@@ -27,8 +27,12 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
@@ -41,11 +45,13 @@ import org.apache.isis.applib.events.lifecycle.ObjectUpdatedEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.mixins.system.HasInteractionId;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
@@ -82,7 +88,9 @@ import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 import lombok.NonNull;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public class DomainObjectAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements
@@ -106,25 +114,81 @@ implements
 
     @Override
     public void process(final ProcessObjectTypeContext processClassContext) {
-        processObjectType(processClassContext);
+
+        val domainObjectIfAny = processClassContext.synthesizeOnType(DomainObject.class);
+        processLogicalTypeName(domainObjectIfAny, processClassContext);
+
+        // conflicting type semantics validation ...
+        validateConflictingTypeSemantics(domainObjectIfAny, processClassContext);
     }
 
+    /*
+     * on the fly validation ...
+     * yet only considers annotations and falls short on other means
+     * (eg. ValueTypeRegistry, configuration, ...)
+     * TODO instead properly validate by implementing a validator that looks into the facets that are created
+     */
+    private void validateConflictingTypeSemantics(
+            final Optional<DomainObject> domainObjectIfAny,
+            final ProcessObjectTypeContext processClassContext) {
+
+        if(!domainObjectIfAny.isPresent()) {
+            return;
+        }
+
+        val domainObject = domainObjectIfAny.get();
+
+        val facetHolder = (IdentifiedHolder)processClassContext.getFacetHolder();
+        val cls = processClassContext.getCls();
+
+        if(processClassContext.synthesizeOnType(Value.class).isPresent()) {
+            ValidationFailure.raiseFormatted(facetHolder,
+                    "Cannot use @DomainObject and @Value on the same type: %s", cls.getName());
+        }
+
+        if(!domainObject.nature().isMixin()) {
+            if(processClassContext.synthesizeOnType(Action.class).isPresent()) {
+                ValidationFailure.raiseFormatted(facetHolder,
+                        "Cannot use @DomainObject and @Action on the same type, "
+                        + "unless nature is MIXIN: %s", cls.getName());
+            }
+            if(processClassContext.synthesizeOnType(Property.class).isPresent()) {
+                ValidationFailure.raiseFormatted(facetHolder,
+                        "Cannot use @DomainObject and @Property on the same type, "
+                        + "unless nature is MIXIN: %s", cls.getName());
+            }
+            if(processClassContext.synthesizeOnType(Collection.class).isPresent()) {
+                ValidationFailure.raiseFormatted(facetHolder,
+                        "Cannot use @DomainObject and @Collection on the same type, "
+                        + "unless nature is MIXIN: %s", cls.getName());
+            }
+        }
+
+        if(domainObject.nature().isMixin()
+                && _Strings.isNotEmpty(domainObject.logicalTypeName())) {
+            // just a console warning, not decided yet whether we should be strict and fail MM validation
+            log.warn("Mixins don't need a logicalTypeName, as was declared with {}.", cls.getName());
+        }
+    }
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
 
-        processEntityChangePublishing(processClassContext);
-        processAutoComplete(processClassContext);
-        processBounded(processClassContext);
-        processEditing(processClassContext);
-        processNature(processClassContext);
-        processLifecycleEvents(processClassContext);
-        processDomainEvents(processClassContext);
+        val domainObjectIfAny = processClassContext.synthesizeOnType(DomainObject.class);
 
+        processEntityChangePublishing(domainObjectIfAny, processClassContext);
+        processAutoComplete(domainObjectIfAny, processClassContext);
+        processBounded(domainObjectIfAny, processClassContext);
+        processEditing(domainObjectIfAny, processClassContext);
+        processNature(domainObjectIfAny, processClassContext);
+        processLifecycleEvents(domainObjectIfAny, processClassContext);
+        processDomainEvents(domainObjectIfAny, processClassContext);
     }
 
 
-    void processEntityChangePublishing(final ProcessClassContext processClassContext) {
+    void processEntityChangePublishing(
+            final Optional<DomainObject> domainObjectIfAny,
+            final ProcessClassContext processClassContext) {
         val cls = processClassContext.getCls();
         val facetHolder = processClassContext.getFacetHolder();
 
@@ -139,7 +203,7 @@ implements
         }
 
         // check for @DomainObject(entityChangePublishing=....)
-        val entityChangePublishing = processClassContext.synthesizeOnType(DomainObject.class)
+        val entityChangePublishing = domainObjectIfAny
                 .map(DomainObject::entityChangePublishing);
         val entityChangePublishingFacet = EntityChangePublishingFacetForDomainObjectAnnotation
                 .create(entityChangePublishing, getConfiguration(), facetHolder);
@@ -150,7 +214,9 @@ implements
 
     // -- AUTO COMPLETE
 
-    void processAutoComplete(final ProcessClassContext processClassContext) {
+    void processAutoComplete(
+            final Optional<DomainObject> domainObjectIfAny,
+            final ProcessClassContext processClassContext) {
         val cls = processClassContext.getCls();
         val facetHolder = processClassContext.getFacetHolder();
 
@@ -215,50 +281,50 @@ implements
 
     // -- BOUNDED
 
-    void processBounded(final ProcessClassContext processClassContext) {
+    // check from @DomainObject(bounded=...)
+    void processBounded(
+            final Optional<DomainObject> domainObjectIfAny,
+            final ProcessClassContext processClassContext) {
         val facetHolder = processClassContext.getFacetHolder();
-
-        // check from @DomainObject(bounded=...)
-        val domainObjectIfAny = processClassContext.synthesizeOnType(DomainObject.class);
-        val facet = ChoicesFacetForDomainObjectAnnotation.create(domainObjectIfAny, facetHolder);
-
-        // then add
-        super.addFacet(facet);
+        FacetUtil.addFacet(
+                ChoicesFacetForDomainObjectAnnotation
+                .create(domainObjectIfAny, facetHolder));
     }
 
-    void processEditing(final ProcessClassContext processClassContext) {
+    // check from @DomainObject(editing=...)
+    void processEditing(
+            final Optional<DomainObject> domainObjectIfAny,
+            final ProcessClassContext processClassContext) {
         val facetHolder = processClassContext.getFacetHolder();
 
-        // check from @DomainObject(editing=...)
-        val domainObjectIfAny = processClassContext.synthesizeOnType(DomainObject.class);
-
-        super.addFacet(
+        FacetUtil.addFacet(
                 EditingEnabledFacetForDomainObjectAnnotation
                 .create(domainObjectIfAny, facetHolder));
 
-        super.addFacet(
+        FacetUtil.addFacet(
                 ImmutableFacetForDomainObjectAnnotation
                 .create(domainObjectIfAny, getConfiguration(), facetHolder));
     }
 
-    void processObjectType(final ProcessObjectTypeContext processClassContext) {
+    // check from @DomainObject(logicalTypeName=...)
+    void processLogicalTypeName(
+            final Optional<DomainObject> domainObjectIfAny,
+            final ProcessObjectTypeContext processClassContext) {
 
         val cls = processClassContext.getCls();
         val facetHolder = processClassContext.getFacetHolder();
 
-        // check from @DomainObject(logicalTypeName=...)
-        val domainObjectIfAny = processClassContext.synthesizeOnType(DomainObject.class);
-        val facet = LogicalTypeFacetForDomainObjectAnnotation.create(domainObjectIfAny, cls, facetHolder);
-
-        // then add
-        super.addFacet(facet);
+        FacetUtil.addFacet(
+                LogicalTypeFacetForDomainObjectAnnotation
+                .create(domainObjectIfAny, cls, facetHolder));
     }
 
 
-    void processNature(final ProcessClassContext processClassContext) {
+    void processNature(
+            final Optional<DomainObject> domainObjectIfAny,
+            final ProcessClassContext processClassContext) {
         val cls = processClassContext.getCls();
         val facetHolder = processClassContext.getFacetHolder();
-        val domainObjectIfAny = processClassContext.synthesizeOnType(DomainObject.class);
 
         if(!domainObjectIfAny.isPresent()) {
             return;
@@ -300,9 +366,10 @@ implements
     }
 
 
-    private void processLifecycleEvents(final ProcessClassContext processClassContext) {
+    private void processLifecycleEvents(
+            final Optional<DomainObject> domainObjectIfAny,
+            final ProcessClassContext processClassContext) {
 
-        val domainObjectIfAny = processClassContext.synthesizeOnType(DomainObject.class);
         if(!domainObjectIfAny.isPresent()) {
             return;
         }
@@ -318,8 +385,9 @@ implements
     }
 
 
-    private void processDomainEvents(final ProcessClassContext processClassContext) {
-        val domainObjectIfAny = processClassContext.synthesizeOnType(DomainObject.class);
+    private void processDomainEvents(
+            final Optional<DomainObject> domainObjectIfAny,
+            final ProcessClassContext processClassContext) {
         if(!domainObjectIfAny.isPresent()) {
             return;
         }
@@ -330,7 +398,9 @@ implements
         processDomainEventCollection(domainObjectIfAny, facetHolder);
     }
 
-    private void processLifecycleEventCreated(final Optional<DomainObject> domainObjectIfAny, final FacetHolder holder) {
+    private void processLifecycleEventCreated(
+            final Optional<DomainObject> domainObjectIfAny,
+            final FacetHolder holder) {
 
         domainObjectIfAny
         .map(DomainObject::createdLifecycleEvent)
@@ -346,7 +416,9 @@ implements
         .ifPresent(super::addFacet);
     }
 
-    private void processLifecycleEventLoaded(final Optional<DomainObject> domainObjectIfAny, final FacetHolder holder) {
+    private void processLifecycleEventLoaded(
+            final Optional<DomainObject> domainObjectIfAny,
+            final FacetHolder holder) {
 
         domainObjectIfAny
         .map(DomainObject::loadedLifecycleEvent)
@@ -362,7 +434,9 @@ implements
         .ifPresent(super::addFacet);
     }
 
-    private void processLifecycleEventPersisting(final Optional<DomainObject> domainObjectIfAny, final FacetHolder holder) {
+    private void processLifecycleEventPersisting(
+            final Optional<DomainObject> domainObjectIfAny,
+            final FacetHolder holder) {
 
         domainObjectIfAny
         .map(DomainObject::persistingLifecycleEvent)
@@ -378,7 +452,9 @@ implements
         .ifPresent(super::addFacet);
     }
 
-    private void processLifecycleEventPersisted(final Optional<DomainObject> domainObjectIfAny, final FacetHolder holder) {
+    private void processLifecycleEventPersisted(
+            final Optional<DomainObject> domainObjectIfAny,
+            final FacetHolder holder) {
 
         domainObjectIfAny
         .map(DomainObject::persistedLifecycleEvent)
@@ -394,7 +470,9 @@ implements
         .ifPresent(super::addFacet);
     }
 
-    private void processLifecycleEventRemoving(final Optional<DomainObject> domainObjectIfAny, final FacetHolder holder) {
+    private void processLifecycleEventRemoving(
+            final Optional<DomainObject> domainObjectIfAny,
+            final FacetHolder holder) {
 
         domainObjectIfAny
         .map(DomainObject::removingLifecycleEvent)
@@ -410,7 +488,9 @@ implements
         .ifPresent(super::addFacet);
     }
 
-    private void processLifecycleEventUpdated(final Optional<DomainObject> domainObjectIfAny, final FacetHolder holder) {
+    private void processLifecycleEventUpdated(
+            final Optional<DomainObject> domainObjectIfAny,
+            final FacetHolder holder) {
 
         domainObjectIfAny
         .map(DomainObject::updatedLifecycleEvent)
@@ -426,7 +506,9 @@ implements
         .ifPresent(super::addFacet);
     }
 
-    private void processLifecycleEventUpdating(final Optional<DomainObject> domainObjectIfAny, final FacetHolder holder) {
+    private void processLifecycleEventUpdating(
+            final Optional<DomainObject> domainObjectIfAny,
+            final FacetHolder holder) {
 
         domainObjectIfAny
         .map(DomainObject::updatingLifecycleEvent)
@@ -442,7 +524,9 @@ implements
         .ifPresent(super::addFacet);
     }
 
-    private void processDomainEventAction(final Optional<DomainObject> domainObjectIfAny, final FacetHolder holder) {
+    private void processDomainEventAction(
+            final Optional<DomainObject> domainObjectIfAny,
+            final FacetHolder holder) {
 
         domainObjectIfAny
         .map(DomainObject::actionDomainEvent)
@@ -453,7 +537,9 @@ implements
 
     }
 
-    private void processDomainEventProperty(final Optional<DomainObject> domainObjectIfAny, final FacetHolder holder) {
+    private void processDomainEventProperty(
+            final Optional<DomainObject> domainObjectIfAny,
+            final FacetHolder holder) {
 
         domainObjectIfAny
         .map(DomainObject::propertyDomainEvent)
@@ -463,7 +549,9 @@ implements
         .ifPresent(super::addFacet);
     }
 
-    private void processDomainEventCollection(final Optional<DomainObject> domainObjectIfAny, final FacetHolder holder) {
+    private void processDomainEventCollection(
+            final Optional<DomainObject> domainObjectIfAny,
+            final FacetHolder holder) {
 
         domainObjectIfAny
         .map(DomainObject::collectionDomainEvent)

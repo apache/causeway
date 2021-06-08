@@ -28,6 +28,8 @@ import org.apache.isis.core.metamodel.facets.object.choices.ChoicesFacetFromBoun
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 
+import lombok.val;
+
 public class ChoicesFacetFromBoundedAnnotationFactoryTest extends AbstractFacetFactoryTest {
 
     private DomainObjectAnnotationFacetFactory facetFactory;
@@ -50,7 +52,8 @@ public class ChoicesFacetFromBoundedAnnotationFactoryTest extends AbstractFacetF
         class Customer {
         }
 
-        facetFactory.processBounded(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
+        val context = new ProcessClassContext(Customer.class, methodRemover, facetedMethod);
+        facetFactory.processBounded(context.synthesizeOnType(DomainObject.class), context);
 
         final Facet facet = facetedMethod.getFacet(ChoicesFacet.class);
         assertNotNull(facet);

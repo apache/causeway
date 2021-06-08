@@ -27,6 +27,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertFalse;
+
 import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.mixins.system.HasInteractionId;
@@ -54,11 +59,6 @@ import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityC
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertFalse;
 
 import lombok.val;
 
@@ -128,7 +128,8 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             allowingEntityChangePublishingToReturn(PublishingPolicies.EntityChangePublishingPolicy.ALL);
 
-            facetFactory.processEntityChangePublishing(new ProcessClassContext(HasInteractionId.class, mockMethodRemover, facetHolder));
+            val context = new ProcessClassContext(HasInteractionId.class, mockMethodRemover, facetHolder);
+            facetFactory.processEntityChangePublishing(context.synthesizeOnType(DomainObject.class), context);
 
             final Facet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
             Assert.assertNull(facet);
@@ -142,7 +143,8 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
             public void configured_value_set_to_all() {
                 allowingEntityChangePublishingToReturn(PublishingPolicies.EntityChangePublishingPolicy.ALL);
 
-                facetFactory.processEntityChangePublishing(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
+                val context = new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder);
+                facetFactory.processEntityChangePublishing(context.synthesizeOnType(DomainObject.class), context);
 
                 final Facet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
                 assertThat(facet, is(notNullValue()));
@@ -531,7 +533,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
     }
 
-    public static class ObjectType extends DomainObjectAnnotationFacetFactoryTest {
+    public static class LogicalTypeName extends DomainObjectAnnotationFacetFactoryTest {
 
         @DomainObject(logicalTypeName = "CUS")
         class CustomerWithDomainObjectAndObjectTypeSet {

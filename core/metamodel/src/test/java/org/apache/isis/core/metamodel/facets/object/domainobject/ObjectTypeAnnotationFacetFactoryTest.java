@@ -34,6 +34,8 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.Lo
 import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 
+import lombok.val;
+
 public class ObjectTypeAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
     private DomainObjectAnnotationFacetFactory facetFactory;
@@ -52,7 +54,8 @@ public class ObjectTypeAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
 
         expectNoMethodsRemoved();
 
-        facetFactory.processObjectType(new ProcessObjectTypeContext(Customer.class, facetHolder));
+        val context = new ProcessObjectTypeContext(Customer.class, facetHolder);
+        facetFactory.processLogicalTypeName(context.synthesizeOnType(DomainObject.class), context);
 
         final LogicalTypeFacet facet = facetHolder.getFacet(LogicalTypeFacet.class);
 

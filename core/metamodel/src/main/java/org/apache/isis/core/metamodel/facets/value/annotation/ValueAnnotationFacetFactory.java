@@ -18,13 +18,10 @@
  */
 package org.apache.isis.core.metamodel.facets.value.annotation;
 
-import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
-import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.val;
 
@@ -45,13 +42,6 @@ implements
         // @Value(logicalTypeName=...)
         val valueIfAny = processClassContext.synthesizeOnType(org.apache.isis.applib.annotation.Value.class);
         FacetUtil.addFacet(LogicalTypeFacetForValueAnnotation.create(valueIfAny, cls, facetHolder));
-
-        // conflicting type semantics validation
-        if(valueIfAny.isPresent()
-                && processClassContext.synthesizeOnType(DomainObject.class).isPresent()) {
-            ValidationFailure.raiseFormatted((IdentifiedHolder)facetHolder,
-                    "Cannot use @DomainObject and @Value on the same type: %s", cls.getName());
-        }
 
     }
 

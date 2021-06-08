@@ -84,4 +84,8 @@ public enum Nature {
     public boolean isEntity() {
         return this == Nature.ENTITY;
     }
+
+    public boolean isMixin() {
+        return this == Nature.MIXIN;
+    }
 }
