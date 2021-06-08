@@ -74,7 +74,7 @@ isis:
         brand-logo-signin: images/gift_256.png
         name: Apache Isis Demo App
         # https://stackoverflow.com/a/38983935/56880
-        # in addition using special config with the project's maven-resources-plugin 
+        # in addition using special config with the project's maven-resources-plugin
         version: ${project.version}
         css: css/application.css
         js: scripts/application.js
@@ -106,7 +106,15 @@ isis:
     schema:
        autoCreateSchemas: isisExtensionsSecman,demo
 
-    
+  testing:
+    fixtures:
+      fixture-scripts-specification:
+        context-class: demoapp.dom._infra.fixtures.DemoFixtureScript
+        multiple-execution-strategy: execute_once_by_value
+        non-persisted-objects-strategy: ignore
+        recreate: demoapp.dom._infra.fixtures.DemoFixtureScript
+        run-script-default: demoapp.dom._infra.fixtures.DemoFixtureScript
+
 # note that properties under 'datanucleus' must use camelCase rather than kebab-case
 datanucleus:
   schema:

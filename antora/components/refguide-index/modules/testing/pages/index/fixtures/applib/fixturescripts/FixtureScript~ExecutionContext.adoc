@@ -1,0 +1,138 @@
+= FixtureScript.ExecutionContext
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Provides an execution context to each xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] execution, the primary use case being to allow the fixture script to execute child fixture scripts (to set up smaller parts of the system).
+
+The execution context also orovides access to parameters that can influence how a fixture script executes (for example, specifying how many demo objects to set up) and also holds the results of the fixture scripts. Fixture scripts are expected to know how the parameter name/key.
+
+The execution context is also a mechanism by which the results of the fixture script (and any children fixture scripts it may have executed) can be collected together. These are rendered to the UI by the xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScripts.adoc[FixtureScripts] domain service, primarily as a convenience for prototyping/demoing.
+
+== API
+
+[source,java]
+.FixtureScript~ExecutionContext.java
+----
+class ExecutionContext {
+  public static final ExecutionContext NOOP;     // <.>
+  ExecutionContext(final String parameters, final FixtureScripts fixtureScripts)
+  ExecutionContext create(final ExecutionParameters executionParameters, final FixtureScripts fixtureScripts)
+  String getParameters()
+  Map<String, String> getParameterMap()
+  String getParameter(final String parameterName)
+  T getParameterAsT(final String parameterName, final Class<T> cls)
+  Boolean getParameterAsBoolean(final String parameterName)
+  Byte getParameterAsByte(final String parameterName)
+  Short getParameterAsShort(final String parameterName)
+  Integer getParameterAsInteger(final String parameterName)
+  Long getParameterAsLong(final String parameterName)
+  Float getParameterAsFloat(final String parameterName)
+  Double getParameterAsDouble(final String parameterName)
+  Character getParameterAsCharacter(final String parameterName)
+  BigInteger getParameterAsBigInteger(final String parameterName)
+  BigDecimal getParameterAsBigDecimal(final String parameterName)
+  LocalDate getParameterAsLocalDate(final String parameterName)
+  LocalDateTime getParameterAsLocalDateTime(final String parameterName)
+  T getParameterAsEnum(final String parameterName, final Class<T> enumClass)
+  void setParameterIfNotPresent(final String parameterName, final String parameterValue)
+  void setParameter(final String parameterName, final Boolean parameterValue)
+  void setParameter(final String parameterName, final Byte parameterValue)
+  void setParameter(final String parameterName, final Short parameterValue)
+  void setParameter(final String parameterName, final Integer parameterValue)
+  void setParameter(final String parameterName, final Long parameterValue)
+  void setParameter(final String parameterName, final Float parameterValue)
+  void setParameter(final String parameterName, final Double parameterValue)
+  void setParameter(final String parameterName, final Character parameterValue)
+  void setParameter(final String parameterName, final BigInteger parameterValue)
+  void setParameter(final String parameterName, final java.util.Date parameterValue)
+  void setParameter(final String parameterName, final java.sql.Date parameterValue)
+  void setParameter(final String parameterName, final LocalDate parameterValue)
+  void setParameter(final String parameterName, final LocalDateTime parameterValue)
+  void setParameter(final String parameterName, final org.joda.time.DateTime parameterValue)
+  void setParameter(final String parameterName, final BigDecimal parameterValue)
+  void setParameter(final String parameterName, final Enum<?> parameterValue)
+  void setParameter(final String parameterName, final String parameterValue)
+  List<FixtureResult> getResults()
+  T addResult(final FixtureScript script, final T object)
+  T addResult(final FixtureScript script, final String key, final T object)
+  T lookup(final String key, final Class<T> cls)
+  void executeChild(final FixtureScript callingFixtureScript, final PersonaWithBuilderScript<?> personaWithBuilderScript)
+  T executeChildT(final FixtureScript callingFixtureScript, final PersonaWithBuilderScript<F> personaWithBuilderScript)
+  void executeChild(final FixtureScript callingFixtureScript, final FixtureScript childFixtureScript)     // <.>
+  void executeChildren(final FixtureScript callingFixtureScript, final PersonaWithBuilderScript<?>... personaWithBuilderScripts)
+  void executeChildren(final FixtureScript callingFixtureScript, final Class<T> personaClass)
+  void executeChildren(final FixtureScript callingFixtureScript, final FixtureScript... fixtureScripts)
+  void executeChildren(final FixtureScript callingFixtureScript, final List<FixtureScript> fixtureScripts)
+  void executeChildren(final FixtureScript callingFixtureScript, final Stream<FixtureScript> fixtureScripts)
+  T executeChildT(final FixtureScript callingFixtureScript, final T childFixtureScript)     // <.>
+  void executeChild(final FixtureScript callingFixtureScript, final String localNameOverride, final FixtureScript childFixtureScript)     // <.>
+  T executeChildT(final FixtureScript callingFixtureScript, final String localNameOverride, final T childFixtureScript)     // <.>
+  List<FixtureScript> getPreviouslyExecuted()     // <.>
+  int roundup(final int n, final int roundTo)
+  T clearUserData(final Class<T> cls)
+}
+----
+
+<.> xref:#NOOP[NOOP]
++
+--
+Null implementation, to assist with unit testing of xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] s.
+--
+<.> xref:#executeChild__FixtureScript_FixtureScript[executeChild(FixtureScript, FixtureScript)]
++
+--
+Executes a child xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] , injecting services into it first, and (for any results that are _FixtureScript.ExecutionContext#addResult(FixtureScript, Object)_ added), uses a key that is derived from the fixture's class name.
+--
+<.> xref:#executeChildT__FixtureScript_T[executeChildT(FixtureScript, T)]
++
+--
+Executes a child xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] , injecting services into it first, and (for any results that are _FixtureScript.ExecutionContext#addResult(FixtureScript, Object)_ added), uses a key that is derived from the fixture's class name.
+--
+<.> xref:#executeChild__FixtureScript_String_FixtureScript[executeChild(FixtureScript, String, FixtureScript)]
++
+--
+Executes a child xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] , injecting services into it first, and (for any results that are _FixtureScript.ExecutionContext#addResult(FixtureScript, Object)_ added), uses a key that overriding the default name of the fixture script with one more meaningful in the context of this fixture.
+--
+<.> xref:#executeChildT__FixtureScript_String_T[executeChildT(FixtureScript, String, T)]
++
+--
+Executes a child xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] , injecting services into it first, and (for any results that are _FixtureScript.ExecutionContext#addResult(FixtureScript, Object)_ added), uses a key that overriding the default name of the fixture script with one more meaningful in the context of this fixture.
+--
+<.> xref:#getPreviouslyExecuted__[getPreviouslyExecuted()]
++
+--
+Returns a list of the xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] instances that have already been executed.
+--
+
+== Members
+
+[#NOOP]
+=== NOOP
+
+Null implementation, to assist with unit testing of xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] s.
+
+[#executeChild__FixtureScript_FixtureScript]
+=== executeChild(FixtureScript, FixtureScript)
+
+Executes a child xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] , injecting services into it first, and (for any results that are _FixtureScript.ExecutionContext#addResult(FixtureScript, Object)_ added), uses a key that is derived from the fixture's class name.
+
+[#executeChildT__FixtureScript_T]
+=== executeChildT(FixtureScript, T)
+
+Executes a child xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] , injecting services into it first, and (for any results that are _FixtureScript.ExecutionContext#addResult(FixtureScript, Object)_ added), uses a key that is derived from the fixture's class name.
+
+[#executeChild__FixtureScript_String_FixtureScript]
+=== executeChild(FixtureScript, String, FixtureScript)
+
+Executes a child xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] , injecting services into it first, and (for any results that are _FixtureScript.ExecutionContext#addResult(FixtureScript, Object)_ added), uses a key that overriding the default name of the fixture script with one more meaningful in the context of this fixture.
+
+[#executeChildT__FixtureScript_String_T]
+=== executeChildT(FixtureScript, String, T)
+
+Executes a child xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] , injecting services into it first, and (for any results that are _FixtureScript.ExecutionContext#addResult(FixtureScript, Object)_ added), uses a key that overriding the default name of the fixture script with one more meaningful in the context of this fixture.
+
+[#getPreviouslyExecuted__]
+=== getPreviouslyExecuted()
+
+Returns a list of the xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] instances that have already been executed.
+
+This allows each individual xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] to determine whether they need to execute; the _FixtureScripts#getMultipleExecutionStrategy()_ can then be left as simply _FixtureScripts.MultipleExecutionStrategy#EXECUTE_ .

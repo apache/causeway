@@ -45,6 +45,8 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
  *     These setup/teardown fixtures will be called in the correct order as per the transitive dependency graph
  *     inferred from the <code>@Configuration</code> imports.
  * </p>
+ *
+ * @since 2.x {@index}
  */
 public interface ModuleWithFixtures {
 

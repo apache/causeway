@@ -30,23 +30,18 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 
 /**
  * Acts as a factory by the {@link FixtureScripts} when
- * instantiating the {@link FixtureScript.ExecutionContext}.
+ * instantiating the {@link FixtureScript.ExecutionContext}, to return an
+ * object able to parse any parameters provided through the UI parameter.
  *
  * <p>
- * Factoring this out as a service potentially allows for extensions to parsing; and also acts as an
- * insurance policy to allow this part of the testing framework to be patched if the chosen parsing algorithms
- * need refinement in the future).
+ * Factoring this out as a service potentially allows for extensions to parsing.
  * </p>
+ *
+ * @since 1.x {@index}
  */
-@Service
-@Named("isis.test.FixtureExecutionParametersService")
-@Order(OrderPrecedence.MIDPOINT)
-@Primary
-@Qualifier("Default")
-public class ExecutionParametersService {
+@FunctionalInterface
+public interface ExecutionParametersService {
 
-    public ExecutionParameters newExecutionParameters(final String parameters) {
-        return new ExecutionParameters(parameters);
-    }
+    ExecutionParameters newExecutionParameters(final String parameters);
 
 }

@@ -1,0 +1,31 @@
+= AnonymousInteractionFactory _(interface)_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Inversion of dependency pattern.
+
+Introduced to allow the AuthenticationManager (module: security) access to the InteractionFactory service (module: interaction), which otherwise was not possible, due to Maven module dependencies (preventing circles).
+
+== API
+
+[source,java]
+.AnonymousInteractionFactory.java
+----
+interface AnonymousInteractionFactory {
+  void runAnonymous(ThrowingRunnable runnable)
+  R callAnonymous(Callable<R> callable)
+  AnonymousInteractionFactory forTesting()     // <.>
+}
+----
+
+<.> xref:#forTesting__[forTesting()]
++
+--
+Returns a pass-through implementation, free of side-effects, in support of simple JUnit tests.
+--
+
+== Members
+
+[#forTesting__]
+=== forTesting()
+
+Returns a pass-through implementation, free of side-effects, in support of simple JUnit tests.

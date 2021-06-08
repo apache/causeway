@@ -35,7 +35,6 @@ import org.apache.isis.testing.fixtures.applib.services.FixturesLifecycleService
 
         // @Service's
         FixturesLifecycleService.class,
-        ExecutionParametersService.class,
         ModuleWithFixturesService.class,
         QueryResultsCacheControlDefault.class,
 
@@ -44,5 +43,5 @@ import org.apache.isis.testing.fixtures.applib.services.FixturesLifecycleService
 })
 public class IsisModuleTestingFixturesApplib {
 
-    public static final String NAMESPACE = "isis.ext.fixtures";
+    public static final String NAMESPACE = "isis.testing.fixtures";
 }

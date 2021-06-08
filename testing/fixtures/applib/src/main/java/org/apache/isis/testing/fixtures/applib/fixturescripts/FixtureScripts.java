@@ -21,7 +21,6 @@ package org.apache.isis.testing.fixtures.applib.fixturescripts;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -30,6 +29,8 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.Action;
@@ -50,20 +51,26 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
-import org.apache.isis.testing.fixtures.applib.api.PersonaWithBuilderScript;
+import org.apache.isis.testing.fixtures.applib.personas.BuilderScriptAbstract;
+import org.apache.isis.testing.fixtures.applib.personas.PersonaWithBuilderScript;
 import org.apache.isis.testing.fixtures.applib.events.FixturesInstalledEvent;
 import org.apache.isis.testing.fixtures.applib.events.FixturesInstallingEvent;
-import org.apache.isis.testing.fixtures.applib.fixturespec.FixtureScriptsSpecification;
-import org.apache.isis.testing.fixtures.applib.fixturespec.FixtureScriptsSpecificationProvider;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
 
 
+/**
+ * Provides the mechanism to execute {@link FixtureScript}s from the UI of
+ * a domain app; and can also be used within integration testing.
+ *
+ * @since 1.x {@index}
+ */
 @DomainService(
         nature = NatureOfService.VIEW,
         logicalTypeName = FixtureScripts.LOGICAL_TYPE_NAME
@@ -76,11 +83,8 @@ public class FixtureScripts {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleTestingFixturesApplib.NAMESPACE + ".FixtureScripts"; // secman seeding
 
-    //  @Inject private FactoryService factoryService;
     @Inject private TitleService titleService;
     @Inject private JaxbService jaxbService;
-    // @Inject private BookmarkService bookmarkService;
-    // @Inject private ServiceRegistry serviceRegistry;
     @Inject private ServiceInjector serviceInjector;
     @Inject private RepositoryService repositoryService;
     @Inject private TransactionService transactionService;
@@ -96,6 +100,8 @@ public class FixtureScripts {
      * How to handle objects that are to be
      * {@link FixtureScripts#newFixtureResult(FixtureScript, String, Object, boolean) added}
      * into a {@link FixtureResult} but which are not yet persisted.
+     *
+     * @since 1.x {@index}
      */
     public enum NonPersistedObjectsStrategy {
         PERSIST,
@@ -110,8 +116,9 @@ public class FixtureScripts {
      *     {@link FixtureScripts} service; there isn't (currently) any way to mix-and-match fixture scripts that are
      *     written with differing semantics in mind.  Ideally it should be the responsibility of the fixture script
      *     itself to determine whether it should be run.  As a partial solution to this, the
-     *
      * </p>
+     *
+     * @since 1.x {@index}
      */
     public enum MultipleExecutionStrategy {
         /**
@@ -194,52 +201,102 @@ public class FixtureScripts {
     public static final String PACKAGE_PREFIX = FixtureScripts.class.getPackage().getName();
 
 
+    /**
+     * Used to configure the UI menu actions, namely {@link #runFixtureScript(String, String)} and
+     * {@link #recreateObjectsAndReturnFirst()}.
+     *
+     * <p>
+     *     May be <code>null</code> if no {@link FixtureScriptsSpecificationProvider} was provided either explicitly
+     *     or implicitly by way of configuring the <code>isis.testing.fixtures.fixture-scripts-specification</code>
+     *     configuration properties.
+     * </p>
+     *
+     * @see #getFixtureScriptByFriendlyName()
+     * @see #getMultipleExecutionStrategy()
+     * @see #getNonPersistedObjectsStrategy()
+     */
     @Getter
     private final FixtureScriptsSpecification specification;
 
-    @Getter
-    private final SortedMap<String,FixtureScript> fixtureScriptByFriendlyName;
-
-    public FixtureScripts(
-            final Optional<FixtureScriptsSpecificationProvider> fixtureScriptsSpecificationProvider,
-            final ServiceRegistry serviceRegistry) {
-
-        this.specification = fixtureScriptsSpecificationProvider.orElse(() -> FixtureScriptsSpecification.builder(PACKAGE_PREFIX).build()).getSpecification();
-        // this.serviceRegistry = serviceRegistry;
-
-        val packagePrefix = specification.getPackagePrefix();
-        fixtureScriptByFriendlyName =
-                serviceRegistry.select(FixtureScript.class).stream()
-                .filter(Objects::nonNull)
-                .filter(fixtureScript -> fixtureScript.getClass().getPackage().getName().startsWith(packagePrefix))
-                .collect(Collectors.toMap(FixtureScript::getFriendlyName, Function.identity(),
-                        (v1,v2) ->{ throw new RuntimeException(String.format("Duplicate key for values %s and %s", v1, v2));},
-                        TreeMap::new));
-    }
-
-
-
-    // -- packagePrefix, nonPersistedObjectsStrategy, multipleExecutionStrategy
-
-    public NonPersistedObjectsStrategy getNonPersistedObjectsStrategy() {
-        return specification.getNonPersistedObjectsStrategy();
-    }
+    /**
+     * Global setting as to how to handle returned entities from fixture scripts that
+     * are still transient (not yet persisted).
+     *
+     * <p>
+     *     Will be <code>null</code> if there is no {@link #getSpecification()}.
+     * </p>
+     *
+     * @see #getSpecification()
+     */
+    @Getter(onMethod_ = {@Programmatic})
+    private final NonPersistedObjectsStrategy nonPersistedObjectsStrategy;
 
     /**
      * Global setting as to how to handle fixture scripts that are executed more than once.  See
      * {@link MultipleExecutionStrategy} for more details.
+     *
+     * <p>
+     *     Will be <code>null</code> if there is no {@link #getSpecification()}.
+     * </p>
+     *
+     * @see #getSpecification()
      */
-    @Programmatic
-    public MultipleExecutionStrategy getMultipleExecutionStrategy() {
-        return specification.getMultipleExecutionStrategy();
-    }
+    @Getter(onMethod_ = {@Programmatic})
+    private final MultipleExecutionStrategy multipleExecutionStrategy;
 
+    /**
+     * Maps all discovered {@link FixtureScript}s to a friendly name for display in the UI (that is, for the
+     * {@link #runFixtureScript(String, String)} menu action parameters).
+     *
+     * <p>
+     *     Will be <code>null</code> if there is no {@link #getSpecification()}.
+     * </p>
+     *
+     * @see #getSpecification()
+     */
+    @Getter
+    private final SortedMap<String,FixtureScript> fixtureScriptByFriendlyName;
+
+
+    @Inject
+    public FixtureScripts(
+            final FixtureScriptsSpecificationProvider fixtureScriptsSpecificationProvider,
+            final ServiceRegistry serviceRegistry) {
+
+        this.specification = fixtureScriptsSpecificationProvider.getSpecification();
+        this.nonPersistedObjectsStrategy = specification.getNonPersistedObjectsStrategy();
+        this.multipleExecutionStrategy = specification.getMultipleExecutionStrategy();
+
+        val packagePrefix = specification.getPackagePrefix();
+        this.fixtureScriptByFriendlyName =
+                packagePrefix != null
+                    ? serviceRegistry.select(FixtureScript.class).stream()
+                        .filter(Objects::nonNull)
+                        .filter(fixtureScript -> fixtureScript.getClass().getPackage().getName().startsWith(packagePrefix))
+                        .collect(Collectors.toMap(FixtureScript::getFriendlyName, Function.identity(),
+                                (v1, v2) -> {
+                                    throw new RuntimeException(String.format("Two FixtureScript's have the same friendly name '%s", v1));
+                                },
+                                TreeMap::new))
+                    : _Maps.newTreeMap();
+    }
 
 
 
 
     // -- runFixtureScript (using choices as the drop-down policy)
 
+    /**
+     * Main action - as exposed in the UI - to execute the specified fixture script.
+     *
+     * <p>
+     *     Also allows arbitrary parameters to be specified for said fixture script.
+     * </p>
+     *
+     * @param fixtureScriptName
+     * @param parameters
+     * @return
+     */
     @Action(
             restrictTo = RestrictTo.PROTOTYPING
     )
@@ -277,10 +334,14 @@ public class FixtureScripts {
         }
     }
 
+    public boolean hideRunFixtureScript() {
+        return specification == null;
+    }
 
     public String disableRunFixtureScript() {
-        return getFixtureScriptByFriendlyName().isEmpty()? "No fixture scripts found under package '" + specification
-                .getPackagePrefix() + "'": null;
+        return getFixtureScriptByFriendlyName().isEmpty()
+                ? String.format("No fixture scripts found under package '%s'", specification.getPackagePrefix())
+                : null;
     }
 
     public String default0RunFixtureScript() {
@@ -295,7 +356,7 @@ public class FixtureScripts {
     }
 
     private String defaultFromFixtureScriptsSpecification() {
-        Class<? extends FixtureScript> defaultScript = getSpecification().getRunScriptDefaultScriptClass();
+        Class<? extends FixtureScript> defaultScript = specification.getRunScriptDefaultScriptClass();
         return defaultScript != null
                 ? findFixtureScriptNameFor(defaultScript)
                 : null;
@@ -325,6 +386,13 @@ public class FixtureScripts {
 
     // -- recreateObjectsAndReturnFirst
 
+    /**
+     * Convenience action - exposed through the UI - to execute the specified
+     * &quot;recreate&quot; {@link FixtureScript fixture script} and
+     * return/show the first object returned by that fixture script.
+     *
+     * @return
+     */
     @Action(
             restrictTo = RestrictTo.PROTOTYPING
     )
@@ -345,7 +413,7 @@ public class FixtureScripts {
     }
 
     public boolean hideRecreateObjectsAndReturnFirst() {
-        return getSpecification().getRecreateScriptClass() == null;
+        return specification == null || specification.getRecreateScriptClass() == null;
     }
 
 
@@ -431,11 +499,8 @@ public class FixtureScripts {
 
     @Programmatic
     public FixtureScript.ExecutionContext newExecutionContext(final String parameters) {
-        final ExecutionParameters executionParameters =
-                executionParametersService != null
-                ? executionParametersService.newExecutionParameters(parameters)
-                        : new ExecutionParameters(parameters);
-                return FixtureScript.ExecutionContext.create(executionParameters, this);
+        val executionParameters = executionParametersService.newExecutionParameters(parameters);
+        return FixtureScript.ExecutionContext.create(executionParameters, this);
     }
 
 

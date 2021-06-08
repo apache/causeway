@@ -40,6 +40,9 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * @since 1.x {@index}
+ */
 @DomainObject(
         nature = Nature.VIEW_MODEL,
         logicalTypeName = FixtureResult.LOGICAL_TYPE_NAME

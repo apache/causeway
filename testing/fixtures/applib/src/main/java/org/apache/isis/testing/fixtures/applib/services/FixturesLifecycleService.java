@@ -35,15 +35,18 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.metamodel.events.MetamodelEvent;
-import org.apache.isis.testing.fixtures.applib.clock.Clock;
-import org.apache.isis.testing.fixtures.applib.clock.FixtureClock;
+import org.apache.isis.testing.fixtures.applib.clock.clock.Clock;
+import org.apache.isis.testing.fixtures.applib.clock.clock.FixtureClock;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Service
-@Named("isis.test.FixturesLifecycleService")
+@Named("isis.testing.fixtures.FixturesLifecycleService")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

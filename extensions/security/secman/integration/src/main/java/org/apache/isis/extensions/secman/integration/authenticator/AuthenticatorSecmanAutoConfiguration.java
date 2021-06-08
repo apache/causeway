@@ -32,7 +32,7 @@ import org.apache.isis.extensions.secman.applib.user.spi.PasswordEncryptionServi
 /**
  * @since 2.0 {@index}
  */
-@AutoConfigureOrder(OrderPrecedence.LAST)
+@AutoConfigureOrder(OrderPrecedence.LATE)
 @Configuration
 public class AuthenticatorSecmanAutoConfiguration  {
 

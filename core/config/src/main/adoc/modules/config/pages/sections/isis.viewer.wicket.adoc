@@ -328,6 +328,70 @@ If truncated, then the remainder of the title will be replaced with ellipses (..
 
 
 |
+[[isis.viewer.wicket.message-popups.error-delay]]
+isis.viewer.wicket.message-popups. +
+error-delay
+
+|  0ms
+| How long the error popup should display before disappearing.
+
+A value of 0 (the default) means do not disappear automatically.
+
+
+|
+[[isis.viewer.wicket.message-popups.info-delay]]
+isis.viewer.wicket.message-popups. +
+info-delay
+
+|  3500ms
+| How long the info popup should display before disappearing.
+
+A value of 0 means do not disappear automatically.
+
+
+|
+[[isis.viewer.wicket.message-popups.offset]]
+isis.viewer.wicket.message-popups. +
+offset
+
+|  100
+| How far in from the edge the popup should display
+
+
+|
+[[isis.viewer.wicket.message-popups.placement.horizontal]]
+isis.viewer.wicket.message-popups. +
+placement.horizontal
+
+| 
+| Whether to display popups aligned ot the left or right of the page.
+
+The default is to show them aligned to the right
+
+
+|
+[[isis.viewer.wicket.message-popups.placement.vertical]]
+isis.viewer.wicket.message-popups. +
+placement.vertical
+
+| 
+| Whether to display popups at the top or the bottom of the page.
+
+The default is to show them at the top.
+
+
+|
+[[isis.viewer.wicket.message-popups.warning-delay]]
+isis.viewer.wicket.message-popups. +
+warning-delay
+
+|  0ms
+| How long the warning popup should display before disappearing.
+
+A value of 0 (the default) means do not disappear automatically.
+
+
+|
 [[isis.viewer.wicket.prevent-double-click-for-form-submit]]
 isis.viewer.wicket. +
 prevent-double-click-for-form- +

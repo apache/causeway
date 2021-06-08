@@ -1,0 +1,36 @@
+= FixtureResultList
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Collecting parameter.
+
+Instantiate using _FixtureScripts#newExecutionContext(String)_
+
+== API
+
+[source,java]
+.FixtureResultList.java
+----
+class FixtureResultList {
+  FixtureResultList(final FixtureScripts fixtureScripts, final FixtureScript.ExecutionContext executionContext)
+  T add(final FixtureScript script, final T object)
+  T add(final FixtureScript fixtureScript, final String key, final T object)     // <.>
+  List<FixtureResult> getResults()
+  String nextItemFor(final FixtureScript script)
+  T lookup(final String key, Class<T> cls)
+}
+----
+
+<.> xref:#add__FixtureScript_String_T[add(FixtureScript, String, T)]
++
+--
+Wraps the object within a xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureResult.adoc[FixtureResult] and add to this list.
+--
+
+== Members
+
+[#add__FixtureScript_String_T]
+=== add(FixtureScript, String, T)
+
+Wraps the object within a xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureResult.adoc[FixtureResult] and add to this list.
+
+If the object is not yet persisted, then the _FixtureScripts#getNonPersistedObjectsStrategy() FixtureScripts_ ' configuration will determine whether it is _FixtureScripts.NonPersistedObjectsStrategy#PERSIST eagerly persisted_ or simply _FixtureScripts.NonPersistedObjectsStrategy#IGNORE ignored_ .

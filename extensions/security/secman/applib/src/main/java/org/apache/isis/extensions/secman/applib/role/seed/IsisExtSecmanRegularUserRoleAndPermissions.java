@@ -21,6 +21,7 @@ package org.apache.isis.extensions.secman.applib.role.seed;
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.security.IsisModuleCoreSecurity;
 import org.apache.isis.core.security.authentication.logout.LogoutMenu;
 import org.apache.isis.extensions.secman.applib.SecmanConfiguration;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
@@ -79,6 +80,9 @@ public class IsisExtSecmanRegularUserRoleAndPermissions extends AbstractRoleAndP
 
                 // we also provide default access to run fixtures (prototype action only)
                 ApplicationFeatureId.newNamespace(IsisModuleTestingFixturesApplib.NAMESPACE),
+
+                // we also provide default access to logout action (!)
+                ApplicationFeatureId.newNamespace(IsisModuleCoreSecurity.NAMESPACE),
 
                 // also the ability to logout (!)
                 ApplicationFeatureId.newType(LogoutMenu.LOGICAL_TYPE_NAME),

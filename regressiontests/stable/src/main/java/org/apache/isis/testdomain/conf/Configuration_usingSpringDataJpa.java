@@ -44,7 +44,7 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
     IsisModuleCoreRuntimeServices.class
     ,IsisModuleSecurityBypass.class
     ,IsisModuleJpaEclipselink.class
-    ,IsisModuleTestingFixturesApplib.class
+    //,IsisModuleTestingFixturesApplib.class
     ,KVStoreForTesting.class, // Helper for JUnit Tests
 })
 @PropertySources({

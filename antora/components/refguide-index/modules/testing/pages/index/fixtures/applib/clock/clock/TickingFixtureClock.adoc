@@ -1,0 +1,89 @@
+= TickingFixtureClock
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+== API
+
+[source,java]
+.TickingFixtureClock.java
+----
+class TickingFixtureClock {
+  TickingFixtureClock replaceExisting()     // <.>
+  boolean reinstateExisting()     // <.>
+  void setTime(final int hour, final int min)     // <.>
+  void setTime(final Timestamp timestamp)
+  void setTime(final long millis)
+  void setDate(final int year, final int month, final int day)     // <.>
+  void addTime(final int hours, final int minutes)     // <.>
+  void addDate(final int years, final int months, final int days)     // <.>
+  String toString()
+}
+----
+
+<.> xref:#replaceExisting__[replaceExisting()]
++
+--
+Configures the system to use a FixtureClock rather than the in-built system clock. Can be called multiple times.
+--
+<.> xref:#reinstateExisting__[reinstateExisting()]
++
+--
+Makes _Clock#remove()_ visible.
+--
+<.> xref:#setTime__int_int[setTime(int, int)]
++
+--
+Sets the hours and minutes as specified, and sets the seconds and milliseconds to zero, but the date portion is left unchanged.
+--
+<.> xref:#setDate__int_int_int[setDate(int, int, int)]
++
+--
+Sets the date, but the time portion is left unchanged.
+--
+<.> xref:#addTime__int_int[addTime(int, int)]
++
+--
+Adjusts the time by the specified number of hours and minutes.
+--
+<.> xref:#addDate__int_int_int[addDate(int, int, int)]
++
+--
+Adjusts the time by the specified number of years, months or days.
+--
+
+== Members
+
+[#replaceExisting__]
+=== replaceExisting()
+
+Configures the system to use a FixtureClock rather than the in-built system clock. Can be called multiple times.
+
+Must call before any other call to _Clock#getInstance()_ .
+
+[#reinstateExisting__]
+=== reinstateExisting()
+
+Makes _Clock#remove()_ visible.
+
+[#setTime__int_int]
+=== setTime(int, int)
+
+Sets the hours and minutes as specified, and sets the seconds and milliseconds to zero, but the date portion is left unchanged.
+
+[#setDate__int_int_int]
+=== setDate(int, int, int)
+
+Sets the date, but the time portion is left unchanged.
+
+[#addTime__int_int]
+=== addTime(int, int)
+
+Adjusts the time by the specified number of hours and minutes.
+
+Typically called after _#setTime(int, int)_ , to move the clock forward or perhaps back.
+
+[#addDate__int_int_int]
+=== addDate(int, int, int)
+
+Adjusts the time by the specified number of years, months or days.
+
+Typically called after _#setDate(int, int, int)_ , to move the clock forward or perhaps back.

@@ -21,6 +21,9 @@ package org.apache.isis.testing.fixtures.applib.events;
 
 import org.apache.isis.applib.events.EventObjectBase;
 
+/**
+ * @since 2.x {@index}
+ */
 public class FixturesInstalledEvent extends EventObjectBase<Object> {
 
     public FixturesInstalledEvent(final Object source) {

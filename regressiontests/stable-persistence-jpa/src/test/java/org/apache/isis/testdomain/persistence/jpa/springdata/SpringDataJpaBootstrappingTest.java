@@ -46,25 +46,27 @@ import org.apache.isis.testdomain.conf.Configuration_usingSpringDataJpa;
 import org.apache.isis.testdomain.jpa.springdata.Employee;
 import org.apache.isis.testdomain.jpa.springdata.EmployeeRepository;
 import org.apache.isis.testdomain.jpa.springdata.SpringDataJpaTestModule;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.ExecutionParametersServiceAutoConfiguration;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScriptsSpecificationProviderAutoConfiguration;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
 import lombok.val;
 
 @DataJpaTest
-@ContextConfiguration(classes = { 
+@ContextConfiguration(classes = {
         Configuration_usingSpringDataJpa.class,
+        FixtureScriptsSpecificationProviderAutoConfiguration.class, // because @DataJpaTest disables autoconfiguration
+        ExecutionParametersServiceAutoConfiguration.class           // because @DataJpaTest disables autoconfiguration
 })
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class SpringDataJpaBootstrappingTest extends IsisIntegrationTestAbstract {
 
-    @Inject private Optional<PlatformTransactionManager> platformTransactionManager; 
+    @Inject private Optional<PlatformTransactionManager> platformTransactionManager;
     @Inject private RepositoryService repository;
     @Inject private SpecificationLoader specLoader;
-    
+
     @Inject private EmployeeRepository employeeRepository;
-    //@Inject private FactoryService factoryService;
-    //@Inject private TransactionService transactionService;
 
     void cleanUp() {
         employeeRepository.deleteAllInBatch();
@@ -74,38 +76,38 @@ class SpringDataJpaBootstrappingTest extends IsisIntegrationTestAbstract {
         SpringDataJpaTestModule.setupEmployeeFixture(employeeRepository);
     }
 
-    @Test @Order(0) 
+    @Test @Order(0)
     void platformTransactionManager_shouldBeAvailable() {
         assertTrue(platformTransactionManager.isPresent());
         platformTransactionManager.ifPresent(ptm->{
             assertEquals("JpaTransactionManager", ptm.getClass().getSimpleName());
         });
     }
-    
-    @Test @Order(0) 
+
+    @Test @Order(0)
     void transactionalAnnotation_shouldBeSupported() {
         assertTrue(platformTransactionManager.isPresent());
         platformTransactionManager.ifPresent(ptm->{
-            
+
             val txDef = new DefaultTransactionDefinition();
             txDef.setPropagationBehavior(DefaultTransactionDefinition.PROPAGATION_MANDATORY);
-                    
+
             val txStatus = ptm.getTransaction(txDef);
-            
+
             assertNotNull(txStatus);
             assertFalse(txStatus.isCompleted());
 
         });
     }
 
-    @Test @Order(0) 
+    @Test @Order(0)
     void jpaEntities_shouldBeRecognisedAsSuch() {
         val productSpec = specLoader.loadSpecification(Employee.class);
         assertTrue(productSpec.isEntity());
         assertNotNull(productSpec.getFacet(EntityFacet.class));
     }
-     
-    @Test @Order(1) @Rollback(false) 
+
+    @Test @Order(1) @Rollback(false)
     void sampleEmployeesShouldBeSetUp() {
 
         // given - expected pre condition: no inventories
@@ -127,8 +129,8 @@ class SpringDataJpaBootstrappingTest extends IsisIntegrationTestAbstract {
         assertNotNull(employee.getLastName());
 
     }
-     
-    @Test @Order(2) @Rollback(false) 
+
+    @Test @Order(2) @Rollback(false)
     void aSecondRunShouldWorkAsWell() {
         sampleEmployeesShouldBeSetUp();
     }

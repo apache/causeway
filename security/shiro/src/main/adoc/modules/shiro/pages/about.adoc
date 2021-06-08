@@ -230,7 +230,7 @@ The snippet below defines a role for each framework feature:
 [roles]
 default_role   = isis.applib,\
                  isis.security
-fixtures_role  = isis.ext.fixtures
+fixtures_role  = isis.testing.fixtures
 features_role  = isis.feat
 metamodel_role = isis.metamodel
 h2_role        = isis.ext.h2Console

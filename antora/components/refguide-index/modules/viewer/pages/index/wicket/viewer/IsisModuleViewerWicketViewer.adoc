@@ -7,6 +7,7 @@
 .IsisModuleViewerWicketViewer.java
 ----
 class IsisModuleViewerWicketViewer {
+  public static final String NAMESPACE;
 }
 ----
 

@@ -178,6 +178,118 @@ exposed-headers
 For more information, check the usage of the ``headers`` init parameter for https://github.com/eBay/cors-filter[EBay CORSFilter].
 
 
+|
+[[isis.extensions.secman.delegated-users.auto-create-policy]]
+isis.extensions.secman. +
+delegated-users.auto-create-policy
+
+| 
+| Whether delegated users should be autocreated as locked (the default) or unlocked.
+
+BE AWARE THAT if any users are auto-created as unlocked, then the set of roles that they are given should be highly restricted !!!
+
+
+|
+[[isis.extensions.secman.permissions-evaluation-policy]]
+isis.extensions.secman. +
+permissions-evaluation-policy
+
+| 
+| If there are conflicting (allow vs veto) permissions at the same scope, then this policy determines whether to prefer to allow the permission or to veto it.
+
+This is only used if a ``PermissionsEvaluationService`` has not been declared explicitly.
+
+
+|
+[[isis.extensions.secman.seed.admin.namespace-permissions.additional]]
+isis.extensions.secman.seed.admin. +
+namespace-permissions.additional
+
+| 
+| An (optional) additional set of namespaces that the admin role is granted.
+
+These are in addition to the main namespaces granted.
+
+@see NamespacePermissions#getSticky()
+
+
+|
+[[isis.extensions.secman.seed.admin.namespace-permissions.sticky]]
+isis.extensions.secman.seed.admin. +
+namespace-permissions.sticky
+
+| 
+| The set of namespaces to which the admin role is granted.
+
+These namespaces are intended to be sufficient to allow users with this admin role to be able to administer the security module itself, for example to manage users and roles. The security user is not necessarily able to use the main business logic within the domain application itself, though.
+
+These roles cannot be removed via user interface
+
+WARNING: normally these should not be overridden. Instead, specify additional namespaces using ``NamespacePermissions#getAdditional()``.
+
+@see NamespacePermissions#getAdditional()
+
+
+|
+[[isis.extensions.secman.seed.admin.password]]
+isis.extensions.secman.seed.admin. +
+password
+
+| 
+| The corresponding password for admin user. @see #getUserName()
+
+
+|
+[[isis.extensions.secman.seed.admin.role-name]]
+isis.extensions.secman.seed.admin. +
+role-name
+
+| 
+| The name of security admin role.
+
+Users with this role (in particular, the default admin user are granted access to a set of namespaces (``NamespacePermissions#getSticky()`` and ``NamespacePermissions#getAdditional()``) which are intended to be sufficient to allow users with this admin role to be able to administer the security module itself, for example to manage users and roles.
+
+@see Admin#getUserName() @see NamespacePermissions#getSticky() @see NamespacePermissions#getAdditional()
+
+
+|
+[[isis.extensions.secman.seed.admin.user-name]]
+isis.extensions.secman.seed.admin. +
+user-name
+
+| 
+| The name of the security super user.
+
+This user is automatically made a member of the admin role, from which it is granted permissions to administer other users.
+
+The password for this user is set in ``Admin#getPassword()``.
+
+@see #getPassword() @see #getRoleName()
+
+
+|
+[[isis.extensions.secman.seed.regular-user.role-name]]
+isis.extensions.secman.seed. +
+regular-user.role-name
+
+| 
+| The role name for regular users of the application, granting them access to basic security features.
+
+The exact set of permissions is hard-wired in the ``IsisExtSecmanRegularUserRoleAndPermissions`` fixture.
+
+
+|
+[[isis.extensions.secman.user-registration.initial-role-names]]
+isis.extensions.secman. +
+user-registration. +
+initial-role-names
+
+| 
+| The set of roles that users registering with the app are granted automatically.
+
+If using the wicket viewer, also requires isis.viewer.wicket.suppress-signup to be set ``false``, along with any other of its other prereqs.
+
+
 
 |===
 
