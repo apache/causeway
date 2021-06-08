@@ -27,17 +27,20 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 
-public class NamedFacetTranslated extends FacetAbstract implements NamedFacet {
+public class NamedFacetTranslated
+extends FacetAbstract
+implements NamedFacet {
 
     final TranslationService translationService;
     TranslationContext context;
     String originalText;
 
     public NamedFacetTranslated(
-            final TranslationContext context, final String originalText,
+            final TranslationContext context,
+            final String originalText,
             final TranslationService translationService,
             final IdentifiedHolder facetHolder) {
-        super(NamedFacet.class, facetHolder);
+        super(NamedFacet.class, facetHolder, Precedence.EARLY); // facet has final say, don't override
         this.context = context;
         this.originalText = originalText;
         this.translationService = translationService;
@@ -56,7 +59,7 @@ public class NamedFacetTranslated extends FacetAbstract implements NamedFacet {
     private String translateText() {
         return translationService!=null
                 ? translationService.translate(context, originalText)
-                        : originalText;
+                : originalText;
     }
 
     @Override

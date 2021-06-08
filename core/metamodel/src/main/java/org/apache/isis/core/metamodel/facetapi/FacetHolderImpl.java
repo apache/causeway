@@ -165,10 +165,11 @@ public class FacetHolderImpl implements FacetHolder, MetaModelContextAware {
         }
 
         if(a.getPrecedence() == b.getPrecedence()) {
-            log.warn("Facets {} and {} have same precedence. Undecidable, which to use. "
+            log.warn("Facets {} and {} have same precedence {}. Undecidable, which to use. "
                     + "Arbitrarily chosing the latter.",
                     a.getClass().getName(),
-                    b.getClass().getName());
+                    b.getClass().getName(),
+                    a.getPrecedence().name());
             return b;
         }
 

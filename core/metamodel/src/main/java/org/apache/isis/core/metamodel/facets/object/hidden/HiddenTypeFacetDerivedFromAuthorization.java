@@ -38,7 +38,7 @@ implements HiddenTypeFacet {
     }
 
     public HiddenTypeFacetDerivedFromAuthorization(final FacetHolder holder) {
-        super(type(), holder, Precedence.DERIVED);
+        super(type(), holder, Precedence.EARLY); // facet has final say, don't override
     }
 
     @Override
