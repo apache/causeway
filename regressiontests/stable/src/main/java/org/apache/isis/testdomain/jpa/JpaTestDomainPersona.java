@@ -32,10 +32,10 @@ import org.apache.isis.testdomain.jpa.entities.JpaBook;
 import org.apache.isis.testdomain.jpa.entities.JpaInventory;
 import org.apache.isis.testdomain.jpa.entities.JpaProduct;
 import org.apache.isis.testdomain.ldap.LdapConstants;
-import org.apache.isis.testing.fixtures.applib.api.PersonaWithBuilderScript;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.BuilderScriptAbstract;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.BuilderScriptWithResult;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.BuilderScriptWithoutResult;
+import org.apache.isis.testing.fixtures.applib.personas.PersonaWithBuilderScript;
+import org.apache.isis.testing.fixtures.applib.personas.BuilderScriptAbstract;
+import org.apache.isis.testing.fixtures.applib.personas.BuilderScriptWithResult;
+import org.apache.isis.testing.fixtures.applib.personas.BuilderScriptWithoutResult;
 
 import lombok.val;
 
