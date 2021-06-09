@@ -63,4 +63,10 @@ public interface InteractionProvider {
     }
 
 
+    /**
+     * interaction-layer-stack size
+     * */
+    int getInteractionLayerCount();
+
+
 }

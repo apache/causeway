@@ -47,9 +47,5 @@ public interface AuthenticationProvider {
                             _Probe.currentThreadId()));
     }
 
-    /**
-     * interaction-layer-stack size
-     * */
-    int getInteractionLayerCount();
 
 }
