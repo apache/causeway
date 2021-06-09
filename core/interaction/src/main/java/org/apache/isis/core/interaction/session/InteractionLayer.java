@@ -35,10 +35,10 @@ import lombok.NonNull;
 public class InteractionLayer {
 
 	@Getter private final IsisInteraction interaction;
-	 private final Authentication authentication;
+	@Getter private final InteractionContext interactionContext;
 
 	public Authentication getAuthentication() {
-		return authentication;
+		return Authentication.authenticationFrom(interactionContext).orElse(null);
 	}
 
 	public InteractionLayer(
@@ -50,12 +50,9 @@ public class InteractionLayer {
 		// meaning the Interaction that holds the stack containing this layer
 		this.interaction = interaction;
 
-		// binds given authentication to this layer
-		this.authentication = authentication;
-	}
-
-	public InteractionContext getInteractionContext() {
-	    return authentication.getInteractionContext();
+		// binds given interaction context (which normally would hold the Authentication in its attribute map)
+		// to this layer
+		this.interactionContext = interactionContext;
 	}
 
 }
