@@ -46,7 +46,7 @@ extends AnonymousInteractionFactory {
      * If present, reuses the current top level {@link InteractionLayer}, otherwise creates a new
      * anonymous one.
      *
-     * @see {@link #openInteraction(Authentication)}
+     * @see #openInteraction(Authentication)
      */
     InteractionLayer openInteraction();
 
