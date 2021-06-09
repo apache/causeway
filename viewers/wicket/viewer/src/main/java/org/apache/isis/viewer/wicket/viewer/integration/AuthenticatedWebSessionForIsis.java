@@ -32,7 +32,6 @@ import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.session.SessionLoggingService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.interaction.session.InteractionFactory;
-import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
@@ -225,18 +224,9 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
         return bookmarkedPagesModel;
     }
 
-
-    // /////////////////////////////////////////////////
-    // Dependencies
-    // /////////////////////////////////////////////////
-
     protected AuthenticationManager getAuthenticationManager() {
         return commonContext.getAuthenticationManager();
     }
-
-    // /////////////////////////////////////////////////
-    // *Provider impl.
-    // /////////////////////////////////////////////////
 
     private void log(
             final SessionLoggingService.Type type,
@@ -244,7 +234,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
             final SessionLoggingService.CausedBy causedBy) {
 
 
-        val isisInteractionFactory = getIsisInteractionFactory();
+        val interactionFactory = getInteractionFactory();
         val sessionLoggingServices = getSessionLoggingServices();
 
         final Runnable loggingTask = ()->{
@@ -258,8 +248,8 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
             );
         };
 
-        if(isisInteractionFactory!=null) {
-            isisInteractionFactory.runAnonymous(loggingTask::run);
+        if(interactionFactory!=null) {
+            interactionFactory.runAnonymous(loggingTask::run);
         } else {
             loggingTask.run();
         }
@@ -269,12 +259,8 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
         return commonContext.getServiceRegistry().select(SessionLoggingService.class);
     }
 
-    protected InteractionService getIsisInteractionFactory() {
+    protected InteractionFactory getInteractionFactory() {
         return commonContext.lookupServiceElseFail(InteractionFactory.class);
-    }
-
-    protected InteractionTracker getIsisInteractionTracker() {
-        return commonContext.getInteractionTracker();
     }
 
     private VirtualClock virtualClock() {

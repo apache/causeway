@@ -34,6 +34,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
+import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.standard.SimpleAuthentication;
 import org.apache.isis.security.spring.authconverters.AuthenticationConverter;
@@ -47,7 +48,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class SpringSecurityFilter implements Filter {
 
-    @Autowired private InteractionService interactionService;
+    @Autowired private InteractionFactory interactionFactory;
 
     @Override
     public void doFilter(
@@ -81,12 +82,13 @@ public class SpringSecurityFilter implements Filter {
             return; // unknown principal type, not handled
         }
 
+        // TODO: this should be added by Wicket viewer
         userMemento = userMemento.withRole("org.apache.isis.viewer.wicket.roles.USER");
 
         val authentication = SimpleAuthentication.validOf(userMemento);
         authentication.setType(Authentication.Type.EXTERNAL);
 
-        interactionService.runAuthenticated(
+        interactionFactory.runAuthenticated(
                 authentication,
                 ()->{
                         filterChain.doFilter(servletRequest, servletResponse);
