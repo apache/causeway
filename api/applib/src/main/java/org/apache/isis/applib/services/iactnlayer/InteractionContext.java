@@ -19,12 +19,17 @@
 package org.apache.isis.applib.services.iactnlayer;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.TimeZone;
 
 import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.user.UserMemento;
+import org.apache.isis.commons.internal.base._Casts;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -70,6 +75,38 @@ public class InteractionContext implements Serializable {
     @With @Getter @Builder.Default
     @NonNull TimeZone timeZone = TimeZone.getDefault();
 
+    Map<String, Serializable> attributes = new HashMap<>();
+    public void putAttribute(String key, Serializable value) {
+        attributes.put(key, value);
+    }
+
+    public <T> Optional<T> getAttribute(String key, Class<T> castTo) {
+        return _Casts.castTo(attributes.get(key), castTo);
+    }
+
+
+    // -- EQUALS and HASHCODE
+
+    /**
+     * We exclude {@link #attributes}.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        InteractionContext that = (InteractionContext) o;
+        return user.equals(that.user) && clock.equals(that.clock) && locale.equals(that.locale) && timeZone.equals(that.timeZone);
+    }
+
+    /**
+     * We exclude {@link #attributes}.
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(user, clock, locale, timeZone);
+    }
+
+
     // -- FACTORIES
 
     /**
@@ -85,5 +122,6 @@ public class InteractionContext implements Serializable {
                 .timeZone(TimeZone.getDefault())
                 .build();
     }
+
 
 }
