@@ -33,7 +33,7 @@ public class ImmutableFacetFromConfiguration extends ImmutableFacetAbstract {
     private final String reason;
 
     public ImmutableFacetFromConfiguration(final String reason, final FacetHolder holder) {
-        super(holder, Precedence.LATE);
+        super(holder, Precedence.LOW);
         this.reason = reason;
     }
 

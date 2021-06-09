@@ -26,8 +26,9 @@ import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInv
 public interface Facet extends FacetWithAttributes {
 
     /**
-     * @implSpec Ordinal dictates precedence
-     * (corresponding to the ascending order of appearance).
+     * @implSpec Ordinal dictates precedence. A higher ordinal
+     * (corresponding to the ascending order of appearance) has
+     * higher precedence.
      */
     public static enum Precedence {
 
@@ -47,9 +48,9 @@ public interface Facet extends FacetWithAttributes {
         DERIVED,
 
         /**
-         * Lower priority than {@link #DEFAULT}.
+         * Lower priority than {@link #DEFAULT}. In other words is overruled by {@link #DEFAULT}.
          */
-        LATE,
+        LOW,
 
         /**
          * The default as used with {@link FacetAbstract}, if not specified otherwise.
@@ -57,9 +58,9 @@ public interface Facet extends FacetWithAttributes {
         DEFAULT,
 
         /**
-         * Higher priority than {@link #DEFAULT}.
+         * Higher priority than {@link #DEFAULT}. In other words, overrules {@link #DEFAULT}.
          */
-        EARLY;
+        HIGH;
 
         public boolean isFallback() {
             return this == FALLBACK;

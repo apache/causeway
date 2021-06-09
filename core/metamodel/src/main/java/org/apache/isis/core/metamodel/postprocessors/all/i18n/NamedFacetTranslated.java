@@ -40,7 +40,7 @@ implements NamedFacet {
             final String originalText,
             final TranslationService translationService,
             final IdentifiedHolder facetHolder) {
-        super(NamedFacet.class, facetHolder, Precedence.EARLY); // facet has final say, don't override
+        super(NamedFacet.class, facetHolder, Precedence.HIGH); // facet has final say, don't override
         this.context = context;
         this.originalText = originalText;
         this.translationService = translationService;

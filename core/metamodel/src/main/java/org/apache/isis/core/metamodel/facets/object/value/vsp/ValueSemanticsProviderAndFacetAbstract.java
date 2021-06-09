@@ -86,7 +86,7 @@ implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProv
          * For example, if there is already a {@link PropertyDefaultFacet} then we
          * shouldn't replace it.
          */
-        super(adapterFacetType, holder, Facet.Precedence.LATE);
+        super(adapterFacetType, holder, Facet.Precedence.LOW);
         this.adaptedClass = adaptedClass;
         this.typicalLength = typicalLength;
         this.maxLength = maxLength;

@@ -96,7 +96,7 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
                 final Class<?> entityClass,
                 final @NonNull ServiceRegistry serviceRegistry) {
 
-            super(EntityFacet.class, holder, Facet.Precedence.EARLY);
+            super(EntityFacet.class, holder, Facet.Precedence.HIGH);
             this.entityClass = entityClass;
             this.serviceRegistry = serviceRegistry;
         }

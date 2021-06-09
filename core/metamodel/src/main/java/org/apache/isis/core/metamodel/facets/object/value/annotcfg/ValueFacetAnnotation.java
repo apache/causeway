@@ -43,7 +43,7 @@ extends ValueFacetAbstract {
                         semanticsProviderName(value, config, annotatedClass)),
                 AddFacetsIfInvalidStrategy.DO_ADD,
                 holder,
-                Precedence.EARLY); // value annotation has final say
+                Precedence.HIGH); // value annotation has final say
     }
 
     // -- HELPER

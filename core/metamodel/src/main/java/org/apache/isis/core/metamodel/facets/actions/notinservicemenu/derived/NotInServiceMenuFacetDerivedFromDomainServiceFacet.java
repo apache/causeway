@@ -34,7 +34,7 @@ extends NotInServiceMenuFacetAbstract {
 
     public NotInServiceMenuFacetDerivedFromDomainServiceFacet(
             final NatureOfService natureOfService, final FacetHolder holder) {
-        super(holder, Precedence.EARLY); // facet has final say, don't override
+        super(holder, Precedence.HIGH); // facet has final say, don't override
         this.natureOfService = natureOfService;
     }
 
