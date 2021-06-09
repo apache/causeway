@@ -65,7 +65,7 @@ implements MetaModelRefiner {
             return;
         }
         final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new HomePageFacetAnnotation(facetHolder));
+        FacetUtil.addFacetIfPresent(new HomePageFacetAnnotation(facetHolder));
     }
 
     @Override

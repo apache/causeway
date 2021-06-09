@@ -26,7 +26,6 @@ import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.param.parameter.fileaccept.FileAcceptFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetInvertedByNullableAnnotationOnParameter;
@@ -64,7 +63,9 @@ extends FacetFactoryAbstract {
         val holder = processParameterContext.getFacetHolder();
         val parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
 
-        super.addFacet(MaxLengthFacetForParameterAnnotation.create(parameterIfAny, holder));
+        addFacetIfPresent(
+                MaxLengthFacetForParameterAnnotation
+                .create(parameterIfAny, holder));
     }
 
     void processParamsMustSatisfy(final ProcessParameterContext processParameterContext) {
@@ -72,8 +73,9 @@ extends FacetFactoryAbstract {
         val holder = processParameterContext.getFacetHolder();
         val parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
 
-        super.addFacet(
-                MustSatisfySpecificationFacetForParameterAnnotation.create(parameterIfAny, holder, getFactoryService()));
+        addFacetIfPresent(
+                MustSatisfySpecificationFacetForParameterAnnotation
+                .create(parameterIfAny, holder, getFactoryService()));
     }
 
     void processParamsRegEx(final ProcessParameterContext processParameterContext) {
@@ -82,33 +84,36 @@ extends FacetFactoryAbstract {
         val parameterType = processParameterContext.getParameterType();
 
         val patternIfAny = processParameterContext.synthesizeOnParameter(Pattern.class);
-        super.addFacet(
-                RegExFacetForPatternAnnotationOnParameter.create(patternIfAny, parameterType, holder));
+        addFacetIfPresent(
+                RegExFacetForPatternAnnotationOnParameter
+                .create(patternIfAny, parameterType, holder));
 
         val parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
-        super.addFacet(
-                RegExFacetForParameterAnnotation.create(parameterIfAny, parameterType, holder));
+        addFacetIfPresent(
+                RegExFacetForParameterAnnotation
+                .create(parameterIfAny, parameterType, holder));
     }
 
     void processParamsOptional(final ProcessParameterContext processParameterContext) {
 
         val holder = processParameterContext.getFacetHolder();
         val parameterType = processParameterContext.getParameterType();
-
         val nullableIfAny = processParameterContext.synthesizeOnParameter(Nullable.class);
-        final MandatoryFacet facet =
-                MandatoryFacetInvertedByNullableAnnotationOnParameter.create(nullableIfAny, parameterType, holder);
-        super.addFacet(facet);
-        MetaModelValidatorForConflictingOptionality.flagIfConflict(
-                facet, "Conflicting @Nullable with other optionality annotation");
-
         val parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
-        final MandatoryFacet mandatoryFacet =
-                MandatoryFacetForParameterAnnotation.create(parameterIfAny, parameterType, holder);
-        super.addFacet(mandatoryFacet);
-        MetaModelValidatorForConflictingOptionality.flagIfConflict(
-                mandatoryFacet, "Conflicting @Parameter#optionality with other optionality annotation");
 
+        addFacetIfPresent(
+                MandatoryFacetInvertedByNullableAnnotationOnParameter
+                .create(nullableIfAny, parameterType, holder))
+        .ifPresent(mandatoryFacet->
+            MetaModelValidatorForConflictingOptionality.flagIfConflict(
+                    mandatoryFacet, "Conflicting @Nullable with other optionality annotation"));
+
+        addFacetIfPresent(
+                MandatoryFacetForParameterAnnotation
+                .create(parameterIfAny, parameterType, holder))
+        .ifPresent(mandatoryFacet->
+            MetaModelValidatorForConflictingOptionality.flagIfConflict(
+                    mandatoryFacet, "Conflicting @Parameter#optionality with other optionality annotation"));
     }
 
     void processParamsFileAccept(final ProcessParameterContext processParameterContext) {
@@ -116,7 +121,9 @@ extends FacetFactoryAbstract {
         val holder = processParameterContext.getFacetHolder();
         val parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
 
-        super.addFacet(FileAcceptFacetForParameterAnnotation.create(parameterIfAny, holder));
+        addFacetIfPresent(
+                FileAcceptFacetForParameterAnnotation
+                .create(parameterIfAny, holder));
     }
 
 

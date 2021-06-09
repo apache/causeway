@@ -36,7 +36,7 @@ public class BigDecimalFacetDerivedFromJdoColumn extends BigDecimalValueFacetAbs
     }
 
     public BigDecimalFacetDerivedFromJdoColumn(final FacetHolder holder, final Integer precision, final Integer scale) {
-        super(BigDecimalFacetDerivedFromJdoColumn.type(), holder);
+        super(BigDecimalFacetDerivedFromJdoColumn.type(), holder, Precedence.DERIVED);
         this.precision = precision;
         this.scale = scale;
     }

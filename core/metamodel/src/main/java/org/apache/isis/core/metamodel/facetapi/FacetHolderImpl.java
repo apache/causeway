@@ -58,7 +58,7 @@ public class FacetHolderImpl implements FacetHolder, MetaModelContextAware {
     }
 
     @Override
-    public void addFacet(Facet facet) {
+    public void addFacet(final @NonNull Facet facet) {
         synchronized($lock) {
             val changed = addFacetOrKeepExistingBasedOnPrecedence(facetsByType, facet);
             if(changed) {

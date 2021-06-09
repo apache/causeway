@@ -91,7 +91,7 @@ implements MetaModelRefiner {
         }
 
         try {
-            super.addFacet(new NavigableParentFacetMethod(method, facetHolder));
+            addFacetIfPresent(new NavigableParentFacetMethod(method, facetHolder));
         } catch (IllegalAccessException e) {
             log.warn("failed to create NavigableParentFacetMethod method:{} holder:{}",
                     method, facetHolder, e);

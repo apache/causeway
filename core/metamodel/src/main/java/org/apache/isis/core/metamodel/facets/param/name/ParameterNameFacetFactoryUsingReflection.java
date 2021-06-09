@@ -64,7 +64,7 @@ public class ParameterNameFacetFactoryUsingReflection extends FacetFactoryAbstra
         val naturalName = StringExtensions.asNaturalName2(parameterName);
         val facetHolder = processParameterContext.getFacetHolder();
 
-        FacetUtil.addFacet(create(naturalName, facetHolder));
+        FacetUtil.addFacetIfPresent(create(naturalName, facetHolder));
     }
 
     private NamedFacet create(final String parameterName, final FacetHolder holder) {

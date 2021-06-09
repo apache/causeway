@@ -57,7 +57,7 @@ extends HiddenObjectFacetAbstract {
     @Override
     public void copyOnto(final FacetHolder holder) {
         final HiddenObjectFacetViaMethod clonedFacet = new HiddenObjectFacetViaMethod(this.method, holder);
-        FacetUtil.addFacet(clonedFacet);
+        FacetUtil.addFacetIfPresent(clonedFacet);
     }
 
     @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {

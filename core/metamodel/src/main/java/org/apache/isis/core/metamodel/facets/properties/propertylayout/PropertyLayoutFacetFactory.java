@@ -45,53 +45,51 @@ extends FacetFactoryAbstract {
                         () -> MetaModelValidatorForAmbiguousMixinAnnotations
                         .addValidationFailure(processMethodContext.getFacetHolder(), PropertyLayout.class));
 
-        val cssClassFacet = CssClassFacetForPropertyLayoutAnnotation
-                .create(propertyLayoutIfAny, facetHolder);
-        super.addFacet(cssClassFacet);
+        addFacetIfPresent(
+                CssClassFacetForPropertyLayoutAnnotation
+                .create(propertyLayoutIfAny, facetHolder));
 
-        val describedAsFacet = DescribedAsFacetForPropertyLayoutAnnotation
-                .create(propertyLayoutIfAny, facetHolder);
-        super.addFacet(describedAsFacet);
+        addFacetIfPresent(
+                DescribedAsFacetForPropertyLayoutAnnotation
+                .create(propertyLayoutIfAny, facetHolder));
 
-        val hiddenFacet = HiddenFacetForPropertyLayoutAnnotation
-                .create(propertyLayoutIfAny, facetHolder);
-        super.addFacet(hiddenFacet);
+        addFacetIfPresent(
+                HiddenFacetForPropertyLayoutAnnotation
+                .create(propertyLayoutIfAny, facetHolder));
 
-        val labelAtFacet = LabelAtFacetForPropertyLayoutAnnotation
-                .create(propertyLayoutIfAny, facetHolder);
-        super.addFacet(labelAtFacet);
+        addFacetIfPresent(
+                LabelAtFacetForPropertyLayoutAnnotation
+                .create(propertyLayoutIfAny, facetHolder));
 
-        val layoutGroupFacet = LayoutGroupFacetFromPropertyLayoutAnnotation
-                .create(propertyLayoutIfAny, facetHolder);
-        super.addFacet(layoutGroupFacet);
+        addFacetIfPresent(
+                LayoutGroupFacetFromPropertyLayoutAnnotation
+                .create(propertyLayoutIfAny, facetHolder));
 
-        val layoutOrderFacet = LayoutOrderFacetFromPropertyLayoutAnnotation
-                .create(propertyLayoutIfAny, facetHolder);
-        super.addFacet(layoutOrderFacet);
+        addFacetIfPresent(
+                LayoutOrderFacetFromPropertyLayoutAnnotation
+                .create(propertyLayoutIfAny, facetHolder));
 
-        val multiLineFacet = MultiLineFacetForPropertyLayoutAnnotation
-                .create(propertyLayoutIfAny, facetHolder);
-        super.addFacet(multiLineFacet);
+        addFacetIfPresent(
+                MultiLineFacetForPropertyLayoutAnnotation
+                .create(propertyLayoutIfAny, facetHolder));
 
-        val namedFacet = NamedFacetForPropertyLayoutAnnotation
-                .create(propertyLayoutIfAny, facetHolder);
-        super.addFacet(namedFacet);
+        addFacetIfPresent(
+                NamedFacetForPropertyLayoutAnnotation
+                .create(propertyLayoutIfAny, facetHolder));
 
-        val promptStyleFacet = PromptStyleFacetForPropertyLayoutAnnotation
-                .create(propertyLayoutIfAny, getConfiguration(), facetHolder);
-        super.addFacet(promptStyleFacet);
+        addFacetIfPresent(
+                PromptStyleFacetForPropertyLayoutAnnotation
+                .create(propertyLayoutIfAny, getConfiguration(), facetHolder));
 
-        val renderedAdjustedFacet = RenderedAdjustedFacetForPropertyLayoutAnnotation
-                .create(propertyLayoutIfAny, facetHolder);
-        super.addFacet(renderedAdjustedFacet);
+        addFacetIfPresent(
+                RenderedAdjustedFacetForPropertyLayoutAnnotation
+                .create(propertyLayoutIfAny, facetHolder));
 
-        val typicalLengthFacet = TypicalLengthFacetForPropertyLayoutAnnotation
-                .create(propertyLayoutIfAny, facetHolder);
-        super.addFacet(typicalLengthFacet);
+        addFacetIfPresent(TypicalLengthFacetForPropertyLayoutAnnotation
+                .create(propertyLayoutIfAny, facetHolder));
 
-        val unchangingFacet = UnchangingFacetForPropertyLayoutAnnotation
-                .create(propertyLayoutIfAny, facetHolder);
-        super.addFacet(unchangingFacet);
+        addFacetIfPresent(UnchangingFacetForPropertyLayoutAnnotation
+                .create(propertyLayoutIfAny, facetHolder));
 
     }
 

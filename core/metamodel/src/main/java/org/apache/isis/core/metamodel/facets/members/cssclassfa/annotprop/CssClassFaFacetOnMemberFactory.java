@@ -37,10 +37,8 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        CssClassFaFacet cssClassFaFacet = createFromConfiguredRegexIfPossible(processMethodContext);
-
-        // no-op if null
-        super.addFacet(cssClassFaFacet);
+        addFacetIfPresent(
+                createFromConfiguredRegexIfPossible(processMethodContext));
     }
 
 

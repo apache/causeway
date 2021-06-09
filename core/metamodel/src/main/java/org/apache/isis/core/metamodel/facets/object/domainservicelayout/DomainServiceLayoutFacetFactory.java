@@ -56,7 +56,8 @@ public class DomainServiceLayoutFacetFactory extends FacetFactoryAbstract {
                 .filter(mb -> mb != DomainServiceLayout.MenuBar.NOT_SPECIFIED) // redundant since _Annotations
                 .orElse(DomainServiceLayout.MenuBar.PRIMARY);
 
-        super.addFacet(new DomainServiceLayoutFacetAnnotation(facetHolder, menuBar));
+        addFacetIfPresent(
+                new DomainServiceLayoutFacetAnnotation(facetHolder, menuBar));
 
         val named = domainServiceLayoutIfAny
                 .map(DomainServiceLayout::named)
@@ -64,7 +65,9 @@ public class DomainServiceLayoutFacetFactory extends FacetFactoryAbstract {
                 .filter(Objects::nonNull)
                 .orElse(null);
 
-        super.addFacet(NamedFacetForDomainServiceLayoutAnnotation.create(named, facetHolder));
+        addFacetIfPresent(
+                NamedFacetForDomainServiceLayoutAnnotation
+                .create(named, facetHolder));
     }
 
 }

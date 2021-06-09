@@ -61,7 +61,7 @@ public class ContributingFacetDerivedFromMixinFacetFactory extends FacetFactoryA
                 || processMethodContext.synthesizeOnType(ActionLayout.class).isPresent();
 
         if(isForceContributedAsAction) {
-            FacetUtil.addFacet(new ContributingFacetAbstract(Contributing.AS_ACTION, facetedMethod) {});
+            FacetUtil.addFacetIfPresent(new ContributingFacetAbstract(Contributing.AS_ACTION, facetedMethod) {});
         }
 
     }

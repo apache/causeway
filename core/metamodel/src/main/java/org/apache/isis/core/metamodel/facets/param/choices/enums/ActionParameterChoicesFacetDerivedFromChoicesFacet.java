@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 public class ActionParameterChoicesFacetDerivedFromChoicesFacet extends ActionParameterChoicesFacetAbstract {
 
     public ActionParameterChoicesFacetDerivedFromChoicesFacet(final FacetHolder holder) {
-        super(holder);
+        super(holder, Precedence.DERIVED);
     }
 
     @Override

@@ -60,7 +60,7 @@ public class TenantedAuthorizationPostProcessor
 
     @Override
     public void doPostProcess(ObjectSpecification objectSpecification) {
-        FacetUtil.addFacet(createFacet(objectSpecification.getCorrespondingClass(), objectSpecification));
+        FacetUtil.addFacetIfPresent(createFacet(objectSpecification.getCorrespondingClass(), objectSpecification));
     }
 
     @Override
@@ -84,7 +84,7 @@ public class TenantedAuthorizationPostProcessor
     }
 
     private void addFacetTo(ObjectSpecification specification, ObjectFeature objectFeature) {
-        FacetUtil.addFacet(createFacet(specification.getCorrespondingClass(), objectFeature));
+        FacetUtil.addFacetIfPresent(createFacet(specification.getCorrespondingClass(), objectFeature));
     }
 
     private TenantedAuthorizationFacetDefault createFacet(

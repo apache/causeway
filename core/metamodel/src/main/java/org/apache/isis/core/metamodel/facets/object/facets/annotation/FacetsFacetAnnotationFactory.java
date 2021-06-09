@@ -36,7 +36,7 @@ public class FacetsFacetAnnotationFactory extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
         final Facets annotation = Annotations.getAnnotation(processClassContaxt.getCls(), Facets.class);
-        FacetUtil.addFacet(create(annotation, processClassContaxt.getFacetHolder()));
+        FacetUtil.addFacetIfPresent(create(annotation, processClassContaxt.getFacetHolder()));
     }
 
     /**

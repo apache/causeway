@@ -20,8 +20,9 @@
 package org.apache.isis.core.metamodel.facets.object.choices.enums;
 
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
+
+import lombok.val;
 
 public class EnumFacetUsingValueFacetUsingSemanticsProviderFactory
 extends ValueFacetUsingSemanticsProviderFactory<Enum<?>> {
@@ -32,18 +33,16 @@ extends ValueFacetUsingSemanticsProviderFactory<Enum<?>> {
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
-        final FacetHolder holder = processClassContext.getFacetHolder();
+        val cls = processClassContext.getCls();
+        val facetHolder = processClassContext.getFacetHolder();
 
         if (!cls.isEnum()) {
             return;
         }
 
-        EnumValueSemanticsProvider<? extends Enum<?>> enumValueSemanticsProvider =
-                new EnumValueSemanticsProvider<>(holder, _Casts.uncheckedCast(cls));
-
-        addFacets(_Casts.uncheckedCast(enumValueSemanticsProvider));
-        super.addFacet(new ChoicesFacetEnum(holder, cls));
+        addFacets(_Casts.uncheckedCast(
+                new EnumValueSemanticsProvider<>(facetHolder, _Casts.uncheckedCast(cls))));
+        addFacetIfPresent(new ChoicesFacetEnum(facetHolder, cls));
     }
 
 }

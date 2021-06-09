@@ -37,10 +37,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacetForXmlRootElementAnnotation;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
@@ -75,33 +73,28 @@ implements MetaModelRefiner {
     }
 
     private void processXmlJavaTypeAdapter(final ProcessClassContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
 
-        final XmlJavaTypeAdapter annotation = Annotations.getAnnotation(cls, XmlJavaTypeAdapter.class);
-        if(annotation == null) {
+        val xmlJavaTypeAdapterIfAny = processClassContext.synthesizeOnType(XmlJavaTypeAdapter.class);
+        if(!xmlJavaTypeAdapterIfAny.isPresent()) {
             return;
         }
 
-        final FacetHolder holder = processClassContext.getFacetHolder();
-        final XmlJavaTypeAdapterFacetDefault facet = new XmlJavaTypeAdapterFacetDefault(holder,
-                annotation.value());
+        val facetHolder = processClassContext.getFacetHolder();
 
-        super.addFacet(facet);
+        addFacetIfPresent(
+                new XmlJavaTypeAdapterFacetDefault(facetHolder, xmlJavaTypeAdapterIfAny.get().value()));
     }
 
     private void processXmlAccessorTypeFacet(final ProcessClassContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
 
-        final XmlAccessorType annotation = Annotations.getAnnotation(cls, XmlAccessorType.class);
-        if(annotation == null) {
+        val xmlAccessorTypeIfAny = processClassContext.synthesizeOnType(XmlAccessorType.class);
+        if(!xmlAccessorTypeIfAny.isPresent()) {
             return;
         }
 
-        final FacetHolder holder = processClassContext.getFacetHolder();
-        final XmlAccessorTypeFacetDefault facet =
-                new XmlAccessorTypeFacetDefault(holder, annotation.value());
-
-        super.addFacet(facet);
+        val facetHolder = processClassContext.getFacetHolder();
+        addFacetIfPresent(
+                new XmlAccessorTypeFacetDefault(facetHolder, xmlAccessorTypeIfAny.get().value()));
     }
 
     // -- METHOD CONTEXT
@@ -123,42 +116,28 @@ implements MetaModelRefiner {
     }
 
     private void processXmlJavaTypeAdapter(final ProcessMethodContext processMethodContext, XmlAccessType accessType) {
-        //val method = processMethodContext.getMethod();
 
-        final XmlJavaTypeAdapter annotation = processMethodContext.synthesizeOnMethod(XmlJavaTypeAdapter.class)
-                .orElse(null);
+        val xmlJavaTypeAdapterIfAny = processMethodContext.synthesizeOnMethod(XmlJavaTypeAdapter.class);
 
-//        _Assert.assertEquals("expected same", annotation,
-//                Annotations.getAnnotation(method, XmlJavaTypeAdapter.class));
-
-        if(annotation == null) {
+        if(!xmlJavaTypeAdapterIfAny.isPresent()) {
             return;
         }
 
-        final FacetHolder holder = processMethodContext.getFacetHolder();
-        final XmlJavaTypeAdapterFacetDefault facet = new XmlJavaTypeAdapterFacetDefault(holder,
-                annotation.value());
-
-        super.addFacet(facet);
+        val facetHolder = processMethodContext.getFacetHolder();
+        addFacetIfPresent(
+                new XmlJavaTypeAdapterFacetDefault(facetHolder, xmlJavaTypeAdapterIfAny.get().value()));
     }
 
     private void processXmlTransient(final ProcessMethodContext processMethodContext, XmlAccessType accessType) {
-        //val method = processMethodContext.getMethod();
 
-        final XmlTransient annotation = processMethodContext.synthesizeOnMethod(XmlTransient.class)
-                .orElse(null);
+        val xmlTransientIfAny = processMethodContext.synthesizeOnMethod(XmlTransient.class);
 
-//        _Assert.assertEquals("expected same", annotation,
-//                Annotations.getAnnotation(method, XmlTransient.class));
-
-        if(annotation == null) {
+        if(!xmlTransientIfAny.isPresent()) {
             return;
         }
 
-        final FacetHolder holder = processMethodContext.getFacetHolder();
-        final XmlTransientFacet facet = new XmlTransientFacetDefault(holder);
-
-        super.addFacet(facet);
+        val facetHolder = processMethodContext.getFacetHolder();
+        addFacetIfPresent(new XmlTransientFacetDefault(facetHolder));
     }
 
     // --

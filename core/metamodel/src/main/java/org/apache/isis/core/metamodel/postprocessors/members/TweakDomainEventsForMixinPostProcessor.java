@@ -113,7 +113,7 @@ extends ObjectSpecificationPostProcessorAbstract {
                     final PropertyDomainEventFacetForPropertyAnnotation propertyDomainEventFacet =
                             new PropertyDomainEventFacetForPropertyAnnotation(
                                     propertyDomainEventType, getterFacetIfAny, property);
-                    FacetUtil.addFacet(propertyDomainEventFacet);
+                    FacetUtil.addFacetIfPresent(propertyDomainEventFacet);
                 }
             }
             final PropertyDomainEventDefaultFacetForDomainObjectAnnotation propertyDomainEventDefaultFacet =
@@ -154,7 +154,7 @@ extends ObjectSpecificationPostProcessorAbstract {
                     final CollectionDomainEventFacetForCollectionAnnotation collectionDomainEventFacet =
                             new CollectionDomainEventFacetForCollectionAnnotation(
                                     collectionDomainEventType, collection);
-                    FacetUtil.addFacet(collectionDomainEventFacet);
+                    FacetUtil.addFacetIfPresent(collectionDomainEventFacet);
                 }
 
                 final CollectionDomainEventDefaultFacetForDomainObjectAnnotation collectionDomainEventDefaultFacet =

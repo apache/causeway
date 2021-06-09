@@ -86,7 +86,9 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
         // sadness: same logic as in I18nFacetFactory
         val translationContext = TranslationContext
                 .forTranslationContextHolder(((IdentifiedHolder)facetHolder).getIdentifier());
-        super.addFacet(new DisableForContextFacetViaMethod(disableMethod, translationService, translationContext, facetHolder));
+        addFacetIfPresent(
+                new DisableForContextFacetViaMethod(
+                        disableMethod, translationService, translationContext, facetHolder));
     }
 
 }

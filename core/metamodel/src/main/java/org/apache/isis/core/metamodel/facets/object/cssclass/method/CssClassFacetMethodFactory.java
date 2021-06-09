@@ -47,6 +47,6 @@ public class CssClassFacetMethodFactory extends MethodPrefixBasedFacetFactoryAbs
             return;
         }
         processClassContext.removeMethod(method);
-        super.addFacet(new CssClassFacetMethod(method, facetHolder));
+        addFacetIfPresent(new CssClassFacetMethod(method, facetHolder));
     }
 }

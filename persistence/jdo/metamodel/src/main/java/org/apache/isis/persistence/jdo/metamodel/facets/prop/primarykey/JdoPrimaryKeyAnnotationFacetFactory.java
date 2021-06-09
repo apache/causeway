@@ -23,10 +23,10 @@ import javax.jdo.annotations.PrimaryKey;
 
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
 import lombok.Setter;
+import lombok.val;
 
 public class JdoPrimaryKeyAnnotationFacetFactory
 extends FacetFactoryAbstract {
@@ -41,26 +41,23 @@ extends FacetFactoryAbstract {
     public void process(ProcessMethodContext processMethodContext) {
 
         // ignore any view models
-        final Class<?> cls = processMethodContext.getCls();
+        val cls = processMethodContext.getCls();
         if(!jdoFacetContext.isPersistenceEnhanced(cls)) {
             return;
         }
 
-        //val method = processMethodContext.getMethod();
+        //      val method = processMethodContext.getMethod();
+        //       _Assert.assertEquals("expected same on method=" + method , annotation,
+        //                Annotations.getAnnotation(method, PrimaryKey.class));
 
-        final PrimaryKey annotation = processMethodContext.synthesizeOnMethod(PrimaryKey.class)
-                .orElse(null);
-
-//        _Assert.assertEquals("expected same on method=" + method , annotation,
-//                Annotations.getAnnotation(method, PrimaryKey.class));
-
-        if (annotation == null) {
+        val primaryKeyIfAny = processMethodContext.synthesizeOnMethod(PrimaryKey.class);
+        if (!primaryKeyIfAny.isPresent()) {
             return;
         }
 
-        final FacetedMethod holder = processMethodContext.getFacetHolder();
-        super.addFacet(new JdoPrimaryKeyFacetAnnotation(holder));
-        super.addFacet(new OptionalFacetDerivedFromJdoPrimaryKeyAnnotation(holder));
-        super.addFacet(new DisabledFacetDerivedFromJdoPrimaryKeyAnnotation(holder));
+        val facetHolder = processMethodContext.getFacetHolder();
+        addFacetIfPresent(new JdoPrimaryKeyFacetAnnotation(facetHolder));
+        addFacetIfPresent(new OptionalFacetDerivedFromJdoPrimaryKeyAnnotation(facetHolder));
+        addFacetIfPresent(new DisabledFacetDerivedFromJdoPrimaryKeyAnnotation(facetHolder));
     }
 }

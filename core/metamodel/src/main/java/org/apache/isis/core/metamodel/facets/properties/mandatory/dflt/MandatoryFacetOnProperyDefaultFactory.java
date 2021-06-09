@@ -46,7 +46,7 @@ public class MandatoryFacetOnProperyDefaultFactory extends FacetFactoryAbstract 
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        FacetUtil.addFacet(
+        FacetUtil.addFacetIfPresent(
                 MandatoryFacetDefault
                 .required(processMethodContext.getFacetHolder()));
     }

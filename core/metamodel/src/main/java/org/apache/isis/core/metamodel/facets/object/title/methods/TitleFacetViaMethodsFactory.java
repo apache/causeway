@@ -68,7 +68,7 @@ public class TitleFacetViaMethodsFactory extends MethodPrefixBasedFacetFactoryAb
             val translationContext = TranslationContext.forMethod(method);
 
             val titleFacet = new TitleFacetViaTitleMethod(method, translationService, translationContext, facetHolder);
-            FacetUtil.addFacet(titleFacet);
+            FacetUtil.addFacetIfPresent(titleFacet);
             return;
         }
 
@@ -88,7 +88,7 @@ public class TitleFacetViaMethodsFactory extends MethodPrefixBasedFacetFactoryAb
                 return;
             }
             processClassContext.removeMethod(method);
-            FacetUtil.addFacet(new TitleFacetViaToStringMethod(method, facetHolder));
+            FacetUtil.addFacetIfPresent(new TitleFacetViaToStringMethod(method, facetHolder));
 
         } catch (final Exception e) {
             return;

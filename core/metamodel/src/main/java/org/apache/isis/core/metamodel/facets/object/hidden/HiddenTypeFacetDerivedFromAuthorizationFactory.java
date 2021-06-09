@@ -38,7 +38,7 @@ public class HiddenTypeFacetDerivedFromAuthorizationFactory extends FacetFactory
     @Override
     public void process(final ProcessClassContext processClassContext) {
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
-        FacetUtil.addFacet(new HiddenTypeFacetDerivedFromAuthorization(facetHolder));
+        FacetUtil.addFacetIfPresent(new HiddenTypeFacetDerivedFromAuthorization(facetHolder));
     }
 
 }

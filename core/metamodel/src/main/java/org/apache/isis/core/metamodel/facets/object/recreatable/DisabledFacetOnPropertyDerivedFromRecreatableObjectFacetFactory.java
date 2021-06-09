@@ -46,7 +46,7 @@ public class DisabledFacetOnPropertyDerivedFromRecreatableObjectFacetFactory ext
         final DisabledFacetAbstract.Semantics semantics = Util.inferSemanticsFrom(facet);
 
         final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
-        super.addFacet(new DisabledFacetOnPropertyDerivedFromRecreatableObject(facetHolder, semantics));
+        addFacetIfPresent(new DisabledFacetOnPropertyDerivedFromRecreatableObject(facetHolder, semantics));
     }
 
 }

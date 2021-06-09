@@ -128,12 +128,12 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
 
                 final CollectionSemanticsFacet semanticsFacet =
                         CollectionSemanticsFacetDefault.forParamType(parameterType, facetedMethodParam);
-                FacetUtil.addFacet(semanticsFacet);
+                FacetUtil.addFacetIfPresent(semanticsFacet);
 
                 TypeOfFacet.inferFromParameterType(facetedMethodParam, param)
                 .ifPresent(typeOfFacet->{
                     // copy over (corresponds to similar code for OneToManyAssociation in FacetMethodsBuilder).
-                    FacetUtil.addFacet(typeOfFacet);
+                    FacetUtil.addFacetIfPresent(typeOfFacet);
                     facetedMethodParam.setType(typeOfFacet.value());
                 });
             }

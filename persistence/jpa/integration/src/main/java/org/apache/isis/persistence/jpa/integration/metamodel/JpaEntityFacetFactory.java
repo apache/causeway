@@ -77,9 +77,8 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
         }
 
         val serviceRegistry = super.getMetaModelContext().getServiceRegistry();
-        val jpaEntityFacet = new JpaEntityFacet(facetHolder, cls, serviceRegistry);
-
-        addFacet(jpaEntityFacet);
+        addFacetIfPresent(
+                new JpaEntityFacet(facetHolder, cls, serviceRegistry));
     }
 
     // --

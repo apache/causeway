@@ -46,7 +46,7 @@ implements MetaModelRefiner {
 
     @Override
     public void process(ProcessClassContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
+        val cls = processClassContext.getCls();
 
         // only applies to JDO entities; ignore any view models
         if(!jdoFacetContext.isPersistenceEnhanced(cls)) {
@@ -57,15 +57,15 @@ implements MetaModelRefiner {
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         if (namedQueriesAnnotation != null) {
-            super.addFacet(new JdoQueriesFacetAnnotation(
-                    namedQueriesAnnotation.value(), facetHolder));
+            addFacetIfPresent(
+                    new JdoQueriesFacetAnnotation(namedQueriesAnnotation.value(), facetHolder));
             return;
         }
 
         final Query namedQueryAnnotation = Annotations.getAnnotation(cls, Query.class);
         if (namedQueryAnnotation != null) {
-            super.addFacet(new JdoQueryFacetAnnotation(
-                    namedQueryAnnotation, facetHolder));
+            addFacetIfPresent(
+                    new JdoQueryFacetAnnotation(namedQueryAnnotation, facetHolder));
         }
     }
 

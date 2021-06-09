@@ -90,7 +90,7 @@ extends FacetFactoryAbstract {
         val holder = processMethodContext.getFacetHolder();
 
         // check for @Action at all.
-        addFacet(
+        addFacetIfPresent(
                 ActionExplicitFacetForActionAnnotation
                 .create(actionIfAny, holder));
     }
@@ -135,7 +135,7 @@ extends FacetFactoryAbstract {
                     ActionDomainEvent.Noop.class,
                     ActionDomainEvent.Default.class,
                     getConfiguration().getApplib().getAnnotation().getAction().getDomainEvent().isPostForDefault())) {
-                addFacet(actionDomainEventFacet);
+                addFacetIfPresent(actionDomainEventFacet);
             }
 
             // replace the current actionInvocationFacet with one that will
@@ -150,7 +150,7 @@ extends FacetFactoryAbstract {
                 actionInvocationFacet = new ActionInvocationFacetForDomainEventFromDefault(
                         actionDomainEventFacet.getEventType(), actionMethod, typeSpec, returnSpec, holder);
             }
-            addFacet(actionInvocationFacet);
+            addFacetIfPresent(actionInvocationFacet);
 
         } finally {
             processMethodContext.removeMethod(actionMethod);
@@ -175,7 +175,7 @@ extends FacetFactoryAbstract {
         val facetedMethod = processMethodContext.getFacetHolder();
 
         // search for @Action(hidden=...)
-        addFacet(
+        addFacetIfPresent(
                 HiddenFacetForActionAnnotation
                 .create(actionIfAny, facetedMethod));
     }
@@ -184,7 +184,7 @@ extends FacetFactoryAbstract {
         val facetedMethod = processMethodContext.getFacetHolder();
 
         // search for @Action(restrictTo=...)
-        addFacet(
+        addFacetIfPresent(
                 PrototypeFacetForActionAnnotation
                 .create(
                         actionIfAny, facetedMethod,
@@ -195,7 +195,7 @@ extends FacetFactoryAbstract {
         val facetedMethod = processMethodContext.getFacetHolder();
 
         // check for @Action(semantics=...)
-        addFacet(
+        addFacetIfPresent(
                 ActionSemanticsFacetForActionAnnotation
                 .create(actionIfAny, facetedMethod));
     }
@@ -216,7 +216,7 @@ extends FacetFactoryAbstract {
         }
 
         // check for @Action(commandPublishing=...)
-        addFacet(CommandPublishingFacetForActionAnnotation
+        addFacetIfPresent(CommandPublishingFacetForActionAnnotation
                 .create(actionIfAny, getConfiguration(), getServiceInjector(), facetedMethod));
     }
 
@@ -237,9 +237,9 @@ extends FacetFactoryAbstract {
         }
 
         // check for @Action(executionPublishing=...)
-        val executionPublishingFacet = ExecutionPublishingActionFacetForActionAnnotation
-                .create(actionIfAny, getConfiguration(), facetedMethod);
-        super.addFacet(executionPublishingFacet);
+        addFacetIfPresent(
+                ExecutionPublishingActionFacetForActionAnnotation
+                .create(actionIfAny, getConfiguration(), facetedMethod));
     }
 
     void processTypeOf(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
@@ -260,7 +260,7 @@ extends FacetFactoryAbstract {
                 // else infer from generic type arg if any
                 .orElseGet(()->TypeOfFacet.inferFromMethodReturnType(facetedMethod, method).orElse(null));
 
-        addFacet(typeOfFacet);
+        addFacetIfPresent(typeOfFacet);
     }
 
     void processChoicesFrom(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
@@ -271,18 +271,18 @@ extends FacetFactoryAbstract {
         actionIfAny.ifPresent(action->{
             val choicesFrom = action.choicesFrom();
             if(_Strings.isNotEmpty(choicesFrom)) {
-                super.addFacet(new ChoicesFromFacetForActionAnnotation(choicesFrom, facetedMethod));
+                addFacetIfPresent(new ChoicesFromFacetForActionAnnotation(choicesFrom, facetedMethod));
                 return;
             }
             @SuppressWarnings("deprecation")
             val associateWith = action.associateWith();
             if(_Strings.isNotEmpty(associateWith)) {
-                super.addFacet(new ChoicesFromFacetForActionAnnotation(associateWith, facetedMethod));
+                addFacetIfPresent(new ChoicesFromFacetForActionAnnotation(associateWith, facetedMethod));
                 return;
             }
         });
 
-        addFacet(
+        addFacetIfPresent(
                 LayoutGroupFacetFromActionAnnotation
                 .create(actionIfAny, facetedMethod));
 
@@ -293,7 +293,7 @@ extends FacetFactoryAbstract {
         val holder = processMethodContext.getFacetHolder();
 
         // check for @Action(fileAccept=...)
-        addFacet(
+        addFacetIfPresent(
                 FileAcceptFacetForActionAnnotation
                 .create(actionIfAny, holder));
     }

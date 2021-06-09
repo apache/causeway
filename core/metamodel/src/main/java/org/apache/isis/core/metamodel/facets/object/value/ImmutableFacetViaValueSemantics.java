@@ -33,7 +33,7 @@ public class ImmutableFacetViaValueSemantics extends ImmutableFacetAbstract {
     @Override
     public void copyOnto(final FacetHolder holder) {
         final Facet facet = new ImmutableFacetViaValueSemantics(holder);
-        FacetUtil.addFacet(facet);
+        FacetUtil.addFacetIfPresent(facet);
     }
 
 }

@@ -39,7 +39,8 @@ public class DefaultedFacetAnnotationElseConfigurationFactory extends FacetFacto
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        super.addFacet(create(processClassContext.getCls(), processClassContext.getFacetHolder()));
+        addFacetIfPresent(
+                create(processClassContext.getCls(), processClassContext.getFacetHolder()));
     }
 
     private DefaultedFacetAbstract create(final Class<?> cls, final FacetHolder holder) {

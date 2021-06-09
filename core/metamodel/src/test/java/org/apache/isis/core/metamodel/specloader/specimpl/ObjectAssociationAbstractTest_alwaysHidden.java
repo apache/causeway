@@ -227,6 +227,6 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
                 return null;
             }
         };
-        FacetUtil.addFacet(facet);
+        FacetUtil.addFacetIfPresent(facet);
     }
 }

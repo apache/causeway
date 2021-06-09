@@ -69,8 +69,7 @@ implements MetaModelRefiner {
                     && !existingFacet.getPrecedence().isFallback()) {
                 // do nothing
             } else {
-                final BigDecimalValueFacet facet = new BigDecimalFacetFallback(holder);
-                super.addFacet(facet);
+                addFacetIfPresent(new BigDecimalFacetFallback(holder));
             }
         } else {
 
@@ -87,8 +86,7 @@ implements MetaModelRefiner {
 
             Integer length = valueElseDefaults(jdoColumnAnnotation.length(), existingLength, DEFAULT_LENGTH);
             Integer scale = valueElseDefaults(jdoColumnAnnotation.scale(), existingScale, DEFAULT_SCALE);
-            final BigDecimalValueFacet facet = new BigDecimalFacetDerivedFromJdoColumn(holder, length, scale);
-            super.addFacet(facet);
+            addFacetIfPresent(new BigDecimalFacetDerivedFromJdoColumn(holder, length, scale));
         }
     }
 

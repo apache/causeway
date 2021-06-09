@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets;
 
+import java.util.Optional;
+
 import javax.annotation.Nullable;
 
 import org.apache.isis.commons.collections.ImmutableEnumSet;
@@ -60,12 +62,12 @@ implements FacetFactory, MetaModelContextAware, HasMetaModelContext {
     // -- FACET UTILITIES
 
     /**
-     * Shortcut to {@link FacetUtil#addFacet}. Acts as a no-op if facet is <tt>null</tt>.
+     * Shortcut to {@link FacetUtil#addFacetIfPresent}. Acts as a no-op if facet is <tt>null</tt>.
      * @param facet - null-able
-     * @return whether given {@code facet} is non-<tt>null</tt>
+     * @return the argument wrapped in an {@link Optional}
      */
-    public boolean addFacet(final @Nullable Facet facet) {
-        return FacetUtil.addFacet(facet);
+    public <F extends Facet> Optional<F> addFacetIfPresent(final @Nullable F facet) {
+        return FacetUtil.addFacetIfPresent(facet);
     }
 
     // -- METHOD UTILITITES

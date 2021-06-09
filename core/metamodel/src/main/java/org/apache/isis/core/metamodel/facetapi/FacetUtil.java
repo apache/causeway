@@ -19,33 +19,32 @@
 
 package org.apache.isis.core.metamodel.facetapi;
 
-import java.util.List;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import javax.annotation.Nullable;
 
 import org.apache.isis.core.metamodel.util.snapshot.XmlSchema;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public final class FacetUtil {
 
     /**
      * Attaches the {@link Facet} to its {@link Facet#getFacetHolder() facet
      * holder} based on precedence. Acts as a no-op if facet is <tt>null</tt>.
      * @param facet - null-able
-     * @return whether given {@code facet} is non-<tt>null</tt>
+     * @return the argument wrapped in an {@link Optional}
      */
-    public static boolean addFacet(final @Nullable Facet facet) {
+    public static <F extends Facet> Optional<F> addFacetIfPresent(final @Nullable F facet) {
         if (facet == null) {
-            return false;
+            return Optional.empty();
         }
         facet.getFacetHolder().addFacet(facet);
-        return true;
+        return Optional.of(facet);
     }
 
     /**
@@ -54,10 +53,10 @@ public final class FacetUtil {
      *
      * @return whether given {@code facetList} contains any non-<tt>null</tt> facets
      */
-    public static boolean addFacets(final @NonNull List<Facet> facetList) {
+    public static boolean addFacets(final @NonNull Iterable<Facet> facetList) {
         boolean addedFacets = false;
         for (val facet : facetList) {
-            addedFacets = addFacet(facet) | addedFacets;
+            addedFacets = addFacetIfPresent(facet).isPresent() | addedFacets;
         }
         return addedFacets;
     }

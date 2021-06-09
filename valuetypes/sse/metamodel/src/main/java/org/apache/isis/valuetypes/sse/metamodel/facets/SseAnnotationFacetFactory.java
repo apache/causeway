@@ -59,7 +59,7 @@ public class SseAnnotationFacetFactory extends FacetFactoryAbstract {
         val serverSentEventsIfAny = processMethodContext.synthesizeOnMethod(ServerSentEvents.class);
         val facet = SseObserveFacetForServerSentEventsAnnotation.create(serverSentEventsIfAny, facetHolder);
 
-        FacetUtil.addFacet(facet);
+        FacetUtil.addFacetIfPresent(facet);
     }
 
 

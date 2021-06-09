@@ -42,7 +42,7 @@ public class CreatedCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAb
 
         val method = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.CREATED_PREFIX, void.class, NO_ARG);
         if (method != null) {
-            super.addFacet(new CreatedCallbackFacetViaMethod(method, facetHolder));
+            addFacetIfPresent(new CreatedCallbackFacetViaMethod(method, facetHolder));
             processClassContext.removeMethod(method);
         }
 

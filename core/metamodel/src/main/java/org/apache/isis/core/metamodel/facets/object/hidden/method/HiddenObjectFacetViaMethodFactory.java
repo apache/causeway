@@ -83,7 +83,7 @@ public class HiddenObjectFacetViaMethodFactory extends MethodPrefixBasedFacetFac
         if (method == null) {
             return false;
         }
-        FacetUtil.addFacet(new HiddenObjectFacetViaMethod(method, facetHolder));
+        FacetUtil.addFacetIfPresent(new HiddenObjectFacetViaMethod(method, facetHolder));
         processClassContext.removeMethod(method);
         return true;
     }

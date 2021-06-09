@@ -35,17 +35,18 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        DescribedAsFacet facet = createFromAnnotationOnReturnTypeIfPossible(processMethodContext);
-        // facet derived from type moved to post-processor
+        // (facet derived from type moved to post-processor)
 
-        // no-op if null
-        super.addFacet(facet);
+        addFacetIfPresent(
+                createFromAnnotationOnReturnTypeIfPossible(processMethodContext));
     }
 
     private DescribedAsFacet createFromAnnotationOnReturnTypeIfPossible(final ProcessMethodContext processMethodContext) {
         final Class<?> returnType = processMethodContext.getMethod().getReturnType();
         final DescribedAsFacet returnTypeDescribedAsFacet = getDescribedAsFacet(returnType);
-        return returnTypeDescribedAsFacet != null ? new DescribedAsFacetOnMemberDerivedFromType(returnTypeDescribedAsFacet, processMethodContext.getFacetHolder()) : null;
+        return returnTypeDescribedAsFacet != null
+                ? new DescribedAsFacetOnMemberDerivedFromType(returnTypeDescribedAsFacet, processMethodContext.getFacetHolder())
+                : null;
     }
 
     private DescribedAsFacet getDescribedAsFacet(final Class<?> type) {

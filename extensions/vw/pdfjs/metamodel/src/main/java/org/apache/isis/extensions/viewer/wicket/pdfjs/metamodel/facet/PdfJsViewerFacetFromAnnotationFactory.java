@@ -68,7 +68,7 @@ public class PdfJsViewerFacetFromAnnotationFactory extends FacetFactoryAbstract 
             pdfjsViewer -> {
                 val pdfJsViewerFacet = PdfJsViewerFacetFromAnnotation.create(pdfjsViewer, holder);
                 serviceInjector.injectServicesInto(pdfJsViewerFacet);
-                FacetUtil.addFacet(pdfJsViewerFacet);
+                FacetUtil.addFacetIfPresent(pdfJsViewerFacet);
             }
         );
     }

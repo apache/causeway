@@ -51,6 +51,6 @@ public class LayoutFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
             processClassContext.removeMethod(method);
             facet = new LayoutFacetMethod(method, facetHolder);
         }
-        super.addFacet(facet);
+        addFacetIfPresent(facet);
     }
 }

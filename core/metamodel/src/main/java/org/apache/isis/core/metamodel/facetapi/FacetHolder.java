@@ -107,6 +107,6 @@ public interface FacetHolder extends HasMetaModelContext {
      * when given {@link Facet} has equal or higher precedence.
      * Otherwise is ignored.
      */
-    void addFacet(Facet facet);
+    void addFacet(@NonNull Facet facet);
 
 }

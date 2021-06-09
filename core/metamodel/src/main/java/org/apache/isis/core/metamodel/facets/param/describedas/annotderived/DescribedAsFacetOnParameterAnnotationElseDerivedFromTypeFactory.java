@@ -42,7 +42,7 @@ public class DescribedAsFacetOnParameterAnnotationElseDerivedFromTypeFactory ext
         // available
         final DescribedAsFacet parameterTypeDescribedAsFacet = getDescribedAsFacet(parameterType);
         if (parameterTypeDescribedAsFacet != null) {
-            FacetUtil.addFacet(new DescribedAsFacetOnParameterDerivedFromType(parameterTypeDescribedAsFacet, processParameterContext.getFacetHolder()));
+            FacetUtil.addFacetIfPresent(new DescribedAsFacetOnParameterDerivedFromType(parameterTypeDescribedAsFacet, processParameterContext.getFacetHolder()));
         }
 
     }

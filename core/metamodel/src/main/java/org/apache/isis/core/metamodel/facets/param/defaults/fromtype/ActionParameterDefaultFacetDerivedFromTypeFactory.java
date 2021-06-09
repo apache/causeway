@@ -52,7 +52,7 @@ public class ActionParameterDefaultFacetDerivedFromTypeFactory extends FacetFact
             hasAtLeastOneDefault = hasAtLeastOneDefault | (parameterTypeDefaultedFacets[i] != null);
         }
         if (hasAtLeastOneDefault) {
-            super.addFacet(new ActionParameterDefaultFacetDerivedFromTypeFacets(parameterTypeDefaultedFacets, processParameterContext.getFacetHolder()));
+            addFacetIfPresent(new ActionParameterDefaultFacetDerivedFromTypeFacets(parameterTypeDefaultedFacets, processParameterContext.getFacetHolder()));
         }
     }
 

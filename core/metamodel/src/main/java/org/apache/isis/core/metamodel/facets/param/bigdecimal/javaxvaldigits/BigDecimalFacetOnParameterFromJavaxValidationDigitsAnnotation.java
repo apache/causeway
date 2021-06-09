@@ -20,12 +20,15 @@ package org.apache.isis.core.metamodel.facets.param.bigdecimal.javaxvaldigits;
 
 import java.util.Map;
 
+import javax.validation.constraints.Digits;
+
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacetAbstract;
 
-public class BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation extends BigDecimalValueFacetAbstract {
+public class BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation
+extends BigDecimalValueFacetAbstract {
 
     private final Integer precision;
     private final Integer scale;
@@ -34,7 +37,13 @@ public class BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation exten
         return BigDecimalValueFacet.class;
     }
 
-    public BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation(final FacetHolder holder, final Integer precision, final Integer scale) {
+    public static BigDecimalValueFacet create(final Digits annotation, final FacetHolder holder) {
+        final int length = annotation.integer() + annotation.fraction();
+        final int scale = annotation.fraction();
+        return new BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation(holder, length, scale);
+    }
+
+    private BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation(final FacetHolder holder, final Integer precision, final Integer scale) {
         super(BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation.type(), holder);
         this.precision = precision;
         this.scale = scale;

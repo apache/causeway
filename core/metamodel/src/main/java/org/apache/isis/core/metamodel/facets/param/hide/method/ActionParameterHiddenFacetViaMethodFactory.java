@@ -82,7 +82,7 @@ public class ActionParameterHiddenFacetViaMethodFactory extends MethodPrefixBase
             val paramAsHolder = parameters.get(paramIndex);
             val ppmFactory = searchResult.getPpmFactory();
 
-            super.addFacet(
+            addFacetIfPresent(
                     new ActionParameterHiddenFacetViaMethod(hideMethod, ppmFactory, paramAsHolder));
         });
 

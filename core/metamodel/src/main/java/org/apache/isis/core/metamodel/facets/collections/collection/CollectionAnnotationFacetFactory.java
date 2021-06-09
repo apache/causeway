@@ -84,8 +84,8 @@ extends FacetFactoryAbstract {
         //@Action(semantics=SAFE)
         //@ActionLayout(contributed=ASSOCIATION) ... it seems, is already allowed for mixins
         val facetedMethod = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
-        FacetUtil.addFacet(new ContributingFacetAbstract(Contributing.AS_ASSOCIATION, facetedMethod) {});
+        FacetUtil.addFacetIfPresent(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
+        FacetUtil.addFacetIfPresent(new ContributingFacetAbstract(Contributing.AS_ASSOCIATION, facetedMethod) {});
 
     }
 
@@ -119,7 +119,7 @@ extends FacetFactoryAbstract {
                 new CollectionDomainEventFacetDefault(
                         defaultFromDomainObjectIfRequired(typeSpec, CollectionDomainEvent.Default.class), holder));
         if(!CollectionDomainEvent.Noop.class.isAssignableFrom(collectionDomainEventFacet.getEventType())) {
-            super.addFacet(collectionDomainEventFacet);
+            addFacetIfPresent(collectionDomainEventFacet);
         }
 
         if(EventUtil.eventTypeIsPostable(
@@ -128,7 +128,7 @@ extends FacetFactoryAbstract {
                 CollectionDomainEvent.Default.class,
                 getConfiguration().getApplib().getAnnotation().getCollection().getDomainEvent().isPostForDefault()
                 )) {
-            super.addFacet(collectionDomainEventFacet);
+            addFacetIfPresent(collectionDomainEventFacet);
         }
 
     }
@@ -151,9 +151,9 @@ extends FacetFactoryAbstract {
         val holder = processMethodContext.getFacetHolder();
 
         // check for @Collection(hidden=...)
-        val facet = HiddenFacetForCollectionAnnotation.create(collectionIfAny, holder);
-
-        super.addFacet(facet);
+        addFacetIfPresent(
+                HiddenFacetForCollectionAnnotation
+                .create(collectionIfAny, holder));
     }
 
 
@@ -185,7 +185,7 @@ extends FacetFactoryAbstract {
             facet = inferFromGenericReturnType(processMethodContext);
         }
 
-        super.addFacet(facet);
+        addFacetIfPresent(facet);
     }
 
     private TypeOfFacet inferFromGenericReturnType(final ProcessMethodContext processMethodContext) {

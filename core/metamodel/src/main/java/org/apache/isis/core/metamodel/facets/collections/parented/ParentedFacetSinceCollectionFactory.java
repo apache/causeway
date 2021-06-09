@@ -45,7 +45,7 @@ public class ParentedFacetSinceCollectionFactory extends FacetFactoryAbstract {
         if (!processClassContaxt.getFacetHolder().containsFacet(CollectionFacet.class)) {
             return;
         }
-        FacetUtil.addFacet(new ParentedCollectionFacetDefault(processClassContaxt.getFacetHolder()));
+        FacetUtil.addFacetIfPresent(new ParentedCollectionFacetDefault(processClassContaxt.getFacetHolder()));
     }
 
 }

@@ -23,6 +23,8 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -57,21 +59,21 @@ extends FacetFactoryAbstract {
         if(getServiceRegistry().select(owningType).isNotEmpty()) {
             return;
         }
-        CssClassFacet cssClassFacet = createFromConfiguredRegexIfPossible(name, facetHolder);
 
-        // no-op if null
-        super.addFacet(cssClassFacet);
+        addFacetIfPresent(createFromConfiguredRegexIfPossible(name, facetHolder));
     }
 
     // -- cssClassFromPattern
 
+    @Nullable
     private CssClassFacet createFromConfiguredRegexIfPossible(String name, FacetHolder facetHolder) {
         String value = cssIfAnyFor(name);
         return value != null
                 ? new CssClassFacetOnActionFromConfiguredRegex(value, facetHolder)
-                        : null;
+                : null;
     }
 
+    @Nullable
     private String cssIfAnyFor(String name) {
         final Map<Pattern, String> cssClassByPattern = getCssClassByPattern();
 

@@ -56,7 +56,7 @@ public class DeriveNavigationFacetFromHiddenTypePostProcessor extends ObjectSpec
 
     private static void addFacetIfRequired(FacetHolder facetHolder, ObjectSpecification navigatedType) {
         if(navigatedType.containsNonFallbackFacet(HiddenTypeFacet.class)) {
-            FacetUtil.addFacet(new NavigationFacetDerivedFromHiddenType(facetHolder, navigatedType));
+            FacetUtil.addFacetIfPresent(new NavigationFacetDerivedFromHiddenType(facetHolder, navigatedType));
         }
     }
 

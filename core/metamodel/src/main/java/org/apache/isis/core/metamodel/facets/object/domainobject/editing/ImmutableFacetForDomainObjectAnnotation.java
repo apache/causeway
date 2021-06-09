@@ -96,7 +96,7 @@ public class ImmutableFacetForDomainObjectAnnotation extends ImmutableFacetAbstr
     @Override
     public void copyOnto(final FacetHolder holder) {
         final Facet facet = new ImmutableFacetForDomainObjectAnnotation(reason, holder);
-        FacetUtil.addFacet(facet);
+        FacetUtil.addFacetIfPresent(facet);
     }
 
     @Override

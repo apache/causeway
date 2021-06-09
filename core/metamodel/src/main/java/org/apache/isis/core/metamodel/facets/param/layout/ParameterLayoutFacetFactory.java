@@ -45,13 +45,31 @@ public class ParameterLayoutFacetFactory extends FacetFactoryAbstract {
 
         val facetHolder = processParameterContext.getFacetHolder();
 
-        super.addFacet(CssClassFacetForParameterLayoutAnnotation.create(parameterLayoutIfAny, facetHolder));
-        super.addFacet(DescribedAsFacetForParameterLayoutAnnotation.create(parameterLayoutIfAny, facetHolder));
-        super.addFacet(LabelAtFacetForParameterLayoutAnnotation.create(parameterLayoutIfAny, facetHolder));
-        super.addFacet(MultiLineFacetForParameterLayoutAnnotation.create(parameterLayoutIfAny, facetHolder));
-        super.addFacet(NamedFacetForParameterLayoutAnnotation.create(parameterLayoutIfAny, facetHolder));
-        super.addFacet(RenderedAdjustedFacetForParameterLayoutAnnotation.create(parameterLayoutIfAny, facetHolder));
-        super.addFacet(TypicalLengthFacetForParameterLayoutAnnotation.create(parameterLayoutIfAny, facetHolder));
+        addFacetIfPresent(
+                CssClassFacetForParameterLayoutAnnotation
+                .create(parameterLayoutIfAny, facetHolder));
+
+        addFacetIfPresent(
+                DescribedAsFacetForParameterLayoutAnnotation
+                .create(parameterLayoutIfAny, facetHolder));
+
+        addFacetIfPresent(
+                LabelAtFacetForParameterLayoutAnnotation
+                .create(parameterLayoutIfAny, facetHolder));
+
+        addFacetIfPresent(
+                MultiLineFacetForParameterLayoutAnnotation
+                .create(parameterLayoutIfAny, facetHolder));
+
+        addFacetIfPresent(
+                NamedFacetForParameterLayoutAnnotation
+                .create(parameterLayoutIfAny, facetHolder));
+
+        addFacetIfPresent(RenderedAdjustedFacetForParameterLayoutAnnotation
+                .create(parameterLayoutIfAny, facetHolder));
+
+        addFacetIfPresent(TypicalLengthFacetForParameterLayoutAnnotation
+                .create(parameterLayoutIfAny, facetHolder));
 
     }
 

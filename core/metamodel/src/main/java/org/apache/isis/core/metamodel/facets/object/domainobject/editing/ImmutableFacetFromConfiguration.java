@@ -47,7 +47,7 @@ public class ImmutableFacetFromConfiguration extends ImmutableFacetAbstract {
     @Override
     public void copyOnto(final FacetHolder holder) {
         final Facet facet = new ImmutableFacetFromConfiguration(reason, holder);
-        FacetUtil.addFacet(facet);
+        FacetUtil.addFacetIfPresent(facet);
     }
 
     @Override

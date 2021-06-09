@@ -41,7 +41,7 @@ implements
 
         // @Value(logicalTypeName=...)
         val valueIfAny = processClassContext.synthesizeOnType(org.apache.isis.applib.annotation.Value.class);
-        FacetUtil.addFacet(LogicalTypeFacetForValueAnnotation.create(valueIfAny, cls, facetHolder));
+        FacetUtil.addFacetIfPresent(LogicalTypeFacetForValueAnnotation.create(valueIfAny, cls, facetHolder));
 
     }
 

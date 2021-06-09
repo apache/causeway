@@ -39,7 +39,8 @@ public class PropertyChoicesFacetDerivedFromChoicesFacetFactory extends FacetFac
             return;
         }
 
-        super.addFacet(new PropertyChoicesFacetDerivedFromChoicesFacet(processMethodContext.getFacetHolder()));
+        addFacetIfPresent(
+                new PropertyChoicesFacetDerivedFromChoicesFacet(processMethodContext.getFacetHolder()));
     }
 
 }

@@ -85,7 +85,7 @@ public class DisabledObjectFacetViaMethod extends DisabledObjectFacetAbstract im
     @Override
     public void copyOnto(final FacetHolder holder) {
         final DisabledObjectFacetViaMethod clonedFacet = new DisabledObjectFacetViaMethod(this.method, translationService, translationContext, holder);
-        FacetUtil.addFacet(clonedFacet);
+        FacetUtil.addFacetIfPresent(clonedFacet);
     }
 
     @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {

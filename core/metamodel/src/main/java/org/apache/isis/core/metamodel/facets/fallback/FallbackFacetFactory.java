@@ -72,11 +72,11 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
         final int pagedStandalone = getConfiguration().getApplib().getAnnotation().getDomainObjectLayout().getPaged();
         final PagedFacetFromConfiguration pagedFacet = new PagedFacetFromConfiguration(pagedStandalone, facetHolder);
 
-        super.addFacet(describedAsFacet);
+        addFacetIfPresent(describedAsFacet);
         // commenting these out, think this whole isNoop business is a little bogus
         //FacetUtil.addFacet(new ImmutableFacetNever(holder));
-        super.addFacet(titleFacet);
-        super.addFacet(pagedFacet);
+        addFacetIfPresent(titleFacet);
+        addFacetIfPresent(pagedFacet);
 
     }
 
@@ -89,25 +89,25 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
         final String id = facetedMethod.getIdentifier().getMemberLogicalName();
         String defaultName = StringExtensions.asNaturalName2(id);
 
-        super.addFacet(new NamedFacetDefault(defaultName, facetedMethod));
+        addFacetIfPresent(new NamedFacetDefault(defaultName, facetedMethod));
 
-        super.addFacet(new DescribedAsFacetNone(facetedMethod));
-        super.addFacet(new HelpFacetNone(facetedMethod));
+        addFacetIfPresent(new DescribedAsFacetNone(facetedMethod));
+        addFacetIfPresent(new HelpFacetNone(facetedMethod));
 
 
         final FeatureType featureType = facetedMethod.getFeatureType();
         if (featureType.isProperty()) {
-            super.addFacet(new MaxLengthFacetUnlimited(facetedMethod));
-            super.addFacet(new MultiLineFacetNone(facetedMethod));
+            addFacetIfPresent(new MaxLengthFacetUnlimited(facetedMethod));
+            addFacetIfPresent(new MultiLineFacetNone(facetedMethod));
 
-            super.addFacet(newPropParamLayoutFacetIfAny(facetedMethod, "propertyLayout", getConfiguration().getApplib().getAnnotation().getPropertyLayout()));
+            addFacetIfPresent(newPropParamLayoutFacetIfAny(facetedMethod, "propertyLayout", getConfiguration().getApplib().getAnnotation().getPropertyLayout()));
         }
         if (featureType.isAction()) {
-            super.addFacet(new ActionDefaultsFacetNone(facetedMethod));
-            super.addFacet(new ActionChoicesFacetNone(facetedMethod));
+            addFacetIfPresent(new ActionDefaultsFacetNone(facetedMethod));
+            addFacetIfPresent(new ActionChoicesFacetNone(facetedMethod));
         }
         if (featureType.isCollection()) {
-            super.addFacet(new PagedFacetFromConfiguration(getConfiguration().getApplib().getAnnotation().getCollectionLayout().getPaged(), facetedMethod));
+            addFacetIfPresent(new PagedFacetFromConfiguration(getConfiguration().getApplib().getAnnotation().getCollectionLayout().getPaged(), facetedMethod));
         }
 
     }
@@ -117,14 +117,14 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
 
         final TypedHolder typedHolder = processParameterContext.getFacetHolder();
         if (typedHolder.getFeatureType().isActionParameter()) {
-            super.addFacet(new NamedFacetNone(typedHolder));
-            super.addFacet(new DescribedAsFacetNone(typedHolder));
-            super.addFacet(new HelpFacetNone(typedHolder));
-            super.addFacet(new MultiLineFacetNone(typedHolder));
+            addFacetIfPresent(new NamedFacetNone(typedHolder));
+            addFacetIfPresent(new DescribedAsFacetNone(typedHolder));
+            addFacetIfPresent(new HelpFacetNone(typedHolder));
+            addFacetIfPresent(new MultiLineFacetNone(typedHolder));
 
-            super.addFacet(new MaxLengthFacetUnlimited(typedHolder));
+            addFacetIfPresent(new MaxLengthFacetUnlimited(typedHolder));
 
-            super.addFacet(newPropParamLayoutFacetIfAny(typedHolder, "parameterLayout", getConfiguration().getApplib().getAnnotation().getParameterLayout()));
+            addFacetIfPresent(newPropParamLayoutFacetIfAny(typedHolder, "parameterLayout", getConfiguration().getApplib().getAnnotation().getParameterLayout()));
         }
 
     }

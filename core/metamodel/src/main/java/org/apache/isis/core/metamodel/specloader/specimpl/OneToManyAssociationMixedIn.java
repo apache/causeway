@@ -106,9 +106,9 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
         final DisabledFacet disabledFacet = disabledFacet();
         final TypeOfFacet typeOfFacet = new TypeOfFacetAbstract(getSpecification().getCorrespondingClass(), this) {};
 
-        FacetUtil.addFacet(snapshotExcludeFacet);
-        FacetUtil.addFacet(disabledFacet);
-        FacetUtil.addFacet(typeOfFacet);
+        FacetUtil.addFacetIfPresent(snapshotExcludeFacet);
+        FacetUtil.addFacetIfPresent(disabledFacet);
+        FacetUtil.addFacetIfPresent(typeOfFacet);
 
 
         //
@@ -124,7 +124,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
 
         if(_Strings.isNullOrEmpty(name) || name.equalsIgnoreCase(mixinMethodName)) {
             String memberName = determineNameFrom(mixinAction);
-            FacetUtil.addFacet(new NamedFacetInferred(memberName, facetHolder));
+            FacetUtil.addFacetIfPresent(new NamedFacetInferred(memberName, facetHolder));
         }
 
     }

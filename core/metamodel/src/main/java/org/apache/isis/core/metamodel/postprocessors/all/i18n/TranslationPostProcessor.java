@@ -89,7 +89,7 @@ extends ObjectSpecificationPostProcessorAbstract {
         val namedFacetTranslated
             = new NamedFacetTranslated(translationContext, originalText, translationService, identifiedHolder);
         namedFacetTranslated.setUnderlyingFacet(facet);
-        FacetUtil.addFacet(namedFacetTranslated);
+        FacetUtil.addFacetIfPresent(namedFacetTranslated);
     }
 
     void translateDescription(final IdentifiedHolder identifiedHolder, final TranslationContext translationContext) {
@@ -103,7 +103,7 @@ extends ObjectSpecificationPostProcessorAbstract {
             return;
         }
 
-        FacetUtil.addFacet(new DescribedAsFacetTranslated(
+        FacetUtil.addFacetIfPresent(new DescribedAsFacetTranslated(
                 translationContext, originalText, translationService, identifiedHolder));
     }
 

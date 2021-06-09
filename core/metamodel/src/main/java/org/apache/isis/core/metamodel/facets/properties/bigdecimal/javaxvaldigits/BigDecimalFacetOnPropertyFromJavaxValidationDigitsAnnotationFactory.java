@@ -24,8 +24,6 @@ import javax.validation.constraints.Digits;
 
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 
 import lombok.val;
 
@@ -46,14 +44,9 @@ public class BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory
         if (digits == null) {
             return;
         }
-        super.addFacet(create(processMethodContext, digits));
-    }
-
-    private BigDecimalValueFacet create(final ProcessMethodContext processMethodContext, final Digits annotation) {
-        final FacetedMethod holder = processMethodContext.getFacetHolder();
-        final int length = annotation.integer() + annotation.fraction();
-        final int scale = annotation.fraction();
-        return new BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation(holder, length, scale);
+        addFacetIfPresent(
+                BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation
+                .create(processMethodContext, digits));
     }
 
 }

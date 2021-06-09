@@ -54,7 +54,7 @@ public class JdoDatastoreIdentityAnnotationFacetFactory extends FacetFactoryAbst
         }
         IdGeneratorStrategy strategyAttribute = annotation.strategy();
 
-        FacetUtil.addFacet(new JdoDatastoreIdentityFacetAnnotation(
+        FacetUtil.addFacetIfPresent(new JdoDatastoreIdentityFacetAnnotation(
                 strategyAttribute, processClassContext.getFacetHolder()));
         return;
     }

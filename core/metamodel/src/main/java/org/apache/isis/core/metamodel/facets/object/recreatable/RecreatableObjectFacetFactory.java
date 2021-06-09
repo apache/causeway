@@ -67,14 +67,14 @@ implements
 
         // ViewModel interface
         if (ViewModel.class.isAssignableFrom(processClassContext.getCls())) {
-            FacetUtil.addFacet(
+            FacetUtil.addFacetIfPresent(
                     new RecreatableObjectFacetForRecreatableObjectInterface(
                             facetHolder, postConstructMethodCache));
         }
 
         // RecreatableDomainObject interface
         if (RecreatableDomainObject.class.isAssignableFrom(type)) {
-            FacetUtil.addFacet(
+            FacetUtil.addFacetIfPresent(
                     new RecreatableObjectFacetForRecreatableDomainObjectInterface(
                             facetHolder, postConstructMethodCache));
         }
@@ -82,7 +82,7 @@ implements
         // XmlRootElement annotation
         val xmlRootElementIfAny = processClassContext.synthesizeOnType(XmlRootElement.class);
         if(xmlRootElementIfAny.isPresent()) {
-            FacetUtil.addFacet(
+            FacetUtil.addFacetIfPresent(
                     new RecreatableObjectFacetForXmlRootElementAnnotation(
                             facetHolder, postConstructMethodCache));
         }

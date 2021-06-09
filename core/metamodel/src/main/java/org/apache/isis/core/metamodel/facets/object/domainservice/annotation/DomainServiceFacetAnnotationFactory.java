@@ -24,7 +24,6 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
@@ -49,16 +48,15 @@ implements MetaModelRefiner {
 
     @Override
     public void process(ProcessClassContext processClassContext) {
-        val cls = processClassContext.getCls();
-        val domainServiceAnnotation = Annotations.getAnnotation(cls, DomainService.class);
-        if (domainServiceAnnotation == null) {
+        val domainServiceIfAny = processClassContext.synthesizeOnType(DomainService.class);
+        if (!domainServiceIfAny.isPresent()) {
             return;
         }
         val facetHolder = processClassContext.getFacetHolder();
-        val domainServiceFacet = new DomainServiceFacetAnnotation(
-                facetHolder,
-                domainServiceAnnotation.nature());
-        super.addFacet(domainServiceFacet);
+        addFacetIfPresent(
+                new DomainServiceFacetAnnotation(
+                        facetHolder,
+                        domainServiceIfAny.get().nature()));
     }
 
     @Override

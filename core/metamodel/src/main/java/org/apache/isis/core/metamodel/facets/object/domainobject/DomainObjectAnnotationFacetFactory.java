@@ -205,11 +205,9 @@ implements
         // check for @DomainObject(entityChangePublishing=....)
         val entityChangePublishing = domainObjectIfAny
                 .map(DomainObject::entityChangePublishing);
-        val entityChangePublishingFacet = EntityChangePublishingFacetForDomainObjectAnnotation
-                .create(entityChangePublishing, getConfiguration(), facetHolder);
-
-        // then add
-        super.addFacet(entityChangePublishingFacet);
+        addFacetIfPresent(
+                EntityChangePublishingFacetForDomainObjectAnnotation
+                .create(entityChangePublishing, getConfiguration(), facetHolder));
     }
 
     // -- AUTO COMPLETE
@@ -236,7 +234,7 @@ implements
                 })
                 .map(a -> new AutoCompleteFacetForDomainObjectAnnotation(
                         facetHolder, a.autoCompleteRepository, a.repositoryMethod))
-                .ifPresent(super::addFacet);
+                .ifPresent(super::addFacetIfPresent);
 
     }
 
@@ -286,7 +284,7 @@ implements
             final Optional<DomainObject> domainObjectIfAny,
             final ProcessClassContext processClassContext) {
         val facetHolder = processClassContext.getFacetHolder();
-        FacetUtil.addFacet(
+        FacetUtil.addFacetIfPresent(
                 ChoicesFacetForDomainObjectAnnotation
                 .create(domainObjectIfAny, facetHolder));
     }
@@ -297,11 +295,11 @@ implements
             final ProcessClassContext processClassContext) {
         val facetHolder = processClassContext.getFacetHolder();
 
-        FacetUtil.addFacet(
+        FacetUtil.addFacetIfPresent(
                 EditingEnabledFacetForDomainObjectAnnotation
                 .create(domainObjectIfAny, facetHolder));
 
-        FacetUtil.addFacet(
+        FacetUtil.addFacetIfPresent(
                 ImmutableFacetForDomainObjectAnnotation
                 .create(domainObjectIfAny, getConfiguration(), facetHolder));
     }
@@ -314,7 +312,7 @@ implements
         val cls = processClassContext.getCls();
         val facetHolder = processClassContext.getFacetHolder();
 
-        FacetUtil.addFacet(
+        FacetUtil.addFacetIfPresent(
                 LogicalTypeFacetForDomainObjectAnnotation
                 .create(domainObjectIfAny, cls, facetHolder));
     }
@@ -333,13 +331,15 @@ implements
         val postConstructMethodCache = this;
 
         // handle with least priority
-        if(addFacet(
+        if(addFacetIfPresent(
                 RecreatableObjectFacetForDomainObjectAnnotation
                 .create(
                         domainObjectIfAny,
                         facetHolder,
                         postConstructMethodCache,
-                        Precedence.LOW))) {
+                        Precedence.LOW)
+                )
+                .isPresent()) {
             return;
         }
 
@@ -357,7 +357,8 @@ implements
                 .filter(domainObject -> domainObject.nature() == Nature.MIXIN)
                 .filter(domainObject -> mixinTypeValidator.ensureMixinType(facetHolder, cls));
 
-        addFacet(MixinFacetForDomainObjectAnnotation
+        addFacetIfPresent(
+                MixinFacetForDomainObjectAnnotation
                 .create(mixinDomainObjectIfAny, cls, facetHolder, getServiceInjector(), mixinTypeValidator));
 
     }
@@ -410,7 +411,7 @@ implements
                 )
         .map(lifecycleEvent -> new CreatedLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
-        .ifPresent(super::addFacet);
+        .ifPresent(super::addFacetIfPresent);
     }
 
     private void processLifecycleEventLoaded(
@@ -428,7 +429,7 @@ implements
                 )
         .map(lifecycleEvent -> new LoadedLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
-        .ifPresent(super::addFacet);
+        .ifPresent(super::addFacetIfPresent);
     }
 
     private void processLifecycleEventPersisting(
@@ -446,7 +447,7 @@ implements
                 )
         .map(lifecycleEvent -> new PersistingLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
-        .ifPresent(super::addFacet);
+        .ifPresent(super::addFacetIfPresent);
     }
 
     private void processLifecycleEventPersisted(
@@ -464,7 +465,7 @@ implements
                 )
         .map(lifecycleEvent -> new PersistedLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
-        .ifPresent(super::addFacet);
+        .ifPresent(super::addFacetIfPresent);
     }
 
     private void processLifecycleEventRemoving(
@@ -482,7 +483,7 @@ implements
                 )
         .map(lifecycleEvent -> new RemovingLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
-        .ifPresent(super::addFacet);
+        .ifPresent(super::addFacetIfPresent);
     }
 
     private void processLifecycleEventUpdated(
@@ -500,7 +501,7 @@ implements
                 )
         .map(lifecycleEvent -> new UpdatedLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
-        .ifPresent(super::addFacet);
+        .ifPresent(super::addFacetIfPresent);
     }
 
     private void processLifecycleEventUpdating(
@@ -518,7 +519,7 @@ implements
                 )
         .map(lifecycleEvent -> new UpdatingLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
-        .ifPresent(super::addFacet);
+        .ifPresent(super::addFacetIfPresent);
     }
 
     private void processDomainEventAction(
@@ -530,7 +531,7 @@ implements
         .filter(domainEvent -> domainEvent != ActionDomainEvent.Default.class)
         .map(domainEvent -> new ActionDomainEventDefaultFacetForDomainObjectAnnotation(
                 holder, domainEvent))
-        .ifPresent(super::addFacet);
+        .ifPresent(super::addFacetIfPresent);
 
     }
 
@@ -543,7 +544,7 @@ implements
         .filter(domainEvent -> domainEvent != PropertyDomainEvent.Default.class)
         .map(domainEvent -> new PropertyDomainEventDefaultFacetForDomainObjectAnnotation(
                 holder, domainEvent))
-        .ifPresent(super::addFacet);
+        .ifPresent(super::addFacetIfPresent);
     }
 
     private void processDomainEventCollection(
@@ -555,7 +556,7 @@ implements
         .filter(domainEvent -> domainEvent != CollectionDomainEvent.Default.class)
         .map(domainEvent -> new CollectionDomainEventDefaultFacetForDomainObjectAnnotation(
                 holder, domainEvent))
-        .ifPresent(super::addFacet);
+        .ifPresent(super::addFacetIfPresent);
     }
 
     @Override

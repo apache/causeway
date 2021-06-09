@@ -48,6 +48,6 @@ public class IconFacetMethodFactory extends MethodPrefixBasedFacetFactoryAbstrac
             return;
         }
         processClassContext.removeMethod(method);
-        FacetUtil.addFacet(new IconFacetMethod(method, facetHolder));
+        FacetUtil.addFacetIfPresent(new IconFacetMethod(method, facetHolder));
     }
 }

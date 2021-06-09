@@ -79,7 +79,7 @@ public class ValueFacetAnnotationOrConfigurationFactory extends FacetFactoryAbst
 
         // create from annotation, if present
         if (valueIfAny.isPresent()) {
-            FacetUtil.addFacet(new ValueFacetAnnotation(valueIfAny.get(), config, cls, facetHolder));
+            FacetUtil.addFacetIfPresent(new ValueFacetAnnotation(valueIfAny.get(), config, cls, facetHolder));
             return;
         }
 
@@ -90,7 +90,7 @@ public class ValueFacetAnnotationOrConfigurationFactory extends FacetFactoryAbst
         if (_Strings.isNotEmpty(semanticsProviderName)) {
             val valueFacet = new ValueFacetFromConfiguration(semanticsProviderName, facetHolder);
             if (valueFacet.hasSemanticsProvider()) {
-                FacetUtil.addFacet(valueFacet);
+                FacetUtil.addFacetIfPresent(valueFacet);
                 return;
             }
         }

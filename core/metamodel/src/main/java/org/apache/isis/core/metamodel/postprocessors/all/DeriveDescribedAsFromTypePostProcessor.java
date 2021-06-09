@@ -52,7 +52,7 @@ extends ObjectSpecificationPostProcessorAbstract {
         }
         objectAction.getReturnType()
         .lookupNonFallbackFacet(DescribedAsFacet.class)
-        .ifPresent(specFacet -> FacetUtil.addFacet(new DescribedAsFacetOnMemberDerivedFromType(specFacet,
+        .ifPresent(specFacet -> FacetUtil.addFacetIfPresent(new DescribedAsFacetOnMemberDerivedFromType(specFacet,
                                     facetedMethodFor(objectAction))));
     }
 
@@ -67,7 +67,7 @@ extends ObjectSpecificationPostProcessorAbstract {
         //TODO: this ought to check if a do-op; if you come across this, you can probably change it (just taking smaller steps for now)
         //if(existsAndIsDoOp(specFacet)) {
         if(specFacet != null) {
-            FacetUtil.addFacet(new DescribedAsFacetOnParameterDerivedFromType(specFacet, peerFor(parameter)));
+            FacetUtil.addFacetIfPresent(new DescribedAsFacetOnParameterDerivedFromType(specFacet, peerFor(parameter)));
         }
     }
 
@@ -87,7 +87,7 @@ extends ObjectSpecificationPostProcessorAbstract {
         }
         objectAssociation.getSpecification()
         .lookupNonFallbackFacet(DescribedAsFacet.class)
-        .ifPresent(specFacet -> FacetUtil.addFacet(new DescribedAsFacetOnMemberDerivedFromType(
+        .ifPresent(specFacet -> FacetUtil.addFacetIfPresent(new DescribedAsFacetOnMemberDerivedFromType(
                                     specFacet, facetedMethodFor(objectAssociation))));
     }
 

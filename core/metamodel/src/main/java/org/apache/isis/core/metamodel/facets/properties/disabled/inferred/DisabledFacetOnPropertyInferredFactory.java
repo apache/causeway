@@ -50,7 +50,7 @@ public class DisabledFacetOnPropertyInferredFactory extends FacetFactoryAbstract
         }
 
         // else, infer that this is not modifiable
-        FacetUtil.addFacet(new DisabledFacetOnPropertyInferred(property));
+        FacetUtil.addFacetIfPresent(new DisabledFacetOnPropertyInferred(property));
     }
 
 }

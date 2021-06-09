@@ -54,7 +54,7 @@ public class NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory extends F
         }
 
         final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new NotInServiceMenuFacetDerivedFromDomainServiceFacet(natureOfService, facetHolder));
+        FacetUtil.addFacetIfPresent(new NotInServiceMenuFacetDerivedFromDomainServiceFacet(natureOfService, facetHolder));
     }
 
 }

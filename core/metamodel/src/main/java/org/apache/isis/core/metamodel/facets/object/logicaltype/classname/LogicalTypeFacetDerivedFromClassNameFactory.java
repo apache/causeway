@@ -73,7 +73,7 @@ implements MetaModelRefiner, ObjectTypeFacetFactory {
             return;
         }
         val logicalTypeFacet = createLogicalTypeFacet(facetHolder, substitute.apply(cls));
-        FacetUtil.addFacet(logicalTypeFacet);
+        FacetUtil.addFacetIfPresent(logicalTypeFacet);
     }
 
     @Override

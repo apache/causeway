@@ -82,7 +82,7 @@ implements ObjectTypeFacetFactory {
                             facetHolder);
 
         }
-        FacetUtil.addFacet(facet);
+        FacetUtil.addFacetIfPresent(facet);
     }
 
 
@@ -101,7 +101,7 @@ implements ObjectTypeFacetFactory {
         }
         String annotationValueAttribute = annotation.value();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
-        FacetUtil.addFacet(new JdoDiscriminatorFacetDefault(annotationValueAttribute, facetHolder));
+        FacetUtil.addFacetIfPresent(new JdoDiscriminatorFacetDefault(annotationValueAttribute, facetHolder));
     }
 
 }

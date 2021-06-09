@@ -86,7 +86,7 @@ implements MetaModelRefiner {
             facet.setUnderlyingFacet(existingFacet);
         }
 
-        FacetUtil.addFacet(facet);
+        FacetUtil.addFacetIfPresent(facet);
     }
 
     @Override

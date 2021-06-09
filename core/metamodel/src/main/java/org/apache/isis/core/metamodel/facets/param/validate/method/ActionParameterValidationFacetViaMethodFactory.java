@@ -86,7 +86,7 @@ public class ActionParameterValidationFacetViaMethodFactory extends MethodPrefix
             val ppmFactory = searchResult.getPpmFactory();
             val translationService = getMetaModelContext().getTranslationService();
 
-            super.addFacet(
+            addFacetIfPresent(
                     new ActionParameterValidationFacetViaMethod(
                             validateMethod, translationService, translationContext, ppmFactory, paramAsHolder));
 

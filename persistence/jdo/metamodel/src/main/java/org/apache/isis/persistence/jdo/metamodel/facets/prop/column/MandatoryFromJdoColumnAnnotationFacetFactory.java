@@ -92,7 +92,7 @@ implements MetaModelRefiner {
 
         // as a side-effect, will chain any existing facets.
         // we'll exploit this fact for meta-model validation (see #refineMetaModelValidator(), below)
-        FacetUtil.addFacet(facet);
+        FacetUtil.addFacetIfPresent(facet);
 
         // however, if a @Column was explicitly provided, and the underlying facet
         // was the simple MandatoryFacetDefault (from an absence of @Optional or @Mandatory),

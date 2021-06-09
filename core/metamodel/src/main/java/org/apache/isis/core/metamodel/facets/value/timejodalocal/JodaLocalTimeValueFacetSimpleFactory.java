@@ -22,9 +22,10 @@ package org.apache.isis.core.metamodel.facets.value.timejodalocal;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacetSimple;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
+
+import lombok.val;
 
 public class JodaLocalTimeValueFacetSimpleFactory extends ValueFacetUsingSemanticsProviderFactory<LocalDate> {
 
@@ -34,13 +35,15 @@ public class JodaLocalTimeValueFacetSimpleFactory extends ValueFacetUsingSemanti
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        final Class<?> type = processClassContext.getCls();
-        final FacetHolder holder = processClassContext.getFacetHolder();
+        val type = processClassContext.getCls();
 
         if (type != LocalTime.class) {
             return;
         }
-        super.addFacet(new ValueFacetSimple(holder));
+
+        val facetHolder = processClassContext.getFacetHolder();
+        addFacetIfPresent(
+                new ValueFacetSimple(facetHolder));
     }
 
 }

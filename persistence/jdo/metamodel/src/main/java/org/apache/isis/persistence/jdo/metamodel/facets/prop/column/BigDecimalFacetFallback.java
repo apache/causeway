@@ -25,14 +25,15 @@ import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFac
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueSemanticsProvider;
 
 
-public class BigDecimalFacetFallback extends BigDecimalValueFacetAbstract {
+public class BigDecimalFacetFallback
+extends BigDecimalValueFacetAbstract {
 
     public static Class<? extends Facet> type() {
         return BigDecimalValueFacet.class;
     }
 
     public BigDecimalFacetFallback(final FacetHolder holder) {
-        super(BigDecimalFacetFallback.type(), holder);
+        super(BigDecimalFacetFallback.type(), holder, Precedence.FALLBACK);
     }
 
     @Override

@@ -88,8 +88,8 @@ implements ObjectTypeFacetFactory {
             val jdoPersistenceCapableFacet = new JdoPersistenceCapableFacetAnnotation(
                     annotationSchemaAttribute,
                     annotationTableAttribute, annotationIdentityType, facetHolder);
-            FacetUtil.addFacet(jdoPersistenceCapableFacet);
-            FacetUtil.addFacet(LogicalTypeFacetForJdoPersistenceCapableAnnotation
+            FacetUtil.addFacetIfPresent(jdoPersistenceCapableFacet);
+            FacetUtil.addFacetIfPresent(LogicalTypeFacetForJdoPersistenceCapableAnnotation
                     .create(jdoPersistenceCapableFacet, cls, facetHolder));
         }
 

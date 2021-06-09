@@ -25,13 +25,13 @@ import java.util.List;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+
+import lombok.val;
 
 public class CollectionAccessorFacetViaAccessorFactory
 extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
@@ -51,15 +51,17 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
         final Method accessorMethod = processMethodContext.getMethod();
         processMethodContext.removeMethod(accessorMethod);
 
-        final Class<?> cls = processMethodContext.getCls();
-        final ObjectSpecification typeSpec = getSpecificationLoader().loadSpecification(cls);
+        val cls = processMethodContext.getCls();
+        val typeSpec = getSpecificationLoader().loadSpecification(cls);
+        val facetHolder = processMethodContext.getFacetHolder();
 
-        final FacetHolder holder = processMethodContext.getFacetHolder();
-        super.addFacet(
+        addFacetIfPresent(
                 new CollectionAccessorFacetViaAccessor(
-                        typeSpec, accessorMethod, holder));
+                        typeSpec, accessorMethod, facetHolder));
 
-        super.addFacet(CollectionSemanticsFacetDefault.forCollection(accessorMethod, holder));
+        addFacetIfPresent(
+                CollectionSemanticsFacetDefault
+                .forCollection(accessorMethod, facetHolder));
     }
 
 

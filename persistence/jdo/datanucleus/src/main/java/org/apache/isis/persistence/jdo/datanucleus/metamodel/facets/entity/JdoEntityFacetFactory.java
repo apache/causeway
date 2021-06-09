@@ -79,7 +79,7 @@ implements ObjectTypeFacetFactory {
             // suppress
         } else {
             val jdoPersistenceCapableFacet = new JdoEntityFacet(facetHolder);
-            FacetUtil.addFacet(jdoPersistenceCapableFacet);
+            FacetUtil.addFacetIfPresent(jdoPersistenceCapableFacet);
         }
 
         return;

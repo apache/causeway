@@ -30,6 +30,7 @@ public class ObjectValidPropertiesFacetImplFactory extends FacetFactoryAbstract 
 
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
-        super.addFacet(new ObjectValidPropertiesFacetImpl(processClassContaxt.getFacetHolder()));
+        addFacetIfPresent(
+                new ObjectValidPropertiesFacetImpl(processClassContaxt.getFacetHolder()));
     }
 }

@@ -22,10 +22,8 @@ import java.math.BigDecimal;
 
 import javax.validation.constraints.Digits;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 
 public class BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory extends FacetFactoryAbstract {
 
@@ -42,15 +40,11 @@ public class BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory exte
 
         processParameterContext.synthesizeOnParameter(Digits.class)
         .ifPresent(digits->{
-            super.addFacet(create(digits, processParameterContext.getFacetHolder()));
+            addFacetIfPresent(
+                    BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation
+                    .create(digits, processParameterContext.getFacetHolder()));
         });
 
-    }
-
-    private BigDecimalValueFacet create(final Digits annotation, final FacetHolder holder) {
-        final int length = annotation.integer() + annotation.fraction();
-        final int scale = annotation.fraction();
-        return new BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation(holder, length, scale);
     }
 
 }

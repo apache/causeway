@@ -23,10 +23,16 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class BigDecimalValueFacetAbstract extends FacetAbstract implements BigDecimalValueFacet {
+public abstract class BigDecimalValueFacetAbstract
+extends FacetAbstract
+implements BigDecimalValueFacet {
 
     public BigDecimalValueFacetAbstract(Class<? extends Facet> facetType, FacetHolder holder) {
         super(facetType, holder);
+    }
+
+    public BigDecimalValueFacetAbstract(Class<? extends Facet> facetType, FacetHolder holder, final Facet.Precedence precedence) {
+        super(facetType, holder, precedence);
     }
 
     @Override

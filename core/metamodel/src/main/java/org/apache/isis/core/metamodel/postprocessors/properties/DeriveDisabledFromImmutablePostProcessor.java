@@ -81,7 +81,7 @@ extends ObjectSpecificationPostProcessorAbstract {
 
             }
 
-            FacetUtil.addFacet(DisabledFacetOnPropertyDerivedFromImmutable
+            FacetUtil.addFacetIfPresent(DisabledFacetOnPropertyDerivedFromImmutable
                             .forImmutable(facetedMethodFor(property), immutableFacet));
         });
     }

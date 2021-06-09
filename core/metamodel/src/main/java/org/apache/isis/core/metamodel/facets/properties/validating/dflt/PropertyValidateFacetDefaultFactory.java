@@ -19,12 +19,13 @@
 
 package org.apache.isis.core.metamodel.facets.properties.validating.dflt;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.properties.validating.PropertyValidateFacet;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
+
+import lombok.val;
 
 /**
  * Simply installs a {@link PropertyValidateFacet} onto all properties.
@@ -43,16 +44,16 @@ public class PropertyValidateFacetDefaultFactory extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        super.addFacet(create(processMethodContext.getFacetHolder()));
+        val facetHolder = processMethodContext.getFacetHolder();
+        addFacetIfPresent(
+                new PropertyValidateFacetDefault(facetHolder));
     }
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
-        super.addFacet(create(processParameterContext.getFacetHolder()));
-    }
-
-    private PropertyValidateFacet create(final FacetHolder holder) {
-        return new PropertyValidateFacetDefault(holder);
+        val facetHolder = processParameterContext.getFacetHolder();
+        addFacetIfPresent(
+                new PropertyValidateFacetDefault(facetHolder));
     }
 
 }
