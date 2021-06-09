@@ -73,19 +73,19 @@ public class SudoServiceDefault implements SudoService {
             final @NonNull Callable<T> callable) {
 
         val currentInteractionLayer = interactionTracker.currentInteractionLayerElseFail();
-        val currentExecutionContext = currentInteractionLayer.getInteractionContext();
-        val sudoExecutionContext = sudoMapper.apply(currentExecutionContext);
+        val currentInteractionContext = currentInteractionLayer.getInteractionContext();
+        val sudoInteractionContext = sudoMapper.apply(currentInteractionContext);
 
-        val sodoSession = currentInteractionLayer
+        val sudoAuthentication = currentInteractionLayer
                 .getAuthentication()
-                .withInteractionContext(sudoExecutionContext);
+                .withInteractionContext(sudoInteractionContext);
 
         try {
-            beforeCall(currentExecutionContext, sudoExecutionContext);
+            beforeCall(currentInteractionContext, sudoInteractionContext);
 
-            return interactionFactory.callAuthenticated(sodoSession, callable);
+            return interactionFactory.callAuthenticated(sudoAuthentication, callable);
         } finally {
-            afterCall(sudoExecutionContext, currentExecutionContext);
+            afterCall(sudoInteractionContext, currentInteractionContext);
         }
     }
 
