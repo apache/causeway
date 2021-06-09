@@ -41,7 +41,7 @@ import org.apache.isis.core.security.authentication.Authenticator;
 @Qualifier("Spring")
 public class AuthenticatorSpring implements Authenticator {
 
-    @Inject private AuthenticationProvider authenticationTracker;
+    @Inject private AuthenticationProvider authenticationProvider;
 
     @Override
     public final boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass) {
@@ -51,7 +51,7 @@ public class AuthenticatorSpring implements Authenticator {
     @Override
     public Authentication authenticate(final AuthenticationRequest request, final String code) {
         // SpringSecurityFilter should already have taken care of Authentication creation
-        return authenticationTracker.currentAuthentication().orElse(null);
+        return authenticationProvider.currentAuthentication().orElse(null);
     }
 
     @Override

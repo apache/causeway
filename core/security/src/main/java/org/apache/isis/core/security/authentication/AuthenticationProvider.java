@@ -43,11 +43,13 @@ public interface AuthenticationProvider {
         return currentAuthentication()
                 .orElseThrow(()->
                     _Exceptions.illegalState(
-                            "no InteractionSession available on current %s",
+                            "no InteractionLayer available on current %s",
                             _Probe.currentThreadId()));
     }
 
-    /** authentication-layer-stack size */
+    /**
+     * interaction-layer-stack size
+     * */
     int getInteractionLayerCount();
 
 }

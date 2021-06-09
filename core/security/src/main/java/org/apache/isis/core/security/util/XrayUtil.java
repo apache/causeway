@@ -66,14 +66,14 @@ public final class XrayUtil {
 
     public static Optional<SequenceHandle> createSequenceHandle(
             final @NonNull InteractionProvider iaContext,
-            final @NonNull AuthenticationProvider authContext,
+            final @NonNull AuthenticationProvider authenticationProvider,
             final String ... callees) {
 
         if(!iaContext.isInInteraction()) {
             return Optional.empty();
         }
 
-        final int authStackSize = authContext.getInteractionLayerCount();
+        final int authStackSize = authenticationProvider.getInteractionLayerCount();
         val interactionId = iaContext.getInteractionId().orElseThrow(_Exceptions::unexpectedCodeReach);
 
         val handle = SequenceHandle.builder()

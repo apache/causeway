@@ -51,7 +51,7 @@ public class LogoutMenu {
     public static final String LOGICAL_TYPE_NAME = IsisModuleCoreSecurity.NAMESPACE + ".LogoutMenu"; // referenced by secman seeding
 
     private final List<LogoutHandler> logoutHandler;
-    private final AuthenticationProvider authenticationTracker;
+    private final AuthenticationProvider authenticationProvider;
     //private final IsisConfiguration configuration;
 
     public static class LogoutDomainEvent
@@ -73,7 +73,7 @@ public class LogoutMenu {
     }
 
     private Object getRedirect() {
-        val redirect =  authenticationTracker.currentAuthentication()
+        val redirect =  authenticationProvider.currentAuthentication()
         .map(authentication->
             authentication.getType() == Authentication.Type.EXTERNAL
             ? "logout"
