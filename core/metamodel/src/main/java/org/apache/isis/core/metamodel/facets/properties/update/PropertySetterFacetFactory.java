@@ -24,7 +24,6 @@ import java.lang.reflect.Method;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod;
@@ -56,7 +55,7 @@ public class PropertySetterFacetFactory extends MethodPrefixBasedFacetFactoryAbs
      * {@link NotPersistableFacet not-persistable} and {@link DisabledFacet
      * disabled} otherwise.
      */
-    private static Method attachPropertyModifyFacetIfSetterIsFound(
+    private Method attachPropertyModifyFacetIfSetterIsFound(
             final ProcessMethodContext processMethodContext) {
 
         final Method getMethod = processMethodContext.getMethod();
@@ -71,10 +70,10 @@ public class PropertySetterFacetFactory extends MethodPrefixBasedFacetFactoryAbs
 
         final FacetHolder property = processMethodContext.getFacetHolder();
         if (setMethod != null) {
-            FacetUtil.addFacetIfPresent(new PropertySetterFacetViaSetterMethod(setMethod, property));
-            FacetUtil.addFacetIfPresent(new PropertyInitializationFacetViaSetterMethod(setMethod, property));
+            addFacetIfPresent(new PropertySetterFacetViaSetterMethod(setMethod, property));
+            addFacetIfPresent(new PropertyInitializationFacetViaSetterMethod(setMethod, property));
         } else {
-            FacetUtil.addFacetIfPresent(new SnapshotExcludeFacetInferred(property));
+            addFacetIfPresent(new SnapshotExcludeFacetInferred(property));
 
             // previously we also added the DisabledFacetAlwaysEverywhere facet here.
             // however, the PropertyModifyFacetFactory (which comes next) might install a PropertySetterFacet instead.
@@ -86,14 +85,14 @@ public class PropertySetterFacetFactory extends MethodPrefixBasedFacetFactoryAbs
         return setMethod;
     }
 
-    private static void attachPropertyClearFacetUsingSetterIfRequired(
+    private void attachPropertyClearFacetUsingSetterIfRequired(
             final ProcessMethodContext processMethodContext, final Method setMethod) {
 
         if (setMethod == null) {
             return;
         }
         final FacetHolder property = processMethodContext.getFacetHolder();
-        FacetUtil.addFacetIfPresent(new PropertyClearFacetViaSetterMethod(setMethod, property));
+        addFacetIfPresent(new PropertyClearFacetViaSetterMethod(setMethod, property));
     }
 
 }

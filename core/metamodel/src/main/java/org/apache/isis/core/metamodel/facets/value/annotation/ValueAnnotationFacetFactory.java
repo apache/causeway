@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.facets.value.annotation;
 
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
@@ -41,7 +40,7 @@ implements
 
         // @Value(logicalTypeName=...)
         val valueIfAny = processClassContext.synthesizeOnType(org.apache.isis.applib.annotation.Value.class);
-        FacetUtil.addFacetIfPresent(LogicalTypeFacetForValueAnnotation.create(valueIfAny, cls, facetHolder));
+        addFacetIfPresent(LogicalTypeFacetForValueAnnotation.create(valueIfAny, cls, facetHolder));
 
     }
 

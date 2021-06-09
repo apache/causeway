@@ -26,7 +26,6 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.commons.internal.reflection._Generics;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
@@ -84,8 +83,8 @@ extends FacetFactoryAbstract {
         //@Action(semantics=SAFE)
         //@ActionLayout(contributed=ASSOCIATION) ... it seems, is already allowed for mixins
         val facetedMethod = processMethodContext.getFacetHolder();
-        FacetUtil.addFacetIfPresent(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
-        FacetUtil.addFacetIfPresent(new ContributingFacetAbstract(Contributing.AS_ASSOCIATION, facetedMethod) {});
+        addFacetIfPresent(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
+        addFacetIfPresent(new ContributingFacetAbstract(Contributing.AS_ASSOCIATION, facetedMethod) {});
 
     }
 
