@@ -47,7 +47,7 @@ extends AnonymousInteractionFactory {
      * If present, reuses the current top level {@link InteractionLayer}, otherwise creates a new
      * anonymous one.
      *
-     * @see #openInteraction(Authentication, InteractionContext)
+     * @see #openInteraction(InteractionContext)
      */
     InteractionLayer openInteraction();
 
@@ -60,8 +60,6 @@ extends AnonymousInteractionFactory {
      * The {@link InteractionLayer} represents a user's span of activities interacting with
      * the application. The session's stack is later closed using {@link #closeInteractionLayers()}.
      *
-     * @param authentication - the {@link Authentication} to associate with the new top of
-     * the stack (non-null)
      * @param interactionContext
      *
      * @apiNote if the current {@link InteractionLayer} (if any) has an {@link Authentication} that
@@ -69,7 +67,6 @@ extends AnonymousInteractionFactory {
      * instead the current one is returned
      */
     InteractionLayer openInteraction(
-            @NonNull Authentication authentication,
             @NonNull InteractionContext interactionContext);
 
     /**

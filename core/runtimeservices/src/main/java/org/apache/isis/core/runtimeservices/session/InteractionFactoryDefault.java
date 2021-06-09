@@ -161,13 +161,12 @@ implements
                 // or else create an anonymous authentication layer
                 .orElseGet(()-> {
                     final AnonymousSession authToUse = new AnonymousSession();
-                    return openInteraction(authToUse, authToUse.getInteractionContext());
+                    return openInteraction(authToUse.getInteractionContext());
                 });
     }
 
     @Override
     public InteractionLayer openInteraction(
-            final @NonNull Authentication authToUse,
             final @NonNull InteractionContext interactionContextToUse) {
 
         val isisInteraction = getOrCreateIsisInteraction();
@@ -184,7 +183,7 @@ implements
             return interactionLayerStack.get().peek();
         }
 
-        val interactionLayer = new InteractionLayer(isisInteraction, authToUse, interactionContextToUse);
+        val interactionLayer = new InteractionLayer(isisInteraction, interactionContextToUse);
 
         interactionLayerStack.get().push(interactionLayer);
 
@@ -245,7 +244,7 @@ implements
             @NonNull final Callable<R> callable) {
 
         final int stackSizeWhenEntering = interactionLayerStack.get().size();
-        openInteraction(authentication, authentication.getInteractionContext());
+        openInteraction(authentication.getInteractionContext());
 
         try {
             serviceInjector.injectServicesInto(callable);
@@ -263,7 +262,7 @@ implements
             @NonNull final ThrowingRunnable runnable) {
 
         final int stackSizeWhenEntering = interactionLayerStack.get().size();
-        openInteraction(authentication, authentication.getInteractionContext());
+        openInteraction(authentication.getInteractionContext());
 
         try {
             serviceInjector.injectServicesInto(runnable);
