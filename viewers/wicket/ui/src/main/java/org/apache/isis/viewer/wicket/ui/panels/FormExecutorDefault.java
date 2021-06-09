@@ -41,7 +41,7 @@ import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.interaction.session.InteractionFactory;
-import org.apache.isis.core.interaction.session.InteractionHandler;
+import org.apache.isis.core.interaction.session.InteractionService;
 import org.apache.isis.core.interaction.session.MessageBroker;
 import org.apache.isis.core.metamodel.facets.actions.redirect.RedirectFacet;
 import org.apache.isis.core.metamodel.facets.properties.renderunchanged.UnchangingFacet;
@@ -430,7 +430,7 @@ implements FormExecutor {
         return getCommonContext().getSpecificationLoader();
     }
 
-    protected InteractionHandler getIsisInteractionFactory() {
+    protected InteractionService getIsisInteractionFactory() {
         return getCommonContext().lookupServiceElseFail(InteractionFactory.class);
     }
 

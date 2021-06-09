@@ -22,7 +22,7 @@ import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
-import org.apache.isis.core.interaction.session.InteractionHandler;
+import org.apache.isis.core.interaction.session.InteractionService;
 
 /**
  * @since 2.0 {@index}
@@ -38,7 +38,7 @@ public class IsisInteractionHandler implements BeforeEachCallback, AfterEachCall
     @Override
     public void afterEach(ExtensionContext extensionContext) throws Exception {
         _Helper.getInteractionFactory(extensionContext)
-        .ifPresent(InteractionHandler::closeInteractionLayers);
+        .ifPresent(InteractionService::closeInteractionLayers);
     }
 
 

@@ -8,7 +8,7 @@ import org.apache.isis.core.security.authentication.Authentication;
 
 import lombok.NonNull;
 
-public interface InteractionHandler {
+public interface InteractionService {
     /**
      * If present, reuses the current top level {@link InteractionLayer}, otherwise creates a new
      * anonymous one.

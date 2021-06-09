@@ -19,7 +19,7 @@
 package org.apache.isis.core.interaction.integration;
 
 import org.apache.isis.applib.services.user.ImpersonatedUserHolder;
-import org.apache.isis.core.interaction.session.InteractionHandler;
+import org.apache.isis.core.interaction.session.InteractionService;
 import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.standard.SimpleAuthentication;
 
@@ -33,7 +33,7 @@ import lombok.val;
 @RequiredArgsConstructor(staticName = "next")
 public class IsisRequestCycle {
 
-    private final InteractionHandler interactionHandler;
+    private final InteractionService interactionService;
     private final ImpersonatedUserHolder impersonatedUserHolder;
 
     // -- SUPPORTING WEB REQUEST CYCLE FOR ISIS ...
@@ -47,7 +47,7 @@ public class IsisRequestCycle {
                         authentication.getValidationCode()))
                 .orElse(authentication);
 
-        interactionHandler.openInteraction(authenticationToUse.getInteractionContext());
+        interactionService.openInteraction(authenticationToUse.getInteractionContext());
     }
 
     public void onRequestHandlerExecuted() {
@@ -56,7 +56,7 @@ public class IsisRequestCycle {
 
     public void onEndRequest() {
 
-        interactionHandler.closeInteractionLayers();
+        interactionService.closeInteractionLayers();
 
     }
 

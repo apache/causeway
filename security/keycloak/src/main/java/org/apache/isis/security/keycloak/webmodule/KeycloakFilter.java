@@ -35,7 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.apache.isis.applib.services.user.UserMemento;
-import org.apache.isis.core.interaction.session.InteractionHandler;
+import org.apache.isis.core.interaction.session.InteractionService;
 import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.standard.SimpleAuthentication;
 
@@ -46,7 +46,7 @@ import lombok.val;
  */
 public class KeycloakFilter implements Filter {
 
-    @Autowired private InteractionHandler interactionHandler;
+    @Autowired private InteractionService interactionService;
 
     @Override
     public void doFilter(
@@ -69,7 +69,7 @@ public class KeycloakFilter implements Filter {
         val authentication = SimpleAuthentication.of(user, subjectHeader);
         authentication.setType(Authentication.Type.EXTERNAL);
 
-        interactionHandler.runAuthenticated(
+        interactionService.runAuthenticated(
                 authentication,
                 ()->{
                         filterChain.doFilter(servletRequest, servletResponse);

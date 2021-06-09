@@ -32,7 +32,7 @@ import org.junit.Test;
 import org.springframework.web.context.WebApplicationContext;
 
 import org.apache.isis.commons.internal.codec._UrlDecoderUtil;
-import org.apache.isis.core.interaction.session.InteractionHandler;
+import org.apache.isis.core.interaction.session.InteractionService;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.interaction.session.IsisInteraction;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
@@ -55,7 +55,7 @@ public class ResourceContext_getArg_Test {
     @Mock private HttpServletRequest mockHttpServletRequest;
     @Mock private ServletContext mockServletContext;
     @Mock private IsisInteraction mockIsisInteraction;
-    @Mock private InteractionHandler mockInteractionHandler;
+    @Mock private InteractionService mockInteractionService;
     @Mock private InteractionTracker mockIsisInteractionTracker;
     @Mock private AuthenticationManager mockAuthenticationManager;
     @Mock private Authentication mockAuthentication;
@@ -72,7 +72,7 @@ public class ResourceContext_getArg_Test {
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
-                .singleton(mockInteractionHandler)
+                .singleton(mockInteractionService)
                 .singleton(mockAuthenticationManager)
                 .singleton(mockIsisInteractionTracker)
                 //                .serviceInjector(mockServiceInjector)

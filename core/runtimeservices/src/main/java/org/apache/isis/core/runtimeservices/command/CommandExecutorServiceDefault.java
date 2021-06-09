@@ -52,7 +52,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.interaction.session.InteractionHandler;
+import org.apache.isis.core.interaction.session.InteractionService;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
@@ -101,7 +101,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     @Inject final InteractionTracker isisInteractionTracker;
     @Inject final Provider<InteractionProvider> interactionProviderProvider;
 
-    @Inject @Getter final InteractionHandler interactionHandler;
+    @Inject @Getter final InteractionService interactionService;
     @Inject @Getter final SpecificationLoader specificationLoader;
 
     @Override

@@ -29,7 +29,7 @@ import com.vaadin.flow.spring.SpringServlet;
 import org.springframework.context.ApplicationContext;
 
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.core.interaction.session.InteractionHandler;
+import org.apache.isis.core.interaction.session.InteractionService;
 import org.apache.isis.incubator.viewer.vaadin.ui.auth.AuthSessionStoreUtil;
 
 import lombok.NonNull;
@@ -47,14 +47,14 @@ extends SpringServlet {
 
     private static final long serialVersionUID = 1L;
 
-    private final InteractionHandler interactionHandler;
+    private final InteractionService interactionService;
 
     public IsisServletForVaadin(
-            @NonNull final InteractionHandler interactionHandler,
+            @NonNull final InteractionService interactionService,
             @NonNull final ApplicationContext context,
             final boolean forwardingEnforced) {
         super(context, forwardingEnforced);
-        this.interactionHandler = interactionHandler;
+        this.interactionService = interactionService;
     }
 
 
@@ -68,7 +68,7 @@ extends SpringServlet {
         log.debug("new request incoming (authentication={})", authentication);
 
         if(authentication!=null) {
-            interactionHandler.runAuthenticated(authentication, ()->{
+            interactionService.runAuthenticated(authentication, ()->{
                 super.service(request, response);
             });
         } else {
@@ -79,8 +79,8 @@ extends SpringServlet {
 
         log.debug("request was successfully serviced (authentication={})", authentication);
 
-        if(interactionHandler.isInInteraction()) {
-            interactionHandler.closeInteractionLayers();
+        if(interactionService.isInInteraction()) {
+            interactionService.closeInteractionLayers();
             log.warn("after servicing current request some interactions have been closed forcefully (authentication={})", authentication);
         }
 

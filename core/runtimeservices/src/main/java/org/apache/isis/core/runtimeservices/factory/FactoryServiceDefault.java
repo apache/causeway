@@ -40,7 +40,7 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
-import org.apache.isis.core.interaction.session.InteractionHandler;
+import org.apache.isis.core.interaction.session.InteractionService;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -56,7 +56,7 @@ import lombok.val;
 @Qualifier("Default")
 public class FactoryServiceDefault implements FactoryService {
 
-    @Inject InteractionHandler interactionHandler; // dependsOn
+    @Inject InteractionService interactionService; // dependsOn
     @Inject private SpecificationLoader specificationLoader;
     @Inject private ServiceInjector serviceInjector;
     @Inject private IsisSystemEnvironment isisSystemEnvironment;

@@ -48,7 +48,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.factory._InstanceUtil;
-import org.apache.isis.core.interaction.session.InteractionHandler;
+import org.apache.isis.core.interaction.session.InteractionService;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
@@ -157,7 +157,7 @@ public class IsisRestfulObjectsInteractionFilter implements Filter {
         return Pattern.compile(".*\\." + input);
     };
 
-    @Autowired private InteractionHandler interactionHandler;
+    @Autowired private InteractionService interactionService;
     @Autowired private SpecificationLoader specificationLoader;
     @Autowired private TransactionService transactionService;
 
@@ -344,7 +344,7 @@ public class IsisRestfulObjectsInteractionFilter implements Filter {
     @Override
     public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
 
-        requires(interactionHandler, "isisInteractionFactory");
+        requires(interactionService, "isisInteractionFactory");
         requires(specificationLoader, "specificationLoader");
 
         ensureMetamodelIsValid(specificationLoader);
@@ -379,7 +379,7 @@ public class IsisRestfulObjectsInteractionFilter implements Filter {
 
                 authStrategy.bind(httpServletRequest, httpServletResponse, authentication);
 
-                interactionHandler.runAuthenticated(
+                interactionService.runAuthenticated(
                         authentication,
                         ()->{
 
@@ -406,7 +406,7 @@ public class IsisRestfulObjectsInteractionFilter implements Filter {
             }
 
         } finally {
-            interactionHandler.closeInteractionLayers();
+            interactionService.closeInteractionLayers();
         }
 
     }

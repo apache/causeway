@@ -33,7 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import org.apache.isis.applib.services.user.UserMemento;
-import org.apache.isis.core.interaction.session.InteractionHandler;
+import org.apache.isis.core.interaction.session.InteractionService;
 import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.standard.SimpleAuthentication;
 import org.apache.isis.security.spring.authconverters.AuthenticationConverter;
@@ -47,7 +47,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class SpringSecurityFilter implements Filter {
 
-    @Autowired private InteractionHandler interactionHandler;
+    @Autowired private InteractionService interactionService;
 
     @Override
     public void doFilter(
@@ -86,7 +86,7 @@ public class SpringSecurityFilter implements Filter {
         val authentication = SimpleAuthentication.validOf(userMemento);
         authentication.setType(Authentication.Type.EXTERNAL);
 
-        interactionHandler.runAuthenticated(
+        interactionService.runAuthenticated(
                 authentication,
                 ()->{
                         filterChain.doFilter(servletRequest, servletResponse);

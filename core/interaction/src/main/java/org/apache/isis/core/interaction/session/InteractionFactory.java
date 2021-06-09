@@ -41,7 +41,7 @@ import lombok.NonNull;
  * @since 2.0 {@index}
  */
 public interface InteractionFactory
-extends AnonymousInteractionFactory, InteractionHandler {
+extends AnonymousInteractionFactory, InteractionService {
 
     /**
      * As per {@link #call(InteractionContext, Callable)}, using the {@link InteractionContext}
