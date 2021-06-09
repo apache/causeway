@@ -20,7 +20,7 @@ package org.apache.isis.core.interaction.session;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.services.iactnlayer.ExecutionContext;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -44,9 +44,9 @@ extends InteractionProvider, AuthenticationProvider {
     }
 
     /**
-     * Returns the {@link ExecutionContext} wrapped by the {@link #currentInteractionLayer()} (if within an interaction layer).
+     * Returns the {@link InteractionContext} wrapped by the {@link #currentInteractionLayer()} (if within an interaction layer).
      */
-    default Optional<ExecutionContext> currentExecutionContext() {
+    default Optional<InteractionContext> currentExecutionContext() {
         return currentInteractionLayer().map(InteractionLayer::getExecutionContext);
     }
 

@@ -31,7 +31,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.iactnlayer.ExecutionContext;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.sudo.SudoServiceListener;
@@ -69,7 +69,7 @@ public class SudoServiceDefault implements SudoService {
 
     @Override
     public <T> T call(
-            final @NonNull UnaryOperator<ExecutionContext> sudoMapper,
+            final @NonNull UnaryOperator<InteractionContext> sudoMapper,
             final @NonNull Callable<T> callable) {
 
         val currentInteractionLayer = interactionTracker.currentInteractionLayerElseFail();
@@ -92,16 +92,16 @@ public class SudoServiceDefault implements SudoService {
     // -- HELPER
 
     private void beforeCall(
-            final @NonNull ExecutionContext before,
-            final @NonNull ExecutionContext after) {
+            final @NonNull InteractionContext before,
+            final @NonNull InteractionContext after) {
         for (val sudoListener : sudoListeners) {
             sudoListener.beforeCall(before, after);
         }
     }
 
     private void afterCall(
-            final @NonNull ExecutionContext before,
-            final @NonNull ExecutionContext after) {
+            final @NonNull InteractionContext before,
+            final @NonNull InteractionContext after) {
         for (val sudoListener : sudoListeners) {
             sudoListener.afterCall(before, after);
         }

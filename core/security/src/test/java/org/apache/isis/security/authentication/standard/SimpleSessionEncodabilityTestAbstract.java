@@ -34,13 +34,13 @@ public abstract class SimpleSessionEncodabilityTestAbstract extends Encodability
         final AuthenticationAbstract original = (AuthenticationAbstract) originalEncodable;
 
         assertThat(decoded.getUser(), is(equalTo(original.getUser()))); // redundant shortcut
-        
-        assertThat(decoded.getExecutionContext().getTimeZone(), is(equalTo(original.getExecutionContext().getTimeZone())));
-        assertThat(decoded.getExecutionContext().getLocale(), is(equalTo(original.getExecutionContext().getLocale())));
-        assertThat(decoded.getExecutionContext().getUser(), is(equalTo(original.getExecutionContext().getUser())));
-        assertThat(decoded.getExecutionContext().getClock(), is(equalTo(original.getExecutionContext().getClock())));
-        
-        assertThat(decoded.getExecutionContext(), is(equalTo(original.getExecutionContext())));
+
+        assertThat(decoded.getInteractionContext().getTimeZone(), is(equalTo(original.getInteractionContext().getTimeZone())));
+        assertThat(decoded.getInteractionContext().getLocale(), is(equalTo(original.getInteractionContext().getLocale())));
+        assertThat(decoded.getInteractionContext().getUser(), is(equalTo(original.getInteractionContext().getUser())));
+        assertThat(decoded.getInteractionContext().getClock(), is(equalTo(original.getInteractionContext().getClock())));
+
+        assertThat(decoded.getInteractionContext(), is(equalTo(original.getInteractionContext())));
     }
 
 }

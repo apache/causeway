@@ -23,7 +23,7 @@ import java.util.Optional;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.applib.services.iactnlayer.ExecutionContext;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
@@ -44,7 +44,7 @@ public interface UserService {
 
     /**
      * Optionally gets the details about the current user,
-     * based on whether an {@link ExecutionContext} can be found with the current thread's context.
+     * based on whether an {@link InteractionContext} can be found with the current thread's context.
      */
     Optional<UserMemento> currentUser();
 
@@ -61,16 +61,16 @@ public interface UserService {
 
     /**
      * Gets the details about the current user.
-     * @throws IllegalStateException if no {@link ExecutionContext} can be found with the current thread's context.
+     * @throws IllegalStateException if no {@link InteractionContext} can be found with the current thread's context.
      */
     default UserMemento currentUserElseFail() {
         return currentUser()
-                .orElseThrow(()->_Exceptions.illegalState("Current thread has no ExecutionContext."));
+                .orElseThrow(()->_Exceptions.illegalState("Current thread has no InteractionContext."));
     }
 
     /**
      * Optionally gets the the current user's name,
-     * based on whether an {@link ExecutionContext} can be found with the current thread's context.
+     * based on whether an {@link InteractionContext} can be found with the current thread's context.
      */
     default Optional<String> currentUserName() {
         return currentUser()

@@ -47,7 +47,7 @@ import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandExecutorService;
 import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.iactnlayer.ExecutionContext;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
@@ -460,7 +460,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
         val executionContext = auth.getExecutionContext();
 
-        val newExecutionContext = ExecutionContext.builder()
+        val newExecutionContext = InteractionContext.builder()
         .clock(Optional.ofNullable(asyncControl.getClock())
                 .orElseGet(executionContext::getClock))
         .locale(Optional.ofNullable(asyncControl.getLocale())

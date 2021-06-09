@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.interaction.session;
 
-import org.apache.isis.applib.services.iactnlayer.ExecutionContext;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.core.security.authentication.Authentication;
 
 import lombok.Getter;
@@ -49,7 +49,7 @@ public class InteractionLayer {
 		this.authentication = authentication;
 	}
 
-	public ExecutionContext getExecutionContext() {
+	public InteractionContext getExecutionContext() {
 	    return authentication.getExecutionContext();
 	}
 

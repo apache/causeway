@@ -21,7 +21,7 @@ package org.apache.isis.core.security.authentication;
 
 import java.io.Serializable;
 
-import org.apache.isis.applib.services.iactnlayer.ExecutionContext;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.user.UserMemento;
 
@@ -29,7 +29,7 @@ import org.apache.isis.applib.services.user.UserMemento;
  * An immutable, serializable value type, that holds details about a user's authentication.
  *
  * <p>
- *     This is really little more than a thin wrapper around {@link ExecutionContext},
+ *     This is really little more than a thin wrapper around {@link InteractionContext},
  *     surfaces a number of the security-specific attributes of that field.
  * </p>
  *
@@ -67,12 +67,12 @@ public interface Authentication extends Serializable {
     }
 
     /**
-     * The {@link ExecutionContext} (programmatically) simulated (or actual), belonging to this session.
+     * The {@link InteractionContext} (programmatically) simulated (or actual), belonging to this session.
      *
      * @apiNote immutable, allows an {@link Interaction} to (logically) run with its
      * own simulated (or actual) clock
      */
-    ExecutionContext getExecutionContext();
+    InteractionContext getExecutionContext();
 
     /**
      * To support external security mechanisms such as keycloak, where the validity of the session is defined by
@@ -96,8 +96,8 @@ public interface Authentication extends Serializable {
     // -- WITHERS
 
     /**
-     * Returns a copy with given {@code executionContext}.
-     * @param executionContext
+     * Returns a copy with given {@code interactionContext}.
+     * @param interactionContext
      */
-    Authentication withExecutionContext(ExecutionContext executionContext);
+    Authentication withExecutionContext(InteractionContext interactionContext);
 }

@@ -40,7 +40,7 @@ import lombok.With;
  */
 @Value @Builder
 @RequiredArgsConstructor
-public class ExecutionContext implements Serializable {
+public class InteractionContext implements Serializable {
 
     private static final long serialVersionUID = -220896735209733865L;
 
@@ -73,12 +73,12 @@ public class ExecutionContext implements Serializable {
     // -- FACTORIES
 
     /**
-     * Creates a new {@link ExecutionContext} with the specified user and
+     * Creates a new {@link InteractionContext} with the specified user and
      * system defaults for clock, locale and time-zone.
      */
-    public static ExecutionContext ofUserWithSystemDefaults(
+    public static InteractionContext ofUserWithSystemDefaults(
             final @NonNull UserMemento user) {
-        return ExecutionContext.builder()
+        return InteractionContext.builder()
                 .user(user)
                 .clock(VirtualClock.system())
                 .locale(Locale.getDefault())

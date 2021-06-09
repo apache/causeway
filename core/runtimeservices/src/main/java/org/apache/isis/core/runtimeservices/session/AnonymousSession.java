@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.runtimeservices.session;
 
-import org.apache.isis.applib.services.iactnlayer.ExecutionContext;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.core.security.authentication.AuthenticationAbstract;
 
@@ -26,8 +26,8 @@ final class AnonymousSession extends AuthenticationAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    private static final ExecutionContext INITIALISATION_CONTEXT =
-            ExecutionContext.ofUserWithSystemDefaults(UserMemento.system());
+    private static final InteractionContext INITIALISATION_CONTEXT =
+            InteractionContext.ofUserWithSystemDefaults(UserMemento.system());
 
     public AnonymousSession() {
         super(INITIALISATION_CONTEXT, AuthenticationAbstract.DEFAULT_AUTH_VALID_CODE);
