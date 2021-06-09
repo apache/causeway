@@ -90,7 +90,7 @@ public interface HasMetaModelContext {
     }
 
     default AuthenticationProvider getAuthenticationContext() {
-        return getMetaModelContext().getAuthenticationContext();
+        return getMetaModelContext().getAuthenticationProvider();
     }
 
     default TitleService getTitleService() {

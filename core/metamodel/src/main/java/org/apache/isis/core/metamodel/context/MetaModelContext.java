@@ -88,7 +88,7 @@ public interface MetaModelContext {
 
     AuthenticationManager getAuthenticationManager();
 
-    AuthenticationProvider getAuthenticationContext();
+    AuthenticationProvider getAuthenticationProvider();
 
     TitleService getTitleService();
 
