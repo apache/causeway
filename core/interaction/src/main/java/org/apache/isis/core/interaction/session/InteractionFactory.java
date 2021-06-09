@@ -75,33 +75,51 @@ extends AnonymousInteractionFactory {
     boolean isInInteraction();
 
     /**
-     * Executes a block of code with a new or reused {@link Authentication} using a new or
+     * Executes a block of code with a new or reused {@link InteractionContext} using a new or
      * reused {@link InteractionLayer}.
+     *
      * <p>
      * If there is currently no {@link InteractionLayer} a new one is created.
+     * </p>
+     *
      * <p>
-     * If there is currently an {@link InteractionLayer} that has an equal {@link Authentication}
+     * If there is currently an {@link InteractionLayer} that has an equal {@link InteractionContext}
      * to the given one, it is reused, otherwise a new one is created.
+     * </p>
+     *
+     * @param interactionContext - the context to run under (non-null)
+     * @param callable - the piece of code to run (non-null)
+     */
+    <R> R call(@NonNull InteractionContext interactionContext, @NonNull Callable<R> callable);
+
+    /**
+     * As per {@link #call(InteractionContext, Callable)}, using the {@link InteractionContext}
+     * {@link Authentication#getInteractionContext() obtained} from the provided {@link Authentication}.
      *
      * @param authentication - the user details to run under (non-null)
      * @param callable - the piece of code to run (non-null)
-     *
      */
     <R> R callAuthenticated(@NonNull Authentication authentication, @NonNull Callable<R> callable);
 
     /**
-     * Variant of {@link #callAuthenticated(Authentication, Callable)} that takes a runnable.
+     * Variant of {@link #call(InteractionContext, Callable)} that takes a runnable.
+     *
+     * @param interactionContext - the user details to run under (non-null)
+     * @param runnable (non-null)
+     */
+    void run(@NonNull InteractionContext interactionContext, @NonNull ThrowingRunnable runnable);
+
+    /**
+     * As per {@link #callAuthenticated(Authentication, Callable)}, but for a runnable.
+     *
      * @param authentication - the user details to run under (non-null)
      * @param runnable (non-null)
      */
     void runAuthenticated(@NonNull Authentication authentication, @NonNull ThrowingRunnable runnable);
 
     /**
-     * Executes a block of code with a new or reused {@link Authentication} using a new or
-     * reused {@link InteractionLayer}.
-     * <p>
-     * If there is currently no {@link InteractionLayer} a new one is created and a new
-     * anonymous {@link InteractionLayer} is returned. Otherwise both, session and layer are reused.
+     * As per {@link #call(InteractionContext, Callable)}, but using an {@link InteractionContext}
+     * {@link Authentication#getInteractionContext() obtained} from an anonymous {@link Authentication}.
      *
      * @param <R>
      * @param callable (non-null)
@@ -109,7 +127,8 @@ extends AnonymousInteractionFactory {
     <R> R callAnonymous(@NonNull Callable<R> callable);
 
     /**
-     * Variant of {@link #callAnonymous(Callable)} that takes a runnable.
+     * As per {@link #callAnonymous(Callable)}, but for a runnable.
+     *
      * @param runnable (non-null)
      */
     @Override

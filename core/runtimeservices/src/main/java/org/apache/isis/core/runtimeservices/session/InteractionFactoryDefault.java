@@ -241,16 +241,38 @@ implements
 
     @Override
     @SneakyThrows
-    public <R> R callAuthenticated(
-            @NonNull final Authentication authentication,
-            @NonNull final Callable<R> callable) {
+    public <R> R call(@NonNull InteractionContext interactionContext, @NonNull Callable<R> callable) {
 
         final int stackSizeWhenEntering = interactionLayerStack.get().size();
-        openInteraction(authentication.getInteractionContext());
+        openInteraction(interactionContext);
 
         try {
             serviceInjector.injectServicesInto(callable);
             return callable.call();
+        } finally {
+            closeInteractionLayerStackDownToStackSize(stackSizeWhenEntering);
+        }
+    }
+
+
+    @Override
+    @SneakyThrows
+    public <R> R callAuthenticated(
+            @NonNull final Authentication authentication,
+            @NonNull final Callable<R> callable) {
+
+        return call(authentication.getInteractionContext(), callable);
+    }
+
+    @Override
+    @SneakyThrows
+    public void run(@NonNull InteractionContext interactionContext, @NonNull ThrowingRunnable runnable) {
+        final int stackSizeWhenEntering = interactionLayerStack.get().size();
+        openInteraction(interactionContext);
+
+        try {
+            serviceInjector.injectServicesInto(runnable);
+            runnable.run();
         } finally {
             closeInteractionLayerStackDownToStackSize(stackSizeWhenEntering);
         }
@@ -263,15 +285,7 @@ implements
             @NonNull final Authentication authentication,
             @NonNull final ThrowingRunnable runnable) {
 
-        final int stackSizeWhenEntering = interactionLayerStack.get().size();
-        openInteraction(authentication.getInteractionContext());
-
-        try {
-            serviceInjector.injectServicesInto(runnable);
-            runnable.run();
-        } finally {
-            closeInteractionLayerStackDownToStackSize(stackSizeWhenEntering);
-        }
+        run(authentication.getInteractionContext(), runnable);
     }
 
 
