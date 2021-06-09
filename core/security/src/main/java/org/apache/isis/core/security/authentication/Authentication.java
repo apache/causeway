@@ -63,7 +63,7 @@ public interface Authentication extends Serializable {
      * own simulated (or actual) user
      */
     default UserMemento getUser() {
-        return getExecutionContext().getUser();
+        return getInteractionContext().getUser();
     }
 
     /**
@@ -72,7 +72,7 @@ public interface Authentication extends Serializable {
      * @apiNote immutable, allows an {@link Interaction} to (logically) run with its
      * own simulated (or actual) clock
      */
-    InteractionContext getExecutionContext();
+    InteractionContext getInteractionContext();
 
     /**
      * To support external security mechanisms such as keycloak, where the validity of the session is defined by

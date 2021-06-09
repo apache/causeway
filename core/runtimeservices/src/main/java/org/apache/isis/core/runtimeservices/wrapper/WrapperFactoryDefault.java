@@ -458,7 +458,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
     private static <R> Authentication authFrom(AsyncControl<R> asyncControl, Authentication auth) {
 
-        val executionContext = auth.getExecutionContext();
+        val executionContext = auth.getInteractionContext();
 
         val newExecutionContext = InteractionContext.builder()
         .clock(Optional.ofNullable(asyncControl.getClock())

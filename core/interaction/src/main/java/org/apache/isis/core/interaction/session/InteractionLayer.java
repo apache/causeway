@@ -50,7 +50,7 @@ public class InteractionLayer {
 	}
 
 	public InteractionContext getExecutionContext() {
-	    return authentication.getExecutionContext();
+	    return authentication.getInteractionContext();
 	}
 
 }
