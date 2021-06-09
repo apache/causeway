@@ -28,7 +28,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
  * Provides the current thread's {@link Authentication}.
  * @since 2.0
  */
-public interface AuthenticationContext {
+public interface AuthenticationProvider {
 
     /**
      * Optionally provides the current thread's {@link Authentication}.

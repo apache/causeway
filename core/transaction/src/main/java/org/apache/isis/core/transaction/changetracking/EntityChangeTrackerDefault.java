@@ -71,7 +71,7 @@ import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityC
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
-import org.apache.isis.core.security.authentication.AuthenticationContext;
+import org.apache.isis.core.security.authentication.AuthenticationProvider;
 import org.apache.isis.core.transaction.changetracking.events.IsisTransactionPlaceholder;
 import org.apache.isis.core.transaction.events.TransactionBeforeCompletionEvent;
 
@@ -102,7 +102,7 @@ implements
     @Inject private EntityChangesPublisher entityChangesPublisher;
     @Inject private EventBusService eventBusService;
     @Inject private Provider<InteractionProvider> interactionProviderProvider;
-    @Inject private Provider<AuthenticationContext> authenticationContextProvider;
+    @Inject private Provider<AuthenticationProvider> authenticationContextProvider;
 
 
     /**

@@ -25,14 +25,14 @@ import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.security.authentication.Authentication;
-import org.apache.isis.core.security.authentication.AuthenticationContext;
+import org.apache.isis.core.security.authentication.AuthenticationProvider;
 
 /**
  *
  * @since 2.0
  */
 public interface InteractionTracker
-extends InteractionProvider, AuthenticationContext {
+extends InteractionProvider, AuthenticationProvider {
 
     /** @return the AuthenticationLayer that sits on top of the current
      * request- or test-scoped InteractionSession's stack*/

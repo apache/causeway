@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.security.authentication.AuthenticationContext;
+import org.apache.isis.core.security.authentication.AuthenticationProvider;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 
 import lombok.Getter;
@@ -75,7 +75,7 @@ public abstract class RuntimeContextBase implements RuntimeContext {
 
     // -- AUTH
 
-    public AuthenticationContext getAuthenticationContext() {
+    public AuthenticationProvider getAuthenticationContext() {
         return interactionTracker;
     }
 

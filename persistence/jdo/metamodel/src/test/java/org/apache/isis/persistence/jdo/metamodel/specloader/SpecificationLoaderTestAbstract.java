@@ -50,7 +50,7 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefaul
 import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.security.authentication.AuthenticationContext;
+import org.apache.isis.core.security.authentication.AuthenticationProvider;
 
 import lombok.val;
 
@@ -70,8 +70,8 @@ abstract class SpecificationLoaderTestAbstract {
             return config;
         }
 
-        AuthenticationContext mockAuthenticationContext() {
-            return Mockito.mock(AuthenticationContext.class);
+        AuthenticationProvider mockAuthenticationContext() {
+            return Mockito.mock(AuthenticationProvider.class);
         }
 
         GridService mockGridService() {
@@ -104,7 +104,7 @@ abstract class SpecificationLoaderTestAbstract {
 
     protected IsisConfiguration isisConfiguration;
     protected SpecificationLoader specificationLoader;
-    protected AuthenticationContext mockAuthenticationContext;
+    protected AuthenticationProvider mockAuthenticationProvider;
     protected GridService mockGridService;
     protected MessageService mockMessageService;
     protected MetaModelContext metaModelContext;
@@ -127,7 +127,7 @@ abstract class SpecificationLoaderTestAbstract {
                 .translationService(producers.mockTranslationService())
                 .titleService(producers.mockTitleService())
 //                .objectAdapterProvider(mockPersistenceSessionServiceInternal = producers.mockPersistenceSessionServiceInternal())
-                .authenticationContext(mockAuthenticationContext =
+                .authenticationProvider(mockAuthenticationProvider =
                     producers.mockAuthenticationContext())
                 .singleton(mockMessageService = producers.mockMessageService())
                 .singleton(mockGridService = producers.mockGridService())

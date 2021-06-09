@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.facets.object.navparent.annotation.Navigab
 import org.apache.isis.core.metamodel.facets.object.navparent.method.NavigableParentFacetMethod;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.security.authentication.Authentication;
-import org.apache.isis.core.security.authentication.AuthenticationContext;
+import org.apache.isis.core.security.authentication.AuthenticationProvider;
 
 public class NavigableParentAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
@@ -59,7 +59,7 @@ public class NavigableParentAnnotationFacetFactoryTest extends AbstractFacetFact
 
         context.checking(new Expectations() {
             {
-                allowing(mockServiceRegistry).lookupService(AuthenticationContext.class);
+                allowing(mockServiceRegistry).lookupService(AuthenticationProvider.class);
                 will(returnValue(Optional.of(mockAuthenticationTracker)));
 
                 allowing(mockAuthenticationTracker).currentAuthentication();
@@ -103,7 +103,7 @@ public class NavigableParentAnnotationFacetFactoryTest extends AbstractFacetFact
         final Method parentMethod = domainClass.getMethod(parentMethodName);
 
         Assert.assertEquals(
-                parentMethod.invoke(domainObject, _Constants.emptyObjects), 
+                parentMethod.invoke(domainObject, _Constants.emptyObjects),
                 navigableParentFacetMethod.navigableParent(domainObject)	);
 
     }

@@ -40,7 +40,7 @@ import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.security.authentication.AuthenticationContext;
+import org.apache.isis.core.security.authentication.AuthenticationProvider;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
@@ -88,7 +88,7 @@ public interface MetaModelContext {
 
     AuthenticationManager getAuthenticationManager();
 
-    AuthenticationContext getAuthenticationContext();
+    AuthenticationProvider getAuthenticationContext();
 
     TitleService getTitleService();
 
