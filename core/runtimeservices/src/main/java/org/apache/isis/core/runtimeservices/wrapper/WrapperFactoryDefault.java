@@ -362,7 +362,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
         val asyncInteractionContext = interactionContextFrom(asyncControl, interactionContext);
 
         val authIfAny = Authentication.authenticationFrom(interactionLayer.getInteractionContext());
-        if(authIfAny.isEmpty()) {
+        if(!authIfAny.isPresent()) {
             return null;
         }
 

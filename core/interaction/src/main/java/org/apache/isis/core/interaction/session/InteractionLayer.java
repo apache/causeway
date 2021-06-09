@@ -19,15 +19,16 @@
 package org.apache.isis.core.interaction.session;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
-import org.apache.isis.core.security.authentication.Authentication;
 
 import lombok.Getter;
 import lombok.NonNull;
 
 /**
  * Provides the environment for an (or parts of an) user interaction to be executed.
+ *
  * <p>
- * Can be nested by pushing onto the current thread's {@link InteractionTracker} Stack.
+ * These may be nested (held in a stack), for example for the {@link org.apache.isis.applib.services.sudo.SudoService},
+ * or for fixtures that mock the clock.
  *
  * @since 2.0
  *
