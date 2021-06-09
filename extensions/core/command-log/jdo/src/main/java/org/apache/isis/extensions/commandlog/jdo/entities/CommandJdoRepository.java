@@ -43,7 +43,7 @@ import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryRange;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.iactn.InteractionContext;
+import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.extensions.commandlog.model.command.CommandModel;
@@ -72,7 +72,7 @@ import lombok.val;
 public class CommandJdoRepository
 implements CommandModelRepository<CommandJdo> {
 
-    @Inject final Provider<InteractionContext> interactionContextProvider;
+    @Inject final Provider<InteractionProvider> interactionContextProvider;
     @Inject final Provider<RepositoryService> repositoryServiceProvider;
     @Inject final JdoSupportService jdoSupport;
 

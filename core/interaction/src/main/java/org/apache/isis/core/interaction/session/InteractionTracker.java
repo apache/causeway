@@ -22,7 +22,7 @@ import java.util.Optional;
 
 import org.apache.isis.applib.services.iactn.ExecutionContext;
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.iactn.InteractionContext;
+import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.AuthenticationContext;
@@ -32,7 +32,7 @@ import org.apache.isis.core.security.authentication.AuthenticationContext;
  * @since 2.0
  */
 public interface InteractionTracker
-extends InteractionContext, AuthenticationContext {
+extends InteractionProvider, AuthenticationContext {
 
     /** @return the AuthenticationLayer that sits on top of the current
      * request- or test-scoped InteractionSession's stack*/

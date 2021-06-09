@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.services.command;
 
 import java.util.UUID;
 
+import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -85,7 +86,7 @@ public interface CommandDtoFactory {
      * </p>
      *
      * @see org.apache.isis.schema.ixn.v2.ActionInvocationDto
-     * @see org.apache.isis.applib.services.iactn.InteractionContext
+     * @see InteractionProvider
      * @see org.apache.isis.applib.services.iactn.Interaction
      */
     void addActionArgs(
@@ -103,7 +104,7 @@ public interface CommandDtoFactory {
      * </p>
      *
      * @see org.apache.isis.schema.ixn.v2.PropertyEditDto
-     * @see org.apache.isis.applib.services.iactn.InteractionContext
+     * @see InteractionProvider
      * @see org.apache.isis.applib.services.iactn.Interaction
      */
     void addPropertyValue(

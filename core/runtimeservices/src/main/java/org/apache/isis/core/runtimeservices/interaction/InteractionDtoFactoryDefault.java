@@ -33,7 +33,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.iactn.InteractionContext;
+import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
@@ -72,7 +72,7 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
 
     @Inject private CommandDtoFactory commandDtoServiceInternal;
     @Inject private BookmarkService bookmarkService;
-    @Inject private javax.inject.Provider<InteractionContext> interactionContextProvider;
+    @Inject private javax.inject.Provider<InteractionProvider> interactionContextProvider;
     @Inject private UserService userService;
 
     @Override

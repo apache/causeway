@@ -16,7 +16,7 @@
 #  specific language governing permissions and limitations
 #  under the License.
 #
-org.apache.isis.applib.services.iactn.InteractionContext
+org.apache.isis.applib.services.iactn.InteractionProvider
 org.apache.isis.applib.services.queryresultscache.QueryResultsCacheInternal
 org.apache.isis.applib.services.scratchpad.Scratchpad
 org.apache.isis.core.runtimeservices.changes.ChangedObjectsServiceInternal

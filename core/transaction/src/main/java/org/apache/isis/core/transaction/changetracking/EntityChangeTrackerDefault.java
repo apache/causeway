@@ -42,7 +42,7 @@ import org.apache.isis.applib.events.lifecycle.AbstractLifecycleEvent;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.iactn.InteractionContext;
+import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.applib.services.publishing.spi.EntityChanges;
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
@@ -101,7 +101,7 @@ implements
     @Inject private EntityPropertyChangePublisher entityPropertyChangePublisher;
     @Inject private EntityChangesPublisher entityChangesPublisher;
     @Inject private EventBusService eventBusService;
-    @Inject private Provider<InteractionContext> interactionContextProvider;
+    @Inject private Provider<InteractionProvider> interactionContextProvider;
     @Inject private Provider<AuthenticationContext> authenticationContextProvider;
 
 

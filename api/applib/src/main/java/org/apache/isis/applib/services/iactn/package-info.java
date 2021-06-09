@@ -18,7 +18,7 @@
  */
 
 /**
- * The {@link org.apache.isis.applib.services.iactn.InteractionContext} is a request-scoped domain service that is used
+ * The {@link org.apache.isis.applib.services.iactn.InteractionProvider} is a request-scoped domain service that is used
  * to obtain the current {@link org.apache.isis.applib.services.iactn.Interaction}.
  * An Interaction in turn generally consists of a single top-level Execution, either to invoke an action or to edit
  * a property. If that top-level action or property uses the {@link org.apache.isis.applib.services.wrapper.WrapperFactory} to invoke child actions/properties, then

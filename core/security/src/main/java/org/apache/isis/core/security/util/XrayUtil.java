@@ -22,7 +22,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-import org.apache.isis.applib.services.iactn.InteractionContext;
+import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.debug.xray.XrayModel.ThreadMemento;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
@@ -41,7 +41,7 @@ public final class XrayUtil {
      * Returns the sequence diagram data model's id, that is bound to the current thread and interaction.
      * @param iaContext
      */
-    public static Optional<String> currentSequenceId(final @NonNull InteractionContext iaContext) {
+    public static Optional<String> currentSequenceId(final @NonNull InteractionProvider iaContext) {
         return iaContext.getInteractionId()
                 .map(XrayUtil::sequenceId);
     }
@@ -65,7 +65,7 @@ public final class XrayUtil {
     // -- SEQUENCE HANDLE
 
     public static Optional<SequenceHandle> createSequenceHandle(
-            final @NonNull InteractionContext iaContext,
+            final @NonNull InteractionProvider iaContext,
             final @NonNull AuthenticationContext authContext,
             final String ... callees) {
 
@@ -89,7 +89,7 @@ public final class XrayUtil {
     }
 
     // Using parameter that implements multiple interfaces, because we have no access to InteractionTracker
-    public static <T extends InteractionContext & AuthenticationContext>
+    public static <T extends InteractionProvider & AuthenticationContext>
     Optional<SequenceHandle> createSequenceHandle(
             final @NonNull T iaTracker,
             final String ... callees) {

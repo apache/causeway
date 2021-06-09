@@ -25,6 +25,7 @@ import java.util.function.Function;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -298,8 +299,8 @@ implements ObjectMember, HasMetaModelContext, HasFacetHolder {
 
     // -- Dependencies
 
-    protected org.apache.isis.applib.services.iactn.InteractionContext getInteractionContext() {
-        return getServiceRegistry().lookupServiceElseFail(org.apache.isis.applib.services.iactn.InteractionContext.class);
+    protected InteractionProvider getInteractionContext() {
+        return getServiceRegistry().lookupServiceElseFail(InteractionProvider.class);
     }
 
     protected CommandDtoFactory getCommandDtoFactory() {

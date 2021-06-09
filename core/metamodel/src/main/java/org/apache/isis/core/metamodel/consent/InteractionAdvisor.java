@@ -35,7 +35,7 @@ import org.apache.isis.core.metamodel.interactions.InteractionAdvisorFacet;
  */
 public interface InteractionAdvisor {
 
-    //boolean handles(InteractionContext ic);
+    //boolean handles(InteractionProvider ic);
 
     /**
      * For testing purposes only.

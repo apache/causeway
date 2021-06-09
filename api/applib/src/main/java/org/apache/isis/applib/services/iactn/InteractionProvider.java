@@ -38,19 +38,19 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
  *
  * @since 1.x {@index}
  */
-public interface InteractionContext {
+public interface InteractionProvider {
 
     /**
      * Whether there is a currently active {@link Interaction} for the calling thread.
      */
     boolean isInInteraction();
-    
+
     /**
      * Optionally, the currently active {@link Interaction} for the calling thread.
      */
     Optional<Interaction> currentInteraction();
-    
-    /** 
+
+    /**
      * Unique id of the current request- or test-scoped {@link Interaction}.
      */
     Optional<UUID> getInteractionId();

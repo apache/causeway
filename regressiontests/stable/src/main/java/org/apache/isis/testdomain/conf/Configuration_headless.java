@@ -63,7 +63,7 @@ public class Configuration_headless {
     public static class HeadlessCommandSupport
     implements InteractionScopeAware {
 
-//      private final Provider<InteractionContext> interactionContextProvider;
+//      private final Provider<InteractionProvider> interactionContextProvider;
 //      private final CommandDispatcher commandDispatcher;
 
         @Override

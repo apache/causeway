@@ -28,7 +28,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.iactn.InteractionContext;
+import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -60,7 +60,7 @@ public abstract class IsisIntegrationTestAbstract {
     public static class InteractionSupport {
 
         @SuppressWarnings("unused")
-        private final Provider<InteractionContext> interactionContextProvider;
+        private final Provider<InteractionProvider> interactionContextProvider;
 
     }
 

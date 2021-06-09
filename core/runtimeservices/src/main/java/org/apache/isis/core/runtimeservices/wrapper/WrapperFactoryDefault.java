@@ -48,7 +48,7 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandExecutorService;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactn.ExecutionContext;
-import org.apache.isis.applib.services.iactn.InteractionContext;
+import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -124,7 +124,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
     @Inject FactoryService factoryService;
     @Inject MetaModelContext metaModelContext;
     @Inject SpecificationLoader specificationLoader;
-    @Inject Provider<InteractionContext> interactionContextProvider;
+    @Inject Provider<InteractionProvider> interactionContextProvider;
     @Inject ServiceInjector serviceInjector;
     @Inject _ProxyFactoryService proxyFactoryService; // protected to allow JUnit test
     @Inject CommandDtoFactory commandDtoFactory;
@@ -597,7 +597,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
         @Inject InteractionFactory interactionFactory;
         @Inject TransactionService transactionService;
         @Inject CommandExecutorService commandExecutorService;
-        @Inject Provider<InteractionContext> interactionContextProvider;
+        @Inject Provider<InteractionProvider> interactionContextProvider;
         @Inject BookmarkService bookmarkService;
         @Inject RepositoryService repositoryService;
         @Inject MetaModelService metaModelService;

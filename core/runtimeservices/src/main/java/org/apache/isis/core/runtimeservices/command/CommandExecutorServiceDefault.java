@@ -42,7 +42,7 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandExecutorService;
 import org.apache.isis.applib.services.command.CommandOutcomeHandler;
 import org.apache.isis.applib.services.iactn.Execution;
-import org.apache.isis.applib.services.iactn.InteractionContext;
+import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.xactn.TransactionService;
@@ -99,7 +99,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     @Inject final ClockService clockService;
     @Inject final TransactionService transactionService;
     @Inject final InteractionTracker isisInteractionTracker;
-    @Inject final Provider<InteractionContext> interactionContextProvider;
+    @Inject final Provider<InteractionProvider> interactionContextProvider;
 
     @Inject @Getter final InteractionFactory isisInteractionFactory;
     @Inject @Getter final SpecificationLoader specificationLoader;
