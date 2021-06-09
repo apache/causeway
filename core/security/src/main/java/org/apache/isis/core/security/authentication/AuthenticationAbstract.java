@@ -21,7 +21,7 @@ package org.apache.isis.core.security.authentication;
 import java.io.Serializable;
 import java.util.Objects;
 
-import org.apache.isis.applib.services.iactn.ExecutionContext;
+import org.apache.isis.applib.services.iactnlayer.ExecutionContext;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.core.security.authentication.standard.SimpleAuthentication;
 

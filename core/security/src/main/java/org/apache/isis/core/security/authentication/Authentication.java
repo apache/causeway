@@ -21,7 +21,7 @@ package org.apache.isis.core.security.authentication;
 
 import java.io.Serializable;
 
-import org.apache.isis.applib.services.iactn.ExecutionContext;
+import org.apache.isis.applib.services.iactnlayer.ExecutionContext;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.user.UserMemento;
 

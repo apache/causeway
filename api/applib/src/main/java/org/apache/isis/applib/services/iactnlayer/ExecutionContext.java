@@ -16,13 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.iactn;
+package org.apache.isis.applib.services.iactnlayer;
 
 import java.io.Serializable;
 import java.util.Locale;
 import java.util.TimeZone;
 
 import org.apache.isis.applib.clock.VirtualClock;
+import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.user.UserMemento;
 
 import lombok.Builder;

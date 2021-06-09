@@ -20,7 +20,7 @@ package org.apache.isis.core.interaction.session;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.services.iactn.ExecutionContext;
+import org.apache.isis.applib.services.iactnlayer.ExecutionContext;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
