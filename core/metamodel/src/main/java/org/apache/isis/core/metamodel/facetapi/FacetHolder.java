@@ -103,20 +103,10 @@ public interface FacetHolder extends HasMetaModelContext {
      * Adds the facet, extracting its {@link Facet#facetType() type} as the key.
      *
      * <p>
-     * If there are any facet of the same type, they will be overwritten
-     * <i>provided</i> that given {@link Facet} has higher precedence.
+     * Any previously added facet of the same type will be overwritten,
+     * when given {@link Facet} has equal or higher precedence.
+     * Otherwise is ignored.
      */
     void addFacet(Facet facet);
-
-    /**
-     * Replaces any existing facet with the given one, while copying any underlying
-     * facet from the existing to the given one.
-     *
-     * @param facet
-     * @since 2.0
-     * @deprecated underlying facets are deprecated
-     */
-    @Deprecated
-    void addOrReplaceFacet(Facet facet);
 
 }

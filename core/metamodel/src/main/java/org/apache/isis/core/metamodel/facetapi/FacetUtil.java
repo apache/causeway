@@ -34,41 +34,11 @@ import lombok.val;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class FacetUtil {
 
-    public static void addIfNotAlreadyPresent(final @Nullable Facet facet) {
-        if (facet == null) {
-            return;
-        }
-        val facetHolder = facet.getFacetHolder();
-        if(!facetHolder.containsFacet(facet.facetType())) {
-            facetHolder.addFacet(facet);
-        }
-    }
-
-    public static void replaceIfAlreadyPresent(final @Nullable Facet facet) {
-        if (facet == null) {
-            return;
-        }
-        val facetHolder = facet.getFacetHolder();
-        facetHolder.addOrReplaceFacet(facet);
-        // second call sets the underlying facet as well to this type
-        // hacky, to pass validation
-        facetHolder.addOrReplaceFacet(facet);
-    }
-
-
-    public static void addOrReplaceFacet(final @Nullable Facet facet) {
-        if (facet == null) {
-            return;
-        }
-        facet.getFacetHolder().addOrReplaceFacet(facet);
-    }
-
     /**
      * Attaches the {@link Facet} to its {@link Facet#getFacetHolder() facet
-     * holder}.
-     *
-     * @return <tt>true</tt> if a non-<tt>null</tt> facet was added,
-     *         <tt>false</tt> otherwise.
+     * holder} based on precedence. Acts as a no-op if facet is <tt>null</tt>.
+     * @param facet - null-able
+     * @return whether given {@code facet} is non-<tt>null</tt>
      */
     public static boolean addFacet(final @Nullable Facet facet) {
         if (facet == null) {
@@ -80,9 +50,9 @@ public final class FacetUtil {
 
     /**
      * Attaches each {@link Facet} to its {@link Facet#getFacetHolder() facet
-     * holder}.
+     * holder} based on precedence.
      *
-     * @return <tt>true</tt> if any facets were added, <tt>false</tt> otherwise.
+     * @return whether given {@code facetList} contains any non-<tt>null</tt> facets
      */
     public static boolean addFacets(final @NonNull List<Facet> facetList) {
         boolean addedFacets = false;

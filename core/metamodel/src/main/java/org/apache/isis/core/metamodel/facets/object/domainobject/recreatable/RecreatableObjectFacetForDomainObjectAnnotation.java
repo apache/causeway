@@ -23,6 +23,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacetDeclarativeInitializingAbstract;
@@ -34,7 +35,8 @@ extends RecreatableObjectFacetDeclarativeInitializingAbstract {
     public static ViewModelFacet create(
             final Optional<DomainObject> domainObjectIfAny,
             final FacetHolder holder,
-            final PostConstructMethodCache postConstructMethodCache) {
+            final PostConstructMethodCache postConstructMethodCache,
+            final Facet.Precedence precedence) {
 
         return domainObjectIfAny
                 .map(DomainObject::nature)
@@ -48,7 +50,7 @@ extends RecreatableObjectFacetDeclarativeInitializingAbstract {
                         return null;
                     case VIEW_MODEL:
                         return new RecreatableObjectFacetForDomainObjectAnnotation(
-                                holder, postConstructMethodCache);
+                                holder, postConstructMethodCache, precedence);
                     }
                     // shouldn't happen, the above switch should match all cases.
                     throw new IllegalArgumentException("nature of '" + nature + "' not recognized");
@@ -59,9 +61,10 @@ extends RecreatableObjectFacetDeclarativeInitializingAbstract {
 
     private RecreatableObjectFacetForDomainObjectAnnotation(
             final FacetHolder holder,
-            final PostConstructMethodCache postConstructMethodCache) {
+            final PostConstructMethodCache postConstructMethodCache,
+            final Facet.Precedence precedence) {
 
-        super(holder, RecreationMechanism.INITIALIZES, postConstructMethodCache);
+        super(holder, RecreationMechanism.INITIALIZES, postConstructMethodCache, precedence);
     }
 
 }

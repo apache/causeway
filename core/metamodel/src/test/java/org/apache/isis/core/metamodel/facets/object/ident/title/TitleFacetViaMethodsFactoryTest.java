@@ -22,13 +22,13 @@ package org.apache.isis.core.metamodel.facets.object.ident.title;
 import java.lang.reflect.Method;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaMethodsFactory;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaTitleMethod;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaToStringMethod;
-import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 
 public class TitleFacetViaMethodsFactoryTest extends AbstractFacetFactoryTest {
 
@@ -89,13 +89,10 @@ public class TitleFacetViaMethodsFactoryTest extends AbstractFacetFactoryTest {
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(toStringMethod));
     }
 
-    /**
-     * This change means that it will be ignored by
-     * {@link ObjectSpecificationAbstract#getFacet(Class)} is the superclass has
-     * a none no-op implementation.
-     */
     public void testTitleFacetMethodUsingToStringIsClassifiedAsANoop() {
-        assertTrue(new TitleFacetViaToStringMethod(null, facetedMethod).getPrecedence().isFallback());
+        assertEquals(
+                Precedence.DERIVED,
+                new TitleFacetViaToStringMethod(null, facetedMethod).getPrecedence());
     }
 
     public void testNoExplicitTitleOrToStringMethod() {

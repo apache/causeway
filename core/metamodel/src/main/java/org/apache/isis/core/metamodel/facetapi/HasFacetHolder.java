@@ -53,9 +53,4 @@ public interface HasFacetHolder extends FacetHolder {
         getFacetHolder().addFacet(facet);
     }
 
-    @Override
-    default public void addOrReplaceFacet(Facet facet) {
-        getFacetHolder().addOrReplaceFacet(facet);
-    }
-
 }

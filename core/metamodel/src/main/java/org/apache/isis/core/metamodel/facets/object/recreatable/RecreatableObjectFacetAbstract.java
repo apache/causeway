@@ -46,12 +46,25 @@ implements ViewModelFacet {
         return ViewModelFacet.class;
     }
 
-    public RecreatableObjectFacetAbstract(final FacetHolder holder, final RecreationMechanism recreationMechanism,
+    protected RecreatableObjectFacetAbstract(
+            final FacetHolder holder,
+            final RecreationMechanism recreationMechanism,
             final PostConstructMethodCache postConstructMethodCache) {
         super(type(), holder);
         this.postConstructMethodCache = postConstructMethodCache;
         this.recreationMechanism = recreationMechanism;
     }
+
+    protected RecreatableObjectFacetAbstract(
+            final FacetHolder holder,
+            final RecreationMechanism recreationMechanism,
+            final PostConstructMethodCache postConstructMethodCache,
+            final Facet.Precedence precedence) {
+        super(type(), holder, precedence);
+        this.postConstructMethodCache = postConstructMethodCache;
+        this.recreationMechanism = recreationMechanism;
+    }
+
 
     @Override
     public boolean isCloneable(Object pojo) {

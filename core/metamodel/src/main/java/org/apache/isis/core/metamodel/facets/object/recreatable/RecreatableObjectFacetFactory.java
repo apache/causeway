@@ -26,11 +26,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.isis.applib.RecreatableDomainObject;
 import org.apache.isis.applib.ViewModel;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
@@ -65,35 +63,34 @@ implements
 
         val facetHolder = processClassContext.getFacetHolder();
         val type = processClassContext.getCls();
+        val postConstructMethodCache = this;
 
         // ViewModel interface
         if (ViewModel.class.isAssignableFrom(processClassContext.getCls())) {
-            final PostConstructMethodCache postConstructMethodCache = this;
-            FacetUtil.addFacet(new RecreatableObjectFacetForRecreatableObjectInterface(
-                    facetHolder, postConstructMethodCache));
+            FacetUtil.addFacet(
+                    new RecreatableObjectFacetForRecreatableObjectInterface(
+                            facetHolder, postConstructMethodCache));
         }
 
         // RecreatableDomainObject interface
         if (RecreatableDomainObject.class.isAssignableFrom(type)) {
-            final PostConstructMethodCache postConstructMethodCache = this;
-            FacetUtil.addFacet(new RecreatableObjectFacetForRecreatableDomainObjectInterface(
-                    facetHolder, postConstructMethodCache));
+            FacetUtil.addFacet(
+                    new RecreatableObjectFacetForRecreatableDomainObjectInterface(
+                            facetHolder, postConstructMethodCache));
         }
 
         // XmlRootElement annotation
-        final XmlRootElement xmlRootElement = Annotations.getAnnotation(type, XmlRootElement.class);
-        // handle with highest precedence
-        FacetUtil.replaceIfAlreadyPresent(create(xmlRootElement, facetHolder));
+        val xmlRootElementIfAny = processClassContext.synthesizeOnType(XmlRootElement.class);
+        if(xmlRootElementIfAny.isPresent()) {
+            FacetUtil.addFacet(
+                    new RecreatableObjectFacetForXmlRootElementAnnotation(
+                            facetHolder, postConstructMethodCache));
+        }
 
         // DomainObject(nature=VIEW_MODEL) is managed by the DomainObjectAnnotationFacetFactory
     }
 
-    private ViewModelFacet create(final XmlRootElement annotation, final FacetHolder holder) {
-        final PostConstructMethodCache postConstructMethodCache = this;
-        return annotation != null
-                ? new RecreatableObjectFacetForXmlRootElementAnnotation(holder, postConstructMethodCache)
-                        : null;
-    }
+
 
     // //////////////////////////////////////
 

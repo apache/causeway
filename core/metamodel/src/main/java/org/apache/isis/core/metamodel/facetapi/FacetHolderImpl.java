@@ -88,21 +88,6 @@ public class FacetHolderImpl implements FacetHolder, MetaModelContextAware {
         }
     }
 
-    @Override
-    public void addOrReplaceFacet(Facet facet) {
-        synchronized($lock) {
-            val facetType = facet.facetType();
-            val existingFacet = getFacet(facetType);
-            if (existingFacet != null) {
-                remove(existingFacet);
-                val underlyingFacet = existingFacet.getUnderlyingFacet();
-                facet.setUnderlyingFacet(underlyingFacet);
-            }
-
-            addFacet(facet);
-        }
-    }
-
     // -- HELPER
 
     private final _Lazy<Map<Class<? extends Facet>, Facet>> snapshot = _Lazy.threadSafe(this::snapshot);
@@ -137,18 +122,20 @@ public class FacetHolderImpl implements FacetHolder, MetaModelContextAware {
             final @NonNull Map<Class<? extends Facet>, Facet> facetsByType,
             final @NonNull Facet newFacet) {
 
-        val existingFacet = facetsByType.get(newFacet.facetType());
+        val facetType = newFacet.facetType();
+
+        val existingFacet = facetsByType.get(facetType);
         if(existingFacet==null) {
-            facetsByType.put(newFacet.facetType(), newFacet);
-            return true;
+            facetsByType.put(facetType, newFacet);
+            return true; // changes
         }
 
-        val preferredFacet = getPreferredOf(existingFacet, newFacet);
+        val preferredFacet = preferredOf(existingFacet, newFacet);
         if(newFacet==preferredFacet) {
-            facetsByType.put(preferredFacet.facetType(), preferredFacet);
-            return true;
+            facetsByType.put(facetType, preferredFacet);
+            return true; // changes
         }
-        return false;
+        return false; // no changes
     }
 
     private void remove(Facet topLevelFacet) {
@@ -157,7 +144,7 @@ public class FacetHolderImpl implements FacetHolder, MetaModelContextAware {
     }
 
     // on equal precedence returns b
-    private Facet getPreferredOf(final @NonNull Facet a, final @NonNull Facet b) {
+    private Facet preferredOf(final @NonNull Facet a, final @NonNull Facet b) {
 
         // guard against args being the same object
         if(a==b) {

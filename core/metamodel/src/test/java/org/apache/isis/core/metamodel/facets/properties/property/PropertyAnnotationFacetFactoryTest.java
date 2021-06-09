@@ -29,6 +29,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertTrue;
+
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Snapshot;
@@ -73,10 +77,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertTrue;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
@@ -86,8 +86,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
     PropertyAnnotationFacetFactory facetFactory;
     Method propertyMethod;
 
-    @Mock
-    ObjectSpecification mockTypeSpec;
+    @Mock ObjectSpecification mockTypeSpec;
     @Mock ObjectSpecification mockReturnTypeSpec;
 
     void expectRemoveMethod(final Method actionMethod) {
@@ -175,7 +174,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
     public static class Modify extends PropertyAnnotationFacetFactoryTest {
 
         private void addGetterFacet(final FacetHolder holder) {
-            FacetUtil.addFacet(new PropertyOrCollectionAccessorFacetAbstract(mockOnType, holder ) {
+            FacetUtil.addFacet(new PropertyOrCollectionAccessorFacetAbstract(mockOnType, holder) {
                 @Override
                 public Object getProperty(
                         final ManagedObject inObject,
@@ -231,9 +230,6 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             // expect
             allowingLoadSpecificationRequestsFor(cls, propertyMethod.getReturnType());
             context.checking(new Expectations() {{
-                //[ahuber] never called during this test ...
-                //oneOf(mockConfiguration).getBoolean("isis.core.meta-model.annotation.property.domain-event.post-for-default", true);
-                //will(returnValue(true));
 
                 allowing(mockTypeSpec).getFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class);
                 will(returnValue(null));

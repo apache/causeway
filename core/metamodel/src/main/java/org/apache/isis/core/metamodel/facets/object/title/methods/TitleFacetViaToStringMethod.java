@@ -29,7 +29,9 @@ import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public class TitleFacetViaToStringMethod extends TitleFacetAbstract implements ImperativeFacet {
+public class TitleFacetViaToStringMethod
+extends TitleFacetAbstract
+implements ImperativeFacet {
 
     private final Method method;
 

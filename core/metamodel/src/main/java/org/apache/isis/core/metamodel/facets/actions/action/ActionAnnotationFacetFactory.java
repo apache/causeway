@@ -26,7 +26,6 @@ import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Collections;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
@@ -91,8 +90,9 @@ extends FacetFactoryAbstract {
         val holder = processMethodContext.getFacetHolder();
 
         // check for @Action at all.
-        val facet = ActionExplicitFacetForActionAnnotation.create(actionIfAny, holder);
-        super.addFacet(facet);
+        addFacet(
+                ActionExplicitFacetForActionAnnotation
+                .create(actionIfAny, holder));
     }
 
 
@@ -135,7 +135,7 @@ extends FacetFactoryAbstract {
                     ActionDomainEvent.Noop.class,
                     ActionDomainEvent.Default.class,
                     getConfiguration().getApplib().getAnnotation().getAction().getDomainEvent().isPostForDefault())) {
-                super.addFacet(actionDomainEventFacet);
+                addFacet(actionDomainEventFacet);
             }
 
             // replace the current actionInvocationFacet with one that will
@@ -145,13 +145,12 @@ extends FacetFactoryAbstract {
             if (actionDomainEventFacet instanceof ActionDomainEventFacetForActionAnnotation) {
                 actionInvocationFacet = new ActionInvocationFacetForDomainEventFromActionAnnotation(
                         actionDomainEventFacet.getEventType(), actionMethod, typeSpec, returnSpec, holder);
-            } else
+            } else {
                 // default
-            {
                 actionInvocationFacet = new ActionInvocationFacetForDomainEventFromDefault(
                         actionDomainEventFacet.getEventType(), actionMethod, typeSpec, returnSpec, holder);
             }
-            super.addFacet(actionInvocationFacet);
+            addFacet(actionInvocationFacet);
 
         } finally {
             processMethodContext.removeMethod(actionMethod);
@@ -176,27 +175,29 @@ extends FacetFactoryAbstract {
         val facetedMethod = processMethodContext.getFacetHolder();
 
         // search for @Action(hidden=...)
-        val facet = HiddenFacetForActionAnnotation.create(actionIfAny, facetedMethod);
-        super.addFacet(facet);
+        addFacet(
+                HiddenFacetForActionAnnotation
+                .create(actionIfAny, facetedMethod));
     }
 
     void processRestrictTo(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
         val facetedMethod = processMethodContext.getFacetHolder();
 
         // search for @Action(restrictTo=...)
-        val facet = PrototypeFacetForActionAnnotation.create(actionIfAny, facetedMethod,
-                ()->super.getSystemEnvironment().getDeploymentType());
-
-        super.addFacet(facet);
+        addFacet(
+                PrototypeFacetForActionAnnotation
+                .create(
+                        actionIfAny, facetedMethod,
+                        ()->super.getSystemEnvironment().getDeploymentType()));
     }
 
     void processSemantics(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
         val facetedMethod = processMethodContext.getFacetHolder();
 
         // check for @Action(semantics=...)
-        val facet = ActionSemanticsFacetForActionAnnotation.create(actionIfAny, facetedMethod);
-
-        super.addFacet(facet);
+        addFacet(
+                ActionSemanticsFacetForActionAnnotation
+                .create(actionIfAny, facetedMethod));
     }
 
     void processCommandPublishing(
@@ -215,10 +216,8 @@ extends FacetFactoryAbstract {
         }
 
         // check for @Action(commandPublishing=...)
-        val commandPublishingFacet = CommandPublishingFacetForActionAnnotation
-                .create(actionIfAny, getConfiguration(), getServiceInjector(), facetedMethod);
-
-        super.addFacet(commandPublishingFacet);
+        addFacet(CommandPublishingFacetForActionAnnotation
+                .create(actionIfAny, getConfiguration(), getServiceInjector(), facetedMethod));
     }
 
     void processExecutionPublishing(
@@ -261,7 +260,7 @@ extends FacetFactoryAbstract {
                 // else infer from generic type arg if any
                 .orElseGet(()->TypeOfFacet.inferFromMethodReturnType(facetedMethod, method).orElse(null));
 
-        super.addFacet(typeOfFacet);
+        addFacet(typeOfFacet);
     }
 
     void processChoicesFrom(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
@@ -283,7 +282,9 @@ extends FacetFactoryAbstract {
             }
         });
 
-        FacetUtil.addIfNotAlreadyPresent(LayoutGroupFacetFromActionAnnotation.create(actionIfAny, facetedMethod));
+        addFacet(
+                LayoutGroupFacetFromActionAnnotation
+                .create(actionIfAny, facetedMethod));
 
     }
 
@@ -292,8 +293,9 @@ extends FacetFactoryAbstract {
         val holder = processMethodContext.getFacetHolder();
 
         // check for @Action(fileAccept=...)
-        val facet = FileAcceptFacetForActionAnnotation.create(actionIfAny, holder);
-        super.addFacet(facet);
+        addFacet(
+                FileAcceptFacetForActionAnnotation
+                .create(actionIfAny, holder));
     }
 
 

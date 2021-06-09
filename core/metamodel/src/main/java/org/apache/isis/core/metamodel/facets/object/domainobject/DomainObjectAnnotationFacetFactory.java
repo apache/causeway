@@ -48,6 +48,7 @@ import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -75,7 +76,6 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.Lo
 import org.apache.isis.core.metamodel.facets.object.domainobject.recreatable.RecreatableObjectFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.mixin.MetaModelValidatorForMixinTypes;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
@@ -331,15 +331,15 @@ implements
         }
 
         val postConstructMethodCache = this;
-        final ViewModelFacet recreatableObjectFacet =
-                RecreatableObjectFacetForDomainObjectAnnotation.create(
-                    domainObjectIfAny,
-                    facetHolder,
-                    postConstructMethodCache);
 
-        if(recreatableObjectFacet != null) {
-            // handle with least priority
-            FacetUtil.addIfNotAlreadyPresent(recreatableObjectFacet);
+        // handle with least priority
+        if(addFacet(
+                RecreatableObjectFacetForDomainObjectAnnotation
+                .create(
+                        domainObjectIfAny,
+                        facetHolder,
+                        postConstructMethodCache,
+                        Precedence.LOW))) {
             return;
         }
 
@@ -357,11 +357,8 @@ implements
                 .filter(domainObject -> domainObject.nature() == Nature.MIXIN)
                 .filter(domainObject -> mixinTypeValidator.ensureMixinType(facetHolder, cls));
 
-        val mixinFacet = MixinFacetForDomainObjectAnnotation
-                .create(mixinDomainObjectIfAny, cls, facetHolder, getServiceInjector(), mixinTypeValidator);
-
-        super.addFacet(mixinFacet);
-
+        addFacet(MixinFacetForDomainObjectAnnotation
+                .create(mixinDomainObjectIfAny, cls, facetHolder, getServiceInjector(), mixinTypeValidator));
 
     }
 

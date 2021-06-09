@@ -48,7 +48,7 @@ public interface Facet extends FacetWithAttributes {
         DERIVED,
 
         /**
-         * Lower priority than {@link #DEFAULT}. In other words is overruled by {@link #DEFAULT}.
+         * Lower precedence than {@link #DEFAULT}. In other words, is overruled by {@link #DEFAULT}.
          */
         LOW,
 
@@ -58,7 +58,7 @@ public interface Facet extends FacetWithAttributes {
         DEFAULT,
 
         /**
-         * Higher priority than {@link #DEFAULT}. In other words, overrules {@link #DEFAULT}.
+         * Higher precedence than {@link #DEFAULT}. In other words, overrules {@link #DEFAULT}.
          */
         HIGH;
 
