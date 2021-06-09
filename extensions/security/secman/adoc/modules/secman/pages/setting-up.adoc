@@ -136,7 +136,7 @@ This is discussed in more detail <<user-registration-aka-sign-up,below>>.
 == Default Roles
 
 With SecMan enabled, it will automatically seed a security super-user and a regular role.
-It also defines a number of other roles to provide access to specific features of the framework (or its extensions).
+It also creates a number of other roles to provide access to specific features of the framework (or its extensions).
 These are summarised here:
 
 * Available in both production and prototype mode
@@ -187,12 +187,13 @@ Creating regular applications users in production use can be done manually by th
 This will return an xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUser.adoc[ApplicationUser] which can then be granted roles, for example using `addRoleToUser()` API of xref:refguide:extensions:index/secman/applib/role/dom/ApplicationRoleRepository.adoc[ApplicationRoleRepository].
 
 
-== Fixture scripts to setup users and roles
+== Fixture scripts and seed service, to setup users and roles
 
 If prototyping with an in-memory database then you will most likely want to set up some fixture scripts to automatically set up application users.
 
-SecMan provides the `AbstractRoleAndPermissionsFixtureScript` and `AbstractUserAndRolesFixtureScript` convenience fixture scripts
-to inherit from.
+SecMan automatically seeds the built-in roles and users, so it is only necessary to setup roles and users specific to the application.
+
+In addition to the <<default-roles, default roles and users>>, you will of course need to define custom roles/perms for your own application.
 
 For example, these scripts can be used to set up access to the domain objects in the xref:docs:starters:helloworld.adoc[HelloWorld] starter app:
 
@@ -277,7 +278,54 @@ public class UserToRole__joe_UserRw_but_NoDelete
 <.> specific access to framework features, see <<default-roles,above>>
 
 
+You will probably want to ensure that the roles and (perhaps) users are automatically seeded into the database.
+One option is to use the xref:refguide:config:sections/isis.testing.adoc#isis.testing.fixtures.initial-script[isis.testing.fixtures.initial-script] configuration property, but the purpose of that config property is meant to be to specify a demo scenario for demoing/prototyping.
 
+Better is to write a little domain service to do the seeding of security data for you.
+The service below will set up the default roles and permissions for the framework's own modules:
+
+[source,java]
+.SeedUsersAndRoles.java
+----
+@Service
+@Order(OrderPrecedence.MIDPOINT + 10)
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
+public class SeedSecurityService {
+
+    private final FixtureScripts fixtureScripts;
+    private final TransactionService transactionService;
+
+    @EventListener(MetamodelEvent.class)
+    public void onMetamodelEvent(final MetamodelEvent event) {
+        if (event.isPostMetamodel()) {
+            runScripts();
+            transactionService.flushTransaction();
+        }
+    }
+
+    private void runScripts() {
+        fixtureScripts.run(new CustomRolesAndUsers());
+    }
+}
+----
+
+where `CustomRolesAndUsers` is application-specific, for example:
+
+[source,java]
+.CustomRolesAndUsers.java
+----
+public class CustomRolesAndUsers extends FixtureScript {
+
+    @Override protected void execute(ExecutionContext executionContext) {
+        executionContext.executeChildren(this,
+                // roles
+                new RoleAndPerms__HelloRw(),
+                // users
+                new UserToRole__joe_UserRw_but_NoDelete()
+        );
+    }
+}
+----
 
 [#user-registration-aka-sign-up]
 == User registration (aka Sign-up)

@@ -60,9 +60,5 @@ public class SeedSecurityModuleService {
 
             fixtureScripts.run(new SeedUsersAndRolesFixtureScript());
         }
-
     }
-
-
-
 }
