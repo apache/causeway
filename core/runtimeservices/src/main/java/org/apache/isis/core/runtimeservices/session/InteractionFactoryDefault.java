@@ -184,7 +184,7 @@ implements
             return interactionLayerStack.get().peek();
         }
 
-        val interactionLayer = new InteractionLayer(isisInteraction, authToUse);
+        val interactionLayer = new InteractionLayer(isisInteraction, authToUse, interactionContextToUse);
 
         interactionLayerStack.get().push(interactionLayer);
 

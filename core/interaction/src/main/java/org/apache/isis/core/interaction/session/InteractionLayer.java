@@ -43,7 +43,8 @@ public class InteractionLayer {
 
 	public InteractionLayer(
 			final @NonNull IsisInteraction interaction,
-			final @NonNull Authentication authentication) {
+			final @NonNull Authentication authentication,
+			final @NonNull InteractionContext interactionContext) {
 
 		// current thread's Interaction which this layer belongs to,
 		// meaning the Interaction that holds the stack containing this layer
