@@ -34,7 +34,6 @@ import org.apache.isis.applib.services.session.SessionLoggingService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.applib.services.iactnlayer.ThrowingRunnable;
 import org.apache.isis.core.interaction.session.InteractionFactory;
-import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
@@ -63,7 +62,7 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
     private AuthenticationManager authMgr;
     @Mock protected Authenticator mockAuthenticator;
     @Mock protected IsisAppCommonContext mockCommonContext;
-    @Mock protected InteractionService mockInteractionService;
+    @Mock protected InteractionFactory mockInteractionFactory;
     @Mock protected InteractionTracker mockInteractionTracker;
     @Mock protected ServiceRegistry mockServiceRegistry;
 
@@ -85,7 +84,7 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
                 will(returnValue(Can.empty()));
 
                 allowing(mockCommonContext).lookupServiceElseFail(InteractionFactory.class);
-                will(returnValue(mockInteractionService));
+                will(returnValue(mockInteractionFactory));
 
                 allowing(mockCommonContext).getInteractionTracker();
                 will(returnValue(mockInteractionTracker));
@@ -93,10 +92,10 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
                 allowing(mockInteractionTracker).currentAuthentication();
                 will(returnValue(Optional.of(new SingleUserAuthentication())));
 
-                allowing(mockInteractionService)
+                allowing(mockInteractionFactory)
                 .runAuthenticated(with(new SingleUserAuthentication()), with(any(ThrowingRunnable.class)));
 
-                allowing(mockInteractionService)
+                allowing(mockInteractionFactory)
                 .runAnonymous(with(any(ThrowingRunnable.class)));
 
                 // ignore
