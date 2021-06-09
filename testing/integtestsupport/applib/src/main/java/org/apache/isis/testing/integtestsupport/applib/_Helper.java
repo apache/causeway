@@ -25,6 +25,7 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.interaction.session.InteractionFactory;
+import org.apache.isis.core.interaction.session.InteractionHandler;
 
 class _Helper {
 
@@ -37,7 +38,7 @@ class _Helper {
 
     // -- SHORTCUTS
 
-    static Optional<InteractionFactory> getInteractionFactory(final ExtensionContext extensionContext) {
+    static Optional<InteractionHandler> getInteractionFactory(final ExtensionContext extensionContext) {
         return getServiceRegistry(extensionContext)
         .flatMap(serviceRegistry->serviceRegistry.lookupService(InteractionFactory.class));
     }

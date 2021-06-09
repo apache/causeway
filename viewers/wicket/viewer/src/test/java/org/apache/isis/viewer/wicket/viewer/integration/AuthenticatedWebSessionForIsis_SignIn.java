@@ -34,6 +34,7 @@ import org.apache.isis.applib.services.session.SessionLoggingService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.applib.services.iactnlayer.ThrowingRunnable;
 import org.apache.isis.core.interaction.session.InteractionFactory;
+import org.apache.isis.core.interaction.session.InteractionHandler;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
@@ -58,7 +59,7 @@ public class AuthenticatedWebSessionForIsis_SignIn {
     private AuthenticationManager authMgr;
     @Mock protected Authenticator mockAuthenticator;
     @Mock protected IsisAppCommonContext mockCommonContext;
-    @Mock protected InteractionFactory mockInteractionFactory;
+    @Mock protected InteractionHandler mockInteractionHandler;
     @Mock protected ServiceRegistry mockServiceRegistry;
 
     protected AuthenticatedWebSessionForIsis webSession;
@@ -82,12 +83,12 @@ public class AuthenticatedWebSessionForIsis_SignIn {
                 will(returnValue(Can.empty()));
 
                 allowing(mockCommonContext).lookupServiceElseFail(InteractionFactory.class);
-                will(returnValue(mockInteractionFactory));
+                will(returnValue(mockInteractionHandler));
 
-                allowing(mockInteractionFactory)
+                allowing(mockInteractionHandler)
                 .runAuthenticated(with(new SingleUserAuthentication()), with(any(ThrowingRunnable.class)));
 
-                allowing(mockInteractionFactory)
+                allowing(mockInteractionHandler)
                 .runAnonymous(with(any(ThrowingRunnable.class)));
 
                 // ignore

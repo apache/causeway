@@ -31,6 +31,7 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.session.SessionLoggingService;
 import org.apache.isis.applib.services.iactnlayer.ThrowingRunnable;
 import org.apache.isis.core.interaction.session.InteractionFactory;
+import org.apache.isis.core.interaction.session.InteractionHandler;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
@@ -45,7 +46,7 @@ public abstract class AuthenticatedWebSessionForIsis_TestAbstract {
     @Mock protected Request mockRequest;
     @Mock protected AuthenticationManager mockAuthMgr;
     @Mock protected IsisAppCommonContext mockCommonContext;
-    @Mock protected InteractionFactory mockIsisInteractionFactory;
+    @Mock protected InteractionHandler mockInteractionHandler;
     @Mock protected ServiceRegistry mockServiceRegistry;
 
     protected AuthenticatedWebSessionForIsis webSession;
@@ -60,9 +61,9 @@ public abstract class AuthenticatedWebSessionForIsis_TestAbstract {
                 will(returnValue(Optional.empty()));
 
                 allowing(mockCommonContext).lookupServiceElseFail(InteractionFactory.class);
-                will(returnValue(mockIsisInteractionFactory));
+                will(returnValue(mockInteractionHandler));
 
-                allowing(mockIsisInteractionFactory).runAuthenticated(new SingleUserAuthentication(), with(any(ThrowingRunnable.class)));
+                allowing(mockInteractionHandler).runAuthenticated(new SingleUserAuthentication(), with(any(ThrowingRunnable.class)));
                 // ignore
 
                 // must provide explicit expectation, since Locale is final.
