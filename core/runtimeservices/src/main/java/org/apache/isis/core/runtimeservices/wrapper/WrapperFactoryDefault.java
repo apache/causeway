@@ -471,7 +471,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
                 .orElseGet(executionContext::getUser))
         .build();
 
-        return auth.withExecutionContext(newExecutionContext);
+        return auth.withInteractionContext(newExecutionContext);
 
     }
 

@@ -99,5 +99,5 @@ public interface Authentication extends Serializable {
      * Returns a copy with given {@code interactionContext}.
      * @param interactionContext
      */
-    Authentication withExecutionContext(InteractionContext interactionContext);
+    Authentication withInteractionContext(InteractionContext interactionContext);
 }
