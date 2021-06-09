@@ -29,7 +29,7 @@ import org.junit.Rule;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.session.SessionLoggingService;
-import org.apache.isis.commons.functional.ThrowingRunnable;
+import org.apache.isis.applib.services.iactnlayer.ThrowingRunnable;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
@@ -39,15 +39,15 @@ import org.apache.isis.core.security.authentication.singleuser.SingleUserAuthent
 
 public abstract class AuthenticatedWebSessionForIsis_TestAbstract {
 
-    @Rule public final JUnitRuleMockery2 context = 
+    @Rule public final JUnitRuleMockery2 context =
             JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
-    
+
     @Mock protected Request mockRequest;
     @Mock protected AuthenticationManager mockAuthMgr;
     @Mock protected IsisAppCommonContext mockCommonContext;
     @Mock protected InteractionFactory mockIsisInteractionFactory;
     @Mock protected ServiceRegistry mockServiceRegistry;
-    
+
     protected AuthenticatedWebSessionForIsis webSession;
 
     protected void setUp() throws Exception {
@@ -55,16 +55,16 @@ public abstract class AuthenticatedWebSessionForIsis_TestAbstract {
             {
                 allowing(mockCommonContext).getServiceRegistry();
                 will(returnValue(mockServiceRegistry));
-                
+
                 allowing(mockServiceRegistry).lookupService(SessionLoggingService.class);
                 will(returnValue(Optional.empty()));
-                
+
                 allowing(mockCommonContext).lookupServiceElseFail(InteractionFactory.class);
                 will(returnValue(mockIsisInteractionFactory));
-                
+
                 allowing(mockIsisInteractionFactory).runAuthenticated(new SingleUserAuthentication(), with(any(ThrowingRunnable.class)));
                 // ignore
-                
+
                 // must provide explicit expectation, since Locale is final.
                 allowing(mockRequest).getLocale();
                 will(returnValue(Locale.getDefault()));
@@ -79,7 +79,7 @@ public abstract class AuthenticatedWebSessionForIsis_TestAbstract {
     protected void setupWebSession() {
         webSession = new AuthenticatedWebSessionForIsis(mockRequest) {
             private static final long serialVersionUID = 1L;
-            
+
             {
                 commonContext = mockCommonContext;
             }
@@ -90,6 +90,6 @@ public abstract class AuthenticatedWebSessionForIsis_TestAbstract {
             }
         };
     }
-    
+
 
 }

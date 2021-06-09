@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.commons.functions;
+package org.apache.isis.applib.services.iactnlayer;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -30,7 +30,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.commons.functional.Result;
-import org.apache.isis.commons.functional.ThrowingRunnable;
 
 import lombok.val;
 

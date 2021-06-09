@@ -20,7 +20,7 @@ package org.apache.isis.core.security.authentication.manager;
 
 import java.util.concurrent.Callable;
 
-import org.apache.isis.commons.functional.ThrowingRunnable;
+import org.apache.isis.applib.services.iactnlayer.ThrowingRunnable;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
