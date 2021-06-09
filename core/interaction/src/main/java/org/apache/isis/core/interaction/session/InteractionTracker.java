@@ -61,6 +61,16 @@ extends InteractionProvider, AuthenticationProvider {
         return currentInteractionLayer().map(InteractionLayer::getAuthentication);
     }
 
+    // -- INTERACTION CONTEXT
+
+    /**
+     * Returns the {@link InteractionContext} wrapped by the {@link #currentInteractionLayer()} (if within an interaction layer).
+     */
+    @Override
+    default Optional<InteractionContext> currentInteractionContext() {
+        return currentInteractionLayer().map(InteractionLayer::getInteractionContext);
+    }
+
 
     // -- INTERACTION
 

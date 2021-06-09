@@ -174,8 +174,8 @@ implements
         // check whether we should reuse any current authenticationLayer,
         // that is, if current authentication and authToUse are equal
 
-        val reuseCurrentLayer = currentInteraction()
-                .map(currentInteraction -> Objects.equals(currentInteraction, interactionContextToUse))
+        val reuseCurrentLayer = currentInteractionContext()
+                .map(currentInteractionContext -> Objects.equals(currentInteractionContext, interactionContextToUse))
                 .orElse(false);
 
         if(reuseCurrentLayer) {
