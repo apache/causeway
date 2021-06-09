@@ -21,6 +21,7 @@ package org.apache.isis.core.interaction.session;
 
 import java.util.concurrent.Callable;
 
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.commons.functional.ThrowingRunnable;
 import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.manager.AnonymousInteractionFactory;
@@ -46,7 +47,7 @@ extends AnonymousInteractionFactory {
      * If present, reuses the current top level {@link InteractionLayer}, otherwise creates a new
      * anonymous one.
      *
-     * @see #openInteraction(Authentication)
+     * @see #openInteraction(Authentication, InteractionContext)
      */
     InteractionLayer openInteraction();
 
@@ -61,12 +62,15 @@ extends AnonymousInteractionFactory {
      *
      * @param authentication - the {@link Authentication} to associate with the new top of
      * the stack (non-null)
+     * @param interactionContext
      *
      * @apiNote if the current {@link InteractionLayer} (if any) has an {@link Authentication} that
      * equals that of the given one, as an optimization, no new layer is pushed onto the stack;
      * instead the current one is returned
      */
-    InteractionLayer openInteraction(@NonNull Authentication authentication);
+    InteractionLayer openInteraction(
+            @NonNull Authentication authentication,
+            @NonNull InteractionContext interactionContext);
 
     /**
      * @return whether the calling thread is within the context of an open {@link InteractionLayer}

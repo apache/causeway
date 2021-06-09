@@ -47,7 +47,7 @@ public class IsisRequestCycle {
                         authentication.getValidationCode()))
                 .orElse(authentication);
 
-        isisInteractionFactory.openInteraction(authenticationToUse);
+        isisInteractionFactory.openInteraction(authenticationToUse, authenticationToUse.getInteractionContext());
     }
 
     public void onRequestHandlerExecuted() {

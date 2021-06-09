@@ -47,7 +47,7 @@ extends InteractionProvider, AuthenticationProvider {
      * Returns the {@link InteractionContext} wrapped by the {@link #currentInteractionLayer()} (if within an interaction layer).
      */
     default Optional<InteractionContext> currentExecutionContext() {
-        return currentInteractionLayer().map(InteractionLayer::getExecutionContext);
+        return currentInteractionLayer().map(InteractionLayer::getInteractionContext);
     }
 
 

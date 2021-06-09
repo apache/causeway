@@ -121,7 +121,7 @@ implements
 
         val authentication = AuthSessionStoreUtil.get().orElse(null);
         if(authentication!=null) {
-            isisInteractionFactory.openInteraction(authentication);
+            isisInteractionFactory.openInteraction(authentication, authentication.getInteractionContext());
             return; // access granted
         }
         // otherwise redirect to login page

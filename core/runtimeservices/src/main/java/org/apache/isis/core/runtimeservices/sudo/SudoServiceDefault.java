@@ -73,7 +73,7 @@ public class SudoServiceDefault implements SudoService {
             final @NonNull Callable<T> callable) {
 
         val currentInteractionLayer = interactionTracker.currentInteractionLayerElseFail();
-        val currentExecutionContext = currentInteractionLayer.getExecutionContext();
+        val currentExecutionContext = currentInteractionLayer.getInteractionContext();
         val sudoExecutionContext = sudoMapper.apply(currentExecutionContext);
 
         val sodoSession = currentInteractionLayer

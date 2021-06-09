@@ -358,7 +358,12 @@ public class WrapperFactoryDefault implements WrapperFactory {
             final AsyncControl<R> asyncControl) {
 
         val interactionLayer = currentInteractionLayer();
-        val asyncAuth = authFrom(asyncControl, interactionLayer.getAuthentication());
+        val interactionContext = interactionLayer.getInteractionContext();
+        val asyncInteractionContext = interactionContextFrom(asyncControl, interactionContext);
+
+        val auth = interactionLayer.getAuthentication();
+        val asyncAuth = auth.withInteractionContext(asyncInteractionContext);
+
         val command = interactionProviderProvider.get().currentInteractionElseFail().getCommand();
         val commandInteractionId = command.getInteractionId();
 
@@ -393,6 +398,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
         val future = executorService.submit(
                 new ExecCommand<R>(
                         asyncAuth,
+                        asyncInteractionContext,
                         Propagation.REQUIRES_NEW,
                         commandDto,
                         asyncControl.getReturnType(),
@@ -456,23 +462,16 @@ public class WrapperFactoryDefault implements WrapperFactory {
         return MemberAndTarget.foundAction(targetAction, currentObjectManager().adapt(mixedIn), method);
     }
 
-    private static <R> Authentication authFrom(AsyncControl<R> asyncControl, Authentication auth) {
+    private static <R> InteractionContext interactionContextFrom(
+            final AsyncControl<R> asyncControl,
+            final InteractionContext interactionContext) {
 
-        val executionContext = auth.getInteractionContext();
-
-        val newExecutionContext = InteractionContext.builder()
-        .clock(Optional.ofNullable(asyncControl.getClock())
-                .orElseGet(executionContext::getClock))
-        .locale(Optional.ofNullable(asyncControl.getLocale())
-                .orElseGet(executionContext::getLocale))
-        .timeZone(Optional.ofNullable(asyncControl.getTimeZone())
-                .orElseGet(executionContext::getTimeZone))
-        .user(Optional.ofNullable(asyncControl.getUser())
-                .orElseGet(executionContext::getUser))
-        .build();
-
-        return auth.withInteractionContext(newExecutionContext);
-
+        return InteractionContext.builder()
+            .clock(Optional.ofNullable(asyncControl.getClock()).orElseGet(interactionContext::getClock))
+            .locale(Optional.ofNullable(asyncControl.getLocale()).orElseGet(interactionContext::getLocale))
+            .timeZone(Optional.ofNullable(asyncControl.getTimeZone()).orElseGet(interactionContext::getTimeZone))
+            .user(Optional.ofNullable(asyncControl.getUser()).orElseGet(interactionContext::getUser))
+            .build();
     }
 
     @Data
@@ -588,6 +587,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
     private static class ExecCommand<R> implements Callable<R> {
 
         private final Authentication authentication;
+        private final InteractionContext interactionContext;
         private final Propagation propagation;
         private final CommandDto commandDto;
         private final Class<R> returnType;

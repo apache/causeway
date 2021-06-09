@@ -45,6 +45,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.util.schema.ChangesDtoUtils;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
@@ -158,19 +159,24 @@ implements
     public InteractionLayer openInteraction() {
         return currentInteractionLayer()
                 // or else create an anonymous authentication layer
-                .orElseGet(()-> openInteraction(new AnonymousSession()));
+                .orElseGet(()-> {
+                    final AnonymousSession authToUse = new AnonymousSession();
+                    return openInteraction(authToUse, authToUse.getInteractionContext());
+                });
     }
 
     @Override
-    public InteractionLayer openInteraction(final @NonNull Authentication authToUse) {
+    public InteractionLayer openInteraction(
+            final @NonNull Authentication authToUse,
+            final @NonNull InteractionContext interactionContextToUse) {
 
         val isisInteraction = getOrCreateIsisInteraction();
 
         // check whether we should reuse any current authenticationLayer,
         // that is, if current authentication and authToUse are equal
 
-        val reuseCurrentLayer = currentAuthentication()
-                .map(currentAuthentication->Objects.equals(currentAuthentication, authToUse))
+        val reuseCurrentLayer = currentInteraction()
+                .map(currentInteraction -> Objects.equals(currentInteraction, interactionContextToUse))
                 .orElse(false);
 
         if(reuseCurrentLayer) {
@@ -178,12 +184,12 @@ implements
             return interactionLayerStack.get().peek();
         }
 
-        val authenticationLayer = new InteractionLayer(isisInteraction, authToUse);
+        val interactionLayer = new InteractionLayer(isisInteraction, authToUse);
 
-        interactionLayerStack.get().push(authenticationLayer);
+        interactionLayerStack.get().push(interactionLayer);
 
         if(isInBaseLayer()) {
-        	postSessionOpened(isisInteraction);
+        	postInteractionOpened(isisInteraction);
         }
 
         if(log.isDebugEnabled()) {
@@ -197,7 +203,7 @@ implements
             _Xray.newInteractionLayer(interactionLayerStack.get());
         }
 
-        return authenticationLayer;
+        return interactionLayer;
     }
 
     private IsisInteraction getOrCreateIsisInteraction() {
@@ -209,7 +215,7 @@ implements
 
     @Override
     public void closeInteractionLayers() {
-        log.debug("about to close the authentication stack (conversation-id={}, total-layers-on-stack={}, {})",
+        log.debug("about to close the interaction stack (conversation-id={}, total-layers-on-stack={}, {})",
                 interactionId.get(),
                 interactionLayerStack.get().size(),
                 _Probe.currentThreadId());
@@ -239,7 +245,7 @@ implements
             @NonNull final Callable<R> callable) {
 
         final int stackSizeWhenEntering = interactionLayerStack.get().size();
-        openInteraction(authentication);
+        openInteraction(authentication, authentication.getInteractionContext());
 
         try {
             serviceInjector.injectServicesInto(callable);
@@ -257,7 +263,7 @@ implements
             @NonNull final ThrowingRunnable runnable) {
 
         final int stackSizeWhenEntering = interactionLayerStack.get().size();
-        openInteraction(authentication);
+        openInteraction(authentication, authentication.getInteractionContext());
 
         try {
             serviceInjector.injectServicesInto(runnable);
@@ -265,8 +271,8 @@ implements
         } finally {
             closeInteractionLayerStackDownToStackSize(stackSizeWhenEntering);
         }
-
     }
+
 
     // -- ANONYMOUS EXECUTION
 
@@ -310,7 +316,7 @@ implements
     	return interactionLayerStack.get().size()==1;
     }
 
-    private void postSessionOpened(IsisInteraction interaction) {
+    private void postInteractionOpened(IsisInteraction interaction) {
         interactionId.set(interaction.getInteractionId());
         interactionScopeAwareBeans.forEach(bean->bean.beforeEnteringTransactionalBoundary(interaction));
         txBoundaryHandler.onOpen(interaction);

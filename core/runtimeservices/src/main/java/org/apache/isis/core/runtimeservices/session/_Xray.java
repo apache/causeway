@@ -39,7 +39,7 @@ final class _Xray {
         // make defensive copies, so can use in another thread
         final int authStackSize = afterEnter.size();
         val interactionId = afterEnter.peek().getInteraction().getInteractionId();
-        val executionContext = afterEnter.peek().getExecutionContext();
+        val executionContext = afterEnter.peek().getInteractionContext();
 
         val threadId = XrayUtil.currentThreadAsMemento();
 

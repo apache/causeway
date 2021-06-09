@@ -35,7 +35,11 @@ import lombok.NonNull;
 public class InteractionLayer {
 
 	@Getter private final IsisInteraction interaction;
-	@Getter private final Authentication authentication;
+	 private final Authentication authentication;
+
+	public Authentication getAuthentication() {
+		return authentication;
+	}
 
 	public InteractionLayer(
 			final @NonNull IsisInteraction interaction,
@@ -49,7 +53,7 @@ public class InteractionLayer {
 		this.authentication = authentication;
 	}
 
-	public InteractionContext getExecutionContext() {
+	public InteractionContext getInteractionContext() {
 	    return authentication.getInteractionContext();
 	}
 
