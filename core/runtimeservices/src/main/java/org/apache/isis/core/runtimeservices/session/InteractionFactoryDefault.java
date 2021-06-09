@@ -51,6 +51,7 @@ import org.apache.isis.applib.util.schema.ChangesDtoUtils;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
 import org.apache.isis.commons.functional.ThrowingRunnable;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.concurrent._ConcurrentContext;
 import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.isis.commons.internal.debug._Probe;
@@ -207,9 +208,10 @@ implements
 
     private IsisInteraction getOrCreateIsisInteraction() {
 
-    	return interactionLayerStack.get().isEmpty()
+        final Stack<InteractionLayer> interactionLayers = interactionLayerStack.get();
+        return interactionLayers.isEmpty()
     			? new IsisInteraction(UUID.randomUUID())
-				: interactionLayerStack.get().firstElement().getInteraction();
+				: _Casts.uncheckedCast(interactionLayers.firstElement().getInteraction());
     }
 
     @Override
@@ -324,7 +326,7 @@ implements
         interactionScopeLifecycleHandler.onTopLevelInteractionOpened();
     }
 
-    private void preSessionClosed(IsisInteraction interaction) {
+    private void preInteractionClosed(IsisInteraction interaction) {
         completeAndPublishCurrentCommand();
         interactionScopeLifecycleHandler.onTopLevelInteractionClosing(); // cleanup the isis-session scope
         val isSynchronizationActive = TransactionSynchronizationManager.isSynchronizationActive();
@@ -346,7 +348,7 @@ implements
         while(stack.size()>downToStackSize) {
         	if(isInBaseLayer()) {
         		// keep the stack unmodified yet, to allow for callbacks to properly operate
-        		preSessionClosed(stack.peek().getInteraction());
+        		preInteractionClosed(_Casts.uncheckedCast(stack.peek().getInteraction()));
         	}
         	_Xray.closeInteractionLayer(stack);
             stack.pop();

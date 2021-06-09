@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.interaction.session;
 
+import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 
 import lombok.Getter;
@@ -35,7 +36,7 @@ import lombok.NonNull;
  */
 public class InteractionLayer {
 
-	@Getter private final IsisInteraction interaction;
+	@Getter private final Interaction interaction;
 	@Getter private final InteractionContext interactionContext;
 
 	public InteractionLayer(
