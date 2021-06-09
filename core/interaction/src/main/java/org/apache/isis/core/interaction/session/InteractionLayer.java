@@ -23,28 +23,43 @@ import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 /**
- * Provides the environment for an (or parts of an) user interaction to be executed.
+ * Binds the {@link Interaction} (&quot;what&quot; is being executed) with
+ * an {@link InteractionContext} (&quot;who&quot; is executing, &quot;when&quot; and &quot;where&quot;).
  *
  * <p>
- * These may be nested (held in a stack), for example for the {@link org.apache.isis.applib.services.sudo.SudoService},
- * or for fixtures that mock the clock.
+ * {@link InteractionLayer}s are so called because they may be nested (held in a stack).  For example the
+ * {@link org.apache.isis.applib.services.sudo.SudoService} creates a new temporary layer with a different
+ * {@link InteractionContext#getUser() user}, while fixtures that mock the clock switch out the
+ * {@link InteractionContext#getClock() clock}.
+ * </p>
+ *
+ * <p>
+ * The stack of layers is per-thread, managed by {@link InteractionFactory} as a thread-local).
+ * </p>
  *
  * @since 2.0
- *
  */
+@RequiredArgsConstructor
 public class InteractionLayer {
 
+	/**
+	 *
+	 * Current thread's {@link Interaction} which this layer belongs to.
+	 */
 	@Getter private final Interaction interaction;
+	/**
+	 * Represents the 		// binds given interaction context (which normally would hold the Authentication in its attribute map)
+	 * 		// to this layer
+	 */
 	@Getter private final InteractionContext interactionContext;
 
 	public InteractionLayer(
 			final @NonNull IsisInteraction interaction,
 			final @NonNull InteractionContext interactionContext) {
 
-		// current thread's Interaction which this layer belongs to,
-		// meaning the Interaction that holds the stack containing this layer
 		this.interaction = interaction;
 
 		// binds given interaction context (which normally would hold the Authentication in its attribute map)
