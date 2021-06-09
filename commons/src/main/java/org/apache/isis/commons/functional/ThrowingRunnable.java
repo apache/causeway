@@ -25,6 +25,7 @@ import lombok.NonNull;
 @FunctionalInterface
 public interface ThrowingRunnable {
 
+
     // -- INTERFACE
 
     void run() throws Exception;
@@ -32,11 +33,13 @@ public interface ThrowingRunnable {
     // -- UTILITY
 
     static Callable<Void> toCallable(final @NonNull ThrowingRunnable runnable) {
-        final Callable<Void> callable = ()->{
+        return ()->{
             runnable.run();
             return null;
         };
-        return callable;
     }
 
+    static Result<Void> resultOf(final @NonNull ThrowingRunnable runnable) {
+        return Result.of(toCallable(runnable));
+    }
 }
