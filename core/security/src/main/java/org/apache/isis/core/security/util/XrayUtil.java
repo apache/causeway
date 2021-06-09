@@ -39,10 +39,10 @@ public final class XrayUtil {
 
     /**
      * Returns the sequence diagram data model's id, that is bound to the current thread and interaction.
-     * @param iaContext
+     * @param interactionProvider
      */
-    public static Optional<String> currentSequenceId(final @NonNull InteractionProvider iaContext) {
-        return iaContext.getInteractionId()
+    public static Optional<String> currentSequenceId(final @NonNull InteractionProvider interactionProvider) {
+        return interactionProvider.getInteractionId()
                 .map(XrayUtil::sequenceId);
     }
 
@@ -65,16 +65,16 @@ public final class XrayUtil {
     // -- SEQUENCE HANDLE
 
     public static Optional<SequenceHandle> createSequenceHandle(
-            final @NonNull InteractionProvider iaContext,
+            final @NonNull InteractionProvider interactionProvider,
             final @NonNull AuthenticationProvider authenticationProvider,
             final String ... callees) {
 
-        if(!iaContext.isInInteraction()) {
+        if(!interactionProvider.isInInteraction()) {
             return Optional.empty();
         }
 
-        final int authStackSize = iaContext.getInteractionLayerCount();
-        val interactionId = iaContext.getInteractionId().orElseThrow(_Exceptions::unexpectedCodeReach);
+        final int authStackSize = interactionProvider.getInteractionLayerCount();
+        val interactionId = interactionProvider.getInteractionId().orElseThrow(_Exceptions::unexpectedCodeReach);
 
         val handle = SequenceHandle.builder()
                 .sequenceId(XrayUtil.sequenceId(interactionId))
