@@ -20,11 +20,16 @@
 package org.apache.isis.core.metamodel.facets.object.value;
 
 import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 
-public class TypicalLengthFacetUsingParser extends FacetAbstract implements TypicalLengthFacet {
+import lombok.NonNull;
+
+public class TypicalLengthFacetUsingParser
+extends FacetAbstract
+implements TypicalLengthFacet {
 
     private final Parser<?> parser;
 
@@ -48,6 +53,13 @@ public class TypicalLengthFacetUsingParser extends FacetAbstract implements Typi
     @Override
     public String toString() {
         return "typicalLength=" + value();
+    }
+
+    @Override
+    public boolean semanticEquals(final @NonNull Facet other) {
+        return other instanceof TypicalLengthFacet
+                ? this.value() == ((TypicalLengthFacet)other).value()
+                : false;
     }
 
 }

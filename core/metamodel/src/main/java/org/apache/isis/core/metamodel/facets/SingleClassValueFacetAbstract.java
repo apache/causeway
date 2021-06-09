@@ -26,7 +26,11 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public abstract class SingleClassValueFacetAbstract extends FacetAbstract implements SingleClassValueFacet {
+import lombok.NonNull;
+
+public abstract class SingleClassValueFacetAbstract
+extends FacetAbstract
+implements SingleClassValueFacet {
 
     private final Class<?> value;
 
@@ -52,9 +56,17 @@ public abstract class SingleClassValueFacetAbstract extends FacetAbstract implem
         return valueType != null ? getSpecificationLoader().loadSpecification(valueType) : null;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+    @Override
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("value", value());
+    }
+
+    @Override
+    public boolean semanticEquals(final @NonNull Facet other) {
+        return other instanceof SingleClassValueFacet
+                ? this.value() == ((SingleClassValueFacet)other).value()
+                : false;
     }
 
 }

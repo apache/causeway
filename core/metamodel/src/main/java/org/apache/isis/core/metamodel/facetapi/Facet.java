@@ -23,7 +23,10 @@ import java.util.function.Consumer;
 
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 
-public interface Facet extends FacetWithAttributes {
+public interface Facet
+extends
+    FacetWithAttributes,
+    HasSemanticEquality {
 
     /**
      * @implSpec Ordinal dictates precedence. A higher ordinal
@@ -151,5 +154,6 @@ public interface Facet extends FacetWithAttributes {
      * @since 2.0
      */
     Class<? extends Facet> facetAliasType();
+
 
 }

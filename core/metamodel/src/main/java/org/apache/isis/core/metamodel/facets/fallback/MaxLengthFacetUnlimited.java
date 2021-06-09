@@ -20,10 +20,13 @@
 package org.apache.isis.core.metamodel.facets.fallback;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.HasSemanticEqualityByClass;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 
-public class MaxLengthFacetUnlimited extends MaxLengthFacetAbstract {
+public class MaxLengthFacetUnlimited
+extends MaxLengthFacetAbstract
+implements HasSemanticEqualityByClass {
 
     public MaxLengthFacetUnlimited(final FacetHolder holder) {
         super(Integer.MAX_VALUE, holder, Precedence.FALLBACK);

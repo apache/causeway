@@ -21,18 +21,34 @@ package org.apache.isis.core.metamodel.facets.object.title.parser;
 
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public class TitleFacetUsingParser extends FacetAbstract implements TitleFacet {
+import lombok.NonNull;
 
-    private final Parser<?> parser;
+public final class TitleFacetUsingParser
+extends FacetAbstract
+implements TitleFacet {
 
-    public TitleFacetUsingParser(final Parser<?> parser, final FacetHolder holder) {
+    private final @NonNull Parser<?> parser;
+
+    public static TitleFacetUsingParser create(final Parser<?> parser, final FacetHolder holder) {
+        return new TitleFacetUsingParser(parser, holder);
+    }
+
+    private TitleFacetUsingParser(final Parser<?> parser, final FacetHolder holder) {
         super(TitleFacet.class, holder, Precedence.LOW);
         this.parser = parser;
+    }
+
+    @Override
+    public boolean semanticEquals(final @NonNull Facet other) {
+        return other instanceof TitleFacetUsingParser
+                ? this.parser.getClass() == ((TitleFacetUsingParser)other).parser.getClass()
+                : false;
     }
 
     @Override

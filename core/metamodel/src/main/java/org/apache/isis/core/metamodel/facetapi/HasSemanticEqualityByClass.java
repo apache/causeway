@@ -16,27 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.core.metamodel.facetapi;
 
-package org.apache.isis.core.metamodel.facets.fallback;
+import lombok.NonNull;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.HasSemanticEqualityByClass;
-import org.apache.isis.core.metamodel.facets.all.help.HelpFacetAbstract;
-
-/**
- * Has a description of <tt>null</tt>.
- */
-public class HelpFacetNone
-extends HelpFacetAbstract
-implements HasSemanticEqualityByClass {
-
-    public HelpFacetNone(final FacetHolder holder) {
-        super(null, holder, Precedence.FALLBACK);
-    }
+public interface HasSemanticEqualityByClass
+extends HasSemanticEquality {
 
     @Override
-    public String value() {
-        return "No help available";
+    default boolean semanticEquals(@NonNull Facet other) {
+        return this.getClass().equals(other.getClass());
     }
 
 }

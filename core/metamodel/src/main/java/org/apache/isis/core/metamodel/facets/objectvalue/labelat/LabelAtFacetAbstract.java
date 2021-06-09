@@ -26,7 +26,11 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class LabelAtFacetAbstract extends FacetAbstract implements LabelAtFacet {
+import lombok.NonNull;
+
+public abstract class LabelAtFacetAbstract
+extends FacetAbstract
+implements LabelAtFacet {
 
     public static Class<? extends Facet> type() {
         return LabelAtFacet.class;
@@ -49,8 +53,16 @@ public abstract class LabelAtFacetAbstract extends FacetAbstract implements Labe
         return "position=" + value;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+    @Override
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("label", value);
     }
+
+    @Override
+    public boolean semanticEquals(@NonNull Facet other) {
+        return other instanceof LabelAtFacetAbstract
+                && this.label() == ((LabelAtFacetAbstract) other).label();
+    }
+
 }

@@ -27,6 +27,8 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.InteractionAdvisorFacet;
 
+import lombok.NonNull;
+
 /**
  * Marker interface for implementations (specifically, {@link Facet}s) that can
  * advise as to whether a member should be disabled.
@@ -41,6 +43,12 @@ public interface InteractionAdvisor {
      * For testing purposes only.
      */
     public static InteractionAdvisor NOOP = new InteractionAdvisorFacet() {
+
+        @Override
+        public boolean semanticEquals(final @NonNull Facet other) {
+            return this == other;
+        }
+
         @Override
         public void appendAttributesTo(final Map<String, Object> attributeMap) {
         }

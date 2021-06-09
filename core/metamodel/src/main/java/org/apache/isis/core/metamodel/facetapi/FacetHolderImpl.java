@@ -21,12 +21,14 @@ package org.apache.isis.core.metamodel.facetapi;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Maps.AliasMap;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 
@@ -138,10 +140,8 @@ public class FacetHolderImpl implements FacetHolder, MetaModelContextAware {
         return false; // no changes
     }
 
-    private void remove(Facet topLevelFacet) {
-        snapshot.clear(); //invalidate
-        facetsByType.remove(topLevelFacet.facetType());
-    }
+    @Deprecated // introduced so can resolve initial conflicts
+    private static Set<String> uniquePrecedenceWarnings = _Sets.newConcurrentHashSet();
 
     // on equal precedence returns b
     private Facet preferredOf(final @NonNull Facet a, final @NonNull Facet b) {
@@ -151,18 +151,40 @@ public class FacetHolderImpl implements FacetHolder, MetaModelContextAware {
             return a;
         }
 
+        // if args are semantically equal, prefer a
+        if(a.semanticEquals(b)) {
+            return a;
+        }
+
         if(a.getPrecedence() == b.getPrecedence()) {
-            log.warn("Facets {} and {} have same precedence {}. Undecidable, which to use. "
-                    + "Arbitrarily chosing the latter.",
-                    a.getClass().getName(),
-                    b.getClass().getName(),
-                    a.getPrecedence().name());
+
+            val msg = a.getClass()==b.getClass()
+                    ? String.format("Facets of identical type %s have equal semantics (precedence %s). "
+                            + "Undecidable, which to use. "
+                            + "Arbitrarily chosing the latter.",
+                            friendlyName(a.getClass()),
+                            a.getPrecedence().name())
+                    : String.format("Facets %s and %s have same precedence %s. "
+                            + "Undecidable, which to use. "
+                            + "Arbitrarily chosing the latter.",
+                            friendlyName(a.getClass()),
+                            friendlyName(b.getClass()),
+                            a.getPrecedence().name());
+
+            if(uniquePrecedenceWarnings.add(msg)) {
+                log.warn(msg);
+            }
+
             return b;
         }
 
         return a.getPrecedence().ordinal() < b.getPrecedence().ordinal()
                 ? b
                 : a;
+    }
+
+    private static String friendlyName(Class<?> cls) {
+        return cls.getName().replace("org.apache.isis", "o.a.i");
     }
 
 }

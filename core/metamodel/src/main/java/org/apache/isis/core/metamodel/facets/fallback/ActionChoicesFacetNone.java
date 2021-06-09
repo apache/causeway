@@ -25,7 +25,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public class ActionChoicesFacetNone extends ActionChoicesFacetAbstract {
+public class ActionChoicesFacetNone
+extends ActionChoicesFacetAbstract {
 
     public ActionChoicesFacetNone(final FacetHolder holder) {
         super(holder, Precedence.FALLBACK);

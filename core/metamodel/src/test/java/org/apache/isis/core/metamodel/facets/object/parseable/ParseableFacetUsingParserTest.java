@@ -111,7 +111,7 @@ public class ParseableFacetUsingParserTest {
                 return null;
             }
         };
-        parseableFacetUsingParser = new ParseableFacetUsingParser(parser, mockFacetHolder);
+        parseableFacetUsingParser = ParseableFacetUsingParser.create(parser, mockFacetHolder);
     }
 
     @Test(expected = TextEntryParseException.class)

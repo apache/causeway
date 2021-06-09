@@ -20,16 +20,18 @@
 package org.apache.isis.core.metamodel.facets.fallback;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.HasSemanticEqualityByClass;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbstract;
 
 /**
  * Has a description of the empty string.
  */
-public class DescribedAsFacetNone extends DescribedAsFacetAbstract {
+public class DescribedAsFacetNone
+extends DescribedAsFacetAbstract
+implements HasSemanticEqualityByClass {
 
     public DescribedAsFacetNone(final FacetHolder holder) {
         super("", holder, Precedence.FALLBACK);
     }
-
 
 }

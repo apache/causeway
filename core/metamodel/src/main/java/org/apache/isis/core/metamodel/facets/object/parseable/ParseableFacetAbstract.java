@@ -44,20 +44,22 @@ implements ParseableFacet {
         super(ParseableFacet.class, holder);
 
         this.parserClass = ParserUtil.parserOrNull(candidateParserClass, candidateParserName);
-        this.parseableFacetUsingParser = isValid()?
-                createParser(holder):null;
+        this.parseableFacetUsingParser = hasParser()
+                ? createParseableFacetUsingParser(holder)
+                : null;
     }
 
-    private ParseableFacetUsingParser createParser(
+    private ParseableFacetUsingParser createParseableFacetUsingParser(
             final FacetHolder holder) {
-        final Parser<?> parser = (Parser<?>) ClassExtensions.newInstance(parserClass, FacetHolder.class, holder);
-        return new ParseableFacetUsingParser(parser, holder);
+        final Parser<?> parser = (Parser<?>) ClassExtensions
+                .newInstance(parserClass, FacetHolder.class, holder);
+        return ParseableFacetUsingParser.create(parser, holder);
     }
 
     /**
      * Discover whether either of the candidate parser name or class is valid.
      */
-    public boolean isValid() {
+    public boolean hasParser() {
         return parserClass != null;
     }
 

@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.val;
 
 public abstract class MandatoryFacetAbstract
@@ -56,6 +57,13 @@ implements MandatoryFacet {
             final FacetHolder holder, final Semantics semantics, final Facet.Precedence precedence) {
         super(type(), holder, precedence);
         this.semantics = semantics;
+    }
+
+    @Override
+    public boolean semanticEquals(final @NonNull Facet other) {
+        return other instanceof MandatoryFacetAbstract
+                ? this.getSemantics() == ((MandatoryFacetAbstract)other).getSemantics()
+                : false;
     }
 
     /**

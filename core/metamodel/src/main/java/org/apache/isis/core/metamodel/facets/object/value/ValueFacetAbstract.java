@@ -127,8 +127,8 @@ implements ValueFacet {
             // Parser
             final Parser<?> parser = semanticsProvider.getParser();
             if (parser != null) {
-                facetHolder.addFacet(new ParseableFacetUsingParser(parser, holder));
-                facetHolder.addFacet(new TitleFacetUsingParser(parser, holder));
+                facetHolder.addFacet(ParseableFacetUsingParser.create(parser, holder));
+                facetHolder.addFacet(TitleFacetUsingParser.create(parser, holder));
                 facetHolder.addFacet(new TypicalLengthFacetUsingParser(parser, holder));
                 final int maxLength = parser.maxLength();
                 if(maxLength >=0) {
