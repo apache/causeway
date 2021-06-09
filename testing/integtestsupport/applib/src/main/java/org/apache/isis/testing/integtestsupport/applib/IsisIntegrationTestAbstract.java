@@ -60,7 +60,7 @@ public abstract class IsisIntegrationTestAbstract {
     public static class InteractionSupport {
 
         @SuppressWarnings("unused")
-        private final Provider<InteractionProvider> interactionContextProvider;
+        private final Provider<InteractionProvider> interactionProviderProvider;
 
     }
 

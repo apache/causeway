@@ -99,7 +99,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     @Inject final ClockService clockService;
     @Inject final TransactionService transactionService;
     @Inject final InteractionTracker isisInteractionTracker;
-    @Inject final Provider<InteractionProvider> interactionContextProvider;
+    @Inject final Provider<InteractionProvider> interactionProviderProvider;
 
     @Inject @Getter final InteractionFactory isisInteractionFactory;
     @Inject @Getter final SpecificationLoader specificationLoader;
@@ -139,7 +139,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             final CommandDto dto,
             final CommandOutcomeHandler commandUpdater) {
 
-        val interaction = interactionContextProvider.get().currentInteractionElseFail();
+        val interaction = interactionProviderProvider.get().currentInteractionElseFail();
         val command = interaction.getCommand();
         if(command.getCommandDto() != dto) {
             command.updater().setCommandDto(dto);
@@ -165,7 +165,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     private void copyStartedAtFromInteractionExecution(
             final CommandOutcomeHandler commandOutcomeHandler) {
 
-        val interaction = interactionContextProvider.get().currentInteractionElseFail();
+        val interaction = interactionProviderProvider.get().currentInteractionElseFail();
         val currentExecution = interaction.getCurrentExecution();
 
         val startedAt = currentExecution != null
@@ -271,7 +271,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         // there was an exception when performing the action invocation/property
         // edit.  We therefore need to guard that case.
         //
-        val interaction = interactionContextProvider.get().currentInteractionElseFail();
+        val interaction = interactionProviderProvider.get().currentInteractionElseFail();
 
         final Execution<?, ?> priorExecution = interaction.getPriorExecution();
         if(priorExecution != null) {

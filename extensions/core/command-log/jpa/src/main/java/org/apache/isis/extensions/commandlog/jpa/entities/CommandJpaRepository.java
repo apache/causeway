@@ -71,7 +71,7 @@ import lombok.val;
 public class CommandJpaRepository
 implements CommandModelRepository<CommandJpa> {
 
-    @Inject final Provider<InteractionProvider> interactionContextProvider;
+    @Inject final Provider<InteractionProvider> interactionProviderProvider;
     @Inject final Provider<RepositoryService> repositoryServiceProvider;
 
 

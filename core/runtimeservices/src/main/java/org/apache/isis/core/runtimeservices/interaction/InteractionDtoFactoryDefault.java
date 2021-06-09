@@ -72,7 +72,7 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
 
     @Inject private CommandDtoFactory commandDtoServiceInternal;
     @Inject private BookmarkService bookmarkService;
-    @Inject private javax.inject.Provider<InteractionProvider> interactionContextProvider;
+    @Inject private javax.inject.Provider<InteractionProvider> interactionProviderProvider;
     @Inject private UserService userService;
 
     @Override
@@ -84,7 +84,7 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
         _Assert.assertEquals(objectAction.getParameterCount(), argumentAdapters.size(),
                 "action's parameter count and provided argument count must match");
 
-        val interaction = interactionContextProvider.get().currentInteractionElseFail();
+        val interaction = interactionProviderProvider.get().currentInteractionElseFail();
         final int nextEventSequence = ((InteractionInternal) interaction).getThenIncrementExecutionSequence();
 
         val owner = head.getOwner();
@@ -128,7 +128,7 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
             final ManagedObject targetAdapter,
             final ManagedObject newValueAdapterIfAny) {
 
-        final Interaction interaction = interactionContextProvider.get().currentInteractionElseFail();
+        final Interaction interaction = interactionProviderProvider.get().currentInteractionElseFail();
         final int nextEventSequence = ((InteractionInternal) interaction).getThenIncrementExecutionSequence();
 
         final Bookmark targetBookmark = targetAdapter.getBookmark()

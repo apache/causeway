@@ -124,7 +124,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
     @Inject FactoryService factoryService;
     @Inject MetaModelContext metaModelContext;
     @Inject SpecificationLoader specificationLoader;
-    @Inject Provider<InteractionProvider> interactionContextProvider;
+    @Inject Provider<InteractionProvider> interactionProviderProvider;
     @Inject ServiceInjector serviceInjector;
     @Inject _ProxyFactoryService proxyFactoryService; // protected to allow JUnit test
     @Inject CommandDtoFactory commandDtoFactory;
@@ -359,7 +359,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
         val interactionLayer = currentInteractionLayer();
         val asyncAuth = authFrom(asyncControl, interactionLayer.getAuthentication());
-        val command = interactionContextProvider.get().currentInteractionElseFail().getCommand();
+        val command = interactionProviderProvider.get().currentInteractionElseFail().getCommand();
         val commandInteractionId = command.getInteractionId();
 
         val targetAdapter = memberAndTarget.getTarget();
@@ -597,7 +597,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
         @Inject InteractionFactory interactionFactory;
         @Inject TransactionService transactionService;
         @Inject CommandExecutorService commandExecutorService;
-        @Inject Provider<InteractionProvider> interactionContextProvider;
+        @Inject Provider<InteractionProvider> interactionProviderProvider;
         @Inject BookmarkService bookmarkService;
         @Inject RepositoryService repositoryService;
         @Inject MetaModelService metaModelService;
@@ -616,7 +616,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
         private R updateDomainObject() {
 
-            val childCommand = interactionContextProvider.get().currentInteractionElseFail().getCommand();
+            val childCommand = interactionProviderProvider.get().currentInteractionElseFail().getCommand();
             childCommand.updater().setParent(parentCommand);
 
             val bookmark = commandExecutorService.executeCommand(commandDto, childCommand.updater());

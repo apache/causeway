@@ -31,8 +31,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 public interface AuthenticationContext {
 
     /**
-     * Optionally provides the current thread's {@link Authentication}, based
-     * on whether there is an open {@link org.apache.isis.core.interaction.session.InteractionSession}.
+     * Optionally provides the current thread's {@link Authentication}.
      * <p>
      * That is the {@link Authentication} that sits at the top of
      * the current thread's {@link org.apache.isis.core.interaction.session.InteractionSession}'s

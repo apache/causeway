@@ -72,7 +72,7 @@ import lombok.val;
 public class CommandJdoRepository
 implements CommandModelRepository<CommandJdo> {
 
-    @Inject final Provider<InteractionProvider> interactionContextProvider;
+    @Inject final Provider<InteractionProvider> interactionProviderProvider;
     @Inject final Provider<RepositoryService> repositoryServiceProvider;
     @Inject final JdoSupportService jdoSupport;
 

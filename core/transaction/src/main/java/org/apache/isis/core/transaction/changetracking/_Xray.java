@@ -35,7 +35,7 @@ final class _Xray {
 
     public static void publish(
             final EntityChangeTrackerDefault entityChangeTrackerDefault,
-            final Provider<InteractionProvider> iaContextProvider,
+            final Provider<InteractionProvider> interactionProviderProvider,
             final Provider<AuthenticationContext> authContextProvider) {
 
         if(!XrayUi.isXrayEnabled()) {
@@ -47,7 +47,7 @@ final class _Xray {
         val enteringLabel = String.format("do publish %d entity change records",
                 propertyChangeRecordCount);
 
-        XrayUtil.createSequenceHandle(iaContextProvider.get(), authContextProvider.get(), "ec-tracker")
+        XrayUtil.createSequenceHandle(interactionProviderProvider.get(), authContextProvider.get(), "ec-tracker")
         .ifPresent(handle->{
 
             handle.submit(sequenceData->{
@@ -69,44 +69,44 @@ final class _Xray {
 
     public static void enlistCreated(
             final ManagedObject entity,
-            final Provider<InteractionProvider> iaContextProvider,
+            final Provider<InteractionProvider> interactionProviderProvider,
             final Provider<AuthenticationContext> authContextProvider) {
-        addSequence("enlistCreated", entity, iaContextProvider, authContextProvider);
+        addSequence("enlistCreated", entity, interactionProviderProvider, authContextProvider);
     }
 
     public static void enlistDeleting(
             final ManagedObject entity,
-            final Provider<InteractionProvider> iaContextProvider,
+            final Provider<InteractionProvider> interactionProviderProvider,
             final Provider<AuthenticationContext> authContextProvider) {
-        addSequence("enlistDeleting", entity, iaContextProvider, authContextProvider);
+        addSequence("enlistDeleting", entity, interactionProviderProvider, authContextProvider);
     }
 
     public static void enlistUpdating(
             final ManagedObject entity,
-            final Provider<InteractionProvider> iaContextProvider,
+            final Provider<InteractionProvider> interactionProviderProvider,
             final Provider<AuthenticationContext> authContextProvider) {
-        addSequence("enlistUpdating", entity, iaContextProvider, authContextProvider);
+        addSequence("enlistUpdating", entity, interactionProviderProvider, authContextProvider);
     }
 
     public static void recognizeLoaded(
             final ManagedObject entity,
-            final Provider<InteractionProvider> iaContextProvider,
+            final Provider<InteractionProvider> interactionProviderProvider,
             final Provider<AuthenticationContext> authContextProvider) {
-        addSequence("recognizeLoaded", entity, iaContextProvider, authContextProvider);
+        addSequence("recognizeLoaded", entity, interactionProviderProvider, authContextProvider);
     }
 
     public static void recognizePersisting(
             final ManagedObject entity,
-            final Provider<InteractionProvider> iaContextProvider,
+            final Provider<InteractionProvider> interactionProviderProvider,
             final Provider<AuthenticationContext> authContextProvider) {
-        addSequence("recognizePersisting", entity, iaContextProvider, authContextProvider);
+        addSequence("recognizePersisting", entity, interactionProviderProvider, authContextProvider);
     }
 
     public static void recognizeUpdating(
             final ManagedObject entity,
-            final Provider<InteractionProvider> iaContextProvider,
+            final Provider<InteractionProvider> interactionProviderProvider,
             final Provider<AuthenticationContext> authContextProvider) {
-        addSequence("recognizeUpdating", entity, iaContextProvider, authContextProvider);
+        addSequence("recognizeUpdating", entity, interactionProviderProvider, authContextProvider);
     }
 
     // -- HELPER
@@ -114,7 +114,7 @@ final class _Xray {
     private static void addSequence(
             final String what,
             final ManagedObject entity,
-            final Provider<InteractionProvider> iaContextProvider,
+            final Provider<InteractionProvider> interactionProviderProvider,
             final Provider<AuthenticationContext> authContextProvider) {
 
         if(!XrayUi.isXrayEnabled()) {
@@ -129,7 +129,7 @@ final class _Xray {
                             entity.getSpecification().getLogicalTypeName(),
                             "" + entity.getPojo()));
 
-        XrayUtil.createSequenceHandle(iaContextProvider.get(), authContextProvider.get(), "ec-tracker")
+        XrayUtil.createSequenceHandle(interactionProviderProvider.get(), authContextProvider.get(), "ec-tracker")
         .ifPresent(handle->{
 
             handle.submit(sequenceData->{
