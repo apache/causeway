@@ -50,6 +50,8 @@ implements Authentication, Serializable {
             final @NonNull String validationCode) {
 
         this.interactionContext = interactionContext;
+        this.interactionContext.putAttribute(this.getClass().getName(), this);
+
         this.validationCode = validationCode;
     }
 
