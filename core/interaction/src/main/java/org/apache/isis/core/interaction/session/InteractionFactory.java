@@ -22,6 +22,8 @@ package org.apache.isis.core.interaction.session;
 import java.util.concurrent.Callable;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayer;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.iactnlayer.ThrowingRunnable;
 import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.manager.AnonymousInteractionFactory;

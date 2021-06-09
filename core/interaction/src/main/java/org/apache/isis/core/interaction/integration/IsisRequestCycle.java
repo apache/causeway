@@ -19,7 +19,7 @@
 package org.apache.isis.core.interaction.integration;
 
 import org.apache.isis.applib.services.user.ImpersonatedUserHolder;
-import org.apache.isis.core.interaction.session.InteractionService;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.standard.SimpleAuthentication;
 

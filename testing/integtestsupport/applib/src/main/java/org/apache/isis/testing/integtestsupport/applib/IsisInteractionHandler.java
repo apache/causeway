@@ -22,7 +22,7 @@ import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
-import org.apache.isis.core.interaction.session.InteractionService;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 
 /**
  * @since 2.0 {@index}

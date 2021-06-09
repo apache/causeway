@@ -1,14 +1,38 @@
-package org.apache.isis.core.interaction.session;
+package org.apache.isis.applib.services.iactnlayer;
 
 import java.util.concurrent.Callable;
 
-import org.apache.isis.applib.services.iactnlayer.InteractionContext;
-import org.apache.isis.applib.services.iactnlayer.ThrowingRunnable;
-import org.apache.isis.core.security.authentication.Authentication;
-
 import lombok.NonNull;
 
+/**
+ * A low-level service to programmatically &quot;connect&quot; (or create a
+ * session, or interact with; choose your term) the the framework's runtime.
+ *
+ * <p>
+ *     This service is used internally by the framework itself, for example
+ *     when a viewer receives a request a new {@link InteractionLayer} is created
+ *     for the duration of the users's interaction.  It is also used by integration
+ *     tests, to be able to connect to the database.
+ * </p>
+ *
+ * <p>
+ *     You could think of this as analogous to an <code>HttpRequest</code>, or
+ *     a JPA <code>EntityManager</code> or JDO <code>PersistenceManager</code>.
+ * </p>
+ *
+ * <p>
+ *     There are two main APIs exposed.  One is to
+ *     {@link #openInteraction(InteractionContext) open} a new {@link InteractionLayer},
+ *     to be {@link #closeInteractionLayers() closed later}.  The other is to
+ *     execute a {@link Callable} or {@link ThrowingRunnable runnable} within the
+ *     duration of an {@link InteractionLayer}, wrapping up automatically.
+ *     This is what is used by {@link org.apache.isis.applib.services.sudo.SudoService}, for example.
+ * </p>
+ *
+ * @since 2.x {@index}
+ */
 public interface InteractionService {
+
     /**
      * If present, reuses the current top level {@link InteractionLayer}, otherwise creates a new
      * anonymous one.
@@ -18,13 +42,18 @@ public interface InteractionService {
     InteractionLayer openInteraction();
 
     /**
-     * Returns a new or reused {@link InteractionLayer} that is a holder of {@link Authentication}
-     * on top of the current thread's authentication layer stack.
+     * Returns a new or reused {@link InteractionLayer} that is a holder of the {@link InteractionContext}
+     * on top of the current thread's interaction layer stack.
+     *
      * <p>
-     * If available reuses an existing {@link Authentication}, otherwise creates a new one.
+     * If available reuses an existing {@link InteractionContext}, otherwise creates a new one.
+     * </p>
+     *
      * <p>
      * The {@link InteractionLayer} represents a user's span of activities interacting with
-     * the application. The session's stack is later closed using {@link #closeInteractionLayers()}.
+     * the application.  These can be stacked (usually temporarily), for example for a sudo
+     * session or to mock the clock.  The stack is later closed using {@link #closeInteractionLayers()}.
+     * </p>
      *
      * @param interactionContext
      *

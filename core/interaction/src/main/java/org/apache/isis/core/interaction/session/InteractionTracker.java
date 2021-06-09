@@ -23,6 +23,7 @@ import java.util.Optional;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayer;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.AuthenticationProvider;

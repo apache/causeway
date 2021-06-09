@@ -32,7 +32,7 @@ import org.junit.Test;
 import org.springframework.web.context.WebApplicationContext;
 
 import org.apache.isis.commons.internal.codec._UrlDecoderUtil;
-import org.apache.isis.core.interaction.session.InteractionService;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.interaction.session.IsisInteraction;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;

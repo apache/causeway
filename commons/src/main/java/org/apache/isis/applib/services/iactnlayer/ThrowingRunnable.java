@@ -24,6 +24,11 @@ import org.apache.isis.commons.functional.Result;
 
 import lombok.NonNull;
 
+/**
+ * Similar to a {@link Runnable}, except that it can also throw exceptions.
+ *
+ * @since 2.x [@index}
+ */
 @FunctionalInterface
 public interface ThrowingRunnable {
 

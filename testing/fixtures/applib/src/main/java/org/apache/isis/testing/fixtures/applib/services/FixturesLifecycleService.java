@@ -33,7 +33,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
-import org.apache.isis.core.interaction.session.InteractionService;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.core.metamodel.events.MetamodelEvent;
 import org.apache.isis.testing.fixtures.applib.clock.clock.Clock;
 import org.apache.isis.testing.fixtures.applib.clock.clock.FixtureClock;

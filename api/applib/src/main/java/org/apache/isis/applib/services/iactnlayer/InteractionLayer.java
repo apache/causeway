@@ -16,17 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.interaction.session;
+package org.apache.isis.applib.services.iactnlayer;
 
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Binds the {@link Interaction} (&quot;what&quot; is being executed) with
+ * Binds an {@link Interaction} (&quot;what&quot; is being executed) with
  * an {@link InteractionContext} (&quot;who&quot; is executing, &quot;when&quot; and &quot;where&quot;).
  *
  * <p>
@@ -37,34 +36,23 @@ import lombok.RequiredArgsConstructor;
  * </p>
  *
  * <p>
- * The stack of layers is per-thread, managed by {@link InteractionFactory} as a thread-local).
+ * The stack of layers is per-thread, managed by {@link InteractionService} as a thread-local).
  * </p>
  *
- * @since 2.0
+ * @since 2.0 {@index}
  */
 @RequiredArgsConstructor
 public class InteractionLayer {
 
 	/**
-	 *
-	 * Current thread's {@link Interaction} which this layer belongs to.
+	 * Current thread's {@link Interaction} : &quot;what&quot; is being executed
 	 */
 	@Getter private final Interaction interaction;
+
 	/**
-	 * Represents the 		// binds given interaction context (which normally would hold the Authentication in its attribute map)
-	 * 		// to this layer
+	 * &quot;who&quot; is performing this {@link #getInteraction()}, also
+	 * &quot;when&quot; and &quot;where&quot;.
 	 */
 	@Getter private final InteractionContext interactionContext;
-
-	public InteractionLayer(
-			final @NonNull IsisInteraction interaction,
-			final @NonNull InteractionContext interactionContext) {
-
-		this.interaction = interaction;
-
-		// binds given interaction context (which normally would hold the Authentication in its attribute map)
-		// to this layer
-		this.interactionContext = interactionContext;
-	}
 
 }
