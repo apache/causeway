@@ -37,10 +37,6 @@ public class InteractionLayer {
 	@Getter private final IsisInteraction interaction;
 	@Getter private final InteractionContext interactionContext;
 
-	public Authentication getAuthentication() {
-		return Authentication.authenticationFrom(interactionContext).orElse(null);
-	}
-
 	public InteractionLayer(
 			final @NonNull IsisInteraction interaction,
 			final @NonNull InteractionContext interactionContext) {

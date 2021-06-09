@@ -160,7 +160,7 @@ implements
         return currentInteractionLayer()
                 // or else create an anonymous authentication layer
                 .orElseGet(()-> {
-                    final AnonymousSession authToUse = new AnonymousSession();
+                    final AnonymousAuthentication authToUse = new AnonymousAuthentication();
                     return openInteraction(authToUse.getInteractionContext());
                 });
     }
@@ -282,7 +282,7 @@ implements
             serviceInjector.injectServicesInto(callable);
             return callable.call(); // reuse existing session
         }
-        return callAuthenticated(new AnonymousSession(), callable);
+        return callAuthenticated(new AnonymousAuthentication(), callable);
     }
 
     /**
@@ -297,7 +297,7 @@ implements
             runnable.run(); // reuse existing session
             return;
         }
-        runAuthenticated(new AnonymousSession(), runnable);
+        runAuthenticated(new AnonymousAuthentication(), runnable);
     }
 
     // -- CONVERSATION ID

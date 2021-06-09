@@ -58,7 +58,9 @@ extends InteractionProvider, AuthenticationProvider {
      */
     @Override
     default Optional<Authentication> currentAuthentication() {
-        return currentInteractionLayer().map(InteractionLayer::getAuthentication);
+        return currentInteractionLayer()
+                .map(InteractionLayer::getInteractionContext)
+                .flatMap(Authentication::authenticationFrom);
     }
 
     // -- INTERACTION CONTEXT

@@ -45,6 +45,11 @@ extends AuthenticationAbstract {
         return of(user, DEFAULT_AUTH_VALID_CODE);
     }
 
+    public static SimpleAuthentication validOf(
+            final @NonNull InteractionContext interactionContext) {
+        return new SimpleAuthentication(interactionContext, DEFAULT_AUTH_VALID_CODE);
+    }
+
     // -- CONSTRUCTOR
 
     public SimpleAuthentication(
