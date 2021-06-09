@@ -20,10 +20,13 @@
 package org.apache.isis.core.security.authentication;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.user.UserMemento;
+
+import lombok.NonNull;
 
 /**
  * An immutable, serializable value type, that holds details about a user's authentication.
@@ -38,6 +41,8 @@ import org.apache.isis.applib.services.user.UserMemento;
  * @since 2.0 {@index}
  */
 public interface Authentication extends Serializable {
+
+    String INTERACTION_CONTEXT_KEY = Authentication.class.getName();
 
     /**
      * The name of the authenticated user; for display purposes only.
@@ -100,4 +105,20 @@ public interface Authentication extends Serializable {
      * @param interactionContext
      */
     Authentication withInteractionContext(InteractionContext interactionContext);
+
+    /**
+     * Looks up an {@link Authentication} from the provided {@link InteractionContext}.
+     *
+     * <p>
+     *     If the {@link InteractionContext} was created as the result of an authentication process (as opposed to
+     *     programmatically) then there will be an attached {@link Authentication} object.
+     * </p>
+     *
+     * @param interactionContext
+     * @return
+     */
+    public static Optional<Authentication> authenticationFrom(final @NonNull InteractionContext interactionContext) {
+        return interactionContext.getAttribute(INTERACTION_CONTEXT_KEY, Authentication.class);
+    }
+
 }

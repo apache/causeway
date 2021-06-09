@@ -20,6 +20,7 @@ package org.apache.isis.core.security.authentication;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.util.ToString;
@@ -29,7 +30,7 @@ import lombok.Getter;
 import lombok.NonNull;
 
 public abstract class AuthenticationAbstract
-implements Authentication, Serializable {
+implements Authentication {
 
     private static final long serialVersionUID = 1L;
 
@@ -50,10 +51,11 @@ implements Authentication, Serializable {
             final @NonNull String validationCode) {
 
         this.interactionContext = interactionContext;
-        this.interactionContext.putAttribute(this.getClass().getName(), this);
+        this.interactionContext.putAttribute(INTERACTION_CONTEXT_KEY, this);
 
         this.validationCode = validationCode;
     }
+
 
     // -- WITHERS
 
