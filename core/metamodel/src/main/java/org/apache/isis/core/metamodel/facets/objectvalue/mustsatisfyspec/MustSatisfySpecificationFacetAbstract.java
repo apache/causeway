@@ -20,15 +20,14 @@
 package org.apache.isis.core.metamodel.facets.objectvalue.mustsatisfyspec;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.spec.Specification;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -37,26 +36,24 @@ import org.apache.isis.core.metamodel.interactions.ProposedHolder;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public abstract class MustSatisfySpecificationFacetAbstract extends FacetAbstract implements MustSatisfySpecificationFacet {
+import lombok.Getter;
+import lombok.NonNull;
 
+public abstract class MustSatisfySpecificationFacetAbstract
+extends FacetAbstract
+implements MustSatisfySpecificationFacet {
 
     public static Class<? extends Facet> type() {
         return MustSatisfySpecificationFacet.class;
     }
 
-    private final List<Specification> specifications;
-
-    /**
-     * For testing.
-     */
-    public List<Specification> getSpecifications() {
-        return specifications;
-    }
+    @Getter //for testing
+    private final @NonNull Can<Specification> specifications;
 
     private final SpecificationEvaluator specificationEvaluator;
 
     public MustSatisfySpecificationFacetAbstract(
-            final List<Specification> specifications,
+            final Can<Specification> specifications,
             final FacetHolder holder) {
         super(type(), holder);
 
@@ -89,19 +86,26 @@ public abstract class MustSatisfySpecificationFacetAbstract extends FacetAbstrac
     /**
      * For benefit of subclasses.
      */
-    protected static List<Specification> toSpecifications(
+    protected static Can<Specification> toSpecifications(
             final FactoryService factoryService,
             final Class<? extends Specification>[] classes) {
-        List<Specification> specifications = Arrays.stream(classes)
+        return Arrays.stream(classes)
                 .map(factoryService::getOrCreate)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
-        return specifications;
+                .collect(Can.toCan());
     }
 
-
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+    @Override
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("specifications", specifications);
     }
+
+    @Override
+    public boolean semanticEquals(final @NonNull Facet other) {
+        return other instanceof MustSatisfySpecificationFacetAbstract
+                ? Objects.equals(this.specifications, ((MustSatisfySpecificationFacetAbstract)other).specifications)
+                : false;
+    }
+
+
 }

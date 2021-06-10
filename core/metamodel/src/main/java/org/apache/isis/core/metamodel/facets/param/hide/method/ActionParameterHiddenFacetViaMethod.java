@@ -22,9 +22,11 @@ package org.apache.isis.core.metamodel.facets.param.hide.method;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.param.hide.ActionParameterHiddenFacetAbstract;
@@ -85,5 +87,18 @@ implements ImperativeFacet {
         super.appendAttributesTo(attributeMap);
         Util.appendAttributesTo(this, attributeMap);
     }
+
+    @Override
+    public boolean semanticEquals(final @NonNull Facet otherFacet) {
+
+        if(! (otherFacet instanceof ActionParameterHiddenFacetViaMethod)) {
+            return false;
+        }
+
+        val other = (ActionParameterHiddenFacetViaMethod)otherFacet;
+        return Objects.equals(this.ppmFactory, other.ppmFactory)
+                && Objects.equals(this.getMethods(), other.getMethods());
+    }
+
 
 }

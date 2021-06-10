@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.facets.properties.property;
 
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.regex.Pattern;
 
 import org.jmock.Expectations;
@@ -562,11 +561,11 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             Assert.assertNotNull(mustSatisfySpecificationFacet);
             Assert.assertTrue(mustSatisfySpecificationFacet instanceof MustSatisfySpecificationFacetForPropertyAnnotation);
             final MustSatisfySpecificationFacetForPropertyAnnotation mustSatisfySpecificationFacetImpl = (MustSatisfySpecificationFacetForPropertyAnnotation) mustSatisfySpecificationFacet;
-            final List<Specification> specifications = mustSatisfySpecificationFacetImpl.getSpecifications();
+            val specifications = mustSatisfySpecificationFacetImpl.getSpecifications();
             assertThat(specifications.size(), is(2));
 
-            assertTrue(specifications.get(0) instanceof NotTooHot);
-            assertTrue(specifications.get(1) instanceof NotTooCold);
+            assertTrue(specifications.getElseFail(0) instanceof NotTooHot);
+            assertTrue(specifications.getElseFail(1) instanceof NotTooCold);
         }
 
     }
