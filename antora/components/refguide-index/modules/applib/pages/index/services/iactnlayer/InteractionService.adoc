@@ -1,0 +1,90 @@
+= InteractionService _(interface)_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+A low-level service to programmatically "connect" (or create a session, or interact with; choose your term) the the framework's runtime.
+
+This service is used internally by the framework itself, for example when a viewer receives a request a new xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] is created for the duration of the users's interaction. It is also used by integration tests, to be able to connect to the database.
+
+You could think of this as analogous to an `HttpRequest` , or a JPA `EntityManager` or JDO `PersistenceManager` .
+
+There are two main APIs exposed. One is to _#openInteraction(InteractionContext) open_ a new xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] , to be _#closeInteractionLayers() closed later_ . The other is to execute a _Callable_ or _ThrowingRunnable runnable_ within the duration of an xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] , wrapping up automatically. This is what is used by _org.apache.isis.applib.services.sudo.SudoService_ , for example.
+
+== API
+
+[source,java]
+.InteractionService.java
+----
+interface InteractionService {
+  InteractionLayer openInteraction()     // <.>
+  InteractionLayer openInteraction(InteractionContext interactionContext)     // <.>
+  boolean isInInteraction()     // <.>
+  R call(InteractionContext interactionContext, Callable<R> callable)     // <.>
+  void run(InteractionContext interactionContext, ThrowingRunnable runnable)     // <.>
+  void closeInteractionLayers()     // <.>
+}
+----
+
+<.> xref:#openInteraction__[openInteraction()]
++
+--
+If present, reuses the current top level xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] , otherwise creates a new anonymous one.
+--
+<.> xref:#openInteraction__InteractionContext[openInteraction(InteractionContext)]
++
+--
+Returns a new or reused xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] that is a holder of the xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] on top of the current thread's interaction layer stack.
+--
+<.> xref:#isInInteraction__[isInInteraction()]
+<.> xref:#call__InteractionContext_Callable[call(InteractionContext, Callable)]
++
+--
+Executes a block of code with a new or reused xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] using a new or reused xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] .
+--
+<.> xref:#run__InteractionContext_ThrowingRunnable[run(InteractionContext, ThrowingRunnable)]
++
+--
+Variant of _#call(InteractionContext, Callable)_ that takes a runnable.
+--
+<.> xref:#closeInteractionLayers__[closeInteractionLayers()]
++
+--
+closes all open xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] (s) as stacked on the current thread
+--
+
+== Members
+
+[#openInteraction__]
+=== openInteraction()
+
+If present, reuses the current top level xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] , otherwise creates a new anonymous one.
+
+[#openInteraction__InteractionContext]
+=== openInteraction(InteractionContext)
+
+Returns a new or reused xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] that is a holder of the xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] on top of the current thread's interaction layer stack.
+
+If available reuses an existing xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] , otherwise creates a new one.
+
+The xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] represents a user's span of activities interacting with the application. These can be stacked (usually temporarily), for example for a sudo session or to mock the clock. The stack is later closed using _#closeInteractionLayers()_ .
+
+[#isInInteraction__]
+=== isInInteraction()
+
+[#call__InteractionContext_Callable]
+=== call(InteractionContext, Callable)
+
+Executes a block of code with a new or reused xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] using a new or reused xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] .
+
+If there is currently no xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] a new one is created.
+
+If there is currently an xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] that has an equal xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to the given one, it is reused, otherwise a new one is created.
+
+[#run__InteractionContext_ThrowingRunnable]
+=== run(InteractionContext, ThrowingRunnable)
+
+Variant of _#call(InteractionContext, Callable)_ that takes a runnable.
+
+[#closeInteractionLayers__]
+=== closeInteractionLayers()
+
+closes all open xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] (s) as stacked on the current thread
