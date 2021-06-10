@@ -21,8 +21,6 @@ package org.apache.isis.core.metamodel.facets.param.disable.method;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -36,11 +34,15 @@ import org.apache.isis.core.metamodel.facets.param.disable.ActionParameterDisabl
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.val;
+
 public class ActionParameterDisabledFacetViaMethod
 extends ActionParameterDisabledFacetAbstract
 implements ImperativeFacet {
 
-    private final Method method;
+    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
     private final TranslationService translationService;
     private final TranslationContext translationContext;
     private final Optional<Constructor<?>> ppmFactory;
@@ -53,19 +55,10 @@ implements ImperativeFacet {
             final FacetHolder holder) {
 
         super(holder);
-        this.method = method;
+        this.methods = Can.ofSingleton(method);
         this.translationService = translationService;
         this.translationContext = translationContext;
         this.ppmFactory = ppmFactory;
-    }
-
-    /**
-     * Returns a singleton list of the {@link Method} provided in the
-     * constructor.
-     */
-    @Override
-    public List<Method> getMethods() {
-        return Collections.singletonList(method);
     }
 
     @Override
@@ -78,6 +71,7 @@ implements ImperativeFacet {
             final ManagedObject owningAdapter,
             final Can<ManagedObject> pendingArgs) {
 
+        val method = methods.getFirstOrFail();
         final Object returnValue = ppmFactory.isPresent()
                 ? ManagedObjects.InvokeUtil.invokeWithPPM(ppmFactory.get(), method, owningAdapter, pendingArgs)
                 : ManagedObjects.InvokeUtil.invokeAutofit(method, owningAdapter, pendingArgs);
@@ -94,10 +88,12 @@ implements ImperativeFacet {
 
     @Override
     protected String toStringValues() {
+        val method = methods.getFirstOrFail();
         return "method=" + method;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+    @Override
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         Util.appendAttributesTo(this, attributeMap);
     }

@@ -105,7 +105,7 @@ final class ObjectCreator_builtinHandlers {
 
              val pojo = adapter.getPojo();
 
-            CallbackFacet.Util.callCallback(adapter, CreatedCallbackFacet.class);
+            CallbackFacet.callCallback(adapter, CreatedCallbackFacet.class);
 
             if (Command.class.isAssignableFrom(pojo.getClass())) {
 

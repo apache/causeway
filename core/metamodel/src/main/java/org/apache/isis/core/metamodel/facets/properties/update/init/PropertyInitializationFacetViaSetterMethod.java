@@ -20,31 +20,27 @@
 package org.apache.isis.core.metamodel.facets.properties.update.init;
 
 import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
-public class PropertyInitializationFacetViaSetterMethod extends PropertyInitializationFacetAbstract implements ImperativeFacet {
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.val;
 
-    private final Method method;
+public class PropertyInitializationFacetViaSetterMethod
+extends PropertyInitializationFacetAbstract
+implements ImperativeFacet {
+
+    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
 
     public PropertyInitializationFacetViaSetterMethod(final Method method, final FacetHolder holder) {
         super(holder);
-        this.method = method;
-    }
-
-    /**
-     * Returns a singleton list of the {@link Method} provided in the
-     * constructor.
-     */
-    @Override
-    public List<Method> getMethods() {
-        return Collections.singletonList(method);
+        this.methods = Can.ofSingleton(method);
     }
 
     @Override
@@ -56,15 +52,18 @@ public class PropertyInitializationFacetViaSetterMethod extends PropertyInitiali
 
     @Override
     public void initProperty(final ManagedObject owningAdapter, final ManagedObject initialAdapter) {
+        val method = methods.getFirstOrFail();
         ManagedObjects.InvokeUtil.invoke(method, owningAdapter, initialAdapter);
     }
 
     @Override
     protected String toStringValues() {
+        val method = methods.getFirstOrFail();
         return "method=" + method;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+    @Override
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
     }

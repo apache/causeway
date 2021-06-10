@@ -53,7 +53,7 @@ public class ActionAnnotationFacetFactoryTest_ActionInvocation extends AbstractF
         val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
         facetFactory.processInvocation(processMethodContext, actionIfAny);
     }
-    
+
     @Override
     public void setUp() throws Exception {
         super.setUp();
@@ -77,7 +77,7 @@ public class ActionAnnotationFacetFactoryTest_ActionInvocation extends AbstractF
         assertNotNull(facet);
         assertTrue(facet instanceof ActionInvocationFacetForDomainEventAbstract);
         final ActionInvocationFacetForDomainEventAbstract actionInvocationFacetViaMethod = (ActionInvocationFacetForDomainEventAbstract) facet;
-        assertEquals(actionMethod, actionInvocationFacetViaMethod.getMethods().get(0));
+        assertEquals(actionMethod, actionInvocationFacetViaMethod.getMethods().getFirstOrFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(actionMethod));
     }
@@ -151,7 +151,7 @@ public class ActionAnnotationFacetFactoryTest_ActionInvocation extends AbstractF
 
         final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(CustomerEx.class, actionMethod);
         facetHolderWithParms.setMetaModelContext(super.metaModelContext);
-        
+
         processInvocation(facetFactory, new ProcessMethodContext(CustomerEx.class, null, actionMethod, methodRemover, facetHolderWithParms));
 
         final Facet facet0 = facetHolderWithParms.getFacet(ActionInvocationFacet.class);
@@ -166,14 +166,14 @@ public class ActionAnnotationFacetFactoryTest_ActionInvocation extends AbstractF
         val facetFactoryForDisable = new DisableForContextFacetViaMethodFactory();
         facetFactoryForChoices.setMetaModelContext(metaModelContext);
         facetFactoryForDisable.setMetaModelContext(metaModelContext);
-        
-        
+
+
         class Customer {
-            
+
             public void someAction(final int x, final long y) {
             }
 
-            
+
             public int[] choices0SomeAction() {
                 return new int[0];
             }
@@ -185,12 +185,12 @@ public class ActionAnnotationFacetFactoryTest_ActionInvocation extends AbstractF
                 return new int[0];
             }
 
-            
+
             public long[] choices1SomeAction() {
                 return new long[0];
             }
 
-            
+
             public String disableSomeAction(final int x, final long y) {
                 return null;
             }
@@ -217,18 +217,18 @@ public class ActionAnnotationFacetFactoryTest_ActionInvocation extends AbstractF
         assertNotNull(facet1);
         assertTrue(facet1 instanceof ActionParameterChoicesFacetViaMethod);
         final ActionParameterChoicesFacetViaMethod actionChoicesFacetViaMethod0 = (ActionParameterChoicesFacetViaMethod) facet1;
-        assertEquals(choices0Method, actionChoicesFacetViaMethod0.getMethods().get(0));
+        assertEquals(choices0Method, actionChoicesFacetViaMethod0.getMethods().getFirstOrFail());
 
         final Facet facet2 = facetHolderWithParms.getParameters().get(1).getFacet(ActionParameterChoicesFacet.class);
         assertNotNull(facet2);
         assertTrue(facet2 instanceof ActionParameterChoicesFacetViaMethod);
         final ActionParameterChoicesFacetViaMethod actionChoicesFacetViaMethod1 = (ActionParameterChoicesFacetViaMethod) facet2;
-        assertEquals(choices1Method, actionChoicesFacetViaMethod1.getMethods().get(0));
+        assertEquals(choices1Method, actionChoicesFacetViaMethod1.getMethods().getFirstOrFail());
 
         final Facet facet3 = facetHolderWithParms.getFacet(DisableForContextFacet.class);
         assertNotNull(facet3);
         assertTrue(facet3 instanceof DisableForContextFacetViaMethod);
         final DisableForContextFacetViaMethod disableFacetViaMethod = (DisableForContextFacetViaMethod) facet3;
-        assertEquals(disableMethod, disableFacetViaMethod.getMethods().get(0));
+        assertEquals(disableMethod, disableFacetViaMethod.getMethods().getFirstOrFail());
     }
 }

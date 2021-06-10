@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.object.callback;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
@@ -29,6 +28,8 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.RemoveCallbackFace
 import org.apache.isis.core.metamodel.facets.object.callbacks.RemoveCallbackViaDeleteMethodFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacetViaMethod;
+
+import lombok.val;
 
 public class RemoveAndDeleteCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -70,7 +71,7 @@ public class RemoveAndDeleteCallbackFacetFactoryTest extends AbstractFacetFactor
         assertNotNull(facet);
         assertTrue(facet instanceof RemovingCallbackFacetViaMethod);
         final RemovingCallbackFacetViaMethod removingCallbackFacetViaMethod = (RemovingCallbackFacetViaMethod) facet;
-        final List<Method> methods = removingCallbackFacetViaMethod.getMethods();
+        val methods = removingCallbackFacetViaMethod.getMethods();
         assertTrue(methods.contains(deleteMethod));
         assertTrue(methods.contains(removeMethod));
 

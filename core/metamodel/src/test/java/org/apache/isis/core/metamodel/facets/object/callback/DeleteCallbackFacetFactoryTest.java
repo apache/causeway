@@ -59,7 +59,7 @@ public class DeleteCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof RemovingCallbackFacetViaMethod);
         final RemovingCallbackFacetViaMethod deletingCallbackFacetViaMethod = (RemovingCallbackFacetViaMethod) facet;
-        assertEquals(method, deletingCallbackFacetViaMethod.getMethods().get(0));
+        assertEquals(method, deletingCallbackFacetViaMethod.getMethods().getFirstOrFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
     }

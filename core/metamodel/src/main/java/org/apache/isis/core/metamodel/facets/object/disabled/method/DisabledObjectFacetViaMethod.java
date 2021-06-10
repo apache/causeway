@@ -20,8 +20,6 @@
 package org.apache.isis.core.metamodel.facets.object.disabled.method;
 
 import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.applib.Identifier;
@@ -29,6 +27,7 @@ import org.apache.isis.applib.Identifier.Type;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -36,9 +35,15 @@ import org.apache.isis.core.metamodel.facets.object.disabled.DisabledObjectFacet
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
-public class DisabledObjectFacetViaMethod extends DisabledObjectFacetAbstract implements ImperativeFacet {
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.val;
 
-    private final Method method;
+public class DisabledObjectFacetViaMethod
+extends DisabledObjectFacetAbstract
+implements ImperativeFacet {
+
+    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
     private TranslationService translationService;
     private final TranslationContext translationContext;
 
@@ -48,14 +53,9 @@ public class DisabledObjectFacetViaMethod extends DisabledObjectFacetAbstract im
             final TranslationContext translationContext,
             final FacetHolder holder) {
         super(holder);
-        this.method = method;
+        this.methods = Can.ofSingleton(method);
         this.translationService = translationService;
         this.translationContext = translationContext;
-    }
-
-    @Override
-    public List<Method> getMethods() {
-        return Collections.singletonList(method);
     }
 
     @Override
@@ -65,6 +65,7 @@ public class DisabledObjectFacetViaMethod extends DisabledObjectFacetAbstract im
 
     @Override
     public String disabledReason(final ManagedObject owningAdapter, final Identifier identifier) {
+        val method = methods.getFirstOrFail();
         final Type type = identifier.getType();
         final Object returnValue = ManagedObjects.InvokeUtil.invoke(method, owningAdapter, type);
         if(returnValue instanceof String) {
@@ -79,16 +80,20 @@ public class DisabledObjectFacetViaMethod extends DisabledObjectFacetAbstract im
 
     @Override
     protected String toStringValues() {
+        val method = methods.getFirstOrFail();
         return "method=" + method;
     }
 
     @Override
     public void copyOnto(final FacetHolder holder) {
-        final DisabledObjectFacetViaMethod clonedFacet = new DisabledObjectFacetViaMethod(this.method, translationService, translationContext, holder);
+        val method = methods.getFirstOrFail();
+        final DisabledObjectFacetViaMethod clonedFacet = new DisabledObjectFacetViaMethod(method, translationService, translationContext, holder);
         FacetUtil.addFacetIfPresent(clonedFacet);
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+    @Override
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        val method = methods.getFirstOrFail();
         super.appendAttributesTo(attributeMap);
         attributeMap.put("method", method);
     }

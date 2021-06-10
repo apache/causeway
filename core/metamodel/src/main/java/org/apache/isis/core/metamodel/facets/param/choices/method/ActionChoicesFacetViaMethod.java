@@ -20,8 +20,6 @@
 package org.apache.isis.core.metamodel.facets.param.choices.method;
 
 import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.applib.exceptions.unrecoverable.DomainModelException;
@@ -34,11 +32,15 @@ import org.apache.isis.core.metamodel.facets.param.choices.ActionChoicesFacetAbs
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
+import lombok.Getter;
+import lombok.NonNull;
 import lombok.val;
 
-public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract implements ImperativeFacet {
+public class ActionChoicesFacetViaMethod
+extends ActionChoicesFacetAbstract
+implements ImperativeFacet {
 
-    private final Method method;
+    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
     private final Class<?> choicesType;
 
     public ActionChoicesFacetViaMethod(
@@ -47,17 +49,8 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
             final FacetHolder holder) {
 
         super(holder);
-        this.method = method;
+        this.methods = Can.ofSingleton(method);
         this.choicesType = choicesType;
-    }
-
-    /**
-     * Returns a singleton list of the {@link Method} provided in the
-     * constructor.
-     */
-    @Override
-    public List<Method> getMethods() {
-        return Collections.singletonList(method);
     }
 
     @Override
@@ -70,6 +63,7 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
             final ManagedObject owningAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
+        val method = methods.getFirstOrFail();
         final Object objectOrCollection = ManagedObjects.InvokeUtil.invoke(method, owningAdapter);
         if (!(objectOrCollection instanceof Object[])) {
             throw new DomainModelException(String.format(
@@ -102,6 +96,7 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
 
     @Override
     protected String toStringValues() {
+        val method = methods.getFirstOrFail();
         return "method=" + method + ",type=" + choicesType;
     }
 

@@ -20,10 +20,9 @@
 package org.apache.isis.core.metamodel.facets.properties.accessor;
 
 import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -32,12 +31,16 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.val;
+
 public class PropertyAccessorFacetViaAccessor
 extends PropertyOrCollectionAccessorFacetAbstract
 implements ImperativeFacet {
 
 
-    private final Method method;
+    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
 
     public PropertyAccessorFacetViaAccessor(
             final ObjectSpecification typeSpec,
@@ -45,16 +48,7 @@ implements ImperativeFacet {
             final FacetHolder holder) {
 
         super(typeSpec, holder);
-        this.method = method;
-    }
-
-    /**
-     * Returns a singleton list of the {@link Method} provided in the
-     * constructor.
-     */
-    @Override
-    public List<Method> getMethods() {
-        return Collections.singletonList(method);
+        this.methods = Can.ofSingleton(method);
     }
 
     @Override
@@ -66,6 +60,7 @@ implements ImperativeFacet {
     public Object getProperty(
             final ManagedObject owningAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
+        val method = methods.getFirstOrFail();
         final Object referencedObject = ManagedObjects.InvokeUtil.invoke(method, owningAdapter);
 
         if(referencedObject == null) {
@@ -86,10 +81,12 @@ implements ImperativeFacet {
 
     @Override
     protected String toStringValues() {
+        val method = methods.getFirstOrFail();
         return "method=" + method;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+    @Override
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
     }

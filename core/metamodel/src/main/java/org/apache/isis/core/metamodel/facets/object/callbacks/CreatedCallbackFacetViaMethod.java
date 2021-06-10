@@ -20,52 +20,17 @@
 package org.apache.isis.core.metamodel.facets.object.callbacks;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
-public class CreatedCallbackFacetViaMethod extends CreatedCallbackFacetAbstract implements ImperativeFacet {
-
-    private final List<Method> methods = new ArrayList<Method>();
+public class CreatedCallbackFacetViaMethod
+extends CreatedCallbackFacetAbstract
+implements ImperativeFacet {
 
     public CreatedCallbackFacetViaMethod(final Method method, final FacetHolder holder) {
         super(holder);
         addMethod(method);
     }
 
-    @Override
-    public void addMethod(final Method method) {
-        methods.add(method);
-    }
-
-    @Override
-    public Intent getIntent(final Method method) {
-        return Intent.LIFECYCLE;
-    }
-
-    @Override
-    public List<Method> getMethods() {
-        return Collections.unmodifiableList(methods);
-    }
-
-    @Override
-    public void invoke(final ManagedObject adapter) {
-        ManagedObjects.InvokeUtil.invokeAll(methods, adapter);
-    }
-
-    @Override
-    protected String toStringValues() {
-        return "methods=" + methods;
-    }
-
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
-    }
 }

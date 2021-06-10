@@ -27,9 +27,12 @@ import org.apache.isis.core.metamodel.facets.object.icon.IconFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
-public class IconFacetMethod extends IconFacetAbstract {
+import lombok.NonNull;
 
-    private final Method method;
+public class IconFacetMethod
+extends IconFacetAbstract {
+
+    private final @NonNull Method method;
 
     public IconFacetMethod(final Method method, final FacetHolder holder) {
         super(holder);
@@ -45,7 +48,8 @@ public class IconFacetMethod extends IconFacetAbstract {
         }
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+    @Override
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("method", method);
     }

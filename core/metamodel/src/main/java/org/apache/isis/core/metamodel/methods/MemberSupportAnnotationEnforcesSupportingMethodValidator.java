@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
@@ -56,7 +57,7 @@ extends MetaModelVisitingValidatorAbstract {
                 .filter(ImperativeFacet.class::isInstance)
                 .map(ImperativeFacet.class::cast)
                 .map(ImperativeFacet::getMethods)
-                .flatMap(List::stream)
+                .flatMap(Can::stream)
                 .collect(Collectors.toCollection(HashSet::new));
 
         // methods intended to be included with the meta-model

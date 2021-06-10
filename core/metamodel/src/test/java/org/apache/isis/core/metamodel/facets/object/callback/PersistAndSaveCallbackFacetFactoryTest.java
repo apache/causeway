@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.object.callback;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
@@ -31,6 +30,8 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackF
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallbackFacetViaMethod;
+
+import lombok.val;
 
 public class PersistAndSaveCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -72,7 +73,7 @@ public class PersistAndSaveCallbackFacetFactoryTest extends AbstractFacetFactory
         assertNotNull(facet);
         assertTrue(facet instanceof PersistingCallbackFacetViaMethod);
         final PersistingCallbackFacetViaMethod persistingCallbackFacetViaMethod = (PersistingCallbackFacetViaMethod) facet;
-        final List<Method> methods = persistingCallbackFacetViaMethod.getMethods();
+        val methods = persistingCallbackFacetViaMethod.getMethods();
         assertTrue(methods.contains(saveMethod));
         assertTrue(methods.contains(persistMethod));
 
@@ -99,7 +100,7 @@ public class PersistAndSaveCallbackFacetFactoryTest extends AbstractFacetFactory
         assertNotNull(facet);
         assertTrue(facet instanceof PersistedCallbackFacetViaMethod);
         final PersistedCallbackFacetViaMethod persistedCallbackFacetViaMethod = (PersistedCallbackFacetViaMethod) facet;
-        final List<Method> methods = persistedCallbackFacetViaMethod.getMethods();
+        val methods = persistedCallbackFacetViaMethod.getMethods();
         assertTrue(methods.contains(saveMethod));
         assertTrue(methods.contains(persistMethod));
 

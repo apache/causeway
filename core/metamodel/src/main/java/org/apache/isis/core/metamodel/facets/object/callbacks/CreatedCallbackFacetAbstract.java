@@ -22,7 +22,9 @@ package org.apache.isis.core.metamodel.facets.object.callbacks;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class CreatedCallbackFacetAbstract extends CallbackFacetAbstract implements CreatedCallbackFacet {
+public abstract class CreatedCallbackFacetAbstract
+extends CallbackFacetAbstract
+implements CreatedCallbackFacet {
 
     public static Class<? extends Facet> type() {
         return CreatedCallbackFacet.class;

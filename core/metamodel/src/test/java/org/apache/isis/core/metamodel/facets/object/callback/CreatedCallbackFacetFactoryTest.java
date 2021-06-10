@@ -59,7 +59,7 @@ public class CreatedCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof CreatedCallbackFacetViaMethod);
         final CreatedCallbackFacetViaMethod createdCallbackFacetViaMethod = (CreatedCallbackFacetViaMethod) facet;
-        assertEquals(method, createdCallbackFacetViaMethod.getMethods().get(0));
+        assertEquals(method, createdCallbackFacetViaMethod.getMethods().getFirstOrFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
     }

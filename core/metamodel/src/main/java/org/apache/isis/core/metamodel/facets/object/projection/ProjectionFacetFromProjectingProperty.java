@@ -30,7 +30,8 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.val;
 
-public class ProjectionFacetFromProjectingProperty extends ProjectionFacetAbstract {
+public class ProjectionFacetFromProjectingProperty
+extends ProjectionFacetAbstract {
 
     public static Class<? extends Facet> type() {
         return ProjectionFacet.class;

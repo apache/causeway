@@ -21,8 +21,6 @@ package org.apache.isis.core.metamodel.facets.param.choices.methodnum;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -36,13 +34,15 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
+import lombok.Getter;
+import lombok.NonNull;
 import lombok.val;
 
 public class ActionParameterChoicesFacetViaMethod
 extends ActionParameterChoicesFacetAbstract
 implements ImperativeFacet {
 
-    private final Method method;
+    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
     private final Class<?> choicesType;
     private final Optional<Constructor<?>> ppmFactory;
 
@@ -53,18 +53,9 @@ implements ImperativeFacet {
             final FacetHolder holder) {
 
         super(holder);
-        this.method = method;
+        this.methods = Can.ofSingleton(method);
         this.choicesType = choicesType;
         this.ppmFactory = ppmFactory;
-    }
-
-    /**
-     * Returns a singleton list of the {@link Method} provided in the
-     * constructor.
-     */
-    @Override
-    public List<Method> getMethods() {
-        return Collections.singletonList(method);
     }
 
     @Override
@@ -79,6 +70,7 @@ implements ImperativeFacet {
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
+        val method = methods.getFirstOrFail();
         final Object collectionOrArray = ppmFactory.isPresent()
                 ? ManagedObjects.InvokeUtil.invokeWithPPM(ppmFactory.get(), method, head.getTarget(), pendingArgs)
                 : ManagedObjects.InvokeUtil.invokeAutofit(method, head.getTarget(), pendingArgs);
@@ -95,6 +87,7 @@ implements ImperativeFacet {
 
     @Override
     protected String toStringValues() {
+        val method = methods.getFirstOrFail();
         return "method=" + method + ",type=" + choicesType;
     }
 

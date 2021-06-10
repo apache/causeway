@@ -20,10 +20,9 @@
 package org.apache.isis.core.metamodel.facets.properties.update.modify;
 
 import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -32,22 +31,19 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
-public class PropertySetterFacetViaSetterMethod extends PropertySetterFacetAbstract implements ImperativeFacet {
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.val;
 
-    private final Method method;
+public class PropertySetterFacetViaSetterMethod
+extends PropertySetterFacetAbstract
+implements ImperativeFacet {
+
+    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
 
     public PropertySetterFacetViaSetterMethod(final Method method, final FacetHolder holder) {
         super(holder);
-        this.method = method;
-    }
-
-    /**
-     * Returns a singleton list of the {@link Method} provided in the
-     * constructor.
-     */
-    @Override
-    public List<Method> getMethods() {
-        return Collections.singletonList(method);
+        this.methods = Can.ofSingleton(method);
     }
 
     @Override
@@ -62,6 +58,7 @@ public class PropertySetterFacetViaSetterMethod extends PropertySetterFacetAbstr
             final ManagedObject valueAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
+        val method = methods.getFirstOrFail();
         ManagedObjects.InvokeUtil.invoke(method, targetAdapter, valueAdapter);
         return cloneIfViewModelCloneable(targetAdapter);
     }
@@ -81,10 +78,12 @@ public class PropertySetterFacetViaSetterMethod extends PropertySetterFacetAbstr
 
     @Override
     protected String toStringValues() {
+        val method = methods.getFirstOrFail();
         return "method=" + method;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+    @Override
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
     }

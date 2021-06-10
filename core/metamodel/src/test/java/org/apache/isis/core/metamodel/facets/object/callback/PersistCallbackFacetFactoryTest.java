@@ -61,7 +61,7 @@ public class PersistCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof PersistingCallbackFacetViaMethod);
         final PersistingCallbackFacetViaMethod persistingCallbackFacetViaMethod = (PersistingCallbackFacetViaMethod) facet;
-        assertEquals(method, persistingCallbackFacetViaMethod.getMethods().get(0));
+        assertEquals(method, persistingCallbackFacetViaMethod.getMethods().getFirstOrFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
     }
@@ -80,7 +80,7 @@ public class PersistCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof PersistedCallbackFacetViaMethod);
         final PersistedCallbackFacetViaMethod persistedCallbackFacetViaMethod = (PersistedCallbackFacetViaMethod) facet;
-        assertEquals(method, persistedCallbackFacetViaMethod.getMethods().get(0));
+        assertEquals(method, persistedCallbackFacetViaMethod.getMethods().getFirstOrFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
     }

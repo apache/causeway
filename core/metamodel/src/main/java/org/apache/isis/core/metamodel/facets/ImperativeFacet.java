@@ -20,12 +20,12 @@
 package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -70,7 +70,7 @@ public interface ImperativeFacet extends Facet {
      * }
      * </pre>
      */
-    public List<Method> getMethods();
+    public Can<Method> getMethods();
 
     public static enum Intent {
         CHECK_IF_HIDDEN,
@@ -153,7 +153,7 @@ public interface ImperativeFacet extends Facet {
         }
 
         public static void appendAttributesTo(ImperativeFacet facet, final Map<String, Object> attributeMap) {
-            List<Method> methods = facet.getMethods();
+            val methods = facet.getMethods();
             attributeMap.put("methods", methods);
             for (Method method : methods) {
                 Intent intent = facet.getIntent(method);

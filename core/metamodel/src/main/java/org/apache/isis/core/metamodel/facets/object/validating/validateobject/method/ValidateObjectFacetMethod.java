@@ -20,36 +20,36 @@
 package org.apache.isis.core.metamodel.facets.object.validating.validateobject.method;
 
 import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.object.validating.validateobject.ValidateObjectFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
-public class ValidateObjectFacetMethod extends ValidateObjectFacetAbstract implements ImperativeFacet {
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.val;
 
-    private final Method method;
+public class ValidateObjectFacetMethod
+extends ValidateObjectFacetAbstract
+implements ImperativeFacet {
+
+    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
     private final TranslationService translationService;
     private final TranslationContext translationContext;
 
     public ValidateObjectFacetMethod(final Method method, final TranslationService translationService,
     		final TranslationContext translationContext, final FacetHolder holder) {
         super(holder);
-        this.method = method;
+        this.methods = Can.ofSingleton(method);
         this.translationService = translationService;
         this.translationContext = translationContext;
-    }
-
-    @Override
-    public List<Method> getMethods() {
-        return Collections.singletonList(method);
     }
 
     @Override
@@ -59,6 +59,7 @@ public class ValidateObjectFacetMethod extends ValidateObjectFacetAbstract imple
 
     @Override
     public String invalidReason(final ManagedObject owningAdapter) {
+        val method = methods.getFirstOrFail();
         final Object returnValue = ManagedObjects.InvokeUtil.invoke(method, owningAdapter);
         if(returnValue instanceof String) {
             return (String) returnValue;
@@ -72,10 +73,12 @@ public class ValidateObjectFacetMethod extends ValidateObjectFacetAbstract imple
 
     @Override
     protected String toStringValues() {
+        val method = methods.getFirstOrFail();
         return "method=" + method;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+    @Override
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
     }

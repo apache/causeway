@@ -131,7 +131,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof ActionValidationFacetViaMethod);
         final ActionValidationFacetViaMethod actionValidationFacetViaMethod = (ActionValidationFacetViaMethod) facet;
-        assertEquals(validateMethod, actionValidationFacetViaMethod.getMethods().get(0));
+        assertEquals(validateMethod, actionValidationFacetViaMethod.getMethods().getFirstOrFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(validateMethod));
     }
@@ -162,7 +162,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof ActionValidationFacetViaMethod);
         final ActionValidationFacetViaMethod actionValidationFacetViaMethod = (ActionValidationFacetViaMethod) facet;
-        assertEquals(validateMethod, actionValidationFacetViaMethod.getMethods().get(0));
+        assertEquals(validateMethod, actionValidationFacetViaMethod.getMethods().getFirstOrFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(validateMethod));
     }
@@ -193,7 +193,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof ActionDefaultsFacetViaMethod);
         final ActionDefaultsFacetViaMethod actionDefaultFacetViaMethod = (ActionDefaultsFacetViaMethod) facet;
-        assertEquals(defaultMethod, actionDefaultFacetViaMethod.getMethods().get(0));
+        assertEquals(defaultMethod, actionDefaultFacetViaMethod.getMethods().getFirstOrFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(defaultMethod));
     }
@@ -248,7 +248,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof ActionChoicesFacetViaMethod);
         final ActionChoicesFacetViaMethod actionChoicesFacetViaMethod = (ActionChoicesFacetViaMethod) facet;
-        assertEquals(choicesMethod, actionChoicesFacetViaMethod.getMethods().get(0));
+        assertEquals(choicesMethod, actionChoicesFacetViaMethod.getMethods().getFirstOrFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(choicesMethod));
     }
@@ -314,7 +314,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         assertNotNull(facet0);
         assertTrue(facet0 instanceof ActionParameterDefaultsFacetViaMethod);
         final ActionParameterDefaultsFacetViaMethod actionDefaultFacetViaMethod0 = (ActionParameterDefaultsFacetViaMethod) facet0;
-        assertEquals(default0Method, actionDefaultFacetViaMethod0.getMethods().get(0));
+        assertEquals(default0Method, actionDefaultFacetViaMethod0.getMethods().getFirstOrFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(default0Method));
 
@@ -322,7 +322,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         assertNotNull(facet1);
         assertTrue(facet1 instanceof ActionParameterDefaultsFacetViaMethod);
         final ActionParameterDefaultsFacetViaMethod actionDefaultFacetViaMethod1 = (ActionParameterDefaultsFacetViaMethod) facet1;
-        assertEquals(default1Method, actionDefaultFacetViaMethod1.getMethods().get(0));
+        assertEquals(default1Method, actionDefaultFacetViaMethod1.getMethods().getFirstOrFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(default1Method));
 
@@ -369,7 +369,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         assertNotNull(facet0);
         assertTrue(facet0 instanceof ActionParameterChoicesFacetViaMethod);
         final ActionParameterChoicesFacetViaMethod actionChoicesFacetViaMethod0 = (ActionParameterChoicesFacetViaMethod) facet0;
-        assertEquals(choices0Method, actionChoicesFacetViaMethod0.getMethods().get(0));
+        assertEquals(choices0Method, actionChoicesFacetViaMethod0.getMethods().getFirstOrFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(choices0Method));
 
@@ -377,7 +377,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         assertNotNull(facet1);
         assertTrue(facet1 instanceof ActionParameterChoicesFacetViaMethod);
         final ActionParameterChoicesFacetViaMethod actionChoicesFacetViaMethod1 = (ActionParameterChoicesFacetViaMethod) facet1;
-        assertEquals(choices1Method, actionChoicesFacetViaMethod1.getMethods().get(0));
+        assertEquals(choices1Method, actionChoicesFacetViaMethod1.getMethods().getFirstOrFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(choices1Method));
 
@@ -385,7 +385,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         assertNotNull(facet2);
         assertTrue(facet2 instanceof ActionParameterChoicesFacetViaMethod);
         final ActionParameterChoicesFacetViaMethod actionChoicesFacetViaMethod2 = (ActionParameterChoicesFacetViaMethod) facet2;
-        assertEquals(choices2Method, actionChoicesFacetViaMethod2.getMethods().get(0));
+        assertEquals(choices2Method, actionChoicesFacetViaMethod2.getMethods().getFirstOrFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(choices2Method));
 
@@ -421,7 +421,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         assertNotNull(facet0);
         assertTrue(facet0 instanceof ActionParameterAutoCompleteFacetViaMethod);
         final ActionParameterAutoCompleteFacetViaMethod actionAutoCompleteFacetViaMethod0 = (ActionParameterAutoCompleteFacetViaMethod) facet0;
-        assertEquals(autoComplete0Method, actionAutoCompleteFacetViaMethod0.getMethods().get(0));
+        assertEquals(autoComplete0Method, actionAutoCompleteFacetViaMethod0.getMethods().getFirstOrFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(autoComplete0Method));
     }

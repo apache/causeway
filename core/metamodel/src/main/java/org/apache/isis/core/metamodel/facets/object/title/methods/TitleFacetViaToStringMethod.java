@@ -20,33 +20,26 @@
 package org.apache.isis.core.metamodel.facets.object.title.methods;
 
 import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
+import lombok.Getter;
+import lombok.NonNull;
+
 public class TitleFacetViaToStringMethod
 extends TitleFacetAbstract
 implements ImperativeFacet {
 
-    private final Method method;
+    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
 
     public TitleFacetViaToStringMethod(final Method method, final FacetHolder holder) {
         super(holder, Precedence.DERIVED);
-        this.method = method;
-    }
-
-    /**
-     * Returns a singleton list of the {@link Method} provided in the
-     * constructor.
-     */
-    @Override
-    public List<Method> getMethods() {
-        return Collections.singletonList(method);
+        this.methods = Can.ofSingleton(method);
     }
 
     @Override

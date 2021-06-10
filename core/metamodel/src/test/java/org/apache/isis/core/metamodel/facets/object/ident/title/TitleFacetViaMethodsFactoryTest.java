@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.ident.title;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
@@ -64,7 +65,7 @@ public class TitleFacetViaMethodsFactoryTest extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof TitleFacetViaTitleMethod);
         final TitleFacetViaTitleMethod titleFacetViaTitleMethod = (TitleFacetViaTitleMethod) facet;
-        assertEquals(titleMethod, titleFacetViaTitleMethod.getMethods().get(0));
+        assertEquals(titleMethod, titleFacetViaTitleMethod.getMethods().getFirstOrFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(titleMethod));
     }
@@ -84,15 +85,17 @@ public class TitleFacetViaMethodsFactoryTest extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof TitleFacetViaToStringMethod);
         final TitleFacetViaToStringMethod titleFacetViaTitleMethod = (TitleFacetViaToStringMethod) facet;
-        assertEquals(toStringMethod, titleFacetViaTitleMethod.getMethods().get(0));
+        assertEquals(toStringMethod, titleFacetViaTitleMethod.getMethods().getFirstOrFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(toStringMethod));
     }
 
-    public void testTitleFacetMethodUsingToStringIsClassifiedAsANoop() {
+    public void testTitleFacetMethodUsingToStringIsClassifiedAsANoop() throws NoSuchMethodException, SecurityException {
+
+        final Method sampleMethod = Object.class.getMethod("toString", _Constants.emptyClasses);
         assertEquals(
                 Precedence.DERIVED,
-                new TitleFacetViaToStringMethod(null, facetedMethod).getPrecedence());
+                new TitleFacetViaToStringMethod(sampleMethod, facetedMethod).getPrecedence());
     }
 
     public void testNoExplicitTitleOrToStringMethod() {

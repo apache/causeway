@@ -46,9 +46,9 @@ implements ActionParameterHiddenFacet {
         }
         val actionArgVisibilityContext = (ActionArgVisibilityContext) context;
         return isHidden(
-                actionArgVisibilityContext.getTarget(),
-                actionArgVisibilityContext.getArgs())
+                    actionArgVisibilityContext.getTarget(),
+                    actionArgVisibilityContext.getArgs())
                 ? "Hidden"
-                        : null;
+                : null;
     }
 }

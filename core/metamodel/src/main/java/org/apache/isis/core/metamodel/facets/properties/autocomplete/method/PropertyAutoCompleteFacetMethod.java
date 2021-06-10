@@ -20,10 +20,9 @@
 package org.apache.isis.core.metamodel.facets.properties.autocomplete.method;
 
 import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -32,13 +31,15 @@ import org.apache.isis.core.metamodel.facets.properties.autocomplete.PropertyAut
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
+import lombok.Getter;
+import lombok.NonNull;
 import lombok.val;
 
 public class PropertyAutoCompleteFacetMethod
 extends PropertyAutoCompleteFacetAbstract
 implements ImperativeFacet {
 
-    private final Method method;
+    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
     private final Class<?> choicesClass;
     private final int minLength;
 
@@ -47,18 +48,9 @@ implements ImperativeFacet {
             final Class<?> choicesClass,
             final FacetHolder holder) {
         super(holder);
-        this.method = method;
+        this.methods = Can.ofSingleton(method);
         this.choicesClass = choicesClass;
         this.minLength = MinLengthUtil.determineMinLength(method);
-    }
-
-    /**
-     * Returns a singleton list of the {@link Method} provided in the
-     * constructor.
-     */
-    @Override
-    public List<Method> getMethods() {
-        return Collections.singletonList(method);
     }
 
     @Override
@@ -77,6 +69,7 @@ implements ImperativeFacet {
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
+        val method = methods.getFirstOrFail();
         final Object collectionOrArray = ManagedObjects.InvokeUtil.invoke(method, owningAdapter, searchArg);
         if (collectionOrArray == null) {
             return null;
@@ -92,6 +85,7 @@ implements ImperativeFacet {
 
     @Override
     protected String toStringValues() {
+        val method = methods.getFirstOrFail();
         return "method=" + method + ",class=" + choicesClass;
     }
 

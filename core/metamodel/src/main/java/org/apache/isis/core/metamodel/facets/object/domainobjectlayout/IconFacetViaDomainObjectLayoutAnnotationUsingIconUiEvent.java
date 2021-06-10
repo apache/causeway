@@ -35,7 +35,8 @@ import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
-public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent extends IconFacetAbstract {
+public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent
+extends IconFacetAbstract {
 
     public static Facet create(
             final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
@@ -109,7 +110,8 @@ public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent extends Ic
         }
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+    @Override
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("iconUiEventClass", iconUiEventClass);
     }

@@ -659,7 +659,7 @@ public final class ManagedObjects {
             return invokeWithPPM(ppmConstructor, method, adapter, argumentAdapters, Collections.emptyList());
         }
 
-        public static void invokeAll(Collection<Method> methods, final ManagedObject adapter) {
+        public static void invokeAll(Iterable<Method> methods, final ManagedObject adapter) {
             MethodUtil.invoke(methods, UnwrapUtil.single(adapter));
         }
 

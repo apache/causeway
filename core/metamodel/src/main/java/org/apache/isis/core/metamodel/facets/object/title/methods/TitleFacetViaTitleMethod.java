@@ -20,44 +20,38 @@
 package org.apache.isis.core.metamodel.facets.object.title.methods;
 
 import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
+import lombok.Getter;
+import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class TitleFacetViaTitleMethod extends TitleFacetAbstract implements ImperativeFacet {
+public class TitleFacetViaTitleMethod
+extends TitleFacetAbstract
+implements ImperativeFacet {
 
-    private final Method method;
+    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
     private final TranslationService translationService;
     private final TranslationContext translationContext;
 
     public TitleFacetViaTitleMethod(final Method method, final TranslationService translationService,
     		final TranslationContext translationContext, final FacetHolder holder) {
         super(holder);
-        this.method = method;
+        this.methods = Can.ofSingleton(method);
         this.translationService = translationService;
         this.translationContext = translationContext;
-    }
-
-    /**
-     * Returns a singleton list of the {@link Method} provided in the
-     * constructor.
-     */
-    @Override
-    public List<Method> getMethods() {
-        return Collections.singletonList(method);
     }
 
     @Override
@@ -72,6 +66,7 @@ public class TitleFacetViaTitleMethod extends TitleFacetAbstract implements Impe
             return null;
         }
 
+        val method = methods.getFirstOrFail();
         try {
             final Object returnValue = ManagedObjects.InvokeUtil.invoke(method, owningAdapter);
             if(returnValue instanceof String) {
@@ -93,7 +88,8 @@ public class TitleFacetViaTitleMethod extends TitleFacetAbstract implements Impe
         }
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+    @Override
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
     }

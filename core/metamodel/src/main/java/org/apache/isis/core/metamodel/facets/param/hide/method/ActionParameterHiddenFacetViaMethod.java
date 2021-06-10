@@ -21,8 +21,6 @@ package org.apache.isis.core.metamodel.facets.param.hide.method;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -33,11 +31,15 @@ import org.apache.isis.core.metamodel.facets.param.hide.ActionParameterHiddenFac
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.val;
+
 public class ActionParameterHiddenFacetViaMethod
 extends ActionParameterHiddenFacetAbstract
 implements ImperativeFacet {
 
-    private final Method method;
+    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
     private final Optional<Constructor<?>> ppmFactory;
 
     public ActionParameterHiddenFacetViaMethod(
@@ -46,17 +48,8 @@ implements ImperativeFacet {
             final FacetHolder holder) {
 
         super(holder);
-        this.method = method;
+        this.methods = Can.ofSingleton(method);
         this.ppmFactory = ppmFactory;
-    }
-
-    /**
-     * Returns a singleton list of the {@link Method} provided in the
-     * constructor.
-     */
-    @Override
-    public List<Method> getMethods() {
-        return Collections.singletonList(method);
     }
 
     @Override
@@ -69,6 +62,7 @@ implements ImperativeFacet {
             final ManagedObject owningAdapter,
             final Can<ManagedObject> argumentAdapters) {
 
+        val method = methods.getFirstOrFail();
         final Object returnValue = ppmFactory.isPresent()
                 ? ManagedObjects.InvokeUtil.invokeWithPPM(ppmFactory.get(), method, owningAdapter, argumentAdapters)
                 : ManagedObjects.InvokeUtil.invokeAutofit(method, owningAdapter, argumentAdapters);
@@ -82,6 +76,7 @@ implements ImperativeFacet {
 
     @Override
     protected String toStringValues() {
+        val method = methods.getFirstOrFail();
         return "method=" + method;
     }
 

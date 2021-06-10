@@ -20,13 +20,12 @@
 package org.apache.isis.core.metamodel.facets.properties.validating.method;
 
 import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.properties.validating.PropertyValidateFacetAbstract;
@@ -52,8 +51,8 @@ public class PropertyValidateFacetViaMethod extends PropertyValidateFacetAbstrac
      * constructor.
      */
     @Override
-    public List<Method> getMethods() {
-        return Collections.singletonList(method);
+    public Can<Method> getMethods() {
+        return Can.ofSingleton(method);
     }
 
     @Override

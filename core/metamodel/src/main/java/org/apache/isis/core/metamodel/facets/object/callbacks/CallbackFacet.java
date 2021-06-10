@@ -28,26 +28,21 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
  * A {@link Facet} that represents some type of lifecycle callback on the object
  * (eg about to be persisted).
  */
-public interface CallbackFacet extends Facet, ImperativeFacetMulti {
+public interface CallbackFacet
+extends Facet, ImperativeFacetMulti {
 
     public void invoke(ManagedObject object);
 
-    public static final class Util {
-
-        private Util() {
-        }
-
-        public static void callCallback(final ManagedObject object, final Class<? extends Facet> cls) {
-            final CallbackFacet facet = (CallbackFacet) object.getSpecification().getFacet(cls);
-            if (facet != null) {
-                try {
-                    facet.invoke(object);
-                } catch (final RuntimeException e) {
-                    throw new DomainModelException("Callback failed.  Calling " + facet + " on " + object, e);
-                }
+    public static void callCallback(final ManagedObject object, final Class<? extends Facet> cls) {
+        final CallbackFacet facet = (CallbackFacet) object.getSpecification().getFacet(cls);
+        if (facet != null) {
+            try {
+                facet.invoke(object);
+            } catch (final RuntimeException e) {
+                throw new DomainModelException("Callback failed.  Calling " + facet + " on " + object, e);
             }
         }
-
     }
+
 
 }
