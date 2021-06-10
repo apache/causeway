@@ -30,6 +30,12 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 import lombok.val;
 
+/**
+ * Convenience fixture script intended to be easily subclassed in order to set up an
+ * {@link org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole} with associated permissions.
+ *
+ * @since 2.x {@index}
+ */
 public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScript {
 
     @Inject private ApplicationRoleRepository applicationRoleRepository;

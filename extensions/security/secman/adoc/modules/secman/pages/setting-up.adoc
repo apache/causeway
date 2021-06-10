@@ -137,7 +137,9 @@ This is discussed in more detail <<user-registration-aka-sign-up,below>>.
 
 With SecMan enabled, it will automatically seed a security super-user and a regular role.
 It also creates a number of other roles to provide access to specific features of the framework (or its extensions).
-These are summarised here:
+This seeding is performed by the  xref:refguide:extensions:index/secman/applib/seed/SeedSecurityModuleService.adoc[SeedSecurityModuleService], which calls xref:refguide:extensions:index/secman/applib/seed/scripts/SeedUsersAndRolesFixtureScript.adoc[SeedUsersAndRolesFixtureScript].
+
+The full list of roles set up is summarised here:
 
 * Available in both production and prototype mode
 
@@ -178,7 +180,7 @@ Access the swagger UI (from the "Prototyping" menu)
 +
 Impersonate other users (from the "Prototyping" menu, and mixins)
 
-The full list can be found by searching for subclasses of `AbstractRoleAndPermissionsFixtureScript`.
+The full list can be found by searching for subclasses of xref:refguide:extensions:index/secman/applib/role/fixtures/ AbstractRoleAndPermissionsFixtureScript.adoc[AbstractRoleAndPermissionsFixtureScript].
 
 
 == Creating Users
@@ -191,11 +193,62 @@ This will return an xref:refguide:extensions:index/secman/applib/user/dom/Applic
 
 If prototyping with an in-memory database then you will most likely want to set up some fixture scripts to automatically set up application users.
 
-SecMan automatically seeds the built-in roles and users, so it is only necessary to setup roles and users specific to the application.
+As noted <<default-roles, above>>, SecMan automatically seeds the built-in roles and users, so it is only necessary to set up roles and users specific to the application.
 
-In addition to the <<default-roles, default roles and users>>, you will of course need to define custom roles/perms for your own application.
+To save some boilerplate, you can subclass:
 
-For example, these scripts can be used to set up access to the domain objects in the xref:docs:starters:helloworld.adoc[HelloWorld] starter app:
+* xref:refguide:extensions:index/secman/applib/role/fixtures/AbstractRoleAndPermissionsFixtureScript.adoc[AbstractRoleAndPermissionsFixtureScript]
++
+to create a role and associated permissions
+
+* xref:refguide:extensions:index/secman/applib/user/fixtures/AbstractUserAndRolesFixtureScript.adoc[AbstractUserAndRolesFixtureScript]
++
+to create a user and associated roles.
+
+You then will need a way to automatically ensure these users/roles are set up on bootstrapping; this is discussed next.
+
+[#custom-seed-service]
+=== Custom Seed Service
+
+When developing the app you will probably be using the H2 in-memory database, and so you'll want to ensure that the roles and (perhaps) users are automatically seeded into the database.
+Even when running in production with a persistent database, running a default set of fixture scripts may be worthwihle.
+
+One option to setup these users/roles would be to use the xref:refguide:config:sections/isis.testing.adoc#isis.testing.fixtures.initial-script[isis.testing.fixtures.initial-script] configuration property.
+However the purpose of that config property is meant to be to specify a demo scenario for demoing/prototyping, so that's probably not the smartest approach.
+
+Better is to write a little domain service to do the seeding of security data for you.
+The service below will set up the default roles and permissions for the framework's own modules:
+
+[source,java]
+.SeedUsersAndRoles.java
+----
+@Service
+@Order(OrderPrecedence.MIDPOINT + 10)
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
+public class SeedSecurityService {
+
+    private final FixtureScripts fixtureScripts;
+    private final TransactionService transactionService;
+
+    @EventListener(MetamodelEvent.class)
+    public void onMetamodelEvent(final MetamodelEvent event) {
+        if (event.isPostMetamodel()) {
+            runScripts();
+            transactionService.flushTransaction();
+        }
+    }
+
+    private void runScripts() {
+        fixtureScripts.run(new CustomRolesAndUsers());
+    }
+}
+----
+
+where `CustomRolesAndUsers` is a top-level fixture script to set up the application-specific users and roles.
+
+=== Examples
+
+For example, the following scripts could be used to set up access to the domain objects in the xref:docs:starters:helloworld.adoc[HelloWorld] starter app:
 
 * to set up a "user-rw" role with access to everything under the "hello" namespace:
 +
@@ -278,38 +331,8 @@ public class UserToRole__joe_UserRw_but_NoDelete
 <.> specific access to framework features, see <<default-roles,above>>
 
 
-You will probably want to ensure that the roles and (perhaps) users are automatically seeded into the database.
-One option is to use the xref:refguide:config:sections/isis.testing.adoc#isis.testing.fixtures.initial-script[isis.testing.fixtures.initial-script] configuration property, but the purpose of that config property is meant to be to specify a demo scenario for demoing/prototyping.
-
-Better is to write a little domain service to do the seeding of security data for you.
-The service below will set up the default roles and permissions for the framework's own modules:
-
-[source,java]
-.SeedUsersAndRoles.java
-----
-@Service
-@Order(OrderPrecedence.MIDPOINT + 10)
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class SeedSecurityService {
-
-    private final FixtureScripts fixtureScripts;
-    private final TransactionService transactionService;
-
-    @EventListener(MetamodelEvent.class)
-    public void onMetamodelEvent(final MetamodelEvent event) {
-        if (event.isPostMetamodel()) {
-            runScripts();
-            transactionService.flushTransaction();
-        }
-    }
-
-    private void runScripts() {
-        fixtureScripts.run(new CustomRolesAndUsers());
-    }
-}
-----
-
-where `CustomRolesAndUsers` is application-specific, for example:
+To seed in fixture scripts we could create a top-level `CustomRolesAndUsers` script (as mentioned in <<custom-seed-service,above>>).
+This would then look something like:
 
 [source,java]
 .CustomRolesAndUsers.java
@@ -326,6 +349,9 @@ public class CustomRolesAndUsers extends FixtureScript {
     }
 }
 ----
+
+The custom seed service would then ensure that these users/roles existed on startup.
+
 
 [#user-registration-aka-sign-up]
 == User registration (aka Sign-up)

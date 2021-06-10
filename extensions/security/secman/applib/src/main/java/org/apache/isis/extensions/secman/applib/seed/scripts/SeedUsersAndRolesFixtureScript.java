@@ -34,11 +34,14 @@ import org.apache.isis.extensions.secman.applib.role.seed.IsisExtSecmanRegularUs
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 /**
- * This fixture script will be run automatically on start-up by virtue of the fact that the
- * {@link SeedSecurityModuleService} is a
- * {@link org.apache.isis.applib.annotation.DomainService} and calls the setup during its
- * {@link SeedSecurityModuleService#onMetamodelEvent(org.apache.isis.core.metamodel.events.MetamodelEvent) init}
- * ({@link javax.annotation.PostConstruct}) method.
+ * Sets up roles and permissions for both Secman itself and also for all other modules that expose UI features
+ * for use by end-users.
+ *
+ * <p>
+ * This fixture script is run automatically on start-up by the {@link SeedSecurityModuleService}.
+ * </p>
+ *
+ * @see SeedSecurityModuleService
  *
  * @since 2.0 {@index}
  */

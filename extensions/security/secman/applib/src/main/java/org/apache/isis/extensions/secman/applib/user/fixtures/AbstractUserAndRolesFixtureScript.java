@@ -32,7 +32,13 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 import lombok.Getter;
 
-public class AbstractUserAndRolesFixtureScript extends FixtureScript {
+/**
+ * Convenience fixture script intended to be easily subclassed in order to set up an
+ * {@link org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser} with associated roles.
+ *
+ * @since 2.x {@index}
+ */
+public abstract class AbstractUserAndRolesFixtureScript extends FixtureScript {
 
     @Inject private ApplicationUserRepository applicationUserRepository;
     @Inject private ApplicationRoleRepository applicationRoleRepository;

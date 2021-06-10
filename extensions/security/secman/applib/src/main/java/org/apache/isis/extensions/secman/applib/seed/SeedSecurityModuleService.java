@@ -34,6 +34,16 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import lombok.extern.log4j.Log4j2;
 
 /**
+ * Automatically seeds the built-in roles (and permissions) for both Secman
+ * and any other UI features made available by the other modules.
+ *
+ * <p>
+ *     The service just runs the {@link SeedUsersAndRolesFixtureScript} on a callback of {@link MetamodelEvent}.
+ * </p>
+ *
+ * @see SeedUsersAndRolesFixtureScript
+ * @see MetamodelEvent
+ *
  * @since 2.0 {@index}
  */
 @Service
