@@ -20,8 +20,9 @@ package org.apache.isis.core.security.authentication;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Optional;
 
-import org.apache.isis.applib.services.iactn.ExecutionContext;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.core.security.authentication.standard.SimpleAuthentication;
 
@@ -29,7 +30,7 @@ import lombok.Getter;
 import lombok.NonNull;
 
 public abstract class AuthenticationAbstract
-implements Authentication, Serializable {
+implements Authentication {
 
     private static final long serialVersionUID = 1L;
 
@@ -38,7 +39,7 @@ implements Authentication, Serializable {
     // -- FIELDS
 
     @Getter(onMethod_ = {@Override})
-    private final @NonNull ExecutionContext executionContext;
+    private final @NonNull InteractionContext interactionContext;
 
     @Getter(onMethod_ = {@Override})
     private final @NonNull String validationCode;
@@ -46,22 +47,24 @@ implements Authentication, Serializable {
     // -- CONSTRUCTOR
 
     protected AuthenticationAbstract(
-            final @NonNull ExecutionContext executionContext,
+            final @NonNull InteractionContext interactionContext,
             final @NonNull String validationCode) {
 
-        this.executionContext = executionContext;
+        this.interactionContext = interactionContext;
+        this.interactionContext.putAttribute(INTERACTION_CONTEXT_KEY, this);
+
         this.validationCode = validationCode;
     }
+
 
     // -- WITHERS
 
     /**
-     * Returns a copy with given {@code executionContext}.
-     * @param executionContext
+     * Returns a copy with given {@code interactionContext}.
+     * @param interactionContext
      */
-    @Override
-    public Authentication withExecutionContext(final @NonNull ExecutionContext executionContext) {
-        return new SimpleAuthentication(executionContext, validationCode);
+    public Authentication withInteractionContext(final @NonNull InteractionContext interactionContext) {
+        return new SimpleAuthentication(interactionContext, validationCode);
     }
 
     // -- TO STRING, EQUALS, HASHCODE
@@ -96,7 +99,7 @@ implements Authentication, Serializable {
         if(!Objects.equals(this.getValidationCode(), other.getValidationCode())) {
             return false;
         }
-        if(!Objects.equals(this.getExecutionContext(), other.getExecutionContext())) {
+        if(!Objects.equals(this.getInteractionContext(), other.getInteractionContext())) {
             return false;
         }
         return true;

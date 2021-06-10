@@ -55,7 +55,7 @@ public class ResourceContext_getArg_Test {
     @Mock private HttpServletRequest mockHttpServletRequest;
     @Mock private ServletContext mockServletContext;
     @Mock private IsisInteraction mockIsisInteraction;
-    @Mock private InteractionFactory mockIsisInteractionFactory;
+    @Mock private InteractionFactory mockInteractionFactory;
     @Mock private InteractionTracker mockIsisInteractionTracker;
     @Mock private AuthenticationManager mockAuthenticationManager;
     @Mock private Authentication mockAuthentication;
@@ -72,7 +72,7 @@ public class ResourceContext_getArg_Test {
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
-                .singleton(mockIsisInteractionFactory)
+                .singleton(mockInteractionFactory)
                 .singleton(mockAuthenticationManager)
                 .singleton(mockIsisInteractionTracker)
                 //                .serviceInjector(mockServiceInjector)
@@ -84,19 +84,19 @@ public class ResourceContext_getArg_Test {
 
 
         context.checking(new Expectations() {{
-                
+
                 allowing(webApplicationContext).getBean(MetaModelContext.class);
                 will(returnValue(metaModelContext));
-            
+
                 allowing(mockServletContext).getAttribute("org.springframework.web.context.WebApplicationContext.ROOT");
                 will(returnValue(webApplicationContext));
-            
+
                 allowing(mockHttpServletRequest).getServletContext();
                 will(returnValue(mockServletContext));
-                
+
                 allowing(mockHttpServletRequest).getQueryString();
                 will(returnValue(""));
-         
+
         }});
     }
 

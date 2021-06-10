@@ -187,7 +187,7 @@ public class ApplicationLayerTestFactory {
                 return result;
             });
 
-            interactionFactory.closeSessionStack();
+            interactionFactory.closeInteractionLayers();
 
             if(isSuccesfulRun) {
                 verifier.accept(onSuccess);

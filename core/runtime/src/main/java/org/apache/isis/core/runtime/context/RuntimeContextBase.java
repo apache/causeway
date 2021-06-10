@@ -25,12 +25,13 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.interaction.session.InteractionFactory;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.security.authentication.AuthenticationContext;
+import org.apache.isis.core.security.authentication.AuthenticationProvider;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 
 import lombok.Getter;
@@ -51,7 +52,7 @@ public abstract class RuntimeContextBase implements RuntimeContext {
     @Getter(onMethod = @__(@Override)) protected final SpecificationLoader specificationLoader;
     @Getter(onMethod = @__(@Override)) protected final InteractionTracker interactionTracker;
 
-    @Getter protected final InteractionFactory interactionFactory;
+    @Getter protected final InteractionService interactionService;
     @Getter protected final AuthenticationManager authenticationManager;
     @Getter protected final TransactionService transactionService;
     @Getter protected final Supplier<ManagedObject> homePageSupplier;
@@ -68,14 +69,14 @@ public abstract class RuntimeContextBase implements RuntimeContext {
         this.objectManager = mmc.getObjectManager();
         this.transactionService = mmc.getTransactionService();
         this.homePageSupplier = mmc::getHomePageAdapter;
-        this.interactionFactory = serviceRegistry.lookupServiceElseFail(InteractionFactory.class);
+        this.interactionService = serviceRegistry.lookupServiceElseFail(InteractionFactory.class);
         this.authenticationManager = serviceRegistry.lookupServiceElseFail(AuthenticationManager.class);
         this.interactionTracker = serviceRegistry.lookupServiceElseFail(InteractionTracker.class);
     }
 
     // -- AUTH
 
-    public AuthenticationContext getAuthenticationContext() {
+    public AuthenticationProvider getAuthenticationContext() {
         return interactionTracker;
     }
 
@@ -89,7 +90,7 @@ public abstract class RuntimeContextBase implements RuntimeContext {
         .ifPresent(authentication->{
 
             authenticationManager.closeSession(authentication);
-            interactionFactory.closeSessionStack();
+            interactionService.closeInteractionLayers();
 
         });
 

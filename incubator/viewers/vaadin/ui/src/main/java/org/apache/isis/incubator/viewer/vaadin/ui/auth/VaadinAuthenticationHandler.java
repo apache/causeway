@@ -33,7 +33,7 @@ import com.vaadin.flow.theme.lumo.Lumo;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.commons.functional.ThrowingRunnable;
+import org.apache.isis.applib.services.iactnlayer.ThrowingRunnable;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
@@ -121,7 +121,7 @@ implements
 
         val authentication = AuthSessionStoreUtil.get().orElse(null);
         if(authentication!=null) {
-            isisInteractionFactory.openInteraction(authentication);
+            isisInteractionFactory.openInteraction(authentication.getInteractionContext());
             return; // access granted
         }
         // otherwise redirect to login page

@@ -32,7 +32,7 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.interaction.session.InteractionFactory;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 
@@ -50,7 +50,7 @@ public class IsisSignInPanel extends SignInPanel {
 
     private static final long serialVersionUID = 1L;
 
-    @Inject transient InteractionFactory isisInteractionFactory;
+    @Inject transient InteractionService interactionService;
     @Inject transient ServiceInjector serviceInjector;
     @Inject transient ServiceRegistry serviceRegistry;
     @Inject transient private PageClassRegistry pageClassRegistry;

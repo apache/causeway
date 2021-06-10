@@ -77,7 +77,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         context.checking(new Expectations() {{
 
-            allowing(mockAuthenticationContext).currentAuthentication();
+            allowing(mockAuthenticationProvider).currentAuthentication();
             will(returnValue(Optional.of(mockAuthentication)));
         }});
 
@@ -117,7 +117,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         @SuppressWarnings("unused")
         class Customer {
-            
+
             public void someAction() {
             }
 

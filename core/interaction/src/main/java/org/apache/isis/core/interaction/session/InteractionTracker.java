@@ -20,48 +20,69 @@ package org.apache.isis.core.interaction.session;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.services.iactn.ExecutionContext;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.iactn.InteractionContext;
+import org.apache.isis.applib.services.iactn.InteractionProvider;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayer;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.security.authentication.Authentication;
-import org.apache.isis.core.security.authentication.AuthenticationContext;
+import org.apache.isis.core.security.authentication.AuthenticationProvider;
 
 /**
  *
  * @since 2.0
- *
  */
 public interface InteractionTracker
-extends InteractionContext, AuthenticationContext {
+extends InteractionProvider, AuthenticationProvider {
 
     /** @return the AuthenticationLayer that sits on top of the current
      * request- or test-scoped InteractionSession's stack*/
-    Optional<AuthenticationLayer> currentAuthenticationLayer();
+    Optional<InteractionLayer> currentInteractionLayer();
 
-    default AuthenticationLayer currentAuthenticationLayerElseFail() {
-        return currentAuthenticationLayer()
-        .orElseThrow(()->_Exceptions.illegalState("No InteractionSession available on current thread"));
+    default InteractionLayer currentInteractionLayerElseFail() {
+        return currentInteractionLayer()
+        .orElseThrow(()->_Exceptions.illegalState("No InteractionLayer available on current thread"));
     }
 
-    default Optional<ExecutionContext> currentExecutionContext() {
-        return currentAuthenticationLayer().map(AuthenticationLayer::getExecutionContext);
+    /**
+     * Returns the {@link InteractionContext} wrapped by the {@link #currentInteractionLayer()} (if within an interaction layer).
+     */
+    default Optional<InteractionContext> currentExecutionContext() {
+        return currentInteractionLayer().map(InteractionLayer::getInteractionContext);
     }
 
-    // -- AUTHENTICATION CONTEXT
 
+    // -- AUTHENTICATION
+
+    /**
+     * Returns the {@link Authentication} wrapped by the {@link #currentInteractionLayer()} (if within an interaction layer).
+     */
     @Override
     default Optional<Authentication> currentAuthentication() {
-        return currentAuthenticationLayer().map(AuthenticationLayer::getAuthentication);
+        return currentInteractionLayer()
+                .map(InteractionLayer::getInteractionContext)
+                .flatMap(Authentication::authenticationFrom);
     }
 
     // -- INTERACTION CONTEXT
 
+    /**
+     * Returns the {@link InteractionContext} wrapped by the {@link #currentInteractionLayer()} (if within an interaction layer).
+     */
     @Override
-    default Optional<Interaction> currentInteraction(){
-    	return currentAuthenticationLayer().map(AuthenticationLayer::getInteraction);
+    default Optional<InteractionContext> currentInteractionContext() {
+        return currentInteractionLayer().map(InteractionLayer::getInteractionContext);
     }
 
 
+    // -- INTERACTION
+
+    /**
+     * Returns the {@link Interaction} wrapped by the {@link #currentInteractionLayer()} (if within an interaction layer).
+     */
+    @Override
+    default Optional<Interaction> currentInteraction(){
+    	return currentInteractionLayer().map(InteractionLayer::getInteraction);
+    }
 
 }

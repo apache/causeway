@@ -224,18 +224,9 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
         return bookmarkedPagesModel;
     }
 
-
-    // /////////////////////////////////////////////////
-    // Dependencies
-    // /////////////////////////////////////////////////
-
     protected AuthenticationManager getAuthenticationManager() {
         return commonContext.getAuthenticationManager();
     }
-
-    // /////////////////////////////////////////////////
-    // *Provider impl.
-    // /////////////////////////////////////////////////
 
     private void log(
             final SessionLoggingService.Type type,
@@ -243,7 +234,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
             final SessionLoggingService.CausedBy causedBy) {
 
 
-        val isisInteractionFactory = getIsisInteractionFactory();
+        val interactionFactory = getInteractionFactory();
         val sessionLoggingServices = getSessionLoggingServices();
 
         final Runnable loggingTask = ()->{
@@ -257,8 +248,8 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
             );
         };
 
-        if(isisInteractionFactory!=null) {
-            isisInteractionFactory.runAnonymous(loggingTask::run);
+        if(interactionFactory!=null) {
+            interactionFactory.runAnonymous(loggingTask::run);
         } else {
             loggingTask.run();
         }
@@ -268,12 +259,8 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
         return commonContext.getServiceRegistry().select(SessionLoggingService.class);
     }
 
-    protected InteractionFactory getIsisInteractionFactory() {
+    protected InteractionFactory getInteractionFactory() {
         return commonContext.lookupServiceElseFail(InteractionFactory.class);
-    }
-
-    protected InteractionTracker getIsisInteractionTracker() {
-        return commonContext.getInteractionTracker();
     }
 
     private VirtualClock virtualClock() {

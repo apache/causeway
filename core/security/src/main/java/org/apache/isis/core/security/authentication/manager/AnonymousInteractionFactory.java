@@ -20,7 +20,7 @@ package org.apache.isis.core.security.authentication.manager;
 
 import java.util.concurrent.Callable;
 
-import org.apache.isis.commons.functional.ThrowingRunnable;
+import org.apache.isis.applib.services.iactnlayer.ThrowingRunnable;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -38,10 +38,19 @@ import lombok.SneakyThrows;
  */
 public interface AnonymousInteractionFactory {
 
-    // for java-doc see InteractionFactory
+    /**
+     * Executes a block of code with anonymous credentials.
+     *
+     * @param runnable
+     */
     void runAnonymous(@NonNull ThrowingRunnable runnable);
 
-    // for java-doc see InteractionFactory
+    /**
+     * Executes a block of code with anonymous credentials.
+     *
+     * @param <R>
+     * @param callable (non-null)
+     */
     <R> R callAnonymous(@NonNull Callable<R> callable);
 
 

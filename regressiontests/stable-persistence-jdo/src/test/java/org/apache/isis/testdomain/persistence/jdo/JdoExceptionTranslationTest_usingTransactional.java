@@ -42,8 +42,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.commons.functional.Result;
-import org.apache.isis.commons.functional.ThrowingRunnable;
+import org.apache.isis.applib.services.iactnlayer.ThrowingRunnable;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.persistence.jdo.spring.integration.JdoTransactionManager;
@@ -54,12 +53,12 @@ import org.apache.isis.testdomain.jdo.entities.JdoInventory;
 import lombok.val;
 
 @SpringBootTest(
-        classes = { 
+        classes = {
                 Configuration_usingJdo.class,
                 JdoInventoryDao.class,
         })
 @TestPropertySources({
-    @TestPropertySource(IsisPresets.UseLog4j2Test)    
+    @TestPropertySource(IsisPresets.UseLog4j2Test)
 })
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class JdoExceptionTranslationTest_usingTransactional
@@ -77,77 +76,77 @@ class JdoExceptionTranslationTest_usingTransactional
         // launch H2Console for troubleshooting ...
         // Util_H2Console.main(null);
     }
-    
-    @Test @Order(1) 
+
+    @Test @Order(1)
     @Transactional @Rollback(false)
     void booksUniqueByIsbn_setupPhase() {
         interactionFactory.runAnonymous(()->{
-            
+
             _TestFixtures.setUp3Books(repositoryService);
-            
+
         });
     }
 
-    @Test @Order(2) 
+    @Test @Order(2)
     void booksUniqueByIsbn_whenViolated_shouldThrowTranslatedException() {
 
         // when adding a book for which one with same ISBN already exists in the database,
         // we expect to see a Spring recognized DataAccessException been thrown
-        
-        final ThrowingRunnable uniqueConstraintViolator = 
+
+        final ThrowingRunnable uniqueConstraintViolator =
                 ()->inventoryDao.get().addBook_havingIsbnA_usingRepositoryService();
-                
+
         assertThrows(DataIntegrityViolationException.class, ()->{
-        
+
             interactionFactory.runAnonymous(()->{
-            
-                Result.ofVoid(uniqueConstraintViolator)
+
+                ThrowingRunnable.resultOf(uniqueConstraintViolator)
                 .ifSuccess(__->fail("expected to fail, but did not"))
                 //.mapFailure(ex->_JdoExceptionTranslator.translate(ex, txManager))
                 .ifFailure(ex->assertTrue(ex instanceof DataIntegrityViolationException))
                 .optionalElseFail();
-            
+
             });
-        
+
         });
-        
-    }    
-    
-    @Test @Order(3) 
+
+    }
+
+    @Test @Order(3)
     @Transactional @Rollback(false)
     void booksUniqueByIsbn_verifyPhase() {
 
         // expected post condition: ONE inventory with 3 books
-        
+
         interactionFactory.runAnonymous(()->{
-            
+
             val inventories = repositoryService.allInstances(JdoInventory.class);
             assertEquals(1, inventories.size());
-            
+
             val inventory = inventories.get(0);
             assertNotNull(inventory);
-            
+
             assertNotNull(inventory);
             assertNotNull(inventory.getProducts());
             assertEquals(3, inventory.getProducts().size());
 
             _TestFixtures.assertInventoryHasBooks(inventory.getProducts(), 1, 2, 3);
-            
+
         });
-        
+
     }
-    
-    @Test @Order(4) 
+
+    @Test @Order(4)
     @Transactional @Rollback(false)
     void booksUniqueByIsbn_cleanupPhase() {
 
         interactionFactory.runAnonymous(()->{
 
             _TestFixtures.cleanUp(repositoryService);
-            
+
         });
-        
+
     }
-    
-    
+
+
 }

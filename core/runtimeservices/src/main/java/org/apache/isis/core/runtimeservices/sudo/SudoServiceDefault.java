@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.runtimeservices.sudo;
 
+import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.function.UnaryOperator;
 
@@ -31,13 +32,16 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.iactn.ExecutionContext;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.sudo.SudoServiceListener;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.interaction.session.InteractionTracker;
+import org.apache.isis.core.runtimeservices.session.AnonymousAuthentication;
+import org.apache.isis.core.security.authentication.Authentication;
+import org.apache.isis.core.security.authentication.standard.SimpleAuthentication;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -69,39 +73,39 @@ public class SudoServiceDefault implements SudoService {
 
     @Override
     public <T> T call(
-            final @NonNull UnaryOperator<ExecutionContext> sudoMapper,
+            final @NonNull UnaryOperator<InteractionContext> sudoMapper,
             final @NonNull Callable<T> callable) {
 
-        val currentInteractionLayer = interactionTracker.currentAuthenticationLayerElseFail();
-        val currentExecutionContext = currentInteractionLayer.getExecutionContext();
-        val sudoExecutionContext = sudoMapper.apply(currentExecutionContext);
+        val currentInteractionLayer = interactionTracker.currentInteractionLayerElseFail();
+        val currentInteractionContext = currentInteractionLayer.getInteractionContext();
+        val sudoInteractionContext = sudoMapper.apply(currentInteractionContext);
 
-        val sodoSession = currentInteractionLayer
-                .getAuthentication()
-                .withExecutionContext(sudoExecutionContext);
+        val authentication = Authentication.authenticationFrom(currentInteractionContext)
+                                .orElse(SimpleAuthentication.validOf(currentInteractionContext));
+        val sudoAuthentication = authentication.withInteractionContext(sudoInteractionContext);
 
         try {
-            beforeCall(currentExecutionContext, sudoExecutionContext);
+            beforeCall(currentInteractionContext, sudoInteractionContext);
 
-            return interactionFactory.callAuthenticated(sodoSession, callable);
+            return interactionFactory.callAuthenticated(sudoAuthentication, callable);
         } finally {
-            afterCall(sudoExecutionContext, currentExecutionContext);
+            afterCall(sudoInteractionContext, currentInteractionContext);
         }
     }
 
     // -- HELPER
 
     private void beforeCall(
-            final @NonNull ExecutionContext before,
-            final @NonNull ExecutionContext after) {
+            final @NonNull InteractionContext before,
+            final @NonNull InteractionContext after) {
         for (val sudoListener : sudoListeners) {
             sudoListener.beforeCall(before, after);
         }
     }
 
     private void afterCall(
-            final @NonNull ExecutionContext before,
-            final @NonNull ExecutionContext after) {
+            final @NonNull InteractionContext before,
+            final @NonNull InteractionContext after) {
         for (val sudoListener : sudoListeners) {
             sudoListener.afterCall(before, after);
         }

@@ -19,7 +19,7 @@
 package org.apache.isis.applib.services.metrics;
 
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.services.iactn.InteractionContext;
+import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.schema.ixn.v2.MemberExecutionDto;
 
 /**
@@ -40,7 +40,7 @@ public interface MetricsService {
      * <p>
      * Corresponds to the number of times that <code>javax.jdo.listener.LoadLifecycleListener#postLoad(InstanceLifecycleEvent)</code> (or equivalent) is fired.
      * <p>
-     * Is captured within {@link MemberExecutionDto#getMetrics()} (accessible from {@link InteractionContext#currentInteraction()}).
+     * Is captured within {@link MemberExecutionDto#getMetrics()} (accessible from {@link InteractionProvider#currentInteraction()}).
      */
     int numberEntitiesLoaded();
 
@@ -50,7 +50,7 @@ public interface MetricsService {
      * <p>
      * Corresponds to the number of times that <code>javax.jdo.listener.DirtyLifecycleListener#preDirty(InstanceLifecycleEvent)</code> (or equivalent) callback is fired.
      * <p>
-     * Is captured within {@link MemberExecutionDto#getMetrics()} (accessible from {@link InteractionContext#currentInteraction()}.
+     * Is captured within {@link MemberExecutionDto#getMetrics()} (accessible from {@link InteractionProvider#currentInteraction()}.
      */
     int numberEntitiesDirtied();
 

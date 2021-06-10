@@ -21,16 +21,16 @@ package org.apache.isis.applib.services.sudo;
 import java.util.concurrent.Callable;
 import java.util.function.UnaryOperator;
 
-import org.apache.isis.applib.services.iactn.ExecutionContext;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.user.RoleMemento;
 import org.apache.isis.applib.services.user.UserService;
-import org.apache.isis.commons.functional.ThrowingRunnable;
+import org.apache.isis.applib.services.iactnlayer.ThrowingRunnable;
 
 import lombok.NonNull;
 
 /**
  * Allows a block of code to be executed within an arbitrary
- * {@link ExecutionContext}, allowing the who, when and where to be temporarily
+ * {@link InteractionContext}, allowing the who, when and where to be temporarily
  * switched.
  *
  * <p>
@@ -61,24 +61,24 @@ public interface SudoService {
 
     /**
      * Executes the supplied {@link Callable} block, within the provided
-     * {@link ExecutionContext}.
+     * {@link InteractionContext}.
      *
-     * @param sudoMapper - maps the current {@link ExecutionContext} to the sudo one
+     * @param sudoMapper - maps the current {@link InteractionContext} to the sudo one
      * @since 2.0
      */
     <T> T call(
-            final @NonNull UnaryOperator<ExecutionContext> sudoMapper,
+            final @NonNull UnaryOperator<InteractionContext> sudoMapper,
             final @NonNull Callable<T> supplier);
 
     /**
      * Executes the supplied {@link Callable} block, within the provided
-     * {@link ExecutionContext}.
+     * {@link InteractionContext}.
      *
-     * @param sudoMapper - maps the current {@link ExecutionContext} to the sudo one
+     * @param sudoMapper - maps the current {@link InteractionContext} to the sudo one
      * @since 2.0
      */
     default void run(
-            final @NonNull UnaryOperator<ExecutionContext> sudoMapper,
+            final @NonNull UnaryOperator<InteractionContext> sudoMapper,
             final @NonNull ThrowingRunnable runnable) {
         call(sudoMapper, ThrowingRunnable.toCallable(runnable));
     }

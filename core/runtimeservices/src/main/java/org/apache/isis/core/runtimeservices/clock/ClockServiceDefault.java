@@ -29,7 +29,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.applib.services.iactn.ExecutionContext;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 
 import lombok.RequiredArgsConstructor;
@@ -47,7 +47,7 @@ public class ClockServiceDefault implements ClockService {
     @Override
     public VirtualClock getClock() {
         return interactionTracker.currentExecutionContext()
-        .map(ExecutionContext::getClock)
+        .map(InteractionContext::getClock)
         .orElseGet(VirtualClock::system);
     }
 

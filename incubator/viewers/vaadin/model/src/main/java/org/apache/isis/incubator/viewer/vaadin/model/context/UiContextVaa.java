@@ -24,14 +24,14 @@ import java.util.function.Supplier;
 
 import com.vaadin.flow.component.Component;
 
-import org.apache.isis.core.interaction.session.InteractionFactory;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public interface UiContextVaa {
 
     //JavaFxViewerConfig getJavaFxViewerConfig();
 
-    InteractionFactory getIsisInteractionFactory();
+    InteractionService getIsisInteractionFactory();
     //ActionUiModelFactoryFx getActionUiModelFactory();
 
     void setNewPageHandler(Consumer<Component> onNewPage);

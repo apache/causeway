@@ -43,7 +43,7 @@ import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.security.authentication.Authentication;
-import org.apache.isis.core.security.authentication.AuthenticationContext;
+import org.apache.isis.core.security.authentication.AuthenticationProvider;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
 import junit.framework.TestCase;
@@ -67,7 +67,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
     }
 
     protected TranslationService mockTranslationService;
-    protected AuthenticationContext mockAuthenticationContext;
+    protected AuthenticationProvider mockAuthenticationProvider;
     protected Authentication mockAuthentication;
     protected SpecificationLoader mockSpecificationLoader;
     protected MethodRemoverForTesting methodRemover;
@@ -107,7 +107,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
 
         methodRemover = new MethodRemoverForTesting();
 
-        mockAuthenticationContext = context.mock(AuthenticationContext.class);
+        mockAuthenticationProvider = context.mock(AuthenticationProvider.class);
 
         mockTranslationService = context.mock(TranslationService.class);
         mockAuthentication = context.mock(Authentication.class);
@@ -117,19 +117,19 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
                 .translationService(mockTranslationService)
-                .authenticationContext(mockAuthenticationContext)
+                .authenticationProvider(mockAuthenticationProvider)
                 .build();
 
         context.checking(new Expectations() {{
 
-            allowing(mockAuthenticationContext).currentAuthentication();
+            allowing(mockAuthenticationProvider).currentAuthentication();
             will(returnValue(Optional.of(mockAuthentication)));
         }});
-        
+
         ((MetaModelContextAware)facetHolder).setMetaModelContext(metaModelContext);
         facetedMethod.setMetaModelContext(metaModelContext);
         facetedMethodParameter.setMetaModelContext(metaModelContext);
-        
+
         jdoFacetContext = jdoFacetContextForTesting();
     }
 
@@ -170,7 +170,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         assertTrue(methodRemover.getRemovedMethodMethodCalls().isEmpty());
         assertTrue(methodRemover.getRemoveMethodArgsCalls().isEmpty());
     }
-    
+
     public static JdoFacetContext jdoFacetContextForTesting() {
         return new JdoFacetContext() {
             @Override public boolean isPersistenceEnhanced(Class<?> cls) {

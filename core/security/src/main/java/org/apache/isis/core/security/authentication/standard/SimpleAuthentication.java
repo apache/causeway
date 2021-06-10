@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.security.authentication.standard;
 
-import org.apache.isis.applib.services.iactn.ExecutionContext;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.core.security.authentication.AuthenticationAbstract;
 
@@ -37,7 +37,7 @@ extends AuthenticationAbstract {
     public static SimpleAuthentication of(
             final @NonNull UserMemento user,
             final @NonNull String validationCode) {
-        return new SimpleAuthentication(ExecutionContext.ofUserWithSystemDefaults(user), validationCode);
+        return new SimpleAuthentication(InteractionContext.ofUserWithSystemDefaults(user), validationCode);
     }
 
     public static SimpleAuthentication validOf(
@@ -45,12 +45,17 @@ extends AuthenticationAbstract {
         return of(user, DEFAULT_AUTH_VALID_CODE);
     }
 
+    public static SimpleAuthentication validOf(
+            final @NonNull InteractionContext interactionContext) {
+        return new SimpleAuthentication(interactionContext, DEFAULT_AUTH_VALID_CODE);
+    }
+
     // -- CONSTRUCTOR
 
     public SimpleAuthentication(
-            final @NonNull ExecutionContext executionContext,
+            final @NonNull InteractionContext interactionContext,
             final @NonNull String validationCode) {
-        super(executionContext, validationCode);
+        super(interactionContext, validationCode);
     }
 
     @Getter @Setter

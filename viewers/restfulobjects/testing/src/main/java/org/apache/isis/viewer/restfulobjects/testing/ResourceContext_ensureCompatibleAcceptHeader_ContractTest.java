@@ -65,7 +65,7 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
     @Mock HttpHeaders mockHttpHeaders;
     @Mock HttpServletRequest mockHttpServletRequest;
     @Mock ServletContext mockServletContext;
-    @Mock InteractionFactory mockIsisInteractionFactory;
+    @Mock InteractionFactory mockInteractionFactory;
     @Mock Interaction mockInteraction;
     @Mock Authentication mockAuthentication;
     @Mock SpecificationLoader mockSpecificationLoader;
@@ -85,7 +85,7 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
                 .authentication(mockAuthentication)
                 .singleton(mockAuthenticationManager)
                 .singleton(mockIsisInteractionTracker)
-                .singleton(mockIsisInteractionFactory)
+                .singleton(mockInteractionFactory)
                 .build();
 
         context.checking(new Expectations() {

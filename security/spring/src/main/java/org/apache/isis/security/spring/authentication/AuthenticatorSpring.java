@@ -28,7 +28,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.security.authentication.Authentication;
-import org.apache.isis.core.security.authentication.AuthenticationContext;
+import org.apache.isis.core.security.authentication.AuthenticationProvider;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.Authenticator;
 
@@ -41,7 +41,7 @@ import org.apache.isis.core.security.authentication.Authenticator;
 @Qualifier("Spring")
 public class AuthenticatorSpring implements Authenticator {
 
-    @Inject private AuthenticationContext authenticationTracker;
+    @Inject private AuthenticationProvider authenticationProvider;
 
     @Override
     public final boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass) {
@@ -51,7 +51,7 @@ public class AuthenticatorSpring implements Authenticator {
     @Override
     public Authentication authenticate(final AuthenticationRequest request, final String code) {
         // SpringSecurityFilter should already have taken care of Authentication creation
-        return authenticationTracker.currentAuthentication().orElse(null);
+        return authenticationProvider.currentAuthentication().orElse(null);
     }
 
     @Override

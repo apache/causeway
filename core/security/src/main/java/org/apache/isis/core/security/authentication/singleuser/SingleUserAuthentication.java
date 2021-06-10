@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.security.authentication.singleuser;
 
-import org.apache.isis.applib.services.iactn.ExecutionContext;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.core.security.authentication.AuthenticationAbstract;
 
@@ -26,8 +26,8 @@ public final class SingleUserAuthentication extends AuthenticationAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    private static final ExecutionContext DEFAULT_SINGLE_USER_ENVIRONMENT =
-            ExecutionContext.ofUserWithSystemDefaults(
+    private static final InteractionContext DEFAULT_SINGLE_USER_ENVIRONMENT =
+            InteractionContext.ofUserWithSystemDefaults(
                     UserMemento.ofName("prototyping"));
 
     /**

@@ -45,7 +45,7 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.security.authentication.AuthenticationContext;
+import org.apache.isis.core.security.authentication.AuthenticationProvider;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -69,8 +69,8 @@ abstract class SpecificationLoaderTestAbstract {
             return config;
         }
 
-        AuthenticationContext mockAuthenticationProvider() {
-            return Mockito.mock(AuthenticationContext.class);
+        AuthenticationProvider mockAuthenticationProvider() {
+            return Mockito.mock(AuthenticationProvider.class);
         }
 
         GridService mockGridService() {
@@ -103,7 +103,7 @@ abstract class SpecificationLoaderTestAbstract {
 
     protected IsisConfiguration isisConfiguration;
     protected SpecificationLoader specificationLoader;
-    protected AuthenticationContext mockAuthenticationContext;
+    protected AuthenticationProvider mockAuthenticationProvider;
     protected GridService mockGridService;
     protected MessageService mockMessageService;
     protected MetaModelContext metaModelContext;
@@ -126,7 +126,7 @@ abstract class SpecificationLoaderTestAbstract {
                 .translationService(producers.mockTranslationService())
                 .titleService(producers.mockTitleService())
 //                .objectAdapterProvider(mockPersistenceSessionServiceInternal = producers.mockPersistenceSessionServiceInternal())
-                .authenticationContext(mockAuthenticationContext =
+                .authenticationProvider(mockAuthenticationProvider =
                     producers.mockAuthenticationProvider())
                 .singleton(mockMessageService = producers.mockMessageService())
                 .singleton(mockGridService = producers.mockGridService())

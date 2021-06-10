@@ -41,7 +41,7 @@ import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnota
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.security.authentication.Authentication;
-import org.apache.isis.core.security.authentication.AuthenticationContext;
+import org.apache.isis.core.security.authentication.AuthenticationProvider;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -66,7 +66,7 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
 
         context.checking(new Expectations() {
             {
-                allowing(mockServiceRegistry).lookupService(AuthenticationContext.class);
+                allowing(mockServiceRegistry).lookupService(AuthenticationProvider.class);
                 will(returnValue(Optional.of(mockAuthenticationTracker)));
 
                 allowing(mockAuthenticationTracker).currentAuthentication();

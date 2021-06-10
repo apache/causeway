@@ -16,14 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.commons.functional;
+package org.apache.isis.applib.services.iactnlayer;
 
 import java.util.concurrent.Callable;
 
+import org.apache.isis.commons.functional.Result;
+
 import lombok.NonNull;
 
+/**
+ * Similar to a {@link Runnable}, except that it can also throw exceptions.
+ *
+ * @since 2.x [@index}
+ */
 @FunctionalInterface
 public interface ThrowingRunnable {
+
 
     // -- INTERFACE
 
@@ -32,11 +40,13 @@ public interface ThrowingRunnable {
     // -- UTILITY
 
     static Callable<Void> toCallable(final @NonNull ThrowingRunnable runnable) {
-        final Callable<Void> callable = ()->{
+        return ()->{
             runnable.run();
             return null;
         };
-        return callable;
     }
 
+    static Result<Void> resultOf(final @NonNull ThrowingRunnable runnable) {
+        return Result.of(toCallable(runnable));
+    }
 }

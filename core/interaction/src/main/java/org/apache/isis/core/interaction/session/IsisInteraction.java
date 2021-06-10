@@ -247,16 +247,12 @@ implements InteractionInternal {
 
     @Override
     public <T> T getAttribute(Class<T> type) {
-        return (attributes!=null)
-                ? _Casts.uncheckedCast(attributes.get(type))
-                : null;
+        return _Casts.uncheckedCast(attributes.get(type));
     }
 
     @Override
     public void removeAttribute(Class<?> type) {
-        if(attributes!=null) {
-            attributes.remove(type);
-        }
+        attributes.remove(type);
     }
 
 

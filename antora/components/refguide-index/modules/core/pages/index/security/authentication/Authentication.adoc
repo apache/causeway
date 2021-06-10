@@ -14,7 +14,7 @@ interface Authentication {
   UserMemento getUser()     // <.>
   ExecutionContext getExecutionContext()     // <.>
   Type getType()     // <.>
-  Authentication withExecutionContext(ExecutionContext executionContext)     // <.>
+  Authentication withExecutionContext(ExecutionContext interactionContext)     // <.>
 }
 ----
 

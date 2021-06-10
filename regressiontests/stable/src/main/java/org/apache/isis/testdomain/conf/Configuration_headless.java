@@ -63,9 +63,6 @@ public class Configuration_headless {
     public static class HeadlessCommandSupport
     implements InteractionScopeAware {
 
-//      private final Provider<InteractionContext> interactionContextProvider;
-//      private final CommandDispatcher commandDispatcher;
-
         @Override
         public void beforeEnteringTransactionalBoundary(Interaction interaction) {
             _Probe.errOut("Interaction HAS_STARTED conversationId=%s", interaction.getInteractionId());
@@ -79,13 +76,13 @@ public class Configuration_headless {
 
         public void setupCommandCreateIfMissing() {
 
-//            val interactionContext = interactionContextProvider.get();
+//            val interactionProvider = interactionProviderProvider.get();
 //            @SuppressWarnings("unused")
 //            final Interaction interaction = Optional.ofNullable(interactionContext.getInteraction())
 //                    .orElseGet(()->{
 //                        val newCommand = new Command();
 //                        val newInteraction = new Interaction(newCommand);
-//                        interactionContext.setInteraction(newInteraction);
+//                        interactionProvider.setInteraction(newInteraction);
 //                        return newInteraction;
 //                    });
         }

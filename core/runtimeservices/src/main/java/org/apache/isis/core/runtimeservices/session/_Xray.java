@@ -22,7 +22,7 @@ import java.util.Stack;
 
 import org.apache.isis.commons.internal.debug.xray.XrayDataModel;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
-import org.apache.isis.core.interaction.session.AuthenticationLayer;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayer;
 import org.apache.isis.core.security.util.XrayUtil;
 
 import lombok.val;
@@ -30,7 +30,7 @@ import lombok.val;
 //@Log4j2
 final class _Xray {
 
-    static void newAuthenticationLayer(Stack<AuthenticationLayer> afterEnter) {
+    static void newInteractionLayer(Stack<InteractionLayer> afterEnter) {
 
         if(!XrayUi.isXrayEnabled()) {
             return;
@@ -39,7 +39,7 @@ final class _Xray {
         // make defensive copies, so can use in another thread
         final int authStackSize = afterEnter.size();
         val interactionId = afterEnter.peek().getInteraction().getInteractionId();
-        val executionContext = afterEnter.peek().getExecutionContext();
+        val executionContext = afterEnter.peek().getInteractionContext();
 
         val threadId = XrayUtil.currentThreadAsMemento();
 
@@ -85,7 +85,7 @@ final class _Xray {
 
     }
 
-    public static void closeAuthenticationLayer(Stack<AuthenticationLayer> beforeClose) {
+    public static void closeInteractionLayer(Stack<InteractionLayer> beforeClose) {
 
         if(!XrayUi.isXrayEnabled()) {
             return;

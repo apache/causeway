@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.security.authentication.AuthenticationContext;
+import org.apache.isis.core.security.authentication.AuthenticationProvider;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
@@ -89,8 +89,8 @@ public interface HasMetaModelContext {
         return getMetaModelContext().getAuthenticationManager();
     }
 
-    default AuthenticationContext getAuthenticationContext() {
-        return getMetaModelContext().getAuthenticationContext();
+    default AuthenticationProvider getAuthenticationContext() {
+        return getMetaModelContext().getAuthenticationProvider();
     }
 
     default TitleService getTitleService() {

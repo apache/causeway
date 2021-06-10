@@ -47,8 +47,8 @@ import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandExecutorService;
 import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.iactn.ExecutionContext;
-import org.apache.isis.applib.services.iactn.InteractionContext;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -81,7 +81,7 @@ import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.proxy._ProxyFactoryService;
-import org.apache.isis.core.interaction.session.AuthenticationLayer;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayer;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -124,7 +124,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
     @Inject FactoryService factoryService;
     @Inject MetaModelContext metaModelContext;
     @Inject SpecificationLoader specificationLoader;
-    @Inject Provider<InteractionContext> interactionContextProvider;
+    @Inject Provider<InteractionProvider> interactionProviderProvider;
     @Inject ServiceInjector serviceInjector;
     @Inject _ProxyFactoryService proxyFactoryService; // protected to allow JUnit test
     @Inject CommandDtoFactory commandDtoFactory;
@@ -358,8 +358,18 @@ public class WrapperFactoryDefault implements WrapperFactory {
             final AsyncControl<R> asyncControl) {
 
         val interactionLayer = currentInteractionLayer();
-        val asyncAuth = authFrom(asyncControl, interactionLayer.getAuthentication());
-        val command = interactionContextProvider.get().currentInteractionElseFail().getCommand();
+        val interactionContext = interactionLayer.getInteractionContext();
+        val asyncInteractionContext = interactionContextFrom(asyncControl, interactionContext);
+
+        val authIfAny = Authentication.authenticationFrom(interactionLayer.getInteractionContext());
+        if(!authIfAny.isPresent()) {
+            return null;
+        }
+
+        val auth = authIfAny.get();
+        val asyncAuth = auth.withInteractionContext(asyncInteractionContext);
+
+        val command = interactionProviderProvider.get().currentInteractionElseFail().getCommand();
         val commandInteractionId = command.getInteractionId();
 
         val targetAdapter = memberAndTarget.getTarget();
@@ -393,6 +403,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
         val future = executorService.submit(
                 new ExecCommand<R>(
                         asyncAuth,
+                        asyncInteractionContext,
                         Propagation.REQUIRES_NEW,
                         commandDto,
                         asyncControl.getReturnType(),
@@ -456,23 +467,16 @@ public class WrapperFactoryDefault implements WrapperFactory {
         return MemberAndTarget.foundAction(targetAction, currentObjectManager().adapt(mixedIn), method);
     }
 
-    private static <R> Authentication authFrom(AsyncControl<R> asyncControl, Authentication auth) {
+    private static <R> InteractionContext interactionContextFrom(
+            final AsyncControl<R> asyncControl,
+            final InteractionContext interactionContext) {
 
-        val executionContext = auth.getExecutionContext();
-
-        val newExecutionContext = ExecutionContext.builder()
-        .clock(Optional.ofNullable(asyncControl.getClock())
-                .orElseGet(executionContext::getClock))
-        .locale(Optional.ofNullable(asyncControl.getLocale())
-                .orElseGet(executionContext::getLocale))
-        .timeZone(Optional.ofNullable(asyncControl.getTimeZone())
-                .orElseGet(executionContext::getTimeZone))
-        .user(Optional.ofNullable(asyncControl.getUser())
-                .orElseGet(executionContext::getUser))
-        .build();
-
-        return auth.withExecutionContext(newExecutionContext);
-
+        return InteractionContext.builder()
+            .clock(Optional.ofNullable(asyncControl.getClock()).orElseGet(interactionContext::getClock))
+            .locale(Optional.ofNullable(asyncControl.getLocale()).orElseGet(interactionContext::getLocale))
+            .timeZone(Optional.ofNullable(asyncControl.getTimeZone()).orElseGet(interactionContext::getTimeZone))
+            .user(Optional.ofNullable(asyncControl.getUser()).orElseGet(interactionContext::getUser))
+            .build();
     }
 
     @Data
@@ -576,8 +580,8 @@ public class WrapperFactoryDefault implements WrapperFactory {
         dispatchersByEventClass.put(type, dispatcher);
     }
 
-    private AuthenticationLayer currentInteractionLayer() {
-        return interactionTracker.currentAuthenticationLayerElseFail();
+    private InteractionLayer currentInteractionLayer() {
+        return interactionTracker.currentInteractionLayerElseFail();
     }
 
     private ObjectManager currentObjectManager() {
@@ -588,6 +592,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
     private static class ExecCommand<R> implements Callable<R> {
 
         private final Authentication authentication;
+        private final InteractionContext interactionContext;
         private final Propagation propagation;
         private final CommandDto commandDto;
         private final Class<R> returnType;
@@ -597,7 +602,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
         @Inject InteractionFactory interactionFactory;
         @Inject TransactionService transactionService;
         @Inject CommandExecutorService commandExecutorService;
-        @Inject Provider<InteractionContext> interactionContextProvider;
+        @Inject Provider<InteractionProvider> interactionProviderProvider;
         @Inject BookmarkService bookmarkService;
         @Inject RepositoryService repositoryService;
         @Inject MetaModelService metaModelService;
@@ -616,7 +621,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
         private R updateDomainObject() {
 
-            val childCommand = interactionContextProvider.get().currentInteractionElseFail().getCommand();
+            val childCommand = interactionProviderProvider.get().currentInteractionElseFail().getCommand();
             childCommand.updater().setParent(parentCommand);
 
             val bookmark = commandExecutorService.executeCommand(commandDto, childCommand.updater());

@@ -18,7 +18,7 @@
  */
 package org.apache.isis.applib.services.sudo;
 
-import org.apache.isis.applib.services.iactn.ExecutionContext;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 
 import lombok.NonNull;
 
@@ -39,7 +39,7 @@ public interface SudoServiceListener {
      * @param before
      * @param after
      */
-    void beforeCall(@NonNull ExecutionContext before, @NonNull ExecutionContext after);
+    void beforeCall(@NonNull InteractionContext before, @NonNull InteractionContext after);
 
-    void afterCall(@NonNull ExecutionContext before, @NonNull ExecutionContext after);
+    void afterCall(@NonNull InteractionContext before, @NonNull InteractionContext after);
 }

@@ -41,7 +41,7 @@ import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.parser.ParseableFacetUsingParser;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.security.authentication.AuthenticationContext;
+import org.apache.isis.core.security.authentication.AuthenticationProvider;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -56,11 +56,11 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     @Mock protected FacetHolder mockFacetHolder;
-    @Mock protected AuthenticationContext mockAuthenticationContext;
+    @Mock protected AuthenticationProvider mockAuthenticationProvider;
     @Mock protected ManagedObject mockAdapter;
-    
+
     protected MetaModelContext metaModelContext;
-    
+
     private ValueSemanticsProviderAndFacetAbstract<?> valueSemanticsProvider;
     private EncodableFacetUsingEncoderDecoder encodeableFacet;
     private ParseableFacetUsingParser parseableFacet;
@@ -71,15 +71,15 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
         Locale.setDefault(Locale.UK);
 
         metaModelContext = MetaModelContext_forTesting.builder()
-                .authenticationContext(mockAuthenticationContext)
+                .authenticationProvider(mockAuthenticationProvider)
                 .build();
 
         context.checking(new Expectations() {
             {
 
-                never(mockAuthenticationContext);
+                never(mockAuthenticationProvider);
                 //never(mockSessionServiceInternal);
-                
+
                 allowing(mockFacetHolder).getMetaModelContext();
                 will(returnValue(metaModelContext));
             }
@@ -103,7 +103,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     protected void setValue(final ValueSemanticsProviderAndFacetAbstract<?> value) {
         this.valueSemanticsProvider = value;
         this.encodeableFacet = new EncodableFacetUsingEncoderDecoder(
-                value, 
+                value,
                 mockFacetHolder);
         this.parseableFacet = new ParseableFacetUsingParser(value, mockFacetHolder);
     }

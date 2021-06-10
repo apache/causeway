@@ -42,7 +42,7 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandExecutorService;
 import org.apache.isis.applib.services.command.CommandOutcomeHandler;
 import org.apache.isis.applib.services.iactn.Execution;
-import org.apache.isis.applib.services.iactn.InteractionContext;
+import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.xactn.TransactionService;
@@ -52,7 +52,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.interaction.session.InteractionFactory;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
@@ -99,9 +99,9 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     @Inject final ClockService clockService;
     @Inject final TransactionService transactionService;
     @Inject final InteractionTracker isisInteractionTracker;
-    @Inject final Provider<InteractionContext> interactionContextProvider;
+    @Inject final Provider<InteractionProvider> interactionProviderProvider;
 
-    @Inject @Getter final InteractionFactory isisInteractionFactory;
+    @Inject @Getter final InteractionService interactionService;
     @Inject @Getter final SpecificationLoader specificationLoader;
 
     @Override
@@ -139,7 +139,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             final CommandDto dto,
             final CommandOutcomeHandler commandUpdater) {
 
-        val interaction = interactionContextProvider.get().currentInteractionElseFail();
+        val interaction = interactionProviderProvider.get().currentInteractionElseFail();
         val command = interaction.getCommand();
         if(command.getCommandDto() != dto) {
             command.updater().setCommandDto(dto);
@@ -165,7 +165,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     private void copyStartedAtFromInteractionExecution(
             final CommandOutcomeHandler commandOutcomeHandler) {
 
-        val interaction = interactionContextProvider.get().currentInteractionElseFail();
+        val interaction = interactionProviderProvider.get().currentInteractionElseFail();
         val currentExecution = interaction.getCurrentExecution();
 
         val startedAt = currentExecution != null
@@ -271,7 +271,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         // there was an exception when performing the action invocation/property
         // edit.  We therefore need to guard that case.
         //
-        val interaction = interactionContextProvider.get().currentInteractionElseFail();
+        val interaction = interactionProviderProvider.get().currentInteractionElseFail();
 
         final Execution<?, ?> priorExecution = interaction.getPriorExecution();
         if(priorExecution != null) {

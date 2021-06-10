@@ -71,7 +71,7 @@ public class IsisModuleIncViewerVaadinViewer {
 
     @Inject private WebApplicationContext context;
     @Inject private VaadinConfigurationProperties configurationProperties;
-    @Inject private InteractionFactory isisInteractionFactory;
+    @Inject private InteractionFactory interactionFactory;
 
     /**
      * Creates a {@link ServletContextInitializer} instance.
@@ -99,7 +99,7 @@ public class IsisModuleIncViewerVaadinViewer {
                     makeContextRelative(urlMapping.replace("*", "")));
         }
         val registration = new ServletRegistrationBean<SpringServlet>(
-                new IsisServletForVaadin(isisInteractionFactory, context, isRootMapping),
+                new IsisServletForVaadin(interactionFactory, context, isRootMapping),
                 urlMapping);
         registration.setInitParameters(initParameters);
         registration.setAsyncSupported(configurationProperties.isAsyncSupported());

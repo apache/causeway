@@ -40,7 +40,7 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 import org.apache.isis.core.metamodel.id.TypeIdentifierTestFactory;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionDefault;
-import org.apache.isis.core.security.authentication.AuthenticationContext;
+import org.apache.isis.core.security.authentication.AuthenticationProvider;
 
 public class ObjectActionLayoutXmlDefaultTest {
 
@@ -50,7 +50,7 @@ public class ObjectActionLayoutXmlDefaultTest {
     private ObjectActionDefault action;
 
     @Mock private FacetedMethod mockFacetedMethod;
-    @Mock private AuthenticationContext mockAuthenticationContext;
+    @Mock private AuthenticationProvider mockAuthenticationProvider;
     @Mock private SpecificationLoader mockSpecificationLoader;
 
     protected MetaModelContext metaModelContext;
@@ -60,7 +60,7 @@ public class ObjectActionLayoutXmlDefaultTest {
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
-                .authenticationContext(mockAuthenticationContext)
+                .authenticationProvider(mockAuthenticationProvider)
                 .build();
 
         context.checking(new Expectations() {

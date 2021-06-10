@@ -34,18 +34,18 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
 import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
-import org.apache.isis.applib.services.iactn.ExecutionContext;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactn.Interaction;
 
 import lombok.NonNull;
 import lombok.val;
 
 /**
- * Works in connection with {@code org.apache.isis.core.interaction.session.InteractionFactory}, 
+ * Works in connection with {@code org.apache.isis.core.interaction.session.InteractionFactory},
  * such that it allows an {@link Interaction}
  * to run with its own simulated (or actual) time.
- * 
- * @see ExecutionContext
+ *
+ * @see InteractionContext
  *
  * @since 2.0 {@index}
  */

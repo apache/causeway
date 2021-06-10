@@ -43,7 +43,7 @@ import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.security.authentication.AuthenticationContext;
+import org.apache.isis.core.security.authentication.AuthenticationProvider;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
@@ -95,8 +95,8 @@ class MetaModelContext_usingIoc implements MetaModelContext {
     getSingletonElseFail(AuthenticationManager.class);
 
     @Getter(lazy=true)
-    private final AuthenticationContext authenticationContext =
-    getSingletonElseFail(AuthenticationContext.class);
+    private final AuthenticationProvider authenticationProvider =
+    getSingletonElseFail(AuthenticationProvider.class);
 
     @Getter(lazy=true)
     private final TitleService titleService =

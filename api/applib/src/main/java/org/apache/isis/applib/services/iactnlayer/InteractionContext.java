@@ -16,14 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.iactn;
+package org.apache.isis.applib.services.iactnlayer;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.TimeZone;
 
 import org.apache.isis.applib.clock.VirtualClock;
+import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.user.UserMemento;
+import org.apache.isis.commons.internal.base._Casts;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -33,13 +39,13 @@ import lombok.Value;
 import lombok.With;
 
 /**
- * Provides the user and scenario specific environment for an {@link Execution}
+ * Provides the user and scenario specific environment for an {@link Interaction}.
  *
  * @since 2.0 {@index}
  */
 @Value @Builder
 @RequiredArgsConstructor
-public class ExecutionContext implements Serializable {
+public class InteractionContext implements Serializable {
 
     private static final long serialVersionUID = -220896735209733865L;
 
@@ -69,15 +75,53 @@ public class ExecutionContext implements Serializable {
     @With @Getter @Builder.Default
     @NonNull TimeZone timeZone = TimeZone.getDefault();
 
+    Map<String, Serializable> attributes = new HashMap<>();
+    public void putAttribute(String key, Serializable value) {
+        attributes.put(key, value);
+    }
+
+    public <T> Optional<T> getAttribute(String key, Class<T> castTo) {
+        return _Casts.castTo(attributes.get(key), castTo);
+    }
+
+
+    // -- EQUALS and HASHCODE
+
+    /**
+     * We exclude {@link #attributes}.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        InteractionContext that = (InteractionContext) o;
+        return user.equals(that.user) && clock.equals(that.clock) && locale.equals(that.locale) && timeZone.equals(that.timeZone);
+    }
+
+    /**
+     * We exclude {@link #attributes}.
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(user, clock, locale, timeZone);
+    }
+
+
     // -- FACTORIES
 
     /**
-     * Creates a new {@link ExecutionContext} with the specified user and
+     * Creates a new {@link InteractionContext} with the specified user and
      * system defaults for clock, locale and time-zone.
      */
-    public static ExecutionContext ofUserWithSystemDefaults(
+    public static InteractionContext ofUserWithSystemDefaults(
             final @NonNull UserMemento user) {
-        return new ExecutionContext(user, VirtualClock.system(), Locale.getDefault(), TimeZone.getDefault());
+        return InteractionContext.builder()
+                .user(user)
+                .clock(VirtualClock.system())
+                .locale(Locale.getDefault())
+                .timeZone(TimeZone.getDefault())
+                .build();
     }
+
 
 }
