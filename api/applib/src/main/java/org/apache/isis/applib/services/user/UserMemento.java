@@ -25,8 +25,6 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties.Authentication;
-
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
@@ -208,7 +206,7 @@ public final class UserMemento implements Serializable {
          * Instructs the {@link org.apache.isis.core.security.authentication.manager.AuthenticationManager}
          * to not cache this session in its internal map of sessions by validation code,
          * and therefore to ignore this aspect when considering if an {@link InteractionContext} is
-         * {@link org.apache.isis.core.security.authentication.manager.AuthenticationManager#isSessionValid(Authentication) valid}
+         * {@link org.apache.isis.core.security.authentication.manager.AuthenticationManager#isSessionValid(InteractionContext) valid}
          * or not.
          */
         EXTERNAL;

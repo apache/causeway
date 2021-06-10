@@ -2,8 +2,6 @@ package org.apache.isis.applib.services.iactnlayer;
 
 import java.util.concurrent.Callable;
 
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties.Authentication;
-
 import lombok.NonNull;
 
 /**
@@ -59,7 +57,7 @@ public interface InteractionService {
      *
      * @param interactionContext
      *
-     * @apiNote if the current {@link InteractionLayer} (if any) has an {@link Authentication} that
+     * @apiNote if the current {@link InteractionLayer} (if any) has an {@link InteractionContext} that
      * equals that of the given one, as an optimization, no new layer is pushed onto the stack;
      * instead the current one is returned
      */
