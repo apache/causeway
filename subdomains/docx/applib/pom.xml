@@ -88,6 +88,42 @@
 						</exclusion>
 					</exclusions>
 				</dependency>
+				<dependency>
+					<groupId>com.google.guava</groupId>
+					<artifactId>guava</artifactId>
+					<scope>test</scope>
+					<exclusions>
+						<exclusion>
+							<!-- conflicts with docx4j -->
+							<groupId>org.checkerframework</groupId>
+							<artifactId>checker-qual</artifactId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+				<dependency>
+					<groupId>com.google.guava</groupId>
+					<artifactId>guava</artifactId>
+					<scope>test</scope>
+					<exclusions>
+						<exclusion>
+							<!-- conflicts with docx4j -->
+							<groupId>org.checkerframework</groupId>
+							<artifactId>checker-qual</artifactId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+				<dependency>
+					<groupId>org.apache.xmlgraphics</groupId>
+					<artifactId>fop-core</artifactId>
+					<scope>test</scope>
+					<exclusions>
+						<exclusion>
+							<!-- conflicts with docx4j -->
+							<groupId>org.apache.pdfbox</groupId>
+							<artifactId>fontbox</artifactId>
+						</exclusion>
+					</exclusions>
+				</dependency>
 			</dependencies>
 		</profile>
 	</profiles>
