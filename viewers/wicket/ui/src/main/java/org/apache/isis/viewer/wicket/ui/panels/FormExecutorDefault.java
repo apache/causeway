@@ -37,11 +37,10 @@ import org.apache.isis.applib.services.exceprecog.Category;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.isis.applib.services.exceprecog.Recognition;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.core.interaction.session.InteractionFactory;
-import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.core.interaction.session.MessageBroker;
 import org.apache.isis.core.metamodel.facets.actions.redirect.RedirectFacet;
 import org.apache.isis.core.metamodel.facets.properties.renderunchanged.UnchangingFacet;
@@ -431,7 +430,7 @@ implements FormExecutor {
     }
 
     protected InteractionService getIsisInteractionFactory() {
-        return getCommonContext().lookupServiceElseFail(InteractionFactory.class);
+        return getCommonContext().lookupServiceElseFail(InteractionService.class);
     }
 
     protected Optional<MessageBroker> currentMessageBroker() {

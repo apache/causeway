@@ -27,10 +27,10 @@ import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Rule;
 
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.iactnlayer.ThrowingRunnable;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.session.SessionLoggingService;
-import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
@@ -45,7 +45,7 @@ public abstract class AuthenticatedWebSessionForIsis_TestAbstract {
     @Mock protected Request mockRequest;
     @Mock protected AuthenticationManager mockAuthMgr;
     @Mock protected IsisAppCommonContext mockCommonContext;
-    @Mock protected InteractionFactory mockInteractionFactory;
+    @Mock protected InteractionService mockInteractionService;
     @Mock protected ServiceRegistry mockServiceRegistry;
 
     protected AuthenticatedWebSessionForIsis webSession;
@@ -59,10 +59,10 @@ public abstract class AuthenticatedWebSessionForIsis_TestAbstract {
                 allowing(mockServiceRegistry).lookupService(SessionLoggingService.class);
                 will(returnValue(Optional.empty()));
 
-                allowing(mockCommonContext).lookupServiceElseFail(InteractionFactory.class);
-                will(returnValue(mockInteractionFactory));
+                allowing(mockCommonContext).lookupServiceElseFail(InteractionService.class);
+                will(returnValue(mockInteractionService));
 
-                allowing(mockInteractionFactory).run(
+                allowing(mockInteractionService).run(
                         InteractionContextFactory.testing(),
                         with(any(ThrowingRunnable.class)));
                 // ignore

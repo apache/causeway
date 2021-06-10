@@ -2,6 +2,8 @@ package org.apache.isis.applib.services.iactnlayer;
 
 import java.util.concurrent.Callable;
 
+import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties.Authentication;
+
 import lombok.NonNull;
 
 /**
@@ -65,6 +67,11 @@ public interface InteractionService {
             @NonNull InteractionContext interactionContext);
 
     /**
+     * closes all open {@link InteractionLayer}(s) as stacked on the current thread
+     */
+    void closeInteractionLayers();
+
+    /**
      * @return whether the calling thread is within the context of an open {@link InteractionLayer}
      */
     boolean isInInteraction();
@@ -96,7 +103,20 @@ public interface InteractionService {
     void run(@NonNull InteractionContext interactionContext, @NonNull ThrowingRunnable runnable);
 
     /**
-     * closes all open {@link InteractionLayer}(s) as stacked on the current thread
+     * As per {@link #call(InteractionContext, Callable)}, but using an
+     * anonymous {@link InteractionContext}.
+     *
+     * @param <R>
+     * @param callable (non-null)
      */
-    void closeInteractionLayers();
+    <R> R callAnonymous(@NonNull Callable<R> callable);
+
+    /**
+     * As per {@link #callAnonymous(Callable)}, but for a runnable.
+     *
+     * @param runnable (non-null)
+     */
+    void runAnonymous(@NonNull ThrowingRunnable runnable);
+
+
 }

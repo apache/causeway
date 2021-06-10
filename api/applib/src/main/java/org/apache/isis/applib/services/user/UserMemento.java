@@ -35,6 +35,7 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 
@@ -204,10 +205,11 @@ public final class UserMemento implements Serializable {
     public enum AuthenticationSource {
         DEFAULT,
         /**
-         * Instructs the {@link org.apache.isis.core.security.authentication.manager.AuthenticationManager} to not cache this session in its internal map of
-         * sessions by validation code, and therefore to ignore this aspect when considering if an
-         * {@link Authentication} is
-         * {@link org.apache.isis.core.security.authentication.manager.AuthenticationManager#isSessionValid(Authentication) valid} or not.
+         * Instructs the {@link org.apache.isis.core.security.authentication.manager.AuthenticationManager}
+         * to not cache this session in its internal map of sessions by validation code,
+         * and therefore to ignore this aspect when considering if an {@link InteractionContext} is
+         * {@link org.apache.isis.core.security.authentication.manager.AuthenticationManager#isSessionValid(Authentication) valid}
+         * or not.
          */
         EXTERNAL;
 
@@ -215,6 +217,8 @@ public final class UserMemento implements Serializable {
             return this == EXTERNAL;
         }
     }
+
+    private static final String DEFAULT_AUTH_VALID_CODE = "";
 
     /**
      * A unique code given to this user during authentication.
@@ -226,7 +230,7 @@ public final class UserMemento implements Serializable {
     @Property
     @PropertyLayout(sequence = "2.1")
     @Getter @Builder.Default @With(onMethod_ = {@Programmatic})
-    private final @NonNull String authenticationCode = "";
+    private final @NonNull String authenticationCode = DEFAULT_AUTH_VALID_CODE;
 
 
     // -- UTILITY

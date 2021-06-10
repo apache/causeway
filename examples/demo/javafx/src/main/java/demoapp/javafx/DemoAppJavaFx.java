@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.runtimeservices.session.InteractionFactoryDefault;
+import org.apache.isis.core.runtimeservices.session.InteractionServiceDefault;
 import org.apache.isis.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
 import org.apache.isis.incubator.viewer.javafx.model.util._fx;
 import org.apache.isis.incubator.viewer.javafx.viewer.IsisModuleIncViewerJavaFxViewer;
@@ -59,7 +59,7 @@ public class DemoAppJavaFx {
 
     public static void main(String[] args) {
 
-        IsisPresets.logging(InteractionFactoryDefault.class, "debug");
+        IsisPresets.logging(InteractionServiceDefault.class, "debug");
         IsisPresets.logging(_Probe.class, "debug"); // enable debug entry logging
 
         IsisPresets.prototyping(); // use prototyping mode as default, unless explicitly overridden (INCUBATING)

@@ -50,6 +50,7 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayer;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -82,7 +83,6 @@ import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.proxy._ProxyFactoryService;
-import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
@@ -588,7 +588,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
         private final Command parentCommand;
         private final ServiceInjector serviceInjector;
 
-        @Inject InteractionFactory interactionFactory;
+        @Inject InteractionService interactionService;
         @Inject TransactionService transactionService;
         @Inject CommandExecutorService commandExecutorService;
         @Inject Provider<InteractionProvider> interactionProviderProvider;
@@ -599,7 +599,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
         @Override
         public R call() {
             serviceInjector.injectServicesInto(this);
-            return interactionFactory.call(interactionContext, this::updateDomainObjectHonoringTransactionalPropagation);
+            return interactionService.call(interactionContext, this::updateDomainObjectHonoringTransactionalPropagation);
         }
 
         private R updateDomainObjectHonoringTransactionalPropagation() {

@@ -22,8 +22,8 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -46,7 +46,7 @@ import javafx.scene.layout.GridPane;
 public class UiActionHandlerFx {
 
     private final UiContextFx uiContext;
-    private final InteractionFactory isisInteractionFactory;
+    private final InteractionService interactionService;
     private final UiComponentFactoryFx uiComponentFactory;
 
     public void handleActionLinkClicked(ManagedAction managedAction) {
@@ -107,7 +107,7 @@ public class UiActionHandlerFx {
             ManagedAction managedAction,
             Can<ManagedObject> params) {
 
-        isisInteractionFactory.runAnonymous(()->{
+        interactionService.runAnonymous(()->{
 
             //Thread.sleep(1000); // simulate long running
 

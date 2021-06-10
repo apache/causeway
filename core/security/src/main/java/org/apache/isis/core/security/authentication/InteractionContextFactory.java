@@ -22,17 +22,16 @@ import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.user.UserMemento;
 
 import lombok.NonNull;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public final class InteractionContextFactory {
-
-    public static final String DEFAULT_AUTH_VALID_CODE = "";
 
     public static InteractionContext anonymous() {
         return InteractionContext
                 .ofUserWithSystemDefaults(
                         UserMemento
-                            .system()
-                            .withAuthenticationCode(DEFAULT_AUTH_VALID_CODE));
+                            .system());
     }
 
     public static InteractionContext health() {
@@ -41,16 +40,14 @@ public final class InteractionContextFactory {
                         UserMemento
                             .ofNameAndRoleNames(
                                 "__health", // user name
-                                "__health-role") // role(s)
-                            .withAuthenticationCode(DEFAULT_AUTH_VALID_CODE));
+                                "__health-role")); // role(s)
     }
 
     public static InteractionContext testing() {
         return InteractionContext
                 .ofUserWithSystemDefaults(
                         UserMemento
-                            .ofName("prototyping")
-                            .withAuthenticationCode(DEFAULT_AUTH_VALID_CODE));
+                            .ofName("prototyping"));
     }
 
     public static InteractionContext testing(final @NonNull String authenticationCode) {
@@ -61,14 +58,5 @@ public final class InteractionContextFactory {
                             .withAuthenticationCode(authenticationCode));
     }
 
-    @Deprecated //TODO remove second arg or probably use InteractionContext.of... instead
-    public static InteractionContext valid(
-            final @NonNull UserMemento user,
-            final @NonNull String authenticationCode) {
-
-        return InteractionContext
-                .ofUserWithSystemDefaults(
-                        user.withAuthenticationCode(authenticationCode));
-    }
 
 }

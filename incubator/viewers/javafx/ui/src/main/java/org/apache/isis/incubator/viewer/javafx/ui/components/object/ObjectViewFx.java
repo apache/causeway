@@ -48,12 +48,13 @@ import org.apache.isis.viewer.common.model.components.UiComponentFactory;
 import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
 import org.apache.isis.viewer.common.model.gridlayout.UiGridLayout;
 
-import javafx.scene.control.TabPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
+
+import javafx.scene.control.TabPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
 @Log4j2
 public class ObjectViewFx extends VBox {
@@ -77,7 +78,7 @@ public class ObjectViewFx extends VBox {
             final ManagedObject managedObject) {
 
         log.info("binding object interaction to owner {}", managedObject.getSpecification().getIdentifier());
-        _Assert.assertTrue(uiContext.getIsisInteractionFactory().isInInteraction(), "requires an active interaction");
+        _Assert.assertTrue(uiContext.getInteractionService().isInInteraction(), "requires an active interaction");
 
         val objectTitle = ManagedObjects.titleOf(managedObject);
 

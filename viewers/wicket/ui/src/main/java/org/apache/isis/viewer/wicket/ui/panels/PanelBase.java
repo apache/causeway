@@ -27,11 +27,11 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
-import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.interaction.session.MessageBroker;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
@@ -67,7 +67,7 @@ implements HasCommonContext {
     private transient ImageResourceCache imageCache;
     private transient MetaModelContext metaModelContext;
     private transient IsisAppCommonContext commonContext;
-    private transient InteractionFactory isisInteractionFactory;
+    private transient InteractionService interactionService;
     private transient TranslationService translationService;
     private transient LocaleProvider localeProvider;
     private transient TreeThemeProvider treeThemeProvider;
@@ -113,8 +113,8 @@ implements HasCommonContext {
         return metaModelContext = computeIfAbsent(MetaModelContext.class, metaModelContext);
     }
 
-    public InteractionFactory getIsisInteractionFactory() {
-        return isisInteractionFactory = computeIfAbsent(InteractionFactory.class, isisInteractionFactory);
+    public InteractionService getInteractionService() {
+        return interactionService = computeIfAbsent(InteractionService.class, interactionService);
     }
 
     public TranslationService getTranslationService() {

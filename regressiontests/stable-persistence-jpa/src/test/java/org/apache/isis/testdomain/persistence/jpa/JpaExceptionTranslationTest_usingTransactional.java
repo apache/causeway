@@ -36,16 +36,16 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.TestPropertySources;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.iactnlayer.ThrowingRunnable;
+import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.jpa.JpaInventoryDao;
 import org.apache.isis.testdomain.jpa.entities.JpaInventory;
@@ -67,7 +67,7 @@ class JpaExceptionTranslationTest_usingTransactional
     //@Inject private JpaSupportService jpaSupport;
     //@Inject private TransactionService transactionService;
     @Inject private RepositoryService repositoryService;
-    @Inject private InteractionFactory interactionFactory;
+    @Inject private InteractionService interactionService;
     @Inject private Provider<JpaInventoryDao> inventoryDao;
     @Inject private JpaTransactionManager txManager;
 
@@ -80,7 +80,7 @@ class JpaExceptionTranslationTest_usingTransactional
     @Test @Order(1)
     @Transactional @Rollback(false)
     void booksUniqueByIsbn_setupPhase() {
-        interactionFactory.runAnonymous(()->{
+        interactionService.runAnonymous(()->{
 
             _TestFixtures.setUp3Books(repositoryService);
 
@@ -98,7 +98,7 @@ class JpaExceptionTranslationTest_usingTransactional
 
         assertThrows(DataIntegrityViolationException.class, ()->{
 
-            interactionFactory.runAnonymous(()->{
+            interactionService.runAnonymous(()->{
 
                 ThrowingRunnable.resultOf(uniqueConstraintViolator)
                 .ifSuccess(__->fail("expected to fail, but did not"))
@@ -118,7 +118,7 @@ class JpaExceptionTranslationTest_usingTransactional
 
         // expected post condition: ONE inventory with 3 books
 
-        interactionFactory.runAnonymous(()->{
+        interactionService.runAnonymous(()->{
 
             val inventories = repositoryService.allInstances(JpaInventory.class);
             assertEquals(1, inventories.size());
@@ -140,7 +140,7 @@ class JpaExceptionTranslationTest_usingTransactional
     @Transactional @Rollback(false)
     void booksUniqueByIsbn_cleanupPhase() {
 
-        interactionFactory.runAnonymous(()->{
+        interactionService.runAnonymous(()->{
 
             _TestFixtures.cleanUp(repositoryService);
 

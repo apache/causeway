@@ -24,11 +24,11 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
-import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
@@ -46,7 +46,7 @@ implements HasCommonContext {
     private transient WebAppContextPath webAppContextPath;
     private transient PageClassRegistry pageClassRegistry;
     private transient IsisAppCommonContext commonContext;
-    private transient InteractionFactory isisInteractionFactory;
+    private transient InteractionService interactionService;
 
     protected WebPageBase(PageParameters parameters) {
         super(parameters);
@@ -93,8 +93,8 @@ implements HasCommonContext {
         return pageClassRegistry = computeIfAbsent(PageClassRegistry.class, pageClassRegistry);
     }
 
-    public InteractionFactory getIsisInteractionFactory() {
-        return isisInteractionFactory = computeIfAbsent(InteractionFactory.class, isisInteractionFactory);
+    public InteractionService getInteractionService() {
+        return interactionService = computeIfAbsent(InteractionService.class, interactionService);
     }
 
     public IsisSystemEnvironment getSystemEnvironment() {

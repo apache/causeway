@@ -21,7 +21,7 @@ package org.apache.isis.core.interaction.integration;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.user.ImpersonatedUserHolder;
-import org.apache.isis.core.security.authentication.InteractionContextFactory;
+import org.apache.isis.applib.services.user.UserMemento;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -41,10 +41,12 @@ public class IsisRequestCycle {
     public void onBeginRequest(final InteractionContext authenticatedContext) {
 
         val contextToUse = impersonatedUserHolder.getUserMemento()
-                .<InteractionContext>map(impersonatingUserMemento->
-                    InteractionContextFactory.valid(
-                        impersonatingUserMemento,
-                        authenticatedContext.getUser().getAuthenticationCode()))
+                .map(impersonatingUserMemento->
+                    InteractionContext
+                        .ofUserWithSystemDefaults(
+                                merge(
+                                        authenticatedContext.getUser(),
+                                        impersonatingUserMemento)))
                 .orElse(authenticatedContext);
 
         interactionService.openInteraction(contextToUse);
@@ -55,9 +57,16 @@ public class IsisRequestCycle {
     }
 
     public void onEndRequest() {
-
         interactionService.closeInteractionLayers();
+    }
 
+    // -- HELPER
+
+    // not sure if this is strictly required; idea is to preserve some state from the origin user
+    private static UserMemento merge(UserMemento origin, UserMemento fake) {
+        return fake
+                .withAuthenticationSource(origin.getAuthenticationSource())
+                .withAuthenticationCode(origin.getAuthenticationCode());
     }
 
 

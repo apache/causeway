@@ -143,7 +143,7 @@ extends MetaModelValidatorAbstract {
         val translationService = super.getMetaModelContext().getTranslationService();
 
         // as used by the Wicket UI?
-        // final TranslationContext context = "org.apache.isis.core.interaction.session.InteractionFactory";
+        // final TranslationContext context = "org.apache.isis...InteractionService";
 
         // see @ConfirmUiModel#translate()
         val translationContext = TranslationContext.forClassName(MessageRegistry.class);

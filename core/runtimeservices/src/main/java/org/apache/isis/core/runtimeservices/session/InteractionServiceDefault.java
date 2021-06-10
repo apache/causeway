@@ -45,6 +45,7 @@ import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayer;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.iactnlayer.ThrowingRunnable;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.util.schema.ChangesDtoUtils;
@@ -60,7 +61,6 @@ import org.apache.isis.core.interaction.integration.InteractionAwareTransactiona
 import org.apache.isis.core.interaction.scope.InteractionScopeAware;
 import org.apache.isis.core.interaction.scope.InteractionScopeBeanFactoryPostProcessor;
 import org.apache.isis.core.interaction.scope.InteractionScopeLifecycleHandler;
-import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.interaction.session.IsisInteraction;
 import org.apache.isis.core.metamodel.services.publishing.CommandPublisher;
@@ -82,14 +82,14 @@ import lombok.extern.log4j.Log4j2;
  * @implNote holds a reference to the current session using a thread-local
  */
 @Service
-@Named("isis.runtimeservices.InteractionFactoryDefault")
+@Named("isis.runtimeservices.InteractionServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 @Log4j2
-public class InteractionFactoryDefault
+public class InteractionServiceDefault
 implements
-    InteractionFactory,
+    InteractionService,
     InteractionTracker {
 
     @Inject AuthenticationManager authenticationManager;
@@ -238,7 +238,9 @@ implements
 
     @Override
     @SneakyThrows
-    public <R> R call(@NonNull InteractionContext interactionContext, @NonNull Callable<R> callable) {
+    public <R> R call(
+            final @NonNull InteractionContext interactionContext,
+            final @NonNull Callable<R> callable) {
 
         final int stackSizeWhenEntering = interactionLayerStack.get().size();
         openInteraction(interactionContext);
@@ -251,19 +253,12 @@ implements
         }
     }
 
-
-//    @Override
-//    @SneakyThrows
-//    public <R> R callAuthenticated(
-//            @NonNull final Authentication authentication,
-//            @NonNull final Callable<R> callable) {
-//
-//        return call(authentication.getInteractionContext(), callable);
-//    }
-
     @Override
     @SneakyThrows
-    public void run(@NonNull InteractionContext interactionContext, @NonNull ThrowingRunnable runnable) {
+    public void run(
+            final @NonNull InteractionContext interactionContext,
+            final @NonNull ThrowingRunnable runnable) {
+
         final int stackSizeWhenEntering = interactionLayerStack.get().size();
         openInteraction(interactionContext);
 
@@ -275,16 +270,6 @@ implements
         }
 
     }
-
-//    @Override
-//    @SneakyThrows
-//    public void runAuthenticated(
-//            @NonNull final Authentication authentication,
-//            @NonNull final ThrowingRunnable runnable) {
-//
-//        run(authentication.getInteractionContext(), runnable);
-//    }
-
 
     // -- ANONYMOUS EXECUTION
 

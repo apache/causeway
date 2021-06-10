@@ -18,8 +18,6 @@
  */
 package org.apache.isis.testdomain.transactions.jdo;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.MethodOrderer;
@@ -30,9 +28,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.debug._Probe;
-import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
@@ -40,11 +40,11 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 /**
  * These tests use the {@code @Transactional} annotation as provided by Spring.
- * <p> 
- * We test whether JUnit Tests are automatically rolled back by Spring. 
+ * <p>
+ * We test whether JUnit Tests are automatically rolled back by Spring.
  */
 @SpringBootTest(
-        classes = { 
+        classes = {
                 Configuration_usingJdo.class
         },
         properties = {
@@ -52,59 +52,59 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
                 "logging.level.org.springframework.test.context.transaction.*=DEBUG",
                 "logging.level.org.datanucleus.*=DEBUG",
                 "logging.config=log4j2-debug-persistence.xml"
-                
+
         })
 @Transactional
 //@TestPropertySource(IsisPresets.UseLog4j2Test)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class JdoTransactionRollbackTest_usingTransactional
 {
-    
+
     @Inject private FixtureScripts fixtureScripts;
     @Inject private RepositoryService repository;
-    @Inject private InteractionFactory interactionFactory;
-    
+    @Inject private InteractionService interactionService;
+
     @Test @Order(1) @Commit
     void cleanup_justInCase() {
-   
+
         // cleanup just in case
         fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
     }
-    
+
     @Test @Order(2)
     void happyCaseTx_shouldCommit() {
-   
+
         _Probe.errOut("before interaction");
-        
-        interactionFactory.runAnonymous(()->{
-            
+
+        interactionService.runAnonymous(()->{
+
             // expected pre condition
             assertEquals(0, repository.allInstances(JdoBook.class).size());
-                
+
             _Probe.errOut("before fixture");
-            
+
             fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
-            
+
             _Probe.errOut("after fixture");
-            
+
             // expected post condition
             assertEquals(1, repository.allInstances(JdoBook.class).size());
-            
-            
+
+
         });
-        
+
         _Probe.errOut("after interaction");
-        
+
     }
-    
+
     @Test @Order(3)
     void previousTest_shouldHaveBeenRolledBack() {
 
-        interactionFactory.runAnonymous(()->{
+        interactionService.runAnonymous(()->{
 
             // expected condition
             assertEquals(0, repository.allInstances(JdoBook.class).size());
-        
+
         });
 
     }

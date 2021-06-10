@@ -54,7 +54,6 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.security.authentication.Authenticator;
-import org.apache.isis.core.security.authentication.InteractionContextFactory;
 import org.apache.isis.core.security.authorization.Authorizor;
 import org.apache.isis.security.shiro.context.ShiroSecurityContext;
 
@@ -172,8 +171,9 @@ public class AuthenticatorShiro implements Authenticator {
                 // (this is used by the Wicket viewer, for example).
                 request.streamRoles());
 
-        val user = UserMemento.ofNameAndRoleNames(request.getName(), roles);
-        return InteractionContextFactory.valid(user, validationCode);
+        val user = UserMemento.ofNameAndRoleNames(request.getName(), roles)
+                .withAuthenticationCode(validationCode);
+        return InteractionContext.ofUserWithSystemDefaults(user);
     }
 
     /**

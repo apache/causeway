@@ -27,7 +27,6 @@ import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.security.authentication.Authenticator;
-import org.apache.isis.core.security.authentication.InteractionContextFactory;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserRepository;
@@ -79,8 +78,9 @@ public class AuthenticatorSecman implements Authenticator {
                     val roleNames = Stream.concat(
                             appUser.getRoles().stream().map(ApplicationRole::getName),
                             request.streamRoles());
-                    val user = UserMemento.ofNameAndRoleNames(username, roleNames);
-                    return InteractionContextFactory.valid(user, code);
+                    val user = UserMemento.ofNameAndRoleNames(username, roleNames)
+                            .withAuthenticationCode(code);
+                    return InteractionContext.ofUserWithSystemDefaults(user);
                 })
                 .orElse(null);
     }

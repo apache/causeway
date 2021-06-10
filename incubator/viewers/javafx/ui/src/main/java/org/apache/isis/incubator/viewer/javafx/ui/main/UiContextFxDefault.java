@@ -26,7 +26,7 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.core.interaction.session.InteractionFactory;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.incubator.viewer.javafx.model.action.ActionUiModelFactoryFx;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContextFx;
@@ -54,7 +54,7 @@ public class UiContextFxDefault implements UiContextFx {
     @Getter(onMethod_ = {@Override})
     private final JavaFxViewerConfig javaFxViewerConfig;
     @Getter(onMethod_ = {@Override})
-    private final InteractionFactory isisInteractionFactory;
+    private final InteractionService interactionService;
     @Getter(onMethod_ = {@Override})
     private final ActionUiModelFactoryFx actionUiModelFactory = new ActionUiModelFactoryFx();
 
@@ -72,7 +72,7 @@ public class UiContextFxDefault implements UiContextFx {
 
     @Override
     public void route(Supplier<ManagedObject> objectSupplier) {
-        isisInteractionFactory.runAnonymous(()->{
+        interactionService.runAnonymous(()->{
             val object = objectSupplier.get();
             route(object);
         });

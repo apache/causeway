@@ -30,11 +30,11 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.session.SessionLoggingService;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.user.UserMemento.AuthenticationSource;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
@@ -237,7 +237,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
             final SessionLoggingService.CausedBy causedBy) {
 
 
-        val interactionFactory = getInteractionFactory();
+        val interactionFactory = getInteractionService();
         val sessionLoggingServices = getSessionLoggingServices();
 
         final Runnable loggingTask = ()->{
@@ -262,8 +262,8 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
         return commonContext.getServiceRegistry().select(SessionLoggingService.class);
     }
 
-    protected InteractionFactory getInteractionFactory() {
-        return commonContext.lookupServiceElseFail(InteractionFactory.class);
+    protected InteractionService getInteractionService() {
+        return commonContext.lookupServiceElseFail(InteractionService.class);
     }
 
     private VirtualClock virtualClock() {

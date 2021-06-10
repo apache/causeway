@@ -26,8 +26,8 @@ import org.quartz.JobExecutionContext;
 import org.quartz.PersistJobDataAfterExecution;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.user.UserMemento;
-import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.extensions.commandreplay.secondary.SecondaryStatus;
 import org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig;
 import org.apache.isis.extensions.commandreplay.secondary.jobcallables.IsTickingClockInitialized;
@@ -64,7 +64,7 @@ public class ReplicateAndReplayJob implements Job {
         }
     }
 
-    @Inject protected InteractionFactory isisInteractionFactory;
+    @Inject protected InteractionService interactionService;
 
     private void exec(final JobExecutionContext quartzContext) {
         val ssh = new SecondaryStatusData(quartzContext);
@@ -87,7 +87,7 @@ public class ReplicateAndReplayJob implements Job {
 
             case OK:
                 val newStatus =
-                        isisInteractionFactory.call(authentication, new ReplicateAndRunCommands());
+                        interactionService.call(authentication, new ReplicateAndRunCommands());
 
                 if(newStatus != null) {
                     ssh.setSecondaryStatus(newStatus);
@@ -105,7 +105,7 @@ public class ReplicateAndReplayJob implements Job {
     }
 
     private boolean isTickingClockInitialized(final InteractionContext authentication) {
-        return isisInteractionFactory.call(authentication, new IsTickingClockInitialized());
+        return interactionService.call(authentication, new IsTickingClockInitialized());
     }
 
 }

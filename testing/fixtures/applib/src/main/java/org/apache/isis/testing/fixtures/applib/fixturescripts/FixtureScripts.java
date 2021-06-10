@@ -42,6 +42,7 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -51,7 +52,6 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 import org.apache.isis.testing.fixtures.applib.events.FixturesInstalledEvent;
 import org.apache.isis.testing.fixtures.applib.events.FixturesInstallingEvent;
@@ -87,7 +87,7 @@ public class FixtureScripts {
     @Inject private RepositoryService repositoryService;
     @Inject private TransactionService transactionService;
     @Inject private ExecutionParametersService executionParametersService;
-    @Inject private InteractionFactory isisInteractionFactory;
+    @Inject private InteractionService interactionService;
 
     @Inject private EventBusService eventBusService;
 
@@ -422,7 +422,7 @@ public class FixtureScripts {
     	val singleScript = toSingleScript(fixtureScriptList);
     	String parameters = null;
 
-    	isisInteractionFactory.runAnonymous(()->{
+    	interactionService.runAnonymous(()->{
     	    transactionService.runWithinCurrentTransactionElseCreateNew(()->{
                 runScript(singleScript, parameters);
             });
@@ -456,7 +456,7 @@ public class FixtureScripts {
     @Programmatic
     public <T> T runBuilder(final BuilderScriptAbstract<T> builderScript) {
 
-        return isisInteractionFactory.callAnonymous(()->
+        return interactionService.callAnonymous(()->
             transactionService.callWithinCurrentTransactionElseCreateNew(()->
                 runBuilderScriptNonTransactional(builderScript)
             )

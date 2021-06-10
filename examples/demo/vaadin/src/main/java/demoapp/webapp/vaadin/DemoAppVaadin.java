@@ -25,7 +25,7 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.runtimeservices.session.InteractionFactoryDefault;
+import org.apache.isis.core.runtimeservices.session.InteractionServiceDefault;
 import org.apache.isis.incubator.viewer.vaadin.viewer.IsisModuleIncViewerVaadinViewer;
 import org.apache.isis.valuetypes.asciidoc.ui.vaa.IsisModuleValAsciidocUiVaa;
 import org.apache.isis.valuetypes.asciidoc.ui.wkt.IsisModuleValAsciidocUiWkt;
@@ -61,7 +61,7 @@ public class DemoAppVaadin extends SpringBootServletInitializer {
      */
     public static void main(String[] args) {
 
-        IsisPresets.logging(InteractionFactoryDefault.class, "debug");
+        IsisPresets.logging(InteractionServiceDefault.class, "debug");
 //        IsisPresets.logging(VaadinAuthenticationHandler.class, "debug");
 //        IsisPresets.logging(IsisServletForVaadin.class, "debug");
         IsisPresets.logging(_Probe.class, "debug"); // enable debug entry logging

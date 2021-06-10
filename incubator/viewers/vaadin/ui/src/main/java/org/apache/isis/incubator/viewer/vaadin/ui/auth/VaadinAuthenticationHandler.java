@@ -33,8 +33,8 @@ import com.vaadin.flow.theme.lumo.Lumo;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.iactnlayer.ThrowingRunnable;
-import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.incubator.viewer.vaadin.ui.pages.login.VaadinLoginView;
@@ -59,7 +59,7 @@ implements
 
     private static final long serialVersionUID = 1L;
 
-    @Inject private transient InteractionFactory isisInteractionFactory;
+    @Inject private transient InteractionService interactionService;
     @Inject private transient MetaModelContext metaModelContext;
 
     @Override
@@ -99,7 +99,7 @@ implements
      */
     public <R> R callAuthenticated(Callable<R> callable) {
         return AuthSessionStoreUtil.get()
-                .map(authentication->isisInteractionFactory.call(authentication, callable))
+                .map(authentication->interactionService.call(authentication, callable))
                 .orElse(null); // TODO redirect to login
     }
 
@@ -121,7 +121,7 @@ implements
 
         val authentication = AuthSessionStoreUtil.get().orElse(null);
         if(authentication!=null) {
-            isisInteractionFactory.openInteraction(authentication);
+            interactionService.openInteraction(authentication);
             return; // access granted
         }
         // otherwise redirect to login page

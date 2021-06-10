@@ -54,7 +54,7 @@ import org.apache.isis.core.runtimeservices.recognizer.dae.ExceptionRecognizerFo
 import org.apache.isis.core.runtimeservices.repository.RepositoryServiceDefault;
 import org.apache.isis.core.runtimeservices.routing.RoutingServiceDefault;
 import org.apache.isis.core.runtimeservices.scratchpad.ScratchpadDefault;
-import org.apache.isis.core.runtimeservices.session.InteractionFactoryDefault;
+import org.apache.isis.core.runtimeservices.session.InteractionServiceDefault;
 import org.apache.isis.core.runtimeservices.sudo.SudoServiceDefault;
 import org.apache.isis.core.runtimeservices.transaction.TransactionServiceSpring;
 import org.apache.isis.core.runtimeservices.urlencoding.UrlEncodingServiceWithCompression;
@@ -90,7 +90,7 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         ImpersonatedUserHolderDefault.class,
         ImpersonateMenuAdvisorDefault.class,
         InteractionDtoFactoryDefault.class,
-        InteractionFactoryDefault.class,
+        InteractionServiceDefault.class,
         JaxbServiceDefault.class,
         TranslationServicePo.class,
         MemberExecutorServiceDefault.class,

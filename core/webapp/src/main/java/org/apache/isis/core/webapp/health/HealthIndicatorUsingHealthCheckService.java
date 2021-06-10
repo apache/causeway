@@ -28,7 +28,7 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.services.health.HealthCheckService;
-import org.apache.isis.core.interaction.session.InteractionFactory;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.core.security.authentication.InteractionContextFactory;
 
 import lombok.val;
@@ -37,14 +37,14 @@ import lombok.val;
 @Named("isis.webapp.HealthCheckService") // logical name appears in the endpoint
 public class HealthIndicatorUsingHealthCheckService extends AbstractHealthIndicator {
 
-    private final InteractionFactory isisInteractionFactory;
+    private final InteractionService interactionService;
     private final Optional<HealthCheckService> healthCheckServiceIfAny;
 
     @Inject
     public HealthIndicatorUsingHealthCheckService(
-            final InteractionFactory isisInteractionFactory,
+            final InteractionService interactionService,
             final Optional<HealthCheckService> healthCheckServiceIfAny) {
-        this.isisInteractionFactory = isisInteractionFactory;
+        this.interactionService = interactionService;
         this.healthCheckServiceIfAny = healthCheckServiceIfAny;
     }
 
@@ -52,7 +52,7 @@ public class HealthIndicatorUsingHealthCheckService extends AbstractHealthIndica
     protected void doHealthCheck(Health.Builder builder) throws Exception {
         val health = healthCheckServiceIfAny
                 .map(healthCheckService ->
-                    isisInteractionFactory
+                    interactionService
                         .call(InteractionContextFactory.health(), healthCheckService::check))
                 .orElse(null);
         if(health != null) {

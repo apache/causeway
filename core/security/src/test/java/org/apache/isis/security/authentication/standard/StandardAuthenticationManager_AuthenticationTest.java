@@ -28,8 +28,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+import org.apache.isis.core.security._testing.InteractionService_forTesting;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
-import org.apache.isis.core.security.authentication.manager.AnonymousInteractionFactory;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authentication.standard.RandomCodeGeneratorDefault;
 import org.apache.isis.security.AuthenticatorsForTesting;
@@ -43,7 +43,7 @@ public class StandardAuthenticationManager_AuthenticationTest {
 
         authenticationManager = new AuthenticationManager(
                 Collections.singletonList(AuthenticatorsForTesting.authenticatorValidForFoo()),
-                AnonymousInteractionFactory.forTesting(),
+                new InteractionService_forTesting(),
                 new RandomCodeGeneratorDefault());
     }
 

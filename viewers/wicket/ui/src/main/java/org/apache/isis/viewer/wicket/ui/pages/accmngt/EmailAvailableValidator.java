@@ -21,10 +21,10 @@ package org.apache.isis.viewer.wicket.ui.pages.accmngt;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.ValidationError;
 
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
-import org.apache.isis.viewer.wicket.ui.validation.ValidatorBase;
-import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.viewer.wicket.ui.validation.ValidatorBase;
 
 import lombok.val;
 
@@ -62,10 +62,10 @@ public class EmailAvailableValidator extends ValidatorBase<String> {
         val userRegistrationService = super.getCommonContext()
                 .lookupServiceElseFail(UserRegistrationService.class);
 
-        val isisInteractionFactory = super.getCommonContext()
-                .lookupServiceElseFail(InteractionFactory.class);
+        val interactionService = super.getCommonContext()
+                .lookupServiceElseFail(InteractionService.class);
 
-        isisInteractionFactory.runAnonymous(() -> {
+        interactionService.runAnonymous(() -> {
             String email = validatable.getValue();
             boolean emailExists1 = userRegistrationService.emailExists(email);
             if (emailExists1 != emailExists) {

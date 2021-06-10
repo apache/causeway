@@ -40,9 +40,9 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.valuetypes.sse.applib.annotations.SseSource;
 import org.apache.isis.valuetypes.sse.applib.service.SseChannel;
 import org.apache.isis.valuetypes.sse.applib.service.SseService;
@@ -69,7 +69,7 @@ import lombok.extern.log4j.Log4j2;
 public class SseServiceDefault implements SseService {
 
     @Inject private TransactionService transactionService;
-    @Inject private InteractionFactory isisInteractionFactory;
+    @Inject private InteractionService interactionService;
 
     private final EventStreamPool eventStreamPool = new EventStreamPool();
 
@@ -97,7 +97,7 @@ public class SseServiceDefault implements SseService {
         // spawn a new thread that gets its own session
         CompletableFuture.runAsync(()->{
 
-            isisInteractionFactory.runAnonymous(()->{
+            interactionService.runAnonymous(()->{
                 transactionService.runWithinCurrentTransactionElseCreateNew(()->run(task));
             });
 

@@ -76,7 +76,7 @@ public class PasswordResetPage extends AccountManagementPageAbstract {
                 error(getString("passwordResetExpiredOrInvalidToken"));
                 addOrReplace(addPasswordResetEmailPanel(ID_CONTENT_PANEL));
             } else {
-                Boolean emailExists = getIsisInteractionFactory().callAnonymous(new Callable<Boolean>() {
+                Boolean emailExists = getInteractionService().callAnonymous(new Callable<Boolean>() {
                     @Override
                     public Boolean call() throws Exception {
                         val serviceRegistry = getServiceRegistry();

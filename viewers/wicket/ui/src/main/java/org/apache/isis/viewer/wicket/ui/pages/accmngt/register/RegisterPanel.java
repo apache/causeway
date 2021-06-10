@@ -34,10 +34,10 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.userreg.UserDetails;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.UsernameAvailableValidator;
@@ -115,7 +115,7 @@ public abstract class RegisterPanel extends PanelBase<UserDetails> {
 
         @Inject private transient UserRegistrationService userRegistrationService;
         @Inject private transient TransactionService transactionService;
-        @Inject private transient InteractionFactory isisInteractionFactory;
+        @Inject private transient InteractionService interactionService;
 
         private final String uuid;
 
@@ -141,7 +141,7 @@ public abstract class RegisterPanel extends PanelBase<UserDetails> {
         public final void onSubmit() {
             final UserDetails userDetails = getModelObject();
 
-            isisInteractionFactory.runAnonymous(() -> {
+            interactionService.runAnonymous(() -> {
                 transactionService.runWithinCurrentTransactionElseCreateNew(() -> {
                     userRegistrationService.registerUser(userDetails);
                     removeAccountConfirmation();

@@ -22,7 +22,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import org.apache.isis.core.interaction.session.InteractionFactory;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.incubator.viewer.javafx.model.action.ActionUiModelFactoryFx;
 import org.apache.isis.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
@@ -39,7 +39,7 @@ public interface UiContextFx {
 
     JavaFxViewerConfig getJavaFxViewerConfig();
 
-    InteractionFactory getIsisInteractionFactory();
+    InteractionService getInteractionService();
     ActionUiModelFactoryFx getActionUiModelFactory();
 
     void setNewPageHandler(Consumer<Node> onNewPage);

@@ -23,7 +23,7 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.interaction.session.InteractionFactory;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
@@ -57,7 +57,7 @@ public class MainViewFx {
     private final JavaFxViewerConfig viewerConfig;
     private final MetaModelContext metaModelContext;
     private final HeaderUiModelProvider headerUiModelProvider;
-    private final InteractionFactory isisInteractionFactory;
+    private final InteractionService interactionService;
     private final UiContextFx uiContext;
     private final UiActionHandlerFx uiActionHandler;
     private final UiComponentFactoryFx uiComponentFactory;
@@ -82,7 +82,7 @@ public class MainViewFx {
         contentView.setVbarPolicy(ScrollBarPolicy.ALWAYS);
         contentPane.setFillWidth(true);
         //_fx.borderDashed(contentPane, Color.CRIMSON); //debug
-        isisInteractionFactory.runAnonymous(this::buildMenu);
+        interactionService.runAnonymous(this::buildMenu);
 
         renderHomepage();
     }

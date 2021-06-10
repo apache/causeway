@@ -33,9 +33,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.user.UserMemento.AuthenticationSource;
-import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.security.spring.authconverters.AuthenticationConverter;
 
 import lombok.val;
@@ -46,7 +46,7 @@ import lombok.val;
 //@Log4j2
 public class SpringSecurityFilter implements Filter {
 
-    @Autowired private InteractionFactory interactionFactory;
+    @Autowired private InteractionService interactionService;
 
     @Override
     public void doFilter(
@@ -84,7 +84,7 @@ public class SpringSecurityFilter implements Filter {
         userMemento = userMemento.withRoleAdded("org.apache.isis.viewer.wicket.roles.USER")
                 .withAuthenticationSource(AuthenticationSource.EXTERNAL);
 
-        interactionFactory.run(
+        interactionService.run(
                 InteractionContext.ofUserWithSystemDefaults(userMemento),
                 ()->filterChain.doFilter(servletRequest, servletResponse));
     }

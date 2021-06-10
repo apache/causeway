@@ -31,7 +31,7 @@ public interface UiContextVaa {
 
     //JavaFxViewerConfig getJavaFxViewerConfig();
 
-    InteractionService getIsisInteractionFactory();
+    InteractionService getInteractionService();
     //ActionUiModelFactoryFx getActionUiModelFactory();
 
     void setNewPageHandler(Consumer<Component> onNewPage);

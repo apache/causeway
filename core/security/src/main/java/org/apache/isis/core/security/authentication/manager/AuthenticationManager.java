@@ -36,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.exceptions.unrecoverable.NoAuthenticatorException;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Timing;
@@ -59,7 +60,7 @@ public class AuthenticationManager {
     @Getter private final @NonNull Can<Authenticator> authenticators;
 
     private final Map<String, String> userByValidationCode = _Maps.newConcurrentHashMap();
-    private final @NonNull AnonymousInteractionFactory anonymousInteractionFactory;
+    private final @NonNull InteractionService interactionService;
     private final @NonNull RandomCodeGenerator randomCodeGenerator;
     private final @NonNull Can<Registrar> registrars;
 
@@ -67,9 +68,9 @@ public class AuthenticationManager {
     public AuthenticationManager(
             final List<Authenticator> authenticators,
             // needs @Lazy due to circular provisioning dependency
-            final @Lazy AnonymousInteractionFactory anonymousInteractionFactory,
+            final @Lazy InteractionService anonymousInteractionFactory,
             final RandomCodeGenerator randomCodeGenerator) {
-        this.anonymousInteractionFactory = anonymousInteractionFactory;
+        this.interactionService = anonymousInteractionFactory;
         this.randomCodeGenerator = randomCodeGenerator;
         this.authenticators = Can.ofCollection(authenticators);
         if (this.authenticators.isEmpty()) {
@@ -100,7 +101,7 @@ public class AuthenticationManager {
 
         // open a new anonymous interaction for this loop to run in
         // we simply participate with the current transaction
-        return anonymousInteractionFactory.callAnonymous(()->{
+        return interactionService.callAnonymous(()->{
 
             for (val authenticator : compatibleAuthenticators) {
                 val authentication = authenticator.authenticate(request, getUnusedRandomCode());

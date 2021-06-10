@@ -37,17 +37,17 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.security.authorization.Authorizor;
 import org.apache.isis.extensions.secman.applib.SecmanConfiguration;
-import org.apache.isis.extensions.secman.applib.user.spi.PasswordEncryptionService;
 import org.apache.isis.extensions.secman.applib.user.dom.AccountType;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.applib.user.spi.PasswordEncryptionService;
 import org.apache.isis.extensions.secman.shiro.util.ShiroUtils;
 
 import lombok.Getter;
@@ -61,7 +61,7 @@ public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm {
 
     private static final String SECMAN_UNLOCK_DELEGATED_USERS = "isis.ext.secman.unlockDelegatedUsers";
 	@Inject protected ServiceInjector serviceInjector;
-    @Inject protected InteractionFactory isisInteractionFactory;
+    @Inject protected InteractionService interactionService;
     @Inject protected PlatformTransactionManager txMan;
     @Inject private SecmanConfiguration configBean;
 	@Inject protected IsisConfiguration isisConfiguration;
@@ -279,7 +279,7 @@ public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm {
     }
 
     <V> V execute(final Supplier<V> closure) {
-        return isisInteractionFactory.callAnonymous(
+        return interactionService.callAnonymous(
                 new Callable<V>() {
                     @Override
                     public V call() {

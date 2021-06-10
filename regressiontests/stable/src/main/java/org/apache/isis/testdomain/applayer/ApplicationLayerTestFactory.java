@@ -18,13 +18,6 @@
  */
 package org.apache.isis.testdomain.applayer;
 
-import static org.apache.isis.applib.services.wrapper.control.AsyncControl.returningVoid;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.junit.jupiter.api.DynamicTest.dynamicTest;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -45,8 +38,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.DynamicTest.dynamicTest;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
@@ -58,7 +58,6 @@ import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.functions._Functions.CheckedConsumer;
-import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
@@ -70,6 +69,8 @@ import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.jdo.entities.JdoInventory;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
+
+import static org.apache.isis.applib.services.wrapper.control.AsyncControl.returningVoid;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -88,7 +89,7 @@ public class ApplicationLayerTestFactory {
     private final ObjectManager objectManager;
     private final FixtureScripts fixtureScripts;
     private final PreCommitListener preCommitListener;
-    private final InteractionFactory interactionFactory;
+    private final InteractionService interactionService;
     private final InteractionTracker interactionTracker;
 
     @Named("transaction-aware-pmf-proxy")
@@ -176,10 +177,10 @@ public class ApplicationLayerTestFactory {
 
             xrayAddTest(displayName);
 
-            assertFalse(interactionFactory.isInInteraction());
+            assertFalse(interactionService.isInInteraction());
             assert_no_initial_tx_context();
 
-            final boolean isSuccesfulRun = interactionFactory.callAnonymous(()->{
+            final boolean isSuccesfulRun = interactionService.callAnonymous(()->{
                 val currentInteraction = interactionTracker.currentInteraction();
                 xrayEnterInteraction(currentInteraction);
                 val result = interactionTestRunner.run(given, verifier);
@@ -187,7 +188,7 @@ public class ApplicationLayerTestFactory {
                 return result;
             });
 
-            interactionFactory.closeInteractionLayers();
+            interactionService.closeInteractionLayers();
 
             if(isSuccesfulRun) {
                 verifier.accept(onSuccess);

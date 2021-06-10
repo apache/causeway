@@ -18,8 +18,6 @@
  */
 package org.apache.isis.testdomain.transactions.jpa;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -27,10 +25,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.jpa.JpaTestDomainPersona;
 import org.apache.isis.testdomain.jpa.entities.JpaBook;
@@ -39,7 +39,7 @@ import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 @SpringBootTest(
-        classes = { 
+        classes = {
                 Configuration_usingJpa.class,
                 InteractionBoundaryProbe.class
         })
@@ -48,64 +48,64 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
  * With this test we manage IsisInteractions ourselves. (not sub-classing IsisIntegrationTestAbstract)
  */
 class JpaTransactionScopeListenerTest {
-    
+
     @Inject private FixtureScripts fixtureScripts;
     @Inject private TransactionService transactionService;
     @Inject private RepositoryService repository;
-    @Inject private InteractionFactory isisInteractionFactory;
+    @Inject private InteractionService interactionService;
     @Inject private KVStoreForTesting kvStoreForTesting;
-    
+
     /* Expectations:
      * 1. for each InteractionScope there should be a new InteractionBoundaryProbe instance
      * 2. for each Transaction the current InteractionBoundaryProbe should get notified
-     * 
+     *
      * first we have 1 InteractionScope with 1 expected Transaction during 'setUp'
      * then we have 1 InteractionScope with 1 expected Transaction within the test method
-     *  
+     *
      */
-    
+
     @BeforeEach
     void setUp() {
-        
+
         // new IsisInteractionScope with a new transaction (#1)
-        isisInteractionFactory.runAnonymous(()->{
-        
+        interactionService.runAnonymous(()->{
+
             // cleanup
             fixtureScripts.runPersona(JpaTestDomainPersona.PurgeAll);
-            
+
         });
-        
+
     }
-    
+
     @Test
     void sessionScopedProbe_shouldBeReused_andBeAwareofTransactionBoundaries() {
-        
+
         // new IsisInteractionScope with a new transaction (#2)
-        isisInteractionFactory.runAnonymous(()->{
-            
+        interactionService.runAnonymous(()->{
+
             // expected pre condition
             // reuse transaction (#2)
             assertEquals(0, repository.allInstances(JpaBook.class).size());
-        
+
             // reuse transaction (#2)
             transactionService.runWithinCurrentTransactionElseCreateNew(()->{
-                
+
                 fixtureScripts.runPersona(JpaTestDomainPersona.InventoryWith1Book);
-                
+
             });
-            
+
             // expected post condition
             // reuse transaction (#2)
             assertEquals(1, repository.allInstances(JpaBook.class).size());
-            
+
         });
-        
+
         assertEquals(2, InteractionBoundaryProbe.totalInteractionsStarted(kvStoreForTesting));
         assertEquals(2, InteractionBoundaryProbe.totalInteractionsEnded(kvStoreForTesting));
         assertEquals(2, InteractionBoundaryProbe.totalTransactionsEnding(kvStoreForTesting));
         assertEquals(2, InteractionBoundaryProbe.totalTransactionsCommitted(kvStoreForTesting));
 
     }
-    
+
 
 }

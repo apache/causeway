@@ -81,7 +81,7 @@ class ProjectSamples {
         assertTrue(sources.contains("o.a.i/core/runtime/events/persistence/TimestampService.java"));
         assertTrue(sources.contains("o.a.i/core/runtime/events/RuntimeEventService.java"));
         assertTrue(sources.contains("o.a.i/core/runtime/iactn/IsisInteraction.java"));
-        assertTrue(sources.contains("o.a.i/core/runtime/iactn/InteractionFactory.java"));
+        assertTrue(sources.contains("o.a.i/core/runtime/iactn/InteractionService.java"));
         assertTrue(sources.contains("o.a.i/core/runtime/iactn/InteractionTracker.java"));
         assertTrue(sources.contains("o.a.i/core/runtime/iactn/scope/IsisInteractionScope.java"));
         assertTrue(sources.contains("o.a.i/core/runtime/iactn/scope/IsisInteractionScopeBeanFactoryPostProcessor.java"));

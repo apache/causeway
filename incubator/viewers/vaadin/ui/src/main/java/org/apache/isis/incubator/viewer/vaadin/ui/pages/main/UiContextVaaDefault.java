@@ -28,7 +28,7 @@ import com.vaadin.flow.component.Component;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.core.interaction.session.InteractionFactory;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.incubator.viewer.vaadin.model.context.UiContextVaa;
 
@@ -46,7 +46,7 @@ public class UiContextVaaDefault implements UiContextVaa {
 //    @Getter(onMethod_ = {@Override})
 //    private final JavaFxViewerConfig javaFxViewerConfig;
     @Getter(onMethod_ = {@Override})
-    private final InteractionFactory isisInteractionFactory;
+    private final InteractionService interactionService;
 //    @Getter(onMethod_ = {@Override})
 //    private final ActionUiModelFactoryFx actionUiModelFactory = new ActionUiModelFactoryFx();
 
@@ -64,7 +64,7 @@ public class UiContextVaaDefault implements UiContextVaa {
 
     @Override
     public void route(Supplier<ManagedObject> objectSupplier) {
-        isisInteractionFactory.runAnonymous(()->{
+        interactionService.runAnonymous(()->{
             val object = objectSupplier.get();
             route(object);
         });

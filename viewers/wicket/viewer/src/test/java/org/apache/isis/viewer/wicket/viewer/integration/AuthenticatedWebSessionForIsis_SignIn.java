@@ -32,18 +32,18 @@ import org.junit.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.iactnlayer.ThrowingRunnable;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.session.SessionLoggingService;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.security._testing.InteractionService_forTesting;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.security.authentication.Authenticator;
 import org.apache.isis.core.security.authentication.InteractionContextFactory;
-import org.apache.isis.core.security.authentication.manager.AnonymousInteractionFactory;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authentication.standard.RandomCodeGeneratorDefault;
 
@@ -58,7 +58,7 @@ public class AuthenticatedWebSessionForIsis_SignIn {
     @Mock protected Request mockRequest;
     @Mock protected Authenticator mockAuthenticator;
     @Mock protected IsisAppCommonContext mockCommonContext;
-    @Mock protected InteractionFactory mockInteractionFactory;
+    @Mock protected InteractionService mockInteractionService;
     @Mock protected ServiceRegistry mockServiceRegistry;
 
     protected AuthenticatedWebSessionForIsis webSession;
@@ -67,7 +67,7 @@ public class AuthenticatedWebSessionForIsis_SignIn {
     public void setUp() throws Exception {
         authMgr = new AuthenticationManager(
                 Collections.singletonList(mockAuthenticator),
-                AnonymousInteractionFactory.forTesting(),
+                new InteractionService_forTesting(),
                 new RandomCodeGeneratorDefault());
     }
 
@@ -81,13 +81,13 @@ public class AuthenticatedWebSessionForIsis_SignIn {
                 allowing(mockServiceRegistry).select(SessionLoggingService.class);
                 will(returnValue(Can.empty()));
 
-                allowing(mockCommonContext).lookupServiceElseFail(InteractionFactory.class);
-                will(returnValue(mockInteractionFactory));
+                allowing(mockCommonContext).lookupServiceElseFail(InteractionService.class);
+                will(returnValue(mockInteractionService));
 
-                allowing(mockInteractionFactory)
+                allowing(mockInteractionService)
                 .run(with(InteractionContextFactory.testing()), with(any(ThrowingRunnable.class)));
 
-                allowing(mockInteractionFactory)
+                allowing(mockInteractionService)
                 .runAnonymous(with(any(ThrowingRunnable.class)));
 
                 // ignore

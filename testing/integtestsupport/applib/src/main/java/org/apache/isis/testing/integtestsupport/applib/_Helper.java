@@ -23,9 +23,8 @@ import java.util.Optional;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 
 class _Helper {
 
@@ -38,9 +37,9 @@ class _Helper {
 
     // -- SHORTCUTS
 
-    static Optional<InteractionFactory> getInteractionFactory(final ExtensionContext extensionContext) {
+    static Optional<InteractionService> getInteractionFactory(final ExtensionContext extensionContext) {
         return getServiceRegistry(extensionContext)
-        .flatMap(serviceRegistry->serviceRegistry.lookupService(InteractionFactory.class));
+        .flatMap(serviceRegistry->serviceRegistry.lookupService(InteractionService.class));
     }
 
     static Optional<ExceptionRecognizerService> getExceptionRecognizerService(

@@ -37,10 +37,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.persistence.jdo.spring.integration.JdoTransactionManager;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.entities.JdoInventory;
@@ -48,21 +48,21 @@ import org.apache.isis.testdomain.jdo.entities.JdoInventory;
 import lombok.val;
 
 @SpringBootTest(
-        classes = { 
+        classes = {
                 Configuration_usingJdo.class,
         })
 @TestPropertySources({
-    @TestPropertySource(IsisPresets.UseLog4j2Test)    
+    @TestPropertySource(IsisPresets.UseLog4j2Test)
 })
 //@Transactional ... we manage transaction ourselves
 class JdoExceptionTranslationTest
 {
 
     // @Inject private JdoSupportService JdoSupport;
-    
+
     @Inject private TransactionService transactionService;
     @Inject private RepositoryService repositoryService;
-    @Inject private InteractionFactory interactionFactory;
+    @Inject private InteractionService interactionService;
     @Inject private JdoTransactionManager txManager;
 
     @BeforeAll
@@ -71,75 +71,75 @@ class JdoExceptionTranslationTest
         // Util_H2Console.main(null);
     }
 
-    @Test 
+    @Test
     void booksUniqueByIsbn_whenViolated_shouldThrowTranslatedException() {
 
-        
+
         transactionService.runTransactional(Propagation.REQUIRES_NEW, ()->{
-            
-            interactionFactory.runAnonymous(()->{
-            
+
+            interactionService.runAnonymous(()->{
+
                 _TestFixtures.setUp3Books(repositoryService);
-                
+
             });
-            
-            
+
+
         });
-        
+
         // when adding a book for which one with same ISBN already exists in the database,
-        // we expect to see a Spring recognized DataAccessException been thrown 
-        
+        // we expect to see a Spring recognized DataAccessException been thrown
+
         assertThrows(DataAccessException.class, ()->{
 
             transactionService.runTransactional(Propagation.REQUIRES_NEW, ()->{
-                
-                interactionFactory.runAnonymous(()->{
-                
+
+                interactionService.runAnonymous(()->{
+
                     // given
-                    
+
                     val inventories = repositoryService.allInstances(JdoInventory.class);
                     assertEquals(1, inventories.size());
-                    
+
                     val inventory = inventories.get(0);
                     assertNotNull(inventory);
-                    
-                    
+
+
                     // add a conflicting book (unique ISBN violation)
                     _TestFixtures.addABookTo(inventory);
-                
+
                 });
-    
+
             })
             .ifSuccess(__->fail("expected to fail, but did not"))
             //.mapFailure(ex->_JdoExceptionTranslator.translate(ex, txManager))
             .ifFailure(ex->assertTrue(ex instanceof DataIntegrityViolationException))
             .optionalElseFail();
-            
+
         });
-        
+
         // expected post condition: ONE inventory with 3 books
-        
+
         transactionService.runTransactional(Propagation.REQUIRES_NEW, ()->{
-            
-            interactionFactory.runAnonymous(()->{
-            
+
+            interactionService.runAnonymous(()->{
+
                 val inventories = repositoryService.allInstances(JdoInventory.class);
                 assertEquals(1, inventories.size());
-                
+
                 val inventory = inventories.get(0);
                 assertNotNull(inventory);
-                
+
                 assertNotNull(inventory);
                 assertNotNull(inventory.getProducts());
                 assertEquals(3, inventory.getProducts().size());
 
                 _TestFixtures.assertInventoryHasBooks(inventory.getProducts(), 1, 2, 3);
-                
+
             });
-            
-            
+
+
         });
 
-        
-    }    
+
+    }
 }

@@ -20,12 +20,11 @@ package org.apache.isis.core.runtime.context;
 
 import java.util.function.Supplier;
 
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.interaction.session.InteractionFactory;
-import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
@@ -69,7 +68,7 @@ public abstract class RuntimeContextBase implements RuntimeContext {
         this.objectManager = mmc.getObjectManager();
         this.transactionService = mmc.getTransactionService();
         this.homePageSupplier = mmc::getHomePageAdapter;
-        this.interactionService = serviceRegistry.lookupServiceElseFail(InteractionFactory.class);
+        this.interactionService = serviceRegistry.lookupServiceElseFail(InteractionService.class);
         this.authenticationManager = serviceRegistry.lookupServiceElseFail(AuthenticationManager.class);
         this.interactionTracker = serviceRegistry.lookupServiceElseFail(InteractionTracker.class);
     }
