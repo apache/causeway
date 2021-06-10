@@ -81,6 +81,13 @@ public class AppManifest {
 <.> use Jbcrypt to encrypt passwords
 <.> fixture script support
 
+In addition, you will probably want to *remove* the `IsisModuleSecurityShiro.class` dependency so that SecMan can take care of both authentication _and_ authorisation.
+
+[NOTE]
+====
+It also possible to use SecMan in conjunction with Shiro, as described xref:setting-up-with-shiro.adoc[here].
+The primary use case is to support delegated users that Shiro authenticates externally using LDAP, for example.
+====
 
 [#configure-properties]
 == Configuration Properties
@@ -131,6 +138,64 @@ These can be removed (through the UI).
 <.> if self-user registration is enabled in the viewer, this defines the set of roles to be granted to said user.
 +
 This is discussed in more detail <<user-registration-aka-sign-up,below>>.
+
+
+== menubar.layout.xml
+
+SecMan provides a large number of menu actions.
+You can use `menubars.layout.xml` to arrange these as you see fit.
+To get you started, the following fragment adds all of the actions to a "Security" secondary menu:
+
+[source,xml]
+.menubars.layout.xml
+----
+<mb3:secondary>
+    ...
+    <mb3:menu>
+        <mb3:named>Security</mb3:named>
+        <mb3:section>
+            <mb3:named>Users</mb3:named>
+            <mb3:serviceAction objectType="isis.ext.secman.ApplicationUserMenu" id="userManager"/>
+            <mb3:serviceAction objectType="isis.ext.secman.ApplicationUserMenu" id="findUsers"/>
+        </mb3:section>
+        <mb3:section>
+            <mb3:named>Roles</mb3:named>
+            <mb3:serviceAction objectType="isis.ext.secman.ApplicationRoleMenu" id="findRoles"/>
+            <mb3:serviceAction objectType="isis.ext.secman.ApplicationRoleMenu" id="newRole"/>
+            <mb3:serviceAction objectType="isis.ext.secman.ApplicationRoleMenu" id="allRoles"/>
+        </mb3:section>
+        <mb3:section>
+            <mb3:named>Permissions</mb3:named>
+            <mb3:serviceAction objectType="isis.ext.secman.ApplicationPermissionMenu" id="allPermissions"/>
+            <mb3:serviceAction objectType="isis.ext.secman.ApplicationPermissionMenu" id="findOrphanedPermissions"/>
+        </mb3:section>
+        <mb3:section>
+            <mb3:named>Tenancies</mb3:named>
+            <mb3:serviceAction objectType="isis.ext.secman.ApplicationTenancyMenu" id="findTenancies"/>
+            <mb3:serviceAction objectType="isis.ext.secman.ApplicationTenancyMenu" id="newTenancy"/>
+            <mb3:serviceAction objectType="isis.ext.secman.ApplicationTenancyMenu" id="allTenancies"/>
+        </mb3:section>
+    </mb3:menu>
+</mb3:secondary>
+----
+
+We also recommend adding the non-production "me" action to the tertiary menu, eg just above the "logout" action:
+
+[source,xml]
+.menubars.layout.xml
+----
+<mb3:tertiary>
+    <mb3:menu>
+        ...
+        <mb3:section>
+            <mb3:serviceAction objectType="isis.ext.secman.MeService" id="me"/>
+            <mb3:serviceAction objectType="isis.security.LogoutMenu" id="logout"/>
+        </mb3:section>
+    </mb3:menu>
+</mb3:tertiary>
+----
+
+
 
 [#default-roles]
 == Default Roles

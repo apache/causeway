@@ -173,6 +173,91 @@ If running in prototype mode, the file will be dynamically reloaded from the cla
 
 Once the application has bootstrapped with a layout file, downloading the "Default" layout (from the prototyping menu) in essence just returns this file.
 
+
+=== Prototyping menu
+
+The framework provides a large number of menu actions available in prototyping mode.
+You can use `menubars.layout.xml` to arrange these as you see fit, though our recommendation is to place them all in a "Prototyping" secondary menu:
+
+[source,xml]
+.menubars.layout.xml
+----
+<mb3:secondary>
+    <mb3:menu>
+        <mb3:named>Prototyping</mb3:named>
+        <mb3:section>
+            <mb3:named>Fixtures</mb3:named>
+            <mb3:serviceAction objectType="isis.testing.fixtures.FixtureScripts" id="runFixtureScript"/>
+            <mb3:serviceAction objectType="isis.testing.fixtures.FixtureScripts" id="recreateObjectsAndReturnFirst"/>
+        </mb3:section>
+        <mb3:section>
+            <mb3:named>Layouts</mb3:named>
+            <mb3:serviceAction objectType="isis.applib.LayoutServiceMenu" id="downloadLayouts"/>
+            <mb3:serviceAction objectType="isis.applib.LayoutServiceMenu" id="downloadMenuBarsLayout"/>
+        </mb3:section>
+        <mb3:section>
+            <mb3:named>Meta Model and Features</mb3:named>
+            <mb3:serviceAction objectType="isis.applib.MetaModelServiceMenu" id="downloadMetaModelXml"/>
+            <mb3:serviceAction objectType="isis.applib.MetaModelServiceMenu" id="downloadMetaModelCsv"/>
+            <mb3:serviceAction objectType="isis.feat.ApplicationFeatureMenu" id="allNamespaces"/>
+            <mb3:serviceAction objectType="isis.feat.ApplicationFeatureMenu" id="allTypes"/>
+            <mb3:serviceAction objectType="isis.feat.ApplicationFeatureMenu" id="allActions"/>
+            <mb3:serviceAction objectType="isis.feat.ApplicationFeatureMenu" id="allProperties"/>
+            <mb3:serviceAction objectType="isis.feat.ApplicationFeatureMenu" id="allCollections"/>
+        </mb3:section>
+        <mb3:section>
+            <mb3:named>Persistence</mb3:named>
+            <mb3:serviceAction objectType="isis.persistence.jdo.JdoMetamodelMenu" id="downloadMetamodels"/>
+            <mb3:serviceAction objectType="isis.ext.h2Console.H2ManagerMenu" id="openH2Console"/>
+        </mb3:section>
+        <mb3:section>
+            <mb3:named>REST API</mb3:named>
+            <mb3:serviceAction objectType="isis.viewer.restfulobjects.SwaggerServiceMenu" id="openSwaggerUi"/>
+            <mb3:serviceAction objectType="isis.viewer.restfulobjects.SwaggerServiceMenu" id="openRestApi"/>
+            <mb3:serviceAction objectType="isis.viewer.restfulobjects.SwaggerServiceMenu" id="downloadSwaggerSchemaDefinition"/>
+        </mb3:section>
+        <mb3:section>
+            <mb3:named>i18n</mb3:named>
+            <mb3:serviceAction objectType="isis.applib.TranslationServicePoMenu" id="downloadTranslations"/>
+            <mb3:serviceAction objectType="isis.applib.TranslationServicePoMenu" id="resetTranslationCache"/>
+            <mb3:serviceAction objectType="isis.applib.TranslationServicePoMenu" id="switchToReadingTranslations"/>
+            <mb3:serviceAction objectType="isis.applib.TranslationServicePoMenu" id="switchToWritingTranslations"/>
+        </mb3:section>
+    </mb3:menu>
+</mb3:secondary>
+----
+
+
+=== Tertiary menu
+
+The framework also provides a number of menu actions available in production (as oppposed to prototyping) mode.
+You can use `menubars.layout.xml` to arrange these as you see fit, though our recommendation is to place them in the tertiary menu:
+
+[source,xml]
+.menubars.layout.xml
+----
+<mb3:tertiary>
+    <mb3:menu>
+        <mb3:named/>
+        <mb3:section>
+            <mb3:named>Configuration</mb3:named>
+            <mb3:serviceAction objectType="isis.conf.ConfigurationMenu" id="configuration"/>
+        </mb3:section>
+        <mb3:section>
+            <mb3:named>Impersonate</mb3:named>
+            <mb3:serviceAction objectType="isis.sudo.ImpersonateMenu" id="impersonate"/>
+            <mb3:serviceAction objectType="isis.sudo.ImpersonateMenu" id="impersonateWithRoles"/>
+            <mb3:serviceAction objectType="isis.sudo.ImpersonateMenu" id="stopImpersonating"/>
+        </mb3:section>
+        <mb3:section>
+            <mb3:serviceAction objectType="isis.security.LogoutMenu" id="logout"/>
+        </mb3:section>
+    </mb3:menu>
+</mb3:tertiary>
+----
+
+
+
 === Downloading the layout file
 
 The current `menubars.layout.xml` can be downloaded from the xref:refguide:applib:index/services/menu/MenuBarsService.adoc[MenuBarsService] (exposed on the prototyping menu):
