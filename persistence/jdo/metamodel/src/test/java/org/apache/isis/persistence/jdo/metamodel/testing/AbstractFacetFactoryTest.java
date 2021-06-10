@@ -28,6 +28,7 @@ import org.junit.Rule;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
@@ -43,7 +44,6 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.security.authentication.AuthenticationProvider;
 import org.apache.isis.core.security.authentication.InteractionContextFactory;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
@@ -68,7 +68,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
     }
 
     protected TranslationService mockTranslationService;
-    protected AuthenticationProvider mockAuthenticationProvider;
+    protected InteractionProvider mockInteractionProvider;
     protected final InteractionContext iaContext = InteractionContextFactory.testing();
     protected SpecificationLoader mockSpecificationLoader;
     protected MethodRemoverForTesting methodRemover;
@@ -108,19 +108,19 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
 
         methodRemover = new MethodRemoverForTesting();
 
-        mockAuthenticationProvider = context.mock(AuthenticationProvider.class);
+        mockInteractionProvider = context.mock(InteractionProvider.class);
         mockTranslationService = context.mock(TranslationService.class);
         mockSpecificationLoader = context.mock(SpecificationLoader.class);
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
                 .translationService(mockTranslationService)
-                .authenticationProvider(mockAuthenticationProvider)
+                .interactionProvider(mockInteractionProvider)
                 .build();
 
         context.checking(new Expectations() {{
 
-            allowing(mockAuthenticationProvider).currentAuthentication();
+            allowing(mockInteractionProvider).currentInteractionContext();
             will(returnValue(Optional.of(iaContext)));
         }});
 

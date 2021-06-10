@@ -32,12 +32,12 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.applib.value.OpenUrlStrategy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.security.IsisModuleCoreSecurity;
-import org.apache.isis.core.security.authentication.AuthenticationProvider;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -51,7 +51,7 @@ public class LogoutMenu {
     public static final String LOGICAL_TYPE_NAME = IsisModuleCoreSecurity.NAMESPACE + ".LogoutMenu"; // referenced by secman seeding
 
     private final List<LogoutHandler> logoutHandler;
-    private final AuthenticationProvider authenticationProvider;
+    private final InteractionProvider interactionProvider;
     //private final IsisConfiguration configuration;
 
     public static class LogoutDomainEvent
@@ -73,7 +73,7 @@ public class LogoutMenu {
     }
 
     private Object getRedirect() {
-        val redirect =  authenticationProvider.currentAuthentication()
+        val redirect =  interactionProvider.currentInteractionContext()
         .map(InteractionContext::getUser)
         .map(userMemento->
             userMemento.getAuthenticationSource().isExternal()

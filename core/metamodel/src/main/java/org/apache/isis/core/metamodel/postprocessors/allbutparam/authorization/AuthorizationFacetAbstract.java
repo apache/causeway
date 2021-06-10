@@ -19,32 +19,34 @@
 
 package org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization;
 
+import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.security.authentication.AuthenticationProvider;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public abstract class AuthorizationFacetAbstract extends FacetAbstract implements AuthorizationFacet {
+public abstract class AuthorizationFacetAbstract
+extends FacetAbstract
+implements AuthorizationFacet {
 
     public static Class<? extends Facet> type() {
         return AuthorizationFacet.class;
     }
 
     private final AuthorizationManager authorizationManager;
-    private final AuthenticationProvider authenticationProvider;
+    private final InteractionProvider interactionProvider;
 
     public AuthorizationFacetAbstract(
             final FacetHolder holder) {
         super(type(), holder, Derivation.NOT_DERIVED);
         this.authorizationManager = getAuthorizationManager();
-        this.authenticationProvider = getAuthenticationContext();
+        this.interactionProvider = getInteractionProvider();
     }
 
     @Override
@@ -52,7 +54,7 @@ public abstract class AuthorizationFacetAbstract extends FacetAbstract implement
 
         val hides = authorizationManager
                 .isVisible(
-                        authenticationProvider.currentAuthenticationElseFail(),
+                        interactionProvider.currentInteractionContextElseFail(),
                         ic.getIdentifier())
                 ? null
                 : "Not authorized to view";
@@ -69,7 +71,7 @@ public abstract class AuthorizationFacetAbstract extends FacetAbstract implement
 
         val disables = authorizationManager
                 .isUsable(
-                        authenticationProvider.currentAuthenticationElseFail(),
+                        interactionProvider.currentInteractionContextElseFail(),
                         ic.getIdentifier())
                 ? null
                 : "Not authorized to edit";

@@ -74,7 +74,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         context.checking(new Expectations() {{
 
-            allowing(mockAuthenticationProvider).currentAuthentication();
+            allowing(mockInteractionProvider).currentInteractionContext();
             will(returnValue(Optional.of(iaContext)));
         }});
 

@@ -396,9 +396,4 @@ implements
         interaction.clear();
     }
 
-    @Override
-    public Optional<InteractionContext> currentAuthentication() {
-        return currentInteractionContext();
-    }
-
 }

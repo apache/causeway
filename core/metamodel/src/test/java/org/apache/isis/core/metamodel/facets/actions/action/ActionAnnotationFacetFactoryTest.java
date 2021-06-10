@@ -28,11 +28,11 @@ import org.junit.After;
 import org.junit.Before;
 
 import org.apache.isis.applib.mixins.system.HasInteractionId;
+import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.security.authentication.AuthenticationProvider;
 
 import lombok.val;
 
@@ -69,8 +69,8 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
         facetFactory.setMetaModelContext(super.metaModelContext);
 
         context.checking(new Expectations() {{
-            allowing(mockServiceRegistry).lookupServiceElseFail(AuthenticationProvider.class);
-            will(returnValue(mockAuthenticationTracker));
+            allowing(mockServiceRegistry).lookupServiceElseFail(InteractionProvider.class);
+            will(returnValue(mockInteractionProvider));
 
             allowing(mockTypeSpec).getFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class);
             will(returnValue(null));

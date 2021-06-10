@@ -28,7 +28,6 @@ import org.apache.isis.commons.internal.debug.xray.XrayModel.ThreadMemento;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.debug.xray.sequence.SequenceDiagram;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.security.authentication.AuthenticationProvider;
 
 import lombok.Builder;
 import lombok.NonNull;
@@ -66,7 +65,6 @@ public final class XrayUtil {
 
     public static Optional<SequenceHandle> createSequenceHandle(
             final @NonNull InteractionProvider interactionProvider,
-            final @NonNull AuthenticationProvider authenticationProvider,
             final String ... callees) {
 
         if(!interactionProvider.isInInteraction()) {
@@ -86,19 +84,6 @@ public final class XrayUtil {
 
         return Optional.of(handle);
 
-    }
-
-    // Using parameter that implements multiple interfaces, because we have no access to InteractionTracker
-    public static <T extends InteractionProvider & AuthenticationProvider>
-    Optional<SequenceHandle> createSequenceHandle(
-            final @NonNull T iaTracker,
-            final String ... callees) {
-
-        if(!iaTracker.isInInteraction()) {
-            return Optional.empty();
-        }
-
-        return createSequenceHandle(iaTracker, iaTracker, callees);
     }
 
     @Value @Builder

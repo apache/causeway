@@ -22,6 +22,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 /**
@@ -61,18 +62,29 @@ public interface InteractionProvider {
      */
     Optional<UUID> getInteractionId();
 
-    // -- SHORTCUTS
-
-    default Interaction currentInteractionElseFail() {
-    	return currentInteraction().orElseThrow(()->_Exceptions
-    			.illegalState("No InteractionSession on current thread"));
-    }
-
-
     /**
      * interaction-layer-stack size
      * */
     int getInteractionLayerCount();
+
+    // -- SHORTCUTS
+
+    default Interaction currentInteractionElseFail() {
+    	return currentInteraction()
+    	        .orElseThrow(()->
+    	            _Exceptions
+    	                .illegalState(
+    	                        "no InteractionLayer available on current thread %s",
+    	                        _Probe.currentThreadId()));
+    }
+
+    default InteractionContext currentInteractionContextElseFail() {
+        return currentInteractionContext()
+                .orElseThrow(()->
+                    _Exceptions.illegalState(
+                            "no InteractionLayer available on current thread %s",
+                            _Probe.currentThreadId()));
+    }
 
 
 }

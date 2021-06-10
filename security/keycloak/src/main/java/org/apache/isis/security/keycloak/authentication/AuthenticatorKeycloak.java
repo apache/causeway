@@ -27,8 +27,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
-import org.apache.isis.core.security.authentication.AuthenticationProvider;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.Authenticator;
 
@@ -42,7 +42,7 @@ import org.apache.isis.core.security.authentication.Authenticator;
 @Singleton
 public class AuthenticatorKeycloak implements Authenticator {
 
-    @Inject private AuthenticationProvider authenticationProvider;
+    @Inject private InteractionProvider interactionProvider;
 
     @Override
     public final boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass) {
@@ -52,7 +52,7 @@ public class AuthenticatorKeycloak implements Authenticator {
     @Override
     public InteractionContext authenticate(final AuthenticationRequest request, final String code) {
         // HTTP request filters should already have taken care of Authentication creation
-        return authenticationProvider.currentAuthentication().orElse(null);
+        return interactionProvider.currentInteractionContext().orElse(null);
     }
 
     @Override

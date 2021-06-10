@@ -26,13 +26,13 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.security.authentication.AuthenticationProvider;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAdapterLinkTo;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
@@ -96,7 +96,7 @@ public interface IResourceContext {
      */
     RepresentationService.Intent getIntent();
 
-    AuthenticationProvider getAuthenticationContext();
+    InteractionProvider getInteractionProvider();
     SpecificationLoader getSpecificationLoader();
     MetaModelContext getMetaModelContext();
     ServiceRegistry getServiceRegistry();

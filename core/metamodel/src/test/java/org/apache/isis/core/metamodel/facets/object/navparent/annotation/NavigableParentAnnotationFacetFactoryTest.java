@@ -28,6 +28,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -37,7 +38,6 @@ import org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFac
 import org.apache.isis.core.metamodel.facets.object.navparent.annotation.NavigableParentTestSamples.DomainObjectA;
 import org.apache.isis.core.metamodel.facets.object.navparent.method.NavigableParentFacetMethod;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.security.authentication.AuthenticationProvider;
 import org.apache.isis.core.security.authentication.InteractionContextFactory;
 
 public class NavigableParentAnnotationFacetFactoryTest
@@ -60,10 +60,10 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
         context.checking(new Expectations() {
             {
-                allowing(mockServiceRegistry).lookupService(AuthenticationProvider.class);
-                will(returnValue(Optional.of(mockAuthenticationTracker)));
+                allowing(mockServiceRegistry).lookupService(InteractionProvider.class);
+                will(returnValue(Optional.of(mockInteractionProvider)));
 
-                allowing(mockAuthenticationTracker).currentAuthentication();
+                allowing(mockInteractionProvider).currentInteractionContext();
                 will(returnValue(Optional.of(iaContext)));
 
                 //                allowing(mockServicesInjector).getSpecificationLoader();

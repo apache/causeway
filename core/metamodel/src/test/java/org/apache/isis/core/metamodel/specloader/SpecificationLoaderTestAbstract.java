@@ -25,9 +25,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.core.env.ConfigurableEnvironment;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.when;
+
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.i18n.Mode;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.title.TitleService;
@@ -45,11 +50,6 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.security.authentication.AuthenticationProvider;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.Mockito.when;
 
 import lombok.val;
 
@@ -69,8 +69,8 @@ abstract class SpecificationLoaderTestAbstract {
             return config;
         }
 
-        AuthenticationProvider mockAuthenticationProvider() {
-            return Mockito.mock(AuthenticationProvider.class);
+        InteractionProvider mockInteractionProvider() {
+            return Mockito.mock(InteractionProvider.class);
         }
 
         GridService mockGridService() {
@@ -103,7 +103,7 @@ abstract class SpecificationLoaderTestAbstract {
 
     protected IsisConfiguration isisConfiguration;
     protected SpecificationLoader specificationLoader;
-    protected AuthenticationProvider mockAuthenticationProvider;
+    protected InteractionProvider mockInteractionProvider;
     protected GridService mockGridService;
     protected MessageService mockMessageService;
     protected MetaModelContext metaModelContext;
@@ -126,8 +126,8 @@ abstract class SpecificationLoaderTestAbstract {
                 .translationService(producers.mockTranslationService())
                 .titleService(producers.mockTitleService())
 //                .objectAdapterProvider(mockPersistenceSessionServiceInternal = producers.mockPersistenceSessionServiceInternal())
-                .authenticationProvider(mockAuthenticationProvider =
-                    producers.mockAuthenticationProvider())
+                .interactionProvider(mockInteractionProvider =
+                    producers.mockInteractionProvider())
                 .singleton(mockMessageService = producers.mockMessageService())
                 .singleton(mockGridService = producers.mockGridService())
                 .serviceInjector(producers.mockServiceInjector())

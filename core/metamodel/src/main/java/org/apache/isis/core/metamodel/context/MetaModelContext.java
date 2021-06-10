@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 import org.apache.isis.applib.services.bookmark.Oid;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -40,7 +41,6 @@ import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.security.authentication.AuthenticationProvider;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
@@ -88,7 +88,7 @@ public interface MetaModelContext {
 
     AuthenticationManager getAuthenticationManager();
 
-    AuthenticationProvider getAuthenticationProvider();
+    InteractionProvider getInteractionProvider();
 
     TitleService getTitleService();
 

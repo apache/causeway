@@ -62,7 +62,7 @@ public class UserReprRenderer extends ReprRendererAbstract<UserReprRenderer, Int
         final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("links");
         if (linkFollower.matches(link)) {
             final UserReprRenderer renderer = new UserReprRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
-            renderer.with(getResourceContext().getAuthenticationContext().currentAuthenticationElseFail());
+            renderer.with(getResourceContext().getInteractionProvider().currentInteractionContextElseFail());
             link.mapPut("value", renderer.render());
         }
 

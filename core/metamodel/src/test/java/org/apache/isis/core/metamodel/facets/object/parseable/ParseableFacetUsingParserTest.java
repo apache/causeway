@@ -29,6 +29,7 @@ import org.junit.Test;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ParsingException;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
+import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
@@ -39,7 +40,6 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.parser.ParseableFacetUsingParser;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.core.security.authentication.AuthenticationProvider;
 
 public class ParseableFacetUsingParserTest {
 
@@ -47,7 +47,7 @@ public class ParseableFacetUsingParserTest {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     @Mock private FacetHolder mockFacetHolder;
-    @Mock private AuthenticationProvider mockAuthenticationProvider;
+    @Mock private InteractionProvider mockInteractionProvider;
     @Mock private ServiceInjector mockServicesInjector;
     @Mock private ServiceRegistry mockServiceRegistry;
 
@@ -58,13 +58,13 @@ public class ParseableFacetUsingParserTest {
     public void setUp() throws Exception {
 
         metaModelContext = MetaModelContext_forTesting.builder()
-                .authenticationProvider(mockAuthenticationProvider)
+                .interactionProvider(mockInteractionProvider)
                 .build();
 
 
         context.checking(new Expectations() {
             {
-                never(mockAuthenticationProvider);
+                never(mockInteractionProvider);
                 //never(mockAdapterManager);
 
                 allowing(mockFacetHolder).getMetaModelContext();

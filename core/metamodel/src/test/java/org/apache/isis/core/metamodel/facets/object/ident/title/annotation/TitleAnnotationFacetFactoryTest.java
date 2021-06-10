@@ -35,6 +35,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
@@ -44,7 +45,6 @@ import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.security.authentication.AuthenticationProvider;
 import org.apache.isis.core.security.authentication.InteractionContextFactory;
 
 public class TitleAnnotationFacetFactoryTest
@@ -66,10 +66,10 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
         context.checking(new Expectations() {
             {
-                allowing(mockServiceRegistry).lookupService(AuthenticationProvider.class);
-                will(returnValue(Optional.of(mockAuthenticationTracker)));
+                allowing(mockServiceRegistry).lookupService(InteractionProvider.class);
+                will(returnValue(Optional.of(mockInteractionProvider)));
 
-                allowing(mockAuthenticationTracker).currentAuthentication();
+                allowing(mockInteractionProvider).currentInteractionContext();
                 will(returnValue(Optional.of(iaContext)));
             }
         });

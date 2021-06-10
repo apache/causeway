@@ -20,6 +20,7 @@ package org.apache.isis.core.runtime.context;
 
 import java.util.function.Supplier;
 
+import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -30,7 +31,6 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.security.authentication.AuthenticationProvider;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 
 import lombok.Getter;
@@ -75,7 +75,7 @@ public abstract class RuntimeContextBase implements RuntimeContext {
 
     // -- AUTH
 
-    public AuthenticationProvider getAuthenticationContext() {
+    public InteractionProvider getInteractionProvider() {
         return interactionTracker;
     }
 
@@ -85,7 +85,7 @@ public abstract class RuntimeContextBase implements RuntimeContext {
         // similar code in wicket viewer (AuthenticatedWebSessionForIsis#onInvalidate())
 
         interactionTracker
-        .currentAuthentication()
+        .currentInteractionContext()
         .ifPresent(authentication->{
 
             authenticationManager.closeSession(authentication);

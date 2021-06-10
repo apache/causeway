@@ -30,6 +30,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
@@ -40,7 +41,6 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 import org.apache.isis.core.metamodel.id.TypeIdentifierTestFactory;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionDefault;
-import org.apache.isis.core.security.authentication.AuthenticationProvider;
 
 public class ObjectActionLayoutXmlDefaultTest {
 
@@ -50,7 +50,7 @@ public class ObjectActionLayoutXmlDefaultTest {
     private ObjectActionDefault action;
 
     @Mock private FacetedMethod mockFacetedMethod;
-    @Mock private AuthenticationProvider mockAuthenticationProvider;
+    @Mock private InteractionProvider mockInteractionProvider;
     @Mock private SpecificationLoader mockSpecificationLoader;
 
     protected MetaModelContext metaModelContext;
@@ -60,7 +60,7 @@ public class ObjectActionLayoutXmlDefaultTest {
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
-                .authenticationProvider(mockAuthenticationProvider)
+                .interactionProvider(mockInteractionProvider)
                 .build();
 
         context.checking(new Expectations() {

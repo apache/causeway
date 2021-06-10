@@ -29,6 +29,7 @@ import org.springframework.core.env.AbstractEnvironment;
 
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -56,7 +57,6 @@ import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault;
-import org.apache.isis.core.security.authentication.AuthenticationProvider;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
@@ -95,7 +95,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
 
     private ProgrammingModel programmingModel;
 
-    private AuthenticationProvider authenticationProvider;
+    private InteractionProvider interactionProvider;
 
     private TranslationService translationService;
 
@@ -163,7 +163,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
                 serviceRegistry,
                 metamodelEventService,
                 specificationLoader,
-                authenticationProvider,
+                interactionProvider,
                 getTranslationService(),
                 authentication,
                 authorizationManager,
