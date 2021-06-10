@@ -20,10 +20,13 @@
 package org.apache.isis.core.metamodel.facets;
 
 import java.util.Map;
+import java.util.Objects;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+
+import lombok.NonNull;
 
 public abstract class SingleStringValueFacetAbstract
 extends FacetAbstract
@@ -57,8 +60,17 @@ implements SingleStringValueFacet {
         }
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+    @Override
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("value", value);
     }
+
+    @Override
+    public boolean semanticEquals(final @NonNull Facet other) {
+        return other instanceof SingleStringValueFacet
+                ? Objects.equals(this.value(), ((SingleStringValueFacet)other).value())
+                : false;
+    }
+
 }

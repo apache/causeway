@@ -20,11 +20,14 @@
 package org.apache.isis.core.metamodel.facets.members.cssclass;
 
 import java.util.Map;
+import java.util.Objects;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+
+import lombok.NonNull;
 
 public abstract class CssClassFacetAbstract
 extends FacetAbstract
@@ -50,5 +53,12 @@ implements CssClassFacet {
     public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("cssClass", cssClass);
+    }
+
+    @Override
+    public boolean semanticEquals(final @NonNull Facet other) {
+        return other instanceof CssClassFacetAbstract
+                ? Objects.equals(this.cssClass, ((CssClassFacetAbstract)other).cssClass)
+                : false;
     }
 }

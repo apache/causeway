@@ -27,7 +27,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
 
-public class CssClassFacetForParameterLayoutAnnotation extends CssClassFacetAbstract {
+public class CssClassFacetForParameterLayoutAnnotation
+extends CssClassFacetAbstract {
 
     public static CssClassFacet create(
             final Optional<ParameterLayout> parameterLayoutIfAny,

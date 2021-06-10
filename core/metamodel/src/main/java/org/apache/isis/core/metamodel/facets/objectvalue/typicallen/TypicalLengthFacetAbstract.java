@@ -23,6 +23,8 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
+import lombok.NonNull;
+
 public abstract class TypicalLengthFacetAbstract
 extends FacetAbstract
 implements TypicalLengthFacet {
@@ -44,8 +46,18 @@ implements TypicalLengthFacet {
 
     @Override
     protected String toStringValues() {
-        final int val = value();
-        return val == 0 ? "default" : String.valueOf(val);
+        final int intValue = value();
+        return intValue == 0
+                ? "default"
+                : String.valueOf(intValue);
     }
+
+    @Override
+    public boolean semanticEquals(final @NonNull Facet other) {
+        return other instanceof TypicalLengthFacet
+                ? this.value() == ((TypicalLengthFacet)other).value()
+                : false;
+    }
+
 
 }

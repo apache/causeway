@@ -25,7 +25,11 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class RenderedAdjustedFacetAbstract extends FacetAbstract implements RenderedAdjustedFacet {
+import lombok.NonNull;
+
+public abstract class RenderedAdjustedFacetAbstract
+extends FacetAbstract
+implements RenderedAdjustedFacet {
 
     public static Class<? extends Facet> type() {
         return RenderedAdjustedFacet.class;
@@ -45,12 +49,23 @@ public abstract class RenderedAdjustedFacetAbstract extends FacetAbstract implem
 
     @Override
     protected String toStringValues() {
-        final int val = value();
-        return val == -1 ? "default" : String.valueOf(val);
+        final int intValue = value();
+        return intValue == -1
+                ? "default"
+                : String.valueOf(intValue);
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+    @Override
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("adjustBy", adjustBy);
     }
+
+    @Override
+    public boolean semanticEquals(final @NonNull Facet other) {
+        return other instanceof RenderedAdjustedFacet
+                ? this.value() == ((RenderedAdjustedFacet)other).value()
+                : false;
+    }
+
 }

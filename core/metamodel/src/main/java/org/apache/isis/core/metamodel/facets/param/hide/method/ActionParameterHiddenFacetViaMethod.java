@@ -33,7 +33,9 @@ import org.apache.isis.core.metamodel.facets.param.hide.ActionParameterHiddenFac
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
-public class ActionParameterHiddenFacetViaMethod extends ActionParameterHiddenFacetAbstract implements ImperativeFacet {
+public class ActionParameterHiddenFacetViaMethod
+extends ActionParameterHiddenFacetAbstract
+implements ImperativeFacet {
 
     private final Method method;
     private final Optional<Constructor<?>> ppmFactory;
@@ -83,7 +85,8 @@ public class ActionParameterHiddenFacetViaMethod extends ActionParameterHiddenFa
         return "method=" + method;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+    @Override
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         Util.appendAttributesTo(this, attributeMap);
     }

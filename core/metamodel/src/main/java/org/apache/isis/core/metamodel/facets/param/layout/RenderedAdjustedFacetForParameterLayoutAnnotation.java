@@ -27,7 +27,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacetAbstract;
 
-public class RenderedAdjustedFacetForParameterLayoutAnnotation extends RenderedAdjustedFacetAbstract {
+public class RenderedAdjustedFacetForParameterLayoutAnnotation
+extends RenderedAdjustedFacetAbstract {
 
     public static RenderedAdjustedFacet create(
             final Optional<ParameterLayout> parameterLayoutIfAny,

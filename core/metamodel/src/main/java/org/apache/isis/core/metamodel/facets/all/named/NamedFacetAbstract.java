@@ -20,12 +20,18 @@
 package org.apache.isis.core.metamodel.facets.all.named;
 
 import java.util.Map;
+import java.util.Objects;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class NamedFacetAbstract extends FacetAbstract implements NamedFacet {
+import lombok.NonNull;
+import lombok.val;
+
+public abstract class NamedFacetAbstract
+extends FacetAbstract
+implements NamedFacet {
 
     private final String value;
     private final boolean escaped;
@@ -56,9 +62,23 @@ public abstract class NamedFacetAbstract extends FacetAbstract implements NamedF
         return escaped;
     }
 
-    @Override public void appendAttributesTo(Map<String, Object> attributeMap) {
+    @Override
+    public void appendAttributesTo(Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("value", value);
         attributeMap.put("escaped", escaped);
     }
+
+    @Override
+    public boolean semanticEquals(final @NonNull Facet other) {
+        if(! (other instanceof NamedFacetAbstract)) {
+            return false;
+        }
+
+        val otherNamedFacet =  (NamedFacetAbstract)other;
+
+        return this.escaped() == otherNamedFacet.escaped()
+                && Objects.equals(this.value(), otherNamedFacet.value());
+    }
+
 }

@@ -32,7 +32,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
  * In the standard Apache Isis Programming Model, corresponds to invoking the
  * <tt>hideNXxx</tt> support method for an action.
  */
-public interface ActionParameterHiddenFacet extends Facet, HidingInteractionAdvisor {
+public interface ActionParameterHiddenFacet
+extends Facet, HidingInteractionAdvisor {
 
     /**
      * Whether the parameter is hidden.

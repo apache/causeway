@@ -25,6 +25,8 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
+import lombok.NonNull;
+
 public abstract class MultiLineFacetAbstract
 extends FacetAbstract
 implements MultiLineFacet {
@@ -55,8 +57,16 @@ implements MultiLineFacet {
         return "lines=" + numberOfLines;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+    @Override
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("numberOfLines", numberOfLines);
+    }
+
+    @Override
+    public boolean semanticEquals(final @NonNull Facet other) {
+        return other instanceof MultiLineFacet
+                ? this.numberOfLines() == ((MultiLineFacet)other).numberOfLines()
+                : false;
     }
 }

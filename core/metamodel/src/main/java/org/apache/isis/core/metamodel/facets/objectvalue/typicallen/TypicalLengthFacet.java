@@ -36,7 +36,8 @@ import lombok.val;
  * In the standard Apache Isis Programming Model, corresponds to the
  * <tt>@TypicalLength</tt> annotation.
  */
-public interface TypicalLengthFacet extends SingleIntValueFacet {
+public interface TypicalLengthFacet
+extends SingleIntValueFacet {
 
     @Override
     public int value();

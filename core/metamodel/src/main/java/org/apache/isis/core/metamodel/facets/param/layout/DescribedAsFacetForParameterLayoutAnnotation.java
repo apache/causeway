@@ -27,7 +27,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbstract;
 
-public class DescribedAsFacetForParameterLayoutAnnotation extends DescribedAsFacetAbstract {
+public class DescribedAsFacetForParameterLayoutAnnotation
+extends DescribedAsFacetAbstract {
 
     public static DescribedAsFacet create(
             final Optional<ParameterLayout> parameterLayoutIfAny,

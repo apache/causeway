@@ -26,7 +26,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacetAbstract;
 
-public class MultiLineFacetForParameterLayoutAnnotation extends MultiLineFacetAbstract {
+public class MultiLineFacetForParameterLayoutAnnotation
+extends MultiLineFacetAbstract {
 
     public static MultiLineFacet create(
             final Optional<ParameterLayout> parameterLayoutIfAny,

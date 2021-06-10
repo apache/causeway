@@ -25,7 +25,11 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class SingleIntValueFacetAbstract extends FacetAbstract implements SingleIntValueFacet {
+import lombok.NonNull;
+
+public abstract class SingleIntValueFacetAbstract
+extends FacetAbstract
+implements SingleIntValueFacet {
 
     private final int value;
 
@@ -44,9 +48,17 @@ public abstract class SingleIntValueFacetAbstract extends FacetAbstract implemen
         return value;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+    @Override
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("value", value);
+    }
+
+    @Override
+    public boolean semanticEquals(final @NonNull Facet other) {
+        return other instanceof SingleIntValueFacet
+                ? this.value() == ((SingleIntValueFacet)other).value()
+                : false;
     }
 
 }
