@@ -21,16 +21,17 @@ package org.apache.isis.extensions.secman.applib.seed.scripts;
 import javax.inject.Inject;
 
 import org.apache.isis.extensions.secman.applib.SecmanConfiguration;
-import org.apache.isis.extensions.secman.applib.seed.SeedSecurityModuleService;
+import org.apache.isis.extensions.secman.applib.role.seed.IsisAppFeatureRoleAndPermissions;
 import org.apache.isis.extensions.secman.applib.role.seed.IsisConfigurationRoleAndPermissions;
 import org.apache.isis.extensions.secman.applib.role.seed.IsisExtH2ConsoleRoleAndPermissions;
+import org.apache.isis.extensions.secman.applib.role.seed.IsisExtSecmanAdminRoleAndPermissions;
+import org.apache.isis.extensions.secman.applib.role.seed.IsisExtSecmanRegularUserRoleAndPermissions;
 import org.apache.isis.extensions.secman.applib.role.seed.IsisPersistenceJdoMetaModelRoleAndPermissions;
 import org.apache.isis.extensions.secman.applib.role.seed.IsisSudoImpersonateRoleAndPermissions;
 import org.apache.isis.extensions.secman.applib.role.seed.IsisViewerRestfulObjectsSwaggerRoleAndPermissions;
+import org.apache.isis.extensions.secman.applib.seed.SeedSecurityModuleService;
 import org.apache.isis.extensions.secman.applib.tenancy.seed.GlobalTenancy;
-import org.apache.isis.extensions.secman.applib.role.seed.IsisExtSecmanAdminRoleAndPermissions;
 import org.apache.isis.extensions.secman.applib.user.seed.IsisExtSecmanAdminUser;
-import org.apache.isis.extensions.secman.applib.role.seed.IsisExtSecmanRegularUserRoleAndPermissions;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 /**
@@ -63,11 +64,12 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
 
         // other modules
         executionContext.executeChildren(this,
-                new IsisConfigurationRoleAndPermissions(),
-                new IsisSudoImpersonateRoleAndPermissions(),
-                new IsisViewerRestfulObjectsSwaggerRoleAndPermissions(),
+                new IsisAppFeatureRoleAndPermissions(),
                 new IsisPersistenceJdoMetaModelRoleAndPermissions(),
-                new IsisExtH2ConsoleRoleAndPermissions()
+                new IsisExtH2ConsoleRoleAndPermissions(),
+                new IsisViewerRestfulObjectsSwaggerRoleAndPermissions(),
+                new IsisSudoImpersonateRoleAndPermissions(),
+                new IsisConfigurationRoleAndPermissions()
                 );
     }
 
