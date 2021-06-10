@@ -68,5 +68,28 @@
 		</dependency>
 	</dependencies>
 
+	<profiles>
+		<profile>
+			<id>dependency-convergence</id>
+			<activation>
+				<property>
+					<name>!skip.dependency-convergence</name>
+				</property>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>org.docx4j</groupId>
+					<artifactId>docx4j-core</artifactId>
+					<version>${docx4j.version}</version>
+					<exclusions>
+						<exclusion>
+							<groupId>org.apache.xmlgraphics</groupId>
+							<artifactId>xmlgraphics-commons</artifactId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
 
 </project>
