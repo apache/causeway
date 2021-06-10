@@ -70,7 +70,6 @@ public interface RoutingService {
      * </p>
      *
      * @param original
-     * @return
      */
     boolean canRoute(Object original);
 
@@ -79,7 +78,6 @@ public interface RoutingService {
      * object, some other object, or (indeed) `null`.
      *
      * @param original
-     * @return
      */
     Object route(Object original);
 

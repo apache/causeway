@@ -55,7 +55,6 @@ public interface JaxbService {
      *
      * @param jaxbContext  - configured for the expected target class
      * @param xml
-     * @return
      */
     default Object fromXml(
             JAXBContext jaxbContext,
@@ -70,7 +69,6 @@ public interface JaxbService {
      * @param jaxbContext - configured for the expected target class
      * @param xml
      * @param unmarshallerProperties
-     * @return
      */
     Object fromXml(
             JAXBContext jaxbContext,
@@ -124,7 +122,6 @@ public interface JaxbService {
      *
      * @param domainObject
      * @param isisSchemas
-     * @return
      */
     Map<String, String> toXsd(
             Object domainObject,

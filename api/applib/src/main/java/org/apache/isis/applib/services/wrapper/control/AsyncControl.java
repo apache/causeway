@@ -29,7 +29,6 @@ import org.apache.isis.applib.services.user.UserMemento;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -68,7 +67,6 @@ public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
      *
      * @param cls
      * @param <X>
-     * @return
      */
     public static <X> AsyncControl<X> returning(final Class<X> cls) {
         return new AsyncControl<X>(cls);
@@ -123,7 +121,6 @@ public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
      *
      *
      * @param executorService
-     * @return
      */
     public AsyncControl<R> with(ExecutorService executorService) {
         this.executorService = executorService;
@@ -207,7 +204,7 @@ public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
             buf.append(" ").append(getMethod().getName()).append(" ");
             if(getBookmark() != null) {
                 buf.append(" on '")
-                        .append(getBookmark().getObjectType())
+                        .append(getBookmark().getLogicalTypeName())
                         .append(":")
                         .append(getBookmark().getIdentifier())
                         .append("'");

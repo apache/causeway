@@ -41,7 +41,6 @@ public interface PersonaWithFinder<T> {
      * </p>
      *
      * @param serviceRegistry
-     * @return
      */
     T findUsing(final ServiceRegistry serviceRegistry);
 

@@ -148,7 +148,6 @@ public interface ServiceRegistry {
      *
      * @param serviceClass
      * @param <T>
-     * @return
      */
     default <T> T lookupServiceElseFail(final Class<T> serviceClass) {
 

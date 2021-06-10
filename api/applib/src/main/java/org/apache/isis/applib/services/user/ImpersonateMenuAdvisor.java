@@ -24,8 +24,6 @@ public interface ImpersonateMenuAdvisor {
      *     (drop-down) for the username (string) argument of
      *     {@link ImpersonateMenu#impersonateWithRoles(String, List)}.
      * </p>
-     *
-     * @return
      */
     List<String> allUserNames();
 
@@ -37,8 +35,6 @@ public interface ImpersonateMenuAdvisor {
      *     (drop-down) for the rolenames (list) argument of
      *     {@link ImpersonateMenu#impersonateWithRoles(String, List)}.
      * </p>
-     *
-     * @return
      */
     List<String> allRoleNames();
 
@@ -50,8 +46,6 @@ public interface ImpersonateMenuAdvisor {
      *     for the rolenames (list) argument of
      *     {@link ImpersonateMenu#impersonateWithRoles(String, List)}.
      * </p>
-     *
-     * @return
      */
     List<String> roleNamesFor(final String username);
 

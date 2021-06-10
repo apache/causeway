@@ -34,8 +34,6 @@ public interface QueryResultsCacheControl {
     /**
      * Whether the {@link QueryResultsCache} should be disabled, in other
      * words to stop using any cached results.
-     *
-     * @return
      */
     boolean isIgnoreCache();
 

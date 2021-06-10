@@ -34,7 +34,6 @@ public abstract class BuilderScriptWithResult<T> extends BuilderScriptAbstract<T
 
     /**
      * Simply returns the object returned by {@link #buildResult(ExecutionContext)}.
-     * @return
      */
     @Override
     public final T getObject() {

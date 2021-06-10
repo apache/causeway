@@ -22,8 +22,8 @@ package org.apache.isis.core.security.authentication;
 import java.io.Serializable;
 import java.util.Optional;
 
-import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.user.UserMemento;
 
 import lombok.NonNull;
@@ -115,7 +115,6 @@ public interface Authentication extends Serializable {
      * </p>
      *
      * @param interactionContext
-     * @return
      */
     public static Optional<Authentication> authenticationFrom(final @NonNull InteractionContext interactionContext) {
         return interactionContext.getAttribute(INTERACTION_CONTEXT_KEY, Authentication.class);

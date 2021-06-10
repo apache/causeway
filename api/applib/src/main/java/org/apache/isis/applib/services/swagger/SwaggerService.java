@@ -39,7 +39,6 @@ public interface SwaggerService {
      *
      * @param visibility
      * @param format
-     * @return
      */
     String generateSwaggerSpec(
             final Visibility visibility,

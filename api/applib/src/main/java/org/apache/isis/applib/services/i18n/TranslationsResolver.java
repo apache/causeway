@@ -43,7 +43,6 @@ public interface TranslationsResolver {
      * </p>
      *
      * @param file
-     * @return
      */
     List<String> readLines(final String file);
 

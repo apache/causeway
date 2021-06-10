@@ -80,15 +80,16 @@ public class Object_downloadLayoutXml {
     /**
      * Defaults to the (simple) name of the domain object's class, with a <code>.layout</code> suffix
      */
-    @MemberSupport public String default0Act() {
+    @MemberSupport
+    public String default0Act() {
         return holder.getClass().getSimpleName() + ".layout";
     }
 
     /**
      * Default style is {@link Style#NORMALIZED}.
-     * @return
      */
-    @MemberSupport public Style default1Act() {
+    @MemberSupport
+    public Style default1Act() {
         return Style.NORMALIZED;
     }
 

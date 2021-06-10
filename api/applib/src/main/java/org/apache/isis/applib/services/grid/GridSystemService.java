@@ -69,8 +69,6 @@ public interface GridSystemService<G extends Grid> {
      *     provided by the framework returns the value
      *     `http://isis.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd`.
      * </p>
-     *
-     * @return
      */
     String schemaLocation();
 
@@ -83,7 +81,6 @@ public interface GridSystemService<G extends Grid> {
      * </p>
      *
      * @param domainClass
-     * @return
      */
     G defaultGrid(Class<?> domainClass);
 

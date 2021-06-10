@@ -21,7 +21,6 @@ package org.apache.isis.applib.services.iactnlayer;
 import org.apache.isis.applib.services.iactn.Interaction;
 
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**

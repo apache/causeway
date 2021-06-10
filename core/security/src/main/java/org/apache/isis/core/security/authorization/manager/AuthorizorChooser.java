@@ -2,8 +2,6 @@ package org.apache.isis.core.security.authorization.manager;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 import org.apache.isis.core.security.authorization.Authorizor;
 
 /**
@@ -18,7 +16,6 @@ public interface AuthorizorChooser {
     /**
      *
      * @param authorizors
-     * @return
      */
     Authorizor chooseFrom(final List<Authorizor> authorizors);
 }

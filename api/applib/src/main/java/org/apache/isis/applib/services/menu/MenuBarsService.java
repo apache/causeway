@@ -64,7 +64,6 @@ public interface MenuBarsService {
      * Returns the menu bars with the requested {@link Type}.
      *
      * @param type - as requested
-     * @return
      */
     MenuBars menuBars(final Type type);
 }

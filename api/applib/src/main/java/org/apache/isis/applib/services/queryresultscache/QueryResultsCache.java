@@ -51,7 +51,6 @@ public interface QueryResultsCache extends DisposableBean {
      * @param methodName
      * @param keys
      * @param <T>
-     * @return
      */
     <T> T execute(
             Callable<T> callable,

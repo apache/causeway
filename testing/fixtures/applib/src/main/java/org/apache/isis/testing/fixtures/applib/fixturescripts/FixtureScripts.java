@@ -30,8 +30,6 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -55,10 +53,10 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
-import org.apache.isis.testing.fixtures.applib.personas.BuilderScriptAbstract;
-import org.apache.isis.testing.fixtures.applib.personas.PersonaWithBuilderScript;
 import org.apache.isis.testing.fixtures.applib.events.FixturesInstalledEvent;
 import org.apache.isis.testing.fixtures.applib.events.FixturesInstallingEvent;
+import org.apache.isis.testing.fixtures.applib.personas.BuilderScriptAbstract;
+import org.apache.isis.testing.fixtures.applib.personas.PersonaWithBuilderScript;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -295,7 +293,6 @@ public class FixtureScripts {
      *
      * @param fixtureScriptName
      * @param parameters
-     * @return
      */
     @Action(
             restrictTo = RestrictTo.PROTOTYPING
@@ -390,8 +387,6 @@ public class FixtureScripts {
      * Convenience action - exposed through the UI - to execute the specified
      * &quot;recreate&quot; {@link FixtureScript fixture script} and
      * return/show the first object returned by that fixture script.
-     *
-     * @return
      */
     @Action(
             restrictTo = RestrictTo.PROTOTYPING

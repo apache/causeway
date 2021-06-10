@@ -21,8 +21,8 @@ package org.apache.isis.applib.services.publishing.spi;
 import java.sql.Timestamp;
 import java.util.UUID;
 
-import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.applib.mixins.security.HasUsername;
+import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.applib.mixins.system.HasTransactionId;
 import org.apache.isis.schema.chg.v2.ChangesDto;
 
@@ -62,44 +62,37 @@ public interface EntityChanges
     /**
      * Inherited from {@link HasUsername}, is the user that initiated the
      * transaction causing these objects to change.
-     * @return
      */
     @Override
     String getUsername();
 
     /**
      * Time that the interaction execution completed
-     * @return
      */
     Timestamp getCompletedAt();
 
     /**
      * Number of domain objects loaded in this interaction
-     * @return
      */
     int getNumberLoaded();
 
     /**
      * Number of domain objects created in this interaction
-     * @return
      */
     int getNumberCreated();
 
     /**
      * Number of domain objects updated in this interaction
-     * @return
      */
     int getNumberUpdated();
 
     /**
      * Number of domain objects deleted in this interaction
-     * @return
      */
     int getNumberDeleted();
 
     /**
      * Number of domain objects properties that were changed in this interaction
-     * @return
      */
     int getNumberPropertiesModified();
 
@@ -110,8 +103,6 @@ public interface EntityChanges
      * This can be converted into a serializable XML representation using the
      * {@link org.apache.isis.applib.util.schema.ChangesDtoUtils} utility class.
      * </p>
-     *
-     * @return
      */
     ChangesDto getDto();
 }

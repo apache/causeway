@@ -22,6 +22,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -62,6 +63,7 @@ public class Dto_downloadXml {
     public static class ActionDomainEvent
     extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Dto_downloadXml> {}
 
+    @MemberSupport
     public Object act(
 
             // PARAM 0
@@ -74,10 +76,7 @@ public class Dto_downloadXml {
         return Clob.of(fileName, CommonMimeType.XML, xmlString);
     }
 
-    /**
-     *
-     * @return
-     */
+    @MemberSupport
     public String default0Act() {
         return holder.getClass().getName();
     }

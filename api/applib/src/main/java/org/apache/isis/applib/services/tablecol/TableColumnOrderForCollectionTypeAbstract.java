@@ -20,8 +20,6 @@ package org.apache.isis.applib.services.tablecol;
 
 import java.util.List;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -79,6 +77,7 @@ public abstract class TableColumnOrderForCollectionTypeAbstract<T>
      *
      * @see #orderStandalone(List)
      */
+    @Override
     public final List<String> orderStandalone(
             final Class<?> collectionType,
             final List<String> propertyIds) {

@@ -31,7 +31,6 @@ public interface UserRegistrationService {
      * Checks if there is already a user with the specified username
      *
      * @param username
-     * @return
      */
     boolean usernameExists(String username);
 
@@ -39,7 +38,6 @@ public interface UserRegistrationService {
      * Checks if there is already a user with the specified email address.
      *
      * @param emailAddress
-     * @return
      */
     boolean emailExists(String emailAddress);
 
@@ -60,7 +58,6 @@ public interface UserRegistrationService {
      *
      * @param emailAddress
      * @param password
-     * @return
      */
     boolean updatePasswordByEmail(String emailAddress, String password);
 

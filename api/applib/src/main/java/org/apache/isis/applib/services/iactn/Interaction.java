@@ -53,8 +53,8 @@ import org.apache.isis.commons.having.HasTypeSpecificAttributes;
  *
  * @since 1.x revised for 2.0 {@index}
  */
-public interface Interaction 
-extends 
+public interface Interaction
+extends
     HasInteractionId,
     HasTypeSpecificAttributes {
 
@@ -66,15 +66,12 @@ extends
      *     This can be used to correlate audit records and transactions
      *     happening as a consequence or within the interaction.
      * </p>
-     *
-     * @return
      */
     @Override
     UUID getInteractionId();
 
     /**
      * Represents the <i>intention</i> to perform this interaction.
-     * @return
      */
     Command getCommand();
 

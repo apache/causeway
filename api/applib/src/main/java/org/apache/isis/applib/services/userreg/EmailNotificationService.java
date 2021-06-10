@@ -39,7 +39,6 @@ public interface EmailNotificationService
      * Sends an email to verify an email address as part of the initial user registration
      *
      * @param ev
-     * @return
      */
     boolean send(EmailRegistrationEvent ev);
 
@@ -47,7 +46,6 @@ public interface EmailNotificationService
      * Sends an email to reset a password for an already-registered user
      *
      * @param ev
-     * @return
      */
     boolean send(PasswordResetEvent ev);
 
