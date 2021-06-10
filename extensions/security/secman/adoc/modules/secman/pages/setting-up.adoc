@@ -182,11 +182,11 @@ Impersonate other users (from the "Prototyping" menu, and mixins)
 
 The full list can be found by searching for subclasses of xref:refguide:extensions:index/secman/applib/role/fixtures/ AbstractRoleAndPermissionsFixtureScript.adoc[AbstractRoleAndPermissionsFixtureScript].
 
+[NOTE]
+====
+There is no fixture script to setup a role to access the UI features of the applib, or to run fixture scripts; these are included automatically as part of the SecMan's own "regular user".
+====
 
-== Creating Users
-
-Creating regular applications users in production use can be done manually by the security super-user, or can be done programmatically through xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUserRepository.adoc[ApplicationUserRepository].
-This will return an xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUser.adoc[ApplicationUser] which can then be granted roles, for example using `addRoleToUser()` API of xref:refguide:extensions:index/secman/applib/role/dom/ApplicationRoleRepository.adoc[ApplicationRoleRepository].
 
 
 == Fixture scripts and seed service, to setup users and roles
@@ -274,6 +274,46 @@ public class RoleAndPerms__UserRw extends AbstractRoleAndPermissionsFixtureScrip
 }
 ----
 
+* to set up a user bob with access to this role plus all available <<default-roles, built-in roles>>:
++
+[source,java]
+.UserToRole__bob_allRoles.java
+----
+public class UserToRole__bob_allRoles extends AbstractUserAndRolesFixtureScript {
+
+  public UserToRole__bob_allRoles() {
+    super(
+      "bob", "pass",          // <.>
+      "bob@cratchet.com",     // <.>
+      "/",                    // <.>
+      AccountType.LOCAL,      // <.>
+      Can.of(
+        RoleAndPerms__UserRw.ROLE_NAME                                            // <.>
+        , IsisConfiguration.Extensions.Secman.Seed.REGULAR_USER_ROLE_NAME_DEFAULT // <.>
+        , IsisAppFeatureRoleAndPermissions.ROLE_NAME                   // <.>
+        , IsisPersistenceJdoMetaModelRoleAndPermissions.ROLE_NAME      // <7>
+        , IsisExtH2ConsoleRoleAndPermissions.ROLE_NAME                 // <7>
+        , IsisViewerRestfulObjectsSwaggerRoleAndPermissions.ROLE_NAME  // <7>
+        , IsisSudoImpersonateRoleAndPermissions.ROLE_NAME              // <7>
+        , IsisConfigurationRoleAndPermissions.ROLE_NAME                // <7>
+      ));
+  }
+}
+----
+
+<.> username and password.
+The password is encrypted, not stored in plain text.
+<.> email address
+<.> application tenancy
+<.> local account (rather than delegated, see xref:setting-up-with-shiro.adoc[])
+<.> application-specific roles
+<.> regular user access (always required).
+*Note* that this expects that the default regular user role has been left as its default value.
+<.> specific access to framework features, see <<default-roles,above>>
+
+
+We can also veto individual members:
+
 * to set up a "no-delete" role that vetoes the ability to delete objects:
 +
 [source,java]
@@ -304,32 +344,25 @@ public class RoleAndPerms__NoDelete extends AbstractRoleAndPermissionsFixtureScr
 .UserToRole__joe_UserRw_but_NoDelete.java
 ----
 public class UserToRole__joe_UserRw_but_NoDelete
-        extends AbstractUserAndRolesFixtureScript {
+    extends AbstractUserAndRolesFixtureScript {
 
-    public UserToRole__joe_UserRw_but_NoDelete_or_isis2619Prop() {
-        super(
-          "joe", "pass",                                               // <.>
-          "joe@italy.com",                                             // <.>
-          "/ITA",                                                      // <.>
-          AccountType.LOCAL,                                           // <.>
-          Can.of(
-            RoleAndPerms__UserRw.ROLE_NAME                             // <.>
-            , RoleAndPerms__NoDelete.ROLE_NAME                         // <5>
-            , SecmanConfiguration.DEFAULT_REGULAR_USER_ROLE_NAME       // <.>
-            , IsisExtH2ConsoleRoleAndPermissions.ROLE_NAME             // <.>
-            , IsisPersistenceJdoMetaModelRoleAndPermissions.ROLE_NAME  // <7>
-          ));
-    }
+  public UserToRole__joe_UserRw_but_NoDelete() {
+    super(
+      "joe", "pass",
+      "joe@italy.com",
+      "/ITA",
+      AccountType.LOCAL,
+      Can.of(
+        RoleAndPerms__UserRw.ROLE_NAME                                           // <.>
+        ,RoleAndPerms__NoDelete.ROLE_NAME                                        // <1>
+        ,IsisConfiguration.Extensions.Secman.Seed.REGULAR_USER_ROLE_NAME_DEFAULT // <.>
+    ));
+  }
 }
 ----
-<.> username and password
-<.> email address
-<.> application tenancy
-<.> local account (rather than delegated, see xref:setting-up-with-shiro.adoc[])
 <.> application-specific roles
 <.> regular user access (always required)
 <.> specific access to framework features, see <<default-roles,above>>
-
 
 To seed in fixture scripts we could create a top-level `CustomRolesAndUsers` script (as mentioned in <<custom-seed-service,above>>).
 This would then look something like:
@@ -342,15 +375,24 @@ public class CustomRolesAndUsers extends FixtureScript {
     @Override protected void execute(ExecutionContext executionContext) {
         executionContext.executeChildren(this,
                 // roles
-                new RoleAndPerms__HelloRw(),
+                new RoleAndPerms__HelloRw()
                 // users
-                new UserToRole__joe_UserRw_but_NoDelete()
+                , new UserToRole__bob_allRoles()
+                , new UserToRole__joe_UserRw_but_NoDelete()
         );
     }
 }
 ----
 
 The custom seed service would then ensure that these users/roles existed on startup.
+
+
+== Creating Users and Roles
+
+Once a super-user admin account has been seeded in, regular users can be created manually by logging in as that security super-user.
+
+Alternatively, users can be created programmatically through xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUserRepository.adoc[ApplicationUserRepository].
+This will return an xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUser.adoc[ApplicationUser] which can then be granted roles, for example using `addRoleToUser()` API of xref:refguide:extensions:index/secman/applib/role/dom/ApplicationRoleRepository.adoc[ApplicationRoleRepository].
 
 
 [#user-registration-aka-sign-up]
