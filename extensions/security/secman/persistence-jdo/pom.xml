@@ -42,7 +42,7 @@
 
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-secman-applib</artifactId>
+			<artifactId>isis-extensions-secman-integration</artifactId>
 		</dependency>
 
 		<dependency>
