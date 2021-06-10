@@ -19,9 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.properties.property.regex;
 
-import java.util.Map;
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.commons.internal.base._Strings;
@@ -30,9 +28,8 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacetAbstract;
 
-public class RegExFacetForPropertyAnnotation extends RegExFacetAbstract {
-
-    private final Pattern pattern;
+public class RegExFacetForPropertyAnnotation
+extends RegExFacetAbstract {
 
     public static RegExFacet create(
             final Optional<Property> propertyIfAny,
@@ -52,19 +49,13 @@ public class RegExFacetForPropertyAnnotation extends RegExFacetAbstract {
 
     }
 
-    private RegExFacetForPropertyAnnotation(final String pattern, final int patternFlags, final FacetHolder holder, final String replacement) {
+    private RegExFacetForPropertyAnnotation(
+            final String pattern,
+            final int patternFlags,
+            final FacetHolder holder,
+            final String replacement) {
+
         super(pattern, patternFlags, replacement, holder);
-        this.pattern = Pattern.compile(pattern, patternFlags());
-    }
-
-    @Override
-    public boolean doesNotMatch(final String text) {
-        return text == null || !pattern.matcher(text).matches();
-    }
-
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("pattern", pattern);
     }
 
 }

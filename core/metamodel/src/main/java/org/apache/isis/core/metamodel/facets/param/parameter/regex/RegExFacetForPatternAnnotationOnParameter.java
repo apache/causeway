@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.param.parameter.regex;
 
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -28,9 +27,8 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacetAbstract;
 
-public class RegExFacetForPatternAnnotationOnParameter extends RegExFacetAbstract {
-
-    private final Pattern pattern;
+public class RegExFacetForPatternAnnotationOnParameter
+extends RegExFacetAbstract {
 
     public static RegExFacet create(
             final Optional<javax.validation.constraints.Pattern> patternIfAny,
@@ -53,14 +51,7 @@ public class RegExFacetForPatternAnnotationOnParameter extends RegExFacetAbstrac
             final String regexp,
             final javax.validation.constraints.Pattern.Flag[] flags,
             final String message, final FacetHolder holder) {
-        super(regexp, flags, message, holder);
-        pattern = Pattern.compile(regexp(), patternFlags());
+        super(regexp, asMask(flags), message, holder);
     }
-
-    @Override
-    public boolean doesNotMatch(final String text) {
-        return text == null || !pattern.matcher(text).matches();
-    }
-
 
 }

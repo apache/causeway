@@ -103,7 +103,11 @@ implements MustSatisfySpecificationFacet {
     @Override
     public boolean semanticEquals(final @NonNull Facet other) {
         return other instanceof MustSatisfySpecificationFacetAbstract
-                ? Objects.equals(this.specifications, ((MustSatisfySpecificationFacetAbstract)other).specifications)
+                ? Objects.equals(
+                        this
+                            .specifications.map(Specification::getClass),
+                        ((MustSatisfySpecificationFacetAbstract)other)
+                            .specifications.map(Specification::getClass))
                 : false;
     }
 
