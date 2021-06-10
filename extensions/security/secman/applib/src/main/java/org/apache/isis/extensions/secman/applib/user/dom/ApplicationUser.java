@@ -22,7 +22,6 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -554,11 +553,10 @@ public abstract class ApplicationUser
         }
 
         // is runAsAdministrator?
-        final List<RoleMemento> roles = currentUser.getRoles();
 
         val adminRoleSuffix = ":" + getAdminRoleName();
 
-        for (final RoleMemento role : roles) {
+        for (final RoleMemento role : currentUser.getRoles()) {
             final String roleName = role.getName();
             // format is realmName:roleName.
             // since we don't know what the realm's name is (depends on its configuration in shiro.ini),
@@ -598,7 +596,7 @@ public abstract class ApplicationUser
 
     @Override
     public int compareTo(final org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser other) {
-        return contract.compare(this, (ApplicationUser) other);
+        return contract.compare(this, other);
     }
 
     @Override

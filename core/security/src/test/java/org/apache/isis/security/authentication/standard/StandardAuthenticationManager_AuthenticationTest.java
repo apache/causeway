@@ -24,15 +24,15 @@ import java.util.Collections;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.core.security.authentication.Authentication;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.security.authentication.manager.AnonymousInteractionFactory;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authentication.standard.RandomCodeGeneratorDefault;
 import org.apache.isis.security.AuthenticatorsForTesting;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public class StandardAuthenticationManager_AuthenticationTest {
 
@@ -50,7 +50,7 @@ public class StandardAuthenticationManager_AuthenticationTest {
     @Test
     public void newlyCreatedAuthenticationShouldBeValid() throws Exception {
         final AuthenticationRequestPassword request = new AuthenticationRequestPassword("foo", "bar");
-        final Authentication authentication = authenticationManager.authenticate(request);
+        final InteractionContext authentication = authenticationManager.authenticate(request);
 
         assertThat(authenticationManager.isSessionValid(authentication), is(true));
     }
@@ -58,7 +58,7 @@ public class StandardAuthenticationManager_AuthenticationTest {
     @Test
     public void newlyCreatedAuthentication_whenUnauthorizedUser_shouldBeRejected() throws Exception {
         final AuthenticationRequestPassword request = new AuthenticationRequestPassword("me", "pass");
-        final Authentication authentication = authenticationManager.authenticate(request);
+        final InteractionContext authentication = authenticationManager.authenticate(request);
 
         assertThat(authenticationManager.isSessionValid(authentication), is(false));
     }

@@ -38,7 +38,6 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.security.shiro.authentication.AuthenticatorShiro;
@@ -61,7 +60,7 @@ public class ShiroAuthenticatorOrAuthorizorTest_authenticate {
 
         val configuration = new IsisConfiguration(null);
         configuration.getSecurity().getShiro().setAutoLogoutIfAlreadyAuthenticated(false);
-        
+
         authenticator = new AuthenticatorShiro(configuration);
         authorizor = new AuthorizorShiro();
     }
@@ -93,11 +92,11 @@ public class ShiroAuthenticatorOrAuthorizorTest_authenticate {
         assertThat(authenticator.canAuthenticate(AuthenticationRequestPassword.class), is(true));
 
         AuthenticationRequest ar = new AuthenticationRequestPassword("lonestarr", "vespa");
-        Authentication authentication = authenticator.authenticate(ar, "test code");
+        val authentication = authenticator.authenticate(ar, "test code");
 
         assertThat(authentication, is(not(nullValue())));
-        assertThat(authentication.getUserName(), is("lonestarr"));
-        assertThat(authentication.getValidationCode(), is("test code"));
+        assertThat(authentication.getUser().getName(), is("lonestarr"));
+        assertThat(authentication.getUser().getAuthenticationCode(), is("test code"));
 
         Identifier changeAddressIdentifier = Identifier.actionIdentifier(
                 TypeIdentifierTestFactory.customer(), "changeAddress", String.class, String.class);
@@ -116,6 +115,6 @@ public class ShiroAuthenticatorOrAuthorizorTest_authenticate {
         assertThat(authorizor.isVisible(authentication, cancelOrderIdentifier), is(false));
     }
 
-    
+
 
 }

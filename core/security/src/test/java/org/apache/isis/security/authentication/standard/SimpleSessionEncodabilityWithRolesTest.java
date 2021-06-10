@@ -21,14 +21,16 @@ package org.apache.isis.security.authentication.standard;
 
 import java.io.Serializable;
 
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.user.UserMemento;
-import org.apache.isis.core.security.authentication.standard.SimpleAuthentication;
 
-public class SimpleSessionEncodabilityWithRolesTest extends SimpleSessionEncodabilityTestAbstract {
+public class SimpleSessionEncodabilityWithRolesTest
+extends SimpleSessionEncodabilityTestAbstract {
 
     @Override
     protected Serializable createEncodable() {
-        return SimpleAuthentication.validOf(UserMemento.ofNameAndRoleNames("joe", "role1", "role2"));
+        return InteractionContext.ofUserWithSystemDefaults(
+                UserMemento.ofNameAndRoleNames("joe", "role1", "role2"));
     }
 
 }

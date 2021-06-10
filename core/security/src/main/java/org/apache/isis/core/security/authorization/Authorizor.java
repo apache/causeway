@@ -20,11 +20,11 @@
 package org.apache.isis.core.security.authorization;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.security.authentication.Authentication;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 
 /**
  * Represents a mechanism to evaluate whether the current user (as represented
- * by {@link Authentication} can either view or invoke the domain object
+ * by {@link InteractionContext} can either view or invoke the domain object
  * feature (as represented by {@link Identifier}.
  *
  * @apiNote This is a framework internal class and so does not constitute a formal API.
@@ -34,13 +34,13 @@ import org.apache.isis.core.security.authentication.Authentication;
 public interface Authorizor {
 
     /**
-     * Whether the current {@link Authentication user} can view the
+     * Whether the current {@link InteractionContext user} can view the
      * domain object feature (represented by {@link Identifier}).
      */
-    boolean isVisible(Authentication authentication, Identifier identifier);
+    boolean isVisible(InteractionContext authentication, Identifier identifier);
 
     /**
-     * Whether the current {@link Authentication user} can invoke the
+     * Whether the current {@link InteractionContext user} can invoke the
      * domain object feature (represented by {@link Identifier}).
      *
      * <p>
@@ -48,6 +48,6 @@ public interface Authorizor {
      *     greyed out/disabled.
      * </p>
      */
-    boolean isUsable(Authentication authentication, Identifier identifier);
+    boolean isUsable(InteractionContext authentication, Identifier identifier);
 
 }

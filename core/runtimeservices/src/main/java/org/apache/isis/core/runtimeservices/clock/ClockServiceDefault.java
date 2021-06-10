@@ -46,7 +46,7 @@ public class ClockServiceDefault implements ClockService {
 
     @Override
     public VirtualClock getClock() {
-        return interactionTracker.currentExecutionContext()
+        return interactionTracker.currentInteractionContext()
         .map(InteractionContext::getClock)
         .orElseGet(VirtualClock::system);
     }

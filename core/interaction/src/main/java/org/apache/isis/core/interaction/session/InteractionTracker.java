@@ -20,12 +20,11 @@ package org.apache.isis.core.interaction.session;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayer;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.AuthenticationProvider;
 
 /**
@@ -41,48 +40,33 @@ extends InteractionProvider, AuthenticationProvider {
 
     default InteractionLayer currentInteractionLayerElseFail() {
         return currentInteractionLayer()
-        .orElseThrow(()->_Exceptions.illegalState("No InteractionLayer available on current thread"));
-    }
-
-    /**
-     * Returns the {@link InteractionContext} wrapped by the {@link #currentInteractionLayer()} (if within an interaction layer).
-     */
-    default Optional<InteractionContext> currentExecutionContext() {
-        return currentInteractionLayer().map(InteractionLayer::getInteractionContext);
-    }
-
-
-    // -- AUTHENTICATION
-
-    /**
-     * Returns the {@link Authentication} wrapped by the {@link #currentInteractionLayer()} (if within an interaction layer).
-     */
-    @Override
-    default Optional<Authentication> currentAuthentication() {
-        return currentInteractionLayer()
-                .map(InteractionLayer::getInteractionContext)
-                .flatMap(Authentication::authenticationFrom);
+                .orElseThrow(()->_Exceptions
+                        .illegalState("No InteractionLayer available on current thread"));
     }
 
     // -- INTERACTION CONTEXT
 
     /**
-     * Returns the {@link InteractionContext} wrapped by the {@link #currentInteractionLayer()} (if within an interaction layer).
+     * Returns the {@link InteractionContext} wrapped by the {@link #currentInteractionLayer()}
+     * (if within an interaction layer).
      */
     @Override
     default Optional<InteractionContext> currentInteractionContext() {
-        return currentInteractionLayer().map(InteractionLayer::getInteractionContext);
+        return currentInteractionLayer()
+                .map(InteractionLayer::getInteractionContext);
     }
 
 
     // -- INTERACTION
 
     /**
-     * Returns the {@link Interaction} wrapped by the {@link #currentInteractionLayer()} (if within an interaction layer).
+     * Returns the {@link Interaction} wrapped by the {@link #currentInteractionLayer()}
+     * (if within an interaction layer).
      */
     @Override
     default Optional<Interaction> currentInteraction(){
-    	return currentInteractionLayer().map(InteractionLayer::getInteraction);
+    	return currentInteractionLayer()
+    	        .map(InteractionLayer::getInteraction);
     }
 
 }

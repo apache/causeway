@@ -25,10 +25,9 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.PersistJobDataAfterExecution;
 
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.core.interaction.session.InteractionFactory;
-import org.apache.isis.core.security.authentication.Authentication;
-import org.apache.isis.core.security.authentication.standard.SimpleAuthentication;
 import org.apache.isis.extensions.commandreplay.secondary.SecondaryStatus;
 import org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig;
 import org.apache.isis.extensions.commandreplay.secondary.jobcallables.IsTickingClockInitialized;
@@ -47,7 +46,7 @@ public class ReplicateAndReplayJob implements Job {
 
     @Inject SecondaryConfig secondaryConfig;
 
-    Authentication authentication;
+    InteractionContext authentication;
 
     @Override
     public void execute(final JobExecutionContext quartzContext) {
@@ -60,7 +59,7 @@ public class ReplicateAndReplayJob implements Job {
                     secondaryConfig.getPrimaryUser(),
                     secondaryConfig.getQuartzRoles().stream());
 
-            authentication = SimpleAuthentication.validOf(user);
+            authentication = InteractionContext.ofUserWithSystemDefaults(user);
             exec(quartzContext);
         }
     }
@@ -88,7 +87,7 @@ public class ReplicateAndReplayJob implements Job {
 
             case OK:
                 val newStatus =
-                        isisInteractionFactory.callAuthenticated(authentication, new ReplicateAndRunCommands());
+                        isisInteractionFactory.call(authentication, new ReplicateAndRunCommands());
 
                 if(newStatus != null) {
                     ssh.setSecondaryStatus(newStatus);
@@ -105,8 +104,8 @@ public class ReplicateAndReplayJob implements Job {
         }
     }
 
-    private boolean isTickingClockInitialized(final Authentication authentication) {
-        return isisInteractionFactory.callAuthenticated(authentication, new IsTickingClockInitialized());
+    private boolean isTickingClockInitialized(final InteractionContext authentication) {
+        return isisInteractionFactory.call(authentication, new IsTickingClockInitialized());
     }
 
 }

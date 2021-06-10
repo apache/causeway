@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.viewer.resources;
 
-import org.apache.isis.core.security.authentication.Authentication;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -27,15 +27,15 @@ import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 
-public class UserReprRenderer extends ReprRendererAbstract<UserReprRenderer, Authentication> {
+public class UserReprRenderer extends ReprRendererAbstract<UserReprRenderer, InteractionContext> {
 
     UserReprRenderer(final IResourceContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, RepresentationType.USER, representation);
     }
 
     @Override
-    public UserReprRenderer with(final Authentication authentication) {
-        representation.mapPut("userName", authentication.getUserName());
+    public UserReprRenderer with(final InteractionContext authentication) {
+        representation.mapPut("userName", authentication.getUser().getName());
         final JsonRepresentation roles = JsonRepresentation.newArray();
 
         authentication.getUser().streamRoleNames()

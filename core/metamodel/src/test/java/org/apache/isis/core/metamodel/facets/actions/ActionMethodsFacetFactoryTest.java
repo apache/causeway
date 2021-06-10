@@ -54,7 +54,6 @@ import org.apache.isis.core.metamodel.facets.param.defaults.methodnum.ActionPara
 import org.apache.isis.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.testspec.ObjectSpecificationStub;
-import org.apache.isis.core.security.authentication.Authentication;
 
 import lombok.val;
 
@@ -73,12 +72,10 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         super.setUp();
 
-        final Authentication mockAuthentication = context.mock(Authentication.class);
-
         context.checking(new Expectations() {{
 
             allowing(mockAuthenticationProvider).currentAuthentication();
-            will(returnValue(Optional.of(mockAuthentication)));
+            will(returnValue(Optional.of(iaContext)));
         }});
 
     }

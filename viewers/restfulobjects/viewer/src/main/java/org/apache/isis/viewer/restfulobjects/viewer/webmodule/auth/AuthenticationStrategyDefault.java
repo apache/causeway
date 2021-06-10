@@ -23,13 +23,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.isis.core.security.authentication.Authentication;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 
 import lombok.val;
 
 /**
- * Returns a valid {@link Authentication} through a number of mechanisms;
- * supports caching of the {@link Authentication} onto the
+ * Returns a valid {@link InteractionContext} through a number of mechanisms;
+ * supports caching of the {@link InteractionContext} onto the
  * {@link HttpSession}.
  *
  * <p>
@@ -41,12 +41,13 @@ import lombok.val;
  *
  * @since 2.0 {@index}
  */
-public class AuthenticationStrategyDefault extends AuthenticationStrategyAbstract {
+public class AuthenticationStrategyDefault
+extends AuthenticationStrategyAbstract {
 
     public static final String HTTP_SESSION_AUTHENTICATION_SESSION_KEY = AuthenticationStrategyDefault.class.getPackage().getName() + ".authentication";
 
     @Override
-    public Authentication lookupValid(
+    public InteractionContext lookupValid(
             final HttpServletRequest httpServletRequest,
             final HttpServletResponse httpServletResponse) {
 
@@ -54,7 +55,7 @@ public class AuthenticationStrategyDefault extends AuthenticationStrategyAbstrac
         val httpSession = getHttpSession(httpServletRequest);
 
         // use previously authenticated session if available
-        val authentication = (Authentication)
+        val authentication = (InteractionContext)
                 httpSession.getAttribute(HTTP_SESSION_AUTHENTICATION_SESSION_KEY);
         if (authentication != null) {
             val sessionValid = authenticationManager.isSessionValid(authentication);
@@ -70,7 +71,7 @@ public class AuthenticationStrategyDefault extends AuthenticationStrategyAbstrac
     public void bind(
             final HttpServletRequest httpServletRequest,
             final HttpServletResponse httpServletResponse,
-            final Authentication authentication) {
+            final InteractionContext authentication) {
 
         val httpSession = getHttpSession(httpServletRequest);
         if(authentication != null) {

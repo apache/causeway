@@ -35,11 +35,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.exceptions.unrecoverable.NoAuthenticatorException;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.Authenticator;
 import org.apache.isis.core.security.authentication.standard.RandomCodeGenerator;
@@ -84,7 +84,7 @@ public class AuthenticationManager {
 
     @Transactional(readOnly = true) // let Spring handle the transactional context for this method
     // cannot use final here, as Spring provides a transaction aware proxy for this type
-    public /*final*/ Authentication authenticate(AuthenticationRequest request) {
+    public /*final*/ InteractionContext authenticate(AuthenticationRequest request) {
 
         if (request == null) {
             return null;
@@ -105,7 +105,10 @@ public class AuthenticationManager {
             for (val authenticator : compatibleAuthenticators) {
                 val authentication = authenticator.authenticate(request, getUnusedRandomCode());
                 if (authentication != null) {
-                    userByValidationCode.put(authentication.getValidationCode(), authentication.getUserName());
+                    val userMemento = authentication.getUser();
+                    userByValidationCode.put(
+                            userMemento.getAuthenticationCode(),
+                            userMemento.getName());
                     return authentication;
                 }
             }
@@ -137,23 +140,24 @@ public class AuthenticationManager {
 
 
     // cannot use final here, as Spring provides a transaction aware proxy for this type
-    public /*final*/ boolean isSessionValid(final @Nullable Authentication authentication) {
+    public /*final*/ boolean isSessionValid(final @Nullable InteractionContext authentication) {
         if(authentication==null) {
             return false;
         }
-        if(authentication.getType() == Authentication.Type.EXTERNAL) {
+        val userMemento = authentication.getUser();
+        if(userMemento.getAuthenticationSource().isExternal()) {
             return true;
         }
-        final String userName = userByValidationCode.get(authentication.getValidationCode());
+        final String userName = userByValidationCode.get(userMemento.getAuthenticationCode());
         return authentication.getUser().isCurrentUser(userName);
     }
 
 
-    public void closeSession(Authentication authentication) {
+    public void closeSession(InteractionContext context) {
         for (val authenticator : authenticators) {
-            authenticator.logout(authentication);
+            authenticator.logout(context);
         }
-        userByValidationCode.remove(authentication.getValidationCode());
+        userByValidationCode.remove(context.getUser().getAuthenticationCode());
     }
 
     // -- AUTHENTICATORS

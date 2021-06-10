@@ -29,7 +29,6 @@ import com.vaadin.flow.spring.SpringServlet;
 import org.springframework.context.ApplicationContext;
 
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.incubator.viewer.vaadin.ui.auth.AuthSessionStoreUtil;
 
@@ -69,7 +68,7 @@ extends SpringServlet {
         log.debug("new request incoming (authentication={})", authentication);
 
         if(authentication!=null) {
-            interactionFactory.runAuthenticated(authentication, ()->{
+            interactionFactory.run(authentication, ()->{
                 super.service(request, response);
             });
         } else {

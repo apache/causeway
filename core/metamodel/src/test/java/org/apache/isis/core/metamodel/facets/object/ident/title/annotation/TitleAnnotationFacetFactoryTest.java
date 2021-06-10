@@ -31,7 +31,11 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -40,20 +44,16 @@ import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.AuthenticationProvider;
+import org.apache.isis.core.security.authentication.InteractionContextFactory;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
-public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
+public class TitleAnnotationFacetFactoryTest
+extends AbstractFacetFactoryJUnit4TestCase {
 
     private TitleAnnotationFacetFactory facetFactory;
 
-    @Mock
-    private ManagedObject mockObjectAdapter;
-    @Mock
-    private Authentication mockAuthentication;
+    @Mock private ManagedObject mockObjectAdapter;
+    protected final InteractionContext iaContext = InteractionContextFactory.testing();
 
     @Before
     public void setUp() throws Exception {
@@ -70,13 +70,7 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
                 will(returnValue(Optional.of(mockAuthenticationTracker)));
 
                 allowing(mockAuthenticationTracker).currentAuthentication();
-                will(returnValue(Optional.of(mockAuthentication)));
-
-                //                allowing(mockServicesInjector).getSpecificationLoader();
-                //                will(returnValue(mockSpecificationLoader));
-                //
-                //                allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
-                //                will(returnValue(mockPersistenceSessionServiceInternal));
+                will(returnValue(Optional.of(iaContext)));
             }
         });
 

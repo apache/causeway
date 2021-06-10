@@ -23,24 +23,25 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.core.security.authentication.AuthenticationAbstract;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.security.EncodabilityContractTest;
 
-public abstract class SimpleSessionEncodabilityTestAbstract extends EncodabilityContractTest {
+public abstract class SimpleSessionEncodabilityTestAbstract
+extends EncodabilityContractTest {
 
     @Override
     protected void assertRoundtripped(final Object decodedEncodable, final Object originalEncodable) {
-        final AuthenticationAbstract decoded = (AuthenticationAbstract) decodedEncodable;
-        final AuthenticationAbstract original = (AuthenticationAbstract) originalEncodable;
+        final InteractionContext decoded = (InteractionContext) decodedEncodable;
+        final InteractionContext original = (InteractionContext) originalEncodable;
 
         assertThat(decoded.getUser(), is(equalTo(original.getUser()))); // redundant shortcut
 
-        assertThat(decoded.getInteractionContext().getTimeZone(), is(equalTo(original.getInteractionContext().getTimeZone())));
-        assertThat(decoded.getInteractionContext().getLocale(), is(equalTo(original.getInteractionContext().getLocale())));
-        assertThat(decoded.getInteractionContext().getUser(), is(equalTo(original.getInteractionContext().getUser())));
-        assertThat(decoded.getInteractionContext().getClock(), is(equalTo(original.getInteractionContext().getClock())));
+        assertThat(decoded.getTimeZone(), is(equalTo(original.getTimeZone())));
+        assertThat(decoded.getLocale(), is(equalTo(original.getLocale())));
+        assertThat(decoded.getUser(), is(equalTo(original.getUser())));
+        assertThat(decoded.getClock(), is(equalTo(original.getClock())));
 
-        assertThat(decoded.getInteractionContext(), is(equalTo(original.getInteractionContext())));
+        assertThat(decoded, is(equalTo(original)));
     }
 
 }

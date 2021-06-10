@@ -19,9 +19,11 @@
 
 package org.apache.isis.core.security.authentication;
 
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+
 /**
  * Represents an authentication mechanism capable of authenticating certain
- * types of {@link AuthenticationRequest} and returning an {@link Authentication}
+ * types of {@link AuthenticationRequest} and returning an {@link InteractionContext}
  * if the credentials are valid.
  *
  * <p>
@@ -44,16 +46,16 @@ public interface Authenticator {
 
     /**
      * Authenticates the provided {@link AuthenticationRequest request},
-     * returning a non-null {@link Authentication} if valid.
+     * returning a non-null {@link InteractionContext} if valid.
      *
      * @param code
      *            - a hint; is guaranteed by the framework to be unique, but the authenticator decides whether to use it or not.
      */
-    Authentication authenticate(AuthenticationRequest request, String code);
+    InteractionContext authenticate(AuthenticationRequest request, String code);
 
     /**
-     * Invalidates this {@link Authentication}, meaning that the user will need
+     * Invalidates this {@link InteractionContext}, meaning that the user will need
      * to log in again to use the application.
      */
-    void logout(Authentication authentication);
+    void logout(InteractionContext context);
 }

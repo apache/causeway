@@ -27,9 +27,9 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.core.security.authentication.AuthenticationRequest;
-import org.apache.isis.core.security.authentication.Authentication;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.core.security.authentication.AuthenticationProvider;
+import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.Authenticator;
 
 /**
@@ -50,13 +50,13 @@ public class AuthenticatorKeycloak implements Authenticator {
     }
 
     @Override
-    public Authentication authenticate(final AuthenticationRequest request, final String code) {
+    public InteractionContext authenticate(final AuthenticationRequest request, final String code) {
         // HTTP request filters should already have taken care of Authentication creation
         return authenticationProvider.currentAuthentication().orElse(null);
     }
 
     @Override
-    public void logout(final Authentication session) {
+    public void logout(final InteractionContext session) {
     }
 
 }

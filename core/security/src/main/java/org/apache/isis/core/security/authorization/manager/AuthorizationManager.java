@@ -32,8 +32,8 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.sudo.SudoService;
-import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authorization.Authorizor;
 
 import lombok.val;
@@ -78,7 +78,7 @@ public class AuthorizationManager {
      * </p>
      */
     public boolean isUsable(
-            final Authentication authentication,
+            final InteractionContext authentication,
             final Identifier identifier) {
         if (isPerspectiveMember(identifier)) {
             return true;
@@ -101,7 +101,7 @@ public class AuthorizationManager {
      * </p>
      */
     public boolean isVisible(
-            final Authentication authentication,
+            final InteractionContext authentication,
             final Identifier identifier) {
         if (isPerspectiveMember(identifier)) {
             return true;
@@ -122,7 +122,7 @@ public class AuthorizationManager {
     // -- HELPER
 
     private static boolean containsSudoSuperuserRole(
-            final @Nullable Authentication session) {
+            final @Nullable InteractionContext session) {
         if(session==null || session.getUser()==null) {
             return false;
         }

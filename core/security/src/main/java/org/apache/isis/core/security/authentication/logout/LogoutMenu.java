@@ -32,11 +32,11 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.applib.value.OpenUrlStrategy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.security.IsisModuleCoreSecurity;
-import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.AuthenticationProvider;
 
 import lombok.RequiredArgsConstructor;
@@ -74,10 +74,11 @@ public class LogoutMenu {
 
     private Object getRedirect() {
         val redirect =  authenticationProvider.currentAuthentication()
-        .map(authentication->
-            authentication.getType() == Authentication.Type.EXTERNAL
-            ? "logout"
-            : "login"
+        .map(InteractionContext::getUser)
+        .map(userMemento->
+            userMemento.getAuthenticationSource().isExternal()
+                ? "logout"
+                : "login"
         )
         .orElse("login");
         switch(redirect) {

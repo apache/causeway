@@ -19,9 +19,9 @@
 
 package org.apache.isis.core.security.authentication.standard;
 
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
-import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.Authenticator;
 
 import lombok.val;
@@ -29,11 +29,11 @@ import lombok.val;
 public abstract class AuthenticatorAbstract implements Authenticator {
 
     /**
-     * Default implementation returns a {@link SimpleAuthentication}; can be overridden
+     * Default implementation returns a validated {@link InteractionContext}; can be overridden
      * if required.
      */
     @Override
-    public final Authentication authenticate(
+    public final InteractionContext authenticate(
             final AuthenticationRequest request,
             final String validationCode) {
 
@@ -41,8 +41,9 @@ public abstract class AuthenticatorAbstract implements Authenticator {
             return null;
         }
 
-        val user = UserMemento.ofNameAndRoleNames(request.getName(), request.streamRoles());
-        return SimpleAuthentication.of(user, validationCode);
+        val user = UserMemento.ofNameAndRoleNames(request.getName(), request.streamRoles())
+                .withAuthenticationCode(validationCode);
+        return InteractionContext.ofUserWithSystemDefaults(user);
     }
 
 
@@ -53,7 +54,7 @@ public abstract class AuthenticatorAbstract implements Authenticator {
     protected abstract boolean isValid(AuthenticationRequest request);
 
     @Override
-    public final void logout(final Authentication session) {
+    public final void logout(final InteractionContext session) {
         // no-op
     }
 

@@ -21,13 +21,16 @@ package org.apache.isis.core.security.authentication;
 
 import java.util.Optional;
 
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 /**
  * Provides the current thread's {@link Authentication}.
  * @since 2.0
+ * @deprecated
  */
+@Deprecated
 public interface AuthenticationProvider {
 
     /**
@@ -37,9 +40,9 @@ public interface AuthenticationProvider {
      * the current thread's {@link org.apache.isis.core.interaction.session.InteractionSession}'s
      * authentication layer stack.
      */
-    Optional<Authentication> currentAuthentication();
+    Optional<InteractionContext> currentAuthentication();
 
-    default Authentication currentAuthenticationElseFail() {
+    default InteractionContext currentAuthenticationElseFail() {
         return currentAuthentication()
                 .orElseThrow(()->
                     _Exceptions.illegalState(

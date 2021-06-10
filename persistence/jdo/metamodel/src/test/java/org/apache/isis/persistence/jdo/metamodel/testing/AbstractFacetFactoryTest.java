@@ -28,6 +28,7 @@ import org.junit.Rule;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
@@ -42,8 +43,8 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.AuthenticationProvider;
+import org.apache.isis.core.security.authentication.InteractionContextFactory;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
 import junit.framework.TestCase;
@@ -68,7 +69,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
 
     protected TranslationService mockTranslationService;
     protected AuthenticationProvider mockAuthenticationProvider;
-    protected Authentication mockAuthentication;
+    protected final InteractionContext iaContext = InteractionContextFactory.testing();
     protected SpecificationLoader mockSpecificationLoader;
     protected MethodRemoverForTesting methodRemover;
 
@@ -108,10 +109,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         methodRemover = new MethodRemoverForTesting();
 
         mockAuthenticationProvider = context.mock(AuthenticationProvider.class);
-
         mockTranslationService = context.mock(TranslationService.class);
-        mockAuthentication = context.mock(Authentication.class);
-
         mockSpecificationLoader = context.mock(SpecificationLoader.class);
 
         metaModelContext = MetaModelContext_forTesting.builder()
@@ -123,7 +121,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         context.checking(new Expectations() {{
 
             allowing(mockAuthenticationProvider).currentAuthentication();
-            will(returnValue(Optional.of(mockAuthentication)));
+            will(returnValue(Optional.of(iaContext)));
         }});
 
         ((MetaModelContextAware)facetHolder).setMetaModelContext(metaModelContext);

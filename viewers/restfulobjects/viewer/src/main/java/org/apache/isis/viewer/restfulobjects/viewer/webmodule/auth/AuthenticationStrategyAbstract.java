@@ -36,7 +36,8 @@ import lombok.val;
  *
  * @since 2.0 {@index}
  */
-public abstract class AuthenticationStrategyAbstract implements AuthenticationStrategy {
+public abstract class AuthenticationStrategyAbstract
+implements AuthenticationStrategy {
 
     public static final int STATUS_UNAUTHORIZED = 401;
 

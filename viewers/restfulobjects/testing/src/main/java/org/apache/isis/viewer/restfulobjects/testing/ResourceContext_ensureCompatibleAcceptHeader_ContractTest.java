@@ -18,9 +18,6 @@
  */
 package org.apache.isis.viewer.restfulobjects.testing;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +34,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.interaction.session.InteractionTracker;
@@ -45,7 +46,7 @@ import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.security.authentication.Authentication;
+import org.apache.isis.core.security.authentication.InteractionContextFactory;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
@@ -62,12 +63,13 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
     @Rule public JUnitRuleMockery2 context =
             JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
+    protected final InteractionContext iaContext = InteractionContextFactory.testing();
+
     @Mock HttpHeaders mockHttpHeaders;
     @Mock HttpServletRequest mockHttpServletRequest;
     @Mock ServletContext mockServletContext;
     @Mock InteractionFactory mockInteractionFactory;
     @Mock Interaction mockInteraction;
-    @Mock Authentication mockAuthentication;
     @Mock SpecificationLoader mockSpecificationLoader;
     @Mock WebApplicationContext webApplicationContext;
     @Mock InteractionTracker mockIsisInteractionTracker;
@@ -82,7 +84,7 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
-                .authentication(mockAuthentication)
+                .authentication(iaContext)
                 .singleton(mockAuthenticationManager)
                 .singleton(mockIsisInteractionTracker)
                 .singleton(mockInteractionFactory)

@@ -30,7 +30,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.core.security.authentication.Authentication;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.core.security.authentication.Authenticator;
 import org.apache.isis.core.security.authorization.Authorizor;
 import org.apache.isis.security.shiro.context.ShiroSecurityContext;
@@ -56,13 +56,13 @@ import lombok.val;
 public class AuthorizorShiro implements Authorizor {
 
     @Override
-    public boolean isVisible(final Authentication authentication, final Identifier identifier) {
-        return isPermitted(authentication.getUserName(), identifier, "r");
+    public boolean isVisible(final InteractionContext authentication, final Identifier identifier) {
+        return isPermitted(authentication.getUser().getName(), identifier, "r");
     }
 
     @Override
-    public boolean isUsable(final Authentication authentication, final Identifier identifier) {
-        return isPermitted(authentication.getUserName(), identifier, "w");
+    public boolean isUsable(final InteractionContext authentication, final Identifier identifier) {
+        return isPermitted(authentication.getUser().getName(), identifier, "w");
     }
 
     private boolean isPermitted(String userName, Identifier identifier, String qualifier) {

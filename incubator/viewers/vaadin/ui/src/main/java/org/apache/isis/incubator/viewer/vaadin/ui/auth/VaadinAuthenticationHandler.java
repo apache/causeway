@@ -82,7 +82,7 @@ implements
                 .authenticate(authenticationRequest);
 
         if(authentication!=null) {
-            log.debug("logging in {}", authentication.getUserName());
+            log.debug("logging in {}", authentication.getUser().getName());
             AuthSessionStoreUtil.put(authentication);
             return true;
         }
@@ -99,7 +99,7 @@ implements
      */
     public <R> R callAuthenticated(Callable<R> callable) {
         return AuthSessionStoreUtil.get()
-                .map(authentication->isisInteractionFactory.callAuthenticated(authentication, callable))
+                .map(authentication->isisInteractionFactory.call(authentication, callable))
                 .orElse(null); // TODO redirect to login
     }
 
@@ -121,7 +121,7 @@ implements
 
         val authentication = AuthSessionStoreUtil.get().orElse(null);
         if(authentication!=null) {
-            isisInteractionFactory.openInteraction(authentication.getInteractionContext());
+            isisInteractionFactory.openInteraction(authentication);
             return; // access granted
         }
         // otherwise redirect to login page

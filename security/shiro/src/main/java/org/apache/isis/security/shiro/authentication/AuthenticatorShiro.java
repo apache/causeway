@@ -47,14 +47,14 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
-import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.Authenticator;
-import org.apache.isis.core.security.authentication.standard.SimpleAuthentication;
+import org.apache.isis.core.security.authentication.InteractionContextFactory;
 import org.apache.isis.core.security.authorization.Authorizor;
 import org.apache.isis.security.shiro.context.ShiroSecurityContext;
 
@@ -100,7 +100,7 @@ public class AuthenticatorShiro implements Authenticator {
     }
 
     @Override
-    public Authentication authenticate(final AuthenticationRequest request, final String code) {
+    public InteractionContext authenticate(final AuthenticationRequest request, final String code) {
         RealmSecurityManager securityManager = getSecurityManager();
         if(securityManager == null) {
             return null;
@@ -152,14 +152,14 @@ public class AuthenticatorShiro implements Authenticator {
     }
 
     @Override
-    public void logout(final Authentication session) {
+    public void logout(final InteractionContext context) {
         Subject currentSubject = SecurityUtils.getSubject();
         if(currentSubject.isAuthenticated()) {
             currentSubject.logout();
         }
     }
 
-    Authentication authenticationFor(
+    InteractionContext authenticationFor(
             AuthenticationRequest request,
             String validationCode,
             AuthenticationToken token,
@@ -173,7 +173,7 @@ public class AuthenticatorShiro implements Authenticator {
                 request.streamRoles());
 
         val user = UserMemento.ofNameAndRoleNames(request.getName(), roles);
-        return SimpleAuthentication.of(user, validationCode);
+        return InteractionContextFactory.valid(user, validationCode);
     }
 
     /**

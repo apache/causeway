@@ -28,13 +28,11 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.core.security.authentication.Authentication;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.core.security.authorization.Authorizor;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserRepository;
-
-import lombok.extern.log4j.Log4j2;
 
 /**
  * @since 2.0 {@index}
@@ -48,24 +46,24 @@ public class AuthorizorSecman implements Authorizor {
     @Inject ApplicationUserRepository applicationUserRepository;
 
     @Override
-    public boolean isVisible(final Authentication authentication, final Identifier identifier) {
+    public boolean isVisible(final InteractionContext authentication, final Identifier identifier) {
         return grants(authentication, identifier, ApplicationPermissionMode.VIEWING);
     }
 
     @Override
-    public boolean isUsable(final Authentication authentication, final Identifier identifier) {
+    public boolean isUsable(final InteractionContext authentication, final Identifier identifier) {
         return grants(authentication, identifier, ApplicationPermissionMode.CHANGING);
     }
 
     // -- HELPER
 
     private boolean grants(
-            final Authentication authentication,
+            final InteractionContext authentication,
             final Identifier identifier,
             final ApplicationPermissionMode permissionMode) {
 
         return applicationUserRepository
-        .findByUsername(authentication.getUserName())
+        .findByUsername(authentication.getUser().getName())
         .map(ApplicationUser::getPermissionSet)
         .map(permissionSet->permissionSet.grants(
                 ApplicationFeatureId.fromIdentifier(identifier),

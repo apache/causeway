@@ -32,20 +32,18 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.user.UserMemento;
-import org.apache.isis.applib.services.iactnlayer.InteractionService;
+import org.apache.isis.applib.services.user.UserMemento.AuthenticationSource;
 import org.apache.isis.core.interaction.session.InteractionFactory;
-import org.apache.isis.core.security.authentication.Authentication;
-import org.apache.isis.core.security.authentication.standard.SimpleAuthentication;
 import org.apache.isis.security.spring.authconverters.AuthenticationConverter;
 
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * @since 2.0 {@index}
  */
-@Log4j2
+//@Log4j2
 public class SpringSecurityFilter implements Filter {
 
     @Autowired private InteractionFactory interactionFactory;
@@ -83,16 +81,12 @@ public class SpringSecurityFilter implements Filter {
         }
 
         // TODO: this should be added by Wicket viewer
-        userMemento = userMemento.withRole("org.apache.isis.viewer.wicket.roles.USER");
+        userMemento = userMemento.withRoleAdded("org.apache.isis.viewer.wicket.roles.USER")
+                .withAuthenticationSource(AuthenticationSource.EXTERNAL);
 
-        val authentication = SimpleAuthentication.validOf(userMemento);
-        authentication.setType(Authentication.Type.EXTERNAL);
-
-        interactionFactory.runAuthenticated(
-                authentication,
-                ()->{
-                        filterChain.doFilter(servletRequest, servletResponse);
-                });
+        interactionFactory.run(
+                InteractionContext.ofUserWithSystemDefaults(userMemento),
+                ()->filterChain.doFilter(servletRequest, servletResponse));
     }
 
     @Inject List<AuthenticationConverter> converters;

@@ -27,15 +27,15 @@ import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Rule;
 
+import org.apache.isis.applib.services.iactnlayer.ThrowingRunnable;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.session.SessionLoggingService;
-import org.apache.isis.applib.services.iactnlayer.ThrowingRunnable;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.security.authentication.InteractionContextFactory;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
-import org.apache.isis.core.security.authentication.singleuser.SingleUserAuthentication;
 
 public abstract class AuthenticatedWebSessionForIsis_TestAbstract {
 
@@ -62,7 +62,9 @@ public abstract class AuthenticatedWebSessionForIsis_TestAbstract {
                 allowing(mockCommonContext).lookupServiceElseFail(InteractionFactory.class);
                 will(returnValue(mockInteractionFactory));
 
-                allowing(mockInteractionFactory).runAuthenticated(new SingleUserAuthentication(), with(any(ThrowingRunnable.class)));
+                allowing(mockInteractionFactory).run(
+                        InteractionContextFactory.testing(),
+                        with(any(ThrowingRunnable.class)));
                 // ignore
 
                 // must provide explicit expectation, since Locale is final.

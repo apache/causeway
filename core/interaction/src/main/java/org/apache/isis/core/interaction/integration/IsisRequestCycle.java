@@ -18,10 +18,10 @@
  */
 package org.apache.isis.core.interaction.integration;
 
-import org.apache.isis.applib.services.user.ImpersonatedUserHolder;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
-import org.apache.isis.core.security.authentication.Authentication;
-import org.apache.isis.core.security.authentication.standard.SimpleAuthentication;
+import org.apache.isis.applib.services.user.ImpersonatedUserHolder;
+import org.apache.isis.core.security.authentication.InteractionContextFactory;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -38,16 +38,16 @@ public class IsisRequestCycle {
 
     // -- SUPPORTING WEB REQUEST CYCLE FOR ISIS ...
 
-    public void onBeginRequest(final Authentication authentication) {
+    public void onBeginRequest(final InteractionContext authenticatedContext) {
 
-        val authenticationToUse = impersonatedUserHolder.getUserMemento()
-                .<Authentication>map(impersonatingUserMemento->
-                    SimpleAuthentication.of(
+        val contextToUse = impersonatedUserHolder.getUserMemento()
+                .<InteractionContext>map(impersonatingUserMemento->
+                    InteractionContextFactory.valid(
                         impersonatingUserMemento,
-                        authentication.getValidationCode()))
-                .orElse(authentication);
+                        authenticatedContext.getUser().getAuthenticationCode()))
+                .orElse(authenticatedContext);
 
-        interactionService.openInteraction(authenticationToUse.getInteractionContext());
+        interactionService.openInteraction(contextToUse);
     }
 
     public void onRequestHandlerExecuted() {

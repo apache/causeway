@@ -34,11 +34,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.user.UserMemento;
-import org.apache.isis.applib.services.iactnlayer.InteractionService;
+import org.apache.isis.applib.services.user.UserMemento.AuthenticationSource;
 import org.apache.isis.core.interaction.session.InteractionFactory;
-import org.apache.isis.core.security.authentication.Authentication;
-import org.apache.isis.core.security.authentication.standard.SimpleAuthentication;
 
 import lombok.val;
 
@@ -66,15 +65,13 @@ public class KeycloakFilter implements Filter {
         }
         final List<String> roles = toClaims(rolesHeader);
 
-        val user = UserMemento.ofNameAndRoleNames(userid, roles.stream());
-        val authentication = SimpleAuthentication.of(user, subjectHeader);
-        authentication.setType(Authentication.Type.EXTERNAL);
+        val user = UserMemento.ofNameAndRoleNames(userid, roles.stream())
+                .withAuthenticationSource(AuthenticationSource.EXTERNAL)
+                .withAuthenticationCode(subjectHeader);
 
-        interactionFactory.runAuthenticated(
-                authentication,
-                ()->{
-                        filterChain.doFilter(servletRequest, servletResponse);
-                });
+        interactionFactory.run(
+                InteractionContext.ofUserWithSystemDefaults(user),
+                ()->filterChain.doFilter(servletRequest, servletResponse));
     }
 
     static List<String> toClaims(final String claimsHeader) {

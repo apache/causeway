@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.runtimeservices.sudo;
 
-import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.function.UnaryOperator;
 
@@ -39,9 +38,6 @@ import org.apache.isis.applib.services.sudo.SudoServiceListener;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.interaction.session.InteractionTracker;
-import org.apache.isis.core.runtimeservices.session.AnonymousAuthentication;
-import org.apache.isis.core.security.authentication.Authentication;
-import org.apache.isis.core.security.authentication.standard.SimpleAuthentication;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -80,14 +76,11 @@ public class SudoServiceDefault implements SudoService {
         val currentInteractionContext = currentInteractionLayer.getInteractionContext();
         val sudoInteractionContext = sudoMapper.apply(currentInteractionContext);
 
-        val authentication = Authentication.authenticationFrom(currentInteractionContext)
-                                .orElse(SimpleAuthentication.validOf(currentInteractionContext));
-        val sudoAuthentication = authentication.withInteractionContext(sudoInteractionContext);
-
         try {
             beforeCall(currentInteractionContext, sudoInteractionContext);
 
-            return interactionFactory.callAuthenticated(sudoAuthentication, callable);
+            return interactionFactory
+                    .call(sudoInteractionContext, callable);
         } finally {
             afterCall(sudoInteractionContext, currentInteractionContext);
         }

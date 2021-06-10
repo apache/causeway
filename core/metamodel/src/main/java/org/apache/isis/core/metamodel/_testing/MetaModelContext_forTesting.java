@@ -23,10 +23,13 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+import static java.util.Objects.requireNonNull;
+
 import org.springframework.core.env.AbstractEnvironment;
 
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -53,12 +56,9 @@ import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault;
-import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.AuthenticationProvider;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
-
-import static java.util.Objects.requireNonNull;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -99,7 +99,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
 
     private TranslationService translationService;
 
-    private Authentication authentication;
+    private InteractionContext authentication;
 
     private AuthorizationManager authorizationManager;
 
@@ -200,7 +200,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
     @Override
     public ServiceRegistry getServiceRegistry() {
         if(serviceRegistry==null) {
-            serviceRegistry = new ServiceRegistry_forTesting((MetaModelContext)this);
+            serviceRegistry = new ServiceRegistry_forTesting(this);
         }
         return serviceRegistry;
     }
@@ -208,7 +208,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
     @Override
     public ServiceInjector getServiceInjector() {
         if(serviceInjector==null) {
-            serviceInjector = new ServiceInjector_forTesting((MetaModelContext)this);
+            serviceInjector = new ServiceInjector_forTesting(this);
         }
         return serviceInjector;
     }
@@ -216,7 +216,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
     @Override
     public FactoryService getFactoryService() {
         if(factoryService==null) {
-            factoryService = new FactoryService_forTesting((MetaModelContext)this);
+            factoryService = new FactoryService_forTesting(this);
         }
         return factoryService;
     }
@@ -281,7 +281,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
     @Override
     public ObjectManager getObjectManager() {
         if(objectManager==null) {
-            objectManager = ObjectManagerDefault.forTesting((MetaModelContext)this);
+            objectManager = ObjectManagerDefault.forTesting(this);
         }
         return objectManager;
     }

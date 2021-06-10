@@ -23,6 +23,9 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+import org.apache.isis.applib.services.user.UserMemento;
+
 /**
  * Represents a request to authenticate the user identified by
  * {@link AuthenticationRequest#getName()}.
@@ -30,9 +33,8 @@ import javax.annotation.Nullable;
  * <p>
  *     If successful, then the authentication mechanism is expected to add the
  *     {@link AuthenticationRequest#streamRoles() roles} to the resultant
- *     {@link Authentication} (obtained from the
- *     {@link org.apache.isis.applib.services.user.UserMemento} returned by
- *     {@link Authentication#getUser()}).
+ *     {@link UserMemento} (obtained from
+ *     {@link InteractionContext#getUser()}).
  * </p>
  *
  * @apiNote This is a framework internal class and so does not constitute a formal API.

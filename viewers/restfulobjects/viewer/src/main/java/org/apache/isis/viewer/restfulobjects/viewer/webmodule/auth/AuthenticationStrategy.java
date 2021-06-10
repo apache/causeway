@@ -22,27 +22,27 @@ package org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.isis.core.security.authentication.Authentication;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 
 /**
  * Decouples the <code>IsisRestfulObjectsInteractionFilter</code> from the mechanism of obtaining the
- * {@link Authentication}.
+ * {@link InteractionContext}.
  *
  * @since 2.0 {@index}
  */
 public interface AuthenticationStrategy {
 
     /**
-     * Returns a still-valid {@link Authentication} or {@code null}
-     * @see AuthenticationManager#isSessionValid(Authentication)
+     * Returns a still-valid {@link InteractionContext} or {@code null}
+     * @see AuthenticationManager#isSessionValid(InteractionContext)
      */
-    Authentication lookupValid(
+    InteractionContext lookupValid(
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse);
 
     /**
-     * Binds the request to a still-valid {@link Authentication} if applicable
+     * Binds the request to a still-valid {@link InteractionContext} if applicable
      * @param httpServletRequest
      * @param httpServletResponse
      * @param auth
@@ -50,7 +50,7 @@ public interface AuthenticationStrategy {
     void bind(
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse,
-            Authentication auth);
+            InteractionContext auth);
 
     void invalidate(
             HttpServletRequest httpServletRequest,

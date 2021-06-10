@@ -47,8 +47,9 @@ import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandExecutorService;
 import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayer;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -81,7 +82,6 @@ import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.proxy._ProxyFactoryService;
-import org.apache.isis.applib.services.iactnlayer.InteractionLayer;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -101,7 +101,6 @@ import org.apache.isis.core.runtimeservices.wrapper.dispatchers.InteractionEvent
 import org.apache.isis.core.runtimeservices.wrapper.handlers.DomainObjectInvocationHandler;
 import org.apache.isis.core.runtimeservices.wrapper.handlers.ProxyContextHandler;
 import org.apache.isis.core.runtimeservices.wrapper.proxy.ProxyCreator;
-import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
 import static org.apache.isis.applib.services.metamodel.MetaModelService.Mode.RELAXED;
@@ -361,14 +360,6 @@ public class WrapperFactoryDefault implements WrapperFactory {
         val interactionContext = interactionLayer.getInteractionContext();
         val asyncInteractionContext = interactionContextFrom(asyncControl, interactionContext);
 
-        val authIfAny = Authentication.authenticationFrom(interactionLayer.getInteractionContext());
-        if(!authIfAny.isPresent()) {
-            return null;
-        }
-
-        val auth = authIfAny.get();
-        val asyncAuth = auth.withInteractionContext(asyncInteractionContext);
-
         val command = interactionProviderProvider.get().currentInteractionElseFail().getCommand();
         val commandInteractionId = command.getInteractionId();
 
@@ -402,7 +393,6 @@ public class WrapperFactoryDefault implements WrapperFactory {
         val executorService = asyncControl.getExecutorService();
         val future = executorService.submit(
                 new ExecCommand<R>(
-                        asyncAuth,
                         asyncInteractionContext,
                         Propagation.REQUIRES_NEW,
                         commandDto,
@@ -591,7 +581,6 @@ public class WrapperFactoryDefault implements WrapperFactory {
     @RequiredArgsConstructor
     private static class ExecCommand<R> implements Callable<R> {
 
-        private final Authentication authentication;
         private final InteractionContext interactionContext;
         private final Propagation propagation;
         private final CommandDto commandDto;
@@ -610,7 +599,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
         @Override
         public R call() {
             serviceInjector.injectServicesInto(this);
-            return interactionFactory.callAuthenticated(authentication, this::updateDomainObjectHonoringTransactionalPropagation);
+            return interactionFactory.call(interactionContext, this::updateDomainObjectHonoringTransactionalPropagation);
         }
 
         private R updateDomainObjectHonoringTransactionalPropagation() {

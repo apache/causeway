@@ -62,7 +62,7 @@ public class UserServiceDefault implements UserService {
         Optional<UserMemento> optional = getImpersonatedUser();
         return optional.isPresent()
                 ? optional
-                : isisInteractionTracker.currentExecutionContext().map(InteractionContext::getUser);
+                : isisInteractionTracker.currentInteractionContext().map(InteractionContext::getUser);
     }
 
     @Override
@@ -82,7 +82,7 @@ public class UserServiceDefault implements UserService {
         impersonatingHolder().ifPresent(x ->
                 {
                     val userMemento = UserMemento.ofNameAndRoleNames(userName, roles)
-                                        .withImpersonating();
+                                        .withImpersonating(true);
                     x.setUserMemento(userMemento);
                 }
         );

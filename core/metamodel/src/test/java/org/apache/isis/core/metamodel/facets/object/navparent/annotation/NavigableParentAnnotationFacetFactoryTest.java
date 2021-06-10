@@ -28,6 +28,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
@@ -36,17 +37,17 @@ import org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFac
 import org.apache.isis.core.metamodel.facets.object.navparent.annotation.NavigableParentTestSamples.DomainObjectA;
 import org.apache.isis.core.metamodel.facets.object.navparent.method.NavigableParentFacetMethod;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.AuthenticationProvider;
+import org.apache.isis.core.security.authentication.InteractionContextFactory;
 
-public class NavigableParentAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
+public class NavigableParentAnnotationFacetFactoryTest
+extends AbstractFacetFactoryJUnit4TestCase {
 
     private NavigableParentAnnotationFacetFactory facetFactory;
 
-    @Mock
-    private ManagedObject mockObjectAdapter;
-    @Mock
-    private Authentication mockAuthentication;
+    @Mock private ManagedObject mockObjectAdapter;
+
+    private final InteractionContext iaContext = InteractionContextFactory.testing();
 
     @Before
     public void setUp() throws Exception {
@@ -63,7 +64,7 @@ public class NavigableParentAnnotationFacetFactoryTest extends AbstractFacetFact
                 will(returnValue(Optional.of(mockAuthenticationTracker)));
 
                 allowing(mockAuthenticationTracker).currentAuthentication();
-                will(returnValue(Optional.of(mockAuthentication)));
+                will(returnValue(Optional.of(iaContext)));
 
                 //                allowing(mockServicesInjector).getSpecificationLoader();
                 //                will(returnValue(mockSpecificationLoader));

@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.runtimeservices.session;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.io.File;
 import java.sql.Timestamp;
 import java.util.List;
@@ -46,11 +44,12 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayer;
+import org.apache.isis.applib.services.iactnlayer.ThrowingRunnable;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.util.schema.ChangesDtoUtils;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
-import org.apache.isis.applib.services.iactnlayer.ThrowingRunnable;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.concurrent._ConcurrentContext;
 import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
@@ -61,15 +60,16 @@ import org.apache.isis.core.interaction.integration.InteractionAwareTransactiona
 import org.apache.isis.core.interaction.scope.InteractionScopeAware;
 import org.apache.isis.core.interaction.scope.InteractionScopeBeanFactoryPostProcessor;
 import org.apache.isis.core.interaction.scope.InteractionScopeLifecycleHandler;
-import org.apache.isis.applib.services.iactnlayer.InteractionLayer;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.interaction.session.IsisInteraction;
 import org.apache.isis.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.events.MetamodelEventService;
-import org.apache.isis.core.security.authentication.Authentication;
+import org.apache.isis.core.security.authentication.InteractionContextFactory;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
+
+import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -160,10 +160,7 @@ implements
     public InteractionLayer openInteraction() {
         return currentInteractionLayer()
                 // or else create an anonymous authentication layer
-                .orElseGet(()-> {
-                    final AnonymousAuthentication authToUse = new AnonymousAuthentication();
-                    return openInteraction(authToUse.getInteractionContext());
-                });
+                .orElseGet(()->openInteraction(InteractionContextFactory.anonymous()));
     }
 
     @Override
@@ -255,14 +252,14 @@ implements
     }
 
 
-    @Override
-    @SneakyThrows
-    public <R> R callAuthenticated(
-            @NonNull final Authentication authentication,
-            @NonNull final Callable<R> callable) {
-
-        return call(authentication.getInteractionContext(), callable);
-    }
+//    @Override
+//    @SneakyThrows
+//    public <R> R callAuthenticated(
+//            @NonNull final Authentication authentication,
+//            @NonNull final Callable<R> callable) {
+//
+//        return call(authentication.getInteractionContext(), callable);
+//    }
 
     @Override
     @SneakyThrows
@@ -279,14 +276,14 @@ implements
 
     }
 
-    @Override
-    @SneakyThrows
-    public void runAuthenticated(
-            @NonNull final Authentication authentication,
-            @NonNull final ThrowingRunnable runnable) {
-
-        run(authentication.getInteractionContext(), runnable);
-    }
+//    @Override
+//    @SneakyThrows
+//    public void runAuthenticated(
+//            @NonNull final Authentication authentication,
+//            @NonNull final ThrowingRunnable runnable) {
+//
+//        run(authentication.getInteractionContext(), runnable);
+//    }
 
 
     // -- ANONYMOUS EXECUTION
@@ -298,7 +295,7 @@ implements
             serviceInjector.injectServicesInto(callable);
             return callable.call(); // reuse existing session
         }
-        return callAuthenticated(new AnonymousAuthentication(), callable);
+        return call(InteractionContextFactory.anonymous(), callable);
     }
 
     /**
@@ -313,7 +310,7 @@ implements
             runnable.run(); // reuse existing session
             return;
         }
-        runAuthenticated(new AnonymousAuthentication(), runnable);
+        run(InteractionContextFactory.anonymous(), runnable);
     }
 
     // -- CONVERSATION ID
@@ -414,5 +411,9 @@ implements
         interaction.clear();
     }
 
+    @Override
+    public Optional<InteractionContext> currentAuthentication() {
+        return currentInteractionContext();
+    }
 
 }

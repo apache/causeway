@@ -27,7 +27,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.core.security.authentication.Authentication;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.core.security.authorization.Authorizor;
 
 /**
@@ -40,12 +40,12 @@ import org.apache.isis.core.security.authorization.Authorizor;
 public class AuthorizorBypass implements Authorizor {
 
     @Override
-    public boolean isVisible(final Authentication authentication, final Identifier identifier) {
+    public boolean isVisible(final InteractionContext authentication, final Identifier identifier) {
         return true;
     }
 
     @Override
-    public boolean isUsable(final Authentication authentication, final Identifier identifier) {
+    public boolean isUsable(final InteractionContext authentication, final Identifier identifier) {
         return true;
     }
 

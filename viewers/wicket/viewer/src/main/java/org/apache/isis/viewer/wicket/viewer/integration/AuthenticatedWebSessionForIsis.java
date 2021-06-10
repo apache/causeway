@@ -29,13 +29,14 @@ import org.apache.wicket.request.cycle.RequestCycle;
 
 import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.services.clock.ClockService;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.session.SessionLoggingService;
+import org.apache.isis.applib.services.user.UserMemento;
+import org.apache.isis.applib.services.user.UserMemento.AuthenticationSource;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.interaction.session.InteractionFactory;
-import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
-import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
@@ -72,7 +73,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
     /**
      * As populated in {@link #signIn(String, String)}.
      */
-    private Authentication authentication;
+    private InteractionContext authentication;
 
     public AuthenticatedWebSessionForIsis(Request request) {
         super(request);
@@ -133,20 +134,22 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
 
         String userName = null;
         if (getAuthentication() != null) {
-            userName = getAuthentication().getUserName();
+            userName = getAuthentication().getUser().getName();
         }
 
         log(SessionLoggingService.Type.LOGOUT, userName, causedBy);
     }
 
-    public synchronized Authentication getAuthentication() {
+    public synchronized InteractionContext getAuthentication() {
 
-        commonContext.getInteractionTracker().currentAuthentication()
+        commonContext.getInteractionTracker().currentInteractionContext()
         .ifPresent(currentAuthentication->{
 
             if (getAuthenticationManager().isSessionValid(currentAuthentication)) {
                 if (this.authentication != null) {
-                    if (Objects.equals(currentAuthentication.getUserName(), this.authentication.getUserName())) {
+                    if (Objects.equals(
+                            currentAuthentication.getUser().getName(),
+                            this.authentication.getUser().getName())) {
                         // ok, same session so far as Wicket is concerned
                         if (isSignedIn()) {
                             // nothing to do...
@@ -179,13 +182,13 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
 
     /**
      * This is a no-op if the {@link #getAuthentication() authentication session}'s
-     * {@link Authentication#getType() type} is
-     * {@link org.apache.isis.core.security.authentication.Authentication.Type#EXTERNAL external}
+     * {@link UserMemento#getAuthenticationSource() source} is
+     * {@link AuthenticationSource#EXTERNAL external}
      * (eg as managed by keycloak).
      */
     @Override
     public void invalidate() {
-        if(this.authentication.getType() == Authentication.Type.EXTERNAL) {
+        if(this.authentication.getUser().getAuthenticationSource().isExternal()) {
             return;
         }
         // otherwise

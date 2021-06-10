@@ -22,12 +22,12 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.user.UserMemento;
-import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.security.authentication.Authenticator;
-import org.apache.isis.core.security.authentication.standard.SimpleAuthentication;
+import org.apache.isis.core.security.authentication.InteractionContextFactory;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserRepository;
@@ -63,7 +63,7 @@ public class AuthenticatorSecman implements Authenticator {
     }
 
     @Override
-    public Authentication authenticate(final AuthenticationRequest request, final String code) {
+    public InteractionContext authenticate(final AuthenticationRequest request, final String code) {
         val authRequest = (AuthenticationRequestPassword) request;
         val username = authRequest.getName();
         val password = authRequest.getPassword();
@@ -80,13 +80,13 @@ public class AuthenticatorSecman implements Authenticator {
                             appUser.getRoles().stream().map(ApplicationRole::getName),
                             request.streamRoles());
                     val user = UserMemento.ofNameAndRoleNames(username, roleNames);
-                    return SimpleAuthentication.of(user, code);
+                    return InteractionContextFactory.valid(user, code);
                 })
                 .orElse(null);
     }
 
     @Override
-    public void logout(final Authentication session) {
+    public void logout(final InteractionContext context) {
         // nothing needs to be done.  On logout the top-level AuthenticationManager
         // will invalidate the validation code held in the Authentication
         // object; this will cause the next http request made by the user to

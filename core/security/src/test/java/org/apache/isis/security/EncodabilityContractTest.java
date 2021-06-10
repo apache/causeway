@@ -32,17 +32,16 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.core.security.authentication.Authentication;
-import org.apache.isis.core.security.authentication.standard.SimpleAuthentication;
 
 import lombok.SneakyThrows;
 import lombok.val;
 
 public abstract class EncodabilityContractTest {
 
-    protected Authentication simpleAuthSession;
+    protected InteractionContext authContext;
     protected Serializable serializable;
 
     public EncodabilityContractTest() {
@@ -52,7 +51,9 @@ public abstract class EncodabilityContractTest {
     @Before
     public void setUp() throws Exception {
         serializable = createEncodable();
-        simpleAuthSession = SimpleAuthentication.validOf(UserMemento.ofName("test"));
+        authContext = InteractionContext.ofUserWithSystemDefaults(
+                UserMemento.ofName("test")
+                    .withAuthenticationCode("test_code"));
     }
 
     /**
@@ -70,16 +71,16 @@ public abstract class EncodabilityContractTest {
         val decodedObject = doRoundTrip(serializable);
         assertRoundtripped(decodedObject, serializable);
     }
-    
+
     @SneakyThrows
     private static <T extends Serializable> T doRoundTrip(T serializable) {
-        
+
         val buffer = new ByteArrayOutputStream();
-        
+
         try(val out = new ObjectOutputStream(buffer)) {
             out.writeObject(serializable);
         }
-        
+
         try(val in = new ObjectInputStream(new ByteArrayInputStream(buffer.toByteArray()))) {
             val decodedObject = in.readObject();
             return _Casts.uncheckedCast(decodedObject);
