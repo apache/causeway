@@ -34,18 +34,18 @@ class IoHelper {
 
 
     public ByteArrayOutputStream asBaos(String fileName) throws IOException {
-        final ByteArrayInputStream bais = asBais(fileName);
+        final ByteArrayInputStream bais = openInputStream(fileName);
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ByteStreams.copy(bais, baos);
         return baos;
     }
 
-    public String asString(final String fileName) throws IOException {
+    public String readFileAsString(final String fileName) throws IOException {
         final URL fileUrl = asUrl(fileName);
         return Resources.toString(fileUrl, Charset.forName("UTF-8"));
     }
 
-    public ByteArrayInputStream asBais(final String fileName) throws IOException {
+    public ByteArrayInputStream openInputStream(final String fileName) throws IOException {
         final URL fileUrl = asUrl(fileName);
         return new ByteArrayInputStream(Resources.toByteArray(fileUrl));
     }

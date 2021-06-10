@@ -5074,9 +5074,24 @@ Artifact: isis-subdomains-docx-applib
 Type: jar
 Directory: /subdomains/docx/applib
 ----
-|.Dependencies
+|.Components
 ****
+o.a.i.subdomains.docx.applib.DocxService +
+****
+
+.Dependencies
+****
+com.google.guava:guava:jar:<managed> +
 org.apache.isis.core:isis-applib:jar:<managed> +
+org.apache.isis.testing:isis-testing-unittestsupport-applib:jar:<managed> +
+org.docx4j:docx4j-JAXB-ReferenceImpl:jar:<managed> +
+org.docx4j:docx4j-export-fo:jar:<managed> +
+org.jdom:jdom2:jar:<managed> +
+****
+
+.Document Index Entries
+****
+xref:refguide:subdomains:index/docx/applib/DocxService.adoc[DocxService], xref:refguide:subdomains:index/docx/applib/DocxService~MergeDefinition.adoc[DocxService.MergeDefinition]
 ****
 
 |Apache Isis Sub - Freemarker (parent)

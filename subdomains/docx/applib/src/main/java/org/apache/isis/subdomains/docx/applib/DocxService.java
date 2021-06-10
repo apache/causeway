@@ -59,7 +59,7 @@ public class DocxService {
      */
     @Getter
     @Builder(builderClassName = "Builder")
-    public static class MergeDefinition {
+    public static class MergeParams {
 
         /**
          * Defines the policy for matching input to placeholders.
@@ -140,8 +140,8 @@ public class DocxService {
      * <p>
      * This is public API because building the in-memory structure can be
      * quite slow.  Thus, clients can use this method to cache the in-memory
-     * structure, and pass it in the {@link MergeDefinition} (through the
-     * {@link MergeDefinition.Builder#docxTemplateAsWpMlPackage(WordprocessingMLPackage) builder method})
+     * structure, and pass it in the {@link MergeParams} (through the
+     * {@link MergeParams.Builder#docxTemplateAsWpMlPackage(WordprocessingMLPackage) builder method})
      */
     public WordprocessingMLPackage loadPackage(final InputStream docxTemplate) throws LoadTemplateException {
         final WordprocessingMLPackage docxPkg;
@@ -156,7 +156,7 @@ public class DocxService {
     /**
      * Merge the input arguments (as HTML) against the Docx template, writing out as a Word docx..
      */
-    public void merge(final MergeDefinition mergeDefn) throws LoadInputException, LoadTemplateException, MergeException {
+    public void merge(final MergeParams mergeDefn) throws LoadInputException, LoadTemplateException, MergeException {
 
         final org.jdom2.Document htmlJdomDoc;
         final Document inputAsHtmlDoc = mergeDefn.getInputAsHtmlDoc();

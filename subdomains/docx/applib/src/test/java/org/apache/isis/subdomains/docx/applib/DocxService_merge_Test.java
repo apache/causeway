@@ -1,6 +1,5 @@
 package org.apache.isis.subdomains.docx.applib;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 
@@ -31,8 +30,7 @@ class DocxService_merge_Test {
         docxService = new DocxService();
 
         // given
-        final ByteArrayInputStream docxInputTemplate = io.asBais("Template.docx");
-        docxTemplate = docxService.loadPackage(docxInputTemplate);
+        docxTemplate = docxService.loadPackage(io.openInputStream("Template.docx"));
 
     }
 
@@ -46,12 +44,14 @@ class DocxService_merge_Test {
 
             // when
             val baos = new ByteArrayOutputStream();
-
-            docxService.merge(DocxService.MergeDefinition.builder()
-                    .inputAsHtml(io.asString("input-exact-match.html"))
+            val params = DocxService.MergeParams.builder()
+                    .inputAsHtml(io.readFileAsString("input-exact-match.html"))
                     .docxTemplateAsWpMlPackage(docxTemplate)
+                    .matchingPolicy(DocxService.MatchingPolicy.STRICT)
+                    .outputType(DocxService.OutputType.DOCX)
                     .output(baos)
-                    .build());
+                    .build();
+            docxService.merge(params);
 
             // then
             final byte[] docxActual = baos.toByteArray();
@@ -80,8 +80,8 @@ class DocxService_merge_Test {
             Assertions.assertThrows(MergeException.class, () -> {
 
                 // when
-                docxService.merge(DocxService.MergeDefinition.builder()
-                        .inputAsHtml(io.asString("input-surplus.html"))
+                docxService.merge(DocxService.MergeParams.builder()
+                        .inputAsHtml(io.readFileAsString("input-surplus.html"))
                         .docxTemplateAsWpMlPackage(docxTemplate)
                         .output(new ByteArrayOutputStream())
                         .build());
@@ -97,8 +97,8 @@ class DocxService_merge_Test {
             Assertions.assertThrows(MergeException.class, () -> {
 
                 // when
-                docxService.merge(DocxService.MergeDefinition.builder()
-                        .inputAsHtml(io.asString("input-missing.html"))
+                docxService.merge(DocxService.MergeParams.builder()
+                        .inputAsHtml(io.readFileAsString("input-missing.html"))
                         .docxTemplateAsWpMlPackage(docxTemplate)
                         .output(new ByteArrayOutputStream())
                         .build());
@@ -118,8 +118,8 @@ class DocxService_merge_Test {
 
             // when
             val baos = new ByteArrayOutputStream();
-            docxService.merge(DocxService.MergeDefinition.builder()
-                    .inputAsHtml(io.asString("input-exact-match.html"))
+            docxService.merge(DocxService.MergeParams.builder()
+                    .inputAsHtml(io.readFileAsString("input-exact-match.html"))
                     .docxTemplateAsWpMlPackage(docxTemplate)
                     .matchingPolicy(matchingPolicy)
                     .output(baos)
@@ -135,8 +135,8 @@ class DocxService_merge_Test {
 
             // when
             val baos = new ByteArrayOutputStream();
-            docxService.merge(DocxService.MergeDefinition.builder()
-                    .inputAsHtml(io.asString("input-surplus.html"))
+            docxService.merge(DocxService.MergeParams.builder()
+                    .inputAsHtml(io.readFileAsString("input-surplus.html"))
                     .docxTemplateAsWpMlPackage(docxTemplate)
                     .matchingPolicy(matchingPolicy)
                     .output(baos)
@@ -154,8 +154,8 @@ class DocxService_merge_Test {
             Assertions.assertThrows(MergeException.class, () -> {
 
                 // when
-                docxService.merge(DocxService.MergeDefinition.builder()
-                        .inputAsHtml(io.asString("input-missing.html"))
+                docxService.merge(DocxService.MergeParams.builder()
+                        .inputAsHtml(io.readFileAsString("input-missing.html"))
                         .docxTemplateAsWpMlPackage(docxTemplate)
                         .output(new ByteArrayOutputStream())
                         .build());
@@ -175,8 +175,8 @@ class DocxService_merge_Test {
 
             // when
             val baos = new ByteArrayOutputStream();
-            docxService.merge(DocxService.MergeDefinition.builder()
-                    .inputAsHtml(io.asString("input-exact-match.html"))
+            docxService.merge(DocxService.MergeParams.builder()
+                    .inputAsHtml(io.readFileAsString("input-exact-match.html"))
                     .docxTemplateAsWpMlPackage(docxTemplate)
                     .matchingPolicy(matchingPolicy)
                     .output(baos)
@@ -194,8 +194,8 @@ class DocxService_merge_Test {
             Assertions.assertThrows(MergeException.class, () -> {
 
                 // when
-                docxService.merge(DocxService.MergeDefinition.builder()
-                        .inputAsHtml(io.asString("input-surplus.html"))
+                docxService.merge(DocxService.MergeParams.builder()
+                        .inputAsHtml(io.readFileAsString("input-surplus.html"))
                         .docxTemplateAsWpMlPackage(docxTemplate)
                         .output(new ByteArrayOutputStream())
                         .build());
@@ -208,8 +208,8 @@ class DocxService_merge_Test {
 
             // when
             val baos = new ByteArrayOutputStream();
-            docxService.merge(DocxService.MergeDefinition.builder()
-                    .inputAsHtml(io.asString("input-missing.html"))
+            docxService.merge(DocxService.MergeParams.builder()
+                    .inputAsHtml(io.readFileAsString("input-missing.html"))
                     .docxTemplateAsWpMlPackage(docxTemplate)
                     .matchingPolicy(matchingPolicy)
                     .output(baos)
@@ -231,8 +231,8 @@ class DocxService_merge_Test {
 
             // when
             val baos = new ByteArrayOutputStream();
-            docxService.merge(DocxService.MergeDefinition.builder()
-                    .inputAsHtml(io.asString("input-exact-match.html"))
+            docxService.merge(DocxService.MergeParams.builder()
+                    .inputAsHtml(io.readFileAsString("input-exact-match.html"))
                     .docxTemplateAsWpMlPackage(docxTemplate)
                     .matchingPolicy(matchingPolicy)
                     .output(baos)
@@ -248,8 +248,8 @@ class DocxService_merge_Test {
 
             // when
             val baos = new ByteArrayOutputStream();
-            docxService.merge(DocxService.MergeDefinition.builder()
-                    .inputAsHtml(io.asString("input-surplus.html"))
+            docxService.merge(DocxService.MergeParams.builder()
+                    .inputAsHtml(io.readFileAsString("input-surplus.html"))
                     .docxTemplateAsWpMlPackage(docxTemplate)
                     .matchingPolicy(matchingPolicy)
                     .output(baos)
@@ -265,8 +265,8 @@ class DocxService_merge_Test {
 
             // when
             val baos = new ByteArrayOutputStream();
-            docxService.merge(DocxService.MergeDefinition.builder()
-                    .inputAsHtml(io.asString("input-missing.html"))
+            docxService.merge(DocxService.MergeParams.builder()
+                    .inputAsHtml(io.readFileAsString("input-missing.html"))
                     .docxTemplateAsWpMlPackage(docxTemplate)
                     .matchingPolicy(matchingPolicy)
                     .output(baos)
@@ -288,8 +288,8 @@ class DocxService_merge_Test {
 
             Assertions.assertThrows(LoadInputException.class, () -> {
 
-                docxService.merge(DocxService.MergeDefinition.builder()
-                        .inputAsHtml(io.asString("input-malformed.html"))
+                docxService.merge(DocxService.MergeParams.builder()
+                        .inputAsHtml(io.readFileAsString("input-malformed.html"))
                         .matchingPolicy(DocxService.MatchingPolicy.LAX)
                         .docxTemplateAsWpMlPackage(docxTemplate)
                         .output(new ByteArrayOutputStream())
@@ -321,8 +321,8 @@ class DocxService_merge_Test {
             // when
             val baos = new ByteArrayOutputStream();
 
-            docxService.merge(DocxService.MergeDefinition.builder()
-                    .inputAsHtml(io.asString("input-exact-match.html"))
+            docxService.merge(DocxService.MergeParams.builder()
+                    .inputAsHtml(io.readFileAsString("input-exact-match.html"))
                     .docxTemplateAsWpMlPackage(docxTemplate)
                     .outputType(DocxService.OutputType.PDF)
                     .output(baos)

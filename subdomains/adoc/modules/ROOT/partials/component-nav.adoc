@@ -3,7 +3,7 @@ include::subdomains:ROOT:partial$module-nav.adoc[]
 // commented out the libraries that have not yet been brought over from incode-platform
 
 include::subdomains:base:partial$module-nav.adoc[]
-//include::subdomains:docx:partial$module-nav.adoc[]
+include::subdomains:docx:partial$module-nav.adoc[]
 include::subdomains:excel:partial$module-nav.adoc[]
 //include::subdomains:freemarker:partial$module-nav.adoc[]
 //include::subdomains:ognl:partial$module-nav.adoc[]

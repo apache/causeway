@@ -4,12 +4,7 @@
 
 This module provides a mail-merge capability of input data into an MS Word `.docx` templates.
 The generated output document is either Word `.docx` or Acrobat `.pdf`.
-
-[IMPORTANT]
-====
-Exporting to PDF requires more memory, both heap and permgen.
-If the PDF generation hangs then increase the memory settings, eg `-Xmx1024m -XX:MaxPermSize=128m`
-====
+(Be aware that exporting to PDF requires more memory).
 
 The module consists of a single domain service, `DocxService`.
 This provides an API to merge a `.docx` template against its input data. The input data is represented as a simple HTML file.
@@ -23,8 +18,9 @@ The service supports several data types:
 * bulleted list
 * tables
 
-The implementation uses link:http://www.docx4java.org[docx4j], link:https://code.google.com/p/guava-libraries/[guava] and link:http://www.jdom.org[jdom2].
+The implementation uses link:http://www.docx4java.org[docx4j] and link:http://www.jdom.org[jdom2].
 Databinding to custom XML parts (the `.docx` file format's in-built support) is *not* used (as repeating datasets - required for lists and tables - was not supported prior to Word 2013).
+
 
 
 include::docs:mavendeps:partial$setup-and-configure-dependencyManagement.adoc[leveloffset=+1]
@@ -71,12 +67,59 @@ To output to PDF, the following dependency must also be added:
 <dependency>
     <groupId>org.docx4j</groupId>
     <artifactId>docx4j-export-fo</artifactId>
-    <scope>test</scope>
 </dependency>
 ----
 
 
-
 == Usage
 
+The `.docx` templates use Word custom content controls as placeholders.
+The actions to work with these placeholders can be enabled by toggling on the "Developer" menu:
 
+image::word-enable-developer-ribbon.png[width=400px]
+
+You can then toggle on _Design Mode_ to create/edit/remove custom content controls.
+
+[[template-docx]]
+For example, see link:{attachmentsdir}/Template.docx[Template.docx].
+
+image::template-docx.png[width=600px]
+
+To programmatically mail-merge into the template, we create a HTML document that provides the input.
+For example:
+
+[[input-html]]
+[source,xhtml]
+.input HTML
+----
+include::example$input-exact-match.html[]
+----
+
+We also parse the template into an internal data structure.
+This is usually done during bootstrapping as it is almost certainly immutable, and the parsing can take a second or two:
+
+[source,java]
+----
+WordprocessingMLPackage docxTemplate =
+    docxService.loadPackage(io.openInputStream("Template.docx"));
+----
+
+We then merge in the input to the template as follows:
+
+[source,java]
+----
+val baos = new ByteArrayOutputStream();
+val params = DocxService.MergeParams.builder()
+        .docxTemplateAsWpMlPackage(docxTemplate)            // <.>
+        .inputAsHtml(inputHtml)                             // <.>
+        .matchingPolicy(DocxService.MatchingPolicy.STRICT)
+        .outputType(DocxService.OutputType.DOCX)
+        .output(baos)
+        .build();
+docxService.merge(params);
+
+final byte[] docxActual = baos.toByteArray();
+----
+
+<.> docx template, as shown <<template-docx,above>>
+<.> input HTML, as shown <<input-html,above>>

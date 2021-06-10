@@ -427,7 +427,6 @@ public class UserToRole__joe_UserRw_but_NoDelete
 ----
 <.> application-specific roles
 <.> regular user access (always required)
-<.> specific access to framework features, see <<default-roles,above>>
 
 To seed in fixture scripts we could create a top-level `CustomRolesAndUsers` script (as mentioned in <<custom-seed-service,above>>).
 This would then look something like:
