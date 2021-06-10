@@ -85,9 +85,7 @@ xref:refguide:subdomains:index/base/applib/valuetypes/VT.adoc[]
 
 * "with" interfaces (useful to write contract tests against):
 +
-:chk: icon:check[]
-+
-[cols="2a,^2a,^2a,^2a",options="header"]
+[cols="1a,^2a,^2a,^2a",options="header"]
 |===
 |With
 | Getter
@@ -95,29 +93,29 @@ xref:refguide:subdomains:index/base/applib/valuetypes/VT.adoc[]
 | Unique
 
 | Code
-| xref:refguide:subdomains:index/base/applib/with/WithCodeGetter.adoc[{chk}]
-| xref:refguide:subdomains:index/base/applib/with/WithCodeComparable.adoc[{chk}]
-| xref:refguide:subdomains:index/base/applib/with/WithCodeUnique.adoc[{chk}]
+| xref:refguide:subdomains:index/base/applib/with/WithCodeGetter.adoc[WithCodeGetter]
+| xref:refguide:subdomains:index/base/applib/with/WithCodeComparable.adoc[WithCodeComparable]
+| xref:refguide:subdomains:index/base/applib/with/WithCodeUnique.adoc[WithCodeUnique]
 
 | Description
-| xref:refguide:subdomains:index/base/applib/with/WithDescriptionGetter.adoc[{chk}]
-| xref:refguide:subdomains:index/base/applib/with/WithDescriptionComparable.adoc[{chk}]
-| xref:refguide:subdomains:index/base/applib/with/WithDescriptionUnique.adoc[{chk}]
+| xref:refguide:subdomains:index/base/applib/with/WithDescriptionGetter.adoc[WithDescriptionGetter]
+| xref:refguide:subdomains:index/base/applib/with/WithDescriptionComparable.adoc[WithDescriptionComparable]
+| xref:refguide:subdomains:index/base/applib/with/WithDescriptionUnique.adoc[WithDescriptionUnique]
 
 | Name
-| xref:refguide:subdomains:index/base/applib/with/WithNameGetter.adoc[{chk}]
-| xref:refguide:subdomains:index/base/applib/with/WithNameComparable.adoc[{chk}]
-| xref:refguide:subdomains:index/base/applib/with/WithNameUnique.adoc[{chk}]
+| xref:refguide:subdomains:index/base/applib/with/WithNameGetter.adoc[WithNameGetter]
+| xref:refguide:subdomains:index/base/applib/with/WithNameComparable.adoc[WithNameComparable]
+| xref:refguide:subdomains:index/base/applib/with/WithNameUnique.adoc[WithNameUnique]
 
 | Reference
-| xref:refguide:subdomains:index/base/applib/with/WithReferenceGetter.adoc[{chk}]
-| xref:refguide:subdomains:index/base/applib/with/WithReferenceComparable.adoc[{chk}]
-| xref:refguide:subdomains:index/base/applib/with/WithReferenceUnique.adoc[{chk}]
+| xref:refguide:subdomains:index/base/applib/with/WithReferenceGetter.adoc[WithReferenceGetter]
+| xref:refguide:subdomains:index/base/applib/with/WithReferenceComparable.adoc[WithReferenceComparable]
+| xref:refguide:subdomains:index/base/applib/with/WithReferenceUnique.adoc[WithReferenceUnique]
 
 | Title
-| xref:refguide:subdomains:index/base/applib/with/WithTitleGetter.adoc[{chk}]
-| xref:refguide:subdomains:index/base/applib/with/WithTitleComparable.adoc[{chk}]
-| xref:refguide:subdomains:index/base/applib/with/WithTitleUnique.adoc[{chk}]
+| xref:refguide:subdomains:index/base/applib/with/WithTitleGetter.adoc[WithTitleGetter]
+| xref:refguide:subdomains:index/base/applib/with/WithTitleComparable.adoc[WithTitleComparable]
+| xref:refguide:subdomains:index/base/applib/with/WithTitleUnique.adoc[WithTitleUnique]
 
 
 |===

@@ -7,35 +7,43 @@
 .CalendarService.java
 ----
 class CalendarService {
-  CalendarService(ClockService clockService)
-  LocalDate beginningOfMonth()
+  LocalDate beginningOfMonth()     // <.>
   LocalDate beginningOfMonth(final LocalDate date)
-  LocalDate beginningOfQuarter()
-  LocalDate beginningOfNextQuarter()
+  LocalDate beginningOfQuarter()     // <.>
+  LocalDate beginningOfNextQuarter()     // <.>
   LocalDate beginningOfQuarter(final LocalDate date)
-  long timestamp()     // <.>
 }
 ----
 
-<.> xref:#timestamp__[timestamp()]
+<.> xref:#beginningOfMonth__[beginningOfMonth()]
 +
 --
-[WARNING]
-====
-[red]#_deprecated:_#
-
-- use _ClockService#getClock()_ .getEpochMillis()
-====
+Returns the date corresponding to the beginning of the current month.
+--
+<.> xref:#beginningOfQuarter__[beginningOfQuarter()]
++
+--
+Returns the date corresponding to the beginning of the current quarter (typically: January, April, July or October).
+--
+<.> xref:#beginningOfNextQuarter__[beginningOfNextQuarter()]
++
+--
+Returns the date corresponding to the beginning of the quarter following this one.
 --
 
 == Members
 
-[#timestamp__]
-=== timestamp()
+[#beginningOfMonth__]
+=== beginningOfMonth()
 
-[WARNING]
-====
-[red]#_deprecated:_#
+Returns the date corresponding to the beginning of the current month.
 
-- use _ClockService#getClock()_ .getEpochMillis()
-====
+[#beginningOfQuarter__]
+=== beginningOfQuarter()
+
+Returns the date corresponding to the beginning of the current quarter (typically: January, April, July or October).
+
+[#beginningOfNextQuarter__]
+=== beginningOfNextQuarter()
+
+Returns the date corresponding to the beginning of the quarter following this one.
