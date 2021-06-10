@@ -1,5 +1,153 @@
-= Base Library
+= Base subdomain
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-WARNING: TODO
+This module provides a base library of utility classes.
+
+include::docs:mavendeps:partial$setup-and-configure-dependencyManagement.adoc[leveloffset=+1]
+
+In addition, add a section for the BOM of all subdomains:
+
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.isis.subdomains</groupId>
+            <artifactId>isis-subdomains</artifactId>
+            <scope>import</scope>
+            <type>pom</type>
+            <version>{page-isisrel}</version>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+----
+
+[#dependencies]
+== Dependencies
+
+In the domain module(s) of your application, add the following dependency:
+
+[source,xml]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.isis.subdomains</groupId>
+        <artifactId>isis-subdomains-base-applib</artifactId>
+    </dependency>
+</dependencies>
+----
+
+
+== Usage
+
+Details:
+
+* xref:refguide:subdomains:index/base/applib/services/calendar/CalendarService.adoc[CalendarService]
++
+to look up beginning of months and quarters based on a date.
++
+To use, `@Import` the xref:refguide:subdomains:index/base/applib/services/BaseServicesModule.adoc[BaseServicesModule] into your app's _AppManifest_.
+
+* Meta-annotations for types:
++
+@xref:refguide:subdomains:index/base/applib/types/Description.adoc[Description],
+@xref:refguide:subdomains:index/base/applib/types/Fqcn.adoc[Fqcn],
+@xref:refguide:subdomains:index/base/applib/types/Money.adoc[Money],
+@xref:refguide:subdomains:index/base/applib/types/Name.adoc[Name],
+@xref:refguide:subdomains:index/base/applib/types/Notes.adoc[Notes],
+@xref:refguide:subdomains:index/base/applib/types/ObjectIdentifier.adoc[ObjectIdentifier],
+@xref:refguide:subdomains:index/base/applib/types/Percentage.adoc[Percentage],
+@xref:refguide:subdomains:index/base/applib/types/ProperName.adoc[ProperName],
+@xref:refguide:subdomains:index/base/applib/types/Reference.adoc[Reference],
+@xref:refguide:subdomains:index/base/applib/types/Title.adoc[Title],
+@xref:refguide:subdomains:index/base/applib/types/UrlTemplate.adoc[UrlTemplate]
+
+* Various utility classes:
++
+xref:refguide:subdomains:index/base/applib/utils/ClassUtils.adoc[],
+xref:refguide:subdomains:index/base/applib/utils/JodaPeriodUtils.adoc[],
+xref:refguide:subdomains:index/base/applib/utils/MathUtils.adoc[],
+xref:refguide:subdomains:index/base/applib/utils/MessageUtils.adoc[],
+xref:refguide:subdomains:index/base/applib/utils/StringUtils.adoc[],
+xref:refguide:subdomains:index/base/applib/utils/TitleBuilder.adoc[]
+
+* value types:
++
+xref:refguide:subdomains:index/base/applib/valuetypes/LocalDateInterval.adoc[] (a specialization of
+xref:refguide:subdomains:index/base/applib/valuetypes/AbstractInterval.adoc[])
+
+* value type factory (useful for tests):
++
+xref:refguide:subdomains:index/base/applib/valuetypes/VT.adoc[]
+
+* "with" interfaces (useful to write contract tests against):
++
+:chk: icon:check[]
++
+[cols="2a,^2a,^2a,^2a",options="header"]
+|===
+|With
+| Getter
+| Comparable
+| Unique
+
+| Code
+| xref:refguide:subdomains:index/base/applib/with/WithCodeGetter.adoc[{chk}]
+| xref:refguide:subdomains:index/base/applib/with/WithCodeComparable.adoc[{chk}]
+| xref:refguide:subdomains:index/base/applib/with/WithCodeUnique.adoc[{chk}]
+
+| Description
+| xref:refguide:subdomains:index/base/applib/with/WithDescriptionGetter.adoc[{chk}]
+| xref:refguide:subdomains:index/base/applib/with/WithDescriptionComparable.adoc[{chk}]
+| xref:refguide:subdomains:index/base/applib/with/WithDescriptionUnique.adoc[{chk}]
+
+| Name
+| xref:refguide:subdomains:index/base/applib/with/WithNameGetter.adoc[{chk}]
+| xref:refguide:subdomains:index/base/applib/with/WithNameComparable.adoc[{chk}]
+| xref:refguide:subdomains:index/base/applib/with/WithNameUnique.adoc[{chk}]
+
+| Reference
+| xref:refguide:subdomains:index/base/applib/with/WithReferenceGetter.adoc[{chk}]
+| xref:refguide:subdomains:index/base/applib/with/WithReferenceComparable.adoc[{chk}]
+| xref:refguide:subdomains:index/base/applib/with/WithReferenceUnique.adoc[{chk}]
+
+| Title
+| xref:refguide:subdomains:index/base/applib/with/WithTitleGetter.adoc[{chk}]
+| xref:refguide:subdomains:index/base/applib/with/WithTitleComparable.adoc[{chk}]
+| xref:refguide:subdomains:index/base/applib/with/WithTitleUnique.adoc[{chk}]
+
+
+|===
+
+** also:
+xref:refguide:subdomains:index/base/applib/with/WithInterval.adoc[WithInterval],
+xref:refguide:subdomains:index/base/applib/with/WithIntervalContiguous.adoc[WithIntervalContiguous],
+xref:refguide:subdomains:index/base/applib/with/WithIntervalMutable.adoc[WithIntervalMutable]
+
+** also:
+xref:refguide:subdomains:index/base/applib/with/WithSequence.adoc[WithSequence]
+
+** also:
+xref:refguide:subdomains:index/base/applib/with/WithStartDate.adoc[WithStartDate]
+
+** also:
+xref:refguide:subdomains:index/base/applib/Chained.adoc[Chained] - declares the objects are linked together with next and previous
+
+* titles:
+
+** xref:refguide:subdomains:index/base/applib/Titled.adoc[Titled] - require an object explicitly implement the `title()` method
+
+** xref:refguide:subdomains:index/base/applib/TitledEnum.adoc[TitledEnum] - require an enum explicitly implement the `title()` method.
+Used by xref:refguide:subdomains:index/base/applib/utils/StringUtils.adoc[StringUtils]
+
+* misc:
+
+** xref:refguide:subdomains:index/base/applib/Dflt.adoc[Dflt] - useful for obtaining a default from a list of choices
+
+** xref:refguide:subdomains:index/base/applib/PowerType.adoc[PowerType] - for enums that act as factories of a subtype
+
+
+

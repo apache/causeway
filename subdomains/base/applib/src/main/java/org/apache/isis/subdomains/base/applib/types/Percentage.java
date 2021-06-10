@@ -18,19 +18,24 @@
  */
 package org.apache.isis.subdomains.base.applib.types;
 
-import lombok.experimental.UtilityClass;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.Property;
 
 /**
+ * Meta-annotation for a numeric property or parameter representing a
+ * the identity of a domain object (with respect to its logical type).
+ *
  * @since 2.0 {@index}
  */
-@UtilityClass
-public class ObjectIdentifierType {
+@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Percentage {
 
-    @UtilityClass
-    public static class Meta {
-
-        public static final int MAX_LEN = 20;
-
-    }
+    int SCALE = 2;
 
 }

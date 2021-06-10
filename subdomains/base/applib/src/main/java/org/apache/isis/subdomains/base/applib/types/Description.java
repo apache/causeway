@@ -18,19 +18,31 @@
  */
 package org.apache.isis.subdomains.base.applib.types;
 
-import lombok.experimental.UtilityClass;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 
 /**
+ * Meta-annotation for a {@link String} property or parameter representing a
+ * description of some sort.
+ *
  * @since 2.0 {@index}
  */
-@UtilityClass
-public class NameType {
+@Property(maxLength = Description.MAX_LEN)
+@PropertyLayout(multiLine = Description.MULTI_LINE)
+@Parameter(maxLength = Description.MAX_LEN)
+@ParameterLayout(multiLine = Description.MULTI_LINE)
+@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Description {
 
-    @UtilityClass
-    public static class Meta {
-
-        public static final int MAX_LEN = 50;
-
-    }
+    int MAX_LEN = 254;
+    int MULTI_LINE = 5;
 
 }

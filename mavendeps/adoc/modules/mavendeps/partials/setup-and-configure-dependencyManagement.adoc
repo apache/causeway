@@ -5,7 +5,7 @@
 
 
 
-If your application inherits from the Apache Isis starter app (`org.apache.isis.app:isis-app-starter-parent` then that will define the version automatically:
+If your application inherits from the Apache Isis starter app (`org.apache.isis.app:isis-app-starter-parent`) then that will define the version automatically:
 
 [source,xml,subs="attributes+"]
 .pom.xml

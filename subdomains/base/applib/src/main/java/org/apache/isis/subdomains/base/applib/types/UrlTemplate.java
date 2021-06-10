@@ -18,19 +18,26 @@
  */
 package org.apache.isis.subdomains.base.applib.types;
 
-import lombok.experimental.UtilityClass;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.Property;
 
 /**
+ * Meta-annotation for a {@link String} property or parameter representing a
+ * URL template, for example for an entity that holds configuration data to access external systems.
+ *
  * @since 2.0 {@index}
  */
-@UtilityClass
-public class MoneyType {
+@Property(maxLength = UrlTemplate.MAX_LEN)
+@Parameter(maxLength = UrlTemplate.MAX_LEN)
+@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface UrlTemplate {
 
-    @UtilityClass
-    public static class Meta {
-
-        public static final int SCALE = 2;
-
-    }
+    int MAX_LEN = 254;
 
 }

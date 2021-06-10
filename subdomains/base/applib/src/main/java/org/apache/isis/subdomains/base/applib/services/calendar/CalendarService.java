@@ -32,6 +32,8 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.clock.ClockService;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * @since 2.0 {@index}
  */
@@ -40,17 +42,16 @@ import org.apache.isis.applib.services.clock.ClockService;
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class CalendarService {
 
     private static final int MONTHS_IN_QUARTER = 3;
 
-    private ClockService clockService;
+    private final ClockService clockService;
 
-    @Inject
-    public CalendarService(ClockService clockService) {
-        this.clockService = clockService;
-    }
-
+    /**
+     * Returns the date corresponding to the beginning of the current month.
+     */
     public LocalDate beginningOfMonth() {
         return beginningOfMonth(nowAsLocalDate());
     }
@@ -60,10 +61,21 @@ public class CalendarService {
         return date.minusDays(dayOfMonth-1L);
     }
 
+    /**
+     * Returns the date corresponding to the beginning of the current quarter (typically: January, April, July or October).
+     *
+     * @see #beginningOfQuarter(LocalDate)
+     * @see #beginningOfNextQuarter()
+     */
     public LocalDate beginningOfQuarter() {
         return beginningOfQuarter(nowAsLocalDate());
     }
 
+    /**
+     * Returns the date corresponding to the beginning of the quarter following this one.
+     *
+     * @see #beginningOfQuarter()
+     */
     public LocalDate beginningOfNextQuarter() {
         return beginningOfQuarter(nowAsLocalDate().plusMonths(3));
     }
@@ -80,14 +92,5 @@ public class CalendarService {
     private LocalDate nowAsLocalDate() {
         return clockService.getClock().localDate(ZoneId.systemDefault());
     }
-
-    /**
-     * @deprecated - use {@link ClockService#getClock()}.getEpochMillis()
-     */
-    @Deprecated
-    public long timestamp() {
-        return clockService.getClock().getEpochMillis();
-    }
-
 
 }

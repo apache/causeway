@@ -36,7 +36,6 @@ public class LocalDateInterval extends AbstractInterval<LocalDateInterval>{
         return new LocalDateInterval(startDate, endDate, IntervalEnding.INCLUDING_END_DATE);
     }
 
-    // //////////////////////////////////////
 
     public LocalDateInterval() {
     }

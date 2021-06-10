@@ -18,17 +18,26 @@
  */
 package org.apache.isis.subdomains.base.applib.types;
 
-import lombok.experimental.UtilityClass;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.Property;
 
 /**
+ * Meta-annotation for a {@link String} property or parameter representing the
+ * unique username (or login name) of a user of the system.
+ *
  * @since 2.0 {@index}
  */
-@UtilityClass
-public class XxxType {
+@Property(maxLength = Username.MAX_LEN)
+@Parameter(maxLength = Username.MAX_LEN)
+@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Username {
 
-    @UtilityClass
-    public static class Meta {
-
-    }
+    int MAX_LEN = 120;
 
 }
