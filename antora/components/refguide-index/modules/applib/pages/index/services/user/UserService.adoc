@@ -27,7 +27,7 @@ interface UserService {
 <.> xref:#currentUser__[currentUser()]
 +
 --
-Optionally gets the details about the current user, based on whether an xref:refguide:applib:index/services/iactn/ExecutionContext.adoc[ExecutionContext] can be found with the current thread's context.
+Optionally gets the details about the current user, based on whether an xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] can be found with the current thread's context.
 --
 <.> xref:#getUser__[getUser()]
 +
@@ -42,7 +42,7 @@ Gets the details about the current user.
 <.> xref:#currentUserName__[currentUserName()]
 +
 --
-Optionally gets the the current user's name, based on whether an xref:refguide:applib:index/services/iactn/ExecutionContext.adoc[ExecutionContext] can be found with the current thread's context.
+Optionally gets the the current user's name, based on whether an xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] can be found with the current thread's context.
 --
 <.> xref:#currentUserNameElseNobody__[currentUserNameElseNobody()]
 +
@@ -80,7 +80,7 @@ Whether or not the user currently reported (in _#currentUser()_ and similar) is 
 [#currentUser__]
 === currentUser()
 
-Optionally gets the details about the current user, based on whether an xref:refguide:applib:index/services/iactn/ExecutionContext.adoc[ExecutionContext] can be found with the current thread's context.
+Optionally gets the details about the current user, based on whether an xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] can be found with the current thread's context.
 
 [#getUser__]
 === getUser()
@@ -95,7 +95,7 @@ Gets the details about the current user.
 [#currentUserName__]
 === currentUserName()
 
-Optionally gets the the current user's name, based on whether an xref:refguide:applib:index/services/iactn/ExecutionContext.adoc[ExecutionContext] can be found with the current thread's context.
+Optionally gets the the current user's name, based on whether an xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] can be found with the current thread's context.
 
 [#currentUserNameElseNobody__]
 === currentUserNameElseNobody()

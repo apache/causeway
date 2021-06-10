@@ -26,7 +26,7 @@ interface IResourceContext {
   boolean suppressMemberDisabledReason()
   boolean canEagerlyRender(ManagedObject objectAdapter)     // <.>
   RepresentationService.Intent getIntent()     // <.>
-  AuthenticationContext getAuthenticationContext()
+  AuthenticationProvider getAuthenticationContext()
   SpecificationLoader getSpecificationLoader()
   MetaModelContext getMetaModelContext()
   ServiceRegistry getServiceRegistry()

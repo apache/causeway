@@ -15,6 +15,7 @@ enum Nature {
   MIXIN     // <.>
   BEAN     // <.>
   boolean isEntity()
+  boolean isMixin()
 }
 ----
 

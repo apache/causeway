@@ -10,7 +10,6 @@ The xref:refguide:commons:index/functional/Result.adoc[Result] type represents a
 ----
 class Result<L> {
   Result<L> of(final Callable<L> callable)
-  Result<Void> ofVoid(final ThrowingRunnable runnable)
   Result<L> success(final L value)
   Result<L> failure(final Throwable throwable)
   Result<L> failure(final String message)

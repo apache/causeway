@@ -20,11 +20,17 @@ Note also that though a value is conceptually not shared, if it is also immutabl
 .Value.java
 ----
 @interface Value {
+  String logicalTypeName() default "";     // <.>
   String semanticsProviderName() default "";     // <.>
   Class<?> semanticsProviderClass() default Value.class;     // <.>
 }
 ----
 
+<.> xref:#logicalTypeName[logicalTypeName]
++
+--
+The logical name of this value's type, that uniquely and fully qualifies it. The logical name is analogous to - but independent of - the actual fully qualified class name. eg. _sales.Customer_ for a class 'org.mycompany.dom.Customer'
+--
 <.> xref:#semanticsProviderName[semanticsProviderName]
 +
 --
@@ -37,6 +43,13 @@ As per _#semanticsProviderName()_ , but specifying a class literal rather than a
 --
 
 == Members
+
+[#logicalTypeName]
+=== logicalTypeName
+
+The logical name of this value's type, that uniquely and fully qualifies it. The logical name is analogous to - but independent of - the actual fully qualified class name. eg. _sales.Customer_ for a class 'org.mycompany.dom.Customer'
+
+If not specified, the fully qualified class name is used instead.
 
 [#semanticsProviderName]
 === semanticsProviderName

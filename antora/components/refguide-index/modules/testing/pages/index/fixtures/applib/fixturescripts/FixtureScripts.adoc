@@ -13,10 +13,9 @@ class FixtureScripts {
 public static final String LOGICAL_TYPE_NAME;
   public static final String PACKAGE_PREFIX;     // <.>
   FixtureScripts(final FixtureScriptsSpecificationProvider fixtureScriptsSpecificationProvider, final ServiceRegistry serviceRegistry)
-  NonPersistedObjectsStrategy getNonPersistedObjectsStrategy()
-  MultipleExecutionStrategy getMultipleExecutionStrategy()     // <.>
   List<FixtureResult> runFixtureScript(final String fixtureScriptName, final String parameters)     // <.>
   List<FixtureResult> runFixtureScript(final FixtureScript fixtureScript, final String parameters)
+  boolean hideRunFixtureScript()
   String disableRunFixtureScript()
   String default0RunFixtureScript()
   Set<String> choices0RunFixtureScript()
@@ -44,11 +43,6 @@ public static final String LOGICAL_TYPE_NAME;
 +
 --
 The package prefix to search for fixture scripts. This default value will result in no fixture scripts being found. However, normally it will be overridden.
---
-<.> xref:#getMultipleExecutionStrategy__[getMultipleExecutionStrategy()]
-+
---
-Global setting as to how to handle fixture scripts that are executed more than once. See _MultipleExecutionStrategy_ for more details.
 --
 <.> xref:#runFixtureScript__String_String[runFixtureScript(String, String)]
 +
@@ -107,11 +101,6 @@ renamed to _#runBuilder(BuilderScriptAbstract)_
 === PACKAGE_PREFIX
 
 The package prefix to search for fixture scripts. This default value will result in no fixture scripts being found. However, normally it will be overridden.
-
-[#getMultipleExecutionStrategy__]
-=== getMultipleExecutionStrategy()
-
-Global setting as to how to handle fixture scripts that are executed more than once. See _MultipleExecutionStrategy_ for more details.
 
 [#runFixtureScript__String_String]
 === runFixtureScript(String, String)

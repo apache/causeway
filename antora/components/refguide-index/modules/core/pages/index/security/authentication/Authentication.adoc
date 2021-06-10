@@ -3,18 +3,22 @@
 
 An immutable, serializable value type, that holds details about a user's authentication.
 
+This is really little more than a thin wrapper around xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] , surfaces a number of the security-specific attributes of that field.
+
 == API
 
 [source,java]
 .Authentication.java
 ----
 interface Authentication {
+  String INTERACTION_CONTEXT_KEY;
   String getUserName()     // <.>
   String getValidationCode()     // <.>
   UserMemento getUser()     // <.>
-  ExecutionContext getExecutionContext()     // <.>
+  InteractionContext getInteractionContext()     // <.>
   Type getType()     // <.>
-  Authentication withExecutionContext(ExecutionContext interactionContext)     // <.>
+  Authentication withInteractionContext(InteractionContext interactionContext)     // <.>
+  Optional<Authentication> authenticationFrom(final InteractionContext interactionContext)     // <.>
 }
 ----
 
@@ -33,20 +37,25 @@ A unique code given to this session during authentication.
 --
 The (programmatically) simulated (or actual) user, belonging to this session.
 --
-<.> xref:#getExecutionContext__[getExecutionContext()]
+<.> xref:#getInteractionContext__[getInteractionContext()]
 +
 --
-The xref:refguide:applib:index/services/iactn/ExecutionContext.adoc[ExecutionContext] (programmatically) simulated (or actual), belonging to this session.
+The xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] (programmatically) simulated (or actual), belonging to this session.
 --
 <.> xref:#getType__[getType()]
 +
 --
 To support external security mechanisms such as keycloak, where the validity of the session is defined by headers in the request.
 --
-<.> xref:#withExecutionContext__ExecutionContext[withExecutionContext(ExecutionContext)]
+<.> xref:#withInteractionContext__InteractionContext[withInteractionContext(InteractionContext)]
 +
 --
-Returns a copy with given _executionContext_ .
+Returns a copy with given _interactionContext_ .
+--
+<.> xref:#authenticationFrom__InteractionContext[authenticationFrom(InteractionContext)]
++
+--
+Looks up an xref:refguide:core:index/security/authentication/Authentication.adoc[Authentication] from the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] .
 --
 
 == Members
@@ -68,17 +77,24 @@ This can be used to confirm that this session has been properly created and the 
 
 The (programmatically) simulated (or actual) user, belonging to this session.
 
-[#getExecutionContext__]
-=== getExecutionContext()
+[#getInteractionContext__]
+=== getInteractionContext()
 
-The xref:refguide:applib:index/services/iactn/ExecutionContext.adoc[ExecutionContext] (programmatically) simulated (or actual), belonging to this session.
+The xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] (programmatically) simulated (or actual), belonging to this session.
 
 [#getType__]
 === getType()
 
 To support external security mechanisms such as keycloak, where the validity of the session is defined by headers in the request.
 
-[#withExecutionContext__ExecutionContext]
-=== withExecutionContext(ExecutionContext)
+[#withInteractionContext__InteractionContext]
+=== withInteractionContext(InteractionContext)
 
-Returns a copy with given _executionContext_ .
+Returns a copy with given _interactionContext_ .
+
+[#authenticationFrom__InteractionContext]
+=== authenticationFrom(InteractionContext)
+
+Looks up an xref:refguide:core:index/security/authentication/Authentication.adoc[Authentication] from the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] .
+
+If the xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] was created as the result of an authentication process (as opposed to programmatically) then there will be an attached xref:refguide:core:index/security/authentication/Authentication.adoc[Authentication] object.

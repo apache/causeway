@@ -11,12 +11,22 @@ Introduced to allow the AuthenticationManager (module: security) access to the I
 .AnonymousInteractionFactory.java
 ----
 interface AnonymousInteractionFactory {
-  void runAnonymous(ThrowingRunnable runnable)
-  R callAnonymous(Callable<R> callable)
+  void runAnonymous(ThrowingRunnable runnable)     // <.>
+  R callAnonymous(Callable<R> callable)     // <.>
   AnonymousInteractionFactory forTesting()     // <.>
 }
 ----
 
+<.> xref:#runAnonymous__ThrowingRunnable[runAnonymous(ThrowingRunnable)]
++
+--
+Executes a block of code with anonymous credentials.
+--
+<.> xref:#callAnonymous__Callable[callAnonymous(Callable)]
++
+--
+Executes a block of code with anonymous credentials.
+--
 <.> xref:#forTesting__[forTesting()]
 +
 --
@@ -24,6 +34,16 @@ Returns a pass-through implementation, free of side-effects, in support of simpl
 --
 
 == Members
+
+[#runAnonymous__ThrowingRunnable]
+=== runAnonymous(ThrowingRunnable)
+
+Executes a block of code with anonymous credentials.
+
+[#callAnonymous__Callable]
+=== callAnonymous(Callable)
+
+Executes a block of code with anonymous credentials.
 
 [#forTesting__]
 === forTesting()
