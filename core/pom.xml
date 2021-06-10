@@ -111,7 +111,7 @@
 		<datanucleus-maven-plugin.version>5.2.1</datanucleus-maven-plugin.version>
 		<datanucleus-rdbms.version>5.2.8</datanucleus-rdbms.version>
 
-		<docx4j.version>6.1.2</docx4j.version>
+		<docx4j.version>8.3.0</docx4j.version>
 
 		<easymock.version>4.3</easymock.version>
 		<error_prone_annotations.version>2.7.1</error_prone_annotations.version>
@@ -190,9 +190,9 @@
 		<wicket-fullcalendar.version>4.2</wicket-fullcalendar.version>
 		<wicket-source.version>7.0.0</wicket-source.version>
 		<wicket-webjars.version>2.0.20</wicket-webjars.version>
-		
+
 		<!-- org.webjars:boostrap, NOTE: dictates popper-js.version and jquery.version -->
-		<bootstrap.version>4.6.0-1</bootstrap.version> 
+		<bootstrap.version>4.6.0-1</bootstrap.version>
 		<popper-js.version>1.16.1-lts</popper-js.version> <!-- org.webjars:popper-js, dictated by bootstrap.version -->
 
 		<wicketstuff.version>8.12.0</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
@@ -999,7 +999,7 @@
 			</dependency>
 			<dependency>
 			    <groupId>org.webjars</groupId>
-			    <artifactId>popper.js</artifactId>		    
+			    <artifactId>popper.js</artifactId>
 				<version>${popper-js.version}</version>
 			</dependency>
 
@@ -1342,7 +1342,7 @@
 
 			<dependency>
 				<groupId>org.docx4j</groupId>
-				<artifactId>docx4j</artifactId>
+				<artifactId>docx4j-JAXB-internal</artifactId>
 				<version>${docx4j.version}</version>
 			</dependency>
 
@@ -1480,7 +1480,7 @@
 				<artifactId>jquery-ui</artifactId>
 				<version>${jquery-ui.version}</version>
 			</dependency>
- 			
+
 			<dependency>
 				<groupId>org.webjars</groupId>
 				<artifactId>select2</artifactId>
