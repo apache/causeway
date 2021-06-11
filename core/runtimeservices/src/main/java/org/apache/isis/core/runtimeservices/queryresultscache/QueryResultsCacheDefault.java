@@ -71,7 +71,7 @@ public class QueryResultsCacheDefault implements QueryResultsCache {
             return action.call();
         }
         final Key cacheKey = new Key(callingClass, methodName);
-        return executeWithCaching(()->action.call(), cacheKey);
+        return executeWithCaching(action::call, cacheKey);
     }
 
     @Override
