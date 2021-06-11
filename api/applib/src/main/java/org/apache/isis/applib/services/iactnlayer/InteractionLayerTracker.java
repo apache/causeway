@@ -28,6 +28,9 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
  * Provides access to the current {@link InteractionLayer}.
  *
  * @see InteractionService
+ * @see org.apache.isis.applib.services.sudo.SudoService
+ * @see org.apache.isis.applib.services.clock.ClockService
+ *
  * @since 2.0 {@index}
  */
 public interface InteractionLayerTracker

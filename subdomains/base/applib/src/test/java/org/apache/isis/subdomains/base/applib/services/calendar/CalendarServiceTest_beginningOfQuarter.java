@@ -46,36 +46,36 @@ public class CalendarServiceTest_beginningOfQuarter {
     @Parameters
     public static Collection<Object[]> data() {
       return Arrays.asList(
-              new Object[][] { 
-                      { LocalDate.of(2013,1,15), LocalDate.of(2013,1,1)}, 
-                      { LocalDate.of(2013,1,1),  LocalDate.of(2013,1,1)}, 
-                      { LocalDate.of(2013,1,31), LocalDate.of(2013,1,1)}, 
-                      { LocalDate.of(2013,2,15), LocalDate.of(2013,1,1)}, 
-                      { LocalDate.of(2013,2,1),  LocalDate.of(2013,1,1)}, 
-                      { LocalDate.of(2013,2,28), LocalDate.of(2013,1,1)}, 
-                      { LocalDate.of(2013,3,15), LocalDate.of(2013,1,1)}, 
-                      { LocalDate.of(2013,3,1),  LocalDate.of(2013,1,1)}, 
-                      { LocalDate.of(2013,3,31), LocalDate.of(2013,1,1)}, 
-                      { LocalDate.of(2013,4,15), LocalDate.of(2013,4,1)}, 
-                      { LocalDate.of(2013,4,1),  LocalDate.of(2013,4,1)}, 
-                      { LocalDate.of(2013,4,30), LocalDate.of(2013,4,1)}, 
-                      { LocalDate.of(2013,5,15), LocalDate.of(2013,4,1)}, 
-                      { LocalDate.of(2013,5,1),  LocalDate.of(2013,4,1)}, 
-                      { LocalDate.of(2013,5,31), LocalDate.of(2013,4,1)}, 
-                      { LocalDate.of(2013,6,15), LocalDate.of(2013,4,1)}, 
-                      { LocalDate.of(2013,6,1),  LocalDate.of(2013,4,1)}, 
-                      { LocalDate.of(2013,6,30), LocalDate.of(2013,4,1)}, 
+              new Object[][] {
+                      { LocalDate.of(2013,1,15), LocalDate.of(2013,1,1)},
+                      { LocalDate.of(2013,1,1),  LocalDate.of(2013,1,1)},
+                      { LocalDate.of(2013,1,31), LocalDate.of(2013,1,1)},
+                      { LocalDate.of(2013,2,15), LocalDate.of(2013,1,1)},
+                      { LocalDate.of(2013,2,1),  LocalDate.of(2013,1,1)},
+                      { LocalDate.of(2013,2,28), LocalDate.of(2013,1,1)},
+                      { LocalDate.of(2013,3,15), LocalDate.of(2013,1,1)},
+                      { LocalDate.of(2013,3,1),  LocalDate.of(2013,1,1)},
+                      { LocalDate.of(2013,3,31), LocalDate.of(2013,1,1)},
+                      { LocalDate.of(2013,4,15), LocalDate.of(2013,4,1)},
+                      { LocalDate.of(2013,4,1),  LocalDate.of(2013,4,1)},
+                      { LocalDate.of(2013,4,30), LocalDate.of(2013,4,1)},
+                      { LocalDate.of(2013,5,15), LocalDate.of(2013,4,1)},
+                      { LocalDate.of(2013,5,1),  LocalDate.of(2013,4,1)},
+                      { LocalDate.of(2013,5,31), LocalDate.of(2013,4,1)},
+                      { LocalDate.of(2013,6,15), LocalDate.of(2013,4,1)},
+                      { LocalDate.of(2013,6,1),  LocalDate.of(2013,4,1)},
+                      { LocalDate.of(2013,6,30), LocalDate.of(2013,4,1)},
               });
     }
-    
+
     public CalendarServiceTest_beginningOfQuarter(LocalDate date, LocalDate expected) {
         this.now = date;
         this.expected = expected;
     }
-    
+
     @Before
     public void setUp() throws Exception {
-        stubClockService = new ClockService() {
+        stubClockService = new ClockService(null) {
             @Override
             public VirtualClock getClock() {
                 return VirtualClock.frozenAt(Instant.from(now));
@@ -83,7 +83,7 @@ public class CalendarServiceTest_beginningOfQuarter {
         };
         calendarService = new CalendarService(stubClockService);
     }
-    
+
     @Test
     public void test() throws Exception {
         assertThat(calendarService.beginningOfQuarter(), is(expected));

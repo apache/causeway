@@ -18,7 +18,20 @@
  */
 package org.apache.isis.applib.services.clock;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
+
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.clock.VirtualClock;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * This service allows an application to be decoupled from the system time.
@@ -28,13 +41,25 @@ import org.apache.isis.applib.clock.VirtualClock;
  *
  * @since 1.x revised for 2.0 {@index}
  */
-public interface ClockService {
+@Service
+@Named("isis.applib.ClockService")
+@Order(OrderPrecedence.MIDPOINT)
+@Primary
+@Qualifier("Default")
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
+public class ClockService {
 
-    VirtualClock getClock();
+    private final InteractionLayerTracker interactionLayerTracker;
+
+    public VirtualClock getClock() {
+        return interactionLayerTracker.currentInteractionContext()
+                .map(InteractionContext::getClock)
+                .orElseGet(VirtualClock::system);
+    }
 
     // -- SHORTCUTS
 
-    default long getEpochMillis() {
+    public long getEpochMillis() {
         return getClock().getEpochMillis();
     }
 
