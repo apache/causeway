@@ -51,7 +51,7 @@ import org.apache.isis.applib.services.publishing.log.EntityChangesLogger;
 import org.apache.isis.applib.services.publishing.log.EntityPropertyChangeLogger;
 import org.apache.isis.applib.services.publishing.log.ExecutionLogger;
 import org.apache.isis.applib.services.session.SessionLoggingServiceLogging;
-import org.apache.isis.applib.services.sudo.SudoServiceDefault;
+import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.user.ImpersonateMenu;
 import org.apache.isis.applib.services.user.RoleMemento;
 import org.apache.isis.applib.services.user.UserMemento;
@@ -108,7 +108,7 @@ import org.apache.isis.schema.IsisModuleSchema;
         EntityPropertyChangeLogger.class,
         ExecutionLogger.class,
         SessionLoggingServiceLogging.class,
-        SudoServiceDefault.class,
+        SudoService.class,
 
 })
 public class IsisModuleApplib {

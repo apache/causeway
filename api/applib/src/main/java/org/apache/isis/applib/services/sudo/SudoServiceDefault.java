@@ -45,64 +45,8 @@ import lombok.val;
 
 import jakarta.annotation.PostConstruct;
 
-@Service
-@Named("isis.applib.SudoServiceDefault")
-@Order(OrderPrecedence.MIDPOINT)
-@Primary
-@Qualifier("Default")
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class SudoServiceDefault implements SudoService {
 
-    private final InteractionService interactionService;
-    private final InteractionTracker interactionTracker;
-
-    // -- LISTENERS
-
-    private Can<SudoServiceListener> sudoListeners = Can.empty();
-
-    @PostConstruct @Inject
-    public void init(final ServiceRegistry serviceRegistry) {
-        this.sudoListeners = serviceRegistry.select(SudoServiceListener.class);
-    }
-
-    // -- IMPLEMENTATION
-
-    @Override
-    public <T> T call(
-            final @NonNull UnaryOperator<InteractionContext> sudoMapper,
-            final @NonNull Callable<T> callable) {
-
-        val currentInteractionLayer = interactionTracker.currentInteractionLayerElseFail();
-        val currentInteractionContext = currentInteractionLayer.getInteractionContext();
-        val sudoInteractionContext = sudoMapper.apply(currentInteractionContext);
-
-        try {
-            beforeCall(currentInteractionContext, sudoInteractionContext);
-
-            return interactionService
-                    .call(sudoInteractionContext, callable);
-        } finally {
-            afterCall(sudoInteractionContext, currentInteractionContext);
-        }
-    }
-
-    // -- HELPER
-
-    private void beforeCall(
-            final @NonNull InteractionContext before,
-            final @NonNull InteractionContext after) {
-        for (val sudoListener : sudoListeners) {
-            sudoListener.beforeCall(before, after);
-        }
-    }
-
-    private void afterCall(
-            final @NonNull InteractionContext before,
-            final @NonNull InteractionContext after) {
-        for (val sudoListener : sudoListeners) {
-            sudoListener.afterCall(before, after);
-        }
-    }
 
 
 

@@ -35,6 +35,6 @@ org.apache.isis.core.runtimeservices.confmenu.ConfigurationViewServiceDefault
 org.apache.isis.core.runtimeservices.email.EmailServiceDefault
 org.apache.isis.core.runtimeservices.i18n.po.TranslationServicePoMenu
 org.apache.isis.core.runtimeservices.ixn.InteractionDtoServiceInternalDefault
-org.apache.isis.applib.services.sudo.SudoServiceDefault
+org.apache.isis.applib.services.sudo.SudoService
 org.apache.isis.core.runtimeservices.userprof.UserProfileServiceDefault
 org.apache.isis.core.runtimeservices.userreg.EmailNotificationServiceDefault

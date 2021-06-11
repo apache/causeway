@@ -23,13 +23,8 @@ import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import lombok.NonNull;
 
 /**
- * Allows the {@link SudoService} to notify other services/components that
- * the effective user has been changed.
- *
- * <p>
- * The subscribing domain service need only implement this interface,
- * there is no need to explicitly register as a subscriber.
- * </p>
+ * Allows the {@link SudoService} to notify other {@link org.springframework.stereotype.Service}s or
+ * {@link org.springframework.stereotype.Component}s that the effective user has been changed.
  *
  * @since 2.0
  */
