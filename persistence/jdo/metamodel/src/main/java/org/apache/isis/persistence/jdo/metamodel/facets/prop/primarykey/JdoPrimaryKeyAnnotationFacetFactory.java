@@ -57,7 +57,7 @@ extends FacetFactoryAbstract {
 
         val facetHolder = processMethodContext.getFacetHolder();
         addFacetIfPresent(new JdoPrimaryKeyFacetAnnotation(facetHolder));
-        addFacetIfPresent(new OptionalFacetDerivedFromJdoPrimaryKeyAnnotation(facetHolder));
+        addFacetIfPresent(new OptionalFacetInferredFromJdoPrimaryKeyAnnotation(facetHolder));
         addFacetIfPresent(new DisabledFacetDerivedFromJdoPrimaryKeyAnnotation(facetHolder));
     }
 }

@@ -24,9 +24,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetAbstract;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 
-
 /**
- * Derived by presence of {@link PrimaryKey}.
+ * Inferred from presence of {@link PrimaryKey}.
  *
  * <p>
  * By default mandatory properties are initialized using the
@@ -34,10 +33,11 @@ import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefault
  * the property as optional, meaning that the {@link PrimaryKey} property is left
  * untouched by Isis.
  */
-public class OptionalFacetDerivedFromJdoPrimaryKeyAnnotation extends MandatoryFacetAbstract {
+public class OptionalFacetInferredFromJdoPrimaryKeyAnnotation
+extends MandatoryFacetAbstract {
 
-    public OptionalFacetDerivedFromJdoPrimaryKeyAnnotation(final FacetHolder holder) {
-        super(holder, Semantics.OPTIONAL);
+    public OptionalFacetInferredFromJdoPrimaryKeyAnnotation(final FacetHolder holder) {
+        super(holder, Semantics.OPTIONAL, Precedence.INFERRED);
     }
 
 }

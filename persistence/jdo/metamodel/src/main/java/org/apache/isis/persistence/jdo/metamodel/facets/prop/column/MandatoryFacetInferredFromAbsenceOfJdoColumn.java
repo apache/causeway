@@ -23,13 +23,14 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetAbstract;
 
 /**
- * Derived by absence of an <tt>@Column</tt> method.
+ * Inferred from absence of an <tt>@Column</tt> method.
  */
 public class MandatoryFacetInferredFromAbsenceOfJdoColumn
 extends MandatoryFacetAbstract {
 
-    public MandatoryFacetInferredFromAbsenceOfJdoColumn(final FacetHolder holder, final boolean required) {
-        super(holder, Semantics.of(required));
+    public MandatoryFacetInferredFromAbsenceOfJdoColumn(
+            final FacetHolder holder, final Semantics semantics) {
+        super(holder, semantics); // inferred but has default precedence
     }
 
 

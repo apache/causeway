@@ -32,12 +32,13 @@ import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet.Semantics;
 import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
-import org.apache.isis.persistence.jdo.metamodel.facets.prop.primarykey.OptionalFacetDerivedFromJdoPrimaryKeyAnnotation;
+import org.apache.isis.persistence.jdo.metamodel.facets.prop.primarykey.OptionalFacetInferredFromJdoPrimaryKeyAnnotation;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
@@ -70,7 +71,7 @@ implements MetaModelRefiner {
         final MandatoryFacet existingFacet = holder.getFacet(MandatoryFacet.class);
         if(existingFacet != null) {
 
-            if (existingFacet instanceof OptionalFacetDerivedFromJdoPrimaryKeyAnnotation) {
+            if (existingFacet instanceof OptionalFacetInferredFromJdoPrimaryKeyAnnotation) {
                 // do not replace this facet;
                 // we must keep an optional facet here for different reasons
                 return;
@@ -83,15 +84,21 @@ implements MetaModelRefiner {
         }
 
         val columnIfAny = processMethodContext.synthesizeOnMethod(Column.class);
-        final boolean required = whetherRequired(processMethodContext, columnIfAny);
-        MandatoryFacet facet = columnIfAny.isPresent()
-                ? new MandatoryFacetDerivedFromJdoColumn(holder, required)
-                : new MandatoryFacetInferredFromAbsenceOfJdoColumn(holder, required);
 
-        FacetUtil.addFacetIfPresent(facet);
+        inferSemantics(processMethodContext, columnIfAny)
+        .ifPresent(semantics->{
+
+            FacetUtil.addFacetIfPresent(
+                columnIfAny.isPresent()
+                        ? new MandatoryFacetInferredFromJdoColumn(holder, semantics)
+                        : new MandatoryFacetInferredFromAbsenceOfJdoColumn(holder, semantics)
+            );
+
+        });
+
     }
 
-    private static boolean whetherRequired(
+    private static Optional<Semantics> inferSemantics(
             final ProcessMethodContext processMethodContext,
             final Optional<Column> columnIfAny) {
 
@@ -101,13 +108,15 @@ implements MetaModelRefiner {
 
         if(_Strings.isNotEmpty(allowsNull)) {
             // if miss-spelled, then DN assumes is not-nullable
-            return !"true".equalsIgnoreCase(allowsNull.trim());
+            return Optional.of(Semantics.of(!"true".equalsIgnoreCase(allowsNull.trim())));
         }
 
         final Class<?> returnType = processMethodContext.getMethod().getReturnType();
         // per JDO spec
         return returnType != null
-                && returnType.isPrimitive();
+                && returnType.isPrimitive()
+            ? Optional.of(Semantics.REQUIRED)
+            : Optional.empty(); // indifferent
 
     }
 
