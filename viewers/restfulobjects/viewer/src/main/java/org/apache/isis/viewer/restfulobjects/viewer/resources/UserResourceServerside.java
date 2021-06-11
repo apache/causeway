@@ -32,6 +32,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
@@ -41,6 +42,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.Caching;
 import org.apache.isis.viewer.restfulobjects.rendering.Responses;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
+import org.apache.isis.viewer.restfulobjects.viewer.context.ResourceContext;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.IsisRestfulObjectsInteractionFilter;
 
 import lombok.val;
@@ -99,7 +101,7 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
         final HomePageReprRenderer renderer = new HomePageReprRenderer(resourceContext, null, JsonRepresentation.newMap());
         renderer.includesSelf();
 
-        resourceContext.logoutFromSession();
+        logout(resourceContext);
 
         // we also redirect to home page with special query string; this allows the session filter
         // to clear out any cookies/headers (eg if BASIC auth in use).
@@ -109,6 +111,22 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void logout(ResourceContext resourceContext) {
+
+        val interactionService = resourceContext.getInteractionService();
+        val interactionLayerTracker = resourceContext.getInteractionLayerTracker();
+        val authenticationManager = resourceContext.getMetaModelContext().getServiceRegistry().lookupServiceElseFail(AuthenticationManager.class);
+
+        interactionLayerTracker
+        .currentInteractionContext()
+        .ifPresent(interactionContext->{
+
+            authenticationManager.closeSession(interactionContext);
+            interactionService.closeInteractionLayers();
+
+        });
     }
 
 }

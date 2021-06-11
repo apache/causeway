@@ -49,7 +49,7 @@ public class JsonParserHelper {
     public JsonParserHelper(IResourceContext resourceContext, ObjectSpecification objectSpecification) {
         this.objectSpec = objectSpecification;
         this.resourceContext = resourceContext;
-        this.jsonValueEncoder = resourceContext.getServiceRegistry()
+        this.jsonValueEncoder = resourceContext.getMetaModelContext().getServiceRegistry()
                 .lookupServiceElseFail(JsonValueEncoder.class);
     }
 

@@ -60,7 +60,7 @@ implements ReprRenderer<R, T> {
             final RepresentationType representationType,
             final JsonRepresentation representation) {
         this.resourceContext = resourceContext;
-        this.jsonValueEncoder = resourceContext.getServiceRegistry()
+        this.jsonValueEncoder = resourceContext.getMetaModelContext().getServiceRegistry()
                 .lookupServiceElseFail(JsonValueEncoder.class);
 
         this.linkFollower = asProvidedElseCreate(linkFollower);

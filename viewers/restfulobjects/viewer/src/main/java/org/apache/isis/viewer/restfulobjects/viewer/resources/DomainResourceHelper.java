@@ -304,7 +304,7 @@ class DomainResourceHelper {
     // //////////////////////////////////////
 
     private <T> T lookupService(Class<T> serviceType) {
-        return resourceContext.getServiceRegistry().lookupServiceElseFail(serviceType);
+        return resourceContext.getMetaModelContext().getServiceRegistry().lookupServiceElseFail(serviceType);
     }
 
 }

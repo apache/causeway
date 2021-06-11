@@ -229,42 +229,42 @@ implements IResourceContext {
 
     @Override
     public boolean honorUiHints() {
-        return getConfiguration().getViewer().getRestfulobjects().isHonorUiHints();
+        return getMetaModelContext().getConfiguration().getViewer().getRestfulobjects().isHonorUiHints();
     }
 
     @Override
     public boolean objectPropertyValuesOnly() {
-        return getConfiguration().getViewer().getRestfulobjects().isObjectPropertyValuesOnly();
+        return getMetaModelContext().getConfiguration().getViewer().getRestfulobjects().isObjectPropertyValuesOnly();
     }
 
     @Override
     public boolean suppressDescribedByLinks() {
-        return getConfiguration().getViewer().getRestfulobjects().isSuppressDescribedByLinks();
+        return getMetaModelContext().getConfiguration().getViewer().getRestfulobjects().isSuppressDescribedByLinks();
     }
 
     @Override
     public boolean suppressUpdateLink() {
-        return getConfiguration().getViewer().getRestfulobjects().isSuppressUpdateLink();
+        return getMetaModelContext().getConfiguration().getViewer().getRestfulobjects().isSuppressUpdateLink();
     }
 
     @Override
     public boolean suppressMemberId() {
-        return getConfiguration().getViewer().getRestfulobjects().isSuppressMemberId();
+        return getMetaModelContext().getConfiguration().getViewer().getRestfulobjects().isSuppressMemberId();
     }
 
     @Override
     public boolean suppressMemberLinks() {
-        return getConfiguration().getViewer().getRestfulobjects().isSuppressMemberLinks();
+        return getMetaModelContext().getConfiguration().getViewer().getRestfulobjects().isSuppressMemberLinks();
     }
 
     @Override
     public boolean suppressMemberExtensions() {
-        return getConfiguration().getViewer().getRestfulobjects().isSuppressMemberExtensions();
+        return getMetaModelContext().getConfiguration().getViewer().getRestfulobjects().isSuppressMemberExtensions();
     }
 
     @Override
     public boolean suppressMemberDisabledReason() {
-        return getConfiguration().getViewer().getRestfulobjects().isSuppressMemberDisabledReason();
+        return getMetaModelContext().getConfiguration().getViewer().getRestfulobjects().isSuppressMemberDisabledReason();
     }
 
     @Override
