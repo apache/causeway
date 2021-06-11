@@ -25,7 +25,7 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.testing.fixtures.applib.queryresultscache.QueryResultsCacheControlForFixtures;
 import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixturesService;
 import org.apache.isis.subdomains.spring.applib.IsisModuleSubdomainsSpringApplib;
-import org.apache.isis.testing.fixtures.applib.services.FixturesLifecycleService;
+import org.apache.isis.testing.fixtures.applib.services.InitialFixtureScriptsInstaller;
 
 @Configuration
 @Import({
@@ -33,7 +33,7 @@ import org.apache.isis.testing.fixtures.applib.services.FixturesLifecycleService
         IsisModuleSubdomainsSpringApplib.class,
 
         // @Service's
-        FixturesLifecycleService.class,
+        InitialFixtureScriptsInstaller.class,
         ModuleWithFixturesService.class,
         QueryResultsCacheControlForFixtures.class,
 

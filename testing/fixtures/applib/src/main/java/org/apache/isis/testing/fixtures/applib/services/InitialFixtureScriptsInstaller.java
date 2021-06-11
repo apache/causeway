@@ -30,25 +30,23 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.events.MetamodelEvent;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
-import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
 /**
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.testing.fixtures.FixturesLifecycleService")
+@Named("isis.testing.fixtures.InitialFixtureScriptsInstaller")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 @Log4j2
-public class FixturesLifecycleService {
+public class InitialFixtureScriptsInstaller {
 
     @SuppressWarnings("unused")
 
@@ -57,7 +55,7 @@ public class FixturesLifecycleService {
     private FixtureScript initialFixtureScript;
 
     @Inject
-    public FixturesLifecycleService(
+    public InitialFixtureScriptsInstaller(
             final IsisConfiguration isisConfiguration,
             final FixtureScripts fixtureScripts) {
 
