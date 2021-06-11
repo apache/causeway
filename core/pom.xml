@@ -112,7 +112,6 @@
 		<datanucleus-rdbms.version>5.2.8</datanucleus-rdbms.version>
 
 		<docx4j.version>8.3.0</docx4j.version>
-		<xmlgraphics.fop-core.version>2.5</xmlgraphics.fop-core.version>
 
 		<easymock.version>4.3</easymock.version>
 		<error_prone_annotations.version>2.7.1</error_prone_annotations.version>

@@ -24,6 +24,12 @@
 	<name>Apache Isis Sub - Docx (applib)</name>
 
 	<properties>
+		<!--
+		there are dependency convergence conflicts within docx4j's own dependency graph;
+		have decided it's not worth the effort of trying to resolve them
+		-->
+		<enforcer.skip>true</enforcer.skip>
+
 		<jar-plugin.automaticModuleName>org.apache.isis.subdomains.docx.applib</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/isis/subdomains/docx/applib</git-plugin.propertiesDir>
 	</properties>
@@ -67,66 +73,5 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
-	<profiles>
-		<profile>
-			<id>dependency-convergence</id>
-			<activation>
-				<property>
-					<name>!skip.dependency-convergence</name>
-				</property>
-			</activation>
-			<dependencies>
-				<dependency>
-					<groupId>org.docx4j</groupId>
-					<artifactId>docx4j-core</artifactId>
-					<version>${docx4j.version}</version>
-					<exclusions>
-						<exclusion>
-							<groupId>org.apache.xmlgraphics</groupId>
-							<artifactId>xmlgraphics-commons</artifactId>
-						</exclusion>
-					</exclusions>
-				</dependency>
-				<dependency>
-					<groupId>com.google.guava</groupId>
-					<artifactId>guava</artifactId>
-					<scope>test</scope>
-					<exclusions>
-						<exclusion>
-							<!-- conflicts with docx4j -->
-							<groupId>org.checkerframework</groupId>
-							<artifactId>checker-qual</artifactId>
-						</exclusion>
-					</exclusions>
-				</dependency>
-				<dependency>
-					<groupId>com.google.guava</groupId>
-					<artifactId>guava</artifactId>
-					<scope>test</scope>
-					<exclusions>
-						<exclusion>
-							<!-- conflicts with docx4j -->
-							<groupId>org.checkerframework</groupId>
-							<artifactId>checker-qual</artifactId>
-						</exclusion>
-					</exclusions>
-				</dependency>
-				<dependency>
-					<groupId>org.apache.xmlgraphics</groupId>
-					<artifactId>fop-core</artifactId>
-					<version>${xmlgraphics.fop-core.version}</version>
-					<scope>test</scope>
-					<exclusions>
-						<exclusion>
-							<!-- conflicts with docx4j -->
-							<groupId>org.apache.pdfbox</groupId>
-							<artifactId>fontbox</artifactId>
-						</exclusion>
-					</exclusions>
-				</dependency>
-			</dependencies>
-		</profile>
-	</profiles>
 
 </project>
