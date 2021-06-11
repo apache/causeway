@@ -115,6 +115,7 @@
 				<dependency>
 					<groupId>org.apache.xmlgraphics</groupId>
 					<artifactId>fop-core</artifactId>
+					<version>${xmlgraphics.fop-core.version}</version>
 					<scope>test</scope>
 					<exclusions>
 						<exclusion>
