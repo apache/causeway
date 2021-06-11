@@ -17,10 +17,12 @@ There are two main APIs exposed. One is to _#openInteraction(InteractionContext)
 interface InteractionService {
   InteractionLayer openInteraction()     // <.>
   InteractionLayer openInteraction(InteractionContext interactionContext)     // <.>
+  void closeInteractionLayers()     // <.>
   boolean isInInteraction()     // <.>
   R call(InteractionContext interactionContext, Callable<R> callable)     // <.>
   void run(InteractionContext interactionContext, ThrowingRunnable runnable)     // <.>
-  void closeInteractionLayers()     // <.>
+  R callAnonymous(Callable<R> callable)     // <.>
+  void runAnonymous(ThrowingRunnable runnable)     // <.>
 }
 ----
 
@@ -34,6 +36,11 @@ If present, reuses the current top level xref:refguide:applib:index/services/iac
 --
 Returns a new or reused xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] that is a holder of the xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] on top of the current thread's interaction layer stack.
 --
+<.> xref:#closeInteractionLayers__[closeInteractionLayers()]
++
+--
+closes all open xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] (s) as stacked on the current thread
+--
 <.> xref:#isInInteraction__[isInInteraction()]
 <.> xref:#call__InteractionContext_Callable[call(InteractionContext, Callable)]
 +
@@ -45,10 +52,15 @@ Executes a block of code with a new or reused xref:refguide:applib:index/service
 --
 Variant of _#call(InteractionContext, Callable)_ that takes a runnable.
 --
-<.> xref:#closeInteractionLayers__[closeInteractionLayers()]
+<.> xref:#callAnonymous__Callable[callAnonymous(Callable)]
 +
 --
-closes all open xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] (s) as stacked on the current thread
+As per _#call(InteractionContext, Callable)_ , but using an anonymous xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] .
+--
+<.> xref:#runAnonymous__ThrowingRunnable[runAnonymous(ThrowingRunnable)]
++
+--
+As per _#callAnonymous(Callable)_ , but for a runnable.
 --
 
 == Members
@@ -67,6 +79,11 @@ If available reuses an existing xref:refguide:applib:index/services/iactnlayer/I
 
 The xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] represents a user's span of activities interacting with the application. These can be stacked (usually temporarily), for example for a sudo session or to mock the clock. The stack is later closed using _#closeInteractionLayers()_ .
 
+[#closeInteractionLayers__]
+=== closeInteractionLayers()
+
+closes all open xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] (s) as stacked on the current thread
+
 [#isInInteraction__]
 === isInInteraction()
 
@@ -84,7 +101,12 @@ If there is currently an xref:refguide:applib:index/services/iactnlayer/Interact
 
 Variant of _#call(InteractionContext, Callable)_ that takes a runnable.
 
-[#closeInteractionLayers__]
-=== closeInteractionLayers()
+[#callAnonymous__Callable]
+=== callAnonymous(Callable)
 
-closes all open xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] (s) as stacked on the current thread
+As per _#call(InteractionContext, Callable)_ , but using an anonymous xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] .
+
+[#runAnonymous__ThrowingRunnable]
+=== runAnonymous(ThrowingRunnable)
+
+As per _#callAnonymous(Callable)_ , but for a runnable.

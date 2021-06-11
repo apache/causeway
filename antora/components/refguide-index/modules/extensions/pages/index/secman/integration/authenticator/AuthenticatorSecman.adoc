@@ -12,8 +12,8 @@ This Authenticator is a fallback and is only used if there is no other implement
 ----
 class AuthenticatorSecman {
   boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass)
-  Authentication authenticate(final AuthenticationRequest request, final String code)
-  void logout(final Authentication session)
+  InteractionContext authenticate(final AuthenticationRequest request, final String code)
+  void logout(final InteractionContext context)
 }
 ----
 

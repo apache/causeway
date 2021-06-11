@@ -10,7 +10,6 @@ Immutable serializable value holding details about a user and its roles.
 ----
 class UserMemento {
   public static final String LOGICAL_TYPE_NAME;
-  UserMemento(final String name, final Stream<RoleMemento> roles)     // <.>
   UserMemento system()     // <.>
   UserMemento ofName(final String name)     // <.>
   UserMemento ofNameAndRoles(final String name, final RoleMemento... roles)     // <.>
@@ -18,25 +17,15 @@ class UserMemento {
   UserMemento ofNameAndRoleNames(final String name, final List<String> roleNames)     // <.>
   UserMemento ofNameAndRoleNames(final String name, final Stream<String> roleNames)     // <.>
   String title()
-  UserMemento withRealName(final String realName)
-  UserMemento withAvatarUrl(final URL avatarUrl)
-  UserMemento withImpersonating()
-  List<RoleMemento> getRoles()
-  UserMemento withRole(String role)
+  List<RoleMemento> getRoles()     // <.>
+  UserMemento withRoleAdded(String role)
   boolean isCurrentUser(final String userName)     // <.>
   Stream<String> streamRoleNames()
   boolean hasRoleName(final String roleName)
-  String toString()
-  boolean equals(Object obj)
-  int hashCode()
+  UserMementoBuilder asBuilder()
 }
 ----
 
-<.> xref:#UserMemento__String_Stream[UserMemento(String, Stream)]
-+
---
-Creates a new user with the specified name and assigned roles.
---
 <.> xref:#system__[system()]
 +
 --
@@ -67,6 +56,11 @@ Creates a new user with the specified name and assigned role names.
 --
 Creates a new user with the specified name and assigned role names.
 --
+<.> xref:#getRoles__[getRoles()]
++
+--
+The roles associated with this user.
+--
 <.> xref:#isCurrentUser__String[isCurrentUser(String)]
 +
 --
@@ -74,11 +68,6 @@ Determine if the specified name is this user.
 --
 
 == Members
-
-[#UserMemento__String_Stream]
-=== UserMemento(String, Stream)
-
-Creates a new user with the specified name and assigned roles.
 
 [#system__]
 === system()
@@ -109,6 +98,11 @@ Creates a new user with the specified name and assigned role names.
 === ofNameAndRoleNames(String, Stream)
 
 Creates a new user with the specified name and assigned role names.
+
+[#getRoles__]
+=== getRoles()
+
+The roles associated with this user.
 
 [#isCurrentUser__String]
 === isCurrentUser(String)

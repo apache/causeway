@@ -1,7 +1,7 @@
 = Authenticator _(interface)_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-Represents an authentication mechanism capable of authenticating certain types of xref:refguide:core:index/security/authentication/AuthenticationRequest.adoc[AuthenticationRequest] and returning an xref:refguide:core:index/security/authentication/Authentication.adoc[Authentication] if the credentials are valid.
+Represents an authentication mechanism capable of authenticating certain types of xref:refguide:core:index/security/authentication/AuthenticationRequest.adoc[AuthenticationRequest] and returning an xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] if the credentials are valid.
 
 There can be multiple xref:refguide:core:index/security/authentication/Authenticator.adoc[Authenticator] s registered. If so, all Authenticators that can authenticate any given xref:refguide:core:index/security/authentication/AuthenticationRequest.adoc[AuthenticationRequest] must
 
@@ -12,8 +12,8 @@ There can be multiple xref:refguide:core:index/security/authentication/Authentic
 ----
 interface Authenticator {
   boolean canAuthenticate(Class<? extends AuthenticationRequest> authenticationRequestClass)     // <.>
-  Authentication authenticate(AuthenticationRequest request, String code)     // <.>
-  void logout(Authentication authentication)     // <.>
+  InteractionContext authenticate(AuthenticationRequest request, String code)     // <.>
+  void logout(InteractionContext context)     // <.>
 }
 ----
 
@@ -25,12 +25,12 @@ Whether the provided xref:refguide:core:index/security/authentication/Authentica
 <.> xref:#authenticate__AuthenticationRequest_String[authenticate(AuthenticationRequest, String)]
 +
 --
-Authenticates the provided xref:refguide:core:index/security/authentication/AuthenticationRequest.adoc[AuthenticationRequest] , returning a non-null xref:refguide:core:index/security/authentication/Authentication.adoc[Authentication] if valid.
+Authenticates the provided xref:refguide:core:index/security/authentication/AuthenticationRequest.adoc[AuthenticationRequest] , returning a non-null xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] if valid.
 --
-<.> xref:#logout__Authentication[logout(Authentication)]
+<.> xref:#logout__InteractionContext[logout(InteractionContext)]
 +
 --
-Invalidates this xref:refguide:core:index/security/authentication/Authentication.adoc[Authentication] , meaning that the user will need to log in again to use the application.
+Invalidates this xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] , meaning that the user will need to log in again to use the application.
 --
 
 == Members
@@ -43,9 +43,9 @@ Whether the provided xref:refguide:core:index/security/authentication/Authentica
 [#authenticate__AuthenticationRequest_String]
 === authenticate(AuthenticationRequest, String)
 
-Authenticates the provided xref:refguide:core:index/security/authentication/AuthenticationRequest.adoc[AuthenticationRequest] , returning a non-null xref:refguide:core:index/security/authentication/Authentication.adoc[Authentication] if valid.
+Authenticates the provided xref:refguide:core:index/security/authentication/AuthenticationRequest.adoc[AuthenticationRequest] , returning a non-null xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] if valid.
 
-[#logout__Authentication]
-=== logout(Authentication)
+[#logout__InteractionContext]
+=== logout(InteractionContext)
 
-Invalidates this xref:refguide:core:index/security/authentication/Authentication.adoc[Authentication] , meaning that the user will need to log in again to use the application.
+Invalidates this xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] , meaning that the user will need to log in again to use the application.

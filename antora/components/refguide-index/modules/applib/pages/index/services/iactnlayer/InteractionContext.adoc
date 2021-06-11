@@ -9,43 +9,87 @@ Provides the user and scenario specific environment for an xref:refguide:applib:
 .InteractionContext.java
 ----
 class InteractionContext {
-  void putAttribute(String key, Serializable value)
-  Optional<T> getAttribute(String key, Class<T> castTo)
-  boolean equals(Object o)     // <.>
-  int hashCode()     // <.>
   InteractionContext ofUserWithSystemDefaults(final UserMemento user)     // <.>
+  UnaryOperator<InteractionContext> switchUser(final UserMemento userMemento)     // <.>
+  UnaryOperator<InteractionContext> switchClock(final VirtualClock clock)     // <.>
+  UnaryOperator<InteractionContext> switchLocale(final Locale locale)     // <.>
+  UnaryOperator<InteractionContext> switchTimeZone(final TimeZone timeZone)     // <.>
+  UnaryOperator<T> combine(UnaryOperator<T>... mappers)     // <.>
+  UnaryOperator<T> combine(Stream<UnaryOperator<T>> mappers)     // <.>
 }
 ----
 
-<.> xref:#equals__Object[equals(Object)]
-+
---
-We exclude _#attributes_ .
---
-<.> xref:#hashCode__[hashCode()]
-+
---
-We exclude _#attributes_ .
---
 <.> xref:#ofUserWithSystemDefaults__UserMemento[ofUserWithSystemDefaults(UserMemento)]
 +
 --
 Creates a new xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] with the specified user and system defaults for clock, locale and time-zone.
 --
+<.> xref:#switchUser__UserMemento[switchUser(UserMemento)]
++
+--
+Convenience method for use with _org.apache.isis.applib.services.sudo.SudoService_ , returning a _UnaryOperator_ that will act upon the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to return the same but with the specified xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento] .
+--
+<.> xref:#switchClock__VirtualClock[switchClock(VirtualClock)]
++
+--
+Convenience method for use with _org.apache.isis.applib.services.sudo.SudoService_ , returning a _UnaryOperator_ that will act upon the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to return the same but with the specified xref:refguide:applib:index/clock/VirtualClock.adoc[VirtualClock] .
+--
+<.> xref:#switchLocale__Locale[switchLocale(Locale)]
++
+--
+Convenience method for use with _org.apache.isis.applib.services.sudo.SudoService_ , returning a _UnaryOperator_ that will act upon the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to return the same but with the specified _Locale_ .
+--
+<.> xref:#switchTimeZone__TimeZone[switchTimeZone(TimeZone)]
++
+--
+Convenience method for use with _org.apache.isis.applib.services.sudo.SudoService_ , returning a _UnaryOperator_ that will act upon the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to return the same but with the specified _TimeZone_ .
+--
+<.> xref:#combine__UnaryOperator[combine(UnaryOperator)]
++
+--
+Convenience method to combine _UnaryOperator_ s, for example as per _#switchUser(UserMemento)_ and _#switchTimeZone(TimeZone)_ .
+--
+<.> xref:#combine__Stream[combine(Stream)]
++
+--
+Convenience method to combine _UnaryOperator_ s, for example as per _#switchUser(UserMemento)_ and _#switchTimeZone(TimeZone)_ . credit: https://stackoverflow.com/a/51065029/56880
+--
 
 == Members
-
-[#equals__Object]
-=== equals(Object)
-
-We exclude _#attributes_ .
-
-[#hashCode__]
-=== hashCode()
-
-We exclude _#attributes_ .
 
 [#ofUserWithSystemDefaults__UserMemento]
 === ofUserWithSystemDefaults(UserMemento)
 
 Creates a new xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] with the specified user and system defaults for clock, locale and time-zone.
+
+[#switchUser__UserMemento]
+=== switchUser(UserMemento)
+
+Convenience method for use with _org.apache.isis.applib.services.sudo.SudoService_ , returning a _UnaryOperator_ that will act upon the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to return the same but with the specified xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento] .
+
+[#switchClock__VirtualClock]
+=== switchClock(VirtualClock)
+
+Convenience method for use with _org.apache.isis.applib.services.sudo.SudoService_ , returning a _UnaryOperator_ that will act upon the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to return the same but with the specified xref:refguide:applib:index/clock/VirtualClock.adoc[VirtualClock] .
+
+[#switchLocale__Locale]
+=== switchLocale(Locale)
+
+Convenience method for use with _org.apache.isis.applib.services.sudo.SudoService_ , returning a _UnaryOperator_ that will act upon the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to return the same but with the specified _Locale_ .
+
+[#switchTimeZone__TimeZone]
+=== switchTimeZone(TimeZone)
+
+Convenience method for use with _org.apache.isis.applib.services.sudo.SudoService_ , returning a _UnaryOperator_ that will act upon the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to return the same but with the specified _TimeZone_ .
+
+[#combine__UnaryOperator]
+=== combine(UnaryOperator)
+
+Convenience method to combine _UnaryOperator_ s, for example as per _#switchUser(UserMemento)_ and _#switchTimeZone(TimeZone)_ .
+
+NOTE: this implementation can result in heap pollution; better to use the _#combine(Stream) overload_ .
+
+[#combine__Stream]
+=== combine(Stream)
+
+Convenience method to combine _UnaryOperator_ s, for example as per _#switchUser(UserMemento)_ and _#switchTimeZone(TimeZone)_ . credit: https://stackoverflow.com/a/51065029/56880

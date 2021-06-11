@@ -7,7 +7,7 @@
 .TransactionServiceSpring.java
 ----
 class TransactionServiceSpring {
-  TransactionServiceSpring(final List<PlatformTransactionManager> platformTransactionManagers, final List<PersistenceExceptionTranslator> persistenceExceptionTranslators, final InteractionTracker interactionLayerTracker)
+  TransactionServiceSpring(final List<PlatformTransactionManager> platformTransactionManagers, final List<PersistenceExceptionTranslator> persistenceExceptionTranslators, final InteractionLayerTracker interactionLayerTracker)
   Result<T> callTransactional(TransactionDefinition def, Callable<T> callable)
   void nextTransaction()
   void flushTransaction()
