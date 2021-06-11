@@ -99,7 +99,6 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     @Inject final ClockService clockService;
     @Inject final TransactionService transactionService;
     @Inject final InteractionLayerTracker iInteractionLayerTracker;
-    @Inject final Provider<InteractionProvider> interactionProviderProvider;
 
     @Inject @Getter final InteractionService interactionService;
     @Inject @Getter final SpecificationLoader specificationLoader;
@@ -139,7 +138,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             final CommandDto dto,
             final CommandOutcomeHandler commandUpdater) {
 
-        val interaction = interactionProviderProvider.get().currentInteractionElseFail();
+        val interaction = iInteractionLayerTracker.currentInteractionElseFail();
         val command = interaction.getCommand();
         if(command.getCommandDto() != dto) {
             command.updater().setCommandDto(dto);
@@ -165,7 +164,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     private void copyStartedAtFromInteractionExecution(
             final CommandOutcomeHandler commandOutcomeHandler) {
 
-        val interaction = interactionProviderProvider.get().currentInteractionElseFail();
+        val interaction = iInteractionLayerTracker.currentInteractionElseFail();
         val currentExecution = interaction.getCurrentExecution();
 
         val startedAt = currentExecution != null
@@ -271,7 +270,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         // there was an exception when performing the action invocation/property
         // edit.  We therefore need to guard that case.
         //
-        val interaction = interactionProviderProvider.get().currentInteractionElseFail();
+        val interaction = iInteractionLayerTracker.currentInteractionElseFail();
 
         final Execution<?, ?> priorExecution = interaction.getPriorExecution();
         if(priorExecution != null) {
