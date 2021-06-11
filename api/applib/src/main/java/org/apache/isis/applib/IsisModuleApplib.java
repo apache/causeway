@@ -56,6 +56,7 @@ import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.user.ImpersonateMenu;
 import org.apache.isis.applib.services.user.RoleMemento;
 import org.apache.isis.applib.services.user.UserMemento;
+import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.schema.IsisModuleSchema;
 
 /**
@@ -99,7 +100,9 @@ import org.apache.isis.schema.IsisModuleSchema;
         LayoutServiceMenu.class,
         ImpersonateMenu.class,
         MetaModelServiceMenu.class,
+        UserService.class,
         ApplicationFeatureMenu.class,
+
 
         // @Service(s)
         CommandDtoProcessorServiceIdentity.class,

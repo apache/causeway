@@ -58,7 +58,6 @@ import org.apache.isis.core.runtimeservices.transaction.TransactionServiceSpring
 import org.apache.isis.core.runtimeservices.urlencoding.UrlEncodingServiceWithCompression;
 import org.apache.isis.core.runtimeservices.user.ImpersonateMenuAdvisorDefault;
 import org.apache.isis.core.runtimeservices.user.ImpersonatedUserHolderDefault;
-import org.apache.isis.core.runtimeservices.user.UserServiceDefault;
 import org.apache.isis.core.runtimeservices.userreg.EmailNotificationServiceDefault;
 import org.apache.isis.core.runtimeservices.wrapper.WrapperFactoryDefault;
 import org.apache.isis.core.runtimeservices.xml.XmlServiceDefault;
@@ -98,7 +97,6 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         ScratchpadDefault.class,
         TransactionServiceSpring.class,
         UrlEncodingServiceWithCompression.class,
-        UserServiceDefault.class,
         WrapperFactoryDefault.class,
         XmlServiceDefault.class,
         XmlSnapshotServiceDefault.class,
