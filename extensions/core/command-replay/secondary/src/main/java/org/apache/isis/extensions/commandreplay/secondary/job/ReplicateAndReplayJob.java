@@ -30,7 +30,6 @@ import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.extensions.commandreplay.secondary.SecondaryStatus;
 import org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig;
-import org.apache.isis.extensions.commandreplay.secondary.jobcallables.IsTickingClockInitialized;
 import org.apache.isis.extensions.commandreplay.secondary.jobcallables.ReplicateAndRunCommands;
 
 import lombok.val;
@@ -68,23 +67,9 @@ public class ReplicateAndReplayJob implements Job {
 
     private void exec(final JobExecutionContext quartzContext) {
         val ssh = new SecondaryStatusData(quartzContext);
-        val secondaryStatus = ssh.getSecondaryStatus(SecondaryStatus.TICKING_CLOCK_STATUS_UNKNOWN);
+        val secondaryStatus = ssh.getSecondaryStatus(SecondaryStatus.OK);
 
         switch (secondaryStatus) {
-
-            case TICKING_CLOCK_STATUS_UNKNOWN:
-            case TICKING_CLOCK_NOT_YET_INITIALIZED:
-                ssh.setSecondaryStatus(
-                        isTickingClockInitialized(authentication)
-                            ? SecondaryStatus.OK
-                            : SecondaryStatus.TICKING_CLOCK_NOT_YET_INITIALIZED);
-                if(ssh.getSecondaryStatus() == SecondaryStatus.OK) {
-                    log.info("Ticking clock now initialised");
-                } else {
-                    log.info("Still waiting for ticking clock to be initialised: {}" , secondaryStatus);
-                }
-                return;
-
             case OK:
                 val newStatus =
                         interactionService.call(authentication, new ReplicateAndRunCommands());
@@ -104,9 +89,6 @@ public class ReplicateAndReplayJob implements Job {
         }
     }
 
-    private boolean isTickingClockInitialized(final InteractionContext authentication) {
-        return interactionService.call(authentication, new IsTickingClockInitialized());
-    }
 
 }
 

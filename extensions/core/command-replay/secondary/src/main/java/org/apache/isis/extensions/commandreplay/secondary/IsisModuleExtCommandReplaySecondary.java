@@ -42,7 +42,6 @@ import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogApplib
 import org.apache.isis.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserException;
 import org.apache.isis.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserResult;
 import org.apache.isis.extensions.commandreplay.secondary.analysis.CommandReplayAnalysisService;
-import org.apache.isis.extensions.commandreplay.secondary.clock.TickingClockService;
 import org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig;
 import org.apache.isis.extensions.commandreplay.secondary.fetch.CommandFetcher;
 import org.apache.isis.extensions.commandreplay.secondary.job.ReplicateAndReplayJob;
@@ -68,7 +67,6 @@ import lombok.val;
         CommandReplayAnalyserException.class,
         CommandReplayAnalysisService.class,
         CommandReplayOnSecondaryService.class,
-        TickingClockService.class,
 
         // @Service's
         SecondaryConfig.class,
