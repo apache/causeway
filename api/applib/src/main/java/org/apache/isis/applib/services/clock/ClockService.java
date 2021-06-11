@@ -20,6 +20,7 @@ package org.apache.isis.applib.services.clock;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
@@ -49,10 +50,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ClockService {
 
-    private final InteractionLayerTracker interactionLayerTracker;
+    private final Provider<InteractionLayerTracker> interactionLayerTrackerProvider;
 
     public VirtualClock getClock() {
-        return interactionLayerTracker.currentInteractionContext()
+        return interactionLayerTrackerProvider.get().currentInteractionContext()
                 .map(InteractionContext::getClock)
                 .orElseGet(VirtualClock::system);
     }
