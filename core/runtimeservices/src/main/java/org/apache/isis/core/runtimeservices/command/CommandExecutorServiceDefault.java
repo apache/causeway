@@ -44,7 +44,6 @@ import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.sudo.SudoService;
-import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
@@ -145,11 +144,15 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         copyStartedAtFromInteractionExecution(commandUpdater);
 
         val result = transactionService.callWithinCurrentTransactionElseCreateNew(
-            () -> sudoPolicy == SudoPolicy.SWITCH
-                ? sudoService.call(
-                        context->context.withUser(UserMemento.ofName(dto.getUser())),
-                        () -> doExecuteCommand(dto))
-                : doExecuteCommand(dto));
+            () -> {
+                if (sudoPolicy == SudoPolicy.NO_SWITCH) {
+                    // short-circuit
+                    return doExecuteCommand(dto);
+                }
+                return sudoService.call(
+                        context -> sudoPolicy.mapper.apply(context, dto),
+                        () -> doExecuteCommand(dto));
+            });
 
         result.ifFailure(ex->{
             log.warn("Exception when executing : {}",

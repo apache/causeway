@@ -18,9 +18,18 @@
  */
 package org.apache.isis.applib.services.command;
 
+import java.time.Instant;
+import java.util.function.BiFunction;
+
+import org.apache.isis.applib.clock.VirtualClock;
+import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.schema.cmd.v2.CommandDto;
+
+import lombok.val;
 
 /**
  * Provides a mechanism to execute a {@link Command}.
@@ -48,17 +57,41 @@ public interface CommandExecutorService {
          * For example, regular background commands.
          * </p>
          */
-        NO_SWITCH,
+        NO_SWITCH((interactionContext, commandDto) -> interactionContext),
 
         /**
-         * Execute using an {@link org.apache.isis.applib.services.iactnlayer.InteractionContext} constructed from
-         * details held with the {@link Command}.
+         * Execute using an {@link org.apache.isis.applib.services.iactnlayer.InteractionContext}, with the apparent
+         * user being taken from the {@link Command}.
+         */
+        SWITCH_USER_ONLY((interactionContext, commandDto) -> {
+            return interactionContext.withUser(UserMemento.ofName(commandDto.getUser()));
+        }),
+
+        /**
+         * Execute using an {@link org.apache.isis.applib.services.iactnlayer.InteractionContext}, with the apparent
+         * user and time being taken from the {@link Command}.
          *
          * <p>
          * For example, replayable commands.
          * </p>
          */
-        SWITCH,
+        SWITCH_USER_AND_TIME((interactionContext, commandDto) -> {
+            return interactionContext.withUser(UserMemento.ofName(commandDto.getUser()))
+                                     .withClock(VirtualClock.nowAt(timestampOf(commandDto)));
+        }),
+        ;
+
+        private static Instant timestampOf(CommandDto commandDto) {
+            val timestampGc = commandDto.getTimestamp();
+            val javaSqlTimestamp = JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(timestampGc);
+            return javaSqlTimestamp.toInstant();
+        }
+
+        public final BiFunction<InteractionContext, CommandDto, InteractionContext> mapper;
+
+        private SudoPolicy(BiFunction<InteractionContext, CommandDto, InteractionContext> mapper) {
+            this.mapper = mapper;
+        }
     }
 
     /**
