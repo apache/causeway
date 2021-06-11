@@ -35,6 +35,7 @@ import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
@@ -150,14 +151,14 @@ public class OneToOneAssociationAbstractTest {
 
     @Test
     public void notPersistedWhenDerived() throws Exception {
-        final SnapshotExcludeFacet mockFacet = mockFacetIgnoring(SnapshotExcludeFacet.class);
+        final SnapshotExcludeFacet mockFacet = mockFacetIgnoring(SnapshotExcludeFacet.class, Precedence.DEFAULT);
         facetedMethod.addFacet(mockFacet);
         assertTrue(objectAssociation.isNotPersisted());
     }
 
     @Test
     public void notPersistedWhenFlaggedAsNotPersisted() throws Exception {
-        final SnapshotExcludeFacet mockFacet = mockFacetIgnoring(SnapshotExcludeFacet.class);
+        final SnapshotExcludeFacet mockFacet = mockFacetIgnoring(SnapshotExcludeFacet.class, Precedence.DEFAULT);
         facetedMethod.addFacet(mockFacet);
         assertTrue(objectAssociation.isNotPersisted());
     }
@@ -167,15 +168,20 @@ public class OneToOneAssociationAbstractTest {
         assertFalse(objectAssociation.isNotPersisted());
     }
 
-    private <T extends Facet> T mockFacetIgnoring(final Class<T> typeToMock) {
+    private <T extends Facet> T mockFacetIgnoring(final Class<T> typeToMock, Precedence precedence) {
         final T facet = context.mock(typeToMock);
         context.checking(new Expectations() {
             {
                 allowing(facet).facetType();
                 will(returnValue(typeToMock));
+
+                allowing(facet).getPrecedence();
+                will(returnValue(precedence));
+
                 ignoring(facet);
             }
         });
         return facet;
     }
+
 }

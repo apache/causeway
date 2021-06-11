@@ -93,7 +93,6 @@ implements ImperativeFacet {
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        ImperativeFacet.Util.appendAttributesTo(this, visitor);
     }
 
 }

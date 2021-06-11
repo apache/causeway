@@ -73,11 +73,6 @@ public interface InteractionAdvisor {
         }
 
         @Override
-        public void setUnderlyingFacet(final Facet underlyingFacet) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
         public void addContributedFacet(Facet contributedFacet) {
             throw _Exceptions.unsupportedOperation();
         }

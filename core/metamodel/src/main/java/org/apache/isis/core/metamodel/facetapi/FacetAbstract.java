@@ -19,29 +19,24 @@
 
 package org.apache.isis.core.metamodel.facetapi;
 
-import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-
-import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import lombok.val;
 
 
 public abstract class FacetAbstract implements Facet, HasMetaModelContext {
 
     private Facet underlyingFacet;
 
-    private final Class<? extends Facet> facetType;
+    private final @NonNull Class<? extends Facet> facetType;
     @Setter private Class<? extends Facet> facetAliasType;
     private Set<Facet> contributedFacets; // lazy init
 
@@ -62,7 +57,7 @@ public abstract class FacetAbstract implements Facet, HasMetaModelContext {
             FacetHolder holder,
             Facet.Precedence precedence) {
 
-        this.facetType = requires(facetType, "facetType");
+        this.facetType = facetType;
         setFacetHolder(holder);
         this.precedence = precedence;
     }
@@ -81,7 +76,9 @@ public abstract class FacetAbstract implements Facet, HasMetaModelContext {
 
     @Override
     public Class<? extends Facet> facetAliasType() {
-        return facetAliasType!=facetType ? facetAliasType : null; // avoids facetAliasType equals facetType
+        return facetAliasType!=facetType
+                ? facetAliasType
+                : null; // avoids facetAliasType equals facetType
     }
 
     @Override
@@ -106,21 +103,6 @@ public abstract class FacetAbstract implements Facet, HasMetaModelContext {
     @Override
     public Facet getUnderlyingFacet() {
         return underlyingFacet;
-    }
-
-    @Override
-    public void setUnderlyingFacet(final Facet underlyingFacet) {
-        if(underlyingFacet != null) {
-            val underlyingFacetType = underlyingFacet.facetType();
-            if(!Objects.equals(underlyingFacetType, facetType)) {
-                val msg = String.format(
-                        "type-missmatch: underlying facet's type '%s' "
-                        + "must match this facet's type '%s'",
-                        underlyingFacetType, facetType);
-                throw _Exceptions.unrecoverable(msg);
-            }
-        }
-        this.underlyingFacet = underlyingFacet;
     }
 
     @Override

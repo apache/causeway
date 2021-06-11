@@ -25,14 +25,13 @@ import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstr
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public class DisabledFacetOnPropertyDerivedFromRecreatableObject extends DisabledFacetAbstract {
+public class DisabledFacetOnPropertyDerivedFromRecreatableObject
+extends DisabledFacetAbstract {
 
     public DisabledFacetOnPropertyDerivedFromRecreatableObject(
             final FacetHolder holder,
             final Semantics semantics) {
-        super(
-                DisabledFacetOnPropertyDerivedFromRecreatableObject.class, // so don't clobber any other DisabledFacet's
-                Where.ANYWHERE, holder, semantics);
+        super(Where.ANYWHERE, holder, semantics, Precedence.DERIVED);
     }
 
     @Override

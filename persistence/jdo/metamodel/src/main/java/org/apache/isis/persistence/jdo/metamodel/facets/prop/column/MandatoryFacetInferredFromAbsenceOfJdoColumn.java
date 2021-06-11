@@ -25,7 +25,8 @@ import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFace
 /**
  * Derived by absence of an <tt>@Column</tt> method.
  */
-public class MandatoryFacetInferredFromAbsenceOfJdoColumn extends MandatoryFacetAbstract {
+public class MandatoryFacetInferredFromAbsenceOfJdoColumn
+extends MandatoryFacetAbstract {
 
     public MandatoryFacetInferredFromAbsenceOfJdoColumn(final FacetHolder holder, final boolean required) {
         super(holder, Semantics.of(required));

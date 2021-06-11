@@ -175,7 +175,7 @@ extends DelegatingInvocationHandlerDefault<T> {
         val objectMember = targetSpec.getMemberElseFail(method);
         val memberName = objectMember.getName();
 
-        val intent = ImperativeFacet.Util.getIntent(objectMember, method);
+        val intent = ImperativeFacet.getIntent(objectMember, method);
         if(intent == Intent.CHECK_IF_HIDDEN || intent == Intent.CHECK_IF_DISABLED) {
             throw new UnsupportedOperationException(String.format("Cannot invoke supporting method '%s'", memberName));
         }

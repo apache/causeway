@@ -98,16 +98,6 @@ extends
     public Facet getUnderlyingFacet();
 
     /**
-     * Sets underlying {@link Facet}, that is, creating a chain.
-     *
-     * <p>
-     * Must be of the same {@link #facetType() type}.
-     * @deprecated
-     */
-    @Deprecated
-    public void setUnderlyingFacet(Facet underlyingFacet);
-
-    /**
      * Determines the type of this facet to be stored under.
      *
      * <p>

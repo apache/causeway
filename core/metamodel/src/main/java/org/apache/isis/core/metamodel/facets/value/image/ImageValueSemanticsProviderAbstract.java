@@ -57,14 +57,6 @@ implements ImageValueFacet {
         return null;
     }
 
-    /**
-     * Not required because {@link #alwaysReplace()} is <tt>false</tt>.
-     */
-    @Override
-    public void setUnderlyingFacet(final Facet underlyingFacet) {
-        throw new UnsupportedOperationException();
-    }
-
     @Override
     public String titleString(final Object value) {
         return "image";

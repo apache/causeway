@@ -27,23 +27,30 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 
+import lombok.Getter;
+import lombok.NonNull;
+
 public class NamedFacetTranslated
 extends FacetAbstract
 implements NamedFacet {
 
     final TranslationService translationService;
-    TranslationContext context;
-    String originalText;
+    final TranslationContext context;
+    final String originalText;
+
+    @Getter private final @NonNull NamedFacet underlyingNamedFacet;
 
     public NamedFacetTranslated(
+            final NamedFacet underlyingNamedFacet,
             final TranslationContext context,
             final String originalText,
             final TranslationService translationService,
             final IdentifiedHolder facetHolder) {
-        super(NamedFacet.class, facetHolder, Precedence.HIGH); // facet has final say, don't override
+        super(NamedFacet.class, facetHolder, Precedence.HIGH); // facet has final say, override others
         this.context = context;
         this.originalText = originalText;
         this.translationService = translationService;
+        this.underlyingNamedFacet = underlyingNamedFacet;
 
         if(translationService!=null && translationService.getMode().isWrite()) {
             // force PoWriter to be called to capture this text that needs translating
@@ -64,13 +71,14 @@ implements NamedFacet {
 
     @Override
     public boolean escaped() {
-        final NamedFacet underlyingFacet = (NamedFacet) getUnderlyingFacet();
-        return underlyingFacet != null && underlyingFacet.escaped();
+        return getUnderlyingNamedFacet().escaped();
     }
 
-    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("context", context);
         visitor.accept("originalText", originalText);
+        visitor.accept("underlyingNamedFacet", underlyingNamedFacet.getClass().getName());
     }
 }

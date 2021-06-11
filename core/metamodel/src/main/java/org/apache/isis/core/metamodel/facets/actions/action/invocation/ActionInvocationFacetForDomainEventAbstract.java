@@ -107,7 +107,6 @@ implements ImperativeFacet {
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        ImperativeFacet.Util.appendAttributesTo(this, visitor);
         visitor.accept("onType", onType);
         visitor.accept("returnType", returnType);
         visitor.accept("eventType", eventType);

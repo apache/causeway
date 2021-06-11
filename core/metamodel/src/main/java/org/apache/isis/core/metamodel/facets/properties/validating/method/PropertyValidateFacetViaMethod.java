@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.properties.validating.method;
 
 import java.lang.reflect.Method;
-import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationContext;
@@ -78,8 +77,4 @@ public class PropertyValidateFacetViaMethod extends PropertyValidateFacetAbstrac
         return "method=" + method;
     }
 
-    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
-        ImperativeFacet.Util.appendAttributesTo(this, visitor);
-    }
 }

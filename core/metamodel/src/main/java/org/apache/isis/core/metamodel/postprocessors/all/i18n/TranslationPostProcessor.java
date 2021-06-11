@@ -75,24 +75,29 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     void translateName(final IdentifiedHolder identifiedHolder, final TranslationContext translationContext) {
-        final NamedFacet facet = identifiedHolder.getFacet(NamedFacet.class);
-        if(facet == null) {
+        val namedFacet = identifiedHolder.getFacet(NamedFacet.class);
+        if(namedFacet == null) {
             // not expected...
             return;
         }
-        final String originalText = facet.value();
+        final String originalText = namedFacet.value();
         if (isNullOrEmptyWhenTrimmed(originalText)) {
             // not expected...
             return;
         }
 
-        val namedFacetTranslated
-            = new NamedFacetTranslated(translationContext, originalText, translationService, identifiedHolder);
-        namedFacetTranslated.setUnderlyingFacet(facet);
-        FacetUtil.addFacetIfPresent(namedFacetTranslated);
+        FacetUtil.addFacetIfPresent(
+                new NamedFacetTranslated(
+                        namedFacet,
+                        translationContext,
+                        originalText,
+                        translationService,
+                        identifiedHolder));
     }
 
-    void translateDescription(final IdentifiedHolder identifiedHolder, final TranslationContext translationContext) {
+    void translateDescription(
+            final IdentifiedHolder identifiedHolder,
+            final TranslationContext translationContext) {
 
         val describedAsFacet = identifiedHolder.getFacet(DescribedAsFacet.class);
         if(describedAsFacet == null) {
@@ -103,15 +108,18 @@ extends ObjectSpecificationPostProcessorAbstract {
             return;
         }
 
-        FacetUtil.addFacetIfPresent(new DescribedAsFacetTranslated(
-                translationContext, originalText, translationService, identifiedHolder));
+        FacetUtil.addFacetIfPresent(
+                new DescribedAsFacetTranslated(
+                        translationContext,
+                        originalText,
+                        translationService,
+                        identifiedHolder));
     }
 
     static boolean isNullOrEmptyWhenTrimmed(final String originalText) {
         return originalText == null || _Strings.isNullOrEmpty(originalText.trim());
     }
 
-    @Inject
-    TranslationService translationService;
+    @Inject TranslationService translationService;
 
 }

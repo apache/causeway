@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.param.hide.method;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Optional;
-import java.util.function.BiConsumer;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -79,12 +78,6 @@ implements ImperativeFacet {
     protected String toStringValues() {
         val method = methods.getFirstOrFail();
         return "method=" + method;
-    }
-
-    @Override
-    public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
-        Util.appendAttributesTo(this, visitor);
     }
 
     @Override

@@ -249,7 +249,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             // then
             final Facet setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);
             Assert.assertNotNull(setterFacet);
-            Assert.assertTrue(setterFacet instanceof PropertySetterFacetForDomainEventFromPropertyAnnotation);
+            Assert.assertTrue("unexpected facet: " + setterFacet, setterFacet instanceof PropertySetterFacetForDomainEventFromPropertyAnnotation);
             final PropertySetterFacetForDomainEventFromPropertyAnnotation setterFacetImpl = (PropertySetterFacetForDomainEventFromPropertyAnnotation) setterFacet;
             assertThat(setterFacetImpl.value(), IsisMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
 
@@ -302,7 +302,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             // then
             final Facet setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);
             Assert.assertNotNull(setterFacet);
-            Assert.assertTrue(setterFacet instanceof PropertySetterFacetForDomainEventFromPropertyAnnotation);
+            Assert.assertTrue("unexpected facet: " + setterFacet, setterFacet instanceof PropertySetterFacetForDomainEventFromPropertyAnnotation);
             final PropertySetterFacetForDomainEventFromPropertyAnnotation setterFacetImpl = (PropertySetterFacetForDomainEventFromPropertyAnnotation) setterFacet;
             assertThat(setterFacetImpl.value(), IsisMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
 
@@ -354,7 +354,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             // then
             final Facet setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);
             Assert.assertNotNull(setterFacet);
-            Assert.assertTrue(setterFacet instanceof PropertySetterFacetForDomainEventFromPropertyAnnotation);
+            Assert.assertTrue("unexpected facet: " + setterFacet, setterFacet instanceof PropertySetterFacetForDomainEventFromPropertyAnnotation);
             final PropertySetterFacetForDomainEventFromPropertyAnnotation setterFacetImpl = (PropertySetterFacetForDomainEventFromPropertyAnnotation) setterFacet;
             assertThat(setterFacetImpl.value(), IsisMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
 
@@ -402,7 +402,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             // then
             final Facet setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);
             Assert.assertNotNull(setterFacet);
-            Assert.assertTrue(setterFacet instanceof PropertySetterFacetForDomainEventFromDefault);
+            Assert.assertTrue("unexpected facet: " + setterFacet, setterFacet instanceof PropertySetterFacetForDomainEventFromDefault);
             final PropertySetterFacetForDomainEventFromDefault setterFacetImpl = (PropertySetterFacetForDomainEventFromDefault) setterFacet;
             assertThat(setterFacetImpl.value(), IsisMatchers.classEqualTo(PropertyDomainEvent.Default.class));
 

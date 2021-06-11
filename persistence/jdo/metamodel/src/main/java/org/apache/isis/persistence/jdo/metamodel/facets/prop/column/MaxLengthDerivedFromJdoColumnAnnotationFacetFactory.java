@@ -28,7 +28,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
@@ -75,18 +74,12 @@ implements MetaModelRefiner {
             return;
         }
 
-        final FacetedMethod holder = processMethodContext.getFacetHolder();
+        val facetHolder = processMethodContext.getFacetHolder();
 
-        MaxLengthFacet existingFacet = holder.getFacet(MaxLengthFacet.class);
-
-        final MaxLengthFacet facet = new MaxLengthFacetDerivedFromJdoColumn(jdoColumnAnnotation.length(), holder);
-
-        if(!existingFacet.getPrecedence().isFallback()) {
-            // will raise violation later
-            facet.setUnderlyingFacet(existingFacet);
-        }
-
-        FacetUtil.addFacetIfPresent(facet);
+        FacetUtil.addFacetIfPresent(
+                new MaxLengthFacetDerivedFromJdoColumn(
+                        jdoColumnAnnotation.length(),
+                        facetHolder));
     }
 
     @Override

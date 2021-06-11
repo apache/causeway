@@ -28,6 +28,7 @@ import java.util.function.BiConsumer;
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.services.metamodel.BeanSort;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -309,30 +310,20 @@ implements FacetHolder {
 
     private void cataloguePropertiesAndCollections(BiConsumer<Method, ObjectMember> onMember) {
         streamDeclaredAssociations(MixedIn.EXCLUDED)
-        .forEach(field->{
-            field.streamFacets()
-            .filter(ImperativeFacet.PREDICATE)
-            .forEach(facet->{
-                val imperativeFacet = ImperativeFacet.Util.getImperativeFacet(facet);
-                for (final Method imperativeFacetMethod : imperativeFacet.getMethods()) {
-                    onMember.accept(imperativeFacetMethod, field);
-                }
-            });
-        });
+        .forEach(field->
+            field.streamFacets(ImperativeFacet.class)
+                .map(ImperativeFacet::getMethods)
+                .flatMap(Can::stream)
+                .forEach(imperativeFacetMethod->onMember.accept(imperativeFacetMethod, field)));
     }
 
     private void catalogueActions(BiConsumer<Method, ObjectMember> onMember) {
         streamDeclaredActions(MixedIn.INCLUDED)
-        .forEach(userAction->{
-            userAction.streamFacets()
-            .filter(ImperativeFacet.PREDICATE)
-            .forEach(facet->{
-                val imperativeFacet = ImperativeFacet.Util.getImperativeFacet(facet);
-                for (final Method imperativeFacetMethod : imperativeFacet.getMethods()) {
-                    onMember.accept(imperativeFacetMethod, userAction);
-                }
-            });
-        });
+        .forEach(userAction->
+            userAction.streamFacets(ImperativeFacet.class)
+                .map(ImperativeFacet::getMethods)
+                .flatMap(Can::stream)
+                .forEach(imperativeFacetMethod->onMember.accept(imperativeFacetMethod, userAction)));
     }
 
     // -- toString

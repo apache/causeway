@@ -26,7 +26,8 @@ import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 
 import lombok.val;
 
-public class DisabledFacetOnPropertyDerivedFromImmutableFactory extends FacetFactoryAbstract {
+public class DisabledFacetOnPropertyDerivedFromImmutableFactory
+extends FacetFactoryAbstract {
 
     public DisabledFacetOnPropertyDerivedFromImmutableFactory() {
         super(FeatureType.PROPERTIES_ONLY);
@@ -41,12 +42,11 @@ public class DisabledFacetOnPropertyDerivedFromImmutableFactory extends FacetFac
         .ifPresent(immutableFacet->{
             val facetHolder = processMethodContext.getFacetHolder();
 
-            val isInvertedSemantics = facetHolder.lookupNonFallbackFacet(DisabledFacet.class)
-            .map(DisabledFacet::isInvertedSemantics)
-            .orElse(false);
+            val semantics = facetHolder.lookupNonFallbackFacet(DisabledFacet.class)
+            .map(DisabledFacet::getSemantics)
+            .orElse(DisabledFacet.Semantics.ENABLED);
 
-            if(isInvertedSemantics) {
-                // @Property(editing=ENABLED)
+            if(semantics.isEnabled()) {
                 return;
             }
             addFacetIfPresent(

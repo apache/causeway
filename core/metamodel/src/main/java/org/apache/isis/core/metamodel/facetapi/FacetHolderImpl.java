@@ -49,7 +49,7 @@ public class FacetHolderImpl implements FacetHolder, MetaModelContextAware {
     @Getter(onMethod = @__(@Override)) @Setter(onMethod = @__(@Override))
     private MetaModelContext metaModelContext;
 
-    private final Map<Class<? extends Facet>, Facet> facetsByType = _Maps.newHashMap();
+    private final Map<Class<? extends Facet>, FacetRanking> rankingByType = _Maps.newHashMap();
     private final Object $lock = new Object();
 
     @Override
@@ -62,8 +62,10 @@ public class FacetHolderImpl implements FacetHolder, MetaModelContextAware {
     @Override
     public void addFacet(final @NonNull Facet facet) {
         synchronized($lock) {
-            val changed = addFacetOrKeepExistingBasedOnPrecedence(facetsByType, facet);
-            if(changed) {
+
+            val ranking = rankingByType.computeIfAbsent(facet.facetType(), FacetRanking::new);
+            val needsInvalidate = ranking.add(facet);
+            if(needsInvalidate) {
                 snapshot.clear(); //invalidate
             }
         }
@@ -79,7 +81,8 @@ public class FacetHolderImpl implements FacetHolder, MetaModelContextAware {
     @Override
     public Stream<Facet> streamFacets() {
         synchronized($lock) {
-            return snapshot.get().values().stream(); // consumers should play nice and don't take too long
+            // consumers should play nice and don't take too long (as we have a lock)
+            return snapshot.get().values().stream();
         }
     }
 
@@ -97,15 +100,20 @@ public class FacetHolderImpl implements FacetHolder, MetaModelContextAware {
     // collect all facet information provided with the top-level facets (contributed facets and aliases)
     private Map<Class<? extends Facet>, Facet> snapshot() {
         val snapshot = _Maps.<Class<? extends Facet>, Facet>newAliasMap(HashMap::new);
-        facetsByType.values().forEach(topLevelFacet->{
+        rankingByType.values()
+        .stream()
+        .map(facetRanking->facetRanking.getTopRank(facetRanking.facetType()))
+        .filter(Can::isNotEmpty)
+        .map(Can::getLastOrFail) // TODO find winner if there are more than one (also report conflicting semantics) - historically the last one wins
+        .forEach(winningFacet->{
 
             snapshot.remap(
-                    topLevelFacet.facetType(),
-                    Can.ofNullable(topLevelFacet.facetAliasType()),
-                    topLevelFacet);
+                    winningFacet.facetType(),
+                    Can.ofNullable(winningFacet.facetAliasType()),
+                    winningFacet);
 
             // honor contributed facets via recursive lookup
-            collectChildren(snapshot, topLevelFacet);
+            collectChildren(snapshot, winningFacet);
 
         });
         return snapshot;

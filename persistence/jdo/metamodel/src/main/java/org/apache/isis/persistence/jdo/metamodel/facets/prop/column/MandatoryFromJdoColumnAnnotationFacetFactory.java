@@ -18,6 +18,7 @@
  */
 package org.apache.isis.persistence.jdo.metamodel.facets.prop.column;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
@@ -31,7 +32,6 @@ import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault;
 import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
@@ -82,30 +82,22 @@ implements MetaModelRefiner {
             }
         }
 
-        val jdoColumnAnnotation = processMethodContext.synthesizeOnMethod(Column.class)
-                .orElse(null);
-        boolean required = whetherRequired(processMethodContext, jdoColumnAnnotation);
-        MandatoryFacet facet = jdoColumnAnnotation != null
+        val columnIfAny = processMethodContext.synthesizeOnMethod(Column.class);
+        final boolean required = whetherRequired(processMethodContext, columnIfAny);
+        MandatoryFacet facet = columnIfAny.isPresent()
                 ? new MandatoryFacetDerivedFromJdoColumn(holder, required)
                 : new MandatoryFacetInferredFromAbsenceOfJdoColumn(holder, required);
 
-
-        // as a side-effect, will chain any existing facets.
-        // we'll exploit this fact for meta-model validation (see #refineMetaModelValidator(), below)
         FacetUtil.addFacetIfPresent(facet);
-
-        // however, if a @Column was explicitly provided, and the underlying facet
-        // was the simple MandatoryFacetDefault (from an absence of @Optional or @Mandatory),
-        // then don't chain, simply replace.
-        if(facet instanceof MandatoryFacetDerivedFromJdoColumn
-                && facet.getUnderlyingFacet() instanceof MandatoryFacetDefault) {
-            facet.setUnderlyingFacet(null);
-        }
     }
 
-    private static boolean whetherRequired(final ProcessMethodContext processMethodContext, final Column annotation) {
+    private static boolean whetherRequired(
+            final ProcessMethodContext processMethodContext,
+            final Optional<Column> columnIfAny) {
 
-        final String allowsNull = annotation != null ? annotation.allowsNull() : null;
+        final String allowsNull = columnIfAny.isPresent()
+                ? columnIfAny.get().allowsNull()
+                : null;
 
         if(_Strings.isNotEmpty(allowsNull)) {
             // if miss-spelled, then DN assumes is not-nullable
@@ -114,7 +106,8 @@ implements MetaModelRefiner {
 
         final Class<?> returnType = processMethodContext.getMethod().getReturnType();
         // per JDO spec
-        return returnType != null && returnType.isPrimitive();
+        return returnType != null
+                && returnType.isPrimitive();
 
     }
 

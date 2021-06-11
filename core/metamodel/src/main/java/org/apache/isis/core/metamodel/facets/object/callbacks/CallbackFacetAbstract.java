@@ -30,7 +30,6 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
@@ -82,7 +81,6 @@ implements CallbackFacet {
     @Override
     public final void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        ImperativeFacet.Util.appendAttributesTo(this, visitor);
     }
 
 }

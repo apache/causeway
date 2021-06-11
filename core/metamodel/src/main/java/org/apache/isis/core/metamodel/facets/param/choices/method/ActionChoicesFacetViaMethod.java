@@ -100,9 +100,9 @@ implements ImperativeFacet {
         return "method=" + method + ",type=" + choicesType;
     }
 
-    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        ImperativeFacet.Util.appendAttributesTo(this, visitor);
         visitor.accept("choicesType", choicesType);
     }
 }

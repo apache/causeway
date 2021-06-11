@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.object.title.methods;
 
 import java.lang.reflect.Method;
-import java.util.function.BiConsumer;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -50,12 +49,6 @@ implements ImperativeFacet {
     @Override
     public String title(final ManagedObject object) {
         return object.getPojo().toString();
-    }
-
-    @Override
-    public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
-        ImperativeFacet.Util.appendAttributesTo(this, visitor);
     }
 
 }

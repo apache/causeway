@@ -55,7 +55,7 @@ extends DisabledFacetAbstract {
             final String reason,
             final FacetHolder holder,
             final Semantics semantics) {
-        super(where, holder, semantics);
+        super(where, holder, semantics, Precedence.DEFAULT);
         this.reason = reason;
     }
 
