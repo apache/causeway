@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facetapi;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 
 public interface Facet
@@ -64,7 +65,24 @@ extends
         /**
          * Higher precedence than {@link #DEFAULT}. In other words, overrules {@link #DEFAULT}.
          */
-        HIGH;
+        HIGH,
+
+        /**
+         * Highest precedence, with special behavior and restrictions:
+         * <ul>
+         * <li>
+         *      There can by only one {@link Facet} with {@link Precedence#EVENT}
+         *      per {@link FacetHolder} and facet-type.
+         * </li>
+         * <li>
+         *      If there are no subscribers to the event or subscribers are indifferent,
+         *      then the 'winning' facet (if any) from the next lower {@link Precedence} rank,
+         *      is used instead.
+         * </li>
+         * </ul>
+         */
+        EVENT,
+        ;
 
         public boolean isFallback() {
             return this == FALLBACK;
@@ -72,6 +90,10 @@ extends
 
         public boolean isInferred() {
             return this == INFERRED;
+        }
+
+        public boolean isEvent() {
+            return this == EVENT;
         }
 
     }
@@ -100,6 +122,12 @@ extends
 
     default Optional<FacetRanking> getSharedFacetRanking() {
         return getFacetHolder().getFacetRanking(facetType());
+    }
+
+    default FacetRanking getSharedFacetRankingElseFail() {
+        return getSharedFacetRanking()
+                .orElseThrow(()->_Exceptions
+                        .noSuchElement("no ranking found with facet holder for facetType %s", facetType()));
     }
 
     /**

@@ -22,14 +22,14 @@ package org.apache.isis.core.metamodel.facets.value;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.exceptions.recoverable.InvalidEntryException;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
-import org.apache.isis.core.metamodel.facets.value.chars.CharValueSemanticsProviderAbstract;
-import org.apache.isis.core.metamodel.facets.value.chars.CharWrapperValueSemanticsProvider;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+
+import org.apache.isis.applib.exceptions.recoverable.InvalidEntryException;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
+import org.apache.isis.core.metamodel.facets.value.chars.CharValueSemanticsProviderAbstract;
+import org.apache.isis.core.metamodel.facets.value.chars.CharWrapperValueSemanticsProvider;
 
 public class CharacterValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
@@ -42,7 +42,7 @@ public class CharacterValueSemanticsProviderTest extends ValueSemanticsProviderA
     @Before
     public void setUpObjects() throws Exception {
         character = Character.valueOf('r');
-        holder = new FacetHolderImpl();
+        holder = new FacetHolderAbstract() {};
         setValue(value = new CharWrapperValueSemanticsProvider(holder));
     }
 

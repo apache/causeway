@@ -67,7 +67,7 @@ implements LayoutFacet {
             final Class<? extends LayoutUiEvent<?>> layoutUiEventClass,
                     final MetamodelEventService metamodelEventService,
                     final FacetHolder holder) {
-        super(holder);
+        super(holder, Precedence.EVENT);
         this.layoutUiEventClass = layoutUiEventClass;
         this.metamodelEventService = metamodelEventService;
     }
@@ -87,9 +87,12 @@ implements LayoutFacet {
 
         if(layout == null) {
             // ie no subscribers out there...
-            final Facet underlyingFacet = getUnderlyingFacet();
-            if(underlyingFacet instanceof LayoutFacet) {
-                final LayoutFacet underlyingLayoutFacet = (LayoutFacet) underlyingFacet;
+
+            final LayoutFacet underlyingLayoutFacet = getSharedFacetRanking()
+            .flatMap(facetRanking->facetRanking.getWinnerNonEvent(LayoutFacet.class))
+            .orElse(null);
+
+            if(underlyingLayoutFacet!=null) {
                 return underlyingLayoutFacet.layout(owningAdapter);
             }
         }

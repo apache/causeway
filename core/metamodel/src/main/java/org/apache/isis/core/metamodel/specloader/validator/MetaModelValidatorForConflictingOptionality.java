@@ -18,10 +18,9 @@
  */
 package org.apache.isis.core.metamodel.specloader.validator;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;
@@ -29,17 +28,21 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class MetaModelValidatorForConflictingOptionality {
 
-    public static void flagIfConflict(final MandatoryFacet facet, final String message) {
-        if(conflictingOptionality(facet)) {
-            addFailure(facet, message);
+    // assumes that given mandatoryFacet is one of the top ranking
+    public static void flagIfConflict(final MandatoryFacet mandatoryFacet, final String message) {
+
+        if(false && //FIXME yet has false positives
+
+                conflictingOptionality(mandatoryFacet)) {
+            addFailure(mandatoryFacet, message);
         }
     }
 
     // -- HELPER
 
-    private static void addFailure(final Facet facet, final String message) {
-        if(facet != null) {
-            val holder = (IdentifiedHolder) facet.getFacetHolder();
+    private static void addFailure(final MandatoryFacet mandatoryFacet, final String message) {
+        if(mandatoryFacet != null) {
+            val holder = (IdentifiedHolder) mandatoryFacet.getFacetHolder();
             ValidationFailure.raiseFormatted(
                     holder,
                     "%s : %s",
@@ -48,18 +51,32 @@ public class MetaModelValidatorForConflictingOptionality {
         }
     }
 
-    private static boolean conflictingOptionality(final MandatoryFacet facet) {
-        if (facet == null) {
+    private static boolean conflictingOptionality(final MandatoryFacet mandatoryFacet) {
+        if (mandatoryFacet == null) {
             return false;
         }
-        final MandatoryFacet underlyingFacet = (MandatoryFacet) facet.getUnderlyingFacet();
-        if(underlyingFacet instanceof MandatoryFacetDefault) {
-            return false;
-        }
-        final boolean conflicting =
-                underlyingFacet != null
-                && facet.getSemantics() != underlyingFacet.getSemantics();
-        return conflicting;
+
+        //TODO maybe move this kind of logic to FacetRanking
+
+        val facetRanking = mandatoryFacet.getSharedFacetRankingElseFail();
+
+        // assumes that given mandatoryFacet is one of the top ranking
+        _Assert.assertEquals(
+                mandatoryFacet.getPrecedence(),
+                facetRanking.getTopPrecedence().orElse(null));
+
+        val topRankingFacets = facetRanking.getTopRank(mandatoryFacet.facetType());
+        val firstOfTopRanking = topRankingFacets.getFirstOrFail();
+
+        // the top ranking mandatory facets should semantically agree
+
+        return topRankingFacets.isCardinalityMultiple()
+                ? topRankingFacets
+                        .stream()
+                        .skip(1)
+                        .anyMatch(firstOfTopRanking::semanticEquals)
+                : false; // not conflicting
+
     }
 
 

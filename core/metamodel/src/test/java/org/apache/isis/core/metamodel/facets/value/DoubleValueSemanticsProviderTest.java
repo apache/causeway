@@ -22,15 +22,15 @@ package org.apache.isis.core.metamodel.facets.value;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.facets.value.doubles.DoubleWrapperValueSemanticsProvider;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 public class DoubleValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
@@ -41,7 +41,7 @@ public class DoubleValueSemanticsProviderTest extends ValueSemanticsProviderAbst
     @Before
     public void setUpObjects() throws Exception {
 
-        holder = new FacetHolderImpl();
+        holder = new FacetHolderAbstract() {};
         ((MetaModelContextAware)holder).setMetaModelContext(super.metaModelContext);
         setValue(new DoubleWrapperValueSemanticsProvider(holder));
 
@@ -79,9 +79,9 @@ public class DoubleValueSemanticsProviderTest extends ValueSemanticsProviderAbst
         final Object newValue = getValue().parseTextEntry(null, "1,20.0");
         assertEquals(120, ((Double) newValue).doubleValue(), 0.0);
     }
-    
+
     // -- HELPER
-    
+
     private ValueSemanticsProviderAndFacetAbstract<Double> getValue() {
         return super.getValue(Double.class);
     }

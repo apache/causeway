@@ -19,11 +19,15 @@
 package org.apache.isis.core.metamodel.facetapi;
 
 import java.util.Objects;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Multimaps;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.facetapi.Facet.Precedence;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -55,6 +59,9 @@ public final class FacetRanking {
     private final @NonNull _Multimaps.ListMultimap<Facet.Precedence, Facet> facetsByPrecedence
             = _Multimaps.newSortedConcurrentListMultimap();
 
+    private final @NonNull AtomicReference<Facet> eventFacetRef = new AtomicReference<>();
+    private final @NonNull AtomicReference<Precedence> topPrecedenceRef = new AtomicReference<>();
+
     /**
      * @return whether the top rank changed,
      * that is whether the winning facet should be reconsidered as a consequence of this call
@@ -63,36 +70,99 @@ public final class FacetRanking {
         val facetType = facet.facetType();
         _Assert.assertEquals(this.facetType, facetType);
 
-        val currentTopOrdinal = facetsByPrecedence.isEmpty()
+        // guard against invalidly mocked facets
+        val facetPreference = Objects.requireNonNull(facet.getPrecedence(),
+                ()->String.format("facet %s declares no precedence", facet.getClass()));
+
+        // handle top priority (EVENT) facets separately
+        if(facetPreference.isEvent()) {
+            eventFacetRef.getAndUpdate(previous->{
+                if(previous!=null) {
+                    throw _Exceptions
+                        .illegalState("cannot override an event facet %s with %s, "
+                                + "must be unique per facet-holder and facet-type",
+                                previous.getClass(),
+                                facet.getClass());
+                }
+                return facet;
+            });
+            topPrecedenceRef.set(facetPreference);
+            return true; // changes apply
+        }
+
+        val currentTopOrdinal = getTopPrecedence()
+                .map(Precedence::ordinal)
+                .orElse(-1);
+
+        if(facetPreference.ordinal() > currentTopOrdinal) {
+            topPrecedenceRef.set(facetPreference);
+        }
+
+        val currentTopRankOrdinal = facetsByPrecedence.isEmpty()
                 ? -1
                 : facetsByPrecedence.asNavigableMapElseFail().lastKey().ordinal();
 
-        // guard against invalidly mocked facets
-        Objects.requireNonNull(facet.getPrecedence(),
-                ()->String.format("facet %s declares no precedence", facet.getClass()));
-
-        val changesTopRank = facet.getPrecedence().ordinal() >= currentTopOrdinal;
+        val changesTopRank = facetPreference.ordinal() >= currentTopRankOrdinal;
 
         // as an optimization (heap), don't store to lower ranks, as these have no effect any way when picking a winning facet
         if(changesTopRank) {
-            facetsByPrecedence.putElement(facet.getPrecedence(), facet);
+            facetsByPrecedence.putElement(facetPreference, facet);
         }
 
         return changesTopRank;
     }
 
     /**
-     * Returns a defensive copy of the top rank.
-     * @param <F>
+     * Optionally returns the winning facet, considering the event facet (if any) and the top rank,
+     * based on whether there was any added that has given facetType.
      * @param facetType - for convenience, so the caller does not need to cast the result
      */
-    public <F extends Facet> Can<F> getTopRank(final @NonNull Class<? extends Facet> facetType) {
+    public <F extends Facet> Optional<F> getWinner(final @NonNull Class<F> facetType) {
+        val eventFacet = getEventFacet(facetType);
+        if(eventFacet.isPresent()) {
+            return eventFacet;
+        }
+        return getWinnerNonEvent(facetType);
+    }
+
+    /**
+     * Optionally returns the winning facet, considering the top rank,
+     * based on whether there was any added that has given facetType.
+     * @param facetType - for convenience, so the caller does not need to cast the result
+     */
+    public <F extends Facet> Optional<F> getWinnerNonEvent(final @NonNull Class<F> facetType) {
+        val topRank = getTopRank(facetType);
+        // TODO find winner if there are more than one
+        // (also report conflicting semantics) - only historically the last one wins
+        return topRank.getLast();
+    }
+
+
+    /**
+     * Optionally returns the top ranking event facet, based on whether there was one added.
+     * @param facetType - for convenience, so the caller does not need to cast the result
+     */
+    public <F extends Facet> Optional<F> getEventFacet(final @NonNull Class<F> facetType) {
+        return Optional.ofNullable(_Casts.uncheckedCast(eventFacetRef.get()));
+    }
+
+    /**
+     * Returns a defensive copy of the top rank.
+     * @param facetType - for convenience, so the caller does not need to cast the result
+     */
+    public <F extends Facet> Can<F> getTopRank(final @NonNull Class<F> facetType) {
         _Assert.assertEquals(this.facetType, facetType);
         val topRankedFacets = facetsByPrecedence.asNavigableMapElseFail().lastEntry();
         return topRankedFacets!=null
                 ? Can.<F>ofCollection(_Casts.uncheckedCast(topRankedFacets.getValue()))
                 : Can.empty();
     }
+
+    public Optional<Facet.Precedence> getTopPrecedence() {
+        return Optional.ofNullable(topPrecedenceRef.get());
+    }
+
+
 
 
 //    /**

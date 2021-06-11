@@ -22,15 +22,15 @@ package org.apache.isis.core.metamodel.facets.value;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facets.value.bytes.ByteValueSemanticsProviderAbstract;
 import org.apache.isis.core.metamodel.facets.value.bytes.ByteWrapperValueSemanticsProvider;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 public class ByteValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
@@ -43,7 +43,7 @@ public class ByteValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
     public void setUpObjects() throws Exception {
         byteObj = Byte.valueOf((byte) 102);
         allowMockAdapterToReturn(byteObj);
-        holder = new FacetHolderImpl();
+        holder = new FacetHolderAbstract() {};
         ((MetaModelContextAware)holder).setMetaModelContext(super.metaModelContext);
 
         setValue(value = new ByteWrapperValueSemanticsProvider(holder));

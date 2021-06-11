@@ -45,7 +45,7 @@ import lombok.extern.log4j.Log4j2;
  * For base subclasses or, more likely, to help write tests.
  */
 @Log4j2
-public class FacetHolderImpl
+public abstract class FacetHolderAbstract
 implements FacetHolder, MetaModelContextAware {
 
     @Getter(onMethod = @__(@Override)) @Setter(onMethod = @__(@Override))
@@ -111,9 +111,9 @@ implements FacetHolder, MetaModelContextAware {
         val snapshot = _Maps.<Class<? extends Facet>, Facet>newAliasMap(HashMap::new);
         rankingByType.values()
         .stream()
-        .map(facetRanking->facetRanking.getTopRank(facetRanking.facetType()))
-        .filter(Can::isNotEmpty)
-        .map(Can::getLastOrFail) // TODO find winner if there are more than one (also report conflicting semantics) - historically the last one wins
+        .map(facetRanking->facetRanking.getWinner(facetRanking.facetType()))
+        .filter(Optional::isPresent)
+        .map(Optional::get)
         .forEach(winningFacet->{
 
             snapshot.remap(

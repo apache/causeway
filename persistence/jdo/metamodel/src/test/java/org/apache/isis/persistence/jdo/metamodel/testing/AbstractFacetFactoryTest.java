@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel._testing.MethodRemoverForTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -79,7 +79,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
     protected MetaModelContext_forTesting metaModelContext;
     protected JdoFacetContext jdoFacetContext;
 
-    public static class IdentifiedHolderImpl extends FacetHolderImpl implements IdentifiedHolder {
+    public static class IdentifiedHolderImpl extends FacetHolderAbstract implements IdentifiedHolder {
 
         private Identifier identifier;
 

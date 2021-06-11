@@ -22,11 +22,11 @@ package org.apache.isis.core.metamodel.facets.value;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
-import org.apache.isis.core.metamodel.facets.value.string.StringValueSemanticsProvider;
-
 import static org.junit.Assert.assertEquals;
+
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
+import org.apache.isis.core.metamodel.facets.value.string.StringValueSemanticsProvider;
 
 public class StringValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
@@ -39,7 +39,7 @@ public class StringValueSemanticsProviderTest extends ValueSemanticsProviderAbst
     @Before
     public void setUpObjects() throws Exception {
         string = "text entry";
-        holder = new FacetHolderImpl();
+        holder = new FacetHolderAbstract() {};
         setValue(value = new StringValueSemanticsProvider(holder));
     }
 

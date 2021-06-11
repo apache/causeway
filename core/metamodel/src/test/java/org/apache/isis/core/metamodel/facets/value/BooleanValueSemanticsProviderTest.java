@@ -27,7 +27,7 @@ import static org.junit.Assert.fail;
 
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facets.value.booleans.BooleanValueSemanticsProviderAbstract;
 import org.apache.isis.core.metamodel.facets.value.booleans.BooleanWrapperValueSemanticsProvider;
 
@@ -41,7 +41,7 @@ public class BooleanValueSemanticsProviderTest extends ValueSemanticsProviderAbs
     @Before
     public void setUpObjects() throws Exception {
         booleanObj = Boolean.valueOf(true);
-        facetHolder = new FacetHolderImpl();
+        facetHolder = new FacetHolderAbstract() {};
         setValue(value = new BooleanWrapperValueSemanticsProvider(facetHolder));
     }
 

@@ -47,17 +47,17 @@ implements CssClassFacet {
             final FacetHolder facetHolder) {
 
         return domainObjectLayoutIfAny
-                .map(DomainObjectLayout::cssClassUiEvent)
-                .filter(cssClassUiEventClass -> EventUtil.eventTypeIsPostable(
-                        cssClassUiEventClass,
-                        CssClassUiEvent.Noop.class,
-                        CssClassUiEvent.Default.class,
-                        configuration.getApplib().getAnnotation().getDomainObjectLayout().getCssClassUiEvent().isPostForDefault()))
-                .map(cssClassUiEventClass -> {
-                    return new CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent(
-                            cssClassUiEventClass, metamodelEventService, facetHolder);
-                })
-                .orElse(null);
+        .map(DomainObjectLayout::cssClassUiEvent)
+        .filter(cssClassUiEventClass -> EventUtil.eventTypeIsPostable(
+                cssClassUiEventClass,
+                CssClassUiEvent.Noop.class,
+                CssClassUiEvent.Default.class,
+                configuration.getApplib().getAnnotation().getDomainObjectLayout().getCssClassUiEvent().isPostForDefault()))
+        .map(cssClassUiEventClass -> {
+            return new CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent(
+                    cssClassUiEventClass, metamodelEventService, facetHolder);
+        })
+        .orElse(null);
 
     }
 
@@ -69,7 +69,7 @@ implements CssClassFacet {
                     final MetamodelEventService metamodelEventService,
                     final FacetHolder holder) {
 
-        super(CssClassFacetAbstract.type(), holder);
+        super(CssClassFacetAbstract.type(), holder, Precedence.EVENT);
         this.cssClassUiEventClass = cssClassUiEventClass;
         this.metamodelEventService = metamodelEventService;
     }
@@ -89,9 +89,12 @@ implements CssClassFacet {
 
         if(cssClass == null) {
             // ie no subscribers out there...
-            final Facet underlyingFacet = getUnderlyingFacet();
-            if(underlyingFacet instanceof CssClassFacet) {
-                final CssClassFacet underlyingCssClassFacet = (CssClassFacet) underlyingFacet;
+
+            final CssClassFacet underlyingCssClassFacet = getSharedFacetRanking()
+            .flatMap(facetRanking->facetRanking.getWinnerNonEvent(CssClassFacet.class))
+            .orElse(null);
+
+            if(underlyingCssClassFacet!=null) {
                 return underlyingCssClassFacet.cssClass(owningAdapter);
             }
         }

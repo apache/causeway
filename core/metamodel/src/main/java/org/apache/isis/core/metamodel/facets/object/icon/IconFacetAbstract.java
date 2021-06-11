@@ -35,4 +35,8 @@ implements IconFacet {
         super(type(), holder);
     }
 
+    public IconFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
+        super(type(), holder, precedence);
+    }
+
 }

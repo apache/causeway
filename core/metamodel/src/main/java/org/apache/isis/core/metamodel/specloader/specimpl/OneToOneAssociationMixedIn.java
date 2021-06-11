@@ -24,7 +24,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
@@ -61,7 +61,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
      * use layout metadata to position the contributee in different ways)
      */
     @Getter(onMethod = @__(@Override))
-    private final FacetHolder facetHolder = new FacetHolderImpl();
+    private final FacetHolder facetHolder = new FacetHolderAbstract() {};
 
     public OneToOneAssociationMixedIn(
             final ObjectActionDefault mixinAction,

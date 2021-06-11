@@ -22,12 +22,12 @@ package org.apache.isis.core.metamodel.facets.value;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facets.value.password.PasswordValueSemanticsProvider;
-
-import static org.junit.Assert.assertEquals;
 
 public class PasswordValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
@@ -37,7 +37,7 @@ public class PasswordValueSemanticsProviderTest extends ValueSemanticsProviderAb
 
     @Before
     public void setUpObjects() throws Exception {
-        holder = new FacetHolderImpl();
+        holder = new FacetHolderAbstract() {};
         setValue(adapter = new PasswordValueSemanticsProvider(holder));
         password = new Password("secret");
     }

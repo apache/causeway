@@ -26,7 +26,7 @@ import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
@@ -59,7 +59,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
      * Hold facets rather than delegate to the mixin action
      */
     @Getter(onMethod = @__(@Override))
-    private final FacetHolder facetHolder = new FacetHolderImpl();
+    private final FacetHolder facetHolder = new FacetHolderAbstract() {};
 
     public ObjectActionMixedIn(
             final Class<?> mixinType,

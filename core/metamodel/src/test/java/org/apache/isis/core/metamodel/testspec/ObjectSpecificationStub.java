@@ -35,7 +35,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;
@@ -54,7 +54,7 @@ import lombok.Synchronized;
 import lombok.val;
 
 public class ObjectSpecificationStub
-extends FacetHolderImpl
+extends FacetHolderAbstract
 implements ObjectSpecification {
 
     private ObjectAction action;

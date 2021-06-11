@@ -65,7 +65,7 @@ extends IconFacetAbstract {
             final Class<? extends IconUiEvent<?>> iconUiEventClass,
                     final MetamodelEventService metamodelEventService,
                     final FacetHolder holder) {
-        super(holder);
+        super(holder, Precedence.EVENT);
         this.iconUiEventClass = iconUiEventClass;
         this.metamodelEventService = metamodelEventService;
     }
@@ -85,9 +85,12 @@ extends IconFacetAbstract {
 
         if(iconName == null) {
             // ie no subscribers out there...
-            final Facet underlyingFacet = getUnderlyingFacet();
-            if(underlyingFacet instanceof IconFacet) {
-                final IconFacet underlyingIconFacet = (IconFacet) underlyingFacet;
+
+            final IconFacet underlyingIconFacet = getSharedFacetRanking()
+            .flatMap(facetRanking->facetRanking.getWinnerNonEvent(IconFacet.class))
+            .orElse(null);
+
+            if(underlyingIconFacet!=null) {
                 return underlyingIconFacet.iconName(owningAdapter);
             }
         }

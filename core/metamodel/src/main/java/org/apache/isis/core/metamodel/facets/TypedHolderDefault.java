@@ -18,10 +18,10 @@
  */
 package org.apache.isis.core.metamodel.facets;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 
-public class TypedHolderDefault extends FacetHolderImpl implements TypedHolder {
+public class TypedHolderDefault extends FacetHolderAbstract implements TypedHolder {
 
     private final FeatureType featureType;
     private Class<?> type;

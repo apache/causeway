@@ -41,7 +41,8 @@ import org.apache.isis.core.metamodel.util.EventUtil;
 
 import lombok.val;
 
-public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends TitleFacetAbstract {
+public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent
+extends TitleFacetAbstract {
 
     public static Facet create(
             final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
@@ -83,7 +84,7 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
                     final TranslationContext translationContext,
                     final MetamodelEventService metamodelEventService,
                     final FacetHolder holder) {
-        super(holder);
+        super(holder, Precedence.EVENT);
         this.titleUiEventClass = titleUiEventClass;
         this.translationService = super.getTranslationService();
         this.translationContext = translationContext;
@@ -97,16 +98,23 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
             return null;
         }
 
-        val underlyingTitleFacet = underlyingTitleFacet();
-        if(underlyingTitleFacet != null) {
-            // underlyingTitleFacet always takes precedence
-            return underlyingTitleFacet.title(owningAdapter);
-        }
-
-
         final TitleUiEvent<Object> titleUiEvent = newTitleUiEvent(owningAdapter);
 
         metamodelEventService.fireTitleUiEvent(titleUiEvent);
+
+        if(titleUiEvent.getTitle() == null
+                && titleUiEvent.getTranslatableTitle() == null) {
+            // ie no subscribers out there...
+
+            final TitleFacet underlyingTitleFacet = getSharedFacetRanking()
+            .flatMap(facetRanking->facetRanking.getWinnerNonEvent(TitleFacet.class))
+            .orElse(null);
+
+            if(underlyingTitleFacet!=null) {
+                return underlyingTitleFacet.title(owningAdapter);
+            }
+        }
+
 
         final TranslatableString translatedTitle = titleUiEvent.getTranslatableTitle();
         if(translatedTitle != null) {
@@ -122,14 +130,6 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
     }
 
     // -- HELPER
-
-    private TitleFacet underlyingTitleFacet() {
-        val underlyingFacet = getUnderlyingFacet();
-        if(underlyingFacet instanceof TitleFacet) {
-            return (TitleFacet) underlyingFacet;
-        }
-        return null;
-    }
 
     private static TranslationContext translationContextFor(final FacetHolder facetHolder) {
         if(facetHolder instanceof ObjectSpecification) {

@@ -23,7 +23,7 @@ import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 
 import lombok.val;
 
@@ -64,7 +64,7 @@ public class InteractionUtils_isA_Test extends TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        facetHolder = new FacetHolderImpl();
+        facetHolder = new FacetHolderAbstract() {};
         fooSuperFacet = new FooSuperFacet(FooSuperFacet.class, facetHolder);
         fooFacet = new FooFacet(facetHolder);
         fooSubFacet = new FooSubFacet(facetHolder);

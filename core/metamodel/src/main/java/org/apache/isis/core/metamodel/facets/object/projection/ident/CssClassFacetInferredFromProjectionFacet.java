@@ -29,11 +29,14 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.val;
 
-public class CssClassFacetDerivedFromProjectionFacet extends CssClassFacetAbstract2 {
+public class CssClassFacetInferredFromProjectionFacet 
+extends CssClassFacetAbstract2 {
 
     private final ProjectionFacet projectionFacet;
 
-    public CssClassFacetDerivedFromProjectionFacet(final ProjectionFacet projectionFacet, final FacetHolder holder) {
+    public CssClassFacetInferredFromProjectionFacet(
+            final ProjectionFacet projectionFacet, 
+            final FacetHolder holder) {
         super(holder);
         this.projectionFacet = projectionFacet;
     }
@@ -42,7 +45,9 @@ public class CssClassFacetDerivedFromProjectionFacet extends CssClassFacetAbstra
     public String cssClass(final ManagedObject targetAdapter) {
         val projectedAdapter = projectionFacet.projected(targetAdapter);
         val cssClassFacet = projectedAdapter.getSpecification().getFacet(CssClassFacet.class);
-        return cssClassFacet != null ? cssClassFacet.cssClass(projectedAdapter) : null;
+        return cssClassFacet != null 
+                ? cssClassFacet.cssClass(projectedAdapter) 
+                : null;
     }
 
     @Override

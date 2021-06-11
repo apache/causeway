@@ -23,6 +23,10 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import org.apache.isis.applib.RecreatableDomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.services.inject.ServiceInjector;
@@ -31,15 +35,11 @@ import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContextAware;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
-
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 import lombok.val;
 
@@ -61,7 +61,7 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
 
         val configuration = new IsisConfiguration(null);
         configuration.getApplib().getAnnotation().getViewModel().getValidation().getSemanticChecking().setEnable(true);
-        
+
         programmingModel = new ProgrammingModelAbstract(mockServicesInjector) {};
         programmingModel.init(new ProgrammingModelInitFilterDefault(), metaModelContext);
 
@@ -142,18 +142,18 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
         val validationFailures = processThenValidate(
                 InvalidDomainObjectWithNatureJdoEntityImplementingRecreatableDomainObject.class);
         assertThat(validationFailures.getNumberOfFailures(), is(1));
-        assertThat(validationFailures.getMessages().iterator().next(), 
+        assertThat(validationFailures.getMessages().iterator().next(),
                 containsString("should not be annotated with @DomainObject with nature of ENTITY and also implement RecreatableDomainObject (specify a nature of VIEW_MODEL)"));
     }
 
     // -- HELPER
-    
+
     private ValidationFailures processThenValidate(final Class<?> cls) {
-        
-        val holder = new FacetHolderImpl();
+
+        val holder = new FacetHolderAbstract() {};
         ((MetaModelContextAware)holder).setMetaModelContext(metaModelContext);
         facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, holder));
-        
+
         return metaModelContext.getSpecificationLoader().getOrAssessValidationResult();
     }
 

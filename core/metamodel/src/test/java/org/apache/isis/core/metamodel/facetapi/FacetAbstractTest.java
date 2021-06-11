@@ -42,8 +42,8 @@ public class FacetAbstractTest extends TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        facetHolder = new FacetHolderImpl();
-        facetHolder2 = new FacetHolderImpl();
+        facetHolder = new FacetHolderAbstract() {};
+        facetHolder2 = new FacetHolderAbstract() {};
         fooFacet = new ConcreteFacet(FooFacet.class, facetHolder);
         new ConcreteFacet(BarFacet.class, facetHolder);
         facetHolder.addFacet(fooFacet);
