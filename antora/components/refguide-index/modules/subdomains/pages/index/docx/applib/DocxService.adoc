@@ -10,7 +10,7 @@ Provides a mail-merge capability.
 ----
 class DocxService {
   WordprocessingMLPackage loadPackage(final InputStream docxTemplate)     // <.>
-  void merge(final MergeDefinition mergeDefn)     // <.>
+  void merge(final MergeParams mergeDefn)     // <.>
 }
 ----
 
@@ -19,7 +19,7 @@ class DocxService {
 --
 Load and return an in-memory representation of a docx.
 --
-<.> xref:#merge__MergeDefinition[merge(MergeDefinition)]
+<.> xref:#merge__MergeParams[merge(MergeParams)]
 +
 --
 Merge the input arguments (as HTML) against the Docx template, writing out as a Word docx..
@@ -32,9 +32,9 @@ Merge the input arguments (as HTML) against the Docx template, writing out as a 
 
 Load and return an in-memory representation of a docx.
 
-This is public API because building the in-memory structure can be quite slow. Thus, clients can use this method to cache the in-memory structure, and pass it in the _MergeDefinition_ (through the _MergeDefinition.Builder#docxTemplateAsWpMlPackage(WordprocessingMLPackage) builder method_ )
+This is public API because building the in-memory structure can be quite slow. Thus, clients can use this method to cache the in-memory structure, and pass it in the _MergeParams_ (through the _MergeParams.Builder#docxTemplateAsWpMlPackage(WordprocessingMLPackage) builder method_ )
 
-[#merge__MergeDefinition]
-=== merge(MergeDefinition)
+[#merge__MergeParams]
+=== merge(MergeParams)
 
 Merge the input arguments (as HTML) against the Docx template, writing out as a Word docx..

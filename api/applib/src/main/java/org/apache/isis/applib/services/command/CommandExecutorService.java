@@ -47,7 +47,7 @@ public interface CommandExecutorService {
      *
      * @since 1.x {@index}
      */
-    enum SudoPolicy {
+    enum InteractionContextPolicy {
 
         /**
          * Execute within the same {@link org.apache.isis.applib.services.iactnlayer.InteractionContext} as the
@@ -89,26 +89,26 @@ public interface CommandExecutorService {
 
         public final BiFunction<InteractionContext, CommandDto, InteractionContext> mapper;
 
-        private SudoPolicy(BiFunction<InteractionContext, CommandDto, InteractionContext> mapper) {
+        private InteractionContextPolicy(BiFunction<InteractionContext, CommandDto, InteractionContext> mapper) {
             this.mapper = mapper;
         }
     }
 
     /**
-     * Executes the specified {@link Command} using the required {@link SudoPolicy}, updating the Command (or its
+     * Executes the specified {@link Command} using the required {@link InteractionContextPolicy}, updating the Command (or its
      * persistent equivalent) afterwards (for example, setting its {@link Command#getCommandDto() commandDto} field.
      *
-     * @param sudoPolicy - policy to use
+     * @param interactionContextPolicy - policy to use
      * @param command - the {@link Command} to be executed
      * @return - a bookmark representing the result of executing the command (could be null)
      */
     Bookmark executeCommand(
-            SudoPolicy sudoPolicy,
+            InteractionContextPolicy interactionContextPolicy,
             Command command
     );
 
     /**
-     * Executes the specified command (represented as a {@link CommandDto} using the required {@link SudoPolicy}.
+     * Executes the specified command (represented as a {@link CommandDto} using the required {@link InteractionContextPolicy}.
      *
      * <p>
      *     IMPORTANT: THIS METHOD HAS SIGNIFICANT SIDE-EFFECTS.  Specifically, the {@link Command} of the executing
@@ -122,38 +122,38 @@ public interface CommandExecutorService {
      * used by the persistent implementations to update their respective persistent equivalents of {@link Command}.
      * </p>
      *
-     * @param sudoPolicy - policy to use
+     * @param interactionContextPolicy - policy to use
      * @param commandDto - the {@link CommandDto} to be executed
      * @param outcomeHandler - callback to handle the result
      *
      * @return - a bookmark representing the result of executing the command (could be null)
      */
     Bookmark executeCommand(
-            SudoPolicy sudoPolicy,
+            InteractionContextPolicy interactionContextPolicy,
             CommandDto commandDto,
             CommandOutcomeHandler outcomeHandler);
 
     /**
-     * As per {@link #executeCommand(SudoPolicy, Command)}, with a policy of {@link SudoPolicy#NO_SWITCH no switch}.
+     * As per {@link #executeCommand(InteractionContextPolicy, Command)}, with a policy of {@link InteractionContextPolicy#NO_SWITCH no switch}.
      *
      * <p>
      *     Note that this method updates the Command as a side-effect.
      * </p>
      *
-     * @see #executeCommand(SudoPolicy, Command)
+     * @see #executeCommand(InteractionContextPolicy, Command)
      */
     Bookmark executeCommand(
             Command command
     );
 
     /**
-     * As per {@link #executeCommand(SudoPolicy, CommandDto, CommandOutcomeHandler)}, with a policy of {@link SudoPolicy#NO_SWITCH no switch}.
+     * As per {@link #executeCommand(InteractionContextPolicy, CommandDto, CommandOutcomeHandler)}, with a policy of {@link InteractionContextPolicy#NO_SWITCH no switch}.
      *
      * <p>
      *     Note that this method has significant side-effects.
      * </p>
      *
-     * @see #executeCommand(SudoPolicy, CommandDto, CommandOutcomeHandler)
+     * @see #executeCommand(InteractionContextPolicy, CommandDto, CommandOutcomeHandler)
      *
      * @param commandDto
      * @param outcomeHandler

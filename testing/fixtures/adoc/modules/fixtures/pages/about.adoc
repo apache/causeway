@@ -17,7 +17,6 @@ The solution that Apache Isis provides is a small library called *_fixture scrip
 A fixture script is basically a command object for executing arbitrary work, where the work in question is almost always invoking one or more business actions.
 In other words, the database is populating through the functionality of the domain object model itself.
 
-
 There is another benefit to Apache Isis' fixture script approach; the fixtures can be (in prototyping mode) run from your application.
 This means that fixture scripts can actually help all the way through the development lifecycle:
 
@@ -36,13 +35,12 @@ And if you can't write a fixture script for the story, it probably means that th
 * when you want to roll out training to your users, you can write fixture scripts as part of their training exercises
 
 
-The following  sections explain the API and how to go about using the API.
+The following sections explain the API and how to go about using the API.
 
 
 
 include::fixture-scripts/api-and-usage.adoc[leveloffset=+1]
-include::fixture-scripts/mocking-the-clock.adoc[leveloffset=+1]
-include::fixture-scripts/sudo-service.adoc[leveloffset=+1]
+include::fixture-scripts/mocking-the-clock-or-user.adoc[leveloffset=+1]
 
 
 

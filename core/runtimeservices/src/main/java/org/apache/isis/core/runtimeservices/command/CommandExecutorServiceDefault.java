@@ -102,15 +102,15 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
     @Override
     public Bookmark executeCommand(final Command command) {
-        return executeCommand(SudoPolicy.NO_SWITCH, command);
+        return executeCommand(InteractionContextPolicy.NO_SWITCH, command);
     }
 
     @Override
     public Bookmark executeCommand(
-            final SudoPolicy sudoPolicy,
+            final InteractionContextPolicy interactionContextPolicy,
             final Command command) {
 
-        return doExecute(sudoPolicy, command.getCommandDto(), command.updater());
+        return doExecute(interactionContextPolicy, command.getCommandDto(), command.updater());
     }
 
     @Override
@@ -118,20 +118,20 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             final CommandDto dto,
             final CommandOutcomeHandler outcomeHandler) {
 
-        return executeCommand(SudoPolicy.NO_SWITCH, dto, outcomeHandler);
+        return executeCommand(InteractionContextPolicy.NO_SWITCH, dto, outcomeHandler);
     }
 
     @Override
     public Bookmark executeCommand(
-            final SudoPolicy sudoPolicy,
+            final InteractionContextPolicy interactionContextPolicy,
             final CommandDto dto,
             final CommandOutcomeHandler outcomeHandler) {
 
-        return doExecute(sudoPolicy, dto, outcomeHandler);
+        return doExecute(interactionContextPolicy, dto, outcomeHandler);
     }
 
     private Bookmark doExecute(
-            final SudoPolicy sudoPolicy,
+            final InteractionContextPolicy interactionContextPolicy,
             final CommandDto dto,
             final CommandOutcomeHandler commandUpdater) {
 
@@ -145,12 +145,12 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
         val result = transactionService.callWithinCurrentTransactionElseCreateNew(
             () -> {
-                if (sudoPolicy == SudoPolicy.NO_SWITCH) {
+                if (interactionContextPolicy == InteractionContextPolicy.NO_SWITCH) {
                     // short-circuit
                     return doExecuteCommand(dto);
                 }
                 return sudoService.call(
-                        context -> sudoPolicy.mapper.apply(context, dto),
+                        context -> interactionContextPolicy.mapper.apply(context, dto),
                         () -> doExecuteCommand(dto));
             });
 

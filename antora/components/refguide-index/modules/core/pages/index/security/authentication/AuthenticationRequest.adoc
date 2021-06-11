@@ -3,7 +3,7 @@
 
 Represents a request to authenticate the user identified by _AuthenticationRequest#getName()_ .
 
-If successful, then the authentication mechanism is expected to add the _AuthenticationRequest#streamRoles() roles_ to the resultant xref:refguide:core:index/security/authentication/Authentication.adoc[Authentication] (obtained from the _org.apache.isis.applib.services.user.UserMemento_ returned by _Authentication#getUser()_ ).
+If successful, then the authentication mechanism is expected to add the _AuthenticationRequest#streamRoles() roles_ to the resultant xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento] (obtained from _InteractionContext#getUser()_ ).
 
 == API
 

@@ -18,8 +18,8 @@
  */
 package org.apache.isis.testing.fixtures.applib.services;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
+import java.lang.reflect.InvocationTargetException;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -30,13 +30,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.environment.IsisSystemEnvironment;
-import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.core.metamodel.events.MetamodelEvent;
-import org.apache.isis.testing.fixtures.applib.clock.clock.Clock;
-import org.apache.isis.testing.fixtures.applib.clock.clock.FixtureClock;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
@@ -46,46 +41,31 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.testing.fixtures.FixturesLifecycleService")
+@Named("isis.testing.fixtures.InitialFixtureScriptsInstaller")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 @Log4j2
-public class FixturesLifecycleService {
+public class InitialFixtureScriptsInstaller {
 
     @SuppressWarnings("unused")
 
-    @Inject
-    private InteractionService interactionService; // depends on relationship
-    @Inject
-    private IsisSystemEnvironment isisSystemEnvironment;
-    @Inject
-    private IsisConfiguration isisConfiguration;
-    @Inject
-    private ServiceInjector serviceInjector;
-    @Inject
-    private FixtureScripts fixtureScripts;
+    private final FixtureScripts fixtureScripts;
 
     private FixtureScript initialFixtureScript;
 
+    @Inject
+    public InitialFixtureScriptsInstaller(
+            final IsisConfiguration isisConfiguration,
+            final FixtureScripts fixtureScripts) {
 
-    @PostConstruct
-    public void postConstruct() {
-
-        // a bit of a workaround, but required if anything in the metamodel (for example, a
-        // ValueSemanticsProvider for a date value type) needs to use the Clock singleton
-        // we do this after loading the services to allow a service to prime a different clock
-        // implementation (eg to use an NTP time service).
-        if (isisSystemEnvironment.isPrototyping() && !Clock.isInitialized()) {
-            FixtureClock.initialize();
-        }
+        this.fixtureScripts = fixtureScripts;
 
         final Class<?> initialScript = isisConfiguration.getTesting().getFixtures().getInitialScript();
         if (initialScript != null && FixtureScript.class.isAssignableFrom(initialScript)) {
             try {
-                initialFixtureScript = (FixtureScript) initialScript.newInstance();
-                serviceInjector.injectServicesInto(initialFixtureScript);
-            } catch (InstantiationException | IllegalAccessException e) {
+                initialFixtureScript = (FixtureScript) initialScript.getDeclaredConstructor().newInstance();
+            } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
                 initialFixtureScript = null;
             }
         }
@@ -102,13 +82,6 @@ public class FixturesLifecycleService {
             log.info("install initial fixtures from script {}", initialFixtureScript.getFriendlyName());
             fixtureScripts.run(initialFixtureScript);
         }
-
-    }
-
-
-    @PreDestroy
-    public void preDestroy() {
-
     }
 
 }

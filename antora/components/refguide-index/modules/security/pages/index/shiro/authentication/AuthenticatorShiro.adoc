@@ -13,9 +13,9 @@ However, although there are two objects, they are set up to share the same _Secu
 class AuthenticatorShiro {
   AuthenticatorShiro(IsisConfiguration configuration)
   boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass)
-  Authentication authenticate(final AuthenticationRequest request, final String code)
-  void logout(final Authentication session)
-  Authentication authenticationFor(AuthenticationRequest request, String validationCode, AuthenticationToken token, Subject currentSubject)
+  InteractionContext authenticate(final AuthenticationRequest request, final String code)
+  void logout(final InteractionContext context)
+  InteractionContext authenticationFor(AuthenticationRequest request, String validationCode, AuthenticationToken token, Subject currentSubject)
 }
 ----
 

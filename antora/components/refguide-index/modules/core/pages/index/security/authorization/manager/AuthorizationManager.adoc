@@ -10,17 +10,17 @@ Authorizes the user in the current session view and use members of an object.
 ----
 class AuthorizationManager {
   AuthorizationManager(final List<Authorizor> authorizors, final AuthorizorChooser authorizorChooser)
-  boolean isUsable(final Authentication authentication, final Identifier identifier)     // <.>
-  boolean isVisible(final Authentication authentication, final Identifier identifier)     // <.>
+  boolean isUsable(final InteractionContext authentication, final Identifier identifier)     // <.>
+  boolean isVisible(final InteractionContext authentication, final Identifier identifier)     // <.>
 }
 ----
 
-<.> xref:#isUsable__Authentication_Identifier[isUsable(Authentication, Identifier)]
+<.> xref:#isUsable__InteractionContext_Identifier[isUsable(InteractionContext, Identifier)]
 +
 --
 Whether the user represented by the specified session is authorized to view the member of the class/object represented by the member identifier.
 --
-<.> xref:#isVisible__Authentication_Identifier[isVisible(Authentication, Identifier)]
+<.> xref:#isVisible__InteractionContext_Identifier[isVisible(InteractionContext, Identifier)]
 +
 --
 Whether the user represented by the specified session is authorized to change the field represented by the member identifier.
@@ -28,15 +28,15 @@ Whether the user represented by the specified session is authorized to change th
 
 == Members
 
-[#isUsable__Authentication_Identifier]
-=== isUsable(Authentication, Identifier)
+[#isUsable__InteractionContext_Identifier]
+=== isUsable(InteractionContext, Identifier)
 
 Whether the user represented by the specified session is authorized to view the member of the class/object represented by the member identifier.
 
 Normally the view of the specified field, or the display of the action will be suppress if this returns false.
 
-[#isVisible__Authentication_Identifier]
-=== isVisible(Authentication, Identifier)
+[#isVisible__InteractionContext_Identifier]
+=== isVisible(InteractionContext, Identifier)
 
 Whether the user represented by the specified session is authorized to change the field represented by the member identifier.
 

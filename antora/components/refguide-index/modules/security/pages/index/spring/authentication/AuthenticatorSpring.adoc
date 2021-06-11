@@ -8,8 +8,8 @@
 ----
 class AuthenticatorSpring {
   boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass)
-  Authentication authenticate(final AuthenticationRequest request, final String code)
-  void logout(final Authentication session)
+  InteractionContext authenticate(final AuthenticationRequest request, final String code)
+  void logout(final InteractionContext session)
 }
 ----
 

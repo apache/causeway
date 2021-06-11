@@ -1,31 +1,71 @@
 = CommandExecutorService _(interface)_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
+Provides a mechanism to execute a xref:refguide:applib:index/services/command/Command.adoc[Command] .
+
 == API
 
 [source,java]
 .CommandExecutorService.java
 ----
 interface CommandExecutorService {
-  Bookmark executeCommand(SudoPolicy sudoPolicy, Command command)     // <.>
-  Bookmark executeCommand(SudoPolicy sudoPolicy, CommandDto commandDto, CommandOutcomeHandler outcomeHandler)
-  Bookmark executeCommand(Command command)
-  Bookmark executeCommand(CommandDto commandDto, CommandOutcomeHandler outcomeHandler)
+  Bookmark executeCommand(InteractionContextPolicy interactionContextPolicy, Command command)     // <.>
+  Bookmark executeCommand(InteractionContextPolicy interactionContextPolicy, CommandDto commandDto, CommandOutcomeHandler outcomeHandler)     // <.>
+  Bookmark executeCommand(Command command)     // <.>
+  Bookmark executeCommand(CommandDto commandDto, CommandOutcomeHandler outcomeHandler)     // <.>
 }
 ----
 
-<.> xref:#executeCommand__SudoPolicy_Command[executeCommand(SudoPolicy, Command)]
+<.> xref:#executeCommand__InteractionContextPolicy_Command[executeCommand(InteractionContextPolicy, Command)]
 +
 --
-Executes the specified command.
+Executes the specified xref:refguide:applib:index/services/command/Command.adoc[Command] using the required _InteractionContextPolicy_ , updating the Command (or its persistent equivalent) afterwards (for example, setting its _Command#getCommandDto() commandDto_ field.
+--
+<.> xref:#executeCommand__InteractionContextPolicy_CommandDto_CommandOutcomeHandler[executeCommand(InteractionContextPolicy, CommandDto, CommandOutcomeHandler)]
++
+--
+Executes the specified command (represented as a _CommandDto_ using the required _InteractionContextPolicy_ .
+--
+<.> xref:#executeCommand__Command[executeCommand(Command)]
++
+--
+As per _#executeCommand(InteractionContextPolicy, Command)_ , with a policy of _InteractionContextPolicy#NO_SWITCH no switch_ .
+--
+<.> xref:#executeCommand__CommandDto_CommandOutcomeHandler[executeCommand(CommandDto, CommandOutcomeHandler)]
++
+--
+As per _#executeCommand(InteractionContextPolicy, CommandDto, CommandOutcomeHandler)_ , with a policy of _InteractionContextPolicy#NO_SWITCH no switch_ .
 --
 
 == Members
 
-[#executeCommand__SudoPolicy_Command]
-=== executeCommand(SudoPolicy, Command)
+[#executeCommand__InteractionContextPolicy_Command]
+=== executeCommand(InteractionContextPolicy, Command)
 
-Executes the specified command.
+Executes the specified xref:refguide:applib:index/services/command/Command.adoc[Command] using the required _InteractionContextPolicy_ , updating the Command (or its persistent equivalent) afterwards (for example, setting its _Command#getCommandDto() commandDto_ field.
+
+[#executeCommand__InteractionContextPolicy_CommandDto_CommandOutcomeHandler]
+=== executeCommand(InteractionContextPolicy, CommandDto, CommandOutcomeHandler)
+
+Executes the specified command (represented as a _CommandDto_ using the required _InteractionContextPolicy_ .
+
+IMPORTANT: THIS METHOD HAS SIGNIFICANT SIDE-EFFECTS. Specifically, the xref:refguide:applib:index/services/command/Command.adoc[Command] of the executing thread (obtained using _org.apache.isis.applib.services.iactn.InteractionProvider_ to obtain the xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] , and then _Interaction#getCommand()_ to obtain the xref:refguide:applib:index/services/command/Command.adoc[Command] ) will be UPDATED to hold the _CommandDto_ passed in.
+
+Optionally an xref:refguide:applib:index/services/command/CommandOutcomeHandler.adoc[CommandOutcomeHandler] can be provided to process the result. This is used by the persistent implementations to update their respective persistent equivalents of xref:refguide:applib:index/services/command/Command.adoc[Command] .
+
+[#executeCommand__Command]
+=== executeCommand(Command)
+
+As per _#executeCommand(InteractionContextPolicy, Command)_ , with a policy of _InteractionContextPolicy#NO_SWITCH no switch_ .
+
+Note that this method updates the Command as a side-effect.
+
+[#executeCommand__CommandDto_CommandOutcomeHandler]
+=== executeCommand(CommandDto, CommandOutcomeHandler)
+
+As per _#executeCommand(InteractionContextPolicy, CommandDto, CommandOutcomeHandler)_ , with a policy of _InteractionContextPolicy#NO_SWITCH no switch_ .
+
+Note that this method has significant side-effects.
 
 include::hooks/CommandExecutorService_010-implementation.adoc[]
 

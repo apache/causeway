@@ -15,8 +15,9 @@ interface InteractionProvider {
   Optional<Interaction> currentInteraction()     // <.>
   Optional<InteractionContext> currentInteractionContext()     // <.>
   Optional<UUID> getInteractionId()     // <.>
-  Interaction currentInteractionElseFail()
   int getInteractionLayerCount()     // <.>
+  Interaction currentInteractionElseFail()
+  InteractionContext currentInteractionContextElseFail()
 }
 ----
 
