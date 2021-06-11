@@ -20,12 +20,12 @@ package org.apache.isis.applib.services.metamodel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.SortedSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -34,6 +34,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -41,10 +42,18 @@ import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.value.Clob;
+import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.schema.metamodel.v2.Collection;
+import org.apache.isis.schema.metamodel.v2.DomainClassDto;
+import org.apache.isis.schema.metamodel.v2.FacetAttr;
+import org.apache.isis.schema.metamodel.v2.FacetHolder.Facets;
 import org.apache.isis.schema.metamodel.v2.MetamodelDto;
+import org.apache.isis.schema.metamodel.v2.Property;
+
+import lombok.val;
 
 /**
  *
@@ -65,17 +74,7 @@ public class MetaModelServiceMenu {
 
     public static abstract class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<MetaModelServiceMenu> { }
 
-    final MimeType mimeTypeTextCsv;
-    final MimeType mimeTypeTextXml;
-
-    public MetaModelServiceMenu() {
-        try {
-            mimeTypeTextCsv = new MimeType("text", "csv");
-            mimeTypeTextXml = new MimeType("application", "xml");
-        } catch (final MimeTypeParseException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
+    // -- CSV
 
     public static class DownloadMetaModelEvent extends ActionDomainEvent { }
 
@@ -96,17 +95,17 @@ public class MetaModelServiceMenu {
         final List<String> list = asList(domainMembers);
         final StringBuilder buf = asBuf(list);
 
-        return new Clob(
-                withSuffix(csvFileName, "csv"),
-                mimeTypeTextCsv, buf.toString().toCharArray());
+        return Clob.of(csvFileName, CommonMimeType.CSV, buf.toString());
 
         // ...
     }
 
-
+    @MemberSupport
     public String default0DownloadMetaModelCsv() {
         return "metamodel.csv";
     }
+
+    // -- XML
 
     public static class DownloadMetaModelXmlEvent extends ActionDomainEvent { }
     @Action(
@@ -121,9 +120,11 @@ public class MetaModelServiceMenu {
     public Clob downloadMetaModelXml(
             @ParameterLayout(named = ".xml file name")
             final String fileName,
+
             @ParameterLayout(named = "Packages",
             describedAs="Subset of the complete meta model, only including namespaces starting with given prefix")
             final List<String> namespaces,
+
             @ParameterLayout(named = "Ignore Interfaces")
             @Parameter(optionality=Optionality.MANDATORY)
             final boolean ignoreInterfaces
@@ -142,15 +143,16 @@ public class MetaModelServiceMenu {
             config = config.withIgnoreInterfaces();
         }
 
-
         final MetamodelDto metamodelDto =  metaModelService.exportMetaModel(config);
 
         final String xml = jaxbService.toXml(metamodelDto);
-        return new Clob(_Strings.asFileNameWithExtension(fileName,  ".xml"), "text/xml", xml);
+
+        return Clob.of(fileName, CommonMimeType.XML, xml);
 
         // ...
     }
 
+    @MemberSupport
     public String validateDownloadMetaModelXml(
             final String fileName, final List<String> packagePrefixes, final boolean ignoreInterfaces) {
         if(packagePrefixes == null || packagePrefixes.isEmpty()) {
@@ -159,10 +161,12 @@ public class MetaModelServiceMenu {
         return null;
     }
 
+    @MemberSupport
     public String default0DownloadMetaModelXml() {
         return "metamodel.xml";
     }
 
+    @MemberSupport
     public List<String> choices1DownloadMetaModelXml() {
         final DomainModel domainModel = metaModelService.getDomainModel();
         final List<DomainMember> export = domainModel.getDomainMembers();
@@ -182,9 +186,98 @@ public class MetaModelServiceMenu {
         return new ArrayList<>(namespaces);
     }
 
+    @MemberSupport
     public boolean default2DownloadMetaModelXml() {
         return true;
     }
+
+    // -- ASCII
+
+    public static class DownloadMetaModelAsciiEvent extends ActionDomainEvent { }
+    @Action(
+            domainEvent = DownloadMetaModelAsciiEvent.class,
+            semantics = SemanticsOf.NON_IDEMPOTENT, //disable client-side caching
+            restrictTo = RestrictTo.PROTOTYPING
+            )
+    @ActionLayout(
+            cssClassFa = "fa-download",
+            named = "Download Meta Model (Ascii)",
+            sequence="500.500.2")
+    public Clob downloadMetaModelAscii(
+            @ParameterLayout(named = ".txt file name")
+            final String fileName,
+
+            @ParameterLayout(named = "Packages",
+            describedAs="Subset of the complete meta model, only including namespaces starting with given prefix")
+            final List<String> namespaces,
+
+            @ParameterLayout(named = "Ignore Interfaces")
+            @Parameter(optionality=Optionality.MANDATORY)
+            final boolean ignoreInterfaces
+            ) {
+
+        Config config =
+                new Config()
+                .withIgnoreNoop()
+                .withIgnoreAbstractClasses()
+                .withIgnoreInterfaces()
+                .withIgnoreBuiltInValueTypes();
+        for (final String namespace : namespaces) {
+            config = config.withNamespacePrefix(namespace);
+        }
+        if(ignoreInterfaces) {
+            config = config.withIgnoreInterfaces();
+        }
+
+        final MetamodelDto metamodelDto =  metaModelService.exportMetaModel(config);
+
+        final StringBuffer ascii = toAscii(metamodelDto);
+
+        return Clob.of(fileName, CommonMimeType.TXT, ascii);
+
+        // ...
+    }
+
+    @MemberSupport
+    public String validateDownloadMetaModelAscii(
+            final String fileName, final List<String> packagePrefixes, final boolean ignoreInterfaces) {
+        if(packagePrefixes == null || packagePrefixes.isEmpty()) {
+            return "At least one package must be selected";
+        }
+        return null;
+    }
+
+    @MemberSupport
+    public String default0DownloadMetaModelAscii() {
+        return "metamodel.txt";
+    }
+
+    @MemberSupport
+    public List<String> choices1DownloadMetaModelAscii() {
+        final DomainModel domainModel = metaModelService.getDomainModel();
+        final List<DomainMember> export = domainModel.getDomainMembers();
+        final SortedSet<String> namespaces = _Sets.newTreeSet();
+        for (final DomainMember domainMember : export) {
+            final String namespace = domainMember.getNamespace();
+            final String[] split = namespace.split("[.]");
+            final StringBuilder buf = new StringBuilder();
+            for (final String part : split) {
+                if(buf.length() > 0) {
+                    buf.append(".");
+                }
+                buf.append(part);
+                namespaces.add(buf.toString());
+            }
+        }
+        return new ArrayList<>(namespaces);
+    }
+
+    @MemberSupport
+    public boolean default2DownloadMetaModelAscii() {
+        return true;
+    }
+
+    // -- HELPER
 
     private static StringBuilder asBuf(final List<String> list) {
         final StringBuilder buf = new StringBuilder();
@@ -227,23 +320,82 @@ public class MetaModelServiceMenu {
                 .collect(Collectors.joining(","));
     }
 
+    private StringBuffer toAscii(MetamodelDto metamodelDto) {
+        val sb = new StringBuffer();
 
-    private static String withSuffix(String fileName, String suffix) {
-        if(!suffix.startsWith(".")) {
-            suffix = "." + suffix;
-        }
-        if(!fileName.endsWith(suffix)) {
-            fileName += suffix;
-        }
-        return fileName;
+        metamodelDto
+            .getDomainClassDto()
+            .forEach(typeDto->toAscii(typeDto, sb));
+
+        return sb;
     }
 
+    private void toAscii(DomainClassDto typeDto, StringBuffer sb) {
+
+        sb.append(typeDto.getId()).append("\n");
+
+        toAscii("  * ", typeDto.getFacets(), sb);
+
+        Optional.ofNullable(typeDto.getProperties())
+        .map(props->props.getProp())
+        .ifPresent(list->list.forEach(propDto->toAscii(propDto, sb)));
+
+        Optional.ofNullable(typeDto.getCollections())
+        .map(colls->colls.getColl())
+        .ifPresent(list->list.forEach(collDto->toAscii(collDto, sb)));
+
+        Optional.ofNullable(typeDto.getActions())
+        .map(acts->acts.getAct())
+        .ifPresent(list->list.forEach(actDto->toAscii(actDto, sb)));
+
+    }
+
+    private void toAscii(final String prefix, @Nullable Facets facets, final StringBuffer sb) {
+
+        val attrPrefix = _Strings.of(prefix.length()-2, ' ') + "  | ";
+
+        Optional.ofNullable(facets)
+        .map(fac->fac.getFacet())
+        .ifPresent(list->list.forEach(facetDto->{
+            sb
+                .append(prefix)
+                .append(shorten(facetDto.getId()))
+                .append("\n");
+
+            Optional.ofNullable(facetDto.getAttr())
+            .ifPresent(attrs->attrs.forEach(attr->{
+                toAscii(attrPrefix, attr, sb);
+            }));
+
+        }));
+    }
+
+    private void toAscii(String attrPrefix, FacetAttr attr, StringBuffer sb) {
+        sb.append(attrPrefix).append(attr.getName()).append('=').append(attr.getValue()).append("\n");
+    }
+
+    private void toAscii(Property propDto, StringBuffer sb) {
+        sb.append("+-- prop ").append(propDto.getId()).append("\n");
+        toAscii  ("      * ", propDto.getFacets(), sb);
+    }
+
+    private void toAscii(Collection collDto, StringBuffer sb) {
+        sb.append("+-- coll ").append(collDto.getId()).append("\n");
+        toAscii  ("      * ", collDto.getFacets(), sb);
+    }
+
+    private void toAscii(org.apache.isis.schema.metamodel.v2.Action actDto, StringBuffer sb) {
+        sb.append("+-- act  ").append(actDto.getId()).append("\n");
+        toAscii  ("      * ", actDto.getFacets(), sb);
+    }
+
+    private String shorten(String id) {
+        return id.replace("org.apache.isis.core.metamodel.facets", "..facets");
+    }
 
     // ...
 
-    @Inject
-    MetaModelService metaModelService;
-    @Inject
-    JaxbService jaxbService;
+    @Inject MetaModelService metaModelService;
+    @Inject JaxbService jaxbService;
 
 }
