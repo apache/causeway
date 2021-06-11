@@ -20,6 +20,7 @@ package org.apache.isis.client.kroviz.to
 
 import kotlinx.serialization.json.Json
 import org.apache.isis.client.kroviz.handler.MemberHandler
+import org.apache.isis.client.kroviz.snapshots.demo2_0_0.COLLECTION_DESCRIPTION
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.FR_PROPERTY_DESCRIPTION
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -73,6 +74,14 @@ class MemberTest() {
         val extensions: Extensions? = m.extensions
         assertNotNull(extensions)
         assertEquals("ResultListResult class", extensions.friendlyName)
+    }
+
+    @Test
+    fun testParseCollection() {
+        val m = MemberHandler().parse(COLLECTION_DESCRIPTION.str) as Member
+        val extensions: Extensions? = m.extensions
+        assertNotNull(extensions)
+        assertEquals("Entities", extensions.friendlyName)
     }
 
     private fun parse(jsonStr: String): Member {

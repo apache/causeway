@@ -21,7 +21,7 @@ package org.apache.isis.client.kroviz.snapshots.demo2_0_0
 
 import org.apache.isis.client.kroviz.snapshots.Response
 
-object COLLECTIONS_ENTITIES: Response(){
+object OBJECT_COLLECTION: Response(){
     override val url = "http://localhost:8080/restful/objects/demo.JavaLangStrings/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPERlbW8vPgo=/collections/entities"
     override val str = """
 {

@@ -44,7 +44,6 @@ import io.kvision.utils.perc
 import io.kvision.utils.px
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.dialog.Command
-import org.apache.isis.client.kroviz.ui.dialog.EventLogDetail
 import org.apache.isis.client.kroviz.ui.panel.SvgPanel
 import org.apache.isis.client.kroviz.utils.DateHelper
 import org.apache.isis.client.kroviz.utils.IconManager
@@ -91,13 +90,12 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
     }
 
     private fun createBoolean(fi: FormItem): Component {
-        if (fi.content == "true") {
-            return CheckBox(label = fi.label, value = true)
+        val value = fi.content
+        val bools = arrayOf("true", "false")
+        return when {
+            value in bools -> CheckBox(label = fi.label, value = (value == "true"))
+            else -> createText(fi)
         }
-        if (fi.content == "false") {
-            return CheckBox(label = fi.label, value = false)
-        }
-        return createText(fi)
     }
 
     private fun createTime(fi: FormItem): DateTime {
@@ -169,8 +167,7 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
 
     private fun createImage(fi: FormItem): VPanel {
         val panel = VPanel {
-            val fc = fi.content
-            when {
+            when (val fc = fi.content) {
                 fc is Image -> fc
                 fc is String -> {
                     // interpret as (file) URL and load locally
@@ -186,7 +183,8 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
             }
         }
         panel.height = auto
-        panel.width = 100.perc
+        panel.width = auto
+        panel.overflow = Overflow.AUTO
         return panel
     }
 
@@ -204,14 +202,16 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
             }
         }
         panel.height = auto
-        panel.width = 100.perc
+        panel.width = auto
+        panel.overflow = Overflow.SCROLL
         return panel
     }
 
     private fun createSvgMap(fi: FormItem): SvgPanel {
         val panel = SvgPanel()
-        panel.height = 100.perc
-        panel.width = 100.perc
+        panel.height = auto
+        panel.width = auto
+        panel.overflow = Overflow.SCROLL
         fi.callBack = panel
         return panel
     }

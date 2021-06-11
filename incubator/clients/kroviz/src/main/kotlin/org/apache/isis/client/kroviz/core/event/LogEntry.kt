@@ -22,7 +22,9 @@ import io.kvision.html.ButtonStyle
 import io.kvision.panel.SimplePanel
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
+import org.apache.isis.client.kroviz.core.aggregator.ActionDispatcher
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
+import org.apache.isis.client.kroviz.core.aggregator.CollectionAggregator
 import org.apache.isis.client.kroviz.to.TransferObject
 import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.ui.core.UiManager
@@ -32,11 +34,13 @@ import kotlin.js.Date
 // use color codes from css instead?
 enum class EventState(val id: String, val iconName: String, val style: ButtonStyle) {
     INITIAL("INITIAL", "fas fa-power-off", ButtonStyle.LIGHT),
-    RUNNING("RUNNING", "fas fa-play-circle", ButtonStyle.WARNING),
+    RUNNING("RUNNING", "fas fa-hourglass-start fa-rotate-90", ButtonStyle.WARNING),
     ERROR("ERROR", "fas fa-exclamation-circle", ButtonStyle.DANGER),
-    SUCCESS("SUCCESS", "fas fa-check-circle", ButtonStyle.SUCCESS),
+    SUCCESS_JS("SUCCESS_JS", "fab fa-js", ButtonStyle.SUCCESS),
+    SUCCESS_XML("SUCCESS_XML", "fas fa-code", ButtonStyle.SUCCESS),
+    SUCCESS_IMG("SUCCESS_IMG", "fas fa-image", ButtonStyle.SUCCESS),
     VIEW("VIEW", "fas fa-eye", ButtonStyle.INFO),
-    DUPLICATE("DUPLICATE", "fas fa-stop-circle", ButtonStyle.OUTLINESUCCESS),
+    DUPLICATE("DUPLICATE", "fas fa-copy", ButtonStyle.OUTLINESUCCESS),
     CLOSED("CLOSED", "fas fa-eye-slash", ButtonStyle.OUTLINEINFO),
     RELOAD("RELOAD", "fas fa-retweet", ButtonStyle.OUTLINEWARNING),
     MISSING("MISSING", "fas fa-bug", ButtonStyle.OUTLINEDANGER)
@@ -79,6 +83,7 @@ data class LogEntry(
 
     var cacheHits = 0
 
+    @Contextual
     val aggregators = mutableListOf<@Contextual BaseAggregator>()
     var nOfAggregators: Int = 0 // must be accessible (public) for LogEntryTable
 
@@ -122,7 +127,11 @@ data class LogEntry(
     fun setSuccess() {
         calculate()
         responseLength = response.length
-        state = EventState.SUCCESS
+        state = when {
+            url.startsWith(Constants.krokiUrl) -> EventState.SUCCESS_IMG
+            subType == Constants.subTypeXml -> EventState.SUCCESS_XML
+            else -> EventState.SUCCESS_JS
+        }
     }
 
     fun setCached() {
@@ -202,6 +211,9 @@ data class LogEntry(
 
     fun addAggregator(aggregator: BaseAggregator) {
         aggregators.add(aggregator)
+        if ((aggregators.size > 1) && ((aggregator is ActionDispatcher) || (aggregator is CollectionAggregator))) {
+            throw Throwable("[LogEntry.addAggregator] not implemented yet")
+        }
         nOfAggregators = aggregators.size
     }
 

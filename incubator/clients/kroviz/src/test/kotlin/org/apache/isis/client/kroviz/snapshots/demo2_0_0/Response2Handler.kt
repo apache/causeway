@@ -28,7 +28,7 @@ object Response2Handler {
             ACTIONS_WHEREINTHEWORLD_INVOKE to TObjectHandler(),
             ACTIONS_TEXT_INVOKE to TObjectHandler(),
             ASSOCIATED_ACTION_OBJECT_LAYOUT to LayoutHandler(),
-            COLLECTIONS_ENTITIES to CollectionHandler(),
+            OBJECT_COLLECTION to CollectionHandler(),
             DOMAIN_TYPES_PROPERTY to PropertyHandler(),
             FILE_NODE to DomainTypeHandler(),
             HTTP_ERROR_405 to HttpErrorHandler(),

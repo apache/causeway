@@ -109,8 +109,8 @@ object EventStore {
     }
 
     fun cached(reSpec: ResourceSpecification): LogEntry {
-        val entry: LogEntry? = findBy(reSpec)
-        entry!!.setCached()
+        val entry: LogEntry = findBy(reSpec)!!
+        entry.setCached()
         updateStatus(entry)
         return entry
     }
@@ -186,7 +186,10 @@ object EventStore {
         val le = findBy(reSpec)
         return when {
             le == null -> false
-            le.hasResponse() && le.method == method && le.subType == reSpec.subType -> true
+            le.hasResponse() && le.method == method && le.subType == reSpec.subType -> {
+                le.setCached()
+                true
+            }
             le.isView() -> true
             else -> false
         }

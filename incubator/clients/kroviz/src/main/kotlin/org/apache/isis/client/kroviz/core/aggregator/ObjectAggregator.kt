@@ -43,17 +43,22 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
     }
 
     override fun update(logEntry: LogEntry, subType: String) {
-        when (val obj = logEntry.getTransferObject()) {
-            is TObject -> handleObject(obj)
-            is ResultObject -> handleResultObject(obj)
-            is Property -> handleProperty(obj)
-            is Layout -> handleLayout(obj, dpm as ObjectDM)
-            is Grid -> handleGrid(obj)
-            is HttpError -> ErrorDialog(logEntry).open()
-            else -> log(logEntry)
+        if (logEntry.url != "") {  // le=="" -> invoked from CollectionAggregrator
+            when (val obj = logEntry.getTransferObject()) {
+                is TObject -> handleObject(obj)
+                is ResultObject -> handleResultObject(obj)
+                is Property -> handleProperty(obj)
+                is Layout -> handleLayout(obj, dpm as ObjectDM)
+                is Grid -> handleGrid(obj)
+                is HttpError -> ErrorDialog(logEntry).open()
+                else -> log(logEntry)
+            }
         }
 
         if (dpm.canBeDisplayed() && collectionsCanBeDisplayed()) {
+            collectionMap.forEach {
+                (dpm as ObjectDM).addCollection(it.key, it.value.dpm as CollectionDM)
+            }
             UiManager.openObjectView(this)
         }
     }
@@ -77,7 +82,7 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
         if (collectionMap.size == 0) {
             handleCollections(obj)
         }
-        invokeLayoutLink(obj)
+        invokeLayoutLink(obj, this)
     }
 
     private fun invokeInstance(obj: TObject) {
@@ -96,18 +101,17 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
     }
 
     private fun handleCollections(obj: TObject) {
-        console.log("[OA.handleCollections]")
         obj.getCollections().forEach {
             val key = it.id
             val aggregator = CollectionAggregator(key, this)
             collectionMap.put(key, aggregator)
-            console.log(key)
             val link = it.links.first()
             RoXmlHttpRequest().invoke(link, aggregator)
         }
     }
 
     private fun handleProperty(property: Property) {
+        console.log("[OA.handleProperty]")
         console.log(property)
         throw Throwable("[ObjectAggregator.handleProperty] not implemented yet")
     }

@@ -22,12 +22,12 @@ abstract class AggregatorWithLayout : BaseAggregator() {
         }
     }
 
-    protected fun invokeLayoutLink(obj: TObject) {
+    protected fun invokeLayoutLink(obj: TObject, aggregator: AggregatorWithLayout) {
         val l = obj.getLayoutLink()!!
         if (l.representation() == Represention.OBJECT_LAYOUT_BS3) {
-            invoke(l, this, Constants.subTypeXml)
+            invoke(l, aggregator, Constants.subTypeXml)
         } else {
-            invoke(l, this)
+            invoke(l, aggregator)
         }
     }
 

@@ -18,7 +18,10 @@
  */
 package org.apache.isis.client.kroviz.ui.dialog
 
+import org.apache.isis.client.kroviz.core.aggregator.CollectionAggregator
+import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.event.LogEntry
+import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.to.bs3.Grid
 import org.apache.isis.client.kroviz.ui.core.Constants
@@ -29,29 +32,31 @@ import org.apache.isis.client.kroviz.ui.diagram.LayoutDiagram
 import org.apache.isis.client.kroviz.utils.Utils
 import org.apache.isis.client.kroviz.utils.XmlHelper
 
-class EventLogDetail(val logEntry: LogEntry) : Command() {
+class EventLogDetail(val logEntryFromTabulator: LogEntry) : Command() {
+    private var logEntry: LogEntry
+    init {
+        // For a yet unknown reason, aggregators are not transmitted via tabulator.
+        // As a WORKAROUND, we fetch the full blown LogEntry from the EventStore again.
+        val rs = ResourceSpecification(logEntryFromTabulator.title)
+        logEntry = EventStore.findBy(rs)!!
+    }
 
     private val LOG: String = "log"
+    private val OBJ: String = "obj"
+
 
     fun open() {
-        val formItems = mutableListOf<FormItem>()
-
-        formItems.add(FormItem("Url", ValueType.TEXT, logEntry.url))
-
-        var responseStr = logEntry.response
-        if (logEntry.subType == Constants.subTypeJson) {
-            responseStr = Utils.format(responseStr)
+        val responseStr = if (logEntry.subType == Constants.subTypeJson) {
+            Utils.format(logEntry.response)
         } else {
-            responseStr = XmlHelper.formatXml(responseStr)
+            XmlHelper.format(logEntry.response)
         }
+
+        val formItems = mutableListOf<FormItem>()
+        formItems.add(FormItem("Url", ValueType.TEXT, logEntry.title))
         formItems.add(FormItem("Response", ValueType.TEXT_AREA, responseStr, 10))
-
-        var aggtStr = ""
-        logEntry.aggregators.forEach { it ->
-            aggtStr += it.toString()
-        }
-        formItems.add(FormItem("Aggregators", ValueType.TEXT_AREA, aggtStr, 5))
-
+        formItems.add(FormItem("Aggregators", ValueType.TEXT, content = logEntry.aggregators))
+        formItems.add(FormItem("Object Diagram", ValueType.BUTTON, null, callBack = this, callBackAction = OBJ))
         formItems.add(FormItem("Console", ValueType.BUTTON, null, callBack = this, callBackAction = LOG))
 
         RoDialog(
@@ -68,9 +73,25 @@ class EventLogDetail(val logEntry: LogEntry) : Command() {
             action == LOG -> {
                 console.log(logEntry)
             }
+            action == OBJ -> {
+                objectDiagram()
+            }
             else -> {
                 console.log(logEntry)
                 console.log("Action not defined yet: " + action)
+            }
+        }
+    }
+
+    private fun objectDiagram() {
+        logEntry.aggregators.forEach {
+            console.log(it)
+            if (it is CollectionAggregator) {
+                val displayModel = it.dpm
+                val jsonStr = JSON.stringify(displayModel)
+                console.log(jsonStr)
+                val pumlCode = JsonDiagram.build(jsonStr)
+                DiagramDialog("Object Diagram", pumlCode).open()
             }
         }
     }

@@ -26,13 +26,12 @@ import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.bs3.Col
 import org.apache.isis.client.kroviz.ui.core.MenuFactory
 import org.apache.isis.client.kroviz.ui.core.RoDisplay
+import org.apache.isis.client.kroviz.ui.core.RoTable
 
 class ColBuilder : UiBuilder() {
 
     fun create(col: Col, tObject: TObject, dsp: RoDisplay): FlexPanel {
         val panel = buildPanel()
-        console.log("[CB.create] col:")
-        console.log(col)
 
         if (col.actionList.size > 0) {
             val menu = createMenu(tObject, dsp)
@@ -47,6 +46,22 @@ class ColBuilder : UiBuilder() {
             val fsCpt = FieldSetBuilder().create(fs, tObject, dsp)!!
             val fsPanel = FieldsetPanel(legend = fs.name).add(fsCpt)
             panel.add(fsPanel)
+        }
+        for (row in col.rowList) {
+            val rowCpt = RowBuilder().create(row, tObject, dsp)
+            panel.add(rowCpt)
+        }
+        for (c in col.collectionList) {
+            console.log("[CB.create]")
+            console.log(c)
+            // analogous to UiManager.openCollectionView
+            val key = c.id  // entities
+            val objectDM = dsp.displayModel
+            val collectionDM = objectDM.collections.get(key)!!
+            console.log(collectionDM)
+            val tblCpt = RoTable(collectionDM)
+            panel.add(tblCpt)
+            collectionDM.isRendered = true
         }
         return panel
     }
@@ -76,6 +91,5 @@ class ColBuilder : UiBuilder() {
 
         return panel
     }
-
 
 }

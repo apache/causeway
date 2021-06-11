@@ -39,7 +39,8 @@ class EventExportDialog() : Command() {
         EventStore.log.forEach { it ->
             val re = buildExportEvent(it)
             when (it.state) {
-                EventState.SUCCESS -> events.add(re)
+                EventState.SUCCESS_JS -> events.add(re)
+                EventState.SUCCESS_XML -> events.add(re)
                 EventState.ERROR -> events.add(re)
                 else -> {
                 }

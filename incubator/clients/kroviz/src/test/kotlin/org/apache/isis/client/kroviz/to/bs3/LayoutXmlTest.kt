@@ -19,6 +19,7 @@
 package org.apache.isis.client.kroviz.to.bs3
 
 import org.apache.isis.client.kroviz.handler.LayoutXmlHandler
+import org.apache.isis.client.kroviz.snapshots.demo2_0_0.STRINGS_LAYOUT_XML
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.TAB_LAYOUT_XML
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.SO_LAYOUT_XML
 import kotlin.test.Test
@@ -26,7 +27,35 @@ import kotlin.test.assertEquals
 
 class LayoutXmlTest {
 
-   @Test
+    @Test
+    fun testDemoStringGrid() {
+        //given
+        val xmlStr = STRINGS_LAYOUT_XML.str
+        //when
+        val grid = LayoutXmlHandler().parse(xmlStr) as Grid
+        // then
+        assertEquals(3, grid.rows.size, message = "grid.rows.size")    //1
+
+        val primaryRow = grid.rows[1]
+        assertEquals(2, primaryRow.colList.size, message = "primaryRow.colList.size")    //2
+
+        val primaryCol = primaryRow.colList[0]
+        assertEquals(1, primaryCol.rowList.size, message = "primaryCol.rowList.size")    //3
+
+        val secondaryRow = primaryCol.rowList[0]
+        assertEquals(2, secondaryRow.colList.size, message = "secondaryRow.colList.size") //4
+
+        val secondaryCol = secondaryRow.colList[0]
+        assertEquals("12", secondaryCol.span, message = "secondaryCol.span") //5
+
+        val collectionList = secondaryCol.collectionList
+        assertEquals(1, collectionList.size, message = "collectionList.size") //6
+
+        val collection = collectionList[0]
+        assertEquals("entities", collection.id, message = "collection.id")
+    }
+
+    @Test
     fun testDemoTabGrid() {
         //given
         val xmlStr = TAB_LAYOUT_XML.str
@@ -35,7 +64,7 @@ class LayoutXmlTest {
         // then
         console.log("[LXT.testDemoTabGrid]")
         console.log(grid)
-       console.log("rows: ", grid.rows.size)
+        console.log("rows: ", grid.rows.size)
 //        assertEquals(2, grid.rows.size)    //1
     }
 

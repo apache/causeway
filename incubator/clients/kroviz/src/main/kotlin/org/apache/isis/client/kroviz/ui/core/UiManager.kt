@@ -166,8 +166,8 @@ object UiManager {
             it.relation() == Relation.OBJECT_LAYOUT
         }
         val reSpec = ResourceSpecification(layoutLink!!.href)
-        val logEntry = EventStore.findBy(reSpec)
-        logEntry!!.addAggregator(aggregator)
+        val logEntry = EventStore.findBy(reSpec)!!
+        logEntry.addAggregator(aggregator)
     }
 
     fun openDialog(panel: RoDialog) {

@@ -20,11 +20,22 @@ package org.apache.isis.client.kroviz.to
 
 import org.apache.isis.client.kroviz.handler.DomainTypeHandler
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.FILE_NODE
+import org.apache.isis.client.kroviz.snapshots.demo2_0_0.JAVA_LANG_STRING_ENTITY
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
 class DomainTypeTest {
+
+    @Test
+    fun testParseJavaLangStringEntity() {
+        //given
+        val jsonStr = JAVA_LANG_STRING_ENTITY.str
+        //when
+        val to = DomainTypeHandler().parse(jsonStr) as DomainType
+        //then
+        assertEquals("Java Lang String Jdo", to.extensions.friendlyName)
+    }
 
     @Test
     fun testParseFileNode() {

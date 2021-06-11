@@ -64,15 +64,13 @@ object RoView {
     }
 
     fun findActive(): SimplePanel? {
-        console.log("[RV.findActive]")
         val index = tabPanel.activeIndex
-        if (index > 0) {
+        return if (index > 0) {
             val tabs = tabPanel.getTabs()
-            val tab = tabs.get(index) as SimplePanel
-            console.log(tab)
-            return (tab)
+            tabs.get(index) as SimplePanel
+        } else {
+            null
         }
-        return null
     }
 
 }

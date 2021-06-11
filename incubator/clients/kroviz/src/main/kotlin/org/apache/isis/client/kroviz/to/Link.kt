@@ -103,6 +103,7 @@ enum class Relation(val type: String) {
     DOMAIN_TYPE("domain-type"),
     DOMAIN_TYPES("domain-types"),
     ELEMENT("element"),
+    ELEMENT_TYPE("element-type"),
     HELP("help"),               //IANA
     ICON("icon"),               //IANA
     INVOKE("invoke"),

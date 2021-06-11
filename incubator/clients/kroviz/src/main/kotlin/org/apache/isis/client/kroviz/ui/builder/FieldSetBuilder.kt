@@ -42,11 +42,9 @@ class FieldSetBuilder {
             val member = members.firstOrNull() { it.id == label }
             if (member != null) {
                 val memberType = TypeMapper().forType(member.type!!)
-                console.log("[FSB.init]")
-                console.log(memberType)
                 val size = maxOf(1, p.multiLine)
                 val fi = FormItem(
-                        label = label,
+                        label = p.named,
                         type = memberType,
                         content = member.value?.content,
                         size = size,

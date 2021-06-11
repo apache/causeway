@@ -30,7 +30,6 @@ class CollectionHandler : BaseHandler() {
     }
 
     override fun doHandle() {
-        //logEntry.addAggregator(ActionDispatcher())
         update()
     }
 

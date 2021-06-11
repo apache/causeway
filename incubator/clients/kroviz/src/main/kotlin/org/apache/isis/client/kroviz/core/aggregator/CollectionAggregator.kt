@@ -49,6 +49,7 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
                 null -> log(logEntry)
                 is ResultList -> handleList(obj)
                 is TObject -> handleObject(obj)
+                is DomainType -> handleDomainType(obj)
                 is Layout -> handleLayout(obj, dpm as CollectionDM)
                 is Grid -> handleGrid(obj)
                 is Property -> handleProperty(obj)
@@ -61,8 +62,8 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
                     UiManager.openCollectionView(this)
                 }
             } else {
-                console.log("[CA.opdate] can be displayed / parent = OA")
-                parent.update(logEntry, subType)
+                val le = LogEntry("")
+                parent.update(le, subType)
             }
         }
     }
@@ -77,13 +78,20 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
     }
 
     private fun handleObject(obj: TObject) {
-        console.log("[CA.handleObject]")
-        console.log(obj)
         dpm.addData(obj)
-        invokeLayoutLink(obj)
+        invokeLayoutLink(obj, this)
 //TODO        invokeIconLink(obj)
     }
 
+    private fun handleDomainType(obj: DomainType) {
+        console.log("[CA.handleDomainType]")
+        obj.links.forEach {
+            if (it.relation() == Relation.LAYOUT) {
+                console.log(it)
+                invoke(it, this)
+            }
+        }
+    }
 
     private fun handleGrid(grid: Grid) {
         (dpm as CollectionDM).grid = grid
@@ -91,6 +99,7 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
 
     private fun handleProperty(p: Property) {
         val dm = dpm as CollectionDM
+        console.log("[CA.handleProperty]")
         if (p.isPropertyDescription()) {
             dm.addPropertyDescription(p)
         } else {
@@ -100,8 +109,12 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
     }
 
     private fun handleCollection(collection: Collection) {
+        collection.links.forEach {
+            if (it.relation() == Relation.DESCRIBED_BY) {
+                RoXmlHttpRequest().invoke(it, this)
+            }
+        }
         collection.value.forEach {
-            console.log(it)
             RoXmlHttpRequest().invoke(it, this)
         }
     }
@@ -112,8 +125,10 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
     }
 
     private fun Property.descriptionLink(): Link? {
+        console.log("[CA.Property.descriptionLink]")
+        console.log(this)
         return links.find {
-            it.relation() == Relation.DESCRIBED_BY
+            it.relation() == Relation.ELEMENT_TYPE
         }
     }
 
