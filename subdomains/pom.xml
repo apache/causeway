@@ -33,7 +33,7 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<jdom2.version>2.0.5</jdom2.version>
+		<jdom2.version>2.0.6</jdom2.version>
 
 		<jar-plugin.automaticModuleName>org.apache.isis.subdomains</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/isis/subdomains</git-plugin.propertiesDir>
