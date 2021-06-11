@@ -25,7 +25,9 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class SingleValueFacetAbstract<T> extends FacetAbstract implements SingleValueFacet<T> {
+public abstract class SingleValueFacetAbstract<T>
+extends FacetAbstract
+implements SingleValueFacet<T> {
 
     private T value;
 
@@ -39,7 +41,8 @@ public abstract class SingleValueFacetAbstract<T> extends FacetAbstract implemen
         return value;
     }
 
-    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("value", value);
     }

@@ -32,7 +32,8 @@ import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured;
 
-public class PromptStyleFacetForPropertyLayoutAnnotation extends PromptStyleFacetAbstract {
+public class PromptStyleFacetForPropertyLayoutAnnotation
+extends PromptStyleFacetAbstract {
 
     private final PromptStyle promptStyle;
 
@@ -98,7 +99,8 @@ public class PromptStyleFacetForPropertyLayoutAnnotation extends PromptStyleFace
         return promptStyle;
     }
 
-    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("promptStyle", promptStyle);
     }

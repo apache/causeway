@@ -17,28 +17,42 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.layout;
+package org.apache.isis.core.metamodel.facets.object.title.methods;
 
-import java.util.function.BiConsumer;
+import java.lang.reflect.Method;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public class LayoutFacetFallback extends LayoutFacetAbstract {
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.val;
 
-    public LayoutFacetFallback(final FacetHolder holder) {
-        super(holder, Facet.Precedence.FALLBACK);
+public class TitleFacetInferredFromToStringMethod
+extends TitleFacetAbstract
+implements ImperativeFacet {
+
+    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
+
+    public TitleFacetInferredFromToStringMethod(final Method method, final FacetHolder holder) {
+        super(holder, Precedence.INFERRED);
+        this.methods = Can.ofSingleton(method);
     }
 
     @Override
-    public String layout(final ManagedObject objectAdapterIfAny) {
-        return null;
+    public Intent getIntent(final Method method) {
+        return Intent.UI_HINT;
     }
 
     @Override
-    public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
+    public String title(final ManagedObject object) {
+        val pojo = object.getPojo();
+        return pojo!=null
+                ? pojo.toString()
+                : "(not present)";
     }
 
 }

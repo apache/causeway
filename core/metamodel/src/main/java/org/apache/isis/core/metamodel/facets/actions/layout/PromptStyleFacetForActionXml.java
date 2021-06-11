@@ -27,7 +27,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacetAbstract;
 
-public class PromptStyleFacetForActionXml extends PromptStyleFacetAbstract {
+public class PromptStyleFacetForActionXml
+extends PromptStyleFacetAbstract {
 
     public static PromptStyleFacet create(ActionLayoutData actionLayout, FacetHolder holder) {
         if(actionLayout == null) {
@@ -49,7 +50,8 @@ public class PromptStyleFacetForActionXml extends PromptStyleFacetAbstract {
         return promptStyle;
     }
 
-    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("promptStyle", promptStyle);
     }

@@ -30,7 +30,8 @@ import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFac
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacetAbstract;
 
 
-public class BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation extends BigDecimalValueFacetAbstract {
+public class BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation
+extends BigDecimalValueFacetAbstract {
 
     private final int precision;
     private final int scale;
@@ -64,7 +65,8 @@ public class BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation extend
         return scale;
     }
 
-    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("precision", precision);
         visitor.accept("scale", scale);

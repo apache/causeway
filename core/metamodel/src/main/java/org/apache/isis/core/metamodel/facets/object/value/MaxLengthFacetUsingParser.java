@@ -25,7 +25,8 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacetAbstract;
 
-public class MaxLengthFacetUsingParser extends MaxLengthFacetAbstract{
+public class MaxLengthFacetUsingParser
+extends MaxLengthFacetAbstract{
 
     private final Parser<?> parser;
 
@@ -51,7 +52,8 @@ public class MaxLengthFacetUsingParser extends MaxLengthFacetAbstract{
         return "maxLength=" + value();
     }
 
-    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("parser", parser);
     }

@@ -20,19 +20,18 @@
 package org.apache.isis.core.metamodel.facets.object.logicaltype.classname;
 
 import org.apache.isis.applib.id.LogicalType;
-import org.apache.isis.core.metamodel.commons.ClassUtil;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacetAbstract;
 
-public class LogicalTypeFacetDerivedFromClassName
+/**
+ * @since 2.0
+ */
+public class LogicalTypeFacetInferredFromIoCNamingStrategy
 extends LogicalTypeFacetAbstract {
 
-    public LogicalTypeFacetDerivedFromClassName(final Class<?> cls, final FacetHolder holder) {
-        this(LogicalType.eager(cls, ClassUtil.getCanonicalName_friendlyToInnerClasses(cls)), holder);
-    }
-
-    public LogicalTypeFacetDerivedFromClassName(final LogicalType logicalType, final FacetHolder holder) {
-        super(logicalType, holder, Precedence.DERIVED);
+    LogicalTypeFacetInferredFromIoCNamingStrategy(
+            final LogicalType logicalType, final FacetHolder holder) {
+        super(logicalType, holder, Precedence.INFERRED);
     }
 
 }

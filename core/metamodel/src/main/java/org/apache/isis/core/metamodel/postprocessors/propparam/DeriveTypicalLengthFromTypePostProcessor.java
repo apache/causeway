@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.postprocessors.propparam;
 
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
-import org.apache.isis.core.metamodel.facets.param.typicallen.fromtype.TypicalLengthFacetOnParameterDerivedFromType;
+import org.apache.isis.core.metamodel.facets.param.typicallen.fromtype.TypicalLengthFacetOnParameterInferredFromType;
 import org.apache.isis.core.metamodel.facets.param.typicallen.fromtype.TypicalLengthFacetOnParameterDerivedFromTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetOnPropertyDerivedFromType;
 import org.apache.isis.core.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetOnPropertyDerivedFromTypeFacetFactory;
@@ -54,7 +54,7 @@ extends ObjectSpecificationPostProcessorAbstract {
         }
         parameter.getSpecification()
         .lookupNonFallbackFacet(TypicalLengthFacet.class)
-        .ifPresent(specFacet -> FacetUtil.addFacetIfPresent(new TypicalLengthFacetOnParameterDerivedFromType(specFacet,
+        .ifPresent(specFacet -> FacetUtil.addFacetIfPresent(new TypicalLengthFacetOnParameterInferredFromType(specFacet,
                                     peerFor(parameter))));
     }
 

@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet
 import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacetAbstract;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
-public class LogicalTypeFacetForJdoPersistenceCapableAnnotation
+public class LogicalTypeFacetInferredFromJdoPersistenceCapableAnnotation
 extends LogicalTypeFacetAbstract {
 
     public static LogicalTypeFacet create(
@@ -43,15 +43,16 @@ extends LogicalTypeFacetAbstract {
         if(_Strings.isNullOrEmpty(schema)) {
             return null;
         }
-        final String logicalTypeName = schema.toLowerCase(Locale.ROOT) + "." + persistenceCapableFacet.getTable();
-        return new LogicalTypeFacetForJdoPersistenceCapableAnnotation(
+        final String logicalTypeName =
+                schema.toLowerCase(Locale.ROOT) + "." + persistenceCapableFacet.getTable();
+        return new LogicalTypeFacetInferredFromJdoPersistenceCapableAnnotation(
                 LogicalType.eager(correspondingClass, logicalTypeName),
                 holder);
     }
 
-    private LogicalTypeFacetForJdoPersistenceCapableAnnotation(
+    private LogicalTypeFacetInferredFromJdoPersistenceCapableAnnotation(
             final LogicalType logicalType,
             final FacetHolder holder) {
-        super(logicalType, holder, Precedence.DERIVED);
+        super(logicalType, holder, Precedence.INFERRED);
     }
 }

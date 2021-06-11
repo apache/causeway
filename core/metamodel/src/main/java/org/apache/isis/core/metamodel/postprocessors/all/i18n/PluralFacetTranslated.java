@@ -28,14 +28,16 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 
-public class PluralFacetTranslated extends FacetAbstract implements PluralFacet {
+public class PluralFacetTranslated
+extends FacetAbstract
+implements PluralFacet {
 
     private final TranslationService translationService;
     private TranslationContext context;
     private String originalText;
 
     public PluralFacetTranslated(final NamedFacetTranslated facet, final FacetHolder facetHolder) {
-        super(PluralFacet.class, facetHolder, Precedence.DERIVED);
+        super(PluralFacet.class, facetHolder, Precedence.INFERRED);
         this.translationService = facet.translationService;
         this.context = facet.context;
         this.originalText = facet.originalText;
@@ -48,7 +50,8 @@ public class PluralFacetTranslated extends FacetAbstract implements PluralFacet 
         return StringExtensions.asPluralName(singularName);
     }
 
-    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("context", context);
         visitor.accept("originalText", originalText);

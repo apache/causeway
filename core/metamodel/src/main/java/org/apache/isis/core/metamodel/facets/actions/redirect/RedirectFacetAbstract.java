@@ -26,7 +26,9 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class RedirectFacetAbstract extends FacetAbstract implements RedirectFacet {
+public abstract class RedirectFacetAbstract
+extends FacetAbstract
+implements RedirectFacet {
 
     public static Class<? extends Facet> type() {
         return RedirectFacet.class;
@@ -59,7 +61,8 @@ public abstract class RedirectFacetAbstract extends FacetAbstract implements Red
         return "redirect=" + redirect;
     }
 
-    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("redirect", redirect);
     }

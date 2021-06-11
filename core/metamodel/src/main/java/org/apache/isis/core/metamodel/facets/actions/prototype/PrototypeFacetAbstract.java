@@ -27,7 +27,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 
-public abstract class PrototypeFacetAbstract extends FacetAbstract implements PrototypeFacet {
+public abstract class PrototypeFacetAbstract
+extends FacetAbstract
+implements PrototypeFacet {
 
     private final DeploymentType deploymentType;
 
@@ -48,7 +50,8 @@ public abstract class PrototypeFacetAbstract extends FacetAbstract implements Pr
                         : null;
     }
 
-    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("deploymentType", deploymentType.name());
     }

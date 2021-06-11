@@ -36,7 +36,8 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
+public class TitleFacetViaTitleAnnotation
+extends TitleFacetAbstract {
 
     private final List<TitleComponent> components;
 
@@ -164,7 +165,8 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
         }
     }
 
-    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         if(components != null && !_Strings.isNullOrEmpty(components.toString())) {
             visitor.accept("components", components);

@@ -26,7 +26,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
-public class LayoutFacetMethod extends LayoutFacetAbstract {
+public class LayoutFacetMethod
+extends LayoutFacetAbstract {
 
     private final Method method;
 
@@ -47,7 +48,8 @@ public class LayoutFacetMethod extends LayoutFacetAbstract {
         }
     }
 
-    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("method", method);
     }

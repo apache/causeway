@@ -17,34 +17,22 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.param.typicallen.annotation;
+package org.apache.isis.core.metamodel.facets.object.logicaltype.classname;
 
-import java.util.function.BiConsumer;
-
+import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.core.metamodel.commons.ClassUtil;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacetAbstract;
 
-/**
- * @deprecated
- */
-@Deprecated
-public class TypicalLengthFacetOnParameterAnnotation extends TypicalLengthFacetAbstract {
+public class LogicalTypeFacetInferredFromClassName
+extends LogicalTypeFacetAbstract {
 
-    private final int value;
-
-    public TypicalLengthFacetOnParameterAnnotation(final int value, final FacetHolder holder) {
-        super(holder);
-        this.value = value;
+    public LogicalTypeFacetInferredFromClassName(final Class<?> cls, final FacetHolder holder) {
+        this(LogicalType.eager(cls, ClassUtil.getCanonicalName_friendlyToInnerClasses(cls)), holder);
     }
 
-    @Override
-    public int value() {
-        return value;
-    }
-
-    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
-        visitor.accept("value", value);
+    public LogicalTypeFacetInferredFromClassName(final LogicalType logicalType, final FacetHolder holder) {
+        super(logicalType, holder, Precedence.INFERRED);
     }
 
 }

@@ -25,7 +25,9 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class PagedFacetAbstract extends FacetAbstract implements PagedFacet {
+public abstract class PagedFacetAbstract
+extends FacetAbstract
+implements PagedFacet {
 
     public static Class<? extends Facet> type() {
         return PagedFacet.class;
@@ -34,7 +36,7 @@ public abstract class PagedFacetAbstract extends FacetAbstract implements PagedF
     private final int value;
 
     public PagedFacetAbstract(int value, final FacetHolder holder) {
-        super(type(), holder, Precedence.DERIVED);
+        super(type(), holder, Precedence.INFERRED);
         this.value = value;
     }
 
@@ -43,7 +45,8 @@ public abstract class PagedFacetAbstract extends FacetAbstract implements PagedF
         return value;
     }
 
-    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("value", value);
     }

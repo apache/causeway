@@ -41,7 +41,7 @@ public class ActionParameterChoicesFacetDerivedFromChoicesFacetFactory extends F
         }
 
         val facetHolder = processParameterContext.getFacetHolder();
-        addFacetIfPresent(new ActionParameterChoicesFacetDerivedFromChoicesFacet(facetHolder));
+        addFacetIfPresent(new ActionParameterChoicesFacetInferredFromChoicesFacet(facetHolder));
     }
 
 

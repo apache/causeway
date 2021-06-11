@@ -26,12 +26,13 @@ import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFace
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacetAbstract;
 
-public class TypicalLengthFacetOnPropertyDerivedFromType extends TypicalLengthFacetAbstract {
+public class TypicalLengthFacetOnPropertyDerivedFromType
+extends TypicalLengthFacetAbstract {
 
     private final TypicalLengthFacet typicalLengthFacet;
 
     public TypicalLengthFacetOnPropertyDerivedFromType(final TypicalLengthFacet typicalLengthFacet, final FacetHolder holder) {
-        super(holder, Precedence.DERIVED);
+        super(holder, Precedence.INFERRED);
         this.typicalLengthFacet = typicalLengthFacet;
     }
 
@@ -41,7 +42,8 @@ public class TypicalLengthFacetOnPropertyDerivedFromType extends TypicalLengthFa
         return (facet != null ? facet.numberOfLines() : 1) * typicalLengthFacet.value();
     }
 
-    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("typicalLengthFacet", typicalLengthFacet);
     }

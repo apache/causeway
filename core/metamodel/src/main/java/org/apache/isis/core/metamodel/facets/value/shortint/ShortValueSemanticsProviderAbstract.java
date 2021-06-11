@@ -33,7 +33,9 @@ import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProv
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 
-public class ShortValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Short> implements ShortValueFacet {
+public class ShortValueSemanticsProviderAbstract
+extends ValueSemanticsProviderAndFacetAbstract<Short>
+implements ShortValueFacet {
 
     public static Class<? extends Facet> type() {
         return ShortValueFacet.class;
@@ -115,7 +117,8 @@ public class ShortValueSemanticsProviderAbstract extends ValueSemanticsProviderA
         return "ShortValueSemanticsProvider: " + format;
     }
 
-    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("format", format);
     }

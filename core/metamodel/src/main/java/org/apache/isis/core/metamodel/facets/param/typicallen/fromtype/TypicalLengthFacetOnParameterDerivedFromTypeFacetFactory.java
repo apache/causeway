@@ -44,7 +44,7 @@ public class TypicalLengthFacetOnParameterDerivedFromTypeFacetFactory extends Fa
     private void addFacetDerivedFromTypeIfPresent(final FacetHolder holder, final Class<?> type) {
         final TypicalLengthFacet facet = getTypicalLengthFacet(type);
         if (facet != null) {
-            FacetUtil.addFacetIfPresent(new TypicalLengthFacetOnParameterDerivedFromType(facet, holder));
+            FacetUtil.addFacetIfPresent(new TypicalLengthFacetOnParameterInferredFromType(facet, holder));
         }
     }
 

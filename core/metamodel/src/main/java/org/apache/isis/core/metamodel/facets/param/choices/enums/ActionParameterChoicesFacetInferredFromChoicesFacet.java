@@ -29,10 +29,11 @@ import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public class ActionParameterChoicesFacetDerivedFromChoicesFacet extends ActionParameterChoicesFacetAbstract {
+public class ActionParameterChoicesFacetInferredFromChoicesFacet
+extends ActionParameterChoicesFacetAbstract {
 
-    public ActionParameterChoicesFacetDerivedFromChoicesFacet(final FacetHolder holder) {
-        super(holder, Precedence.DERIVED);
+    public ActionParameterChoicesFacetInferredFromChoicesFacet(final FacetHolder holder) {
+        super(holder, Precedence.INFERRED);
     }
 
     @Override

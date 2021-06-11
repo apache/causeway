@@ -42,13 +42,13 @@ extends
         FALLBACK,
 
         /**
-         * Whether this facet implementation is derived (as opposed to explicit);
+         * Whether this facet implementation is inferred (as opposed to explicit);
          * <p>
          * For example, we might derive the typical length of a property based on
          * its type; but if the typical length has been explicitly specified using
          * an annotation then that should take precedence.
          */
-        DERIVED,
+        INFERRED,
 
         /**
          * Lower precedence than {@link #DEFAULT}. In other words, is overruled by {@link #DEFAULT}.
@@ -70,7 +70,7 @@ extends
         }
 
         public boolean isDerived() {
-            return this == DERIVED;
+            return this == INFERRED;
         }
 
     }

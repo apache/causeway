@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaMethodsFactory;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaTitleMethod;
-import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaToStringMethod;
+import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetInferredFromToStringMethod;
 
 public class TitleFacetViaMethodsFactoryTest extends AbstractFacetFactoryTest {
 
@@ -83,8 +83,8 @@ public class TitleFacetViaMethodsFactoryTest extends AbstractFacetFactoryTest {
 
         final Facet facet = facetedMethod.getFacet(TitleFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof TitleFacetViaToStringMethod);
-        final TitleFacetViaToStringMethod titleFacetViaTitleMethod = (TitleFacetViaToStringMethod) facet;
+        assertTrue(facet instanceof TitleFacetInferredFromToStringMethod);
+        final TitleFacetInferredFromToStringMethod titleFacetViaTitleMethod = (TitleFacetInferredFromToStringMethod) facet;
         assertEquals(toStringMethod, titleFacetViaTitleMethod.getMethods().getFirstOrFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(toStringMethod));
@@ -94,8 +94,8 @@ public class TitleFacetViaMethodsFactoryTest extends AbstractFacetFactoryTest {
 
         final Method sampleMethod = Object.class.getMethod("toString", _Constants.emptyClasses);
         assertEquals(
-                Precedence.DERIVED,
-                new TitleFacetViaToStringMethod(sampleMethod, facetedMethod).getPrecedence());
+                Precedence.INFERRED,
+                new TitleFacetInferredFromToStringMethod(sampleMethod, facetedMethod).getPrecedence());
     }
 
     public void testNoExplicitTitleOrToStringMethod() {

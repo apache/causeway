@@ -294,7 +294,8 @@ implements
         return getServiceRegistry().lookupServiceElseFail(InteractionDtoFactory.class);
     }
 
-    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("getterFacet", getterFacet);
         visitor.accept("setterFacet", setterFacet);

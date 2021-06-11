@@ -17,38 +17,33 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.title.methods;
+package org.apache.isis.core.metamodel.facets.object.recreatable;
 
-import java.lang.reflect.Method;
-
-import org.apache.isis.commons.collections.Can;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-import lombok.Getter;
-import lombok.NonNull;
+import lombok.val;
 
-public class TitleFacetViaToStringMethod
-extends TitleFacetAbstract
-implements ImperativeFacet {
+public class DisabledFacetOnPropertyInferredFromRecreatableObject
+extends DisabledFacetAbstract {
 
-    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
-
-    public TitleFacetViaToStringMethod(final Method method, final FacetHolder holder) {
-        super(holder, Precedence.DERIVED);
-        this.methods = Can.ofSingleton(method);
+    public DisabledFacetOnPropertyInferredFromRecreatableObject(
+            final FacetHolder holder,
+            final Semantics semantics) {
+        super(Where.ANYWHERE, holder, semantics, Precedence.INFERRED);
     }
 
     @Override
-    public Intent getIntent(final Method method) {
-        return Intent.UI_HINT;
-    }
-
-    @Override
-    public String title(final ManagedObject object) {
-        return object.getPojo().toString();
+    public String disabledReason(final ManagedObject target) {
+        val viewModelFacet = target.getSpecification().getFacet(ViewModelFacet.class);
+        val isCloneable = viewModelFacet.isCloneable(target.getPojo());
+        if (!isCloneable) {
+            return "Non-cloneable view models are read-only";
+        }
+        return null;
     }
 
 }

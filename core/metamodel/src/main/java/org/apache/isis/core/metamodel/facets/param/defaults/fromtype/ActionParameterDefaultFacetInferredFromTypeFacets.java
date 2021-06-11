@@ -26,13 +26,14 @@ import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFace
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public class ActionParameterDefaultFacetDerivedFromTypeFacets
+public class ActionParameterDefaultFacetInferredFromTypeFacets
 extends ActionDefaultsFacetAbstract {
 
     private final DefaultedFacet[] defaultedFacets;
 
-    public ActionParameterDefaultFacetDerivedFromTypeFacets(final DefaultedFacet[] defaultedFacets, final FacetHolder holder) {
-        super(holder, Precedence.DERIVED);
+    public ActionParameterDefaultFacetInferredFromTypeFacets(
+            final DefaultedFacet[] defaultedFacets, final FacetHolder holder) {
+        super(holder, Precedence.INFERRED);
         this.defaultedFacets = defaultedFacets;
     }
 

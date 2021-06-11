@@ -86,7 +86,7 @@ implements MetaModelRefiner {
 
             Integer length = valueElseDefaults(jdoColumnAnnotation.length(), existingLength, DEFAULT_LENGTH);
             Integer scale = valueElseDefaults(jdoColumnAnnotation.scale(), existingScale, DEFAULT_SCALE);
-            addFacetIfPresent(new BigDecimalFacetDerivedFromJdoColumn(holder, length, scale));
+            addFacetIfPresent(new BigDecimalFacetInferredFromJdoColumn(holder, length, scale));
         }
     }
 
@@ -129,7 +129,7 @@ implements MetaModelRefiner {
             return;
         }
 
-        if(facet instanceof BigDecimalFacetDerivedFromJdoColumn) {
+        if(facet instanceof BigDecimalFacetInferredFromJdoColumn) {
 
             if(underlying instanceof BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation) {
 

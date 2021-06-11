@@ -59,7 +59,8 @@ extends BigDecimalValueFacetAbstract {
         return scale;
     }
 
-    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("precision", precision);
         visitor.accept("scale", scale);

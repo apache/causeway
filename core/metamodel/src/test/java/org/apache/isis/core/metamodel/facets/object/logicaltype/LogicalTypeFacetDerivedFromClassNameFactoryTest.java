@@ -30,7 +30,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.logicaltype.classname.LogicalTypeFacetDerivedFromClassName;
+import org.apache.isis.core.metamodel.facets.object.logicaltype.classname.LogicalTypeFacetInferredFromClassName;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.classname.LogicalTypeFacetDerivedFromClassNameFactory;
 import org.apache.isis.core.metamodel.facets.value.annotation.LogicalTypeFacetForValueAnnotation;
 import org.apache.isis.core.metamodel.facets.value.annotation.ValueAnnotationFacetFactory;
@@ -55,7 +55,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
         final LogicalTypeFacet facet = facetHolder.getFacet(LogicalTypeFacet.class);
 
         assertThat(facet, is(not(nullValue())));
-        assertThat(facet instanceof LogicalTypeFacetDerivedFromClassName, is(true));
+        assertThat(facet instanceof LogicalTypeFacetInferredFromClassName, is(true));
         assertThat(facet.value(), is(Customer.class.getCanonicalName()));
     }
 
@@ -75,7 +75,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
         final LogicalTypeFacet facet = facetHolder.getFacet(LogicalTypeFacet.class);
 
         assertThat(facet, is(not(nullValue())));
-        assertThat(facet instanceof LogicalTypeFacetDerivedFromClassName, is(true));
+        assertThat(facet instanceof LogicalTypeFacetInferredFromClassName, is(true));
         assertThat(facet.value(), is(ValueExample1.class.getCanonicalName()));
     }
 

@@ -65,7 +65,7 @@ extends AbstractFacetFactoryTest {
 
         final BigDecimalValueFacet facet = facetedMethod.getFacet(BigDecimalValueFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof BigDecimalFacetDerivedFromJdoColumn);
+        assertTrue(facet instanceof BigDecimalFacetInferredFromJdoColumn);
         assertThat(facet.getPrecision(), is(12));
         assertThat(facet.getScale(), is(3));
     }
@@ -77,7 +77,7 @@ extends AbstractFacetFactoryTest {
 
         final BigDecimalValueFacet facet = facetedMethod.getFacet(BigDecimalValueFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof BigDecimalFacetDerivedFromJdoColumn);
+        assertTrue(facet instanceof BigDecimalFacetInferredFromJdoColumn);
         assertThat(facet.getPrecision(), is(18));
     }
 
@@ -88,7 +88,7 @@ extends AbstractFacetFactoryTest {
 
         final BigDecimalValueFacet facet = facetedMethod.getFacet(BigDecimalValueFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof BigDecimalFacetDerivedFromJdoColumn);
+        assertTrue(facet instanceof BigDecimalFacetInferredFromJdoColumn);
         assertThat(facet.getScale(), is(2));
     }
 

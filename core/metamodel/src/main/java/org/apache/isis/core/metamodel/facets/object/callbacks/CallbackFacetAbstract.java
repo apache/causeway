@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.object.callbacks;
 
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.function.BiConsumer;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
@@ -78,9 +77,5 @@ implements CallbackFacet {
         ManagedObjects.InvokeUtil.invokeAll(getMethods(), adapter);
     }
 
-    @Override
-    public final void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
-    }
 
 }

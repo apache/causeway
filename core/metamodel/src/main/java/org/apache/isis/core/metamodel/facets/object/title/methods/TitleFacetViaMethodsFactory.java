@@ -88,7 +88,7 @@ public class TitleFacetViaMethodsFactory extends MethodPrefixBasedFacetFactoryAb
                 return;
             }
             processClassContext.removeMethod(method);
-            FacetUtil.addFacetIfPresent(new TitleFacetViaToStringMethod(method, facetHolder));
+            FacetUtil.addFacetIfPresent(new TitleFacetInferredFromToStringMethod(method, facetHolder));
 
         } catch (final Exception e) {
             return;

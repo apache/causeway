@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.postprocessors.properties;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
-import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnPropertyDerivedFromRecreatableObject;
+import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnPropertyInferredFromRecreatableObject;
 import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnPropertyDerivedFromRecreatableObjectFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
@@ -58,7 +58,7 @@ extends ObjectSpecificationPostProcessorAbstract {
         }
         property.getOnType()
         .lookupNonFallbackFacet(ViewModelFacet.class)
-        .ifPresent(specFacet -> FacetUtil.addFacetIfPresent(new DisabledFacetOnPropertyDerivedFromRecreatableObject(
+        .ifPresent(specFacet -> FacetUtil.addFacetIfPresent(new DisabledFacetOnPropertyInferredFromRecreatableObject(
                                     facetedMethodFor(property), inferSemanticsFrom(specFacet))));
     }
 

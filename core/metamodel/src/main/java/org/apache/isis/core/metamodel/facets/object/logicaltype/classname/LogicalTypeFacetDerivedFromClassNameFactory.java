@@ -89,11 +89,11 @@ implements MetaModelRefiner, ObjectTypeFacetFactory {
         val isService = serviceId!=null;
 
         if (isService) {
-            return new LogicalTypeFacetDerivedFromIoCNamingStrategy(
+            return new LogicalTypeFacetInferredFromIoCNamingStrategy(
                     LogicalType.eager(substitutedClass, serviceId),
                     facetHolder);
         }
-        return new LogicalTypeFacetDerivedFromClassName(substitutedClass, facetHolder);
+        return new LogicalTypeFacetInferredFromClassName(substitutedClass, facetHolder);
     }
 
     private static String getServiceId(final FacetHolder facetHolder) {
@@ -121,7 +121,7 @@ implements MetaModelRefiner, ObjectTypeFacetFactory {
             }
 
             val logicalTypeFacet = objectSpec.getFacet(LogicalTypeFacet.class);
-            if(logicalTypeFacet instanceof LogicalTypeFacetDerivedFromClassName) {
+            if(logicalTypeFacet instanceof LogicalTypeFacetInferredFromClassName) {
                 ValidationFailure.raiseFormatted(
                         objectSpec,
                         "%s: the object type must be specified explicitly ('%s' config property). "

@@ -33,7 +33,9 @@ import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProv
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 
-public abstract class LongValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Long> implements LongValueFacet {
+public abstract class LongValueSemanticsProviderAbstract
+extends ValueSemanticsProviderAndFacetAbstract<Long>
+implements LongValueFacet {
 
     public static Class<? extends Facet> type() {
         return LongValueFacet.class;
@@ -112,7 +114,8 @@ public abstract class LongValueSemanticsProviderAbstract extends ValueSemanticsP
         return "LongValueSemanticsProvider: " + format;
     }
 
-    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("format", format);
     }

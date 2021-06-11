@@ -59,7 +59,8 @@ implements DescribedAsFacet {
         return translationService.translate(context, originalText);
     }
 
-    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("context", context);
         visitor.accept("originalText", originalText);

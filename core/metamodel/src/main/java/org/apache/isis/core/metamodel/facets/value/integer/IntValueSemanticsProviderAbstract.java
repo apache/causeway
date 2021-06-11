@@ -33,7 +33,9 @@ import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProv
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 
-public abstract class IntValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Integer> implements IntegerValueFacet {
+public abstract class IntValueSemanticsProviderAbstract
+extends ValueSemanticsProviderAndFacetAbstract<Integer>
+implements IntegerValueFacet {
 
     public static Class<? extends Facet> type() {
         return IntegerValueFacet.class;
@@ -117,7 +119,8 @@ public abstract class IntValueSemanticsProviderAbstract extends ValueSemanticsPr
         return "IntegerValueSemanticsProvider: " + format;
     }
 
-    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("format", format);
     }

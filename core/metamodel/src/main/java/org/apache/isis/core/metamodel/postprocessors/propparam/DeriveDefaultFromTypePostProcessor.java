@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.postprocessors.propparam;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet;
-import org.apache.isis.core.metamodel.facets.param.defaults.fromtype.ActionParameterDefaultFacetDerivedFromTypeFacets;
+import org.apache.isis.core.metamodel.facets.param.defaults.fromtype.ActionParameterDefaultFacetInferredFromTypeFacets;
 import org.apache.isis.core.metamodel.facets.param.defaults.fromtype.ActionParameterDefaultFacetDerivedFromTypeFactory;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.metamodel.facets.properties.defaults.fromtype.PropertyDefaultFacetDerivedFromDefaultedFacet;
@@ -70,7 +70,7 @@ extends ObjectSpecificationPostProcessorAbstract {
             hasAtLeastOneDefault = hasAtLeastOneDefault | (parameterTypeDefaultedFacets[i] != null);
         }
         if (hasAtLeastOneDefault) {
-            FacetUtil.addFacetIfPresent(new ActionParameterDefaultFacetDerivedFromTypeFacets(parameterTypeDefaultedFacets, peerFor(parameter)));
+            FacetUtil.addFacetIfPresent(new ActionParameterDefaultFacetInferredFromTypeFacets(parameterTypeDefaultedFacets, peerFor(parameter)));
         }
     }
 

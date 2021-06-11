@@ -25,8 +25,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacetAbstract;
 
-
-public class BigDecimalFacetDerivedFromJdoColumn extends BigDecimalValueFacetAbstract {
+public class BigDecimalFacetInferredFromJdoColumn
+extends BigDecimalValueFacetAbstract {
 
     private final Integer precision;
     private final Integer scale;
@@ -35,8 +35,9 @@ public class BigDecimalFacetDerivedFromJdoColumn extends BigDecimalValueFacetAbs
         return BigDecimalValueFacet.class;
     }
 
-    public BigDecimalFacetDerivedFromJdoColumn(final FacetHolder holder, final Integer precision, final Integer scale) {
-        super(BigDecimalFacetDerivedFromJdoColumn.type(), holder, Precedence.DERIVED);
+    public BigDecimalFacetInferredFromJdoColumn(
+            final FacetHolder holder, final Integer precision, final Integer scale) {
+        super(BigDecimalFacetInferredFromJdoColumn.type(), holder, Precedence.INFERRED);
         this.precision = precision;
         this.scale = scale;
     }
@@ -51,7 +52,8 @@ public class BigDecimalFacetDerivedFromJdoColumn extends BigDecimalValueFacetAbs
         return scale;
     }
 
-    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+    @Override 
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("precision", precision);
         visitor.accept("scale", scale);

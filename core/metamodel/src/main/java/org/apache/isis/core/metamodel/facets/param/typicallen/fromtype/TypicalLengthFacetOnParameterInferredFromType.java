@@ -17,34 +17,38 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.properties.typicallen.annotation;
+package org.apache.isis.core.metamodel.facets.param.typicallen.fromtype;
 
 import java.util.function.BiConsumer;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacetAbstract;
 
-/**
- * @deprecated
- */
-@Deprecated
-public class TypicalLengthFacetOnPropertyAnnotation extends TypicalLengthFacetAbstract {
+import lombok.val;
 
-    private final int value;
+public class TypicalLengthFacetOnParameterInferredFromType
+extends TypicalLengthFacetAbstract {
 
-    public TypicalLengthFacetOnPropertyAnnotation(final int value, final FacetHolder holder) {
-        super(holder);
-        this.value = value;
+    private final TypicalLengthFacet typicalLengthFacet;
+
+    public TypicalLengthFacetOnParameterInferredFromType(
+            final TypicalLengthFacet typicalLengthFacet, final FacetHolder holder) {
+        super(holder, Precedence.INFERRED);
+        this.typicalLengthFacet = typicalLengthFacet;
     }
 
     @Override
     public int value() {
-        return value;
+        val multiLineFacet = getFacetHolder().getFacet(MultiLineFacet.class);
+        return multiLineFacet.numberOfLines() * typicalLengthFacet.value();
     }
 
-    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("value", value);
+        visitor.accept("typicalLengthFacet", typicalLengthFacet);
     }
 
 }

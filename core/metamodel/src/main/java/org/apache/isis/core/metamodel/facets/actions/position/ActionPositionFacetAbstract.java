@@ -26,7 +26,9 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class ActionPositionFacetAbstract extends FacetAbstract implements ActionPositionFacet {
+public abstract class ActionPositionFacetAbstract
+extends FacetAbstract
+implements ActionPositionFacet {
 
     public static Class<? extends Facet> type() {
         return ActionPositionFacet.class;
@@ -49,7 +51,8 @@ public abstract class ActionPositionFacetAbstract extends FacetAbstract implemen
         return "position=" + position;
     }
 
-    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("position", position);
     }
