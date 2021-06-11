@@ -80,7 +80,7 @@ implements ImperativeFacet {
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        ImperativeFacet.super.visitAttributes(visitor);
+        ImperativeFacet.visitAttributes(this, visitor);
     }
 
 }

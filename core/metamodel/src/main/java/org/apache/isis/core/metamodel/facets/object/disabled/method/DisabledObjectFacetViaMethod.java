@@ -95,7 +95,7 @@ implements ImperativeFacet {
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         val method = methods.getFirstOrFail();
         super.visitAttributes(visitor);
-        ImperativeFacet.super.visitAttributes(visitor);
+        ImperativeFacet.visitAttributes(this, visitor);
         visitor.accept("method", method);
     }
 
