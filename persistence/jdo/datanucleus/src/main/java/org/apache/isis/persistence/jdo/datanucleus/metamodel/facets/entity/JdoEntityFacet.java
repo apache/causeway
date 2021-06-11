@@ -75,7 +75,6 @@ implements EntityFacet {
     public JdoEntityFacet(
             final FacetHolder holder) {
         super(EntityFacet.class, holder);
-        super.setFacetAliasType(EntityFacet.class);
     }
 
     @Override

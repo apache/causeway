@@ -47,36 +47,28 @@ public abstract class HiddenFacetAbstract
 extends WhereValueFacetAbstract
 implements HiddenFacet {
 
-    public HiddenFacetAbstract(
-            Class<? extends Facet> facetType,
-            Where where,
-            FacetHolder holder) {
-
-        super(facetType, holder, where);
-        super.setFacetAliasType(HiddenFacet.class);
+    public static Class<? extends Facet> type() {
+        return HiddenFacet.class;
     }
 
     public HiddenFacetAbstract(
-            Class<? extends Facet> facetType,
+            Where where,
+            FacetHolder holder) {
+        super(type(), holder, where);
+    }
+
+    public HiddenFacetAbstract(
             Where where,
             FacetHolder holder,
             final Facet.Precedence precedence) {
 
-        super(facetType, holder, where, precedence);
-        super.setFacetAliasType(HiddenFacet.class);
+        super(type(), holder, where, precedence);
     }
 
 
     // to instantiate contributed facets
     private HiddenFacetAbstract(HiddenFacetAbstract toplevelFacet) {
-        super(HiddenFacet.class, toplevelFacet.getFacetHolder(), toplevelFacet.where());
-    }
-
-    /**
-     * For testing only.
-     */
-    public HiddenFacetAbstract(Where where, FacetHolder holder) {
-        super(HiddenFacetAbstract.class, holder, where);
+        super(type(), toplevelFacet.getFacetHolder(), toplevelFacet.where());
     }
 
     @Override

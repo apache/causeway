@@ -162,14 +162,4 @@ extends
      */
     void forEachContributedFacet(Consumer<Facet> onContributedFacet);
 
-    /**
-     * An alternative type this Facet can be looked up via {@link FacetHolder#getFacet(Class)}.
-     * @apiNote like {@link #facetType()} the alias must be unique within any facet-holder's
-     * registered facet-types, otherwise an {@link IllegalArgumentException} is thrown during
-     * facet-processing; this is to ensure unambiguous lookup of facets by their alias type
-     * @since 2.0
-     */
-    Class<? extends Facet> facetAliasType();
-
-
 }

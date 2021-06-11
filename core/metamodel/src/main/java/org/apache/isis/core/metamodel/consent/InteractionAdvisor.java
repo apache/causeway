@@ -76,11 +76,6 @@ public interface InteractionAdvisor {
         }
 
         @Override
-        public Class<? extends Facet> facetAliasType() {
-            return null;
-        }
-
-        @Override
         public Precedence getPrecedence() {
             return Facet.Precedence.FALLBACK;
         }

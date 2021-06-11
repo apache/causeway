@@ -19,16 +19,13 @@
 
 package org.apache.isis.core.metamodel.facetapi;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.collections._Maps.AliasMap;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContextAware;
@@ -108,7 +105,7 @@ implements FacetHolder, MetaModelContextAware {
 
     // collect all facet information provided with the top-level facets (contributed facets and aliases)
     private Map<Class<? extends Facet>, Facet> snapshot() {
-        val snapshot = _Maps.<Class<? extends Facet>, Facet>newAliasMap(HashMap::new);
+        val snapshot = _Maps.<Class<? extends Facet>, Facet>newHashMap();
         rankingByType.values()
         .stream()
         .map(facetRanking->facetRanking.getWinner(facetRanking.facetType()))
@@ -116,9 +113,8 @@ implements FacetHolder, MetaModelContextAware {
         .map(Optional::get)
         .forEach(winningFacet->{
 
-            snapshot.remap(
+            snapshot.put(
                     winningFacet.facetType(),
-                    Can.ofNullable(winningFacet.facetAliasType()),
                     winningFacet);
 
             // honor contributed facets via recursive lookup
@@ -128,7 +124,7 @@ implements FacetHolder, MetaModelContextAware {
         return snapshot;
     }
 
-    private void collectChildren(AliasMap<Class<? extends Facet>, Facet> target, Facet parentFacet) {
+    private void collectChildren(Map<Class<? extends Facet>, Facet> target, Facet parentFacet) {
         parentFacet.forEachContributedFacet(child->{
             val added = addFacetOrKeepExistingBasedOnPrecedence(target, child);
             if(added) {

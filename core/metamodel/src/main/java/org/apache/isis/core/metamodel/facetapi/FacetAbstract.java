@@ -29,14 +29,12 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.Setter;
 
 
 public abstract class FacetAbstract
 implements Facet, HasMetaModelContext {
 
     private final @NonNull Class<? extends Facet> facetType;
-    @Setter private Class<? extends Facet> facetAliasType;
     private Set<Facet> contributedFacets; // lazy init
 
     @Getter(onMethod_ = {@Override}) private final @NonNull Facet.Precedence precedence;
@@ -71,13 +69,6 @@ implements Facet, HasMetaModelContext {
     @Override
     public final Class<? extends Facet> facetType() {
         return facetType;
-    }
-
-    @Override
-    public Class<? extends Facet> facetAliasType() {
-        return facetAliasType!=facetType
-                ? facetAliasType
-                : null; // avoids facetAliasType equals facetType
     }
 
     @Override

@@ -442,7 +442,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             final HiddenFacetForPropertyAnnotation hiddenFacetImpl = (HiddenFacetForPropertyAnnotation) hiddenFacet;
             assertThat(hiddenFacetImpl.where(), is(Where.REFERENCES_PARENT));
 
-            final Facet hiddenFacetForProp = facetedMethod.getFacet(HiddenFacetForPropertyAnnotation.class);
+            final Facet hiddenFacetForProp = facetedMethod.getFacet(HiddenFacet.class);
             Assert.assertNotNull(hiddenFacetForProp);
             Assert.assertTrue(hiddenFacet == hiddenFacetForProp);
         }

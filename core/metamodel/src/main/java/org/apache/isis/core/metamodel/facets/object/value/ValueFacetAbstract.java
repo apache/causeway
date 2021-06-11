@@ -83,7 +83,6 @@ implements ValueFacet {
             final Facet.Precedence precedence) {
 
         super(type(), holder, precedence);
-        super.setFacetAliasType(ValueFacet.class);
 
         this.semanticsProvider = semanticsProvider;
 

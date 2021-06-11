@@ -24,7 +24,6 @@ import javax.jdo.annotations.IdentityType;
 
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
 public class JdoPersistenceCapableFacetAnnotation
@@ -42,7 +41,6 @@ implements JdoPersistenceCapableFacet {
             final FacetHolder holder) {
 
         super(JdoPersistenceCapableFacet.class, holder);
-        super.setFacetAliasType(EntityFacet.class);
         this.schema = schemaName;
         this.table = tableOrTypeName;
         this.identityType = identityType;

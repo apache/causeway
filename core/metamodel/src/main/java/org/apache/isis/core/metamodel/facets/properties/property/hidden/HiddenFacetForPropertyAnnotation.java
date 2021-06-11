@@ -42,7 +42,7 @@ public class HiddenFacetForPropertyAnnotation extends HiddenFacetAbstract {
     }
 
     private HiddenFacetForPropertyAnnotation(final Where where, final FacetHolder holder) {
-        super(HiddenFacetForPropertyAnnotation.class, where, holder);
+        super(where, holder);
     }
 
     @Override

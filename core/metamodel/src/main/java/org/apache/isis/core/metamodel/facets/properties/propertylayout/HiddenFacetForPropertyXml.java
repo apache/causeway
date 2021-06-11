@@ -37,7 +37,7 @@ public class HiddenFacetForPropertyXml extends HiddenFacetAbstract {
     }
 
     private HiddenFacetForPropertyXml(final Where where, final FacetHolder holder) {
-        super(HiddenFacetForPropertyXml.class, where, holder);
+        super(where, holder);
     }
 
     @Override

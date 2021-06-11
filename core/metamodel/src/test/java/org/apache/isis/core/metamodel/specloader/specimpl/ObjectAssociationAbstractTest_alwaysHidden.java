@@ -220,7 +220,7 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
                 ? Facet.Precedence.FALLBACK
                 : Facet.Precedence.DEFAULT;
 
-        HiddenFacet facet = new HiddenFacetAbstract(HiddenFacet.class, where, holder, precedence) {
+        HiddenFacet facet = new HiddenFacetAbstract(where, holder, precedence) {
 
             @Override
             protected String hiddenReason(final ManagedObject target, final Where whereContext) {

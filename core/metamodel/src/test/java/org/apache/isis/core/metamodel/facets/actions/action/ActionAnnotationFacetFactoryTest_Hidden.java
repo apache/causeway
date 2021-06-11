@@ -21,14 +21,13 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.isis.core.metamodel.facets.actions.action.hidden.HiddenFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 import lombok.val;
 
@@ -36,11 +35,11 @@ public class ActionAnnotationFacetFactoryTest_Hidden extends ActionAnnotationFac
 
     private void processHidden(
             ActionAnnotationFacetFactory facetFactory, ProcessMethodContext processMethodContext) {
-        
+
         val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
         facetFactory.processHidden(processMethodContext, actionIfAny);
     }
-    
+
     @Test
     public void withAnnotation() {
 
@@ -64,7 +63,7 @@ public class ActionAnnotationFacetFactoryTest_Hidden extends ActionAnnotationFac
         Assert.assertNotNull(hiddenFacet);
         assertThat(hiddenFacet.where(), is(Where.REFERENCES_PARENT));
 
-        val hiddenFacetImpl = facetedMethod.getFacet(HiddenFacetForActionAnnotation.class);
+        val hiddenFacetImpl = facetedMethod.getFacet(HiddenFacet.class);
         Assert.assertNotNull(hiddenFacetImpl);
         Assert.assertTrue(hiddenFacet == hiddenFacetImpl);
     }

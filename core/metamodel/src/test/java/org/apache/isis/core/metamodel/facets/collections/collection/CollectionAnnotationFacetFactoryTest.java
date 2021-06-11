@@ -26,6 +26,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.commons.matchers.IsisMatchers;
@@ -39,9 +42,6 @@ import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.collections.collection.hidden.HiddenFacetForCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.typeof.TypeOfFacetOnCollectionFromCollectionAnnotation;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 import lombok.val;
 
@@ -141,7 +141,7 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
             final HiddenFacetForCollectionAnnotation hiddenFacetImpl = (HiddenFacetForCollectionAnnotation) hiddenFacet;
             assertThat(hiddenFacetImpl.where(), is(Where.REFERENCES_PARENT));
 
-            final Facet hiddenFacetForColl = facetedMethod.getFacet(HiddenFacetForCollectionAnnotation.class);
+            final Facet hiddenFacetForColl = facetedMethod.getFacet(HiddenFacet.class);
             Assert.assertNotNull(hiddenFacetForColl);
             Assert.assertTrue(hiddenFacet == hiddenFacetForColl);
         }

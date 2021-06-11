@@ -43,7 +43,7 @@ extends HiddenFacetAbstract {
     }
 
     private HiddenFacetForActionAnnotation(final Where where, final FacetHolder holder) {
-        super(HiddenFacetForActionAnnotation.class, where, holder);
+        super(where, holder);
     }
 
     @Override
