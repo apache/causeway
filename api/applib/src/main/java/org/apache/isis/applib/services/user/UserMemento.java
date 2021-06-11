@@ -37,7 +37,6 @@ import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -162,7 +161,7 @@ public final class UserMemento implements Serializable {
     }
 
     @Programmatic
-    @Getter(AccessLevel.PRIVATE) @Builder.Default
+    @Builder.Default
     private final Can<RoleMemento> roles = Can.empty();
 
 
