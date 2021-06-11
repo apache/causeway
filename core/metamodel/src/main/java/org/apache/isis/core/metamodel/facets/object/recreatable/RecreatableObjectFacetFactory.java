@@ -99,20 +99,22 @@ implements
 
         programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec -> {
 
-            val viewModelFacet = objectSpec.getFacet(ViewModelFacet.class);
-            val underlyingFacet = viewModelFacet != null ? viewModelFacet.getUnderlyingFacet() : null;
-            if(underlyingFacet == null) {
-                return;
-            }
-            if(underlyingFacet.getClass() != viewModelFacet.getClass()) {
-                ValidationFailure.raiseFormatted(
-                        objectSpec,
-                        "%s: has multiple incompatible annotations/interfaces indicating that " +
-                                "it is a recreatable object of some sort (%s and %s)",
-                                objectSpec.getFullIdentifier(),
-                                viewModelFacet.getClass().getSimpleName(),
-                                underlyingFacet.getClass().getSimpleName());
-            }
+            objectSpec.lookupFacet(ViewModelFacet.class)
+            .map(ViewModelFacet::getSharedFacetRankingElseFail)
+            .ifPresent(facetRanking->facetRanking
+                    .visitTopRankPairsSemanticDiffering(ViewModelFacet.class, (a, b)->{
+
+                            ValidationFailure.raiseFormatted(
+                                    objectSpec,
+                                    "%s: has multiple incompatible annotations/interfaces indicating that " +
+                                            "it is a recreatable object of some sort (%s and %s)",
+                                            objectSpec.getFullIdentifier(),
+                                            a.getClass().getSimpleName(),
+                                            b.getClass().getSimpleName());
+
+
+                    }));
+
         });
     }
 

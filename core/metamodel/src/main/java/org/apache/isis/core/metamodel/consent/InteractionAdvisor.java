@@ -37,8 +37,6 @@ import lombok.NonNull;
  */
 public interface InteractionAdvisor {
 
-    //boolean handles(InteractionProvider ic);
-
     /**
      * For testing purposes only.
      */
@@ -65,11 +63,6 @@ public interface InteractionAdvisor {
 
         @Override
         public void setFacetHolder(final FacetHolder facetHolder) {
-        }
-
-        @Override
-        public Facet getUnderlyingFacet() {
-            return null;
         }
 
         @Override

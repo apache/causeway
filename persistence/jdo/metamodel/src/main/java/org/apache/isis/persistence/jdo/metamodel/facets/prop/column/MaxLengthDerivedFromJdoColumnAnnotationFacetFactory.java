@@ -29,7 +29,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
-import org.apache.isis.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -100,23 +99,19 @@ implements MetaModelRefiner {
                     return;
                 }
 
-                final MaxLengthFacet facet = association.getFacet(MaxLengthFacet.class);
-                final MaxLengthFacet underlying = (MaxLengthFacet) facet.getUnderlyingFacet();
-                if(underlying == null) {
-                    return;
-                }
+                association.lookupFacet(MaxLengthFacet.class)
+                .map(MaxLengthFacet::getSharedFacetRankingElseFail)
+                .ifPresent(facetRanking->facetRanking
+                        .visitTopRankPairsSemanticDiffering(MaxLengthFacet.class, (a, b)->{
 
-                if(facet instanceof MaxLengthFacetDerivedFromJdoColumn
-                        && underlying instanceof MaxLengthFacetForPropertyAnnotation) {
-                    if(facet.value() != underlying.value()) {
-                        ValidationFailure.raiseFormatted(
-                                association,
-                                "%s: inconsistent lengths specified in Isis' @Property(maxLength=...) "
-                                + "and @javax.jdo.annotations.Column(length=...); "
-                                + "use just @javax.jdo.annotations.Column(length=...)",
-                                association.getIdentifier().toString());
-                    }
-                }
+                            ValidationFailure.raiseFormatted(
+                                    association,
+                                    "%s: inconsistent MaxLength semantics specified in %s and %s.",
+                                    association.getIdentifier().toString(),
+                                    a.getClass().getSimpleName(),
+                                    b.getClass().getSimpleName());
+                        }));
+
             });
         });
     }

@@ -32,9 +32,8 @@ import lombok.NonNull;
 import lombok.Setter;
 
 
-public abstract class FacetAbstract implements Facet, HasMetaModelContext {
-
-    private Facet underlyingFacet;
+public abstract class FacetAbstract
+implements Facet, HasMetaModelContext {
 
     private final @NonNull Class<? extends Facet> facetType;
     @Setter private Class<? extends Facet> facetAliasType;
@@ -101,11 +100,6 @@ public abstract class FacetAbstract implements Facet, HasMetaModelContext {
     }
 
     @Override
-    public Facet getUnderlyingFacet() {
-        return underlyingFacet;
-    }
-
-    @Override
     public void setFacetHolder(final FacetHolder facetHolder) {
         this.holder = facetHolder;
         this.identifiedHolder = (holder!=null && holder instanceof IdentifiedHolder)
@@ -160,7 +154,6 @@ public abstract class FacetAbstract implements Facet, HasMetaModelContext {
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         visitor.accept("precedence", getPrecedence().name());
-        visitor.accept("underlyingFacet", underlyingFacet);
         if(isHiding()) {
             visitor.accept("hiding", isHiding());
         }

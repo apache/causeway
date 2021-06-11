@@ -133,53 +133,20 @@ implements MetaModelRefiner {
     }
 
     private static void validateMandatoryFacet(ObjectAssociation association) {
-        MandatoryFacet facet = association.getFacet(MandatoryFacet.class);
 
-        MandatoryFacet underlying = (MandatoryFacet) facet.getUnderlyingFacet();
-        if(underlying == null) {
-            return;
-        }
+        association.lookupFacet(MandatoryFacet.class)
+        .map(MandatoryFacet::getSharedFacetRankingElseFail)
+        .ifPresent(facetRanking->facetRanking
+                .visitTopRankPairsSemanticDiffering(MandatoryFacet.class, (a, b)->{
 
-        if(facet instanceof MandatoryFacetDerivedFromJdoColumn) {
+                    ValidationFailure.raiseFormatted(
+                            association,
+                            "%s: inconsistent Mandatory/Optional semantics specified in %s and %s.",
+                            association.getIdentifier().toString(),
+                            a.getClass().getSimpleName(),
+                            b.getClass().getSimpleName());
+                }));
 
-            if(underlying.getSemantics() == facet.getSemantics()) {
-                return;
-            }
-
-            if(underlying.getSemantics().isOptional()) {
-                // ie @Optional
-                ValidationFailure.raiseFormatted(
-                        association,
-                        //TODO @Optional is history
-                        "%s: incompatible usage of Isis' @Optional annotation and @javax.jdo.annotations.Column; use just @javax.jdo.annotations.Column(allowsNull=\"...\")",
-                        association.getIdentifier().getFullIdentityString());
-            } else {
-                ValidationFailure.raiseFormatted(
-                        association,
-                        "%s: incompatible Isis' default of required/optional properties vs JDO; add @javax.jdo.annotations.Column(allowsNull=\"...\")",
-                        association.getIdentifier().getFullIdentityString());
-            }
-        }
-
-        if(facet instanceof MandatoryFacetInferredFromAbsenceOfJdoColumn) {
-
-            if(underlying.getSemantics() == facet.getSemantics()) {
-                return;
-            }
-            if(underlying.getSemantics().isOptional()) {
-                // ie @Optional
-                ValidationFailure.raiseFormatted(
-                        association,
-                        //TODO @Optional is history
-                        "%s: incompatible usage of Isis' @Optional annotation and @javax.jdo.annotations.Column; use just @javax.jdo.annotations.Column(allowsNull=\"...\")",
-                        association.getIdentifier().getFullIdentityString());
-            } else {
-                ValidationFailure.raiseFormatted(
-                        association,
-                        "%s: incompatible default handling of required/optional properties between Isis and JDO; add @javax.jdo.annotations.Column(allowsNull=\"...\")",
-                        association.getIdentifier().getFullIdentityString());
-            }
-        }
     }
 
 }

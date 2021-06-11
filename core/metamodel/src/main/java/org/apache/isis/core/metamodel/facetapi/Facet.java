@@ -113,13 +113,6 @@ extends
      */
     public void setFacetHolder(FacetHolder facetHolder);
 
-    /**
-     * Underlying {@link Facet} of the same {@link #facetType() type}, if any.
-     * @deprecated
-     */
-    @Deprecated
-    public Facet getUnderlyingFacet();
-
     default Optional<FacetRanking> getSharedFacetRanking() {
         return getFacetHolder().getFacetRanking(facetType());
     }

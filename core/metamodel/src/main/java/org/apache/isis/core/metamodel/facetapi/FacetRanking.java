@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facetapi;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
@@ -162,34 +163,36 @@ public final class FacetRanking {
         return Optional.ofNullable(topPrecedenceRef.get());
     }
 
+    // -- VALIDATION SUPPORT
+
+    public <F extends Facet> void visitTopRankPairsSemanticDiffering(
+            final @NonNull Class<F> facetType,
+            final @NonNull BiConsumer<F, F> visitor) {
+        visitTopRankPairs(facetType, (a, b)->{
+            if(!a.semanticEquals(b)) {
+                visitor.accept(a, b);
+            }
+        });
+    }
 
 
+    public <F extends Facet> void visitTopRankPairs(
+            final @NonNull Class<F> facetType,
+            final @NonNull BiConsumer<F, F> visitor) {
 
-//    /**
-//     * @param <F>
-//     * @param facetType - for convenience, so the caller does not need to cast the result
-//     */
-//    public <F extends Facet> Optional<F> getWinningFacet(final @NonNull Class<? extends Facet> facetType) {
-//        _Assert.assertEquals(this.facetType, facetType);
-//        val topRankedFacets = facetsByPrecedence.asNavigableMapElseFail().lastEntry();
-//
-//        return topRankedFacets!=null
-//                ? Optional.ofNullable(
-//                        _Casts.uncheckedCast(
-//                                winningFacetAmongSamePrecedence(topRankedFacets.getValue())))
-//                : Optional.empty();
-//
-//    }
-//
-//    // -- HELPER
-//
-//    private Optional<Facet> winningFacetAmongSamePrecedence(final @Nullable List<Facet> facets) {
-//        return _NullSafe.isEmpty(facets)
-//                ? Optional.empty()
-//                : Optional.of(facets.get(0)); // TODO resolve conflicting semantics if any, when there are multiple facets
-//    }
+        val topRankingFacets = getTopRank(facetType);
 
+        if(topRankingFacets.isCardinalityMultiple()) {
 
+            val firstOfTopRanking = topRankingFacets.getFirstOrFail();
+
+            topRankingFacets
+            .stream()
+            .skip(1)
+            .forEach(next->visitor.accept(firstOfTopRanking, next));
+        }
+
+    }
 
 
 }

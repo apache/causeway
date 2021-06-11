@@ -27,7 +27,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.properties.bigdecimal.javaxvaldigits.BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueSemanticsProvider;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
@@ -119,44 +118,20 @@ implements MetaModelRefiner {
     }
 
     private static void validateBigDecimalValueFacet(ObjectAssociation association) {
-        BigDecimalValueFacet facet = association.getFacet(BigDecimalValueFacet.class);
-        if(facet == null) {
-            return;
-        }
 
-        BigDecimalValueFacet underlying = (BigDecimalValueFacet) facet.getUnderlyingFacet();
-        if(underlying == null) {
-            return;
-        }
+        association.lookupFacet(BigDecimalValueFacet.class)
+        .map(BigDecimalValueFacet::getSharedFacetRankingElseFail)
+        .ifPresent(facetRanking->facetRanking
+                .visitTopRankPairsSemanticDiffering(BigDecimalValueFacet.class, (a, b)->{
 
-        if(facet instanceof BigDecimalFacetInferredFromJdoColumn) {
-
-            if(underlying instanceof BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation) {
-
-                if(notNullButNotEqual(facet.getPrecision(), underlying.getPrecision())) {
-                    ValidationFailure.raise(
+                    ValidationFailure.raiseFormatted(
                             association,
-                            String.format("%s: @javax.jdo.annotations.Column(length=...) "
-                                    + "different from @javax.validation.constraint.Digits(...); "
-                                    + "should equal the sum of its integer and fraction attributes",
-                                    association.getIdentifier().toString())
-                            );
-                }
+                            "%s: inconsistent BigDecimalValue semantics specified in %s and %s.",
+                            association.getIdentifier().toString(),
+                            a.getClass().getSimpleName(),
+                            b.getClass().getSimpleName());
+                }));
 
-                if(notNullButNotEqual(facet.getScale(), underlying.getScale())) {
-                    ValidationFailure.raise(
-                            association,
-                            String.format("%s: @javax.jdo.annotations.Column(scale=...) "
-                                    + "different from @javax.validation.constraint.Digits(fraction=...)",
-                                    association.getIdentifier().toString())
-                            );
-                }
-            }
-        }
-    }
-
-    private static boolean notNullButNotEqual(Integer x, Integer y) {
-        return x != null && y != null && !x.equals(y);
     }
 
 
