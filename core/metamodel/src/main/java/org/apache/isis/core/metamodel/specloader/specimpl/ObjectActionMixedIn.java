@@ -23,12 +23,12 @@ import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.CanVector;
 import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacetForMemberName;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -37,6 +37,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.val;
 
 public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInMember {
 
@@ -80,14 +81,16 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
         this.mixedInType = mixedInType;
 
         // copy over facets from mixin action to self
-        FacetUtil.copyFacets(mixinAction.getFacetedMethod(), facetHolder);
+        FacetUtil.copyFacetsTo(mixinAction.getFacetedMethod(), facetHolder);
 
         // adjust name if necessary
-        final String name = getName();
 
-        if(_Strings.isNullOrEmpty(name) || name.equalsIgnoreCase(mixinMethodName)) {
-            String memberName = determineNameFrom(mixinAction);
-            this.addFacet(new NamedFacetInferred(memberName, facetHolder));
+        val isExplicitlyNamed = lookupNonFallbackFacet(NamedFacet.class)
+                .isPresent();
+
+        if(!isExplicitlyNamed) {
+            val memberName = determineNameFrom(mixinAction);
+            this.addFacet(new NamedFacetForMemberName(memberName, facetHolder));
         }
     }
 

@@ -36,18 +36,14 @@ implements NamedFacet {
     private final String value;
     private final boolean escaped;
 
-    public static Class<? extends Facet> type() {
-        return NamedFacet.class;
-    }
-
     public NamedFacetAbstract(String value, boolean escaped, FacetHolder holder) {
-        super(type(), holder);
+        super(NamedFacet.type(), holder);
         this.value = value;
         this.escaped = escaped;
     }
 
     public NamedFacetAbstract(String value, boolean escaped, FacetHolder holder, final Facet.Precedence precedence) {
-        super(type(), holder, precedence);
+        super(NamedFacet.type(), holder, precedence);
         this.value = value;
         this.escaped = escaped;
     }

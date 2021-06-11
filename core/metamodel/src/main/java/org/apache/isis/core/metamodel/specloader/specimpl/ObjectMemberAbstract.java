@@ -122,15 +122,8 @@ implements ObjectMember, HasMetaModelContext, HasFacetHolder {
      */
     @Override
     public String getName() {
-        final NamedFacet facet = getFacet(NamedFacet.class);
-        final String name = facet.value();
-        if (name != null) {
-            return name;
-        }
-        else {
-            // this should now be redundant, see NamedFacetDefault
-            return StringExtensions.asNaturalName2(getId());
-        }
+        val namedFacet = getFacet(NamedFacet.class);
+        return namedFacet.value();
     }
 
     @Override

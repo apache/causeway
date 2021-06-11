@@ -23,7 +23,6 @@ import java.util.Map;
 
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -85,12 +84,7 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
 
         final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
 
-
-        final String id = facetedMethod.getIdentifier().getMemberLogicalName();
-        String defaultName = StringExtensions.asNaturalName2(id);
-
-        addFacetIfPresent(new NamedFacetDefault(defaultName, facetedMethod));
-
+        addFacetIfPresent(new NamedFacetFallbackFromMemberName(facetedMethod));
         addFacetIfPresent(new DescribedAsFacetNone(facetedMethod));
         addFacetIfPresent(new HelpFacetNone(facetedMethod));
 

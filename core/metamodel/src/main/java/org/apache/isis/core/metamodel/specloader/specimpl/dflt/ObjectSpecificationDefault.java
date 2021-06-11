@@ -41,7 +41,7 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacetForMemberName;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.inferred.PluralFacetInferred;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
@@ -185,7 +185,9 @@ implements FacetHolder {
     private void addNamedFacetAndPluralFacetIfRequired() {
         NamedFacet namedFacet = getFacet(NamedFacet.class);
         if (namedFacet == null) {
-            namedFacet = new NamedFacetInferred(StringExtensions.asNaturalName2(getShortIdentifier()), this);
+            namedFacet = new NamedFacetForMemberName(
+                    StringExtensions.asNaturalName2(getShortIdentifier()),
+                    this);
             addFacet(namedFacet);
         }
 

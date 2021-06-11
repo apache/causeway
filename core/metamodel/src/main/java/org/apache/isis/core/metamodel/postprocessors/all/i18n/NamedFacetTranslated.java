@@ -46,13 +46,18 @@ implements NamedFacet {
             final String originalText,
             final TranslationService translationService,
             final IdentifiedHolder facetHolder) {
-        super(NamedFacet.class, facetHolder, Precedence.HIGH); // facet has final say, override others
+        super(
+                NamedFacet.type(),
+                facetHolder,
+                underlyingNamedFacet.getPrecedence()); // keep original precedence
+
         this.context = context;
         this.originalText = originalText;
         this.translationService = translationService;
         this.underlyingNamedFacet = underlyingNamedFacet;
 
-        if(translationService!=null && translationService.getMode().isWrite()) {
+        if(translationService!=null
+                && translationService.getMode().isWrite()) {
             // force PoWriter to be called to capture this text that needs translating
             translateText();
         }

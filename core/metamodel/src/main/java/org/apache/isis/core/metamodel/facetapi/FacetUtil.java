@@ -80,7 +80,7 @@ public final class FacetUtil {
         };
     }
 
-    public static void copyFacets(final FacetHolder source, final FacetHolder target) {
+    public static void copyFacetsTo(final FacetHolder source, final FacetHolder target) {
         source.streamFacets()
         .forEach(target::addFacet);
     }

@@ -19,15 +19,18 @@
 
 package org.apache.isis.core.metamodel.facets.fallback;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
+import org.apache.isis.core.metamodel.commons.StringExtensions;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacetFromMemberNameAbstract;
 
-public class NamedFacetDefault extends NamedFacetAbstract {
+public class NamedFacetFallbackFromMemberName
+extends NamedFacetFromMemberNameAbstract {
 
-    public static final boolean ESCAPED = true;
-
-    public NamedFacetDefault(final String value, final FacetHolder holder) {
-        super(value, ESCAPED, holder);
+    protected NamedFacetFallbackFromMemberName(IdentifiedHolder holder) {
+        super(
+                StringExtensions.asNaturalName2(holder.getIdentifier().getMemberLogicalName()),
+                holder,
+                Precedence.FALLBACK);
     }
 
 }

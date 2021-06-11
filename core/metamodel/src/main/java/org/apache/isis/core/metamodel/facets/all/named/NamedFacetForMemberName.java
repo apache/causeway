@@ -21,11 +21,11 @@ package org.apache.isis.core.metamodel.facets.all.named;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public class NamedFacetInferred extends NamedFacetAbstract {
+public class NamedFacetForMemberName
+extends NamedFacetFromMemberNameAbstract {
 
-    public NamedFacetInferred(final String value, final FacetHolder holder) {
-
-        super(value, /*escaped*/ true, holder);
+    public NamedFacetForMemberName(String memberName, FacetHolder holder) {
+        super(memberName, holder, Precedence.DEFAULT);
     }
 
 }

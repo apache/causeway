@@ -21,14 +21,14 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetAbstract;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacetForMemberName;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetForContributee;
 import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet;
@@ -117,14 +117,15 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
         // These could include everything under @Collection(...) because the
         // CollectionAnnotationFacetFactory is also run against actions.
         //
-        FacetUtil.copyFacets(mixinAction.getFacetedMethod(), facetHolder);
+        FacetUtil.copyFacetsTo(mixinAction.getFacetedMethod(), facetHolder);
 
         // adjust name if necessary
-        final String name = getName();
+        val isExplicitlyNamed = lookupNonFallbackFacet(NamedFacet.class)
+                .isPresent();
 
-        if(_Strings.isNullOrEmpty(name) || name.equalsIgnoreCase(mixinMethodName)) {
+        if(!isExplicitlyNamed) {
             String memberName = determineNameFrom(mixinAction);
-            FacetUtil.addFacetIfPresent(new NamedFacetInferred(memberName, facetHolder));
+            FacetUtil.addFacetIfPresent(new NamedFacetForMemberName(memberName, facetHolder));
         }
 
     }
