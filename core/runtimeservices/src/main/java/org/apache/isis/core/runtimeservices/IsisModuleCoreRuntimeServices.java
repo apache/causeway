@@ -47,7 +47,6 @@ import org.apache.isis.core.runtimeservices.publish.CommandPublisherDefault;
 import org.apache.isis.core.runtimeservices.publish.EntityChangesPublisherDefault;
 import org.apache.isis.core.runtimeservices.publish.EntityPropertyChangePublisherDefault;
 import org.apache.isis.core.runtimeservices.publish.ExecutionPublisherDefault;
-import org.apache.isis.core.runtimeservices.queryresultscache.QueryResultsCacheDefault;
 import org.apache.isis.core.runtimeservices.recognizer.ExceptionRecognizerServiceDefault;
 import org.apache.isis.core.runtimeservices.recognizer.dae.ExceptionRecognizerForDataAccessException;
 import org.apache.isis.core.runtimeservices.repository.RepositoryServiceDefault;
@@ -93,7 +92,6 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         MenuBarsLoaderServiceDefault.class,
         MenuBarsServiceBS3.class,
         MessageServiceDefault.class,
-        QueryResultsCacheDefault.class,
         ScratchpadDefault.class,
         TransactionServiceSpring.class,
         UrlEncodingServiceWithCompression.class,
