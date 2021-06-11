@@ -29,6 +29,7 @@ import lombok.NonNull;
  *     This is what is used by {@link org.apache.isis.applib.services.sudo.SudoService}, for example.
  * </p>
  *
+ * @see org.apache.isis.applib.services.sudo.SudoService
  * @since 2.x {@index}
  */
 public interface InteractionService {

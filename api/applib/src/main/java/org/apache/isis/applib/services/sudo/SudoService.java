@@ -60,6 +60,9 @@ import lombok.val;
  * integration tests.
  * </p>
  *
+ * @see InteractionService
+ * @see InteractionTracker
+ *
  * @since 1.x revised for 2.0 {@index}
  */
 @Service

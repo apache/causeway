@@ -22,8 +22,6 @@ import java.util.Optional;
 
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
-import org.apache.isis.applib.services.iactnlayer.InteractionContext;
-import org.apache.isis.applib.services.iactnlayer.InteractionLayer;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 /**
@@ -47,7 +45,7 @@ extends InteractionProvider {
 
     /**
      * Returns the {@link InteractionContext} wrapped by the {@link #currentInteractionLayer()}
-     * (if within an interaction layer).
+     * (if within an {@link InteractionLayer}).
      */
     @Override
     default Optional<InteractionContext> currentInteractionContext() {
@@ -60,7 +58,7 @@ extends InteractionProvider {
 
     /**
      * Returns the {@link Interaction} wrapped by the {@link #currentInteractionLayer()}
-     * (if within an interaction layer).
+     * (if within an {@link InteractionLayer}).
      */
     @Override
     default Optional<Interaction> currentInteraction(){
