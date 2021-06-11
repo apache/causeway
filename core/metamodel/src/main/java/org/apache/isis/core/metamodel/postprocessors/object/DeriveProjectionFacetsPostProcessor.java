@@ -82,7 +82,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     private static boolean canOverwrite(final @Nullable Facet existingFacet) {
         return existingFacet == null
                 || existingFacet.getPrecedence().isFallback()
-                || existingFacet.getPrecedence().isDerived();
+                || existingFacet.getPrecedence().isInferred();
     }
 
 

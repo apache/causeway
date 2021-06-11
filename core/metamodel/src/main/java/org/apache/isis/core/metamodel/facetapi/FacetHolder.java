@@ -82,13 +82,13 @@ public interface FacetHolder extends HasMetaModelContext {
 
     /**
      * As {@link #containsNonFallbackFacet(Class)}, with additional requirement, that the
-     * facet is <i>explicit</i>, not {@link Facet.Precedence#isDerived() derived}.
+     * facet is <i>explicit</i>, not {@link Facet.Precedence#isInferred() derived}.
      */
     default boolean containsExplicitNonFallbackFacet(Class<? extends Facet> facetType) {
         val facet = getFacet(facetType);
         return facet != null
                 && !facet.getPrecedence().isFallback()
-                && !facet.getPrecedence().isDerived();
+                && !facet.getPrecedence().isInferred();
     }
 
     Stream<Facet> streamFacets();
@@ -108,5 +108,9 @@ public interface FacetHolder extends HasMetaModelContext {
      * Otherwise is ignored.
      */
     void addFacet(@NonNull Facet facet);
+
+    // -- VALIDATION SUPPORT
+
+    Optional<FacetRanking> getFacetRanking(Class<? extends Facet> facetType);
 
 }

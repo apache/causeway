@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facetapi;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
@@ -69,7 +70,7 @@ extends
             return this == FALLBACK;
         }
 
-        public boolean isDerived() {
+        public boolean isInferred() {
             return this == INFERRED;
         }
 
@@ -96,6 +97,10 @@ extends
      */
     @Deprecated
     public Facet getUnderlyingFacet();
+
+    default Optional<FacetRanking> getSharedFacetRanking() {
+        return getFacetHolder().getFacetRanking(facetType());
+    }
 
     /**
      * Determines the type of this facet to be stored under.

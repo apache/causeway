@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facetapi;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -44,7 +45,8 @@ import lombok.extern.log4j.Log4j2;
  * For base subclasses or, more likely, to help write tests.
  */
 @Log4j2
-public class FacetHolderImpl implements FacetHolder, MetaModelContextAware {
+public class FacetHolderImpl
+implements FacetHolder, MetaModelContextAware {
 
     @Getter(onMethod = @__(@Override)) @Setter(onMethod = @__(@Override))
     private MetaModelContext metaModelContext;
@@ -91,6 +93,13 @@ public class FacetHolderImpl implements FacetHolder, MetaModelContextAware {
         synchronized($lock) {
             return snapshot.get().size();
         }
+    }
+
+    // -- VALIDATION SUPPORT
+
+    @Override
+    public Optional<FacetRanking> getFacetRanking(Class<? extends Facet> facetType) {
+        return Optional.ofNullable(rankingByType.get(facetType));
     }
 
     // -- HELPER
