@@ -1,0 +1,79 @@
+= Mocking the Clock or User
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+The xref:refguide:applib:index/services/sudo/SudoService.adoc[SudoService] provides the mechanism to run an arbitrary block of code, but changing the effective user executing the block, or the effective time that the block was run.
+
+This is a general purpose capability, but is especially useful for fixtures.
+
+== Mocking the Clock
+
+It's sometimes necessary to change the effective time that a fixture or test runs.
+This can be done by calling xref:refguide:applib:index/services/sudo/SudoService.adoc[SudoService] with an xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] that has switched the clock.
+
+For example:
+
+[source,java]
+----
+val when = VirtualClock.nowAt(Instant.parse("2017-02-03T09:00:00.00Z")); // <.>
+
+simpleObject =
+    sudoService.call(
+        InteractionContext.switchClock(when),                            // <.>
+        ()-> fixtureScripts.runPersona(SimpleObject_persona.FOO)         // <.>
+    );
+----
+
+<.> the effective time, in other words the date/time we want the xref:refguide:applib:index/services/clock/ClockService.adoc[ClockService] to report
+<.> Unary operator on xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to switch the effective time
+<.> the block of code to run within this modified xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext].
+
+
+== Switching the User ("Sudo")
+
+Sometimes in our fixture scripts we want to perform a business action running as a particular user.
+This might be for the usual reason - so that our fixtures accurately reflect the reality of the system with all business constraints enforced using the `WrapperFactory` - or more straightforwardly it might be simply that the action depends on the identity of the user invoking the action.
+Either way, this can be done by calling xref:refguide:applib:index/services/sudo/SudoService.adoc[SudoService] with an xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] that has switched the effective user.
+
+
+For example:
+
+[source,java]
+----
+val who = UserMemento.ofName("fred");                            // <.>
+
+simpleObject =
+    sudoService.call(
+        InteractionContext.switchUser(who),                      // <.>
+        ()-> fixtureScripts.runPersona(SimpleObject_persona.FOO) // <.>
+    );
+----
+
+<.> the effective user, in other words the user that we want xref:refguide:applib:index/services/user/UserService.adoc[UserService] to report
+<.> Unary operator on xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] to switch the effective user
+<.> the block of code to run within this modified xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext].
+
+
+
+== Mocking the Clock and the User
+
+If we want to change both the effective time _and_ the effective user, then we just need to combine the ``UnaryOperator``s passed into xref:refguide:applib:index/services/sudo/SudoService.adoc[SudoService].
+
+As a convenience, xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] provides a helper method for just this purpose:
+
+For example:
+
+[source,java]
+----
+val who = UserMemento.ofName("fred");
+val when = VirtualClock.nowAt(Instant.parse("2017-02-03T09:00:00.00Z"));
+
+val switchWhoAndWhen =
+        InteractionContext.combine(
+            InteractionContext.switchUser(who),
+            InteractionContext.switchClock(when)
+        );
+----
+
+This can then be passed in as the first argument to `SudoService`'s xref:refguide:applib:index/services/sudo/SudoService.adoc#call__UnaryOperator_Callable[call(...)] or xref:refguide:applib:index/services/sudo/SudoService.adoc#run__UnaryOperator_ThrowingRunnable[run(...)] methods.

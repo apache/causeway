@@ -21,6 +21,8 @@ package org.apache.isis.applib.services.iactnlayer;
 import java.io.Serializable;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.function.UnaryOperator;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.services.iactn.Interaction;
@@ -86,6 +88,63 @@ public class InteractionContext implements Serializable {
     @NonNull TimeZone timeZone = TimeZone.getDefault();
 
 
+    /**
+     * Convenience method for use with {@link org.apache.isis.applib.services.sudo.SudoService}, returning a
+     * {@link UnaryOperator} that will act upon the provided {@link InteractionContext} to return the same but with
+     * the specified {@link UserMemento}.
+     */
+    public static UnaryOperator<InteractionContext> switchUser(@NonNull final UserMemento userMemento) {
+        return interactionContext -> interactionContext.withUser(userMemento);
+    }
+
+    /**
+     * Convenience method for use with {@link org.apache.isis.applib.services.sudo.SudoService}, returning a
+     * {@link UnaryOperator} that will act upon the provided {@link InteractionContext} to return the same but with
+     * the specified {@link VirtualClock}.
+     */
+    public static UnaryOperator<InteractionContext> switchClock(@NonNull final VirtualClock clock) {
+        return interactionContext -> interactionContext.withClock(clock);
+    }
+
+    /**
+     * Convenience method for use with {@link org.apache.isis.applib.services.sudo.SudoService}, returning a
+     * {@link UnaryOperator} that will act upon the provided {@link InteractionContext} to return the same but with
+     * the specified {@link Locale}.
+     */
+    public static UnaryOperator<InteractionContext> switchLocale(@NonNull final Locale locale) {
+        return interactionContext -> interactionContext.withLocale(locale);
+    }
+
+    /**
+     * Convenience method for use with {@link org.apache.isis.applib.services.sudo.SudoService}, returning a
+     * {@link UnaryOperator} that will act upon the provided {@link InteractionContext} to return the same but with
+     * the specified {@link TimeZone}.
+     */
+    public static UnaryOperator<InteractionContext> switchTimeZone(@NonNull final TimeZone timeZone) {
+        return interactionContext -> interactionContext.withTimeZone(timeZone);
+    }
+
+    /**
+     * Convenience method to combine {@link UnaryOperator}s, for example as per {@link #switchUser(UserMemento)} and {@link #switchTimeZone(TimeZone)}.
+     *
+     * <p>
+     * NOTE: this implementation can result in heap pollution; better to use the {@link #combine(Stream) overload}.
+     * </p>
+     *
+     * @see #combine(Stream)
+     */
+    public static <T> UnaryOperator<T> combine(UnaryOperator<T>... mappers) {
+        return combine(Stream.of(mappers));
+    }
+
+    /**
+     * Convenience method to combine {@link UnaryOperator}s, for example as per {@link #switchUser(UserMemento)} and {@link #switchTimeZone(TimeZone)}.
+     *
+     * credit: https://stackoverflow.com/a/51065029/56880
+     */
+    public static <T> UnaryOperator<T> combine(Stream<UnaryOperator<T>> mappers) {
+        return mappers.reduce(t -> t, (a,b) -> a.andThen(b)::apply);
+    }
 
 
 }
