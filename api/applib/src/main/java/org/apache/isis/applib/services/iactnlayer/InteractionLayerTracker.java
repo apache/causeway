@@ -25,8 +25,10 @@ import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 /**
+ * Provides access to the current {@link InteractionLayer}.
  *
- * @since 2.0
+ * @see InteractionService
+ * @since 2.0 {@index}
  */
 public interface InteractionLayerTracker
 extends InteractionProvider {

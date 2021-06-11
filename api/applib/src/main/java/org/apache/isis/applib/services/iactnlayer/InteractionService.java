@@ -30,6 +30,7 @@ import lombok.NonNull;
  * </p>
  *
  * @see org.apache.isis.applib.services.sudo.SudoService
+ * @see InteractionLayerTracker
  * @since 2.x {@index}
  */
 public interface InteractionService {
