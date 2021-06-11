@@ -19,9 +19,9 @@
 package org.apache.isis.core.runtime.events;
 
 import org.apache.isis.applib.services.confview.ConfigurationViewService;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.commons.internal.debug.xray.XrayDataModel;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
-import org.apache.isis.applib.services.iactnlayer.InteractionTracker;
 import org.apache.isis.core.security.util.XrayUtil;
 
 import lombok.val;
@@ -48,7 +48,7 @@ final class _Xray {
 
     }
 
-    public static void txBeforeCompletion(InteractionTracker iaTracker, String txInfo) {
+    public static void txBeforeCompletion(InteractionLayerTracker iaTracker, String txInfo) {
         // append to the current interaction if any
 
         if(!XrayUi.isXrayEnabled()) {
@@ -84,7 +84,7 @@ final class _Xray {
 
     }
 
-    public static void txAfterCompletion(InteractionTracker iaTracker, String txInfo) {
+    public static void txAfterCompletion(InteractionLayerTracker iaTracker, String txInfo) {
         // append to the current interaction if any
 
         if(!XrayUi.isXrayEnabled()) {

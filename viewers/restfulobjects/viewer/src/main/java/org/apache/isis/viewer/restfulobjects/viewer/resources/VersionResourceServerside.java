@@ -31,8 +31,8 @@ import javax.ws.rs.core.Response;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.applib.services.iactnlayer.InteractionTracker;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -61,8 +61,8 @@ public class VersionResourceServerside extends ResourceAbstract implements Versi
     public VersionResourceServerside(
             final MetaModelContext metaModelContext,
             final IsisConfiguration isisConfiguration,
-            final InteractionTracker isisInteractionTracker) {
-        super(metaModelContext, isisConfiguration, isisInteractionTracker);
+            final InteractionLayerTracker iInteractionLayerTracker) {
+        super(metaModelContext, isisConfiguration, iInteractionLayerTracker);
     }
 
     @Override

@@ -31,10 +31,10 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.user.ImpersonatedUserHolder;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.user.UserService;
-import org.apache.isis.applib.services.iactnlayer.InteractionTracker;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -51,7 +51,7 @@ import lombok.val;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class UserServiceDefault implements UserService {
 
-    private final InteractionTracker isisInteractionTracker;
+    private final InteractionLayerTracker iInteractionLayerTracker;
     private final List<ImpersonatedUserHolder> impersonatedUserHolders;
 
     /**
@@ -62,7 +62,7 @@ public class UserServiceDefault implements UserService {
         Optional<UserMemento> optional = getImpersonatedUser();
         return optional.isPresent()
                 ? optional
-                : isisInteractionTracker.currentInteractionContext().map(InteractionContext::getUser);
+                : iInteractionLayerTracker.currentInteractionContext().map(InteractionContext::getUser);
     }
 
     @Override

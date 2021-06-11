@@ -53,7 +53,7 @@ import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
-import org.apache.isis.applib.services.iactnlayer.InteractionTracker;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
@@ -98,7 +98,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     @Inject final SudoService sudoService;
     @Inject final ClockService clockService;
     @Inject final TransactionService transactionService;
-    @Inject final InteractionTracker isisInteractionTracker;
+    @Inject final InteractionLayerTracker iInteractionLayerTracker;
     @Inject final Provider<InteractionProvider> interactionProviderProvider;
 
     @Inject @Getter final InteractionService interactionService;

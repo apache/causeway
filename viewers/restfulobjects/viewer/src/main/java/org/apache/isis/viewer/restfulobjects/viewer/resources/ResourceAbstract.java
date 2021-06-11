@@ -33,9 +33,9 @@ import javax.ws.rs.ext.Providers;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.commons.internal.codec._UrlDecoderUtil;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.applib.services.iactnlayer.InteractionTracker;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -54,7 +54,7 @@ public abstract class ResourceAbstract {
 
     protected final MetaModelContext metaModelContext;
     protected final IsisConfiguration isisConfiguration;
-    protected final InteractionTracker isisInteractionTracker;
+    protected final InteractionLayerTracker iInteractionLayerTracker;
 
     @Context HttpHeaders httpHeaders;
     @Context UriInfo uriInfo;
@@ -68,11 +68,11 @@ public abstract class ResourceAbstract {
     protected ResourceAbstract(
             final MetaModelContext metaModelContext,
             final IsisConfiguration isisConfiguration,
-            final InteractionTracker isisInteractionTracker) {
+            final InteractionLayerTracker iInteractionLayerTracker) {
 
         this.metaModelContext = metaModelContext;
         this.isisConfiguration = isisConfiguration;
-        this.isisInteractionTracker = isisInteractionTracker;
+        this.iInteractionLayerTracker = iInteractionLayerTracker;
     }
 
     // -- FACTORIES
@@ -102,7 +102,7 @@ public abstract class ResourceAbstract {
             final ResourceDescriptor resourceDescriptor,
             final String urlUnencodedQueryString) {
 
-        if (!isisInteractionTracker.isInInteraction()) {
+        if (!iInteractionLayerTracker.isInInteraction()) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED);
         }
 

@@ -50,7 +50,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.codec._UrlDecoderUtil;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.applib.services.iactnlayer.InteractionTracker;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -85,8 +85,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     public DomainObjectResourceServerside(
             final MetaModelContext metaModelContext,
             final IsisConfiguration isisConfiguration,
-            final InteractionTracker isisInteractionTracker) {
-        super(metaModelContext, isisConfiguration, isisInteractionTracker);
+            final InteractionLayerTracker iInteractionLayerTracker) {
+        super(metaModelContext, isisConfiguration, iInteractionLayerTracker);
         log.debug("<init>");
     }
 

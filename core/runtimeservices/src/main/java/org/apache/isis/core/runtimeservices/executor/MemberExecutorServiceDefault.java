@@ -37,6 +37,7 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.iactn.ActionInvocation;
 import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.iactn.PropertyEdit;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
@@ -45,7 +46,6 @@ import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.applib.services.iactnlayer.InteractionTracker;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.execution.InteractionInternal;
 import org.apache.isis.core.metamodel.execution.MemberExecutorService;
@@ -83,7 +83,7 @@ import lombok.extern.log4j.Log4j2;
 public class MemberExecutorServiceDefault
 implements MemberExecutorService {
 
-    private final @Getter InteractionTracker interactionTracker;
+    private final @Getter InteractionLayerTracker interactionLayerTracker;
     private final @Getter IsisConfiguration configuration;
     private final @Getter ObjectManager objectManager;
     private final @Getter ClockService clockService;
@@ -95,7 +95,7 @@ implements MemberExecutorService {
 
     @Override
     public Optional<InteractionInternal> getInteraction() {
-        return interactionTracker.currentInteraction()
+        return interactionLayerTracker.currentInteraction()
                 .map(InteractionInternal.class::cast);
     }
 
@@ -119,7 +119,7 @@ implements MemberExecutorService {
         CommandPublishingFacet.ifPublishingEnabledForCommand(
                 command, owningAction, facetHolder, ()->command.updater().setPublishingEnabled(true));
 
-        val xrayHandle = _Xray.enterActionInvocation(interactionTracker, interaction, owningAction, head, argumentAdapters);
+        val xrayHandle = _Xray.enterActionInvocation(interactionLayerTracker, interaction, owningAction, head, argumentAdapters);
 
         val actionId = owningAction.getIdentifier();
         log.debug("about to invoke action {}", actionId);
@@ -200,7 +200,7 @@ implements MemberExecutorService {
         CommandPublishingFacet.ifPublishingEnabledForCommand(
                 command, owningProperty, facetHolder, ()->command.updater().setPublishingEnabled(true));
 
-        val xrayHandle = _Xray.enterPropertyEdit(interactionTracker, interaction, owningProperty, head, newValueAdapter);
+        val xrayHandle = _Xray.enterPropertyEdit(interactionLayerTracker, interaction, owningProperty, head, newValueAdapter);
 
         val propertyId = owningProperty.getIdentifier();
 

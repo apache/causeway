@@ -30,7 +30,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
-import org.apache.isis.applib.services.iactnlayer.InteractionTracker;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 
 import lombok.RequiredArgsConstructor;
 
@@ -42,11 +42,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ClockServiceDefault implements ClockService {
 
-    private final InteractionTracker interactionTracker;
+    private final InteractionLayerTracker interactionLayerTracker;
 
     @Override
     public VirtualClock getClock() {
-        return interactionTracker.currentInteractionContext()
+        return interactionLayerTracker.currentInteractionContext()
         .map(InteractionContext::getClock)
         .orElseGet(VirtualClock::system);
     }

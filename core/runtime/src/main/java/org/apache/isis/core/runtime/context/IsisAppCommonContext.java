@@ -23,12 +23,12 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
-import org.apache.isis.applib.services.iactnlayer.InteractionTracker;
 import org.apache.isis.core.interaction.session.MessageBroker;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -69,7 +69,7 @@ public class IsisAppCommonContext implements HasMetaModelContext {
     private final MenuBarsService menuBarsService = lookupServiceElseFail(MenuBarsService.class);
 
     @Getter(lazy = true)
-    private final InteractionTracker interactionTracker = lookupServiceElseFail(InteractionTracker.class);
+    private final InteractionLayerTracker interactionLayerTracker = lookupServiceElseFail(InteractionLayerTracker.class);
 
     @Getter(lazy = true, value = AccessLevel.PRIVATE)
     private final ObjectMementoService mementoService = lookupServiceElseFail(ObjectMementoService.class);

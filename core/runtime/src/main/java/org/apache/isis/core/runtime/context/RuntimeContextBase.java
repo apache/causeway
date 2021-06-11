@@ -21,12 +21,12 @@ package org.apache.isis.core.runtime.context;
 import java.util.function.Supplier;
 
 import org.apache.isis.applib.services.iactn.InteractionProvider;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.applib.services.iactnlayer.InteractionTracker;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -49,7 +49,7 @@ public abstract class RuntimeContextBase implements RuntimeContext {
     @Getter(onMethod = @__(@Override)) protected final ServiceInjector serviceInjector;
     @Getter(onMethod = @__(@Override)) protected final ServiceRegistry serviceRegistry;
     @Getter(onMethod = @__(@Override)) protected final SpecificationLoader specificationLoader;
-    @Getter(onMethod = @__(@Override)) protected final InteractionTracker interactionTracker;
+    @Getter(onMethod = @__(@Override)) protected final InteractionLayerTracker interactionLayerTracker;
 
     @Getter protected final InteractionService interactionService;
     @Getter protected final AuthenticationManager authenticationManager;
@@ -70,13 +70,13 @@ public abstract class RuntimeContextBase implements RuntimeContext {
         this.homePageSupplier = mmc::getHomePageAdapter;
         this.interactionService = serviceRegistry.lookupServiceElseFail(InteractionService.class);
         this.authenticationManager = serviceRegistry.lookupServiceElseFail(AuthenticationManager.class);
-        this.interactionTracker = serviceRegistry.lookupServiceElseFail(InteractionTracker.class);
+        this.interactionLayerTracker = serviceRegistry.lookupServiceElseFail(InteractionLayerTracker.class);
     }
 
     // -- AUTH
 
     public InteractionProvider getInteractionProvider() {
-        return interactionTracker;
+        return interactionLayerTracker;
     }
 
     @Override
@@ -84,7 +84,7 @@ public abstract class RuntimeContextBase implements RuntimeContext {
         // we do the logout (removes this session from those valid)
         // similar code in wicket viewer (AuthenticatedWebSessionForIsis#onInvalidate())
 
-        interactionTracker
+        interactionLayerTracker
         .currentInteractionContext()
         .ifPresent(authentication->{
 

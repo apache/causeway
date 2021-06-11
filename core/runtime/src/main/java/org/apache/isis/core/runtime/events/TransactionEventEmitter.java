@@ -27,7 +27,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.core.interaction.scope.InteractionScopeAware;
-import org.apache.isis.applib.services.iactnlayer.InteractionTracker;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.core.transaction.events.TransactionAfterCompletionEvent;
 import org.apache.isis.core.transaction.events.TransactionBeforeCompletionEvent;
 
@@ -40,11 +40,11 @@ public class TransactionEventEmitter
 implements TransactionSynchronization, InteractionScopeAware {
 
     private final EventBusService eventBusService;
-    private final InteractionTracker interactionTracker;
+    private final InteractionLayerTracker interactionLayerTracker;
 
     @Override
     public void beforeCompletion() {
-        _Xray.txBeforeCompletion(interactionTracker, "tx: beforeCompletion");
+        _Xray.txBeforeCompletion(interactionLayerTracker, "tx: beforeCompletion");
         eventBusService.post(TransactionBeforeCompletionEvent.instance());
     }
 
@@ -52,7 +52,7 @@ implements TransactionSynchronization, InteractionScopeAware {
     public void afterCompletion(int status) {
         val event = TransactionAfterCompletionEvent.forStatus(status);
         eventBusService.post(event);
-        _Xray.txAfterCompletion(interactionTracker, String.format("tx: afterCompletion (%s)", event.name()));
+        _Xray.txAfterCompletion(interactionLayerTracker, String.format("tx: afterCompletion (%s)", event.name()));
     }
 
     @Override

@@ -41,7 +41,7 @@ import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.applib.services.iactnlayer.InteractionTracker;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -72,7 +72,7 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
     @Mock Interaction mockInteraction;
     @Mock SpecificationLoader mockSpecificationLoader;
     @Mock WebApplicationContext webApplicationContext;
-    @Mock InteractionTracker mockIsisInteractionTracker;
+    @Mock InteractionLayerTracker mockInteractionLayerTracker;
     @Mock AuthenticationManager mockAuthenticationManager;
 
     MetaModelContext metaModelContext;
@@ -86,7 +86,7 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
                 .specificationLoader(mockSpecificationLoader)
                 .authentication(iaContext)
                 .singleton(mockAuthenticationManager)
-                .singleton(mockIsisInteractionTracker)
+                .singleton(mockInteractionLayerTracker)
                 .singleton(mockInteractionService)
                 .build();
 

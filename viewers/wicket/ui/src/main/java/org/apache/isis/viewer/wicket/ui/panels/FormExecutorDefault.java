@@ -135,7 +135,7 @@ implements FormExecutor {
                 ? ((ActionModel) model).getMetaModel().getFacet(RedirectFacet.class)
                 : null;
 
-            if(commonContext.getInteractionTracker().isInInteraction()) {
+            if(commonContext.getInteractionLayerTracker().isInInteraction()) {
 
                 // flush any queued changes; any concurrency or violation exceptions will actually be thrown here
                 commonContext.getTransactionService().flushTransaction();

@@ -39,7 +39,7 @@ import org.apache.isis.applib.services.iactnlayer.ThrowingRunnable;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.session.SessionLoggingService;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.applib.services.iactnlayer.InteractionTracker;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.security._testing.InteractionService_forTesting;
@@ -63,7 +63,7 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
     @Mock protected Authenticator mockAuthenticator;
     @Mock protected IsisAppCommonContext mockCommonContext;
     @Mock protected InteractionService mockInteractionService;
-    @Mock protected InteractionTracker mockInteractionTracker;
+    @Mock protected InteractionLayerTracker mockInteractionLayerTracker;
     @Mock protected ServiceRegistry mockServiceRegistry;
 
     protected AuthenticatedWebSessionForIsis webSession;
@@ -86,10 +86,10 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
                 allowing(mockCommonContext).lookupServiceElseFail(InteractionService.class);
                 will(returnValue(mockInteractionService));
 
-                allowing(mockCommonContext).getInteractionTracker();
-                will(returnValue(mockInteractionTracker));
+                allowing(mockCommonContext).getInteractionLayerTracker();
+                will(returnValue(mockInteractionLayerTracker));
 
-                allowing(mockInteractionTracker).currentInteractionContext();
+                allowing(mockInteractionLayerTracker).currentInteractionContext();
                 will(returnValue(Optional.of(InteractionContextFactory.testing())));
 
                 allowing(mockInteractionService)

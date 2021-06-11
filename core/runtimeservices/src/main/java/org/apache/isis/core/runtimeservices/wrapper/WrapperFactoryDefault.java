@@ -50,6 +50,7 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayer;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
@@ -83,7 +84,6 @@ import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.proxy._ProxyFactoryService;
-import org.apache.isis.applib.services.iactnlayer.InteractionTracker;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
@@ -119,7 +119,7 @@ import lombok.val;
 //@Log4j2
 public class WrapperFactoryDefault implements WrapperFactory {
 
-    @Inject InteractionTracker interactionTracker;
+    @Inject InteractionLayerTracker interactionLayerTracker;
     @Inject FactoryService factoryService;
     @Inject MetaModelContext metaModelContext;
     @Inject SpecificationLoader specificationLoader;
@@ -571,7 +571,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
     }
 
     private InteractionLayer currentInteractionLayer() {
-        return interactionTracker.currentInteractionLayerElseFail();
+        return interactionLayerTracker.currentInteractionLayerElseFail();
     }
 
     private ObjectManager currentObjectManager() {

@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
-import org.apache.isis.applib.services.iactnlayer.InteractionTracker;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.core.metamodel.execution.InteractionInternal;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -40,7 +40,7 @@ import lombok.val;
 final class _Xray {
 
     static SequenceHandle enterActionInvocation(
-            final @NonNull InteractionTracker iaTracker,
+            final @NonNull InteractionLayerTracker iaTracker,
             final @NonNull InteractionInternal interaction,
             final @NonNull ObjectAction owningAction,
             final @NonNull InteractionHead head,
@@ -64,7 +64,7 @@ final class _Xray {
     }
 
     public static SequenceHandle enterPropertyEdit(
-            final @NonNull InteractionTracker iaTracker,
+            final @NonNull InteractionLayerTracker iaTracker,
             final @NonNull InteractionInternal interaction,
             final @NonNull OneToOneAssociation owningProperty,
             final @NonNull InteractionHead head,
@@ -82,7 +82,7 @@ final class _Xray {
     }
 
     private static SequenceHandle enterInvocation(
-            final @NonNull InteractionTracker iaTracker,
+            final @NonNull InteractionLayerTracker iaTracker,
             final InteractionInternal interaction,
             final String participantLabel,
             final String enteringLabel) {

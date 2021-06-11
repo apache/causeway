@@ -28,7 +28,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
  *
  * @since 2.0
  */
-public interface InteractionTracker
+public interface InteractionLayerTracker
 extends InteractionProvider {
 
     /** @return the AuthenticationLayer that sits on top of the current

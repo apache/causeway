@@ -32,8 +32,8 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
-import org.apache.isis.applib.services.iactnlayer.InteractionTracker;
 import org.apache.isis.applib.services.iactnlayer.ThrowingRunnable;
 import org.apache.isis.applib.services.user.RoleMemento;
 import org.apache.isis.applib.services.user.UserService;
@@ -61,7 +61,7 @@ import lombok.val;
  * </p>
  *
  * @see InteractionService
- * @see InteractionTracker
+ * @see InteractionLayerTracker
  *
  * @since 1.x revised for 2.0 {@index}
  */
@@ -83,7 +83,7 @@ public class SudoService {
 
 
     private final InteractionService interactionService;
-    private final InteractionTracker interactionTracker;
+    private final InteractionLayerTracker interactionLayerTracker;
     private final List<SudoServiceListener> sudoListeners;
 
     /**
@@ -97,7 +97,7 @@ public class SudoService {
             final @NonNull UnaryOperator<InteractionContext> sudoMapper,
             final @NonNull Callable<T> callable) {
 
-        val currentInteractionLayer = interactionTracker.currentInteractionLayerElseFail();
+        val currentInteractionLayer = interactionLayerTracker.currentInteractionLayerElseFail();
         val currentInteractionContext = currentInteractionLayer.getInteractionContext();
         val sudoInteractionContext = sudoMapper.apply(currentInteractionContext);
 
