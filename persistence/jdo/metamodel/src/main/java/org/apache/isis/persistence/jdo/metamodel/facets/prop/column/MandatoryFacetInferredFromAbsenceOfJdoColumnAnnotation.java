@@ -25,12 +25,12 @@ import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFace
 /**
  * Inferred from absence of an <tt>@Column</tt> method.
  */
-public class MandatoryFacetInferredFromAbsenceOfJdoColumn
+public class MandatoryFacetInferredFromAbsenceOfJdoColumnAnnotation
 extends MandatoryFacetAbstract {
 
-    public MandatoryFacetInferredFromAbsenceOfJdoColumn(
-            final FacetHolder holder, final Semantics semantics) {
-        super(holder, semantics); // inferred but has default precedence
+    public MandatoryFacetInferredFromAbsenceOfJdoColumnAnnotation(
+            final FacetHolder holder, final Semantics semantics, Precedence precedence) {
+        super(holder, semantics, precedence);
     }
 
 

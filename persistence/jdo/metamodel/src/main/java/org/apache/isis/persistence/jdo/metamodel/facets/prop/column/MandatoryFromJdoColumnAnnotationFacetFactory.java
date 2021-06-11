@@ -26,6 +26,7 @@ import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
@@ -85,20 +86,22 @@ implements MetaModelRefiner {
 
         val columnIfAny = processMethodContext.synthesizeOnMethod(Column.class);
 
-        inferSemantics(processMethodContext, columnIfAny)
-        .ifPresent(semantics->{
+        val semantics = inferSemantics(processMethodContext, columnIfAny);
 
-            FacetUtil.addFacetIfPresent(
-                columnIfAny.isPresent()
-                        ? new MandatoryFacetInferredFromJdoColumn(holder, semantics)
-                        : new MandatoryFacetInferredFromAbsenceOfJdoColumn(holder, semantics)
-            );
-
-        });
+        FacetUtil.addFacetIfPresent(
+            columnIfAny.isPresent()
+                    ? new MandatoryFacetFromJdoColumnAnnotation(holder, semantics)
+                    : new MandatoryFacetInferredFromAbsenceOfJdoColumnAnnotation(
+                            holder,
+                            semantics,
+                            semantics.isRequired()
+                                ? Precedence.DEFAULT
+                                : Precedence.INFERRED)
+        );
 
     }
 
-    private static Optional<Semantics> inferSemantics(
+    private static Semantics inferSemantics(
             final ProcessMethodContext processMethodContext,
             final Optional<Column> columnIfAny) {
 
@@ -108,15 +111,15 @@ implements MetaModelRefiner {
 
         if(_Strings.isNotEmpty(allowsNull)) {
             // if miss-spelled, then DN assumes is not-nullable
-            return Optional.of(Semantics.of(!"true".equalsIgnoreCase(allowsNull.trim())));
+            return Semantics.of(!"true".equalsIgnoreCase(allowsNull.trim()));
         }
 
         final Class<?> returnType = processMethodContext.getMethod().getReturnType();
         // per JDO spec
         return returnType != null
                 && returnType.isPrimitive()
-            ? Optional.of(Semantics.REQUIRED)
-            : Optional.empty(); // indifferent
+            ? Semantics.REQUIRED
+            : Semantics.OPTIONAL;
 
     }
 
