@@ -210,6 +210,13 @@ public class UserMemento implements Serializable {
     boolean impersonating = false;
 
 
+    /**
+     * Indicates which tenancy (or tenancies) this user has access to.
+     *
+     * <p>
+     * The interpretation of this token is implementation-specific.
+     * </p>
+     */
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "security", sequence = "3")
     @Getter @With(onMethod_ = {@Programmatic})

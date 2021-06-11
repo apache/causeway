@@ -215,6 +215,29 @@ class UserMemento_Test {
     }
 
     @Nested
+    class withTenancyToken {
+
+        @Test
+        void user_and_roles_preserved_and_impersonating_flag_set() throws MalformedURLException {
+
+            // given
+            val userMemento = UserMemento.ofNameAndRoleNames("fredflintstone", "CAVEMAN", "HUSBAND");
+
+            // when
+            val userMemento2 = userMemento.withMultiTenancyToken("/ITA");
+
+            // then copy created
+            Assertions.assertThat(userMemento2).isNotSameAs(userMemento);
+
+            // then copy correct
+            Assertions.assertThat(userMemento2.getMultiTenancyToken()).isEqualTo("/ITA");
+
+            // then original unchanged
+            Assertions.assertThat(userMemento.getMultiTenancyToken()).isNull();
+        }
+    }
+
+    @Nested
     class all_the_withers {
 
         @Test
@@ -225,7 +248,9 @@ class UserMemento_Test {
                     .withRoleAdded("CAVEMAN")
                     .withRoleAdded("HUSBAND")
                     .withAvatarUrl(new java.net.URL("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"))
-                    .withRealName("Fred Flintstone");
+                    .withRealName("Fred Flintstone")
+                    .withMultiTenancyToken("/USA/Bedrock")
+                    ;
 
             // then
             Assertions.assertThat(userMemento.getName()).isEqualTo("fredflintstone");
@@ -250,6 +275,7 @@ class UserMemento_Test {
             Assertions.assertThat(userMemento2.getAvatarUrl()).isEqualTo(new java.net.URL("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
             Assertions.assertThat(userMemento2.getRealName()).isEqualTo("Fred Flintstone");
             Assertions.assertThat(userMemento2.isImpersonating()).isTrue();
+            Assertions.assertThat(userMemento2.getMultiTenancyToken()).isEqualTo("/USA/Bedrock");
 
             // then original unchanged
             Assertions.assertThat(userMemento.getName()).isEqualTo("fredflintstone");
@@ -259,6 +285,7 @@ class UserMemento_Test {
             Assertions.assertThat(userMemento.getAvatarUrl()).isEqualTo(new java.net.URL("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
             Assertions.assertThat(userMemento.getRealName()).isEqualTo("Fred Flintstone");
             Assertions.assertThat(userMemento.isImpersonating()).isFalse();
+            Assertions.assertThat(userMemento.getMultiTenancyToken()).isEqualTo("/USA/Bedrock");
 
         }
     }
