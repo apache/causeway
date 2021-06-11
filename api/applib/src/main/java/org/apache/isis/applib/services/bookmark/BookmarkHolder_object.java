@@ -33,7 +33,6 @@ import lombok.RequiredArgsConstructor;
         domainEvent = BookmarkHolder_object.PropertyDomainEvent.class
 )
 @RequiredArgsConstructor
-@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + ".services.bookmark.BookmarkHolder_object")
 public class BookmarkHolder_object {
 
     private final BookmarkHolder bookmarkHolder;
