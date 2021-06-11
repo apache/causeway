@@ -59,11 +59,11 @@ fixtures`
 
 
 |`DateFixture`
-|Use `TickingClockFixture` instead
+|Use `SudoService` instead
 
 
 |`SwitchUserFixture`
-|Use fixture with injected `SudoService` instead
+|Use `SudoService` instead
 
 
 .2+|o.a.i.applib.
