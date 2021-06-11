@@ -18,12 +18,19 @@
  */
 package org.apache.isis.core.security._testing;
 
+import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.Callable;
+import java.util.function.Function;
 
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.iactn.Execution;
+import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayer;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.iactnlayer.ThrowingRunnable;
+import org.apache.isis.applib.services.user.UserMemento;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -35,11 +42,23 @@ import lombok.SneakyThrows;
 public class InteractionService_forTesting
 implements InteractionService {
 
-    private boolean isInInteraction = false;
+    private InteractionLayer interactionLayer = null;
 
     @Override
     public InteractionLayer openInteraction() {
-        isInInteraction = true;
+        final UserMemento userMemento = UserMemento.system();
+        final UUID uuid = UUID.randomUUID();
+        final Interaction interaction = new Interaction() {
+            @Override public <T> T putAttribute(Class<? super T> type, T value) { return null; }
+            @Override public <T> T computeAttributeIfAbsent(Class<? super T> type, Function<Class<?>, ? extends T> mappingFunction) { return null; }
+            @Override public <T> T getAttribute(Class<T> type) { return null; }
+            @Override public void removeAttribute(Class<?> type) { }
+            @Override public UUID getInteractionId() { return uuid; }
+            @Override public Command getCommand() { return null; }
+            @Override public Execution<?, ?> getCurrentExecution() { return null; }
+            @Override public Execution<?, ?> getPriorExecution() { return null; }
+        };
+        interactionLayer = new InteractionLayer(interaction, InteractionContext.ofUserWithSystemDefaults(userMemento));
         return null;
     }
 
@@ -50,12 +69,26 @@ implements InteractionService {
 
     @Override
     public void closeInteractionLayers() {
-        isInInteraction = false;
+        interactionLayer = null;
     }
 
     @Override
     public boolean isInInteraction() {
-        return isInInteraction;
+        return interactionLayer != null;
+    }
+
+    @Override public Optional<UUID> getInteractionId() {
+        return currentInteractionLayer()
+                .map(InteractionLayer::getInteraction)
+                .map(Interaction::getInteractionId);
+    }
+
+    @Override public Optional<InteractionLayer> currentInteractionLayer() {
+        return Optional.ofNullable(this.interactionLayer);
+    }
+
+    @Override public int getInteractionLayerCount() {
+        return isInInteraction() ? 1 : 0;
     }
 
     @Override @SneakyThrows
