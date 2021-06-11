@@ -44,7 +44,6 @@ import org.apache.isis.extensions.commandreplay.secondary.analyser.CommandReplay
 import org.apache.isis.extensions.commandreplay.secondary.analysis.CommandReplayAnalysisService;
 import org.apache.isis.extensions.commandreplay.secondary.clock.TickingClockService;
 import org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig;
-import org.apache.isis.extensions.commandreplay.secondary.executor.CommandExecutorServiceWithTime;
 import org.apache.isis.extensions.commandreplay.secondary.fetch.CommandFetcher;
 import org.apache.isis.extensions.commandreplay.secondary.job.ReplicateAndReplayJob;
 import org.apache.isis.extensions.commandreplay.secondary.mixins.Object_openOnPrimary;
@@ -64,7 +63,6 @@ import lombok.val;
         IsisModuleExtQuartzImpl.class,
 
         // @Service's
-        CommandExecutorServiceWithTime.class,
         CommandFetcher.class,
         CommandReplayAnalyserResult.class,
         CommandReplayAnalyserException.class,
