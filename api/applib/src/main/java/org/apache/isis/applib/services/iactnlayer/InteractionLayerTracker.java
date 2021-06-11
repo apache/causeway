@@ -16,21 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.interaction.session;
+package org.apache.isis.applib.services.iactnlayer;
 
 import java.util.Optional;
 
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
-import org.apache.isis.applib.services.iactnlayer.InteractionContext;
-import org.apache.isis.applib.services.iactnlayer.InteractionLayer;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 /**
+ * Provides access to the current {@link InteractionLayer}.
  *
- * @since 2.0
+ * @see InteractionService
+ * @see org.apache.isis.applib.services.sudo.SudoService
+ * @see org.apache.isis.applib.services.clock.ClockService
+ *
+ * @since 2.0 {@index}
  */
-public interface InteractionTracker
+public interface InteractionLayerTracker
 extends InteractionProvider {
 
     /** @return the AuthenticationLayer that sits on top of the current
@@ -47,7 +50,7 @@ extends InteractionProvider {
 
     /**
      * Returns the {@link InteractionContext} wrapped by the {@link #currentInteractionLayer()}
-     * (if within an interaction layer).
+     * (if within an {@link InteractionLayer}).
      */
     @Override
     default Optional<InteractionContext> currentInteractionContext() {
@@ -60,7 +63,7 @@ extends InteractionProvider {
 
     /**
      * Returns the {@link Interaction} wrapped by the {@link #currentInteractionLayer()}
-     * (if within an interaction layer).
+     * (if within an {@link InteractionLayer}).
      */
     @Override
     default Optional<Interaction> currentInteraction(){

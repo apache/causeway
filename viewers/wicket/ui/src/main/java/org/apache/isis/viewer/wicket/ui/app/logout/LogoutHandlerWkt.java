@@ -24,7 +24,7 @@ import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.core.interaction.session.InteractionTracker;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.core.interaction.session.IsisInteraction;
 import org.apache.isis.core.security.authentication.logout.LogoutHandler;
 
@@ -33,7 +33,7 @@ import lombok.val;
 @Service
 public class LogoutHandlerWkt implements LogoutHandler {
 
-    @Inject InteractionTracker isisInteractionTracker;
+    @Inject InteractionLayerTracker iInteractionLayerTracker;
 
     @Override
     public void logout() {
@@ -43,8 +43,8 @@ public class LogoutHandlerWkt implements LogoutHandler {
             return;
         }
 
-        if(isisInteractionTracker.isInInteraction()) {
-            isisInteractionTracker.currentInteraction()
+        if(iInteractionLayerTracker.isInInteraction()) {
+            iInteractionLayerTracker.currentInteraction()
             .map(IsisInteraction.class::cast)
             .ifPresent(interaction->
                 interaction.setOnClose(currentWktSession::invalidateNow));

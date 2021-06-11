@@ -58,7 +58,7 @@ import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.functions._Functions.CheckedConsumer;
-import org.apache.isis.core.interaction.session.InteractionTracker;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -90,7 +90,7 @@ public class ApplicationLayerTestFactory {
     private final FixtureScripts fixtureScripts;
     private final PreCommitListener preCommitListener;
     private final InteractionService interactionService;
-    private final InteractionTracker interactionTracker;
+    private final InteractionLayerTracker interactionLayerTracker;
 
     @Named("transaction-aware-pmf-proxy")
     private final PersistenceManagerFactory pmf;
@@ -181,7 +181,7 @@ public class ApplicationLayerTestFactory {
             assert_no_initial_tx_context();
 
             final boolean isSuccesfulRun = interactionService.callAnonymous(()->{
-                val currentInteraction = interactionTracker.currentInteraction();
+                val currentInteraction = interactionLayerTracker.currentInteraction();
                 xrayEnterInteraction(currentInteraction);
                 val result = interactionTestRunner.run(given, verifier);
                 xrayExitInteraction();

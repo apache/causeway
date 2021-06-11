@@ -93,7 +93,7 @@ public class JpaInventoryResource {
     public String httpSessionInfo() {
 
         // when running with basic-auth strategy, we don't want to create HttpSessions at all
-        // however, this isn't the case if UserServiceDefault is in use, as that _dpes_
+        // however, this isn't the case if UserService is in use, as that _dpes_
         // use HttpSession to hold any impersonated user.
 
         val servletRequestAttributes =

@@ -129,7 +129,7 @@ class ShiroSecmanLdap_restfulStressTest extends AbstractShiroTest {
 
                 assertNotNull(httpSessionInfo);
 
-                // impersonation in UserServiceDefault means that we _do_ now get
+                // impersonation in UserService means that we _do_ now get
                 // an httpSession as a side-effect
                 //assertEquals("no http-session", httpSessionInfo);
                 assertEquals("http-session attribute names: {}", httpSessionInfo);

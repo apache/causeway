@@ -38,7 +38,7 @@ import org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.having.HasEnabling;
-import org.apache.isis.core.interaction.session.InteractionTracker;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.core.transaction.changetracking.EntityChangesPublisher;
 import org.apache.isis.core.transaction.changetracking.HasEnlistedEntityChanges;
 
@@ -58,7 +58,7 @@ public class EntityChangesPublisherDefault implements EntityChangesPublisher {
     private final List<EntityChangesSubscriber> subscribers;
     private final ClockService clockService;
     private final UserService userService;
-    private final InteractionTracker iaTracker;
+    private final InteractionLayerTracker iaTracker;
 
     private Can<EntityChangesSubscriber> enabledSubscribers = Can.empty();
 

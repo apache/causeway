@@ -32,10 +32,10 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.having.HasEnabling;
-import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.services.publishing.CommandPublisher;
 
 import lombok.NonNull;
@@ -53,7 +53,7 @@ import lombok.extern.log4j.Log4j2;
 public class CommandPublisherDefault implements CommandPublisher {
 
     private final List<CommandSubscriber> subscribers;
-    private final InteractionTracker iaTracker;
+    private final InteractionLayerTracker iaTracker;
 
     private Can<CommandSubscriber> enabledSubscribers = Can.empty();
 

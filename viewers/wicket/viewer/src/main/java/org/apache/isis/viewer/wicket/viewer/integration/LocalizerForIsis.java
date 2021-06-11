@@ -37,7 +37,7 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.interaction.session.InteractionTracker;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketApplication;
 
 import lombok.val;
@@ -48,7 +48,7 @@ import lombok.val;
  */
 public class LocalizerForIsis extends Localizer {
 
-    @Inject private InteractionTracker interactionTracker;
+    @Inject private InteractionLayerTracker interactionLayerTracker;
     @Inject private InteractionService interactionService;
     @Inject private TranslationService translationService;
 
@@ -76,7 +76,7 @@ public class LocalizerForIsis extends Localizer {
     protected String translate(final String key, final Component component) {
         final Class<?> contextClass = determineContextClassElse(component, IsisWicketApplication.class);
         final TranslationContext context = TranslationContext.forClassName(contextClass);
-        if(interactionTracker.isInInteraction()) {
+        if(interactionLayerTracker.isInInteraction()) {
             return translate(key, context);
         } else {
             return interactionService.callAnonymous(()->translate(key, context));

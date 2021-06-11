@@ -214,7 +214,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
                 final String actionArguments = actionArgumentsFrom(objectAndActionInvocation);
                 final DomainObjectList list = domainObjectListFrom(collectionAdapters, elementSpec, actionOwnerSpec, actionId, actionArguments);
 
-                val listAdapter = ManagedObject.lazy(resourceContext.getSpecificationLoader(), list);
+                val listAdapter = ManagedObject.lazy(resourceContext.getMetaModelContext().getSpecificationLoader(), list);
                 return responseBuilder(
                         buildResponse(
                                 resourceContext,

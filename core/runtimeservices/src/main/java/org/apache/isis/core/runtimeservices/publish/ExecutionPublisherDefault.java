@@ -39,7 +39,7 @@ import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.having.HasEnabling;
-import org.apache.isis.core.interaction.session.InteractionTracker;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.core.metamodel.services.publishing.ExecutionPublisher;
 
 import lombok.RequiredArgsConstructor;
@@ -57,7 +57,7 @@ public class ExecutionPublisherDefault
 implements ExecutionPublisher {
 
     private final List<ExecutionSubscriber> subscribers;
-    private final InteractionTracker iaTracker;
+    private final InteractionLayerTracker iaTracker;
 
     private Can<ExecutionSubscriber> enabledSubscribers = Can.empty();
 

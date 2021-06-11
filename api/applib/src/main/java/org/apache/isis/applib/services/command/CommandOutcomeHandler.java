@@ -24,7 +24,8 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.functional.Result;
 
 /**
- * 
+ * Used by {@link CommandExecutorService}, to update a {@link Command} after it has been executed.
+ *
  * @since 2.0 {@index}
  */
 public interface CommandOutcomeHandler {
@@ -36,11 +37,35 @@ public interface CommandOutcomeHandler {
         @Override public void setResult(Result<Bookmark> resultBookmark) { }
     };
 
+    /**
+     * Reads the <code>startedAt</code> field from the underlying {@link Command} (or persistent equivalent)
+     *
+     * <p>
+     *     This is to ensure that it isn't overwritten by {@link #setStartedAt(Timestamp)}.
+     * </p>
+     *
+     * @see #setStartedAt(Timestamp)
+     */
     Timestamp getStartedAt();
+
+    /**
+     * Sets the <code>startedAt</code> field on the underlying {@link Command} (or persistent equivalent)
+     *
+     * @see #getStartedAt()
+     * @see #setCompletedAt(Timestamp)
+     */
     void setStartedAt(Timestamp startedAt);
 
+    /**
+     * Sets the <code>completedAt</code> field on the underlying {@link Command} (or persistent equivalent)
+     *
+     * @see #setStartedAt(Timestamp)
+     */
     void setCompletedAt(Timestamp completedAt);
 
+    /**
+     * Sets the result of the execute, represented as a {@link Bookmark}, on the underlying {@link Command} (or persistent equivalent).
+     */
     void setResult(Result<Bookmark> resultBookmark);
-    
+
 }

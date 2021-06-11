@@ -27,8 +27,6 @@ import javax.ws.rs.core.MediaType;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -97,10 +95,7 @@ public interface IResourceContext {
     RepresentationService.Intent getIntent();
 
     InteractionProvider getInteractionProvider();
-    SpecificationLoader getSpecificationLoader();
     MetaModelContext getMetaModelContext();
-    ServiceRegistry getServiceRegistry();
-    IsisConfiguration getConfiguration();
 
     // -- UTILITY
 

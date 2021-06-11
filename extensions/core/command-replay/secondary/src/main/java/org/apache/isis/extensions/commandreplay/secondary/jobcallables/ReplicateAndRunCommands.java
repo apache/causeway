@@ -18,6 +18,7 @@
  */
 package org.apache.isis.extensions.commandreplay.secondary.jobcallables;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Callable;
@@ -155,7 +156,7 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
                     transactionService.callWithinCurrentTransactionElseCreateNew(
                             () -> commandModelRepository.findByParent(parent))
                     .optionalElseFail()
-                    .orElse(null);
+                    .orElse(Collections.emptyList());
             for (val childCommand : childCommands) {
                 val childReplayState = executeCommandInTranAndAnalyse(childCommand);
                 if(childReplayState.isFailed()) {
@@ -173,7 +174,7 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
         transactionService.runWithinCurrentTransactionElseCreateNew(
                 () -> {
                     commandExecutorService.executeCommand(
-                        CommandExecutorService.SudoPolicy.SWITCH, commandJdo.getCommandDto(), commandJdo.outcomeHandler());
+                        CommandExecutorService.SudoPolicy.SWITCH_USER_AND_TIME, commandJdo.getCommandDto(), commandJdo.outcomeHandler());
                 });
 
         transactionService.runWithinCurrentTransactionElseCreateNew(() -> {

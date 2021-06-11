@@ -62,7 +62,7 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
         addLinkToMenuBars();
         addLinkToServices(metaModelContext.streamServiceAdapters());
         addLinkToVersion();
-        addLinkToDomainTypes(getResourceContext().getSpecificationLoader().snapshotSpecifications());
+        addLinkToDomainTypes(getResourceContext().getMetaModelContext().getSpecificationLoader().snapshotSpecifications());
 
         // inks and extensions
         representation.mapPut("extensions", JsonRepresentation.newMap());

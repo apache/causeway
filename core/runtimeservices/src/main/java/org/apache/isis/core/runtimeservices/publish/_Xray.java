@@ -27,6 +27,7 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.iactn.Execution;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.isis.applib.services.publishing.spi.EntityChanges;
 import org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber;
@@ -36,7 +37,6 @@ import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Text;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
-import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.security.util.XrayUtil;
 import org.apache.isis.core.security.util.XrayUtil.SequenceHandle;
 
@@ -48,7 +48,7 @@ final class _Xray {
     // -- COMMAND
 
     static SequenceHandle enterCommandPublishing(
-            final @NonNull InteractionTracker iaTracker,
+            final @NonNull InteractionLayerTracker iaTracker,
             final @Nullable Command command,
             final @NonNull Can<CommandSubscriber> enabledSubscribers,
             final @NonNull Supplier<String> cannotPublishReasonSupplier) {
@@ -91,7 +91,7 @@ final class _Xray {
     // -- EXECUTION
 
     public static SequenceHandle enterExecutionPublishing(
-            final @NonNull InteractionTracker iaTracker,
+            final @NonNull InteractionLayerTracker iaTracker,
             final @Nullable Execution<?, ?> execution,
             final @NonNull Can<ExecutionSubscriber> enabledSubscribers,
             final @NonNull Supplier<String> cannotPublishReasonSupplier) {
@@ -134,7 +134,7 @@ final class _Xray {
     // -- ENTITY CHANGES
 
     public static SequenceHandle enterEntityChangesPublishing(
-            final @NonNull InteractionTracker iaTracker,
+            final @NonNull InteractionLayerTracker iaTracker,
             final @NonNull Optional<EntityChanges> payload,
             final @NonNull Can<EntityChangesSubscriber> enabledSubscribers,
             final @NonNull Supplier<String> cannotPublishReasonSupplier) {
@@ -177,7 +177,7 @@ final class _Xray {
     // -- ENTITY PROPERTY CHANGES
 
     public static SequenceHandle enterEntityPropertyChangePublishing(
-            final @NonNull InteractionTracker iaTracker,
+            final @NonNull InteractionLayerTracker iaTracker,
             final @NonNull Can<EntityPropertyChange> payload,
             final @NonNull Can<EntityPropertyChangeSubscriber> enabledSubscribers,
             final @NonNull Supplier<String> cannotPublishReasonSupplier) {

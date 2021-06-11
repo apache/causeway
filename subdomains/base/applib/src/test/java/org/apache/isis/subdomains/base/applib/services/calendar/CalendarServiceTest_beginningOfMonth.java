@@ -46,21 +46,21 @@ public class CalendarServiceTest_beginningOfMonth {
     @Parameters
     public static Collection<Object[]> data() {
       return Arrays.asList(
-              new Object[][] { 
-                      { LocalDate.of(2013,4,15), LocalDate.of(2013,4,1)}, 
-                      { LocalDate.of(2013,4,1),  LocalDate.of(2013,4,1)}, 
-                      { LocalDate.of(2013,4,30),  LocalDate.of(2013,4,1)}, 
+              new Object[][] {
+                      { LocalDate.of(2013,4,15), LocalDate.of(2013,4,1)},
+                      { LocalDate.of(2013,4,1),  LocalDate.of(2013,4,1)},
+                      { LocalDate.of(2013,4,30),  LocalDate.of(2013,4,1)},
               });
     }
-    
+
     public CalendarServiceTest_beginningOfMonth(LocalDate date, LocalDate expected) {
         this.now = date;
         this.expected = expected;
     }
-    
+
     @Before
     public void setUp() throws Exception {
-        stubClockService = new ClockService() {
+        stubClockService = new ClockService(null) {
             @Override
             public VirtualClock getClock() {
                 return VirtualClock.frozenAt(Instant.from(now));
@@ -68,7 +68,7 @@ public class CalendarServiceTest_beginningOfMonth {
         };
         calendarService = new CalendarService(stubClockService);
     }
-    
+
     @Test
     public void test() throws Exception {
         assertThat(calendarService.beginningOfMonth(), is(expected));

@@ -38,7 +38,6 @@ import lombok.RequiredArgsConstructor;
 @ActionLayout(
         cssClassFa = "fa-bookmark"
 )
-@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + ".services.bookmark.BookmarkHolder_lookup")
 @RequiredArgsConstructor
 public class BookmarkHolder_lookup {
 

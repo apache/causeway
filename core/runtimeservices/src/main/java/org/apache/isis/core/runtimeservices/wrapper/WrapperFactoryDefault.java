@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.runtimeservices.wrapper;
 
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,6 +49,7 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayer;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
@@ -83,7 +83,6 @@ import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.proxy._ProxyFactoryService;
-import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
@@ -119,11 +118,10 @@ import lombok.val;
 //@Log4j2
 public class WrapperFactoryDefault implements WrapperFactory {
 
-    @Inject InteractionTracker interactionTracker;
+    @Inject InteractionLayerTracker interactionLayerTracker;
     @Inject FactoryService factoryService;
     @Inject MetaModelContext metaModelContext;
     @Inject SpecificationLoader specificationLoader;
-    @Inject Provider<InteractionProvider> interactionProviderProvider;
     @Inject ServiceInjector serviceInjector;
     @Inject _ProxyFactoryService proxyFactoryService; // protected to allow JUnit test
     @Inject CommandDtoFactory commandDtoFactory;
@@ -270,31 +268,28 @@ public class WrapperFactoryDefault implements WrapperFactory {
         val proxyFactory = proxyFactoryService
                 .<T>factory(_Casts.uncheckedCast(domainObject.getClass()), WrappingObject.class);
 
-        return proxyFactory.createInstance(new InvocationHandler() {
-            @Override
-            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        return proxyFactory.createInstance((proxy, method, args) -> {
 
-                if (isInheritedFromJavaLangObject(method)) {
-                    return method.invoke(domainObject, args);
-                }
-
-                if (shouldCheckRules(asyncControl)) {
-                    val doih = new DomainObjectInvocationHandler<>(
-                            domainObject,
-                            null, // mixeeAdapter ignored
-                            targetAdapter,
-                            control().withNoExecute(),
-                            null);
-                    doih.invoke(null, method, args);
-                }
-
-                val memberAndTarget = memberAndTargetForRegular(method, targetAdapter);
-                if( ! memberAndTarget.isMemberFound()) {
-                    return method.invoke(domainObject, args);
-                }
-
-                return submitAsync(memberAndTarget, args, asyncControl);
+            if (isInheritedFromJavaLangObject(method)) {
+                return method.invoke(domainObject, args);
             }
+
+            if (shouldCheckRules(asyncControl)) {
+                val doih = new DomainObjectInvocationHandler<>(
+                        domainObject,
+                        null, // mixeeAdapter ignored
+                        targetAdapter,
+                        control().withNoExecute(),
+                        null);
+                doih.invoke(null, method, args);
+            }
+
+            val memberAndTarget = memberAndTargetForRegular(method, targetAdapter);
+            if( ! memberAndTarget.isMemberFound()) {
+                return method.invoke(domainObject, args);
+            }
+
+            return submitAsync(memberAndTarget, args, asyncControl);
         }, false);
     }
 
@@ -318,32 +313,29 @@ public class WrapperFactoryDefault implements WrapperFactory {
         val proxyFactory = proxyFactoryService
                 .factory(mixinClass, new Class[]{WrappingObject.class}, new Class[]{mixee.getClass()});
 
-        return proxyFactory.createInstance(new InvocationHandler() {
-            @Override
-            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        return proxyFactory.createInstance((proxy, method, args) -> {
 
-                final boolean inheritedFromObject = isInheritedFromJavaLangObject(method);
-                if (inheritedFromObject) {
-                    return method.invoke(mixin, args);
-                }
-
-                if (shouldCheckRules(asyncControl)) {
-                    val doih = new DomainObjectInvocationHandler<>(
-                            mixin,
-                            mixeeAdapter,
-                            mixinAdapter,
-                            control().withNoExecute(),
-                            null);
-                    doih.invoke(null, method, args);
-                }
-
-                val actionAndTarget = memberAndTargetForMixin(method, mixee, mixinAdapter);
-                if (! actionAndTarget.isMemberFound()) {
-                    return method.invoke(mixin, args);
-                }
-
-                return submitAsync(actionAndTarget, args, asyncControl);
+            final boolean inheritedFromObject = isInheritedFromJavaLangObject(method);
+            if (inheritedFromObject) {
+                return method.invoke(mixin, args);
             }
+
+            if (shouldCheckRules(asyncControl)) {
+                val doih = new DomainObjectInvocationHandler<>(
+                        mixin,
+                        mixeeAdapter,
+                        mixinAdapter,
+                        control().withNoExecute(),
+                        null);
+                doih.invoke(null, method, args);
+            }
+
+            val actionAndTarget = memberAndTargetForMixin(method, mixee, mixinAdapter);
+            if (! actionAndTarget.isMemberFound()) {
+                return method.invoke(mixin, args);
+            }
+
+            return submitAsync(actionAndTarget, args, asyncControl);
         }, new Object[]{ mixee });
     }
 
@@ -360,7 +352,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
         val interactionContext = interactionLayer.getInteractionContext();
         val asyncInteractionContext = interactionContextFrom(asyncControl, interactionContext);
 
-        val command = interactionProviderProvider.get().currentInteractionElseFail().getCommand();
+        val command = interactionLayerTracker.currentInteractionElseFail().getCommand();
         val commandInteractionId = command.getInteractionId();
 
         val targetAdapter = memberAndTarget.getTarget();
@@ -571,7 +563,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
     }
 
     private InteractionLayer currentInteractionLayer() {
-        return interactionTracker.currentInteractionLayerElseFail();
+        return interactionLayerTracker.currentInteractionLayerElseFail();
     }
 
     private ObjectManager currentObjectManager() {

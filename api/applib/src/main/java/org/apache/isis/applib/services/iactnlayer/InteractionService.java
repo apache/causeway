@@ -29,9 +29,11 @@ import lombok.NonNull;
  *     This is what is used by {@link org.apache.isis.applib.services.sudo.SudoService}, for example.
  * </p>
  *
+ * @see org.apache.isis.applib.services.sudo.SudoService
+ * @see InteractionLayerTracker
  * @since 2.x {@index}
  */
-public interface InteractionService {
+public interface InteractionService extends InteractionLayerTracker {
 
     /**
      * If present, reuses the current top level {@link InteractionLayer}, otherwise creates a new

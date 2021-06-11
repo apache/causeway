@@ -63,11 +63,11 @@ public class CommandSubscriberForJdo implements CommandSubscriber {
                 // this isn't expected to happen ... we just log the fact if it does
                 val existingCommandDto = existingCommandJdoIfAny.get().getCommandDto();
 
-                String existingCommandDtoXml = JaxbUtil.toXml(existingCommandDto).presentElse("Dto to Xml failure");
-                String commandDtoXml = JaxbUtil.toXml(command.getCommandDto()).presentElse("Dto to Xml failure");
+                val existingCommandDtoXml = JaxbUtil.toXml(existingCommandDto).presentElse("Dto to Xml failure");
+                val commandDtoXml = JaxbUtil.toXml(command.getCommandDto()).presentElse("Dto to Xml failure");
 
-                log.debug("existing: \n" + existingCommandDtoXml);
-                log.debug("proposed: \n" + commandDtoXml);
+                log.debug("existing: \n{}", existingCommandDtoXml);
+                log.debug("proposed: \n{}", commandDtoXml);
             }
         } else {
             val commandJdo = new CommandJdo(command);

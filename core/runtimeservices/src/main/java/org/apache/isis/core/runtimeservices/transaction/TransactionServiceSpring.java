@@ -49,7 +49,7 @@ import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.interaction.scope.InteractionScopeAware;
-import org.apache.isis.core.interaction.session.InteractionTracker;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.core.transaction.events.TransactionAfterCompletionEvent;
 
 import lombok.val;
@@ -75,7 +75,7 @@ implements
     InteractionScopeAware {
 
     private final Can<PlatformTransactionManager> platformTransactionManagers;
-    private final InteractionTracker interactionTracker;
+    private final InteractionLayerTracker interactionLayerTracker;
     private final Can<PersistenceExceptionTranslator> persistenceExceptionTranslators;
 
 
@@ -83,7 +83,7 @@ implements
     public TransactionServiceSpring(
             final List<PlatformTransactionManager> platformTransactionManagers,
             final List<PersistenceExceptionTranslator> persistenceExceptionTranslators,
-            final InteractionTracker interactionTracker) {
+            final InteractionLayerTracker interactionLayerTracker) {
 
         this.platformTransactionManagers = Can.ofCollection(platformTransactionManagers);
         log.info("PlatformTransactionManagers: {}", platformTransactionManagers);
@@ -91,7 +91,7 @@ implements
         this.persistenceExceptionTranslators = Can.ofCollection(persistenceExceptionTranslators);
         log.info("PersistenceExceptionTranslators: {}", persistenceExceptionTranslators);
 
-        this.interactionTracker = interactionTracker;
+        this.interactionLayerTracker = interactionLayerTracker;
     }
 
     // -- SPRING INTEGRATION
@@ -198,7 +198,7 @@ implements
 
     @Override
     public Optional<TransactionId> currentTransactionId() {
-        return interactionTracker.getInteractionId()
+        return interactionLayerTracker.getInteractionId()
                 .map(uuid->{
                     //XXX get current transaction's persistence context (once we support multiple contexts)
                     val persistenceContext = "";

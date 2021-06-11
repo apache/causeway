@@ -60,8 +60,6 @@ public interface VirtualClock extends Serializable {
      *
      * @apiNote This is a universal time difference, that does not depend on
      * where you are (eg. your current timezone), just on when you are.
-     *
-     * @see {@link Instant}
      */
     Instant now();
 

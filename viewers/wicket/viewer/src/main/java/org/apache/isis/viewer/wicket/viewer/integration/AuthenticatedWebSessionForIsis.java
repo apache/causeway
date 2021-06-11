@@ -142,7 +142,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
 
     public synchronized InteractionContext getAuthentication() {
 
-        commonContext.getInteractionTracker().currentInteractionContext()
+        commonContext.getInteractionLayerTracker().currentInteractionContext()
         .ifPresent(currentAuthentication->{
 
             if (getAuthenticationManager().isSessionValid(currentAuthentication)) {

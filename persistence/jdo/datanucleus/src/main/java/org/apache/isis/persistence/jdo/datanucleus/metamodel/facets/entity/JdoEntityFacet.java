@@ -325,8 +325,8 @@ implements EntityFacet {
     // -- INTERACTION TRACKER LAZY LOOKUP
 
     // memoizes the lookup, just an optimization
-//    private final _Lazy<InteractionTracker> isisInteractionTrackerLazy = _Lazy.threadSafe(
-//            ()->getServiceRegistry().lookupServiceElseFail(InteractionTracker.class));
+//    private final _Lazy<InteractionLayerTracker> isisInteractionTrackerLazy = _Lazy.threadSafe(
+//            ()->getServiceRegistry().lookupServiceElseFail(InteractionLayerTracker.class));
 
     // -- DEPENDENCIES
 

@@ -25,11 +25,11 @@ import org.apache.isis.applib.domain.DomainObjectList;
 import org.apache.isis.applib.mixins.dto.Dto_downloadXml;
 import org.apache.isis.applib.mixins.dto.Dto_downloadXsd;
 import org.apache.isis.applib.mixins.layout.Object_downloadLayoutXml;
-import org.apache.isis.applib.mixins.rest.Object_openRestApi;
-import org.apache.isis.applib.mixins.metamodel.Object_rebuildMetamodel;
 import org.apache.isis.applib.mixins.metamodel.Object_downloadMetamodelXml;
-import org.apache.isis.applib.mixins.metamodel.Object_objectIdentifier;
 import org.apache.isis.applib.mixins.metamodel.Object_logicalTypeName;
+import org.apache.isis.applib.mixins.metamodel.Object_objectIdentifier;
+import org.apache.isis.applib.mixins.metamodel.Object_rebuildMetamodel;
+import org.apache.isis.applib.mixins.rest.Object_openRestApi;
 import org.apache.isis.applib.services.appfeatui.ApplicationFeatureMenu;
 import org.apache.isis.applib.services.appfeatui.ApplicationNamespace;
 import org.apache.isis.applib.services.appfeatui.ApplicationType;
@@ -39,6 +39,7 @@ import org.apache.isis.applib.services.appfeatui.ApplicationTypeMember;
 import org.apache.isis.applib.services.appfeatui.ApplicationTypeProperty;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder_lookup;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder_object;
+import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandsDto;
 import org.apache.isis.applib.services.commanddto.processor.spi.CommandDtoProcessorServiceIdentity;
@@ -50,10 +51,13 @@ import org.apache.isis.applib.services.publishing.log.CommandLogger;
 import org.apache.isis.applib.services.publishing.log.EntityChangesLogger;
 import org.apache.isis.applib.services.publishing.log.EntityPropertyChangeLogger;
 import org.apache.isis.applib.services.publishing.log.ExecutionLogger;
+import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.session.SessionLoggingServiceLogging;
+import org.apache.isis.applib.services.sudo.SudoService;
+import org.apache.isis.applib.services.user.ImpersonateMenu;
 import org.apache.isis.applib.services.user.RoleMemento;
 import org.apache.isis.applib.services.user.UserMemento;
-import org.apache.isis.applib.services.user.ImpersonateMenu;
+import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.schema.IsisModuleSchema;
 
 /**
@@ -92,11 +96,15 @@ import org.apache.isis.schema.IsisModuleSchema;
         UserMemento.class,
 
         // @DomainService(s)
+        ClockService.class,
         ConfigurationMenu.class,
         LayoutServiceMenu.class,
         ImpersonateMenu.class,
         MetaModelServiceMenu.class,
+        QueryResultsCache.class,
+        UserService.class,
         ApplicationFeatureMenu.class,
+
 
         // @Service(s)
         CommandDtoProcessorServiceIdentity.class,
@@ -107,6 +115,7 @@ import org.apache.isis.schema.IsisModuleSchema;
         EntityPropertyChangeLogger.class,
         ExecutionLogger.class,
         SessionLoggingServiceLogging.class,
+        SudoService.class,
 
 })
 public class IsisModuleApplib {

@@ -493,7 +493,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
     }
 
     private boolean isInInteraction() {
-        return getCommonContext().getInteractionTracker().isInInteraction();
+        return getCommonContext().getInteractionLayerTracker().isInInteraction();
     }
 
     private Optional<MessageBroker> getMessageBroker() {

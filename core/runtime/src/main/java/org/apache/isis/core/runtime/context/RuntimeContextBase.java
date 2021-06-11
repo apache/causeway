@@ -21,36 +21,29 @@ package org.apache.isis.core.runtime.context;
 import java.util.function.Supplier;
 
 import org.apache.isis.applib.services.iactn.InteractionProvider;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
-import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 
 import lombok.Getter;
+import lombok.val;
 
 /**
  *
  * @since 2.0
  *
  */
-public abstract class RuntimeContextBase implements RuntimeContext {
+public abstract class RuntimeContextBase {
 
     // -- FINAL FIELDS
 
-    @Getter(onMethod = @__(@Override)) protected final MetaModelContext metaModelContext;
-    @Getter(onMethod = @__(@Override)) protected final IsisConfiguration configuration;
-    @Getter(onMethod = @__(@Override)) protected final ServiceInjector serviceInjector;
-    @Getter(onMethod = @__(@Override)) protected final ServiceRegistry serviceRegistry;
-    @Getter(onMethod = @__(@Override)) protected final SpecificationLoader specificationLoader;
-    @Getter(onMethod = @__(@Override)) protected final InteractionTracker interactionTracker;
+    @Getter protected final MetaModelContext metaModelContext;
 
+    @Getter protected final InteractionLayerTracker interactionLayerTracker;
     @Getter protected final InteractionService interactionService;
     @Getter protected final AuthenticationManager authenticationManager;
     @Getter protected final TransactionService transactionService;
@@ -61,40 +54,19 @@ public abstract class RuntimeContextBase implements RuntimeContext {
 
     protected RuntimeContextBase(MetaModelContext mmc) {
         this.metaModelContext= mmc;
-        this.configuration = mmc.getConfiguration();
-        this.serviceInjector = mmc.getServiceInjector();
-        this.serviceRegistry = mmc.getServiceRegistry();
-        this.specificationLoader = mmc.getSpecificationLoader();
+        val serviceRegistry = mmc.getServiceRegistry();
         this.objectManager = mmc.getObjectManager();
         this.transactionService = mmc.getTransactionService();
         this.homePageSupplier = mmc::getHomePageAdapter;
         this.interactionService = serviceRegistry.lookupServiceElseFail(InteractionService.class);
         this.authenticationManager = serviceRegistry.lookupServiceElseFail(AuthenticationManager.class);
-        this.interactionTracker = serviceRegistry.lookupServiceElseFail(InteractionTracker.class);
+        this.interactionLayerTracker = serviceRegistry.lookupServiceElseFail(InteractionLayerTracker.class);
     }
 
     // -- AUTH
 
     public InteractionProvider getInteractionProvider() {
-        return interactionTracker;
+        return interactionLayerTracker;
     }
-
-    @Override
-    public void logoutFromSession() {
-        // we do the logout (removes this session from those valid)
-        // similar code in wicket viewer (AuthenticatedWebSessionForIsis#onInvalidate())
-
-        interactionTracker
-        .currentInteractionContext()
-        .ifPresent(authentication->{
-
-            authenticationManager.closeSession(authentication);
-            interactionService.closeInteractionLayers();
-
-        });
-
-
-    }
-
 
 }

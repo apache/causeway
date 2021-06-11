@@ -32,6 +32,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.clock.ClockService;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
 import org.apache.isis.applib.services.user.UserService;
@@ -39,7 +40,6 @@ import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.having.HasEnabling;
-import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.transaction.changetracking.EntityPropertyChangePublisher;
 import org.apache.isis.core.transaction.changetracking.HasEnlistedEntityPropertyChanges;
 
@@ -60,7 +60,7 @@ public class EntityPropertyChangePublisherDefault implements EntityPropertyChang
     private final UserService userService;
     private final ClockService clockService;
     private final TransactionService transactionService;
-    private final InteractionTracker iaTracker;
+    private final InteractionLayerTracker iaTracker;
 
     private Can<EntityPropertyChangeSubscriber> enabledSubscribers = Can.empty();
 

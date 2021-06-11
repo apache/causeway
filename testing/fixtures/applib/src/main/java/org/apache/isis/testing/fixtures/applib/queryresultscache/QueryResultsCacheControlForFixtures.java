@@ -37,11 +37,11 @@ import org.apache.isis.testing.fixtures.applib.events.FixturesInstallingEvent;
  * In separate class because {@link QueryResultsCache} itself is request-scoped
  */
 @Service
-@Named("isis.testing.fixtures.FixtureQueryResultsCacheControlDefault")
+@Named("isis.testing.fixtures.QueryResultsCacheControlForFixtures")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
-@Qualifier("Default")
-public class QueryResultsCacheControlDefault implements QueryResultsCacheControl {
+@Qualifier("ForFixtures")
+public class QueryResultsCacheControlForFixtures implements QueryResultsCacheControl {
 
     @EventListener(FixturesInstallingEvent.class)
     public void onFixturesInstallingEvent(FixturesInstallingEvent ev) {

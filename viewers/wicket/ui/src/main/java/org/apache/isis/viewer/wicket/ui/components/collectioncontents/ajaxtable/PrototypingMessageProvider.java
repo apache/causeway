@@ -60,7 +60,7 @@ class PrototypingMessageProvider {
 
         final StringBuilder tookTimingMessage = new StringBuilder();
 
-        commonContext().getInteractionTracker().currentInteraction()
+        commonContext().getInteractionLayerTracker().currentInteraction()
         .map(IsisInteraction.class::cast)
         .ifPresent(interaction->{
             val stopWatch = _Timing.atSystemNanos(interaction.getStartedAtSystemNanos());
