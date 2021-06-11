@@ -85,7 +85,7 @@ public class FallbackFieldFactory implements UiComponentHandlerVaa {
         sb.append(facet.getClass().getSimpleName());
         if(facet instanceof FacetAbstract) {
             val attributeMap = _Maps.<String, Object>newTreeMap();
-            ((FacetAbstract)facet).appendAttributesTo(attributeMap);
+            ((FacetAbstract)facet).visitAttributes(attributeMap::put);
             attributeMap.forEach((k, v)->{
                 sb.append("\n • ").append(k).append(": ").append(v);
             });

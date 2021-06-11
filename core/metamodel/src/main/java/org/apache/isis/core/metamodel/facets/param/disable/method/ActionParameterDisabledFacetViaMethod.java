@@ -21,8 +21,8 @@ package org.apache.isis.core.metamodel.facets.param.disable.method;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationContext;
@@ -93,9 +93,9 @@ implements ImperativeFacet {
     }
 
     @Override
-    public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        Util.appendAttributesTo(this, attributeMap);
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        Util.appendAttributesTo(this, visitor);
     }
 
 }

@@ -19,14 +19,15 @@
 
 package org.apache.isis.core.metamodel.facets.members.disabled;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public abstract class DisabledFacetAbstractImpl extends DisabledFacetAbstract {
+public abstract class DisabledFacetAbstractImpl
+extends DisabledFacetAbstract {
 
     private final String reason;
 
@@ -64,9 +65,10 @@ public abstract class DisabledFacetAbstractImpl extends DisabledFacetAbstract {
 
     }
 
-    private String disabledReasonElse(
-            final String defaultReason) {
-        return !_Strings.isNullOrEmpty(reason) ? reason : defaultReason;
+    private String disabledReasonElse(final String defaultReason) {
+        return !_Strings.isNullOrEmpty(reason)
+                ? reason
+                : defaultReason;
     }
 
     /**
@@ -76,8 +78,9 @@ public abstract class DisabledFacetAbstractImpl extends DisabledFacetAbstract {
         return reason;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("reason", reason);
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("reason", reason);
     }
 }

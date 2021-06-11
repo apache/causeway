@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.properties.update.init;
 
 import java.lang.reflect.Method;
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -63,8 +63,8 @@ implements ImperativeFacet {
     }
 
     @Override
-    public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        ImperativeFacet.Util.appendAttributesTo(this, visitor);
     }
 }

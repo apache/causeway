@@ -20,8 +20,8 @@
 package org.apache.isis.core.metamodel.facets.object.value.vsp;
 
 import java.text.Format;
-import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
@@ -283,14 +283,15 @@ implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProv
     }
 
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("adaptedClass", adaptedClass);
-        attributeMap.put("typicalLength", this.typicalLength);
-        attributeMap.put("maxLength", this.maxLength);
-        attributeMap.put("immutable", this.immutable);
-        attributeMap.put("equalByContent", this.equalByContent);
-        attributeMap.put("defaultValue", this.defaultValue);
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("adaptedClass", adaptedClass);
+        visitor.accept("typicalLength", this.typicalLength);
+        visitor.accept("maxLength", this.maxLength);
+        visitor.accept("immutable", this.immutable);
+        visitor.accept("equalByContent", this.equalByContent);
+        visitor.accept("defaultValue", this.defaultValue);
     }
 
 

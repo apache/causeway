@@ -18,7 +18,7 @@
  */
 package org.apache.isis.persistence.jdo.metamodel.facets.object.query;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import javax.jdo.annotations.Query;
 
@@ -56,9 +56,9 @@ implements JdoQueryFacet {
     }
 
     @Override
-    public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("namedQueries", namedQueries);
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("namedQueries", namedQueries);
     }
 
 }

@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.object.recreatable;
 
 import java.lang.reflect.Method;
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.commons.internal.base._Strings;
@@ -146,9 +146,9 @@ implements ViewModelFacet {
     }
 
     @Override
-    public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("recreationMechanism", recreationMechanism);
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("recreationMechanism", recreationMechanism);
     }
 
 }

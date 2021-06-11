@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.properties.property.modify;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
@@ -158,9 +158,9 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
 
 
     @Override
-    public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("getterFacet", getterFacetIfAny);
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("getterFacet", getterFacetIfAny);
     }
 
 }

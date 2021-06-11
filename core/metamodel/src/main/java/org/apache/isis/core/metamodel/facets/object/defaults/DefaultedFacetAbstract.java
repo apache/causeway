@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.object.defaults;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
@@ -79,8 +79,8 @@ implements DefaultedFacet {
     }
 
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("defaultsProviderClass", defaultsProviderClass);
+    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("defaultsProviderClass", defaultsProviderClass);
     }
 }

@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Method;
-import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -152,12 +152,12 @@ public interface ImperativeFacet extends Facet {
             throw new IllegalArgumentException(member.getIdentifier().toString() +  ": unable to determine intent of " + method.getName());
         }
 
-        public static void appendAttributesTo(ImperativeFacet facet, final Map<String, Object> attributeMap) {
+        public static void appendAttributesTo(ImperativeFacet facet, final BiConsumer<String, Object> visitor) {
             val methods = facet.getMethods();
-            attributeMap.put("methods", methods);
+            visitor.accept("methods", methods);
             for (Method method : methods) {
                 Intent intent = facet.getIntent(method);
-                attributeMap.put("intent." + method.getName(), intent);
+                visitor.accept("intent." + method.getName(), intent);
             }
         }
 

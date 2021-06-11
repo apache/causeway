@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.param.defaults.fromtype;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacetAbstract;
@@ -54,8 +54,9 @@ extends ActionDefaultsFacetAbstract {
         return defaults;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("defaultFacets", defaultedFacets);
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("defaultFacets", defaultedFacets);
     }
 }

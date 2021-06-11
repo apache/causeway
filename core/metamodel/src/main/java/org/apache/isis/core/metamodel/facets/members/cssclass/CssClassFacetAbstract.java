@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.members.cssclass;
 
-import java.util.Map;
 import java.util.Objects;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -50,9 +50,9 @@ implements CssClassFacet {
     }
 
     @Override
-    public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("cssClass", cssClass);
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("cssClass", cssClass);
     }
 
     @Override

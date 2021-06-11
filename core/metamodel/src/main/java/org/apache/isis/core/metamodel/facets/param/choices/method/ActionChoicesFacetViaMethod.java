@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.param.choices.method;
 
 import java.lang.reflect.Method;
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.exceptions.unrecoverable.DomainModelException;
 import org.apache.isis.commons.collections.Can;
@@ -100,9 +100,9 @@ implements ImperativeFacet {
         return "method=" + method + ",type=" + choicesType;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
-        attributeMap.put("choicesType", choicesType);
+    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        ImperativeFacet.Util.appendAttributesTo(this, visitor);
+        visitor.accept("choicesType", choicesType);
     }
 }

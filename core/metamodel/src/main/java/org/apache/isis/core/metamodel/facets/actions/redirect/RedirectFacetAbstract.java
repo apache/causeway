@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.actions.redirect;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.annotation.Redirect;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -59,9 +59,9 @@ public abstract class RedirectFacetAbstract extends FacetAbstract implements Red
         return "redirect=" + redirect;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("redirect", redirect);
+    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("redirect", redirect);
     }
 
 }

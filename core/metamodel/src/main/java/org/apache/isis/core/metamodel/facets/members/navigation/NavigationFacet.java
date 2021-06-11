@@ -20,15 +20,8 @@
 package org.apache.isis.core.metamodel.facets.members.navigation;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.hidden.HiddenTypeFacet;
 import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
-import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet;
-import org.apache.isis.core.metamodel.spec.feature.MixedIn;
-
-import lombok.val;
 
 /**
  * Hides object members that would allow navigation to a domain type that is

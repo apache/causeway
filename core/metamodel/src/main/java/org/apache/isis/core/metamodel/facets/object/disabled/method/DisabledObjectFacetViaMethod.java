@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.object.disabled.method;
 
 import java.lang.reflect.Method;
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.Identifier.Type;
@@ -92,9 +92,9 @@ implements ImperativeFacet {
     }
 
     @Override
-    public void appendAttributesTo(final Map<String, Object> attributeMap) {
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
         val method = methods.getFirstOrFail();
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("method", method);
+        super.visitAttributes(visitor);
+        visitor.accept("method", method);
     }
 }

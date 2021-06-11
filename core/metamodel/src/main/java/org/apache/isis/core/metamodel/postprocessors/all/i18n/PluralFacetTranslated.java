@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.postprocessors.all.i18n;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
@@ -48,9 +48,9 @@ public class PluralFacetTranslated extends FacetAbstract implements PluralFacet 
         return StringExtensions.asPluralName(singularName);
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("context", context);
-        attributeMap.put("originalText", originalText);
+    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("context", context);
+        visitor.accept("originalText", originalText);
     }
 }

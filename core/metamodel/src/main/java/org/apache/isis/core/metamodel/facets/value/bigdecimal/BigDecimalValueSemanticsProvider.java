@@ -23,7 +23,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
@@ -74,9 +74,7 @@ implements BigDecimalValueFacet {
 
     }
 
-    // //////////////////////////////////////////////////////////////////
-    // Parser
-    // //////////////////////////////////////////////////////////////////
+    // -- SCALE, PRECISION
 
     @Override
     public Integer getPrecision() {
@@ -88,9 +86,7 @@ implements BigDecimalValueFacet {
         return DEFAULT_SCALE;
     }
 
-    // //////////////////////////////////////////////////////////////////
-    // Parser
-    // //////////////////////////////////////////////////////////////////
+    // -- PARSER
 
     @Override
     protected BigDecimal doParse(final Object context, final String entry) {
@@ -100,6 +96,8 @@ implements BigDecimalValueFacet {
             throw new TextEntryParseException("Not an decimal " + entry, e);
         }
     }
+
+    // -- TITLE
 
     @Override
     public String titleString(final Object object) {
@@ -111,9 +109,7 @@ implements BigDecimalValueFacet {
         return titleString(new DecimalFormat(usingMask), value);
     }
 
-    // //////////////////////////////////////////////////////////////////
-    // EncoderDecoder
-    // //////////////////////////////////////////////////////////////////
+    // -- ENCODER DECODER
 
     @Override
     protected String doEncode(final BigDecimal object) {
@@ -137,16 +133,19 @@ implements BigDecimalValueFacet {
         return new BigDecimal(data);
     }
 
-    // /////// toString ///////
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("format", format);
+    }
+
+    // -- TO STRING
 
     @Override
     public String toString() {
         return "BigDecimalValueSemanticsProvider: " + format;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("format", format);
-    }
+
 
 }

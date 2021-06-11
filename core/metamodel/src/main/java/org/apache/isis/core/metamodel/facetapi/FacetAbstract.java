@@ -19,9 +19,9 @@
 
 package org.apache.isis.core.metamodel.facetapi;
 
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import org.apache.isis.commons.internal.collections._Sets;
@@ -176,17 +176,17 @@ public abstract class FacetAbstract implements Facet, HasMetaModelContext {
     }
 
     @Override
-    public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        attributeMap.put("precedence", getPrecedence().name());
-        attributeMap.put("underlyingFacet", underlyingFacet);
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        visitor.accept("precedence", getPrecedence().name());
+        visitor.accept("underlyingFacet", underlyingFacet);
         if(isHiding()) {
-            attributeMap.put("hiding", isHiding());
+            visitor.accept("hiding", isHiding());
         }
         if(isDisabling()) {
-            attributeMap.put("disabling", isDisabling());
+            visitor.accept("disabling", isDisabling());
         }
         if(isValidating()) {
-            attributeMap.put("validating", isValidating());
+            visitor.accept("validating", isValidating());
         }
     }
 

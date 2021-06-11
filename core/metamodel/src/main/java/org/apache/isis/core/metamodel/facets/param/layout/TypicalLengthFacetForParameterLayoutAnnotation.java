@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.param.layout;
 
-import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -53,9 +53,9 @@ extends TypicalLengthFacetAbstract {
         return value;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("value", value);
+    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("value", value);
     }
 
 }

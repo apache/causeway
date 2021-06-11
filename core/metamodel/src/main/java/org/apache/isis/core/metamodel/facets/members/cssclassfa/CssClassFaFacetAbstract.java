@@ -18,8 +18,8 @@
 package org.apache.isis.core.metamodel.facets.members.cssclassfa;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -35,7 +35,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import lombok.Getter;
 import lombok.val;
 
-public class CssClassFaFacetAbstract extends FacetAbstract implements CssClassFaFacet {
+public class CssClassFaFacetAbstract
+extends FacetAbstract
+implements CssClassFaFacet {
 
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
     private static final String FIXED_WIDTH = "fa-fw";
@@ -61,10 +63,10 @@ public class CssClassFaFacetAbstract extends FacetAbstract implements CssClassFa
     }
 
     @Override
-    public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("position", position);
-        attributeMap.put("classes", asSpaceSeparated());
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("position", position);
+        visitor.accept("classes", asSpaceSeparated());
     }
 
     // -- HELPER

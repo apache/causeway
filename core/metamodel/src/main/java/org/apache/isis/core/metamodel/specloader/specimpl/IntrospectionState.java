@@ -18,8 +18,6 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;
-
 public enum IntrospectionState implements Comparable<IntrospectionState> {
     /**
      * {@link ObjectTypeFacet} only.

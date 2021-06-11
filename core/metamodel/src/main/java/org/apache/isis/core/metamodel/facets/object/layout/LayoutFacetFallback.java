@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.object.layout;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -37,8 +37,8 @@ public class LayoutFacetFallback extends LayoutFacetAbstract {
     }
 
     @Override
-    public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
     }
 
 }

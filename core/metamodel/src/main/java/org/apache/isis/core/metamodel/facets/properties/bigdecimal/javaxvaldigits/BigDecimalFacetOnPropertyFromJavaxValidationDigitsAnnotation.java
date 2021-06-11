@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.properties.bigdecimal.javaxvaldigits;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import javax.validation.constraints.Digits;
 
@@ -64,10 +64,10 @@ public class BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation extend
         return scale;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("precision", precision);
-        attributeMap.put("scale", scale);
+    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("precision", precision);
+        visitor.accept("scale", scale);
     }
 
 }

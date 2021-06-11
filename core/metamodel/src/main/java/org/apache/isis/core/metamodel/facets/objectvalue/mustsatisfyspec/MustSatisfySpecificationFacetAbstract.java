@@ -20,8 +20,8 @@
 package org.apache.isis.core.metamodel.facets.objectvalue.mustsatisfyspec;
 
 import java.util.Arrays;
-import java.util.Map;
 import java.util.Objects;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.i18n.TranslationContext;
@@ -95,9 +95,9 @@ implements MustSatisfySpecificationFacet {
     }
 
     @Override
-    public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("specifications", specifications);
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("specifications", specifications);
     }
 
     @Override

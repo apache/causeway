@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.members.layout.group;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -49,10 +49,10 @@ implements LayoutGroupFacet {
     }
 
     @Override
-    public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("groupId", getGroupId());
-        attributeMap.put("groupName", getGroupName());
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("groupId", getGroupId());
+        visitor.accept("groupName", getGroupName());
     }
 
 }

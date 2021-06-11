@@ -23,7 +23,7 @@ import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
@@ -114,8 +114,9 @@ public class BigIntegerValueSemanticsProvider extends ValueSemanticsProviderAndF
         return "BigIntegerValueSemanticsProvider: " + format;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("format", format);
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("format", format);
     }
 }

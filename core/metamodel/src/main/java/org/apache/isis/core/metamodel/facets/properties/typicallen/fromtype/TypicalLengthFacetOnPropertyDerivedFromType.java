@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.properties.typicallen.fromtype;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
@@ -41,9 +41,9 @@ public class TypicalLengthFacetOnPropertyDerivedFromType extends TypicalLengthFa
         return (facet != null ? facet.numberOfLines() : 1) * typicalLengthFacet.value();
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("typicalLengthFacet", typicalLengthFacet);
+    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("typicalLengthFacet", typicalLengthFacet);
     }
 
 }

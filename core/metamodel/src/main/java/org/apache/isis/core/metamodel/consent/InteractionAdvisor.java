@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.consent;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -50,7 +50,7 @@ public interface InteractionAdvisor {
         }
 
         @Override
-        public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        public void visitAttributes(final BiConsumer<String, Object> visitor) {
         }
 
         @Override

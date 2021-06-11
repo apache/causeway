@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.properties.autocomplete.method;
 
 import java.lang.reflect.Method;
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -89,11 +89,11 @@ implements ImperativeFacet {
         return "method=" + method + ",class=" + choicesClass;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
-        attributeMap.put("choicesType", choicesClass);
-        attributeMap.put("minLength", minLength);
+    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        ImperativeFacet.Util.appendAttributesTo(this, visitor);
+        visitor.accept("choicesType", choicesClass);
+        visitor.accept("minLength", minLength);
     }
 
 }

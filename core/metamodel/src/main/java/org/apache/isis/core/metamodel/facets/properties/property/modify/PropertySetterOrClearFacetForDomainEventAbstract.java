@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.properties.property.modify;
 
-import java.util.Map;
 import java.util.Objects;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
@@ -294,10 +294,10 @@ implements
         return getServiceRegistry().lookupServiceElseFail(InteractionDtoFactory.class);
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("getterFacet", getterFacet);
-        attributeMap.put("setterFacet", setterFacet);
-        attributeMap.put("clearFacet", clearFacet);
+    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("getterFacet", getterFacet);
+        visitor.accept("setterFacet", setterFacet);
+        visitor.accept("clearFacet", clearFacet);
     }
 }

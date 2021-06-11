@@ -22,8 +22,8 @@ package org.apache.isis.core.metamodel.facets.actions.action.invocation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
@@ -105,12 +105,12 @@ implements ImperativeFacet {
     }
 
     @Override
-    public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
-        attributeMap.put("onType", onType);
-        attributeMap.put("returnType", returnType);
-        attributeMap.put("eventType", eventType);
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        ImperativeFacet.Util.appendAttributesTo(this, visitor);
+        visitor.accept("onType", onType);
+        visitor.accept("returnType", returnType);
+        visitor.accept("eventType", eventType);
     }
 
     @Override

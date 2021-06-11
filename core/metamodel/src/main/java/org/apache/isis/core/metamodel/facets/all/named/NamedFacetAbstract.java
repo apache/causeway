@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.all.named;
 
-import java.util.Map;
 import java.util.Objects;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -63,10 +63,10 @@ implements NamedFacet {
     }
 
     @Override
-    public void appendAttributesTo(Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("value", value);
-        attributeMap.put("escaped", escaped);
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("value", value);
+        visitor.accept("escaped", escaped);
     }
 
     @Override

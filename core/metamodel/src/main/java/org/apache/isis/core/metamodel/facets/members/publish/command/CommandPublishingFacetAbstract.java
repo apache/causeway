@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.members.publish.command;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.applib.services.inject.ServiceInjector;
@@ -80,8 +80,9 @@ implements CommandPublishingFacet {
         }
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("dtoProcessor", processor);
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("dtoProcessor", processor);
     }
 }

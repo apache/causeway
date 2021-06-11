@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
-import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -89,9 +89,9 @@ public class PromptStyleFacetForActionLayoutAnnotation extends PromptStyleFacetA
         return promptStyle;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("promptStyle", promptStyle);
+    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("promptStyle", promptStyle);
     }
 
 }

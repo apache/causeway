@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -57,9 +57,9 @@ implements SingleClassValueFacet {
     }
 
     @Override
-    public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("value", value());
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("value", value());
     }
 
     @Override

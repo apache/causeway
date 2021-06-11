@@ -18,7 +18,7 @@
  */
 package org.apache.isis.persistence.jdo.metamodel.facets.object.datastoreidentity;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 
@@ -28,8 +28,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityFacet;
 
 
-public abstract class JdoDatastoreIdentityFacetAbstract extends FacetAbstract implements
-JdoDatastoreIdentityFacet {
+public abstract class JdoDatastoreIdentityFacetAbstract
+extends FacetAbstract
+implements JdoDatastoreIdentityFacet {
 
 
     public static Class<? extends Facet> type() {
@@ -48,8 +49,9 @@ JdoDatastoreIdentityFacet {
         return strategy;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("strategy", strategy);
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("strategy", strategy);
     }
 }

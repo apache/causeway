@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.objectvalue.regex;
 
-import java.util.Map;
 import java.util.Objects;
+import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -88,9 +88,9 @@ implements RegExFacet {
     }
 
     @Override
-    public final void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("pattern", pattern);
+    public final void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("pattern", pattern);
     }
 
     @Override

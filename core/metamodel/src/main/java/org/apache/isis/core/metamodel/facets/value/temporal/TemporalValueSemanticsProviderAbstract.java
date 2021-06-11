@@ -25,6 +25,7 @@ import java.time.temporal.TemporalQuery;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -104,10 +105,10 @@ implements TemporalValueFacet<T> {
     }
 
     @Override
-    public void appendAttributesTo(Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("temporalCharacteristic", getTemporalCharacteristic());
-        attributeMap.put("offsetCharacteristic", getOffsetCharacteristic());
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("temporalCharacteristic", getTemporalCharacteristic());
+        visitor.accept("offsetCharacteristic", getOffsetCharacteristic());
     }
 
     protected void setEncodingFormatter(DateTimeFormatter encodingFormatter) {

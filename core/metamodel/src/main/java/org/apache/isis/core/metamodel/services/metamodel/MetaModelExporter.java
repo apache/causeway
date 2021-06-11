@@ -391,7 +391,7 @@ class MetaModelExporter {
             final Config config) {
 
         Map<String, Object> attributeMap = _Maps.newTreeMap();
-        facet.appendAttributesTo(attributeMap);
+        facet.visitAttributes(attributeMap::put);
 
         for (final String key : attributeMap.keySet()) {
             Object attributeObj = attributeMap.get(key);

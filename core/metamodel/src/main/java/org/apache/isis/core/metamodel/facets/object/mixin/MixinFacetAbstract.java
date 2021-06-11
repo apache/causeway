@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets.object.mixin;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -104,10 +104,10 @@ implements MixinFacet {
     }
 
     @Override
-    public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("mixinType", mixinType);
-        attributeMap.put("holderType", holderType);
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("mixinType", mixinType);
+        visitor.accept("holderType", holderType);
     }
 
     /**

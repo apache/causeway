@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.members.disabled;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -85,10 +85,10 @@ public abstract class DisabledFacetAbstract extends WhereValueFacetAbstract impl
     }
 
     @Override
-    public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("semantics", semantics);
-        attributeMap.put("inverted", isInvertedSemantics());
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("semantics", semantics);
+        visitor.accept("inverted", isInvertedSemantics());
     }
 
 }

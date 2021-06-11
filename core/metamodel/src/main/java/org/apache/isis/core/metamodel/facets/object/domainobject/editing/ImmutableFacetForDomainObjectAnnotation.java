@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobject.editing;
 
-import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.commons.internal.base._Strings;
@@ -100,9 +100,9 @@ public class ImmutableFacetForDomainObjectAnnotation extends ImmutableFacetAbstr
     }
 
     @Override
-    public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("reason", reason);
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("reason", reason);
     }
 
 

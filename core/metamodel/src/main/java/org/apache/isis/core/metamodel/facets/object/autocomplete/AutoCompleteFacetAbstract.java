@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.autocomplete;
 
 import java.lang.reflect.Method;
 import java.util.Collections;
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.reflection._Reflect;
@@ -104,10 +104,11 @@ implements AutoCompleteFacet {
         return minLength;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("repositoryClass", repositoryClass);
-        attributeMap.put("repositoryMethod", repositoryMethod);
-        attributeMap.put("minLength", getMinLength());
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("repositoryClass", repositoryClass);
+        visitor.accept("repositoryMethod", repositoryMethod);
+        visitor.accept("minLength", getMinLength());
     }
 }

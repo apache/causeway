@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
@@ -132,9 +133,9 @@ public class JavaUtilDateValueSemanticsProvider extends ValueSemanticsProviderAb
     }
 
     @Override
-    public void appendAttributesTo(Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("configuredFormat", configuredFormat);
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("configuredFormat", configuredFormat);
     }
 
 

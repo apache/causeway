@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.actions.prototype;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.core.config.environment.DeploymentType;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -48,8 +48,8 @@ public abstract class PrototypeFacetAbstract extends FacetAbstract implements Pr
                         : null;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("deploymentType", deploymentType.name());
+    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("deploymentType", deploymentType.name());
     }
 }

@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.object.promptStyle;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -37,9 +37,9 @@ public class PromptStyleFacetAsConfigured extends PromptStyleFacetAbstract {
         return promptStyle;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("promptStyle", promptStyle);
+    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("promptStyle", promptStyle);
     }
 
 }

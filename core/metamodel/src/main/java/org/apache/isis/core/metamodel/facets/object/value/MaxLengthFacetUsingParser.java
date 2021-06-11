@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.object.value;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -51,8 +51,8 @@ public class MaxLengthFacetUsingParser extends MaxLengthFacetAbstract{
         return "maxLength=" + value();
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("parser", parser);
+    @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("parser", parser);
     }
 }

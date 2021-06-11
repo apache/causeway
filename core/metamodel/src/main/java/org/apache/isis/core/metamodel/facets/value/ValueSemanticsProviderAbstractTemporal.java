@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.adapters.EncodingException;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
@@ -320,8 +321,8 @@ implements DateValueFacet {
     }
 
     @Override
-    public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("propertyType", propertyType);
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("propertyType", propertyType);
     }
 }
