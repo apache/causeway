@@ -33,7 +33,7 @@ import lombok.NonNull;
  * @see InteractionLayerTracker
  * @since 2.x {@index}
  */
-public interface InteractionService {
+public interface InteractionService extends InteractionLayerTracker {
 
     /**
      * If present, reuses the current top level {@link InteractionLayer}, otherwise creates a new
