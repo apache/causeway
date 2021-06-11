@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.properties.update.clear;
 
 import java.lang.reflect.Method;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -79,5 +80,10 @@ implements ImperativeFacet {
         return "method=" + method;
     }
 
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        ImperativeFacet.super.visitAttributes(visitor);
+    }
 
 }

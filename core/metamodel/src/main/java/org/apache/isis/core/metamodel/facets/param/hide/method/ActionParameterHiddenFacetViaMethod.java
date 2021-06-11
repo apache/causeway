@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.param.hide.method;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -90,6 +91,12 @@ implements ImperativeFacet {
         val other = (ActionParameterHiddenFacetViaMethod)otherFacet;
         return this.ppmFactory.equals(other.ppmFactory)
                 && this.getMethods().equals(other.getMethods());
+    }
+
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        ImperativeFacet.super.visitAttributes(visitor);
     }
 
 

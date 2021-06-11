@@ -92,6 +92,7 @@ implements ImperativeFacet {
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
+        ImperativeFacet.super.visitAttributes(visitor);
         visitor.accept("choicesType", choicesClass);
         visitor.accept("minLength", minLength);
     }

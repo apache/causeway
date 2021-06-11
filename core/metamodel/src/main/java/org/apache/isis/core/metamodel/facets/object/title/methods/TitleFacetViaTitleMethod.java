@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.object.title.methods;
 
 import java.lang.reflect.Method;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationContext;
@@ -87,4 +88,10 @@ implements ImperativeFacet {
         }
     }
 
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        ImperativeFacet.super.visitAttributes(visitor);
+    }
+    
 }

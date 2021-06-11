@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.properties.defaults.method;
 
 import java.lang.reflect.Method;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.exceptions.unrecoverable.UnknownTypeException;
 import org.apache.isis.commons.collections.Can;
@@ -74,6 +75,12 @@ implements ImperativeFacet {
     protected String toStringValues() {
         val method = methods.getFirstOrFail();
         return "method=" + method;
+    }
+
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        ImperativeFacet.super.visitAttributes(visitor);
     }
 
 }
