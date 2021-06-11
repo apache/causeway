@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtimeservices.sudo;
+package org.apache.isis.applib.services.sudo;
 
 import java.util.concurrent.Callable;
 import java.util.function.UnaryOperator;

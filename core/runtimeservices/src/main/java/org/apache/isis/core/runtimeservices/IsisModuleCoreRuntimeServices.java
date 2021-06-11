@@ -55,7 +55,7 @@ import org.apache.isis.core.runtimeservices.repository.RepositoryServiceDefault;
 import org.apache.isis.core.runtimeservices.routing.RoutingServiceDefault;
 import org.apache.isis.core.runtimeservices.scratchpad.ScratchpadDefault;
 import org.apache.isis.core.runtimeservices.session.InteractionServiceDefault;
-import org.apache.isis.core.runtimeservices.sudo.SudoServiceDefault;
+import org.apache.isis.applib.services.sudo.SudoServiceDefault;
 import org.apache.isis.core.runtimeservices.transaction.TransactionServiceSpring;
 import org.apache.isis.core.runtimeservices.urlencoding.UrlEncodingServiceWithCompression;
 import org.apache.isis.core.runtimeservices.user.ImpersonateMenuAdvisorDefault;
@@ -99,7 +99,6 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         MessageServiceDefault.class,
         QueryResultsCacheDefault.class,
         ScratchpadDefault.class,
-        SudoServiceDefault.class,
         TransactionServiceSpring.class,
         UrlEncodingServiceWithCompression.class,
         UserServiceDefault.class,
