@@ -23,9 +23,9 @@ Doing it this way makes it easy to keep the branches in sync.
 . merge jdo-SNAPSHOT to jpa-SNAPSHOT, and fix any persistence differences
 
 [NOTE]
-----
+====
 If you do want to update the antora docs and have them updated on-line, then the procedure is to check out the released branch (M5) and make changes there.
 Then we build and copy over to the apache/isis-site repo to publish up to isis.apache.org.
-----
+====
 
 

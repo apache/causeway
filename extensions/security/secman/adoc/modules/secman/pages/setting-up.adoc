@@ -40,14 +40,14 @@ In the webapp module of your application, add the following dependency:
 .pom.xml
 ----
 <dependencies>
-        <dependency>
-            <groupId>org.apache.isis.extensions</groupId>
-            <artifactId>isis-extensions-secman-persistence-XXX</artifactId> <!--.-->
-        </dependency>
-        <dependency>
-            <groupId>org.apache.isis.extensions</groupId>
-            <artifactId>isis-extensions-secman-encryption-jbcrypt</artifactId> <!--.-->
-        </dependency>
+    <dependency>
+        <groupId>org.apache.isis.extensions</groupId>
+        <artifactId>isis-extensions-secman-persistence-XXX</artifactId>    <!--.-->
+    </dependency>
+    <dependency>
+        <groupId>org.apache.isis.extensions</groupId>
+        <artifactId>isis-extensions-secman-encryption-jbcrypt</artifactId> <!--.-->
+    </dependency>
 </dependencies>
 ----
 <.> specify either `isis-extensions-secman-persistence-jpa` or `isis-extensions-secman-persistence-jdo`, as required
@@ -427,7 +427,6 @@ public class UserToRole__joe_UserRw_but_NoDelete
 ----
 <.> application-specific roles
 <.> regular user access (always required)
-<.> specific access to framework features, see <<default-roles,above>>
 
 To seed in fixture scripts we could create a top-level `CustomRolesAndUsers` script (as mentioned in <<custom-seed-service,above>>).
 This would then look something like:

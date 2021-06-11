@@ -1,6 +1,6 @@
 
 
 
-* xref:subdomains:spring:about.adoc[Spring]
+* xref:subdomains:spring:about.adoc[Spring Library]
 
 
