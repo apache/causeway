@@ -49,7 +49,7 @@ import lombok.With;
  */
 @DomainObject(logicalTypeName = UserMemento.LOGICAL_TYPE_NAME)
 @lombok.Value @lombok.Builder
-public final class UserMemento implements Serializable {
+public class UserMemento implements Serializable {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".UserMemento";
 
@@ -134,22 +134,25 @@ public final class UserMemento implements Serializable {
     @Property
     @PropertyLayout(sequence = "1.1")
     @Getter
-    private final @NonNull String name;
+    @NonNull
+    String name;
 
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(sequence = "1.2")
     @Getter @With(onMethod_ = {@Programmatic})
-    private final @Nullable String realName;
+    @Nullable
+    String realName;
 
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(sequence = "1.3")
     @Getter @With(onMethod_ = {@Programmatic})
-    private final @Nullable URL avatarUrl;
+    @Nullable
+    URL avatarUrl;
 
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(sequence = "1.4")
     @Getter @Builder.Default @With(onMethod_ = {@Programmatic})
-    private final boolean impersonating = false;
+    boolean impersonating = false;
 
     /**
      * The roles associated with this user.
@@ -162,7 +165,7 @@ public final class UserMemento implements Serializable {
 
     @Programmatic
     @Builder.Default
-    private final Can<RoleMemento> roles = Can.empty();
+    Can<RoleMemento> roles = Can.empty();
 
 
     @Programmatic
@@ -203,7 +206,7 @@ public final class UserMemento implements Serializable {
     @Property
     @PropertyLayout(sequence = "2.0")
     @Getter @Builder.Default @With(onMethod_ = {@Programmatic})
-    private final @NonNull AuthenticationSource authenticationSource = AuthenticationSource.DEFAULT;
+    @NonNull AuthenticationSource authenticationSource = AuthenticationSource.DEFAULT;
 
     public enum AuthenticationSource {
         DEFAULT,
@@ -233,7 +236,7 @@ public final class UserMemento implements Serializable {
     @Property
     @PropertyLayout(sequence = "2.1")
     @Getter @Builder.Default @With(onMethod_ = {@Programmatic})
-    private final @NonNull String authenticationCode = DEFAULT_AUTH_VALID_CODE;
+    @NonNull String authenticationCode = DEFAULT_AUTH_VALID_CODE;
 
 
     // -- UTILITY
@@ -261,7 +264,4 @@ public final class UserMemento implements Serializable {
         return UserMemento.builder()
                 .name(name);
     }
-
-
 }
-
