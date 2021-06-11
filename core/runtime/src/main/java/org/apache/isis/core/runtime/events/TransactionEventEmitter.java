@@ -27,7 +27,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.core.interaction.scope.InteractionScopeAware;
-import org.apache.isis.core.interaction.session.InteractionTracker;
+import org.apache.isis.applib.services.iactnlayer.InteractionTracker;
 import org.apache.isis.core.transaction.events.TransactionAfterCompletionEvent;
 import org.apache.isis.core.transaction.events.TransactionBeforeCompletionEvent;
 

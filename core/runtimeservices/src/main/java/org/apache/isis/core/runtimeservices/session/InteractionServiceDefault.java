@@ -61,7 +61,7 @@ import org.apache.isis.core.interaction.integration.InteractionAwareTransactiona
 import org.apache.isis.core.interaction.scope.InteractionScopeAware;
 import org.apache.isis.core.interaction.scope.InteractionScopeBeanFactoryPostProcessor;
 import org.apache.isis.core.interaction.scope.InteractionScopeLifecycleHandler;
-import org.apache.isis.core.interaction.session.InteractionTracker;
+import org.apache.isis.applib.services.iactnlayer.InteractionTracker;
 import org.apache.isis.core.interaction.session.IsisInteraction;
 import org.apache.isis.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;

@@ -35,7 +35,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.codec._UrlDecoderUtil;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.interaction.session.InteractionTracker;
+import org.apache.isis.applib.services.iactnlayer.InteractionTracker;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;

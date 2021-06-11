@@ -36,7 +36,7 @@ import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Text;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
-import org.apache.isis.core.interaction.session.InteractionTracker;
+import org.apache.isis.applib.services.iactnlayer.InteractionTracker;
 import org.apache.isis.core.security.util.XrayUtil;
 import org.apache.isis.core.security.util.XrayUtil.SequenceHandle;
 

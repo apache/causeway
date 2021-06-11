@@ -24,7 +24,7 @@ import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.core.interaction.session.InteractionTracker;
+import org.apache.isis.applib.services.iactnlayer.InteractionTracker;
 import org.apache.isis.core.interaction.session.IsisInteraction;
 import org.apache.isis.core.security.authentication.logout.LogoutHandler;
 

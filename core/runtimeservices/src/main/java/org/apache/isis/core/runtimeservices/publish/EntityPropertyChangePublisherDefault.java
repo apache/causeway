@@ -39,7 +39,7 @@ import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.having.HasEnabling;
-import org.apache.isis.core.interaction.session.InteractionTracker;
+import org.apache.isis.applib.services.iactnlayer.InteractionTracker;
 import org.apache.isis.core.transaction.changetracking.EntityPropertyChangePublisher;
 import org.apache.isis.core.transaction.changetracking.HasEnlistedEntityPropertyChanges;
 

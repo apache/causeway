@@ -32,7 +32,7 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.interaction.session.InteractionTracker;
+import org.apache.isis.applib.services.iactnlayer.InteractionTracker;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 
 @Component

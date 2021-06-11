@@ -37,7 +37,7 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.interaction.session.InteractionTracker;
+import org.apache.isis.applib.services.iactnlayer.InteractionTracker;
 import org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketApplication;
 
 import lombok.val;

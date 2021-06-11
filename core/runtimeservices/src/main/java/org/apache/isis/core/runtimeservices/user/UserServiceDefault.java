@@ -34,7 +34,7 @@ import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.user.ImpersonatedUserHolder;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.user.UserService;
-import org.apache.isis.core.interaction.session.InteractionTracker;
+import org.apache.isis.applib.services.iactnlayer.InteractionTracker;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

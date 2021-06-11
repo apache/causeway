@@ -30,7 +30,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
-import org.apache.isis.core.interaction.session.InteractionTracker;
+import org.apache.isis.applib.services.iactnlayer.InteractionTracker;
 
 import lombok.RequiredArgsConstructor;
 

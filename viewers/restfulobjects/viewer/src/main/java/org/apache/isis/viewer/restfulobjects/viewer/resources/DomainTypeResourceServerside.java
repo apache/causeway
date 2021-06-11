@@ -33,7 +33,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.interaction.session.InteractionTracker;
+import org.apache.isis.applib.services.iactnlayer.InteractionTracker;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;

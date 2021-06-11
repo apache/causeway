@@ -33,11 +33,11 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
+import org.apache.isis.applib.services.iactnlayer.InteractionTracker;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.sudo.SudoServiceListener;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.interaction.session.InteractionTracker;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +46,7 @@ import lombok.val;
 import jakarta.annotation.PostConstruct;
 
 @Service
-@Named("isis.runtimeservices.SudoServiceDefault")
+@Named("isis.applib.SudoServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

@@ -29,7 +29,7 @@ import org.springframework.beans.factory.config.Scope;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.interaction.session.InteractionTracker;
+import org.apache.isis.applib.services.iactnlayer.InteractionTracker;
 
 import lombok.Data;
 import lombok.val;

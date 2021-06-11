@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.interaction.session;
+package org.apache.isis.applib.services.iactnlayer;
 
 import java.util.Optional;
 

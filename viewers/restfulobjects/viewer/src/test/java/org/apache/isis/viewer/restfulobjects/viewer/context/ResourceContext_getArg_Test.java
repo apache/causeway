@@ -33,7 +33,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.commons.internal.codec._UrlDecoderUtil;
-import org.apache.isis.core.interaction.session.InteractionTracker;
+import org.apache.isis.applib.services.iactnlayer.InteractionTracker;
 import org.apache.isis.core.interaction.session.IsisInteraction;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
