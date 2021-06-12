@@ -18,9 +18,12 @@
  */
 package org.apache.isis.applib.services.metamodel;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedSet;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -37,8 +40,10 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.jaxb.JaxbService;
+import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.schema.metamodel.v2.MetamodelDto;
 
@@ -74,14 +79,16 @@ public class MetaModelServiceMenu {
             cssClassFa = "fa-download",
             named = "Download Meta Model (CSV)",
             sequence="500.500.2")
-    public Clob downloadMetaModelCsv(
+    public Blob downloadMetaModelCsv(
             @ParameterLayout(named = ".csv file name")
             final String csvFileName) {
 
         final DomainModel domainModel =  metaModelService.getDomainModel();
         final StringBuilder csv = _CsvExport.toCsv(domainModel);
-
-        return Clob.of(csvFileName, CommonMimeType.CSV, csv);
+        
+        return Clob.of(csvFileName, CommonMimeType.CSV, csv)
+                .toBlob(UTF_8)
+                .zip(UTF_8);
 
         // ...
     }
@@ -103,7 +110,7 @@ public class MetaModelServiceMenu {
             cssClassFa = "fa-download",
             named = "Download Meta Model (XML)",
             sequence="500.500.2")
-    public Clob downloadMetaModelXml(
+    public Blob downloadMetaModelXml(
             @ParameterLayout(named = ".xml file name")
             final String fileName,
 
@@ -133,7 +140,9 @@ public class MetaModelServiceMenu {
 
         final String xml = jaxbService.toXml(metamodelDto);
 
-        return Clob.of(fileName, CommonMimeType.XML, xml);
+        return Clob.of(fileName, CommonMimeType.XML, xml)
+                .toBlob(UTF_8)
+                .zip(UTF_8);
 
         // ...
     }
@@ -174,7 +183,7 @@ public class MetaModelServiceMenu {
             cssClassFa = "fa-download",
             named = "Download Meta Model (Ascii)",
             sequence="500.500.2")
-    public Clob downloadMetaModelAscii(
+    public Blob downloadMetaModelAscii(
             @ParameterLayout(named = ".txt file name")
             final String fileName,
 
@@ -203,8 +212,10 @@ public class MetaModelServiceMenu {
         final MetamodelDto metamodelDto =  metaModelService.exportMetaModel(config);
 
         final StringBuilder ascii = _AsciiExport.toAscii(metamodelDto);
-
-        return Clob.of(fileName, CommonMimeType.TXT, ascii);
+        
+        return Clob.of(fileName, CommonMimeType.TXT, ascii)
+                .toBlob(UTF_8)
+                .zip(UTF_8);
 
         // ...
     }
@@ -233,6 +244,96 @@ public class MetaModelServiceMenu {
         return true;
     }
 
+    // -- DIFF
+
+    public static class DownloadMetaModelDiffEvent extends ActionDomainEvent { }
+    @Action(
+            domainEvent = DownloadMetaModelDiffEvent.class,
+            semantics = SemanticsOf.NON_IDEMPOTENT, //disable client-side caching
+            restrictTo = RestrictTo.PROTOTYPING
+            )
+    @ActionLayout(
+            cssClassFa = "fa-download",
+            named = "Generate Meta Model Diff",
+            sequence="500.500.2")
+    public Blob downloadMetaModelDiff(
+            @ParameterLayout(named = ".txt file name")
+            final String fileName,
+
+            @ParameterLayout(named = "Namespaces",
+            describedAs="Subset of the complete meta model, only including namespaces starting with given prefix")
+            final List<String> namespaces,
+
+            @ParameterLayout(named = "Ignore Interfaces")
+            @Parameter(optionality=Optionality.MANDATORY)
+            final boolean ignoreInterfaces, 
+            
+            @ParameterLayout(named="Metamodel (Zipped XML)", 
+            describedAs="Metamodel from a previous export, to compare the current with.")
+            @Parameter(fileAccept=".zip", optionality = Optionality.MANDATORY)
+            Blob rightZippedMetamodelBlob
+            
+            ) throws IOException {
+
+        Config config =
+                new Config()
+                .withIgnoreNoop()
+                .withIgnoreAbstractClasses()
+                .withIgnoreInterfaces()
+                .withIgnoreBuiltInValueTypes();
+        for (final String namespace : namespaces) {
+            config = config.withNamespacePrefix(namespace);
+        }
+        if(ignoreInterfaces) {
+            config = config.withIgnoreInterfaces();
+        }
+
+        final MetamodelDto leftMetamodelDto =  metaModelService.exportMetaModel(config);
+
+        final String xml = rightZippedMetamodelBlob
+                .unZip(CommonMimeType.XML, UTF_8)
+                .digest(inputStream->_Strings.read(inputStream, UTF_8));
+        
+        final MetamodelDto rightMetamodelDto =  jaxbService.fromXml(MetamodelDto.class, xml);
+
+        final StringBuilder diff = _DiffExport.toDiff(leftMetamodelDto, rightMetamodelDto);
+
+        return Clob.of(fileName, CommonMimeType.TXT, diff)
+                .toBlob(UTF_8)
+                .zip(UTF_8);
+
+        // ...
+    }
+
+    
+    @MemberSupport
+    public String validateDownloadMetaModelDiff(
+            final String fileName, 
+            final List<String> namespacePrefixes, 
+            final boolean ignoreInterfaces,
+            final Blob rightMetamodelBlob) {
+        if(namespacePrefixes == null || namespacePrefixes.isEmpty()) {
+            return "At least one package must be selected";
+        }
+        return null;
+    }
+
+    @MemberSupport
+    public String default0DownloadMetaModelDiff() {
+        return "metamodel-diff.txt";
+    }
+
+    @MemberSupport
+    public List<String> choices1DownloadMetaModelDiff() {
+        return namespaceChoices();
+    }
+
+    @MemberSupport
+    public boolean default2DownloadMetaModelDiff() {
+        return true;
+    }
+
+    
     // -- HELPER
 
     private List<String> namespaceChoices() {

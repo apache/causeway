@@ -20,11 +20,16 @@
 package org.apache.isis.applib.value;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
@@ -34,9 +39,15 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.jaxb.PrimitiveJaxbAdapters;
+import org.apache.isis.applib.util.ZipReader;
+import org.apache.isis.applib.util.ZipWriter;
+import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.image._Images;
 
+import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -150,6 +161,8 @@ public final class Blob implements NamedWithMimeType {
         return bytes;
     }
 
+    // -- UTILITIES
+    
     /**
      * Does not close the OutputStream.
      * @param os
@@ -163,6 +176,66 @@ public final class Blob implements NamedWithMimeType {
             os.write(bytes);
         }
     }
+    
+    /**
+     * The {@link InputStream} involved is closed after consumption.
+     * @param consumer
+     * @throws IOException
+     */
+    public void consume(Consumer<InputStream> consumer) throws IOException {
+     // null to empty
+        val bytes = Optional.ofNullable(getBytes())
+                .orElse(new byte[0]);
+        try(val bis = new ByteArrayInputStream(bytes)) {
+            consumer.accept(bis);    
+        }
+    }
+    
+    /**
+     * The {@link InputStream} involved is closed after digestion.
+     * @param <R>
+     * @param mapper
+     * @return
+     * @throws IOException
+     */
+    public <R> R digest(final @NonNull Function<InputStream, R> digester) throws IOException {
+        // null to empty
+        val bytes = Optional.ofNullable(getBytes())
+                .orElse(new byte[0]);
+        try(val bis = new ByteArrayInputStream(bytes)) {
+            return digester.apply(bis);    
+        }
+    }
+    
+    public Blob zip(final @NonNull Charset charset) {
+        val zipWriter = ZipWriter.newInstance();
+        zipWriter.nextEntry(getName(), writer->writer.write(new String(getBytes(), charset)));
+        return Blob.of(getName()+".zip", CommonMimeType.ZIP, zipWriter.toBytes());
+    }
+    
+    @SneakyThrows
+    public Blob unZip(final @NonNull CommonMimeType resultingMimeType, final @NonNull Charset charset) {
+        
+        return digest(is->
+            ZipReader.digest(is, charset, (zipEntry, zipInputStream)->{
+                if(zipEntry.isDirectory()) {
+                    return (Blob)null; // continue
+                }
+                final byte[] unzippedBytes;
+                try {
+                    unzippedBytes = _Bytes.of(zipInputStream);
+                } catch (IOException e) {
+                    throw _Exceptions
+                        .unrecoverable(String.format("failed to read zip entry %s", zipEntry.getName()), e);
+                }
+                return Blob.of(zipEntry.getName(), resultingMimeType, unzippedBytes);
+            })
+                
+        )
+        .orElse(Blob.of("blob_unzip_failed", resultingMimeType, new byte[0]));
+    }
+    
+    // -- OBJECT CONTRACT
 
     @Override
     public boolean equals(final Object o) {
@@ -254,5 +327,7 @@ public final class Blob implements NamedWithMimeType {
         }
 
     }
+
+
 
 }

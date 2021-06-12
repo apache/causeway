@@ -21,6 +21,7 @@ package org.apache.isis.applib.value;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
@@ -34,6 +35,7 @@ import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.jaxb.PrimitiveJaxbAdapters;
 import org.apache.isis.commons.internal.base._Strings;
 
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -158,12 +160,20 @@ public final class Clob implements NamedWithMimeType {
     public CharSequence getChars() {
         return chars;
     }
+    
+    // -- UTILITIES
 
     public void writeCharsTo(final Writer wr) throws IOException {
         if(wr!=null && chars!=null){
             wr.append(chars);
         }
     }
+    
+    public Blob toBlob(final @NonNull Charset charset) {
+        return new Blob(getName(), getMimeType(), _Strings.toBytes(getChars().toString(), charset));
+    }    
+    
+    // -- OBJECT CONTRACT
 
     @Override
     public boolean equals(final Object o) {
@@ -227,4 +237,6 @@ public final class Clob implements NamedWithMimeType {
         }
 
     }
+
+    
 }

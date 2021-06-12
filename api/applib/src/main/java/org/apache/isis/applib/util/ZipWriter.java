@@ -31,6 +31,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
+ * Zip utility for generating compressed output.
+ * <p>
  * Typical use:
  * <pre>
  * val zipWriter = ZipWriter.newInstance();
@@ -46,7 +48,7 @@ import lombok.val;
  * return BlobClobFactory.blobZip(fileName, zipWriter.toBytes());
  * </pre>
  * 
- * @since 2.0
+ * @since 2.0 {@index}
  * @apiNote Implementation is <em>not</em> thread safe.
  *
  */
