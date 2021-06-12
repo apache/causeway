@@ -133,7 +133,6 @@ public class ZipWriter {
         try {
             zos.putNextEntry(new ZipEntry(zipEntryName));
             onZipEntry.accept(writer);
-            zos.flush();
             zos.closeEntry();
         } catch (final IOException e) {
             throw _Exceptions.unrecoverable(failureMessage, e);
@@ -147,6 +146,11 @@ public class ZipWriter {
      */
     public byte[] toBytes() {
         if(zippedBytes==null) {
+            try {
+                zos.close();
+            } catch (IOException e) {
+                throw _Exceptions.unrecoverable(failureMessage, e);
+            }
             zippedBytes = baos.toByteArray();
         }
         return zippedBytes;
