@@ -163,15 +163,15 @@ public final class Clob implements NamedWithMimeType {
     
     // -- UTILITIES
 
+    public Blob toBlob(final @NonNull Charset charset) {
+        return new Blob(getName(), getMimeType(), _Strings.toBytes(getChars().toString(), charset));
+    } 
+    
     public void writeCharsTo(final Writer wr) throws IOException {
         if(wr!=null && chars!=null){
             wr.append(chars);
         }
     }
-    
-    public Blob toBlob(final @NonNull Charset charset) {
-        return new Blob(getName(), getMimeType(), _Strings.toBytes(getChars().toString(), charset));
-    }    
     
     // -- OBJECT CONTRACT
 

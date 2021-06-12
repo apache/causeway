@@ -24,6 +24,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
@@ -161,6 +162,10 @@ public final class Blob implements NamedWithMimeType {
     }
 
     // -- UTILITIES
+    
+    public Clob toClob(final @NonNull Charset charset) {
+        return new Clob(getName(), getMimeType(), _Strings.ofBytes(getBytes(), charset));
+    }
     
     /**
      * Does not close the OutputStream.
