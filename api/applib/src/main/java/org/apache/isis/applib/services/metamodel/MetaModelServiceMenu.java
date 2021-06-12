@@ -88,7 +88,7 @@ public class MetaModelServiceMenu {
         
         return Clob.of(csvFileName, CommonMimeType.CSV, csv)
                 .toBlob(UTF_8)
-                .zip(UTF_8);
+                .zip();
 
         // ...
     }
@@ -142,7 +142,7 @@ public class MetaModelServiceMenu {
 
         return Clob.of(fileName, CommonMimeType.XML, xml)
                 .toBlob(UTF_8)
-                .zip(UTF_8);
+                .zip();
 
         // ...
     }
@@ -215,7 +215,7 @@ public class MetaModelServiceMenu {
         
         return Clob.of(fileName, CommonMimeType.TXT, ascii)
                 .toBlob(UTF_8)
-                .zip(UTF_8);
+                .zip();
 
         // ...
     }
@@ -291,7 +291,7 @@ public class MetaModelServiceMenu {
         final MetamodelDto leftMetamodelDto =  metaModelService.exportMetaModel(config);
 
         final String xml = rightZippedMetamodelBlob
-                .unZip(CommonMimeType.XML, UTF_8)
+                .unZip(CommonMimeType.XML)
                 .digest(inputStream->_Strings.read(inputStream, UTF_8));
         
         final MetamodelDto rightMetamodelDto =  jaxbService.fromXml(MetamodelDto.class, xml);
@@ -300,7 +300,7 @@ public class MetaModelServiceMenu {
 
         return Clob.of(fileName, CommonMimeType.TXT, diff)
                 .toBlob(UTF_8)
-                .zip(UTF_8);
+                .zip();
 
         // ...
     }

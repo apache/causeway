@@ -57,7 +57,7 @@ public class ZipWriter {
 
     @FunctionalInterface
     public interface OnZipEntry {
-        public void accept(OutputStreamWriter writer) throws IOException;
+        public void accept(ZipOutputStream outputStream) throws IOException;
     }
 
     public static ZipWriter newInstance() {
@@ -67,15 +67,13 @@ public class ZipWriter {
     public static ZipWriter ofFailureMessage(String failureMessage) {
         val baos = new ByteArrayOutputStream();
         val zos = new ZipOutputStream(baos);
-        val writer = new OutputStreamWriter(zos);
-        return new ZipWriter(baos, zos, writer, failureMessage);
+        return new ZipWriter(baos, zos, failureMessage);
     }
 
     private final ByteArrayOutputStream baos;
     private final ZipOutputStream zos;
-    private final OutputStreamWriter writer;
     private final String failureMessage;
-    private byte[] content;
+    private byte[] zippedBytes;
 
     /**
      * Adds a new zipEntry with given {@code zipEntryName}, and provides the
@@ -85,13 +83,13 @@ public class ZipWriter {
      * @param onZipEntry
      */
     public void nextEntry(String zipEntryName, OnZipEntry onZipEntry) {
-        if(content!=null) {
+        if(zippedBytes!=null) {
             throw new IllegalStateException("Cannot create a new ZipEntry an a closed ZipWriter");
         }
         try {
             zos.putNextEntry(new ZipEntry(zipEntryName));
-            onZipEntry.accept(writer);
-            writer.flush();
+            onZipEntry.accept(zos);
+            zos.flush();
             zos.closeEntry();
         } catch (final IOException e) {
             throw _Exceptions.unrecoverable(failureMessage, e);
@@ -104,15 +102,10 @@ public class ZipWriter {
      * @return the byte array created by the underlying ZipOutputStream
      */
     public byte[] toBytes() {
-        if(content==null) {
-            try {
-                writer.close();
-            } catch (IOException e) {
-                throw _Exceptions.unrecoverable(failureMessage, e);
-            }
-            content = baos.toByteArray();
+        if(zippedBytes==null) {
+            zippedBytes = baos.toByteArray();
         }
-        return content;
+        return zippedBytes;
     }
 
 

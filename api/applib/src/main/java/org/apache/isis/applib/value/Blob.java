@@ -24,7 +24,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
@@ -207,17 +206,17 @@ public final class Blob implements NamedWithMimeType {
         }
     }
     
-    public Blob zip(final @NonNull Charset charset) {
+    public Blob zip() {
         val zipWriter = ZipWriter.newInstance();
-        zipWriter.nextEntry(getName(), writer->writer.write(new String(getBytes(), charset)));
+        zipWriter.nextEntry(getName(), outputStream->outputStream.write(getBytes()));
         return Blob.of(getName()+".zip", CommonMimeType.ZIP, zipWriter.toBytes());
     }
     
     @SneakyThrows
-    public Blob unZip(final @NonNull CommonMimeType resultingMimeType, final @NonNull Charset charset) {
+    public Blob unZip(final @NonNull CommonMimeType resultingMimeType) {
         
         return digest(is->
-            ZipReader.digest(is, charset, (zipEntry, zipInputStream)->{
+            ZipReader.digest(is, (zipEntry, zipInputStream)->{
                 if(zipEntry.isDirectory()) {
                     return (Blob)null; // continue
                 }

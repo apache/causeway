@@ -18,15 +18,13 @@
  */
 package org.apache.isis.applib.mixins.dto;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -111,8 +109,8 @@ public class Dto_downloadXsd {
         for (Map.Entry<String, String> entry : schemaMap.entrySet()) {
             val namespaceUri = entry.getKey();
             val schemaText = entry.getValue();
-            zipWriter.nextEntry(zipEntryNameFor(namespaceUri), writer->{
-                writer.write(schemaText);
+            zipWriter.nextEntry(zipEntryNameFor(namespaceUri), outputStream->{
+                outputStream.write(schemaText.getBytes(StandardCharsets.UTF_8));
             });
         }
 

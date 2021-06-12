@@ -21,6 +21,7 @@ package org.apache.isis.applib.util;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
@@ -41,6 +42,8 @@ import lombok.val;
  */
 public class ZipReader {
     
+    private static final Charset ENTRY_NAME_CHARSET = StandardCharsets.UTF_8;
+    
     /**
      * BiPredicate stating whether to continue visiting after consuming {@link ZipEntry}.
      * <p>
@@ -60,14 +63,13 @@ public class ZipReader {
     @SneakyThrows
     public static void read(
             final @Nullable InputStream inputStream, 
-            final @NonNull Charset charset, 
             final @NonNull ZipVisistor zipVisistor) {
         
         if(inputStream==null) {
             return; // no-op
         }
         
-        try(ZipInputStream in = new ZipInputStream(new BufferedInputStream(inputStream, 64*1024), charset)){
+        try(ZipInputStream in = new ZipInputStream(new BufferedInputStream(inputStream, 64*1024), ENTRY_NAME_CHARSET)){
             ZipEntry entry;
             while((entry=in.getNextEntry())!=null) {
                 if(!zipVisistor.test(entry, in)) {
@@ -77,17 +79,18 @@ public class ZipReader {
         }
     }
 
+    
+    
     @SneakyThrows
     public static <R> Optional<R> digest(
             final @Nullable InputStream inputStream, 
-            final @NonNull Charset charset, 
             final @NonNull ZipDigester<R> zipDigester) {
         
         if(inputStream==null) {
             return Optional.empty();
         }
         
-        try(ZipInputStream in = new ZipInputStream(new BufferedInputStream(inputStream, 64*1024), charset)){
+        try(ZipInputStream in = new ZipInputStream(new BufferedInputStream(inputStream, 64*1024), ENTRY_NAME_CHARSET)){
             ZipEntry entry;
             while((entry=in.getNextEntry())!=null) {
                 val digest = zipDigester.apply(entry, in);
