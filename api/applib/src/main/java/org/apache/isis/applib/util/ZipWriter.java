@@ -21,13 +21,21 @@ package org.apache.isis.applib.util;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import javax.annotation.Nullable;
+
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.AccessLevel;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import lombok.val;
 
 /**
@@ -55,9 +63,43 @@ import lombok.val;
 @RequiredArgsConstructor(staticName = "of", access = AccessLevel.PRIVATE)
 public class ZipWriter {
 
+    @Value(staticConstructor = "of")
+    public static class ZipOutputStreamWrapper {
+        private final @NonNull ZipOutputStream zipOutputStream;
+        
+        public void writeCharactersUtf8(final @Nullable CharSequence chars) throws IOException {
+            writeCharacters(chars, StandardCharsets.UTF_8);
+        }
+        
+        public void writeCharacters(
+                final @Nullable CharSequence chars, 
+                final @NonNull Charset charset) throws IOException {
+            if(chars==null 
+                    || chars.length()==0) {
+                return; // no-op
+            }
+            zipOutputStream.write(_Strings.toBytes(chars.toString(), charset));
+        }
+        
+        public void writeBytes(final @Nullable byte bytes[]) throws IOException {
+            if(_NullSafe.isEmpty(bytes)) {
+                return; // no-op
+            }
+            zipOutputStream.write(bytes);
+        }
+
+        public void writeBytes(final @Nullable byte bytes[], int off, int len) throws IOException {
+            if(_NullSafe.isEmpty(bytes)) {
+                return; // no-op
+            }
+            zipOutputStream.write(bytes, off, len);
+        }
+        
+    }
+    
     @FunctionalInterface
     public interface OnZipEntry {
-        public void accept(ZipOutputStream outputStream) throws IOException;
+        public void accept(ZipOutputStreamWrapper writer) throws IOException;
     }
 
     public static ZipWriter newInstance() {
@@ -67,11 +109,13 @@ public class ZipWriter {
     public static ZipWriter ofFailureMessage(String failureMessage) {
         val baos = new ByteArrayOutputStream();
         val zos = new ZipOutputStream(baos);
-        return new ZipWriter(baos, zos, failureMessage);
+        val writer = new ZipOutputStreamWrapper(zos);
+        return new ZipWriter(baos, zos, writer, failureMessage);
     }
 
     private final ByteArrayOutputStream baos;
     private final ZipOutputStream zos;
+    private final ZipOutputStreamWrapper writer;
     private final String failureMessage;
     private byte[] zippedBytes;
 
@@ -88,7 +132,7 @@ public class ZipWriter {
         }
         try {
             zos.putNextEntry(new ZipEntry(zipEntryName));
-            onZipEntry.accept(zos);
+            onZipEntry.accept(writer);
             zos.flush();
             zos.closeEntry();
         } catch (final IOException e) {

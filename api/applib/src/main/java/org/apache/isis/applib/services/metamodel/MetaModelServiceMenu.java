@@ -43,7 +43,6 @@ import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.schema.metamodel.v2.MetamodelDto;
 
@@ -271,7 +270,7 @@ public class MetaModelServiceMenu {
             @ParameterLayout(named="Metamodel (Zipped XML)", 
             describedAs="Metamodel from a previous export, to compare the current with.")
             @Parameter(fileAccept=".zip", optionality = Optionality.MANDATORY)
-            Blob rightZippedMetamodelBlob
+            Blob zippedMetamodelBlob
             
             ) throws IOException {
 
@@ -290,9 +289,11 @@ public class MetaModelServiceMenu {
 
         final MetamodelDto leftMetamodelDto =  metaModelService.exportMetaModel(config);
 
-        final String xml = rightZippedMetamodelBlob
+        final String xml = zippedMetamodelBlob
                 .unZip(CommonMimeType.XML)
-                .digest(inputStream->_Strings.read(inputStream, UTF_8));
+                .toClob(UTF_8)
+                .getChars()
+                .toString();
         
         final MetamodelDto rightMetamodelDto =  jaxbService.fromXml(MetamodelDto.class, xml);
 

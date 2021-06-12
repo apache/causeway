@@ -18,7 +18,6 @@
  */
 package org.apache.isis.applib.mixins.dto;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -110,7 +109,7 @@ public class Dto_downloadXsd {
             val namespaceUri = entry.getKey();
             val schemaText = entry.getValue();
             zipWriter.nextEntry(zipEntryNameFor(namespaceUri), outputStream->{
-                outputStream.write(schemaText.getBytes(StandardCharsets.UTF_8));
+                outputStream.writeCharactersUtf8(schemaText);
             });
         }
 

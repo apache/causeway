@@ -213,7 +213,7 @@ public final class Blob implements NamedWithMimeType {
     
     public Blob zip() {
         val zipWriter = ZipWriter.newInstance();
-        zipWriter.nextEntry(getName(), outputStream->outputStream.write(getBytes()));
+        zipWriter.nextEntry(getName(), outputStream->outputStream.writeBytes(getBytes()));
         return Blob.of(getName()+".zip", CommonMimeType.ZIP, zipWriter.toBytes());
     }
     

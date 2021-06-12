@@ -116,7 +116,7 @@ public class LayoutServiceDefault implements LayoutService {
                                     Marshaller.JAXB_SCHEMA_LOCATION,
                                     grid.getTnsAndSchemaLocation()
                                     ));
-                    writer.write(xmlString);
+                    writer.writeCharactersUtf8(xmlString);
                 });
             }
         }
