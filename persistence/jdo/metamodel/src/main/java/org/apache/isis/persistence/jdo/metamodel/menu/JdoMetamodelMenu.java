@@ -88,7 +88,7 @@ public class JdoMetamodelMenu {
         .map(pmFactory::getMetadata)
         .forEach(metadata->{
             val xmlString = metadata.toString();
-            zipWriter.nextEntry(zipEntryNameFor(metadata), writer->writer.write(xmlString));
+            zipWriter.nextEntry(zipEntryNameFor(metadata), writer->writer.writeCharactersUtf8(xmlString));
         });
         return zipWriter.toBytes();
     }
