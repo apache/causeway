@@ -19,9 +19,8 @@
 package org.apache.isis.applib.graph;
 
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Value;
 
-import lombok.Value;
 
 /**
  * Fundamental building block for graph structures.
@@ -30,8 +29,8 @@ import lombok.Value;
  *
  * @param <T> type constraint for values contained by this edge's vertices
  */
-@Value(staticConstructor = "of")
-@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + ".graph.SimpleEdge")
+@lombok.Value(staticConstructor = "of")
+@Value(logicalTypeName = IsisModuleApplib.NAMESPACE + ".graph.SimpleEdge")
 public class SimpleEdge<T> implements Edge<T> {
 
     Vertex<T> from;

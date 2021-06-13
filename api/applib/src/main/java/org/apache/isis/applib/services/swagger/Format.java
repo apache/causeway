@@ -20,13 +20,14 @@ package org.apache.isis.applib.services.swagger;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Value;
 
 /**
  * The format to generate the representation of the swagger spec.
  *
  * @since 1.x {@index}
  */
-@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + ".services.swagger.Format")
+@Value(logicalTypeName = IsisModuleApplib.NAMESPACE + ".services.swagger.Format")
 public enum Format {
     /**
      * Generate a format in JSON (<code>text/json</code> media type).

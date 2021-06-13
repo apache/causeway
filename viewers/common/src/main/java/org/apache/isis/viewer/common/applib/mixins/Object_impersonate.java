@@ -53,8 +53,7 @@ import lombok.RequiredArgsConstructor;
         redirectPolicy = Redirect.EVEN_IF_SAME,
         sequence = "850.1"
 )
-//mixin's don't need a logicalTypeName, in fact MM validation should guard against wrong usage here
-//@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE_SUDO + ".mixins.Object_impersonate")
+//mixin's don't need a logicalTypeName
 @RequiredArgsConstructor
 public class Object_impersonate {
 

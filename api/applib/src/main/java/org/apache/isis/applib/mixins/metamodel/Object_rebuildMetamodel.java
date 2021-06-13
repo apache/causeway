@@ -51,8 +51,7 @@ import lombok.RequiredArgsConstructor;
         associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         sequence = "800.1"
 )
-//mixin's don't need a logicalTypeName, in fact MM validation should guard against wrong usage here
-//@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + ".mixins.metamodel.Object_rebuildMetamodel")
+//mixin's don't need a logicalTypeName
 @RequiredArgsConstructor
 public class Object_rebuildMetamodel {
 

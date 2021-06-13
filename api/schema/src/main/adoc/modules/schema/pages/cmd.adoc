@@ -91,16 +91,16 @@ The `actionDto` and `propertyDto` are the concrete subtypes:
 ----
 <xs:schema targetNamespace="http://isis.apache.org/schema/cmd" ...>
     ...
-    <xs:complexType name="memberDto" abstract="true">                       <!--1-->
+    <xs:complexType name="memberDto" abstract="true">                       <!--.-->
         </xs:element>
         <xs:sequence>
-            <xs:element name="memberIdentifier" type="xs:string"/>          <!--2-->
-            <xs:element name="logicalMemberIdentifier" type="xs:string">    <!--3-->
+            <xs:element name="memberIdentifier" type="xs:string"/>          <!--.-->
+            <xs:element name="logicalMemberIdentifier" type="xs:string">    <!--.-->
         </xs:sequence>
-        <xs:attribute  name="interactionType" type="com:interactionType"/>  <!--4-->
+        <xs:attribute  name="interactionType" type="com:interactionType"/>  <!--.-->
     </xs:complexType>
 
-    <xs:complexType name="actionDto">                                       <!--5-->
+    <xs:complexType name="actionDto">                                       <!--.-->
         <xs:complexContent>
             <xs:extension base="memberDto">
                 <xs:sequence>
@@ -110,7 +110,7 @@ The `actionDto` and `propertyDto` are the concrete subtypes:
         </xs:complexContent>
     </xs:complexType>
 
-    <xs:complexType name="propertyDto">                                     <!--6-->
+    <xs:complexType name="propertyDto">                                     <!--.-->
         <xs:complexContent>
             <xs:extension base="memberDto">
                 <xs:sequence>
@@ -121,14 +121,15 @@ The `actionDto` and `propertyDto` are the concrete subtypes:
     </xs:complexType>
 </xs:schema>
 ----
-<1> the `memberDto` is an abstract type.
-Its primary responsibility is simply to identify the member (action or property).
-<2> the formal identifier (fully qualified class name + member name) of the member being interacted with (action or property).
-<3> the "logical" formal identifier (object type, as per `@DomainObject(logicalTypeName=)`, + member name) of the member being interacted with (action or property).
-<4> the `interactionType` attribute indicates whether the member is an action or a property.
-<5> the `actionDto` complex type captures the set of parameters (also including the argument values) with which to invoke the action.
-The `paramsDto` type is defined xref:refguide:schema:cmd/ancillary.adoc[below].
-<6> the `propertyDto` complex type captures the new value (possibly `null`) to set the property to.
+
+<.> the `memberDto` is an abstract type.
+I.s primary responsibility is simply to identify the member (action or property).
+<.> the formal identifier (fully qualified class name + member name) of the member being interacted with (action or property).
+<.> the "logical" formal identifier (object type, as per `@DomainObject(logicalTypeName=)`, + member name) of the member being interacted with (action or property).
+<.> the `interactionType` attribute indicates whether the member is an action or a property.
+<.> the `actionDto` complex type captures the set of parameters (also including the argument values) with which to invoke the action.
+T.e `paramsDto` type is defined xref:refguide:schema:cmd/ancillary.adoc[below].
+<.> the `propertyDto` complex type captures the new value (possibly `null`) to set the property to.
 
 In general the `logicalMemberIdentifier` should be used in preference to the `memberIdentifier` because will not (necessarily) have to change if the class is moved during a refactoring.
 
@@ -145,13 +146,13 @@ The schema also defines a small number of supporting types:
 ----
 <xs:schema targetNamespace="http://isis.apache.org/schema/cmd" ...>
     ...
-    <xs:complexType name="paramsDto">                                       <!--1-->
+    <xs:complexType name="paramsDto">                                       <!--.-->
         <xs:sequence minOccurs="0" maxOccurs="unbounded">
             <xs:element name="parameter" type="paramDto"/>
         </xs:sequence>
     </xs:complexType>
 
-    <xs:complexType name="paramDto">                                        <!--2-->
+    <xs:complexType name="paramDto">                                        <!--.-->
         <xs:complexContent>
             <xs:extension base="com:valueWithTypeDto">
                 <xs:attribute name="name" use="required" type="xs:string"/>
@@ -160,7 +161,8 @@ The schema also defines a small number of supporting types:
     </xs:complexType>
 </xs:schema>
 ----
-<1> the `paramsDto` is simply the list of parameter/arguments.
-<2> the `paramDto` complex type essentially combines a parameter with its corresponding argument: a named value that has a type.
+
+<.> the `paramsDto` is simply the list of parameter/arguments.
+<.> the `paramDto` complex type essentially combines a parameter with its corresponding argument: a named value that has a type.
 It extends the `valueWithTypeDto` complex type taken from the
 xref:refguide:schema:common.adoc["common"] schema.

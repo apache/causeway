@@ -20,12 +20,13 @@ package org.apache.isis.applib.services.appfeat;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Value;
 
 /**
  *
  * @since 1.x revised for 2.0 {@index}
  */
-@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationFeatureSort")
+@Value(logicalTypeName = IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationFeatureSort")
 public enum ApplicationFeatureSort {
 
     /**

@@ -56,8 +56,7 @@ import lombok.val;
         associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         sequence = "850.2"
 )
-//mixin's don't need a logicalTypeName, in fact MM validation should guard against wrong usage here
-//@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE_SUDO + ".mixins.Object_impersonateWithRoles")
+//mixin's don't need a logicalTypeName
 @RequiredArgsConstructor
 public class Object_impersonateWithRoles {
 

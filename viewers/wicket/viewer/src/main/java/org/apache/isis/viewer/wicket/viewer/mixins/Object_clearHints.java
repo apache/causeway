@@ -71,8 +71,7 @@ import lombok.val;
         associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         sequence = "400.1"
 )
-//mixin's don't need a logicalTypeName, in fact MM validation should guard against wrong usage here
-//@DomainObject(logicalTypeName = IsisModuleViewerWicketViewer.NAMESPACE + ".mixins.Object_clearHints")
+//mixin's don't need a logicalTypeName
 @RequiredArgsConstructor
 public class Object_clearHints {
 
