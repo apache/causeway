@@ -62,8 +62,7 @@ import lombok.val;
         associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         sequence = "700.2"
 )
-//mixin's don't need a logicalTypeName, in fact MM validation should guard against wrong usage here
-//@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + ".mixins.metamodel.Object_downloadMetamodelXml")
+//mixin's don't need a logicalTypeName
 @RequiredArgsConstructor
 public class Object_downloadMetamodelXml {
 

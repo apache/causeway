@@ -65,7 +65,6 @@ import lombok.val;
         cssClassFa = "fa-download",
         sequence = "500.2")
 //mixin's don't need a logicalTypeName, in fact MM validation should guard against wrong usage here
-//@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + ".mixins.dto.Dto_downloadXsd")
 @RequiredArgsConstructor
 public class Dto_downloadXsd {
 

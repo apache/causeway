@@ -18,20 +18,20 @@
  */
 package org.apache.isis.applib.services.appfeat;
 
+import org.apache.isis.applib.IsisModuleApplib;
+import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Value;
+
 import java.util.Collections;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.SortedSet;
 
-import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.SemanticsOf;
-
 /**
  *
  * @since 1.x revised for 2.0 {@index}
  */
-@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE_SUDO + ".ApplicationFeature")
+@Value(logicalTypeName = IsisModuleApplib.NAMESPACE_SUDO + ".ApplicationFeature")
 public interface ApplicationFeature {
 
     ApplicationFeatureId getFeatureId();

@@ -26,13 +26,7 @@ import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.CollectionLayout;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Optionality;
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
@@ -47,7 +41,7 @@ import lombok.With;
  *
  * @since 1.x revised for 2.0 {@index}
  */
-@DomainObject(logicalTypeName = UserMemento.LOGICAL_TYPE_NAME)
+@DomainObject(nature = Nature.VIEW_MODEL, logicalTypeName = UserMemento.LOGICAL_TYPE_NAME)
 @lombok.Value @lombok.Builder
 public class UserMemento implements Serializable {
 

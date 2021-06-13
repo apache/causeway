@@ -18,21 +18,21 @@
  */
 package org.apache.isis.applib.services.user;
 
-import java.io.Serializable;
-
-import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.PropertyLayout;
-
 import lombok.Getter;
 import lombok.Value;
+import org.apache.isis.applib.IsisModuleApplib;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.PropertyLayout;
+
+import java.io.Serializable;
 
 /**
  * Immutable serializable value held by {@link UserMemento}.
  *
  * @since 1.x revised for 2.0 {@index}
  */
-@DomainObject(logicalTypeName = RoleMemento.LOGICAL_TYPE_NAME)
+@DomainObject(nature = Nature.VIEW_MODEL, logicalTypeName = RoleMemento.LOGICAL_TYPE_NAME)
 @Value
 public class RoleMemento implements Serializable {
 

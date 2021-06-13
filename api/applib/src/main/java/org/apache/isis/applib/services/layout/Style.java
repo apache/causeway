@@ -20,6 +20,7 @@ package org.apache.isis.applib.services.layout;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.layout.grid.Grid;
 
 /**
@@ -35,7 +36,7 @@ import org.apache.isis.applib.layout.grid.Grid;
  *
  * @since 1.x {@index}
  */
-@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + ".services.layout.Style")
+@Value(logicalTypeName = IsisModuleApplib.NAMESPACE + ".services.layout.Style")
 public enum Style {
 
     /**

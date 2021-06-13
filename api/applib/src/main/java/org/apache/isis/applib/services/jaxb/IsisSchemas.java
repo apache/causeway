@@ -20,6 +20,7 @@ package org.apache.isis.applib.services.jaxb;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.mixins.dto.Dto_downloadXsd;
 
 /**
@@ -35,7 +36,7 @@ import org.apache.isis.applib.mixins.dto.Dto_downloadXsd;
  * <a href="http://isis.apache.org/schema">downloaded</a> from the Isis website.
  * </p>
  */
-@DomainObject(logicalTypeName = IsisModuleApplib.NAMESPACE + ".services.jaxb.IsisSchemas")
+@Value(logicalTypeName = IsisModuleApplib.NAMESPACE + ".services.jaxb.IsisSchemas")
 public enum IsisSchemas {
     INCLUDE,
     IGNORE;
