@@ -70,7 +70,7 @@ public abstract class LinkAndLabelAbstract implements Serializable {
     @Override
     public String toString() {
         return Optional.ofNullable(named).orElse("") +
-                " ~ " + objectAction.getIdentifier().getFullIdentityString();
+                " ~ " + objectAction.getFeatureIdentifier().getFullIdentityString();
     }
 
     // -- SHORTCUTS

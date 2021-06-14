@@ -171,7 +171,7 @@ implements MetaModelRefiner {
                 ValidationFailure.raiseFormatted(
                         objectSpec,
                         "%s: conflict for determining a strategy for retrieval of title for class, contains a method '%s' and an annotation '@%s'",
-                        objectSpec.getIdentifier().getClassName(),
+                        objectSpec.getFeatureIdentifier().getClassName(),
                         TITLE_METHOD_NAME,
                         Title.class.getName());
             }

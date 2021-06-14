@@ -81,7 +81,7 @@ extends MetaModelVisitingValidatorAbstract {
             ValidationFailure.raiseFormatted(
                     spec,
                     messageFormat,
-                    spec.getIdentifier().getClassName(),
+                    spec.getFeatureIdentifier().getClassName(),
                     notRecognizedMethod.getName(),
                     MemberSupport.class.getSimpleName(),
                     unmetContraints.stream()

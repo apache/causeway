@@ -126,7 +126,7 @@ implements MetaModelRefiner {
                         spec,
                         "%s: conflict for determining a strategy for retrieval of (navigable) parent for class, "
                                 + "contains multiple annotations '@%s' having navigable=PARENT, while at most one is allowed.",
-                                spec.getIdentifier().getClassName(),
+                                spec.getFeatureIdentifier().getClassName(),
                                 PropertyLayout.class.getName());
 
                 return; // continue validation processing
@@ -146,7 +146,7 @@ implements MetaModelRefiner {
                             spec,
                             "%s: unable to determine a strategy for retrieval of (navigable) parent for class, "
                                     + "field '%s' annotated with '@%s' having navigable=PARENT does not provide a getter.",
-                                    spec.getIdentifier().getClassName(),
+                                    spec.getFeatureIdentifier().getClassName(),
                                     fieldEvaluator.getField().getName(),
                                     PropertyLayout.class.getName());
                 }

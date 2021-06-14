@@ -27,6 +27,7 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -70,16 +71,16 @@ implements ObjectMember, HasMetaModelContext, HasFacetHolder {
 
     // -- fields
 
-    private final Identifier identifier;
+    private final Identifier featureIdentifier;
     private final FacetedMethod facetedMethod;
     private final FeatureType featureType;
 
     protected ObjectMemberAbstract(
-            final Identifier identifier,
+            final Identifier featureIdentifier,
             final FacetedMethod facetedMethod,
             final FeatureType featureType) {
 
-        this.identifier = identifier;
+        this.featureIdentifier = featureIdentifier;
         this.facetedMethod = facetedMethod;
         this.featureType = featureType;
         if (getId() == null) {
@@ -91,12 +92,12 @@ implements ObjectMember, HasMetaModelContext, HasFacetHolder {
 
     @Override
     public final String getId() {
-        return getIdentifier().getMemberLogicalName();
+        return getFeatureIdentifier().getMemberLogicalName();
     }
 
     @Override
-    public final Identifier getIdentifier() {
-        return identifier;
+    public final Identifier getFeatureIdentifier() {
+        return featureIdentifier;
     }
 
     @Override
@@ -123,6 +124,11 @@ implements ObjectMember, HasMetaModelContext, HasFacetHolder {
     @Override
     public String getName() {
         val namedFacet = getFacet(NamedFacet.class);
+
+        if(namedFacet==null) {
+            throw _Exceptions.unrecoverableFormatted("no namedFacet preset on %s", getFeatureIdentifier());
+        }
+
         return namedFacet.value();
     }
 

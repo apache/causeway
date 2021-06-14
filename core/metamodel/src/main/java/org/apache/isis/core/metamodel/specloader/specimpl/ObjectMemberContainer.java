@@ -98,7 +98,7 @@ implements
                 return true; // do not filter mixedIn actions based on signature
             }
             val isUnique = actionSignatures
-                    .add(action.getIdentifier().getMemberNameAndParameterClassNamesIdentityString());
+                    .add(action.getFeatureIdentifier().getMemberNameAndParameterClassNamesIdentityString());
             return isUnique;
         })
 

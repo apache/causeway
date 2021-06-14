@@ -119,7 +119,7 @@ implements MemberExecutorService {
 
         val xrayHandle = _Xray.enterActionInvocation(interactionLayerTracker, interaction, owningAction, head, argumentAdapters);
 
-        val actionId = owningAction.getIdentifier();
+        val actionId = owningAction.getFeatureIdentifier();
         log.debug("about to invoke action {}", actionId);
 
         val targetAdapter = head.getTarget();
@@ -199,7 +199,7 @@ implements MemberExecutorService {
 
         val xrayHandle = _Xray.enterPropertyEdit(interactionLayerTracker, interaction, owningProperty, head, newValueAdapter);
 
-        val propertyId = owningProperty.getIdentifier();
+        val propertyId = owningProperty.getFeatureIdentifier();
 
         val targetManagedObject = head.getTarget();
         val target = UnwrapUtil.single(targetManagedObject);

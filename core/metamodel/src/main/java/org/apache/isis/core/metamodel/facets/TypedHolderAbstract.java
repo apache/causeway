@@ -21,10 +21,10 @@ package org.apache.isis.core.metamodel.facets;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 public abstract class TypedHolderAbstract
 extends FacetHolderAbstract
 implements TypedHolder {
@@ -39,7 +39,8 @@ implements TypedHolder {
      * <tt>java.util.List</tt>, rather than a generic one such as
      * <tt>java.util.List&lt;Customer&gt;</tt>.
      */
-    @Getter(onMethod_ = {@Override}) private final Class<?> type;
+    @Getter(onMethod_ = {@Override})
+    protected Class<?> type;
 
     @Override // as used for logging, not strictly required
     public String toString() {

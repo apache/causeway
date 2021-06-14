@@ -134,7 +134,7 @@ extends TitleFacetAbstract {
     private static TranslationContext translationContextFor(final FacetHolder facetHolder) {
         if(facetHolder instanceof ObjectSpecification) {
             val facetHolderAsSpec = (ObjectSpecification) facetHolder;
-            return TranslationContext.forTranslationContextHolder(facetHolderAsSpec.getIdentifier());
+            return TranslationContext.forTranslationContextHolder(facetHolderAsSpec.getFeatureIdentifier());
         }
         return null;
     }

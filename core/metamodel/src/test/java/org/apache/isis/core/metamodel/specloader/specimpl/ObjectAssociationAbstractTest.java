@@ -79,7 +79,7 @@ public class ObjectAssociationAbstractTest {
         }});
 
         objectAssociation = new ObjectAssociationAbstract(
-                facetedMethod.getIdentifier(),
+                facetedMethod.getFeatureIdentifier(),
                 facetedMethod, FeatureType.PROPERTY, objectSpecification) {
 
             @Override

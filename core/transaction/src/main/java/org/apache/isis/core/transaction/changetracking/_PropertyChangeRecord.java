@@ -61,7 +61,7 @@ final class _PropertyChangeRecord {
     }
 
     public String getMemberId() {
-        return property.getIdentifier().getFullIdentityString();
+        return property.getFeatureIdentifier().getFullIdentityString();
     }
 
     void setPreValue(Object pre) {

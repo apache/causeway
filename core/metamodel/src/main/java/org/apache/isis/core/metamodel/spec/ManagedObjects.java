@@ -626,7 +626,7 @@ public final class ManagedObjects {
 
             return new ObjectVisibilityContext(
                     adapter,
-                    adapter.getSpecification().getIdentifier(),
+                    adapter.getSpecification().getFeatureIdentifier(),
                     interactionInitiatedBy,
                     where);
         }

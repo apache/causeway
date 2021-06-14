@@ -85,7 +85,7 @@ extends MetaModelVisitingValidatorAbstract {
                     spec,
                     String.format(
                             messageFormat,
-                            spec.getIdentifier().getClassName(),
+                            spec.getFeatureIdentifier().getClassName(),
                             notRecognizedMethod.getName(),
                             unmetContraints.stream()
                             .collect(Collectors.joining("; "))));

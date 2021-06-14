@@ -46,7 +46,7 @@ public class MetaModelValidatorForConflictingOptionality {
                     holder,
                     "%s : %s",
                     message,
-                    holder.getIdentifier().getFullIdentityString());
+                    holder.getFeatureIdentifier().getFullIdentityString());
         }
     }
 

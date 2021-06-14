@@ -89,7 +89,7 @@ implements PropertyUiModel {
 
     @Override
     public String getIdentifier() {
-        return getMetaModel().getIdentifier().getMemberLogicalName();
+        return getMetaModel().getFeatureIdentifier().getMemberLogicalName();
     }
 
     @Override

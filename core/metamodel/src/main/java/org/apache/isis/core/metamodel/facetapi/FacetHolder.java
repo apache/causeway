@@ -36,9 +36,9 @@ import lombok.val;
 public interface FacetHolder extends HasMetaModelContext {
 
     /**
-     * Identifier of the feature this holder represents.
+     * Identifier of the feature this holder represents or is associated with.
      */
-    Identifier getIdentifier();
+    Identifier getFeatureIdentifier();
 
     int getFacetCount();
 

@@ -36,8 +36,8 @@ public class MemberIdentifierComparator implements Comparator<FacetHolder>, Seri
 
     @Override
     public int compare(final FacetHolder o1, final FacetHolder o2) {
-        final Identifier identifier1 = o1.getIdentifier();
-        final Identifier identifier2 = o2.getIdentifier();
+        final Identifier identifier1 = o1.getFeatureIdentifier();
+        final Identifier identifier2 = o2.getFeatureIdentifier();
         return identifier1.compareTo(identifier2);
     }
 

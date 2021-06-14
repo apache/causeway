@@ -51,7 +51,7 @@ implements FacetHolder, MetaModelContextAware {
     private MetaModelContext metaModelContext;
 
     // not private, as identifier might depend on lazily provided spec-loader
-    @Getter(onMethod_ = {@Override}) protected Identifier identifier;
+    @Getter(onMethod_ = {@Override}) protected Identifier featureIdentifier;
 
     private final Map<Class<? extends Facet>, FacetRanking> rankingByType = _Maps.newHashMap();
     private final Object $lock = new Object();
@@ -106,9 +106,9 @@ implements FacetHolder, MetaModelContextAware {
 
     // -- JUNIT SUPPORT
 
-    public static FacetHolderAbstract simple(Identifier identifier) {
+    public static FacetHolderAbstract simple(Identifier featureIdentifier) {
         final FacetHolderAbstract facetHolder = new FacetHolderAbstract() {};
-        facetHolder.identifier = identifier;
+        facetHolder.featureIdentifier = featureIdentifier;
         return facetHolder;
     }
 

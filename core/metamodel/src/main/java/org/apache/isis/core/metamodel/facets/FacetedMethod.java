@@ -187,7 +187,7 @@ extends TypedHolderAbstract {
         super(featureType, type);
         this.owningType = declaringType;
         this.method = method;
-        super.identifier = featureType.identifierFor(LogicalType.lazy(
+        super.featureIdentifier = featureType.identifierFor(LogicalType.lazy(
                 declaringType,
                 ()->getSpecificationLoader().specForTypeElseFail(declaringType).getLogicalTypeName()), method);
         this.parameters = parameters;
@@ -195,15 +195,17 @@ extends TypedHolderAbstract {
 
     @Override
     public String toString() {
-        return getFeatureType().name() + " Peer [identifier=\"" + getIdentifier() + "\",type=" + getType().getName() + " ]";
+        return getFeatureType().name() + " Peer [identifier=\"" + getFeatureIdentifier() + "\",type=" + getType().getName() + " ]";
     }
 
     /**
-     * Returns a new instance with {@code type} replaced by given {@code elementType}.
+     * Returns an instance with {@code type} replaced by given {@code elementType}.
      * @param elementType
      */
     public FacetedMethod withType(Class<?> elementType) {
-        return new FacetedMethod(getFeatureType(), getOwningType(), method, elementType, parameters);
+        //XXX maybe future refactoring can make the type immutable, so we can remove this method
+        this.type = elementType;
+        return this;
     }
 
 

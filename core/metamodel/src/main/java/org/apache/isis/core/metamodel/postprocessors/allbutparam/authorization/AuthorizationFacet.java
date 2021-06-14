@@ -47,7 +47,7 @@ extends Facet, HidingInteractionAdvisor, DisablingInteractionAdvisor {
                 .map(facet->facet.hides(
                         new PropertyVisibilityContext(
                                 vc.getHead(),
-                                property.getIdentifier(),
+                                property.getFeatureIdentifier(),
                                 vc.getInitiatedBy(),
                                 vc.getWhere())) != null)
                 .orElse(false);
@@ -61,7 +61,7 @@ extends Facet, HidingInteractionAdvisor, DisablingInteractionAdvisor {
                 .map(facet->facet.hides(
                         new CollectionVisibilityContext(
                                 vc.getHead(),
-                                collection.getIdentifier(),
+                                collection.getFeatureIdentifier(),
                                 vc.getInitiatedBy(),
                                 vc.getWhere())) != null)
                 .orElse(false);
@@ -76,7 +76,7 @@ extends Facet, HidingInteractionAdvisor, DisablingInteractionAdvisor {
                         new ActionVisibilityContext(
                                 vc.getHead(),
                                 action,
-                                action.getIdentifier(),
+                                action.getFeatureIdentifier(),
                                 vc.getInitiatedBy(),
                                 vc.getWhere())) != null)
                 .orElse(false);

@@ -61,18 +61,18 @@ implements OneToOneAssociation {
 
     public static OneToOneAssociationDefault forMethod(final FacetedMethod facetedMethod) {
         return new OneToOneAssociationDefault(
-                facetedMethod.getIdentifier(),
+                facetedMethod.getFeatureIdentifier(),
                 facetedMethod,
                 facetedMethod.getMetaModelContext().getSpecificationLoader()
                     .loadSpecification(facetedMethod.getType()));
     }
 
     protected OneToOneAssociationDefault(
-            final Identifier identifier,
+            final Identifier featureIdentifier,
             final FacetedMethod facetedMethod,
             final ObjectSpecification objectSpec) {
 
-        super(identifier, facetedMethod, FeatureType.PROPERTY, objectSpec);
+        super(featureIdentifier, facetedMethod, FeatureType.PROPERTY, objectSpec);
     }
 
     // -- visible, usable
@@ -83,7 +83,7 @@ implements OneToOneAssociation {
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
         return new PropertyVisibilityContext(
-                headFor(ownerAdapter), getIdentifier(), interactionInitiatedBy, where);
+                headFor(ownerAdapter), getFeatureIdentifier(), interactionInitiatedBy, where);
     }
 
 
@@ -93,7 +93,7 @@ implements OneToOneAssociation {
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
         return new PropertyUsabilityContext(
-                headFor(ownerAdapter), getIdentifier(), interactionInitiatedBy, where);
+                headFor(ownerAdapter), getFeatureIdentifier(), interactionInitiatedBy, where);
     }
 
 
@@ -104,7 +104,7 @@ implements OneToOneAssociation {
             final ManagedObject proposedToReferenceAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         return new PropertyModifyContext(
-                headFor(ownerAdapter), getIdentifier(), proposedToReferenceAdapter,
+                headFor(ownerAdapter), getFeatureIdentifier(), proposedToReferenceAdapter,
                 interactionInitiatedBy);
     }
 

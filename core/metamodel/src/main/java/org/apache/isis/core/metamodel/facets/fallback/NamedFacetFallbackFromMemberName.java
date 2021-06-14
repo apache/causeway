@@ -28,7 +28,7 @@ extends NamedFacetFromMemberNameAbstract {
 
     protected NamedFacetFallbackFromMemberName(FacetHolder holder) {
         super(
-                StringExtensions.asNaturalName2(holder.getIdentifier().getMemberLogicalName()),
+                StringExtensions.asNaturalName2(holder.getFeatureIdentifier().getMemberLogicalName()),
                 holder,
                 Precedence.FALLBACK);
     }

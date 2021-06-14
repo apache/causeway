@@ -40,8 +40,8 @@ public interface ObjectFeature extends Specification {
      * be all camel-case with no spaces: so if the member is called 'Return
      * Date' then a suitable id would be 'returnDate'.
      * @implNote for {@link ObjectMember}(s) this is a shortcut for
-     * {@link ObjectMember#getIdentifier()}.getMemberName()
-     * @see Identifier#getMemberName()
+     * {@link ObjectMember#getFeatureIdentifier()}.getMemberLogicalName()
+     * @see Identifier#getMemberLogicalName()
      */
     String getId();
 
@@ -49,7 +49,7 @@ public interface ObjectFeature extends Specification {
      * Return the name for this member - the field or action. This is based on
      * the name of this member.
      *
-     * @see #getIdentifier()
+     * @see #getFeatureIdentifier()
      */
     String getName();
 

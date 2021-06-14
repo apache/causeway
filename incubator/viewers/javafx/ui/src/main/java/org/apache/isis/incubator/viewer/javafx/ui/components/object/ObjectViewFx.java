@@ -77,7 +77,7 @@ public class ObjectViewFx extends VBox {
             final Consumer<ManagedAction> actionEventHandler,
             final ManagedObject managedObject) {
 
-        log.info("binding object interaction to owner {}", managedObject.getSpecification().getIdentifier());
+        log.info("binding object interaction to owner {}", managedObject.getSpecification().getFeatureIdentifier());
         _Assert.assertTrue(uiContext.getInteractionService().isInInteraction(), "requires an active interaction");
 
         val objectTitle = ManagedObjects.titleOf(managedObject);

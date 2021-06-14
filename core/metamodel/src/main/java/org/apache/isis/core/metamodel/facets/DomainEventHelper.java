@@ -120,7 +120,7 @@ public class DomainEventHelper {
                 // all other phases, create a new event
                 final S source = uncheckedCast(UnwrapUtil.single(head.getTarget()));
                 final Object[] arguments = UnwrapUtil.multipleAsArray(argumentAdapters);
-                final Identifier identifier = facetHolder.getIdentifier();
+                final Identifier identifier = facetHolder.getFeatureIdentifier();
                 event = newActionDomainEvent(eventType, identifier, source, arguments);
 
                 // copy over if have
@@ -234,7 +234,7 @@ public class DomainEventHelper {
                 // all other phases, create a new event
 
                 final S source = uncheckedCast(UnwrapUtil.single(head.getTarget()));
-                final Identifier identifier = facetHolder.getIdentifier();
+                final Identifier identifier = facetHolder.getFeatureIdentifier();
 
                 event = newPropertyDomainEvent(eventType, identifier, source, oldValue, newValue);
 
@@ -317,7 +317,7 @@ public class DomainEventHelper {
             final CollectionDomainEvent<S, T> event;
 
             final S source = uncheckedCast(UnwrapUtil.single(head.getTarget()));
-            final Identifier identifier = facetHolder.getIdentifier();
+            final Identifier identifier = facetHolder.getFeatureIdentifier();
             event = newCollectionDomainEvent(eventType, phase, identifier, source);
 
             // copy over if have

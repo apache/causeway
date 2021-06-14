@@ -259,7 +259,7 @@ implements ObjectSpecification {
     }
 
     @Override
-    public Identifier getIdentifier() {
+    public Identifier getFeatureIdentifier() {
         return Identifier.classIdentifier(LogicalType.fqcn(correspondingClass));
     }
 

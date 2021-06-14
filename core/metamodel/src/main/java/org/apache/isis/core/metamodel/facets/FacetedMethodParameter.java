@@ -42,7 +42,7 @@ extends TypedHolderAbstract {
                 ()->getSpecificationLoader().loadSpecification(declaringType).getLogicalTypeName());
 
         // best we can do...
-        super.identifier = FeatureType.ACTION.identifierFor(logicalType, method);
+        super.featureIdentifier = FeatureType.ACTION.identifierFor(logicalType, method);
     }
 
     public FacetedMethodParameter(
@@ -51,16 +51,18 @@ extends TypedHolderAbstract {
             final Identifier identifier) {
 
         super(featureType, type);
-        super.identifier = identifier;
+        super.featureIdentifier = identifier;
     }
 
 
     /**
-     * Returns a new instance with {@code type} replaced by given {@code elementType}.
+     * Returns an instance with {@code type} replaced by given {@code elementType}.
      * @param elementType
      */
     public FacetedMethodParameter withType(Class<?> elementType) {
-        return new FacetedMethodParameter(getFeatureType(), elementType, super.identifier);
+        //XXX maybe future refactoring can make the type immutable, so we can remove this method
+        this.type = elementType;
+        return this;
     }
 
 }

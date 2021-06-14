@@ -22,9 +22,9 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
-import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.core.metamodel.execution.InteractionInternal;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -50,7 +50,7 @@ final class _Xray {
             return null;
         }
 
-        val participantLabel = owningAction.getIdentifier().getLogicalIdentityString("\n#");
+        val participantLabel = owningAction.getFeatureIdentifier().getLogicalIdentityString("\n#");
         val enteringLabel = argumentAdapters.isEmpty()
                 ? "action invocation (no args)"
                 : String.format("action invocation w/ %d args:\n  %s",
@@ -74,7 +74,7 @@ final class _Xray {
             return null;
         }
 
-        val participantLabel = owningProperty.getIdentifier().getLogicalIdentityString("\n#");
+        val participantLabel = owningProperty.getFeatureIdentifier().getLogicalIdentityString("\n#");
         val enteringLabel = String.format("property edit -> '%s'",
                 ManagedObjects.UnwrapUtil.single(newValueAdapter));
 

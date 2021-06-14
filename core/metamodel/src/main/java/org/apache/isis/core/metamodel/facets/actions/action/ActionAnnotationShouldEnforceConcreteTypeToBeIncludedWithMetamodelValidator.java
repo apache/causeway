@@ -45,7 +45,7 @@ extends MetaModelVisitingValidatorAbstract {
             if (numActions > 0) {
 
                 val actionIds = actions.stream()
-                .map(ObjectAction::getIdentifier)
+                .map(ObjectAction::getFeatureIdentifier)
                 .map(Identifier::toString)
                 .collect(Collectors.joining(", "));
 

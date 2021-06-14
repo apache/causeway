@@ -23,7 +23,6 @@ import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.CanVector;
 import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
@@ -76,12 +75,10 @@ implements MixedInMember {
                             mixedInType.getCorrespondingClass(),
                             mixedInType.getLogicalTypeName()),
                     determineIdFrom(mixinAction),
-                    mixinAction.getFacetedMethod().getIdentifier().getMemberParameterClassNames()),
+                    mixinAction.getFacetedMethod().getFeatureIdentifier().getMemberParameterClassNames()),
                 mixinAction.getFacetedMethod());
 
-        _Probe.errOut("mixin action id: %s", super.getIdentifier());
-
-        this.facetHolder = FacetHolderAbstract.simple(super.getIdentifier());
+        this.facetHolder = FacetHolderAbstract.simple(super.getFeatureIdentifier());
         this.mixinType = mixinType;
         this.mixinAction = mixinAction;
         this.mixedInType = mixedInType;

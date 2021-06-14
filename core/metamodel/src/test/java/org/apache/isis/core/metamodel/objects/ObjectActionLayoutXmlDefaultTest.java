@@ -65,7 +65,7 @@ public class ObjectActionLayoutXmlDefaultTest {
 
         context.checking(new Expectations() {
             {
-                oneOf(mockFacetedMethod).getIdentifier();
+                oneOf(mockFacetedMethod).getFeatureIdentifier();
                 will(returnValue(Identifier.actionIdentifier(TypeIdentifierTestFactory.newCustomer(), "reduceheadcount")));
             }
         });

@@ -287,8 +287,8 @@ implements FacetHolder {
                             : ImmutableEnumSet.of(type),
                         MixedIn.INCLUDED)
                     .filter(action->
-                        id.equals(action.getIdentifier().getMemberNameAndParameterClassNamesIdentityString())
-                                || id.equals(action.getIdentifier().getMemberLogicalName())
+                        id.equals(action.getFeatureIdentifier().getMemberNameAndParameterClassNamesIdentityString())
+                                || id.equals(action.getFeatureIdentifier().getMemberLogicalName())
                     )
                     .findFirst();
     }

@@ -36,8 +36,9 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.tabs.AjaxBootstrapTabbedPanel;
 import lombok.val;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.tabs.AjaxBootstrapTabbedPanel;
 
 // hmmm... not sure how to make this implement HasDynamicallyVisibleContent
 public class TabGroupPanel
@@ -63,7 +64,8 @@ implements HasDynamicallyVisibleContent {
 
         for (val bs3Tab : tablist) {
             val repeatingViewWithDynamicallyVisibleContent = TabPanel.newRows(entityModel, bs3Tab);
-            val translateContext = TranslationContext.forTabIdentifier(entityModel.getTypeOfSpecification().getIdentifier());
+            val translateContext = TranslationContext
+                    .forTabIdentifier(entityModel.getTypeOfSpecification().getFeatureIdentifier());
 
             String bs3TabName = bs3Tab.getName();
             String tabName = translationService.translate(translateContext, bs3TabName);

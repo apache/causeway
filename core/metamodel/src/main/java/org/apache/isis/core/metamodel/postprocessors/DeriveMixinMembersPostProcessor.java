@@ -21,12 +21,10 @@ package org.apache.isis.core.metamodel.postprocessors;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContextAware;
-import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 
 import lombok.Setter;
-import lombok.val;
 
 
 public class DeriveMixinMembersPostProcessor
@@ -42,10 +40,7 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         // as a side-effect the meta-model gets (further) populated
 
         // all the actions of this type
-        val actionTypes = metaModelContext.getSystemEnvironment().isPrototyping()
-                ? ActionType.USER_AND_PROTOTYPE
-                : ActionType.USER_ONLY;
-        objectSpecification.streamActions(actionTypes, MixedIn.INCLUDED).count();
+        objectSpecification.streamRuntimeActions(MixedIn.INCLUDED).count();
 
         // and all the collections of this type
         objectSpecification.streamCollections(MixedIn.INCLUDED).count();

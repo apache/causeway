@@ -49,7 +49,7 @@ extends MetaModelVisitingValidatorAbstract {
             val overloadedNames = _Sets.<String>newHashSet();
 
             spec.streamActions(ActionType.ANY, MixedIn.EXCLUDED, oa->{
-                overloadedNames.add(oa.getIdentifier().getMemberLogicalName());
+                overloadedNames.add(oa.getFeatureIdentifier().getMemberLogicalName());
             })
             .count(); // consumer the stream
 

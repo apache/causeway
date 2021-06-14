@@ -69,7 +69,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     // -- HELPER
 
     private void addFacetsFor(final FacetHolder identifiedHolder) {
-        val translationContext = TranslationContext.forTranslationContextHolder(identifiedHolder.getIdentifier());
+        val translationContext = TranslationContext.forTranslationContextHolder(identifiedHolder.getFeatureIdentifier());
         translateName(identifiedHolder, translationContext);
         translateDescription(identifiedHolder, translationContext);
     }

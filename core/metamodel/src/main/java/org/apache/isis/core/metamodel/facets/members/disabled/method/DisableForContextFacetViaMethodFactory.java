@@ -84,7 +84,7 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
         val translationService = getTranslationService();
         // sadness: same logic as in I18nFacetFactory
         val translationContext = TranslationContext
-                .forTranslationContextHolder(facetHolder.getIdentifier());
+                .forTranslationContextHolder(facetHolder.getFeatureIdentifier());
         addFacetIfPresent(
                 new DisableForContextFacetViaMethod(
                         disableMethod, translationService, translationContext, facetHolder));

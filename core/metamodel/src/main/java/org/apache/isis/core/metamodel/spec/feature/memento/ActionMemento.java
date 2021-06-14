@@ -57,7 +57,7 @@ public class ActionMemento implements Serializable {
 
     public static ActionMemento forAction(final @NonNull ObjectAction action) {
         return new ActionMemento(
-                action.getIdentifier(),
+                action.getFeatureIdentifier(),
                 action.getType(),
                 action);
     }

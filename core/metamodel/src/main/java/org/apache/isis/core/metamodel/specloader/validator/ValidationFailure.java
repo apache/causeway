@@ -61,7 +61,7 @@ public final class ValidationFailure implements Comparable<ValidationFailure> {
     public static void raise(
             @NonNull FacetHolder facetHolder,
             @NonNull String deficiencyMessage) {
-        raise(facetHolder.getSpecificationLoader(), facetHolder.getIdentifier(), deficiencyMessage);
+        raise(facetHolder.getSpecificationLoader(), facetHolder.getFeatureIdentifier(), deficiencyMessage);
     }
 
     /**

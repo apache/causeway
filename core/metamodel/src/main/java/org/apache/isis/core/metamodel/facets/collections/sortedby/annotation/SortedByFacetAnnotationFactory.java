@@ -68,7 +68,7 @@ implements MetaModelRefiner {
                                 String.format(
                                     "%s#%s: is annotated with @SortedBy, "
                                     + "but the class specified '%s' is not a Comparator",
-                                    objectSpec.getIdentifier().getClassName(),
+                                    objectSpec.getFeatureIdentifier().getClassName(),
                                     objectCollection.getId(),
                                     facet.value().getName()));
                     }

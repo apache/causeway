@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable
 import java.util.function.Predicate;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
-import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -46,7 +45,7 @@ implements MetaModelRefiner {
     @Override
     public void process(final ProcessClassContext processClassContext) {
 
-        _Probe.errOut("type: %s", processClassContext.getFacetHolder().getIdentifier());
+        //_Probe.errOut("facet-processing(bookmarks) type: %s", processClassContext.getFacetHolder().getIdentifier());
 
         addFacetIfPresent(new BookmarkPolicyFacetFallback(processClassContext.getFacetHolder()));
     }
@@ -54,7 +53,7 @@ implements MetaModelRefiner {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        _Probe.errOut("method: %s", processMethodContext.getFacetHolder().getIdentifier());
+       //_Probe.errOut("facet-processing(bookmarks) method: %s", processMethodContext.getFacetHolder().getIdentifier());
 
         addFacetIfPresent(new BookmarkPolicyFacetFallback(processMethodContext.getFacetHolder()));
     }
@@ -83,7 +82,7 @@ implements MetaModelRefiner {
                             + "Either add @Action(semantics=SemanticsOf.SAFE) "
                             + "or @Action(semantics=SemanticsOf.SAFE_AND_REQUEST_CACHEABLE), "
                             + "or remove @ActionLayout(bookmarking=...).",
-                            objectAction.getIdentifier().toString());
+                            objectAction.getFeatureIdentifier().toString());
                 }
             });
 

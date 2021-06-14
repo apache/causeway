@@ -60,7 +60,7 @@ implements ActionDomainEventFacet {
         this.translationService = getTranslationService();
         // sadness: same as in TranslationFactory
         this.translationContext = TranslationContext.forTranslationContextHolder(
-                holder.getIdentifier());
+                holder.getFeatureIdentifier());
 
         domainEventHelper = DomainEventHelper.ofServiceRegistry(getServiceRegistry());
     }

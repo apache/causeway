@@ -79,7 +79,7 @@ class MetaModelServiceDefaultTest {
         Matcher<Class<? extends Facet>> facetMatcher = _Casts.uncheckedCast(Matchers.any(Class.class));
         context.checking(new Expectations() {
             {
-                allowing(mockFacetedMethod).getIdentifier();
+                allowing(mockFacetedMethod).getFeatureIdentifier();
                 will(returnValue(Identifier.actionIdentifier(
                         TypeIdentifierTestFactory.newCustomer(), "reduceheadcount")));
 

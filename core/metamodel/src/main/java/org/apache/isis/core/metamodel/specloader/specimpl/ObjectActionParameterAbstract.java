@@ -122,8 +122,8 @@ implements ObjectActionParameter, HasFacetHolder {
     }
 
     @Override
-    public Identifier getIdentifier() {
-        return parentAction.getIdentifier();
+    public Identifier getFeatureIdentifier() {
+        return parentAction.getFeatureIdentifier();
     }
 
     @Override
@@ -299,7 +299,7 @@ implements ObjectActionParameter, HasFacetHolder {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         return new ActionArgVisibilityContext(
-                head, parentAction, getIdentifier(), pendingArgs, position, interactionInitiatedBy);
+                head, parentAction, getFeatureIdentifier(), pendingArgs, position, interactionInitiatedBy);
     }
 
     @Override
@@ -325,7 +325,7 @@ implements ObjectActionParameter, HasFacetHolder {
         return new ActionArgUsabilityContext(
                 head,
                 parentAction,
-                getIdentifier(),
+                getFeatureIdentifier(),
                 pendingArgs,
                 position,
                 interactionInitiatedBy);
@@ -355,7 +355,7 @@ implements ObjectActionParameter, HasFacetHolder {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         return new ActionArgValidityContext(
-                head, parentAction, getIdentifier(), proposedArguments, position, interactionInitiatedBy);
+                head, parentAction, getFeatureIdentifier(), proposedArguments, position, interactionInitiatedBy);
     }
 
     @Override

@@ -106,10 +106,10 @@ extends
 
     /**
      * Identifier of the feature this facet is associated with.
-     * @see FacetHolder#getIdentifier()
+     * @see FacetHolder#getFeatureIdentifier()
      */
     default Identifier getFeatureIdentifier() {
-        return getFacetHolder().getIdentifier();
+        return getFacetHolder().getFeatureIdentifier();
     }
 
     /**

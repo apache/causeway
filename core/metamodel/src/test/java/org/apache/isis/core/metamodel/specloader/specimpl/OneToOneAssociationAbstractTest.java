@@ -78,7 +78,7 @@ public class OneToOneAssociationAbstractTest {
         }});
 
         objectAssociation = new OneToOneAssociationDefault(
-                facetedMethod.getIdentifier(),
+                facetedMethod.getFeatureIdentifier(),
                 facetedMethod, objectSpecification) {
 
             @Override

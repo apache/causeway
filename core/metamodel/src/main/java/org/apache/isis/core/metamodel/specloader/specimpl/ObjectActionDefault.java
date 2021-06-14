@@ -81,7 +81,7 @@ implements ObjectAction {
     // -- FACTORY
 
     public static ObjectActionDefault forMethod(final FacetedMethod facetedMethod) {
-        return new ObjectActionDefault(facetedMethod.getIdentifier(), facetedMethod);
+        return new ObjectActionDefault(facetedMethod.getFeatureIdentifier(), facetedMethod);
     }
 
     // -- FIELDS
@@ -242,7 +242,7 @@ implements ObjectAction {
         return new ActionVisibilityContext(
                 headFor(target),
                 this,
-                getIdentifier(),
+                getFeatureIdentifier(),
                 interactionInitiatedBy,
                 where);
     }
@@ -255,7 +255,7 @@ implements ObjectAction {
         return new ActionUsabilityContext(
                 headFor(target),
                 this,
-                getIdentifier(),
+                getFeatureIdentifier(),
                 interactionInitiatedBy,
                 where);
     }
@@ -344,7 +344,7 @@ implements ObjectAction {
         return new ActionValidityContext(
                 head,
                 this,
-                getIdentifier(),
+                getFeatureIdentifier(),
                 proposedArguments,
                 interactionInitiatedBy);
     }

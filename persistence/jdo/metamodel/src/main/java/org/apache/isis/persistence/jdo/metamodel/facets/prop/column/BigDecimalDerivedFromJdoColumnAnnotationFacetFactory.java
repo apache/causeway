@@ -127,7 +127,7 @@ implements MetaModelRefiner {
                     ValidationFailure.raiseFormatted(
                             association,
                             "%s: inconsistent BigDecimalValue semantics specified in %s and %s.",
-                            association.getIdentifier().toString(),
+                            association.getFeatureIdentifier().toString(),
                             a.getClass().getSimpleName(),
                             b.getClass().getSimpleName());
                 }));

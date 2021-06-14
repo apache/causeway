@@ -144,7 +144,7 @@ implements MethodPrefixBasedFacetFactory {
                                     spec,
                                     String.format(
                                             messageFormat,
-                                            spec.getIdentifier().getClassName(),
+                                            spec.getFeatureIdentifier().getClassName(),
                                             actionId,
                                             prefix,
                                             explanation));

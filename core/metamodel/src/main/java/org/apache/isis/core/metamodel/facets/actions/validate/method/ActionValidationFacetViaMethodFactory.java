@@ -76,7 +76,7 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
 
             val ppmFactory = searchResult.getPpmFactory();
             val translationService = getTranslationService();
-            val translationContext = TranslationContext.forTranslationContextHolder(facetHolder.getIdentifier());
+            val translationContext = TranslationContext.forTranslationContextHolder(facetHolder.getFeatureIdentifier());
             addFacetIfPresent(
                     new ActionValidationFacetViaMethod(
                             validateMethod, translationService, translationContext, ppmFactory, facetHolder));

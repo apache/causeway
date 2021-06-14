@@ -345,7 +345,7 @@ extends DelegatingInvocationHandlerDefault<T> {
             val currentReferencedObj = UnwrapUtil.single(currentReferencedAdapter);
 
             val propertyAccessEvent = new PropertyAccessEvent(
-                    getDelegate(), property.getIdentifier(), currentReferencedObj);
+                    getDelegate(), property.getFeatureIdentifier(), currentReferencedObj);
             notifyListeners(propertyAccessEvent);
             return currentReferencedObj;
 
@@ -408,7 +408,7 @@ extends DelegatingInvocationHandlerDefault<T> {
 
             val currentReferencedObj = UnwrapUtil.single(currentReferencedAdapter);
 
-            val collectionAccessEvent = new CollectionAccessEvent(getDelegate(), collection.getIdentifier());
+            val collectionAccessEvent = new CollectionAccessEvent(getDelegate(), collection.getFeatureIdentifier());
 
             if (currentReferencedObj instanceof Collection) {
                 val collectionViewObject = lookupWrappingObject(memberName,

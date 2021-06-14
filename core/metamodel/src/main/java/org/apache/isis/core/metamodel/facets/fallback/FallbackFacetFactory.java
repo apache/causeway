@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.isis.applib.annotation.LabelPosition;
+import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -63,6 +64,9 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
+
+        _Probe.errOut("facet-processing(fallbacks) type: %s", processClassContext.getFacetHolder().getFeatureIdentifier());
+
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         final DescribedAsFacetNone describedAsFacet = new DescribedAsFacetNone(facetHolder);
@@ -81,6 +85,9 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
+
+        _Probe.errOut("facet-processing(fallbacks) method: %s", processMethodContext.getFacetHolder().getFeatureIdentifier());
+
 
         final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
 
