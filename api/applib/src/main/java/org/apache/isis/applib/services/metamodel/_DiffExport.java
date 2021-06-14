@@ -205,27 +205,44 @@ class _DiffExport {
     private void diffFacets(DiffModel diffModel, String typeOrMemberId, 
             Facets leftFacets, Facets rightFacets) {
         
-        val sb = diffModel.sb;
         val leftFacet = findFirstFacet(leftFacets, diffModel.facetFilter);
         val rightFacet = findFirstFacet(rightFacets, diffModel.facetFilter);
         
         if(leftFacet.isPresent()) {
             if(!rightFacet.isPresent()) {
-                sb.append(LEFT_SYMBOL).append(" ").append(typeOrMemberId).append("\n");
-                diffModel.diffCout++;
+                reportFacetNotInOther(diffModel, LEFT_SYMBOL, typeOrMemberId, leftFacet.get());
             } else {
                 diffAttrs(diffModel, typeOrMemberId, leftFacet.get(), rightFacet.get());
             }
         } else {
             if(rightFacet.isPresent()) {
-                sb.append(RIGHT_SYMBOL).append(" ").append(typeOrMemberId).append("\n");
-                diffModel.diffCout++;
+                reportFacetNotInOther(diffModel, RIGHT_SYMBOL, typeOrMemberId, rightFacet.get());
             } else {
                 // skip (absent in both)
             }
         }
     }
     
+    private void reportFacetNotInOther(DiffModel diffModel, String symbol, String typeOrMemberId, Facet facet) {
+        val sb = diffModel.sb;
+        val attrNameValueLiterals = streamFacetAttr(facet)
+                .map(attr->attr.getName() + " " + attr.getValue())
+                .collect(Can.toCan());
+
+        // even if there are no attributes, we still want to report that there is a difference with facets 
+        val attrNameValueOrEmptyLiterals =
+                attrNameValueLiterals.isEmpty()
+                    ? Can.of("<no-attributes>")
+                    : attrNameValueLiterals;
+        
+        attrNameValueOrEmptyLiterals.forEach(attrNameValueLiteral->{
+            sb.append(symbol).append(" ").append(typeOrMemberId)
+            .append(" ").append(attrNameValueLiteral)
+            .append("\n");    
+        });
+        diffModel.diffCout++;
+    }
+
     private void diffAttrs(DiffModel diffModel, String typeOrMemberId, Facet leftFacet, Facet rightFacet) {
         
         val sb = diffModel.sb;
