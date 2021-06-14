@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 
 import lombok.Getter;
 import lombok.NonNull;
-
+import lombok.Setter;
 
 public abstract class FacetAbstract
 implements Facet, HasMetaModelContext {
@@ -38,16 +38,9 @@ implements Facet, HasMetaModelContext {
     private Set<Facet> contributedFacets; // lazy init
 
     @Getter(onMethod_ = {@Override}) private final @NonNull Facet.Precedence precedence;
-    private FacetHolder holder;
 
-    /**
-     * Populated in {@link #setFacetHolder(FacetHolder)} if the provided holder
-     * implements {@link IdentifiedHolder}.
-     *
-     * <p>
-     * Otherwise is <tt>null</tt>.
-     */
-    private IdentifiedHolder identifiedHolder;
+    @Getter(onMethod_ = {@Override}) @Setter(onMethod_ = {@Override})
+    private FacetHolder facetHolder;
 
     public FacetAbstract(
             Class<? extends Facet> facetType,
@@ -61,9 +54,9 @@ implements Facet, HasMetaModelContext {
 
     protected FacetAbstract(
             Class<? extends Facet> facetType,
-            FacetHolder holder) {
+            FacetHolder facetHolder) {
 
-        this(facetType, holder, Facet.Precedence.DEFAULT);
+        this(facetType, facetHolder, Facet.Precedence.DEFAULT);
     }
 
     @Override
@@ -72,30 +65,8 @@ implements Facet, HasMetaModelContext {
     }
 
     @Override
-    public FacetHolder getFacetHolder() {
-        return holder;
-    }
-
-    @Override
     public MetaModelContext getMetaModelContext() {
-        return holder.getMetaModelContext();
-    }
-
-    /**
-     * Convenience method that returns {@link #getFacetHolder()} downcast to
-     * {@link IdentifiedHolder} if the implementation does indeed inherit from
-     * {@link IdentifiedHolder}, otherwise <tt>null</tt>.
-     */
-    public IdentifiedHolder getIdentified() {
-        return identifiedHolder;
-    }
-
-    @Override
-    public void setFacetHolder(final FacetHolder facetHolder) {
-        this.holder = facetHolder;
-        this.identifiedHolder = (holder!=null && holder instanceof IdentifiedHolder)
-                ? (IdentifiedHolder) holder
-                        : null;
+        return facetHolder.getMetaModelContext();
     }
 
     protected String toStringValues() {

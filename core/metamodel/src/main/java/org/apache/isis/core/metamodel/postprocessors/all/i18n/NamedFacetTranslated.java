@@ -24,7 +24,7 @@ import java.util.function.BiConsumer;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 
 import lombok.Getter;
@@ -45,7 +45,7 @@ implements NamedFacet {
             final TranslationContext context,
             final String originalText,
             final TranslationService translationService,
-            final IdentifiedHolder facetHolder) {
+            final FacetHolder facetHolder) {
         super(
                 NamedFacet.type(),
                 facetHolder,

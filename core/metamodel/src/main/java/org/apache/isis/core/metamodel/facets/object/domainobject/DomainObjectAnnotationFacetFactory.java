@@ -52,7 +52,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
@@ -138,7 +137,7 @@ implements
 
         val domainObject = domainObjectIfAny.get();
 
-        val facetHolder = (IdentifiedHolder)processClassContext.getFacetHolder();
+        val facetHolder = processClassContext.getFacetHolder();
         val cls = processClassContext.getCls();
 
         if(processClassContext.synthesizeOnType(Value.class).isPresent()) {

@@ -42,14 +42,4 @@ public interface TypedHolder extends FacetHolder {
      */
     public Class<?> getType();
 
-    /**
-     * Type may not be known initially (eg {@link FeatureType#COLLECTION}s).
-     *
-     * <p>
-     * For example, the accessor might return a raw type such as
-     * <tt>java.util.List</tt>, rather than a generic one such as
-     * <tt>java.util.List&lt;Customer&gt;</tt>.
-     */
-    public void setType(Class<?> type);
-
 }

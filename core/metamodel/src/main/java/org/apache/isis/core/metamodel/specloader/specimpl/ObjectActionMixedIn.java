@@ -23,6 +23,7 @@ import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.CanVector;
 import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
@@ -39,7 +40,9 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 
-public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInMember {
+public class ObjectActionMixedIn
+extends ObjectActionDefault
+implements MixedInMember {
 
     /**
      * The type of the mixin (providing the action), eg annotated with {@link org.apache.isis.applib.annotation.Mixin}.
@@ -60,7 +63,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
      * Hold facets rather than delegate to the mixin action
      */
     @Getter(onMethod = @__(@Override))
-    private final FacetHolder facetHolder = new FacetHolderAbstract() {};
+    private final FacetHolder facetHolder;
 
     public ObjectActionMixedIn(
             final Class<?> mixinType,
@@ -76,6 +79,9 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
                     mixinAction.getFacetedMethod().getIdentifier().getMemberParameterClassNames()),
                 mixinAction.getFacetedMethod());
 
+        _Probe.errOut("mixin action id: %s", super.getIdentifier());
+
+        this.facetHolder = FacetHolderAbstract.simple(super.getIdentifier());
         this.mixinType = mixinType;
         this.mixinAction = mixinAction;
         this.mixedInType = mixedInType;

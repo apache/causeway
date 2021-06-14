@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.layout.memberorderfacet;
 import java.util.Comparator;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacet;
 import org.apache.isis.core.metamodel.layout.DeweyOrderSet;
@@ -47,7 +47,7 @@ import lombok.val;
  */
 public class MemberOrderComparator implements Comparator<Object> {
 
-    private final Comparator<IdentifiedHolder> memberComparator;
+    private final Comparator<FacetHolder> memberComparator;
     private final MemberIdentifierComparator memberIdentifierComparator = new MemberIdentifierComparator();
     private final OrderSetGroupNameComparator orderSetComparator = new OrderSetGroupNameComparator(true);
 
@@ -57,9 +57,9 @@ public class MemberOrderComparator implements Comparator<Object> {
 
     @Override
     public int compare(final Object o1, final Object o2) {
-        if (o1 instanceof IdentifiedHolder && o2 instanceof IdentifiedHolder) {
-            val m1 = (IdentifiedHolder) o1;
-            val m2 = (IdentifiedHolder) o2;
+        if (o1 instanceof FacetHolder && o2 instanceof FacetHolder) {
+            val m1 = (FacetHolder) o1;
+            val m2 = (FacetHolder) o2;
             final int memberOrderComparison = memberComparator.compare(m1, m2);
             if(memberOrderComparison != 0) {
                 return memberOrderComparison;
@@ -69,10 +69,10 @@ public class MemberOrderComparator implements Comparator<Object> {
         if (o1 instanceof DeweyOrderSet && o2 instanceof DeweyOrderSet) {
             return orderSetComparator.compare((DeweyOrderSet) o1, (DeweyOrderSet) o2);
         }
-        if (o1 instanceof IdentifiedHolder && o2 instanceof DeweyOrderSet) {
+        if (o1 instanceof FacetHolder && o2 instanceof DeweyOrderSet) {
             return -1; // members before OrderSets.
         }
-        if (o1 instanceof DeweyOrderSet && o2 instanceof IdentifiedHolder) {
+        if (o1 instanceof DeweyOrderSet && o2 instanceof FacetHolder) {
             return +1; // members before OrderSets.
         }
         throw _Exceptions.illegalArgument(

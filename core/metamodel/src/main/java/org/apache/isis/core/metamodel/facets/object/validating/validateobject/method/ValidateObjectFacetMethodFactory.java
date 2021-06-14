@@ -26,7 +26,6 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
@@ -54,7 +53,7 @@ public class ValidateObjectFacetMethodFactory extends MethodPrefixBasedFacetFact
             val translationService = getTranslationService();
             // sadness: same as in TranslationFactory
             val translationContext = TranslationContext.forTranslationContextHolder(
-                    ((IdentifiedHolder)facetHolder).getIdentifier());
+                    facetHolder.getIdentifier());
             FacetUtil.addFacetIfPresent(new ValidateObjectFacetMethod(method, translationService, translationContext, facetHolder));
             processClassContext.removeMethod(method);
         }

@@ -31,7 +31,6 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.interactions.ProposedHolder;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -62,7 +61,7 @@ implements MustSatisfySpecificationFacet {
         final TranslationService translationService = getTranslationService();
         // sadness: same as in TranslationFactory
         final TranslationContext translationContext = TranslationContext.forTranslationContextHolder(
-                ((IdentifiedHolder) holder).getIdentifier()); // .getTranslationContext();
+                holder.getIdentifier()); // .getTranslationContext();
 
         specificationEvaluator = new SpecificationEvaluator(translationService, translationContext);
     }

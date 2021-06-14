@@ -23,6 +23,8 @@ import java.lang.reflect.Method;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
+import static org.mockito.Mockito.when;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.i18n.Mode;
@@ -31,17 +33,15 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 import org.apache.isis.core.metamodel.services.title.TitleServiceDefault;
-
-import static org.mockito.Mockito.when;
 
 import lombok.val;
 
@@ -89,7 +89,7 @@ abstract class MixinIntendedAs {
 
     protected FacetHolder runTypeContextOn(Class<?> type) {
 
-        val facetHolder = new AbstractFacetFactoryTest.IdentifiedHolderImpl(
+        val facetHolder = FacetHolderAbstract.simple(
               Identifier.classIdentifier(LogicalType.fqcn(type)));
         facetHolder.setMetaModelContext(metaModelContext);
 

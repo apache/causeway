@@ -41,7 +41,7 @@ public class BooleanValueSemanticsProviderTest extends ValueSemanticsProviderAbs
     @Before
     public void setUpObjects() throws Exception {
         booleanObj = Boolean.valueOf(true);
-        facetHolder = new FacetHolderAbstract() {};
+        facetHolder = FacetHolderAbstract.forTesting();
         setValue(value = new BooleanWrapperValueSemanticsProvider(facetHolder));
     }
 

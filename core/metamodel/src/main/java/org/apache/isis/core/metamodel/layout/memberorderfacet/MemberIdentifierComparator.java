@@ -23,19 +23,19 @@ import java.io.Serializable;
 import java.util.Comparator;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 
 /**
  * Compares {@link FacetedMethod}) by {@link FacetedMethod#getIdentifier()}
  *
  */
-public class MemberIdentifierComparator implements Comparator<IdentifiedHolder>, Serializable {
+public class MemberIdentifierComparator implements Comparator<FacetHolder>, Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Override
-    public int compare(final IdentifiedHolder o1, final IdentifiedHolder o2) {
+    public int compare(final FacetHolder o1, final FacetHolder o2) {
         final Identifier identifier1 = o1.getIdentifier();
         final Identifier identifier2 = o2.getIdentifier();
         return identifier1.compareTo(identifier2);

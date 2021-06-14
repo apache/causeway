@@ -20,13 +20,13 @@
 package org.apache.isis.core.metamodel.facets.fallback;
 
 import org.apache.isis.core.metamodel.commons.StringExtensions;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetFromMemberNameAbstract;
 
 public class NamedFacetFallbackFromMemberName
 extends NamedFacetFromMemberNameAbstract {
 
-    protected NamedFacetFallbackFromMemberName(IdentifiedHolder holder) {
+    protected NamedFacetFallbackFromMemberName(FacetHolder holder) {
         super(
                 StringExtensions.asNaturalName2(holder.getIdentifier().getMemberLogicalName()),
                 holder,

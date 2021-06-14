@@ -35,12 +35,17 @@ implements BookmarkPolicyFacet {
 
     private final BookmarkPolicy bookmarkPolicy;
 
-    public BookmarkPolicyFacetAbstract(BookmarkPolicy bookmarkPolicy, FacetHolder facetHolder) {
+    protected BookmarkPolicyFacetAbstract(
+            final BookmarkPolicy bookmarkPolicy,
+            final FacetHolder facetHolder) {
         super(BookmarkPolicyFacetAbstract.type(), facetHolder);
         this.bookmarkPolicy = bookmarkPolicy;
     }
 
-    public BookmarkPolicyFacetAbstract(BookmarkPolicy bookmarkPolicy, FacetHolder facetHolder, final Facet.Precedence precedence) {
+    protected BookmarkPolicyFacetAbstract(
+            final BookmarkPolicy bookmarkPolicy,
+            final FacetHolder facetHolder,
+            final Facet.Precedence precedence) {
         super(BookmarkPolicyFacetAbstract.type(), facetHolder, precedence);
         this.bookmarkPolicy = bookmarkPolicy;
     }

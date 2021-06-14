@@ -41,7 +41,7 @@ public class DoubleValueSemanticsProviderTest extends ValueSemanticsProviderAbst
     @Before
     public void setUpObjects() throws Exception {
 
-        holder = new FacetHolderAbstract() {};
+        holder = FacetHolderAbstract.forTesting();
         ((MetaModelContextAware)holder).setMetaModelContext(super.metaModelContext);
         setValue(new DoubleWrapperValueSemanticsProvider(holder));
 

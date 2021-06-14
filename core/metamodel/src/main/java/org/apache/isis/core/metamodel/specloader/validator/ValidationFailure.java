@@ -25,7 +25,7 @@ import static java.util.Comparator.naturalOrder;
 import static java.util.Comparator.nullsFirst;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.NonNull;
@@ -59,7 +59,7 @@ public final class ValidationFailure implements Comparable<ValidationFailure> {
      * Collects a new ValidationFailure for given FacetHolder (that is the origin) using given message.
      */
     public static void raise(
-            @NonNull IdentifiedHolder facetHolder,
+            @NonNull FacetHolder facetHolder,
             @NonNull String deficiencyMessage) {
         raise(facetHolder.getSpecificationLoader(), facetHolder.getIdentifier(), deficiencyMessage);
     }
@@ -69,7 +69,7 @@ public final class ValidationFailure implements Comparable<ValidationFailure> {
      * (assembled from format and args).
      */
     public static void raiseFormatted(
-            @NonNull IdentifiedHolder facetHolder,
+            @NonNull FacetHolder facetHolder,
             @NonNull String messageFormat,
             final Object ...args) {
         raise(facetHolder, String.format(messageFormat, args));

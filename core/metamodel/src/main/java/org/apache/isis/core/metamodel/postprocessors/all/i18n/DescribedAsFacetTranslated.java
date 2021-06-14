@@ -24,7 +24,7 @@ import java.util.function.BiConsumer;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 
 public class DescribedAsFacetTranslated
@@ -38,7 +38,7 @@ implements DescribedAsFacet {
     public DescribedAsFacetTranslated(
             final TranslationContext context, final String originalText,
             final TranslationService translationService,
-            final IdentifiedHolder holder) {
+            final FacetHolder holder) {
         super(DescribedAsFacet.class, holder);
         this.context = context;
         this.originalText = originalText;

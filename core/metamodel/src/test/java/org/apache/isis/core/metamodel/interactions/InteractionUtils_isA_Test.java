@@ -64,7 +64,7 @@ public class InteractionUtils_isA_Test extends TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        facetHolder = new FacetHolderAbstract() {};
+        facetHolder = FacetHolderAbstract.forTesting();
         fooSuperFacet = new FooSuperFacet(FooSuperFacet.class, facetHolder);
         fooFacet = new FooFacet(facetHolder);
         fooSubFacet = new FooSubFacet(facetHolder);

@@ -50,7 +50,7 @@ public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProvid
 
         date = new java.util.Date(0);
 
-        holder = new FacetHolderAbstract() {};
+        holder = FacetHolderAbstract.forTesting();
         ((MetaModelContextAware)holder).setMetaModelContext(super.metaModelContext);
 
         setValue(new JavaUtilDateValueSemanticsProvider(holder) {

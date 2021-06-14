@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.metamodel.spec;
 
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
  * Base interface for elements of the metamodel.
  *
  * <p>
- * The most significant subinterfaces of this are {@link ObjectSpecification}
+ * The most significant sub-interfaces of this are {@link ObjectSpecification}
  * and {@link ObjectFeature} (which brings in {@link ObjectMember} and
  * {@link ObjectActionParameter}.
  *
@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
  * Introduces so that viewers can deal with abstract Instances of said.
  *
  */
-public interface Specification extends IdentifiedHolder {
+public interface Specification extends FacetHolder {
 
     FeatureType getFeatureType();
 

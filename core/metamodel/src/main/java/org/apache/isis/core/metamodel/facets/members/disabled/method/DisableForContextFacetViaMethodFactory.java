@@ -24,7 +24,6 @@ import java.lang.reflect.Method;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
@@ -85,7 +84,7 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
         val translationService = getTranslationService();
         // sadness: same logic as in I18nFacetFactory
         val translationContext = TranslationContext
-                .forTranslationContextHolder(((IdentifiedHolder)facetHolder).getIdentifier());
+                .forTranslationContextHolder(facetHolder.getIdentifier());
         addFacetIfPresent(
                 new DisableForContextFacetViaMethod(
                         disableMethod, translationService, translationContext, facetHolder));

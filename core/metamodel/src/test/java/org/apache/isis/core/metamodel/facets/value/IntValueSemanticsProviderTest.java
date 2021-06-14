@@ -43,7 +43,7 @@ public class IntValueSemanticsProviderTest extends ValueSemanticsProviderAbstrac
         integer = Integer.valueOf(32);
         allowMockAdapterToReturn(integer);
 
-        holder = new FacetHolderAbstract() {};
+        holder = FacetHolderAbstract.forTesting();
         ((MetaModelContextAware)holder).setMetaModelContext(super.metaModelContext);
 
         setValue(value = new IntWrapperValueSemanticsProvider(holder));

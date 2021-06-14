@@ -202,7 +202,7 @@ implements
                         domainEventHelper.postEventForProperty(
                                 AbstractDomainEvent.Phase.EXECUTING,
                                 PropertySetterOrClearFacetForDomainEventAbstract.this.getEventType(), null,
-                                PropertySetterOrClearFacetForDomainEventAbstract.this.getIdentified(), head,
+                                PropertySetterOrClearFacetForDomainEventAbstract.this.getFacetHolder(), head,
                                 oldValuePojo, newValuePojo);
 
                 val newValuePojoPossiblyUpdated = propertyDomainEvent.getNewValue();
@@ -228,7 +228,7 @@ implements
                     domainEventHelper.postEventForProperty(
                             AbstractDomainEvent.Phase.EXECUTED,
                             PropertySetterOrClearFacetForDomainEventAbstract.this.getEventType(), uncheckedCast(propertyDomainEvent),
-                            PropertySetterOrClearFacetForDomainEventAbstract.this.getIdentified(), head,
+                            PropertySetterOrClearFacetForDomainEventAbstract.this.getFacetHolder(), head,
                             oldValuePojo, actualNewValue);
                 }
 
@@ -269,7 +269,6 @@ implements
                 interactionInitiatedBy,
                 DomainEventMemberExecutor::new,
                 getFacetHolder(),
-                getIdentified(),
                 editingVariant
                 );
     }

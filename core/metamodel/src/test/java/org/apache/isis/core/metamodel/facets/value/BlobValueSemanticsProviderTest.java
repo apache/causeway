@@ -41,7 +41,7 @@ public class BlobValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
     public void setUpObjects() throws Exception {
         blob = new Blob("myfile1.docx", "application", "vnd.ms-word", new byte[]{1,2,3,4});
         allowMockAdapterToReturn(blob);
-        holder = new FacetHolderAbstract() {};
+        holder = FacetHolderAbstract.forTesting();
 
         setValue(value = new BlobValueSemanticsProvider(holder));
     }

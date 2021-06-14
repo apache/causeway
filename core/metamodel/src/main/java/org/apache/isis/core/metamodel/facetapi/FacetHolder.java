@@ -23,6 +23,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 
 import lombok.NonNull;
@@ -33,6 +34,11 @@ import lombok.val;
  * can be extended.
  */
 public interface FacetHolder extends HasMetaModelContext {
+
+    /**
+     * Identifier of the feature this holder represents.
+     */
+    Identifier getIdentifier();
 
     int getFacetCount();
 

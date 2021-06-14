@@ -43,7 +43,7 @@ public class ByteValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
     public void setUpObjects() throws Exception {
         byteObj = Byte.valueOf((byte) 102);
         allowMockAdapterToReturn(byteObj);
-        holder = new FacetHolderAbstract() {};
+        holder = FacetHolderAbstract.forTesting();
         ((MetaModelContextAware)holder).setMetaModelContext(super.metaModelContext);
 
         setValue(value = new ByteWrapperValueSemanticsProvider(holder));

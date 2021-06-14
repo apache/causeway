@@ -93,7 +93,7 @@ implements ParseableFacet {
                 && getFacetHolder().containsFacet(ValueFacet.class)) {
 
             val entryAdapter = getObjectManager().adapt(entry);
-            final Identifier identifier = getIdentified().getIdentifier();
+            final Identifier identifier = getFacetHolder().getIdentifier();
             final ParseValueContext parseValueContext =
                     new ParseValueContext(
                             InteractionHead.regular(contextAdapter), identifier, entryAdapter, interactionInitiatedBy

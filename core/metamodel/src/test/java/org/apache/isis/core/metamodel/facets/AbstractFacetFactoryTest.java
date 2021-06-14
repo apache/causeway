@@ -39,7 +39,6 @@ import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.actions.layout.ActionLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.layout.CollectionLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.PropertyLayoutFacetFactory;
@@ -78,27 +77,13 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
     protected FacetedMethodParameter facetedMethodParameter;
     protected MetaModelContext_forTesting metaModelContext;
 
-    public static class IdentifiedHolderImpl extends FacetHolderAbstract implements IdentifiedHolder {
-
-        private Identifier identifier;
-
-        public IdentifiedHolderImpl(final Identifier identifier) {
-            this.identifier = identifier;
-        }
-
-        @Override
-        public Identifier getIdentifier() {
-            return identifier;
-        }
-    }
-
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
         // PRODUCTION
 
-        facetHolder = new IdentifiedHolderImpl(
+        facetHolder = FacetHolderAbstract.simple(
                 Identifier.propertyOrCollectionIdentifier(LogicalType.fqcn(Customer.class), "firstName"));
         facetedMethod = FacetedMethod.createForProperty(Customer.class, "firstName");
         facetedMethodParameter = new FacetedMethodParameter(

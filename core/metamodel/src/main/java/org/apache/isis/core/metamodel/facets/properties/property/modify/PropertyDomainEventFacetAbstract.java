@@ -29,7 +29,6 @@ import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
@@ -64,7 +63,7 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
         this.translationService = getTranslationService();
         // sadness: same as in TranslationFactory
         this.translationContext = TranslationContext.forTranslationContextHolder(
-                ((IdentifiedHolder)holder).getIdentifier());
+                holder.getIdentifier());
 
         domainEventHelper = DomainEventHelper.ofServiceRegistry(getServiceRegistry());
     }
@@ -95,7 +94,7 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
                 domainEventHelper.postEventForProperty(
                         AbstractDomainEvent.Phase.HIDE,
                         getEventType(), null,
-                        getIdentified(), ic.getHead(),
+                        getFacetHolder(), ic.getHead(),
                         null, null);
         if (event != null && event.isHidden()) {
             return "Hidden by subscriber";
@@ -110,7 +109,7 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
                 domainEventHelper.postEventForProperty(
                         AbstractDomainEvent.Phase.DISABLE,
                         getEventType(), null,
-                        getIdentified(), ic.getHead(),
+                        getFacetHolder(), ic.getHead(),
                         null, null);
         if (event != null && event.isDisabled()) {
             final TranslatableString reasonTranslatable = event.getDisabledReasonTranslatable();
@@ -143,7 +142,7 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
                 domainEventHelper.postEventForProperty(
                         AbstractDomainEvent.Phase.VALIDATE,
                         getEventType(), null,
-                        getIdentified(), ic.getHead(),
+                        getFacetHolder(), ic.getHead(),
                         oldValue, proposedValue);
         if (event != null && event.isInvalid()) {
             final TranslatableString reasonTranslatable = event.getInvalidityReasonTranslatable();

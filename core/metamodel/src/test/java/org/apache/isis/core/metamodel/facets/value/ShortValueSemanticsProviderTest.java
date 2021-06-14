@@ -44,7 +44,7 @@ public class ShortValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
         short1 = Short.valueOf((short) 32);
         allowMockAdapterToReturn(short1);
 
-        holder = new FacetHolderAbstract() {};
+        holder = FacetHolderAbstract.forTesting();
         ((MetaModelContextAware)holder).setMetaModelContext(super.metaModelContext);
 
         setValue(value = new ShortWrapperValueSemanticsProvider(holder));

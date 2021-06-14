@@ -24,6 +24,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
@@ -47,6 +49,9 @@ implements FacetHolder, MetaModelContextAware {
 
     @Getter(onMethod = @__(@Override)) @Setter(onMethod = @__(@Override))
     private MetaModelContext metaModelContext;
+
+    // not private, as identifier might depend on lazily provided spec-loader
+    @Getter(onMethod_ = {@Override}) protected Identifier identifier;
 
     private final Map<Class<? extends Facet>, FacetRanking> rankingByType = _Maps.newHashMap();
     private final Object $lock = new Object();
@@ -97,6 +102,21 @@ implements FacetHolder, MetaModelContextAware {
     @Override
     public Optional<FacetRanking> getFacetRanking(Class<? extends Facet> facetType) {
         return Optional.ofNullable(rankingByType.get(facetType));
+    }
+
+    // -- JUNIT SUPPORT
+
+    public static FacetHolderAbstract simple(Identifier identifier) {
+        final FacetHolderAbstract facetHolder = new FacetHolderAbstract() {};
+        facetHolder.identifier = identifier;
+        return facetHolder;
+    }
+
+    /**
+     *  Meant for simple JUnit tests, that don't use the FacetHolder's identifier.
+     */
+    public static FacetHolderAbstract forTesting() {
+        return simple(Identifier.classIdentifier(LogicalType.fqcn(Object.class)));
     }
 
     // -- HELPER

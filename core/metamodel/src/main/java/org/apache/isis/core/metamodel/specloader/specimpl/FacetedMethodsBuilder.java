@@ -289,14 +289,13 @@ public class FacetedMethodsBuilder {
             if (typeOfFacet != null) {
                 elementType = typeOfFacet.value();
             }
-            facetedMethod.setType(elementType);
 
             // skip if class substitutor says so.
             if (classSubstitutorRegistry.getSubstitution(elementType).isNeverIntrospect()) {
                 continue;
             }
 
-            onNewFacetMethod.accept(facetedMethod);
+            onNewFacetMethod.accept(facetedMethod.withType(elementType));
         }
     }
 

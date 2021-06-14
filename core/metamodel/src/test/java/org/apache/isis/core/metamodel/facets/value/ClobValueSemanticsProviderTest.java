@@ -41,7 +41,7 @@ public class ClobValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
     public void setUpObjects() throws Exception {
         clob = new Clob("myfile1.xml", "application", "xml", "abcdef");
         allowMockAdapterToReturn(clob);
-        holder = new FacetHolderAbstract() {};
+        holder = FacetHolderAbstract.forTesting();
 
         setValue(value = new ClobValueSemanticsProvider(holder));
     }

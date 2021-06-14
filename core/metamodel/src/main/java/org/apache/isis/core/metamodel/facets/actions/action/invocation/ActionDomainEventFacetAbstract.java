@@ -27,7 +27,6 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.ActionInteractionContext;
@@ -61,7 +60,7 @@ implements ActionDomainEventFacet {
         this.translationService = getTranslationService();
         // sadness: same as in TranslationFactory
         this.translationContext = TranslationContext.forTranslationContextHolder(
-                ((IdentifiedHolder)holder).getIdentifier());
+                holder.getIdentifier());
 
         domainEventHelper = DomainEventHelper.ofServiceRegistry(getServiceRegistry());
     }
@@ -78,7 +77,7 @@ implements ActionDomainEventFacet {
                 domainEventHelper.postEventForAction(
                         AbstractDomainEvent.Phase.HIDE,
                         getEventType(),
-                        actionFrom(ic), getIdentified(),
+                        actionFrom(ic), getFacetHolder(),
                         ic.getHead(), argumentAdaptersFrom(ic),
                         null);
         if (event != null && event.isHidden()) {
@@ -94,7 +93,7 @@ implements ActionDomainEventFacet {
                 domainEventHelper.postEventForAction(
                         AbstractDomainEvent.Phase.DISABLE,
                         getEventType(),
-                        actionFrom(ic), getIdentified(),
+                        actionFrom(ic), getFacetHolder(),
                         ic.getHead(), argumentAdaptersFrom(ic),
                         null);
         if (event != null && event.isDisabled()) {
@@ -119,7 +118,7 @@ implements ActionDomainEventFacet {
                 domainEventHelper.postEventForAction(
                         AbstractDomainEvent.Phase.VALIDATE,
                         getEventType(),
-                        actionFrom(ic), getIdentified(),
+                        actionFrom(ic), getFacetHolder(),
                         ic.getHead(), aic.getArgs(),
                         null);
         if (event != null && event.isInvalid()) {

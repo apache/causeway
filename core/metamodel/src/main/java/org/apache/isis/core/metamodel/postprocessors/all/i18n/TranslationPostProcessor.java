@@ -24,8 +24,8 @@ import javax.inject.Inject;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
@@ -68,13 +68,13 @@ extends ObjectSpecificationPostProcessorAbstract {
 
     // -- HELPER
 
-    private void addFacetsFor(final IdentifiedHolder identifiedHolder) {
+    private void addFacetsFor(final FacetHolder identifiedHolder) {
         val translationContext = TranslationContext.forTranslationContextHolder(identifiedHolder.getIdentifier());
         translateName(identifiedHolder, translationContext);
         translateDescription(identifiedHolder, translationContext);
     }
 
-    void translateName(final IdentifiedHolder identifiedHolder, final TranslationContext translationContext) {
+    void translateName(final FacetHolder identifiedHolder, final TranslationContext translationContext) {
         val namedFacet = identifiedHolder.getFacet(NamedFacet.class);
         if(namedFacet == null) {
             // not expected...
@@ -96,7 +96,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     void translateDescription(
-            final IdentifiedHolder identifiedHolder,
+            final FacetHolder identifiedHolder,
             final TranslationContext translationContext) {
 
         val describedAsFacet = identifiedHolder.getFacet(DescribedAsFacet.class);

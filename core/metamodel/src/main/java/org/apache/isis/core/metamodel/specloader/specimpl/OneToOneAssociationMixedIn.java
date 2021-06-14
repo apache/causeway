@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
@@ -61,7 +62,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
      * use layout metadata to position the contributee in different ways)
      */
     @Getter(onMethod = @__(@Override))
-    private final FacetHolder facetHolder = new FacetHolderAbstract() {};
+    private final FacetHolder facetHolder;
 
     public OneToOneAssociationMixedIn(
             final ObjectActionDefault mixinAction,
@@ -76,6 +77,10 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
                     determineIdFrom(mixinAction),
                     mixinAction.getFacetedMethod().getIdentifier().getMemberParameterClassNames()),
                 mixinAction.getFacetedMethod(), mixinAction.getReturnType());
+
+        _Probe.errOut("mixin prop id: %s", super.getIdentifier());
+
+        this.facetHolder = FacetHolderAbstract.simple(super.getIdentifier());
 
         this.mixinType = mixinType;
         this.mixinAction = mixinAction;

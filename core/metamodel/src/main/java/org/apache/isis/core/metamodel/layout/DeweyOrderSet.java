@@ -32,7 +32,7 @@ import java.util.TreeSet;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberIdentifierComparator;
@@ -75,26 +75,26 @@ import lombok.val;
  */
 public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object>  {
 
-    public static DeweyOrderSet createOrderSet(final List<? extends IdentifiedHolder> identifiedHolders) {
+    public static DeweyOrderSet createOrderSet(final List<? extends FacetHolder> identifiedHolders) {
 
-        final SortedMap<String, SortedSet<IdentifiedHolder>> sortedMembersByGroup = _Maps.newTreeMap();
-        final SortedSet<IdentifiedHolder> nonAnnotatedGroup = _Sets.newTreeSet(new MemberIdentifierComparator());
+        final SortedMap<String, SortedSet<FacetHolder>> sortedMembersByGroup = _Maps.newTreeMap();
+        final SortedSet<FacetHolder> nonAnnotatedGroup = _Sets.newTreeSet(new MemberIdentifierComparator());
 
         // spin over all the members and put them into a Map of SortedSets
         // any non-annotated members go into additional nonAnnotatedGroup set.
-        for (final IdentifiedHolder identifiedHolder : identifiedHolders) {
+        for (final FacetHolder identifiedHolder : identifiedHolders) {
             val layoutGroupFacet = identifiedHolder.getFacet(LayoutGroupFacet.class);
             if (layoutGroupFacet == null) {
                 nonAnnotatedGroup.add(identifiedHolder);
                 continue;
             }
-            final SortedSet<IdentifiedHolder> sortedMembersForFieldSet =
+            final SortedSet<FacetHolder> sortedMembersForFieldSet =
                     getSortedSet(sortedMembersByGroup, layoutGroupFacet.getGroupId());
             sortedMembersForFieldSet.add(identifiedHolder);
         }
 
         // add the non-annotated group to the first "" group.
-        final SortedSet<IdentifiedHolder> defaultSet = getSortedSet(sortedMembersByGroup, "");
+        final SortedSet<FacetHolder> defaultSet = getSortedSet(sortedMembersByGroup, "");
         defaultSet.addAll(nonAnnotatedGroup);
 
         // create OrderSets, wiring up parents and children.
@@ -115,7 +115,7 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
         // now populate the OrderSets
         for (final String groupName : groupNames) {
             final DeweyOrderSet deweyOrderSet = orderSetsByGroup.get(groupName);
-            final SortedSet<IdentifiedHolder> sortedMembers = sortedMembersByGroup.get(groupName);
+            final SortedSet<FacetHolder> sortedMembers = sortedMembersByGroup.get(groupName);
             deweyOrderSet.addAll(sortedMembers);
             deweyOrderSet.copyOverChildren();
         }
@@ -133,7 +133,7 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
      */
     private static void ensureParentFor(final SortedMap<String,DeweyOrderSet> orderSetsByGroup, final DeweyOrderSet deweyOrderSet) {
         final String parentGroup = deweyOrderSet.getGroupPath();
-        DeweyOrderSet parentOrderSet = (DeweyOrderSet) orderSetsByGroup.get(parentGroup);
+        DeweyOrderSet parentOrderSet = orderSetsByGroup.get(parentGroup);
         if (parentOrderSet == null) {
             parentOrderSet = new DeweyOrderSet(parentGroup);
             orderSetsByGroup.put(parentGroup, parentOrderSet);
@@ -159,10 +159,10 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
      * @param groupName
      * @return
      */
-    private static SortedSet<IdentifiedHolder> getSortedSet(final SortedMap<String, SortedSet<IdentifiedHolder>> sortedMembersByGroup, final String groupName) {
-        SortedSet<IdentifiedHolder> sortedMembersForGroup = sortedMembersByGroup.get(groupName);
+    private static SortedSet<FacetHolder> getSortedSet(final SortedMap<String, SortedSet<FacetHolder>> sortedMembersByGroup, final String groupName) {
+        SortedSet<FacetHolder> sortedMembersForGroup = sortedMembersByGroup.get(groupName);
         if (sortedMembersForGroup == null) {
-            sortedMembersForGroup = new TreeSet<IdentifiedHolder>(new MemberOrderComparator(true));
+            sortedMembersForGroup = new TreeSet<FacetHolder>(new MemberOrderComparator(true));
             sortedMembersByGroup.put(groupName, sortedMembersForGroup);
         }
         return sortedMembersForGroup;

@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facetapi;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 
@@ -102,6 +103,14 @@ extends
      * The {@link FacetHolder holder} of this facet.
      */
     FacetHolder getFacetHolder();
+
+    /**
+     * Identifier of the feature this facet is associated with.
+     * @see FacetHolder#getIdentifier()
+     */
+    default Identifier getFeatureIdentifier() {
+        return getFacetHolder().getIdentifier();
+    }
 
     /**
      * Allows re-parenting of Facet.

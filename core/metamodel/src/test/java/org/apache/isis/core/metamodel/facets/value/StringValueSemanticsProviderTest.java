@@ -39,7 +39,7 @@ public class StringValueSemanticsProviderTest extends ValueSemanticsProviderAbst
     @Before
     public void setUpObjects() throws Exception {
         string = "text entry";
-        holder = new FacetHolderAbstract() {};
+        holder = FacetHolderAbstract.forTesting();
         setValue(value = new StringValueSemanticsProvider(holder));
     }
 

@@ -21,34 +21,25 @@ package org.apache.isis.core.metamodel.facets;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 
-public class TypedHolderDefault extends FacetHolderAbstract implements TypedHolder {
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-    private final FeatureType featureType;
-    private Class<?> type;
+@RequiredArgsConstructor
+public abstract class TypedHolderAbstract
+extends FacetHolderAbstract
+implements TypedHolder {
 
-    public TypedHolderDefault(final FeatureType featureType, final Class<?> type) {
-        this.featureType = featureType;
-        this.type = type;
-    }
-
-    @Override
-    public FeatureType getFeatureType() {
-        return featureType;
-    }
-
-    @Override
-    public Class<?> getType() {
-        return type;
-    }
+    @Getter(onMethod_ = {@Override}) private final FeatureType featureType;
 
     /**
      * For {@link FeatureType#COLLECTION collection}s and for
      * {@link FeatureType#ACTION_PARAMETER_COLLECTION}s, represents the element type.
+     * <p>
+     * For example, the accessor might return a raw type such as
+     * <tt>java.util.List</tt>, rather than a generic one such as
+     * <tt>java.util.List&lt;Customer&gt;</tt>.
      */
-    @Override
-    public void setType(final Class<?> type) {
-        this.type = type;
-    }
+    @Getter(onMethod_ = {@Override}) private final Class<?> type;
 
     @Override // as used for logging, not strictly required
     public String toString() {

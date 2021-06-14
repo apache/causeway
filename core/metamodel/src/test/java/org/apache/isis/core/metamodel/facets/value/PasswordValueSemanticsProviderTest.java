@@ -37,7 +37,7 @@ public class PasswordValueSemanticsProviderTest extends ValueSemanticsProviderAb
 
     @Before
     public void setUpObjects() throws Exception {
-        holder = new FacetHolderAbstract() {};
+        holder = FacetHolderAbstract.forTesting();
         setValue(adapter = new PasswordValueSemanticsProvider(holder));
         password = new Password("secret");
     }

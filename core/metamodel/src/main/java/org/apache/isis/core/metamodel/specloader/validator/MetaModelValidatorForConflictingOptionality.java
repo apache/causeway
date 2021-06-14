@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.specloader.validator;
 
 import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 
 import lombok.val;
@@ -42,7 +41,7 @@ public class MetaModelValidatorForConflictingOptionality {
 
     private static void addFailure(final MandatoryFacet mandatoryFacet, final String message) {
         if(mandatoryFacet != null) {
-            val holder = (IdentifiedHolder) mandatoryFacet.getFacetHolder();
+            val holder = mandatoryFacet.getFacetHolder();
             ValidationFailure.raiseFormatted(
                     holder,
                     "%s : %s",

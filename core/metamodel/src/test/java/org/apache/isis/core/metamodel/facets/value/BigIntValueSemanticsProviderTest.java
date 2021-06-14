@@ -46,7 +46,7 @@ public class BigIntValueSemanticsProviderTest extends ValueSemanticsProviderAbst
         bigInt = new BigInteger("132199");
         allowMockAdapterToReturn(bigInt);
 
-        holder = new FacetHolderAbstract() {};
+        holder = FacetHolderAbstract.forTesting();
         ((MetaModelContextAware)holder).setMetaModelContext(super.metaModelContext);
 
         setValue(new BigIntegerValueSemanticsProvider(holder));

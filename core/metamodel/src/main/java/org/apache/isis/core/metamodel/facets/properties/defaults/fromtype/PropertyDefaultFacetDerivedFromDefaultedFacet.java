@@ -45,7 +45,7 @@ implements PropertyDefaultFacet {
 
     @Override
     public ManagedObject getDefault(final ManagedObject inObject) {
-        if (getIdentified() == null) {
+        if (getFacetHolder() == null) {
             return null;
         }
         final Object typeFacetDefault = typeFacet.getDefault();

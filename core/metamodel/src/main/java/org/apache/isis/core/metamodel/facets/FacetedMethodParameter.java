@@ -23,15 +23,11 @@ import java.lang.reflect.Method;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 
 import lombok.val;
 
 public class FacetedMethodParameter
-extends TypedHolderDefault
-implements IdentifiedHolder {
-
-    private final Identifier identifier;
+extends TypedHolderAbstract {
 
     public FacetedMethodParameter(
             final FeatureType featureType,
@@ -46,12 +42,25 @@ implements IdentifiedHolder {
                 ()->getSpecificationLoader().loadSpecification(declaringType).getLogicalTypeName());
 
         // best we can do...
-        this.identifier = FeatureType.ACTION.identifierFor(logicalType, method);
+        super.identifier = FeatureType.ACTION.identifierFor(logicalType, method);
     }
 
-    @Override
-    public Identifier getIdentifier() {
-        return identifier;
+    public FacetedMethodParameter(
+            final FeatureType featureType,
+            final Class<?> type,
+            final Identifier identifier) {
+
+        super(featureType, type);
+        super.identifier = identifier;
+    }
+
+
+    /**
+     * Returns a new instance with {@code type} replaced by given {@code elementType}.
+     * @param elementType
+     */
+    public FacetedMethodParameter withType(Class<?> elementType) {
+        return new FacetedMethodParameter(getFeatureType(), elementType, super.identifier);
     }
 
 }

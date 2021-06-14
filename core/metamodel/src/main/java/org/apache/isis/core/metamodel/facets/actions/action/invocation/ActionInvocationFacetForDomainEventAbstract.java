@@ -139,8 +139,7 @@ implements ImperativeFacet {
                 interactionInitiatedBy,
                 method,
                 DomainEventMemberExecutor::new,
-                getFacetHolder(),
-                getIdentified());
+                getFacetHolder());
     }
 
     private Object invokeMethodElseFromCache(

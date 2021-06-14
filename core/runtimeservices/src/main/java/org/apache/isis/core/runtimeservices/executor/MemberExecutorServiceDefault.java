@@ -50,7 +50,6 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.execution.InteractionInternal;
 import org.apache.isis.core.metamodel.execution.MemberExecutorService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
 import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
@@ -107,8 +106,7 @@ implements MemberExecutorService {
             final @NonNull InteractionInitiatedBy interactionInitiatedBy,
             final @NonNull Method method,
             final @NonNull ActionExecutorFactory actionExecutorFactory,
-            final @NonNull FacetHolder facetHolder,
-            final @NonNull IdentifiedHolder identifiedHolder) {
+            final @NonNull FacetHolder facetHolder) {
 
         _Assert.assertEquals(owningAction.getParameterCount(), argumentAdapters.size(),
                 "action's parameter count and provided argument count must match");
@@ -172,7 +170,7 @@ implements MemberExecutorService {
         setCommandResultIfEntity(command, returnedAdapter);
 
         // publish (if not a contributed association, query-only mixin)
-        if (ExecutionPublishingFacet.isPublishingEnabled(identifiedHolder)) {
+        if (ExecutionPublishingFacet.isPublishingEnabled(facetHolder)) {
             executionPublisher.get().publishActionInvocation(priorExecution);
         }
 
@@ -188,7 +186,6 @@ implements MemberExecutorService {
             final @NonNull InteractionInitiatedBy interactionInitiatedBy,
             final @NonNull PropertyExecutorFactory propertyExecutorFactory,
             final @NonNull FacetHolder facetHolder,
-            final @NonNull IdentifiedHolder identifiedHolder,
             final @NonNull EditingVariant editingVariant) {
 
         val interaction = getInteractionElseFail();
@@ -232,7 +229,7 @@ implements MemberExecutorService {
         }
 
         // publish (if not a contributed association, query-only mixin)
-        val publishedPropertyFacet = identifiedHolder.getFacet(ExecutionPublishingFacet.class);
+        val publishedPropertyFacet = facetHolder.getFacet(ExecutionPublishingFacet.class);
         if (publishedPropertyFacet != null) {
             executionPublisher.get().publishPropertyEdit(priorExecution);
         }

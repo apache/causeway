@@ -27,7 +27,6 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterOrClearFacetForDomainEventAbstract.EditingVariant;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -89,8 +88,7 @@ public interface MemberExecutorService {
             @NonNull InteractionInitiatedBy interactionInitiatedBy,
             @NonNull Method method,
             @NonNull ActionExecutorFactory actionExecutorFactory,
-            @NonNull FacetHolder facetHolder,
-            @NonNull IdentifiedHolder identifiedHolder);
+            @NonNull FacetHolder facetHolder);
 
     //TODO implementations of this service should also handle domain object events, don't delegate this responsibility to facets
     ManagedObject setOrClearProperty(
@@ -100,7 +98,6 @@ public interface MemberExecutorService {
             @NonNull InteractionInitiatedBy interactionInitiatedBy,
             @NonNull PropertyExecutorFactory propertyExecutorFactory,
             @NonNull FacetHolder facetHolder,
-            @NonNull IdentifiedHolder identifiedHolder,
             @NonNull EditingVariant editingVariant);
 
 }

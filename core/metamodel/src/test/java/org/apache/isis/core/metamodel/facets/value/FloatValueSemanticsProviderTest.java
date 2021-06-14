@@ -44,7 +44,7 @@ public class FloatValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
         float1 = Float.valueOf(32.5f);
         allowMockAdapterToReturn(float1);
 
-        holder = new FacetHolderAbstract() {};
+        holder = FacetHolderAbstract.forTesting();
         ((MetaModelContextAware)holder).setMetaModelContext(super.metaModelContext);
 
         setValue(value = new FloatWrapperValueSemanticsProvider(holder));

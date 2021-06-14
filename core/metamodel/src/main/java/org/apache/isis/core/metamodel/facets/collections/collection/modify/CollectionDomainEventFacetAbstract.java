@@ -65,7 +65,7 @@ public abstract class CollectionDomainEventFacetAbstract
                 domainEventHelper.postEventForCollection(
                         AbstractDomainEvent.Phase.HIDE,
                         getEventType(),
-                        getIdentified(), ic.getHead()
+                        getFacetHolder(), ic.getHead()
                 );
         if (event != null && event.isHidden()) {
             return "Hidden by subscriber";

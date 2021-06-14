@@ -43,7 +43,7 @@ public class LongValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
     public void setUpObjects() throws Exception {
         longObj = Long.valueOf(367322);
         allowMockAdapterToReturn(longObj);
-        holder = new FacetHolderAbstract() {};
+        holder = FacetHolderAbstract.forTesting();
         ((MetaModelContextAware)holder).setMetaModelContext(super.metaModelContext);
 
         setValue(value = new LongWrapperValueSemanticsProvider(holder));

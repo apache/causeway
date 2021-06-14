@@ -150,7 +150,7 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
 
     private ValidationFailures processThenValidate(final Class<?> cls) {
 
-        val holder = new FacetHolderAbstract() {};
+        val holder = FacetHolderAbstract.forTesting();
         ((MetaModelContextAware)holder).setMetaModelContext(metaModelContext);
         facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, holder));
 
