@@ -54,6 +54,6 @@ public class ChoicesFacetEnum extends ChoicesFacetAbstract {
     @Override 
     public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
-        attributeMap.put("choices", choices.map(ManagedObject::getPojo));
+        attributeMap.put("choices", choices.map(ManagedObject::getPojo).toList());
     }
 }
