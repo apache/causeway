@@ -225,19 +225,19 @@ class _DiffExport {
     
     private void reportFacetNotInOther(DiffModel diffModel, String symbol, String typeOrMemberId, Facet facet) {
         val sb = diffModel.sb;
-        val attrKeyValueLiterals = streamFacetAttr(facet)
-                .map(attr->attr.getName())
+        val attrNameValueLiterals = streamFacetAttr(facet)
+                .map(attr->attr.getName() + " " + attr.getValue())
                 .collect(Can.toCan());
 
         // even if there are no attributes, we still want to report that there is a difference with facets 
-        val attrKeyValueOrEmptyLiterals =
-                attrKeyValueLiterals.isEmpty()
+        val attrNameValueOrEmptyLiterals =
+                attrNameValueLiterals.isEmpty()
                     ? Can.of("<no-attributes>")
-                    : attrKeyValueLiterals;
+                    : attrNameValueLiterals;
         
-        attrKeyValueOrEmptyLiterals.forEach(attrKeyValueLiteral->{
+        attrNameValueOrEmptyLiterals.forEach(attrNameValueLiteral->{
             sb.append(symbol).append(" ").append(typeOrMemberId)
-            .append(" ").append(attrKeyValueLiteral)
+            .append(" ").append(attrNameValueLiteral)
             .append("\n");    
         });
         diffModel.diffCout++;
