@@ -27,11 +27,12 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
+import lombok.NonNull;
 import lombok.val;
 
 public class ChoicesFacetEnum extends ChoicesFacetAbstract {
 
-    private final Can<ManagedObject> choices;
+    private final @NonNull Can<ManagedObject> choices;
 
     public ChoicesFacetEnum(final FacetHolder holder, final Class<?> enumClass) {
         super(holder);
@@ -50,8 +51,9 @@ public class ChoicesFacetEnum extends ChoicesFacetAbstract {
         return choices;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+    @Override 
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
-        attributeMap.put("choices", choices);
+        attributeMap.put("choices", choices.map(ManagedObject::getPojo));
     }
 }

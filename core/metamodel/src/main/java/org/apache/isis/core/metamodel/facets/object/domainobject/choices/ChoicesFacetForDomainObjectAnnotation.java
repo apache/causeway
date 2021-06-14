@@ -37,8 +37,9 @@ public class ChoicesFacetForDomainObjectAnnotation extends ChoicesFacetFromBound
                 .map(DomainObject::bounding)
                 .filter(bounding -> bounding != Bounding.NOT_SPECIFIED)
                 .map(bounding -> bounding == Bounding.BOUNDED
-                ? new ChoicesFacetForDomainObjectAnnotation(facetHolder)
-                        : null).orElse(null);
+                        ? new ChoicesFacetForDomainObjectAnnotation(facetHolder)
+                        : null)
+                .orElse(null);
     }
 
     private ChoicesFacetForDomainObjectAnnotation(
