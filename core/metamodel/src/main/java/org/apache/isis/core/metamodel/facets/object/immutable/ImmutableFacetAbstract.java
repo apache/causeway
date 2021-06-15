@@ -29,7 +29,7 @@ public abstract class ImmutableFacetAbstract
 extends FacetAbstract
 implements ImmutableFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return ImmutableFacet.class;
     }
 

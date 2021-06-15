@@ -23,6 +23,7 @@ import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
@@ -30,9 +31,14 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import lombok.Getter;
 import lombok.NonNull;
 
+@Deprecated // merge up into NamedFacetAbstract
 public class NamedFacetTranslated
 extends FacetAbstract
 implements NamedFacet {
+
+    private static final Class<? extends Facet> type() {
+        return NamedFacet.class;
+    }
 
     final TranslationService translationService;
     final TranslationContext context;
@@ -47,7 +53,7 @@ implements NamedFacet {
             final TranslationService translationService,
             final FacetHolder facetHolder) {
         super(
-                NamedFacet.type(),
+                type(),
                 facetHolder,
                 underlyingNamedFacet.getPrecedence()); // keep original precedence
 

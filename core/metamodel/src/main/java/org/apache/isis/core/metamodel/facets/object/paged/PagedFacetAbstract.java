@@ -29,7 +29,7 @@ public abstract class PagedFacetAbstract
 extends FacetAbstract
 implements PagedFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return PagedFacet.class;
     }
 

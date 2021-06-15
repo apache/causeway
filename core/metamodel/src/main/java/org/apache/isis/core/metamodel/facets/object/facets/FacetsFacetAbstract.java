@@ -34,7 +34,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public abstract class FacetsFacetAbstract extends FacetAbstract implements FacetsFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return FacetsFacet.class;
     }
 

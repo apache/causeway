@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 public class CollectionSemanticsFacetDefault extends SingleValueFacetAbstract<CollectionSemantics> implements
 CollectionSemanticsFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return CollectionSemanticsFacet.class;
     }
 

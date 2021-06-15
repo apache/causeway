@@ -42,7 +42,7 @@ implements ViewModelFacet {
     private final PostConstructMethodCache postConstructMethodCache;
     private final ViewModelFacet.RecreationMechanism recreationMechanism;
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return ViewModelFacet.class;
     }
 

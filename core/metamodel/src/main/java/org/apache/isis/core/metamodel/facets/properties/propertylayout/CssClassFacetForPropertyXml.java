@@ -23,9 +23,9 @@ import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetSimple;
 
-public class CssClassFacetForPropertyXml extends CssClassFacetAbstract {
+public class CssClassFacetForPropertyXml extends CssClassFacetSimple {
 
     public static CssClassFacet create(PropertyLayoutData propertyLayout, FacetHolder holder) {
         if(propertyLayout == null) {

@@ -27,7 +27,7 @@ public abstract class ActionParameterAutoCompleteFacetAbstract
 extends FacetAbstract
 implements ActionParameterAutoCompleteFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return ActionParameterAutoCompleteFacet.class;
     }
 

@@ -37,7 +37,7 @@ public class ShortValueSemanticsProviderAbstract
 extends ValueSemanticsProviderAndFacetAbstract<Short>
 implements ShortValueFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return ShortValueFacet.class;
     }
 

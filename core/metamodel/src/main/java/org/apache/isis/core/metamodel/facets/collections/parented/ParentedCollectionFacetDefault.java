@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionF
 
 public class ParentedCollectionFacetDefault extends FacetAbstract implements ParentedCollectionFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return ParentedCollectionFacet.class;
     }
 

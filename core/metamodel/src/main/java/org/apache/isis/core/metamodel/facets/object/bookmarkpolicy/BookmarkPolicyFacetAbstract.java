@@ -29,7 +29,7 @@ public abstract class BookmarkPolicyFacetAbstract
 extends FacetAbstract
 implements BookmarkPolicyFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return BookmarkPolicyFacet.class;
     }
 
@@ -38,7 +38,7 @@ implements BookmarkPolicyFacet {
     protected BookmarkPolicyFacetAbstract(
             final BookmarkPolicy bookmarkPolicy,
             final FacetHolder facetHolder) {
-        super(BookmarkPolicyFacetAbstract.type(), facetHolder);
+        super(type(), facetHolder);
         this.bookmarkPolicy = bookmarkPolicy;
     }
 
@@ -46,7 +46,7 @@ implements BookmarkPolicyFacet {
             final BookmarkPolicy bookmarkPolicy,
             final FacetHolder facetHolder,
             final Facet.Precedence precedence) {
-        super(BookmarkPolicyFacetAbstract.type(), facetHolder, precedence);
+        super(type(), facetHolder, precedence);
         this.bookmarkPolicy = bookmarkPolicy;
     }
 

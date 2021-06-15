@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.object.projection;
 
 import org.apache.isis.applib.annotation.Projecting;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.projection.ProjectingFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -32,10 +31,6 @@ import lombok.val;
 
 public class ProjectionFacetFromProjectingProperty
 extends ProjectionFacetAbstract {
-
-    public static Class<? extends Facet> type() {
-        return ProjectionFacet.class;
-    }
 
     private final OneToOneAssociation projectingProperty;
 

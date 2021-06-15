@@ -44,7 +44,8 @@ import lombok.Setter;
  * Treats {@link java.sql.Time} as a time-only value type.
  *
  */
-public class JavaSqlTimeValueSemanticsProvider extends ValueSemanticsProviderAbstractTemporal<Time> {
+public class JavaSqlTimeValueSemanticsProvider
+extends ValueSemanticsProviderAbstractTemporal<Time> {
 
     protected static void initFormats(final Map<String, DateFormat> formats) {
         formats.put(ISO_ENCODING_FORMAT, createDateEncodingFormat("HHmmssSSS"));

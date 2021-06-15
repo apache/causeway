@@ -33,7 +33,7 @@ public class LocalResourcePathValueSemanticsProvider
 extends ValueSemanticsProviderAndFacetAbstract<LocalResourcePath> implements LocalResourcePathValueFacet {
 
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return LocalResourcePathValueFacet.class;
     }
 

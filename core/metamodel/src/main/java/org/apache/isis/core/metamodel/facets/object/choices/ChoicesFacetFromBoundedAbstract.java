@@ -57,7 +57,7 @@ implements
     DisablingInteractionAdvisor,
     ValidatingInteractionAdvisor {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return ChoicesFacet.class;
     }
 

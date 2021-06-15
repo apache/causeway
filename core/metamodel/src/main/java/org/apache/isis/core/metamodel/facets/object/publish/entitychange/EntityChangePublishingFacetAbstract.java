@@ -26,7 +26,7 @@ public abstract class EntityChangePublishingFacetAbstract
 extends FacetAbstract
 implements EntityChangePublishingFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return EntityChangePublishingFacet.class;
     }
 

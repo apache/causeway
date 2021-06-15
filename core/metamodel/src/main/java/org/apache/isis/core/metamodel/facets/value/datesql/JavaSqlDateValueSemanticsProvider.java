@@ -47,7 +47,8 @@ import lombok.Setter;
  * @see JavaUtilDateValueSemanticsProvider
  * @see JavaSqlTimeValueSemanticsProvider
  */
-public class JavaSqlDateValueSemanticsProvider extends ValueSemanticsProviderAbstractTemporal<Date> {
+public class JavaSqlDateValueSemanticsProvider
+extends ValueSemanticsProviderAbstractTemporal<Date> {
 
 
     private static Map<String, DateFormat> formats = _Maps.newHashMap();

@@ -39,7 +39,7 @@ public abstract class RegExFacetAbstract
 extends FacetAbstract
 implements RegExFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return RegExFacet.class;
     }
 

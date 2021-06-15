@@ -31,6 +31,8 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
 
+import lombok.val;
+
 /**
  * Central point for providing some kind of default for any {@link Facet}s
  * required by the Apache Isis framework itself.
@@ -67,20 +69,14 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
 
         _Probe.errOut("facet-processing(fallbacks) type: %s", processClassContext.getFacetHolder().getFeatureIdentifier());
 
-        final FacetHolder facetHolder = processClassContext.getFacetHolder();
+        val facetHolder = processClassContext.getFacetHolder();
 
-        final DescribedAsFacetNone describedAsFacet = new DescribedAsFacetNone(facetHolder);
-        final TitleFacetNone titleFacet = new TitleFacetNone(facetHolder);
-
-        final int pagedStandalone = getConfiguration().getApplib().getAnnotation().getDomainObjectLayout().getPaged();
-        final PagedFacetFromConfiguration pagedFacet = new PagedFacetFromConfiguration(pagedStandalone, facetHolder);
-
-        addFacetIfPresent(describedAsFacet);
-        // commenting these out, think this whole isNoop business is a little bogus
-        //FacetUtil.addFacet(new ImmutableFacetNever(holder));
-        addFacetIfPresent(titleFacet);
-        addFacetIfPresent(pagedFacet);
-
+        addFacetIfPresent(new DescribedAsFacetNone(facetHolder));
+        addFacetIfPresent(new TitleFacetNone(facetHolder));
+        addFacetIfPresent(
+                new PagedFacetFromConfiguration(
+                        getConfiguration().getApplib().getAnnotation().getDomainObjectLayout().getPaged(),
+                        facetHolder));
     }
 
     @Override
@@ -88,19 +84,16 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
 
         _Probe.errOut("facet-processing(fallbacks) method: %s", processMethodContext.getFacetHolder().getFeatureIdentifier());
 
-
         final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
 
         addFacetIfPresent(new NamedFacetFallbackFromMemberName(facetedMethod));
         addFacetIfPresent(new DescribedAsFacetNone(facetedMethod));
         addFacetIfPresent(new HelpFacetNone(facetedMethod));
 
-
         final FeatureType featureType = facetedMethod.getFeatureType();
         if (featureType.isProperty()) {
             addFacetIfPresent(new MaxLengthFacetUnlimited(facetedMethod));
             addFacetIfPresent(new MultiLineFacetNone(facetedMethod));
-
             addFacetIfPresent(newPropParamLayoutFacetIfAny(facetedMethod, "propertyLayout", getConfiguration().getApplib().getAnnotation().getPropertyLayout()));
         }
         if (featureType.isAction()) {
@@ -108,7 +101,10 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
             addFacetIfPresent(new ActionChoicesFacetNone(facetedMethod));
         }
         if (featureType.isCollection()) {
-            addFacetIfPresent(new PagedFacetFromConfiguration(getConfiguration().getApplib().getAnnotation().getCollectionLayout().getPaged(), facetedMethod));
+            addFacetIfPresent(
+                    new PagedFacetFromConfiguration(
+                            getConfiguration().getApplib().getAnnotation().getCollectionLayout().getPaged(),
+                            facetedMethod));
         }
 
     }

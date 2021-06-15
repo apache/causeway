@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public abstract class PropertyInitializationFacetAbstract extends FacetAbstract implements PropertyInitializationFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return PropertyInitializationFacet.class;
     }
 

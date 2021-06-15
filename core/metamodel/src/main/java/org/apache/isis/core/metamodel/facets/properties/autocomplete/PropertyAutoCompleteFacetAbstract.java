@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public abstract class PropertyAutoCompleteFacetAbstract extends FacetAbstract implements PropertyAutoCompleteFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return PropertyAutoCompleteFacet.class;
     }
 

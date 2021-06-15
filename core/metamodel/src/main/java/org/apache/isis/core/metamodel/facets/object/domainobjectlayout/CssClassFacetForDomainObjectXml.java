@@ -23,9 +23,9 @@ import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetSimple;
 
-public class CssClassFacetForDomainObjectXml extends CssClassFacetAbstract {
+public class CssClassFacetForDomainObjectXml extends CssClassFacetSimple {
 
     public static CssClassFacet create(DomainObjectLayoutData domainObjectLayout, FacetHolder holder) {
         if(domainObjectLayout == null) {

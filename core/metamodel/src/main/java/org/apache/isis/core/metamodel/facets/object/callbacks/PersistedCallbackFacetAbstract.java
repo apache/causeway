@@ -26,7 +26,7 @@ public abstract class PersistedCallbackFacetAbstract
 extends CallbackFacetAbstract
 implements PersistedCallbackFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return PersistedCallbackFacet.class;
     }
 

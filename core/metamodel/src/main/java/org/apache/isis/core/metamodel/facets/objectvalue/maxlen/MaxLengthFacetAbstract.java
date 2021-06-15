@@ -33,7 +33,7 @@ public abstract class MaxLengthFacetAbstract
 extends SingleIntValueFacetAbstract
 implements MaxLengthFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return MaxLengthFacet.class;
     }
 

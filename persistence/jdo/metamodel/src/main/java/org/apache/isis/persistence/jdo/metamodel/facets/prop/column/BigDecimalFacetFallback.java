@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueSem
 public class BigDecimalFacetFallback
 extends BigDecimalValueFacetAbstract {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return BigDecimalValueFacet.class;
     }
 

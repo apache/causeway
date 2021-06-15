@@ -33,7 +33,7 @@ public abstract class LogicalTypeFacetAbstract
 extends FacetAbstract
 implements LogicalTypeFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return LogicalTypeFacet.class;
     }
 

@@ -27,7 +27,7 @@ public abstract class ProjectionFacetAbstract
 extends FacetAbstract
 implements ProjectionFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return ProjectionFacet.class;
     }
 

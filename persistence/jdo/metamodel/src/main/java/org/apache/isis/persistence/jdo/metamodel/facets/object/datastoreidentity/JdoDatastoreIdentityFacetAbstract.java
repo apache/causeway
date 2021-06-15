@@ -33,7 +33,7 @@ extends FacetAbstract
 implements JdoDatastoreIdentityFacet {
 
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return JdoDatastoreIdentityFacet.class;
     }
 

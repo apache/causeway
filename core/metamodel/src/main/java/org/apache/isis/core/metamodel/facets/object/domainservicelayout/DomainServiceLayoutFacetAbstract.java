@@ -31,7 +31,7 @@ public abstract class DomainServiceLayoutFacetAbstract
 extends FacetAbstract
 implements DomainServiceLayoutFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return DomainServiceLayoutFacet.class;
     }
 

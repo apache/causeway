@@ -36,7 +36,7 @@ import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserReposito
 
 public class TenantedAuthorizationFacetDefault extends FacetAbstract implements TenantedAuthorizationFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return TenantedAuthorizationFacet.class;
     }
 

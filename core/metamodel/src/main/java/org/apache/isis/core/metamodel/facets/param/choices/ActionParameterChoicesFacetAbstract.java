@@ -27,7 +27,7 @@ public abstract class ActionParameterChoicesFacetAbstract
 extends FacetAbstract
 implements ActionParameterChoicesFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return ActionParameterChoicesFacet.class;
     }
 

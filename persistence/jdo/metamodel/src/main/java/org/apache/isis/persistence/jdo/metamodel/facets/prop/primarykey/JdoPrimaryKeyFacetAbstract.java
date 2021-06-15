@@ -28,7 +28,7 @@ public abstract class JdoPrimaryKeyFacetAbstract
 extends FacetAbstract
 implements JdoPrimaryKeyFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return JdoPrimaryKeyFacet.class;
     }
 

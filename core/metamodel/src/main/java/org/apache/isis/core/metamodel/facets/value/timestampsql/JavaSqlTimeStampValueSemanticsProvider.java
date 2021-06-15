@@ -60,7 +60,6 @@ extends ValueSemanticsProviderAbstractTemporal<Timestamp> {
         this(null);
     }
 
-    @SuppressWarnings("unchecked")
     public JavaSqlTimeStampValueSemanticsProvider(final FacetHolder holder) {
         super("timestamp", type(), holder, java.sql.Timestamp.class, 25, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, null);
 

@@ -28,7 +28,7 @@ public abstract class JdoNotPersistentFacetAbstract
 extends FacetAbstract
 implements JdoNotPersistentFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return JdoNotPersistentFacet.class;
     }
 

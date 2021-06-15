@@ -37,7 +37,7 @@ public class FloatValueSemanticsProviderAbstract
 extends ValueSemanticsProviderAndFacetAbstract<Float>
 implements FloatingPointValueFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return FloatingPointValueFacet.class;
     }
 

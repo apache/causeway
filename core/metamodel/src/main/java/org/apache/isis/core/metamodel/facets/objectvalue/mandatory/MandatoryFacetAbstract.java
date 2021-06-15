@@ -41,7 +41,7 @@ public abstract class MandatoryFacetAbstract
 extends FacetAbstract
 implements MandatoryFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return MandatoryFacet.class;
     }
 

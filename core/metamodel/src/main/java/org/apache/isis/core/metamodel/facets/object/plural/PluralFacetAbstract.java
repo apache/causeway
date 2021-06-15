@@ -27,7 +27,7 @@ public abstract class PluralFacetAbstract
 extends SingleStringValueFacetAbstract
 implements PluralFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return PluralFacet.class;
     }
 

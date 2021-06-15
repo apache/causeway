@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.facets.SingleStringValueFacetAbstract;
 
 public abstract class FileAcceptFacetAbstract extends SingleStringValueFacetAbstract implements FileAcceptFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return FileAcceptFacet.class;
     }
 

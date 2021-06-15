@@ -58,7 +58,7 @@ implements DateValueFacet {
     /**
      * The facet type, used if not specified explicitly in the constructor.
      */
-    public static Class<? extends Facet> type() {
+    protected static final Class<? extends Facet> type() {
         return DateValueFacet.class;
     }
 

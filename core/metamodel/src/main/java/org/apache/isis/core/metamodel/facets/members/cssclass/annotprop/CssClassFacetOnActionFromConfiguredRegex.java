@@ -20,9 +20,9 @@
 package org.apache.isis.core.metamodel.facets.members.cssclass.annotprop;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetSimple;
 
-public class CssClassFacetOnActionFromConfiguredRegex extends CssClassFacetAbstract {
+public class CssClassFacetOnActionFromConfiguredRegex extends CssClassFacetSimple {
 
     public CssClassFacetOnActionFromConfiguredRegex(final String value, final FacetHolder holder) {
         super(value, holder);

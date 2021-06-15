@@ -33,17 +33,21 @@ public abstract class NamedFacetAbstract
 extends FacetAbstract
 implements NamedFacet {
 
+    private static final Class<? extends Facet> type() {
+        return NamedFacet.class;
+    }
+
     private final String value;
     private final boolean escaped;
 
     public NamedFacetAbstract(String value, boolean escaped, FacetHolder holder) {
-        super(NamedFacet.type(), holder);
+        super(type(), holder);
         this.value = value;
         this.escaped = escaped;
     }
 
     public NamedFacetAbstract(String value, boolean escaped, FacetHolder holder, final Facet.Precedence precedence) {
-        super(NamedFacet.type(), holder, precedence);
+        super(type(), holder, precedence);
         this.value = value;
         this.escaped = escaped;
     }

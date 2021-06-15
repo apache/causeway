@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public abstract class UpdatedCallbackFacetAbstract extends CallbackFacetAbstract implements UpdatedCallbackFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return UpdatedCallbackFacet.class;
     }
 

@@ -33,7 +33,7 @@ public class CssClassFacetMethod
 extends FacetAbstract
 implements CssClassFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return CssClassFacet.class;
     }
 

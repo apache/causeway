@@ -27,7 +27,7 @@ public abstract class ActionInvocationFacetAbstract
 extends FacetAbstract
 implements ActionInvocationFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return ActionInvocationFacet.class;
     }
 

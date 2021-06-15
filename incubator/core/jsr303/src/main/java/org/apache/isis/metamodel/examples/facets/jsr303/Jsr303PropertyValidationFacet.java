@@ -39,7 +39,7 @@ import org.apache.isis.core.metamodel.spec.identifier.Identified;
 
 public class Jsr303PropertyValidationFacet extends FacetAbstract implements ValidatingInteractionAdvisor {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return Jsr303PropertyValidationFacet.class;
     }
 

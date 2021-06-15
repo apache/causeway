@@ -27,7 +27,7 @@ public abstract class TypeOfFacetAbstract
 extends SingleClassValueFacetAbstract
 implements TypeOfFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return TypeOfFacet.class;
     }
 

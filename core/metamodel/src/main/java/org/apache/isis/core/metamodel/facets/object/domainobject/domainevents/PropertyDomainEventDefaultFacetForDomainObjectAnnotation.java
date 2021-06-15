@@ -37,7 +37,7 @@ extends SingleClassValueFacetAbstract {
         return eventType;
     }
 
-    static Class<? extends Facet> type() {
+    private static Class<? extends Facet> type() {
         return PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class;
     }
 

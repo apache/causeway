@@ -32,7 +32,7 @@ implements PropertyOrCollectionAccessorFacet {
 
     private final ObjectSpecification onType;
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return PropertyOrCollectionAccessorFacet.class;
     }
 

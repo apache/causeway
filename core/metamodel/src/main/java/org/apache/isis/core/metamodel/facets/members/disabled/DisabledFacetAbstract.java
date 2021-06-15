@@ -35,7 +35,7 @@ public abstract class DisabledFacetAbstract
 extends WhereValueFacetAbstract
 implements DisabledFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return DisabledFacet.class;
     }
 

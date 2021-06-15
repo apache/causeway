@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public abstract class HiddenObjectFacetAbstract extends FacetAbstract implements HiddenObjectFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return HiddenObjectFacet.class;
     }
 

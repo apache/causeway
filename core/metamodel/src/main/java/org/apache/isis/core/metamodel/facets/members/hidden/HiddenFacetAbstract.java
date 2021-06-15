@@ -47,7 +47,7 @@ public abstract class HiddenFacetAbstract
 extends WhereValueFacetAbstract
 implements HiddenFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return HiddenFacet.class;
     }
 

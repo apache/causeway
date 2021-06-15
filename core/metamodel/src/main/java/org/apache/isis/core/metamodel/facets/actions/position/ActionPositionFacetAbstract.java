@@ -30,7 +30,7 @@ public abstract class ActionPositionFacetAbstract
 extends FacetAbstract
 implements ActionPositionFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return ActionPositionFacet.class;
     }
 

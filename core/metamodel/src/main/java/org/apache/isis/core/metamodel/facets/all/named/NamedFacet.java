@@ -30,10 +30,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  */
 public interface NamedFacet extends Facet {
 
-    static Class<? extends Facet> type() {
-        return NamedFacet.class;
-    }
-
     /**
      * @return The name to use as a label for a collection, a property or a parameter
      */

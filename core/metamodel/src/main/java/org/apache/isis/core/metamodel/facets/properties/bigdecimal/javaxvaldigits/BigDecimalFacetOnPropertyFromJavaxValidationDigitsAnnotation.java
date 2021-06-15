@@ -36,7 +36,7 @@ extends BigDecimalValueFacetAbstract {
     private final int precision;
     private final int scale;
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return BigDecimalValueFacet.class;
     }
 

@@ -23,17 +23,14 @@ import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Projecting;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 
 import lombok.val;
 
-public class ProjectingFacetFromPropertyAnnotation extends ProjectingFacetAbstract {
+public class ProjectingFacetFromPropertyAnnotation
+extends ProjectingFacetAbstract {
 
-    public static Class<? extends Facet> type() {
-        return ProjectingFacet.class;
-    }
     private final Projecting projecting;
 
     private ProjectingFacetFromPropertyAnnotation(

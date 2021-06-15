@@ -35,7 +35,7 @@ public class NavigationFacetDerivedFromHiddenType extends FacetAbstract implemen
 
     private final ObjectSpecification navigatedType;
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return NavigationFacet.class;
     }
 

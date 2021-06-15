@@ -19,20 +19,41 @@
 
 package org.apache.isis.core.metamodel.facets.members.cssclass;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import java.util.Objects;
+import java.util.function.BiConsumer;
 
-public abstract class CssClassFacetAbstract2
-extends FacetAbstract
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+
+import lombok.NonNull;
+
+public abstract class CssClassFacetSimple
+extends CssClassFacetAbstract
 implements CssClassFacet {
 
-    public static Class<? extends Facet> type() {
-        return CssClassFacet.class;
+    private final String cssClass;
+
+    public CssClassFacetSimple(final String cssClass, final FacetHolder holder) {
+        super(holder);
+        this.cssClass = cssClass;
     }
 
-    public CssClassFacetAbstract2(final FacetHolder holder) {
-        super(type(), holder);
+    @Override
+    public String cssClass(final ManagedObject objectAdapter) {
+        return cssClass;
     }
 
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("cssClass", cssClass);
+    }
+
+    @Override
+    public boolean semanticEquals(final @NonNull Facet other) {
+        return other instanceof CssClassFacetSimple
+                ? Objects.equals(this.cssClass, ((CssClassFacetSimple)other).cssClass)
+                : false;
+    }
 }

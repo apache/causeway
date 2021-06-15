@@ -37,7 +37,7 @@ public abstract class LongValueSemanticsProviderAbstract
 extends ValueSemanticsProviderAndFacetAbstract<Long>
 implements LongValueFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return LongValueFacet.class;
     }
 

@@ -30,7 +30,7 @@ public abstract class DisabledObjectFacetAbstract
 extends FacetAbstract
 implements DisabledObjectFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return DisabledObjectFacet.class;
     }
 

@@ -33,7 +33,7 @@ implements PrototypeFacet {
 
     private final DeploymentType deploymentType;
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return PrototypeFacet.class;
     }
 

@@ -31,7 +31,7 @@ public abstract class ActionParameterHiddenFacetAbstract
 extends FacetAbstract
 implements ActionParameterHiddenFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return ActionParameterHiddenFacet.class;
     }
 

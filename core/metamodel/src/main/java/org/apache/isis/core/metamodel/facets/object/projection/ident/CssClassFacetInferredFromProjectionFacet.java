@@ -23,14 +23,14 @@ import java.util.function.BiConsumer;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract2;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.val;
 
 public class CssClassFacetInferredFromProjectionFacet 
-extends CssClassFacetAbstract2 {
+extends CssClassFacetAbstract {
 
     private final ProjectionFacet projectionFacet;
 

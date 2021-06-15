@@ -27,7 +27,7 @@ public abstract class IconFacetAbstract
 extends FacetAbstract
 implements IconFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return IconFacet.class;
     }
 

@@ -31,10 +31,9 @@ public abstract class ChoicesFromFacetAbstract
 extends SingleStringValueFacetAbstract
 implements ChoicesFromFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return ChoicesFromFacet.class;
     }
-
 
     public ChoicesFromFacetAbstract(
             final String value,

@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.interactions.ValidityContext;
 
 public abstract class ObjectValidPropertiesFacetAbstract extends FacetAbstract implements ObjectValidPropertiesFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return ObjectValidPropertiesFacet.class;
     }
 

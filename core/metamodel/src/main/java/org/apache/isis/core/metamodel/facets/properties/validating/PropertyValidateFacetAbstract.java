@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public abstract class PropertyValidateFacetAbstract extends FacetAbstract implements PropertyValidateFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return PropertyValidateFacet.class;
     }
 

@@ -27,7 +27,7 @@ public abstract class DescribedAsFacetAbstract
 extends SingleStringValueFacetAbstract
 implements DescribedAsFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return DescribedAsFacet.class;
     }
 

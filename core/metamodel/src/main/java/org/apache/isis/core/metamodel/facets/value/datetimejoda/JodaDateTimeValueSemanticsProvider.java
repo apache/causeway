@@ -42,7 +42,8 @@ import org.apache.isis.core.metamodel.facets.value.ValueSemanticsProviderAbstrac
 import lombok.Getter;
 import lombok.Setter;
 
-public class JodaDateTimeValueSemanticsProvider extends ValueSemanticsProviderAbstractTemporal<DateTime> {
+public class JodaDateTimeValueSemanticsProvider
+extends ValueSemanticsProviderAbstractTemporal<DateTime> {
 
     private static final Map<String, DateFormat> FORMATS = _Maps.newHashMap();
 

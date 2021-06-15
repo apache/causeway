@@ -38,7 +38,7 @@ public abstract class ValueFacetAbstract
 extends FacetAbstract
 implements ValueFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return ValueFacet.class;
     }
 
