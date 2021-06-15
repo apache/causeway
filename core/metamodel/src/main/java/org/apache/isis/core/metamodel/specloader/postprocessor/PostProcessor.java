@@ -30,20 +30,24 @@ import lombok.val;
 public class PostProcessor {
 
     private final ProgrammingModel programmingModel;
-    private Can<ObjectSpecificationPostProcessor> postProcessors = Can.empty(); // populated at #init
+    private Can<ObjectSpecificationPostProcessor> enabledPostProcessors = Can.empty(); // populated at #init
 
     public void init() {
-        postProcessors = programmingModel.streamPostProcessors().collect(Can.toCan());
+        enabledPostProcessors = programmingModel.streamPostProcessors()
+                .filter(ObjectSpecificationPostProcessor::isEnabled)
+                .collect(Can.toCan());
     }
 
     public void shutdown() {
-        postProcessors = null;
+        enabledPostProcessors = null;
     }
 
     public void postProcess(ObjectSpecification objectSpecification) {
 
-        for (val postProcessor : postProcessors) {
+        for (val postProcessor : enabledPostProcessors) {
+
             postProcessor.postProcess(objectSpecification);
+
         }
 
     }

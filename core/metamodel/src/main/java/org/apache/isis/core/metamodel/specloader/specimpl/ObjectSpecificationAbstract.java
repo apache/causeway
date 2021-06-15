@@ -496,7 +496,7 @@ implements ObjectSpecification {
     @Override
     public String getSingularName() {
         val namedFacet = getFacet(NamedFacet.class);
-        return namedFacet != null? namedFacet.value() : this.getFullIdentifier();
+        return namedFacet != null? namedFacet.translated() : this.getFullIdentifier();
     }
 
     /**
@@ -506,7 +506,7 @@ implements ObjectSpecification {
     @Override
     public String getPluralName() {
         val pluralFacet = getFacet(PluralFacet.class);
-        return pluralFacet.value();
+        return pluralFacet.translated();
     }
 
     /**
@@ -516,7 +516,7 @@ implements ObjectSpecification {
     @Override
     public String getDescription() {
         val describedAsFacet = getFacet(DescribedAsFacet.class);
-        val describedAs = describedAsFacet.value();
+        val describedAs = describedAsFacet.translated();
         return describedAs == null ? "" : describedAs;
     }
 

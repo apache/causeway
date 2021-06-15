@@ -27,6 +27,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
@@ -40,9 +43,6 @@ import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 
 public class ObjectActionParameterAbstractTest_getId_and_getName {
@@ -95,7 +95,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
                 InteractionInitiatedBy interactionInitiatedBy) {
             return null;
         }
-        
+
         @Override
         public ObjectSpecification getSpecification() {
             return objectSpec;
@@ -136,7 +136,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
                 oneOf(actionParamPeer).getFacet(NamedFacet.class);
                 will(returnValue(namedFacet));
 
-                atLeast(1).of(namedFacet).value();
+                atLeast(1).of(namedFacet).translated();
                 will(returnValue("Some parameter name"));
             }
         });
@@ -154,7 +154,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
                 oneOf(actionParamPeer).getFacet(NamedFacet.class);
                 will(returnValue(namedFacet));
 
-                atLeast(1).of(namedFacet).value();
+                atLeast(1).of(namedFacet).translated();
                 will(returnValue("Some parameter name"));
             }
         });

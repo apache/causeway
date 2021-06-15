@@ -280,7 +280,7 @@ public interface ObjectAction extends ObjectMember {
             }
             final NamedFacet namedFacet = objAction.getFacet(NamedFacet.class);
             if (namedFacet != null) {
-                return namedFacet.value();
+                return namedFacet.translated();
             }
             return "(no name)";
         }

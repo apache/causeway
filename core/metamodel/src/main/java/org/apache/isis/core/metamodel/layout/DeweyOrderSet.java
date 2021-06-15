@@ -82,15 +82,15 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
 
         // spin over all the members and put them into a Map of SortedSets
         // any non-annotated members go into additional nonAnnotatedGroup set.
-        for (final FacetHolder identifiedHolder : identifiedHolders) {
-            val layoutGroupFacet = identifiedHolder.getFacet(LayoutGroupFacet.class);
+        for (final FacetHolder facetHolder : identifiedHolders) {
+            val layoutGroupFacet = facetHolder.getFacet(LayoutGroupFacet.class);
             if (layoutGroupFacet == null) {
-                nonAnnotatedGroup.add(identifiedHolder);
+                nonAnnotatedGroup.add(facetHolder);
                 continue;
             }
             final SortedSet<FacetHolder> sortedMembersForFieldSet =
                     getSortedSet(sortedMembersByGroup, layoutGroupFacet.getGroupId());
-            sortedMembersForFieldSet.add(identifiedHolder);
+            sortedMembersForFieldSet.add(facetHolder);
         }
 
         // add the non-annotated group to the first "" group.

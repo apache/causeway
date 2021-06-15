@@ -134,8 +134,8 @@ implements ObjectActionParameter, HasFacetHolder {
     @Override
     public String getName() {
         final NamedFacet facet = getFacet(NamedFacet.class);
-        if (facet != null && facet.value() != null) {
-            return facet.value();
+        if (facet != null && facet.translated() != null) {
+            return facet.translated();
         }
         val singularName = getSpecification().getSingularName();
         val parameters = getAction().getParameters(this::equalsShortIdentifier);
@@ -156,7 +156,7 @@ implements ObjectActionParameter, HasFacetHolder {
     @Override
     public String getDescription() {
         final DescribedAsFacet facet = getFacet(DescribedAsFacet.class);
-        final String description = facet.value();
+        final String description = facet.translated();
         return description == null ? "" : description;
     }
 

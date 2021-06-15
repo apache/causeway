@@ -131,7 +131,7 @@ public class OneToManyAssociationDefaultTest {
                 oneOf(mockPeer).getFacet(NamedFacet.class);
                 will(returnValue(mockNamedFacet));
 
-                oneOf(mockNamedFacet).value();
+                oneOf(mockNamedFacet).translated();
                 will(returnValue("My name"));
             }
         });

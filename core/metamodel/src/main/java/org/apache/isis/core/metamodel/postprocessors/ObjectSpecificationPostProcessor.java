@@ -25,4 +25,8 @@ public interface ObjectSpecificationPostProcessor {
 
     void postProcess(ObjectSpecification objectSpecification);
 
+    default boolean isEnabled() {
+        return true;
+    }
+
 }

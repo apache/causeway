@@ -115,6 +115,7 @@ implements Facet, HasMetaModelContext {
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        visitor.accept("fqcn", this.getClass().getName());
         visitor.accept("precedence", getPrecedence().name());
         if(isHiding()) {
             visitor.accept("hiding", isHiding());

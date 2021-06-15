@@ -129,13 +129,13 @@ implements ObjectMember, HasMetaModelContext, HasFacetHolder {
             throw _Exceptions.unrecoverableFormatted("no namedFacet preset on %s", getFeatureIdentifier());
         }
 
-        return namedFacet.value();
+        return namedFacet.translated();
     }
 
     @Override
     public String getDescription() {
         final DescribedAsFacet facet = getFacet(DescribedAsFacet.class);
-        return facet.value();
+        return facet.translated();
     }
 
     @Override

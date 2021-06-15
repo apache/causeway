@@ -19,42 +19,32 @@
 
 package org.apache.isis.core.metamodel.facets.all.named;
 
-import java.util.Objects;
 import java.util.function.BiConsumer;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.all.i8n.I8nFacetAbstract;
 
 import lombok.NonNull;
 import lombok.val;
 
 public abstract class NamedFacetAbstract
-extends FacetAbstract
+extends I8nFacetAbstract
 implements NamedFacet {
 
     private static final Class<? extends Facet> type() {
         return NamedFacet.class;
     }
 
-    private final String value;
     private final boolean escaped;
 
-    public NamedFacetAbstract(String value, boolean escaped, FacetHolder holder) {
-        super(type(), holder);
-        this.value = value;
-        this.escaped = escaped;
+    protected NamedFacetAbstract(String originalText, boolean escaped, FacetHolder holder) {
+        this(originalText, escaped, holder, Precedence.DEFAULT);
     }
 
-    public NamedFacetAbstract(String value, boolean escaped, FacetHolder holder, final Facet.Precedence precedence) {
-        super(type(), holder, precedence);
-        this.value = value;
+    protected NamedFacetAbstract(String originalText, boolean escaped, FacetHolder holder, final Facet.Precedence precedence) {
+        super(type(), originalText, holder, precedence);
         this.escaped = escaped;
-    }
-
-    @Override
-    public String value() {
-        return value;
     }
 
     @Override
@@ -65,7 +55,6 @@ implements NamedFacet {
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("value", value);
         visitor.accept("escaped", escaped);
     }
 
@@ -78,7 +67,7 @@ implements NamedFacet {
         val otherNamedFacet =  (NamedFacetAbstract)other;
 
         return this.escaped() == otherNamedFacet.escaped()
-                && Objects.equals(this.value(), otherNamedFacet.value());
+                && super.semanticEquals(otherNamedFacet);
     }
 
 }

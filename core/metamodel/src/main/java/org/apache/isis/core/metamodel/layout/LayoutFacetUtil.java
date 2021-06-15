@@ -133,7 +133,7 @@ public class LayoutFacetUtil {
 
         val describedAsFacet = facetHolder.getFacet(DescribedAsFacet.class);
         if(isDoOp(describedAsFacet)) {
-            final String describedAs = describedAsFacet.value();
+            final String describedAs = describedAsFacet.translated();
             if(!_Strings.isNullOrEmpty(describedAs)) {
                 hasDescribedAs.setDescribedAs(describedAs);
             }
@@ -185,7 +185,7 @@ public class LayoutFacetUtil {
 
         val namedFacet = facetHolder.getFacet(NamedFacet.class);
         if(isDoOp(namedFacet)) {
-            final String named = namedFacet.value();
+            final String named = namedFacet.translated();
             if(!_Strings.isNullOrEmpty(named)){
                 hasNamed.setNamed(named);
             }
@@ -215,7 +215,7 @@ public class LayoutFacetUtil {
 
         val pluralFacet = facetHolder.getFacet(PluralFacet.class);
         if(isDoOp(pluralFacet)) {
-            final String plural = pluralFacet.value();
+            final String plural = pluralFacet.translated();
             if(!_Strings.isNullOrEmpty(plural)) {
                 domainObjectLayoutData.setPlural(plural);
             }

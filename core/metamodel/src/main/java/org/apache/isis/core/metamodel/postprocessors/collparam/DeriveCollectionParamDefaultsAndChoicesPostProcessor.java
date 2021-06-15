@@ -19,8 +19,10 @@
 
 package org.apache.isis.core.metamodel.postprocessors.collparam;
 
+import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.metamodel.facetapi.HasFacetHolder;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
@@ -74,6 +76,8 @@ extends ObjectSpecificationPostProcessorAbstract {
                 new ObjectActionParameter.Predicates.ScalarParameter(specification);
 
         objectSpecification.streamActions(actionTypes, MixedIn.INCLUDED)
+        //XXX refactor/remove this FacetHolder post init, once FacetHolderAbstract holds the MMC in a final field
+        .peek(action->((MetaModelContextAware)((HasFacetHolder)action).getFacetHolder()).setMetaModelContext(super.getMetaModelContext()))
         .filter(ObjectAction.Predicates.choicesFromAndHavingCollectionParameterFor(collection))
         .forEach(action->{
 

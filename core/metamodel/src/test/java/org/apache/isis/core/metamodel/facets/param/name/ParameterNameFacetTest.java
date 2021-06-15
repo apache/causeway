@@ -109,7 +109,7 @@ public class ParameterNameFacetTest extends AbstractFacetFactoryJUnit4TestCase {
 
         // then
         val namedFacet = facetedMethodParameter.getFacet(NamedFacet.class);
-        assertEquals("An Awesome Name", namedFacet.value());
+        assertEquals("An Awesome Name", namedFacet.text());
 
     }
 
@@ -139,7 +139,7 @@ public class ParameterNameFacetTest extends AbstractFacetFactoryJUnit4TestCase {
         // then
         val namedFacet = facetedMethodParameter.getFacet(NamedFacet.class);
         assertNotNull(namedFacet);
-        assertEquals("Even Better Name", namedFacet.value());
+        assertEquals("Even Better Name", namedFacet.text());
 
     }
 

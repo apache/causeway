@@ -44,10 +44,10 @@ import org.apache.isis.testdomain.util.interaction.InteractionTestAbstract;
 import lombok.val;
 
 @SpringBootTest(
-        classes = { 
+        classes = {
                 Configuration_headless.class,
                 Configuration_usingInteractionDomain.class
-        }, 
+        },
         properties = {
                 "isis.core.meta-model.introspector.mode=FULL",
                 "isis.applib.annotation.domain-object.editing=TRUE",
@@ -61,48 +61,48 @@ import lombok.val;
     IsisPresets.SilenceProgrammingModel
 })
 class NewParameterModelTest extends InteractionTestAbstract {
-    
+
     //InteractionNpmDemo_biArgDisabled#validateAct()
 
     @Test
     void metamodel_shouldBeValid() {
         assertMetamodelValid();
     }
-    
+
     @Test
     void paramAnnotations_whenNpm_shouldBeRecognized() {
 
         val param0Metamodel = startActionInteractionOn(InteractionNpmDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
                 .getMetamodel().get().getParameters().getElseFail(0);
-        
+
         // as with first param's @Parameter(maxLength = 2)
         val maxLengthFacet = param0Metamodel.getFacet(MaxLengthFacet.class);
-        
+
         // as with first param's @ParameterLayout(describedAs = "first")
         val describedAsFacet = param0Metamodel.getFacet(DescribedAsFacet.class);
-        
+
         assertNotNull(maxLengthFacet);
         assertNotNull(describedAsFacet);
 
         assertEquals(2, maxLengthFacet.value());
-        assertEquals("first", describedAsFacet.value());
+        assertEquals("first", describedAsFacet.text());
     }
-    
+
     @Test
     void actionInteraction_withParams_shouldProduceCorrectResult() throws Throwable {
 
         val actionInteraction = startActionInteractionOn(InteractionNpmDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
         .checkVisibility()
         .checkUsability();
-        
+
         val params = Can.of(objectManager.adapt(12), objectManager.adapt(34));
-        
+
         val pendingArgs = actionInteraction.startParameterNegotiation().get();
         pendingArgs.setParamValues(params);
-        
+
         val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
         assertTrue(resultOrVeto.isLeft());
-        
+
         assertEquals(46, (int)resultOrVeto.leftIfAny().getPojo());
     }
 
@@ -112,36 +112,36 @@ class NewParameterModelTest extends InteractionTestAbstract {
         val actionInteraction = startActionInteractionOn(InteractionNpmDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
         .checkVisibility()
         .checkUsability();
-        
+
         val params =  Can.of(objectManager.adapt(12), objectManager.adapt(34), objectManager.adapt(99));
-        
+
         val pendingArgs = actionInteraction.startParameterNegotiation().get();
         pendingArgs.setParamValues(params);
-        
+
         val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
         assertTrue(resultOrVeto.isLeft());
-        
+
         assertEquals(46, (int)resultOrVeto.leftIfAny().getPojo());
     }
-    
+
     @Test
     void actionInteraction_withTooLittleParams_shouldIgnoreUnderflow() throws Throwable {
 
         val actionInteraction = startActionInteractionOn(InteractionNpmDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
         .checkVisibility()
         .checkUsability();
-        
+
         val params = Can.<ManagedObject>of();
-        
+
         val pendingArgs = actionInteraction.startParameterNegotiation().get();
         pendingArgs.setParamValues(params);
-        
+
         val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
         assertTrue(resultOrVeto.isLeft());
-        
+
         assertEquals(5, (int)resultOrVeto.leftIfAny().getPojo());
     }
-    
+
     @Test
     void actionInteraction_shouldProvideParameterDefaults() {
 
@@ -151,18 +151,18 @@ class NewParameterModelTest extends InteractionTestAbstract {
 
         val managedAction = actionInteraction.getManagedAction().get(); // should not throw
         val pendingArgs = managedAction.getInteractionHead().defaults();
-     
+
         val expectedDefaults = Can.of(
                 new InteractionDemo_biArgEnabled(null).defaultA(null),
                 0);
         val actualDefaults = pendingArgs.getParamValues().stream()
                 .map(ManagedObject::getPojo)
                 .collect(Collectors.toList());
-        
+
         assertComponentWiseEquals(expectedDefaults, actualDefaults);
     }
-    
-    @Test 
+
+    @Test
     void actionInteraction_shouldProvideChoices() {
 
         val actionInteraction = startActionInteractionOn(InteractionNpmDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
@@ -171,19 +171,19 @@ class NewParameterModelTest extends InteractionTestAbstract {
 
         assertTrue(actionInteraction.getManagedAction().isPresent(), "action is expected to be usable");
 
-        val managedAction = actionInteraction.getManagedAction().get(); 
+        val managedAction = actionInteraction.getManagedAction().get();
         val pendingArgs = managedAction.startParameterNegotiation();
 
         val param0Choices = pendingArgs.getObservableParamChoices(0); // observable
         val param1Choices = pendingArgs.getObservableParamChoices(1); // observable
-        
+
         assertTrue(param0Choices.getValue().isEmpty());
-        
+
         val expectedChoices = new InteractionNpmDemo_biArgEnabled(null).choicesB(null);
         val actualChoices = param1Choices.getValue();
-        
+
         assertComponentWiseUnwrappedEquals(expectedChoices, actualChoices);
     }
-    
+
 
 }

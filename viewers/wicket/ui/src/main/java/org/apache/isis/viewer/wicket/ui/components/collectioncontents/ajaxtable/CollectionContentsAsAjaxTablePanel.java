@@ -298,7 +298,7 @@ implements CollectionCountProvider {
 
         final String parentTypeName = property.getOnType().getLogicalTypeName();
         final String describedAs = mapIfPresentElse(property.getFacet(DescribedAsFacet.class),
-                DescribedAsFacet::value, null);
+                DescribedAsFacet::translated, null);
 
         val commonContext = super.getCommonContext();
 

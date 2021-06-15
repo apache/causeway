@@ -87,7 +87,8 @@ implements MandatoryFacet {
 
     @Override
     public String invalidates(final ValidityContext context) {
-        if (!(context instanceof PropertyModifyContext) && !(context instanceof ActionArgValidityContext)) {
+        if (!(context instanceof PropertyModifyContext)
+                && !(context instanceof ActionArgValidityContext)) {
             return null;
         }
         // TODO: IntelliJ says the following is always false, so looks like it can be removed...
@@ -102,8 +103,12 @@ implements MandatoryFacet {
             return null;
         }
         final NamedFacet namedFacet = getFacetHolder().getFacet(NamedFacet.class);
-        final String name = namedFacet != null? namedFacet.value(): null;
-        return name != null? "'" + name + "' is mandatory":"Mandatory";
+        final String name = namedFacet != null
+                ? namedFacet.translated()
+                : null;
+        return name != null
+                ? "'" + name + "' is mandatory"
+                : "Mandatory";
     }
 
     @Override

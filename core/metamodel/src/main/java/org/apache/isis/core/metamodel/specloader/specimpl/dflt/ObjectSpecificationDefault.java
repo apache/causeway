@@ -47,8 +47,6 @@ import org.apache.isis.core.metamodel.facets.object.plural.inferred.PluralFacetI
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.object.wizard.WizardFacet;
-import org.apache.isis.core.metamodel.postprocessors.all.i18n.NamedFacetTranslated;
-import org.apache.isis.core.metamodel.postprocessors.all.i18n.PluralFacetTranslated;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
@@ -193,12 +191,9 @@ implements FacetHolder {
 
         PluralFacet pluralFacet = getFacet(PluralFacet.class);
         if (pluralFacet == null) {
-            if(namedFacet instanceof NamedFacetTranslated) {
-                final NamedFacetTranslated facet = (NamedFacetTranslated) namedFacet;
-                pluralFacet = new PluralFacetTranslated(facet, this);
-            } else {
-                pluralFacet = new PluralFacetInferred(StringExtensions.asPluralName(namedFacet.value()), this);
-            }
+            pluralFacet = new PluralFacetInferred(
+                    StringExtensions.asPluralName(namedFacet.text()),
+                    this);
             addFacet(pluralFacet);
         }
     }

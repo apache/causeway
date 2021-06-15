@@ -19,7 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.plural;
 
-import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facets.all.i8n.HasTranslation;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 
@@ -36,6 +37,13 @@ import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
  * @see IconFacet
  * @see TitleFacet
  */
-public interface PluralFacet extends SingleStringValueFacet {
+public interface PluralFacet extends Facet, HasTranslation {
+
+    /**
+     * Originating text to be translated before use with the UI.
+     */
+    String text();
+
+    String translated();
 
 }

@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -26,6 +26,13 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
@@ -40,13 +47,6 @@ import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolic
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
@@ -81,7 +81,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
             )
     class Customer { }
 
-    @DomainObjectLayout 
+    @DomainObjectLayout
     class CustomerWithDefaults { }
 
     // -- LAYOUT TESTS
@@ -106,7 +106,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
                 assertNotNull(facet);
                 assertTrue(facet instanceof BookmarkPolicyFacetForDomainObjectLayoutAnnotation);
 
-                final BookmarkPolicyFacetForDomainObjectLayoutAnnotation facetImpl = 
+                final BookmarkPolicyFacetForDomainObjectLayoutAnnotation facetImpl =
                         (BookmarkPolicyFacetForDomainObjectLayoutAnnotation) facet;
 
                 Assert.assertThat(facetImpl.value(), is(BookmarkPolicy.AS_ROOT));
@@ -251,7 +251,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
                 assertTrue(facet instanceof DescribedAsFacetForDomainObjectLayoutAnnotation);
 
                 final DescribedAsFacetForDomainObjectLayoutAnnotation facetImpl = (DescribedAsFacetForDomainObjectLayoutAnnotation) facet;
-                Assert.assertThat(facetImpl.value(), is("This is a description"));
+                Assert.assertThat(facetImpl.text(), is("This is a description"));
 
                 expectNoMethodsRemoved();
             }
@@ -296,7 +296,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
                 assertTrue(facet instanceof NamedFacetForDomainObjectLayoutAnnotation);
 
                 final NamedFacetForDomainObjectLayoutAnnotation facetImpl = (NamedFacetForDomainObjectLayoutAnnotation) facet;
-                Assert.assertThat(facetImpl.value(), is("Name override"));
+                Assert.assertThat(facetImpl.text(), is("Name override"));
 
                 expectNoMethodsRemoved();
             }
@@ -385,7 +385,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
                 assertTrue(facet instanceof PluralFacetForDomainObjectLayoutAnnotation);
 
                 final PluralFacetForDomainObjectLayoutAnnotation facetImpl = (PluralFacetForDomainObjectLayoutAnnotation) facet;
-                Assert.assertThat(facetImpl.value(), is("Customers Plural Form"));
+                Assert.assertThat(facetImpl.text(), is("Customers Plural Form"));
 
                 expectNoMethodsRemoved();
             }
@@ -399,7 +399,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
                 final PluralFacet facet = facetHolder.getFacet(PluralFacet.class);
                 assertNotNull(facet);
-                Assert.assertThat(facet.value(), is(""));
+                Assert.assertThat(facet.text(), is(""));
 
                 expectNoMethodsRemoved();
             }
