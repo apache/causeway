@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -38,11 +39,14 @@ implements TypedHolder {
      * <tt>java.util.List</tt>, rather than a generic one such as
      * <tt>java.util.List&lt;Customer&gt;</tt>.
      */
-    @Getter(onMethod_ = {@Override})
-    protected Class<?> type;
+    @Getter(onMethod_ = {@Override}) protected Class<?> type;
 
-    public TypedHolderAbstract(MetaModelContext mmc, FeatureType featureType, Class<?> type) {
-        super(mmc);
+    protected TypedHolderAbstract(
+            final MetaModelContext mmc,
+            final FeatureType featureType,
+            final Class<?> type,
+            final Identifier featureIdentifier) {
+        super(mmc, featureIdentifier);
         this.featureType = featureType;
         this.type = type;
     }

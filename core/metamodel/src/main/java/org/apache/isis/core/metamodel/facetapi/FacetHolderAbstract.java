@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +43,7 @@ import lombok.extern.log4j.Log4j2;
 /**
  * For base subclasses or, more likely, to help write tests.
  */
+@AllArgsConstructor
 @RequiredArgsConstructor
 @Log4j2
 public abstract class FacetHolderAbstract
@@ -49,7 +51,7 @@ implements FacetHolder {
 
     // -- FACTORY
 
-    public static FacetHolderAbstract simple(MetaModelContext mmc, Identifier featureIdentifier) {
+    public static FacetHolderAbstract simple(final MetaModelContext mmc, final Identifier featureIdentifier) {
         final FacetHolderAbstract facetHolder = new FacetHolderAbstract(mmc) {};
         facetHolder.featureIdentifier = featureIdentifier;
         return facetHolder;
@@ -57,17 +59,16 @@ implements FacetHolder {
 
     // -- FIELDS
 
-    @Getter(onMethod = @__(@Override))
-    private final @NonNull MetaModelContext metaModelContext;
+    @Getter(onMethod_ = {@Override}) private final @NonNull MetaModelContext metaModelContext;
 
-    // not private, as identifier might depend on lazily provided spec-loader
+    // not private nor final, as featureIdentifier might depend on lazily provided LogicalTypeFacet
     @Getter(onMethod_ = {@Override}) protected Identifier featureIdentifier;
 
     private final Map<Class<? extends Facet>, FacetRanking> rankingByType = _Maps.newHashMap();
     private final Object $lock = new Object();
 
     @Override
-    public boolean containsFacet(Class<? extends Facet> facetType) {
+    public boolean containsFacet(final Class<? extends Facet> facetType) {
         synchronized($lock) {
             return snapshot.get().containsKey(facetType);
         }
@@ -86,7 +87,7 @@ implements FacetHolder {
     }
 
     @Override
-    public <T extends Facet> T getFacet(Class<T> facetType) {
+    public <T extends Facet> T getFacet(final Class<T> facetType) {
         synchronized($lock) {
             return uncheckedCast(snapshot.get().get(facetType));
         }
@@ -110,7 +111,7 @@ implements FacetHolder {
     // -- VALIDATION SUPPORT
 
     @Override
-    public Optional<FacetRanking> getFacetRanking(Class<? extends Facet> facetType) {
+    public Optional<FacetRanking> getFacetRanking(final Class<? extends Facet> facetType) {
         return Optional.ofNullable(rankingByType.get(facetType));
     }
 
@@ -119,7 +120,7 @@ implements FacetHolder {
     /**
      *  Meant for simple JUnit tests, that don't use the FacetHolder's identifier.
      */
-    public static FacetHolderAbstract forTesting(MetaModelContext mmc) {
+    public static FacetHolderAbstract forTesting(final MetaModelContext mmc) {
         return simple(mmc, Identifier.classIdentifier(LogicalType.fqcn(Object.class)));
     }
 
@@ -148,7 +149,7 @@ implements FacetHolder {
         return snapshot;
     }
 
-    private void collectChildren(Map<Class<? extends Facet>, Facet> target, Facet parentFacet) {
+    private void collectChildren(final Map<Class<? extends Facet>, Facet> target, final Facet parentFacet) {
         parentFacet.forEachContributedFacet(child->{
             val added = addFacetOrKeepExistingBasedOnPrecedence(target, child);
             if(added) {
@@ -220,7 +221,7 @@ implements FacetHolder {
                 : a;
     }
 
-    private static String friendlyName(Class<?> cls) {
+    private static String friendlyName(final Class<?> cls) {
         return cls.getName().replace("org.apache.isis", "o.a.i");
     }
 

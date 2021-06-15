@@ -39,13 +39,12 @@ public class FacetAbstractTest extends TestCase {
     }
 
     private FacetAbstract fooFacet;
-    private FacetHolder facetHolder, facetHolder2;
+    private FacetHolder facetHolder;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
         facetHolder = FacetHolderAbstract.forTesting(MetaModelContext_forTesting.buildDefault());
-        facetHolder2 = FacetHolderAbstract.forTesting(MetaModelContext_forTesting.buildDefault());
         fooFacet = new ConcreteFacet(FooFacet.class, facetHolder);
         new ConcreteFacet(BarFacet.class, facetHolder);
         facetHolder.addFacet(fooFacet);
@@ -64,11 +63,6 @@ public class FacetAbstractTest extends TestCase {
 
     public void testGetFacetHolder() {
         assertEquals(facetHolder, fooFacet.getFacetHolder());
-    }
-
-    public void testSetFacetHolder() {
-        fooFacet.setFacetHolder(facetHolder2);
-        assertEquals(facetHolder2, fooFacet.getFacetHolder());
     }
 
     public void testToString() {

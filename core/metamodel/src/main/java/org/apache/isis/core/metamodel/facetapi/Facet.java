@@ -112,16 +112,6 @@ extends
         return getFacetHolder().getFeatureIdentifier();
     }
 
-    /**
-     * Allows re-parenting of Facet.
-     *
-     * <p>
-     * Used by Facet decorators.
-     *
-     * @param facetHolder
-     */
-    public void setFacetHolder(FacetHolder facetHolder);
-
     default Optional<FacetRanking> getSharedFacetRanking() {
         return getFacetHolder().getFacetRanking(facetType());
     }

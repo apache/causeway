@@ -40,46 +40,44 @@ public interface InteractionAdvisor {
     /**
      * For testing purposes only.
      */
-    public static InteractionAdvisor NOOP = new InteractionAdvisorFacet() {
+    public static InteractionAdvisor forTesting() {
+        return new InteractionAdvisorFacet() {
 
-        @Override
-        public boolean semanticEquals(final @NonNull Facet other) {
-            return this == other;
-        }
+            @Override
+            public boolean semanticEquals(final @NonNull Facet other) {
+                return this == other;
+            }
 
-        @Override
-        public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        }
+            @Override
+            public void visitAttributes(final BiConsumer<String, Object> visitor) {
+            }
 
-        @Override
-        public Class<? extends Facet> facetType() {
-            return null;
-        }
+            @Override
+            public Class<? extends Facet> facetType() {
+                return null;
+            }
 
-        @Override
-        public FacetHolder getFacetHolder() {
-            return null;
-        }
+            @Override
+            public FacetHolder getFacetHolder() {
+                return null;
+            }
 
-        @Override
-        public void setFacetHolder(final FacetHolder facetHolder) {
-        }
+            @Override
+            public void addContributedFacet(final Facet contributedFacet) {
+                throw _Exceptions.unsupportedOperation();
+            }
 
-        @Override
-        public void addContributedFacet(Facet contributedFacet) {
-            throw _Exceptions.unsupportedOperation();
-        }
+            @Override
+            public void forEachContributedFacet(final Consumer<Facet> onContributedFacet) {
+                throw _Exceptions.unsupportedOperation();
+            }
 
-        @Override
-        public void forEachContributedFacet(Consumer<Facet> onContributedFacet) {
-            throw _Exceptions.unsupportedOperation();
-        }
+            @Override
+            public Precedence getPrecedence() {
+                return Facet.Precedence.FALLBACK;
+            }
 
-        @Override
-        public Precedence getPrecedence() {
-            return Facet.Precedence.FALLBACK;
-        }
-
-    };
+        };
+    }
 
 }

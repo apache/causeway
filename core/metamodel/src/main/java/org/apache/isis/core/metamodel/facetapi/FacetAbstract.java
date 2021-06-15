@@ -29,7 +29,6 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.Setter;
 
 public abstract class FacetAbstract
 implements Facet, HasMetaModelContext {
@@ -39,22 +38,22 @@ implements Facet, HasMetaModelContext {
 
     @Getter(onMethod_ = {@Override}) private final @NonNull Facet.Precedence precedence;
 
-    @Getter(onMethod_ = {@Override}) @Setter(onMethod_ = {@Override})
-    private FacetHolder facetHolder;
+    @Getter(onMethod_ = {@Override})
+    private final @NonNull FacetHolder facetHolder;
 
     public FacetAbstract(
-            Class<? extends Facet> facetType,
-            FacetHolder holder,
-            Facet.Precedence precedence) {
+            final Class<? extends Facet> facetType,
+            final FacetHolder facetHolder,
+            final Facet.Precedence precedence) {
 
         this.facetType = facetType;
-        setFacetHolder(holder);
+        this.facetHolder = facetHolder;
         this.precedence = precedence;
     }
 
     protected FacetAbstract(
-            Class<? extends Facet> facetType,
-            FacetHolder facetHolder) {
+            final Class<? extends Facet> facetType,
+            final FacetHolder facetHolder) {
 
         this(facetType, facetHolder, Facet.Precedence.DEFAULT);
     }
@@ -149,7 +148,7 @@ implements Facet, HasMetaModelContext {
     // -- CONTRIBUTED FACET SUPPORT
 
     @Override
-    public void addContributedFacet(Facet contributedFacet) {
+    public void addContributedFacet(final Facet contributedFacet) {
         if(contributedFacets==null) {
             contributedFacets = _Sets.newHashSet();
         }
@@ -157,7 +156,7 @@ implements Facet, HasMetaModelContext {
     }
 
     @Override
-    public void forEachContributedFacet(Consumer<Facet> onContributedFacet) {
+    public void forEachContributedFacet(final Consumer<Facet> onContributedFacet) {
         if(contributedFacets!=null) {
             contributedFacets.forEach(onContributedFacet);
         }

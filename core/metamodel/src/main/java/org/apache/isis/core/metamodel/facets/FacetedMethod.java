@@ -205,12 +205,14 @@ extends TypedHolderAbstract {
             final Class<?> type,
             final List<FacetedMethodParameter> parameters) {
 
-        super(mmc, featureType, type);
+        super(mmc,
+                featureType,
+                type,
+                featureType.identifierFor(LogicalType.lazy(
+                        declaringType,
+                        ()->mmc.getSpecificationLoader().specForTypeElseFail(declaringType).getLogicalTypeName()), method));
         this.owningType = declaringType;
         this.method = method;
-        super.featureIdentifier = featureType.identifierFor(LogicalType.lazy(
-                declaringType,
-                ()->getSpecificationLoader().specForTypeElseFail(declaringType).getLogicalTypeName()), method);
         this.parameters = parameters;
     }
 
@@ -223,7 +225,7 @@ extends TypedHolderAbstract {
      * Returns an instance with {@code type} replaced by given {@code elementType}.
      * @param elementType
      */
-    public FacetedMethod withType(Class<?> elementType) {
+    public FacetedMethod withType(final Class<?> elementType) {
         //XXX maybe future refactoring can make the type immutable, so we can remove this method
         this.type = elementType;
         return this;

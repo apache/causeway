@@ -44,7 +44,7 @@ extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
     @Inject
-    public BookmarkPolicyFacetFallbackFactory(MetaModelContext mmc) {
+    public BookmarkPolicyFacetFallbackFactory(final MetaModelContext mmc) {
         super(mmc, FeatureType.OBJECTS_AND_ACTIONS);
     }
 
@@ -53,6 +53,11 @@ implements MetaModelRefiner {
 
         _Probe.errOut("facet-processing(bookmarks) type: %s",
                 processClassContext.getFacetHolder().getFeatureIdentifier());
+
+        if(processClassContext.getFacetHolder().getFeatureIdentifier().toString()
+                .contains("services.confview.ConfigurationMenu")) {
+            System.out.println("!!! bingo");
+        }
 
         addFacetIfPresent(new BookmarkPolicyFacetFallback(processClassContext.getFacetHolder()));
     }
@@ -63,6 +68,11 @@ implements MetaModelRefiner {
         _Probe.errOut("facet-processing(bookmarks) method: %s",
                 processMethodContext.getFacetHolder().getFeatureIdentifier());
 
+        if(processMethodContext.getFacetHolder().getFeatureIdentifier().toString()
+                .contains("services.confview.ConfigurationMenu")) {
+            System.out.println("!!! bingo");
+        }
+
         addFacetIfPresent(new BookmarkPolicyFacetFallback(processMethodContext.getFacetHolder()));
     }
 
@@ -70,7 +80,7 @@ implements MetaModelRefiner {
      * Violation if there is an action that is bookmarkable but does not have safe action semantics.
      */
     @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+    public void refineProgrammingModel(final ProgrammingModel programmingModel) {
 
         programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec -> {
 

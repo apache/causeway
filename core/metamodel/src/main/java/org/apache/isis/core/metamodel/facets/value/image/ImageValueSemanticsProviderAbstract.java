@@ -31,8 +31,6 @@ implements ImageValueFacet {
     private static final int TYPICAL_LENGTH = 18;
     private static final Object DEFAULT_VALUE = null; // no default
 
-    private FacetHolder facetHolder;
-
     @SuppressWarnings("unchecked")
     public ImageValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass) {
         super(ImageValueFacet.class, holder, adaptedClass, TYPICAL_LENGTH, -1, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, (T) DEFAULT_VALUE);
@@ -59,16 +57,6 @@ implements ImageValueFacet {
     @Override
     public String titleStringWithMask(final Object value, final String usingMask) {
         return "image";
-    }
-
-    @Override
-    public FacetHolder getFacetHolder() {
-        return facetHolder;
-    }
-
-    @Override
-    public void setFacetHolder(final FacetHolder facetHolder) {
-        this.facetHolder = facetHolder;
     }
 
     // -- toString

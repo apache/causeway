@@ -23,8 +23,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.core.metamodel.interactions.InteractionAdvisorFacet;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -56,27 +54,27 @@ public class InteractionResultTest {
 
     @Test
     public void shouldHaveNonNullReasonWhenAdvisedWithNonNull() {
-        result.advise("foo", InteractionAdvisorFacet.NOOP);
+        result.advise("foo", InteractionAdvisor.forTesting());
         assertEquals("foo", result.getReason());
     }
 
     @Test
     public void shouldConcatenateAdviseWhenAdvisedWithNonNull() {
-        result.advise("foo", InteractionAdvisorFacet.NOOP);
-        result.advise("bar", InteractionAdvisorFacet.NOOP);
+        result.advise("foo", InteractionAdvisor.forTesting());
+        result.advise("bar", InteractionAdvisor.forTesting());
         assertEquals("foo; bar", result.getReason());
     }
 
     @Test
     public void shouldNotBeEmptyWhenAdvisedWithNonNull() {
-        result.advise("foo", InteractionAdvisorFacet.NOOP);
+        result.advise("foo", InteractionAdvisor.forTesting());
         assertTrue(result.isVetoing());
         assertFalse(result.isNotVetoing());
     }
 
     @Test
     public void shouldBeEmptyWhenAdvisedWithNull() {
-        result.advise(null, InteractionAdvisorFacet.NOOP);
+        result.advise(null, InteractionAdvisor.forTesting());
         assertTrue(result.isNotVetoing());
         assertFalse(result.isVetoing());
         assertEquals(null, result.getReason());
