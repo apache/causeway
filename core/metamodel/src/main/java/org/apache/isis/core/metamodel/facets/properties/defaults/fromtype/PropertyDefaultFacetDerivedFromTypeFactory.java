@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.properties.defaults.fromtype;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -26,11 +29,12 @@ import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public class PropertyDefaultFacetDerivedFromTypeFactory extends FacetFactoryAbstract {
+public class PropertyDefaultFacetDerivedFromTypeFactory
+extends FacetFactoryAbstract {
 
-
-    public PropertyDefaultFacetDerivedFromTypeFactory() {
-        super(FeatureType.PROPERTIES_ONLY);
+    @Inject
+    public PropertyDefaultFacetDerivedFromTypeFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.PROPERTIES_ONLY);
     }
 
     /**

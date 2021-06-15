@@ -38,7 +38,7 @@ public class SaveCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new PersistCallbackViaSaveMethodFacetFactory();
+        facetFactory = new PersistCallbackViaSaveMethodFacetFactory(metaModelContext);
     }
 
     @Override

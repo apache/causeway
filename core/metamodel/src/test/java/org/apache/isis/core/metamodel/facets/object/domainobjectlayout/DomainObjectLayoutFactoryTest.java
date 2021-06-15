@@ -48,7 +48,8 @@ import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
+public class DomainObjectLayoutFactoryTest
+extends AbstractFacetFactoryJUnit4TestCase {
 
     DomainObjectLayoutFacetFactory facetFactory;
 
@@ -56,8 +57,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
     @Before
     public void setUp() throws Exception {
-        facetFactory = new DomainObjectLayoutFacetFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        facetFactory = new DomainObjectLayoutFacetFactory(metaModelContext);
     }
 
     @Override

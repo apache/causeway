@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.properties.disabled.fromimmutable;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
@@ -29,8 +32,9 @@ import lombok.val;
 public class DisabledFacetOnPropertyDerivedFromImmutableFactory
 extends FacetFactoryAbstract {
 
-    public DisabledFacetOnPropertyDerivedFromImmutableFactory() {
-        super(FeatureType.PROPERTIES_ONLY);
+    @Inject
+    public DisabledFacetOnPropertyDerivedFromImmutableFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.PROPERTIES_ONLY);
     }
 
     @Override

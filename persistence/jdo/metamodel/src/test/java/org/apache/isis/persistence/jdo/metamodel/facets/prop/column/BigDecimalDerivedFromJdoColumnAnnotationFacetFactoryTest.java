@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
@@ -31,7 +32,7 @@ import org.apache.isis.persistence.jdo.metamodel.testing.AbstractFacetFactoryTes
 
 import lombok.val;
 
-public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactoryTest 
+public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactoryTest
 extends AbstractFacetFactoryTest {
 
     private BigDecimalDerivedFromJdoColumnAnnotationFacetFactory facetFactory;
@@ -40,7 +41,8 @@ extends AbstractFacetFactoryTest {
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new BigDecimalDerivedFromJdoColumnAnnotationFacetFactory();
+        val mmc = MetaModelContext_forTesting.buildDefault();
+        facetFactory = new BigDecimalDerivedFromJdoColumnAnnotationFacetFactory(mmc);
     }
 
     @Override

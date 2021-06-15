@@ -65,8 +65,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
         // PRODUCTION
 
-        facetFactory = new ActionAnnotationFacetFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        facetFactory = new ActionAnnotationFacetFactory(metaModelContext);
 
         context.checking(new Expectations() {{
             allowing(mockServiceRegistry).lookupServiceElseFail(InteractionProvider.class);

@@ -39,7 +39,7 @@ public class ParameterOptionalityOrNullableAnnotationOnParameterFacetFactoryTest
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        facetFactory = new ParameterAnnotationFacetFactory();
+        facetFactory = new ParameterAnnotationFacetFactory(metaModelContext);
     }
 
     public void testParameterAnnotationWithOptionalityPickedUpOnActionParameter() {

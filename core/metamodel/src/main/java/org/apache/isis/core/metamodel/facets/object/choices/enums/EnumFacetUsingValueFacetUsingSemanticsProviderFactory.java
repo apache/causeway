@@ -19,7 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.object.choices.enums;
 
+import javax.inject.Inject;
+
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 
 import lombok.val;
@@ -27,8 +30,9 @@ import lombok.val;
 public class EnumFacetUsingValueFacetUsingSemanticsProviderFactory
 extends ValueFacetUsingSemanticsProviderFactory<Enum<?>> {
 
-    public EnumFacetUsingValueFacetUsingSemanticsProviderFactory() {
-        super();
+    @Inject
+    public EnumFacetUsingValueFacetUsingSemanticsProviderFactory(final MetaModelContext mmc) {
+        super(mmc);
     }
 
     @Override

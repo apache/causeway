@@ -18,9 +18,11 @@
  */
 package org.apache.isis.core.metamodel._testing;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
@@ -39,6 +41,7 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -53,7 +56,11 @@ import org.apache.isis.core.metamodel.execution.MemberExecutorService;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManagerDefault;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
+import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
+import org.apache.isis.core.metamodel.services.title.TitleServiceDefault;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault;
@@ -87,13 +94,16 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
     @Builder.Default
     private IsisConfiguration configuration = newIsisConfiguration();
 
+    @Builder.Default
+    private ClassSubstitutorRegistry classSubstitutorRegistry = new ClassSubstitutorRegistry(Collections.emptyList());
+
     private ObjectManager objectManager;
 
     private WrapperFactory wrapperFactory;
 
     private SpecificationLoader specificationLoader;
 
-    private ProgrammingModel programmingModel;
+    private Function<MetaModelContext,  ProgrammingModel> programmingModelFactory;
 
     private InteractionProvider interactionProvider;
 
@@ -105,7 +115,8 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
 
     private AuthenticationManager authenticationManager;
 
-    private TitleService titleService;
+    @Builder.Default
+    private TitleService titleService = new TitleServiceDefault(null, null);
 
     private RepositoryService repositoryService;
 
@@ -136,7 +147,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
     }
 
     @Override
-    public ManagedObject lookupServiceAdapterById(String serviceId) {
+    public ManagedObject lookupServiceAdapterById(final String serviceId) {
         if(serviceAdaptersById==null) {
             return null;
         }
@@ -146,7 +157,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
     // -- LOOKUP
 
     @Override
-    public <T> T getSingletonElseFail(Class<T> type) {
+    public <T> T getSingletonElseFail(final Class<T> type) {
         return getSystemEnvironment().ioc().getSingletonElseFail(type);
     }
 
@@ -159,6 +170,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
                 getIsisBeanTypeClassifier(),
                 getIsisBeanTypeRegistry(),
                 systemEnvironment,
+                classSubstitutorRegistry,
                 serviceInjector,
                 serviceRegistry,
                 metamodelEventService,
@@ -190,7 +202,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
         val properties = _Maps.<String, String>newHashMap();
         val config = new IsisConfiguration(new AbstractEnvironment() {
             @Override
-            public String getProperty(String key) {
+            public String getProperty(final String key) {
                 return properties.get(key);
             }
         });
@@ -247,6 +259,17 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
         return isisBeanTypeRegistry;
     }
 
+    private final _Lazy<ProgrammingModel> programmingModelRef =
+            _Lazy.threadSafe(()->initProgrammingModel());
+    public ProgrammingModel getProgrammingModel() {
+        return programmingModelRef.get();
+    }
+    private final ProgrammingModel initProgrammingModel() {
+        val programmingModel = programmingModelFactory.apply(this);
+        ((ProgrammingModelAbstract)programmingModel).init(new ProgrammingModelInitFilterDefault());
+        return programmingModel;
+    }
+
     @Override
     public SpecificationLoader getSpecificationLoader() {
         if(specificationLoader==null) {
@@ -294,7 +317,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
         return wrapperFactory;
     }
 
-    public void runWithConfigProperties(Consumer<Map<String, String>> setup, Runnable runnable) {
+    public void runWithConfigProperties(final Consumer<Map<String, String>> setup, final Runnable runnable) {
         val properties = _Maps.<String, String>newHashMap();
         setup.accept(properties);
 
@@ -303,7 +326,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
 
             this.configuration = new IsisConfiguration(new AbstractEnvironment() {
                 @Override
-                public String getProperty(String key) {
+                public String getProperty(final String key) {
                     return properties.get(key);
                 }
             });

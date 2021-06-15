@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.object.immutable.immutableannot;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -27,8 +30,9 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class CopyImmutableFacetOntoMembersFactory extends FacetFactoryAbstract {
 
-    public CopyImmutableFacetOntoMembersFactory() {
-        super(FeatureType.MEMBERS);
+    @Inject
+    public CopyImmutableFacetOntoMembersFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.MEMBERS);
     }
 
     @Override

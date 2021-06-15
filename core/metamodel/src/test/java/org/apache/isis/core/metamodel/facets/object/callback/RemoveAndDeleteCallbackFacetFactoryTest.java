@@ -31,7 +31,8 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFa
 
 import lombok.val;
 
-public class RemoveAndDeleteCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
+public class RemoveAndDeleteCallbackFacetFactoryTest
+extends AbstractFacetFactoryTest {
 
     private RemoveCallbackFacetFactory removeFacetFactory;
     private RemoveCallbackViaDeleteMethodFacetFactory deleteFacetFactory;
@@ -40,8 +41,8 @@ public class RemoveAndDeleteCallbackFacetFactoryTest extends AbstractFacetFactor
     protected void setUp() throws Exception {
         super.setUp();
 
-        removeFacetFactory = new RemoveCallbackFacetFactory();
-        deleteFacetFactory = new RemoveCallbackViaDeleteMethodFacetFactory();
+        removeFacetFactory = new RemoveCallbackFacetFactory(metaModelContext);
+        deleteFacetFactory = new RemoveCallbackViaDeleteMethodFacetFactory(metaModelContext);
     }
 
     @Override

@@ -21,8 +21,11 @@ package org.apache.isis.core.metamodel.facets.object.ignore.datanucleus;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.factory._InstanceUtil;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.ignore.javalang.RemoveMethodsFacetFactory;
@@ -30,12 +33,15 @@ import org.apache.isis.core.metamodel.facets.object.ignore.javalang.RemoveMethod
 /**
  * Removes all methods inherited from <tt>org.datanucleus.enhancement.Persistable</tt> (if datanucleus 4.1.x is on the classpath).
  */
-public class RemoveDatanucleusPersistableTypesFacetFactory extends FacetFactoryAbstract {
+public class RemoveDatanucleusPersistableTypesFacetFactory
+extends FacetFactoryAbstract {
 
-    private final List<RemoveMethodsFacetFactory.MethodAndParameterTypes> datanucleusPersistableMethodsToIgnore = _Lists.newArrayList();
+    private final List<RemoveMethodsFacetFactory.MethodAndParameterTypes>
+        datanucleusPersistableMethodsToIgnore = _Lists.newArrayList();
 
-    public RemoveDatanucleusPersistableTypesFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    @Inject
+    public RemoveDatanucleusPersistableTypesFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
 
         final String typeToIgnoreIfOnClasspath = "org.datanucleus.enhancement.Persistable";
         try {
@@ -46,7 +52,7 @@ public class RemoveDatanucleusPersistableTypesFacetFactory extends FacetFactoryA
         }
     }
 
-    private void addMethodsToBeIgnored(Class<?> typeToIgnore) {
+    private void addMethodsToBeIgnored(final Class<?> typeToIgnore) {
         final Method[] methods = typeToIgnore.getMethods();
         for (final Method method : methods) {
             datanucleusPersistableMethodsToIgnore

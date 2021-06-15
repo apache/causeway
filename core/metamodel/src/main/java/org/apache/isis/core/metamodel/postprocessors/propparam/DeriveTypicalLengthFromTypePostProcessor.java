@@ -19,10 +19,13 @@
 
 package org.apache.isis.core.metamodel.postprocessors.propparam;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
-import org.apache.isis.core.metamodel.facets.param.typicallen.fromtype.TypicalLengthFacetOnParameterInferredFromType;
 import org.apache.isis.core.metamodel.facets.param.typicallen.fromtype.TypicalLengthFacetOnParameterDerivedFromTypeFacetFactory;
+import org.apache.isis.core.metamodel.facets.param.typicallen.fromtype.TypicalLengthFacetOnParameterInferredFromType;
 import org.apache.isis.core.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetOnPropertyDerivedFromType;
 import org.apache.isis.core.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetOnPropertyDerivedFromTypeFacetFactory;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
@@ -39,16 +42,21 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 public class DeriveTypicalLengthFromTypePostProcessor
 extends ObjectSpecificationPostProcessorAbstract {
 
-    @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification) {
+    @Inject
+    public DeriveTypicalLengthFromTypePostProcessor(final MetaModelContext metaModelContext) {
+        super(metaModelContext);
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction act) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification) {
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction objectAction, final ObjectActionParameter parameter) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction act) {
+    }
+
+    @Override
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction, final ObjectActionParameter parameter) {
         if(parameter.containsNonFallbackFacet(TypicalLengthFacet.class)) {
             return;
         }
@@ -59,7 +67,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, final OneToOneAssociation property) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToOneAssociation property) {
         if(property.containsNonFallbackFacet(TypicalLengthFacet.class)) {
             return;
         }
@@ -71,7 +79,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, OneToManyAssociation coll) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
     }
 
 

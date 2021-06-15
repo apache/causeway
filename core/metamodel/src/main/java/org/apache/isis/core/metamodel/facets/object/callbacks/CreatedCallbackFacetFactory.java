@@ -19,7 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.object.callbacks;
 
+import javax.inject.Inject;
+
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
@@ -31,8 +34,9 @@ public class CreatedCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAb
 
     private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.CREATED_PREFIX);
 
-    public CreatedCallbackFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
+    @Inject
+    public CreatedCallbackFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     @Override

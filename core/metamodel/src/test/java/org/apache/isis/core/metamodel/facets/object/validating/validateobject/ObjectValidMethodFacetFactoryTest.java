@@ -34,8 +34,7 @@ public class ObjectValidMethodFacetFactoryTest extends AbstractFacetFactoryTest 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        facetFactory = new ValidateObjectFacetMethodFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        facetFactory = new ValidateObjectFacetMethodFactory(metaModelContext);
     }
 
     @Override

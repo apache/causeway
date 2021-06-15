@@ -19,10 +19,12 @@
 package org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity;
 
 
+import javax.inject.Inject;
 import javax.jdo.annotations.EmbeddedOnly;
 import javax.jdo.annotations.PersistenceCapable;
 
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -41,12 +43,13 @@ public class JdoEntityFacetFactory
 extends FacetFactoryAbstract
 implements ObjectTypeFacetFactory {
 
-    public JdoEntityFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    @Inject
+    public JdoEntityFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
     }
 
     @Override
-    public void process(ObjectTypeFacetFactory.ProcessObjectTypeContext processClassContext) {
+    public void process(final ObjectTypeFacetFactory.ProcessObjectTypeContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
 
         // only applies to JDO entities; ignore any view models

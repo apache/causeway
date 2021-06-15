@@ -41,6 +41,7 @@ import org.apache.isis.persistence.jdo.metamodel.facets.prop.column.MandatoryFro
 import org.apache.isis.persistence.jdo.metamodel.facets.prop.column.MaxLengthDerivedFromJdoColumnAnnotationFacetFactory;
 import org.apache.isis.persistence.jdo.metamodel.facets.prop.notpersistent.JdoNotPersistentAnnotationFacetFactory;
 import org.apache.isis.persistence.jdo.metamodel.facets.prop.primarykey.JdoPrimaryKeyAnnotationFacetFactory;
+import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
 import lombok.val;
@@ -51,40 +52,42 @@ public class JdoProgrammingModel implements MetaModelRefiner {
     //@Inject private IsisConfiguration config;
 
     @Override
-    public void refineProgrammingModel(ProgrammingModel pm) {
+    public void refineProgrammingModel(final ProgrammingModel pm) {
 
         val step1 = ProgrammingModel.FacetProcessingOrder.C2_AFTER_METHOD_REMOVING;
+        val mmc = pm.getMetaModelContext();
 
         // come what may, we have to ignore the PersistenceCapable supertype.
-        pm.addFactory(step1, RemoveJdoEnhancementTypesFacetFactory.class, Marker.JDO);
+        pm.addFactory(step1, new RemoveJdoEnhancementTypesFacetFactory(mmc), Marker.JDO);
         // so we may as well also just ignore any 'jdo' prefixed methods here also.
-        pm.addFactory(step1, RemoveJdoPrefixedMethodsFacetFactory.class, Marker.JDO);
+        pm.addFactory(step1, new RemoveJdoPrefixedMethodsFacetFactory(mmc), Marker.JDO);
         // Datanucleus
-        pm.addFactory(step1, RemoveDatanucleusPersistableTypesFacetFactory.class, Marker.JDO);
-        pm.addFactory(step1, RemoveDnPrefixedMethodsFacetFactory.class, Marker.JDO);
+        pm.addFactory(step1, new RemoveDatanucleusPersistableTypesFacetFactory(mmc), Marker.JDO);
+        pm.addFactory(step1, new RemoveDnPrefixedMethodsFacetFactory(mmc), Marker.JDO);
 
 
         val step2 = ProgrammingModel.FacetProcessingOrder.A2_AFTER_FALLBACK_DEFAULTS;
+        val jdoFacetContext = mmc.getServiceRegistry().lookupServiceElseFail(JdoFacetContext.class);
 
-        pm.addFactory(step2, JdoPersistenceCapableAnnotationFacetFactory.class, Marker.JDO);
-        pm.addFactory(step2, JdoDatastoreIdentityAnnotationFacetFactory.class, Marker.JDO);
+        pm.addFactory(step2, new JdoPersistenceCapableAnnotationFacetFactory(mmc, jdoFacetContext), Marker.JDO);
+        pm.addFactory(step2, new JdoDatastoreIdentityAnnotationFacetFactory(mmc, jdoFacetContext), Marker.JDO);
 
-        pm.addFactory(step2, JdoPrimaryKeyAnnotationFacetFactory.class, Marker.JDO);
-        pm.addFactory(step2, JdoNotPersistentAnnotationFacetFactory.class, Marker.JDO);
+        pm.addFactory(step2, new JdoPrimaryKeyAnnotationFacetFactory(mmc, jdoFacetContext), Marker.JDO);
+        pm.addFactory(step2, new JdoNotPersistentAnnotationFacetFactory(mmc, jdoFacetContext), Marker.JDO);
 
         // breaks idea of logical-type-names having namespaces
         //pm.addFactory(step2, JdoDiscriminatorAnnotationFacetFactory.class, Marker.JDO);
 
-        pm.addFactory(step2, JdoVersionAnnotationFacetFactory.class, Marker.JDO);
+        pm.addFactory(step2, new JdoVersionAnnotationFacetFactory(mmc, jdoFacetContext), Marker.JDO);
 
-        pm.addFactory(step2, JdoQueryAnnotationFacetFactory.class, Marker.JDO);
+        pm.addFactory(step2, new JdoQueryAnnotationFacetFactory(mmc, jdoFacetContext), Marker.JDO);
 
-        pm.addFactory(step2, BigDecimalDerivedFromJdoColumnAnnotationFacetFactory.class, Marker.JDO);
-        pm.addFactory(step2, MaxLengthDerivedFromJdoColumnAnnotationFacetFactory.class, Marker.JDO);
+        pm.addFactory(step2, new BigDecimalDerivedFromJdoColumnAnnotationFacetFactory(mmc), Marker.JDO);
+        pm.addFactory(step2, new MaxLengthDerivedFromJdoColumnAnnotationFacetFactory(mmc), Marker.JDO);
         // must appear after JdoPrimaryKeyAnnotationFacetFactory (above)
         // and also MandatoryFacetOnPropertyMandatoryAnnotationFactory
         // and also PropertyAnnotationFactory
-        pm.addFactory(step2, MandatoryFromJdoColumnAnnotationFacetFactory.class, Marker.JDO);
+        pm.addFactory(step2, new MandatoryFromJdoColumnAnnotationFacetFactory(mmc, jdoFacetContext), Marker.JDO);
 
 
         // -- validators
@@ -96,7 +99,7 @@ public class JdoProgrammingModel implements MetaModelRefiner {
 
     // -- HELPER
 
-    private void addValidatorToEnsureIdentityType(ProgrammingModel pm) {
+    private void addValidatorToEnsureIdentityType(final ProgrammingModel pm) {
 
         pm.addVisitingValidatorSkipManagedBeans(objSpec -> {
 
@@ -129,7 +132,7 @@ public class JdoProgrammingModel implements MetaModelRefiner {
 
     }
 
-    private void addValidatorToCheckForUnsupportedAnnotations(ProgrammingModel pm) {
+    private void addValidatorToCheckForUnsupportedAnnotations(final ProgrammingModel pm) {
 
         pm.addVisitingValidatorSkipManagedBeans(objSpec -> {
             if (objSpec.containsNonFallbackFacet(ParentedCollectionFacet.class) && !objSpec.containsNonFallbackFacet(CollectionFacet.class)) {

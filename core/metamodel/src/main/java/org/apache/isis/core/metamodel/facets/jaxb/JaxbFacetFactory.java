@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlTransient;
@@ -37,6 +38,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -57,11 +59,13 @@ import lombok.val;
 /**
  * just adds a validator
  */
-public class JaxbFacetFactory extends FacetFactoryAbstract
+public class JaxbFacetFactory
+extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
-    public JaxbFacetFactory() {
-        super(FeatureType.OBJECTS_AND_PROPERTIES);
+    @Inject
+    public JaxbFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_AND_PROPERTIES);
     }
 
     // -- CLASS CONTEXT
@@ -115,7 +119,7 @@ implements MetaModelRefiner {
 
     }
 
-    private void processXmlJavaTypeAdapter(final ProcessMethodContext processMethodContext, XmlAccessType accessType) {
+    private void processXmlJavaTypeAdapter(final ProcessMethodContext processMethodContext, final XmlAccessType accessType) {
 
         val xmlJavaTypeAdapterIfAny = processMethodContext.synthesizeOnMethod(XmlJavaTypeAdapter.class);
 
@@ -128,7 +132,7 @@ implements MetaModelRefiner {
                 new XmlJavaTypeAdapterFacetDefault(facetHolder, xmlJavaTypeAdapterIfAny.get().value()));
     }
 
-    private void processXmlTransient(final ProcessMethodContext processMethodContext, XmlAccessType accessType) {
+    private void processXmlTransient(final ProcessMethodContext processMethodContext, final XmlAccessType accessType) {
 
         val xmlTransientIfAny = processMethodContext.synthesizeOnMethod(XmlTransient.class);
 
@@ -143,7 +147,7 @@ implements MetaModelRefiner {
     // --
 
     @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+    public void refineProgrammingModel(final ProgrammingModel programmingModel) {
 
         final List<TypeValidator> typeValidators = getTypeValidators(getConfiguration());
         final List<PropertyValidator> propertyValidators = getPropertyValidators(getConfiguration());
@@ -180,7 +184,7 @@ implements MetaModelRefiner {
 
     }
 
-    private List<TypeValidator> getTypeValidators(IsisConfiguration configuration) {
+    private List<TypeValidator> getTypeValidators(final IsisConfiguration configuration) {
 
         final List<TypeValidator> typeValidators = _Lists.newArrayList();
         if(configuration.getCore().getMetaModel().getValidator().getJaxbViewModel().isNotAbstract()) {
@@ -195,7 +199,7 @@ implements MetaModelRefiner {
         return typeValidators;
     }
 
-    private List<PropertyValidator> getPropertyValidators(IsisConfiguration configuration) {
+    private List<PropertyValidator> getPropertyValidators(final IsisConfiguration configuration) {
         final List<PropertyValidator> propertyValidators = _Lists.newArrayList();
         if(configuration.getCore().getMetaModel().getValidator().getJaxbViewModel().isReferenceTypeAdapter()) {
             propertyValidators.add(new PropertyValidatorForReferenceTypes());

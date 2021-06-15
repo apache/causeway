@@ -19,13 +19,22 @@
 
 package org.apache.isis.core.metamodel.facets.schema.cmd.v2;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
 import lombok.val;
 
-public class CommandDtoValueFacetUsingSemanticsProviderFactory extends ValueFacetUsingSemanticsProviderFactory<CommandDto> {
+public class CommandDtoValueFacetUsingSemanticsProviderFactory
+extends ValueFacetUsingSemanticsProviderFactory<CommandDto> {
+
+    @Inject
+    public CommandDtoValueFacetUsingSemanticsProviderFactory(final MetaModelContext mmc) {
+        super(mmc);
+    }
 
     @Override
     public void process(final ProcessClassContext processClassContext) {

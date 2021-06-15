@@ -18,7 +18,10 @@
  */
 package org.apache.isis.core.metamodel.facets.collections.layout;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromCollectionLayoutAnnotation;
@@ -29,8 +32,9 @@ import lombok.val;
 public class CollectionLayoutFacetFactory
 extends FacetFactoryAbstract {
 
-    public CollectionLayoutFacetFactory() {
-        super(FeatureType.COLLECTIONS_AND_ACTIONS);
+    @Inject
+    public CollectionLayoutFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.COLLECTIONS_AND_ACTIONS);
     }
 
     @Override

@@ -21,8 +21,11 @@ package org.apache.isis.core.metamodel.facets.members.disabled.method;
 
 import java.lang.reflect.Method;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
@@ -35,8 +38,9 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
 
     private static final String PREFIX = MethodLiteralConstants.DISABLE_PREFIX;
 
-    public DisableForContextFacetViaMethodFactory() {
-        super(FeatureType.MEMBERS, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
+    @Inject
+    public DisableForContextFacetViaMethodFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.MEMBERS, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
     }
 
     @Override

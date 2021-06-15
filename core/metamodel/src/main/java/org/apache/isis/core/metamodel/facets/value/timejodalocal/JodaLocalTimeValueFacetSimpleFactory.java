@@ -19,18 +19,23 @@
 
 package org.apache.isis.core.metamodel.facets.value.timejodalocal;
 
+import javax.inject.Inject;
+
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacetSimple;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 
 import lombok.val;
 
-public class JodaLocalTimeValueFacetSimpleFactory extends ValueFacetUsingSemanticsProviderFactory<LocalDate> {
+public class JodaLocalTimeValueFacetSimpleFactory
+extends ValueFacetUsingSemanticsProviderFactory<LocalDate> {
 
-    public JodaLocalTimeValueFacetSimpleFactory() {
-        super();
+    @Inject
+    public JodaLocalTimeValueFacetSimpleFactory(final MetaModelContext mmc) {
+        super(mmc);
     }
 
     @Override

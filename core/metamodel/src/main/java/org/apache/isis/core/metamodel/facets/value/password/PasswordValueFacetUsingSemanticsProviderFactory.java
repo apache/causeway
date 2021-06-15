@@ -19,14 +19,19 @@
 
 package org.apache.isis.core.metamodel.facets.value.password;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.value.Password;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 
-public class PasswordValueFacetUsingSemanticsProviderFactory extends ValueFacetUsingSemanticsProviderFactory<Password> {
+public class PasswordValueFacetUsingSemanticsProviderFactory
+extends ValueFacetUsingSemanticsProviderFactory<Password> {
 
-    public PasswordValueFacetUsingSemanticsProviderFactory() {
-        super();
+    @Inject
+    public PasswordValueFacetUsingSemanticsProviderFactory(final MetaModelContext mmc) {
+        super(mmc);
     }
 
     @Override

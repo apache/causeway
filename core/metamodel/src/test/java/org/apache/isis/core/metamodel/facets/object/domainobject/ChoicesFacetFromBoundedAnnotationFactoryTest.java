@@ -30,7 +30,8 @@ import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 
 import lombok.val;
 
-public class ChoicesFacetFromBoundedAnnotationFactoryTest extends AbstractFacetFactoryTest {
+public class ChoicesFacetFromBoundedAnnotationFactoryTest
+extends AbstractFacetFactoryTest {
 
     private DomainObjectAnnotationFacetFactory facetFactory;
 
@@ -38,7 +39,7 @@ public class ChoicesFacetFromBoundedAnnotationFactoryTest extends AbstractFacetF
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new DomainObjectAnnotationFacetFactory(new MethodByClassMap());
+        facetFactory = new DomainObjectAnnotationFacetFactory(metaModelContext, new MethodByClassMap());
     }
 
     @Override

@@ -21,8 +21,11 @@ package org.apache.isis.core.metamodel.facets.param.defaults.methodnum;
 
 import java.util.EnumSet;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.ParameterSupport;
@@ -41,8 +44,9 @@ public class ActionParameterDefaultsFacetViaMethodFactory extends MethodPrefixBa
 
     private static final String PREFIX = MethodLiteralConstants.DEFAULT_PREFIX;
 
-    public ActionParameterDefaultsFacetViaMethodFactory() {
-        super(FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
+    @Inject
+    public ActionParameterDefaultsFacetViaMethodFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
     }
 
     // ///////////////////////////////////////////////////////

@@ -26,6 +26,7 @@ import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -44,7 +45,6 @@ import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
 
-import lombok.Setter;
 import lombok.val;
 
 
@@ -52,10 +52,14 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
-    @Inject @Setter private JdoFacetContext jdoFacetContext;
+    private final JdoFacetContext jdoFacetContext;
 
-    public MandatoryFromJdoColumnAnnotationFacetFactory() {
-        super(FeatureType.PROPERTIES_ONLY);
+    @Inject
+    public MandatoryFromJdoColumnAnnotationFacetFactory(
+            final MetaModelContext mmc,
+            final JdoFacetContext jdoFacetContext) {
+        super(mmc, FeatureType.PROPERTIES_ONLY);
+        this.jdoFacetContext = jdoFacetContext;
     }
 
     @Override
@@ -124,7 +128,7 @@ implements MetaModelRefiner {
     }
 
     @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+    public void refineProgrammingModel(final ProgrammingModel programmingModel) {
         programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec->{
 
             final JdoPersistenceCapableFacet pcFacet = objectSpec.getFacet(JdoPersistenceCapableFacet.class);
@@ -144,7 +148,7 @@ implements MetaModelRefiner {
         });
     }
 
-    private static void validateMandatoryFacet(ObjectAssociation association) {
+    private static void validateMandatoryFacet(final ObjectAssociation association) {
 
         association.lookupFacet(MandatoryFacet.class)
         .map(MandatoryFacet::getSharedFacetRankingElseFail)

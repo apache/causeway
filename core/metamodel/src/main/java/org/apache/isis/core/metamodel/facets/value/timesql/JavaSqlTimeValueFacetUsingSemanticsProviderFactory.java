@@ -21,13 +21,18 @@ package org.apache.isis.core.metamodel.facets.value.timesql;
 
 import java.sql.Time;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 
-public class JavaSqlTimeValueFacetUsingSemanticsProviderFactory extends ValueFacetUsingSemanticsProviderFactory<Time> {
+public class JavaSqlTimeValueFacetUsingSemanticsProviderFactory
+extends ValueFacetUsingSemanticsProviderFactory<Time> {
 
-    public JavaSqlTimeValueFacetUsingSemanticsProviderFactory() {
-        super(); // as per inherited
+    @Inject
+    public JavaSqlTimeValueFacetUsingSemanticsProviderFactory(final MetaModelContext mmc) {
+        super(mmc); // as per inherited
         // TimeValueSemanticsProvider#facetType
         // (inherited)
     }

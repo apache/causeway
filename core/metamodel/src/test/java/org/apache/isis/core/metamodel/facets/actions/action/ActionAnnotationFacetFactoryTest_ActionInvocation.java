@@ -49,7 +49,7 @@ extends AbstractFacetFactoryTest {
     private ActionAnnotationFacetFactory facetFactory;
 
     private void processInvocation(
-            ActionAnnotationFacetFactory facetFactory, ProcessMethodContext processMethodContext) {
+            final ActionAnnotationFacetFactory facetFactory, final ProcessMethodContext processMethodContext) {
 
         val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
         facetFactory.processInvocation(processMethodContext, actionIfAny);
@@ -58,8 +58,7 @@ extends AbstractFacetFactoryTest {
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        this.facetFactory =  new ActionAnnotationFacetFactory();
-        facetFactory.setMetaModelContext(metaModelContext);
+        this.facetFactory =  new ActionAnnotationFacetFactory(metaModelContext);
 
         voidSpec = new ObjectSpecificationStub(metaModelContext, void.class);
         stringSpec = new ObjectSpecificationStub(metaModelContext, java.lang.String.class);
@@ -167,11 +166,8 @@ extends AbstractFacetFactoryTest {
 
         allowing_specificationLoader_loadSpecification_any_willReturn(voidSpec);
 
-        val facetFactoryForChoices = new ActionParameterChoicesFacetViaMethodFactory();
-        val facetFactoryForDisable = new DisableForContextFacetViaMethodFactory();
-        facetFactoryForChoices.setMetaModelContext(metaModelContext);
-        facetFactoryForDisable.setMetaModelContext(metaModelContext);
-
+        val facetFactoryForChoices = new ActionParameterChoicesFacetViaMethodFactory(metaModelContext);
+        val facetFactoryForDisable = new DisableForContextFacetViaMethodFactory(metaModelContext);
 
         class Customer {
 

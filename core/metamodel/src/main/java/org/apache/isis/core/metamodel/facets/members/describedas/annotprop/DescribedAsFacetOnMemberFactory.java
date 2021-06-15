@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.members.describedas.annotprop;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
@@ -27,9 +30,9 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 public class DescribedAsFacetOnMemberFactory
 extends FacetFactoryAbstract {
 
-
-    public DescribedAsFacetOnMemberFactory() {
-        super(FeatureType.MEMBERS);
+    @Inject
+    public DescribedAsFacetOnMemberFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.MEMBERS);
     }
 
     @Override

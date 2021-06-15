@@ -26,24 +26,26 @@ import javax.annotation.Nullable;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NonNull;
 
 public abstract class FacetFactoryAbstract
-implements FacetFactory, MetaModelContextAware, HasMetaModelContext {
+implements FacetFactory, HasMetaModelContext {
 
-    @Getter(onMethod = @__({@Override})) @Setter(onMethod = @__({@Override}))
-    private MetaModelContext metaModelContext;
+    @Getter(onMethod = @__({@Override}))
+    private final @NonNull MetaModelContext metaModelContext;
 
     @Getter(onMethod = @__({@Override}))
     private final ImmutableEnumSet<FeatureType> featureTypes;
 
-    public FacetFactoryAbstract(ImmutableEnumSet<FeatureType> featureTypes) {
+    public FacetFactoryAbstract(
+            final MetaModelContext metaModelContext,
+            final ImmutableEnumSet<FeatureType> featureTypes) {
+        this.metaModelContext = metaModelContext;
         this.featureTypes = featureTypes;
     }
 

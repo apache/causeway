@@ -21,13 +21,17 @@ package org.apache.isis.core.metamodel.facets.value.temporal.zoneddatetime;
 
 import java.time.ZonedDateTime;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacetUsingSemanticsProviderFactory;
 
 public class ZonedDateTimeValueFacetUsingSemanticsProviderFactory
 extends TemporalValueFacetUsingSemanticsProviderFactory<ZonedDateTime> {
 
-    public ZonedDateTimeValueFacetUsingSemanticsProviderFactory() {
-        super(ZonedDateTime.class, ZonedDateTimeValueSemanticsProvider::new);
+    @Inject
+    public ZonedDateTimeValueFacetUsingSemanticsProviderFactory(final MetaModelContext mmc) {
+        super(mmc, ZonedDateTime.class, ZonedDateTimeValueSemanticsProvider::new);
     }
 
 }

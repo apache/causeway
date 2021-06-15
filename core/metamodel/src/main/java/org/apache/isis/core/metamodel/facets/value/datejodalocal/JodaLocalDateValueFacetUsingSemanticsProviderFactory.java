@@ -19,16 +19,21 @@
 
 package org.apache.isis.core.metamodel.facets.value.datejodalocal;
 
+import javax.inject.Inject;
+
 import org.joda.time.LocalDate;
 
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 
-public class JodaLocalDateValueFacetUsingSemanticsProviderFactory extends ValueFacetUsingSemanticsProviderFactory<LocalDate> {
+public class JodaLocalDateValueFacetUsingSemanticsProviderFactory
+extends ValueFacetUsingSemanticsProviderFactory<LocalDate> {
 
-    public JodaLocalDateValueFacetUsingSemanticsProviderFactory() {
+    @Inject
+    public JodaLocalDateValueFacetUsingSemanticsProviderFactory(final MetaModelContext mmc) {
         // as per inherited DateTimeValueSemanticsProvider#facetType
-        super();
+        super(mmc);
     }
 
     @Override

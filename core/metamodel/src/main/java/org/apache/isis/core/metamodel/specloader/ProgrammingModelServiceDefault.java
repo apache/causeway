@@ -27,8 +27,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
@@ -46,7 +44,8 @@ import lombok.extern.log4j.Log4j2;
 @Primary
 @Qualifier("Default")
 @Log4j2
-public class ProgrammingModelServiceDefault implements ProgrammingModelService {
+public class ProgrammingModelServiceDefault
+implements ProgrammingModelService {
 
     @Override
     public ProgrammingModel getProgrammingModel() {
@@ -55,8 +54,6 @@ public class ProgrammingModelServiceDefault implements ProgrammingModelService {
 
     // -- HELPER
 
-    @Inject private ServiceInjector serviceInjector;
-    @Inject private ServiceRegistry serviceRegistry;
     @Inject private ProgrammingModelInitFilter programmingModelInitFilter;
     @Inject private MetaModelContext metaModelContext;
 
@@ -67,17 +64,17 @@ public class ProgrammingModelServiceDefault implements ProgrammingModelService {
 
         log.info("About to create the ProgrammingModel.");
 
-        val programmingModel = new ProgrammingModelFacetsJava8(serviceInjector);
+        val programmingModel = new ProgrammingModelFacetsJava8(metaModelContext);
 
         // from all plugins out there, add their contributed FacetFactories, Validators
         // and PostProcessors to the programming model
-        val metaModelRefiners = serviceRegistry.select(MetaModelRefiner.class);
+        val metaModelRefiners = metaModelContext.getServiceRegistry().select(MetaModelRefiner.class);
         for (val metaModelRefiner : metaModelRefiners) {
             metaModelRefiner.refineProgrammingModel(programmingModel);
         }
 
         // finalize the programming model (make it immutable)
-        programmingModel.init(programmingModelInitFilter, metaModelContext);
+        programmingModel.init(programmingModelInitFilter);
 
         if(log.isInfoEnabled()) {
 

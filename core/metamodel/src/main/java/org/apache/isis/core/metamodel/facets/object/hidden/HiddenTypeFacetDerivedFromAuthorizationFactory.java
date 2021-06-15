@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.object.hidden;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -29,10 +32,12 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
  * Installs the {@link HiddenTypeFacetDerivedFromAuthorization} on the
  * {@link ObjectSpecification}.
  */
-public class HiddenTypeFacetDerivedFromAuthorizationFactory extends FacetFactoryAbstract {
+public class HiddenTypeFacetDerivedFromAuthorizationFactory
+extends FacetFactoryAbstract {
 
-    public HiddenTypeFacetDerivedFromAuthorizationFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    @Inject
+    public HiddenTypeFacetDerivedFromAuthorizationFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
     }
 
     @Override

@@ -24,6 +24,7 @@ import javax.inject.Inject;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
@@ -46,8 +47,9 @@ implements MetaModelRefiner {
 
     @Inject private JdoFacetContext jdoFacetContext;
 
-    public MaxLengthDerivedFromJdoColumnAnnotationFacetFactory() {
-        super(FeatureType.PROPERTIES_ONLY);
+    public MaxLengthDerivedFromJdoColumnAnnotationFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.PROPERTIES_ONLY);
+        this.jdoFacetContext = jdoFacetContext;
     }
 
     @Override
@@ -82,7 +84,7 @@ implements MetaModelRefiner {
     }
 
     @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+    public void refineProgrammingModel(final ProgrammingModel programmingModel) {
         programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec->{
             final JdoPersistenceCapableFacet pcFacet = objectSpec.getFacet(JdoPersistenceCapableFacet.class);
             if(pcFacet==null || pcFacet.getIdentityType() == IdentityType.NONDURABLE) {

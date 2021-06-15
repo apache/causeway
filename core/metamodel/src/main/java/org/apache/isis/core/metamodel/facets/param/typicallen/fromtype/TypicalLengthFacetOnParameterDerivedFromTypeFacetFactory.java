@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.param.typicallen.fromtype;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -28,10 +31,12 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
-public class TypicalLengthFacetOnParameterDerivedFromTypeFacetFactory extends FacetFactoryAbstract {
+public class TypicalLengthFacetOnParameterDerivedFromTypeFacetFactory
+extends FacetFactoryAbstract {
 
-    public TypicalLengthFacetOnParameterDerivedFromTypeFacetFactory() {
-        super(FeatureType.PARAMETERS_ONLY);
+    @Inject
+    public TypicalLengthFacetOnParameterDerivedFromTypeFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.PARAMETERS_ONLY);
     }
 
     @Override

@@ -27,9 +27,9 @@ import org.apache.isis.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
+import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetInferredFromToStringMethod;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaMethodsFactory;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaTitleMethod;
-import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetInferredFromToStringMethod;
 
 public class TitleFacetViaMethodsFactoryTest extends AbstractFacetFactoryTest {
 
@@ -39,8 +39,7 @@ public class TitleFacetViaMethodsFactoryTest extends AbstractFacetFactoryTest {
     public void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new TitleFacetViaMethodsFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        facetFactory = new TitleFacetViaMethodsFactory(metaModelContext);
     }
 
 

@@ -19,13 +19,18 @@
 
 package org.apache.isis.core.metamodel.facets.value.chars;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 
-public class CharPrimitiveValueFacetUsingSemanticsProviderFactory extends ValueFacetUsingSemanticsProviderFactory<Character> {
+public class CharPrimitiveValueFacetUsingSemanticsProviderFactory
+extends ValueFacetUsingSemanticsProviderFactory<Character> {
 
-    public CharPrimitiveValueFacetUsingSemanticsProviderFactory() {
-        super();
+    @Inject
+    public CharPrimitiveValueFacetUsingSemanticsProviderFactory(final MetaModelContext mmc) {
+        super(mmc);
     }
 
     @Override

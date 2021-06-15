@@ -42,8 +42,8 @@ public class PersistAndSaveCallbackFacetFactoryTest extends AbstractFacetFactory
     protected void setUp() throws Exception {
         super.setUp();
 
-        saveFacetFactory = new PersistCallbackViaSaveMethodFacetFactory();
-        persistFacetFactory = new PersistCallbackFacetFactory();
+        saveFacetFactory = new PersistCallbackViaSaveMethodFacetFactory(metaModelContext);
+        persistFacetFactory = new PersistCallbackFacetFactory(metaModelContext);
     }
 
     @Override

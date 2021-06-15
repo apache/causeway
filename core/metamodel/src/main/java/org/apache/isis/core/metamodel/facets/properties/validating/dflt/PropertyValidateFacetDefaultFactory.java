@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.properties.validating.dflt;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -36,10 +39,12 @@ import lombok.val;
  * implementations will potentially replace these where the property is
  * annotated or otherwise provides a validation mechanism.
  */
-public class PropertyValidateFacetDefaultFactory extends FacetFactoryAbstract {
+public class PropertyValidateFacetDefaultFactory
+extends FacetFactoryAbstract {
 
-    public PropertyValidateFacetDefaultFactory() {
-        super(FeatureType.PROPERTIES_ONLY);
+    @Inject
+    public PropertyValidateFacetDefaultFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.PROPERTIES_ONLY);
     }
 
     @Override

@@ -37,7 +37,6 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
-import org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
 import lombok.val;
@@ -53,7 +52,6 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
 
     private MetaModelContext metaModelContext;
     private ViewModelSemanticCheckingFacetFactory facetFactory;
-    private ProgrammingModelAbstract programmingModel;
 
     @Before
     public void setUp() throws Exception {
@@ -61,16 +59,12 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
         val configuration = new IsisConfiguration(null);
         configuration.getApplib().getAnnotation().getViewModel().getValidation().getSemanticChecking().setEnable(true);
 
-        programmingModel = new ProgrammingModelAbstract(mockServicesInjector) {};
-        programmingModel.init(new ProgrammingModelInitFilterDefault(), metaModelContext);
-
         metaModelContext = MetaModelContext_forTesting.builder()
                 .configuration(configuration)
-                .programmingModel(programmingModel)
+                .programmingModelFactory(mmc->new ProgrammingModelAbstract(mmc) {})
                 .build();
 
-        facetFactory = new ViewModelSemanticCheckingFacetFactory();
-        facetFactory.setMetaModelContext(metaModelContext);
+        facetFactory = new ViewModelSemanticCheckingFacetFactory(metaModelContext);
     }
 
     @Test

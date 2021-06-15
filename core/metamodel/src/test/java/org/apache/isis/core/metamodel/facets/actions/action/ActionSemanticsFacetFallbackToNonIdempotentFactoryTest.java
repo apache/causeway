@@ -30,10 +30,11 @@ import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFa
 
 import lombok.val;
 
-public class ActionSemanticsFacetFallbackToNonIdempotentFactoryTest extends AbstractFacetFactoryTest {
+public class ActionSemanticsFacetFallbackToNonIdempotentFactoryTest
+extends AbstractFacetFactoryTest {
 
     private ActionAnnotationFacetFactory facetFactory;
-    
+
     private void processSemantics(
             ActionAnnotationFacetFactory facetFactory, ProcessMethodContext processMethodContext) {
         val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
@@ -44,7 +45,7 @@ public class ActionSemanticsFacetFallbackToNonIdempotentFactoryTest extends Abst
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new ActionAnnotationFacetFactory();
+        facetFactory = new ActionAnnotationFacetFactory(metaModelContext);
     }
 
     @Override

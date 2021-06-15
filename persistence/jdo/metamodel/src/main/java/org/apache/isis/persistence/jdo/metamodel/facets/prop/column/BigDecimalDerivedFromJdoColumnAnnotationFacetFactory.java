@@ -20,9 +20,11 @@ package org.apache.isis.persistence.jdo.metamodel.facets.prop.column;
 
 import java.math.BigDecimal;
 
+import javax.inject.Inject;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -39,14 +41,16 @@ import org.apache.isis.persistence.jdo.provider.metamodel.facets.prop.notpersist
 import lombok.val;
 
 
-public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactory extends FacetFactoryAbstract
+public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactory
+extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
     private static final int DEFAULT_LENGTH = BigDecimalValueSemanticsProvider.DEFAULT_LENGTH;
     private static final int DEFAULT_SCALE = BigDecimalValueSemanticsProvider.DEFAULT_SCALE;
 
-    public BigDecimalDerivedFromJdoColumnAnnotationFacetFactory() {
-        super(FeatureType.PROPERTIES_ONLY);
+    @Inject
+    public BigDecimalDerivedFromJdoColumnAnnotationFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.PROPERTIES_ONLY);
     }
 
     @Override

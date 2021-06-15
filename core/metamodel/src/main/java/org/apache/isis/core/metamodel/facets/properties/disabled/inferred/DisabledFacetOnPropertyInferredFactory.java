@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.properties.disabled.inferred;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -29,10 +32,12 @@ import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySe
 /**
  * Run "near the end"
  */
-public class DisabledFacetOnPropertyInferredFactory extends FacetFactoryAbstract {
+public class DisabledFacetOnPropertyInferredFactory
+extends FacetFactoryAbstract {
 
-    public DisabledFacetOnPropertyInferredFactory() {
-        super(FeatureType.PROPERTIES_ONLY);
+    @Inject
+    public DisabledFacetOnPropertyInferredFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.PROPERTIES_ONLY);
     }
 
     @Override

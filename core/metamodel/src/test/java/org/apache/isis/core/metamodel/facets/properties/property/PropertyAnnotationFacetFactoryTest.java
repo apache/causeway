@@ -109,49 +109,49 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
     }
 
     private static void processModify(
-            PropertyAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
+            final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
         val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         facetFactory.processModify(processMethodContext, propertyIfAny);
     }
 
     private static void processHidden(
-            PropertyAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
+            final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
         val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         facetFactory.processHidden(processMethodContext, propertyIfAny);
     }
 
     private static void processOptional(
-            PropertyAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
+            final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
         val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         facetFactory.processOptional(processMethodContext, propertyIfAny);
     }
 
     private static void processRegEx(
-            PropertyAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
+            final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
         val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         facetFactory.processRegEx(processMethodContext, propertyIfAny);
     }
 
     private static void processEditing(
-            PropertyAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
+            final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
         val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         facetFactory.processEditing(processMethodContext, propertyIfAny);
     }
 
     private static void processMaxLength(
-            PropertyAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
+            final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
         val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         facetFactory.processMaxLength(processMethodContext, propertyIfAny);
     }
 
     private static void processMustSatisfy(
-            PropertyAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
+            final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
         val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         facetFactory.processMustSatisfy(processMethodContext, propertyIfAny);
     }
 
     private static void processNotPersisted(
-            PropertyAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
+            final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
         val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         facetFactory.processNotPersisted(processMethodContext, propertyIfAny);
     }
@@ -160,8 +160,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
 
     @Before
     public void setUp() throws Exception {
-        facetFactory = new PropertyAnnotationFacetFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        facetFactory = new PropertyAnnotationFacetFactory(metaModelContext);
     }
 
     @Override

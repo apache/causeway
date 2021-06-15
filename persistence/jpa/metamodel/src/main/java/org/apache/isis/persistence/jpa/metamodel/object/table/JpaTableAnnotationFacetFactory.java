@@ -19,9 +19,11 @@
 package org.apache.isis.persistence.jpa.metamodel.object.table;
 
 
+import javax.inject.Inject;
 import javax.persistence.Table;
 
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -39,12 +41,13 @@ public class JpaTableAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements ObjectTypeFacetFactory {
 
-    public JpaTableAnnotationFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    @Inject
+    public JpaTableAnnotationFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
     }
 
     @Override
-    public void process(ObjectTypeFacetFactory.ProcessObjectTypeContext processClassContext) {
+    public void process(final ObjectTypeFacetFactory.ProcessObjectTypeContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
 
         final Table annotation = Annotations.getAnnotation(cls, Table.class);

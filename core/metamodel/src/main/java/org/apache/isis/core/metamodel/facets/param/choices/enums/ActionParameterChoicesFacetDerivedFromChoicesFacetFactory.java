@@ -19,16 +19,21 @@
 
 package org.apache.isis.core.metamodel.facets.param.choices.enums;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 
 import lombok.val;
 
-public class ActionParameterChoicesFacetDerivedFromChoicesFacetFactory extends FacetFactoryAbstract {
+public class ActionParameterChoicesFacetDerivedFromChoicesFacetFactory
+extends FacetFactoryAbstract {
 
-    public ActionParameterChoicesFacetDerivedFromChoicesFacetFactory() {
-        super(FeatureType.PARAMETERS_ONLY);
+    @Inject
+    public ActionParameterChoicesFacetDerivedFromChoicesFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.PARAMETERS_ONLY);
     }
 
     @Override

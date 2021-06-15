@@ -19,11 +19,14 @@
 
 package org.apache.isis.core.metamodel.postprocessors.properties;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
-import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnPropertyInferredFromRecreatableObject;
 import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnPropertyDerivedFromRecreatableObjectFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnPropertyInferredFromRecreatableObject;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -39,20 +42,25 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 public class DeriveDisabledFromViewModelPostProcessor
 extends ObjectSpecificationPostProcessorAbstract {
 
-    @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification) {
+    @Inject
+    public DeriveDisabledFromViewModelPostProcessor(final MetaModelContext metaModelContext) {
+        super(metaModelContext);
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction act) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification) {
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction objectAction, ObjectActionParameter param) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction act) {
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, final OneToOneAssociation property) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction, final ObjectActionParameter param) {
+    }
+
+    @Override
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToOneAssociation property) {
         if(property.containsNonFallbackFacet(DisabledFacet.class)){
             return;
         }
@@ -63,13 +71,13 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, OneToManyAssociation coll) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
     }
 
     static DisabledFacetAbstract.Semantics inferSemanticsFrom(final ViewModelFacet facet) {
-        return facet.isImplicitlyImmutable() ?
-                DisabledFacetAbstract.Semantics.DISABLED :
-                DisabledFacetAbstract.Semantics.ENABLED;
+        return facet.isImplicitlyImmutable()
+                ? DisabledFacetAbstract.Semantics.DISABLED
+                : DisabledFacetAbstract.Semantics.ENABLED;
     }
 
 }

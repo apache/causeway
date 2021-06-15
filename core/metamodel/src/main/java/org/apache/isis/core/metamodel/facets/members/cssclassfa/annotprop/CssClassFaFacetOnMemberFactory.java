@@ -23,7 +23,10 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
@@ -31,8 +34,9 @@ import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 public class CssClassFaFacetOnMemberFactory
 extends FacetFactoryAbstract {
 
-    public CssClassFaFacetOnMemberFactory() {
-        super(FeatureType.ACTIONS_ONLY);
+    @Inject
+    public CssClassFaFacetOnMemberFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.ACTIONS_ONLY);
     }
 
     @Override
@@ -69,7 +73,7 @@ extends FacetFactoryAbstract {
         }
     }
 
-    private String faIconIfAnyFor(String name) {
+    private String faIconIfAnyFor(final String name) {
         final Map<Pattern, String> faIconByPattern = getFaIconByPattern();
 
         for (Map.Entry<Pattern, String> entry : faIconByPattern.entrySet()) {

@@ -22,8 +22,11 @@ package org.apache.isis.core.metamodel.facets.object.callbacks;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -33,14 +36,16 @@ import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstr
 
 import lombok.val;
 
-public class PersistCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
+public class PersistCallbackFacetFactory
+extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final Can<String> PREFIXES = Can.ofCollection(_Lists.of(
             MethodLiteralConstants.PERSISTED_PREFIX,
             MethodLiteralConstants.PERSISTING_PREFIX));
 
-    public PersistCallbackFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
+    @Inject
+    public PersistCallbackFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     @Override

@@ -34,22 +34,23 @@ import org.apache.isis.core.metamodel.facets.properties.property.mandatory.Manda
 
 import lombok.val;
 
-public class PropertyOptionalityOrNullableAnnotationOnPropertyFacetFactoryTest extends AbstractFacetFactoryTest {
+public class PropertyOptionalityOrNullableAnnotationOnPropertyFacetFactoryTest
+extends AbstractFacetFactoryTest {
 
     private PropertyAnnotationFacetFactory facetFactory;
 
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        facetFactory = new PropertyAnnotationFacetFactory();
+        facetFactory = new PropertyAnnotationFacetFactory(metaModelContext);
     }
 
     private void processOptional(
-            PropertyAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
+            final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
         val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         facetFactory.processOptional(processMethodContext, propertyIfAny);
     }
-    
+
     public void testPropertyAnnotationWithOptionalityPickedUpOnProperty() {
 
         class Customer {

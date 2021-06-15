@@ -18,7 +18,10 @@
  */
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
@@ -34,8 +37,9 @@ import lombok.val;
 public class ActionLayoutFacetFactory
 extends FacetFactoryAbstract {
 
-    public ActionLayoutFacetFactory() {
-        super(FeatureType.ACTIONS_ONLY);
+    @Inject
+    public ActionLayoutFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.ACTIONS_ONLY);
     }
 
     @Override

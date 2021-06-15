@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.properties.mandatory.dflt;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
@@ -38,10 +41,12 @@ import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
  * the property or parameter is annotated or otherwise indicated as being
  * optional.
  */
-public class MandatoryFacetOnProperyDefaultFactory extends FacetFactoryAbstract {
+public class MandatoryFacetOnProperyDefaultFactory
+extends FacetFactoryAbstract {
 
-    public MandatoryFacetOnProperyDefaultFactory() {
-        super(FeatureType.PROPERTIES_ONLY);
+    @Inject
+    public MandatoryFacetOnProperyDefaultFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.PROPERTIES_ONLY);
     }
 
     @Override

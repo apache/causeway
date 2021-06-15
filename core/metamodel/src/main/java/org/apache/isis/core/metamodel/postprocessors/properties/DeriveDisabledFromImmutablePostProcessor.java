@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.metamodel.postprocessors.properties;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.ImmutableFacetFromConfiguration;
@@ -42,23 +45,28 @@ import lombok.val;
 public class DeriveDisabledFromImmutablePostProcessor
 extends ObjectSpecificationPostProcessorAbstract {
 
-    @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification) {
+    @Inject
+    public DeriveDisabledFromImmutablePostProcessor(final MetaModelContext metaModelContext) {
+        super(metaModelContext);
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction act) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification) {
+    }
+
+    @Override
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction act) {
         // previously was also copying ImmutableFacet from spec onto Action (as for properties and collections ...
         // corresponds to CopyImmutableFacetOntoMembersFactory.  However, ImmutableFacet only ever disables for
         // properties and collections, so no point in copying over.
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction objectAction, ObjectActionParameter param) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction, final ObjectActionParameter param) {
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, final OneToOneAssociation property) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToOneAssociation property) {
         if(property.containsNonFallbackFacet(DisabledFacet.class)) {
             return;
         }
@@ -87,7 +95,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, OneToManyAssociation coll) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
 
     }
 

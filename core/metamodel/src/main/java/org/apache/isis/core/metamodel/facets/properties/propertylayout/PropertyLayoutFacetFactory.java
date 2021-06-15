@@ -19,7 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacetFromPropertyLayoutAnnotation;
@@ -31,8 +34,9 @@ import lombok.val;
 public class PropertyLayoutFacetFactory
 extends FacetFactoryAbstract {
 
-    public PropertyLayoutFacetFactory() {
-        super(FeatureType.PROPERTIES_AND_ACTIONS);
+    @Inject
+    public PropertyLayoutFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.PROPERTIES_AND_ACTIONS);
     }
 
     @Override

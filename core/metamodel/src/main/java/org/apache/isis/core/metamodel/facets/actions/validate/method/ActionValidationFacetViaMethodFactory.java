@@ -21,9 +21,12 @@ package org.apache.isis.core.metamodel.facets.actions.validate.method;
 
 import java.util.EnumSet;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.ActionSupport;
 import org.apache.isis.core.metamodel.facets.ActionSupport.SearchAlgorithm;
@@ -42,8 +45,9 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
 
     private static final String PREFIX = MethodLiteralConstants.VALIDATE_PREFIX;
 
-    public ActionValidationFacetViaMethodFactory() {
-        super(FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
+    @Inject
+    public ActionValidationFacetViaMethodFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
     }
 
     @Override

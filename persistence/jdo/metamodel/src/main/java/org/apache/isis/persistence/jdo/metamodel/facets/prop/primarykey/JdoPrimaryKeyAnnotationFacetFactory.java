@@ -21,24 +21,28 @@ package org.apache.isis.persistence.jdo.metamodel.facets.prop.primarykey;
 import javax.inject.Inject;
 import javax.jdo.annotations.PrimaryKey;
 
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
-import lombok.Setter;
 import lombok.val;
 
 public class JdoPrimaryKeyAnnotationFacetFactory
 extends FacetFactoryAbstract {
 
-    @Inject @Setter private JdoFacetContext jdoFacetContext;
+    private final JdoFacetContext jdoFacetContext;
 
-    public JdoPrimaryKeyAnnotationFacetFactory() {
-        super(FeatureType.PROPERTIES_ONLY);
+    @Inject
+    public JdoPrimaryKeyAnnotationFacetFactory(
+            final MetaModelContext mmc,
+            final JdoFacetContext jdoFacetContext) {
+        super(mmc, FeatureType.PROPERTIES_ONLY);
+        this.jdoFacetContext = jdoFacetContext;
     }
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
 
         // ignore any view models
         val cls = processMethodContext.getCls();

@@ -31,10 +31,12 @@ import org.apache.isis.core.metamodel.facets.properties.bigdecimal.javaxvaldigit
 import org.apache.isis.core.metamodel.facets.properties.bigdecimal.javaxvaldigits.BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 
-public class JavaxValidationDigitsAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
+public class JavaxValidationDigitsAnnotationFacetFactoryTest
+extends AbstractFacetFactoryTest {
 
     public void testAnnotationPickedUpOnProperty() {
-        final BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory facetFactory = new BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory();
+        final BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory facetFactory =
+                new BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory(metaModelContext);
 
         class Order {
             @javax.validation.constraints.Digits(integer=14, fraction=4)
@@ -55,12 +57,13 @@ public class JavaxValidationDigitsAnnotationFacetFactoryTest extends AbstractFac
     }
 
     public void testAnnotationPickedUpOnActionParameter() {
-        final BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory facetFactory = new BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory();
+        final BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory facetFactory =
+                new BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory(metaModelContext);
 
         class Order {
             @SuppressWarnings("unused")
             public void updateCost(
-                    @javax.validation.constraints.Digits(integer=14, fraction=4) 
+                    @javax.validation.constraints.Digits(integer=14, fraction=4)
                     final BigDecimal cost) {
             }
         }

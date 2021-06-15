@@ -21,14 +21,19 @@ package org.apache.isis.core.metamodel.facets.value.datesql;
 
 import java.sql.Date;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 
-public class JavaSqlDateValueFacetUsingSemanticsProviderFactory extends ValueFacetUsingSemanticsProviderFactory<Date> {
+public class JavaSqlDateValueFacetUsingSemanticsProviderFactory
+extends ValueFacetUsingSemanticsProviderFactory<Date> {
 
-    public JavaSqlDateValueFacetUsingSemanticsProviderFactory() {
+    @Inject
+    public JavaSqlDateValueFacetUsingSemanticsProviderFactory(final MetaModelContext mmc) {
         // as per inherited TimeValueSemanticsProvider#facetType
-        super();
+        super(mmc);
     }
 
     @Override

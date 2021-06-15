@@ -20,17 +20,21 @@ package org.apache.isis.core.metamodel.facets.properties.bigdecimal.javaxvaldigi
 
 import java.math.BigDecimal;
 
+import javax.inject.Inject;
 import javax.validation.constraints.Digits;
 
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
 import lombok.val;
 
-public class BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory extends FacetFactoryAbstract {
+public class BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory
+extends FacetFactoryAbstract {
 
-    public BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory() {
-        super(FeatureType.PROPERTIES_ONLY);
+    @Inject
+    public BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.PROPERTIES_ONLY);
     }
 
     @Override

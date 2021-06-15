@@ -16,17 +16,22 @@
  * under the License. */
 package org.apache.isis.core.metamodel.facets.object.grid;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
 import lombok.val;
 
-public class GridFacetFactory extends FacetFactoryAbstract {
+public class GridFacetFactory
+extends FacetFactoryAbstract {
 
-    public GridFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    @Inject
+    public GridFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
     }
 
     @Override

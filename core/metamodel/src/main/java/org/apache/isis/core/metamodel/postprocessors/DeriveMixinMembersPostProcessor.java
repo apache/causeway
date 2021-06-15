@@ -19,19 +19,25 @@
 
 package org.apache.isis.core.metamodel.postprocessors;
 
+import javax.inject.Inject;
+
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 
-import lombok.Setter;
-
+import lombok.Getter;
+import lombok.NonNull;
 
 public class DeriveMixinMembersPostProcessor
-implements ObjectSpecificationPostProcessor, MetaModelContextAware {
+implements ObjectSpecificationPostProcessor {
 
-    @Setter(onMethod = @__(@Override))
-    private MetaModelContext metaModelContext;
+    @Getter(onMethod_ = {@Override})
+    private final @NonNull MetaModelContext metaModelContext;
+
+    @Inject
+    public DeriveMixinMembersPostProcessor(final MetaModelContext metaModelContext) {
+        this.metaModelContext = metaModelContext;
+    }
 
     @Override
     public void postProcess(final ObjectSpecification objectSpecification) {

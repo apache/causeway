@@ -21,7 +21,10 @@ package org.apache.isis.core.metamodel.facets.actions.notinservicemenu.derived;
 
 import java.lang.reflect.Method;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -29,10 +32,12 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public class NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory extends FacetFactoryAbstract {
+public class NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory
+extends FacetFactoryAbstract {
 
-    public NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory() {
-        super(FeatureType.ACTIONS_ONLY);
+    @Inject
+    public NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.ACTIONS_ONLY);
     }
 
     @Override

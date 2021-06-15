@@ -19,7 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.object.facets.annotation;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.Facets;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -29,8 +32,9 @@ import org.apache.isis.core.metamodel.facets.object.facets.FacetsFacet;
 
 public class FacetsFacetAnnotationFactory extends FacetFactoryAbstract {
 
-    public FacetsFacetAnnotationFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    @Inject
+    public FacetsFacetAnnotationFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
     }
 
     @Override

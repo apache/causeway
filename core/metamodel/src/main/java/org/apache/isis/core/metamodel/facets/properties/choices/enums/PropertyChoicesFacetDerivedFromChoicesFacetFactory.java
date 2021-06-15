@@ -19,15 +19,19 @@
 
 package org.apache.isis.core.metamodel.facets.properties.choices.enums;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 
-public class PropertyChoicesFacetDerivedFromChoicesFacetFactory extends FacetFactoryAbstract {
+public class PropertyChoicesFacetDerivedFromChoicesFacetFactory
+extends FacetFactoryAbstract {
 
-
-    public PropertyChoicesFacetDerivedFromChoicesFacetFactory() {
-        super(FeatureType.PROPERTIES_ONLY);
+    @Inject
+    public PropertyChoicesFacetDerivedFromChoicesFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.PROPERTIES_ONLY);
     }
 
     @Override

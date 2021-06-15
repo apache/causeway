@@ -28,7 +28,8 @@ import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolic
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetFallbackFactory;
 
-public class BookmarkableAnnotationFacetFactoryTest_action extends AbstractFacetFactoryTest {
+public class BookmarkableAnnotationFacetFactoryTest_action
+extends AbstractFacetFactoryTest {
 
     private BookmarkPolicyFacetFallbackFactory facetFactory;
 
@@ -36,7 +37,7 @@ public class BookmarkableAnnotationFacetFactoryTest_action extends AbstractFacet
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new BookmarkPolicyFacetFallbackFactory();
+        facetFactory = new BookmarkPolicyFacetFallbackFactory(metaModelContext);
     }
 
     @Override
@@ -47,6 +48,7 @@ public class BookmarkableAnnotationFacetFactoryTest_action extends AbstractFacet
 
     public void testBookmarkableAnnotationPickedUpOnClass() {
         class Customer {
+            @SuppressWarnings("unused")
             public void placeOrder(){}
         }
         final Method actionMethod = findMethod(Customer.class, "placeOrder");

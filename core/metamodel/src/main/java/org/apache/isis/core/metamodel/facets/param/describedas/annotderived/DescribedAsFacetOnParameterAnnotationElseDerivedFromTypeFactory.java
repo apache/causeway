@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.param.describedas.annotderived;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -27,10 +30,12 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
-public class DescribedAsFacetOnParameterAnnotationElseDerivedFromTypeFactory extends FacetFactoryAbstract {
+public class DescribedAsFacetOnParameterAnnotationElseDerivedFromTypeFactory
+extends FacetFactoryAbstract {
 
-    public DescribedAsFacetOnParameterAnnotationElseDerivedFromTypeFactory() {
-        super(FeatureType.PARAMETERS_ONLY);
+    @Inject
+    public DescribedAsFacetOnParameterAnnotationElseDerivedFromTypeFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.PARAMETERS_ONLY);
     }
 
     @Override

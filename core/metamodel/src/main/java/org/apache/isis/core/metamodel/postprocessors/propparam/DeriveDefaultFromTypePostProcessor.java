@@ -19,11 +19,14 @@
 
 package org.apache.isis.core.metamodel.postprocessors.propparam;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet;
-import org.apache.isis.core.metamodel.facets.param.defaults.fromtype.ActionParameterDefaultFacetInferredFromTypeFacets;
 import org.apache.isis.core.metamodel.facets.param.defaults.fromtype.ActionParameterDefaultFacetDerivedFromTypeFactory;
+import org.apache.isis.core.metamodel.facets.param.defaults.fromtype.ActionParameterDefaultFacetInferredFromTypeFacets;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.metamodel.facets.properties.defaults.fromtype.PropertyDefaultFacetDerivedFromDefaultedFacet;
 import org.apache.isis.core.metamodel.facets.properties.defaults.fromtype.PropertyDefaultFacetDerivedFromTypeFactory;
@@ -44,16 +47,21 @@ import lombok.val;
 public class DeriveDefaultFromTypePostProcessor
 extends ObjectSpecificationPostProcessorAbstract {
 
-    @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification) {
+    @Inject
+    public DeriveDefaultFromTypePostProcessor(final MetaModelContext metaModelContext) {
+        super(metaModelContext);
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction act) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification) {
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction objectAction, final ObjectActionParameter parameter) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction act) {
+    }
+
+    @Override
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction, final ObjectActionParameter parameter) {
 
         if (parameter.containsNonFallbackFacet(ActionDefaultsFacet.class)) {
             return;
@@ -75,7 +83,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, final OneToOneAssociation property) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToOneAssociation property) {
         if(property.containsNonFallbackFacet(PropertyDefaultFacet.class)) {
             return;
         }
@@ -86,7 +94,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, OneToManyAssociation coll) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
     }
 
 }

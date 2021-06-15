@@ -21,10 +21,13 @@ package org.apache.isis.core.metamodel.facets.object.title.methods;
 
 import java.lang.reflect.Method;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -38,14 +41,16 @@ import static org.apache.isis.core.metamodel.methods.MethodLiteralConstants.TO_S
 
 import lombok.val;
 
-public class TitleFacetViaMethodsFactory extends MethodPrefixBasedFacetFactoryAbstract {
+public class TitleFacetViaMethodsFactory
+extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final Can<String> PREFIXES = Can.ofCollection(_Lists.of(
             TO_STRING,
             TITLE));
 
-    public TitleFacetViaMethodsFactory() {
-        super(FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
+    @Inject
+    public TitleFacetViaMethodsFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     /**

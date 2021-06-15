@@ -24,9 +24,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.HomePage;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
@@ -46,15 +49,17 @@ import static org.apache.isis.commons.internal.functions._Predicates.not;
 import lombok.NonNull;
 import lombok.val;
 
-public class HomePageFacetAnnotationFactory extends FacetFactoryAbstract
+public class HomePageFacetAnnotationFactory
+extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
-    public HomePageFacetAnnotationFactory() {
-        super(FeatureType.ACTIONS_ONLY);
+    @Inject
+    public HomePageFacetAnnotationFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.ACTIONS_ONLY);
     }
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
         final HomePage homepageAnnot = processMethodContext.synthesizeOnMethod(HomePage.class)
                 .orElse(null);
 
@@ -69,7 +74,7 @@ implements MetaModelRefiner {
     }
 
     @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+    public void refineProgrammingModel(final ProgrammingModel programmingModel) {
         programmingModel.addValidator(newValidatorVisitor());
     }
 
@@ -79,7 +84,7 @@ implements MetaModelRefiner {
             private final Map<String, ObjectAction> actionsHavingHomePageFacet = _Maps.newHashMap();
 
             @Override
-            public void validate(@NonNull ObjectSpecification spec) {
+            public void validate(@NonNull final ObjectSpecification spec) {
                 if(spec.isManagedBean()) {
                     return;
                 }

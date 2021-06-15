@@ -21,13 +21,18 @@ package org.apache.isis.core.metamodel.facets.value.url;
 
 import java.net.URL;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 
-public class URLValueFacetUsingSemanticsProviderFactory extends ValueFacetUsingSemanticsProviderFactory<URL> {
+public class URLValueFacetUsingSemanticsProviderFactory
+extends ValueFacetUsingSemanticsProviderFactory<URL> {
 
-    public URLValueFacetUsingSemanticsProviderFactory() {
-        super();
+    @Inject
+    public URLValueFacetUsingSemanticsProviderFactory(final MetaModelContext mmc) {
+        super(mmc);
     }
 
     @Override

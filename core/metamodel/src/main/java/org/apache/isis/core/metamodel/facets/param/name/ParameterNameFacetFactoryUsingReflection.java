@@ -20,7 +20,10 @@ package org.apache.isis.core.metamodel.facets.param.name;
 
 import java.util.regex.Pattern;
 
+import javax.inject.Inject;
+
 import org.apache.isis.core.metamodel.commons.StringExtensions;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -41,12 +44,14 @@ import lombok.val;
  *
  * @since 2.0
  */
-public class ParameterNameFacetFactoryUsingReflection extends FacetFactoryAbstract {
+public class ParameterNameFacetFactoryUsingReflection
+extends FacetFactoryAbstract {
 
     private final Pattern argXPattern = Pattern.compile("arg\\d+");
 
-    public ParameterNameFacetFactoryUsingReflection() {
-        super(FeatureType.PARAMETERS_ONLY);
+    @Inject
+    public ParameterNameFacetFactoryUsingReflection(final MetaModelContext mmc) {
+        super(mmc, FeatureType.PARAMETERS_ONLY);
     }
 
     @Override

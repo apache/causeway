@@ -21,6 +21,8 @@ package org.apache.isis.core.metamodel.facets.object.domainservicelayout.annotat
 
 import org.junit.Assert;
 
+import static org.hamcrest.Matchers.is;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -29,9 +31,8 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacetFactory;
 
-import static org.hamcrest.Matchers.is;
-
-public class DomainServiceLayoutFacetFactoryTest extends AbstractFacetFactoryTest {
+public class DomainServiceLayoutFacetFactoryTest
+extends AbstractFacetFactoryTest {
 
     private DomainServiceLayoutFacetFactory facetFactory;
 
@@ -39,7 +40,7 @@ public class DomainServiceLayoutFacetFactoryTest extends AbstractFacetFactoryTes
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new DomainServiceLayoutFacetFactory();
+        facetFactory = new DomainServiceLayoutFacetFactory(metaModelContext);
     }
 
     @Override

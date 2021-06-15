@@ -24,7 +24,6 @@ import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.annotation.Value;
-import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet;
@@ -47,8 +46,7 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new ValueFacetAnnotationOrConfigurationFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        facetFactory = new ValueFacetAnnotationOrConfigurationFactory(metaModelContext);
     }
 
     @Override
@@ -287,7 +285,7 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
 
     @Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.object.value.ValueFacetAnnotationOrConfigurationFactoryTest$MyValueSemanticsProviderThatSpecifiesEqualByContentSemantic")
     public static class MyValueSemanticsProviderThatSpecifiesEqualByContentSemantic extends AbstractValueSemanticsProvider<MyValueSemanticsProviderThatSpecifiesEqualByContentSemantic> {
-        
+
     }
 
     public void testEqualByContentFacetsIsInstalledIfSpecifiesEqualByContent() {
@@ -342,11 +340,11 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
         val configKey = ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_PREFIX + canonical(className) + ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_SUFFIX;
 
         // when
-        ((MetaModelContext_forTesting)metaModelContext)
+        metaModelContext
         .runWithConfigProperties(
             map->map.put(configKey, className),
             ()->{
-                facetFactory.process(new ProcessClassContext(MyValueWithSemanticsProviderSpecifiedUsingConfiguration.class, methodRemover, facetedMethod));                
+                facetFactory.process(new ProcessClassContext(MyValueWithSemanticsProviderSpecifiedUsingConfiguration.class, methodRemover, facetedMethod));
             });
 
         // then
@@ -399,12 +397,12 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
         val configKey = ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_PREFIX + canonical(className) + ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_SUFFIX;
 
         // when
-        ((MetaModelContext_forTesting)metaModelContext)
+        metaModelContext
         .runWithConfigProperties(
             map->map.put(configKey, className),
             ()->{
-                
-                facetFactory.process(new ProcessClassContext(NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration.class, methodRemover, facetedMethod));                
+
+                facetFactory.process(new ProcessClassContext(NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration.class, methodRemover, facetedMethod));
             });
 
         // then

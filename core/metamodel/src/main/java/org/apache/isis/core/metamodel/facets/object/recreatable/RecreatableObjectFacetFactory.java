@@ -22,10 +22,12 @@ package org.apache.isis.core.metamodel.facets.object.recreatable;
 import java.lang.reflect.Method;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.isis.applib.RecreatableDomainObject;
 import org.apache.isis.applib.ViewModel;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
@@ -46,9 +48,11 @@ implements
     MetaModelRefiner,
     PostConstructMethodCache {
 
+    @Inject
     public RecreatableObjectFacetFactory(
-            final @NonNull MethodByClassMap postConstructMethodsCache) {
-        super(FeatureType.OBJECTS_ONLY);
+            final MetaModelContext mmc,
+            final MethodByClassMap postConstructMethodsCache) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
         this.postConstructMethodsCache = postConstructMethodsCache;
     }
 
@@ -95,7 +99,7 @@ implements
     // //////////////////////////////////////
 
     @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+    public void refineProgrammingModel(final ProgrammingModel programmingModel) {
 
         programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec -> {
 
@@ -121,7 +125,7 @@ implements
 
     // //////////////////////////////////////
 
-    private final MethodByClassMap postConstructMethodsCache;
+    private final @NonNull MethodByClassMap postConstructMethodsCache;
 
     @Override
     public Method postConstructMethodFor(final Object pojo) {

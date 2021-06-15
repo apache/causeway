@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.object.value.vsp;
 
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -26,8 +27,8 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 public abstract class ValueFacetUsingSemanticsProviderFactory<T>
 extends FacetFactoryAbstract {
 
-    protected ValueFacetUsingSemanticsProviderFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    protected ValueFacetUsingSemanticsProviderFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
     }
 
     protected void addFacets(final ValueSemanticsProviderAndFacetAbstract<T> adapter) {

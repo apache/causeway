@@ -22,7 +22,10 @@ package org.apache.isis.core.metamodel.facets.actions.defaults.method;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
@@ -38,8 +41,9 @@ public class ActionDefaultsFacetViaMethodFactory extends MethodPrefixBasedFacetF
 
     private static final String PREFIX = MethodLiteralConstants.DEFAULT_PREFIX;
 
-    public ActionDefaultsFacetViaMethodFactory() {
-        super(FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
+    @Inject
+    public ActionDefaultsFacetViaMethodFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
     }
 
     @Override

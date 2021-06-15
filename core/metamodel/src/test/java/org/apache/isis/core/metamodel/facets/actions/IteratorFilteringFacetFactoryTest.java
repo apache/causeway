@@ -34,7 +34,7 @@ public class IteratorFilteringFacetFactoryTest extends AbstractFacetFactoryTest 
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new IteratorFilteringFacetFactory();
+        facetFactory = new IteratorFilteringFacetFactory(metaModelContext);
     }
 
     @Override

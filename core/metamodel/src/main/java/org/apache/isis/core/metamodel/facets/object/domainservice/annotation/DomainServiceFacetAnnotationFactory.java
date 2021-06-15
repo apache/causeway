@@ -20,6 +20,8 @@ package org.apache.isis.core.metamodel.facets.object.domainservice.annotation;
 
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -37,17 +39,13 @@ public class DomainServiceFacetAnnotationFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
-    public DomainServiceFacetAnnotationFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    @Inject
+    public DomainServiceFacetAnnotationFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
     }
 
     @Override
-    public void setMetaModelContext(MetaModelContext metaModelContext) {
-        super.setMetaModelContext(metaModelContext);
-    }
-
-    @Override
-    public void process(ProcessClassContext processClassContext) {
+    public void process(final ProcessClassContext processClassContext) {
         val domainServiceIfAny = processClassContext.synthesizeOnType(DomainService.class);
         if (!domainServiceIfAny.isPresent()) {
             return;
@@ -60,7 +58,7 @@ implements MetaModelRefiner {
     }
 
     @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+    public void refineProgrammingModel(final ProgrammingModel programmingModel) {
 
         programmingModel.addVisitingValidatorSkipManagedBeans(spec->{
 

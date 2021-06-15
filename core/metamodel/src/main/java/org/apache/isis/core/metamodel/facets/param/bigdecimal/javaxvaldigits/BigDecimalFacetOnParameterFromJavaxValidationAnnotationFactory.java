@@ -20,15 +20,19 @@ package org.apache.isis.core.metamodel.facets.param.bigdecimal.javaxvaldigits;
 
 import java.math.BigDecimal;
 
+import javax.inject.Inject;
 import javax.validation.constraints.Digits;
 
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
-public class BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory extends FacetFactoryAbstract {
+public class BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory
+extends FacetFactoryAbstract {
 
-    public BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory() {
-        super(FeatureType.PARAMETERS_ONLY);
+    @Inject
+    public BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.PARAMETERS_ONLY);
     }
 
     @Override

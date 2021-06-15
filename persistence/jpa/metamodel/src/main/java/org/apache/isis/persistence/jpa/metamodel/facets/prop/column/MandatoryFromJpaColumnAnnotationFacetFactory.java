@@ -20,9 +20,11 @@ package org.apache.isis.persistence.jpa.metamodel.facets.prop.column;
 
 import java.util.Optional;
 
+import javax.inject.Inject;
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -32,8 +34,9 @@ import lombok.val;
 public class MandatoryFromJpaColumnAnnotationFacetFactory
 extends FacetFactoryAbstract {
 
-    public MandatoryFromJpaColumnAnnotationFacetFactory() {
-        super(FeatureType.PROPERTIES_ONLY);
+    @Inject
+    public MandatoryFromJpaColumnAnnotationFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.PROPERTIES_ONLY);
     }
 
     @Override

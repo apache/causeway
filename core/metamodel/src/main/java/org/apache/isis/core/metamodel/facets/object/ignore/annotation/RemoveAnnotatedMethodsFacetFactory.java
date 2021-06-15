@@ -26,11 +26,13 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.commons.ClassUtil;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -38,7 +40,8 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
-public class RemoveAnnotatedMethodsFacetFactory extends FacetFactoryAbstract {
+public class RemoveAnnotatedMethodsFacetFactory
+extends FacetFactoryAbstract {
 
     private final List<String> eventHandlerClassNames = _Lists.of(
             "org.axonframework.eventhandling.EventHandler", // axon 3.x
@@ -48,8 +51,9 @@ public class RemoveAnnotatedMethodsFacetFactory extends FacetFactoryAbstract {
 
     private final List<Class<? extends Annotation>> eventHandlerClasses;
 
-    public RemoveAnnotatedMethodsFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    @Inject
+    public RemoveAnnotatedMethodsFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
 
         eventHandlerClasses = eventHandlerClassNames.stream()
                 .map(name->{

@@ -19,14 +19,17 @@
 
 package org.apache.isis.valuetypes.sse.metamodel.facets;
 
+import javax.inject.Inject;
+
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.valuetypes.sse.applib.annotations.ServerSentEvents;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.valuetypes.sse.applib.annotations.ServerSentEvents;
 
 import lombok.val;
 
@@ -36,15 +39,16 @@ public class SseAnnotationFacetFactory extends FacetFactoryAbstract {
     public static class Register implements MetaModelRefiner {
 
         @Override
-        public void refineProgrammingModel(ProgrammingModel programmingModel) {
+        public void refineProgrammingModel(final ProgrammingModel programmingModel) {
             programmingModel.addFactory(
                     ProgrammingModel.FacetProcessingOrder.Z2_AFTER_FINALLY,
-                    SseAnnotationFacetFactory.class);
+                    new SseAnnotationFacetFactory(programmingModel.getMetaModelContext()));
         }
     }
 
-    public SseAnnotationFacetFactory() {
-        super(FeatureType.PROPERTIES_ONLY);
+    @Inject
+    public SseAnnotationFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.PROPERTIES_ONLY);
     }
 
     @Override

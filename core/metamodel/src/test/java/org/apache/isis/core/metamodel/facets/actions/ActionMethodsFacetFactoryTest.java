@@ -108,8 +108,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
 
     public void testInstallsValidateMethodNoArgsFacetAndRemovesMethod() {
-        val facetFactory = new ActionValidationFacetViaMethodFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        val facetFactory = new ActionValidationFacetViaMethodFactory(metaModelContext);
 
         // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
         allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
@@ -139,8 +138,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testInstallsValidateMethodSomeArgsFacetAndRemovesMethod() {
-        val facetFactory = new ActionValidationFacetViaMethodFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        val facetFactory = new ActionValidationFacetViaMethodFactory(metaModelContext);
 
         // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
         allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
@@ -170,8 +168,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testInstallsParameterDefaultsMethodNoArgsFacetAndRemovesMethod() {
-        val facetFactory = new ActionDefaultsFacetViaMethodFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        val facetFactory = new ActionDefaultsFacetViaMethodFactory(metaModelContext);
 
         // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
         allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
@@ -201,8 +198,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testInstallsParameterDefaultsMethodSomeArgsIsIgnored() {
-        val facetFactory = new ActionDefaultsFacetViaMethodFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        val facetFactory = new ActionDefaultsFacetViaMethodFactory(metaModelContext);
 
         // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
         allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
@@ -226,8 +222,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testInstallsParameterChoicesMethodNoArgsFacetAndRemovesMethod() {
-        val facetFactory = new ActionChoicesFacetViaMethodFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        val facetFactory = new ActionChoicesFacetViaMethodFactory(metaModelContext);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -256,8 +251,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testInstallsParameterChoicesMethodSomeArgsIsIgnored() {
-        val facetFactory = new ActionChoicesFacetViaMethodFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        val facetFactory = new ActionChoicesFacetViaMethodFactory(metaModelContext);
 
         // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
         allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
@@ -283,8 +277,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
 
     public void testInstallsParameterDefaultsMethodAndRemovesMethod() {
-        val facetFactory = new ActionParameterDefaultsFacetViaMethodFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        val facetFactory = new ActionParameterDefaultsFacetViaMethodFactory(metaModelContext);
 
         allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
@@ -332,8 +325,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testInstallsParameterChoicesMethodAndRemovesMethod() {
-        val facetFactory = new ActionParameterChoicesFacetViaMethodFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        val facetFactory = new ActionParameterChoicesFacetViaMethodFactory(metaModelContext);
 
         // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
         allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
@@ -397,8 +389,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testInstallsParameterAutoCompleteMethodAndRemovesMethod() {
-        val facetFactory = new ActionParameterAutoCompleteFacetViaMethodFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        val facetFactory = new ActionParameterAutoCompleteFacetViaMethodFactory(metaModelContext);
 
         // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
         allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
@@ -409,7 +400,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
             }
 
             @SuppressWarnings("unused")
-            public List<Integer> autoComplete0SomeAction(String searchArg) {
+            public List<Integer> autoComplete0SomeAction(final String searchArg) {
                 return Collections.emptyList();
             }
         }
@@ -433,13 +424,13 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testBothChoicesMethodCausesException() {
 
-        val facetFactory = new ActionChoicesFacetViaMethodFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        val facetFactory = new ActionChoicesFacetViaMethodFactory(metaModelContext);
 
         //        mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
         allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
-        final ActionParameterChoicesFacetViaMethodFactory facetFactoryForParams = new ActionParameterChoicesFacetViaMethodFactory();
+        final ActionParameterChoicesFacetViaMethodFactory facetFactoryForParams =
+                new ActionParameterChoicesFacetViaMethodFactory(metaModelContext);
 
         //        mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
 
@@ -479,13 +470,13 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testBothDefaultMethodCausesException() {
-        val facetFactory = new ActionDefaultsFacetViaMethodFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        val facetFactory = new ActionDefaultsFacetViaMethodFactory(metaModelContext);
 
         // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
         allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
-        final ActionParameterDefaultsFacetViaMethodFactory facetFactoryForParams = new ActionParameterDefaultsFacetViaMethodFactory();
+        final ActionParameterDefaultsFacetViaMethodFactory facetFactoryForParams =
+                new ActionParameterDefaultsFacetViaMethodFactory(metaModelContext);
 
         // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
         allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);

@@ -42,7 +42,7 @@ import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFac
 
 import lombok.val;
 
-public class LayoutOrderTest 
+public class LayoutOrderTest
 extends AbstractFacetFactoryTest {
 
     @Rule
@@ -82,7 +82,7 @@ extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Customer.class, "getFirstName");
 
-        val facetFactory = super.createPropertyLayoutFacetFactory();
+        val facetFactory = super.createPropertyLayoutFacetFactory(metaModelContext);
         facetFactory.process(new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
 
         val facet = facetedMethod.getFacet(LayoutOrderFacet.class);
@@ -108,7 +108,7 @@ extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Customer.class, "getOrders");
 
-        val facetFactory = super.createCollectionLayoutFacetFactory();
+        val facetFactory = super.createCollectionLayoutFacetFactory(metaModelContext);
         facetFactory.process(new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
 
         val facet = facetedMethod.getFacet(LayoutOrderFacet.class);
@@ -127,7 +127,7 @@ extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Customer.class, "someAction");
 
-        val facetFactory = super.createActionLayoutFacetFactory();
+        val facetFactory = super.createActionLayoutFacetFactory(metaModelContext);
         facetFactory.process(new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
 
         val facet = facetedMethod.getFacet(LayoutOrderFacet.class);

@@ -22,18 +22,20 @@ package org.apache.isis.core.metamodel.facets.object.layout;
 import java.lang.reflect.Method;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
-public class LayoutFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
+public class LayoutFacetFactory
+extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.LAYOUT_METHOD_NAME);
 
-    public LayoutFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
+    public LayoutFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     @Override

@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import javax.jdo.annotations.Queries;
 import javax.jdo.annotations.Query;
 
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
@@ -38,14 +39,18 @@ import lombok.val;
 public class JdoQueryAnnotationFacetFactory extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
-    @Inject private JdoFacetContext jdoFacetContext;
+    private final JdoFacetContext jdoFacetContext;
 
-    public JdoQueryAnnotationFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    @Inject
+    public JdoQueryAnnotationFacetFactory(
+            final MetaModelContext mmc,
+            final JdoFacetContext jdoFacetContext) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
+        this.jdoFacetContext = jdoFacetContext;
     }
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
+    public void process(final ProcessClassContext processClassContext) {
         val cls = processClassContext.getCls();
 
         // only applies to JDO entities; ignore any view models
@@ -70,7 +75,7 @@ implements MetaModelRefiner {
     }
 
     @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+    public void refineProgrammingModel(final ProgrammingModel programmingModel) {
         val isValidateFromClause =
                 getConfiguration().getCore().getMetaModel().getValidator().getJdoql().isFromClause();
         if (isValidateFromClause) {

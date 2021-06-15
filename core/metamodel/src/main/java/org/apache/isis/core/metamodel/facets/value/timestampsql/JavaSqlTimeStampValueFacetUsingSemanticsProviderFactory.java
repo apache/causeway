@@ -21,14 +21,18 @@ package org.apache.isis.core.metamodel.facets.value.timestampsql;
 
 import java.sql.Timestamp;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 
 public class JavaSqlTimeStampValueFacetUsingSemanticsProviderFactory
 extends ValueFacetUsingSemanticsProviderFactory<Timestamp> {
 
-    public JavaSqlTimeStampValueFacetUsingSemanticsProviderFactory() {
-        super(); // as per inherited
+    @Inject
+    public JavaSqlTimeStampValueFacetUsingSemanticsProviderFactory(final MetaModelContext mmc) {
+        super(mmc); // as per inherited
         // DateTimeValueSemanticsProvider#facetType
         // (inherited)
     }

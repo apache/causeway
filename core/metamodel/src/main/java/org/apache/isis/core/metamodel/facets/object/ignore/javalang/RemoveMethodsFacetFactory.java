@@ -22,11 +22,14 @@ package org.apache.isis.core.metamodel.facets.object.ignore.javalang;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -56,8 +59,9 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
 
     private final List<MethodAndParameterTypes> javaLangObjectMethodsToIgnore = _Lists.newArrayList();
 
-    public RemoveMethodsFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    @Inject
+    public RemoveMethodsFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
 
         final Class<?> typeToIgnore = Object.class;
 
@@ -115,7 +119,7 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
         processClassContext.removeMethod("init", void.class, _Constants.emptyClasses);
     }
 
-    private void removeSuperclassMethods(Class<?> type, final ProcessClassContext processClassContext) {
+    private void removeSuperclassMethods(final Class<?> type, final ProcessClassContext processClassContext) {
         if (type == null) {
             return;
         }

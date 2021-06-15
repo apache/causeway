@@ -35,7 +35,7 @@ public class ObjectHiddenMethodFacetFactoryTest extends AbstractFacetFactoryTest
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new HiddenObjectFacetViaMethodFactory();
+        facetFactory = new HiddenObjectFacetViaMethodFactory(metaModelContext);
     }
 
     @Override

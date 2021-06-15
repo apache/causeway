@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.object.defaults;
 
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.annotation.Defaulted;
-import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.defaults.annotcfg.DefaultedFacetAnnotationElseConfigurationFactory;
@@ -36,8 +35,7 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new DefaultedFacetAnnotationElseConfigurationFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        facetFactory = new DefaultedFacetAnnotationElseConfigurationFactory(metaModelContext);
     }
 
     @Override
@@ -187,17 +185,17 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
 
         val className = "org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacetFactoryTest$MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration";
         val configKey = DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_PREFIX + canonical(className) + DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_SUFFIX;
-        
-        ((MetaModelContext_forTesting)metaModelContext)
+
+        metaModelContext
         .runWithConfigProperties(
             map->map.put(configKey, className),
             ()->{
-                
-                facetFactory.process(new ProcessClassContext(MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration.class, methodRemover, facetedMethod));            
-                
+
+                facetFactory.process(new ProcessClassContext(MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration.class, methodRemover, facetedMethod));
+
             });
-        
-        
+
+
         final DefaultedFacetAbstract facet = (DefaultedFacetAbstract) facetedMethod.getFacet(DefaultedFacet.class);
         assertNotNull(facet);
         assertEquals(MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration.class, facet.getDefaultsProviderClass());
@@ -220,15 +218,15 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testNonAnnotatedDefaultedCanBePickedUpFromConfiguration() {
 
         val className = "org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacetFactoryTest$NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration";
-        val configKey = DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_PREFIX + canonical(className) + DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_SUFFIX; 
-        
-        ((MetaModelContext_forTesting)metaModelContext)
+        val configKey = DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_PREFIX + canonical(className) + DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_SUFFIX;
+
+        metaModelContext
         .runWithConfigProperties(
             map->map.put(configKey, className),
             ()->{
-                
-                facetFactory.process(new ProcessClassContext(NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration.class, methodRemover, facetedMethod));            
-                
+
+                facetFactory.process(new ProcessClassContext(NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration.class, methodRemover, facetedMethod));
+
             });
 
         final DefaultedFacetAbstract facet = (DefaultedFacetAbstract) facetedMethod.getFacet(DefaultedFacet.class);

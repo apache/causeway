@@ -25,6 +25,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Action;
@@ -100,15 +101,12 @@ implements
     private final MetaModelValidatorForMixinTypes mixinTypeValidator =
             new MetaModelValidatorForMixinTypes("@DomainObject#nature=MIXIN");
 
+    @Inject
     public DomainObjectAnnotationFacetFactory(
-            final @NonNull MethodByClassMap postConstructMethodsCache) {
-        super(FeatureType.OBJECTS_ONLY);
+            final MetaModelContext mmc,
+            final MethodByClassMap postConstructMethodsCache) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
         this.postConstructMethodsCache = postConstructMethodsCache;
-    }
-
-    @Override
-    public void setMetaModelContext(MetaModelContext metaModelContext) {
-        super.setMetaModelContext(metaModelContext);
     }
 
     @Override
@@ -238,7 +236,7 @@ implements
     }
 
     private static final class AnnotHelper {
-        AnnotHelper(DomainObject domainObject) {
+        AnnotHelper(final DomainObject domainObject) {
             this.autoCompleteRepository = domainObject.autoCompleteRepository();
             this.autoCompleteMethod = domainObject.autoCompleteMethod();
         }
@@ -559,11 +557,11 @@ implements
     }
 
     @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+    public void refineProgrammingModel(final ProgrammingModel programmingModel) {
         addValidatorToEnsureUniqueLogicalTypeNames(programmingModel);
     }
 
-    private void addValidatorToEnsureUniqueLogicalTypeNames(ProgrammingModel pm) {
+    private void addValidatorToEnsureUniqueLogicalTypeNames(final ProgrammingModel pm) {
 
         final _Multimaps.ListMultimap<String, ObjectSpecification> collidingSpecsByLogicalTypeName =
                 _Multimaps.newConcurrentListMultimap();
@@ -572,7 +570,7 @@ implements
                 new MetaModelVisitingValidatorAbstract(){
 
                     @Override
-                    public void validate(ObjectSpecification objSpec) {
+                    public void validate(final ObjectSpecification objSpec) {
 
                         // @DomainObject(logicalTypeName=...) must be unique among non-abstract types
                         // Eg. having an ApplicationUser interface and a concrete ApplicationUser (JDO)
@@ -630,7 +628,7 @@ implements
 
     // //////////////////////////////////////
 
-    private final MethodByClassMap postConstructMethodsCache;
+    private final @NonNull MethodByClassMap postConstructMethodsCache;
 
     @Override
     public Method postConstructMethodFor(final Object pojo) {

@@ -40,8 +40,7 @@ extends AbstractFacetFactoryTest {
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new MandatoryFromJdoColumnAnnotationFacetFactory();
-        facetFactory.setJdoFacetContext(jdoFacetContext);
+        facetFactory = new MandatoryFromJdoColumnAnnotationFacetFactory(metaModelContext, jdoFacetContext);
         cls = SimpleObjectWithColumnAllowsNullAnnotations.class;
     }
 

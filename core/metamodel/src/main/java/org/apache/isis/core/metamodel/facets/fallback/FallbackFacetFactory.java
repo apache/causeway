@@ -21,9 +21,12 @@ package org.apache.isis.core.metamodel.facets.fallback;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -60,8 +63,9 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
         }
     };
 
-    public FallbackFacetFactory() {
-        super(FeatureType.EVERYTHING);
+    @Inject
+    public FallbackFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.EVERYTHING);
     }
 
     @Override
@@ -126,12 +130,12 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
 
     }
 
-    private Facet newPropParamLayoutFacetIfAny(final FacetHolder facetHolder, final String layoutKey, IsisConfiguration.Applib.Annotation.ConfigPropsForPropertyOrParameterLayout configPropsHolder) {
+    private Facet newPropParamLayoutFacetIfAny(final FacetHolder facetHolder, final String layoutKey, final IsisConfiguration.Applib.Annotation.ConfigPropsForPropertyOrParameterLayout configPropsHolder) {
         final LabelPosition labelPosition = from(configPropsHolder);
         return new LabelAtFacetFromLayoutConfiguration(labelPosition, facetHolder);
     }
 
-    private static LabelPosition from(IsisConfiguration.Applib.Annotation.ConfigPropsForPropertyOrParameterLayout configPropsHolder) {
+    private static LabelPosition from(final IsisConfiguration.Applib.Annotation.ConfigPropsForPropertyOrParameterLayout configPropsHolder) {
         return configPropsHolder.getLabelPosition();
     }
 }

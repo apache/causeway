@@ -24,6 +24,7 @@ import javax.jdo.annotations.Discriminator;
 
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -35,18 +36,23 @@ import org.apache.isis.core.metamodel.facets.object.logicaltype.classname.Logica
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
-import lombok.Setter;
 import lombok.val;
 
 public class JdoDiscriminatorAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements ObjectTypeFacetFactory {
 
-    @Inject private ClassSubstitutorRegistry classSubstitutorRegistry;
-    @Inject @Setter private JdoFacetContext jdoFacetContext;
+    private final ClassSubstitutorRegistry classSubstitutorRegistry;
+    private final JdoFacetContext jdoFacetContext;
 
-    public JdoDiscriminatorAnnotationFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    @Inject
+    public JdoDiscriminatorAnnotationFacetFactory(
+            final MetaModelContext mmc,
+            final JdoFacetContext jdoFacetContext,
+            final ClassSubstitutorRegistry classSubstitutorRegistry) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
+        this.jdoFacetContext = jdoFacetContext;
+        this.classSubstitutorRegistry = classSubstitutorRegistry;
     }
 
     @Override
@@ -87,7 +93,7 @@ implements ObjectTypeFacetFactory {
 
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
+    public void process(final ProcessClassContext processClassContext) {
 
         // only applies to JDO entities; ignore any view models
         final Class<?> cls = processClassContext.getCls();

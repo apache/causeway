@@ -33,15 +33,15 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredF
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public class CollectionAnnotationFacetFactoryTest_typeOf extends AbstractFacetFactoryTest {
+public class CollectionAnnotationFacetFactoryTest_typeOf
+extends AbstractFacetFactoryTest {
 
     private CollectionAnnotationFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        facetFactory = new CollectionAnnotationFacetFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        facetFactory = new CollectionAnnotationFacetFactory(metaModelContext);
     }
 
     @Override

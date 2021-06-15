@@ -39,8 +39,7 @@ extends AbstractFacetFactoryTest {
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new JdoNotPersistentAnnotationFacetFactory();
-        facetFactory.setJdoFacetContext(jdoFacetContext);
+        facetFactory = new JdoNotPersistentAnnotationFacetFactory(metaModelContext, jdoFacetContext);
     }
 
     @Override

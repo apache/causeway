@@ -19,8 +19,11 @@
 
 package org.apache.isis.core.metamodel.facets.object.defaults.annotcfg;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.Defaulted;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -30,11 +33,12 @@ import org.apache.isis.core.metamodel.facets.object.defaults.DefaultsProviderUti
 
 import lombok.val;
 
-public class DefaultedFacetAnnotationElseConfigurationFactory extends FacetFactoryAbstract {
+public class DefaultedFacetAnnotationElseConfigurationFactory
+extends FacetFactoryAbstract {
 
-
-    public DefaultedFacetAnnotationElseConfigurationFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    @Inject
+    public DefaultedFacetAnnotationElseConfigurationFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
     }
 
     @Override

@@ -43,8 +43,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
     @Before
     public void setUp() throws Exception {
-        facetFactory = new NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        facetFactory = new NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory(metaModelContext);
     }
 
     //TODO[2142] NatureOfService.VIEW_CONTRIBUTIONS_ONLY was deprecated, remove ?

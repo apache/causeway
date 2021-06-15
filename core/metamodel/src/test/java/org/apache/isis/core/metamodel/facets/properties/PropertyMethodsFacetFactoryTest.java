@@ -73,8 +73,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testPropertyAccessorFacetIsInstalledAndMethodRemoved() {
-        val facetFactory = new PropertyAccessorFacetViaAccessorFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        val facetFactory = new PropertyAccessorFacetViaAccessorFactory(metaModelContext);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -96,8 +95,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testSetterFacetIsInstalledForSetterMethodAndMethodRemoved() {
-        val facetFactory = new PropertySetterFacetFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        val facetFactory = new PropertySetterFacetFactory(metaModelContext);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -124,8 +122,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testInitializationFacetIsInstalledForSetterMethodAndMethodRemoved() {
-        val facetFactory = new PropertySetterFacetFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        val facetFactory = new PropertySetterFacetFactory(metaModelContext);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -152,8 +149,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testSetterFacetIsInstalledMeansNoDisabledOrDerivedFacetsInstalled() {
-        val facetFactory = new PropertySetterFacetFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        val facetFactory = new PropertySetterFacetFactory(metaModelContext);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -174,8 +170,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testClearFacetViaSetterIfNoExplicitClearMethod() {
-        val facetFactory = new PropertySetterFacetFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        val facetFactory = new PropertySetterFacetFactory(metaModelContext);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -200,8 +195,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testChoicesFacetFoundAndMethodRemoved() {
-        val facetFactory = new PropertyChoicesFacetViaMethodFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        val facetFactory = new PropertyChoicesFacetViaMethodFactory(metaModelContext);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -231,8 +225,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testAutoCompleteFacetFoundAndMethodRemoved() {
 
-        val facetFactory = new PropertyAutoCompleteFacetMethodFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        val facetFactory = new PropertyAutoCompleteFacetMethodFactory(metaModelContext);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -241,7 +234,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
             }
 
             @SuppressWarnings("unused")
-            public Object[] autoCompleteFirstName(String searchArg) {
+            public Object[] autoCompleteFirstName(final String searchArg) {
                 return null;
             }
         }
@@ -261,8 +254,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testDefaultFacetFoundAndMethodRemoved() {
-        val facetFactory = new PropertyDefaultFacetViaMethodFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        val facetFactory = new PropertyDefaultFacetViaMethodFactory(metaModelContext);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -291,8 +283,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testValidateFacetFoundAndMethodRemoved() {
-        val facetFactory = new PropertyValidateFacetViaMethodFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        val facetFactory = new PropertyValidateFacetViaMethodFactory(metaModelContext);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -320,8 +311,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testDisableFacetFoundAndMethodRemoved() {
-        val facetFactory = new DisableForContextFacetViaMethodFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        val facetFactory = new DisableForContextFacetViaMethodFactory(metaModelContext);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -350,8 +340,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testDisableFacetNoArgsFoundAndMethodRemoved() {
 
-        val facetFactory = new DisableForContextFacetViaMethodFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        val facetFactory = new DisableForContextFacetViaMethodFactory(metaModelContext);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -379,8 +368,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testHiddenFacetFoundAndMethodRemoved() {
-        val facetFactory = new HideForContextFacetViaMethodFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        val facetFactory = new HideForContextFacetViaMethodFactory(metaModelContext);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -408,8 +396,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testHiddenFacetWithNoArgFoundAndMethodRemoved() {
-        val facetFactory = new HideForContextFacetViaMethodFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        val facetFactory = new HideForContextFacetViaMethodFactory(metaModelContext);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -437,8 +424,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testPropertyFoundOnSuperclass() {
-        val facetFactory = new PropertyAccessorFacetViaAccessorFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        val facetFactory = new PropertyAccessorFacetViaAccessorFactory(metaModelContext);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -462,13 +448,9 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testPropertyFoundOnSuperclassButHelperMethodFoundOnSubclass() {
-        val facetFactory = new PropertyAccessorFacetViaAccessorFactory();
-        val facetFactoryForHide = new HideForContextFacetViaMethodFactory();
-        val facetFactoryForDisable = new DisableForContextFacetViaMethodFactory();
-
-        facetFactory.setMetaModelContext(super.metaModelContext);
-        facetFactoryForHide.setMetaModelContext(super.metaModelContext);
-        facetFactoryForDisable.setMetaModelContext(super.metaModelContext);
+        val facetFactory = new PropertyAccessorFacetViaAccessorFactory(metaModelContext);
+        val facetFactoryForHide = new HideForContextFacetViaMethodFactory(metaModelContext);
+        val facetFactoryForDisable = new DisableForContextFacetViaMethodFactory(metaModelContext);
 
         class Customer {
             @SuppressWarnings("unused")

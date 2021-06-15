@@ -23,19 +23,17 @@ import java.lang.reflect.Method;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.isis.applib.annotation.ParameterLayout;
-import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 
 import lombok.val;
@@ -43,23 +41,25 @@ import lombok.val;
 /**
  * needs the javac -parameter flag set when compiling this test
  */
-public class ParameterNameFacetTest extends AbstractFacetFactoryJUnit4TestCase {
+public class ParameterNameFacetTest
+extends AbstractFacetFactoryJUnit4TestCase {
 
-    ProgrammingModelFacetsJava8 programmingModel;
+    ProgrammingModel programmingModel;
     Method actionMethod;
 
     @Before
     public void setUp() throws Exception {
 
-        val mockServiceInjector = Mockito.mock(ServiceInjector.class);
+        //val mockServiceInjector = Mockito.mock(ServiceInjector.class);
 
-        programmingModel = new ProgrammingModelFacetsJava8(mockServiceInjector);
+        val metaModelContext = MetaModelContext_forTesting.builder()
+                .programmingModelFactory(ProgrammingModelFacetsJava8::new)
+                .build();
 
-        val metaModelContext = MetaModelContext_forTesting.builder().build();
-
-        programmingModel.init(new ProgrammingModelInitFilterDefault(), metaModelContext);
 
         super.setUpFacetedMethodAndParameter();
+
+        programmingModel = metaModelContext.getProgrammingModel();
 
         // verify that
         assertEquals(119, programmingModel.streamFactories().count());

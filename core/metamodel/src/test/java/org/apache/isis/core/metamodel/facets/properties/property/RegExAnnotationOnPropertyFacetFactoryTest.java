@@ -34,7 +34,8 @@ import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFace
 
 import lombok.val;
 
-public class RegExAnnotationOnPropertyFacetFactoryTest extends AbstractFacetFactoryTest {
+public class RegExAnnotationOnPropertyFacetFactoryTest
+extends AbstractFacetFactoryTest {
 
     private PropertyAnnotationFacetFactory facetFactory;
 
@@ -42,15 +43,15 @@ public class RegExAnnotationOnPropertyFacetFactoryTest extends AbstractFacetFact
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        facetFactory = new PropertyAnnotationFacetFactory();
+        facetFactory = new PropertyAnnotationFacetFactory(metaModelContext);
     }
 
     private void processRegEx(
-            PropertyAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
+            final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
         val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         facetFactory.processRegEx(processMethodContext, propertyIfAny);
     }
-    
+
     public void testRegExAnnotationPickedUpOnProperty() {
 
         class Customer {

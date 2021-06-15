@@ -22,7 +22,10 @@ package org.apache.isis.core.metamodel.facets.object.callbacks;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -32,13 +35,15 @@ import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstr
 
 import lombok.val;
 
-public class RemoveCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
+public class RemoveCallbackFacetFactory
+extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final Can<String> PREFIXES = Can.of(
             MethodLiteralConstants.REMOVING_PREFIX);
 
-    public RemoveCallbackFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
+    @Inject
+    public RemoveCallbackFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     @Override

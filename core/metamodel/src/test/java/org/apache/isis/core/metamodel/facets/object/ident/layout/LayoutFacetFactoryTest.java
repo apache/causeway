@@ -21,17 +21,17 @@ package org.apache.isis.core.metamodel.facets.object.ident.layout;
 
 import java.lang.reflect.Method;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacet;
 import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacetMethod;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
 
 public class LayoutFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -41,7 +41,7 @@ public class LayoutFacetFactoryTest extends AbstractFacetFactoryTest {
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new LayoutFacetFactory();
+        facetFactory = new LayoutFacetFactory(metaModelContext);
     }
 
     @Override

@@ -24,7 +24,9 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nullable;
+import javax.inject.Inject;
 
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -34,8 +36,9 @@ import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 public class CssClassFacetOnActionFromConfiguredRegexFactory
 extends FacetFactoryAbstract {
 
-    public CssClassFacetOnActionFromConfiguredRegexFactory() {
-        super(FeatureType.ACTIONS_ONLY);
+    @Inject
+    public CssClassFacetOnActionFromConfiguredRegexFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.ACTIONS_ONLY);
     }
 
     @Override
@@ -66,7 +69,7 @@ extends FacetFactoryAbstract {
     // -- cssClassFromPattern
 
     @Nullable
-    private CssClassFacet createFromConfiguredRegexIfPossible(String name, FacetHolder facetHolder) {
+    private CssClassFacet createFromConfiguredRegexIfPossible(final String name, final FacetHolder facetHolder) {
         String value = cssIfAnyFor(name);
         return value != null
                 ? new CssClassFacetOnActionFromConfiguredRegex(value, facetHolder)
@@ -74,7 +77,7 @@ extends FacetFactoryAbstract {
     }
 
     @Nullable
-    private String cssIfAnyFor(String name) {
+    private String cssIfAnyFor(final String name) {
         final Map<Pattern, String> cssClassByPattern = getCssClassByPattern();
 
         for (Map.Entry<Pattern, String> entry : cssClassByPattern.entrySet()) {

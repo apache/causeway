@@ -20,10 +20,9 @@
 package org.apache.isis.core.metamodel.progmodel;
 
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import org.apache.isis.commons.internal.functions._Functions;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessor;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -32,7 +31,8 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelVisitingVali
 
 import lombok.NonNull;
 
-public interface ProgrammingModel {
+public interface ProgrammingModel
+extends HasMetaModelContext {
 
     // -- ENUM TYPES
 
@@ -136,31 +136,21 @@ public interface ProgrammingModel {
 
     // -- SHORTCUTS
 
-    /** shortcut for see {@link #addFactory(FacetProcessingOrder, FacetFactory, Marker...)}*/
-    default <T extends FacetFactory> void addFactory(
-            FacetProcessingOrder order,
-            Class<T> type,
-            Marker ... markers) {
-
-        final Supplier<FacetFactory> supplier = _Functions.uncheckedSupplier(type::newInstance);
-        addFactory(order, supplier.get(), markers);
-    }
-
     /** shortcut for see {@link #addValidator(ValidationOrder, MetaModelValidator, Marker...)} */
     default void addValidator(
             final @NonNull MetaModelValidator validator,
-            Marker ... markers) {
+            final Marker ... markers) {
 
         addValidator(ValidationOrder.A2_AFTER_BUILTIN, validator, markers);
     }
 
     default void addVisitingValidator(
             final @NonNull Consumer<ObjectSpecification> validator,
-            Marker ... markers) {
+            final Marker ... markers) {
 
         addValidator(new MetaModelVisitingValidatorAbstract() {
             @Override
-            public void validate(@NonNull ObjectSpecification spec) {
+            public void validate(@NonNull final ObjectSpecification spec) {
                 validator.accept(spec);
             }
         });
@@ -168,11 +158,11 @@ public interface ProgrammingModel {
 
     default void addVisitingValidatorSkipManagedBeans(
             final @NonNull Consumer<ObjectSpecification> validator,
-            Marker ... markers) {
+            final Marker ... markers) {
 
         addValidator(new MetaModelVisitingValidatorAbstract() {
             @Override
-            public void validate(@NonNull ObjectSpecification spec) {
+            public void validate(@NonNull final ObjectSpecification spec) {
                 if(spec.isManagedBean()) {
                     return;
                 }
@@ -180,20 +170,6 @@ public interface ProgrammingModel {
             }
         });
     }
-
-
-
-    /** shortcut for see {@link #addPostProcessor(PostProcessingOrder, ObjectSpecificationPostProcessor, Marker...)}*/
-    default <T extends ObjectSpecificationPostProcessor> void addPostProcessor(
-            PostProcessingOrder order,
-            Class<T> type,
-            Marker ... markers) {
-
-        final Supplier<ObjectSpecificationPostProcessor> supplier = _Functions.uncheckedSupplier(type::newInstance);
-        addPostProcessor(order, supplier.get(), markers);
-    }
-
-
 
 
 }

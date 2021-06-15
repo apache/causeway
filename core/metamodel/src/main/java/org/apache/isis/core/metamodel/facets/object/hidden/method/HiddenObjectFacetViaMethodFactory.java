@@ -21,7 +21,10 @@ package org.apache.isis.core.metamodel.facets.object.hidden.method;
 
 import java.lang.reflect.Method;
 
+import javax.inject.Inject;
+
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -45,12 +48,14 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
  * class is being processed}, the {@link ObjectMember member}s for the
  * {@link ObjectSpecification spec} are not known.
  */
-public class HiddenObjectFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
+public class HiddenObjectFacetViaMethodFactory
+extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.HIDDEN_PREFIX);
 
-    public HiddenObjectFacetViaMethodFactory() {
-        super(FeatureType.EVERYTHING_BUT_PARAMETERS, OrphanValidation.VALIDATE, PREFIXES);
+    @Inject
+    public HiddenObjectFacetViaMethodFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.EVERYTHING_BUT_PARAMETERS, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     @Override

@@ -19,9 +19,11 @@
 
 package org.apache.isis.core.metamodel.postprocessors;
 
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public interface ObjectSpecificationPostProcessor {
+public interface ObjectSpecificationPostProcessor
+extends HasMetaModelContext {
 
     void postProcess(ObjectSpecification objectSpecification);
 

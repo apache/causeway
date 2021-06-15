@@ -19,6 +19,9 @@
 package org.apache.isis.core.metamodel.postprocessors.all.i18n;
 
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
@@ -33,6 +36,11 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 public class TranslationPostProcessor
 extends ObjectSpecificationPostProcessorAbstract {
 
+    @Inject
+    public TranslationPostProcessor(final MetaModelContext metaModelContext) {
+        super(metaModelContext);
+    }
+
     @Override
     public boolean isEnabled() {
         // force PoWriter to be called to capture text that needs translating
@@ -40,27 +48,27 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification) {
         memoizeTranslations(objectSpecification);
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction act) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction act) {
         memoizeTranslations(act);
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction objectAction, ObjectActionParameter param) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction, final ObjectActionParameter param) {
         memoizeTranslations(param);
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, OneToOneAssociation prop) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToOneAssociation prop) {
         memoizeTranslations(prop);
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, OneToManyAssociation coll) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
         memoizeTranslations(coll);
 
     }

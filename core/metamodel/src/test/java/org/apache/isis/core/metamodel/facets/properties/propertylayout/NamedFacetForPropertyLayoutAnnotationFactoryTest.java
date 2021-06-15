@@ -38,7 +38,7 @@ public class NamedFacetForPropertyLayoutAnnotationFactoryTest
 extends AbstractFacetFactoryTest {
 
     public void testPropertyLayoutAnnotationNamed() {
-        val facetFactory = createPropertyLayoutFacetFactory();
+        val facetFactory = createPropertyLayoutFacetFactory(metaModelContext);
 
         class Customer {
             @PropertyLayout(named = "1st name")
@@ -64,7 +64,7 @@ extends AbstractFacetFactoryTest {
     }
 
     public void testPropertyLayoutAnnotationNamedEscapedFalse() {
-        val facetFactory = createPropertyLayoutFacetFactory();
+        val facetFactory = createPropertyLayoutFacetFactory(metaModelContext);
 
         class Customer {
             @PropertyLayout(named = "1st name", namedEscaped = false)

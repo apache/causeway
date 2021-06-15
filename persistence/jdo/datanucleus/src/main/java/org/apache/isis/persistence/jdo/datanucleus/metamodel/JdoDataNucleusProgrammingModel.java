@@ -28,16 +28,15 @@ import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.JdoEn
 import lombok.val;
 
 @Component
-public class JdoDataNucleusProgrammingModel implements MetaModelRefiner {
-
-    //@Inject private IsisConfiguration config;
+public class JdoDataNucleusProgrammingModel
+implements MetaModelRefiner {
 
     @Override
-    public void refineProgrammingModel(ProgrammingModel pm) {
+    public void refineProgrammingModel(final ProgrammingModel pm) {
 
         val step2 = ProgrammingModel.FacetProcessingOrder.A2_AFTER_FALLBACK_DEFAULTS;
 
-        pm.addFactory(step2, JdoEntityFacetFactory.class, Marker.JDO);
+        pm.addFactory(step2, new JdoEntityFacetFactory(pm.getMetaModelContext()), Marker.JDO);
 
     }
 

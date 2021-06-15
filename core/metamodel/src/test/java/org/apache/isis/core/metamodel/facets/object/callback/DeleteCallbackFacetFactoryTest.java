@@ -28,7 +28,8 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.RemoveCallbackViaD
 import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacetViaMethod;
 
-public class DeleteCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
+public class DeleteCallbackFacetFactoryTest
+extends AbstractFacetFactoryTest {
 
     private RemoveCallbackViaDeleteMethodFacetFactory facetFactory;
 
@@ -36,7 +37,7 @@ public class DeleteCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new RemoveCallbackViaDeleteMethodFacetFactory();
+        facetFactory = new RemoveCallbackViaDeleteMethodFacetFactory(metaModelContext);
     }
 
     @Override

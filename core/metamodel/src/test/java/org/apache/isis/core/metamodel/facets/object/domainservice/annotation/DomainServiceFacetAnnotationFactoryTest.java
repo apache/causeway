@@ -24,7 +24,8 @@ import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 
-public class DomainServiceFacetAnnotationFactoryTest extends AbstractFacetFactoryTest {
+public class DomainServiceFacetAnnotationFactoryTest
+extends AbstractFacetFactoryTest {
 
     private DomainServiceFacetAnnotationFactory facetFactory;
 
@@ -32,7 +33,7 @@ public class DomainServiceFacetAnnotationFactoryTest extends AbstractFacetFactor
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new DomainServiceFacetAnnotationFactory();
+        facetFactory = new DomainServiceFacetAnnotationFactory(metaModelContext);
     }
 
     @Override

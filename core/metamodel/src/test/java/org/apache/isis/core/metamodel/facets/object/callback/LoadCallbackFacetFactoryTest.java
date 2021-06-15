@@ -36,7 +36,7 @@ public class LoadCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new LoadCallbackFacetFactory();
+        facetFactory = new LoadCallbackFacetFactory(metaModelContext);
     }
 
     @Override

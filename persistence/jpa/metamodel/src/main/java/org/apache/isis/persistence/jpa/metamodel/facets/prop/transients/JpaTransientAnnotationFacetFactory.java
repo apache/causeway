@@ -18,8 +18,10 @@
  */
 package org.apache.isis.persistence.jpa.metamodel.facets.prop.transients;
 
+import javax.inject.Inject;
 import javax.persistence.Transient;
 
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -28,12 +30,13 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 public class JpaTransientAnnotationFacetFactory
 extends FacetFactoryAbstract {
 
-    public JpaTransientAnnotationFacetFactory() {
-        super(FeatureType.PROPERTIES_ONLY);
+    @Inject
+    public JpaTransientAnnotationFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.PROPERTIES_ONLY);
     }
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
 
         //val cls = processMethodContext.getCls();
 

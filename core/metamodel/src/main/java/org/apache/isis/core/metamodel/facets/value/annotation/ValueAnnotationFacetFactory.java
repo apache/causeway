@@ -18,6 +18,9 @@
  */
 package org.apache.isis.core.metamodel.facets.value.annotation;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
@@ -29,8 +32,9 @@ extends FacetFactoryAbstract
 implements
     ObjectTypeFacetFactory {
 
-    public ValueAnnotationFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    @Inject
+    public ValueAnnotationFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
     }
 
     @Override

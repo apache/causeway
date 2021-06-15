@@ -62,7 +62,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
         context.allowing(mockSpecificationLoader);
 
-        facetFactory = new TitleAnnotationFacetFactory();
+        facetFactory = new TitleAnnotationFacetFactory(metaModelContext);
 
         context.checking(new Expectations() {
             {

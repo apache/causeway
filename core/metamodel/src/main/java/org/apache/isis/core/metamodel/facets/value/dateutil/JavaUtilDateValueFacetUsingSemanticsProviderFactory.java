@@ -21,13 +21,18 @@ package org.apache.isis.core.metamodel.facets.value.dateutil;
 
 import java.util.Date;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 
-public class JavaUtilDateValueFacetUsingSemanticsProviderFactory extends ValueFacetUsingSemanticsProviderFactory<Date> {
+public class JavaUtilDateValueFacetUsingSemanticsProviderFactory
+extends ValueFacetUsingSemanticsProviderFactory<Date> {
 
-    public JavaUtilDateValueFacetUsingSemanticsProviderFactory() {
-        super(); // as per inherited
+    @Inject
+    public JavaUtilDateValueFacetUsingSemanticsProviderFactory(final MetaModelContext mmc) {
+        super(mmc); // as per inherited
         // TimeValueSemanticsProvider#facetType
         // (inherited)
     }

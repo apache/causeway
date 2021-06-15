@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.collections.parented;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -34,10 +37,12 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
  * Must be registered in the {@link ProgrammingModel} after
  * {@link CollectionFacetFactory}.
  */
-public class ParentedFacetSinceCollectionFactory extends FacetFactoryAbstract {
+public class ParentedFacetSinceCollectionFactory
+extends FacetFactoryAbstract {
 
-    public ParentedFacetSinceCollectionFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    @Inject
+    public ParentedFacetSinceCollectionFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
     }
 
     @Override

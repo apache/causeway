@@ -22,8 +22,11 @@ package org.apache.isis.core.metamodel.facets.object.ignore.jdo;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.factory._InstanceUtil;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.ignore.javalang.RemoveMethodsFacetFactory;
@@ -31,12 +34,15 @@ import org.apache.isis.core.metamodel.facets.object.ignore.javalang.RemoveMethod
 /**
  * Removes all methods inherited from <tt>javax.jdo.spi.PersistenceCapable</tt> (if JDO is on the classpath).
  */
-public class RemoveJdoEnhancementTypesFacetFactory extends FacetFactoryAbstract {
+public class RemoveJdoEnhancementTypesFacetFactory
+extends FacetFactoryAbstract {
 
-    private final List<RemoveMethodsFacetFactory.MethodAndParameterTypes> jdoEnhancementmethodsToIgnore = _Lists.newArrayList();
+    private final List<RemoveMethodsFacetFactory.MethodAndParameterTypes>
+        jdoEnhancementmethodsToIgnore = _Lists.newArrayList();
 
-    public RemoveJdoEnhancementTypesFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    @Inject
+    public RemoveJdoEnhancementTypesFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
 
         final String typeToIgnoreIfOnClasspath = "javax.jdo.spi.PersistenceCapable";
         try {
@@ -47,7 +53,7 @@ public class RemoveJdoEnhancementTypesFacetFactory extends FacetFactoryAbstract 
         }
     }
 
-    private void addMethodsToBeIgnored(Class<?> typeToIgnore) {
+    private void addMethodsToBeIgnored(final Class<?> typeToIgnore) {
         final Method[] methods = typeToIgnore.getMethods();
         for (final Method method : methods) {
             jdoEnhancementmethodsToIgnore

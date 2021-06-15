@@ -21,8 +21,11 @@ package org.apache.isis.core.metamodel.facets.object.validating.validateobject.m
 
 import java.lang.reflect.Method;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -32,12 +35,14 @@ import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstr
 
 import lombok.val;
 
-public class ValidateObjectFacetMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
+public class ValidateObjectFacetMethodFactory
+extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final String PREFIX = MethodLiteralConstants.VALIDATE_PREFIX;
 
-    public ValidateObjectFacetMethodFactory() {
-        super(FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
+    @Inject
+    public ValidateObjectFacetMethodFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
     }
 
     @Override

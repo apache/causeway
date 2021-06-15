@@ -21,6 +21,11 @@ package org.apache.isis.core.metamodel.facets.object.ident.cssclass;
 
 import java.lang.reflect.Method;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
@@ -28,12 +33,8 @@ import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFacetMethod;
 import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFacetMethodFactory;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-
-public class CssClassFacetMethodFactoryTest extends AbstractFacetFactoryTest {
+public class CssClassFacetMethodFactoryTest
+extends AbstractFacetFactoryTest {
 
     private CssClassFacetMethodFactory facetFactory;
 
@@ -41,7 +42,7 @@ public class CssClassFacetMethodFactoryTest extends AbstractFacetFactoryTest {
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new CssClassFacetMethodFactory();
+        facetFactory = new CssClassFacetMethodFactory(metaModelContext);
     }
 
     @Override

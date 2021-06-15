@@ -22,7 +22,10 @@ package org.apache.isis.core.metamodel.facets.param.choices.method;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
+import javax.inject.Inject;
+
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
@@ -31,12 +34,14 @@ import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstr
 
 import lombok.val;
 
-public class ActionChoicesFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
+public class ActionChoicesFacetViaMethodFactory
+extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final String PREFIX = MethodLiteralConstants.CHOICES_PREFIX;
 
-    public ActionChoicesFacetViaMethodFactory() {
-        super(FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
+    @Inject
+    public ActionChoicesFacetViaMethodFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
     }
 
     @Override

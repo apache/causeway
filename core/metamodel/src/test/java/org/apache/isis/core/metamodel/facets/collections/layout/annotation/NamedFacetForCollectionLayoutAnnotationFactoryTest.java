@@ -42,8 +42,7 @@ import lombok.val;
 public class NamedFacetForCollectionLayoutAnnotationFactoryTest extends AbstractFacetFactoryTest {
 
     public void testCollectionLayoutAnnotationNamed() {
-        val facetFactory = new CollectionLayoutFacetFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        val facetFactory = new CollectionLayoutFacetFactory(metaModelContext);
 
         class Customer {
             @CollectionLayout(named = "1st names")
@@ -63,8 +62,7 @@ public class NamedFacetForCollectionLayoutAnnotationFactoryTest extends Abstract
     }
 
     public void testCollectionLayoutAnnotationNamedEscapedFalse() {
-        val facetFactory = new CollectionLayoutFacetFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        val facetFactory = new CollectionLayoutFacetFactory(metaModelContext);
 
         class Customer {
             @CollectionLayout(named = "1st names", namedEscaped = false)

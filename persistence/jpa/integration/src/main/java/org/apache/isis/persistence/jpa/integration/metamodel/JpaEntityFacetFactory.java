@@ -21,6 +21,7 @@ package org.apache.isis.persistence.jpa.integration.metamodel;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
+import javax.inject.Inject;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceUnitUtil;
@@ -43,6 +44,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.memento._Mementos;
 import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -59,14 +61,16 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class JpaEntityFacetFactory extends FacetFactoryAbstract {
+public class JpaEntityFacetFactory
+extends FacetFactoryAbstract {
 
-    public JpaEntityFacetFactory() {
-        super(ImmutableEnumSet.of(FeatureType.OBJECT));
+    @Inject
+    public JpaEntityFacetFactory(final MetaModelContext mmc) {
+        super(mmc, ImmutableEnumSet.of(FeatureType.OBJECT));
     }
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
+    public void process(final ProcessClassContext processClassContext) {
         val cls = processClassContext.getCls();
 
         val facetHolder = processClassContext.getFacetHolder();
@@ -108,7 +112,7 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
         }
 
         @Override
-        public String identifierFor(ObjectSpecification spec, Object pojo) {
+        public String identifierFor(final ObjectSpecification spec, final Object pojo) {
 
             if(pojo==null) {
                 throw _Exceptions.illegalArgument(
@@ -155,7 +159,7 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
         }
 
         @Override
-        public Can<ManagedObject> fetchByQuery(ObjectSpecification spec, Query<?> query) {
+        public Can<ManagedObject> fetchByQuery(final ObjectSpecification spec, final Query<?> query) {
 
             val range = query.getRange();
 
@@ -223,7 +227,7 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
         }
 
         @Override
-        public void persist(ObjectSpecification spec, Object pojo) {
+        public void persist(final ObjectSpecification spec, final Object pojo) {
             if(pojo==null) {
                 return; // nothing to do
             }
@@ -241,7 +245,7 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
         }
 
         @Override
-        public void refresh(Object pojo) {
+        public void refresh(final Object pojo) {
             if(pojo==null) {
                 return; // nothing to do
             }
@@ -256,7 +260,7 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
         }
 
         @Override
-        public void delete(ObjectSpecification spec, Object pojo) {
+        public void delete(final ObjectSpecification spec, final Object pojo) {
 
             if(pojo==null) {
                 return; // nothing to do
@@ -272,7 +276,7 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
         }
 
         @Override
-        public EntityState getEntityState(Object pojo) {
+        public EntityState getEntityState(final Object pojo) {
 
             if(pojo==null) {
                 return EntityState.NOT_PERSISTABLE;
@@ -300,12 +304,12 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
         }
 
         @Override
-        public boolean isProxyEnhancement(Method method) {
+        public boolean isProxyEnhancement(final Method method) {
             return false;
         }
 
         @Override
-        public <T> T detach(T pojo) {
+        public <T> T detach(final T pojo) {
             getEntityManager().detach(pojo);
             return pojo;
         }
@@ -350,7 +354,7 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
             return getJpaContext().getEntityManagerByManagedType(entityClass);
         }
 
-        protected PersistenceUnitUtil getPersistenceUnitUtil(EntityManager entityManager) {
+        protected PersistenceUnitUtil getPersistenceUnitUtil(final EntityManager entityManager) {
             return entityManager.getEntityManagerFactory().getPersistenceUnitUtil();
         }
 
@@ -401,23 +405,23 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
 
     private static class LongIdSerializer extends JpaObjectIdSerializer<Long> {
         public LongIdSerializer() { super(Long.class); }
-        @Override String stringify(Long id) { return id.toString(); }
-        @Override Long parse(String stringifiedPrimaryKey) { return Long.parseLong(stringifiedPrimaryKey); }
+        @Override String stringify(final Long id) { return id.toString(); }
+        @Override Long parse(final String stringifiedPrimaryKey) { return Long.parseLong(stringifiedPrimaryKey); }
     }
     private static class IntegerIdSerializer extends JpaObjectIdSerializer<Integer> {
         public IntegerIdSerializer() { super(Integer.class); }
-        @Override String stringify(Integer id) { return id.toString(); }
-        @Override Integer parse(String stringifiedPrimaryKey) { return Integer.parseInt(stringifiedPrimaryKey); }
+        @Override String stringify(final Integer id) { return id.toString(); }
+        @Override Integer parse(final String stringifiedPrimaryKey) { return Integer.parseInt(stringifiedPrimaryKey); }
     }
     private static class ShortIdSerializer extends JpaObjectIdSerializer<Short> {
         public ShortIdSerializer() { super(Short.class); }
-        @Override String stringify(Short id) { return id.toString(); }
-        @Override Short parse(String stringifiedPrimaryKey) { return Short.parseShort(stringifiedPrimaryKey); }
+        @Override String stringify(final Short id) { return id.toString(); }
+        @Override Short parse(final String stringifiedPrimaryKey) { return Short.parseShort(stringifiedPrimaryKey); }
     }
     private static class ByteIdSerializer extends JpaObjectIdSerializer<Byte> {
         public ByteIdSerializer() { super(Byte.class); }
-        @Override String stringify(Byte id) { return id.toString(); }
-        @Override Byte parse(String stringifiedPrimaryKey) { return Byte.parseByte(stringifiedPrimaryKey); }
+        @Override String stringify(final Byte id) { return id.toString(); }
+        @Override Byte parse(final String stringifiedPrimaryKey) { return Byte.parseByte(stringifiedPrimaryKey); }
     }
 
     private static class JpaObjectIdSerializerUsingMementos<T> extends JpaObjectIdSerializer<T> {
@@ -434,7 +438,7 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
         }
 
         @Override
-        public String stringify(Object id) {
+        public String stringify(final Object id) {
             return newMemento().put("id", id).asString();
         }
 
@@ -452,7 +456,7 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
             return _Mementos.create(codec, serializer);
         }
 
-        private _Mementos.Memento parseMemento(String input){
+        private _Mementos.Memento parseMemento(final String input){
             return _Mementos.parse(codec, serializer, input);
         }
 

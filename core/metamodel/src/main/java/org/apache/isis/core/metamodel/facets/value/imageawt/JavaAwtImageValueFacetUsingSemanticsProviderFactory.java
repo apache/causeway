@@ -21,14 +21,18 @@ package org.apache.isis.core.metamodel.facets.value.imageawt;
 
 import java.awt.image.BufferedImage;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 
 public class JavaAwtImageValueFacetUsingSemanticsProviderFactory
 extends ValueFacetUsingSemanticsProviderFactory<BufferedImage> {
 
-    public JavaAwtImageValueFacetUsingSemanticsProviderFactory() {
-        super();
+    @Inject
+    public JavaAwtImageValueFacetUsingSemanticsProviderFactory(final MetaModelContext mmc) {
+        super(mmc);
     }
 
     @Override

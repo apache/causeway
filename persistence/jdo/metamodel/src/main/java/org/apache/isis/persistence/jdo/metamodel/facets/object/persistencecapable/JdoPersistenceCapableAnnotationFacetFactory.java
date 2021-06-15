@@ -25,6 +25,7 @@ import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -34,7 +35,6 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.DomainObjectAnn
 import org.apache.isis.persistence.jdo.metamodel.facets.object.domainobject.objectspecid.LogicalTypeFacetInferredFromJdoPersistenceCapableAnnotation;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
-import lombok.Setter;
 import lombok.val;
 
 /**
@@ -44,14 +44,18 @@ public class JdoPersistenceCapableAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements ObjectTypeFacetFactory {
 
-    @Inject @Setter private JdoFacetContext jdoFacetContext;
+    private final JdoFacetContext jdoFacetContext;
 
-    public JdoPersistenceCapableAnnotationFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    @Inject
+    public JdoPersistenceCapableAnnotationFacetFactory(
+            final MetaModelContext mmc,
+            final JdoFacetContext jdoFacetContext) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
+        this.jdoFacetContext = jdoFacetContext;
     }
 
     @Override
-    public void process(ObjectTypeFacetFactory.ProcessObjectTypeContext processClassContext) {
+    public void process(final ObjectTypeFacetFactory.ProcessObjectTypeContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
 
         // only applies to JDO entities; ignore any view models

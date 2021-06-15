@@ -32,7 +32,7 @@ import org.apache.isis.persistence.jdo.provider.metamodel.facets.prop.primarykey
 
 import lombok.val;
 
-public class GivenJdoPrimaryKeyAnnotationFacetFactoryTest 
+public class GivenJdoPrimaryKeyAnnotationFacetFactoryTest
 extends AbstractFacetFactoryTest {
 
     private JdoPrimaryKeyAnnotationFacetFactory facetFactory;
@@ -41,8 +41,7 @@ extends AbstractFacetFactoryTest {
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new JdoPrimaryKeyAnnotationFacetFactory();
-        facetFactory.setJdoFacetContext(jdoFacetContext);
+        facetFactory = new JdoPrimaryKeyAnnotationFacetFactory(metaModelContext, jdoFacetContext);
     }
 
     @Override

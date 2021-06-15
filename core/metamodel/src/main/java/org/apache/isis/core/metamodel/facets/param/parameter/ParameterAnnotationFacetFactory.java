@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.param.parameter;
 
 import javax.annotation.Nullable;
+import javax.inject.Inject;
 import javax.validation.constraints.Pattern;
 
 import org.apache.isis.applib.annotation.Parameter;
@@ -40,13 +41,9 @@ import lombok.val;
 public class ParameterAnnotationFacetFactory
 extends FacetFactoryAbstract {
 
-    public ParameterAnnotationFacetFactory() {
-        super(FeatureType.PARAMETERS_ONLY);
-    }
-
-    @Override
-    public void setMetaModelContext(MetaModelContext metaModelContext) {
-        super.setMetaModelContext(metaModelContext);
+    @Inject
+    public ParameterAnnotationFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.PARAMETERS_ONLY);
     }
 
     @Override

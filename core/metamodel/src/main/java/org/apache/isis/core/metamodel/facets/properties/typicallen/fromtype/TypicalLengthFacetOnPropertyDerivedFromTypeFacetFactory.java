@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.properties.typicallen.fromtype;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -27,10 +30,12 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public class TypicalLengthFacetOnPropertyDerivedFromTypeFacetFactory extends FacetFactoryAbstract {
+public class TypicalLengthFacetOnPropertyDerivedFromTypeFacetFactory
+extends FacetFactoryAbstract {
 
-    public TypicalLengthFacetOnPropertyDerivedFromTypeFacetFactory() {
-        super(FeatureType.PROPERTIES_ONLY);
+    @Inject
+    public TypicalLengthFacetOnPropertyDerivedFromTypeFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.PROPERTIES_ONLY);
     }
 
     @Override

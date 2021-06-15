@@ -46,7 +46,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import lombok.val;
 
 @SuppressWarnings("unused")
-public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
+public class CollectionAnnotationFacetFactoryTest
+extends AbstractFacetFactoryJUnit4TestCase {
 
     CollectionAnnotationFacetFactory facetFactory;
     Method collectionMethod;
@@ -98,7 +99,7 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
 
     @Before
     public void setUp() throws Exception {
-        facetFactory = new CollectionAnnotationFacetFactory();
+        facetFactory = new CollectionAnnotationFacetFactory(metaModelContext);
     }
 
     @Override

@@ -21,8 +21,11 @@ package org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable
 
 import java.util.function.Predicate;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.commons.internal.debug._Probe;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -40,8 +43,9 @@ public class BookmarkPolicyFacetFallbackFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
-    public BookmarkPolicyFacetFallbackFactory() {
-        super(FeatureType.OBJECTS_AND_ACTIONS);
+    @Inject
+    public BookmarkPolicyFacetFallbackFactory(MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_AND_ACTIONS);
     }
 
     @Override

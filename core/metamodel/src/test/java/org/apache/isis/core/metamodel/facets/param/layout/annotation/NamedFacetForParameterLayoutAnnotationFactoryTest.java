@@ -39,7 +39,7 @@ public class NamedFacetForParameterLayoutAnnotationFactoryTest extends AbstractF
     private static final String NAME = "an action";
 
     public void testParameterLayoutAnnotationNamed() {
-        final ParameterLayoutFacetFactory facetFactory = new ParameterLayoutFacetFactory();
+        final ParameterLayoutFacetFactory facetFactory = new ParameterLayoutFacetFactory(metaModelContext);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -58,7 +58,7 @@ public class NamedFacetForParameterLayoutAnnotationFactoryTest extends AbstractF
     }
 
     public void testParameterLayoutAnnotationNamedEscapedFalse() {
-        final ParameterLayoutFacetFactory facetFactory = new ParameterLayoutFacetFactory();
+        final ParameterLayoutFacetFactory facetFactory = new ParameterLayoutFacetFactory(metaModelContext);
 
         class Customer {
             @SuppressWarnings("unused")

@@ -28,20 +28,28 @@ import org.apache.isis.core.metamodel.facets.schema.cmd.v2.CommandDtoValueFacetU
 import org.apache.isis.core.metamodel.facets.schema.ixn.v2.InteractionDtoValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 
+import lombok.val;
+
 @Component
 @Named("isis.metamodel.isisSchema.MetaModelRefiner")
-public class IsisSchemaMetaModelRefiner implements MetaModelRefiner {
+public class IsisSchemaMetaModelRefiner
+implements MetaModelRefiner {
+
     @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+    public void refineProgrammingModel(final ProgrammingModel programmingModel) {
+
+        val mmc = programmingModel.getMetaModelContext();
+
         programmingModel.addFactory(
                 ProgrammingModel.FacetProcessingOrder.G1_VALUE_TYPES,
-                InteractionDtoValueFacetUsingSemanticsProviderFactory.class);
+                new InteractionDtoValueFacetUsingSemanticsProviderFactory(mmc));
         programmingModel.addFactory(
                 ProgrammingModel.FacetProcessingOrder.G1_VALUE_TYPES,
-                ChangesDtoValueFacetUsingSemanticsProviderFactory.class);
+                new ChangesDtoValueFacetUsingSemanticsProviderFactory(mmc));
         programmingModel.addFactory(
                 ProgrammingModel.FacetProcessingOrder.G1_VALUE_TYPES,
-                CommandDtoValueFacetUsingSemanticsProviderFactory.class);
+                new CommandDtoValueFacetUsingSemanticsProviderFactory(mmc));
     }
+
 }
 

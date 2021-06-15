@@ -19,13 +19,18 @@
 
 package org.apache.isis.core.metamodel.facets.value.floats;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 
-public class FloatWrapperValueFacetUsingSemanticsProviderFactory extends ValueFacetUsingSemanticsProviderFactory<Float> {
+public class FloatWrapperValueFacetUsingSemanticsProviderFactory
+extends ValueFacetUsingSemanticsProviderFactory<Float> {
 
-    public FloatWrapperValueFacetUsingSemanticsProviderFactory() {
-        super();
+    @Inject
+    public FloatWrapperValueFacetUsingSemanticsProviderFactory(final MetaModelContext mmc) {
+        super(mmc);
     }
 
     @Override

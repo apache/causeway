@@ -19,13 +19,18 @@
 
 package org.apache.isis.core.metamodel.facets.object.objectvalidprops.impl;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
-public class ObjectValidPropertiesFacetImplFactory extends FacetFactoryAbstract {
+public class ObjectValidPropertiesFacetImplFactory
+extends FacetFactoryAbstract {
 
-    public ObjectValidPropertiesFacetImplFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    @Inject
+    public ObjectValidPropertiesFacetImplFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
     }
 
     @Override

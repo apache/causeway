@@ -21,11 +21,14 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 
 import java.util.Optional;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Collections;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
@@ -55,8 +58,9 @@ import lombok.val;
 public class ActionAnnotationFacetFactory
 extends FacetFactoryAbstract {
 
-    public ActionAnnotationFacetFactory() {
-        super(FeatureType.ACTIONS_ONLY);
+    @Inject
+    public ActionAnnotationFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.ACTIONS_ONLY);
     }
 
     @Override
