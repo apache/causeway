@@ -75,11 +75,11 @@ implements MetaModelRefiner {
 
     @Override
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
-        programmingModel.addValidator(newValidatorVisitor());
+        programmingModel.addValidator(newValidatorVisitor(programmingModel.getMetaModelContext()));
     }
 
-    private MetaModelValidator newValidatorVisitor() {
-        return new MetaModelVisitingValidatorAbstract() {
+    private MetaModelValidator newValidatorVisitor(final MetaModelContext mmc) {
+        return new MetaModelVisitingValidatorAbstract(mmc) {
 
             private final Map<String, ObjectAction> actionsHavingHomePageFacet = _Maps.newHashMap();
 

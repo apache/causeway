@@ -567,7 +567,7 @@ implements
                 _Multimaps.newConcurrentListMultimap();
 
         final MetaModelVisitingValidatorAbstract ensureUniqueObjectIds =
-                new MetaModelVisitingValidatorAbstract(){
+                new MetaModelVisitingValidatorAbstract(pm.getMetaModelContext()){
 
                     @Override
                     public void validate(final ObjectSpecification objSpec) {

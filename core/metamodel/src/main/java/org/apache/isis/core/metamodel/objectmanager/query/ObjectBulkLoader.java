@@ -24,8 +24,8 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.handler.ChainOfResponsibility;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -51,20 +51,18 @@ public interface ObjectBulkLoader {
 
     static interface Handler
     extends
-        MetaModelContextAware,
+        HasMetaModelContext,
         ChainOfResponsibility.Handler<ObjectBulkLoader.Request, Can<ManagedObject>> {
     }
 
     // -- FACTORY
 
-    public static ObjectBulkLoader createDefault(MetaModelContext metaModelContext) {
+    public static ObjectBulkLoader createDefault(final MetaModelContext mmc) {
 
         val chainOfHandlers = _Lists.of(
-                new ObjectBulkLoader_builtinHandlers.GuardAgainstNull(),
-                new ObjectBulkLoader_builtinHandlers.BulkLoadEntity(),
-                new ObjectBulkLoader_builtinHandlers.LoadOther());
-
-        chainOfHandlers.forEach(h->h.setMetaModelContext(metaModelContext));
+                new ObjectBulkLoader_builtinHandlers.GuardAgainstNull(mmc),
+                new ObjectBulkLoader_builtinHandlers.BulkLoadEntity(mmc),
+                new ObjectBulkLoader_builtinHandlers.LoadOther(mmc));
 
         val chainOfRespo = ChainOfResponsibility.of(chainOfHandlers);
 

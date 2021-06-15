@@ -30,7 +30,6 @@ import org.apache.isis.commons.internal.collections._Multimaps.SetMultimap;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessor;
@@ -166,8 +165,7 @@ implements
             }
             for(val factoryEntry : factoryEntrySet) {
                 if(filter.acceptFactoryType(factoryEntry.getInstance().getClass(), factoryEntry.getMarkers())) {
-                    factories.add(honorMetaModelContextAwareness(
-                            factoryEntry.getInstance(), metaModelContext));
+                    factories.add(factoryEntry.getInstance());
                 }
             }
         }
@@ -189,10 +187,7 @@ implements
             }
             for(val validatorEntry : validatorEntrySet) {
                 if(filter.acceptValidator(validatorEntry.getInstance().getClass(), validatorEntry.getMarkers())) {
-
-                    validators.add(honorMetaModelContextAwareness(
-                            validatorEntry.getInstance(), metaModelContext));
-
+                    validators.add(validatorEntry.getInstance());
                 }
             }
         }
@@ -213,10 +208,10 @@ implements
                 continue;
             }
             for(val postProcessorEntry : postProcessorEntrySet) {
-                if(filter.acceptPostProcessor(postProcessorEntry.getInstance().getClass(), postProcessorEntry.getMarkers())) {
-
-                    postProcessors.add(honorMetaModelContextAwareness(
-                            postProcessorEntry.getInstance(), metaModelContext));
+                if(filter.acceptPostProcessor(
+                        postProcessorEntry.getInstance().getClass(),
+                        postProcessorEntry.getMarkers())) {
+                    postProcessors.add(postProcessorEntry.getInstance());
                 }
             }
         }
@@ -242,18 +237,6 @@ implements
                     "The programming-model was not initialized yet.");
         }
     }
-
-    // -- METAMODEL CONTEXT AWARE
-
-    private static <T> T honorMetaModelContextAwareness(final T pojo, final MetaModelContext metaModelContext) {
-        if(pojo instanceof MetaModelContextAware) {
-            val contextAware = (MetaModelContextAware) pojo;
-            contextAware.setMetaModelContext(metaModelContext);
-        }
-        return pojo;
-    }
-
-
 
 
 }

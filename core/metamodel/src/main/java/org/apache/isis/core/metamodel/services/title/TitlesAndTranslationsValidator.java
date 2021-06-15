@@ -18,12 +18,15 @@
  */
 package org.apache.isis.core.metamodel.services.title;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.core.config.messages.MessageRegistry;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
@@ -36,6 +39,11 @@ import lombok.val;
  */
 public class TitlesAndTranslationsValidator
 extends MetaModelValidatorAbstract {
+
+    @Inject
+    public TitlesAndTranslationsValidator(final MetaModelContext mmc) {
+        super(mmc);
+    }
 
     @Override
     public void validate() {

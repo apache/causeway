@@ -22,8 +22,8 @@ package org.apache.isis.core.metamodel.objectmanager.load;
 import org.apache.isis.commons.handler.ChainOfResponsibility;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -49,24 +49,22 @@ public interface ObjectLoader {
 
     static interface Handler
     extends
-        MetaModelContextAware,
+        HasMetaModelContext,
         ChainOfResponsibility.Handler<ObjectLoader.Request, ManagedObject> {
 
     }
 
     // -- FACTORY
 
-    public static ObjectLoader createDefault(MetaModelContext metaModelContext) {
+    public static ObjectLoader createDefault(final MetaModelContext mmc) {
 
         val chainOfHandlers = _Lists.of(
-                new ObjectLoader_builtinHandlers.GuardAgainstNull(),
-                new ObjectLoader_builtinHandlers.LoadService(),
-                new ObjectLoader_builtinHandlers.LoadValue(),
-                new ObjectLoader_builtinHandlers.LoadViewModel(),
-                new ObjectLoader_builtinHandlers.LoadEntity(),
-                new ObjectLoader_builtinHandlers.LoadOther());
-
-        chainOfHandlers.forEach(h->h.setMetaModelContext(metaModelContext));
+                new ObjectLoader_builtinHandlers.GuardAgainstNull(mmc),
+                new ObjectLoader_builtinHandlers.LoadService(mmc),
+                new ObjectLoader_builtinHandlers.LoadValue(mmc),
+                new ObjectLoader_builtinHandlers.LoadViewModel(mmc),
+                new ObjectLoader_builtinHandlers.LoadEntity(mmc),
+                new ObjectLoader_builtinHandlers.LoadOther(mmc));
 
         val chainOfRespo = ChainOfResponsibility.of(chainOfHandlers);
 

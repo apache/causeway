@@ -36,7 +36,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 
-import lombok.Data;
+import lombok.NonNull;
+import lombok.Value;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -47,18 +48,18 @@ import lombok.extern.log4j.Log4j2;
  */
 final class ObjectCreator_builtinHandlers {
 
-    @Data @Log4j2
+    @Value @Log4j2
     public static class LegacyCreationHandler implements ObjectCreator.Handler {
 
-        private MetaModelContext metaModelContext;
+        private final @NonNull MetaModelContext metaModelContext;
 
         @Override
-        public boolean isHandling(ObjectCreator.Request objectCreateRequest) {
+        public boolean isHandling(final ObjectCreator.Request objectCreateRequest) {
             return true;
         }
 
         @Override
-        public ManagedObject handle(ObjectCreator.Request objectCreateRequest) {
+        public ManagedObject handle(final ObjectCreator.Request objectCreateRequest) {
 
             val spec = objectCreateRequest.getObjectSpecification();
 
@@ -73,7 +74,7 @@ final class ObjectCreator_builtinHandlers {
 
         //  -- HELPER
 
-        private Object instantiateAndInjectServices(ObjectSpecification spec) {
+        private Object instantiateAndInjectServices(final ObjectSpecification spec) {
 
             val type = spec.getCorrespondingClass();
             if (type.isArray()) {
@@ -97,7 +98,7 @@ final class ObjectCreator_builtinHandlers {
 
         }
 
-        private ManagedObject initializePropertiesAndDoCallback(ManagedObject adapter) {
+        private ManagedObject initializePropertiesAndDoCallback(final ManagedObject adapter) {
 
             // initialize new object
             adapter.getSpecification().streamAssociations(MixedIn.EXCLUDED)
@@ -135,8 +136,8 @@ final class ObjectCreator_builtinHandlers {
         }
 
         private void postLifecycleEventIfRequired(
-                ManagedObject adapter,
-                Class<? extends LifecycleEventFacet> lifecycleEventFacetClass) {
+                final ManagedObject adapter,
+                final Class<? extends LifecycleEventFacet> lifecycleEventFacetClass) {
 
             val lifecycleEventFacet = adapter.getSpecification().getFacet(lifecycleEventFacetClass);
             if(lifecycleEventFacet == null) {
@@ -150,7 +151,7 @@ final class ObjectCreator_builtinHandlers {
 
         }
 
-        private <T> void postEvent(AbstractLifecycleEvent<T> event, T pojo) {
+        private <T> void postEvent(final AbstractLifecycleEvent<T> event, final T pojo) {
 
             metaModelContext.getServiceRegistry()
                 .lookupService(EventBusService.class)

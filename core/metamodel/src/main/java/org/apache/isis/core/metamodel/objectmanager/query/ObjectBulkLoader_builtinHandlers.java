@@ -24,7 +24,8 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-import lombok.Data;
+import lombok.NonNull;
+import lombok.Value;
 import lombok.val;
 
 /**
@@ -36,13 +37,13 @@ final class ObjectBulkLoader_builtinHandlers {
 
     // -- NULL GUARD
 
-    @Data
+    @Value
     public static class GuardAgainstNull implements ObjectBulkLoader.Handler {
 
-        private MetaModelContext metaModelContext;
+        private final @NonNull MetaModelContext metaModelContext;
 
         @Override
-        public boolean isHandling(ObjectBulkLoader.Request objectQuery) {
+        public boolean isHandling(final ObjectBulkLoader.Request objectQuery) {
 
             if(objectQuery==null) {
                 return true;
@@ -60,7 +61,7 @@ final class ObjectBulkLoader_builtinHandlers {
         }
 
         @Override
-        public Can<ManagedObject> handle(ObjectBulkLoader.Request objectQuery) {
+        public Can<ManagedObject> handle(final ObjectBulkLoader.Request objectQuery) {
             return Can.empty();
         }
 
@@ -68,20 +69,20 @@ final class ObjectBulkLoader_builtinHandlers {
 
     // -- ENTITIES
 
-    @Data
+    @Value
     public static class BulkLoadEntity implements ObjectBulkLoader.Handler {
 
-        private MetaModelContext metaModelContext;
+        private final @NonNull MetaModelContext metaModelContext;
 
         @Override
-        public boolean isHandling(ObjectBulkLoader.Request objectQuery) {
+        public boolean isHandling(final ObjectBulkLoader.Request objectQuery) {
 
             val spec = objectQuery.getObjectSpecification();
             return spec.isEntity();
         }
 
         @Override
-        public Can<ManagedObject> handle(ObjectBulkLoader.Request objectQuery) {
+        public Can<ManagedObject> handle(final ObjectBulkLoader.Request objectQuery) {
 
             val spec = objectQuery.getObjectSpecification();
             val entityFacet = spec.getFacet(EntityFacet.class);
@@ -102,18 +103,18 @@ final class ObjectBulkLoader_builtinHandlers {
 
     // -- UNKNOWN LOAD REQUEST
 
-    @Data
+    @Value
     public static class LoadOther implements ObjectBulkLoader.Handler {
 
-        private MetaModelContext metaModelContext;
+        private final @NonNull MetaModelContext metaModelContext;
 
         @Override
-        public boolean isHandling(ObjectBulkLoader.Request objectQuery) {
+        public boolean isHandling(final ObjectBulkLoader.Request objectQuery) {
             return true; // the last handler in the chain
         }
 
         @Override
-        public Can<ManagedObject> handle(ObjectBulkLoader.Request objectQuery) {
+        public Can<ManagedObject> handle(final ObjectBulkLoader.Request objectQuery) {
 
             // unknown object load request
 

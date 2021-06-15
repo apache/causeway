@@ -23,9 +23,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -44,8 +47,13 @@ import lombok.val;
 public class OrphanedSupportingMethodValidator
 extends MetaModelVisitingValidatorAbstract {
 
+    @Inject
+    public OrphanedSupportingMethodValidator(final MetaModelContext mmc) {
+        super(mmc);
+    }
+
     @Override
-    public void validate(@NonNull ObjectSpecification spec) {
+    public void validate(@NonNull final ObjectSpecification spec) {
 
         if(!(spec instanceof ObjectSpecificationAbstract)) {
             return; // continue
@@ -98,8 +106,8 @@ extends MetaModelVisitingValidatorAbstract {
     // -- VALIDATION LOGIC
 
     private List<String> unmetContraints(
-            ObjectSpecification spec,
-            Method method) {
+            final ObjectSpecification spec,
+            final Method method) {
 
         val unmetContraints = _Lists.<String>newArrayList();
 

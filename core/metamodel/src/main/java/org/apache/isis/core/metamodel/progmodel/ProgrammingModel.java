@@ -148,7 +148,7 @@ extends HasMetaModelContext {
             final @NonNull Consumer<ObjectSpecification> validator,
             final Marker ... markers) {
 
-        addValidator(new MetaModelVisitingValidatorAbstract() {
+        addValidator(new MetaModelVisitingValidatorAbstract(getMetaModelContext()) {
             @Override
             public void validate(@NonNull final ObjectSpecification spec) {
                 validator.accept(spec);
@@ -160,7 +160,7 @@ extends HasMetaModelContext {
             final @NonNull Consumer<ObjectSpecification> validator,
             final Marker ... markers) {
 
-        addValidator(new MetaModelVisitingValidatorAbstract() {
+        addValidator(new MetaModelVisitingValidatorAbstract(getMetaModelContext()) {
             @Override
             public void validate(@NonNull final ObjectSpecification spec) {
                 if(spec.isManagedBean()) {

@@ -402,11 +402,14 @@ extends ProgrammingModelAbstract {
     }
 
     private void addValidators() {
-        addValidator(new MemberSupportAnnotationEnforcesSupportingMethodValidator());
-        addValidator(new OrphanedSupportingMethodValidator());
-        addValidator(new TitlesAndTranslationsValidator());  // should this instead be a post processor, alongside TranslationPostProcessor ?
-        addValidator(new ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator());
-        addValidator(new ActionOverloadingValidator());
+
+        val mmc = getMetaModelContext();
+
+        addValidator(new MemberSupportAnnotationEnforcesSupportingMethodValidator(mmc));
+        addValidator(new OrphanedSupportingMethodValidator(mmc));
+        addValidator(new TitlesAndTranslationsValidator(mmc));  // should this instead be a post processor, alongside TranslationPostProcessor ?
+        addValidator(new ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator(mmc));
+        addValidator(new ActionOverloadingValidator(mmc));
     }
 
 }
