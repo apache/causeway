@@ -44,8 +44,7 @@ public class BigDecimalValueSemanticsProviderTest extends ValueSemanticsProvider
 
         bigDecimal = new BigDecimal("34132.199");
         allowMockAdapterToReturn(bigDecimal);
-        holder = FacetHolderAbstract.forTesting();
-        holder.setMetaModelContext(super.metaModelContext);
+        holder = FacetHolderAbstract.forTesting(metaModelContext);
 
         setValue(value = new BigDecimalValueSemanticsProvider(holder));
     }

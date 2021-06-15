@@ -26,13 +26,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.facets.value.doubles.DoubleWrapperValueSemanticsProvider;
 
-public class DoubleValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
+public class DoubleValueSemanticsProviderTest
+extends ValueSemanticsProviderAbstractTestCase {
 
     private Double doubleObj;
 
@@ -41,8 +41,7 @@ public class DoubleValueSemanticsProviderTest extends ValueSemanticsProviderAbst
     @Before
     public void setUpObjects() throws Exception {
 
-        holder = FacetHolderAbstract.forTesting();
-        ((MetaModelContextAware)holder).setMetaModelContext(super.metaModelContext);
+        holder = FacetHolderAbstract.forTesting(metaModelContext);
         setValue(new DoubleWrapperValueSemanticsProvider(holder));
 
         doubleObj = Double.valueOf(32.5d);

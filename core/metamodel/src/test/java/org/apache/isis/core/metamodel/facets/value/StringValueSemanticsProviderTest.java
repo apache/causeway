@@ -24,6 +24,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facets.value.string.StringValueSemanticsProvider;
@@ -39,7 +40,7 @@ public class StringValueSemanticsProviderTest extends ValueSemanticsProviderAbst
     @Before
     public void setUpObjects() throws Exception {
         string = "text entry";
-        holder = FacetHolderAbstract.forTesting();
+        holder = FacetHolderAbstract.forTesting(MetaModelContext_forTesting.buildDefault());
         setValue(value = new StringValueSemanticsProvider(holder));
     }
 

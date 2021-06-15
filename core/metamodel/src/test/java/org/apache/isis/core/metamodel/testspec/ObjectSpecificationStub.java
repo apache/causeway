@@ -35,6 +35,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
@@ -87,7 +88,8 @@ implements ObjectSpecification {
         return correspondingClass;
     }
 
-    public ObjectSpecificationStub(final Class<?> correspondingClass) {
+    public ObjectSpecificationStub(final MetaModelContext mmc, final Class<?> correspondingClass) {
+        super(mmc);
         this.correspondingClass = correspondingClass;
         title = "";
         name = correspondingClass.getCanonicalName();

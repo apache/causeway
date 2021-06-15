@@ -43,6 +43,8 @@ import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.core.metamodel.commons.CanBeVoid;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
 import org.apache.isis.core.metamodel.commons.ToString;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
@@ -53,15 +55,16 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.object.facets.FacetsFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.core.metamodel.specloader.typeextract.TypeExtractor;
 
+import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class FacetedMethodsBuilder {
+public class FacetedMethodsBuilder
+implements HasMetaModelContext {
 
     private static final String GET_PREFIX = "get";
     private static final String IS_PREFIX = "is";
@@ -110,25 +113,19 @@ public class FacetedMethodsBuilder {
     private final ObjectSpecificationAbstract inspectedTypeSpec;
 
     private final Class<?> introspectedClass;
-   // private final Set<Method> methodsRemaining;
 
     private List<FacetedMethod> associationFacetMethods;
     private List<FacetedMethod> actionFacetedMethods;
 
     private final FacetedMethodsMethodRemover methodRemover;
 
-    private final FacetProcessor facetProcessor;
+    @Getter private final FacetProcessor facetProcessor;
 
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
 
-    private final SpecificationLoader specificationLoader;
-
-
     private final boolean explicitAnnotationsForActions;
 
-    // ////////////////////////////////////////////////////////////////////////////
-    // Constructor & finalize
-    // ////////////////////////////////////////////////////////////////////////////
+    // -- CONSTRUCTOR
 
     public FacetedMethodsBuilder(
             final ObjectSpecificationAbstract inspectedTypeSpec,
@@ -141,22 +138,22 @@ public class FacetedMethodsBuilder {
 
         this.facetProcessor = facetProcessor;
         this.classSubstitutorRegistry = classSubstitutorRegistry;
-
-        val mmContext = inspectedTypeSpec.getMetaModelContext();
-
         this.inspectedTypeSpec = inspectedTypeSpec;
         this.introspectedClass = inspectedTypeSpec.getCorrespondingClass();
+
+        this.explicitAnnotationsForActions =
+                getConfiguration().getApplib().getAnnotation().getAction().isExplicit();
 
         val methodsRemaining = introspectedClass.getMethods();
         this.methodRemover = new FacetedMethodsMethodRemover(introspectedClass, methodsRemaining);
 
-        this.specificationLoader = mmContext.getSpecificationLoader();
-
-        val isisConfiguration = mmContext.getConfiguration();
-
-        this.explicitAnnotationsForActions = isisConfiguration.getApplib().getAnnotation().getAction().isExplicit();
-
     }
+
+    @Override
+    public MetaModelContext getMetaModelContext() {
+        return inspectedTypeSpec.getMetaModelContext();
+    }
+
 
     // ////////////////////////////////////////////////////////////////////////////
     // Class and stuff immediately derived from class
@@ -244,10 +241,11 @@ public class FacetedMethodsBuilder {
         return Collections.unmodifiableList(associationFacetedMethods);
     }
 
-    private void findAndRemoveCollectionAccessorsAndCreateCorrespondingFacetedMethods(Consumer<FacetedMethod> onNewAssociationPeer) {
+    private void findAndRemoveCollectionAccessorsAndCreateCorrespondingFacetedMethods(
+            final Consumer<FacetedMethod> onNewAssociationPeer) {
         val collectionAccessors = _Lists.<Method>newArrayList();
         getFacetProcessor().findAndRemoveCollectionAccessors(methodRemover, collectionAccessors);
-        createCollectionFacetedMethodsFromAccessors(collectionAccessors, onNewAssociationPeer);
+        createCollectionFacetedMethodsFromAccessors(getMetaModelContext(), collectionAccessors, onNewAssociationPeer);
     }
 
     /**
@@ -265,6 +263,7 @@ public class FacetedMethodsBuilder {
     }
 
     private void createCollectionFacetedMethodsFromAccessors(
+            final MetaModelContext mmc,
             final List<Method> accessorMethods,
             final Consumer<FacetedMethod> onNewFacetMethod) {
 
@@ -274,7 +273,7 @@ public class FacetedMethodsBuilder {
             }
 
             // create property and add facets
-            val facetedMethod = FacetedMethod.createForCollection(introspectedClass, accessorMethod);
+            val facetedMethod = FacetedMethod.createForCollection(mmc, introspectedClass, accessorMethod);
             getFacetProcessor().process(
                     introspectedClass,
                     accessorMethod,
@@ -314,7 +313,8 @@ public class FacetedMethodsBuilder {
             }
 
             // create a 1:1 association peer
-            val facetedMethod = FacetedMethod.createForProperty(introspectedClass, accessorMethod);
+            val facetedMethod = FacetedMethod
+                    .createForProperty(getMetaModelContext(), introspectedClass, accessorMethod);
 
             // process facets for the 1:1 association (eg. contributed properties)
             getFacetProcessor().process(
@@ -390,7 +390,8 @@ public class FacetedMethodsBuilder {
             return null;
         }
 
-        final FacetedMethod action = FacetedMethod.createForAction(introspectedClass, actionMethod);
+        final FacetedMethod action = FacetedMethod
+                .createForAction(getMetaModelContext(), introspectedClass, actionMethod);
 
         // process facets on the action & parameters
         getFacetProcessor().process(
@@ -582,16 +583,5 @@ public class FacetedMethodsBuilder {
         return str.toString();
     }
 
-    // ////////////////////////////////////////////////////////////////////////////
-    // Dependencies
-    // ////////////////////////////////////////////////////////////////////////////
-
-    private SpecificationLoader getSpecificationLoader() {
-        return specificationLoader;
-    }
-
-    private FacetProcessor getFacetProcessor() {
-        return facetProcessor;
-    }
 
 }

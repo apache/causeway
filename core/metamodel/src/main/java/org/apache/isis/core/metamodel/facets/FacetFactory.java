@@ -38,6 +38,7 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
@@ -62,33 +63,27 @@ import lombok.val;
  */
 public interface FacetFactory {
 
+    @RequiredArgsConstructor
     static class AbstractProcessContext<T extends FacetHolder> {
-        private final T facetHolder;
-
-        public AbstractProcessContext(final T facetHolder) {
-            this.facetHolder = facetHolder;
-        }
-
-        public T getFacetHolder() {
-            return facetHolder;
-        }
+        @Getter private final T facetHolder;
     }
 
     static class AbstractProcessWithClsContext<T extends FacetHolder>
     extends AbstractProcessContext<T>{
 
-        private final Class<?> cls;
+        /**
+         * The class being introspected.
+         * <p>
+         *     In the context of method introspection, this isn't necessarily the same as the
+         *     {@link java.lang.reflect.Method#getDeclaringClass() declaring class}
+         *     of the {@link #getMethod() method}; the method might have been inherited.
+         * </p>
+         */
+        @Getter private final Class<?> cls;
 
         AbstractProcessWithClsContext(final Class<?> cls, final T facetHolder) {
             super(facetHolder);
             this.cls = cls;
-        }
-
-        /**
-         * The class being introspected upon.
-         */
-        public Class<?> getCls() {
-            return cls;
         }
 
         /**
@@ -102,9 +97,10 @@ public interface FacetFactory {
     }
 
     static class AbstractProcessWithMethodContext<T extends FacetHolder>
-    extends AbstractProcessWithClsContext<T> implements MethodRemover{
+    extends AbstractProcessWithClsContext<T>
+    implements MethodRemover{
 
-        private final Method method;
+        @Getter private final Method method;
         protected final MethodRemover methodRemover;
 
         AbstractProcessWithMethodContext(
@@ -116,22 +112,6 @@ public interface FacetFactory {
             super(cls, facetHolder);
             this.method = method;
             this.methodRemover = methodRemover;
-        }
-
-        /**
-         * The class being introspected upon.
-         *
-         * <p>
-         *     This isn't necessarily the same as the {@link java.lang.reflect.Method#getDeclaringClass() declaring class} of the {@link #getMethod() method}; the method might have been inherited.
-         * </p>
-         */
-        @Override
-        public Class<?> getCls() {
-            return super.getCls();
-        }
-
-        public Method getMethod() {
-            return method;
         }
 
         @Override
@@ -160,7 +140,7 @@ public interface FacetFactory {
      * {@link Facet}s for.
      *
      * <p>
-     * Used by the Java5 Reflector's <tt>ProgrammingModel</tt> to reduce the
+     * Used by the Java 8 Reflector's <tt>ProgrammingModel</tt> to reduce the
      * number of {@link FacetFactory factory}s that are queried when building up
      * the meta-model.
      *
@@ -308,9 +288,9 @@ public interface FacetFactory {
     public static class ProcessParameterContext
     extends AbstractProcessWithMethodContext<FacetedMethodParameter> {
 
-        private final int paramNum;
-        private final Class<?> paramType;
-        private final Parameter parameter;
+        @Getter private final int paramNum;
+        @Getter private final Class<?> parameterType;
+        @Getter private final Parameter parameter;
 
         public ProcessParameterContext(
                 final Class<?> cls,
@@ -324,12 +304,8 @@ public interface FacetFactory {
                 throw _Exceptions.unrecoverable("invalid ProcessParameterContext");
             }
             this.paramNum = paramNum;
-            this.paramType = super.method.getParameterTypes()[paramNum];
+            this.parameterType = super.method.getParameterTypes()[paramNum];
             this.parameter = super.method.getParameters()[paramNum];
-        }
-
-        public int getParamNum() {
-            return paramNum;
         }
 
         /**
@@ -340,19 +316,6 @@ public interface FacetFactory {
             return _Annotations.synthesizeInherited(parameter, annotationType);
         }
 
-        /**
-         * @since 2.0
-         */
-        public Class<?> getParameterType() {
-            return this.paramType;
-        }
-
-        /**
-         * @since 2.0
-         */
-        public Parameter getParameter() {
-            return parameter;
-        }
     }
 
     /**

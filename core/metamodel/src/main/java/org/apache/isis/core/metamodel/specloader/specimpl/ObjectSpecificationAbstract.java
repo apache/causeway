@@ -193,6 +193,8 @@ implements ObjectSpecification {
             final FacetProcessor facetProcessor,
             final PostProcessor postProcessor) {
 
+        super(facetProcessor.getMetaModelContext());
+
         this.correspondingClass = introspectedClass;
         this.fullName = introspectedClass.getName();
         this.shortName = shortName;

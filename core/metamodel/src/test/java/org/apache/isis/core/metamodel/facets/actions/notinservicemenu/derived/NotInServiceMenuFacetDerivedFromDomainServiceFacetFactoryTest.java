@@ -22,6 +22,10 @@ import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -32,11 +36,7 @@ import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServi
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacetAbstract;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-
-public class NotInServiceMenuFacetDerivedFromDomainServiceFacetFactoryTest 
+public class NotInServiceMenuFacetDerivedFromDomainServiceFacetFactoryTest
 extends AbstractFacetFactoryJUnit4TestCase {
 
     private NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory facetFactory;
@@ -144,7 +144,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
         expectNoMethodsRemoved();
 
-        facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name");
+        facetedMethod = FacetedMethod
+                .createForAction(metaModelContext, CustomerService.class, "name");
 
         // when
         facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
@@ -177,7 +178,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
         expectNoMethodsRemoved();
 
-        facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name");
+        facetedMethod = FacetedMethod
+                .createForAction(metaModelContext, CustomerService.class, "name");
 
         // when
         facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
@@ -208,7 +210,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
         expectNoMethodsRemoved();
 
-        facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name");
+        facetedMethod = FacetedMethod
+                .createForAction(metaModelContext, CustomerService.class, "name");
 
         // when
         facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));

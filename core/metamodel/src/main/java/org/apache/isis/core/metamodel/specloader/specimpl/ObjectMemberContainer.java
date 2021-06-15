@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.Hierarchical;
@@ -53,6 +54,10 @@ implements
     ObjectActionContainer,
     ObjectAssociationContainer,
     Hierarchical {
+
+    protected ObjectMemberContainer(MetaModelContext metaModelContext) {
+        super(metaModelContext);
+    }
 
     // -- ACTIONS
 

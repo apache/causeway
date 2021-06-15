@@ -26,13 +26,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facets.value.bytes.ByteValueSemanticsProviderAbstract;
 import org.apache.isis.core.metamodel.facets.value.bytes.ByteWrapperValueSemanticsProvider;
 
-public class ByteValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
+public class ByteValueSemanticsProviderTest
+extends ValueSemanticsProviderAbstractTestCase {
 
     private ByteValueSemanticsProviderAbstract value;
 
@@ -43,8 +43,7 @@ public class ByteValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
     public void setUpObjects() throws Exception {
         byteObj = Byte.valueOf((byte) 102);
         allowMockAdapterToReturn(byteObj);
-        holder = FacetHolderAbstract.forTesting();
-        ((MetaModelContextAware)holder).setMetaModelContext(super.metaModelContext);
+        holder = FacetHolderAbstract.forTesting(metaModelContext);
 
         setValue(value = new ByteWrapperValueSemanticsProvider(holder));
     }

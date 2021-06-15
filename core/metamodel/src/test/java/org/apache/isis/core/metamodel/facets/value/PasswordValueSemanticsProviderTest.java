@@ -25,6 +25,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 import org.apache.isis.applib.value.Password;
+import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facets.value.password.PasswordValueSemanticsProvider;
@@ -37,7 +38,7 @@ public class PasswordValueSemanticsProviderTest extends ValueSemanticsProviderAb
 
     @Before
     public void setUpObjects() throws Exception {
-        holder = FacetHolderAbstract.forTesting();
+        holder = FacetHolderAbstract.forTesting(MetaModelContext_forTesting.buildDefault());
         setValue(adapter = new PasswordValueSemanticsProvider(holder));
         password = new Password("secret");
     }

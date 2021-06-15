@@ -54,6 +54,6 @@ extends ChoicesFacetAbstract {
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("choices", choices);
+        visitor.accept("choices", choices.map(ManagedObject::getPojo).toList());
     }
 }

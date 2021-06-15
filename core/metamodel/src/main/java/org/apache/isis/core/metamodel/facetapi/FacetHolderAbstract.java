@@ -30,25 +30,35 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.Setter;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
  * For base subclasses or, more likely, to help write tests.
  */
+@RequiredArgsConstructor
 @Log4j2
 public abstract class FacetHolderAbstract
-implements FacetHolder, MetaModelContextAware {
+implements FacetHolder {
 
-    @Getter(onMethod = @__(@Override)) @Setter(onMethod = @__(@Override))
-    private MetaModelContext metaModelContext;
+    // -- FACTORY
+
+    public static FacetHolderAbstract simple(MetaModelContext mmc, Identifier featureIdentifier) {
+        final FacetHolderAbstract facetHolder = new FacetHolderAbstract(mmc) {};
+        facetHolder.featureIdentifier = featureIdentifier;
+        return facetHolder;
+    }
+
+    // -- FIELDS
+
+    @Getter(onMethod = @__(@Override))
+    private final @NonNull MetaModelContext metaModelContext;
 
     // not private, as identifier might depend on lazily provided spec-loader
     @Getter(onMethod_ = {@Override}) protected Identifier featureIdentifier;
@@ -106,17 +116,11 @@ implements FacetHolder, MetaModelContextAware {
 
     // -- JUNIT SUPPORT
 
-    public static FacetHolderAbstract simple(Identifier featureIdentifier) {
-        final FacetHolderAbstract facetHolder = new FacetHolderAbstract() {};
-        facetHolder.featureIdentifier = featureIdentifier;
-        return facetHolder;
-    }
-
     /**
      *  Meant for simple JUnit tests, that don't use the FacetHolder's identifier.
      */
-    public static FacetHolderAbstract forTesting() {
-        return simple(Identifier.classIdentifier(LogicalType.fqcn(Object.class)));
+    public static FacetHolderAbstract forTesting(MetaModelContext mmc) {
+        return simple(mmc, Identifier.classIdentifier(LogicalType.fqcn(Object.class)));
     }
 
     // -- HELPER
@@ -219,5 +223,7 @@ implements FacetHolder, MetaModelContextAware {
     private static String friendlyName(Class<?> cls) {
         return cls.getName().replace("org.apache.isis", "o.a.i");
     }
+
+
 
 }

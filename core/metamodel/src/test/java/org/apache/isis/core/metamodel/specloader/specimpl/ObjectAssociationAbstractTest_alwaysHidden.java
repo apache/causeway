@@ -35,7 +35,9 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -71,7 +73,9 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
 
     @Before
     public void setup() {
-        facetedMethod = FacetedMethod.createForProperty(Customer.class, "firstName");
+
+        MetaModelContext mmc = MetaModelContext_forTesting.buildDefault();
+        facetedMethod = FacetedMethod.createForProperty(mmc, Customer.class, "firstName");
 
         context.checking(new Expectations() {{
             //            allowing(mockServicesInjector).getSpecificationLoader();

@@ -32,6 +32,8 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.layout.group.GroupIdAndName;
@@ -76,11 +78,12 @@ public class DeweyOrderSetTest extends TestCase {
         }
     }
 
-    private final FacetedMethod lastNameMember = FacetedMethod.createForProperty(Customer.class, "Last Name");
-    private final FacetedMethod firstNameMember = FacetedMethod.createForProperty(Customer.class, "First Name");
-    private final FacetedMethod houseNumberMember = FacetedMethod.createForProperty(Customer.class, "House Number");
-    private final FacetedMethod streetNameMember = FacetedMethod.createForProperty(Customer.class, "Street Name");
-    private final FacetedMethod postalTownMember = FacetedMethod.createForProperty(Customer.class, "Postal Town");
+    private final MetaModelContext mmc = MetaModelContext_forTesting.buildDefault();
+    private final FacetedMethod lastNameMember = FacetedMethod.createForProperty(mmc, Customer.class, "Last Name");
+    private final FacetedMethod firstNameMember = FacetedMethod.createForProperty(mmc, Customer.class, "First Name");
+    private final FacetedMethod houseNumberMember = FacetedMethod.createForProperty(mmc, Customer.class, "House Number");
+    private final FacetedMethod streetNameMember = FacetedMethod.createForProperty(mmc, Customer.class, "Street Name");
+    private final FacetedMethod postalTownMember = FacetedMethod.createForProperty(mmc, Customer.class, "Postal Town");
     private final List<FacetedMethod> lastNameAndFirstName = _Lists.of(lastNameMember, firstNameMember);
     private final List<FacetedMethod> nameAndAddressMembers = _Lists.of(lastNameMember, firstNameMember, houseNumberMember, streetNameMember, postalTownMember);
     private final List<FacetedMethod> lastNameFirstNameAndPostalTown = _Lists.of(lastNameMember, firstNameMember, postalTownMember);

@@ -90,8 +90,8 @@ abstract class MixinIntendedAs {
     protected FacetHolder runTypeContextOn(Class<?> type) {
 
         val facetHolder = FacetHolderAbstract.simple(
-              Identifier.classIdentifier(LogicalType.fqcn(type)));
-        facetHolder.setMetaModelContext(metaModelContext);
+                metaModelContext,
+                Identifier.classIdentifier(LogicalType.fqcn(type)));
 
         val processClassContext =
                 new FacetFactory.ProcessClassContext(
@@ -113,6 +113,7 @@ abstract class MixinIntendedAs {
         val parameterType = actionMethod.getParameterTypes()[paramIndex];
 
         val facetedMethodParameter = new FacetedMethodParameter(
+                metaModelContext,
                 FeatureType.ACTION_PARAMETER_SCALAR,
                 owningType,
                 actionMethod,

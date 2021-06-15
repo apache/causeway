@@ -97,15 +97,13 @@ implements FacetHolder {
     public ObjectSpecificationDefault(
             final Class<?> correspondingClass,
             final BeanSort beanSort,
-            final MetaModelContext metaModelContext,
+            final MetaModelContext mmc,
             final FacetProcessor facetProcessor,
             final String nameIfIsManagedBean,
             final PostProcessor postProcessor,
             final ClassSubstitutorRegistry classSubstitutorRegistry) {
 
         super(correspondingClass, determineShortName(correspondingClass), beanSort, facetProcessor, postProcessor);
-
-        setMetaModelContext(metaModelContext);
 
         this.nameIfIsManagedBean = nameIfIsManagedBean;
         this.facetedMethodsBuilder = new FacetedMethodsBuilder(this, facetProcessor, classSubstitutorRegistry);

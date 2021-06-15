@@ -35,7 +35,6 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel._testing.MethodRemoverForTesting;
-import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -83,13 +82,6 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
 
         // PRODUCTION
 
-        facetHolder = FacetHolderAbstract.simple(
-                Identifier.propertyOrCollectionIdentifier(LogicalType.fqcn(Customer.class), "firstName"));
-        facetedMethod = FacetedMethod.createForProperty(Customer.class, "firstName");
-        facetedMethodParameter = new FacetedMethodParameter(
-                FeatureType.ACTION_PARAMETER_SCALAR, facetedMethod.getOwningType(), facetedMethod.getMethod(), String.class
-                );
-
         methodRemover = new MethodRemoverForTesting();
 
         mockInteractionProvider = context.mock(InteractionProvider.class);
@@ -110,9 +102,15 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
             will(returnValue(Optional.of(iaContext)));
         }});
 
-        ((MetaModelContextAware)facetHolder).setMetaModelContext(metaModelContext);
-        facetedMethod.setMetaModelContext(metaModelContext);
-        facetedMethodParameter.setMetaModelContext(metaModelContext);
+        facetHolder = FacetHolderAbstract.simple(
+                metaModelContext,
+                Identifier.propertyOrCollectionIdentifier(LogicalType.fqcn(Customer.class), "firstName"));
+
+        facetedMethod = FacetedMethod.createForProperty(metaModelContext, Customer.class, "firstName");
+        facetedMethodParameter = new FacetedMethodParameter(
+                metaModelContext,
+                FeatureType.ACTION_PARAMETER_SCALAR, facetedMethod.getOwningType(), facetedMethod.getMethod(), String.class
+                );
     }
 
 

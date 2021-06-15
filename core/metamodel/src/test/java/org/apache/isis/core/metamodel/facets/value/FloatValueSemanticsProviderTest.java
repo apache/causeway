@@ -26,13 +26,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facets.value.floats.FloatValueSemanticsProviderAbstract;
 import org.apache.isis.core.metamodel.facets.value.floats.FloatWrapperValueSemanticsProvider;
 
-public class FloatValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
+public class FloatValueSemanticsProviderTest
+extends ValueSemanticsProviderAbstractTestCase {
 
     private FloatValueSemanticsProviderAbstract value;
     private Float float1;
@@ -44,8 +44,7 @@ public class FloatValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
         float1 = Float.valueOf(32.5f);
         allowMockAdapterToReturn(float1);
 
-        holder = FacetHolderAbstract.forTesting();
-        ((MetaModelContextAware)holder).setMetaModelContext(super.metaModelContext);
+        holder = FacetHolderAbstract.forTesting(metaModelContext);
 
         setValue(value = new FloatWrapperValueSemanticsProvider(holder));
     }

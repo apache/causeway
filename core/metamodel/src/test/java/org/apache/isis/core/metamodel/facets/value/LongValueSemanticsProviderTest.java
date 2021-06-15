@@ -26,13 +26,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facets.value.longs.LongValueSemanticsProviderAbstract;
 import org.apache.isis.core.metamodel.facets.value.longs.LongWrapperValueSemanticsProvider;
 
-public class LongValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
+public class LongValueSemanticsProviderTest
+extends ValueSemanticsProviderAbstractTestCase {
 
     private LongValueSemanticsProviderAbstract value;
 
@@ -43,8 +43,7 @@ public class LongValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
     public void setUpObjects() throws Exception {
         longObj = Long.valueOf(367322);
         allowMockAdapterToReturn(longObj);
-        holder = FacetHolderAbstract.forTesting();
-        ((MetaModelContextAware)holder).setMetaModelContext(super.metaModelContext);
+        holder = FacetHolderAbstract.forTesting(metaModelContext);
 
         setValue(value = new LongWrapperValueSemanticsProvider(holder));
     }

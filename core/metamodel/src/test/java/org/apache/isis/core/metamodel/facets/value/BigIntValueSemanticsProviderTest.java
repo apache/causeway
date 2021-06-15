@@ -28,13 +28,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.facets.value.biginteger.BigIntegerValueSemanticsProvider;
 
-public class BigIntValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
+public class BigIntValueSemanticsProviderTest
+extends ValueSemanticsProviderAbstractTestCase {
 
     private BigInteger bigInt;
     private FacetHolder holder;
@@ -46,8 +46,7 @@ public class BigIntValueSemanticsProviderTest extends ValueSemanticsProviderAbst
         bigInt = new BigInteger("132199");
         allowMockAdapterToReturn(bigInt);
 
-        holder = FacetHolderAbstract.forTesting();
-        ((MetaModelContextAware)holder).setMetaModelContext(super.metaModelContext);
+        holder = FacetHolderAbstract.forTesting(metaModelContext);
 
         setValue(new BigIntegerValueSemanticsProvider(holder));
     }

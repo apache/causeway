@@ -28,6 +28,7 @@ import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
@@ -42,71 +43,40 @@ import lombok.val;
 public class FacetedMethod
 extends TypedHolderAbstract {
 
-    // //////////////////////////////////////////////////
-    // Factory methods
-    // //////////////////////////////////////////////////
+    // -- FACTORIES
 
-    /**
-     * Principally for testing purposes.
-     */
-    public static FacetedMethod createForProperty(final Class<?> declaringType, final String propertyName) {
-        try {
-            final Method method = declaringType.getMethod("get" + StringExtensions.asPascal(propertyName));
-            return FacetedMethod.createForProperty(declaringType, method);
-        } catch (final SecurityException | NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * Principally for testing purposes.
-     */
-    public static FacetedMethod createForCollection(final Class<?> declaringType, final String collectionName) {
-        try {
-            final Method method = declaringType.getMethod("get" + StringExtensions.asPascal(collectionName));
-            return FacetedMethod.createForCollection(declaringType, method);
-        } catch (final SecurityException | NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * Principally for testing purposes.
-     */
-    public static FacetedMethod createForAction(
-            final Class<?> declaringType,
-            final String actionName,
-            final Class<?>... parameterTypes) {
-
-        try {
-            final Method method = declaringType.getMethod(actionName, parameterTypes);
-            return FacetedMethod.createForAction(declaringType, method);
-        } catch (final SecurityException | NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
-    public static FacetedMethod createForProperty(final Class<?> declaringType, final Method method) {
-        return new FacetedMethod(FeatureType.PROPERTY, declaringType, method, method.getReturnType(), emptyParameterList());
-    }
-
-    public static FacetedMethod createForCollection(final Class<?> declaringType, final Method method) {
-        return new FacetedMethod(FeatureType.COLLECTION, declaringType, method, null, emptyParameterList());
-    }
-
-    public static FacetedMethod createForAction(
+    public static FacetedMethod createForProperty(
+            final MetaModelContext mmc,
             final Class<?> declaringType,
             final Method method) {
-        return new FacetedMethod(FeatureType.ACTION, declaringType, method, method.getReturnType(),
-                getParameters(declaringType, method));
+        return new FacetedMethod(mmc, FeatureType.PROPERTY,
+                declaringType, method, method.getReturnType(), emptyParameterList());
+    }
+
+    public static FacetedMethod createForCollection(
+            final MetaModelContext mmc,
+            final Class<?> declaringType,
+            final Method method) {
+        return new FacetedMethod(mmc, FeatureType.COLLECTION,
+                declaringType, method, null, emptyParameterList());
+    }
+
+    public static FacetedMethod createForAction(
+            final MetaModelContext mmc,
+            final Class<?> declaringType,
+            final Method method) {
+        return new FacetedMethod(mmc, FeatureType.ACTION,
+                declaringType, method, method.getReturnType(),
+                getParameters(mmc, declaringType, method));
     }
 
     private static List<FacetedMethodParameter> getParameters(
+            final MetaModelContext mmc,
             final Class<?> declaringType,
             final Method actionMethod) {
 
-        final List<FacetedMethodParameter> actionParams = _Lists.newArrayList(actionMethod.getParameterCount());
+        final List<FacetedMethodParameter> actionParams =
+                _Lists.newArrayList(actionMethod.getParameterCount());
 
         for(val param : actionMethod.getParameters()) {
 
@@ -119,7 +89,7 @@ extends TypedHolderAbstract {
                     : FeatureType.ACTION_PARAMETER_SCALAR;
 
             val facetedMethodParam =
-                    new FacetedMethodParameter(featureType, declaringType, actionMethod, parameterType);
+                    new FacetedMethodParameter(mmc, featureType, declaringType, actionMethod, parameterType);
 
             if(featureType != FeatureType.ACTION_PARAMETER_COLLECTION) {
                 actionParams.add(facetedMethodParam);
@@ -147,6 +117,56 @@ extends TypedHolderAbstract {
         }
         return Collections.unmodifiableList(actionParams);
     }
+
+    // -- FACTORIES (JUNIT)
+
+    /**
+     * Principally for testing purposes.
+     */
+    public static FacetedMethod createForProperty(
+            final MetaModelContext mmc,
+            final Class<?> declaringType,
+            final String propertyName) {
+        try {
+            final Method method = declaringType.getMethod("get" + StringExtensions.asPascal(propertyName));
+            return FacetedMethod.createForProperty(mmc, declaringType, method);
+        } catch (final SecurityException | NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Principally for testing purposes.
+     */
+    public static FacetedMethod createForCollection(
+            final MetaModelContext mmc,
+            final Class<?> declaringType,
+            final String collectionName) {
+        try {
+            final Method method = declaringType.getMethod("get" + StringExtensions.asPascal(collectionName));
+            return FacetedMethod.createForCollection(mmc, declaringType, method);
+        } catch (final SecurityException | NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Principally for testing purposes.
+     */
+    public static FacetedMethod createForAction(
+            final MetaModelContext mmc,
+            final Class<?> declaringType,
+            final String actionName,
+            final Class<?>... parameterTypes) {
+
+        try {
+            final Method method = declaringType.getMethod(actionName, parameterTypes);
+            return FacetedMethod.createForAction(mmc, declaringType, method);
+        } catch (final SecurityException | NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     // -- FIELDS
 
@@ -178,13 +198,14 @@ extends TypedHolderAbstract {
     // -- CONSTRUCTOR
 
     private FacetedMethod(
+            final MetaModelContext mmc,
             final FeatureType featureType,
             final Class<?> declaringType,
             final Method method,
             final Class<?> type,
             final List<FacetedMethodParameter> parameters) {
 
-        super(featureType, type);
+        super(mmc, featureType, type);
         this.owningType = declaringType;
         this.method = method;
         super.featureIdentifier = featureType.identifierFor(LogicalType.lazy(

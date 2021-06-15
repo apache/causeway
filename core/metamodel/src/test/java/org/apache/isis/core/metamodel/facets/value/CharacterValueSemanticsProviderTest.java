@@ -31,7 +31,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facets.value.chars.CharValueSemanticsProviderAbstract;
 import org.apache.isis.core.metamodel.facets.value.chars.CharWrapperValueSemanticsProvider;
 
-public class CharacterValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
+public class CharacterValueSemanticsProviderTest
+extends ValueSemanticsProviderAbstractTestCase {
 
     private CharValueSemanticsProviderAbstract value;
 
@@ -42,7 +43,7 @@ public class CharacterValueSemanticsProviderTest extends ValueSemanticsProviderA
     @Before
     public void setUpObjects() throws Exception {
         character = Character.valueOf('r');
-        holder = FacetHolderAbstract.forTesting();
+        holder = FacetHolderAbstract.forTesting(metaModelContext);
         setValue(value = new CharWrapperValueSemanticsProvider(holder));
     }
 

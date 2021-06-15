@@ -32,7 +32,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
@@ -40,7 +39,8 @@ import org.apache.isis.core.metamodel.facets.value.dateutil.JavaUtilDateValueSem
 
 import lombok.val;
 
-public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
+public class JavaUtilDateValueSemanticsProviderTest
+extends ValueSemanticsProviderAbstractTestCase {
 
     private java.util.Date date;
     private FacetHolder holder;
@@ -50,8 +50,7 @@ public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProvid
 
         date = new java.util.Date(0);
 
-        holder = FacetHolderAbstract.forTesting();
-        ((MetaModelContextAware)holder).setMetaModelContext(super.metaModelContext);
+        holder = FacetHolderAbstract.forTesting(metaModelContext);
 
         setValue(new JavaUtilDateValueSemanticsProvider(holder) {
         });

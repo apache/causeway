@@ -18,13 +18,12 @@
  */
 package org.apache.isis.core.metamodel.facets;
 
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor
 public abstract class TypedHolderAbstract
 extends FacetHolderAbstract
 implements TypedHolder {
@@ -42,9 +41,17 @@ implements TypedHolder {
     @Getter(onMethod_ = {@Override})
     protected Class<?> type;
 
+    public TypedHolderAbstract(MetaModelContext mmc, FeatureType featureType, Class<?> type) {
+        super(mmc);
+        this.featureType = featureType;
+        this.type = type;
+    }
+
     @Override // as used for logging, not strictly required
     public String toString() {
         return type.getSimpleName();
     }
+
+
 
 }

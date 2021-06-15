@@ -22,6 +22,7 @@ import java.lang.reflect.Method;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 
 import lombok.val;
@@ -30,12 +31,13 @@ public class FacetedMethodParameter
 extends TypedHolderAbstract {
 
     public FacetedMethodParameter(
+            final MetaModelContext mmc,
             final FeatureType featureType,
             final Class<?> declaringType,
             final Method method,
             final Class<?> type) {
 
-        super(featureType, type);
+        super(mmc, featureType, type);
 
         val logicalType = LogicalType.lazy(
                 declaringType,
@@ -46,11 +48,12 @@ extends TypedHolderAbstract {
     }
 
     public FacetedMethodParameter(
+            final MetaModelContext mmc,
             final FeatureType featureType,
             final Class<?> type,
             final Identifier identifier) {
 
-        super(featureType, type);
+        super(mmc, featureType, type);
         super.featureIdentifier = identifier;
     }
 

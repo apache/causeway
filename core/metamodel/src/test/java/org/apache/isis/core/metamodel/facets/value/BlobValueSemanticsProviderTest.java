@@ -31,7 +31,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facets.value.blobs.BlobValueSemanticsProvider;
 
-public class BlobValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
+public class BlobValueSemanticsProviderTest
+extends ValueSemanticsProviderAbstractTestCase {
 
     private BlobValueSemanticsProvider value;
     private Blob blob;
@@ -41,7 +42,7 @@ public class BlobValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
     public void setUpObjects() throws Exception {
         blob = new Blob("myfile1.docx", "application", "vnd.ms-word", new byte[]{1,2,3,4});
         allowMockAdapterToReturn(blob);
-        holder = FacetHolderAbstract.forTesting();
+        holder = FacetHolderAbstract.forTesting(metaModelContext);
 
         setValue(value = new BlobValueSemanticsProvider(holder));
     }

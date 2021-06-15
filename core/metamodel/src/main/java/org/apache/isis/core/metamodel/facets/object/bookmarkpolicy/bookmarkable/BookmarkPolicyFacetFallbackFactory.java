@@ -36,7 +36,8 @@ import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.val;
 
-public class BookmarkPolicyFacetFallbackFactory extends FacetFactoryAbstract
+public class BookmarkPolicyFacetFallbackFactory
+extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
     public BookmarkPolicyFacetFallbackFactory() {

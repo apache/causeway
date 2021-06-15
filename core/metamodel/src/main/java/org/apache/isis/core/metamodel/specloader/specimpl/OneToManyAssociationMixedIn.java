@@ -95,7 +95,9 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
                     mixinAction.getFacetedMethod().getFeatureIdentifier().getMemberParameterClassNames()),
                 mixinAction.getFacetedMethod(), typeOfSpec(mixinAction));
 
-        this.facetHolder = FacetHolderAbstract.simple(super.getFeatureIdentifier());
+        this.facetHolder = FacetHolderAbstract.simple(
+                mixeeSpec.getMetaModelContext(),
+                super.getFeatureIdentifier());
 
         this.mixinType = mixinType;
         this.mixinAction = mixinAction;

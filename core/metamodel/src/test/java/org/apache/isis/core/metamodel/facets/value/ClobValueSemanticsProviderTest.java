@@ -31,7 +31,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facets.value.clobs.ClobValueSemanticsProvider;
 
-public class ClobValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
+public class ClobValueSemanticsProviderTest
+extends ValueSemanticsProviderAbstractTestCase {
 
     private ClobValueSemanticsProvider value;
     private Clob clob;
@@ -41,7 +42,7 @@ public class ClobValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
     public void setUpObjects() throws Exception {
         clob = new Clob("myfile1.xml", "application", "xml", "abcdef");
         allowMockAdapterToReturn(clob);
-        holder = FacetHolderAbstract.forTesting();
+        holder = FacetHolderAbstract.forTesting(metaModelContext);
 
         setValue(value = new ClobValueSemanticsProvider(holder));
     }

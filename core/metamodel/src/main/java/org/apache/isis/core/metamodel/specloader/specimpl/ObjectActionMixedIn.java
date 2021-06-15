@@ -78,7 +78,9 @@ implements MixedInMember {
                     mixinAction.getFacetedMethod().getFeatureIdentifier().getMemberParameterClassNames()),
                 mixinAction.getFacetedMethod());
 
-        this.facetHolder = FacetHolderAbstract.simple(super.getFeatureIdentifier());
+        this.facetHolder = FacetHolderAbstract.simple(
+                mixedInType.getMetaModelContext(),
+                super.getFeatureIdentifier());
         this.mixinType = mixinType;
         this.mixinAction = mixinAction;
         this.mixedInType = mixedInType;

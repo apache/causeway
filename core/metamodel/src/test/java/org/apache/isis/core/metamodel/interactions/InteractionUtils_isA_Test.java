@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.interactions;
 
 import org.apache.isis.commons.internal.functions._Predicates;
+import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -64,7 +65,8 @@ public class InteractionUtils_isA_Test extends TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        facetHolder = FacetHolderAbstract.forTesting();
+
+        facetHolder = FacetHolderAbstract.forTesting(MetaModelContext_forTesting.buildDefault());
         fooSuperFacet = new FooSuperFacet(FooSuperFacet.class, facetHolder);
         fooFacet = new FooFacet(facetHolder);
         fooSubFacet = new FooSubFacet(facetHolder);

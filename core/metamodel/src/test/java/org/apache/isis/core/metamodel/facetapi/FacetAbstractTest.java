@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facetapi;
 
+import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
+
 import junit.framework.TestCase;
 
 public class FacetAbstractTest extends TestCase {
@@ -42,8 +44,8 @@ public class FacetAbstractTest extends TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        facetHolder = FacetHolderAbstract.forTesting();
-        facetHolder2 = FacetHolderAbstract.forTesting();
+        facetHolder = FacetHolderAbstract.forTesting(MetaModelContext_forTesting.buildDefault());
+        facetHolder2 = FacetHolderAbstract.forTesting(MetaModelContext_forTesting.buildDefault());
         fooFacet = new ConcreteFacet(FooFacet.class, facetHolder);
         new ConcreteFacet(BarFacet.class, facetHolder);
         facetHolder.addFacet(fooFacet);

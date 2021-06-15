@@ -29,6 +29,8 @@ import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.layout.group.GroupIdAndName;
 import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacetAbstract;
@@ -54,8 +56,9 @@ public class DeweyOrderComparatorTest extends TestCase {
         }
     }
 
-    private final FacetedMethod m1 = FacetedMethod.createForProperty(Customer.class, "abc");
-    private final FacetedMethod m2 = FacetedMethod.createForProperty(Customer.class, "abc");
+    private final MetaModelContext mmc = MetaModelContext_forTesting.buildDefault();
+    private final FacetedMethod m1 = FacetedMethod.createForProperty(mmc, Customer.class, "abc");
+    private final FacetedMethod m2 = FacetedMethod.createForProperty(mmc, Customer.class, "abc");
 
     TranslationService mockTranslationService;
 
@@ -63,7 +66,7 @@ public class DeweyOrderComparatorTest extends TestCase {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
 	static TranslationContext ctx = TranslationContext.ofName("test");
-    
+
     @Override
     protected void setUp() {
 
@@ -182,13 +185,13 @@ public class DeweyOrderComparatorTest extends TestCase {
         setupLayoutFacets("def", "2", m2);
         assertEquals(+1, comparator.compare(m1, m2));
     }
-    
+
     // -- HELPER
-    
+
     void setupLayoutFacets(String groupId, String sequence, FacetedMethod facetedMethod) {
         facetedMethod.addFacet(new LayoutGroupFacetAbstract(GroupIdAndName.of(groupId, ""), facetedMethod) {});
         facetedMethod.addFacet(new LayoutOrderFacetAbstract(sequence, facetedMethod) {});
     }
-        
+
 
 }

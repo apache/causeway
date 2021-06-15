@@ -34,7 +34,6 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
@@ -150,8 +149,7 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
 
     private ValidationFailures processThenValidate(final Class<?> cls) {
 
-        val holder = FacetHolderAbstract.forTesting();
-        ((MetaModelContextAware)holder).setMetaModelContext(metaModelContext);
+        val holder = FacetHolderAbstract.forTesting(metaModelContext);
         facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, holder));
 
         return metaModelContext.getSpecificationLoader().getOrAssessValidationResult();

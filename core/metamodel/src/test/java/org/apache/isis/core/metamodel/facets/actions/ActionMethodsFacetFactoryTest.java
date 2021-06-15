@@ -61,7 +61,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     private JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
-    private final ObjectSpecification voidSpec = new ObjectSpecificationStub(void.class);
+    private ObjectSpecification voidSpec;
 //    private final ObjectSpecification stringSpec = new ObjectSpecificationStub("java.lang.String");
 //    private final ObjectSpecification customerSpec = new ObjectSpecificationStub("Customer");
 
@@ -71,6 +71,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         // PRODUCTION
 
         super.setUp();
+
+        voidSpec = new ObjectSpecificationStub(metaModelContext, void.class);
 
         context.checking(new Expectations() {{
 
@@ -306,7 +308,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method default0Method = findMethod(Customer.class, "default0SomeAction", new Class[] {});
         final Method default1Method = findMethod(Customer.class, "default1SomeAction", new Class[]{});
 
-        final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(Customer.class, actionMethod);
+        final FacetedMethod facetHolderWithParms = FacetedMethod
+                .createForAction(metaModelContext, Customer.class, actionMethod);
 
         facetFactory.process(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetHolderWithParms));
 
@@ -361,7 +364,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method choices1Method = findMethod(Customer.class, "choices1SomeAction", new Class[] {});
         final Method choices2Method = findMethod(Customer.class, "choices2SomeAction", new Class[] {});
 
-        final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(Customer.class, actionMethod);
+        final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(
+                metaModelContext, Customer.class, actionMethod);
 
         facetFactory.process(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetHolderWithParms));
 
@@ -413,7 +417,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class, long.class });
         final Method autoComplete0Method = findMethod(Customer.class, "autoComplete0SomeAction", new Class[] {String.class});
 
-        final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(Customer.class, actionMethod);
+        final FacetedMethod facetHolderWithParms = FacetedMethod
+                .createForAction(metaModelContext, Customer.class, actionMethod);
 
         facetFactory.process(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetHolderWithParms));
 
@@ -460,7 +465,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         }
 
         final Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class, long.class });
-        final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(Customer.class, actionMethod);
+        final FacetedMethod facetHolderWithParms = FacetedMethod
+                .createForAction(metaModelContext, Customer.class, actionMethod);
 
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetHolderWithParms);
         facetFactory.process(processMethodContext);
@@ -506,7 +512,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         }
 
         final Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class, long.class });
-        final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(Customer.class, actionMethod);
+        final FacetedMethod facetHolderWithParms = FacetedMethod
+                .createForAction(metaModelContext, Customer.class, actionMethod);
 
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetHolderWithParms);
         facetFactory.process(processMethodContext);

@@ -40,11 +40,12 @@ import org.apache.isis.core.metamodel.testspec.ObjectSpecificationStub;
 import lombok.val;
 
 @SuppressWarnings("unused")
-public class ActionAnnotationFacetFactoryTest_ActionInvocation extends AbstractFacetFactoryTest {
+public class ActionAnnotationFacetFactoryTest_ActionInvocation
+extends AbstractFacetFactoryTest {
 
-    private final ObjectSpecification voidSpec = new ObjectSpecificationStub(void.class);
-    private final ObjectSpecification stringSpec = new ObjectSpecificationStub(java.lang.String.class);
-    private final ObjectSpecification customerSpec = new ObjectSpecificationStub(Customer.class);
+    private ObjectSpecification voidSpec;
+    private ObjectSpecification stringSpec;
+    private ObjectSpecification customerSpec;
     private ActionAnnotationFacetFactory facetFactory;
 
     private void processInvocation(
@@ -58,7 +59,11 @@ public class ActionAnnotationFacetFactoryTest_ActionInvocation extends AbstractF
     public void setUp() throws Exception {
         super.setUp();
         this.facetFactory =  new ActionAnnotationFacetFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        facetFactory.setMetaModelContext(metaModelContext);
+
+        voidSpec = new ObjectSpecificationStub(metaModelContext, void.class);
+        stringSpec = new ObjectSpecificationStub(metaModelContext, java.lang.String.class);
+        customerSpec = new ObjectSpecificationStub(metaModelContext, Customer.class);
     }
 
     public void testActionInvocationFacetIsInstalledAndMethodRemoved() {
@@ -149,8 +154,8 @@ public class ActionAnnotationFacetFactoryTest_ActionInvocation extends AbstractF
 
         final Method actionMethod = findMethod(CustomerEx.class, "someAction", new Class[] { int.class, long.class });
 
-        final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(CustomerEx.class, actionMethod);
-        facetHolderWithParms.setMetaModelContext(super.metaModelContext);
+        final FacetedMethod facetHolderWithParms = FacetedMethod
+                .createForAction(metaModelContext, CustomerEx.class, actionMethod);
 
         processInvocation(facetFactory, new ProcessMethodContext(CustomerEx.class, null, actionMethod, methodRemover, facetHolderWithParms));
 
@@ -201,8 +206,7 @@ public class ActionAnnotationFacetFactoryTest_ActionInvocation extends AbstractF
         final Method choices1Method = findMethod(CustomerEx.class, "choices1SomeAction", new Class[] {});
         final Method disableMethod = findMethod(CustomerEx.class, "disableSomeAction", new Class[] { int.class, long.class });
 
-        final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(CustomerEx.class, actionMethod);
-        facetHolderWithParms.setMetaModelContext(metaModelContext);
+        final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(metaModelContext, CustomerEx.class, actionMethod);
 
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(CustomerEx.class, null, actionMethod, methodRemover, facetHolderWithParms);
         processInvocation(facetFactory, processMethodContext);
