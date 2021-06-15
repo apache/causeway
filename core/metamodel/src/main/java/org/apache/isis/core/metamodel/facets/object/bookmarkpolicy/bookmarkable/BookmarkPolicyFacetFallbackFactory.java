@@ -24,7 +24,6 @@ import java.util.function.Predicate;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
-import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
@@ -50,29 +49,11 @@ implements MetaModelRefiner {
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-
-        _Probe.errOut("facet-processing(bookmarks) type: %s",
-                processClassContext.getFacetHolder().getFeatureIdentifier());
-
-        if(processClassContext.getFacetHolder().getFeatureIdentifier().toString()
-                .contains("services.confview.ConfigurationMenu")) {
-            System.out.println("!!! bingo");
-        }
-
         addFacetIfPresent(new BookmarkPolicyFacetFallback(processClassContext.getFacetHolder()));
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-
-        _Probe.errOut("facet-processing(bookmarks) method: %s",
-                processMethodContext.getFacetHolder().getFeatureIdentifier());
-
-        if(processMethodContext.getFacetHolder().getFeatureIdentifier().toString()
-                .contains("services.confview.ConfigurationMenu")) {
-            System.out.println("!!! bingo");
-        }
-
         addFacetIfPresent(new BookmarkPolicyFacetFallback(processMethodContext.getFacetHolder()));
     }
 
