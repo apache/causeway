@@ -46,7 +46,7 @@ extends ValueFacetUsingSemanticsProviderFactory<Enum<?>> {
 
         addFacets(_Casts.uncheckedCast(
                 new EnumValueSemanticsProvider<>(facetHolder, _Casts.uncheckedCast(cls))));
-        addFacetIfPresent(new ChoicesFacetEnum(facetHolder, cls));
+        addFacet(new ChoicesFacetEnum(facetHolder, cls));
     }
 
 }

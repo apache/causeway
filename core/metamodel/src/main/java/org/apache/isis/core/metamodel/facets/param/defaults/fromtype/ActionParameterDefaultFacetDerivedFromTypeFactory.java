@@ -57,7 +57,7 @@ extends FacetFactoryAbstract  {
             hasAtLeastOneDefault = hasAtLeastOneDefault | (parameterTypeDefaultedFacets[i] != null);
         }
         if (hasAtLeastOneDefault) {
-            addFacetIfPresent(new ActionParameterDefaultFacetInferredFromTypeFacets(parameterTypeDefaultedFacets, processParameterContext.getFacetHolder()));
+            addFacet(new ActionParameterDefaultFacetInferredFromTypeFacets(parameterTypeDefaultedFacets, processParameterContext.getFacetHolder()));
         }
     }
 

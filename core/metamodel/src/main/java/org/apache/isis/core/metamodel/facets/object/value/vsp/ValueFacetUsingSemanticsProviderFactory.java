@@ -32,7 +32,7 @@ extends FacetFactoryAbstract {
     }
 
     protected void addFacets(final ValueSemanticsProviderAndFacetAbstract<T> adapter) {
-        FacetUtil.addFacetIfPresent(
+        FacetUtil.addFacet(
                 new ValueFacetUsingSemanticsProvider(adapter, adapter.getFacetHolder()));
     }
 

@@ -24,6 +24,7 @@ import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.commons.internal.base._Optionals;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
@@ -40,48 +41,54 @@ extends PromptStyleFacetAbstract {
         this.promptStyle = promptStyle;
     }
 
-    public static PromptStyleFacet create(
+    public static Optional<PromptStyleFacet> create(
             final Optional<ActionLayout> actionLayoutIfAny,
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        return actionLayoutIfAny
-                .map(ActionLayout::promptStyle)
-                .filter(promptStyle -> promptStyle != PromptStyle.NOT_SPECIFIED)
-                .map(promptStyle -> {
+        return _Optionals.<PromptStyleFacet>orNullable(
 
-                    switch (promptStyle) {
-                    case DIALOG:
-                    case DIALOG_MODAL:
-                    case DIALOG_SIDEBAR:
-                    case INLINE:
-                    case INLINE_AS_IF_EDIT:
-                        return new PromptStyleFacetForActionLayoutAnnotation(promptStyle, holder);
+        actionLayoutIfAny
+        .map(ActionLayout::promptStyle)
+        .filter(promptStyle -> promptStyle != PromptStyle.NOT_SPECIFIED)
+        .map(promptStyle -> {
 
-                    case AS_CONFIGURED:
+            switch (promptStyle) {
+            case DIALOG:
+            case DIALOG_MODAL:
+            case DIALOG_SIDEBAR:
+            case INLINE:
+            case INLINE_AS_IF_EDIT:
+                return new PromptStyleFacetForActionLayoutAnnotation(promptStyle, holder);
 
-                        // do not replace
-                        if (holder.containsNonFallbackFacet(PromptStyleFacet.class)) {
-                            return null;
-                        }
+            case AS_CONFIGURED:
 
-                        promptStyle = configuration.getViewer().getWicket().getPromptStyle();
-                        return new PromptStyleFacetAsConfigured(promptStyle, holder);
-                    default:
-                        throw new IllegalStateException("promptStyle '" + promptStyle + "' not recognised");
-                    }
-
-                })
-                .orElseGet(() -> {
-                    // do not replace
-                    if (holder.containsNonFallbackFacet(PromptStyleFacet.class)) {
-                        return null;
-                    }
-
-                    PromptStyle promptStyle = configuration.getViewer().getWicket().getPromptStyle();
-                    return new PromptStyleFacetAsConfigured(promptStyle, holder);
+                // do not replace
+                if (holder.containsNonFallbackFacet(PromptStyleFacet.class)) {
+                    return null;
                 }
-                        );
+
+                promptStyle = configuration.getViewer().getWicket().getPromptStyle();
+                return new PromptStyleFacetAsConfigured(promptStyle, holder);
+            default:
+                throw new IllegalStateException("promptStyle '" + promptStyle + "' not recognised");
+            }
+
+        })
+
+        ,
+
+        () -> {
+            // do not replace
+            if (holder.containsNonFallbackFacet(PromptStyleFacet.class)) {
+                return null;
+            }
+
+            PromptStyle promptStyle = configuration.getViewer().getWicket().getPromptStyle();
+            return new PromptStyleFacetAsConfigured(promptStyle, holder);
+        }
+
+        );
 
     }
 

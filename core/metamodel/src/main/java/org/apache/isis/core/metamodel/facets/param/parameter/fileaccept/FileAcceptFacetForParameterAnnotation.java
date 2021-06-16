@@ -27,17 +27,17 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.fileaccept.FileAcceptFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.fileaccept.FileAcceptFacetAbstract;
 
-public class FileAcceptFacetForParameterAnnotation extends FileAcceptFacetAbstract {
+public class FileAcceptFacetForParameterAnnotation
+extends FileAcceptFacetAbstract {
 
-    public static FileAcceptFacet create(
+    public static Optional<FileAcceptFacet> create(
             final Optional<Parameter> parameterIfAny,
             final FacetHolder holder) {
 
         return parameterIfAny
                 .map(Parameter::fileAccept)
                 .filter(_Strings::isNotEmpty)
-                .map(fileAccept -> new FileAcceptFacetForParameterAnnotation(fileAccept, holder))
-                .orElse(null);
+                .map(fileAccept -> new FileAcceptFacetForParameterAnnotation(fileAccept, holder));
     }
 
     private FileAcceptFacetForParameterAnnotation(final String value, final FacetHolder holder) {

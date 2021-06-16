@@ -75,10 +75,10 @@ extends MethodPrefixBasedFacetFactoryAbstract {
 
         final FacetHolder property = processMethodContext.getFacetHolder();
         if (setMethod != null) {
-            addFacetIfPresent(new PropertySetterFacetViaSetterMethod(setMethod, property));
-            addFacetIfPresent(new PropertyInitializationFacetViaSetterMethod(setMethod, property));
+            addFacet(new PropertySetterFacetViaSetterMethod(setMethod, property));
+            addFacet(new PropertyInitializationFacetViaSetterMethod(setMethod, property));
         } else {
-            addFacetIfPresent(new SnapshotExcludeFacetInferred(property));
+            addFacet(new SnapshotExcludeFacetInferred(property));
 
             // previously we also added the DisabledFacetAlwaysEverywhere facet here.
             // however, the PropertyModifyFacetFactory (which comes next) might install a PropertySetterFacet instead.
@@ -97,7 +97,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
             return;
         }
         final FacetHolder property = processMethodContext.getFacetHolder();
-        addFacetIfPresent(new PropertyClearFacetViaSetterMethod(setMethod, property));
+        addFacet(new PropertyClearFacetViaSetterMethod(setMethod, property));
     }
 
 }

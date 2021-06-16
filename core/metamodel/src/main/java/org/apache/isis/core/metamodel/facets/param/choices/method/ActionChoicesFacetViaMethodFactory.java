@@ -75,7 +75,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         final Class<?> returnType = actionMethod.getReturnType();
         final FacetHolder action = processMethodContext.getFacetHolder();
 
-        addFacetIfPresent(new ActionChoicesFacetViaMethod(choicesMethod, returnType, action));
+        addFacet(new ActionChoicesFacetViaMethod(choicesMethod, returnType, action));
 
     }
 

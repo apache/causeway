@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.metamodel.facets.param.bigdecimal.javaxvaldigits;
 
+import java.util.Optional;
+
 import javax.validation.constraints.Digits;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -27,10 +29,16 @@ import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFac
 public class BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation
 extends BigDecimalValueFacetAbstract {
 
-     public static BigDecimalValueFacet create(final Digits annotation, final FacetHolder holder) {
-        final int length = annotation.integer() + annotation.fraction();
-        final int scale = annotation.fraction();
-        return new BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation(holder, length, scale);
+     public static Optional<BigDecimalValueFacet> create(
+             final Optional<Digits> digitsIfAny,
+             final FacetHolder holder) {
+
+         return digitsIfAny
+         .map(digits->{
+             final int length = digits.integer() + digits.fraction();
+             final int scale = digits.fraction();
+             return new BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation(holder, length, scale);
+         });
     }
 
     private BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation(

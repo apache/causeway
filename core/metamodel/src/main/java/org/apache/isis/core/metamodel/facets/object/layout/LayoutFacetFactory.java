@@ -46,13 +46,13 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         final Method method = MethodFinderUtils.findMethod(
                 cls, MethodLiteralConstants.LAYOUT_METHOD_NAME, String.class, NO_ARG);
 
-        final LayoutFacet facet;
+        final LayoutFacet layoutFacet;
         if (method == null) {
-            facet = new LayoutFacetFallback(facetHolder);
+            layoutFacet = new LayoutFacetFallback(facetHolder);
         } else {
             processClassContext.removeMethod(method);
-            facet = new LayoutFacetMethod(method, facetHolder);
+            layoutFacet = new LayoutFacetMethod(method, facetHolder);
         }
-        addFacetIfPresent(facet);
+        addFacet(layoutFacet);
     }
 }

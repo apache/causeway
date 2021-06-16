@@ -59,7 +59,7 @@ extends FacetFactoryAbstract {
         }
 
         final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
-        FacetUtil.addFacetIfPresent(new NotInServiceMenuFacetDerivedFromDomainServiceFacet(natureOfService, facetHolder));
+        FacetUtil.addFacet(new NotInServiceMenuFacetDerivedFromDomainServiceFacet(natureOfService, facetHolder));
     }
 
 }

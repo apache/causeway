@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.commons.internal.base._Strings;
@@ -26,18 +28,24 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacetAbstract;
 
-public class CssClassFaFacetForActionXml extends CssClassFaFacetAbstract {
+public class CssClassFaFacetForActionXml
+extends CssClassFaFacetAbstract {
 
-    public static CssClassFaFacet create(final ActionLayoutData actionLayout, final FacetHolder holder) {
+    public static Optional<CssClassFaFacet> create(
+            final ActionLayoutData actionLayout,
+            final FacetHolder holder) {
         if(actionLayout == null) {
-            return null;
+            return Optional.empty();
         }
         final String cssClassFa = _Strings.emptyToNull(actionLayout.getCssClassFa());
         CssClassFaPosition cssClassFaPosition = actionLayout.getCssClassFaPosition();
-        return cssClassFa != null ? new CssClassFaFacetForActionXml(cssClassFa, cssClassFaPosition, holder) : null;
+        return cssClassFa != null
+                ? Optional.of(new CssClassFaFacetForActionXml(cssClassFa, cssClassFaPosition, holder))
+                : Optional.empty();
     }
 
-    private CssClassFaFacetForActionXml(final String value, final CssClassFaPosition position, final FacetHolder holder) {
+    private CssClassFaFacetForActionXml(
+            final String value, final CssClassFaPosition position, final FacetHolder holder) {
         super(value, position, holder);
     }
 

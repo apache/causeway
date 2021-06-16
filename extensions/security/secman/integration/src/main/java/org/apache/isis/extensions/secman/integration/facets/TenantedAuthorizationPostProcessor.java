@@ -18,6 +18,7 @@
  */
 package org.apache.isis.extensions.secman.integration.facets;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -93,7 +94,7 @@ extends ObjectSpecificationPostProcessorAbstract {
         FacetUtil.addFacetIfPresent(createFacet(specification.getCorrespondingClass(), objectFeature));
     }
 
-    private TenantedAuthorizationFacetDefault createFacet(
+    private Optional<TenantedAuthorizationFacetDefault> createFacet(
             final Class<?> cls,
             final FacetHolder holder) {
 
@@ -104,11 +105,11 @@ extends ObjectSpecificationPostProcessorAbstract {
                 .collect(Collectors.<ApplicationTenancyEvaluator>toList());
 
         return evaluators.isEmpty()
-                ? null
-                : new TenantedAuthorizationFacetDefault(
+                ? Optional.empty()
+                : Optional.of(new TenantedAuthorizationFacetDefault(
                         evaluators, userRepository,
                         queryResultsCacheProvider, userService,
-                        holder);
+                        holder));
     }
 
     @Inject ServiceRegistry serviceRegistry;

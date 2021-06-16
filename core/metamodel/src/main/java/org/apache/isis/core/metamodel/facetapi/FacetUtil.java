@@ -34,17 +34,28 @@ import lombok.experimental.UtilityClass;
 public final class FacetUtil {
 
     /**
+     * Attaches the {@link Facet} to its {@link Facet#getFacetHolder()}.
+     * @param facet - non-null
+     * @return the argument as is
+     */
+    public static <F extends Facet> F addFacet(final @NonNull F facet) {
+        facet.getFacetHolder().addFacet(facet);
+        return facet;
+    }
+
+    /**
      * Attaches the {@link Facet} to its {@link Facet#getFacetHolder() facet
      * holder} based on precedence. Acts as a no-op if facet is <tt>null</tt>.
-     * @param facet - null-able
-     * @return the argument wrapped in an {@link Optional}
+     * @param facetIfAny - null-able (for fail-safety)
+     * @return the argument as is - or just in case if null converted to an Optional.empty()
      */
-    public static <F extends Facet> Optional<F> addFacetIfPresent(final @Nullable F facet) {
-        if (facet == null) {
+    public static <F extends Facet> Optional<F> addFacetIfPresent(final @Nullable Optional<F> facetIfAny) {
+        if (facetIfAny == null) {
             return Optional.empty();
         }
-        facet.getFacetHolder().addFacet(facet);
-        return Optional.of(facet);
+        facetIfAny
+            .ifPresent(facet->facet.getFacetHolder().addFacet(facet));
+        return facetIfAny;
     }
 
     /**
@@ -56,7 +67,8 @@ public final class FacetUtil {
     public static boolean addFacets(final @NonNull Iterable<Facet> facetList) {
         boolean addedFacets = false;
         for (val facet : facetList) {
-            addedFacets = addFacetIfPresent(facet).isPresent() | addedFacets;
+            addedFacets = addFacetIfPresent(Optional.ofNullable(facet)).isPresent()
+                    | addedFacets;
         }
         return addedFacets;
     }
@@ -72,7 +84,7 @@ public final class FacetUtil {
 
             @SuppressWarnings("unchecked")
             @Override
-            public void visit(BiConsumer<Class<T>, T> elementConsumer) {
+            public void visit(final BiConsumer<Class<T>, T> elementConsumer) {
                 facetHolder.streamFacets()
                 .forEach(facet->elementConsumer.accept((Class<T>)facet.facetType(), (T)facet));
             }

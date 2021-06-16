@@ -29,15 +29,14 @@ import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengt
 public class TypicalLengthFacetForParameterLayoutAnnotation
 extends TypicalLengthFacetAbstract {
 
-    public static TypicalLengthFacet create(
+    public static Optional<TypicalLengthFacet> create(
             final Optional<ParameterLayout> parameterLayoutIfAny,
             final FacetHolder holder) {
 
         return parameterLayoutIfAny
         .map(ParameterLayout::typicalLength)
         .filter(typicalLength -> typicalLength != -1)
-        .map(typicalLength -> new TypicalLengthFacetForParameterLayoutAnnotation(typicalLength, holder))
-        .orElse(null);
+        .map(typicalLength -> new TypicalLengthFacetForParameterLayoutAnnotation(typicalLength, holder));
     }
 
     private TypicalLengthFacetForParameterLayoutAnnotation(

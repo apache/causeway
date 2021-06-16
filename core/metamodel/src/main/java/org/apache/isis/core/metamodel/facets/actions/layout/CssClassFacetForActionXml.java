@@ -19,23 +19,30 @@
 
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetSimple;
 
-public class CssClassFacetForActionXml extends CssClassFacetSimple {
+public class CssClassFacetForActionXml
+extends CssClassFacetSimple {
 
-    public static CssClassFacet create(ActionLayoutData actionLayout, FacetHolder holder) {
+    public static Optional<CssClassFacet> create(
+            final ActionLayoutData actionLayout,
+            final FacetHolder holder) {
         if(actionLayout == null) {
-            return null;
+            return Optional.empty();
         }
         final String cssClass = _Strings.emptyToNull(actionLayout.getCssClass());
-        return cssClass != null ? new CssClassFacetForActionXml(cssClass, holder) : null;
+        return cssClass != null
+                ? Optional.of(new CssClassFacetForActionXml(cssClass, holder))
+                : Optional.empty();
     }
 
-    private CssClassFacetForActionXml(String value, FacetHolder holder) {
+    private CssClassFacetForActionXml(final String value, final FacetHolder holder) {
         super(value, holder);
     }
 

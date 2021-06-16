@@ -19,21 +19,28 @@
 
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 
-public class NamedFacetForActionXml extends NamedFacetAbstract {
+public class NamedFacetForActionXml
+extends NamedFacetAbstract {
 
-    public static NamedFacet create(final ActionLayoutData actionLayout, final FacetHolder holder) {
+    public static Optional<NamedFacet> create(
+            final ActionLayoutData actionLayout,
+            final FacetHolder holder) {
         if(actionLayout == null) {
-            return null;
+            return Optional.empty();
         }
         final String named = _Strings.emptyToNull(actionLayout.getNamed());
         Boolean escaped = actionLayout.getNamedEscaped();
-        return named != null ? new NamedFacetForActionXml(named, (escaped == null || escaped), holder) : null;
+        return named != null
+                ? Optional.of(new NamedFacetForActionXml(named, (escaped == null || escaped), holder))
+                : Optional.empty();
     }
 
     private NamedFacetForActionXml(final String value, final boolean escaped, final FacetHolder holder) {

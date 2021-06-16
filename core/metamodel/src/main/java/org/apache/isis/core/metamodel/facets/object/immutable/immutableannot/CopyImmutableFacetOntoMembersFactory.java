@@ -48,7 +48,7 @@ public class CopyImmutableFacetOntoMembersFactory extends FacetFactoryAbstract {
         owningSpec
             .lookupFacet(ImmutableFacet.class)
             .ifPresent(immutableFacet->
-                FacetUtil.addFacetIfPresent(immutableFacet.clone(member)));
+                FacetUtil.addFacet(immutableFacet.clone(member)));
     }
 
 }

@@ -48,7 +48,7 @@ extends FacetFactoryAbstract {
         }
 
         final FacetedMethod holder = processMethodContext.getFacetHolder();
-        FacetUtil.addFacetIfPresent(new JpaTransientAnnotationFacet(holder));
+        FacetUtil.addFacet(new JpaTransientAnnotationFacet(holder));
     }
 
 

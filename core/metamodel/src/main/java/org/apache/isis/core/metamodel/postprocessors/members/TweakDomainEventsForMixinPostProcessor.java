@@ -118,10 +118,9 @@ extends ObjectSpecificationPostProcessorAbstract {
                             PropertyAnnotationFacetFactory.defaultFromDomainObjectIfRequired(
                                     objectSpecification, propertyAnnot.domainEvent());
                     final PropertyOrCollectionAccessorFacet getterFacetIfAny = null;
-                    final PropertyDomainEventFacetForPropertyAnnotation propertyDomainEventFacet =
+                    FacetUtil.addFacet(
                             new PropertyDomainEventFacetForPropertyAnnotation(
-                                    propertyDomainEventType, getterFacetIfAny, property);
-                    FacetUtil.addFacetIfPresent(propertyDomainEventFacet);
+                                    propertyDomainEventType, getterFacetIfAny, property));
                 }
             }
             final PropertyDomainEventDefaultFacetForDomainObjectAnnotation propertyDomainEventDefaultFacet =
@@ -159,10 +158,9 @@ extends ObjectSpecificationPostProcessorAbstract {
                     final Class<? extends CollectionDomainEvent<?, ?>> collectionDomainEventType =
                             CollectionAnnotationFacetFactory.defaultFromDomainObjectIfRequired(
                                     objectSpecification, collectionAnnot.domainEvent());
-                    final CollectionDomainEventFacetForCollectionAnnotation collectionDomainEventFacet =
+                    FacetUtil.addFacet(
                             new CollectionDomainEventFacetForCollectionAnnotation(
-                                    collectionDomainEventType, collection);
-                    FacetUtil.addFacetIfPresent(collectionDomainEventFacet);
+                                    collectionDomainEventType, collection));
                 }
 
                 final CollectionDomainEventDefaultFacetForDomainObjectAnnotation collectionDomainEventDefaultFacet =

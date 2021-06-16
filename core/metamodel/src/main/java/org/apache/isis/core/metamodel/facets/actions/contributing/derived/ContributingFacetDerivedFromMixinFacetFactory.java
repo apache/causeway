@@ -66,7 +66,7 @@ extends FacetFactoryAbstract {
                 || processMethodContext.synthesizeOnType(ActionLayout.class).isPresent();
 
         if(isForceContributedAsAction) {
-            FacetUtil.addFacetIfPresent(new ContributingFacetAbstract(Contributing.AS_ACTION, facetedMethod) {});
+            FacetUtil.addFacet(new ContributingFacetAbstract(Contributing.AS_ACTION, facetedMethod) {});
         }
 
     }

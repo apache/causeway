@@ -24,14 +24,13 @@ import java.util.Optional;
 
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacetAbstract;
 
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
 public class SortedByFacetForCollectionLayoutAnnotation extends SortedByFacetAbstract {
 
-    public static SortedByFacet create(
+    public static Optional<SortedByFacetForCollectionLayoutAnnotation> create(
             final Optional<CollectionLayout> collectionLayoutIfAny,
             final FacetHolder holder) {
 
@@ -42,11 +41,12 @@ public class SortedByFacetForCollectionLayoutAnnotation extends SortedByFacetAbs
                 .map(sortedBy -> {
                     Class<? extends Comparator<?>> sortedByForceGenerics = uncheckedCast(sortedBy);
                     return new SortedByFacetForCollectionLayoutAnnotation(sortedByForceGenerics, holder);
-                })
-                .orElse(null);
+                });
     }
 
-    private SortedByFacetForCollectionLayoutAnnotation(Class<? extends Comparator<?>> sortedBy, FacetHolder holder) {
+    private SortedByFacetForCollectionLayoutAnnotation(
+            final Class<? extends Comparator<?>> sortedBy,
+            final FacetHolder holder) {
         super(sortedBy, holder);
     }
 

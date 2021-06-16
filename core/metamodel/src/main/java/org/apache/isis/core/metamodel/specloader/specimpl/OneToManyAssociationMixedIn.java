@@ -31,7 +31,6 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetForMemberName;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetForContributee;
-import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.services.publishing.ExecutionPublisher;
@@ -106,14 +105,9 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
         //
         // ensure the mixedIn collection cannot be modified, and derive its TypeOfFaccet
         //
-        final SnapshotExcludeFacet snapshotExcludeFacet = new SnapshotExcludeFacetAbstract(this) {};
-        final DisabledFacet disabledFacet = disabledFacet();
-        final TypeOfFacet typeOfFacet = new TypeOfFacetAbstract(getSpecification().getCorrespondingClass(), this) {};
-
-        FacetUtil.addFacetIfPresent(snapshotExcludeFacet);
-        FacetUtil.addFacetIfPresent(disabledFacet);
-        FacetUtil.addFacetIfPresent(typeOfFacet);
-
+        FacetUtil.addFacet(new SnapshotExcludeFacetAbstract(this) {});
+        FacetUtil.addFacet(disabledFacet());
+        FacetUtil.addFacet(new TypeOfFacetAbstract(getSpecification().getCorrespondingClass(), this) {});
 
         //
         // in addition, copy over facets from contributed to own.
@@ -129,7 +123,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
 
         if(!isExplicitlyNamed) {
             String memberName = determineNameFrom(mixinAction);
-            FacetUtil.addFacetIfPresent(new NamedFacetForMemberName(memberName, facetHolder));
+            FacetUtil.addFacet(new NamedFacetForMemberName(memberName, facetHolder));
         }
 
     }

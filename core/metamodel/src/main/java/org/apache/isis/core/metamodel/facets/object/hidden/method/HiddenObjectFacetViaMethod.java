@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 import java.util.function.BiConsumer;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.object.hidden.HiddenObjectFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -55,9 +54,8 @@ extends HiddenObjectFacetAbstract {
     }
 
     @Override
-    public void copyOnto(final FacetHolder holder) {
-        final HiddenObjectFacetViaMethod clonedFacet = new HiddenObjectFacetViaMethod(this.method, holder);
-        FacetUtil.addFacetIfPresent(clonedFacet);
+    public HiddenObjectFacetViaMethod clone(final FacetHolder holder) {
+        return new HiddenObjectFacetViaMethod(this.method, holder);
     }
 
     @Override

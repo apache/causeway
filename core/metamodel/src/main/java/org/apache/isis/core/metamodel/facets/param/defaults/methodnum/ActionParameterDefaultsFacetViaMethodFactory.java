@@ -93,7 +93,7 @@ public class ActionParameterDefaultsFacetViaMethodFactory extends MethodPrefixBa
             //val translationContext = paramAsHolder.getIdentifier().toFullIdentityString();
             val ppmFactory = searchResult.getPpmFactory();
 
-            addFacetIfPresent(new ActionParameterDefaultsFacetViaMethod(
+            addFacet(new ActionParameterDefaultsFacetViaMethod(
                     defaultMethod, paramIndex, ppmFactory, paramAsHolder));
         });
     }

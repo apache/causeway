@@ -85,7 +85,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         processMethodContext.removeMethod(hideMethod);
 
         final FacetHolder facetedMethod = processMethodContext.getFacetHolder();
-        FacetUtil.addFacetIfPresent(new HideForContextFacetViaMethod(hideMethod, facetedMethod));
+        FacetUtil.addFacet(new HideForContextFacetViaMethod(hideMethod, facetedMethod));
     }
 
 }

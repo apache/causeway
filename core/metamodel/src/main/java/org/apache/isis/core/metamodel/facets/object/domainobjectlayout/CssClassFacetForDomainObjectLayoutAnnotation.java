@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFace
 
 public class CssClassFacetForDomainObjectLayoutAnnotation extends CssClassFacetSimple {
 
-    public static CssClassFacet create(
+    public static Optional<CssClassFacetForDomainObjectLayoutAnnotation> create(
             final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final FacetHolder holder) {
 
@@ -45,8 +45,7 @@ public class CssClassFacetForDomainObjectLayoutAnnotation extends CssClassFacetS
         return domainObjectLayoutIfAny
                 .map(DomainObjectLayout::cssClass)
                 .filter(_Strings::isNotEmpty)
-                .map(cssClass -> new CssClassFacetForDomainObjectLayoutAnnotation(cssClass, holder))
-                .orElse(null);
+                .map(cssClass -> new CssClassFacetForDomainObjectLayoutAnnotation(cssClass, holder));
     }
 
     private CssClassFacetForDomainObjectLayoutAnnotation(

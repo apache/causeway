@@ -47,7 +47,7 @@ extends FacetFactoryAbstract {
         // available
         final DescribedAsFacet parameterTypeDescribedAsFacet = getDescribedAsFacet(parameterType);
         if (parameterTypeDescribedAsFacet != null) {
-            FacetUtil.addFacetIfPresent(new DescribedAsFacetOnParameterDerivedFromType(parameterTypeDescribedAsFacet, processParameterContext.getFacetHolder()));
+            FacetUtil.addFacet(new DescribedAsFacetOnParameterDerivedFromType(parameterTypeDescribedAsFacet, processParameterContext.getFacetHolder()));
         }
 
     }

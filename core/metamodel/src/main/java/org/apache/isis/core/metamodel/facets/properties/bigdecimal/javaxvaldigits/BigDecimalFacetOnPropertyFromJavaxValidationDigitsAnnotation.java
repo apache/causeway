@@ -18,11 +18,11 @@
  */
 package org.apache.isis.core.metamodel.facets.properties.bigdecimal.javaxvaldigits;
 
+import java.util.Optional;
+
 import javax.validation.constraints.Digits;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacetAbstract;
 
@@ -30,13 +30,16 @@ import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFac
 public class BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation
 extends BigDecimalValueFacetAbstract {
 
-    public static BigDecimalValueFacet create(
-            final ProcessMethodContext processMethodContext,
-            final Digits annotation) {
-        final FacetedMethod holder = processMethodContext.getFacetHolder();
-        final int length = annotation.integer() + annotation.fraction();
-        final int scale = annotation.fraction();
-        return new BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation(holder, length, scale);
+    public static Optional<BigDecimalValueFacet> create(
+            final FacetHolder facetHolder,
+            final Optional<Digits> digitsIfAny) {
+
+        return digitsIfAny
+        .map(digits->{
+            final int length = digits.integer() + digits.fraction();
+            final int scale = digits.fraction();
+            return new BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation(facetHolder, length, scale);
+        });
     }
 
     private BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation(

@@ -61,7 +61,7 @@ extends FacetFactoryAbstract {
                 .filter(mb -> mb != DomainServiceLayout.MenuBar.NOT_SPECIFIED) // redundant since _Annotations
                 .orElse(DomainServiceLayout.MenuBar.PRIMARY);
 
-        addFacetIfPresent(
+        addFacet(
                 new DomainServiceLayoutFacetAnnotation(facetHolder, menuBar));
 
         val named = domainServiceLayoutIfAny

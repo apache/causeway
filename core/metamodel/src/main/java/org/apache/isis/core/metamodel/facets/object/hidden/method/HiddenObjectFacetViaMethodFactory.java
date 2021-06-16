@@ -37,6 +37,8 @@ import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstr
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
+import lombok.val;
+
 /**
  * Installs the {@link HiddenObjectFacetViaMethod} on the
  * {@link ObjectSpecification}, and copies this facet onto each
@@ -72,11 +74,11 @@ extends MethodPrefixBasedFacetFactoryAbstract {
     public void process(final ProcessMethodContext processMethodContext) {
         final FacetedMethod member = processMethodContext.getFacetHolder();
         final Class<?> owningClass = processMethodContext.getCls();
-        final ObjectSpecification owningSpec = getSpecificationLoader().loadSpecification(owningClass);
-        final HiddenObjectFacet facet = owningSpec.getFacet(HiddenObjectFacet.class);
-        if (facet != null) {
-            facet.copyOnto(member);
-        }
+        val owningSpec = getSpecificationLoader().loadSpecification(owningClass);
+
+        owningSpec.lookupFacet(HiddenObjectFacet.class)
+        .map(hiddenObjectFacet->hiddenObjectFacet.clone(member))
+        .ifPresent(FacetUtil::addFacet);
     }
 
     private boolean addFacetIfMethodFound(final ProcessClassContext processClassContext, final Class<?> returnType) {
@@ -88,7 +90,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         if (method == null) {
             return false;
         }
-        FacetUtil.addFacetIfPresent(new HiddenObjectFacetViaMethod(method, facetHolder));
+        FacetUtil.addFacet(new HiddenObjectFacetViaMethod(method, facetHolder));
         processClassContext.removeMethod(method);
         return true;
     }

@@ -80,8 +80,8 @@ implements
         if(substitute.isNeverIntrospect()) {
             return;
         }
-        val logicalTypeFacet = createLogicalTypeFacet(facetHolder, substitute.apply(cls));
-        FacetUtil.addFacetIfPresent(logicalTypeFacet);
+        FacetUtil.addFacet(
+                createLogicalTypeFacet(facetHolder, substitute.apply(cls)));
     }
 
     @Override
@@ -96,12 +96,12 @@ implements
         val serviceId = getServiceId(facetHolder);
         val isService = serviceId!=null;
 
-        if (isService) {
-            return new LogicalTypeFacetInferredFromIoCNamingStrategy(
-                    LogicalType.eager(substitutedClass, serviceId),
-                    facetHolder);
-        }
-        return new LogicalTypeFacetInferredFromClassName(substitutedClass, facetHolder);
+       return isService
+               ? new LogicalTypeFacetInferredFromIoCNamingStrategy(
+                        LogicalType
+                        .eager(substitutedClass, serviceId),
+                        facetHolder)
+               : new LogicalTypeFacetInferredFromClassName(substitutedClass, facetHolder);
     }
 
     private static String getServiceId(final FacetHolder facetHolder) {

@@ -19,22 +19,30 @@
 
 package org.apache.isis.core.metamodel.facets.collections.layout;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacetAbstract;
 
-public class PagedFacetForCollectionXml extends PagedFacetAbstract {
+public class PagedFacetForCollectionXml
+extends PagedFacetAbstract {
 
-    public static PagedFacet create(CollectionLayoutData collectionLayout, FacetHolder holder) {
+    public static Optional<PagedFacet> create(
+            final CollectionLayoutData collectionLayout,
+            final FacetHolder holder) {
         if(collectionLayout == null) {
-            return null;
+            return Optional.empty();
         }
         final Integer paged = collectionLayout.getPaged();
-        return paged != null && paged != -1 ? new PagedFacetForCollectionXml(paged, holder) : null;
+        return paged != null
+                && paged != -1
+                        ? Optional.of(new PagedFacetForCollectionXml(paged, holder))
+                        : Optional.empty();
     }
 
-    private PagedFacetForCollectionXml(int paged, FacetHolder holder) {
+    private PagedFacetForCollectionXml(final int paged, final FacetHolder holder) {
         super(paged, holder);
     }
 

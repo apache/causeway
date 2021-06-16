@@ -98,7 +98,7 @@ extends TypedHolderAbstract {
 
             // this is based on similar logic to ActionAnnotationFacetFactory#processTypeOf
 
-            FacetUtil.addFacetIfPresent(
+            FacetUtil.addFacet(
                     CollectionSemanticsFacetDefault
                     .forParamType(parameterType, facetedMethodParam));
 
@@ -107,7 +107,7 @@ extends TypedHolderAbstract {
                     .inferFromParameterType(facetedMethodParam, param)
                     .map(typeOfFacet->{
                         // (corresponds to similar code for OneToManyAssociation in FacetMethodsBuilder).
-                        FacetUtil.addFacetIfPresent(typeOfFacet);
+                        FacetUtil.addFacet(typeOfFacet);
                         return facetedMethodParam.withType(typeOfFacet.value());
                     })
                     .orElse(facetedMethodParam);

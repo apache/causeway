@@ -59,7 +59,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
             // sadness: same as in TranslationFactory
             val translationContext = TranslationContext.forTranslationContextHolder(
                     facetHolder.getFeatureIdentifier());
-            FacetUtil.addFacetIfPresent(new ValidateObjectFacetMethod(method, translationService, translationContext, facetHolder));
+            FacetUtil.addFacet(new ValidateObjectFacetMethod(method, translationService, translationContext, facetHolder));
             processClassContext.removeMethod(method);
         }
     }

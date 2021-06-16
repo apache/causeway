@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet
 
 public class LogicalTypeFacetForDomainObjectAnnotation extends LogicalTypeFacetAbstract {
 
-    public static LogicalTypeFacet create(
+    public static Optional<LogicalTypeFacet> create(
             final Optional<DomainObject> domainObjectIfAny,
             final Class<?> correspondingClass,
             final FacetHolder holder) {
@@ -41,8 +41,7 @@ public class LogicalTypeFacetForDomainObjectAnnotation extends LogicalTypeFacetA
                 .filter(_Strings::isNotEmpty)
                 .map(logicalTypeName -> new LogicalTypeFacetForDomainObjectAnnotation(
                         LogicalType.eager(correspondingClass, logicalTypeName),
-                        holder))
-                .orElse(null);
+                        holder));
     }
 
     private LogicalTypeFacetForDomainObjectAnnotation(

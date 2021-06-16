@@ -61,7 +61,7 @@ implements MetaModelRefiner {
         if (annotation == null) {
             return;
         }
-        FacetUtil.addFacetIfPresent(new JdoVersionFacetFromAnnotation(processClassContext.getFacetHolder()));
+        FacetUtil.addFacet(new JdoVersionFacetFromAnnotation(processClassContext.getFacetHolder()));
     }
 
     @Override

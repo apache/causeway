@@ -24,21 +24,21 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbstract;
 
 public class DescribedAsFacetForCollectionLayoutAnnotation extends DescribedAsFacetAbstract {
 
-    public static DescribedAsFacet create(Optional<CollectionLayout> collectionLayoutIfAny, FacetHolder holder) {
+    public static Optional<DescribedAsFacetForCollectionLayoutAnnotation> create(
+            final Optional<CollectionLayout> collectionLayoutIfAny,
+            final FacetHolder holder) {
 
         return collectionLayoutIfAny
                 .map(CollectionLayout::describedAs)
                 .filter(_Strings::isNotEmpty)
-                .map(describedAs -> new DescribedAsFacetForCollectionLayoutAnnotation(describedAs, holder))
-                .orElse(null);
+                .map(describedAs -> new DescribedAsFacetForCollectionLayoutAnnotation(describedAs, holder));
     }
 
-    private DescribedAsFacetForCollectionLayoutAnnotation(String value, FacetHolder holder) {
+    private DescribedAsFacetForCollectionLayoutAnnotation(final String value, final FacetHolder holder) {
         super(value, holder);
     }
 

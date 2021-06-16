@@ -88,9 +88,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
         //
         // ensure the contributed property cannot be modified
         //
-        final DisabledFacet disabledFacet = disabledFacet();
-
-        FacetUtil.addFacetIfPresent(disabledFacet);
+        FacetUtil.addFacet(disabledFacet());
 
         //
         // in addition, copy over facets from contributed to own.
@@ -108,7 +106,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
 
         if(!isExplicitlyNamed) {
             String memberName = determineNameFrom(mixinAction);
-            FacetUtil.addFacetIfPresent(new NamedFacetForMemberName(memberName, facetHolder));
+            FacetUtil.addFacet(new NamedFacetForMemberName(memberName, facetHolder));
         }
 
     }

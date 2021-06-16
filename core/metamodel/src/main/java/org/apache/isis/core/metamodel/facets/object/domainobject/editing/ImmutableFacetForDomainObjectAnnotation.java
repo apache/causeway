@@ -36,7 +36,7 @@ extends ImmutableFacetAbstract {
 
     // -- FACTORY
 
-    public static ImmutableFacet create(
+    public static Optional<ImmutableFacet> create(
             final Optional<DomainObject> domainObjectIfAny,
             final IsisConfiguration configuration,
             final FacetHolder holder) {
@@ -55,24 +55,24 @@ extends ImmutableFacetAbstract {
 
                 if(holder.containsNonFallbackFacet(ImmutableFacet.class)) {
                     // do not replace
-                    return null;
+                    return Optional.empty();
                 }
 
                 return editingDisabledByDefault
-                        ? (ImmutableFacet) new ImmutableFacetForDomainObjectAnnotationAsConfigured(disabledReason, holder)
-                        : null;
+                        ? Optional.of((ImmutableFacet) new ImmutableFacetForDomainObjectAnnotationAsConfigured(disabledReason, holder))
+                        : Optional.empty();
             case DISABLED:
-                return new ImmutableFacetForDomainObjectAnnotation(disabledReason, holder);
+                return Optional.of(new ImmutableFacetForDomainObjectAnnotation(disabledReason, holder));
             case ENABLED:
-                return null; // see also EditingEnabledFacetForDomainObjectAnnotation
+                return Optional.empty(); // see also EditingEnabledFacetForDomainObjectAnnotation
             default:
                 throw _Exceptions.unmatchedCase(domainObject.editing());
             }
         }
 
         return editingDisabledByDefault
-                    ? ImmutableFacetFromConfiguration.create(holder)
-                    : null;
+                    ? Optional.of(ImmutableFacetFromConfiguration.create(holder))
+                    : Optional.empty();
     }
 
     // -- CONSTRUCTOR

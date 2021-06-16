@@ -71,9 +71,9 @@ implements ObjectTypeFacetFactory {
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         final String annotationValue = annotation.value();
-        final LogicalTypeFacet facet;
+        final LogicalTypeFacet logicalTypeFacet; // non-null
         if (!_Strings.isNullOrEmpty(annotationValue)) {
-            facet = new LogicalTypeFacetInferredFromJdoDiscriminatorValueAnnotation(
+            logicalTypeFacet = new LogicalTypeFacetInferredFromJdoDiscriminatorValueAnnotation(
                         LogicalType.eager(cls, annotationValue),
                         facetHolder);
         } else {
@@ -83,12 +83,12 @@ implements ObjectTypeFacetFactory {
             }
 
             val substituted = substitute.apply(cls);
-            facet = new LogicalTypeFacetInferredFromClassName(
+            logicalTypeFacet = new LogicalTypeFacetInferredFromClassName(
                             LogicalType.eager(substituted, substituted.getCanonicalName()),
                             facetHolder);
 
         }
-        FacetUtil.addFacetIfPresent(facet);
+        FacetUtil.addFacet(logicalTypeFacet);
     }
 
 
@@ -107,7 +107,7 @@ implements ObjectTypeFacetFactory {
         }
         String annotationValueAttribute = annotation.value();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
-        FacetUtil.addFacetIfPresent(new JdoDiscriminatorFacetDefault(annotationValueAttribute, facetHolder));
+        FacetUtil.addFacet(new JdoDiscriminatorFacetDefault(annotationValueAttribute, facetHolder));
     }
 
 }

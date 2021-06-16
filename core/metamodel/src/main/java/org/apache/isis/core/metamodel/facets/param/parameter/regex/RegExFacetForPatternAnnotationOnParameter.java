@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacetAbstrac
 public class RegExFacetForPatternAnnotationOnParameter
 extends RegExFacetAbstract {
 
-    public static RegExFacet create(
+    public static Optional<RegExFacet> create(
             final Optional<javax.validation.constraints.Pattern> patternIfAny,
             final Class<?> parameterType,
             final FacetHolder holder) {
@@ -43,8 +43,7 @@ extends RegExFacetAbstract {
                 .filter(pattern -> _Strings.emptyToNull(pattern.regexp()) != null)
                 .map(pattern ->
                 new RegExFacetForPatternAnnotationOnParameter(
-                        pattern.regexp(), pattern.flags(), pattern.message(), holder))
-                .orElse(null);
+                        pattern.regexp(), pattern.flags(), pattern.message(), holder));
     }
 
     private RegExFacetForPatternAnnotationOnParameter(

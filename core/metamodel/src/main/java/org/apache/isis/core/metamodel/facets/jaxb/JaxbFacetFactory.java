@@ -85,7 +85,7 @@ implements MetaModelRefiner {
 
         val facetHolder = processClassContext.getFacetHolder();
 
-        addFacetIfPresent(
+        addFacet(
                 new XmlJavaTypeAdapterFacetDefault(facetHolder, xmlJavaTypeAdapterIfAny.get().value()));
     }
 
@@ -97,7 +97,7 @@ implements MetaModelRefiner {
         }
 
         val facetHolder = processClassContext.getFacetHolder();
-        addFacetIfPresent(
+        addFacet(
                 new XmlAccessorTypeFacetDefault(facetHolder, xmlAccessorTypeIfAny.get().value()));
     }
 
@@ -128,7 +128,7 @@ implements MetaModelRefiner {
         }
 
         val facetHolder = processMethodContext.getFacetHolder();
-        addFacetIfPresent(
+        addFacet(
                 new XmlJavaTypeAdapterFacetDefault(facetHolder, xmlJavaTypeAdapterIfAny.get().value()));
     }
 
@@ -141,7 +141,7 @@ implements MetaModelRefiner {
         }
 
         val facetHolder = processMethodContext.getFacetHolder();
-        addFacetIfPresent(new XmlTransientFacetDefault(facetHolder));
+        addFacet(new XmlTransientFacetDefault(facetHolder));
     }
 
     // --

@@ -29,18 +29,17 @@ import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFace
 public class MultiLineFacetForParameterLayoutAnnotation
 extends MultiLineFacetAbstract {
 
-    public static MultiLineFacet create(
+    public static Optional<MultiLineFacet> create(
             final Optional<ParameterLayout> parameterLayoutIfAny,
             final FacetHolder holder) {
 
         return parameterLayoutIfAny
                 .map(ParameterLayout::multiLine)
                 .filter(multiLine -> multiLine != -1)
-                .map(multiLine -> new MultiLineFacetForParameterLayoutAnnotation(multiLine, holder))
-                .orElse(null);
+                .map(multiLine -> new MultiLineFacetForParameterLayoutAnnotation(multiLine, holder));
     }
 
-    private MultiLineFacetForParameterLayoutAnnotation(int numberOfLines, FacetHolder holder) {
+    private MultiLineFacetForParameterLayoutAnnotation(final int numberOfLines, final FacetHolder holder) {
         super(numberOfLines, holder);
     }
 }

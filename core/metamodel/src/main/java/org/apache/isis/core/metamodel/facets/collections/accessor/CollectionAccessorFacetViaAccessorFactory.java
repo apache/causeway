@@ -59,11 +59,11 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
         val typeSpec = getSpecificationLoader().loadSpecification(cls);
         val facetHolder = processMethodContext.getFacetHolder();
 
-        addFacetIfPresent(
+        addFacet(
                 new CollectionAccessorFacetViaAccessor(
                         typeSpec, accessorMethod, facetHolder));
 
-        addFacetIfPresent(
+        addFacet(
                 CollectionSemanticsFacetDefault
                 .forCollection(accessorMethod, facetHolder));
     }

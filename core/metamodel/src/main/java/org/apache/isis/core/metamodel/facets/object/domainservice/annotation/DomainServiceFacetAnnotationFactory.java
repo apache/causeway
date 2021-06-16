@@ -51,7 +51,7 @@ implements MetaModelRefiner {
             return;
         }
         val facetHolder = processClassContext.getFacetHolder();
-        addFacetIfPresent(
+        addFacet(
                 new DomainServiceFacetAnnotation(
                         facetHolder,
                         domainServiceIfAny.get().nature()));

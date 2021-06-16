@@ -24,9 +24,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacetFallback;
-import org.apache.isis.core.metamodel.facets.actions.redirect.RedirectFacet;
 import org.apache.isis.core.metamodel.facets.actions.redirect.RedirectFacetFallback;
 import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacetFromActionLayoutAnnotation;
 import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromActionLayoutAnnotation;
@@ -92,19 +90,17 @@ extends FacetFactoryAbstract {
                 .create(actionLayoutIfAny, getConfiguration(), facetHolder));
 
         // position
-        ActionPositionFacet actionPositionFacet = ActionPositionFacetForActionLayoutAnnotation
-                .create(actionLayoutIfAny, facetHolder);
-        if(actionPositionFacet == null) {
-            actionPositionFacet = new ActionPositionFacetFallback(facetHolder);
-        }
-        addFacetIfPresent(actionPositionFacet);
+        val actionPositionFacet = ActionPositionFacetForActionLayoutAnnotation
+                .create(actionLayoutIfAny, facetHolder)
+                .orElseGet(()->new ActionPositionFacetFallback(facetHolder));
+
+        addFacet(actionPositionFacet);
 
         // redirectPolicy
-        RedirectFacet redirectFacet = RedirectFacetFromActionLayoutAnnotation.create(actionLayoutIfAny, facetHolder);
-        if(redirectFacet == null) {
-            redirectFacet = new RedirectFacetFallback(facetHolder);
-        }
-        addFacetIfPresent(redirectFacet);
+        val redirectFacet = RedirectFacetFromActionLayoutAnnotation
+                .create(actionLayoutIfAny, facetHolder)
+                .orElseGet(()->new RedirectFacetFallback(facetHolder));
+        addFacet(redirectFacet);
 
         // sequence (layout)
         addFacetIfPresent(

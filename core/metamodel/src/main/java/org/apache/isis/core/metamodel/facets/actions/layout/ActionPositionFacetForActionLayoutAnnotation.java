@@ -28,15 +28,14 @@ import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFace
 
 public class ActionPositionFacetForActionLayoutAnnotation extends ActionPositionFacetAbstract {
 
-    public static ActionPositionFacet create(
+    public static Optional<ActionPositionFacet> create(
             final Optional<ActionLayout> actionLayoutIfAny,
             final FacetHolder holder) {
 
         return actionLayoutIfAny
                 .map(ActionLayout::position)
                 .filter(position -> position != ActionLayout.Position.NOT_SPECIFIED)
-                .map(position -> new ActionPositionFacetForActionLayoutAnnotation(position, holder))
-                .orElse(null);
+                .map(position -> new ActionPositionFacetForActionLayoutAnnotation(position, holder));
     }
 
     private ActionPositionFacetForActionLayoutAnnotation(final ActionLayout.Position position, final FacetHolder holder) {

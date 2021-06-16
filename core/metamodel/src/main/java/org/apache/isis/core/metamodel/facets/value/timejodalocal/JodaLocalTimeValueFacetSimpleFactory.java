@@ -47,7 +47,7 @@ extends ValueFacetUsingSemanticsProviderFactory<LocalDate> {
         }
 
         val facetHolder = processClassContext.getFacetHolder();
-        addFacetIfPresent(
+        addFacet(
                 new ValueFacetSimple(facetHolder));
     }
 

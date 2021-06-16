@@ -70,7 +70,7 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
         val translationService = getTranslationService();
         // sadness: same as in TranslationFactory
         val translationContext = TranslationContext.forTranslationContextHolder(facetHolder.getFeatureIdentifier());
-        addFacetIfPresent(
+        addFacet(
                 new PropertyValidateFacetViaMethod(
                         validateMethod, translationService, translationContext, facetHolder));
     }

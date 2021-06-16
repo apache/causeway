@@ -66,7 +66,7 @@ extends ObjectSpecificationPostProcessorAbstract {
         }
         property.getOnType()
         .lookupNonFallbackFacet(ViewModelFacet.class)
-        .ifPresent(specFacet -> FacetUtil.addFacetIfPresent(new DisabledFacetOnPropertyInferredFromRecreatableObject(
+        .ifPresent(specFacet -> FacetUtil.addFacet(new DisabledFacetOnPropertyInferredFromRecreatableObject(
                                     facetedMethodFor(property), inferSemanticsFrom(specFacet))));
     }
 

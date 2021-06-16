@@ -90,7 +90,7 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
             val ppmFactory = searchResult.getPpmFactory();
             val translationService = getMetaModelContext().getTranslationService();
 
-            addFacetIfPresent(
+            addFacet(
                     new ActionParameterDisabledFacetViaMethod(
                             disableMethod, translationService, translationContext, ppmFactory, paramAsHolder));
         });

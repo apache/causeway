@@ -50,7 +50,7 @@ public class MandatoryFacetOnParametersDefaultFactory extends FacetFactoryAbstra
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
-        FacetUtil.addFacetIfPresent(
+        FacetUtil.addFacet(
                 MandatoryFacetDefault
                 .required(processParameterContext.getFacetHolder()));
     }

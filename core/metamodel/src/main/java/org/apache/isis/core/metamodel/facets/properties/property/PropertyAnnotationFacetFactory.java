@@ -112,8 +112,8 @@ extends FacetFactoryAbstract {
         //@Action(semantics=SAFE)
         //@ActionLayout(contributed=ASSOCIATION) ... it seems, is already allowed for mixins
         val facetedMethod = processMethodContext.getFacetHolder();
-        addFacetIfPresent(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
-        addFacetIfPresent(new ContributingFacetAbstract(Contributing.AS_ASSOCIATION, facetedMethod) {});
+        addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
+        addFacet(new ContributingFacetAbstract(Contributing.AS_ASSOCIATION, facetedMethod) {});
     }
 
     void processModify(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
@@ -151,7 +151,7 @@ extends FacetFactoryAbstract {
                 PropertyDomainEvent.Default.class,
                 getConfiguration().getApplib().getAnnotation().getProperty().getDomainEvent().isPostForDefault()
                 )) {
-            addFacetIfPresent(propertyDomainEventFacet);
+            addFacet(propertyDomainEventFacet);
         }
 
 
@@ -174,7 +174,7 @@ extends FacetFactoryAbstract {
                 replacementFacet = new PropertySetterFacetForDomainEventFromDefault(
                         propertyDomainEventFacet.getEventType(), getterFacet, setterFacet, propertyDomainEventFacet, holder);
             }
-            addFacetIfPresent(replacementFacet);
+            addFacet(replacementFacet);
         }
 
         final PropertyClearFacet clearFacet = holder.getFacet(PropertyClearFacet.class);
@@ -191,7 +191,7 @@ extends FacetFactoryAbstract {
                 replacementFacet = new PropertyClearFacetForDomainEventFromDefault(
                         propertyDomainEventFacet.getEventType(), getterFacet, clearFacet, propertyDomainEventFacet, holder);
             }
-            addFacetIfPresent(replacementFacet);
+            addFacet(replacementFacet);
         }
     }
 
@@ -316,17 +316,25 @@ extends FacetFactoryAbstract {
 
         // check for @Nullable
         val nullableIfAny = processMethodContext.synthesizeOnMethod(Nullable.class);
-        val facet2 =
-                MandatoryFacetInvertedByNullableAnnotationOnProperty.create(nullableIfAny, method, holder);
-        addFacetIfPresent(facet2);
-        MetaModelValidatorForConflictingOptionality.flagIfConflict(
-                facet2, "Conflicting @Nullable with other optionality annotation");
+
+        addFacetIfPresent(
+                MandatoryFacetInvertedByNullableAnnotationOnProperty
+                .create(nullableIfAny, method, holder))
+        .ifPresent(mandatoryFacet->
+                MetaModelValidatorForConflictingOptionality
+                .flagIfConflict(
+                        mandatoryFacet,
+                        "Conflicting @Nullable with other optionality annotation"));
 
         // search for @Property(optional=...)
-        val facet3 = MandatoryFacetForPropertyAnnotation.create(propertyIfAny, method, holder);
-        addFacetIfPresent(facet3);
-        MetaModelValidatorForConflictingOptionality.flagIfConflict(
-                facet3, "Conflicting Property#optionality with other optionality annotation");
+        addFacetIfPresent(
+                MandatoryFacetForPropertyAnnotation
+                .create(propertyIfAny, method, holder))
+        .ifPresent(mandatoryFacet->
+                MetaModelValidatorForConflictingOptionality
+                .flagIfConflict(
+                        mandatoryFacet,
+                        "Conflicting Property#optionality with other optionality annotation"));
     }
 
     void processRegEx(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
@@ -337,8 +345,7 @@ extends FacetFactoryAbstract {
         val patternIfAny = processMethodContext.synthesizeOnMethod(Pattern.class);
         if (addFacetIfPresent(
                 RegExFacetForPatternAnnotationOnProperty
-                .create(patternIfAny, returnType, holder)
-                )
+                .create(patternIfAny, returnType, holder))
                 .isPresent()) {
             return;
         }

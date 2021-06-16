@@ -72,8 +72,9 @@ extends MethodPrefixBasedFacetFactoryAbstract {
             // sadness: same as in TranslationFactory
             val translationContext = TranslationContext.forMethod(method);
 
-            val titleFacet = new TitleFacetViaTitleMethod(method, translationService, translationContext, facetHolder);
-            FacetUtil.addFacetIfPresent(titleFacet);
+            FacetUtil.addFacet(
+                    new TitleFacetViaTitleMethod(
+                            method, translationService, translationContext, facetHolder));
             return;
         }
 
@@ -93,7 +94,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
                 return;
             }
             processClassContext.removeMethod(method);
-            FacetUtil.addFacetIfPresent(new TitleFacetInferredFromToStringMethod(method, facetHolder));
+            FacetUtil.addFacet(new TitleFacetInferredFromToStringMethod(method, facetHolder));
 
         } catch (final Exception e) {
             return;

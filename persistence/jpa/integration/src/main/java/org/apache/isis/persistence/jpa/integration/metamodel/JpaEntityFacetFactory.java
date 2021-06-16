@@ -80,9 +80,8 @@ extends FacetFactoryAbstract {
             return;
         }
 
-        val serviceRegistry = super.getMetaModelContext().getServiceRegistry();
-        addFacetIfPresent(
-                new JpaEntityFacet(facetHolder, cls, serviceRegistry));
+        addFacet(
+                new JpaEntityFacet(facetHolder, cls, getServiceRegistry()));
     }
 
     // --

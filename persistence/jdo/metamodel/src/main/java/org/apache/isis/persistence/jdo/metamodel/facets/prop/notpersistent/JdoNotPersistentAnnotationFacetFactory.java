@@ -58,6 +58,6 @@ extends FacetFactoryAbstract {
         }
 
         final FacetedMethod holder = processMethodContext.getFacetHolder();
-        FacetUtil.addFacetIfPresent(new JdoNotPersistentFacetAnnotation(holder));
+        FacetUtil.addFacet(new JdoNotPersistentFacetAnnotation(holder));
     }
 }

@@ -24,35 +24,33 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Repainting;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.properties.renderunchanged.UnchangingFacet;
 import org.apache.isis.core.metamodel.facets.properties.renderunchanged.UnchangingFacetAbstract;
 
 public class UnchangingFacetForPropertyLayoutAnnotation extends UnchangingFacetAbstract {
 
-    public static UnchangingFacet create(
+    public static Optional<UnchangingFacetForPropertyLayoutAnnotation> create(
             final Optional<PropertyLayout> propertyLayoutIfAny,
             final FacetHolder holder) {
 
         return propertyLayoutIfAny
-                .map(PropertyLayout::repainting)
-                .filter(repainting -> repainting != Repainting.NOT_SPECIFIED)
-                .map(repainting -> {
-                    boolean unchanging;
-                    switch (repainting) {
-                    case REPAINT:
-                        unchanging = false;
-                        return new UnchangingFacetForPropertyLayoutAnnotation(unchanging, holder);
-                    case NO_REPAINT:
-                        unchanging = true;
-                        return new UnchangingFacetForPropertyLayoutAnnotation(unchanging, holder);
-                    default:
-                    }
-                    throw new IllegalStateException("repainting '" + repainting + "' not recognised");
-                })
-                .orElse(null);
+        .map(PropertyLayout::repainting)
+        .filter(repainting -> repainting != Repainting.NOT_SPECIFIED)
+        .map(repainting -> {
+            boolean unchanging;
+            switch (repainting) {
+            case REPAINT:
+                unchanging = false;
+                return new UnchangingFacetForPropertyLayoutAnnotation(unchanging, holder);
+            case NO_REPAINT:
+                unchanging = true;
+                return new UnchangingFacetForPropertyLayoutAnnotation(unchanging, holder);
+            default:
+            }
+            throw new IllegalStateException("repainting '" + repainting + "' not recognised");
+        });
     }
 
-    private UnchangingFacetForPropertyLayoutAnnotation(final boolean unchanging, FacetHolder holder) {
+    private UnchangingFacetForPropertyLayoutAnnotation(final boolean unchanging, final FacetHolder holder) {
         super(unchanging, holder);
     }
 

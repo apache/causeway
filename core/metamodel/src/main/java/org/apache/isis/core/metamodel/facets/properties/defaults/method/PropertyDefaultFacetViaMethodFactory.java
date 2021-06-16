@@ -76,7 +76,7 @@ public class PropertyDefaultFacetViaMethodFactory extends MethodPrefixBasedFacet
         processMethodContext.removeMethod(method);
 
         final FacetHolder property = processMethodContext.getFacetHolder();
-        FacetUtil.addFacetIfPresent(new PropertyDefaultFacetViaMethod(method, property));
+        FacetUtil.addFacet(new PropertyDefaultFacetViaMethod(method, property));
     }
 
 }

@@ -18,20 +18,27 @@
  */
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacetAbstract;
 
-public class PluralFacetForDomainObjectXml extends PluralFacetAbstract {
+public class PluralFacetForDomainObjectXml
+extends PluralFacetAbstract {
 
-    public static PluralFacet create(final DomainObjectLayoutData domainObjectLayout, final FacetHolder holder) {
+    public static Optional<PluralFacet> create(
+            final DomainObjectLayoutData domainObjectLayout,
+            final FacetHolder holder) {
         if(domainObjectLayout == null) {
-            return null;
+            return Optional.empty();
         }
         final String plural = _Strings.emptyToNull(domainObjectLayout.getPlural());
-        return plural != null ? new PluralFacetForDomainObjectXml(plural, holder) : null;
+        return plural != null
+                ? Optional.of(new PluralFacetForDomainObjectXml(plural, holder))
+                : Optional.empty();
     }
 
     private PluralFacetForDomainObjectXml(final String value, final FacetHolder holder) {

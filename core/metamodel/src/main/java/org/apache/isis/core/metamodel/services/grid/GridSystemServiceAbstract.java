@@ -81,6 +81,7 @@ import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
+import static org.apache.isis.core.metamodel.facetapi.FacetUtil.addFacet;
 import static org.apache.isis.core.metamodel.facetapi.FacetUtil.addFacetIfPresent;
 
 import lombok.Value;
@@ -235,7 +236,7 @@ implements GridSystemService<G> {
                     groupIdAndName = null;
                     memberOrderSequence = actionDomainObjectSequence++;
                 }
-                addFacetIfPresent(LayoutOrderFacetFromXml.create(memberOrderSequence, objectAction));
+                addFacet(LayoutOrderFacetFromXml.create(memberOrderSequence, objectAction));
                 addFacetIfPresent(LayoutGroupFacetFromXml.create(groupIdAndName, objectAction));
 
                 // fix up the action position if required
@@ -298,7 +299,7 @@ implements GridSystemService<G> {
                 // table columns are shown correctly (by fieldset, then property order within that fieldset).
                 final FieldSet fieldSet = propertyLayoutData.getOwner();
 
-                addFacetIfPresent(LayoutOrderFacetFromXml.create(propertySequence.incrementAndGet(), oneToOneAssociation));
+                addFacet(LayoutOrderFacetFromXml.create(propertySequence.incrementAndGet(), oneToOneAssociation));
                 addFacetIfPresent(LayoutGroupFacetFromXml.create(fieldSet, oneToOneAssociation));
             }
 
@@ -321,7 +322,7 @@ implements GridSystemService<G> {
                 addFacetIfPresent(PagedFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
                 addFacetIfPresent(SortedByFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
 
-                addFacetIfPresent(LayoutOrderFacetFromXml.create(collectionSequence++, oneToManyAssociation));
+                addFacet(LayoutOrderFacetFromXml.create(collectionSequence++, oneToManyAssociation));
             }
         });
     }

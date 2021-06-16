@@ -18,19 +18,23 @@
  */
 package org.apache.isis.core.metamodel.facets.object.domainservicelayout;
 
+import java.util.Optional;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 
+public class NamedFacetForDomainServiceLayoutAnnotation
+extends NamedFacetAbstract {
 
-public class NamedFacetForDomainServiceLayoutAnnotation extends NamedFacetAbstract {
-
-    public static NamedFacet create(final String named, final FacetHolder holder) {
-        return named != null ? new NamedFacetForDomainServiceLayoutAnnotation(named, holder) : null;
+    public static Optional<NamedFacet> create(
+            final String named,
+            final FacetHolder holder) {
+        return Optional.ofNullable(named)
+                .map(name->new NamedFacetForDomainServiceLayoutAnnotation(name, holder));
     }
 
-    private NamedFacetForDomainServiceLayoutAnnotation(String value, FacetHolder holder) {
+    private NamedFacetForDomainServiceLayoutAnnotation(final String value, final FacetHolder holder) {
         super(value, /*escaped*/ true, holder);
     }
 }

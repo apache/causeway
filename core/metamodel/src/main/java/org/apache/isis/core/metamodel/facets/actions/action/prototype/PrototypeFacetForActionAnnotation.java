@@ -26,13 +26,12 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.core.config.environment.DeploymentType;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacetAbstract;
 
 public class PrototypeFacetForActionAnnotation
 extends PrototypeFacetAbstract {
 
-    public static PrototypeFacet create(
+    public static Optional<PrototypeFacetForActionAnnotation> create(
             final Optional<Action> actionsIfAny,
             final FacetHolder holder,
             final Supplier<DeploymentType> lazyDeploymentType) {
@@ -40,12 +39,11 @@ extends PrototypeFacetAbstract {
         return actionsIfAny
                 .map(Action::restrictTo)
                 .filter(restrictTo -> restrictTo == RestrictTo.PROTOTYPING)
-                .map(restrictTo -> new PrototypeFacetForActionAnnotation(holder, lazyDeploymentType.get()))
-                .orElse(null);
+                .map(restrictTo -> new PrototypeFacetForActionAnnotation(holder, lazyDeploymentType.get()));
 
     }
 
-    private PrototypeFacetForActionAnnotation(FacetHolder holder, final DeploymentType deploymentType) {
+    private PrototypeFacetForActionAnnotation(final FacetHolder holder, final DeploymentType deploymentType) {
         super(holder, deploymentType);
     }
 

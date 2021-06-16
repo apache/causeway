@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.facets.annotation;
 
+import java.util.Optional;
+
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Facets;
@@ -47,12 +49,12 @@ public class FacetsFacetAnnotationFactory extends FacetFactoryAbstract {
      * Returns a {@link FacetsFacet} impl provided that at least one valid
      * {@link FacetsFacet#facetFactories() factory} was specified.
      */
-    private FacetsFacet create(final Facets annotation, final FacetHolder holder) {
-        if (annotation == null) {
-            return null;
-        }
-        final FacetsFacetAnnotation facetsFacetAnnotation = new FacetsFacetAnnotation(annotation, holder);
-        return facetsFacetAnnotation.facetFactories().length > 0 ? facetsFacetAnnotation : null;
+    private Optional<FacetsFacetAnnotation> create(final Facets annotation, final FacetHolder holder) {
+
+        return Optional.ofNullable(annotation)
+        .map(facets->new FacetsFacetAnnotation(facets, holder))
+        .filter(facetsFacetAnnotation->facetsFacetAnnotation.facetFactories().length > 0);
+
     }
 
 }

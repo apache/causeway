@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -30,17 +31,21 @@ import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet
 public class PromptStyleFacetForActionXml
 extends PromptStyleFacetAbstract {
 
-    public static PromptStyleFacet create(ActionLayoutData actionLayout, FacetHolder holder) {
+    public static Optional<PromptStyleFacet> create(
+            final ActionLayoutData actionLayout,
+            final FacetHolder holder) {
         if(actionLayout == null) {
-            return null;
+            return Optional.empty();
         }
         final PromptStyle promptStyle = actionLayout.getPromptStyle();
-        return promptStyle != null ? new PromptStyleFacetForActionXml(promptStyle, holder) : null;
+        return promptStyle != null
+                ? Optional.of(new PromptStyleFacetForActionXml(promptStyle, holder))
+                : Optional.empty();
     }
 
     private final PromptStyle promptStyle;
 
-    private PromptStyleFacetForActionXml(PromptStyle promptStyle, FacetHolder holder) {
+    private PromptStyleFacetForActionXml(final PromptStyle promptStyle, final FacetHolder holder) {
         super(holder);
         this.promptStyle = promptStyle;
     }

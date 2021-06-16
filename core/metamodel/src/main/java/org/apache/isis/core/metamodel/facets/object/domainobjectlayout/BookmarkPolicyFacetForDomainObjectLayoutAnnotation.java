@@ -23,21 +23,19 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetAbstract;
 
 
 public class BookmarkPolicyFacetForDomainObjectLayoutAnnotation extends BookmarkPolicyFacetAbstract {
 
-    public static BookmarkPolicyFacet create(
+    public static Optional<BookmarkPolicyFacetForDomainObjectLayoutAnnotation> create(
             final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final FacetHolder holder) {
 
         return domainObjectLayoutIfAny
                 .map(DomainObjectLayout::bookmarking)
                 .filter(bookmarkPolicy -> bookmarkPolicy != BookmarkPolicy.NEVER)
-                .map(bookmarkPolicy -> new BookmarkPolicyFacetForDomainObjectLayoutAnnotation(bookmarkPolicy, holder))
-                .orElse(null);
+                .map(bookmarkPolicy -> new BookmarkPolicyFacetForDomainObjectLayoutAnnotation(bookmarkPolicy, holder));
     }
 
     private BookmarkPolicyFacetForDomainObjectLayoutAnnotation(final BookmarkPolicy bookmarkPolicy, final FacetHolder holder) {

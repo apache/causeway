@@ -92,7 +92,7 @@ implements MetaModelRefiner {
 
         val semantics = inferSemantics(processMethodContext, columnIfAny);
 
-        FacetUtil.addFacetIfPresent(
+        FacetUtil.addFacet(
             columnIfAny.isPresent()
                     ? new MandatoryFacetFromJdoColumnAnnotation(holder, semantics)
                     : new MandatoryFacetInferredFromAbsenceOfJdoColumnAnnotation(

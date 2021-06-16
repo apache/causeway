@@ -50,7 +50,7 @@ extends FacetFactoryAbstract {
         if (!processClassContaxt.getFacetHolder().containsFacet(CollectionFacet.class)) {
             return;
         }
-        FacetUtil.addFacetIfPresent(new ParentedCollectionFacetDefault(processClassContaxt.getFacetHolder()));
+        FacetUtil.addFacet(new ParentedCollectionFacetDefault(processClassContaxt.getFacetHolder()));
     }
 
 }

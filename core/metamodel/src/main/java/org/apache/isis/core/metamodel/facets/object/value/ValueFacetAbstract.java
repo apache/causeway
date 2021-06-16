@@ -141,6 +141,7 @@ implements ValueFacet {
             // install the DefaultedFacet if we've been given a DefaultsProvider
             final DefaultsProvider<?> defaultsProvider = semanticsProvider.getDefaultsProvider();
             if (defaultsProvider != null) {
+                facetHolder.getServiceInjector().injectServicesInto(defaultsProvider);
                 this.addContributedFacet(new DefaultedFacetUsingDefaultsProvider(defaultsProvider, holder));
             }
 
@@ -152,7 +153,7 @@ implements ValueFacet {
         }
     }
 
-    public boolean hasSemanticsProvider() {
+    protected boolean hasSemanticsProvider() {
         return this.semanticsProvider != null;
     }
 

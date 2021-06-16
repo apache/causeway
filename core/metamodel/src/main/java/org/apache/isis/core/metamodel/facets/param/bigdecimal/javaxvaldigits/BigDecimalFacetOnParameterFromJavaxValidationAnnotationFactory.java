@@ -27,6 +27,8 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
+import lombok.val;
+
 public class BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory
 extends FacetFactoryAbstract {
 
@@ -36,18 +38,17 @@ extends FacetFactoryAbstract {
     }
 
     @Override
-    public void processParams(ProcessParameterContext processParameterContext) {
+    public void processParams(final ProcessParameterContext processParameterContext) {
 
         if(BigDecimal.class != processParameterContext.getParameterType()) {
             return;
         }
 
-        processParameterContext.synthesizeOnParameter(Digits.class)
-        .ifPresent(digits->{
-            addFacetIfPresent(
-                    BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation
-                    .create(digits, processParameterContext.getFacetHolder()));
-        });
+        val digitsIfAny = processParameterContext.synthesizeOnParameter(Digits.class);
+
+        addFacetIfPresent(
+                BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation
+                .create(digitsIfAny, processParameterContext.getFacetHolder()));
 
     }
 

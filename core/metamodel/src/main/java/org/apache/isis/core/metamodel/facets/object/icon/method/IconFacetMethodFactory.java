@@ -53,6 +53,6 @@ extends MethodPrefixBasedFacetFactoryAbstract {
             return;
         }
         processClassContext.removeMethod(method);
-        FacetUtil.addFacetIfPresent(new IconFacetMethod(method, facetHolder));
+        FacetUtil.addFacet(new IconFacetMethod(method, facetHolder));
     }
 }

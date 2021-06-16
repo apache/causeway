@@ -23,13 +23,12 @@ import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.choices.ChoicesFacetFromBoundedAbstract;
 
 public class ChoicesFacetForDomainObjectAnnotation extends ChoicesFacetFromBoundedAbstract {
 
-    public static Facet create(
+    public static Optional<ChoicesFacetForDomainObjectAnnotation> create(
             final Optional<DomainObject> domainObjectIfAny,
             final FacetHolder facetHolder) {
 
@@ -37,8 +36,8 @@ public class ChoicesFacetForDomainObjectAnnotation extends ChoicesFacetFromBound
                 .map(DomainObject::bounding)
                 .filter(bounding -> bounding != Bounding.NOT_SPECIFIED)
                 .map(bounding -> bounding == Bounding.BOUNDED
-                ? new ChoicesFacetForDomainObjectAnnotation(facetHolder)
-                        : null).orElse(null);
+                        ? new ChoicesFacetForDomainObjectAnnotation(facetHolder)
+                        : null);
     }
 
     private ChoicesFacetForDomainObjectAnnotation(

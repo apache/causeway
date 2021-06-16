@@ -25,7 +25,8 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+
+import lombok.val;
 
 public class DescribedAsFacetOnMemberFactory
 extends FacetFactoryAbstract {
@@ -40,23 +41,16 @@ extends FacetFactoryAbstract {
 
         // (facet derived from type moved to post-processor)
 
+        val returnType = processMethodContext.getMethod().getReturnType();
+        val paramTypeSpec = getSpecificationLoader().loadSpecification(returnType);
+
         addFacetIfPresent(
-                createFromAnnotationOnReturnTypeIfPossible(processMethodContext));
+                paramTypeSpec.lookupFacet(DescribedAsFacet.class)
+                .map(returnTypeDescribedAsFacet->
+                    new DescribedAsFacetOnMemberDerivedFromType(
+                            returnTypeDescribedAsFacet,
+                            processMethodContext.getFacetHolder())));
     }
-
-    private DescribedAsFacet createFromAnnotationOnReturnTypeIfPossible(final ProcessMethodContext processMethodContext) {
-        final Class<?> returnType = processMethodContext.getMethod().getReturnType();
-        final DescribedAsFacet returnTypeDescribedAsFacet = getDescribedAsFacet(returnType);
-        return returnTypeDescribedAsFacet != null
-                ? new DescribedAsFacetOnMemberDerivedFromType(returnTypeDescribedAsFacet, processMethodContext.getFacetHolder())
-                : null;
-    }
-
-    private DescribedAsFacet getDescribedAsFacet(final Class<?> type) {
-        final ObjectSpecification paramTypeSpec = getSpecificationLoader().loadSpecification(type);
-        return paramTypeSpec.getFacet(DescribedAsFacet.class);
-    }
-
 
 
 }

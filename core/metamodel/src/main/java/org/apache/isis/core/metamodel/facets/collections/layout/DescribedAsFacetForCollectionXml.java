@@ -19,23 +19,30 @@
 
 package org.apache.isis.core.metamodel.facets.collections.layout;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbstract;
 
-public class DescribedAsFacetForCollectionXml extends DescribedAsFacetAbstract {
+public class DescribedAsFacetForCollectionXml
+extends DescribedAsFacetAbstract {
 
-    public static DescribedAsFacet create(CollectionLayoutData collectionLayout, FacetHolder holder) {
+    public static Optional<DescribedAsFacet> create(
+            final CollectionLayoutData collectionLayout,
+            final FacetHolder holder) {
         if(collectionLayout == null) {
-            return null;
+            return Optional.empty();
         }
         final String describedAs = _Strings.emptyToNull(collectionLayout.getDescribedAs());
-        return describedAs != null ? new DescribedAsFacetForCollectionXml(describedAs, holder) : null;
+        return describedAs != null
+                ? Optional.of(new DescribedAsFacetForCollectionXml(describedAs, holder))
+                : Optional.empty();
     }
 
-    private DescribedAsFacetForCollectionXml(String value, FacetHolder holder) {
+    private DescribedAsFacetForCollectionXml(final String value, final FacetHolder holder) {
         super(value, holder);
     }
 

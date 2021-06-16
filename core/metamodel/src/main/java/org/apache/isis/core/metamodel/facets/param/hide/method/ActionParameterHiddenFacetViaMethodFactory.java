@@ -87,7 +87,7 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
             val paramAsHolder = parameters.get(paramIndex);
             val ppmFactory = searchResult.getPpmFactory();
 
-            addFacetIfPresent(
+            addFacet(
                     new ActionParameterHiddenFacetViaMethod(hideMethod, ppmFactory, paramAsHolder));
         });
 

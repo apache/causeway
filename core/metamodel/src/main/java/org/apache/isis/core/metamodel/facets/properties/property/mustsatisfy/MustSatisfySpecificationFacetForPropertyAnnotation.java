@@ -25,8 +25,8 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.objectvalue.mustsatisfyspec.MustSatisfySpecificationFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.mustsatisfyspec.MustSatisfySpecificationFacetAbstract;
 
 import lombok.val;
@@ -34,7 +34,7 @@ import lombok.val;
 public class MustSatisfySpecificationFacetForPropertyAnnotation
 extends MustSatisfySpecificationFacetAbstract {
 
-    public static Facet create(
+    public static Optional<MustSatisfySpecificationFacet> create(
             final Optional<Property> propertyIfAny,
             final FacetHolder holder,
             final FactoryService factoryService) {
@@ -45,8 +45,8 @@ extends MustSatisfySpecificationFacetAbstract {
                 .orElseGet(Can::empty);
 
         return specifications.isEmpty()
-                ? null
-                : new MustSatisfySpecificationFacetForPropertyAnnotation(specifications, holder);
+                ? Optional.empty()
+                : Optional.of(new MustSatisfySpecificationFacetForPropertyAnnotation(specifications, holder));
     }
 
     private MustSatisfySpecificationFacetForPropertyAnnotation(

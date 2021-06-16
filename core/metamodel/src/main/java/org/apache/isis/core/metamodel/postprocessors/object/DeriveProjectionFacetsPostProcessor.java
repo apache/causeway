@@ -54,18 +54,18 @@ extends ObjectSpecificationPostProcessorAbstract {
         if (projectionFacet == null) {
             return;
         }
-        FacetUtil.addFacetIfPresent(projectionFacet);
+        FacetUtil.addFacet(projectionFacet);
         val titleFacet = objectSpecification.getFacet(TitleFacet.class);
         if(canOverwrite(titleFacet)) {
-            FacetUtil.addFacetIfPresent(new TitleFacetDerivedFromProjectionFacet(projectionFacet, objectSpecification));
+            FacetUtil.addFacet(new TitleFacetDerivedFromProjectionFacet(projectionFacet, objectSpecification));
         }
         val iconFacet = objectSpecification.getFacet(IconFacet.class);
         if(canOverwrite(iconFacet)) {
-            FacetUtil.addFacetIfPresent(new IconFacetDerivedFromProjectionFacet(projectionFacet, objectSpecification));
+            FacetUtil.addFacet(new IconFacetDerivedFromProjectionFacet(projectionFacet, objectSpecification));
         }
         val cssClassFacet = objectSpecification.getFacet(CssClassFacet.class);
         if(canOverwrite(cssClassFacet)) {
-            FacetUtil.addFacetIfPresent(new IconFacetDerivedFromProjectionFacet(projectionFacet, objectSpecification));
+            FacetUtil.addFacet(new IconFacetDerivedFromProjectionFacet(projectionFacet, objectSpecification));
         }
     }
 

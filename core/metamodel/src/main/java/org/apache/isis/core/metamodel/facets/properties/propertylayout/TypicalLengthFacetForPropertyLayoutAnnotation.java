@@ -23,24 +23,24 @@ import java.util.Optional;
 
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacetAbstract;
 
 public class TypicalLengthFacetForPropertyLayoutAnnotation
 extends TypicalLengthFacetAbstract {
 
-    public static TypicalLengthFacet create(
+    public static Optional<TypicalLengthFacetForPropertyLayoutAnnotation> create(
             final Optional<PropertyLayout> propertyLayoutIfAny,
             final FacetHolder holder) {
 
         return propertyLayoutIfAny
-                .map(PropertyLayout::typicalLength)
-                .filter(typicalLength -> typicalLength != -1)
-                .map(typicalLength -> new TypicalLengthFacetForPropertyLayoutAnnotation(typicalLength, holder))
-                .orElse(null);
+        .map(PropertyLayout::typicalLength)
+        .filter(typicalLength -> typicalLength != -1)
+        .map(typicalLength -> new TypicalLengthFacetForPropertyLayoutAnnotation(typicalLength, holder));
     }
 
-    private TypicalLengthFacetForPropertyLayoutAnnotation(final int typicalLength, final FacetHolder holder) {
+    private TypicalLengthFacetForPropertyLayoutAnnotation(
+            final int typicalLength,
+            final FacetHolder holder) {
         super(typicalLength, holder);
     }
 

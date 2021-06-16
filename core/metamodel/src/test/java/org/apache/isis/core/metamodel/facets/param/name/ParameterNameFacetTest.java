@@ -109,6 +109,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
         // then
         val namedFacet = facetedMethodParameter.getFacet(NamedFacet.class);
+
         assertEquals("An Awesome Name", namedFacet.text());
 
     }

@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacetAbstrac
 public class RegExFacetForParameterAnnotation
 extends RegExFacetAbstract {
 
-    public static RegExFacet create(
+    public static Optional<RegExFacet> create(
             final Optional<Parameter> parameterIfAny,
             final Class<?> parameterType,
             final FacetHolder holder) {
@@ -43,8 +43,7 @@ extends RegExFacetAbstract {
                     final int patternFlags = parameter.regexPatternFlags();
 
                     return new RegExFacetForParameterAnnotation(pattern, patternFlags, replacement, holder);
-                })
-                .orElse(null);
+                });
     }
 
     private RegExFacetForParameterAnnotation(

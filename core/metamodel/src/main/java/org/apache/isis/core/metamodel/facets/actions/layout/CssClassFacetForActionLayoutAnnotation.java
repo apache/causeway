@@ -29,18 +29,17 @@ import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetSimpl
 
 public class CssClassFacetForActionLayoutAnnotation extends CssClassFacetSimple {
 
-    public static CssClassFacet create(
+    public static Optional<CssClassFacet> create(
             final Optional<ActionLayout> actionLayoutIfAny,
             final FacetHolder holder) {
 
         return actionLayoutIfAny
                 .map(ActionLayout::cssClass)
                 .filter(_Strings::isNotEmpty)
-                .map(cssClass -> new CssClassFacetForActionLayoutAnnotation(cssClass, holder))
-                .orElse(null);
+                .map(cssClass -> new CssClassFacetForActionLayoutAnnotation(cssClass, holder));
     }
 
-    private CssClassFacetForActionLayoutAnnotation(String value, FacetHolder holder) {
+    private CssClassFacetForActionLayoutAnnotation(final String value, final FacetHolder holder) {
         super(value, holder);
     }
 

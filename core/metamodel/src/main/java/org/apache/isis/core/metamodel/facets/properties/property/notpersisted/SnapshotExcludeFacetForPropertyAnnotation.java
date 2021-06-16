@@ -33,14 +33,13 @@ public class SnapshotExcludeFacetForPropertyAnnotation extends SnapshotExcludeFa
         super(holder);
     }
 
-    public static SnapshotExcludeFacet create(
+    public static Optional<SnapshotExcludeFacet> create(
             final Optional<Property> propertyIfAny,
             final FacetHolder holder) {
 
         return propertyIfAny
                 .map(Property::snapshot)
                 .filter(snapshot -> snapshot == Snapshot.EXCLUDED)
-                .map(snapshot -> new SnapshotExcludeFacetForPropertyAnnotation(holder))
-                .orElse(null);
+                .map(snapshot -> new SnapshotExcludeFacetForPropertyAnnotation(holder));
     }
 }

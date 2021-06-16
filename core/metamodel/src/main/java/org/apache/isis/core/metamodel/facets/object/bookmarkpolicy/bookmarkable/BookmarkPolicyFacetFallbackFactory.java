@@ -49,12 +49,12 @@ implements MetaModelRefiner {
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        addFacetIfPresent(new BookmarkPolicyFacetFallback(processClassContext.getFacetHolder()));
+        addFacet(new BookmarkPolicyFacetFallback(processClassContext.getFacetHolder()));
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        addFacetIfPresent(new BookmarkPolicyFacetFallback(processMethodContext.getFacetHolder()));
+        addFacet(new BookmarkPolicyFacetFallback(processMethodContext.getFacetHolder()));
     }
 
     /**

@@ -50,14 +50,14 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
         val facetHolder = processMethodContext.getFacetHolder();
-        addFacetIfPresent(
+        addFacet(
                 new PropertyValidateFacetDefault(facetHolder));
     }
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
         val facetHolder = processParameterContext.getFacetHolder();
-        addFacetIfPresent(
+        addFacet(
                 new PropertyValidateFacetDefault(facetHolder));
     }
 

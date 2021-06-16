@@ -27,14 +27,15 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 
 public class ActionExplicitFacetForActionAnnotation extends ActionExplicitFacetAbstract {
 
-    private ActionExplicitFacetForActionAnnotation(final FacetHolder holder) {
-        super(holder);
+    public static Optional<ActionExplicitFacetForActionAnnotation> create(
+            final Optional<Action> actionIfAny,
+            final FacetedMethod holder) {
+        return actionIfAny
+                .map(x -> new ActionExplicitFacetForActionAnnotation(holder));
     }
 
-    public static ActionExplicitFacet create(Optional<Action> actionIfAny, FacetedMethod holder) {
-        return actionIfAny
-                .map(x -> new ActionExplicitFacetForActionAnnotation(holder))
-                .orElse(null);
+    private ActionExplicitFacetForActionAnnotation(final FacetHolder holder) {
+        super(holder);
     }
 
 }

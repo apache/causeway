@@ -83,7 +83,7 @@ public class ValueFacetAnnotationOrConfigurationFactory extends FacetFactoryAbst
 
         // create from annotation, if present
         if (valueIfAny.isPresent()) {
-            FacetUtil.addFacetIfPresent(new ValueFacetAnnotation(valueIfAny.get(), config, cls, facetHolder));
+            FacetUtil.addFacet(new ValueFacetAnnotation(valueIfAny.get(), config, cls, facetHolder));
             return;
         }
 
@@ -92,10 +92,10 @@ public class ValueFacetAnnotationOrConfigurationFactory extends FacetFactoryAbst
                 .semanticsProviderNameFromConfiguration(config, cls);
 
         if (_Strings.isNotEmpty(semanticsProviderName)) {
-            val valueFacet = new ValueFacetFromConfiguration(semanticsProviderName, facetHolder);
-            if (valueFacet.hasSemanticsProvider()) {
-                FacetUtil.addFacetIfPresent(valueFacet);
-                return;
+            val valueFacet = FacetUtil.addFacetIfPresent(
+                    ValueFacetFromConfiguration.create(semanticsProviderName, facetHolder));
+            if(valueFacet.isPresent()) {
+                return; // could also just fall through, but kept for readability
             }
         }
 

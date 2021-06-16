@@ -35,16 +35,7 @@ import lombok.val;
 public class MixinFacetForDomainObjectAnnotation
 extends MixinFacetAbstract {
 
-    private MixinFacetForDomainObjectAnnotation(
-            final Class<?> mixinType,
-            final String value,
-            final Constructor<?> constructorType,
-            final FacetHolder holder) {
-
-        super(mixinType, value, constructorType, holder);
-    }
-
-    public static MixinFacet create(
+    public static Optional<MixinFacetForDomainObjectAnnotation> create(
             final Optional<DomainObject> domainObjectIfAny,
             final Class<?> candidateMixinType,
             final FacetHolder facetHolder,
@@ -66,8 +57,15 @@ extends MixinFacetAbstract {
                         constructor,
                         facetHolder))
             .orElse(null);
-        })
-        .orElse(null);
+        });
     }
 
+    private MixinFacetForDomainObjectAnnotation(
+            final Class<?> mixinType,
+            final String value,
+            final Constructor<?> constructorType,
+            final FacetHolder holder) {
+
+        super(mixinType, value, constructorType, holder);
+    }
 }

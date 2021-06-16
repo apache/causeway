@@ -58,7 +58,7 @@ extends ObjectSpecificationPostProcessorAbstract {
             .getSpecification()
             .lookupNonFallbackFacet(TypicalLengthFacet.class)
             .ifPresent(typicalLengthFacet ->
-                    FacetUtil.addFacetIfPresent(
+                    FacetUtil.addFacet(
                             TypicalLengthFacetOnParameterInferredFromType
                             .createWhilePostprocessing(typicalLengthFacet, peerFor(parameter))));
     }
@@ -72,7 +72,7 @@ extends ObjectSpecificationPostProcessorAbstract {
             .getSpecification()
             .lookupNonFallbackFacet(TypicalLengthFacet.class)
             .ifPresent(typicalLengthFacet ->
-                    FacetUtil.addFacetIfPresent(
+                    FacetUtil.addFacet(
                             TypicalLengthFacetOnPropertyInferredFromType
                             .createWhilePostprocessing(typicalLengthFacet, facetedMethodFor(property))));
 

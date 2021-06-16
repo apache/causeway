@@ -32,7 +32,9 @@ import org.apache.isis.core.metamodel.facets.FacetFactory;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public abstract class FacetsFacetAbstract extends FacetAbstract implements FacetsFacet {
+public abstract class FacetsFacetAbstract
+extends FacetAbstract
+implements FacetsFacet {
 
     private static final Class<? extends Facet> type() {
         return FacetsFacet.class;

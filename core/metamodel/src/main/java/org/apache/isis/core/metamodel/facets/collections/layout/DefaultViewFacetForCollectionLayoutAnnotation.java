@@ -30,10 +30,6 @@ import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.
 
 public class DefaultViewFacetForCollectionLayoutAnnotation extends DefaultViewFacetAbstract {
 
-    private DefaultViewFacetForCollectionLayoutAnnotation(String value, FacetHolder holder) {
-        super(value, holder);
-    }
-
     public static DefaultViewFacet create(
             final Optional<CollectionLayout> collectionLayoutIfAny,
             final IsisConfiguration configuration,
@@ -42,7 +38,11 @@ public class DefaultViewFacetForCollectionLayoutAnnotation extends DefaultViewFa
         final String defaultView = collectionLayoutIfAny
                 .map(CollectionLayout::defaultView)
                 .filter(_Strings::isNotEmpty)
-                .orElseGet(() -> configuration.getApplib().getAnnotation().getCollectionLayout().getDefaultView().toNameLower());
+                .orElseGet(()->configuration.getApplib().getAnnotation().getCollectionLayout().getDefaultView().toNameLower());
         return new DefaultViewFacetForCollectionLayoutAnnotation(defaultView, holder);
+    }
+
+    private DefaultViewFacetForCollectionLayoutAnnotation(final String value, final FacetHolder holder) {
+        super(value, holder);
     }
 }

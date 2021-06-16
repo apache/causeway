@@ -81,8 +81,7 @@ implements ObjectTypeFacetFactory {
         if(embeddedOnly) {
             // suppress
         } else {
-            val jdoPersistenceCapableFacet = new JdoEntityFacet(facetHolder);
-            FacetUtil.addFacetIfPresent(jdoPersistenceCapableFacet);
+            FacetUtil.addFacet(new JdoEntityFacet(facetHolder));
         }
 
         return;

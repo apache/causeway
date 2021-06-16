@@ -35,15 +35,12 @@ import lombok.val;
  *
  * <p>
  * This implementation indicates that the {@link FacetHolder} is <i>not</i>
- * mandatory, as per {@link #isInvertedSemantics()}.
+ * mandatory, as per {@link #getSemantics()}.
  */
-public class MandatoryFacetInvertedByNullableAnnotationOnProperty extends MandatoryFacetAbstract {
+public class MandatoryFacetInvertedByNullableAnnotationOnProperty
+extends MandatoryFacetAbstract {
 
-    public MandatoryFacetInvertedByNullableAnnotationOnProperty(final FacetHolder holder) {
-        super(holder, Semantics.OPTIONAL);
-    }
-
-    public static MandatoryFacet create(
+    public static Optional<MandatoryFacet> create(
             final Optional<Nullable> annotation,
             final Method method,
             final FacetHolder holder) {
@@ -54,8 +51,14 @@ public class MandatoryFacetInvertedByNullableAnnotationOnProperty extends Mandat
 
         val returnType = method.getReturnType();
         if (returnType.isPrimitive()) {
-            return null;
+            return Optional.empty();
         }
-        return new MandatoryFacetInvertedByNullableAnnotationOnProperty(holder);
+        return Optional.of(new MandatoryFacetInvertedByNullableAnnotationOnProperty(holder));
     }
+
+    private MandatoryFacetInvertedByNullableAnnotationOnProperty(final FacetHolder holder) {
+        super(holder, Semantics.OPTIONAL);
+    }
+
+
 }

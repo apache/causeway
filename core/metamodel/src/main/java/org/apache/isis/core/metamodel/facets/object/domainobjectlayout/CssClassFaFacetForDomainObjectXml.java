@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
@@ -26,18 +28,26 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacetAbstract;
 
-public class CssClassFaFacetForDomainObjectXml extends CssClassFaFacetAbstract {
+public class CssClassFaFacetForDomainObjectXml
+extends CssClassFaFacetAbstract {
 
-    public static CssClassFaFacet create(final DomainObjectLayoutData domainObjectLayout, final FacetHolder holder) {
+    public static Optional<CssClassFaFacet> create(
+            final DomainObjectLayoutData domainObjectLayout,
+            final FacetHolder holder) {
         if(domainObjectLayout == null) {
-            return null;
+            return Optional.empty();
         }
         final String cssClassFa = _Strings.emptyToNull(domainObjectLayout.getCssClassFa());
         CssClassFaPosition cssClassFaPosition = domainObjectLayout.getCssClassFaPosition();
-        return cssClassFa != null ? new CssClassFaFacetForDomainObjectXml(cssClassFa, cssClassFaPosition, holder) : null;
+        return cssClassFa != null
+                ? Optional.of(new CssClassFaFacetForDomainObjectXml(cssClassFa, cssClassFaPosition, holder))
+                : Optional.empty();
     }
 
-    private CssClassFaFacetForDomainObjectXml(final String value, final CssClassFaPosition position, final FacetHolder holder) {
+    private CssClassFaFacetForDomainObjectXml(
+            final String value,
+            final CssClassFaPosition position,
+            final FacetHolder holder) {
         super(value, position, holder);
     }
 

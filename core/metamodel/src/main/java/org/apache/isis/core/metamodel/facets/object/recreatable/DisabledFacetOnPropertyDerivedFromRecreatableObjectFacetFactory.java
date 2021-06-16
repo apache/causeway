@@ -51,7 +51,7 @@ extends FacetFactoryAbstract {
         final DisabledFacetAbstract.Semantics semantics = Util.inferSemanticsFrom(facet);
 
         final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
-        addFacetIfPresent(new DisabledFacetOnPropertyInferredFromRecreatableObject(facetHolder, semantics));
+        addFacet(new DisabledFacetOnPropertyInferredFromRecreatableObject(facetHolder, semantics));
     }
 
 }

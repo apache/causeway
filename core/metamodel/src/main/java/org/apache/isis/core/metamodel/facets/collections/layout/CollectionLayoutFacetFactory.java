@@ -51,7 +51,7 @@ extends FacetFactoryAbstract {
                 CssClassFacetForCollectionLayoutAnnotation
                 .create(collectionLayoutIfAny, facetHolder));
 
-        addFacetIfPresent(
+        addFacet(
                 DefaultViewFacetForCollectionLayoutAnnotation
                 .create(collectionLayoutIfAny, getConfiguration(), facetHolder));
 

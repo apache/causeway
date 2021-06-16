@@ -24,21 +24,20 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public class HiddenFacetForPropertyAnnotation extends HiddenFacetAbstract {
+public class HiddenFacetForPropertyAnnotation
+extends HiddenFacetAbstract {
 
-    public static HiddenFacet create(
+    public static Optional<HiddenFacetForPropertyAnnotation> create(
             final Optional<Property> propertyIfAny,
             final FacetHolder holder) {
 
         return propertyIfAny
                 .map(Property::hidden)
                 .filter(where -> where != null && where != Where.NOT_SPECIFIED)
-                .map(where -> new HiddenFacetForPropertyAnnotation(where, holder))
-                .orElse(null);
+                .map(where -> new HiddenFacetForPropertyAnnotation(where, holder));
     }
 
     private HiddenFacetForPropertyAnnotation(final Where where, final FacetHolder holder) {

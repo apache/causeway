@@ -77,7 +77,7 @@ implements MetaModelRefiner {
 
         val facetHolder = processMethodContext.getFacetHolder();
 
-        FacetUtil.addFacetIfPresent(
+        FacetUtil.addFacet(
                 new MaxLengthFacetDerivedFromJdoColumn(
                         jdoColumnAnnotation.length(),
                         facetHolder));

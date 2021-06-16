@@ -29,15 +29,14 @@ import org.apache.isis.core.metamodel.facets.objectvalue.fileaccept.FileAcceptFa
 
 public class FileAcceptFacetForPropertyAnnotation extends FileAcceptFacetAbstract {
 
-    public static FileAcceptFacet create(
+    public static Optional<FileAcceptFacet> create(
             final Optional<Property> propertyIfAny,
             final FacetHolder holder) {
 
         return propertyIfAny
-                .map(Property::fileAccept)
-                .filter(_Strings::isNotEmpty)
-                .map(fileAccept -> new FileAcceptFacetForPropertyAnnotation(fileAccept, holder))
-                .orElse(null);
+        .map(Property::fileAccept)
+        .filter(_Strings::isNotEmpty)
+        .map(fileAccept -> new FileAcceptFacetForPropertyAnnotation(fileAccept, holder));
     }
 
     private FileAcceptFacetForPropertyAnnotation(final String value, final FacetHolder holder) {

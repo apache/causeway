@@ -86,7 +86,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
             val paramAsHolder = parameters.get(paramIndex);
             val ppmFactory = searchResult.getPpmFactory();
 
-            addFacetIfPresent(
+            addFacet(
                     new ActionParameterAutoCompleteFacetViaMethod(
                             autoCompleteMethod, paramType, ppmFactory, paramAsHolder));
         });

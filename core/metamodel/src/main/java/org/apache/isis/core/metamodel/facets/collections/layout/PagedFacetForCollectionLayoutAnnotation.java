@@ -23,23 +23,21 @@ import java.util.Optional;
 
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacetAbstract;
 
 public class PagedFacetForCollectionLayoutAnnotation extends PagedFacetAbstract {
 
-    public static PagedFacet create(
+    public static Optional<PagedFacetForCollectionLayoutAnnotation> create(
             final Optional<CollectionLayout> collectionLayoutIfAny,
             final FacetHolder holder) {
 
         return collectionLayoutIfAny
                 .map(CollectionLayout::paged)
                 .filter(paged -> paged != -1)
-                .map(paged -> new PagedFacetForCollectionLayoutAnnotation(paged, holder))
-                .orElse(null);
+                .map(paged -> new PagedFacetForCollectionLayoutAnnotation(paged, holder));
     }
 
-    private PagedFacetForCollectionLayoutAnnotation(int paged, FacetHolder holder) {
+    private PagedFacetForCollectionLayoutAnnotation(final int paged, final FacetHolder holder) {
         super(paged, holder);
     }
 

@@ -29,7 +29,6 @@ import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.object.disabled.DisabledObjectFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -85,10 +84,9 @@ implements ImperativeFacet {
     }
 
     @Override
-    public void copyOnto(final FacetHolder holder) {
+    public DisabledObjectFacetViaMethod clone(final FacetHolder holder) {
         val method = methods.getFirstOrFail();
-        final DisabledObjectFacetViaMethod clonedFacet = new DisabledObjectFacetViaMethod(method, translationService, translationContext, holder);
-        FacetUtil.addFacetIfPresent(clonedFacet);
+        return new DisabledObjectFacetViaMethod(method, translationService, translationContext, holder);
     }
 
     @Override

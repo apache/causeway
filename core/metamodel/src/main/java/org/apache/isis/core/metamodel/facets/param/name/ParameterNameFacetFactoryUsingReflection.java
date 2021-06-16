@@ -24,11 +24,9 @@ import javax.inject.Inject;
 
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 
 import lombok.val;
 
@@ -69,11 +67,8 @@ extends FacetFactoryAbstract {
         val naturalName = StringExtensions.asNaturalName2(parameterName);
         val facetHolder = processParameterContext.getFacetHolder();
 
-        FacetUtil.addFacetIfPresent(create(naturalName, facetHolder));
-    }
-
-    private NamedFacet create(final String parameterName, final FacetHolder holder) {
-        return new NamedFacetForParameterUsingReflection(parameterName, holder);
+        FacetUtil.addFacet(
+                new NamedFacetForParameterUsingReflection(naturalName, facetHolder));
     }
 
 }

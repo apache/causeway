@@ -172,7 +172,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
     public static class Modify extends PropertyAnnotationFacetFactoryTest {
 
         private void addGetterFacet(final FacetHolder holder) {
-            FacetUtil.addFacetIfPresent(new PropertyOrCollectionAccessorFacetAbstract(mockOnType, holder) {
+            FacetUtil.addFacet(new PropertyOrCollectionAccessorFacetAbstract(mockOnType, holder) {
                 @Override
                 public Object getProperty(
                         final ManagedObject inObject,
@@ -183,7 +183,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
         }
 
         private void addSetterFacet(final FacetHolder holder) {
-            FacetUtil.addFacetIfPresent(new PropertySetterFacetAbstract(holder) {
+            FacetUtil.addFacet(new PropertySetterFacetAbstract(holder) {
                 @Override
                 public ManagedObject setProperty(
                         final OneToOneAssociation owningAssociation,
@@ -196,7 +196,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
         }
 
         private void addClearFacet(final FacetHolder holder) {
-            FacetUtil.addFacetIfPresent(new PropertyClearFacetAbstract(holder) {
+            FacetUtil.addFacet(new PropertyClearFacetAbstract(holder) {
                 @Override
                 public ManagedObject clearProperty(
                         final OneToOneAssociation owningProperty,

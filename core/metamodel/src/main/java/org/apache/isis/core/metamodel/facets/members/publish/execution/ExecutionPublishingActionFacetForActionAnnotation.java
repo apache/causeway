@@ -23,6 +23,7 @@ import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.commons.internal.base._Optionals;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -33,54 +34,61 @@ import lombok.val;
 public class ExecutionPublishingActionFacetForActionAnnotation
 extends ExecutionPublishingFacetAbstract {
 
-    public static ExecutionPublishingFacet create(
+    public static Optional<ExecutionPublishingFacet> create(
             final Optional<Action> actionsIfAny,
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
         val publishingPolicy = PublishingPolicies.actionExecutionPublishingPolicy(configuration);
 
-        return actionsIfAny
-                .map(Action::executionPublishing)
-                .filter(publishing -> publishing != Publishing.NOT_SPECIFIED)
-                .<ExecutionPublishingFacet>map(publishing -> {
-                    switch (publishing) {
-                    case AS_CONFIGURED:
+        return _Optionals.orNullable(
 
-                        switch (publishingPolicy) {
-                        case NONE:
-                            return null;
-                        case IGNORE_QUERY_ONLY:
-                        case IGNORE_SAFE:
-                            if (hasSafeSemantics(holder)) {
-                                return null;
-                            }
-                            // else fall through
-                        default:
-                            return new ExecutionPublishingActionFacetForActionAnnotationAsConfigured(holder);
-                        }
-                    case DISABLED:
+        actionsIfAny
+        .map(Action::executionPublishing)
+        .filter(publishing -> publishing != Publishing.NOT_SPECIFIED)
+        .<ExecutionPublishingFacet>map(publishing -> {
+            switch (publishing) {
+            case AS_CONFIGURED:
+
+                switch (publishingPolicy) {
+                case NONE:
+                    return null;
+                case IGNORE_QUERY_ONLY:
+                case IGNORE_SAFE:
+                    if (hasSafeSemantics(holder)) {
                         return null;
-                    case ENABLED:
-                        return new ExecutionPublishingActionFacetForActionAnnotation(holder);
-                    default:
                     }
-                    throw new IllegalStateException("publishing '" + publishing + "' not recognised");
-                })
-                .orElseGet(() -> {
-                    switch (publishingPolicy) {
-                    case NONE:
-                        return null;
-                    case IGNORE_QUERY_ONLY:
-                    case IGNORE_SAFE:
-                        if (hasSafeSemantics(holder)) {
-                            return null;
-                        }
-                        // else fall through
-                    default:
-                        return new ExecutionPublishingActionFacetFromConfiguration(holder);
-                    }
-                });
+                    // else fall through
+                default:
+                    return new ExecutionPublishingActionFacetForActionAnnotationAsConfigured(holder);
+                }
+            case DISABLED:
+                return null;
+            case ENABLED:
+                return new ExecutionPublishingActionFacetForActionAnnotation(holder);
+            default:
+            }
+            throw new IllegalStateException("publishing '" + publishing + "' not recognised");
+        })
+
+        ,
+
+        () -> {
+            switch (publishingPolicy) {
+            case NONE:
+                return null;
+            case IGNORE_QUERY_ONLY:
+            case IGNORE_SAFE:
+                if (hasSafeSemantics(holder)) {
+                    return null;
+                }
+                // else fall through
+            default:
+                return new ExecutionPublishingActionFacetFromConfiguration(holder);
+            }
+        }
+
+        );
     }
 
     private static boolean hasSafeSemantics(final FacetHolder holder) {

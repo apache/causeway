@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.metamodel.facets.members.layout.group;
 
+import java.util.Optional;
+
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.layout.component.FieldSet;
@@ -30,27 +32,26 @@ extends LayoutGroupFacetAbstract {
 
     // -- FACTORIES
 
-    public static @Nullable LayoutGroupFacetFromXml create(
+    public static Optional<LayoutGroupFacetFromXml> create(
             final @Nullable GroupIdAndName groupIdAndName,
             final @NonNull  FacetHolder holder) {
 
-        return groupIdAndName!=null
-                ? new LayoutGroupFacetFromXml(groupIdAndName, holder)
-                : null;
+        return Optional.ofNullable(groupIdAndName)
+                .map(gIdAndName->new LayoutGroupFacetFromXml(gIdAndName, holder));
     }
 
-    public static @Nullable LayoutGroupFacetFromXml create(
+    public static Optional<LayoutGroupFacetFromXml> create(
             final @NonNull FieldSet fieldSet,
             final @NonNull FacetHolder holder) {
 
-        return GroupIdAndName.forFieldSet(fieldSet)
-            .map(groupIdAndName->create(groupIdAndName, holder))
-            .orElse(null);
+        return GroupIdAndName
+                .forFieldSet(fieldSet)
+                .flatMap(groupIdAndName->create(groupIdAndName, holder));
     }
 
     // -- IMPLEMENTATION
 
-    private LayoutGroupFacetFromXml(GroupIdAndName groupIdAndName, FacetHolder holder) {
+    private LayoutGroupFacetFromXml(final GroupIdAndName groupIdAndName, final FacetHolder holder) {
         super(groupIdAndName, holder);
     }
 

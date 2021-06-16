@@ -51,7 +51,7 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        FacetUtil.addFacetIfPresent(
+        FacetUtil.addFacet(
                 MandatoryFacetDefault
                 .required(processMethodContext.getFacetHolder()));
     }

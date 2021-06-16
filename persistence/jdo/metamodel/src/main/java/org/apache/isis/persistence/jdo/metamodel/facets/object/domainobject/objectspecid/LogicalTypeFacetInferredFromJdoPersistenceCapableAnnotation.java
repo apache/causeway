@@ -20,6 +20,7 @@
 package org.apache.isis.persistence.jdo.metamodel.facets.object.domainobject.objectspecid;
 
 import java.util.Locale;
+import java.util.Optional;
 
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.base._Strings;
@@ -31,23 +32,23 @@ import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persiste
 public class LogicalTypeFacetInferredFromJdoPersistenceCapableAnnotation
 extends LogicalTypeFacetAbstract {
 
-    public static LogicalTypeFacet create(
+    public static Optional<LogicalTypeFacet> create(
             final JdoPersistenceCapableFacet persistenceCapableFacet,
             final Class<?> correspondingClass,
             final FacetHolder holder) {
 
         if(persistenceCapableFacet.getPrecedence().isFallback()) {
-            return null;
+            return Optional.empty();
         }
         final String schema = persistenceCapableFacet.getSchema();
         if(_Strings.isNullOrEmpty(schema)) {
-            return null;
+            return Optional.empty();
         }
         final String logicalTypeName =
                 schema.toLowerCase(Locale.ROOT) + "." + persistenceCapableFacet.getTable();
-        return new LogicalTypeFacetInferredFromJdoPersistenceCapableAnnotation(
+        return Optional.of(new LogicalTypeFacetInferredFromJdoPersistenceCapableAnnotation(
                 LogicalType.eager(correspondingClass, logicalTypeName),
-                holder);
+                holder));
     }
 
     private LogicalTypeFacetInferredFromJdoPersistenceCapableAnnotation(

@@ -31,6 +31,26 @@ import lombok.val;
 public class ProjectingFacetFromPropertyAnnotation
 extends ProjectingFacetAbstract {
 
+    public static Optional<ProjectingFacet> create(
+            final Optional<Property> propertyIfAny,
+            final FacetedMethod facetHolder) {
+
+        if(!propertyIfAny.isPresent()) {
+            return Optional.empty();
+        }
+
+        val projecting = propertyIfAny.get().projecting();
+        switch (projecting) {
+        case PROJECTED:
+            return Optional.of(new ProjectingFacetFromPropertyAnnotation(projecting, facetHolder));
+        case NOT_SPECIFIED:
+        default:
+            return Optional.empty();
+        }
+
+    }
+
+
     private final Projecting projecting;
 
     private ProjectingFacetFromPropertyAnnotation(
@@ -38,25 +58,6 @@ extends ProjectingFacetAbstract {
             final FacetHolder holder) {
         super( holder);
         this.projecting = projecting;
-    }
-
-    public static ProjectingFacet create(
-            final Optional<Property> propertyIfAny,
-            final FacetedMethod facetHolder) {
-
-        if(!propertyIfAny.isPresent()) {
-            return null;
-        }
-
-        val projecting = propertyIfAny.get().projecting();
-        switch (projecting) {
-        case PROJECTED:
-            return new ProjectingFacetFromPropertyAnnotation(projecting, facetHolder);
-        case NOT_SPECIFIED:
-        default:
-            return null;
-        }
-
     }
 
     @Override

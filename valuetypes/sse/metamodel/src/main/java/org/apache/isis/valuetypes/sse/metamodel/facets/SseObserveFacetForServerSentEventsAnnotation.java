@@ -21,9 +21,9 @@ package org.apache.isis.valuetypes.sse.metamodel.facets;
 
 import java.util.Optional;
 
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.valuetypes.sse.applib.annotations.ServerSentEvents;
 import org.apache.isis.valuetypes.sse.applib.annotations.SseSource;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 /**
  *
@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
  */
 public class SseObserveFacetForServerSentEventsAnnotation extends SseObserveFacetAbstract {
 
-    public static SseObserveFacet create(
+    public static Optional<SseObserveFacetForServerSentEventsAnnotation> create(
             final Optional<ServerSentEvents> serverSentEventsIfAny,
             final FacetHolder holder) {
 
@@ -40,13 +40,12 @@ public class SseObserveFacetForServerSentEventsAnnotation extends SseObserveFace
                 .map(ServerSentEvents::observe)
                 .filter(SseSource::isObservable)
                 .map(eventStreamType -> new SseObserveFacetForServerSentEventsAnnotation(
-                        eventStreamType, holder))
-                .orElse(null);
+                        eventStreamType, holder));
     }
 
     private SseObserveFacetForServerSentEventsAnnotation(
-            Class<? extends SseSource> eventStreamType,
-            FacetHolder holder) {
+            final Class<? extends SseSource> eventStreamType,
+            final FacetHolder holder) {
 
         super(eventStreamType, holder);
     }

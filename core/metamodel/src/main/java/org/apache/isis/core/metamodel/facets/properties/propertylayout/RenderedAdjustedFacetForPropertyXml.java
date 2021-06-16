@@ -19,26 +19,33 @@
 
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.annotation.RenderDay;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacetAbstract;
 
-public class RenderedAdjustedFacetForPropertyXml extends RenderedAdjustedFacetAbstract {
+public class RenderedAdjustedFacetForPropertyXml
+extends RenderedAdjustedFacetAbstract {
 
-    public static RenderedAdjustedFacet create(final PropertyLayoutData propertyLayout, FacetHolder holder) {
+    public static Optional<RenderedAdjustedFacet> create(
+            final PropertyLayoutData propertyLayout,
+            final FacetHolder holder) {
         if(propertyLayout == null) {
-            return null;
+            return Optional.empty();
         }
         final RenderDay renderDay = propertyLayout.getRenderDay();
-        return renderDay != null && renderDay == RenderDay.AS_DAY_BEFORE
-                ? new RenderedAdjustedFacetForPropertyXml(holder) : null;
+        return renderDay != null
+                && renderDay == RenderDay.AS_DAY_BEFORE
+                        ? Optional.of(new RenderedAdjustedFacetForPropertyXml(holder))
+                        : Optional.empty();
     }
 
     public static final int ADJUST_BY = -1;
 
-    private RenderedAdjustedFacetForPropertyXml(FacetHolder holder) {
+    private RenderedAdjustedFacetForPropertyXml(final FacetHolder holder) {
         super(ADJUST_BY, holder);
     }
 

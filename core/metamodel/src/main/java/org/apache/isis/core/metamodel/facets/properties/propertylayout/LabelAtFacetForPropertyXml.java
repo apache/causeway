@@ -19,20 +19,27 @@
 
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacetAbstract;
 
-public class LabelAtFacetForPropertyXml extends LabelAtFacetAbstract {
+public class LabelAtFacetForPropertyXml
+extends LabelAtFacetAbstract {
 
-    public static LabelAtFacet create(final PropertyLayoutData propertyLayout, FacetHolder holder) {
+    public static Optional<LabelAtFacet> create(
+            final PropertyLayoutData propertyLayout,
+            final FacetHolder holder) {
         if (propertyLayout == null) {
-            return null;
+            return Optional.empty();
         }
         final LabelPosition labelPosition = propertyLayout.getLabelPosition();
-        return labelPosition != null ? new LabelAtFacetForPropertyXml(labelPosition, holder) : null;
+        return labelPosition != null
+                ? Optional.of(new LabelAtFacetForPropertyXml(labelPosition, holder))
+                : Optional.empty();
     }
 
     private LabelAtFacetForPropertyXml(final LabelPosition value, final FacetHolder holder) {

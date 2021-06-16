@@ -72,9 +72,9 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
 
         val facetHolder = processClassContext.getFacetHolder();
 
-        addFacetIfPresent(new DescribedAsFacetNone(facetHolder));
-        addFacetIfPresent(new TitleFacetNone(facetHolder));
-        addFacetIfPresent(
+        addFacet(new DescribedAsFacetNone(facetHolder));
+        addFacet(new TitleFacetNone(facetHolder));
+        addFacet(
                 new PagedFacetFromConfiguration(
                         getConfiguration().getApplib().getAnnotation().getDomainObjectLayout().getPaged(),
                         facetHolder));
@@ -85,22 +85,22 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
 
         final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
 
-        addFacetIfPresent(new NamedFacetFallbackFromMemberName(facetedMethod));
-        addFacetIfPresent(new DescribedAsFacetNone(facetedMethod));
-        addFacetIfPresent(new HelpFacetNone(facetedMethod));
+        addFacet(new NamedFacetFallbackFromMemberName(facetedMethod));
+        addFacet(new DescribedAsFacetNone(facetedMethod));
+        addFacet(new HelpFacetNone(facetedMethod));
 
         final FeatureType featureType = facetedMethod.getFeatureType();
         if (featureType.isProperty()) {
-            addFacetIfPresent(new MaxLengthFacetUnlimited(facetedMethod));
-            addFacetIfPresent(new MultiLineFacetNone(facetedMethod));
-            addFacetIfPresent(newPropParamLayoutFacetIfAny(facetedMethod, "propertyLayout", getConfiguration().getApplib().getAnnotation().getPropertyLayout()));
+            addFacet(new MaxLengthFacetUnlimited(facetedMethod));
+            addFacet(new MultiLineFacetNone(facetedMethod));
+            addFacet(newPropParamLayoutFacetIfAny(facetedMethod, "propertyLayout", getConfiguration().getApplib().getAnnotation().getPropertyLayout()));
         }
         if (featureType.isAction()) {
-            addFacetIfPresent(new ActionDefaultsFacetNone(facetedMethod));
-            addFacetIfPresent(new ActionChoicesFacetNone(facetedMethod));
+            addFacet(new ActionDefaultsFacetNone(facetedMethod));
+            addFacet(new ActionChoicesFacetNone(facetedMethod));
         }
         if (featureType.isCollection()) {
-            addFacetIfPresent(
+            addFacet(
                     new PagedFacetFromConfiguration(
                             getConfiguration().getApplib().getAnnotation().getCollectionLayout().getPaged(),
                             facetedMethod));
@@ -113,14 +113,14 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
 
         final TypedHolder typedHolder = processParameterContext.getFacetHolder();
         if (typedHolder.getFeatureType().isActionParameter()) {
-            addFacetIfPresent(new NamedFacetNone(typedHolder));
-            addFacetIfPresent(new DescribedAsFacetNone(typedHolder));
-            addFacetIfPresent(new HelpFacetNone(typedHolder));
-            addFacetIfPresent(new MultiLineFacetNone(typedHolder));
+            addFacet(new NamedFacetNone(typedHolder));
+            addFacet(new DescribedAsFacetNone(typedHolder));
+            addFacet(new HelpFacetNone(typedHolder));
+            addFacet(new MultiLineFacetNone(typedHolder));
 
-            addFacetIfPresent(new MaxLengthFacetUnlimited(typedHolder));
+            addFacet(new MaxLengthFacetUnlimited(typedHolder));
 
-            addFacetIfPresent(newPropParamLayoutFacetIfAny(typedHolder, "parameterLayout", getConfiguration().getApplib().getAnnotation().getParameterLayout()));
+            addFacet(newPropParamLayoutFacetIfAny(typedHolder, "parameterLayout", getConfiguration().getApplib().getAnnotation().getParameterLayout()));
         }
 
     }

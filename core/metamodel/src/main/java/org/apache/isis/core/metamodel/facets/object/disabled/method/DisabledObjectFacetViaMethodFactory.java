@@ -76,7 +76,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         // sadness: same logic as in I18nFacetFactory
         val translationContext = TranslationContext.forMethod(method);
 
-        FacetUtil.addFacetIfPresent(new DisabledObjectFacetViaMethod(method, translationService, translationContext, facetHolder));
+        FacetUtil.addFacet(new DisabledObjectFacetViaMethod(method, translationService, translationContext, facetHolder));
 
         processClassContext.removeMethod(method);
     }
@@ -85,10 +85,10 @@ extends MethodPrefixBasedFacetFactoryAbstract {
     public void process(final ProcessMethodContext processMethodContext) {
         final FacetedMethod member = processMethodContext.getFacetHolder();
         final Class<?> owningClass = processMethodContext.getCls();
-        final ObjectSpecification owningSpec = getSpecificationLoader().loadSpecification(owningClass);
-        final DisabledObjectFacet facet = owningSpec.getFacet(DisabledObjectFacet.class);
-        if (facet != null) {
-            facet.copyOnto(member);
-        }
+        val owningSpec = getSpecificationLoader().loadSpecification(owningClass);
+
+        owningSpec.lookupFacet(DisabledObjectFacet.class)
+        .map(disabledObjectFacet->disabledObjectFacet.clone(member))
+        .ifPresent(FacetUtil::addFacet);
     }
 }

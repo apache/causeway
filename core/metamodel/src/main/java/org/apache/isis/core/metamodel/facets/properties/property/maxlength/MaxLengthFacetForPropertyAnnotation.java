@@ -23,20 +23,18 @@ import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacetAbstract;
 
 public class MaxLengthFacetForPropertyAnnotation extends MaxLengthFacetAbstract {
 
-    public static MaxLengthFacet create(
+    public static Optional<MaxLengthFacetForPropertyAnnotation> create(
             final Optional<Property> propertyIfAny,
             final FacetHolder holder) {
 
         return propertyIfAny
                 .map(Property::maxLength)
                 .filter(maxLength -> maxLength != -1)
-                .map(maxLength -> new MaxLengthFacetForPropertyAnnotation(maxLength, holder))
-                .orElse(null);
+                .map(maxLength -> new MaxLengthFacetForPropertyAnnotation(maxLength, holder));
     }
 
     private MaxLengthFacetForPropertyAnnotation(final int value, final FacetHolder holder) {

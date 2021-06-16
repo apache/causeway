@@ -42,7 +42,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
@@ -224,13 +223,12 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
                 ? Facet.Precedence.FALLBACK
                 : Facet.Precedence.DEFAULT;
 
-        HiddenFacet facet = new HiddenFacetAbstract(where, holder, precedence) {
-
-            @Override
-            protected String hiddenReason(final ManagedObject target, final Where whereContext) {
-                return null;
-            }
-        };
-        FacetUtil.addFacetIfPresent(facet);
+        FacetUtil.addFacet(
+            new HiddenFacetAbstract(where, holder, precedence) {
+                @Override
+                protected String hiddenReason(final ManagedObject target, final Where whereContext) {
+                    return null;
+                }
+            });
     }
 }

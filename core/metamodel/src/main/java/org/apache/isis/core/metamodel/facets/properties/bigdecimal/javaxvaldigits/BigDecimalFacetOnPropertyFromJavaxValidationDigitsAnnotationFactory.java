@@ -44,13 +44,11 @@ extends FacetFactoryAbstract {
             return;
         }
 
-        val digits = processMethodContext.synthesizeOnMethod(Digits.class).orElse(null);
-        if (digits == null) {
-            return;
-        }
+        val digitsIfAny = processMethodContext.synthesizeOnMethod(Digits.class);
+
         addFacetIfPresent(
                 BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation
-                .create(processMethodContext, digits));
+                .create(processMethodContext.getFacetHolder(), digitsIfAny));
     }
 
 }

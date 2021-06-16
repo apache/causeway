@@ -22,66 +22,50 @@ package org.apache.isis.core.metamodel.facets.object.defaults;
 import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.adapters.DefaultsProvider;
-import org.apache.isis.applib.adapters.EncoderDecoder;
-import org.apache.isis.core.metamodel.commons.ClassExtensions;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+
+import lombok.NonNull;
 
 public abstract class DefaultedFacetAbstract
 extends FacetAbstract
 implements DefaultedFacet {
 
-    private final Class<?> defaultsProviderClass;
+    private static final Class<? extends Facet> type() {
+        return DefaultedFacet.class;
+    }
 
-    // to delegate to
-    private final DefaultedFacetUsingDefaultsProvider defaultedFacetUsingDefaultsProvider;
+    private final @NonNull DefaultsProvider<?> defaultsProvider;
 
-    public DefaultedFacetAbstract(
-            final String candidateEncoderDecoderName,
-            final Class<?> candidateEncoderDecoderClass,
-            final FacetHolder holder) {
+    protected DefaultedFacetAbstract(
+            final @NonNull DefaultsProvider<?> defaultsProvider,
+            final @NonNull FacetHolder holder) {
 
-        super(DefaultedFacet.class, holder);
+        super(type(), holder);
+        this.defaultsProvider = defaultsProvider;
+    }
 
-        this.defaultsProviderClass = DefaultsProviderUtil.defaultsProviderOrNull(candidateEncoderDecoderClass, candidateEncoderDecoderName);
-        if (isValid()) {
-            final DefaultsProvider<?> defaultsProvider = (DefaultsProvider<?>) ClassExtensions.newInstance(defaultsProviderClass, FacetHolder.class, holder);
-            this.defaultedFacetUsingDefaultsProvider = new DefaultedFacetUsingDefaultsProvider(defaultsProvider, holder);
-        } else {
-            this.defaultedFacetUsingDefaultsProvider = null;
-        }
+    @Override
+    public final Object getDefault() {
+        return defaultsProvider.getDefaultValue();
+    }
+
+    @Override
+    protected final String toStringValues() {
+        return defaultsProvider.toString();
+    }
+
+    @Override
+    public final void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("defaultsProvider", defaultsProvider.getClass().getName());
     }
 
     /**
-     * Discover whether either of the candidate defaults provider name or class
-     * is valid.
-     */
-    public boolean isValid() {
-        return defaultsProviderClass != null;
-    }
-
-    /**
-     * Guaranteed to implement the {@link EncoderDecoder} class, thanks to
-     * generics in the applib.
+     * JUnit support.
      */
     public Class<?> getDefaultsProviderClass() {
-        return defaultsProviderClass;
-    }
-
-    @Override
-    public Object getDefault() {
-        return defaultedFacetUsingDefaultsProvider.getDefault();
-    }
-
-    @Override
-    protected String toStringValues() {
-        return defaultsProviderClass.getName();
-    }
-
-
-    @Override
-    public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
-        visitor.accept("defaultsProviderClass", defaultsProviderClass);
+        return defaultsProvider.getClass();
     }
 }

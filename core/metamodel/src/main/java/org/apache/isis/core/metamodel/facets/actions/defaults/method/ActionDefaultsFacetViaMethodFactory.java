@@ -66,7 +66,7 @@ public class ActionDefaultsFacetViaMethodFactory extends MethodPrefixBasedFacetF
         processMethodContext.removeMethod(defaultsMethod);
 
         val facetedMethod = processMethodContext.getFacetHolder();
-        addFacetIfPresent(new ActionDefaultsFacetViaMethod(defaultsMethod, facetedMethod));
+        addFacet(new ActionDefaultsFacetViaMethod(defaultsMethod, facetedMethod));
     }
 
     private static Method findDefaultsMethodReturning(

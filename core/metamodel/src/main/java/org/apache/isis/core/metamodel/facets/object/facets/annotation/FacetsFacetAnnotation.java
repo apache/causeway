@@ -23,7 +23,8 @@ import org.apache.isis.applib.annotation.Facets;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.facets.FacetsFacetAbstract;
 
-public class FacetsFacetAnnotation extends FacetsFacetAbstract {
+public class FacetsFacetAnnotation
+extends FacetsFacetAbstract {
 
     public FacetsFacetAnnotation(final Facets annotation, final FacetHolder holder) {
         super(annotation.facetFactoryNames(), annotation.facetFactoryClasses(), holder);

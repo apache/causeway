@@ -78,7 +78,7 @@ extends ObjectSpecificationPostProcessorAbstract {
             hasAtLeastOneDefault = hasAtLeastOneDefault | (parameterTypeDefaultedFacets[i] != null);
         }
         if (hasAtLeastOneDefault) {
-            FacetUtil.addFacetIfPresent(new ActionParameterDefaultFacetInferredFromTypeFacets(parameterTypeDefaultedFacets, peerFor(parameter)));
+            FacetUtil.addFacet(new ActionParameterDefaultFacetInferredFromTypeFacets(parameterTypeDefaultedFacets, peerFor(parameter)));
         }
     }
 
@@ -89,7 +89,7 @@ extends ObjectSpecificationPostProcessorAbstract {
         }
         property.getSpecification()
         .lookupNonFallbackFacet(DefaultedFacet.class)
-        .ifPresent(specFacet -> FacetUtil.addFacetIfPresent(new PropertyDefaultFacetDerivedFromDefaultedFacet(
+        .ifPresent(specFacet -> FacetUtil.addFacet(new PropertyDefaultFacetDerivedFromDefaultedFacet(
                                     specFacet, facetedMethodFor(property))));
     }
 

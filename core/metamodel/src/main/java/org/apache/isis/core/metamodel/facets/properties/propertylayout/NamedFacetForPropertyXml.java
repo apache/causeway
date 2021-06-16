@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -27,13 +29,17 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 
 public class NamedFacetForPropertyXml extends NamedFacetAbstract {
 
-    public static NamedFacet create(PropertyLayoutData propertyLayout, FacetHolder holder) {
+    public static Optional<NamedFacet> create(
+            final PropertyLayoutData propertyLayout,
+            final FacetHolder holder) {
         if(propertyLayout == null) {
-            return null;
+            return Optional.empty();
         }
         final String named = _Strings.emptyToNull(propertyLayout.getNamed());
         final Boolean escaped = propertyLayout.getNamedEscaped();
-        return named != null ? new NamedFacetForPropertyXml(named, (escaped == null || escaped), holder) : null;
+        return named != null
+                ? Optional.of(new NamedFacetForPropertyXml(named, (escaped == null || escaped), holder))
+                : Optional.empty();
     }
 
     private NamedFacetForPropertyXml(

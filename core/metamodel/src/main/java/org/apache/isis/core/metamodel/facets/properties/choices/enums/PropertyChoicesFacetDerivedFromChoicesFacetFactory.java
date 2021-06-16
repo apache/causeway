@@ -43,7 +43,7 @@ extends FacetFactoryAbstract {
             return;
         }
 
-        addFacetIfPresent(
+        addFacet(
                 new PropertyChoicesFacetDerivedFromChoicesFacet(processMethodContext.getFacetHolder()));
     }
 

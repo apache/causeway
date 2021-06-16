@@ -19,25 +19,34 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 
-public class NamedFacetForDomainObjectXml extends NamedFacetAbstract {
+public class NamedFacetForDomainObjectXml
+extends NamedFacetAbstract {
 
-    public static NamedFacet create(final DomainObjectLayoutData domainObjectLayout, final FacetHolder holder) {
+    public static Optional<NamedFacet> create(
+            final DomainObjectLayoutData domainObjectLayout,
+            final FacetHolder holder) {
         if(domainObjectLayout == null) {
-            return null;
+            return Optional.empty();
         }
         final String named = _Strings.emptyToNull(domainObjectLayout.getNamed());
         Boolean escaped = domainObjectLayout.getNamedEscaped();
-        return named != null ? new NamedFacetForDomainObjectXml(named, (escaped == null || escaped), holder) : null;
+        return named != null
+                ? Optional.of(new NamedFacetForDomainObjectXml(named, (escaped == null || escaped), holder))
+                : Optional.empty();
     }
 
-    private NamedFacetForDomainObjectXml(final String value, final boolean escaped, final FacetHolder holder) {
-
+    private NamedFacetForDomainObjectXml(
+            final String value,
+            final boolean escaped,
+            final FacetHolder holder) {
         super(value, escaped, holder);
     }
 

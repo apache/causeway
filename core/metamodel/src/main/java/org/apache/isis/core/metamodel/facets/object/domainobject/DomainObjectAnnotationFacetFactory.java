@@ -231,7 +231,7 @@ implements
                 })
                 .map(a -> new AutoCompleteFacetForDomainObjectAnnotation(
                         facetHolder, a.autoCompleteRepository, a.repositoryMethod))
-                .ifPresent(super::addFacetIfPresent);
+                .ifPresent(super::addFacet);
 
     }
 
@@ -334,8 +334,7 @@ implements
                         domainObjectIfAny,
                         facetHolder,
                         postConstructMethodCache,
-                        Precedence.LOW)
-                )
+                        Precedence.LOW))
                 .isPresent()) {
             return;
         }
@@ -408,7 +407,7 @@ implements
                 )
         .map(lifecycleEvent -> new CreatedLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
-        .ifPresent(super::addFacetIfPresent);
+        .ifPresent(super::addFacet);
     }
 
     private void processLifecycleEventLoaded(
@@ -426,7 +425,7 @@ implements
                 )
         .map(lifecycleEvent -> new LoadedLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
-        .ifPresent(super::addFacetIfPresent);
+        .ifPresent(super::addFacet);
     }
 
     private void processLifecycleEventPersisting(
@@ -444,7 +443,7 @@ implements
                 )
         .map(lifecycleEvent -> new PersistingLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
-        .ifPresent(super::addFacetIfPresent);
+        .ifPresent(super::addFacet);
     }
 
     private void processLifecycleEventPersisted(
@@ -462,7 +461,7 @@ implements
                 )
         .map(lifecycleEvent -> new PersistedLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
-        .ifPresent(super::addFacetIfPresent);
+        .ifPresent(super::addFacet);
     }
 
     private void processLifecycleEventRemoving(
@@ -480,7 +479,7 @@ implements
                 )
         .map(lifecycleEvent -> new RemovingLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
-        .ifPresent(super::addFacetIfPresent);
+        .ifPresent(super::addFacet);
     }
 
     private void processLifecycleEventUpdated(
@@ -498,7 +497,7 @@ implements
                 )
         .map(lifecycleEvent -> new UpdatedLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
-        .ifPresent(super::addFacetIfPresent);
+        .ifPresent(super::addFacet);
     }
 
     private void processLifecycleEventUpdating(
@@ -516,7 +515,7 @@ implements
                 )
         .map(lifecycleEvent -> new UpdatingLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
-        .ifPresent(super::addFacetIfPresent);
+        .ifPresent(super::addFacet);
     }
 
     private void processDomainEventAction(
@@ -528,7 +527,7 @@ implements
         .filter(domainEvent -> domainEvent != ActionDomainEvent.Default.class)
         .map(domainEvent -> new ActionDomainEventDefaultFacetForDomainObjectAnnotation(
                 holder, domainEvent))
-        .ifPresent(super::addFacetIfPresent);
+        .ifPresent(super::addFacet);
 
     }
 
@@ -541,7 +540,7 @@ implements
         .filter(domainEvent -> domainEvent != PropertyDomainEvent.Default.class)
         .map(domainEvent -> new PropertyDomainEventDefaultFacetForDomainObjectAnnotation(
                 holder, domainEvent))
-        .ifPresent(super::addFacetIfPresent);
+        .ifPresent(super::addFacet);
     }
 
     private void processDomainEventCollection(
@@ -553,7 +552,7 @@ implements
         .filter(domainEvent -> domainEvent != CollectionDomainEvent.Default.class)
         .map(domainEvent -> new CollectionDomainEventDefaultFacetForDomainObjectAnnotation(
                 holder, domainEvent))
-        .ifPresent(super::addFacetIfPresent);
+        .ifPresent(super::addFacet);
     }
 
     @Override

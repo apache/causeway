@@ -23,23 +23,21 @@ import java.util.Optional;
 
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacetAbstract;
 
 public class MultiLineFacetForPropertyLayoutAnnotation extends MultiLineFacetAbstract {
 
-    public static MultiLineFacet create(
+    public static Optional<MultiLineFacetForPropertyLayoutAnnotation> create(
             final Optional<PropertyLayout> propertyLayoutIfAny,
             final FacetHolder holder) {
 
         return propertyLayoutIfAny
                 .map(PropertyLayout::multiLine)
                 .filter(multiLine -> multiLine > 1)
-                .map(multiLine -> new MultiLineFacetForPropertyLayoutAnnotation(multiLine, holder))
-                .orElse(null);
+                .map(multiLine -> new MultiLineFacetForPropertyLayoutAnnotation(multiLine, holder));
     }
 
-    private MultiLineFacetForPropertyLayoutAnnotation(int numberOfLines, FacetHolder holder) {
+    private MultiLineFacetForPropertyLayoutAnnotation(final int numberOfLines, final FacetHolder holder) {
         super(numberOfLines, holder);
     }
 

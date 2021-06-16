@@ -43,7 +43,7 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessClassContext processClassContext) {
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
-        FacetUtil.addFacetIfPresent(new HiddenTypeFacetDerivedFromAuthorization(facetHolder));
+        FacetUtil.addFacet(new HiddenTypeFacetDerivedFromAuthorization(facetHolder));
     }
 
 }

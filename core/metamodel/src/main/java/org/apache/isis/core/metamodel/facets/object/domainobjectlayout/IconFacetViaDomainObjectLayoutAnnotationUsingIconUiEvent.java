@@ -27,7 +27,6 @@ import org.apache.isis.applib.events.ui.IconUiEvent;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacetAbstract;
@@ -38,7 +37,7 @@ import org.apache.isis.core.metamodel.util.EventUtil;
 public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent
 extends IconFacetAbstract {
 
-    public static Facet create(
+    public static Optional<IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent> create(
             final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final MetamodelEventService metamodelEventService,
             final IsisConfiguration configuration,
@@ -54,8 +53,7 @@ extends IconFacetAbstract {
                 .map(iconUiEvent -> {
                     return new IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent(
                             iconUiEvent, metamodelEventService, facetHolder);
-                })
-                .orElse(null);
+                });
     }
 
     private final Class<? extends IconUiEvent<?>> iconUiEventClass;

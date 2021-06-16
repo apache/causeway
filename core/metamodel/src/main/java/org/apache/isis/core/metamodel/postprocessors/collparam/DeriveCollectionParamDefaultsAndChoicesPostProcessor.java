@@ -119,7 +119,7 @@ extends ObjectSpecificationPostProcessorAbstract {
         if(collectionParam.containsNonFallbackFacet(ActionParameterDefaultsFacet.class)) {
             return;
         }
-        FacetUtil.addFacetIfPresent(new ActionParameterDefaultsFacetFromAssociatedCollection(collectionParam));
+        FacetUtil.addFacet(new ActionParameterDefaultsFacetFromAssociatedCollection(collectionParam));
     }
 
     private static void addCollectionParamChoicesFacetIfNoneAlready(
@@ -130,7 +130,7 @@ extends ObjectSpecificationPostProcessorAbstract {
             return;
         }
 
-        FacetUtil.addFacetIfPresent(new ActionParameterChoicesFacetFromParentedCollection(
+        FacetUtil.addFacet(new ActionParameterChoicesFacetFromParentedCollection(
                         scalarOrCollectionParam, otma));
     }
 

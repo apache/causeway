@@ -27,7 +27,8 @@ import org.apache.isis.core.metamodel.facets.object.defaults.annotcfg.DefaultedF
 
 import lombok.val;
 
-public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
+public class DefaultedFacetFactoryTest
+extends AbstractFacetFactoryTest {
 
     private DefaultedFacetAnnotationElseConfigurationFactory facetFactory;
 

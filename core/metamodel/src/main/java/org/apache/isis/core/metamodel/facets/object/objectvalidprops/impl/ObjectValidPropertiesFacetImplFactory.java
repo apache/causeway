@@ -35,7 +35,7 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
-        addFacetIfPresent(
+        addFacet(
                 new ObjectValidPropertiesFacetImpl(processClassContaxt.getFacetHolder()));
     }
 }

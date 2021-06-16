@@ -31,33 +31,31 @@ public abstract class MandatoryFacetForParameterAnnotation extends MandatoryFace
         super(holder, semantics);
     }
 
-    public static MandatoryFacet create(
+    public static java.util.Optional<MandatoryFacet> create(
             final java.util.Optional<Parameter> parameterIfAny,
             final Class<?> parameterType,
             final FacetHolder holder) {
 
         if (parameterType.isPrimitive()) {
-            return new MandatoryFacetForParameterAnnotation.Primitive(holder);
+            return java.util.Optional.of(new MandatoryFacetForParameterAnnotation.Primitive(holder));
         }
 
-
         return parameterIfAny
-                .map(Parameter::optionality)
-                .filter(optionality -> optionality != Optionality.NOT_SPECIFIED)
-                .map(optionality -> {
-                    switch (optionality) {
-                    case DEFAULT:
-                        // do nothing here
-                        return null;
-                    case MANDATORY:
-                        return new MandatoryFacetForParameterAnnotation.Required(holder);
-                    case OPTIONAL:
-                        return new MandatoryFacetForParameterAnnotation.Optional(holder);
-                    default:
-                    }
-                    throw new IllegalStateException("optionality '" + optionality + "' not recognised");
-                })
-                .orElse(null);
+        .map(Parameter::optionality)
+        .filter(optionality -> optionality != Optionality.NOT_SPECIFIED)
+        .map(optionality -> {
+            switch (optionality) {
+            case DEFAULT:
+                // do nothing here
+                return null;
+            case MANDATORY:
+                return new MandatoryFacetForParameterAnnotation.Required(holder);
+            case OPTIONAL:
+                return new MandatoryFacetForParameterAnnotation.Optional(holder);
+            default:
+            }
+            throw new IllegalStateException("optionality '" + optionality + "' not recognised");
+        });
     }
 
     public static class Primitive extends MandatoryFacetForParameterAnnotation {

@@ -65,13 +65,16 @@ implements ObjectTypeFacetFactory {
 
         val facetHolder = processClassContext.getFacetHolder();
 
+        val jdoPersistenceCapableFacet =
+        FacetUtil.addFacet(
+                new JpaTableFacetAnnotationImpl(
+                    annotationSchemaAttribute,
+                    annotationTableAttribute,
+                    facetHolder));
 
-        val jdoPersistenceCapableFacet = new JpaTableFacetAnnotationImpl(
-                annotationSchemaAttribute,
-                annotationTableAttribute,
-                facetHolder);
-        FacetUtil.addFacetIfPresent(jdoPersistenceCapableFacet);
-        FacetUtil.addFacetIfPresent(LogicalTypeFacetForTableAnnotation.create(jdoPersistenceCapableFacet, cls, facetHolder));
+        FacetUtil.addFacetIfPresent(
+                LogicalTypeFacetForTableAnnotation
+                .create(jdoPersistenceCapableFacet, cls, facetHolder));
 
         return;
     }

@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.Render
 public class RenderedAdjustedFacetForParameterLayoutAnnotation
 extends RenderedAdjustedFacetAbstract {
 
-    public static RenderedAdjustedFacet create(
+    public static Optional<RenderedAdjustedFacet> create(
             final Optional<ParameterLayout> parameterLayoutIfAny,
             final FacetHolder holder) {
 
@@ -46,13 +46,12 @@ extends RenderedAdjustedFacetAbstract {
                     default:
                     }
                     throw new IllegalStateException("renderDay '" + renderDay + "' not recognised");
-                })
-                .orElse(null);
+                });
     }
 
     public static final int ADJUST_BY = -1;
 
-    private RenderedAdjustedFacetForParameterLayoutAnnotation(FacetHolder holder) {
+    private RenderedAdjustedFacetForParameterLayoutAnnotation(final FacetHolder holder) {
         super(ADJUST_BY, holder);
     }
 

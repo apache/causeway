@@ -30,7 +30,6 @@ import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
@@ -44,7 +43,7 @@ import lombok.val;
 public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent
 extends TitleFacetAbstract {
 
-    public static Facet create(
+    public static Optional<TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent> create(
             final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final MetamodelEventService metamodelEventService,
             final IsisConfiguration configuration,
@@ -70,8 +69,7 @@ extends TitleFacetAbstract {
                             translationContextFor(facetHolder),
                             metamodelEventService,
                             facetHolder);
-                })
-                .orElse(null);
+                });
     }
 
     private final Class<? extends TitleUiEvent<?>> titleUiEventClass;

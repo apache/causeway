@@ -52,6 +52,6 @@ extends MethodPrefixBasedFacetFactoryAbstract {
             return;
         }
         processClassContext.removeMethod(method);
-        addFacetIfPresent(new CssClassFacetMethod(method, facetHolder));
+        addFacet(new CssClassFacetMethod(method, facetHolder));
     }
 }

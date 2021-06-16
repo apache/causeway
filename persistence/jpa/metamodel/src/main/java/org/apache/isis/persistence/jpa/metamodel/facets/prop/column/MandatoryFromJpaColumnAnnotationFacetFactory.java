@@ -58,7 +58,7 @@ extends FacetFactoryAbstract {
         val nullable = nullable1.orElseGet(nullable2::get);
 
         val facetHolder = processMethodContext.getFacetHolder();
-        FacetUtil.addFacetIfPresent(new MandatoryFacetDerivedFromJpaColumn(
+        FacetUtil.addFacet(new MandatoryFacetDerivedFromJpaColumn(
                 facetHolder,
                 !nullable));
     }

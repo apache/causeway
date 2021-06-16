@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacetAbstrac
 public class RegExFacetForPropertyAnnotation
 extends RegExFacetAbstract {
 
-    public static RegExFacet create(
+    public static Optional<RegExFacet> create(
             final Optional<Property> propertyIfAny,
             final Class<?> returnType,
             final FacetHolder holder) {
@@ -44,8 +44,7 @@ extends RegExFacetAbstract {
                 .filter(property -> _Strings.emptyToNull(property.regexPattern()) != null)
                 .map(property -> new RegExFacetForPropertyAnnotation(
                         property.regexPattern(), property.regexPatternFlags(), holder,
-                        property.regexPatternReplacement()))
-                .orElse(null);
+                        property.regexPatternReplacement()));
 
     }
 

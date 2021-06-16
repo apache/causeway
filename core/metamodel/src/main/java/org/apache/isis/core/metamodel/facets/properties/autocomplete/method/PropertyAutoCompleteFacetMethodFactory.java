@@ -78,7 +78,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         processMethodContext.removeMethod(autoCompleteMethod);
 
         final FacetHolder property = processMethodContext.getFacetHolder();
-        FacetUtil.addFacetIfPresent(new PropertyAutoCompleteFacetMethod(autoCompleteMethod, returnType, property));
+        FacetUtil.addFacet(new PropertyAutoCompleteFacetMethod(autoCompleteMethod, returnType, property));
     }
 
 

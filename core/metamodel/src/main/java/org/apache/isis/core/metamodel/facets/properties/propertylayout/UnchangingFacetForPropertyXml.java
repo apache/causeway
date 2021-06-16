@@ -19,26 +19,32 @@
 
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.annotation.Repainting;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.renderunchanged.UnchangingFacet;
 import org.apache.isis.core.metamodel.facets.properties.renderunchanged.UnchangingFacetAbstract;
 
-public class UnchangingFacetForPropertyXml extends UnchangingFacetAbstract {
+public class UnchangingFacetForPropertyXml
+extends UnchangingFacetAbstract {
 
-    public static UnchangingFacet create(final PropertyLayoutData propertyLayout, FacetHolder holder) {
+    public static Optional<UnchangingFacet> create(
+            final PropertyLayoutData propertyLayout,
+            final FacetHolder holder) {
         if(propertyLayout == null) {
-            return null;
+            return Optional.empty();
         }
         final Repainting repainting = propertyLayout.getRepainting();
-        if(repainting == null || repainting == Repainting.NOT_SPECIFIED) {
-            return null;
+        if(repainting == null
+                || repainting == Repainting.NOT_SPECIFIED) {
+            return Optional.empty();
         }
-        return new UnchangingFacetForPropertyXml(repainting == Repainting.NO_REPAINT, holder);
+        return Optional.of(new UnchangingFacetForPropertyXml(repainting == Repainting.NO_REPAINT, holder));
     }
 
-    private UnchangingFacetForPropertyXml(final boolean unchanging, FacetHolder holder) {
+    private UnchangingFacetForPropertyXml(final boolean unchanging, final FacetHolder holder) {
         super(unchanging, holder);
     }
 

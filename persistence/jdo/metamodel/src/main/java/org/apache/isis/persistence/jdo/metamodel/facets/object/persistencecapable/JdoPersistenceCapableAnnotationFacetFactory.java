@@ -89,10 +89,10 @@ implements ObjectTypeFacetFactory {
         } else {
 
             final IdentityType annotationIdentityType = annotation.identityType();
-            val jdoPersistenceCapableFacet = new JdoPersistenceCapableFacetAnnotation(
+            val jdoPersistenceCapableFacet =
+            FacetUtil.addFacet(new JdoPersistenceCapableFacetAnnotation(
                     annotationSchemaAttribute,
-                    annotationTableAttribute, annotationIdentityType, facetHolder);
-            FacetUtil.addFacetIfPresent(jdoPersistenceCapableFacet);
+                    annotationTableAttribute, annotationIdentityType, facetHolder));
             FacetUtil.addFacetIfPresent(LogicalTypeFacetInferredFromJdoPersistenceCapableAnnotation
                     .create(jdoPersistenceCapableFacet, cls, facetHolder));
         }

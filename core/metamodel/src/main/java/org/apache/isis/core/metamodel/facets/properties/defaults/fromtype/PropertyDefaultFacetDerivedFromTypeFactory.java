@@ -56,9 +56,9 @@ extends FacetFactoryAbstract {
         final Class<?> returnType = processMethodContext.getMethod().getReturnType();
         final DefaultedFacet returnTypeDefaultedFacet = getDefaultedFacet(returnType);
         if (returnTypeDefaultedFacet != null) {
-            final PropertyDefaultFacetDerivedFromDefaultedFacet propertyFacet =
-                    new PropertyDefaultFacetDerivedFromDefaultedFacet(returnTypeDefaultedFacet, processMethodContext.getFacetHolder());
-            FacetUtil.addFacetIfPresent(propertyFacet);
+            FacetUtil.addFacet(
+                    new PropertyDefaultFacetDerivedFromDefaultedFacet(
+                            returnTypeDefaultedFacet, processMethodContext.getFacetHolder()));
         }
     }
 

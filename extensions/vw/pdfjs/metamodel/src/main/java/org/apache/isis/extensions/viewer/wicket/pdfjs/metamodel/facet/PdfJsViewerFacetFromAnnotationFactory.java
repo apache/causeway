@@ -62,9 +62,15 @@ extends FacetFactoryAbstract {
 
         pdfjsViewerIfAny.ifPresent(
             pdfjsViewer -> {
-                val pdfJsViewerFacet = PdfJsViewerFacetFromAnnotation.create(pdfjsViewer, facetHoder);
-                getMetaModelContext().getServiceInjector().injectServicesInto(pdfJsViewerFacet);
-                FacetUtil.addFacetIfPresent(pdfJsViewerFacet);
+
+                getServiceInjector().injectServicesInto(
+
+                    FacetUtil.addFacet(
+                            PdfJsViewerFacetFromAnnotation
+                            .create(pdfjsViewer, facetHoder))
+
+                );
+
             }
         );
     }

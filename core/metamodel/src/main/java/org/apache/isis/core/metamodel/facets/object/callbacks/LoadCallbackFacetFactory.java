@@ -51,7 +51,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         Method method = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.LOADED_PREFIX, void.class, NO_ARG);
         if (method != null) {
             processClassContext.removeMethod(method);
-            addFacetIfPresent(new LoadedCallbackFacetViaMethod(method, facetHolder));
+            addFacet(new LoadedCallbackFacetViaMethod(method, facetHolder));
         }
 
     }

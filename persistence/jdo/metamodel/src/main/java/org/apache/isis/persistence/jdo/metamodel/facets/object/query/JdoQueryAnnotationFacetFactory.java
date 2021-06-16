@@ -62,14 +62,14 @@ implements MetaModelRefiner {
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         if (namedQueriesAnnotation != null) {
-            addFacetIfPresent(
+            addFacet(
                     new JdoQueriesFacetAnnotation(namedQueriesAnnotation.value(), facetHolder));
             return;
         }
 
         final Query namedQueryAnnotation = Annotations.getAnnotation(cls, Query.class);
         if (namedQueryAnnotation != null) {
-            addFacetIfPresent(
+            addFacet(
                     new JdoQueryFacetAnnotation(namedQueryAnnotation, facetHolder));
         }
     }

@@ -40,7 +40,7 @@ extends FacetFactoryAbstract {
             return;
         }
         val facetHolder = processClassContext.getFacetHolder();
-        addFacetIfPresent(
+        addFacet(
                 GridFacetDefault
                 .create(facetHolder, gridService.get()));
     }

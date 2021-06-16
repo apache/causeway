@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -26,14 +28,20 @@ import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public class HiddenFacetForActionXml extends HiddenFacetAbstract {
+public class HiddenFacetForActionXml
+extends HiddenFacetAbstract {
 
-    public static HiddenFacet create(final ActionLayoutData actionLayout, final FacetHolder holder) {
+    public static Optional<HiddenFacet> create(
+            final ActionLayoutData actionLayout,
+            final FacetHolder holder) {
         if (actionLayout == null) {
-            return null;
+            return Optional.empty();
         }
         final Where where = actionLayout.getHidden();
-        return where != null && where != Where.NOT_SPECIFIED  ? new HiddenFacetForActionXml(where, holder) : null;
+        return where != null
+                && where != Where.NOT_SPECIFIED
+                        ? Optional.of(new HiddenFacetForActionXml(where, holder))
+                        : Optional.empty();
     }
 
     private HiddenFacetForActionXml(final Where where, final FacetHolder holder) {

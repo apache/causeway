@@ -61,7 +61,7 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
         final ObjectSpecification typeSpec = getSpecificationLoader().loadSpecification(cls);
 
         final FacetHolder property = processMethodContext.getFacetHolder();
-        FacetUtil.addFacetIfPresent(
+        FacetUtil.addFacet(
                 new PropertyAccessorFacetViaAccessor(typeSpec, accessorMethod, property));
     }
 
