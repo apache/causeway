@@ -36,8 +36,10 @@ implements HasTranslation {
         this.originalText = originalText;
         this.translationContext = TranslationContext
                 .forTranslationContextHolder(holder.getFeatureIdentifier());
-        this.translated = _Lazy.threadSafe(()->originalText);
-                //holder.getTranslationService().translate(translationContext, originalText));
+        this.translated = _Lazy.threadSafe(()->
+                holder
+                    .getTranslationService()
+                    .translate(translationContext, originalText));
     }
 
     @Override
@@ -60,7 +62,10 @@ implements HasTranslation {
 
     @Override
     public boolean semanticEquals(final @NonNull Facet other) {
-        if(! (other instanceof I8nFacetAbstract)) {
+
+        // equality by facet-type, text and context
+
+        if(! this.facetType().equals(other.facetType())) {
             return false;
         }
 
