@@ -19,6 +19,11 @@
 
 package org.apache.isis.core.metamodel.facets.object.immutable;
 
+import java.util.function.BiConsumer;
+
+import javax.annotation.Nullable;
+
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -33,12 +38,34 @@ implements ImmutableFacet {
         return ImmutableFacet.class;
     }
 
-    public ImmutableFacetAbstract(final FacetHolder holder) {
+    protected final @Nullable String reason;
+
+    public ImmutableFacetAbstract(
+            final String reason,
+            final FacetHolder holder) {
         super(type(), holder);
+        this.reason = reason;
     }
 
-    public ImmutableFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
+    public ImmutableFacetAbstract(
+            final String reason,
+            final FacetHolder holder,
+            final Facet.Precedence precedence) {
         super(type(), holder, precedence);
+        this.reason = reason;
+    }
+
+    @Override
+    public final String disabledReason(final ManagedObject targetAdapter) {
+        return !_Strings.isNullOrEmpty(reason)
+                ? reason
+                : "Always immmutable"; // assuming there is no ImmutableFacet(s) with inverted semantics
+    }
+
+    @Override
+    public final void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("reason", reason);
     }
 
     /**

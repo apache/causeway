@@ -19,40 +19,33 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobject.editing;
 
-import java.util.function.BiConsumer;
-
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacetAbstract;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public class ImmutableFacetFromConfiguration extends ImmutableFacetAbstract {
+public class ImmutableFacetFromConfiguration
+extends ImmutableFacetAbstract {
 
-    private final String reason;
+    // -- FACTORY
 
-    public ImmutableFacetFromConfiguration(final String reason, final FacetHolder holder) {
-        super(holder, Precedence.LOW);
-        this.reason = reason;
+    public static ImmutableFacetFromConfiguration create(final FacetHolder holder) {
+        return new ImmutableFacetFromConfiguration("Disabled (by configuration defaults)", holder);
     }
+
+    // -- CONSTRUCTOR
+
+    private ImmutableFacetFromConfiguration(final String reason, final FacetHolder holder) {
+        super(reason, holder, Precedence.LOW);
+    }
+
+    // -- IMPL
 
     @Override
-    public String disabledReason(final ManagedObject targetAdapter) {
-        return !_Strings.isNullOrEmpty(reason)
-                ? reason
-                : super.disabledReason(targetAdapter);
+    public ImmutableFacet clone(final FacetHolder holder) {
+        return new ImmutableFacetFromConfiguration(reason, holder);
     }
 
-    @Override
-    public void copyOnto(final FacetHolder holder) {
-        final Facet facet = new ImmutableFacetFromConfiguration(reason, holder);
-        FacetUtil.addFacetIfPresent(facet);
-    }
 
-    @Override
-    public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
-        visitor.accept("reason", reason);
-    }
+
+
 }

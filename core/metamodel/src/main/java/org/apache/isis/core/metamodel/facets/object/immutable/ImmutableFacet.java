@@ -39,37 +39,18 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
  * @see EqualByContentFacet
  * @see ValueFacet
  */
-public interface ImmutableFacet extends Facet, DisablingInteractionAdvisor {
+public interface ImmutableFacet
+extends Facet, DisablingInteractionAdvisor {
 
     /**
-     * Clone this facet onto another {@link FacetHolder}.
+     * Clone this facet using another {@link FacetHolder}.
      *
-     * <p>
-     * Introduced to allow this facet to be installed onto the
+     * @apiNote Introduced to allow this facet to be installed onto the
      * {@link ObjectSpecification}, and then copied down onto each of the spec's
      * {@link ObjectMember}s.
      */
-    void copyOnto(FacetHolder holder);
+    ImmutableFacet clone(FacetHolder holder);
 
-    default String disabledReason(final ManagedObject targetAdapter) {
-        return "Always immmutable";
-    }
-
-     public static final class Utils {
-
-        private Utils(){}
-        public static boolean isAlwaysImmutable(
-                final ObjectSpecification specification) {
-
-            // this is a workaround for a dubious test
-            if (specification == null) {
-                return false;
-            }
-
-            return specification.getFacet(ImmutableFacet.class) != null;
-        }
-
-    }
-
+    String disabledReason(ManagedObject targetAdapter);
 
 }

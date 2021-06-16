@@ -32,7 +32,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import lombok.NonNull;
 import lombok.val;
 
-public class DisabledFacetOnPropertyDerivedFromImmutable extends DisabledFacetAbstract {
+public class DisabledFacetOnPropertyDerivedFromImmutable
+extends DisabledFacetAbstract {
 
     private final Function<ManagedObject, String> reasonProvider;
 

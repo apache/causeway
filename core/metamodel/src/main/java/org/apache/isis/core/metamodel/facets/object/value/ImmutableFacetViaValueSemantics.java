@@ -19,21 +19,20 @@
 
 package org.apache.isis.core.metamodel.facets.object.value;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacetAbstract;
 
-public class ImmutableFacetViaValueSemantics extends ImmutableFacetAbstract {
+public class ImmutableFacetViaValueSemantics
+extends ImmutableFacetAbstract {
 
     public ImmutableFacetViaValueSemantics(final FacetHolder holder) {
-        super(holder);
+        super("Value types are immutable", holder);
     }
 
     @Override
-    public void copyOnto(final FacetHolder holder) {
-        final Facet facet = new ImmutableFacetViaValueSemantics(holder);
-        FacetUtil.addFacetIfPresent(facet);
+    public ImmutableFacet clone(final FacetHolder holder) {
+        return new ImmutableFacetViaValueSemantics(holder);
     }
 
 }
