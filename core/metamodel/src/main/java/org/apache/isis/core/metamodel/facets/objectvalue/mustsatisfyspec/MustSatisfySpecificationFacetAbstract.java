@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.objectvalue.mustsatisfyspec;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.i18n.TranslationContext;
@@ -96,7 +97,11 @@ implements MustSatisfySpecificationFacet {
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("specifications", specifications);
+        visitor.accept("specifications",
+                specifications.stream()
+                .map(Specification::getClass)
+                .map(Class::getName)
+                .collect(Collectors.joining(", ")));
     }
 
     @Override

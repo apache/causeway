@@ -94,11 +94,15 @@ public interface ImperativeFacet extends Facet {
      */
     public Intent getIntent(Method method);
 
-    public static void visitAttributes(ImperativeFacet imperativeFacet, final BiConsumer<String, Object> visitor) {
-        val methods = imperativeFacet.getMethods().toList();
-        visitor.accept("methods", methods);
+    public static void visitAttributes(final ImperativeFacet imperativeFacet, final BiConsumer<String, Object> visitor) {
+        val methods = imperativeFacet.getMethods();
+        visitor.accept("methods",
+                methods.stream()
+                .map(Method::toString)
+                .collect(Collectors.joining(", ")));
         methods.forEach(method->
-            visitor.accept("intent." + method.getName(), imperativeFacet.getIntent(method)));
+            visitor.accept(
+                    "intent." + method.getName(), imperativeFacet.getIntent(method)));
     }
 
     // -- UTILITIES

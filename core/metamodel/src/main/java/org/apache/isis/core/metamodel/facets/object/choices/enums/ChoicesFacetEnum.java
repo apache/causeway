@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.object.choices.enums;
 
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -54,6 +55,11 @@ extends ChoicesFacetAbstract {
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("choices", choices.map(ManagedObject::getPojo).toList());
+        visitor.accept("choices",
+                choices.stream()
+                .map(ManagedObject::getPojo)
+                .map(Enum.class::cast)
+                .map(Enum::name)
+                .collect(Collectors.joining(", ")));
     }
 }
