@@ -37,12 +37,17 @@ implements MaxLengthFacet {
         return MaxLengthFacet.class;
     }
 
-    public MaxLengthFacetAbstract(final int value, final FacetHolder holder) {
-        super(type(), holder, value);
+    public MaxLengthFacetAbstract(
+            final int maxLength,
+            final FacetHolder holder) {
+        super(type(), holder, maxLength);
     }
 
-    public MaxLengthFacetAbstract(final int value, final FacetHolder holder, final Facet.Precedence precedence) {
-        super(type(), holder, value, precedence);
+    public MaxLengthFacetAbstract(
+            final int maxLength,
+            final FacetHolder holder,
+            final Facet.Precedence precedence) {
+        super(type(), holder, maxLength, precedence);
     }
 
     /**
@@ -78,4 +83,8 @@ implements MaxLengthFacet {
         return val == 0 ? "unlimited" : String.valueOf(val);
     }
 
+    @Override
+    protected String getAttributeNameForValue() {
+        return "maxLength";
+    }
 }

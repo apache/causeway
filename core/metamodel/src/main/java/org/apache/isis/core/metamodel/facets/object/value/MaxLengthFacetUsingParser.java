@@ -37,15 +37,9 @@ extends MaxLengthFacetAbstract{
 
     @Override
     protected String toStringValues() {
-        getServiceInjector().injectServicesInto(parser);
         return parser.toString();
     }
 
-    @Override
-    public int value() {
-        getServiceInjector().injectServicesInto(parser);
-        return parser.maxLength();
-    }
 
     @Override
     public String toString() {

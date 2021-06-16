@@ -19,16 +19,12 @@
 
 package org.apache.isis.core.metamodel.facets.objectvalue.typicallen;
 
-import java.util.function.BiConsumer;
-
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-
-import lombok.NonNull;
+import org.apache.isis.core.metamodel.facets.SingleIntValueFacetAbstract;
 
 public abstract class TypicalLengthFacetAbstract
-extends FacetAbstract
+extends SingleIntValueFacetAbstract
 implements TypicalLengthFacet {
 
     private static final Class<? extends Facet> type() {
@@ -38,31 +34,14 @@ implements TypicalLengthFacet {
     public TypicalLengthFacetAbstract(
             final int typicalLength,
             final FacetHolder holder) {
-        super(type(), holder);
-        this.typicalLength = typicalLength;
+        super(type(), holder, typicalLength);
     }
 
     public TypicalLengthFacetAbstract(
             final int typicalLength,
             final FacetHolder holder,
             final Facet.Precedence precedence) {
-        super(type(), holder, precedence);
-        this.typicalLength = typicalLength;
-    }
-
-    // -- IMPL
-
-    private final int typicalLength;
-    @Override
-    public final int value() {
-        return typicalLength;
-    }
-
-    @Override
-    public final boolean semanticEquals(final @NonNull Facet other) {
-        return other instanceof TypicalLengthFacet
-                ? this.value() == ((TypicalLengthFacet)other).value()
-                : false;
+        super(type(), holder, typicalLength, precedence);
     }
 
     // -- REPORTING
@@ -76,9 +55,8 @@ implements TypicalLengthFacet {
     }
 
     @Override
-    public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
-        visitor.accept("typicalLength", value());
+    protected String getAttributeNameForValue() {
+        return "typicalLength";
     }
 
 
