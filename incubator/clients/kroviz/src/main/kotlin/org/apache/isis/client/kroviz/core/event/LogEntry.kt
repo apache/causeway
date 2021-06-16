@@ -25,16 +25,17 @@ import kotlinx.serialization.Serializable
 import org.apache.isis.client.kroviz.core.aggregator.ActionDispatcher
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.isis.client.kroviz.core.aggregator.CollectionAggregator
+import org.apache.isis.client.kroviz.to.HasLinks
+import org.apache.isis.client.kroviz.to.Link
+import org.apache.isis.client.kroviz.to.Relation
 import org.apache.isis.client.kroviz.to.TransferObject
 import org.apache.isis.client.kroviz.ui.core.Constants
-import org.apache.isis.client.kroviz.ui.core.UiManager
-import org.apache.isis.client.kroviz.utils.Utils.removeHexCode
 import kotlin.js.Date
 
 // use color codes from css instead?
 enum class EventState(val id: String, val iconName: String, val style: ButtonStyle) {
     INITIAL("INITIAL", "fas fa-power-off", ButtonStyle.LIGHT),
-    RUNNING("RUNNING", "fas fa-hourglass-start fa-rotate-90", ButtonStyle.WARNING),
+    RUNNING("RUNNING", "fas fa-hourglass-start", ButtonStyle.WARNING),
     ERROR("ERROR", "fas fa-exclamation-circle", ButtonStyle.DANGER),
     SUCCESS_JS("SUCCESS_JS", "fab fa-js", ButtonStyle.SUCCESS),
     SUCCESS_XML("SUCCESS_XML", "fas fa-code", ButtonStyle.SUCCESS),
@@ -67,7 +68,7 @@ data class LogEntry(
         state = EventState.RUNNING
         title = url // stripHostPort(url)
         requestLength = request?.length
-                ?: 0 // if this is simplyfied to request.length, Tabulator.js goes in ERROR and EventLogTable shows no entries
+                ?: 0 // ?. is required, otherwise Tabulator.js/EventLogTable shows no entries
     }
 
     @Contextual
@@ -177,17 +178,6 @@ data class LogEntry(
 
     //end region response
 
-    private fun stripHostPort(url: String): String {
-        var result = url
-        val signature = "restful/"
-        if (url.contains(signature)) {
-            val protocolHostPort = UiManager.getUrl()
-            result = result.replace(protocolHostPort + signature, "")
-            result = removeHexCode(result)
-        }
-        return result
-    }
-
     fun isView(): Boolean {
         return isOpenView() || isClosedView()
     }
@@ -220,5 +210,19 @@ data class LogEntry(
     fun matches(reSpec: ResourceSpecification): Boolean {
         return url == reSpec.url && subType.equals(reSpec.subType)
     }
+
+    fun selfHref(): String {
+        return selfLink().href
+    }
+
+    fun selfLink(): Link {
+        return getLinks().first { it.relation() == Relation.SELF }
+    }
+
+    fun getLinks(): List<Link> {
+        return (obj as HasLinks).getLinks()
+    }
+
+
 
 }

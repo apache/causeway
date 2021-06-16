@@ -22,6 +22,7 @@ import io.kvision.panel.SimplePanel
 import io.kvision.state.observableListOf
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.isis.client.kroviz.core.aggregator.SvgDispatcher
+import org.apache.isis.client.kroviz.to.HasLinks
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.apache.isis.client.kroviz.ui.core.UiManager
@@ -198,5 +199,16 @@ object EventStore {
     fun reset() {
         log.removeAll(log)
     }
+
+
+    fun getLinked(): List<LogEntry> {
+        // we use all LE's - eventually to be refined to a single LE (chain up and down)
+        val linked = mutableListOf<LogEntry>()
+        log.forEach {
+            if (it.obj is HasLinks) linked.add(it)
+        }
+        return linked
+    }
+
 
 }

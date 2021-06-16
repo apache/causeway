@@ -20,75 +20,42 @@
 package org.apache.isis.client.kroviz.ui.table
 
 import org.apache.isis.client.kroviz.core.event.EventStore
-import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.handler.*
 import org.apache.isis.client.kroviz.snapshots.Response
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.*
 import org.apache.isis.client.kroviz.to.Method
-import org.apache.isis.client.kroviz.ui.core.UiManager
-import org.apache.isis.client.kroviz.ui.diagram.SequenceDiagram
+import org.apache.isis.client.kroviz.ui.diagram.LinkTreeDiagram
 import kotlin.test.*
 
-class SequenceDiagramTest {
-
-    @BeforeTest
-    fun setup() {
-        val user = "sven"
-        val pw = "pass"
-        val url = "http://${user}:${pw}@localhost:8080/restful/"
-        UiManager.login(url, user, pw)
-    }
-
-    //@Test   //TODO IntegrationTest ?
-    fun testSequenceDiagram() {
-        //given
-        val rootLe = fillEventStoreWith(RESTFUL)
-        fillEventStoreWith(RESTFUL_SERVICES)
-        fillEventStoreWith(RESTFUL_MENUBARS)
-        //when
-        val actual = SequenceDiagram.with(rootLe)
-        //then
-        assertEquals(3, EventStore.log.size)
-        console.log("[PBT.testSequenceDiagram]")
-        console.log(actual)
-        assertTrue(actual.startsWith("\"@startuml"))
-        assertTrue(actual.endsWith("@enduml\""))
-        assertTrue(actual.contains("-> restful_services"))
-    }
-
-    private fun fillEventStoreWith(r: Response): LogEntry {
-        val rs = ResourceSpecification(r.url)
-        EventStore.start(rs, Method.GET.operation)
-        val logEntry = EventStore.end(rs, r.str)!!
-        ResponseHandler.handle(logEntry)
-        return logEntry
-    }
+class LinkTreeDiagramTest {
 
     @Test
-    fun testEventDiagram() {
-        //given
+    fun testLinkTreeDiagram() {
+        //when
         load(RESTFUL, RestfulHandler())
         load(RESTFUL_SERVICES, ServiceHandler())
         load(RESTFUL_USER, UserHandler())
         load(RESTFUL_MENUBARS, MenuBarsHandler())
         load(RESTFUL_VERSION, VersionHandler())
         load(RESTFUL_DOMAIN_TYPES, DomainTypesHandler())
-
-        val rootRs = ResourceSpecification(RESTFUL.url)
-
-        // when
-        val rootLogEntry = EventStore.findBy(rootRs)
         // then
+        assertTrue(EventStore.log.size >= 6)
+        val rootRs = ResourceSpecification(RESTFUL.url)
+        val rootLogEntry = EventStore.findBy(rootRs)
         assertNotNull(rootLogEntry)  //1
 
         // when
-        val code = SequenceDiagram.with(rootLogEntry)
+        val code = LinkTreeDiagram.build().trim()
         // then
-        console.log("[PumlBuilderTest.testEventDiagram]")
+        console.log("[LTDT.testLinkTreeDiagram]")
         console.log(code)
-        val wrong = "@startuml\n@enduml"
-        assertNotEquals(wrong, code)
+        assertTrue(code.startsWith("@startsalt"))
+        assertTrue(code.endsWith("@endsalt"))
+        assertTrue(code.contains("+ /http://localhost:8080/restful/"))
+        assertTrue(code.contains("++ /http://localhost:8080/restful/version"))
+        //menuBars json doesn't have UP nor SELF nor a reference to it's parent
+//        assertTrue(code.contains("++ /http://localhost:8080/restful/menuBars"))
     }
 
     private fun load(response: Response, handler: BaseHandler) {

@@ -23,7 +23,7 @@ import io.kvision.utils.obj
 import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.ui.chart.ChartFactory
 import org.apache.isis.client.kroviz.ui.core.UiManager
-import org.apache.isis.client.kroviz.ui.diagram.SequenceDiagram
+import org.apache.isis.client.kroviz.ui.diagram.LinkTreeDiagram
 import org.apache.isis.client.kroviz.ui.dialog.DiagramDialog
 import org.apache.isis.client.kroviz.ui.dialog.EventExportDialog
 import org.apache.isis.client.kroviz.utils.IconManager
@@ -33,8 +33,8 @@ class EventLogTableMgr {
     fun buildTableMenu(table: EventLogTable): dynamic {
         val menu = mutableListOf<dynamic>()
 
-        val a1 = buildMenuEntry("Hierarchy", "Event Diagram",
-                { this.eventDiagram() })
+        val a1 = buildMenuEntry("Hierarchy", "Link Tree Diagram",
+                { this.linkTreeDiagram() })
         menu.add(a1)
 
         val a2 = buildMenuEntry("Export", "Export Events ...", {
@@ -65,9 +65,11 @@ class EventLogTableMgr {
         }
     }
 
-    private fun eventDiagram() {
-        val code = SequenceDiagram.build(EventStore.log)!!
-        DiagramDialog("Event Diagram", code).open()
+    private fun linkTreeDiagram() {
+        val code = LinkTreeDiagram.build()
+        console.log("[ETM.eventDiagrm]")
+        console.log(code)
+        DiagramDialog("Link Tree Diagram", code).open()
     }
 
     private fun downLoadCsv(table: EventLogTable) {

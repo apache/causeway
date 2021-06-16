@@ -20,6 +20,7 @@ package org.apache.isis.client.kroviz.ui.core
 
 object Constants {
 
+    const val restInfix = "restful/"
     const val stdMimeType = "text/plain"
     const val svgMimeType = "image/svg+xml"
     const val xmlMimeType = "application/xml"
