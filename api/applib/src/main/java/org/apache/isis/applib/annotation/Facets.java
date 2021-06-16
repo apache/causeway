@@ -33,10 +33,13 @@ import java.lang.annotation.Target;
  * At least one named factory (as per {@link #facetFactoryNames()}) or one class
  * factory (as per {@link #facetFactoryClasses()}) should be specified.
  * @since 1.x {@index}
+ * @deprecated currently alternatively works with MetaModelRefiner(s),
+ * but ultimately FacetFactory(s) should be managed by Spring
  */
 @Inherited
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
+@Deprecated
 public @interface Facets {
 
     /**
