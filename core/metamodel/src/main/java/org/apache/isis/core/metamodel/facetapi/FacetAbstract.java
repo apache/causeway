@@ -22,6 +22,8 @@ package org.apache.isis.core.metamodel.facetapi;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
@@ -29,6 +31,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.val;
 
 public abstract class FacetAbstract
 implements Facet, HasMetaModelContext {
@@ -74,17 +77,8 @@ implements Facet, HasMetaModelContext {
 
     @Override
     public String toString() {
-        String details = "";
-        if (isValidating()) {
-            details += "Validating";
-        }
-        if (isDisabling()) {
-            details += (details.length() > 0 ? ";" : "") + "Disabling";
-        }
-        if (isHiding()) {
-            details += (details.length() > 0 ? ";" : "") + "Hiding";
-        }
-        if (!"".equals(details)) {
+        String details = interactionDetails(";");
+        if (!details.isEmpty()) {
             details = "interaction=" + details + ",";
         }
 
@@ -100,30 +94,16 @@ implements Facet, HasMetaModelContext {
         return className.substring(className.lastIndexOf('.') + 1) + "[" + details + stringValues + "]";
     }
 
-    private boolean isHiding() {
-        return Hiding.class.isAssignableFrom(getClass());
-    }
-
-    private boolean isDisabling() {
-        return Disabling.class.isAssignableFrom(getClass());
-    }
-
-    private boolean isValidating() {
-        return Validating.class.isAssignableFrom(getClass());
-    }
-
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        visitor.accept("fqcn", this.getClass().getName());
+        visitor.accept("facet", this.getClass().getName());
         visitor.accept("precedence", getPrecedence().name());
-        if(isHiding()) {
-            visitor.accept("hiding", isHiding());
-        }
-        if(isDisabling()) {
-            visitor.accept("disabling", isDisabling());
-        }
-        if(isValidating()) {
-            visitor.accept("validating", isValidating());
+
+        val interactionDetails = interactionDetails(", ");
+
+        // suppress 'details' if none
+        if(!interactionDetails.isEmpty()) {
+            visitor.accept("interaction", interactionDetails);
         }
     }
 
@@ -143,6 +123,14 @@ implements Facet, HasMetaModelContext {
      * Marker interface used within {@link #toString()}.
      */
     public static interface Validating {
+    }
+
+    private String interactionDetails(final String delimiter) {
+        return Stream.of(Validating.class, Hiding.class, Disabling.class)
+        .filter(marker->marker.isAssignableFrom(getClass()))
+        .map(Class::getSimpleName)
+        .map(String::toLowerCase)
+        .collect(Collectors.joining(delimiter));
     }
 
     // -- CONTRIBUTED FACET SUPPORT
