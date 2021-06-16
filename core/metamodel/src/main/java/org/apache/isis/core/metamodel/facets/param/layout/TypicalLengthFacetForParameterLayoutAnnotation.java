@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.param.layout;
 
 import java.util.Optional;
-import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -35,28 +34,16 @@ extends TypicalLengthFacetAbstract {
             final FacetHolder holder) {
 
         return parameterLayoutIfAny
-                .map(ParameterLayout::typicalLength)
-                .filter(typicalLength -> typicalLength != -1)
-                .map(typicalLength -> new TypicalLengthFacetForParameterLayoutAnnotation(typicalLength, holder))
-                .orElse(null);
+        .map(ParameterLayout::typicalLength)
+        .filter(typicalLength -> typicalLength != -1)
+        .map(typicalLength -> new TypicalLengthFacetForParameterLayoutAnnotation(typicalLength, holder))
+        .orElse(null);
     }
 
-    private final int value;
-
-    public TypicalLengthFacetForParameterLayoutAnnotation(int typicalLength, FacetHolder holder) {
-        super(holder);
-        this.value = typicalLength;
-    }
-
-    @Override
-    public int value() {
-        return value;
-    }
-
-    @Override
-    public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
-        visitor.accept("value", value);
+    private TypicalLengthFacetForParameterLayoutAnnotation(
+            final int typicalLength,
+            final FacetHolder holder) {
+        super(typicalLength, holder);
     }
 
 }

@@ -22,28 +22,51 @@ package org.apache.isis.core.metamodel.facets.param.typicallen.fromtype;
 import java.util.function.BiConsumer;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacetAbstract;
 
-import lombok.val;
-
 public class TypicalLengthFacetOnParameterInferredFromType
 extends TypicalLengthFacetAbstract {
 
+    // -- FACTORIES
+
+    /**
+     * @apiNote call during post processing only!
+     * based on the assumption, that all MultiLineFacet processing already has settled
+     * on the peer (action parameter meta-data)
+     */
+    public static TypicalLengthFacetOnParameterInferredFromType createWhilePostprocessing(
+            final TypicalLengthFacet typicalLengthFacet,
+            final TypedHolder peer) {
+
+        final int numberOfLines = peer.lookupFacet(MultiLineFacet.class)
+                .map(MultiLineFacet::numberOfLines)
+                .orElse(1);
+        final int typicalLength = numberOfLines * typicalLengthFacet.value();
+
+        return new TypicalLengthFacetOnParameterInferredFromType(typicalLength, typicalLengthFacet, peer);
+    }
+
+    // -- FIELDS
+
+    /**
+     * @apiNote held only for reporting purposes
+     */
     private final TypicalLengthFacet typicalLengthFacet;
 
-    public TypicalLengthFacetOnParameterInferredFromType(
-            final TypicalLengthFacet typicalLengthFacet, final FacetHolder holder) {
-        super(holder, Precedence.INFERRED);
+    // -- CONSTRUCTOR
+
+    private TypicalLengthFacetOnParameterInferredFromType(
+            final int typicalLength,
+            final TypicalLengthFacet typicalLengthFacet,
+            final FacetHolder holder) {
+        super(typicalLength, holder, Precedence.INFERRED);
         this.typicalLengthFacet = typicalLengthFacet;
     }
 
-    @Override
-    public int value() {
-        val multiLineFacet = getFacetHolder().getFacet(MultiLineFacet.class);
-        return multiLineFacet.numberOfLines() * typicalLengthFacet.value();
-    }
+    // -- IMPL
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {

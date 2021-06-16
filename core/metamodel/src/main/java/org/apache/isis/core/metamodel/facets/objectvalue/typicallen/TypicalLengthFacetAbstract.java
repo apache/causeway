@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.objectvalue.typicallen;
 
+import java.util.function.BiConsumer;
+
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -33,30 +35,50 @@ implements TypicalLengthFacet {
         return TypicalLengthFacet.class;
     }
 
-    public TypicalLengthFacetAbstract(final FacetHolder holder) {
+    public TypicalLengthFacetAbstract(
+            final int typicalLength,
+            final FacetHolder holder) {
         super(type(), holder);
+        this.typicalLength = typicalLength;
     }
 
-    public TypicalLengthFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
+    public TypicalLengthFacetAbstract(
+            final int typicalLength,
+            final FacetHolder holder,
+            final Facet.Precedence precedence) {
         super(type(), holder, precedence);
+        this.typicalLength = typicalLength;
+    }
+
+    // -- IMPL
+
+    private final int typicalLength;
+    @Override
+    public final int value() {
+        return typicalLength;
     }
 
     @Override
-    public abstract int value();
-
-    @Override
-    protected String toStringValues() {
-        final int intValue = value();
-        return intValue == 0
-                ? "default"
-                : String.valueOf(intValue);
-    }
-
-    @Override
-    public boolean semanticEquals(final @NonNull Facet other) {
+    public final boolean semanticEquals(final @NonNull Facet other) {
         return other instanceof TypicalLengthFacet
                 ? this.value() == ((TypicalLengthFacet)other).value()
                 : false;
+    }
+
+    // -- REPORTING
+
+    @Override
+    protected String toStringValues() {
+        final int typicalLength = value();
+        return typicalLength == 0
+                ? "default"
+                : String.valueOf(typicalLength);
+    }
+
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("typicalLength", value());
     }
 
 

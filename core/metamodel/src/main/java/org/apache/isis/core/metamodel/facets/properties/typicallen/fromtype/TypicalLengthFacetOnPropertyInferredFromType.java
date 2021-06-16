@@ -22,25 +22,52 @@ package org.apache.isis.core.metamodel.facets.properties.typicallen.fromtype;
 import java.util.function.BiConsumer;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacetAbstract;
 
-public class TypicalLengthFacetOnPropertyDerivedFromType
+public class TypicalLengthFacetOnPropertyInferredFromType
 extends TypicalLengthFacetAbstract {
 
+    // -- FACTORY
+
+    /**
+     * @apiNote call during post processing only!
+     * based on the assumption, that all MultiLineFacet processing already has settled
+     * on the peer (property meta-data)
+     */
+    public static TypicalLengthFacetOnPropertyInferredFromType createWhilePostprocessing(
+            final TypicalLengthFacet typicalLengthFacet,
+            final FacetedMethod peer) {
+
+        final int numberOfLines = peer.lookupFacet(MultiLineFacet.class)
+                .map(MultiLineFacet::numberOfLines)
+                .orElse(1);
+        final int typicalLength = numberOfLines * typicalLengthFacet.value();
+
+        return new TypicalLengthFacetOnPropertyInferredFromType(
+                typicalLength, typicalLengthFacet, peer);
+    }
+
+    // -- FIELDS
+
+    /**
+     * @apiNote held only for reporting purposes
+     */
     private final TypicalLengthFacet typicalLengthFacet;
 
-    public TypicalLengthFacetOnPropertyDerivedFromType(final TypicalLengthFacet typicalLengthFacet, final FacetHolder holder) {
-        super(holder, Precedence.INFERRED);
+    // -- CONSTRUCTOR
+
+    private TypicalLengthFacetOnPropertyInferredFromType(
+            final int typicalLength,
+            final TypicalLengthFacet typicalLengthFacet,
+            final FacetHolder holder) {
+        super(typicalLength, holder, Precedence.INFERRED);
         this.typicalLengthFacet = typicalLengthFacet;
     }
 
-    @Override
-    public int value() {
-        final MultiLineFacet facet = getFacetHolder().getFacet(MultiLineFacet.class);
-        return (facet != null ? facet.numberOfLines() : 1) * typicalLengthFacet.value();
-    }
+    // -- IMPL
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {

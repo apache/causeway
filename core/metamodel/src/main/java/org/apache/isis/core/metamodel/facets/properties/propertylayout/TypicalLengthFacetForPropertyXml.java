@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
-import java.util.function.BiConsumer;
-
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
@@ -29,30 +27,19 @@ import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengt
 public class TypicalLengthFacetForPropertyXml
 extends TypicalLengthFacetAbstract {
 
-    public static TypicalLengthFacet create(PropertyLayoutData propertyLayout, FacetHolder holder) {
+    public static TypicalLengthFacet create(final PropertyLayoutData propertyLayout, final FacetHolder holder) {
         if(propertyLayout == null) {
             return null;
         }
         final Integer typicalLength = propertyLayout.getTypicalLength();
-        return typicalLength != null && typicalLength != -1 ? new TypicalLengthFacetForPropertyXml(typicalLength, holder) : null;
+        return typicalLength != null
+                && typicalLength != -1
+                    ? new TypicalLengthFacetForPropertyXml(typicalLength, holder)
+                    : null;
     }
 
-    private final int value;
-
-    private TypicalLengthFacetForPropertyXml(int value, FacetHolder holder) {
-        super(holder);
-        this.value = value;
-    }
-
-    @Override
-    public int value() {
-        return value;
-    }
-
-    @Override
-    public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
-        visitor.accept("value", value);
+    private TypicalLengthFacetForPropertyXml(final int typicalLength, final FacetHolder holder) {
+        super(typicalLength, holder);
     }
 
 }

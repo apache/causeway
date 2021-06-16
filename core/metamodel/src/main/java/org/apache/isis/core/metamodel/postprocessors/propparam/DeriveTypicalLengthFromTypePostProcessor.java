@@ -24,10 +24,8 @@ import javax.inject.Inject;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
-import org.apache.isis.core.metamodel.facets.param.typicallen.fromtype.TypicalLengthFacetOnParameterDerivedFromTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.param.typicallen.fromtype.TypicalLengthFacetOnParameterInferredFromType;
-import org.apache.isis.core.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetOnPropertyDerivedFromType;
-import org.apache.isis.core.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetOnPropertyDerivedFromTypeFacetFactory;
+import org.apache.isis.core.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetOnPropertyInferredFromType;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -35,10 +33,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
-/**
- * replaces {@link TypicalLengthFacetOnPropertyDerivedFromTypeFacetFactory}
- * and {@link TypicalLengthFacetOnParameterDerivedFromTypeFacetFactory}
- */
 public class DeriveTypicalLengthFromTypePostProcessor
 extends ObjectSpecificationPostProcessorAbstract {
 
@@ -60,10 +54,13 @@ extends ObjectSpecificationPostProcessorAbstract {
         if(parameter.containsNonFallbackFacet(TypicalLengthFacet.class)) {
             return;
         }
-        parameter.getSpecification()
-        .lookupNonFallbackFacet(TypicalLengthFacet.class)
-        .ifPresent(specFacet -> FacetUtil.addFacetIfPresent(new TypicalLengthFacetOnParameterInferredFromType(specFacet,
-                                    peerFor(parameter))));
+        parameter
+            .getSpecification()
+            .lookupNonFallbackFacet(TypicalLengthFacet.class)
+            .ifPresent(typicalLengthFacet ->
+                    FacetUtil.addFacetIfPresent(
+                            TypicalLengthFacetOnParameterInferredFromType
+                            .createWhilePostprocessing(typicalLengthFacet, peerFor(parameter))));
     }
 
     @Override
@@ -71,10 +68,13 @@ extends ObjectSpecificationPostProcessorAbstract {
         if(property.containsNonFallbackFacet(TypicalLengthFacet.class)) {
             return;
         }
-        property.getSpecification()
-        .lookupNonFallbackFacet(TypicalLengthFacet.class)
-        .ifPresent(specFacet -> FacetUtil.addFacetIfPresent(new TypicalLengthFacetOnPropertyDerivedFromType(
-                                    specFacet, facetedMethodFor(property))));
+        property
+            .getSpecification()
+            .lookupNonFallbackFacet(TypicalLengthFacet.class)
+            .ifPresent(typicalLengthFacet ->
+                    FacetUtil.addFacetIfPresent(
+                            TypicalLengthFacetOnPropertyInferredFromType
+                            .createWhilePostprocessing(typicalLengthFacet, facetedMethodFor(property))));
 
     }
 

@@ -278,27 +278,27 @@ public class LayoutFacetUtil {
 
         private final MetamodelToGridOverridingVisitor helper;
 
-        public static LayoutDataFactory of(ObjectSpecification objectSpec) {
+        public static LayoutDataFactory of(final ObjectSpecification objectSpec) {
             return new LayoutDataFactory(objectSpec);
         }
 
-        private LayoutDataFactory(ObjectSpecification objectSpec) {
+        private LayoutDataFactory(final ObjectSpecification objectSpec) {
             this.helper = MetamodelToGridOverridingVisitor.of(objectSpec);
         }
 
-        public ActionLayoutData createActionLayoutData(String id) {
+        public ActionLayoutData createActionLayoutData(final String id) {
             val layoutData = new ActionLayoutData(id);
             helper.visit(layoutData);
             return layoutData;
         }
 
-        public CollectionLayoutData createCollectionLayoutData(String id) {
+        public CollectionLayoutData createCollectionLayoutData(final String id) {
             val layoutData = new CollectionLayoutData(id);
             helper.visit(layoutData);
             return layoutData;
         }
 
-        public PropertyLayoutData createPropertyLayoutData(String id) {
+        public PropertyLayoutData createPropertyLayoutData(final String id) {
             val layoutData = new PropertyLayoutData(id);
             helper.visit(layoutData);
             return layoutData;
