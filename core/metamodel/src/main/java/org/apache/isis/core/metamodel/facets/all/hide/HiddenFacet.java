@@ -32,15 +32,19 @@ public interface HiddenFacet
 extends WhereValueFacet, HidingInteractionAdvisor {
 
     public enum Semantics {
+
+        /** regular semantics */
         HIDDEN,
-        SHOWING;
+
+        /** inverted semantics */
+        SHOWN;
 
         public boolean isHidden() {
             return this == HIDDEN;
         }
 
-        public boolean isShowing() {
-            return this == SHOWING;
+        public boolean isShown() {
+            return this == SHOWN;
         }
     }
 

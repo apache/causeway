@@ -39,7 +39,11 @@ public interface DisabledFacet
 extends WhereValueFacet, DisablingInteractionAdvisor {
 
     public enum Semantics {
+
+        /** regular semantics */
         DISABLED,
+
+        /** inverted semantics */
         ENABLED;
 
         public boolean isDisabled() {
