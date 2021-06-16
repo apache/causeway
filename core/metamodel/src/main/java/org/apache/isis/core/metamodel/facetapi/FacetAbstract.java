@@ -79,7 +79,7 @@ implements Facet, HasMetaModelContext {
     public String toString() {
         String details = interactionDetails(";");
         if (!details.isEmpty()) {
-            details = "interaction=" + details + ",";
+            details = "interactionAdvisors=" + details + ",";
         }
 
         final String className = getClass().getName();
@@ -103,20 +103,20 @@ implements Facet, HasMetaModelContext {
 
         // suppress 'details' if none
         if(!interactionDetails.isEmpty()) {
-            visitor.accept("interaction", interactionDetails);
+            visitor.accept("interactionAdvisors", interactionDetails);
         }
     }
 
     /**
      * Marker interface used within {@link #toString()}.
      */
-    public static interface Hiding {
+    public static interface HidingOrShowing {
     }
 
     /**
      * Marker interface used within {@link #toString()}.
      */
-    public static interface Disabling {
+    public static interface DisablingOrEnabling {
     }
 
     /**
@@ -126,10 +126,9 @@ implements Facet, HasMetaModelContext {
     }
 
     private String interactionDetails(final String delimiter) {
-        return Stream.of(Validating.class, Hiding.class, Disabling.class)
+        return Stream.of(Validating.class, HidingOrShowing.class, DisablingOrEnabling.class)
         .filter(marker->marker.isAssignableFrom(getClass()))
         .map(Class::getSimpleName)
-        .map(String::toLowerCase)
         .collect(Collectors.joining(delimiter));
     }
 
