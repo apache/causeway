@@ -26,7 +26,6 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.reflection._Reflect;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 import static org.apache.isis.commons.internal.reflection._Reflect.Filter.paramCount;
@@ -36,20 +35,7 @@ import lombok.val;
 public class MixinFacetForDomainObjectAnnotation
 extends MixinFacetAbstract {
 
-    public static Class<? extends Facet> type() {
-        return MixinFacet.class;
-    }
-
-    private MixinFacetForDomainObjectAnnotation(
-            final Class<?> mixinType,
-            final String value,
-            final Constructor<?> constructorType,
-            final FacetHolder holder) {
-
-        super(mixinType, value, constructorType, holder);
-    }
-
-    public static MixinFacet create(
+    public static Optional<MixinFacetForDomainObjectAnnotation> create(
             final Optional<DomainObject> domainObjectIfAny,
             final Class<?> candidateMixinType,
             final FacetHolder facetHolder,
@@ -71,8 +57,15 @@ extends MixinFacetAbstract {
                         constructor,
                         facetHolder))
             .orElse(null);
-        })
-        .orElse(null);
+        });
     }
 
+    private MixinFacetForDomainObjectAnnotation(
+            final Class<?> mixinType,
+            final String value,
+            final Constructor<?> constructorType,
+            final FacetHolder holder) {
+
+        super(mixinType, value, constructorType, holder);
+    }
 }

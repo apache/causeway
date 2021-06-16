@@ -18,8 +18,6 @@
  */
 package org.apache.isis.core.metamodel.facets.objectvalue.mustsatisfyspec;
 
-import java.util.List;
-
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
@@ -51,7 +49,7 @@ public class SpecificationEvaluator {
 
         final ReasonBuffer reasonBuffer = new ReasonBuffer();
 
-        public Evaluation evaluate(final List<Specification> specifications, final Object proposedObject) {
+        public Evaluation evaluate(final Iterable<Specification> specifications, final Object proposedObject) {
             for (final Specification specification : specifications) {
                 evaluate(specification, proposedObject);
             }

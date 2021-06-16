@@ -38,7 +38,7 @@ public class MetaModelValidatorForAmbiguousMixinAnnotations {
                 "Annotation %s on both method and type level is not allowed, "
                 + "it must be one or the other. Found with mixin: %s",
                 annotationLiteral,
-                holder.getIdentifier().getFullIdentityString());
+                holder.getFeatureIdentifier().getFullIdentityString());
     }
 
 

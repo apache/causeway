@@ -170,7 +170,6 @@ implements ObjectSpecification {
     private final Class<?> correspondingClass;
     private final String fullName;
     private final String shortName;
-    private final Identifier identifier;
     private final boolean isAbstract;
 
     // derived lazily, cached since immutable
@@ -194,6 +193,8 @@ implements ObjectSpecification {
             final FacetProcessor facetProcessor,
             final PostProcessor postProcessor) {
 
+        super(facetProcessor.getMetaModelContext());
+
         this.correspondingClass = introspectedClass;
         this.fullName = introspectedClass.getName();
         this.shortName = shortName;
@@ -201,7 +202,7 @@ implements ObjectSpecification {
 
         this.isAbstract = ClassExtensions.isAbstract(introspectedClass);
 
-        this.identifier = Identifier.classIdentifier(
+        super.featureIdentifier = Identifier.classIdentifier(
                 LogicalType.lazy(
                         introspectedClass,
                         ()->logicalTypeLazy.get().getLogicalTypeName()));
@@ -497,7 +498,7 @@ implements ObjectSpecification {
     @Override
     public String getSingularName() {
         val namedFacet = getFacet(NamedFacet.class);
-        return namedFacet != null? namedFacet.value() : this.getFullIdentifier();
+        return namedFacet != null? namedFacet.translated() : this.getFullIdentifier();
     }
 
     /**
@@ -507,7 +508,7 @@ implements ObjectSpecification {
     @Override
     public String getPluralName() {
         val pluralFacet = getFacet(PluralFacet.class);
-        return pluralFacet.value();
+        return pluralFacet.translated();
     }
 
     /**
@@ -517,7 +518,7 @@ implements ObjectSpecification {
     @Override
     public String getDescription() {
         val describedAsFacet = getFacet(DescribedAsFacet.class);
-        val describedAs = describedAsFacet.value();
+        val describedAs = describedAsFacet.translated();
         return describedAs == null ? "" : describedAs;
     }
 
@@ -572,7 +573,7 @@ implements ObjectSpecification {
             if(facet==null) {
                 return false;
             }
-            if(!facet.isFallback()) {
+            if(!facet.getPrecedence().isFallback()) {
                 return true;
             }
             if(noopFacet == null) {
@@ -595,16 +596,11 @@ implements ObjectSpecification {
     }
 
     @Override
-    public Identifier getIdentifier() {
-        return identifier;
-    }
-
-    @Override
     public ObjectTitleContext createTitleInteractionContext(
             final ManagedObject targetObjectAdapter,
             final InteractionInitiatedBy interactionMethod) {
 
-        return new ObjectTitleContext(targetObjectAdapter, getIdentifier(), targetObjectAdapter.titleString(),
+        return new ObjectTitleContext(targetObjectAdapter, getFeatureIdentifier(), targetObjectAdapter.titleString(),
                 interactionMethod);
     }
 
@@ -853,7 +849,7 @@ implements ObjectSpecification {
     @Override
     public ObjectValidityContext createValidityInteractionContext(
             final ManagedObject targetAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
-        return new ObjectValidityContext(targetAdapter, getIdentifier(), interactionInitiatedBy);
+        return new ObjectValidityContext(targetAdapter, getFeatureIdentifier(), interactionInitiatedBy);
     }
 
     // -- convenience isXxx (looked up from facets)

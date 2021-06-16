@@ -19,12 +19,16 @@
 
 package org.apache.isis.core.metamodel.facets.properties.validating.dflt;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.properties.validating.PropertyValidateFacet;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
+
+import lombok.val;
 
 /**
  * Simply installs a {@link PropertyValidateFacet} onto all properties.
@@ -35,24 +39,26 @@ import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
  * implementations will potentially replace these where the property is
  * annotated or otherwise provides a validation mechanism.
  */
-public class PropertyValidateFacetDefaultFactory extends FacetFactoryAbstract {
+public class PropertyValidateFacetDefaultFactory
+extends FacetFactoryAbstract {
 
-    public PropertyValidateFacetDefaultFactory() {
-        super(FeatureType.PROPERTIES_ONLY);
+    @Inject
+    public PropertyValidateFacetDefaultFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.PROPERTIES_ONLY);
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        super.addFacet(create(processMethodContext.getFacetHolder()));
+        val facetHolder = processMethodContext.getFacetHolder();
+        addFacet(
+                new PropertyValidateFacetDefault(facetHolder));
     }
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
-        super.addFacet(create(processParameterContext.getFacetHolder()));
-    }
-
-    private PropertyValidateFacet create(final FacetHolder holder) {
-        return new PropertyValidateFacetDefault(holder);
+        val facetHolder = processParameterContext.getFacetHolder();
+        addFacet(
+                new PropertyValidateFacetDefault(facetHolder));
     }
 
 }

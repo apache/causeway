@@ -38,7 +38,7 @@ public class SaveCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new PersistCallbackViaSaveMethodFacetFactory();
+        facetFactory = new PersistCallbackViaSaveMethodFacetFactory(metaModelContext);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class SaveCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof PersistingCallbackFacetViaMethod);
         final PersistingCallbackFacetViaMethod savingCallbackFacetViaMethod = (PersistingCallbackFacetViaMethod) facet;
-        assertEquals(method, savingCallbackFacetViaMethod.getMethods().get(0));
+        assertEquals(method, savingCallbackFacetViaMethod.getMethods().getFirstOrFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
     }
@@ -80,7 +80,7 @@ public class SaveCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof PersistedCallbackFacetViaMethod);
         final PersistedCallbackFacetViaMethod savedCallbackFacetViaMethod = (PersistedCallbackFacetViaMethod) facet;
-        assertEquals(method, savedCallbackFacetViaMethod.getMethods().get(0));
+        assertEquals(method, savedCallbackFacetViaMethod.getMethods().getFirstOrFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
     }

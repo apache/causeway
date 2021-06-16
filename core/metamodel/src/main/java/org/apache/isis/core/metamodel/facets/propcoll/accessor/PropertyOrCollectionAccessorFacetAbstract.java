@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.propcoll.accessor;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -32,14 +32,14 @@ implements PropertyOrCollectionAccessorFacet {
 
     private final ObjectSpecification onType;
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return PropertyOrCollectionAccessorFacet.class;
     }
 
     public PropertyOrCollectionAccessorFacetAbstract(
             final ObjectSpecification onType,
             final FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
         this.onType = onType;
     }
 
@@ -48,10 +48,9 @@ implements PropertyOrCollectionAccessorFacet {
         return onType;
     }
 
-    // //////////////////////////////////////
-
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("onType", onType);
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("onType", onType);
     }
 }

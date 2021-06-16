@@ -35,11 +35,9 @@ import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel._testing.MethodRemoverForTesting;
-import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -79,32 +77,11 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
     protected MetaModelContext_forTesting metaModelContext;
     protected JdoFacetContext jdoFacetContext;
 
-    public static class IdentifiedHolderImpl extends FacetHolderImpl implements IdentifiedHolder {
-
-        private Identifier identifier;
-
-        public IdentifiedHolderImpl(final Identifier identifier) {
-            this.identifier = identifier;
-        }
-
-        @Override
-        public Identifier getIdentifier() {
-            return identifier;
-        }
-    }
-
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
         // PRODUCTION
-
-        facetHolder = new IdentifiedHolderImpl(
-                Identifier.propertyOrCollectionIdentifier(LogicalType.fqcn(Customer.class), "firstName"));
-        facetedMethod = FacetedMethod.createForProperty(Customer.class, "firstName");
-        facetedMethodParameter = new FacetedMethodParameter(
-                FeatureType.ACTION_PARAMETER_SCALAR, facetedMethod.getOwningType(), facetedMethod.getMethod(), String.class
-                );
 
         methodRemover = new MethodRemoverForTesting();
 
@@ -124,14 +101,18 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
             will(returnValue(Optional.of(iaContext)));
         }});
 
-        ((MetaModelContextAware)facetHolder).setMetaModelContext(metaModelContext);
-        facetedMethod.setMetaModelContext(metaModelContext);
-        facetedMethodParameter.setMetaModelContext(metaModelContext);
+        facetHolder = FacetHolderAbstract.simple(
+                metaModelContext,
+                Identifier.propertyOrCollectionIdentifier(LogicalType.fqcn(Customer.class), "firstName"));
+
+        facetedMethod = FacetedMethod.createForProperty(metaModelContext, Customer.class, "firstName");
+        facetedMethodParameter = new FacetedMethodParameter(
+                metaModelContext,
+                FeatureType.ACTION_PARAMETER_SCALAR, facetedMethod.getOwningType(), facetedMethod.getMethod(), String.class
+                );
 
         jdoFacetContext = jdoFacetContextForTesting();
     }
-
-
 
     protected void allowing_specificationLoader_loadSpecification_any_willReturn(final ObjectSpecification objectSpecification) {
         context.checking(new Expectations() {{

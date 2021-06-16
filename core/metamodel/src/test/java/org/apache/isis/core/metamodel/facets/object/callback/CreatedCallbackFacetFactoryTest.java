@@ -28,7 +28,8 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFac
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacetViaMethod;
 
-public class CreatedCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
+public class CreatedCallbackFacetFactoryTest
+extends AbstractFacetFactoryTest {
 
     private CreatedCallbackFacetFactory facetFactory;
 
@@ -36,7 +37,7 @@ public class CreatedCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new CreatedCallbackFacetFactory();
+        facetFactory = new CreatedCallbackFacetFactory(metaModelContext);
     }
 
     @Override
@@ -59,7 +60,7 @@ public class CreatedCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof CreatedCallbackFacetViaMethod);
         final CreatedCallbackFacetViaMethod createdCallbackFacetViaMethod = (CreatedCallbackFacetViaMethod) facet;
-        assertEquals(method, createdCallbackFacetViaMethod.getMethods().get(0));
+        assertEquals(method, createdCallbackFacetViaMethod.getMethods().getFirstOrFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
     }

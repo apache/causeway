@@ -20,20 +20,25 @@ package org.apache.isis.core.metamodel.facets.object.ignore.datanucleus;
 
 import java.lang.reflect.Method;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
 /**
  * Removes all methods with prefix "dn" (as introduced by DataNucleus enhancement).
  */
-public class RemoveDnPrefixedMethodsFacetFactory extends FacetFactoryAbstract {
+public class RemoveDnPrefixedMethodsFacetFactory
+extends FacetFactoryAbstract {
 
-    public RemoveDnPrefixedMethodsFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    @Inject
+    public RemoveDnPrefixedMethodsFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
     }
 
     @Override
-    public void process(ProcessClassContext context) {
+    public void process(final ProcessClassContext context) {
         Class<?> cls = context.getCls();
         Method[] methods = cls.getMethods();
         for(Method method: methods) {

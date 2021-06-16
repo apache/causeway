@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.metamodel.postprocessors.all;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberDerivedFromType;
@@ -40,13 +43,18 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 public class DeriveDescribedAsFromTypePostProcessor
 extends ObjectSpecificationPostProcessorAbstract {
 
+    @Inject
+    public DeriveDescribedAsFromTypePostProcessor(final MetaModelContext mmc) {
+        super(mmc);
+    }
+
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification) {
         // no-op
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, final ObjectAction objectAction) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction) {
         if(objectAction.containsNonFallbackFacet(DescribedAsFacet.class)) {
             return;
         }
@@ -57,7 +65,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction objectAction, final ObjectActionParameter parameter) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction, final ObjectActionParameter parameter) {
         if(parameter.containsNonFallbackFacet(DescribedAsFacet.class)) {
             return;
         }
@@ -72,12 +80,12 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, OneToOneAssociation prop) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToOneAssociation prop) {
         handle(prop);
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, OneToManyAssociation coll) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
         handle(coll);
     }
 

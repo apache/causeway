@@ -25,12 +25,11 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacetAbstract;
 
 public class CssClassFaFacetForActionLayoutAnnotation extends CssClassFaFacetAbstract {
 
-    public static CssClassFaFacet create(
+    public static Optional<CssClassFaFacetForActionLayoutAnnotation> create(
             final Optional<ActionLayout> actionLayoutIfAny,
             final FacetHolder holder) {
 
@@ -46,8 +45,7 @@ public class CssClassFaFacetForActionLayoutAnnotation extends CssClassFaFacetAbs
         return actionLayoutIfAny
                 .map(Annot::new)
                 .filter(a -> a.cssClassFa != null )
-                .map(a -> new CssClassFaFacetForActionLayoutAnnotation(a.cssClassFa, a.cssClassFaPosition, holder))
-                .orElse(null);
+                .map(a -> new CssClassFaFacetForActionLayoutAnnotation(a.cssClassFa, a.cssClassFaPosition, holder));
     }
 
     private CssClassFaFacetForActionLayoutAnnotation(final String value, final CssClassFaPosition position, final FacetHolder holder) {

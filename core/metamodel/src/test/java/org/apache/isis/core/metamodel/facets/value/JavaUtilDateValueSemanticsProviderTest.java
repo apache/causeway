@@ -28,19 +28,19 @@ import java.util.TimeZone;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.core.metamodel.context.MetaModelContextAware;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.facets.value.dateutil.JavaUtilDateValueSemanticsProvider;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
+import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
+import org.apache.isis.core.metamodel.facets.value.dateutil.JavaUtilDateValueSemanticsProvider;
+
 import lombok.val;
 
-public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
+public class JavaUtilDateValueSemanticsProviderTest
+extends ValueSemanticsProviderAbstractTestCase {
 
     private java.util.Date date;
     private FacetHolder holder;
@@ -50,9 +50,8 @@ public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProvid
 
         date = new java.util.Date(0);
 
-        holder = new FacetHolderImpl();
-        ((MetaModelContextAware)holder).setMetaModelContext(super.metaModelContext);
-        
+        holder = FacetHolderAbstract.forTesting(metaModelContext);
+
         setValue(new JavaUtilDateValueSemanticsProvider(holder) {
         });
     }
@@ -85,14 +84,14 @@ public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProvid
         val defaultTimezone = TimeZone.getDefault();
         Locale.setDefault(Locale.UK);
         TimeZone.setDefault(TimeZone.getTimeZone("Etc/UTC"));
-        
+
         val parsedDate = getValue().parseTextEntry(null, "1980-01-01 10:40");
-        
+
         // restore environment
         Locale.setDefault(defaultLocale);
         TimeZone.setDefault(defaultTimezone);
-        
-        
+
+
         final Calendar calendar = Calendar.getInstance();
         calendar.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
         calendar.set(1980, 0, 1, 10, 40, 0);
@@ -100,9 +99,9 @@ public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProvid
 
         assertEquals(calendar.getTime(), parsedDate);
     }
-    
+
     // -- HELPER
-    
+
     private ValueSemanticsProviderAndFacetAbstract<java.util.Date> getValue() {
         return super.getValue(java.util.Date.class);
     }

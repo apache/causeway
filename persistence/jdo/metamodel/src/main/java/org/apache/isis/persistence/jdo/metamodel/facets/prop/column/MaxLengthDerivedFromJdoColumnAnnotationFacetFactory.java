@@ -24,13 +24,12 @@ import javax.inject.Inject;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
-import org.apache.isis.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -48,8 +47,9 @@ implements MetaModelRefiner {
 
     @Inject private JdoFacetContext jdoFacetContext;
 
-    public MaxLengthDerivedFromJdoColumnAnnotationFacetFactory() {
-        super(FeatureType.PROPERTIES_ONLY);
+    public MaxLengthDerivedFromJdoColumnAnnotationFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.PROPERTIES_ONLY);
+        this.jdoFacetContext = jdoFacetContext;
     }
 
     @Override
@@ -75,22 +75,16 @@ implements MetaModelRefiner {
             return;
         }
 
-        final FacetedMethod holder = processMethodContext.getFacetHolder();
+        val facetHolder = processMethodContext.getFacetHolder();
 
-        MaxLengthFacet existingFacet = holder.getFacet(MaxLengthFacet.class);
-
-        final MaxLengthFacet facet = new MaxLengthFacetDerivedFromJdoColumn(jdoColumnAnnotation.length(), holder);
-
-        if(!existingFacet.isFallback()) {
-            // will raise violation later
-            facet.setUnderlyingFacet(existingFacet);
-        }
-
-        FacetUtil.addFacet(facet);
+        FacetUtil.addFacet(
+                new MaxLengthFacetDerivedFromJdoColumn(
+                        jdoColumnAnnotation.length(),
+                        facetHolder));
     }
 
     @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+    public void refineProgrammingModel(final ProgrammingModel programmingModel) {
         programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec->{
             final JdoPersistenceCapableFacet pcFacet = objectSpec.getFacet(JdoPersistenceCapableFacet.class);
             if(pcFacet==null || pcFacet.getIdentityType() == IdentityType.NONDURABLE) {
@@ -107,23 +101,19 @@ implements MetaModelRefiner {
                     return;
                 }
 
-                final MaxLengthFacet facet = association.getFacet(MaxLengthFacet.class);
-                final MaxLengthFacet underlying = (MaxLengthFacet) facet.getUnderlyingFacet();
-                if(underlying == null) {
-                    return;
-                }
+                association.lookupFacet(MaxLengthFacet.class)
+                .map(MaxLengthFacet::getSharedFacetRankingElseFail)
+                .ifPresent(facetRanking->facetRanking
+                        .visitTopRankPairsSemanticDiffering(MaxLengthFacet.class, (a, b)->{
 
-                if(facet instanceof MaxLengthFacetDerivedFromJdoColumn
-                        && underlying instanceof MaxLengthFacetForPropertyAnnotation) {
-                    if(facet.value() != underlying.value()) {
-                        ValidationFailure.raiseFormatted(
-                                association,
-                                "%s: inconsistent lengths specified in Isis' @Property(maxLength=...) "
-                                + "and @javax.jdo.annotations.Column(length=...); "
-                                + "use just @javax.jdo.annotations.Column(length=...)",
-                                association.getIdentifier().toString());
-                    }
-                }
+                            ValidationFailure.raiseFormatted(
+                                    association,
+                                    "%s: inconsistent MaxLength semantics specified in %s and %s.",
+                                    association.getFeatureIdentifier().toString(),
+                                    a.getClass().getSimpleName(),
+                                    b.getClass().getSimpleName());
+                        }));
+
             });
         });
     }

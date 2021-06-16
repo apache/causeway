@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.object.projection;
 
 import org.apache.isis.applib.annotation.Projecting;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.projection.ProjectingFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -30,11 +29,8 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.val;
 
-public class ProjectionFacetFromProjectingProperty extends ProjectionFacetAbstract {
-
-    public static Class<? extends Facet> type() {
-        return ProjectionFacet.class;
-    }
+public class ProjectionFacetFromProjectingProperty
+extends ProjectionFacetAbstract {
 
     private final OneToOneAssociation projectingProperty;
 
@@ -49,8 +45,9 @@ public class ProjectionFacetFromProjectingProperty extends ProjectionFacetAbstra
     public static ProjectionFacet create(final ObjectSpecification objectSpecification) {
         return objectSpecification.streamProperties(MixedIn.EXCLUDED)
         .filter(propertySpec -> {
-            val projectingFacet = propertySpec.getFacet(ProjectingFacet.class);
-            return projectingFacet != null && !projectingFacet.isFallback()
+            val projectingFacet = propertySpec.lookupNonFallbackFacet(ProjectingFacet.class)
+                    .orElse(null);
+            return projectingFacet != null
                     && projectingFacet.value() == Projecting.PROJECTED;
         })
         .findFirst()

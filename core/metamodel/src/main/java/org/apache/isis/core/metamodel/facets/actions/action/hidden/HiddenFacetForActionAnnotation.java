@@ -24,26 +24,24 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class HiddenFacetForActionAnnotation
 extends HiddenFacetAbstract {
 
-    public static HiddenFacet create(
+    public static Optional<HiddenFacetForActionAnnotation> create(
             final Optional<Action> actionsIfAny,
             final FacetHolder holder) {
 
         return actionsIfAny
                 .map(Action::hidden)
                 .filter(where -> where != null && where != Where.NOT_SPECIFIED)
-                .map(where -> new HiddenFacetForActionAnnotation(where, holder))
-                .orElse(null);
+                .map(where -> new HiddenFacetForActionAnnotation(where, holder));
     }
 
     private HiddenFacetForActionAnnotation(final Where where, final FacetHolder holder) {
-        super(HiddenFacetForActionAnnotation.class, where, holder);
+        super(where, holder);
     }
 
     @Override

@@ -64,7 +64,7 @@ public interface ObjectManager {
      * Creates and initializes an instance conforming to given request parameters.
      * @param objectCreateRequest
      */
-    public default ManagedObject createObject(ObjectCreator.Request objectCreateRequest) {
+    public default ManagedObject createObject(final ObjectCreator.Request objectCreateRequest) {
         return getObjectCreator().createObject(objectCreateRequest);
     }
 
@@ -72,11 +72,11 @@ public interface ObjectManager {
      * Loads an instance identified with given request parameters.
      * @param objectLoadRequest
      */
-    public default ManagedObject loadObject(ObjectLoader.Request objectLoadRequest) {
+    public default ManagedObject loadObject(final ObjectLoader.Request objectLoadRequest) {
         return getObjectLoader().loadObject(objectLoadRequest);
     }
 
-    public default Can<ManagedObject> queryObjects(ObjectBulkLoader.Request objectQuery) {
+    public default Can<ManagedObject> queryObjects(final ObjectBulkLoader.Request objectQuery) {
         return getObjectBulkLoader().loadObject(objectQuery);
     }
 
@@ -84,7 +84,7 @@ public interface ObjectManager {
      * Returns an object identifier for the instance.
      * @param managedObject
      */
-    public default Bookmark bookmarkObject(ManagedObject managedObject) {
+    public default Bookmark bookmarkObject(final ManagedObject managedObject) {
         return getObjectBookmarker().bookmarkObject(managedObject);
     }
 
@@ -92,11 +92,10 @@ public interface ObjectManager {
      * Reloads the state of the (entity) instance from the data store.
      * @param managedObject
      */
-    public default void refreshObject(ManagedObject managedObject) {
+    public default void refreshObject(final ManagedObject managedObject) {
         getObjectRefresher().refreshObject(managedObject);
     }
 
-    @Nullable
     public default Optional<ObjectSpecification> specForPojo(final @Nullable Object pojo) {
         if(pojo==null) {
             return Optional.empty();

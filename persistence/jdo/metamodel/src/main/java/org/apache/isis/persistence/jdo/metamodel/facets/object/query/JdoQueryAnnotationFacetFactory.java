@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import javax.jdo.annotations.Queries;
 import javax.jdo.annotations.Query;
 
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
@@ -38,15 +39,19 @@ import lombok.val;
 public class JdoQueryAnnotationFacetFactory extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
-    @Inject private JdoFacetContext jdoFacetContext;
+    private final JdoFacetContext jdoFacetContext;
 
-    public JdoQueryAnnotationFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    @Inject
+    public JdoQueryAnnotationFacetFactory(
+            final MetaModelContext mmc,
+            final JdoFacetContext jdoFacetContext) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
+        this.jdoFacetContext = jdoFacetContext;
     }
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
+    public void process(final ProcessClassContext processClassContext) {
+        val cls = processClassContext.getCls();
 
         // only applies to JDO entities; ignore any view models
         if(!jdoFacetContext.isPersistenceEnhanced(cls)) {
@@ -57,30 +62,30 @@ implements MetaModelRefiner {
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         if (namedQueriesAnnotation != null) {
-            super.addFacet(new JdoQueriesFacetAnnotation(
-                    namedQueriesAnnotation.value(), facetHolder));
+            addFacet(
+                    new JdoQueriesFacetAnnotation(namedQueriesAnnotation.value(), facetHolder));
             return;
         }
 
         final Query namedQueryAnnotation = Annotations.getAnnotation(cls, Query.class);
         if (namedQueryAnnotation != null) {
-            super.addFacet(new JdoQueryFacetAnnotation(
-                    namedQueryAnnotation, facetHolder));
+            addFacet(
+                    new JdoQueryFacetAnnotation(namedQueryAnnotation, facetHolder));
         }
     }
 
     @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+    public void refineProgrammingModel(final ProgrammingModel programmingModel) {
         val isValidateFromClause =
                 getConfiguration().getCore().getMetaModel().getValidator().getJdoql().isFromClause();
         if (isValidateFromClause) {
-            programmingModel.addValidator(new MetaModelVisitingValidatorForFromClause());
+            programmingModel.addValidator(new MetaModelVisitingValidatorForFromClause(programmingModel.getMetaModelContext()));
         }
 
         val isValidateVariablesClause =
                 getConfiguration().getCore().getMetaModel().getValidator().getJdoql().isVariablesClause();
         if (isValidateVariablesClause) {
-            programmingModel.addValidator(new MetaModelVisitingValidatorForVariablesClause());
+            programmingModel.addValidator(new MetaModelVisitingValidatorForVariablesClause(programmingModel.getMetaModelContext()));
         }
     }
 

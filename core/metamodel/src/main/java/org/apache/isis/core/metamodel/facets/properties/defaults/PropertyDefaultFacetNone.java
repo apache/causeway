@@ -22,10 +22,11 @@ package org.apache.isis.core.metamodel.facets.properties.defaults;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public class PropertyDefaultFacetNone extends PropertyDefaultFacetAbstract {
+public class PropertyDefaultFacetNone
+extends PropertyDefaultFacetAbstract {
 
     public PropertyDefaultFacetNone(final FacetHolder holder) {
-        super(holder);
+        super(holder, Precedence.FALLBACK);
     }
 
     /**
@@ -34,11 +35,6 @@ public class PropertyDefaultFacetNone extends PropertyDefaultFacetAbstract {
     @Override
     public ManagedObject getDefault(final ManagedObject inObject) {
         return null;
-    }
-
-    @Override
-    public boolean isFallback() {
-        return true;
     }
 
 }

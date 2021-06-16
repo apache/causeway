@@ -39,8 +39,7 @@ public class RegExAnnotationOnParameterFacetFactoryTest extends AbstractFacetFac
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        facetFactory = new ParameterAnnotationFacetFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        facetFactory = new ParameterAnnotationFacetFactory(metaModelContext);
     }
 
     public void testRegExAnnotationPickedUpOnActionParameter() {

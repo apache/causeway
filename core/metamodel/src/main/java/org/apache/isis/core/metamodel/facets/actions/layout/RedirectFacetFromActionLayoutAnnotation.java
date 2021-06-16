@@ -27,16 +27,16 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.redirect.RedirectFacet;
 import org.apache.isis.core.metamodel.facets.actions.redirect.RedirectFacetAbstract;
 
-public class RedirectFacetFromActionLayoutAnnotation extends RedirectFacetAbstract {
+public class RedirectFacetFromActionLayoutAnnotation
+extends RedirectFacetAbstract {
 
-    public static RedirectFacet create(
+    public static Optional<RedirectFacet> create(
             final Optional<ActionLayout> actionLayoutIfAny,
             final FacetHolder holder) {
 
         return actionLayoutIfAny
                 .map(ActionLayout::redirectPolicy)
-                .map(redirect -> new RedirectFacetFromActionLayoutAnnotation(redirect, holder))
-                .orElse(null);
+                .map(redirect -> new RedirectFacetFromActionLayoutAnnotation(redirect, holder));
     }
 
     public RedirectFacetFromActionLayoutAnnotation(

@@ -23,6 +23,7 @@ import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.commons.internal.base._Optionals;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -32,44 +33,51 @@ import lombok.val;
 public class ExecutionPublishingPropertyFacetForPropertyAnnotation
 extends ExecutionPublishingFacetAbstract {
 
-    public static ExecutionPublishingFacet create(
+    public static Optional<ExecutionPublishingFacet> create(
             final Optional<Property> propertyIfAny,
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
         val publishingPolicy = PublishingPolicies.propertyExecutionPublishingPolicy(configuration);
 
-        return propertyIfAny
-                .map(Property::executionPublishing)
-                .filter(publishing -> publishing != Publishing.NOT_SPECIFIED)
-                .map(publishing -> {
+        return _Optionals.orNullable(
 
-                    switch (publishing) {
-                    case AS_CONFIGURED:
-                        switch (publishingPolicy) {
-                        case NONE:
-                            return null;
-                        default:
-                            return (ExecutionPublishingFacet)
-                                    new ExecutionPublishingPropertyFacetForPropertyAnnotationAsConfigured(holder);
-                        }
-                    case DISABLED:
-                        return null;
-                    case ENABLED:
-                        return new ExecutionPublishingPropertyFacetForPropertyAnnotation(holder);
-                    default:
-                    }
-                    return null;
+            propertyIfAny
+            .map(Property::executionPublishing)
+            .filter(publishing -> publishing != Publishing.NOT_SPECIFIED)
+            .map(publishing -> {
 
-                })
-                .orElseGet(() -> {
+                switch (publishing) {
+                case AS_CONFIGURED:
                     switch (publishingPolicy) {
                     case NONE:
                         return null;
                     default:
-                        return new ExecutionPublishingPropertyFacetFromConfiguration(holder);
+                        return (ExecutionPublishingFacet)
+                                new ExecutionPublishingPropertyFacetForPropertyAnnotationAsConfigured(holder);
                     }
-                });
+                case DISABLED:
+                    return null;
+                case ENABLED:
+                    return new ExecutionPublishingPropertyFacetForPropertyAnnotation(holder);
+                default:
+                }
+                return null;
+
+            })
+
+            ,
+
+            () -> {
+                switch (publishingPolicy) {
+                case NONE:
+                    return null;
+                default:
+                    return new ExecutionPublishingPropertyFacetFromConfiguration(holder);
+                }
+            }
+
+        );
 
     }
 

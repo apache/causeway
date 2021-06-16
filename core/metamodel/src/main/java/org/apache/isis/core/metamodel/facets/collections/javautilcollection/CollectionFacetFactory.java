@@ -19,8 +19,11 @@
 
 package org.apache.isis.core.metamodel.facets.collections.javautilcollection;
 
+import javax.inject.Inject;
+
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Collections;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -30,10 +33,12 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredF
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 
-public class CollectionFacetFactory extends FacetFactoryAbstract {
+public class CollectionFacetFactory
+extends FacetFactoryAbstract {
 
-    public CollectionFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    @Inject
+    public CollectionFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
     }
 
     @Override

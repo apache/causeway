@@ -45,9 +45,6 @@ import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
-import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
-import org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -96,10 +93,6 @@ abstract class SpecificationLoaderTestAbstract {
             return Mockito.mock(ServiceInjector.class);
         }
 
-        ProgrammingModel getProgrammingModel() {
-            return new ProgrammingModelFacetsJava8(mockServiceInjector());
-        }
-
     }
 
     protected IsisConfiguration isisConfiguration;
@@ -119,11 +112,9 @@ abstract class SpecificationLoaderTestAbstract {
 
         val producers = new Producers();
 
-        val programmingModel = producers.getProgrammingModel();
-
         metaModelContext = MetaModelContext_forTesting.builder()
                 .configuration(isisConfiguration = producers.newConfiguration())
-                .programmingModel(programmingModel)
+                .programmingModelFactory(ProgrammingModelFacetsJava8::new)
                 .translationService(producers.mockTranslationService())
                 .titleService(producers.mockTitleService())
 //                .objectAdapterProvider(mockPersistenceSessionServiceInternal = producers.mockPersistenceSessionServiceInternal())
@@ -135,8 +126,6 @@ abstract class SpecificationLoaderTestAbstract {
                 .build();
 
         specificationLoader = metaModelContext.getSpecificationLoader();
-
-        ((ProgrammingModelAbstract)programmingModel).init(new ProgrammingModelInitFilterDefault(), metaModelContext);
 
         specificationLoader.createMetaModel();
 

@@ -37,7 +37,7 @@ import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.reflection._Reflect;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -73,13 +73,13 @@ public class DomainEventHelper {
             final AbstractDomainEvent.Phase phase,
             @NonNull final Class<? extends ActionDomainEvent<?>> eventType,
             final ObjectAction objectAction,
-            final IdentifiedHolder identified,
+            final FacetHolder facetHolder,
             final InteractionHead head,
             final Can<ManagedObject> argumentAdapters,
             final ManagedObject resultAdapter) {
 
         return postEventForAction(phase, uncheckedCast(eventType), /*existingEvent*/null,
-                objectAction, identified,
+                objectAction, facetHolder,
                 head, argumentAdapters, resultAdapter);
     }
 
@@ -88,13 +88,13 @@ public class DomainEventHelper {
             final AbstractDomainEvent.Phase phase,
             @NonNull final ActionDomainEvent<?> existingEvent,
             final ObjectAction objectAction,
-            final IdentifiedHolder identified,
+            final FacetHolder facetHolder,
             final InteractionHead head,
             final Can<ManagedObject> argumentAdapters,
             final ManagedObject resultAdapter) {
 
         return postEventForAction(phase,
-                uncheckedCast(existingEvent.getClass()), existingEvent, objectAction, identified,
+                uncheckedCast(existingEvent.getClass()), existingEvent, objectAction, facetHolder,
                 head, argumentAdapters, resultAdapter);
     }
 
@@ -103,7 +103,7 @@ public class DomainEventHelper {
             final Class<? extends ActionDomainEvent<S>> eventType,
             final ActionDomainEvent<S> existingEvent,
             final ObjectAction objectAction,
-            final IdentifiedHolder identified,
+            final FacetHolder facetHolder,
             final InteractionHead head,
             final Can<ManagedObject> argumentAdapters,
             final ManagedObject resultAdapter) {
@@ -120,7 +120,7 @@ public class DomainEventHelper {
                 // all other phases, create a new event
                 final S source = uncheckedCast(UnwrapUtil.single(head.getTarget()));
                 final Object[] arguments = UnwrapUtil.multipleAsArray(argumentAdapters);
-                final Identifier identifier = identified.getIdentifier();
+                final Identifier identifier = facetHolder.getFeatureIdentifier();
                 event = newActionDomainEvent(eventType, identifier, source, arguments);
 
                 // copy over if have
@@ -217,7 +217,7 @@ public class DomainEventHelper {
             final AbstractDomainEvent.Phase phase,
             final Class<? extends PropertyDomainEvent<S, T>> eventType,
             final PropertyDomainEvent<S, T> existingEvent,
-            final IdentifiedHolder identified,
+            final FacetHolder facetHolder,
             final InteractionHead head,
             final T oldValue,
             final T newValue) {
@@ -234,7 +234,7 @@ public class DomainEventHelper {
                 // all other phases, create a new event
 
                 final S source = uncheckedCast(UnwrapUtil.single(head.getTarget()));
-                final Identifier identifier = identified.getIdentifier();
+                final Identifier identifier = facetHolder.getFeatureIdentifier();
 
                 event = newPropertyDomainEvent(eventType, identifier, source, oldValue, newValue);
 
@@ -308,7 +308,7 @@ public class DomainEventHelper {
     public <S, T> CollectionDomainEvent<S, T> postEventForCollection(
             final AbstractDomainEvent.Phase phase,
             final Class<? extends CollectionDomainEvent<S, T>> eventType,
-            final IdentifiedHolder identified,
+            final FacetHolder facetHolder,
             final InteractionHead head) {
 
         _Assert.assertTypeIsInstanceOf(eventType, CollectionDomainEvent.class);
@@ -317,7 +317,7 @@ public class DomainEventHelper {
             final CollectionDomainEvent<S, T> event;
 
             final S source = uncheckedCast(UnwrapUtil.single(head.getTarget()));
-            final Identifier identifier = identified.getIdentifier();
+            final Identifier identifier = facetHolder.getFeatureIdentifier();
             event = newCollectionDomainEvent(eventType, phase, identifier, source);
 
             // copy over if have

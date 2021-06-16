@@ -26,9 +26,10 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacetAbstract;
 
-public class CssClassFaFacetForDomainObjectLayoutAnnotation extends CssClassFaFacetAbstract {
+public class CssClassFaFacetForDomainObjectLayoutAnnotation
+extends CssClassFaFacetAbstract {
 
-    public static CssClassFaFacet create(
+    public static Optional<CssClassFaFacet> create(
             final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final FacetHolder holder) {
 
@@ -44,8 +45,7 @@ public class CssClassFaFacetForDomainObjectLayoutAnnotation extends CssClassFaFa
         return domainObjectLayoutIfAny
                 .map(Annot::new)
                 .filter(a -> a.cssClassFa != null )
-                .map(a -> new CssClassFaFacetForDomainObjectLayoutAnnotation(a.cssClassFa, a.cssClassFaPosition, holder))
-                .orElse(null);
+                .map(a -> new CssClassFaFacetForDomainObjectLayoutAnnotation(a.cssClassFa, a.cssClassFaPosition, holder));
     }
 
     public CssClassFaFacetForDomainObjectLayoutAnnotation(final String value, final CssClassFaPosition position, //NOSONAR false positive: method IS used in create()/stream().map()

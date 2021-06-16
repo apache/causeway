@@ -27,6 +27,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
@@ -43,7 +44,8 @@ import lombok.Setter;
  * Treats {@link java.sql.Time} as a time-only value type.
  *
  */
-public class JavaSqlTimeValueSemanticsProvider extends ValueSemanticsProviderAbstractTemporal<Time> {
+public class JavaSqlTimeValueSemanticsProvider
+extends ValueSemanticsProviderAbstractTemporal<Time> {
 
     protected static void initFormats(final Map<String, DateFormat> formats) {
         formats.put(ISO_ENCODING_FORMAT, createDateEncodingFormat("HHmmssSSS"));
@@ -115,9 +117,9 @@ public class JavaSqlTimeValueSemanticsProvider extends ValueSemanticsProviderAbs
     }
 
     @Override
-    public void appendAttributesTo(Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("configuredFormat", configuredFormat);
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("configuredFormat", configuredFormat);
     }
 
 

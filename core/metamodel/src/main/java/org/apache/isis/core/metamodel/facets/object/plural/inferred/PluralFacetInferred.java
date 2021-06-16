@@ -22,10 +22,11 @@ package org.apache.isis.core.metamodel.facets.object.plural.inferred;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacetAbstract;
 
-public class PluralFacetInferred extends PluralFacetAbstract {
+public class PluralFacetInferred
+extends PluralFacetAbstract {
 
     public PluralFacetInferred(final String value, final FacetHolder holder) {
-        super(value, holder, Derivation.DERIVED);
+        super(value, holder, Precedence.INFERRED);
     }
 
 }

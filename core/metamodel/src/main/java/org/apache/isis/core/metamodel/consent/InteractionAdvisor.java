@@ -19,13 +19,15 @@
 
 package org.apache.isis.core.metamodel.consent;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.InteractionAdvisorFacet;
+
+import lombok.NonNull;
 
 /**
  * Marker interface for implementations (specifically, {@link Facet}s) that can
@@ -35,70 +37,47 @@ import org.apache.isis.core.metamodel.interactions.InteractionAdvisorFacet;
  */
 public interface InteractionAdvisor {
 
-    //boolean handles(InteractionProvider ic);
-
     /**
      * For testing purposes only.
      */
-    public static InteractionAdvisor NOOP = new InteractionAdvisorFacet() {
-        @Override
-        public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        }
+    public static InteractionAdvisor forTesting() {
+        return new InteractionAdvisorFacet() {
 
-        @Override
-        public boolean alwaysReplace() {
-            return false;
-        }
+            @Override
+            public boolean semanticEquals(final @NonNull Facet other) {
+                return this == other;
+            }
 
-        @Override
-        public Class<? extends Facet> facetType() {
-            return null;
-        }
+            @Override
+            public void visitAttributes(final BiConsumer<String, Object> visitor) {
+            }
 
-        @Override
-        public FacetHolder getFacetHolder() {
-            return null;
-        }
+            @Override
+            public Class<? extends Facet> facetType() {
+                return null;
+            }
 
-        @Override
-        public boolean isFallback() {
-            return true;
-        }
+            @Override
+            public FacetHolder getFacetHolder() {
+                return null;
+            }
 
-        @Override
-        public void setFacetHolder(final FacetHolder facetHolder) {
-        }
+            @Override
+            public void addContributedFacet(final Facet contributedFacet) {
+                throw _Exceptions.unsupportedOperation();
+            }
 
-        @Override
-        public Facet getUnderlyingFacet() {
-            return null;
-        }
+            @Override
+            public void forEachContributedFacet(final Consumer<Facet> onContributedFacet) {
+                throw _Exceptions.unsupportedOperation();
+            }
 
-        @Override
-        public void setUnderlyingFacet(final Facet underlyingFacet) {
-            throw new UnsupportedOperationException();
-        }
+            @Override
+            public Precedence getPrecedence() {
+                return Facet.Precedence.FALLBACK;
+            }
 
-        @Override
-        public boolean isDerived() {
-            return false;
-        }
-
-        @Override
-        public void addContributedFacet(Facet contributedFacet) {
-            throw _Exceptions.unsupportedOperation();
-        }
-
-        @Override
-        public void forEachContributedFacet(Consumer<Facet> onContributedFacet) {
-            throw _Exceptions.unsupportedOperation();
-        }
-
-        @Override
-        public Class<? extends Facet> facetAliasType() {
-            return null;
-        }
-
-    };
+        };
+    }
 
 }

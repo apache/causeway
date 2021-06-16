@@ -19,29 +19,63 @@
 
 package org.apache.isis.core.metamodel.facets;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class SingleIntValueFacetAbstract extends FacetAbstract implements SingleIntValueFacet {
+import lombok.NonNull;
+
+public abstract class SingleIntValueFacetAbstract
+extends FacetAbstract
+implements SingleIntValueFacet {
 
     private final int value;
 
-    public SingleIntValueFacetAbstract(final Class<? extends Facet> facetType, final FacetHolder holder, final int value) {
-        super(facetType, holder, Derivation.NOT_DERIVED);
+    public SingleIntValueFacetAbstract(
+            final Class<? extends Facet> facetType,
+            final FacetHolder holder,
+            final int value) {
+        super(facetType, holder);
         this.value = value;
     }
 
+    public SingleIntValueFacetAbstract(
+            final Class<? extends Facet> facetType,
+            final FacetHolder holder,
+            final int value,
+            final Facet.Precedence precedence) {
+        super(facetType, holder, precedence);
+        this.value = value;
+    }
+
+    // -- IMPL
+
     @Override
-    public int value() {
+    public final int value() {
         return value;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("value", value);
+    /**
+     * @apiNote used for reporting only
+     */
+    protected abstract String getAttributeNameForValue();
+
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept(getAttributeNameForValue(), value);
+    }
+
+    @Override
+    public final boolean semanticEquals(final @NonNull Facet other) {
+
+        // equality by facet-type and actual value
+        return this.facetType().equals(other.facetType())
+                    && other instanceof SingleIntValueFacet
+                ? this.value() == ((SingleIntValueFacet)other).value()
+                : false;
     }
 
 }

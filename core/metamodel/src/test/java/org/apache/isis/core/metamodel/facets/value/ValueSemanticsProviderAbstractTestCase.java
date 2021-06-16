@@ -105,7 +105,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
         this.encodeableFacet = new EncodableFacetUsingEncoderDecoder(
                 value,
                 mockFacetHolder);
-        this.parseableFacet = new ParseableFacetUsingParser(value, mockFacetHolder);
+        this.parseableFacet = ParseableFacetUsingParser.create(value, mockFacetHolder);
     }
 
     protected <T> ValueSemanticsProviderAndFacetAbstract<T> getValue(Class<T> type) {

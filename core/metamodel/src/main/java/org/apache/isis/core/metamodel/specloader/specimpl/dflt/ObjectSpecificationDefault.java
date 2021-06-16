@@ -28,6 +28,7 @@ import java.util.function.BiConsumer;
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.services.metamodel.BeanSort;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -40,14 +41,12 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacetForMemberName;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.inferred.PluralFacetInferred;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.object.wizard.WizardFacet;
-import org.apache.isis.core.metamodel.postprocessors.all.i18n.NamedFacetTranslated;
-import org.apache.isis.core.metamodel.postprocessors.all.i18n.PluralFacetTranslated;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
@@ -98,15 +97,13 @@ implements FacetHolder {
     public ObjectSpecificationDefault(
             final Class<?> correspondingClass,
             final BeanSort beanSort,
-            final MetaModelContext metaModelContext,
+            final MetaModelContext mmc,
             final FacetProcessor facetProcessor,
             final String nameIfIsManagedBean,
             final PostProcessor postProcessor,
             final ClassSubstitutorRegistry classSubstitutorRegistry) {
 
         super(correspondingClass, determineShortName(correspondingClass), beanSort, facetProcessor, postProcessor);
-
-        setMetaModelContext(metaModelContext);
 
         this.nameIfIsManagedBean = nameIfIsManagedBean;
         this.facetedMethodsBuilder = new FacetedMethodsBuilder(this, facetProcessor, classSubstitutorRegistry);
@@ -184,18 +181,17 @@ implements FacetHolder {
     private void addNamedFacetAndPluralFacetIfRequired() {
         NamedFacet namedFacet = getFacet(NamedFacet.class);
         if (namedFacet == null) {
-            namedFacet = new NamedFacetInferred(StringExtensions.asNaturalName2(getShortIdentifier()), this);
+            namedFacet = new NamedFacetForMemberName(
+                    StringExtensions.asNaturalName2(getShortIdentifier()),
+                    this);
             addFacet(namedFacet);
         }
 
         PluralFacet pluralFacet = getFacet(PluralFacet.class);
         if (pluralFacet == null) {
-            if(namedFacet instanceof NamedFacetTranslated) {
-                final NamedFacetTranslated facet = (NamedFacetTranslated) namedFacet;
-                pluralFacet = new PluralFacetTranslated(facet, this);
-            } else {
-                pluralFacet = new PluralFacetInferred(StringExtensions.asPluralName(namedFacet.value()), this);
-            }
+            pluralFacet = new PluralFacetInferred(
+                    StringExtensions.asPluralName(namedFacet.text()),
+                    this);
             addFacet(pluralFacet);
         }
     }
@@ -284,8 +280,8 @@ implements FacetHolder {
                             : ImmutableEnumSet.of(type),
                         MixedIn.INCLUDED)
                     .filter(action->
-                        id.equals(action.getIdentifier().getMemberNameAndParameterClassNamesIdentityString())
-                                || id.equals(action.getIdentifier().getMemberLogicalName())
+                        id.equals(action.getFeatureIdentifier().getMemberNameAndParameterClassNamesIdentityString())
+                                || id.equals(action.getFeatureIdentifier().getMemberLogicalName())
                     )
                     .findFirst();
     }
@@ -309,30 +305,20 @@ implements FacetHolder {
 
     private void cataloguePropertiesAndCollections(BiConsumer<Method, ObjectMember> onMember) {
         streamDeclaredAssociations(MixedIn.EXCLUDED)
-        .forEach(field->{
-            field.streamFacets()
-            .filter(ImperativeFacet.PREDICATE)
-            .forEach(facet->{
-                val imperativeFacet = ImperativeFacet.Util.getImperativeFacet(facet);
-                for (final Method imperativeFacetMethod : imperativeFacet.getMethods()) {
-                    onMember.accept(imperativeFacetMethod, field);
-                }
-            });
-        });
+        .forEach(field->
+            field.streamFacets(ImperativeFacet.class)
+                .map(ImperativeFacet::getMethods)
+                .flatMap(Can::stream)
+                .forEach(imperativeFacetMethod->onMember.accept(imperativeFacetMethod, field)));
     }
 
     private void catalogueActions(BiConsumer<Method, ObjectMember> onMember) {
         streamDeclaredActions(MixedIn.INCLUDED)
-        .forEach(userAction->{
-            userAction.streamFacets()
-            .filter(ImperativeFacet.PREDICATE)
-            .forEach(facet->{
-                val imperativeFacet = ImperativeFacet.Util.getImperativeFacet(facet);
-                for (final Method imperativeFacetMethod : imperativeFacet.getMethods()) {
-                    onMember.accept(imperativeFacetMethod, userAction);
-                }
-            });
-        });
+        .forEach(userAction->
+            userAction.streamFacets(ImperativeFacet.class)
+                .map(ImperativeFacet::getMethods)
+                .flatMap(Can::stream)
+                .forEach(imperativeFacetMethod->onMember.accept(imperativeFacetMethod, userAction)));
     }
 
     // -- toString

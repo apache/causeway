@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.facets.param.parameter;
 
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.regex.Pattern;
 
 import org.jmock.Expectations;
@@ -28,6 +27,10 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
@@ -44,9 +47,7 @@ import org.apache.isis.core.metamodel.facets.param.parameter.mustsatisfy.MustSat
 import org.apache.isis.core.metamodel.facets.param.parameter.regex.RegExFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertTrue;
+import lombok.val;
 
 @SuppressWarnings("unused")
 public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
@@ -75,8 +76,7 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
 
     @Before
     public void setUp() throws Exception {
-        facetFactory = new ParameterAnnotationFacetFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        facetFactory = new ParameterAnnotationFacetFactory(metaModelContext);
     }
 
     @Override
@@ -159,11 +159,11 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
             Assert.assertNotNull(mustSatisfySpecificationFacet);
             Assert.assertTrue(mustSatisfySpecificationFacet instanceof MustSatisfySpecificationFacetForParameterAnnotation);
             MustSatisfySpecificationFacetForParameterAnnotation mustSatisfySpecificationFacetImpl = (MustSatisfySpecificationFacetForParameterAnnotation) mustSatisfySpecificationFacet;
-            List<Specification> specifications = mustSatisfySpecificationFacetImpl.getSpecifications();
+            val specifications = mustSatisfySpecificationFacetImpl.getSpecifications();
             assertThat(specifications.size(), is(2));
 
-            assertTrue(specifications.get(0) instanceof NotTooHot);
-            assertTrue(specifications.get(1) instanceof NotTooCold);
+            assertTrue(specifications.getElseFail(0) instanceof NotTooHot);
+            assertTrue(specifications.getElseFail(1) instanceof NotTooCold);
         }
 
     }
@@ -371,7 +371,7 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
             actionMethod = findMethod(Customer.class, "someAction", new Class[]{int.class} );
 
             // when
-            final FacetFactory.ProcessParameterContext processParameterContext = 
+            final FacetFactory.ProcessParameterContext processParameterContext =
                     new FacetFactory.ProcessParameterContext(
                             Customer.class, actionMethod, 0, null, facetedMethodParameter);
             facetFactory.processParams(processParameterContext);

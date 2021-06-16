@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.object.bookmarkpolicy;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -29,14 +29,24 @@ public abstract class BookmarkPolicyFacetAbstract
 extends FacetAbstract
 implements BookmarkPolicyFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return BookmarkPolicyFacet.class;
     }
 
     private final BookmarkPolicy bookmarkPolicy;
 
-    public BookmarkPolicyFacetAbstract(BookmarkPolicy bookmarkPolicy, FacetHolder facetHolder) {
-        super(BookmarkPolicyFacetAbstract.type(), facetHolder, Derivation.NOT_DERIVED);
+    protected BookmarkPolicyFacetAbstract(
+            final BookmarkPolicy bookmarkPolicy,
+            final FacetHolder facetHolder) {
+        super(type(), facetHolder);
+        this.bookmarkPolicy = bookmarkPolicy;
+    }
+
+    protected BookmarkPolicyFacetAbstract(
+            final BookmarkPolicy bookmarkPolicy,
+            final FacetHolder facetHolder,
+            final Facet.Precedence precedence) {
+        super(type(), facetHolder, precedence);
         this.bookmarkPolicy = bookmarkPolicy;
     }
 
@@ -45,8 +55,9 @@ implements BookmarkPolicyFacet {
         return bookmarkPolicy;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("bookmarkPolicy", bookmarkPolicy);
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("bookmarkPolicy", bookmarkPolicy);
     }
 }

@@ -38,7 +38,7 @@ public class UpdateCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new UpdateCallbackFacetFactory();
+        facetFactory = new UpdateCallbackFacetFactory(metaModelContext);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class UpdateCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof UpdatingCallbackFacetViaMethod);
         final UpdatingCallbackFacetViaMethod updatingCallbackFacetViaMethod = (UpdatingCallbackFacetViaMethod) facet;
-        assertEquals(method, updatingCallbackFacetViaMethod.getMethods().get(0));
+        assertEquals(method, updatingCallbackFacetViaMethod.getMethods().getFirstOrFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
     }
@@ -80,7 +80,7 @@ public class UpdateCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof UpdatedCallbackFacetViaMethod);
         final UpdatedCallbackFacetViaMethod updatedCallbackFacetViaMethod = (UpdatedCallbackFacetViaMethod) facet;
-        assertEquals(method, updatedCallbackFacetViaMethod.getMethods().get(0));
+        assertEquals(method, updatedCallbackFacetViaMethod.getMethods().getFirstOrFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
     }

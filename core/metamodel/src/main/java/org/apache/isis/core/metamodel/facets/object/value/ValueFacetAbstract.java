@@ -38,7 +38,7 @@ public abstract class ValueFacetAbstract
 extends FacetAbstract
 implements ValueFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return ValueFacet.class;
     }
 
@@ -70,18 +70,19 @@ implements ValueFacet {
     public ValueFacetAbstract(
             final Class<?> semanticsProviderClass,
             final AddFacetsIfInvalidStrategy addFacetsIfInvalid,
-            final FacetHolder holder) {
+            final FacetHolder holder,
+            final Facet.Precedence precedence) {
 
-        this(newValueSemanticsProviderOrNull(semanticsProviderClass, holder), addFacetsIfInvalid, holder);
+        this(newValueSemanticsProviderOrNull(semanticsProviderClass, holder), addFacetsIfInvalid, holder, precedence);
     }
 
     public ValueFacetAbstract(
             final ValueSemanticsProvider<?> semanticsProvider,
             final AddFacetsIfInvalidStrategy addFacetsIfInvalid,
-            final FacetHolder holder) {
+            final FacetHolder holder,
+            final Facet.Precedence precedence) {
 
-        super(type(), holder, Derivation.NOT_DERIVED);
-        super.setFacetAliasType(ValueFacet.class);
+        super(type(), holder, precedence);
 
         this.semanticsProvider = semanticsProvider;
 
@@ -125,8 +126,11 @@ implements ValueFacet {
             // Parser
             final Parser<?> parser = semanticsProvider.getParser();
             if (parser != null) {
-                facetHolder.addFacet(new ParseableFacetUsingParser(parser, holder));
-                facetHolder.addFacet(new TitleFacetUsingParser(parser, holder));
+
+                facetHolder.getServiceInjector().injectServicesInto(parser);
+
+                facetHolder.addFacet(ParseableFacetUsingParser.create(parser, holder));
+                facetHolder.addFacet(TitleFacetUsingParser.create(parser, holder));
                 facetHolder.addFacet(new TypicalLengthFacetUsingParser(parser, holder));
                 final int maxLength = parser.maxLength();
                 if(maxLength >=0) {
@@ -137,6 +141,7 @@ implements ValueFacet {
             // install the DefaultedFacet if we've been given a DefaultsProvider
             final DefaultsProvider<?> defaultsProvider = semanticsProvider.getDefaultsProvider();
             if (defaultsProvider != null) {
+                facetHolder.getServiceInjector().injectServicesInto(defaultsProvider);
                 this.addContributedFacet(new DefaultedFacetUsingDefaultsProvider(defaultsProvider, holder));
             }
 
@@ -148,7 +153,7 @@ implements ValueFacet {
         }
     }
 
-    public boolean hasSemanticsProvider() {
+    protected boolean hasSemanticsProvider() {
         return this.semanticsProvider != null;
     }
 

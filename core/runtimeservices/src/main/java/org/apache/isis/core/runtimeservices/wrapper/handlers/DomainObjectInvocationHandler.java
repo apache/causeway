@@ -175,7 +175,7 @@ extends DelegatingInvocationHandlerDefault<T> {
         val objectMember = targetSpec.getMemberElseFail(method);
         val memberName = objectMember.getName();
 
-        val intent = ImperativeFacet.Util.getIntent(objectMember, method);
+        val intent = ImperativeFacet.getIntent(objectMember, method);
         if(intent == Intent.CHECK_IF_HIDDEN || intent == Intent.CHECK_IF_DISABLED) {
             throw new UnsupportedOperationException(String.format("Cannot invoke supporting method '%s'", memberName));
         }
@@ -345,7 +345,7 @@ extends DelegatingInvocationHandlerDefault<T> {
             val currentReferencedObj = UnwrapUtil.single(currentReferencedAdapter);
 
             val propertyAccessEvent = new PropertyAccessEvent(
-                    getDelegate(), property.getIdentifier(), currentReferencedObj);
+                    getDelegate(), property.getFeatureIdentifier(), currentReferencedObj);
             notifyListeners(propertyAccessEvent);
             return currentReferencedObj;
 
@@ -408,7 +408,7 @@ extends DelegatingInvocationHandlerDefault<T> {
 
             val currentReferencedObj = UnwrapUtil.single(currentReferencedAdapter);
 
-            val collectionAccessEvent = new CollectionAccessEvent(getDelegate(), collection.getIdentifier());
+            val collectionAccessEvent = new CollectionAccessEvent(getDelegate(), collection.getFeatureIdentifier());
 
             if (currentReferencedObj instanceof Collection) {
                 val collectionViewObject = lookupWrappingObject(memberName,

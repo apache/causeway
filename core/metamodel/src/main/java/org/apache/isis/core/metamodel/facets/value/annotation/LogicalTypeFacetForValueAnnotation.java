@@ -24,12 +24,11 @@ import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacetAbstract;
 
 public class LogicalTypeFacetForValueAnnotation extends LogicalTypeFacetAbstract {
 
-    public static LogicalTypeFacet create(
+    public static Optional<LogicalTypeFacetForValueAnnotation> create(
             final Optional<Value> valueIfAny,
             final Class<?> correspondingClass,
             final FacetHolder holder) {
@@ -39,8 +38,7 @@ public class LogicalTypeFacetForValueAnnotation extends LogicalTypeFacetAbstract
                 .filter(_Strings::isNotEmpty)
                 .map(logicalTypeName -> new LogicalTypeFacetForValueAnnotation(
                         LogicalType.eager(correspondingClass, logicalTypeName),
-                        holder))
-                .orElse(null);
+                        holder));
     }
 
     private LogicalTypeFacetForValueAnnotation(

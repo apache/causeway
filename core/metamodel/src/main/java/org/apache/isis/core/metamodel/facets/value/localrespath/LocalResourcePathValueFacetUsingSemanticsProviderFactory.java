@@ -19,15 +19,19 @@
 
 package org.apache.isis.core.metamodel.facets.value.localrespath;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.value.LocalResourcePath;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 
 public class LocalResourcePathValueFacetUsingSemanticsProviderFactory
 extends ValueFacetUsingSemanticsProviderFactory<LocalResourcePath> {
 
-    public LocalResourcePathValueFacetUsingSemanticsProviderFactory() {
-        super();
+    @Inject
+    public LocalResourcePathValueFacetUsingSemanticsProviderFactory(final MetaModelContext mmc) {
+        super(mmc);
     }
 
     @Override

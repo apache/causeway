@@ -36,7 +36,7 @@ import lombok.val;
  */
 public class EditingEnabledFacetForDomainObjectAnnotation extends FacetAbstract implements EditingEnabledFacet {
 
-    public static EditingEnabledFacetForDomainObjectAnnotation create(
+    public static Optional<EditingEnabledFacetForDomainObjectAnnotation> create(
             final Optional<DomainObject> domainObjectIfAny,
             final FacetHolder holder) {
 
@@ -46,8 +46,8 @@ public class EditingEnabledFacetForDomainObjectAnnotation extends FacetAbstract 
         .orElse(false);
 
         return isEditingEnabled
-                ? new EditingEnabledFacetForDomainObjectAnnotation(holder)
-                : null;
+                ? Optional.of(new EditingEnabledFacetForDomainObjectAnnotation(holder))
+                : Optional.empty();
     }
 
     protected EditingEnabledFacetForDomainObjectAnnotation(

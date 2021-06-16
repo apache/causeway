@@ -22,10 +22,11 @@ import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 
-public class BookmarkPolicyFacetFallback extends BookmarkPolicyFacetAbstract {
+public class BookmarkPolicyFacetFallback
+extends BookmarkPolicyFacetAbstract {
 
     public BookmarkPolicyFacetFallback(FacetHolder facetHolder) {
-        super(BookmarkPolicy.NEVER, facetHolder);
+        super(BookmarkPolicy.NEVER, facetHolder, Precedence.FALLBACK);
     }
 
 

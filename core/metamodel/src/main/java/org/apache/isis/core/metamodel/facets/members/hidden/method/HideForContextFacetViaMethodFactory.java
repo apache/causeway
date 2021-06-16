@@ -21,7 +21,10 @@ package org.apache.isis.core.metamodel.facets.members.hidden.method;
 
 import java.lang.reflect.Method;
 
+import javax.inject.Inject;
+
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -36,8 +39,9 @@ extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final String PREFIX = MethodLiteralConstants.HIDE_PREFIX;
 
-    public HideForContextFacetViaMethodFactory() {
-        super(FeatureType.MEMBERS, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
+    @Inject
+    public HideForContextFacetViaMethodFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.MEMBERS, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
     }
 
     @Override

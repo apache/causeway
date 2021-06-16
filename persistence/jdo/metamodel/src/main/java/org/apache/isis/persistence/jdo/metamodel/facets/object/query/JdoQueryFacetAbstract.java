@@ -18,7 +18,7 @@
  */
 package org.apache.isis.persistence.jdo.metamodel.facets.object.query;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import javax.jdo.annotations.Query;
 
@@ -38,7 +38,7 @@ public class JdoQueryFacetAbstract
 extends FacetAbstract
 implements JdoQueryFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return JdoQueryFacet.class;
     }
 
@@ -49,16 +49,16 @@ implements JdoQueryFacet {
             final @NonNull FacetHolder holder,
             final @NonNull Can<Query> jdoNamedQueries) {
 
-        super(JdoQueryFacetAbstract.type(), holder, Derivation.NOT_DERIVED);
+        super(JdoQueryFacetAbstract.type(), holder);
 
         val objSpec = (ObjectSpecification) getFacetHolder();
         this.namedQueries = jdoNamedQueries.map(jdoNamedQuery->new JdoNamedQuery(jdoNamedQuery, objSpec));
     }
 
     @Override
-    public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("namedQueries", namedQueries);
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("namedQueries", namedQueries);
     }
 
 }

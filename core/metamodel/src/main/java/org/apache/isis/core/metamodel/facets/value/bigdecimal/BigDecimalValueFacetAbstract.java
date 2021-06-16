@@ -19,19 +19,49 @@
 
 package org.apache.isis.core.metamodel.facets.value.bigdecimal;
 
+import java.util.function.BiConsumer;
+
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class BigDecimalValueFacetAbstract extends FacetAbstract implements BigDecimalValueFacet {
+import lombok.Getter;
 
-    public BigDecimalValueFacetAbstract(Class<? extends Facet> facetType, FacetHolder holder, Derivation derivation) {
-        super(facetType, holder, derivation);
+public abstract class BigDecimalValueFacetAbstract
+extends FacetAbstract
+implements BigDecimalValueFacet {
+
+    private static final Class<? extends Facet> type() {
+        return BigDecimalValueFacet.class;
+    }
+
+    @Getter(onMethod_ = {@Override}) private final int precision;
+    @Getter(onMethod_ = {@Override}) private final int scale;
+
+    public BigDecimalValueFacetAbstract(
+            final int precision,
+            final int scale,
+            final FacetHolder holder) {
+        super(type(), holder);
+        this.precision = precision;
+        this.scale = scale;
+    }
+
+    public BigDecimalValueFacetAbstract(
+            final int precision,
+            final int scale,
+            final FacetHolder holder,
+            final Facet.Precedence precedence) {
+        super(type(), holder, precedence);
+        this.precision = precision;
+        this.scale = scale;
     }
 
     @Override
-    public abstract Integer getPrecision();
+    public final void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("precision", precision);
+        visitor.accept("scale", scale);
+    }
 
-    @Override
-    public abstract Integer getScale();
 }

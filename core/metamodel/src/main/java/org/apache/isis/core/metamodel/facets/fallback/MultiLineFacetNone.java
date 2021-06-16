@@ -20,17 +20,15 @@
 package org.apache.isis.core.metamodel.facets.fallback;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.HasSemanticEqualityByClass;
 import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacetAbstract;
 
-public class MultiLineFacetNone extends MultiLineFacetAbstract {
+public class MultiLineFacetNone
+extends MultiLineFacetAbstract
+implements HasSemanticEqualityByClass {
 
     public MultiLineFacetNone(final FacetHolder holder) {
-        super(1, holder);
-    }
-
-    @Override
-    public boolean isFallback() {
-        return true;
+        super(1, holder, Precedence.FALLBACK);
     }
 
 }

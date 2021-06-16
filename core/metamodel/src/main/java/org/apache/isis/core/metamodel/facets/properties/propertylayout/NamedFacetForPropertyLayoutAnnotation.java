@@ -24,20 +24,18 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 
 public class NamedFacetForPropertyLayoutAnnotation extends NamedFacetAbstract {
 
-    public static NamedFacet create(
+    public static Optional<NamedFacetForPropertyLayoutAnnotation> create(
             final Optional<PropertyLayout> propertyLayoutIfAny,
             final FacetHolder holder) {
 
         return propertyLayoutIfAny
                 .filter(propertyLayout->_Strings.isNotEmpty(propertyLayout.named()))
                 .map(propertyLayout -> new NamedFacetForPropertyLayoutAnnotation(
-                        propertyLayout.named(), propertyLayout.namedEscaped(), holder))
-                .orElse(null);
+                        propertyLayout.named(), propertyLayout.namedEscaped(), holder));
     }
 
     private NamedFacetForPropertyLayoutAnnotation(

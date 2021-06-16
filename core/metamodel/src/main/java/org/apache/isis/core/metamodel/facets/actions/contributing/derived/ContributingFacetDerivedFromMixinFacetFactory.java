@@ -19,8 +19,11 @@
 
 package org.apache.isis.core.metamodel.facets.actions.contributing.derived;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -30,10 +33,12 @@ import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 
 import lombok.val;
 
-public class ContributingFacetDerivedFromMixinFacetFactory extends FacetFactoryAbstract {
+public class ContributingFacetDerivedFromMixinFacetFactory
+extends FacetFactoryAbstract {
 
-    public ContributingFacetDerivedFromMixinFacetFactory() {
-        super(FeatureType.ACTIONS_ONLY);
+    @Inject
+    public ContributingFacetDerivedFromMixinFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.ACTIONS_ONLY);
     }
 
     @Override
@@ -48,8 +53,7 @@ public class ContributingFacetDerivedFromMixinFacetFactory extends FacetFactoryA
         val declaringClass = method.getDeclaringClass();
         val spec = getSpecificationLoader().loadSpecification(declaringClass);
 
-        val mixinFacet = spec.getFacet(MixinFacet.class);
-        if(mixinFacet == null || mixinFacet.isFallback()) {
+        if(!spec.lookupNonFallbackFacet(MixinFacet.class).isPresent()) {
             return;
         }
 

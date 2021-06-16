@@ -49,10 +49,9 @@ public class PropertyDescriptionReprRenderer extends AbstractTypeMemberReprRende
     @Override
     protected void addPropertiesSpecificToFeature() {
         representation.mapPut("optional", !getObjectFeature().isMandatory());
-        final MaxLengthFacet maxLength = getObjectFeature().getFacet(MaxLengthFacet.class);
-        if (maxLength != null && !maxLength.isFallback()) {
-            representation.mapPut("maxLength", maxLength.value());
-        }
+        getObjectFeature()
+            .lookupNonFallbackFacet(MaxLengthFacet.class)
+            .ifPresent(maxLengthFacet->representation.mapPut("maxLength", maxLengthFacet.value()));
     }
 
     private void addLinkToReturnTypeIfAny() {

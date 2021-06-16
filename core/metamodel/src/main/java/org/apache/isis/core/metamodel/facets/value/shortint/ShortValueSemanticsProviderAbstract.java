@@ -23,7 +23,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.commons.LocaleUtil;
@@ -33,9 +33,11 @@ import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProv
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 
-public class ShortValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Short> implements ShortValueFacet {
+public class ShortValueSemanticsProviderAbstract
+extends ValueSemanticsProviderAndFacetAbstract<Short>
+implements ShortValueFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return ShortValueFacet.class;
     }
 
@@ -115,9 +117,10 @@ public class ShortValueSemanticsProviderAbstract extends ValueSemanticsProviderA
         return "ShortValueSemanticsProvider: " + format;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("format", format);
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("format", format);
     }
 
 }

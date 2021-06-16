@@ -19,14 +19,19 @@
 
 package org.apache.isis.core.metamodel.facets.value.clobs;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.value.Clob;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 
-public class ClobValueFacetUsingSemanticsProviderFactory extends ValueFacetUsingSemanticsProviderFactory<Clob> {
+public class ClobValueFacetUsingSemanticsProviderFactory
+extends ValueFacetUsingSemanticsProviderFactory<Clob> {
 
-    public ClobValueFacetUsingSemanticsProviderFactory() {
-        super();
+    @Inject
+    public ClobValueFacetUsingSemanticsProviderFactory(final MetaModelContext mmc) {
+        super(mmc);
     }
 
     @Override

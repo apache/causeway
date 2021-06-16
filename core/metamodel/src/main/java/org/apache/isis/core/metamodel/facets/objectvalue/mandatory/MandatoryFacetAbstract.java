@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.objectvalue.mandatory;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -33,23 +33,19 @@ import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 
+import lombok.Getter;
+import lombok.NonNull;
 import lombok.val;
 
-public abstract class MandatoryFacetAbstract extends FacetAbstract implements MandatoryFacet {
+public abstract class MandatoryFacetAbstract
+extends FacetAbstract
+implements MandatoryFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return MandatoryFacet.class;
     }
 
-    public enum Semantics {
-        REQUIRED,
-        OPTIONAL;
-
-        public static Semantics of(boolean required) {
-            return required ? REQUIRED: OPTIONAL;
-        }
-    }
-
+    @Getter(onMethod_ = {@Override})
     private Semantics semantics;
 
     public MandatoryFacetAbstract(final FacetHolder holder, final Semantics semantics) {
@@ -57,12 +53,25 @@ public abstract class MandatoryFacetAbstract extends FacetAbstract implements Ma
         this.semantics = semantics;
     }
 
+    public MandatoryFacetAbstract(
+            final FacetHolder holder, final Semantics semantics, final Facet.Precedence precedence) {
+        super(type(), holder, precedence);
+        this.semantics = semantics;
+    }
+
+    @Override
+    public boolean semanticEquals(final @NonNull Facet other) {
+        return other instanceof MandatoryFacetAbstract
+                ? this.getSemantics() == ((MandatoryFacetAbstract)other).getSemantics()
+                : false;
+    }
+
     /**
      * If not specified or, if a string, then zero length.
      */
     @Override
     public final boolean isRequiredButNull(final ManagedObject adapter) {
-        if(!isInvertedSemantics()) {
+        if(getSemantics().isRequired()) {
             val pojo = UnwrapUtil.single(adapter);
 
             // special case string handling.
@@ -77,13 +86,9 @@ public abstract class MandatoryFacetAbstract extends FacetAbstract implements Ma
     }
 
     @Override
-    public boolean isInvertedSemantics() {
-        return this.semantics == Semantics.OPTIONAL;
-    }
-
-    @Override
     public String invalidates(final ValidityContext context) {
-        if (!(context instanceof PropertyModifyContext) && !(context instanceof ActionArgValidityContext)) {
+        if (!(context instanceof PropertyModifyContext)
+                && !(context instanceof ActionArgValidityContext)) {
             return null;
         }
         // TODO: IntelliJ says the following is always false, so looks like it can be removed...
@@ -98,13 +103,17 @@ public abstract class MandatoryFacetAbstract extends FacetAbstract implements Ma
             return null;
         }
         final NamedFacet namedFacet = getFacetHolder().getFacet(NamedFacet.class);
-        final String name = namedFacet != null? namedFacet.value(): null;
-        return name != null? "'" + name + "' is mandatory":"Mandatory";
+        final String name = namedFacet != null
+                ? namedFacet.translated()
+                : null;
+        return name != null
+                ? "'" + name + "' is mandatory"
+                : "Mandatory";
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("semantics", semantics);
-        attributeMap.put("inverted", isInvertedSemantics());
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("semantics", semantics);
     }
 }

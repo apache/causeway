@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.object.title.annotation;
 
 import java.util.List;
-import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -36,7 +36,8 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
+public class TitleFacetViaTitleAnnotation
+extends TitleFacetAbstract {
 
     private final List<TitleComponent> components;
 
@@ -164,10 +165,11 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
         }
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
         if(components != null && !_Strings.isNullOrEmpty(components.toString())) {
-            attributeMap.put("components", components);
+            visitor.accept("components", components);
         }
     }
 }

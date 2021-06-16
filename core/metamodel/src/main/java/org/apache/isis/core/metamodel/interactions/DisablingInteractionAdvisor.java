@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import org.apache.isis.core.metamodel.facetapi.FacetAbstract.Disabling;
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract.DisablingOrEnabling;
 
 /**
  * Mix-in interface for facets that can advise as to whether a member should be
@@ -28,7 +28,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract.Disabling;
  * @see ValidatingInteractionAdvisor
  * @see HidingInteractionAdvisor
  */
-public interface DisablingInteractionAdvisor extends InteractionAdvisorFacet, Disabling {
+public interface DisablingInteractionAdvisor
+extends InteractionAdvisorFacet, DisablingOrEnabling {
 
     /**
      * Whether the rule represented by this facet disables the member to which

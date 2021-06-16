@@ -34,15 +34,16 @@ import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentFactoryF
 import org.apache.isis.incubator.viewer.javafx.ui.components.dialog.Dialogs;
 import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingUiModel;
 
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
+import lombok.val;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
-import lombok.RequiredArgsConstructor;
-import lombok.Value;
-import lombok.val;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
@@ -73,7 +74,7 @@ public class PrototypingInfoPopupProvider {
 
         val infos = _Sets.<Info>newTreeSet();
 
-        val handlerInfo = (String)uiComponentFactory.get().getRegisteredHandlers()
+        val handlerInfo = uiComponentFactory.get().getRegisteredHandlers()
                 .stream()
                 .map(Class::getSimpleName)
                 .map(handlerName->" • " + handlerName)
@@ -123,7 +124,7 @@ public class PrototypingInfoPopupProvider {
         sb.append(facet.getClass().getSimpleName());
         if(facet instanceof FacetAbstract) {
             val attributeMap = _Maps.<String, Object>newTreeMap();
-            ((FacetAbstract)facet).appendAttributesTo(attributeMap);
+            ((FacetAbstract)facet).visitAttributes(attributeMap::put);
             attributeMap.forEach((k, v)->{
                 sb.append("\n • ").append(k).append(": ").append(v);
             });

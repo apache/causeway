@@ -19,13 +19,18 @@
 
 package org.apache.isis.core.metamodel.facets.value.booleans;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 
-public class BooleanPrimitiveValueFacetUsingSemanticsProviderFactory extends ValueFacetUsingSemanticsProviderFactory<Boolean> {
+public class BooleanPrimitiveValueFacetUsingSemanticsProviderFactory
+extends ValueFacetUsingSemanticsProviderFactory<Boolean> {
 
-    public BooleanPrimitiveValueFacetUsingSemanticsProviderFactory() {
-        super();
+    @Inject
+    public BooleanPrimitiveValueFacetUsingSemanticsProviderFactory(final MetaModelContext mmc) {
+        super(mmc);
     }
 
     @Override

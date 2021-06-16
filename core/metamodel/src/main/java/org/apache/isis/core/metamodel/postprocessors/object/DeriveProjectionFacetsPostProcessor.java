@@ -19,6 +19,10 @@
 
 package org.apache.isis.core.metamodel.postprocessors.object;
 
+import javax.annotation.Nullable;
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
@@ -39,6 +43,10 @@ import lombok.val;
 public class DeriveProjectionFacetsPostProcessor
 extends ObjectSpecificationPostProcessorAbstract {
 
+    @Inject
+    public DeriveProjectionFacetsPostProcessor(final MetaModelContext metaModelContext) {
+        super(metaModelContext);
+    }
 
     @Override
     protected void doPostProcess(final ObjectSpecification objectSpecification) {
@@ -62,23 +70,25 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction act) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction act) {
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction objectAction, ObjectActionParameter param) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction, final ObjectActionParameter param) {
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, OneToOneAssociation prop) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToOneAssociation prop) {
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, OneToManyAssociation coll) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
     }
 
-    private static boolean canOverwrite(final Facet facet) {
-        return facet == null || facet.isFallback() || facet.isDerived();
+    private static boolean canOverwrite(final @Nullable Facet existingFacet) {
+        return existingFacet == null
+                || existingFacet.getPrecedence().isFallback()
+                || existingFacet.getPrecedence().isInferred();
     }
 
 

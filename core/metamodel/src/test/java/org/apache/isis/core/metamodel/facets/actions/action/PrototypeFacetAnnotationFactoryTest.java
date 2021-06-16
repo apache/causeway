@@ -31,12 +31,11 @@ import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacetAbs
 
 import lombok.val;
 
-public class PrototypeFacetAnnotationFactoryTest extends AbstractFacetFactoryTest {
-
-    //private JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
+public class PrototypeFacetAnnotationFactoryTest
+extends AbstractFacetFactoryTest {
 
     private ActionAnnotationFacetFactory facetFactory;
-    
+
     private void processRestrictTo(
             ActionAnnotationFacetFactory facetFactory, ProcessMethodContext processMethodContext) {
         val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
@@ -47,8 +46,7 @@ public class PrototypeFacetAnnotationFactoryTest extends AbstractFacetFactoryTes
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new ActionAnnotationFacetFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        facetFactory = new ActionAnnotationFacetFactory(metaModelContext);
     }
 
     @Override

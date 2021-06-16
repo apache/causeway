@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.object.recreatable;
 
 import java.lang.reflect.Method;
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.commons.internal.base._Strings;
@@ -42,16 +42,29 @@ implements ViewModelFacet {
     private final PostConstructMethodCache postConstructMethodCache;
     private final ViewModelFacet.RecreationMechanism recreationMechanism;
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return ViewModelFacet.class;
     }
 
-    public RecreatableObjectFacetAbstract(final FacetHolder holder, final RecreationMechanism recreationMechanism,
+    protected RecreatableObjectFacetAbstract(
+            final FacetHolder holder,
+            final RecreationMechanism recreationMechanism,
             final PostConstructMethodCache postConstructMethodCache) {
         super(type(), holder);
         this.postConstructMethodCache = postConstructMethodCache;
         this.recreationMechanism = recreationMechanism;
     }
+
+    protected RecreatableObjectFacetAbstract(
+            final FacetHolder holder,
+            final RecreationMechanism recreationMechanism,
+            final PostConstructMethodCache postConstructMethodCache,
+            final Facet.Precedence precedence) {
+        super(type(), holder, precedence);
+        this.postConstructMethodCache = postConstructMethodCache;
+        this.recreationMechanism = recreationMechanism;
+    }
+
 
     @Override
     public boolean isCloneable(Object pojo) {
@@ -133,9 +146,9 @@ implements ViewModelFacet {
     }
 
     @Override
-    public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("recreationMechanism", recreationMechanism);
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("recreationMechanism", recreationMechanism);
     }
 
 }

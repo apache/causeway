@@ -19,16 +19,14 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
-import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.events.ui.CssClassUiEvent;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
@@ -37,39 +35,37 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
 public class CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent
-extends FacetAbstract
-implements CssClassFacet {
+extends CssClassFacetAbstract {
 
-    public static Facet create(
+    public static Optional<CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent> create(
             final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final MetamodelEventService metamodelEventService,
             final IsisConfiguration configuration,
             final FacetHolder facetHolder) {
 
         return domainObjectLayoutIfAny
-                .map(DomainObjectLayout::cssClassUiEvent)
-                .filter(cssClassUiEventClass -> EventUtil.eventTypeIsPostable(
-                        cssClassUiEventClass,
-                        CssClassUiEvent.Noop.class,
-                        CssClassUiEvent.Default.class,
-                        configuration.getApplib().getAnnotation().getDomainObjectLayout().getCssClassUiEvent().isPostForDefault()))
-                .map(cssClassUiEventClass -> {
-                    return new CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent(
-                            cssClassUiEventClass, metamodelEventService, facetHolder);
-                })
-                .orElse(null);
+        .map(DomainObjectLayout::cssClassUiEvent)
+        .filter(cssClassUiEventClass -> EventUtil.eventTypeIsPostable(
+                cssClassUiEventClass,
+                CssClassUiEvent.Noop.class,
+                CssClassUiEvent.Default.class,
+                configuration.getApplib().getAnnotation().getDomainObjectLayout().getCssClassUiEvent().isPostForDefault()))
+        .map(cssClassUiEventClass -> {
+            return new CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent(
+                    cssClassUiEventClass, metamodelEventService, facetHolder);
+        });
 
     }
 
     private final Class<? extends CssClassUiEvent<?>> cssClassUiEventClass;
     private final MetamodelEventService metamodelEventService;
 
-    public CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent(
+    private CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent(
             final Class<? extends CssClassUiEvent<?>> cssClassUiEventClass,
                     final MetamodelEventService metamodelEventService,
                     final FacetHolder holder) {
 
-        super(CssClassFacetAbstract.type(), holder, Derivation.NOT_DERIVED);
+        super(holder, Precedence.EVENT);
         this.cssClassUiEventClass = cssClassUiEventClass;
         this.metamodelEventService = metamodelEventService;
     }
@@ -89,9 +85,12 @@ implements CssClassFacet {
 
         if(cssClass == null) {
             // ie no subscribers out there...
-            final Facet underlyingFacet = getUnderlyingFacet();
-            if(underlyingFacet instanceof CssClassFacet) {
-                final CssClassFacet underlyingCssClassFacet = (CssClassFacet) underlyingFacet;
+
+            final CssClassFacet underlyingCssClassFacet = getSharedFacetRanking()
+            .flatMap(facetRanking->facetRanking.getWinnerNonEvent(CssClassFacet.class))
+            .orElse(null);
+
+            if(underlyingCssClassFacet!=null) {
                 return underlyingCssClassFacet.cssClass(owningAdapter);
             }
         }
@@ -114,8 +113,9 @@ implements CssClassFacet {
         }
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("cssClassUiEventClass", cssClassUiEventClass);
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("cssClassUiEventClass", cssClassUiEventClass);
     }
 }

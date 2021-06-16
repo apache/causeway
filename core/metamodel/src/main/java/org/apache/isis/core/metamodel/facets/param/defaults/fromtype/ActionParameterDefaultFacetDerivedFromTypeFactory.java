@@ -19,16 +19,21 @@
 
 package org.apache.isis.core.metamodel.facets.param.defaults.fromtype;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public class ActionParameterDefaultFacetDerivedFromTypeFactory extends FacetFactoryAbstract  {
+public class ActionParameterDefaultFacetDerivedFromTypeFactory
+extends FacetFactoryAbstract  {
 
-    public ActionParameterDefaultFacetDerivedFromTypeFactory() {
-        super(FeatureType.PARAMETERS_ONLY);
+    @Inject
+    public ActionParameterDefaultFacetDerivedFromTypeFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.PARAMETERS_ONLY);
     }
 
     /**
@@ -52,7 +57,7 @@ public class ActionParameterDefaultFacetDerivedFromTypeFactory extends FacetFact
             hasAtLeastOneDefault = hasAtLeastOneDefault | (parameterTypeDefaultedFacets[i] != null);
         }
         if (hasAtLeastOneDefault) {
-            super.addFacet(new ActionParameterDefaultFacetDerivedFromTypeFacets(parameterTypeDefaultedFacets, processParameterContext.getFacetHolder()));
+            addFacet(new ActionParameterDefaultFacetInferredFromTypeFacets(parameterTypeDefaultedFacets, processParameterContext.getFacetHolder()));
         }
     }
 

@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -44,20 +45,27 @@ import lombok.val;
 
 public class LogicalTypeFacetDerivedFromClassNameFactory
 extends FacetFactoryAbstract
-implements MetaModelRefiner, ObjectTypeFacetFactory {
+implements
+        ObjectTypeFacetFactory,
+        MetaModelRefiner {
+
+    private ClassSubstitutorRegistry classSubstitutorRegistry;
 
     @Inject
-    private ClassSubstitutorRegistry classSubstitutorRegistry =
-            // default for testing purposes only, overwritten in prod
-            new ClassSubstitutorRegistry(Collections.singletonList( new ClassSubstitutorDefault()));
-
-
-    public LogicalTypeFacetDerivedFromClassNameFactory() {
-        super(FeatureType.OBJECTS_ONLY);
-    }
-    public LogicalTypeFacetDerivedFromClassNameFactory(ClassSubstitutorRegistry classSubstitutorRegistry) {
-        this();
+    public LogicalTypeFacetDerivedFromClassNameFactory(
+            final MetaModelContext mmc,
+            final ClassSubstitutorRegistry classSubstitutorRegistry) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
         this.classSubstitutorRegistry = classSubstitutorRegistry;
+    }
+
+    // -- JUNIT SUPPORT
+
+    public static LogicalTypeFacetDerivedFromClassNameFactory forTesting(
+            final MetaModelContext mmc) {
+        return new LogicalTypeFacetDerivedFromClassNameFactory(
+                mmc,
+                new ClassSubstitutorRegistry(Collections.singletonList(new ClassSubstitutorDefault())));
     }
 
     @Override
@@ -72,8 +80,8 @@ implements MetaModelRefiner, ObjectTypeFacetFactory {
         if(substitute.isNeverIntrospect()) {
             return;
         }
-        val logicalTypeFacet = createLogicalTypeFacet(facetHolder, substitute.apply(cls));
-        FacetUtil.addFacet(logicalTypeFacet);
+        FacetUtil.addFacet(
+                createLogicalTypeFacet(facetHolder, substitute.apply(cls)));
     }
 
     @Override
@@ -88,12 +96,12 @@ implements MetaModelRefiner, ObjectTypeFacetFactory {
         val serviceId = getServiceId(facetHolder);
         val isService = serviceId!=null;
 
-        if (isService) {
-            return new LogicalTypeFacetDerivedFromIoCNamingStrategy(
-                    LogicalType.eager(substitutedClass, serviceId),
-                    facetHolder);
-        }
-        return new LogicalTypeFacetDerivedFromClassName(substitutedClass, facetHolder);
+       return isService
+               ? new LogicalTypeFacetInferredFromIoCNamingStrategy(
+                        LogicalType
+                        .eager(substitutedClass, serviceId),
+                        facetHolder)
+               : new LogicalTypeFacetInferredFromClassName(substitutedClass, facetHolder);
     }
 
     private static String getServiceId(final FacetHolder facetHolder) {
@@ -107,7 +115,7 @@ implements MetaModelRefiner, ObjectTypeFacetFactory {
     }
 
     @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+    public void refineProgrammingModel(final ProgrammingModel programmingModel) {
 
         val shouldCheck = getConfiguration().getCore().getMetaModel().getValidator().isExplicitLogicalTypeNames();
         if(!shouldCheck) {
@@ -121,7 +129,7 @@ implements MetaModelRefiner, ObjectTypeFacetFactory {
             }
 
             val logicalTypeFacet = objectSpec.getFacet(LogicalTypeFacet.class);
-            if(logicalTypeFacet instanceof LogicalTypeFacetDerivedFromClassName) {
+            if(logicalTypeFacet instanceof LogicalTypeFacetInferredFromClassName) {
                 ValidationFailure.raiseFormatted(
                         objectSpec,
                         "%s: the object type must be specified explicitly ('%s' config property). "
@@ -173,5 +181,7 @@ implements MetaModelRefiner, ObjectTypeFacetFactory {
         }
         return false; //skip validation
     }
+
+
 
 }

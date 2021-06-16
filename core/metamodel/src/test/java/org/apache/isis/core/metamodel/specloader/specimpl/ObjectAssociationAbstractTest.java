@@ -33,8 +33,11 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
@@ -68,7 +71,9 @@ public class ObjectAssociationAbstractTest {
 
     @Before
     public void setup() {
-        facetedMethod = FacetedMethod.createForProperty(Customer.class, "firstName");
+
+        MetaModelContext mmc = MetaModelContext_forTesting.buildDefault();
+        facetedMethod = FacetedMethod.createForProperty(mmc , Customer.class, "firstName");
 
         context.checking(new Expectations() {{
             //            allowing(mockServicesInjector).getSpecificationLoader();
@@ -78,7 +83,7 @@ public class ObjectAssociationAbstractTest {
         }});
 
         objectAssociation = new ObjectAssociationAbstract(
-                facetedMethod.getIdentifier(),
+                facetedMethod.getFeatureIdentifier(),
                 facetedMethod, FeatureType.PROPERTY, objectSpecification) {
 
             @Override
@@ -161,7 +166,7 @@ public class ObjectAssociationAbstractTest {
 
     @Test
     public void mandatory() throws Exception {
-        final MandatoryFacet mockFacet = mockFacetIgnoring(MandatoryFacet.class);
+        final MandatoryFacet mockFacet = mockFacetIgnoring(MandatoryFacet.class, Precedence.DEFAULT);
         facetedMethod.addFacet(mockFacet);
         assertTrue(objectAssociation.isMandatory());
     }
@@ -173,17 +178,21 @@ public class ObjectAssociationAbstractTest {
 
     @Test
     public void hasChoices() throws Exception {
-        final PropertyChoicesFacet mockFacet = mockFacetIgnoring(PropertyChoicesFacet.class);
+        final PropertyChoicesFacet mockFacet = mockFacetIgnoring(PropertyChoicesFacet.class, Precedence.DEFAULT);
         facetedMethod.addFacet(mockFacet);
         assertTrue(objectAssociation.hasChoices());
     }
 
-    private <T extends Facet> T mockFacetIgnoring(final Class<T> typeToMock) {
+    private <T extends Facet> T mockFacetIgnoring(final Class<T> typeToMock, Precedence precedence) {
         final T facet = context.mock(typeToMock);
         context.checking(new Expectations() {
             {
                 allowing(facet).facetType();
                 will(returnValue(typeToMock));
+
+                allowing(facet).getPrecedence();
+                will(returnValue(precedence));
+
                 ignoring(facet);
             }
         });

@@ -19,14 +19,15 @@
 
 package org.apache.isis.core.metamodel.facetapi;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.services.metamodel.Config;
 
 /**
- * For serialization of metamodel into XML, see {@link org.apache.isis.applib.services.metamodel.MetaModelService#exportMetaModel(Config)}.
+ * For serialization of metamodel into XML,
+ * see {@link org.apache.isis.applib.services.metamodel.MetaModelService#exportMetaModel(Config)}.
  */
 public interface FacetWithAttributes {
 
-    void appendAttributesTo(Map<String,Object> attributeMap);
+    void visitAttributes(final BiConsumer<String, Object> visitor);
 }

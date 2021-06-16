@@ -56,7 +56,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
         context.allowing(mockSpecificationLoader);
 
-        facetFactory = new NavigableParentAnnotationFacetFactory();
+        facetFactory = new NavigableParentAnnotationFacetFactory(metaModelContext);
 
         context.checking(new Expectations() {
             {
@@ -90,7 +90,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
     // -- HELPER
 
-    private void testParentMethod(Object domainObject, String parentMethodName) throws Exception {
+    private void testParentMethod(final Object domainObject, final String parentMethodName) throws Exception {
 
         final Class<?> domainClass = domainObject.getClass();
 

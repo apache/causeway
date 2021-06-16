@@ -33,22 +33,23 @@ import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFace
  *
  * <p>
  * This implementation indicates that the {@link FacetHolder} is <i>not</i>
- * mandatory, as per {@link #isInvertedSemantics()}.
+ * mandatory, as per {@link #getSemantics()}.
  */
-public class MandatoryFacetInvertedByNullableAnnotationOnParameter extends MandatoryFacetAbstract {
+public class MandatoryFacetInvertedByNullableAnnotationOnParameter
+extends MandatoryFacetAbstract {
 
-    public static MandatoryFacet create(
+    public static Optional<MandatoryFacet> create(
             final Optional<Nullable> nullableIfAny,
             final Class<?> parameterType,
             final FacetedMethodParameter holder) {
 
         if(!nullableIfAny.isPresent()) {
-            return null;
+            return Optional.empty();
         }
         if(parameterType.isPrimitive()) {
-            return null;
+            return Optional.empty();
         }
-        return new MandatoryFacetInvertedByNullableAnnotationOnParameter(holder);
+        return Optional.of(new MandatoryFacetInvertedByNullableAnnotationOnParameter(holder));
     }
 
     private MandatoryFacetInvertedByNullableAnnotationOnParameter(final FacetHolder holder) {

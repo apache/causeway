@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.commons;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Collection;
 import java.util.Objects;
 import java.util.function.Predicate;
 
@@ -35,7 +34,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class MethodUtil {
 
-    public static void invoke(final Collection<Method> methods, final Object object) {
+    public static void invoke(final Iterable<Method> methods, final Object object) {
         methods.forEach(method->MethodExtensions.invoke(method, object));
     }
 

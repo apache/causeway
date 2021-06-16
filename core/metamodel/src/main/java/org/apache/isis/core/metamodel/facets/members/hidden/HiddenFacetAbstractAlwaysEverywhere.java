@@ -20,23 +20,14 @@
 package org.apache.isis.core.metamodel.facets.members.hidden;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public abstract class HiddenFacetAbstractAlwaysEverywhere extends HiddenFacetAbstract {
 
     public HiddenFacetAbstractAlwaysEverywhere(
-            final Class<? extends Facet> facetType, final FacetHolder holder) {
-        super(facetType, Where.ANYWHERE, holder);
-    }
-
-    /**
-     * For testing only.
-     */
-    public HiddenFacetAbstractAlwaysEverywhere(
             final FacetHolder holder) {
-        super(HiddenFacetAbstractAlwaysEverywhere.class, Where.ANYWHERE, holder);
+        super(Where.ANYWHERE, holder);
     }
 
     /**

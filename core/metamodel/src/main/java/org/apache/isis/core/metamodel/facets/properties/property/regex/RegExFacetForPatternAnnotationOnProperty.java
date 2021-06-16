@@ -19,9 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.properties.property.regex;
 
-import java.util.Map;
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -29,11 +27,10 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacetAbstract;
 
-public class RegExFacetForPatternAnnotationOnProperty extends RegExFacetAbstract {
+public class RegExFacetForPatternAnnotationOnProperty
+extends RegExFacetAbstract {
 
-    private final Pattern pattern;
-
-    public static RegExFacet create(
+    public static Optional<RegExFacet> create(
             final Optional<javax.validation.constraints.Pattern> patternIfAny,
             final Class<?> returnType,
             final FacetHolder holder) {
@@ -46,8 +43,7 @@ public class RegExFacetForPatternAnnotationOnProperty extends RegExFacetAbstract
                 .filter(pattern -> _Strings.emptyToNull(pattern.regexp()) != null)
                 .map(pattern ->
                     new RegExFacetForPatternAnnotationOnProperty(
-                        pattern.regexp(), pattern.flags(), pattern.message(), holder))
-                .orElse(null);
+                        pattern.regexp(), pattern.flags(), pattern.message(), holder));
     }
 
     private RegExFacetForPatternAnnotationOnProperty(
@@ -55,22 +51,7 @@ public class RegExFacetForPatternAnnotationOnProperty extends RegExFacetAbstract
             final javax.validation.constraints.Pattern.Flag[] flags,
             final String replacement,
             final FacetHolder holder) {
-        super(regexp, flags, replacement, holder);
-        pattern = Pattern.compile(regexp(), patternFlags());
-    }
-
-
-    @Override
-    public boolean doesNotMatch(final String text) {
-        if (text == null) {
-            return true;
-        }
-        return !pattern.matcher(text).matches();
-    }
-
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("pattern", pattern);
+        super(regexp, asMask(flags), replacement, holder);
     }
 
 }

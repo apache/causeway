@@ -21,12 +21,15 @@ package org.apache.isis.core.metamodel.facets.collections.collection;
 
 import java.util.Optional;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
+import org.apache.isis.commons.internal.base._Optionals;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.commons.internal.reflection._Generics;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
@@ -51,8 +54,9 @@ import lombok.val;
 public class CollectionAnnotationFacetFactory
 extends FacetFactoryAbstract {
 
-    public CollectionAnnotationFacetFactory() {
-        super(FeatureType.COLLECTIONS_AND_ACTIONS);
+    @Inject
+    public CollectionAnnotationFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.COLLECTIONS_AND_ACTIONS);
     }
 
     @Override
@@ -71,7 +75,7 @@ extends FacetFactoryAbstract {
         processTypeOf(processMethodContext, collectionIfAny);
     }
 
-    void inferIntentWhenOnTypeLevel(ProcessMethodContext processMethodContext, Optional<Collection> collectionIfAny) {
+    void inferIntentWhenOnTypeLevel(final ProcessMethodContext processMethodContext, final Optional<Collection> collectionIfAny) {
         if(!processMethodContext.isMixinMain() || !collectionIfAny.isPresent()) {
             return; // no @Collection found neither type nor method
         }
@@ -84,12 +88,12 @@ extends FacetFactoryAbstract {
         //@Action(semantics=SAFE)
         //@ActionLayout(contributed=ASSOCIATION) ... it seems, is already allowed for mixins
         val facetedMethod = processMethodContext.getFacetHolder();
-        FacetUtil.addOrReplaceFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
-        FacetUtil.addFacet(new ContributingFacetAbstract(Contributing.AS_ASSOCIATION, facetedMethod) {});
+        addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
+        addFacet(new ContributingFacetAbstract(Contributing.AS_ASSOCIATION, facetedMethod) {});
 
     }
 
-    void processModify(final ProcessMethodContext processMethodContext, Optional<Collection> collectionIfAny) {
+    void processModify(final ProcessMethodContext processMethodContext, final Optional<Collection> collectionIfAny) {
 
         val cls = processMethodContext.getCls();
         val typeSpec = getSpecificationLoader().loadSpecification(cls);
@@ -119,7 +123,7 @@ extends FacetFactoryAbstract {
                 new CollectionDomainEventFacetDefault(
                         defaultFromDomainObjectIfRequired(typeSpec, CollectionDomainEvent.Default.class), holder));
         if(!CollectionDomainEvent.Noop.class.isAssignableFrom(collectionDomainEventFacet.getEventType())) {
-            super.addFacet(collectionDomainEventFacet);
+            addFacet(collectionDomainEventFacet);
         }
 
         if(EventUtil.eventTypeIsPostable(
@@ -128,7 +132,7 @@ extends FacetFactoryAbstract {
                 CollectionDomainEvent.Default.class,
                 getConfiguration().getApplib().getAnnotation().getCollection().getDomainEvent().isPostForDefault()
                 )) {
-            super.addFacet(collectionDomainEventFacet);
+            addFacet(collectionDomainEventFacet);
         }
 
     }
@@ -147,17 +151,17 @@ extends FacetFactoryAbstract {
     }
 
 
-    void processHidden(final ProcessMethodContext processMethodContext, Optional<Collection> collectionIfAny) {
+    void processHidden(final ProcessMethodContext processMethodContext, final Optional<Collection> collectionIfAny) {
         val holder = processMethodContext.getFacetHolder();
 
         // check for @Collection(hidden=...)
-        val facet = HiddenFacetForCollectionAnnotation.create(collectionIfAny, holder);
-
-        super.addFacet(facet);
+        addFacetIfPresent(
+                HiddenFacetForCollectionAnnotation
+                .create(collectionIfAny, holder));
     }
 
 
-    void processTypeOf(final ProcessMethodContext processMethodContext, Optional<Collection> collectionIfAny) {
+    void processTypeOf(final ProcessMethodContext processMethodContext, final Optional<Collection> collectionIfAny) {
 
         val facetHolder = processMethodContext.getFacetHolder();
         val method = processMethodContext.getMethod();
@@ -167,36 +171,38 @@ extends FacetFactoryAbstract {
             return;
         }
 
-        // check for @Collection(typeOf=...)
-        TypeOfFacet facet = TypeOfFacetOnCollectionFromCollectionAnnotation
-                .create(collectionIfAny, facetHolder);
+        addFacetIfPresent(_Optionals.orNullable(
 
-        // else infer from return type
-        if(facet == null) {
-            val returnType = method.getReturnType();
-            if (returnType.isArray()) {
-                val componentType = returnType.getComponentType();
-                facet = new TypeOfFacetInferredFromArray(componentType, facetHolder);
-            }
-        }
+            // check for @Collection(typeOf=...)
+            TypeOfFacetOnCollectionFromCollectionAnnotation
+            .create(collectionIfAny, facetHolder)
 
-        // else infer from generic return type
-        if(facet == null) {
-            facet = inferFromGenericReturnType(processMethodContext);
-        }
+            ,
 
-        super.addFacet(facet);
+            // else infer from return type
+            ()-> method.getReturnType().isArray()
+                        ? new TypeOfFacetInferredFromArray(
+                                method.getReturnType().getComponentType(),
+                                facetHolder)
+                        : null
+            ,
+
+            // else infer from generic return type
+            ()->inferFromGenericReturnType(processMethodContext)
+                    .orElse(null)
+
+        ));
+
     }
 
-    private TypeOfFacet inferFromGenericReturnType(final ProcessMethodContext processMethodContext) {
+    private Optional<TypeOfFacet> inferFromGenericReturnType(final ProcessMethodContext processMethodContext) {
 
         val facetHolder = processMethodContext.getFacetHolder();
         val method = processMethodContext.getMethod();
 
         return _Generics.streamGenericTypeArgumentsOfMethodReturnType(method)
                 .findFirst()
-                .map(elementType->new TypeOfFacetInferredFromGenerics(elementType, facetHolder))
-                .orElse(null);
+                .map(elementType->new TypeOfFacetInferredFromGenerics(elementType, facetHolder));
     }
 
 

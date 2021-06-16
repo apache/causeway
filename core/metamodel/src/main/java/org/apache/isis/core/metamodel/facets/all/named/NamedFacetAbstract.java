@@ -19,31 +19,32 @@
 
 package org.apache.isis.core.metamodel.facets.all.named;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.all.i8n.I8nFacetAbstract;
 
-public abstract class NamedFacetAbstract extends FacetAbstract implements NamedFacet {
+import lombok.NonNull;
+import lombok.val;
 
-    private final String value;
-    private final boolean escaped;
+public abstract class NamedFacetAbstract
+extends I8nFacetAbstract
+implements NamedFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return NamedFacet.class;
     }
 
-    public NamedFacetAbstract(String value, boolean escaped, FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+    private final boolean escaped;
 
-        this.value = value;
-        this.escaped = escaped;
+    protected NamedFacetAbstract(String originalText, boolean escaped, FacetHolder holder) {
+        this(originalText, escaped, holder, Precedence.DEFAULT);
     }
 
-    @Override
-    public String value() {
-        return value;
+    protected NamedFacetAbstract(String originalText, boolean escaped, FacetHolder holder, final Facet.Precedence precedence) {
+        super(type(), originalText, holder, precedence);
+        this.escaped = escaped;
     }
 
     @Override
@@ -51,9 +52,22 @@ public abstract class NamedFacetAbstract extends FacetAbstract implements NamedF
         return escaped;
     }
 
-    @Override public void appendAttributesTo(Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("value", value);
-        attributeMap.put("escaped", escaped);
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("escaped", escaped);
     }
+
+    @Override
+    public boolean semanticEquals(final @NonNull Facet other) {
+        if(! (other instanceof NamedFacetAbstract)) {
+            return false;
+        }
+
+        val otherNamedFacet =  (NamedFacetAbstract)other;
+
+        return this.escaped() == otherNamedFacet.escaped()
+                && super.semanticEquals(otherNamedFacet);
+    }
+
 }

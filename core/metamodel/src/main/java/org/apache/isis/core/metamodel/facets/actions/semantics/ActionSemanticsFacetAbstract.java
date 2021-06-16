@@ -28,7 +28,7 @@ public abstract class ActionSemanticsFacetAbstract
 extends SingleValueFacetAbstract<SemanticsOf>
 implements ActionSemanticsFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return ActionSemanticsFacet.class;
     }
 

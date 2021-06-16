@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
-import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.events.ui.TitleUiEvent;
@@ -30,7 +30,6 @@ import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
@@ -41,9 +40,10 @@ import org.apache.isis.core.metamodel.util.EventUtil;
 
 import lombok.val;
 
-public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends TitleFacetAbstract {
+public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent
+extends TitleFacetAbstract {
 
-    public static Facet create(
+    public static Optional<TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent> create(
             final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final MetamodelEventService metamodelEventService,
             final IsisConfiguration configuration,
@@ -69,8 +69,7 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
                             translationContextFor(facetHolder),
                             metamodelEventService,
                             facetHolder);
-                })
-                .orElse(null);
+                });
     }
 
     private final Class<? extends TitleUiEvent<?>> titleUiEventClass;
@@ -83,7 +82,7 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
                     final TranslationContext translationContext,
                     final MetamodelEventService metamodelEventService,
                     final FacetHolder holder) {
-        super(holder);
+        super(holder, Precedence.EVENT);
         this.titleUiEventClass = titleUiEventClass;
         this.translationService = super.getTranslationService();
         this.translationContext = translationContext;
@@ -97,16 +96,23 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
             return null;
         }
 
-        val underlyingTitleFacet = underlyingTitleFacet();
-        if(underlyingTitleFacet != null) {
-            // underlyingTitleFacet always takes precedence
-            return underlyingTitleFacet.title(owningAdapter);
-        }
-
-
         final TitleUiEvent<Object> titleUiEvent = newTitleUiEvent(owningAdapter);
 
         metamodelEventService.fireTitleUiEvent(titleUiEvent);
+
+        if(titleUiEvent.getTitle() == null
+                && titleUiEvent.getTranslatableTitle() == null) {
+            // ie no subscribers out there...
+
+            final TitleFacet underlyingTitleFacet = getSharedFacetRanking()
+            .flatMap(facetRanking->facetRanking.getWinnerNonEvent(TitleFacet.class))
+            .orElse(null);
+
+            if(underlyingTitleFacet!=null) {
+                return underlyingTitleFacet.title(owningAdapter);
+            }
+        }
+
 
         final TranslatableString translatedTitle = titleUiEvent.getTranslatableTitle();
         if(translatedTitle != null) {
@@ -116,25 +122,17 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
     }
 
     @Override
-    public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("titleUiEventClass", titleUiEventClass);
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("titleUiEventClass", titleUiEventClass);
     }
 
     // -- HELPER
 
-    private TitleFacet underlyingTitleFacet() {
-        val underlyingFacet = getUnderlyingFacet();
-        if(underlyingFacet instanceof TitleFacet) {
-            return (TitleFacet) underlyingFacet;
-        }
-        return null;
-    }
-
     private static TranslationContext translationContextFor(final FacetHolder facetHolder) {
         if(facetHolder instanceof ObjectSpecification) {
             val facetHolderAsSpec = (ObjectSpecification) facetHolder;
-            return TranslationContext.forTranslationContextHolder(facetHolderAsSpec.getIdentifier());
+            return TranslationContext.forTranslationContextHolder(facetHolderAsSpec.getFeatureIdentifier());
         }
         return null;
     }

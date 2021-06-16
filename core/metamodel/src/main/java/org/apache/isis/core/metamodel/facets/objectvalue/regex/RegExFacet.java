@@ -26,7 +26,8 @@ import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
  * Whether the (string) property or a parameter must correspond to a specific
  * regular expression.
  */
-public interface RegExFacet extends Facet, ValidatingInteractionAdvisor {
+public interface RegExFacet
+extends Facet, ValidatingInteractionAdvisor {
 
     public String regexp();
 

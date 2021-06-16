@@ -93,7 +93,7 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
 
 
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return JodaLocalDateValueFacet.class;
     }
 

@@ -84,7 +84,7 @@ extends DelegatingInvocationHandlerDefault<C> {
 
             resolveIfRequired(domainObject);
 
-            final InteractionEvent ev = new CollectionMethodEvent(getDelegate(), getCollection().getIdentifier(), getDomainObject(), method.getName(), args, returnValueObj);
+            final InteractionEvent ev = new CollectionMethodEvent(getDelegate(), getCollection().getFeatureIdentifier(), getDomainObject(), method.getName(), args, returnValueObj);
             notifyListeners(ev);
             return returnValueObj;
         }

@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.value.image;
 
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.exceptions.unrecoverable.UnexpectedCallException;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 
@@ -31,8 +30,6 @@ implements ImageValueFacet {
 
     private static final int TYPICAL_LENGTH = 18;
     private static final Object DEFAULT_VALUE = null; // no default
-
-    private FacetHolder facetHolder;
 
     @SuppressWarnings("unchecked")
     public ImageValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass) {
@@ -53,29 +50,6 @@ implements ImageValueFacet {
     }
 
     @Override
-    public boolean alwaysReplace() {
-        return false;
-    }
-
-    @Override
-    public Facet getUnderlyingFacet() {
-        return null;
-    }
-
-    /**
-     * Not required because {@link #alwaysReplace()} is <tt>false</tt>.
-     */
-    @Override
-    public void setUnderlyingFacet(final Facet underlyingFacet) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean isDerived() {
-        return false;
-    }
-
-    @Override
     public String titleString(final Object value) {
         return "image";
     }
@@ -83,16 +57,6 @@ implements ImageValueFacet {
     @Override
     public String titleStringWithMask(final Object value, final String usingMask) {
         return "image";
-    }
-
-    @Override
-    public FacetHolder getFacetHolder() {
-        return facetHolder;
-    }
-
-    @Override
-    public void setFacetHolder(final FacetHolder facetHolder) {
-        this.facetHolder = facetHolder;
     }
 
     // -- toString

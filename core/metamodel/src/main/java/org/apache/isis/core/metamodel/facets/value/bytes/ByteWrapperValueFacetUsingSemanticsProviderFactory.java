@@ -19,13 +19,18 @@
 
 package org.apache.isis.core.metamodel.facets.value.bytes;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 
-public class ByteWrapperValueFacetUsingSemanticsProviderFactory extends ValueFacetUsingSemanticsProviderFactory<Byte> {
+public class ByteWrapperValueFacetUsingSemanticsProviderFactory
+extends ValueFacetUsingSemanticsProviderFactory<Byte> {
 
-    public ByteWrapperValueFacetUsingSemanticsProviderFactory() {
-        super();
+    @Inject
+    public ByteWrapperValueFacetUsingSemanticsProviderFactory(final MetaModelContext mmc) {
+        super(mmc);
     }
 
     @Override

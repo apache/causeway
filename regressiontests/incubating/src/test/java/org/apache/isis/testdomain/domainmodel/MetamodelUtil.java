@@ -30,22 +30,22 @@ import lombok.val;
 final class MetamodelUtil {
 
     static Set<String> featuresSummarized(Can<ObjectSpecification> allSpecs){
-        
+
         val features = _Sets.<String>newHashSet();
-        
+
         allSpecs.stream()
         .forEach(spec->{
             spec.streamDeclaredActions(MixedIn.INCLUDED)
             .forEach(feature->{
-                features.add(feature.getIdentifier().toString());
+                features.add(feature.getFeatureIdentifier().toString());
             });
             spec.streamDeclaredAssociations(MixedIn.INCLUDED)
             .forEach(feature->{
-                features.add(feature.getIdentifier().toString());
+                features.add(feature.getFeatureIdentifier().toString());
             });
         });
-        
+
         return features;
     }
-    
+
 }

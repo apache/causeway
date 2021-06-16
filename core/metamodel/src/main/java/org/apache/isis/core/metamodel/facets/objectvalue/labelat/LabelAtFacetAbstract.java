@@ -19,16 +19,20 @@
 
 package org.apache.isis.core.metamodel.facets.objectvalue.labelat;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class LabelAtFacetAbstract extends FacetAbstract implements LabelAtFacet {
+import lombok.NonNull;
 
-    public static Class<? extends Facet> type() {
+public abstract class LabelAtFacetAbstract
+extends FacetAbstract
+implements LabelAtFacet {
+
+    private static final Class<? extends Facet> type() {
         return LabelAtFacet.class;
     }
 
@@ -49,8 +53,16 @@ public abstract class LabelAtFacetAbstract extends FacetAbstract implements Labe
         return "position=" + value;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("label", value);
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("label", value);
     }
+
+    @Override
+    public boolean semanticEquals(@NonNull Facet other) {
+        return other instanceof LabelAtFacetAbstract
+                && this.label() == ((LabelAtFacetAbstract) other).label();
+    }
+
 }

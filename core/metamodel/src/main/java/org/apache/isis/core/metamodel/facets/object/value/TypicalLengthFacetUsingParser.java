@@ -20,34 +20,22 @@
 package org.apache.isis.core.metamodel.facets.object.value;
 
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacetAbstract;
 
-public class TypicalLengthFacetUsingParser extends FacetAbstract implements TypicalLengthFacet {
+public class TypicalLengthFacetUsingParser
+extends TypicalLengthFacetAbstract {
 
     private final Parser<?> parser;
 
     public TypicalLengthFacetUsingParser(final Parser<?> parser, final FacetHolder holder) {
-        super(TypicalLengthFacet.class, holder, Derivation.NOT_DERIVED);
+        super(parser.typicalLength(), holder);
         this.parser = parser;
     }
 
     @Override
     protected String toStringValues() {
-        getServiceInjector().injectServicesInto(parser);
         return parser.toString();
-    }
-
-    @Override
-    public int value() {
-        getServiceInjector().injectServicesInto(parser);
-        return parser.typicalLength();
-    }
-
-    @Override
-    public String toString() {
-        return "typicalLength=" + value();
     }
 
 }

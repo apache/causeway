@@ -20,52 +20,49 @@
 package org.apache.isis.core.metamodel.facets.objectvalue.mustsatisfyspec;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.spec.Specification;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.interactions.ProposedHolder;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public abstract class MustSatisfySpecificationFacetAbstract extends FacetAbstract implements MustSatisfySpecificationFacet {
+import lombok.Getter;
+import lombok.NonNull;
 
+public abstract class MustSatisfySpecificationFacetAbstract
+extends FacetAbstract
+implements MustSatisfySpecificationFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return MustSatisfySpecificationFacet.class;
     }
 
-    private final List<Specification> specifications;
-
-    /**
-     * For testing.
-     */
-    public List<Specification> getSpecifications() {
-        return specifications;
-    }
+    @Getter //for testing
+    private final @NonNull Can<Specification> specifications;
 
     private final SpecificationEvaluator specificationEvaluator;
 
     public MustSatisfySpecificationFacetAbstract(
-            final List<Specification> specifications,
+            final Can<Specification> specifications,
             final FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
 
         this.specifications = specifications;
 
         final TranslationService translationService = getTranslationService();
         // sadness: same as in TranslationFactory
         final TranslationContext translationContext = TranslationContext.forTranslationContextHolder(
-                ((IdentifiedHolder) holder).getIdentifier()); // .getTranslationContext();
+                holder.getFeatureIdentifier()); // .getTranslationContext();
 
         specificationEvaluator = new SpecificationEvaluator(translationService, translationContext);
     }
@@ -89,19 +86,34 @@ public abstract class MustSatisfySpecificationFacetAbstract extends FacetAbstrac
     /**
      * For benefit of subclasses.
      */
-    protected static List<Specification> toSpecifications(
+    protected static Can<Specification> toSpecifications(
             final FactoryService factoryService,
             final Class<? extends Specification>[] classes) {
-        List<Specification> specifications = Arrays.stream(classes)
+        return Arrays.stream(classes)
                 .map(factoryService::getOrCreate)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
-        return specifications;
+                .collect(Can.toCan());
+    }
+
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("specifications",
+                specifications.stream()
+                .map(Specification::getClass)
+                .map(Class::getName)
+                .collect(Collectors.joining(", ")));
+    }
+
+    @Override
+    public boolean semanticEquals(final @NonNull Facet other) {
+        return other instanceof MustSatisfySpecificationFacetAbstract
+                ? Objects.equals(
+                        this
+                            .specifications.map(Specification::getClass),
+                        ((MustSatisfySpecificationFacetAbstract)other)
+                            .specifications.map(Specification::getClass))
+                : false;
     }
 
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("specifications", specifications);
-    }
 }

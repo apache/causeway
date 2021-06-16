@@ -19,13 +19,18 @@
 
 package org.apache.isis.core.metamodel.facets.value.doubles;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 
-public class DoubleWrapperValueFacetUsingSemanticsProviderFactory extends ValueFacetUsingSemanticsProviderFactory<Double> {
+public class DoubleWrapperValueFacetUsingSemanticsProviderFactory
+extends ValueFacetUsingSemanticsProviderFactory<Double> {
 
-    public DoubleWrapperValueFacetUsingSemanticsProviderFactory() {
-        super();
+    @Inject
+    public DoubleWrapperValueFacetUsingSemanticsProviderFactory(final MetaModelContext mmc) {
+        super(mmc);
     }
 
     @Override

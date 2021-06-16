@@ -22,6 +22,7 @@ package org.apache.isis.persistence.jdo.metamodel.facets.object.version;
 import javax.inject.Inject;
 import javax.jdo.annotations.Version;
 
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
@@ -32,20 +33,22 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
-import lombok.Setter;
-
 public class JdoVersionAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
-    @Inject @Setter private JdoFacetContext jdoFacetContext;
+    private final JdoFacetContext jdoFacetContext;
 
-    public JdoVersionAnnotationFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    @Inject
+    public JdoVersionAnnotationFacetFactory(
+            final MetaModelContext mmc,
+            final JdoFacetContext jdoFacetContext) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
+        this.jdoFacetContext = jdoFacetContext;
     }
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
+    public void process(final ProcessClassContext processClassContext) {
         // deliberately do NOT search superclasses/superinterfaces
         final Class<?> cls = processClassContext.getCls();
 
@@ -62,7 +65,7 @@ implements MetaModelRefiner {
     }
 
     @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+    public void refineProgrammingModel(final ProgrammingModel programmingModel) {
         programmingModel.addVisitingValidatorSkipManagedBeans(spec->{
 
             if(!declaresVersionAnnotation(spec)) {
@@ -84,7 +87,7 @@ implements MetaModelRefiner {
         });
     }
 
-    private static boolean declaresVersionAnnotation(ObjectSpecification spec) {
+    private static boolean declaresVersionAnnotation(final ObjectSpecification spec) {
         return Annotations.getDeclaredAnnotation(spec.getCorrespondingClass(), Version.class)!=null;
     }
 

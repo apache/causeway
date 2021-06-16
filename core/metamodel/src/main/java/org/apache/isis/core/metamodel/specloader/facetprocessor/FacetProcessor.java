@@ -33,6 +33,7 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -51,15 +52,19 @@ import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @RequiredArgsConstructor
-public class FacetProcessor {
+public class FacetProcessor
+implements HasMetaModelContext{
 
-    @NonNull private final ProgrammingModel programmingModel;
-    @NonNull private final MetaModelContext metaModelContext;
+    private final @NonNull ProgrammingModel programmingModel;
+
+    @Getter(onMethod_ = {@Override})
+    private final @NonNull MetaModelContext metaModelContext;
 
     /**
      * Class<FacetFactory> => FacetFactory
@@ -325,8 +330,6 @@ public class FacetProcessor {
             FeatureType featureType,
             boolean isMixinMain) {
 
-        facetedMethod.setMetaModelContext(metaModelContext);
-
         val processMethodContext =
                 new ProcessMethodContext(
                         cls,
@@ -369,8 +372,6 @@ public class FacetProcessor {
             MethodRemover methodRemover,
             FacetedMethodParameter facetedMethodParameter) {
 
-        facetedMethodParameter.setMetaModelContext(metaModelContext);
-
         for (val featureType : FeatureType.PARAMETERS_ONLY) {
             processParams(introspectedClass, method, paramNum, methodRemover, facetedMethodParameter, featureType);
         }
@@ -383,8 +384,6 @@ public class FacetProcessor {
             MethodRemover methodRemover,
             FacetedMethodParameter facetedMethodParameter,
             FeatureType featureType) {
-
-        facetedMethodParameter.setMetaModelContext(metaModelContext);
 
         val processParameterContext =
                 new ProcessParameterContext(introspectedClass, method, paramNum, methodRemover, facetedMethodParameter);

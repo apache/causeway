@@ -22,6 +22,7 @@ import java.util.function.IntFunction;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
@@ -48,12 +49,13 @@ implements MethodPrefixBasedFacetFactory {
         DONT_VALIDATE
     }
 
-    public MethodPrefixBasedFacetFactoryAbstract(
-            @NonNull final ImmutableEnumSet<FeatureType> featureTypes,
-            @NonNull final OrphanValidation orphanValidation,
-            @NonNull final Can<String> prefixes) {
+    protected MethodPrefixBasedFacetFactoryAbstract(
+            final @NonNull MetaModelContext mmc,
+            final @NonNull ImmutableEnumSet<FeatureType> featureTypes,
+            final @NonNull OrphanValidation orphanValidation,
+            final @NonNull Can<String> prefixes) {
 
-        super(featureTypes);
+        super(mmc, featureTypes);
         this.orphanValidation = orphanValidation;
         this.prefixes = prefixes;
     }
@@ -90,7 +92,7 @@ implements MethodPrefixBasedFacetFactory {
     // -- PROGRAMMING MODEL
 
     @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+    public void refineProgrammingModel(final ProgrammingModel programmingModel) {
 
         if(orphanValidation == OrphanValidation.DONT_VALIDATE
                 || getConfiguration().getApplib().getAnnotation().getAction().isExplicit()) {
@@ -99,7 +101,7 @@ implements MethodPrefixBasedFacetFactory {
 
         val noParamsOnly = getConfiguration().getCore().getMetaModel().getValidator().isNoParamsOnly();
 
-        programmingModel.addValidator(new MetaModelVisitingValidatorAbstract() {
+        programmingModel.addValidator(new MetaModelVisitingValidatorAbstract(programmingModel.getMetaModelContext()) {
 
             @Override
             public String toString() {
@@ -107,7 +109,7 @@ implements MethodPrefixBasedFacetFactory {
             }
 
             @Override
-            public void validate(ObjectSpecification spec) {
+            public void validate(final ObjectSpecification spec) {
 
                 if(spec.isManagedBean()) {
                     return;
@@ -144,7 +146,7 @@ implements MethodPrefixBasedFacetFactory {
                                     spec,
                                     String.format(
                                             messageFormat,
-                                            spec.getIdentifier().getClassName(),
+                                            spec.getFeatureIdentifier().getClassName(),
                                             actionId,
                                             prefix,
                                             explanation));
@@ -156,7 +158,7 @@ implements MethodPrefixBasedFacetFactory {
         });
     }
 
-    protected boolean isPropertyOrMixinMain(ProcessMethodContext processMethodContext) {
+    protected boolean isPropertyOrMixinMain(final ProcessMethodContext processMethodContext) {
         return processMethodContext.isMixinMain()
                 || (
                         processMethodContext.getFeatureType()!=null // null check, yet to support some JUnit tests
@@ -166,7 +168,7 @@ implements MethodPrefixBasedFacetFactory {
 
     // -- HELPER
 
-    private static boolean isPrefixed(String actionId, String prefix) {
+    private static boolean isPrefixed(final String actionId, final String prefix) {
         return actionId.startsWith(prefix) && actionId.length() > prefix.length();
     }
 

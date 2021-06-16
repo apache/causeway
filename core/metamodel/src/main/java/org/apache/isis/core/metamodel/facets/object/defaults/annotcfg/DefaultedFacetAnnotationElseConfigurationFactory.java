@@ -19,52 +19,53 @@
 
 package org.apache.isis.core.metamodel.facets.object.defaults.annotcfg;
 
+import java.util.Optional;
+
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.Defaulted;
+import org.apache.isis.commons.internal.base._Optionals;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultsProviderUtil;
 
 import lombok.val;
 
-public class DefaultedFacetAnnotationElseConfigurationFactory extends FacetFactoryAbstract {
+public class DefaultedFacetAnnotationElseConfigurationFactory
+extends FacetFactoryAbstract {
 
-
-    public DefaultedFacetAnnotationElseConfigurationFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    @Inject
+    public DefaultedFacetAnnotationElseConfigurationFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
     }
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        super.addFacet(create(processClassContext.getCls(), processClassContext.getFacetHolder()));
-    }
 
-    private DefaultedFacetAbstract create(final Class<?> cls, final FacetHolder holder) {
-
-        val defaultedAnnot = Annotations.getAnnotation(cls, Defaulted.class);
+        val cls = processClassContext.getCls();
+        val facetHolder = processClassContext.getFacetHolder();
         val config = super.getConfiguration();
+        val defaultedIfAny = processClassContext.synthesizeOnType(Defaulted.class);
 
-        // create from annotation, if present
-        if (defaultedAnnot != null) {
-            val defaultedFacet = new DefaultedFacetAnnotation(config, cls, holder);
-            if (defaultedFacet.isValid()) {
-                return defaultedFacet;
+        addFacetIfPresent(_Optionals.<DefaultedFacet>or(
+
+            // create from annotation, if present
+            defaultedIfAny
+                .flatMap(defaultedAnnot->DefaultedFacetAnnotation.create(config, cls, facetHolder))
+            ,
+
+            // otherwise, try to create from configuration, if present
+            ()->{
+                val providerName = DefaultsProviderUtil.defaultsProviderNameFromConfiguration(config, cls);
+                return _Strings.isNotEmpty(providerName)
+                    ? DefaultedFacetFromConfiguration.create(providerName, facetHolder)
+                    : Optional.empty();
             }
-        }
 
-        // otherwise, try to create from configuration, if present
-        val providerName = DefaultsProviderUtil.defaultsProviderNameFromConfiguration(config, cls);
-        if (!_Strings.isNullOrEmpty(providerName)) {
-            final DefaultedFacetFromConfiguration facet = new DefaultedFacetFromConfiguration(providerName, holder);
-            if (facet.isValid()) {
-                return facet;
-            }
-        }
-
-        return null;
+        ));
     }
 
 

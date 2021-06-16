@@ -19,24 +19,31 @@
 
 package org.apache.isis.core.metamodel.facets.collections.layout;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacetAbstract;
 
-public class DefaultViewFacetForCollectionXml extends DefaultViewFacetAbstract {
+public class DefaultViewFacetForCollectionXml
+extends DefaultViewFacetAbstract {
 
-    private DefaultViewFacetForCollectionXml(String value, FacetHolder holder) {
-        super(value, holder);
-    }
-
-    public static DefaultViewFacet create(CollectionLayoutData collectionLayout, FacetHolder holder) {
+    public static Optional<DefaultViewFacet> create(
+            final CollectionLayoutData collectionLayout,
+            final FacetHolder holder) {
         if (collectionLayout == null) {
-            return null;
+            return Optional.empty();
         }
 
         final String defaultView = _Strings.emptyToNull(collectionLayout.getDefaultView());
-        return defaultView != null ? new DefaultViewFacetForCollectionXml(defaultView, holder) : null;
+        return defaultView != null
+                ? Optional.of(new DefaultViewFacetForCollectionXml(defaultView, holder))
+                : Optional.empty();
+    }
+
+    private DefaultViewFacetForCollectionXml(final String value, final FacetHolder holder) {
+        super(value, holder);
     }
 }

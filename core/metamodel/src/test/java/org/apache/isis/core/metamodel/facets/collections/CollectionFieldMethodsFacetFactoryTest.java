@@ -54,8 +54,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testPropertyAccessorFacetIsInstalledForJavaUtilCollectionAndMethodRemoved() {
-        val facetFactory = new CollectionAccessorFacetViaAccessorFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        val facetFactory = new CollectionAccessorFacetViaAccessorFactory(metaModelContext);
 
         class Customer {
             @SuppressWarnings({ "rawtypes", "unused" })
@@ -71,15 +70,14 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         assertNotNull(facet);
         assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
         final CollectionAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
-        assertEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().get(0));
+        assertEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().getFirstOrFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(collectionAccessorMethod));
     }
 
 
     public void testPropertyAccessorFacetIsInstalledForJavaUtilListAndMethodRemoved() {
-        val facetFactory = new CollectionAccessorFacetViaAccessorFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        val facetFactory = new CollectionAccessorFacetViaAccessorFactory(metaModelContext);
 
         class Customer {
             @SuppressWarnings({ "rawtypes", "unused" })
@@ -96,14 +94,13 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         assertNotNull(facet);
         assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
         final CollectionAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
-        assertEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().get(0));
+        assertEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().getFirstOrFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(collectionAccessorMethod));
     }
 
     public void testPropertyAccessorFacetIsInstalledForJavaUtilSetAndMethodRemoved() {
-        val facetFactory = new CollectionAccessorFacetViaAccessorFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        val facetFactory = new CollectionAccessorFacetViaAccessorFactory(metaModelContext);
 
         class Customer {
             @SuppressWarnings({ "rawtypes", "unused" })
@@ -119,14 +116,13 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         assertNotNull(facet);
         assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
         final CollectionAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
-        assertEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().get(0));
+        assertEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().getFirstOrFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(collectionAccessorMethod));
     }
 
     public void testPropertyAccessorFacetIsInstalledForObjectArrayAndMethodRemoved() {
-        val facetFactory = new CollectionAccessorFacetViaAccessorFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        val facetFactory = new CollectionAccessorFacetViaAccessorFactory(metaModelContext);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -142,14 +138,13 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         assertNotNull(facet);
         assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
         final CollectionAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
-        assertEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().get(0));
+        assertEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().getFirstOrFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(collectionAccessorMethod));
     }
 
     public void testPropertyAccessorFacetIsInstalledForOrderArrayAndMethodRemoved() {
-        val facetFactory = new CollectionAccessorFacetViaAccessorFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        val facetFactory = new CollectionAccessorFacetViaAccessorFactory(metaModelContext);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -168,14 +163,13 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         assertNotNull(facet);
         assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
         final CollectionAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
-        assertEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().get(0));
+        assertEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().getFirstOrFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(collectionAccessorMethod));
     }
 
     public void testMethodFoundInSuperclass() {
-        val facetFactory = new CollectionAccessorFacetViaAccessorFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        val facetFactory = new CollectionAccessorFacetViaAccessorFactory(metaModelContext);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -198,7 +192,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         assertNotNull(facet);
         assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
         final CollectionAccessorFacetViaAccessor collectionAccessorFacetViaMethod = (CollectionAccessorFacetViaAccessor) facet;
-        assertEquals(collectionAccessorMethod, collectionAccessorFacetViaMethod.getMethods().get(0));
+        assertEquals(collectionAccessorMethod, collectionAccessorFacetViaMethod.getMethods().getFirstOrFail());
     }
 
     static class Order {

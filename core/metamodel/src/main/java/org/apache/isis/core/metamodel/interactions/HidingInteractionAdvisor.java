@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import org.apache.isis.core.metamodel.facetapi.FacetAbstract.Hiding;
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract.HidingOrShowing;
 
 /**
  * Mix-in interface for facets that can advise as to whether a member should be
@@ -28,7 +28,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract.Hiding;
  * @see DisablingInteractionAdvisor
  * @see ValidatingInteractionAdvisor
  */
-public interface HidingInteractionAdvisor extends InteractionAdvisorFacet, Hiding {
+public interface HidingInteractionAdvisor
+extends InteractionAdvisorFacet, HidingOrShowing {
 
     /**
      * Whether the rule represented by this facet hides the member to which it

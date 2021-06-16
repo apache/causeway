@@ -23,18 +23,19 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacetDeclarativeInitializingAbstract;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 
 public class RecreatableObjectFacetForDomainObjectAnnotation
 extends RecreatableObjectFacetDeclarativeInitializingAbstract {
 
-    public static ViewModelFacet create(
+    public static Optional<RecreatableObjectFacetForDomainObjectAnnotation> create(
             final Optional<DomainObject> domainObjectIfAny,
             final FacetHolder holder,
-            final PostConstructMethodCache postConstructMethodCache) {
+            final PostConstructMethodCache postConstructMethodCache,
+            final Facet.Precedence precedence) {
 
         return domainObjectIfAny
                 .map(DomainObject::nature)
@@ -48,20 +49,20 @@ extends RecreatableObjectFacetDeclarativeInitializingAbstract {
                         return null;
                     case VIEW_MODEL:
                         return new RecreatableObjectFacetForDomainObjectAnnotation(
-                                holder, postConstructMethodCache);
+                                holder, postConstructMethodCache, precedence);
                     }
                     // shouldn't happen, the above switch should match all cases.
                     throw new IllegalArgumentException("nature of '" + nature + "' not recognized");
                 })
-                .filter(Objects::nonNull)
-                .orElse(null);
+                .filter(Objects::nonNull);
     }
 
     private RecreatableObjectFacetForDomainObjectAnnotation(
             final FacetHolder holder,
-            final PostConstructMethodCache postConstructMethodCache) {
+            final PostConstructMethodCache postConstructMethodCache,
+            final Facet.Precedence precedence) {
 
-        super(holder, RecreationMechanism.INITIALIZES, postConstructMethodCache);
+        super(holder, RecreationMechanism.INITIALIZES, postConstructMethodCache, precedence);
     }
 
 }

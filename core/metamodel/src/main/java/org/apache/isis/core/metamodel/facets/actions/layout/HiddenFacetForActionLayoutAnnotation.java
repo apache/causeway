@@ -24,21 +24,19 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class HiddenFacetForActionLayoutAnnotation extends HiddenFacetAbstract {
 
-    public static HiddenFacet create(
+    public static Optional<HiddenFacetForActionLayoutAnnotation> create(
             final Optional<ActionLayout> actionLayoutIfAny,
             final FacetHolder holder) {
 
         return actionLayoutIfAny
                 .map(ActionLayout::hidden)
                 .filter(where -> where != null && where != Where.NOT_SPECIFIED)
-                .map(where -> new HiddenFacetForActionLayoutAnnotation(where, holder))
-                .orElse(null);
+                .map(where -> new HiddenFacetForActionLayoutAnnotation(where, holder));
     }
 
     private HiddenFacetForActionLayoutAnnotation(final Where where, final FacetHolder holder) {

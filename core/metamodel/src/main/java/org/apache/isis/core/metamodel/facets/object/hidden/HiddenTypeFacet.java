@@ -19,10 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.object.hidden;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-
 public interface HiddenTypeFacet extends HiddenInstanceFacet {
 
 }

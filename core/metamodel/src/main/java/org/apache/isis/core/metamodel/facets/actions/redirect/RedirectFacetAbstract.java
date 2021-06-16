@@ -19,16 +19,18 @@
 
 package org.apache.isis.core.metamodel.facets.actions.redirect;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.annotation.Redirect;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class RedirectFacetAbstract extends FacetAbstract implements RedirectFacet {
+public abstract class RedirectFacetAbstract
+extends FacetAbstract
+implements RedirectFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return RedirectFacet.class;
     }
 
@@ -37,14 +39,15 @@ public abstract class RedirectFacetAbstract extends FacetAbstract implements Red
     protected RedirectFacetAbstract(
             final Redirect redirect,
             final FacetHolder holder) {
-        this(redirect, holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
+        this.redirect = redirect;
     }
 
     protected RedirectFacetAbstract(
             final Redirect redirect,
             final FacetHolder holder,
-            final Derivation derivation) {
-        super(type(), holder, derivation);
+            final Facet.Precedence precedence) {
+        super(type(), holder, precedence);
         this.redirect = redirect;
     }
 
@@ -58,9 +61,10 @@ public abstract class RedirectFacetAbstract extends FacetAbstract implements Red
         return "redirect=" + redirect;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("redirect", redirect);
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("redirect", redirect);
     }
 
 }

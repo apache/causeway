@@ -28,14 +28,13 @@ import java.util.TimeZone;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.core.metamodel.context.MetaModelContextAware;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
-import org.apache.isis.core.metamodel.facets.value.datesql.JavaSqlDateValueSemanticsProvider;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+
+import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
+import org.apache.isis.core.metamodel.facets.value.datesql.JavaSqlDateValueSemanticsProvider;
 
 public class JavaSqlDateValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
@@ -47,9 +46,8 @@ public class JavaSqlDateValueSemanticsProviderTest extends ValueSemanticsProvide
     public void setUpObjects() throws Exception {
 
         date = new Date(0);
-        holder = new FacetHolderImpl();
-        ((MetaModelContextAware)holder).setMetaModelContext(super.metaModelContext);
-        
+        holder = FacetHolderAbstract.forTesting(metaModelContext);
+
         setValue(adapter = new JavaSqlDateValueSemanticsProvider(holder) {
         });
     }

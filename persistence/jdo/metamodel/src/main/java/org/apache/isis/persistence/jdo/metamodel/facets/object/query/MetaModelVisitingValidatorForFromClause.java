@@ -23,6 +23,7 @@ import java.util.Objects;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.Hierarchical;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
@@ -32,8 +33,8 @@ import lombok.val;
 class MetaModelVisitingValidatorForFromClause
 extends MetaModelVisitingValidatorForClauseAbstract {
 
-    MetaModelVisitingValidatorForFromClause() {
-        super("FROM");
+    MetaModelVisitingValidatorForFromClause(final MetaModelContext mmc) {
+        super(mmc, "FROM");
     }
 
     @Override

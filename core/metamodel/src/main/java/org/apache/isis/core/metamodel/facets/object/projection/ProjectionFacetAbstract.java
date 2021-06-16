@@ -27,16 +27,12 @@ public abstract class ProjectionFacetAbstract
 extends FacetAbstract
 implements ProjectionFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return ProjectionFacet.class;
     }
 
     protected ProjectionFacetAbstract(final FacetHolder holder) {
-        this( holder, Derivation.NOT_DERIVED);
-    }
-
-    protected ProjectionFacetAbstract(final FacetHolder holder, final Derivation derivation) {
-        super( type(), holder, derivation);
+        super( type(), holder);
     }
 
 }

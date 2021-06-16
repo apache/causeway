@@ -19,22 +19,26 @@
 
 package org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class RenderedAdjustedFacetAbstract extends FacetAbstract implements RenderedAdjustedFacet {
+import lombok.NonNull;
 
-    public static Class<? extends Facet> type() {
+public abstract class RenderedAdjustedFacetAbstract
+extends FacetAbstract
+implements RenderedAdjustedFacet {
+
+    private static final Class<? extends Facet> type() {
         return RenderedAdjustedFacet.class;
     }
 
     private final int adjustBy;
 
     public RenderedAdjustedFacetAbstract(int adjustBy, final FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
         this.adjustBy = adjustBy;
     }
 
@@ -45,12 +49,23 @@ public abstract class RenderedAdjustedFacetAbstract extends FacetAbstract implem
 
     @Override
     protected String toStringValues() {
-        final int val = value();
-        return val == -1 ? "default" : String.valueOf(val);
+        final int intValue = value();
+        return intValue == -1
+                ? "default"
+                : String.valueOf(intValue);
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("adjustBy", adjustBy);
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("adjustBy", adjustBy);
     }
+
+    @Override
+    public boolean semanticEquals(final @NonNull Facet other) {
+        return other instanceof RenderedAdjustedFacet
+                ? this.value() == ((RenderedAdjustedFacet)other).value()
+                : false;
+    }
+
 }

@@ -20,8 +20,11 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.metamodel.BeanSort;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -34,8 +37,13 @@ import lombok.val;
 public class ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator
 extends MetaModelVisitingValidatorAbstract {
 
+    @Inject
+    public ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator(final MetaModelContext mmc) {
+        super(mmc);
+    }
+
     @Override
-    public void validate(@NonNull ObjectSpecification spec) {
+    public void validate(@NonNull final ObjectSpecification spec) {
         if(spec.getBeanSort()==BeanSort.UNKNOWN
                 && !spec.isAbstract()) {
 
@@ -45,7 +53,7 @@ extends MetaModelVisitingValidatorAbstract {
             if (numActions > 0) {
 
                 val actionIds = actions.stream()
-                .map(ObjectAction::getIdentifier)
+                .map(ObjectAction::getFeatureIdentifier)
                 .map(Identifier::toString)
                 .collect(Collectors.joining(", "));
 

@@ -26,36 +26,36 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstractImpl;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
 
-public class DisabledFacetForPropertyAnnotation extends DisabledFacetAbstractImpl {
+public class DisabledFacetForPropertyAnnotation
+extends DisabledFacetAbstract {
 
-    public static DisabledFacet create(
+    public static Optional<DisabledFacet> create(
             final Optional<Property> propertyIfAny,
             final FacetHolder holder) {
 
         return propertyIfAny
-                .filter(property -> property.editing() != Editing.NOT_SPECIFIED)
-                .map(property -> {
-                    switch (property.editing()) {
-                    case AS_CONFIGURED:
+        .filter(property -> property.editing() != Editing.NOT_SPECIFIED)
+        .map(property -> {
+            switch (property.editing()) {
+            case AS_CONFIGURED:
 
-                        // nothing needs to be done here; the DomainObjectFactory (processing @DomainObject annotation)
-                        // will install an ImmutableFacetForDomainObjectAnnotation on the domain object and then a
-                        // DisabledFacetOnPropertyDerivedFromImmutable facet will be installed.
+                // nothing needs to be done here; the DomainObjectFactory (processing @DomainObject annotation)
+                // will install an ImmutableFacetForDomainObjectAnnotation on the domain object and then a
+                // DisabledFacetOnPropertyDerivedFromImmutable facet will be installed.
 
-                        return null;
+                return null;
 
-                    case DISABLED:
-                        final String disabledReason = property.editingDisabledReason();
-                        return new DisabledFacetForPropertyAnnotation(disabledReason, holder);
-                    case ENABLED:
-                        return new DisabledFacetForPropertyAnnotationInvertedSemantics(holder);
-                    default:
-                    }
-                    return null;
-                })
-                .orElse(null);
+            case DISABLED:
+                final String disabledReason = property.editingDisabledReason();
+                return new DisabledFacetForPropertyAnnotation(disabledReason, holder);
+            case ENABLED:
+                return new DisabledFacetForPropertyAnnotationInvertedSemantics(holder);
+            default:
+            }
+            return null;
+        });
     }
 
     private DisabledFacetForPropertyAnnotation(final String reason, final FacetHolder holder) {

@@ -19,7 +19,7 @@
 package org.apache.isis.core.metamodel.facets.object.domainservice;
 
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -31,7 +31,7 @@ public abstract class DomainServiceFacetAbstract
 extends FacetAbstract
 implements DomainServiceFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return DomainServiceFacet.class;
     }
 
@@ -40,7 +40,7 @@ implements DomainServiceFacet {
     public DomainServiceFacetAbstract(
             final FacetHolder facetHolder,
             final NatureOfService natureOfService) {
-        super(DomainServiceFacetAbstract.type(), facetHolder, Derivation.NOT_DERIVED);
+        super(DomainServiceFacetAbstract.type(), facetHolder);
         this.natureOfService = natureOfService;
     }
 
@@ -49,8 +49,9 @@ implements DomainServiceFacet {
         return natureOfService;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("natureOfService", natureOfService);
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("natureOfService", natureOfService);
     }
 }

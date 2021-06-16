@@ -21,6 +21,9 @@ package org.apache.isis.core.metamodel.facets.object.ignore.javalang;
 
 import java.lang.reflect.Method;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -33,10 +36,13 @@ import org.apache.isis.core.metamodel.methods.MethodFilteringFacetFactory;
  * <p>
  * Does not add any {@link Facet}s.
  */
-public class IteratorFilteringFacetFactory extends FacetFactoryAbstract implements MethodFilteringFacetFactory {
+public class IteratorFilteringFacetFactory
+extends FacetFactoryAbstract
+implements MethodFilteringFacetFactory {
 
-    public IteratorFilteringFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    @Inject
+    public IteratorFilteringFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
     }
 
     @Override

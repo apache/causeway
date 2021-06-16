@@ -18,6 +18,7 @@
  */
 package org.apache.isis.extensions.secman.integration.facets;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -29,6 +30,7 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.user.UserService;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
@@ -46,48 +48,53 @@ import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserReposito
 import lombok.val;
 
 public class TenantedAuthorizationPostProcessor
-        extends ObjectSpecificationPostProcessorAbstract {
+extends ObjectSpecificationPostProcessorAbstract {
 
     @Component
     public static class Register implements MetaModelRefiner {
         @Override
-        public void refineProgrammingModel(ProgrammingModel programmingModel) {
+        public void refineProgrammingModel(final ProgrammingModel programmingModel) {
             programmingModel.addPostProcessor(
                     ProgrammingModel.PostProcessingOrder.A2_AFTER_BUILTIN,
-                    TenantedAuthorizationPostProcessor.class);
+                    new TenantedAuthorizationPostProcessor(programmingModel.getMetaModelContext()));
         }
     }
 
-    @Override
-    public void doPostProcess(ObjectSpecification objectSpecification) {
-        FacetUtil.addFacet(createFacet(objectSpecification.getCorrespondingClass(), objectSpecification));
+    @Inject
+    public TenantedAuthorizationPostProcessor(final MetaModelContext metaModelContext) {
+        super(metaModelContext);
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction act) {
+    public void doPostProcess(final ObjectSpecification objectSpecification) {
+        FacetUtil.addFacetIfPresent(createFacet(objectSpecification.getCorrespondingClass(), objectSpecification));
+    }
+
+    @Override
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction act) {
         addFacetTo(objectSpecification, act);
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction objectAction, ObjectActionParameter param) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction, final ObjectActionParameter param) {
         // no-op
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, OneToOneAssociation prop) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToOneAssociation prop) {
         addFacetTo(objectSpecification, prop);
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, OneToManyAssociation coll) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
         addFacetTo(objectSpecification, coll);
     }
 
-    private void addFacetTo(ObjectSpecification specification, ObjectFeature objectFeature) {
-        FacetUtil.addFacet(createFacet(specification.getCorrespondingClass(), objectFeature));
+    private void addFacetTo(final ObjectSpecification specification, final ObjectFeature objectFeature) {
+        FacetUtil.addFacetIfPresent(createFacet(specification.getCorrespondingClass(), objectFeature));
     }
 
-    private TenantedAuthorizationFacetDefault createFacet(
+    private Optional<TenantedAuthorizationFacetDefault> createFacet(
             final Class<?> cls,
             final FacetHolder holder) {
 
@@ -98,11 +105,11 @@ public class TenantedAuthorizationPostProcessor
                 .collect(Collectors.<ApplicationTenancyEvaluator>toList());
 
         return evaluators.isEmpty()
-                ? null
-                : new TenantedAuthorizationFacetDefault(
+                ? Optional.empty()
+                : Optional.of(new TenantedAuthorizationFacetDefault(
                         evaluators, userRepository,
                         queryResultsCacheProvider, userService,
-                        holder);
+                        holder));
     }
 
     @Inject ServiceRegistry serviceRegistry;

@@ -19,17 +19,19 @@
 
 package org.apache.isis.core.metamodel.facets.objectvalue.multiline;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
+import lombok.NonNull;
+
 public abstract class MultiLineFacetAbstract
 extends FacetAbstract
 implements MultiLineFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return MultiLineFacet.class;
     }
 
@@ -37,6 +39,11 @@ implements MultiLineFacet {
 
     public MultiLineFacetAbstract(final int numberOfLines, final FacetHolder holder) {
         super(type(), holder);
+        this.numberOfLines = numberOfLines;
+    }
+
+    public MultiLineFacetAbstract(final int numberOfLines, final FacetHolder holder, final Facet.Precedence precedence) {
+        super(type(), holder, precedence);
         this.numberOfLines = numberOfLines;
     }
 
@@ -50,8 +57,16 @@ implements MultiLineFacet {
         return "lines=" + numberOfLines;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("numberOfLines", numberOfLines);
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("numberOfLines", numberOfLines);
+    }
+
+    @Override
+    public boolean semanticEquals(final @NonNull Facet other) {
+        return other instanceof MultiLineFacet
+                ? this.numberOfLines() == ((MultiLineFacet)other).numberOfLines()
+                : false;
     }
 }

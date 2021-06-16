@@ -27,6 +27,7 @@ import org.apache.isis.applib.adapters.ParsingException;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
@@ -40,20 +41,34 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
+import lombok.NonNull;
 import lombok.val;
 
-public class ParseableFacetUsingParser
+public final class ParseableFacetUsingParser
 extends FacetAbstract
 implements ParseableFacet {
 
-    private final Parser<?> parser;
+    private final @NonNull Parser<?> parser;
 
-    public ParseableFacetUsingParser(
+    public static ParseableFacetUsingParser create(
+            final Parser<?> parser,
+            final FacetHolder holder) {
+        return new ParseableFacetUsingParser(parser, holder);
+    }
+
+    private ParseableFacetUsingParser(
             final Parser<?> parser,
             final FacetHolder holder) {
 
-        super(ParseableFacet.class, holder, Derivation.NOT_DERIVED);
+        super(ParseableFacet.class, holder);
         this.parser = parser;
+    }
+
+    @Override
+    public boolean semanticEquals(final @NonNull Facet other) {
+        return other instanceof ParseableFacetUsingParser
+                ? this.parser.getClass() == ((ParseableFacetUsingParser)other).parser.getClass()
+                : false;
     }
 
     @Override
@@ -78,7 +93,7 @@ implements ParseableFacet {
                 && getFacetHolder().containsFacet(ValueFacet.class)) {
 
             val entryAdapter = getObjectManager().adapt(entry);
-            final Identifier identifier = getIdentified().getIdentifier();
+            final Identifier identifier = getFacetHolder().getFeatureIdentifier();
             final ParseValueContext parseValueContext =
                     new ParseValueContext(
                             InteractionHead.regular(contextAdapter), identifier, entryAdapter, interactionInitiatedBy

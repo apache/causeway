@@ -22,6 +22,9 @@ package org.apache.isis.core.metamodel.facets.collections.sortedby.annotation;
 import java.util.Comparator;
 import java.util.stream.Stream;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -39,8 +42,9 @@ public class SortedByFacetAnnotationFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
-    public SortedByFacetAnnotationFactory() {
-        super(FeatureType.COLLECTIONS_ONLY);
+    @Inject
+    public SortedByFacetAnnotationFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.COLLECTIONS_ONLY);
     }
 
     @Override
@@ -52,7 +56,7 @@ implements MetaModelRefiner {
     }
 
     @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+    public void refineProgrammingModel(final ProgrammingModel programmingModel) {
         programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec->{
             final Stream<OneToManyAssociation> objectCollections =
                     objectSpec.streamCollections(MixedIn.EXCLUDED);
@@ -68,7 +72,7 @@ implements MetaModelRefiner {
                                 String.format(
                                     "%s#%s: is annotated with @SortedBy, "
                                     + "but the class specified '%s' is not a Comparator",
-                                    objectSpec.getIdentifier().getClassName(),
+                                    objectSpec.getFeatureIdentifier().getClassName(),
                                     objectCollection.getId(),
                                     facet.value().getName()));
                     }

@@ -40,25 +40,29 @@ import org.apache.isis.core.metamodel.testspec.ObjectSpecificationStub;
 import lombok.val;
 
 @SuppressWarnings("unused")
-public class ActionAnnotationFacetFactoryTest_ActionInvocation extends AbstractFacetFactoryTest {
+public class ActionAnnotationFacetFactoryTest_ActionInvocation
+extends AbstractFacetFactoryTest {
 
-    private final ObjectSpecification voidSpec = new ObjectSpecificationStub(void.class);
-    private final ObjectSpecification stringSpec = new ObjectSpecificationStub(java.lang.String.class);
-    private final ObjectSpecification customerSpec = new ObjectSpecificationStub(Customer.class);
+    private ObjectSpecification voidSpec;
+    private ObjectSpecification stringSpec;
+    private ObjectSpecification customerSpec;
     private ActionAnnotationFacetFactory facetFactory;
 
     private void processInvocation(
-            ActionAnnotationFacetFactory facetFactory, ProcessMethodContext processMethodContext) {
+            final ActionAnnotationFacetFactory facetFactory, final ProcessMethodContext processMethodContext) {
 
         val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
         facetFactory.processInvocation(processMethodContext, actionIfAny);
     }
-    
+
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        this.facetFactory =  new ActionAnnotationFacetFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        this.facetFactory =  new ActionAnnotationFacetFactory(metaModelContext);
+
+        voidSpec = new ObjectSpecificationStub(metaModelContext, void.class);
+        stringSpec = new ObjectSpecificationStub(metaModelContext, java.lang.String.class);
+        customerSpec = new ObjectSpecificationStub(metaModelContext, Customer.class);
     }
 
     public void testActionInvocationFacetIsInstalledAndMethodRemoved() {
@@ -77,7 +81,7 @@ public class ActionAnnotationFacetFactoryTest_ActionInvocation extends AbstractF
         assertNotNull(facet);
         assertTrue(facet instanceof ActionInvocationFacetForDomainEventAbstract);
         final ActionInvocationFacetForDomainEventAbstract actionInvocationFacetViaMethod = (ActionInvocationFacetForDomainEventAbstract) facet;
-        assertEquals(actionMethod, actionInvocationFacetViaMethod.getMethods().get(0));
+        assertEquals(actionMethod, actionInvocationFacetViaMethod.getMethods().getFirstOrFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(actionMethod));
     }
@@ -149,9 +153,9 @@ public class ActionAnnotationFacetFactoryTest_ActionInvocation extends AbstractF
 
         final Method actionMethod = findMethod(CustomerEx.class, "someAction", new Class[] { int.class, long.class });
 
-        final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(CustomerEx.class, actionMethod);
-        facetHolderWithParms.setMetaModelContext(super.metaModelContext);
-        
+        final FacetedMethod facetHolderWithParms = FacetedMethod
+                .createForAction(metaModelContext, CustomerEx.class, actionMethod);
+
         processInvocation(facetFactory, new ProcessMethodContext(CustomerEx.class, null, actionMethod, methodRemover, facetHolderWithParms));
 
         final Facet facet0 = facetHolderWithParms.getFacet(ActionInvocationFacet.class);
@@ -162,18 +166,15 @@ public class ActionAnnotationFacetFactoryTest_ActionInvocation extends AbstractF
 
         allowing_specificationLoader_loadSpecification_any_willReturn(voidSpec);
 
-        val facetFactoryForChoices = new ActionParameterChoicesFacetViaMethodFactory();
-        val facetFactoryForDisable = new DisableForContextFacetViaMethodFactory();
-        facetFactoryForChoices.setMetaModelContext(metaModelContext);
-        facetFactoryForDisable.setMetaModelContext(metaModelContext);
-        
-        
+        val facetFactoryForChoices = new ActionParameterChoicesFacetViaMethodFactory(metaModelContext);
+        val facetFactoryForDisable = new DisableForContextFacetViaMethodFactory(metaModelContext);
+
         class Customer {
-            
+
             public void someAction(final int x, final long y) {
             }
 
-            
+
             public int[] choices0SomeAction() {
                 return new int[0];
             }
@@ -185,12 +186,12 @@ public class ActionAnnotationFacetFactoryTest_ActionInvocation extends AbstractF
                 return new int[0];
             }
 
-            
+
             public long[] choices1SomeAction() {
                 return new long[0];
             }
 
-            
+
             public String disableSomeAction(final int x, final long y) {
                 return null;
             }
@@ -201,8 +202,7 @@ public class ActionAnnotationFacetFactoryTest_ActionInvocation extends AbstractF
         final Method choices1Method = findMethod(CustomerEx.class, "choices1SomeAction", new Class[] {});
         final Method disableMethod = findMethod(CustomerEx.class, "disableSomeAction", new Class[] { int.class, long.class });
 
-        final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(CustomerEx.class, actionMethod);
-        facetHolderWithParms.setMetaModelContext(metaModelContext);
+        final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(metaModelContext, CustomerEx.class, actionMethod);
 
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(CustomerEx.class, null, actionMethod, methodRemover, facetHolderWithParms);
         processInvocation(facetFactory, processMethodContext);
@@ -217,18 +217,18 @@ public class ActionAnnotationFacetFactoryTest_ActionInvocation extends AbstractF
         assertNotNull(facet1);
         assertTrue(facet1 instanceof ActionParameterChoicesFacetViaMethod);
         final ActionParameterChoicesFacetViaMethod actionChoicesFacetViaMethod0 = (ActionParameterChoicesFacetViaMethod) facet1;
-        assertEquals(choices0Method, actionChoicesFacetViaMethod0.getMethods().get(0));
+        assertEquals(choices0Method, actionChoicesFacetViaMethod0.getMethods().getFirstOrFail());
 
         final Facet facet2 = facetHolderWithParms.getParameters().get(1).getFacet(ActionParameterChoicesFacet.class);
         assertNotNull(facet2);
         assertTrue(facet2 instanceof ActionParameterChoicesFacetViaMethod);
         final ActionParameterChoicesFacetViaMethod actionChoicesFacetViaMethod1 = (ActionParameterChoicesFacetViaMethod) facet2;
-        assertEquals(choices1Method, actionChoicesFacetViaMethod1.getMethods().get(0));
+        assertEquals(choices1Method, actionChoicesFacetViaMethod1.getMethods().getFirstOrFail());
 
         final Facet facet3 = facetHolderWithParms.getFacet(DisableForContextFacet.class);
         assertNotNull(facet3);
         assertTrue(facet3 instanceof DisableForContextFacetViaMethod);
         final DisableForContextFacetViaMethod disableFacetViaMethod = (DisableForContextFacetViaMethod) facet3;
-        assertEquals(disableMethod, disableFacetViaMethod.getMethods().get(0));
+        assertEquals(disableMethod, disableFacetViaMethod.getMethods().getFirstOrFail());
     }
 }

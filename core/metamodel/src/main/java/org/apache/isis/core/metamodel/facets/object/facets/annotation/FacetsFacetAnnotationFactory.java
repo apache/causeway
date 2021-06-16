@@ -19,7 +19,12 @@
 
 package org.apache.isis.core.metamodel.facets.object.facets.annotation;
 
+import java.util.Optional;
+
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.Facets;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -29,26 +34,27 @@ import org.apache.isis.core.metamodel.facets.object.facets.FacetsFacet;
 
 public class FacetsFacetAnnotationFactory extends FacetFactoryAbstract {
 
-    public FacetsFacetAnnotationFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    @Inject
+    public FacetsFacetAnnotationFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
     }
 
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
         final Facets annotation = Annotations.getAnnotation(processClassContaxt.getCls(), Facets.class);
-        FacetUtil.addFacet(create(annotation, processClassContaxt.getFacetHolder()));
+        FacetUtil.addFacetIfPresent(create(annotation, processClassContaxt.getFacetHolder()));
     }
 
     /**
      * Returns a {@link FacetsFacet} impl provided that at least one valid
      * {@link FacetsFacet#facetFactories() factory} was specified.
      */
-    private FacetsFacet create(final Facets annotation, final FacetHolder holder) {
-        if (annotation == null) {
-            return null;
-        }
-        final FacetsFacetAnnotation facetsFacetAnnotation = new FacetsFacetAnnotation(annotation, holder);
-        return facetsFacetAnnotation.facetFactories().length > 0 ? facetsFacetAnnotation : null;
+    private Optional<FacetsFacetAnnotation> create(final Facets annotation, final FacetHolder holder) {
+
+        return Optional.ofNullable(annotation)
+        .map(facets->new FacetsFacetAnnotation(facets, holder))
+        .filter(facetsFacetAnnotation->facetsFacetAnnotation.facetFactories().length > 0);
+
     }
 
 }

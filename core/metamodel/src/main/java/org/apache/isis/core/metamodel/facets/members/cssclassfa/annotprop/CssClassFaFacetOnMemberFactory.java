@@ -19,30 +19,33 @@
 
 package org.apache.isis.core.metamodel.facets.members.cssclassfa.annotprop;
 
-import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 
+import lombok.val;
+
 public class CssClassFaFacetOnMemberFactory
 extends FacetFactoryAbstract {
 
-    public CssClassFaFacetOnMemberFactory() {
-        super(FeatureType.ACTIONS_ONLY);
+    @Inject
+    public CssClassFaFacetOnMemberFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.ACTIONS_ONLY);
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        CssClassFaFacet cssClassFaFacet = createFromConfiguredRegexIfPossible(processMethodContext);
-
-        // no-op if null
-        super.addFacet(cssClassFaFacet);
+        addFacetIfPresent(
+                createFromConfiguredRegexIfPossible(processMethodContext));
     }
-
 
 //    /*
 //     * The pattern matches definitions like:
@@ -53,35 +56,35 @@ extends FacetFactoryAbstract {
 //     */
 //    private static final Pattern FA_ICON_REGEX_PATTERN = Pattern.compile("([^:]+):(.+)");
 
-    private CssClassFaFacet createFromConfiguredRegexIfPossible(final ProcessMethodContext processMethodContext) {
-        final Method method = processMethodContext.getMethod();
+    private Optional<CssClassFaFacet> createFromConfiguredRegexIfPossible(final ProcessMethodContext processMethodContext) {
+        val method = processMethodContext.getMethod();
 
-        String value = faIconIfAnyFor(MixinInterceptor.intendedNameOf(method));
-        CssClassFaPosition position = CssClassFaPosition.LEFT;
-        if (value != null) {
-            int idxOfSeparator = value.indexOf(':');
+        return faIconIfAnyFor(MixinInterceptor.intendedNameOf(method))
+        .map(faIcon->{
+            CssClassFaPosition position = CssClassFaPosition.LEFT;
+            int idxOfSeparator = faIcon.indexOf(':');
             if (idxOfSeparator > -1) {
-                value = value.substring(0, idxOfSeparator);
-                String rest = value.substring(idxOfSeparator + 1);
+                faIcon = faIcon.substring(0, idxOfSeparator);
+                String rest = faIcon.substring(idxOfSeparator + 1);
                 position = CssClassFaPosition.valueOf(rest.toUpperCase());
             }
-            return new CssClassFaFacetOnMemberFromConfiguredRegex(value, position, processMethodContext.getFacetHolder());
-        } else {
-            return null;
-        }
+            return new CssClassFaFacetOnMemberFromConfiguredRegex(
+                    faIcon, position, processMethodContext.getFacetHolder());
+        });
+
     }
 
-    private String faIconIfAnyFor(String name) {
+    private Optional<String> faIconIfAnyFor(final String name) {
         final Map<Pattern, String> faIconByPattern = getFaIconByPattern();
 
         for (Map.Entry<Pattern, String> entry : faIconByPattern.entrySet()) {
             final Pattern pattern = entry.getKey();
             final String faIcon = entry.getValue();
             if (pattern.matcher(name).matches()) {
-                return faIcon;
+                return Optional.ofNullable(faIcon);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     private Map<Pattern, String> faIconByPattern;

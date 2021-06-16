@@ -28,7 +28,7 @@ extends FacetAbstract
 implements CollectionFacet {
 
     public CollectionFacetAbstract(final FacetHolder holder) {
-        super(CollectionFacet.class, holder, Derivation.NOT_DERIVED);
+        super(CollectionFacet.class, holder);
     }
 
     @Override

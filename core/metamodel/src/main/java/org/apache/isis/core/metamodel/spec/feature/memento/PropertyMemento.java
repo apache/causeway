@@ -53,7 +53,7 @@ public class PropertyMemento implements Serializable {
 
     public static PropertyMemento forProperty(final @NonNull OneToOneAssociation property) {
         return new PropertyMemento(
-                property.getIdentifier(),
+                property.getFeatureIdentifier(),
                 property);
     }
 

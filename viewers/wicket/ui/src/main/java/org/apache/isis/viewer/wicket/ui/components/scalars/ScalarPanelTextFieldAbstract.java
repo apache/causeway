@@ -40,7 +40,6 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
@@ -184,7 +183,7 @@ implements TextFieldValueModel.ScalarModelProvider {
         return formGroup;
     }
 
-    private Fragment createTextFieldFragment(String id) {
+    private Fragment createTextFieldFragment(final String id) {
         return new Fragment(id, createTextFieldFragmentId(), this);
     }
 
@@ -252,8 +251,8 @@ implements TextFieldValueModel.ScalarModelProvider {
 
     private void setTextFieldSizeAndMaxLengthIfSpecified() {
 
-        final Integer maxLength = getValueOf(getModel(), MaxLengthFacet.class);
-        Integer typicalLength = getValueOf(getModel(), TypicalLengthFacet.class);
+        final Integer maxLength = getMaxLengthOf(getModel());
+        Integer typicalLength = getTypicalLenghtOf(getModel());
 
         // doesn't make sense for typical length to be > maxLength
         if(typicalLength != null && maxLength != null && typicalLength > maxLength) {
@@ -271,7 +270,6 @@ implements TextFieldValueModel.ScalarModelProvider {
 
 
     // //////////////////////////////////////
-
 
     /**
      * Mandatory hook method to build the component to render the model when in
@@ -294,7 +292,7 @@ implements TextFieldValueModel.ScalarModelProvider {
     }
 
 
-    Fragment getCompactFragment(CompactType type) {
+    Fragment getCompactFragment(final CompactType type) {
         Fragment compactFragment;
         switch (type) {
         case INPUT_CHECKBOX:
@@ -328,7 +326,7 @@ implements TextFieldValueModel.ScalarModelProvider {
 
         @NonNull private final IConverter<X> converter;
 
-        private ToStringConvertingModel(@NonNull IConverter<X> converter) {
+        private ToStringConvertingModel(@NonNull final IConverter<X> converter) {
             this.converter = converter;
         }
 
@@ -342,7 +340,7 @@ implements TextFieldValueModel.ScalarModelProvider {
         }
     }
 
-    protected ToStringConvertingModel<T> toStringConvertingModelOf(IConverter<T> converter) {
+    protected ToStringConvertingModel<T> toStringConvertingModelOf(final IConverter<T> converter) {
         return new ToStringConvertingModel<>(converter);
     }
 
@@ -413,10 +411,21 @@ implements TextFieldValueModel.ScalarModelProvider {
 
     // //////////////////////////////////////
 
-    private static Integer getValueOf(ScalarModel model, Class<? extends SingleIntValueFacet> facetType) {
-        final SingleIntValueFacet facet = model.getFacet(facetType);
-        return facet != null ? facet.value() : null;
+    private static Integer getMaxLengthOf(@NonNull final ScalarModel model) {
+        return model
+                .lookupFacet(MaxLengthFacet.class)
+                .map(MaxLengthFacet::value)
+                .orElse(null);
     }
+
+    private static Integer getTypicalLenghtOf(@NonNull final ScalarModel model) {
+        return model
+                .lookupFacet(TypicalLengthFacet.class)
+                .map(TypicalLengthFacet::value)
+                .orElse(null);
+    }
+
+
 
 }
 

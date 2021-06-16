@@ -32,14 +32,9 @@ import lombok.val;
  * Intended to be used by the viewer as a rendering hint to size the UI field to
  * an appropriate size.
  *
- * <p>
- * In the standard Apache Isis Programming Model, corresponds to the
- * <tt>@TypicalLength</tt> annotation.
  */
-public interface TypicalLengthFacet extends SingleIntValueFacet {
-
-    @Override
-    public int value();
+public interface TypicalLengthFacet
+extends SingleIntValueFacet {
 
     /**
      *
@@ -48,7 +43,7 @@ public interface TypicalLengthFacet extends SingleIntValueFacet {
      * @param fallback
      * @return #value() if within given constraints [min,max], or else {@code fallback}
      */
-    default public int bounded(int min, int max, int fallback) {
+    default public int bounded(final int min, final int max, final int fallback) {
         final int value = value();
         val bounds = _Ints.Range.of(Bound.inclusive(min), Bound.inclusive(max));
         return bounds.contains(value)

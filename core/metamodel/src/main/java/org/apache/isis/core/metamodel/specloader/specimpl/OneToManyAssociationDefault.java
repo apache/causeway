@@ -45,17 +45,17 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
 
     public static OneToManyAssociationDefault forMethod(final FacetedMethod facetedMethod) {
         return new OneToManyAssociationDefault(
-                facetedMethod.getIdentifier(),
+                facetedMethod.getFeatureIdentifier(),
                 facetedMethod,
                 facetedMethod.getMetaModelContext().getSpecificationLoader()
                     .loadSpecification(facetedMethod.getType()));
     }
 
     protected OneToManyAssociationDefault(
-            final Identifier identifier,
+            final Identifier featureIdentifier,
             final FacetedMethod facetedMethod,
             final ObjectSpecification objectSpec) {
-        super(identifier, facetedMethod, FeatureType.COLLECTION, objectSpec);
+        super(featureIdentifier, facetedMethod, FeatureType.COLLECTION, objectSpec);
     }
 
     @Override
@@ -72,7 +72,7 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
         return new CollectionVisibilityContext(
-                headFor(ownerAdapter), getIdentifier(), interactionInitiatedBy, where);
+                headFor(ownerAdapter), getFeatureIdentifier(), interactionInitiatedBy, where);
     }
 
 
@@ -82,7 +82,7 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
         return new CollectionUsabilityContext(
-                headFor(ownerAdapter), getIdentifier(), interactionInitiatedBy, where);
+                headFor(ownerAdapter), getFeatureIdentifier(), interactionInitiatedBy, where);
     }
 
 

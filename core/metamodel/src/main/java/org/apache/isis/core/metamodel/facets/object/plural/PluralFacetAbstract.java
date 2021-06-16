@@ -20,23 +20,25 @@
 package org.apache.isis.core.metamodel.facets.object.plural;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.SingleStringValueFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.i8n.I8nFacetAbstract;
 
-public abstract class PluralFacetAbstract extends SingleStringValueFacetAbstract implements PluralFacet {
+public abstract class PluralFacetAbstract
+extends I8nFacetAbstract
+implements PluralFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return PluralFacet.class;
     }
 
-    public PluralFacetAbstract(final String value, final FacetHolder holder) {
-        this(value, holder, FacetAbstract.Derivation.NOT_DERIVED);
+    protected PluralFacetAbstract(String originalText, FacetHolder holder) {
+        this(originalText, holder, Precedence.DEFAULT);
     }
 
-    public PluralFacetAbstract(final String value, final FacetHolder holder, final FacetAbstract.Derivation derivation) {
-        super(type(), holder, value, derivation);
+    protected PluralFacetAbstract(String originalText, FacetHolder holder, final Facet.Precedence precedence) {
+        super(type(), originalText, holder, precedence);
     }
 
 
 }
+

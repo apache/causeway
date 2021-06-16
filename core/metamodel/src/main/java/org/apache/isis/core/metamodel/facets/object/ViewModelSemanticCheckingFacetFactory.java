@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.metamodel.facets.object;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.RecreatableDomainObject;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -35,13 +37,9 @@ import lombok.val;
 public class ViewModelSemanticCheckingFacetFactory
 extends FacetFactoryAbstract {
 
-    public ViewModelSemanticCheckingFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY);
-    }
-
-    @Override
-    public void setMetaModelContext(MetaModelContext metaModelContext) {
-        super.setMetaModelContext(metaModelContext);
+    @Inject
+    public ViewModelSemanticCheckingFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
     }
 
     @Override

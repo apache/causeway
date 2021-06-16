@@ -27,14 +27,13 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 public class LayoutOrderFacetFromPropertyLayoutAnnotation
 extends LayoutOrderFacetAbstract {
 
-    public static LayoutOrderFacetFromPropertyLayoutAnnotation create(
+    public static Optional<LayoutOrderFacetFromPropertyLayoutAnnotation> create(
             final Optional<PropertyLayout> actionLayoutIfAny,
             final FacetHolder holder) {
 
         return actionLayoutIfAny
                 .map(PropertyLayout::sequence)
-                .map(sequence -> new LayoutOrderFacetFromPropertyLayoutAnnotation(sequence, holder))
-                .orElse(null);
+                .map(sequence -> new LayoutOrderFacetFromPropertyLayoutAnnotation(sequence, holder));
     }
 
     public LayoutOrderFacetFromPropertyLayoutAnnotation(final String sequence, final FacetHolder holder) {

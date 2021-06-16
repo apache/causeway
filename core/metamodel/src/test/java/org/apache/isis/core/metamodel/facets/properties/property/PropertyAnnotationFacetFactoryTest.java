@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.facets.properties.property;
 
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.regex.Pattern;
 
 import org.jmock.Expectations;
@@ -28,6 +27,10 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
@@ -73,10 +76,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertTrue;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
@@ -86,8 +85,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
     PropertyAnnotationFacetFactory facetFactory;
     Method propertyMethod;
 
-    @Mock
-    ObjectSpecification mockTypeSpec;
+    @Mock ObjectSpecification mockTypeSpec;
     @Mock ObjectSpecification mockReturnTypeSpec;
 
     void expectRemoveMethod(final Method actionMethod) {
@@ -111,49 +109,49 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
     }
 
     private static void processModify(
-            PropertyAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
+            final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
         val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         facetFactory.processModify(processMethodContext, propertyIfAny);
     }
 
     private static void processHidden(
-            PropertyAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
+            final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
         val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         facetFactory.processHidden(processMethodContext, propertyIfAny);
     }
 
     private static void processOptional(
-            PropertyAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
+            final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
         val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         facetFactory.processOptional(processMethodContext, propertyIfAny);
     }
 
     private static void processRegEx(
-            PropertyAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
+            final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
         val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         facetFactory.processRegEx(processMethodContext, propertyIfAny);
     }
 
     private static void processEditing(
-            PropertyAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
+            final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
         val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         facetFactory.processEditing(processMethodContext, propertyIfAny);
     }
 
     private static void processMaxLength(
-            PropertyAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
+            final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
         val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         facetFactory.processMaxLength(processMethodContext, propertyIfAny);
     }
 
     private static void processMustSatisfy(
-            PropertyAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
+            final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
         val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         facetFactory.processMustSatisfy(processMethodContext, propertyIfAny);
     }
 
     private static void processNotPersisted(
-            PropertyAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
+            final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
         val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         facetFactory.processNotPersisted(processMethodContext, propertyIfAny);
     }
@@ -162,8 +160,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
 
     @Before
     public void setUp() throws Exception {
-        facetFactory = new PropertyAnnotationFacetFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        facetFactory = new PropertyAnnotationFacetFactory(metaModelContext);
     }
 
     @Override
@@ -175,7 +172,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
     public static class Modify extends PropertyAnnotationFacetFactoryTest {
 
         private void addGetterFacet(final FacetHolder holder) {
-            FacetUtil.addFacet(new PropertyOrCollectionAccessorFacetAbstract(mockOnType, holder ) {
+            FacetUtil.addFacet(new PropertyOrCollectionAccessorFacetAbstract(mockOnType, holder) {
                 @Override
                 public Object getProperty(
                         final ManagedObject inObject,
@@ -231,9 +228,6 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             // expect
             allowingLoadSpecificationRequestsFor(cls, propertyMethod.getReturnType());
             context.checking(new Expectations() {{
-                //[ahuber] never called during this test ...
-                //oneOf(mockConfiguration).getBoolean("isis.core.meta-model.annotation.property.domain-event.post-for-default", true);
-                //will(returnValue(true));
 
                 allowing(mockTypeSpec).getFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class);
                 will(returnValue(null));
@@ -254,7 +248,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             // then
             final Facet setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);
             Assert.assertNotNull(setterFacet);
-            Assert.assertTrue(setterFacet instanceof PropertySetterFacetForDomainEventFromPropertyAnnotation);
+            Assert.assertTrue("unexpected facet: " + setterFacet, setterFacet instanceof PropertySetterFacetForDomainEventFromPropertyAnnotation);
             final PropertySetterFacetForDomainEventFromPropertyAnnotation setterFacetImpl = (PropertySetterFacetForDomainEventFromPropertyAnnotation) setterFacet;
             assertThat(setterFacetImpl.value(), IsisMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
 
@@ -307,7 +301,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             // then
             final Facet setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);
             Assert.assertNotNull(setterFacet);
-            Assert.assertTrue(setterFacet instanceof PropertySetterFacetForDomainEventFromPropertyAnnotation);
+            Assert.assertTrue("unexpected facet: " + setterFacet, setterFacet instanceof PropertySetterFacetForDomainEventFromPropertyAnnotation);
             final PropertySetterFacetForDomainEventFromPropertyAnnotation setterFacetImpl = (PropertySetterFacetForDomainEventFromPropertyAnnotation) setterFacet;
             assertThat(setterFacetImpl.value(), IsisMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
 
@@ -359,7 +353,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             // then
             final Facet setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);
             Assert.assertNotNull(setterFacet);
-            Assert.assertTrue(setterFacet instanceof PropertySetterFacetForDomainEventFromPropertyAnnotation);
+            Assert.assertTrue("unexpected facet: " + setterFacet, setterFacet instanceof PropertySetterFacetForDomainEventFromPropertyAnnotation);
             final PropertySetterFacetForDomainEventFromPropertyAnnotation setterFacetImpl = (PropertySetterFacetForDomainEventFromPropertyAnnotation) setterFacet;
             assertThat(setterFacetImpl.value(), IsisMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
 
@@ -407,7 +401,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             // then
             final Facet setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);
             Assert.assertNotNull(setterFacet);
-            Assert.assertTrue(setterFacet instanceof PropertySetterFacetForDomainEventFromDefault);
+            Assert.assertTrue("unexpected facet: " + setterFacet, setterFacet instanceof PropertySetterFacetForDomainEventFromDefault);
             final PropertySetterFacetForDomainEventFromDefault setterFacetImpl = (PropertySetterFacetForDomainEventFromDefault) setterFacet;
             assertThat(setterFacetImpl.value(), IsisMatchers.classEqualTo(PropertyDomainEvent.Default.class));
 
@@ -447,7 +441,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             final HiddenFacetForPropertyAnnotation hiddenFacetImpl = (HiddenFacetForPropertyAnnotation) hiddenFacet;
             assertThat(hiddenFacetImpl.where(), is(Where.REFERENCES_PARENT));
 
-            final Facet hiddenFacetForProp = facetedMethod.getFacet(HiddenFacetForPropertyAnnotation.class);
+            final Facet hiddenFacetForProp = facetedMethod.getFacet(HiddenFacet.class);
             Assert.assertNotNull(hiddenFacetForProp);
             Assert.assertTrue(hiddenFacet == hiddenFacetForProp);
         }
@@ -486,9 +480,9 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             final DisabledFacet disabledFacet = facetedMethod.getFacet(DisabledFacet.class);
             Assert.assertNotNull(disabledFacet);
             Assert.assertTrue(disabledFacet instanceof DisabledFacetForPropertyAnnotation);
-            final DisabledFacetForPropertyAnnotation disabledFacetImpl = (DisabledFacetForPropertyAnnotation) disabledFacet;
+            final DisabledFacetForPropertyAnnotation disabledFacet2 = (DisabledFacetForPropertyAnnotation) disabledFacet;
             assertThat(disabledFacet.where(), is(Where.EVERYWHERE));
-            assertThat(disabledFacetImpl.getReason(), is("you cannot edit the name property"));
+            assertThat(disabledFacet2.disabledReason(null), is("you cannot edit the name property"));
         }
     }
 
@@ -566,11 +560,11 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             Assert.assertNotNull(mustSatisfySpecificationFacet);
             Assert.assertTrue(mustSatisfySpecificationFacet instanceof MustSatisfySpecificationFacetForPropertyAnnotation);
             final MustSatisfySpecificationFacetForPropertyAnnotation mustSatisfySpecificationFacetImpl = (MustSatisfySpecificationFacetForPropertyAnnotation) mustSatisfySpecificationFacet;
-            final List<Specification> specifications = mustSatisfySpecificationFacetImpl.getSpecifications();
+            val specifications = mustSatisfySpecificationFacetImpl.getSpecifications();
             assertThat(specifications.size(), is(2));
 
-            assertTrue(specifications.get(0) instanceof NotTooHot);
-            assertTrue(specifications.get(1) instanceof NotTooCold);
+            assertTrue(specifications.getElseFail(0) instanceof NotTooHot);
+            assertTrue(specifications.getElseFail(1) instanceof NotTooCold);
         }
 
     }

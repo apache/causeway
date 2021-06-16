@@ -22,20 +22,25 @@ package org.apache.isis.core.metamodel.facets.object.ignore.jdo;
 
 import java.lang.reflect.Method;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
 /**
  * Removes all methods inherited from <tt>javax.jdo.spi.PersistenceCapable</tt> (if JDO is on the classpath).
  */
-public class RemoveJdoPrefixedMethodsFacetFactory extends FacetFactoryAbstract {
+public class RemoveJdoPrefixedMethodsFacetFactory
+extends FacetFactoryAbstract {
 
-    public RemoveJdoPrefixedMethodsFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    @Inject
+    public RemoveJdoPrefixedMethodsFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
     }
 
     @Override
-    public void process(ProcessClassContext context) {
+    public void process(final ProcessClassContext context) {
         Class<?> cls = context.getCls();
         Method[] methods = cls.getMethods();
         for(Method method: methods) {

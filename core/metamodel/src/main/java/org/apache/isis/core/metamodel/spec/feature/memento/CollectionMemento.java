@@ -54,7 +54,7 @@ public class CollectionMemento implements Serializable {
 
     public static CollectionMemento forCollection(final @NonNull OneToManyAssociation collection) {
         return new CollectionMemento(
-                collection.getIdentifier(),
+                collection.getFeatureIdentifier(),
                 collection);
     }
 

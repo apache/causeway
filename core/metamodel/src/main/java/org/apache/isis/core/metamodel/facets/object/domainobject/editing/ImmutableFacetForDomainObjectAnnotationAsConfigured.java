@@ -20,11 +20,20 @@
 package org.apache.isis.core.metamodel.facets.object.domainobject.editing;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 
-public class ImmutableFacetForDomainObjectAnnotationAsConfigured extends ImmutableFacetForDomainObjectAnnotation {
+public class ImmutableFacetForDomainObjectAnnotationAsConfigured
+extends ImmutableFacetForDomainObjectAnnotation {
 
-    public ImmutableFacetForDomainObjectAnnotationAsConfigured(final String reason, final FacetHolder holder) {
+    public ImmutableFacetForDomainObjectAnnotationAsConfigured(
+            final String reason,
+            final FacetHolder holder) {
         super(reason, holder);
+    }
+
+    @Override
+    public ImmutableFacet clone(final FacetHolder holder) {
+        return new ImmutableFacetForDomainObjectAnnotationAsConfigured(reason, holder);
     }
 
 }

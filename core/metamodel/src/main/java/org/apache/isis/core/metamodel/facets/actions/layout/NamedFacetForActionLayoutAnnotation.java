@@ -24,20 +24,18 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 
 public class NamedFacetForActionLayoutAnnotation extends NamedFacetAbstract {
 
-    public static NamedFacet create(
+    public static Optional<NamedFacetForActionLayoutAnnotation> create(
             final Optional<ActionLayout> actionLayoutIfAny,
             final FacetHolder holder) {
 
         return actionLayoutIfAny
                 .map(ActionLayout::named)
                 .filter(_Strings::isNotEmpty)
-                .map(named -> new NamedFacetForActionLayoutAnnotation(named, holder))
-                .orElse(null);
+                .map(named -> new NamedFacetForActionLayoutAnnotation(named, holder));
     }
 
     private NamedFacetForActionLayoutAnnotation(final String value, final FacetHolder holder) {

@@ -23,7 +23,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import org.apache.isis.commons.internal.functions._Predicates;
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 
 import lombok.NonNull;
@@ -34,6 +34,11 @@ import lombok.val;
  * can be extended.
  */
 public interface FacetHolder extends HasMetaModelContext {
+
+    /**
+     * Identifier of the feature this holder represents or is associated with.
+     */
+    Identifier getFeatureIdentifier();
 
     int getFacetCount();
 
@@ -58,7 +63,7 @@ public interface FacetHolder extends HasMetaModelContext {
 
     default <T extends Facet> Optional<T> lookupNonFallbackFacet(
             @NonNull final Class<T> facetType) {
-        return lookupFacet(facetType, _Predicates.not(Facet::isFallback));
+        return lookupFacet(facetType, facet->!facet.getPrecedence().isFallback());
     }
 
     // -- CONTAINS
@@ -70,23 +75,26 @@ public interface FacetHolder extends HasMetaModelContext {
 
     /**
      * Whether there is a facet registered of the specified type that is not a
-     * {@link Facet#isFallback() fallback} .
+     * {@link Facet.Precedence#isFallback() fallback} .
      * <p>
      * Convenience; saves having to {@link #getFacet(Class)} and then check if
      * <tt>null</tt> and not a fallback.
      */
     default boolean containsNonFallbackFacet(Class<? extends Facet> facetType) {
         val facet = getFacet(facetType);
-        return facet != null && !facet.isFallback();
+        return facet != null
+                && !facet.getPrecedence().isFallback();
     }
 
     /**
      * As {@link #containsNonFallbackFacet(Class)}, with additional requirement, that the
-     * facet is <i>explicit</i>, not {@link Facet#isDerived() derived}.
+     * facet is <i>explicit</i>, not {@link Facet.Precedence#isInferred() inferred}.
      */
     default boolean containsExplicitNonFallbackFacet(Class<? extends Facet> facetType) {
         val facet = getFacet(facetType);
-        return facet != null && !facet.isFallback() && !facet.isDerived();
+        return facet != null
+                && !facet.getPrecedence().isFallback()
+                && !facet.getPrecedence().isInferred();
     }
 
     Stream<Facet> streamFacets();
@@ -101,20 +109,14 @@ public interface FacetHolder extends HasMetaModelContext {
      * Adds the facet, extracting its {@link Facet#facetType() type} as the key.
      *
      * <p>
-     * If there are any facet of the same type, they will be overwritten
-     * <i>provided</i> that either the {@link Facet} specifies to
-     * {@link Facet#alwaysReplace() always replace} or if the existing
-     * {@link Facet} is a {@link Facet#isFallback() no-op}.
+     * Any previously added facet of the same type will be overwritten,
+     * when given {@link Facet} has equal or higher precedence.
+     * Otherwise is ignored.
      */
-    void addFacet(Facet facet);
+    void addFacet(@NonNull Facet facet);
 
-    /**
-     * Replaces any existing facet with the given one, while copying any underlying
-     * facet from the existing to the given one.
-     *
-     * @param facet
-     * @since 2.0
-     */
-    void addOrReplaceFacet(Facet facet);
+    // -- VALIDATION SUPPORT
+
+    Optional<FacetRanking> getFacetRanking(Class<? extends Facet> facetType);
 
 }

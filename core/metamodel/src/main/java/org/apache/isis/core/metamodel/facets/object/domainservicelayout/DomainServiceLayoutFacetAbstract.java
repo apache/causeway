@@ -19,7 +19,7 @@
 package org.apache.isis.core.metamodel.facets.object.domainservicelayout;
 
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -31,14 +31,14 @@ public abstract class DomainServiceLayoutFacetAbstract
 extends FacetAbstract
 implements DomainServiceLayoutFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return DomainServiceLayoutFacet.class;
     }
 
     private final DomainServiceLayout.MenuBar menuBar;
 
     public DomainServiceLayoutFacetAbstract(final FacetHolder facetHolder, final DomainServiceLayout.MenuBar menuBar) {
-        super(DomainServiceLayoutFacetAbstract.type(), facetHolder, Derivation.NOT_DERIVED);
+        super(DomainServiceLayoutFacetAbstract.type(), facetHolder);
         this.menuBar = menuBar;
     }
 
@@ -47,8 +47,9 @@ implements DomainServiceLayoutFacet {
         return menuBar;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("menuBar", menuBar);
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("menuBar", menuBar);
     }
 }

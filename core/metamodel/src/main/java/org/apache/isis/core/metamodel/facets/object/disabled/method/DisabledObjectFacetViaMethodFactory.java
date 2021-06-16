@@ -19,9 +19,12 @@
 
 package org.apache.isis.core.metamodel.facets.object.disabled.method;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
@@ -46,12 +49,14 @@ import lombok.val;
  * class is being processed}, the {@link ObjectMember member}s for the
  * {@link ObjectSpecification spec} are not known.
  */
-public class DisabledObjectFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
+public class DisabledObjectFacetViaMethodFactory
+extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.DISABLED);
 
-    public DisabledObjectFacetViaMethodFactory() {
-        super(FeatureType.EVERYTHING_BUT_PARAMETERS, OrphanValidation.VALIDATE, PREFIXES);
+    @Inject
+    public DisabledObjectFacetViaMethodFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.EVERYTHING_BUT_PARAMETERS, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     @Override
@@ -80,10 +85,10 @@ public class DisabledObjectFacetViaMethodFactory extends MethodPrefixBasedFacetF
     public void process(final ProcessMethodContext processMethodContext) {
         final FacetedMethod member = processMethodContext.getFacetHolder();
         final Class<?> owningClass = processMethodContext.getCls();
-        final ObjectSpecification owningSpec = getSpecificationLoader().loadSpecification(owningClass);
-        final DisabledObjectFacet facet = owningSpec.getFacet(DisabledObjectFacet.class);
-        if (facet != null) {
-            facet.copyOnto(member);
-        }
+        val owningSpec = getSpecificationLoader().loadSpecification(owningClass);
+
+        owningSpec.lookupFacet(DisabledObjectFacet.class)
+        .map(disabledObjectFacet->disabledObjectFacet.clone(member))
+        .ifPresent(FacetUtil::addFacet);
     }
 }

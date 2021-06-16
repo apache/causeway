@@ -25,9 +25,12 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -40,14 +43,15 @@ import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
-public class TitleAnnotationFacetFactory extends FacetFactoryAbstract
+public class TitleAnnotationFacetFactory
+extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
     private static final String TITLE_METHOD_NAME = "title";
 
-
-    public TitleAnnotationFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    @Inject
+    public TitleAnnotationFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
     }
 
     /**
@@ -148,7 +152,7 @@ implements MetaModelRefiner {
      * precedence.
      */
     @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+    public void refineProgrammingModel(final ProgrammingModel programmingModel) {
 
         programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec -> {
 
@@ -171,7 +175,7 @@ implements MetaModelRefiner {
                 ValidationFailure.raiseFormatted(
                         objectSpec,
                         "%s: conflict for determining a strategy for retrieval of title for class, contains a method '%s' and an annotation '@%s'",
-                        objectSpec.getIdentifier().getClassName(),
+                        objectSpec.getFeatureIdentifier().getClassName(),
                         TITLE_METHOD_NAME,
                         Title.class.getName());
             }

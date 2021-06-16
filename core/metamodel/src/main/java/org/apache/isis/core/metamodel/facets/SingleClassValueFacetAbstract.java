@@ -19,14 +19,18 @@
 
 package org.apache.isis.core.metamodel.facets;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public abstract class SingleClassValueFacetAbstract extends FacetAbstract implements SingleClassValueFacet {
+import lombok.NonNull;
+
+public abstract class SingleClassValueFacetAbstract
+extends FacetAbstract
+implements SingleClassValueFacet {
 
     private final Class<?> value;
 
@@ -34,7 +38,7 @@ public abstract class SingleClassValueFacetAbstract extends FacetAbstract implem
             final Class<? extends Facet> facetType,
             final FacetHolder holder,
             final Class<?> value) {
-        super(facetType, holder, Derivation.NOT_DERIVED);
+        super(facetType, holder);
         this.value = value;
     }
 
@@ -52,9 +56,17 @@ public abstract class SingleClassValueFacetAbstract extends FacetAbstract implem
         return valueType != null ? getSpecificationLoader().loadSpecification(valueType) : null;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("value", value());
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("value", value());
+    }
+
+    @Override
+    public boolean semanticEquals(final @NonNull Facet other) {
+        return other instanceof SingleClassValueFacet
+                ? this.value() == ((SingleClassValueFacet)other).value()
+                : false;
     }
 
 }

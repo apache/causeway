@@ -26,17 +26,12 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 public class ActionDefaultsFacetNone extends ActionDefaultsFacetAbstract {
 
     public ActionDefaultsFacetNone(final FacetHolder holder) {
-        super(holder, Derivation.NOT_DERIVED);
+        super(holder, Precedence.FALLBACK);
     }
 
     @Override
     public Object[] getDefaults(final ManagedObject inObject) {
         return null;
-    }
-
-    @Override
-    public boolean isFallback() {
-        return true;
     }
 
 }

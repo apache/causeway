@@ -31,15 +31,11 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
-import org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.persistence.jdo.metamodel.testing.AbstractFacetFactoryTest;
@@ -54,9 +50,8 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
     private ObjectSpecification mockChildType;
     private ObjectSpecification mockParentType;
     private ObjectSpecification mockGrandParentType;
-    private ServiceInjector mockServicesInjector;
 
-    private MetaModelContext metaModelContext;
+    private MetaModelContext_forTesting metaModelContext;
 
     private Sequence sequence;
 
@@ -65,30 +60,29 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
         mockChildType = context.mock(ObjectSpecification.class, "mockChildtype");
         mockParentType = context.mock(ObjectSpecification.class, "mockParenttype");
         mockGrandParentType = context.mock(ObjectSpecification.class, "mockGrandParenttype");
-        mockServicesInjector = context.mock(ServiceInjector.class, "mockServicesInjector");
 
         val configuration = new IsisConfiguration(null);
 
-        val facetFactory = new JdoVersionAnnotationFacetFactory();
-        facetFactory.setJdoFacetContext(AbstractFacetFactoryTest.jdoFacetContextForTesting());
-        
-        val programmingModel = new ProgrammingModelAbstract(mockServicesInjector) {};
-        
-        metaModelContext = MetaModelContext_forTesting.builder()
-                .configuration(configuration)
-                .programmingModel(programmingModel)
-                .build();
-        
-        _Reflect.setFieldOn(
-                ProgrammingModelAbstract.class.getDeclaredField("serviceInjector"), 
-                programmingModel, 
-                metaModelContext.getServiceInjector());
-        
-        facetFactory.refineProgrammingModel(programmingModel);
-        programmingModel.init(new ProgrammingModelInitFilterDefault(), metaModelContext);
+        metaModelContext = MetaModelContext_forTesting
+        .builder()
+        .programmingModelFactory(mmc->{
+
+            val uninitializedProgrammingModel = new ProgrammingModelAbstract(mmc) {};
+
+            val facetFactory = new JdoVersionAnnotationFacetFactory(
+                    metaModelContext,
+                    AbstractFacetFactoryTest.jdoFacetContextForTesting());
+
+            facetFactory.refineProgrammingModel(uninitializedProgrammingModel);
+
+            return uninitializedProgrammingModel;
+
+        })
+        .configuration(configuration)
+        .build();
 
         sequence = context.sequence("inorder");
-        
+
     }
 
     @Test
@@ -115,7 +109,7 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
 
         context.checking(new Expectations() {
             {
-                
+
                 allowing(mockChildType).getCorrespondingClass();
                 inSequence(sequence);
                 will(returnValue(Child.class));
@@ -140,7 +134,7 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
 
         context.checking(new Expectations() {
             {
-                
+
                 allowing(mockChildType).getCorrespondingClass();
                 inSequence(sequence);
                 will(returnValue(Child.class));
@@ -164,7 +158,7 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
     }
 
 
-    @Test 
+    @Test
     public void whenHasFacetWithParentTypeHasFacet() {
 
         @Version
@@ -186,8 +180,8 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
                 allowing(mockParentType).getCorrespondingClass();
                 inSequence(sequence);
                 will(returnValue(Parent.class));
-                
-                allowing(mockChildType).getIdentifier();
+
+                allowing(mockChildType).getFeatureIdentifier();
                 inSequence(sequence);
                 will(returnValue(Identifier.classIdentifier(TypeIdentifierTestFactory.customer())));
 
@@ -198,24 +192,24 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
                 allowing(mockParentType).getFullIdentifier();
                 inSequence(sequence);
                 will(returnValue("mockParentType"));
-                
+
                 allowing(mockParentType).getSpecificationLoader();
                 inSequence(sequence);
                 will(returnValue(metaModelContext.getSpecificationLoader()));
-                
+
                 allowing(mockChildType).getSpecificationLoader();
                 inSequence(sequence);
                 will(returnValue(metaModelContext.getSpecificationLoader()));
-                
+
             }
         });
 
         //((SpecificationLoaderDefault)metaModelContext.getSpecificationLoader()).invalidateValidationResult();
-        
+
         val failures = processThenValidate(mockChildType);
-        
+
         assertThat(failures.getNumberOfFailures(), is(1));
-        assertThat(failures.getMessages().iterator().next(), 
+        assertThat(failures.getMessages().iterator().next(),
                 CoreMatchers.containsString("cannot have @Version annotated on this subclass and any of its supertypes; superclass: "));
     }
 
@@ -253,8 +247,8 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
                 allowing(mockGrandParentType).getCorrespondingClass();
                 inSequence(sequence);
                 will(returnValue(GrandParent.class));
-                
-                allowing(mockChildType).getIdentifier();
+
+                allowing(mockChildType).getFeatureIdentifier();
                 inSequence(sequence);
                 will(returnValue(Identifier.classIdentifier(TypeIdentifierTestFactory.customer())));
 
@@ -265,26 +259,26 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
                 allowing(mockGrandParentType).getFullIdentifier();
                 inSequence(sequence);
                 will(returnValue("mockGrandParentType"));
-                
+
                 allowing(mockParentType).getSpecificationLoader();
                 inSequence(sequence);
                 will(returnValue(metaModelContext.getSpecificationLoader()));
-                
+
                 allowing(mockChildType).getSpecificationLoader();
                 inSequence(sequence);
                 will(returnValue(metaModelContext.getSpecificationLoader()));
-                
+
             }
         });
 
         val failures = processThenValidate(mockChildType);
 
         assertThat(failures.getNumberOfFailures(), is(1));
-        assertThat(failures.getMessages().iterator().next(), 
+        assertThat(failures.getMessages().iterator().next(),
                 CoreMatchers.containsString("cannot have @Version annotated on this subclass and any of its supertypes; superclass: "));
     }
 
-    private ValidationFailures processThenValidate(ObjectSpecification spec) {
+    private ValidationFailures processThenValidate(final ObjectSpecification spec) {
         val specLoader = metaModelContext.getSpecificationLoader();
         specLoader.specForType(spec.getCorrespondingClass()).get(); // fail if empty
         return specLoader.getOrAssessValidationResult();

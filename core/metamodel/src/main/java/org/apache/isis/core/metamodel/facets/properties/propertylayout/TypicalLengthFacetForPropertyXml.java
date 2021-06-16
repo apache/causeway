@@ -19,39 +19,31 @@
 
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
-import java.util.Map;
+import java.util.Optional;
 
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
-import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacetAbstract;
 
-public class TypicalLengthFacetForPropertyXml extends TypicalLengthFacetAbstract {
+public class TypicalLengthFacetForPropertyXml
+extends TypicalLengthFacetAbstract {
 
-    public static TypicalLengthFacet create(PropertyLayoutData propertyLayout, FacetHolder holder) {
+    public static Optional<TypicalLengthFacet> create(
+            final PropertyLayoutData propertyLayout,
+            final FacetHolder holder) {
         if(propertyLayout == null) {
-            return null;
+            return Optional.empty();
         }
         final Integer typicalLength = propertyLayout.getTypicalLength();
-        return typicalLength != null && typicalLength != -1 ? new TypicalLengthFacetForPropertyXml(typicalLength, holder) : null;
+        return typicalLength != null
+                && typicalLength != -1
+                    ? Optional.of(new TypicalLengthFacetForPropertyXml(typicalLength, holder))
+                    : Optional.empty();
     }
 
-    private final int value;
-
-    private TypicalLengthFacetForPropertyXml(int value, FacetHolder holder) {
-        super(holder, FacetAbstract.Derivation.NOT_DERIVED);
-        this.value = value;
-    }
-
-    @Override
-    public int value() {
-        return value;
-    }
-
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("value", value);
+    private TypicalLengthFacetForPropertyXml(final int typicalLength, final FacetHolder holder) {
+        super(typicalLength, holder);
     }
 
 }

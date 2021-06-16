@@ -26,17 +26,17 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacetAbstract;
 
-public class MaxLengthFacetForParameterAnnotation extends MaxLengthFacetAbstract {
+public class MaxLengthFacetForParameterAnnotation
+extends MaxLengthFacetAbstract {
 
-    public static MaxLengthFacet create(
+    public static Optional<MaxLengthFacet> create(
             final Optional<Parameter> parameterIfAny,
             final FacetHolder holder) {
 
         return parameterIfAny
                 .map(Parameter::maxLength)
                 .filter(maxLength -> maxLength != -1)
-                .map(maxLength -> new MaxLengthFacetForParameterAnnotation(maxLength, holder))
-                .orElse(null);
+                .map(maxLength -> new MaxLengthFacetForParameterAnnotation(maxLength, holder));
     }
 
     private MaxLengthFacetForParameterAnnotation(final int value, final FacetHolder holder) {

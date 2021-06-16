@@ -24,21 +24,19 @@ import java.util.Optional;
 
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacetAbstract;
 
 
 public class PluralFacetForDomainObjectLayoutAnnotation extends PluralFacetAbstract {
 
-    public static PluralFacet create(
+    public static Optional<PluralFacetForDomainObjectLayoutAnnotation> create(
             final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final FacetHolder holder) {
 
         return domainObjectLayoutIfAny
                 .map(DomainObjectLayout::plural)
                 .filter(Objects::nonNull)
-                .map(plural -> new PluralFacetForDomainObjectLayoutAnnotation(plural, holder))
-                .orElse(null);
+                .map(plural -> new PluralFacetForDomainObjectLayoutAnnotation(plural, holder));
     }
 
     private PluralFacetForDomainObjectLayoutAnnotation(final String value, final FacetHolder holder) {

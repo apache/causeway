@@ -22,10 +22,11 @@ package org.apache.isis.core.metamodel.facets.members.disabled.method;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 
-public class DisableForContextFacetNone extends DisableForContextFacetAbstract {
+public class DisableForContextFacetNone
+extends DisableForContextFacetAbstract {
 
     public DisableForContextFacetNone(final FacetHolder holder) {
-        super(holder);
+        super(holder, Precedence.FALLBACK);
     }
 
     /**
@@ -37,12 +38,6 @@ public class DisableForContextFacetNone extends DisableForContextFacetAbstract {
     @Override
     public String disables(final UsabilityContext ic) {
         return null;
-    }
-
-
-    @Override
-    public boolean isFallback() {
-        return true;
     }
 
 }

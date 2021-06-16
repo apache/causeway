@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -30,31 +33,36 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 public class AuthorizationFacetPostProcessor
     extends ObjectSpecificationPostProcessorAbstract {
 
+    @Inject
+    public AuthorizationFacetPostProcessor(final MetaModelContext metaModelContext) {
+        super(metaModelContext);
+    }
+
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification) {
         addFacet(objectSpecification);
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction act) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction act) {
         addFacet(act);
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction objectAction, ObjectActionParameter param) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction, final ObjectActionParameter param) {
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, OneToOneAssociation prop) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToOneAssociation prop) {
         addFacet(prop);
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, OneToManyAssociation coll) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
         addFacet(coll);
     }
 
-    private static void addFacet(FacetHolder facetHolder) {
+    private static void addFacet(final FacetHolder facetHolder) {
         facetHolder.addFacet(new AuthorizationFacetImpl(facetHolder));
     }
 

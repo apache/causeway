@@ -44,7 +44,7 @@ public class GridFacetDefault
 extends FacetAbstract
 implements GridFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return GridFacet.class;
     }
 
@@ -64,7 +64,7 @@ implements GridFacet {
     private GridFacetDefault(
             final FacetHolder facetHolder,
             final GridService gridService) {
-        super(GridFacetDefault.type(), facetHolder, Derivation.NOT_DERIVED);
+        super(GridFacetDefault.type(), facetHolder);
         this.gridService = gridService;
     }
 

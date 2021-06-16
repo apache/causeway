@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class UUIDValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<UUID> implements UUIDValueFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return UUIDValueFacet.class;
     }
 

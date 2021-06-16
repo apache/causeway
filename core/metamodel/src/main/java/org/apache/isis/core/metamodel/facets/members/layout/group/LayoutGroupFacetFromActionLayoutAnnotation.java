@@ -26,17 +26,16 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 public class LayoutGroupFacetFromActionLayoutAnnotation
 extends LayoutGroupFacetAbstract {
 
-    public static LayoutGroupFacetFromActionLayoutAnnotation create(
+    public static Optional<LayoutGroupFacetFromActionLayoutAnnotation> create(
             final Optional<ActionLayout> actionLayoutIfAny,
             final FacetHolder holder) {
 
         return actionLayoutIfAny
             .flatMap(GroupIdAndName::forActionLayout)
-            .map(groupIdAndName->new LayoutGroupFacetFromActionLayoutAnnotation(groupIdAndName, holder))
-            .orElse(null);
+            .map(groupIdAndName->new LayoutGroupFacetFromActionLayoutAnnotation(groupIdAndName, holder));
     }
 
-    private LayoutGroupFacetFromActionLayoutAnnotation(GroupIdAndName groupIdAndName, FacetHolder holder) {
+    private LayoutGroupFacetFromActionLayoutAnnotation(final GroupIdAndName groupIdAndName, final FacetHolder holder) {
         super(groupIdAndName, holder);
     }
 

@@ -23,10 +23,13 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbstract;
 
-public class DescribedAsFacetOnParameterDerivedFromType extends DescribedAsFacetAbstract {
+public class DescribedAsFacetOnParameterDerivedFromType
+extends DescribedAsFacetAbstract {
 
-    public DescribedAsFacetOnParameterDerivedFromType(final DescribedAsFacet describedAsFacet, final FacetHolder holder) {
-        super(describedAsFacet.value(), holder);
+    public DescribedAsFacetOnParameterDerivedFromType(
+            final DescribedAsFacet describedAsFacet,
+            final FacetHolder holder) {
+        super(describedAsFacet.text(), holder);
     }
 
 }

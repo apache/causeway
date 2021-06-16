@@ -23,8 +23,8 @@ import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelVisitingValidatorAbstract;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.query.JdoQueryFacet;
@@ -36,9 +36,10 @@ extends MetaModelVisitingValidatorAbstract {
 
     final String clause;
 
-    MetaModelVisitingValidatorForClauseAbstract(
+    protected MetaModelVisitingValidatorForClauseAbstract(
+            final MetaModelContext mmc,
             final String clause) {
-
+        super(mmc);
         this.clause = clause;
     }
 
@@ -100,10 +101,5 @@ extends MetaModelVisitingValidatorAbstract {
             final String classNameFromClause,
             final ObjectSpecification objectSpec,
             final String query);
-
-
-    SpecificationLoader getSpecificationLoader() {
-        return super.getMetaModelContext().getSpecificationLoader();
-    }
 
 }

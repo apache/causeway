@@ -24,6 +24,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.commons.internal.base._Optionals;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -32,7 +33,7 @@ import lombok.val;
 
 public class CommandPublishingFacetForPropertyAnnotation extends CommandPublishingFacetAbstract {
 
-    public static CommandPublishingFacet create(
+    public static Optional<CommandPublishingFacet> create(
             final Optional<Property> propertyIfAny,
             final IsisConfiguration configuration,
             final FacetHolder holder,
@@ -40,42 +41,49 @@ public class CommandPublishingFacetForPropertyAnnotation extends CommandPublishi
 
         val publishingPolicy = PublishingPolicies.propertyCommandPublishingPolicy(configuration);
 
-        return propertyIfAny
-                .filter(property -> property.commandPublishing() != Publishing.NOT_SPECIFIED)
-                .map(property -> {
-                    Publishing commandReification = property.commandPublishing();
+        return _Optionals.orNullable(
 
-                    final Class<? extends CommandDtoProcessor> processorClass =
-                            property.commandDtoProcessor();
-                    final CommandDtoProcessor processor = newProcessorElseNull(processorClass);
+            propertyIfAny
+            .filter(property -> property.commandPublishing() != Publishing.NOT_SPECIFIED)
+            .map(property -> {
+                Publishing commandReification = property.commandPublishing();
 
-                    if(processor != null) {
-                        commandReification = Publishing.ENABLED;
-                    }
-                    switch (commandReification) {
-                    case AS_CONFIGURED:
-                        switch (publishingPolicy) {
-                        case NONE:
-                            return null;
-                        default:
-                            return (CommandPublishingFacet)new CommandPublishingFacetForPropertyAnnotationAsConfigured(holder, servicesInjector);
-                        }
-                    case DISABLED:
-                        return null;
-                    case ENABLED:
-                        return new CommandPublishingFacetForPropertyAnnotation(holder, processor, servicesInjector);
-                    default:
-                    }
-                    throw new IllegalStateException("command '" + commandReification + "' not recognised");
-                })
-                .orElseGet(() -> {
+                final Class<? extends CommandDtoProcessor> processorClass =
+                        property.commandDtoProcessor();
+                final CommandDtoProcessor processor = newProcessorElseNull(processorClass);
+
+                if(processor != null) {
+                    commandReification = Publishing.ENABLED;
+                }
+                switch (commandReification) {
+                case AS_CONFIGURED:
                     switch (publishingPolicy) {
                     case NONE:
                         return null;
                     default:
-                        return CommandPublishingFacetFromConfiguration.create(holder, servicesInjector);
+                        return (CommandPublishingFacet)new CommandPublishingFacetForPropertyAnnotationAsConfigured(holder, servicesInjector);
                     }
-                });
+                case DISABLED:
+                    return null;
+                case ENABLED:
+                    return new CommandPublishingFacetForPropertyAnnotation(holder, processor, servicesInjector);
+                default:
+                }
+                throw new IllegalStateException("command '" + commandReification + "' not recognised");
+            })
+
+            ,
+
+            () -> {
+                switch (publishingPolicy) {
+                case NONE:
+                    return null;
+                default:
+                    return CommandPublishingFacetFromConfiguration.create(holder, servicesInjector);
+                }
+            }
+
+        );
     }
 
 

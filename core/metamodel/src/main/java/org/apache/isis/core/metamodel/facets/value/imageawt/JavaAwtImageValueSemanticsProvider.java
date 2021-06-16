@@ -72,11 +72,6 @@ extends ImageValueSemanticsProviderAbstract<BufferedImage> {
     }
 
     @Override
-    public boolean isFallback() {
-        return false;
-    }
-
-    @Override
     public String toString() {
         return "JavaAwtImageValueSemanticsProvider: ";
     }

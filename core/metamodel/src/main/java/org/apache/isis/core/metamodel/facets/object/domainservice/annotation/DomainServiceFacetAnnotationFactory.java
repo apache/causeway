@@ -20,11 +20,12 @@ package org.apache.isis.core.metamodel.facets.object.domainservice.annotation;
 
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
@@ -38,31 +39,26 @@ public class DomainServiceFacetAnnotationFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
-    public DomainServiceFacetAnnotationFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    @Inject
+    public DomainServiceFacetAnnotationFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
     }
 
     @Override
-    public void setMetaModelContext(MetaModelContext metaModelContext) {
-        super.setMetaModelContext(metaModelContext);
-    }
-
-    @Override
-    public void process(ProcessClassContext processClassContext) {
-        val cls = processClassContext.getCls();
-        val domainServiceAnnotation = Annotations.getAnnotation(cls, DomainService.class);
-        if (domainServiceAnnotation == null) {
+    public void process(final ProcessClassContext processClassContext) {
+        val domainServiceIfAny = processClassContext.synthesizeOnType(DomainService.class);
+        if (!domainServiceIfAny.isPresent()) {
             return;
         }
         val facetHolder = processClassContext.getFacetHolder();
-        val domainServiceFacet = new DomainServiceFacetAnnotation(
-                facetHolder,
-                domainServiceAnnotation.nature());
-        super.addFacet(domainServiceFacet);
+        addFacet(
+                new DomainServiceFacetAnnotation(
+                        facetHolder,
+                        domainServiceIfAny.get().nature()));
     }
 
     @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+    public void refineProgrammingModel(final ProgrammingModel programmingModel) {
 
         programmingModel.addVisitingValidatorSkipManagedBeans(spec->{
 

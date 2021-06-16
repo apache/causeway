@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public abstract class SnapshotExcludeFacetAbstract extends FacetAbstract implements SnapshotExcludeFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return SnapshotExcludeFacet.class;
     }
 

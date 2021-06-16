@@ -69,7 +69,7 @@ public interface ObjectActionContainer {
      * <p>
      * The identity string can be either fully specified with parameters (as per
      * {@link Identifier#getMemberNameAndParameterClassNamesIdentityString()} or in abbreviated form (
-     * {@link Identifier#getMemberName()}).
+     * {@link Identifier#getMemberLogicalName()}).
      *
      * @see #getDeclaredAction(String)
      */

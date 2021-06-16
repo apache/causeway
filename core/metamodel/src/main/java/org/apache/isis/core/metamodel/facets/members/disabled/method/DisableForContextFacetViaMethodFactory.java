@@ -21,10 +21,12 @@ package org.apache.isis.core.metamodel.facets.members.disabled.method;
 
 import java.lang.reflect.Method;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
@@ -36,8 +38,9 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
 
     private static final String PREFIX = MethodLiteralConstants.DISABLE_PREFIX;
 
-    public DisableForContextFacetViaMethodFactory() {
-        super(FeatureType.MEMBERS, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
+    @Inject
+    public DisableForContextFacetViaMethodFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.MEMBERS, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
     }
 
     @Override
@@ -85,8 +88,10 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
         val translationService = getTranslationService();
         // sadness: same logic as in I18nFacetFactory
         val translationContext = TranslationContext
-                .forTranslationContextHolder(((IdentifiedHolder)facetHolder).getIdentifier());
-        super.addFacet(new DisableForContextFacetViaMethod(disableMethod, translationService, translationContext, facetHolder));
+                .forTranslationContextHolder(facetHolder.getFeatureIdentifier());
+        addFacet(
+                new DisableForContextFacetViaMethod(
+                        disableMethod, translationService, translationContext, facetHolder));
     }
 
 }

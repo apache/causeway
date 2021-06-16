@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.facets.SingleStringValueFacetAbstract;
 
 public class DefaultViewFacetAbstract extends SingleStringValueFacetAbstract implements DefaultViewFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return DefaultViewFacet.class;
     }
 

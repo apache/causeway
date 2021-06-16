@@ -21,16 +21,21 @@ package org.apache.isis.core.metamodel.facets.param.layout;
 
 import java.util.Optional;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
 import lombok.val;
 
-public class ParameterLayoutFacetFactory extends FacetFactoryAbstract {
+public class ParameterLayoutFacetFactory
+extends FacetFactoryAbstract {
 
-    public ParameterLayoutFacetFactory() {
-        super(FeatureType.PARAMETERS_ONLY);
+    @Inject
+    public ParameterLayoutFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.PARAMETERS_ONLY);
     }
 
     @Override
@@ -40,18 +45,36 @@ public class ParameterLayoutFacetFactory extends FacetFactoryAbstract {
     }
 
     protected void addFacets(
-            ProcessParameterContext processParameterContext,
-            Optional<ParameterLayout> parameterLayoutIfAny) {
+            final ProcessParameterContext processParameterContext,
+            final Optional<ParameterLayout> parameterLayoutIfAny) {
 
         val facetHolder = processParameterContext.getFacetHolder();
 
-        super.addFacet(CssClassFacetForParameterLayoutAnnotation.create(parameterLayoutIfAny, facetHolder));
-        super.addFacet(DescribedAsFacetForParameterLayoutAnnotation.create(parameterLayoutIfAny, facetHolder));
-        super.addFacet(LabelAtFacetForParameterLayoutAnnotation.create(parameterLayoutIfAny, facetHolder));
-        super.addFacet(MultiLineFacetForParameterLayoutAnnotation.create(parameterLayoutIfAny, facetHolder));
-        super.addFacet(NamedFacetForParameterLayoutAnnotation.create(parameterLayoutIfAny, facetHolder));
-        super.addFacet(RenderedAdjustedFacetForParameterLayoutAnnotation.create(parameterLayoutIfAny, facetHolder));
-        super.addFacet(TypicalLengthFacetForParameterLayoutAnnotation.create(parameterLayoutIfAny, facetHolder));
+        addFacetIfPresent(
+                CssClassFacetForParameterLayoutAnnotation
+                .create(parameterLayoutIfAny, facetHolder));
+
+        addFacetIfPresent(
+                DescribedAsFacetForParameterLayoutAnnotation
+                .create(parameterLayoutIfAny, facetHolder));
+
+        addFacetIfPresent(
+                LabelAtFacetForParameterLayoutAnnotation
+                .create(parameterLayoutIfAny, facetHolder));
+
+        addFacetIfPresent(
+                MultiLineFacetForParameterLayoutAnnotation
+                .create(parameterLayoutIfAny, facetHolder));
+
+        addFacetIfPresent(
+                NamedFacetForParameterLayoutAnnotation
+                .create(parameterLayoutIfAny, facetHolder));
+
+        addFacetIfPresent(RenderedAdjustedFacetForParameterLayoutAnnotation
+                .create(parameterLayoutIfAny, facetHolder));
+
+        addFacetIfPresent(TypicalLengthFacetForParameterLayoutAnnotation
+                .create(parameterLayoutIfAny, facetHolder));
 
     }
 

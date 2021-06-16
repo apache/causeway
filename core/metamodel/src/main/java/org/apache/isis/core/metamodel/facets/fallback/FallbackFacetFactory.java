@@ -21,15 +21,19 @@ package org.apache.isis.core.metamodel.facets.fallback;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.commons.StringExtensions;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
+
+import lombok.val;
 
 /**
  * Central point for providing some kind of default for any {@link Facet}s
@@ -58,26 +62,22 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
         }
     };
 
-    public FallbackFacetFactory() {
-        super(FeatureType.EVERYTHING);
+    @Inject
+    public FallbackFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.EVERYTHING);
     }
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        final DescribedAsFacetNone describedAsFacet = new DescribedAsFacetNone(facetHolder);
-        final TitleFacetNone titleFacet = new TitleFacetNone(facetHolder);
+        val facetHolder = processClassContext.getFacetHolder();
 
-        final int pagedStandalone = getConfiguration().getApplib().getAnnotation().getDomainObjectLayout().getPaged();
-        final PagedFacetFromConfiguration pagedFacet = new PagedFacetFromConfiguration(pagedStandalone, facetHolder);
-
-        super.addFacet(describedAsFacet);
-        // commenting these out, think this whole isNoop business is a little bogus
-        //FacetUtil.addFacet(new ImmutableFacetNever(holder));
-        super.addFacet(titleFacet);
-        super.addFacet(pagedFacet);
-
+        addFacet(new DescribedAsFacetNone(facetHolder));
+        addFacet(new TitleFacetNone(facetHolder));
+        addFacet(
+                new PagedFacetFromConfiguration(
+                        getConfiguration().getApplib().getAnnotation().getDomainObjectLayout().getPaged(),
+                        facetHolder));
     }
 
     @Override
@@ -85,29 +85,25 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
 
         final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
 
-
-        final String id = facetedMethod.getIdentifier().getMemberLogicalName();
-        String defaultName = StringExtensions.asNaturalName2(id);
-
-        super.addFacet(new NamedFacetDefault(defaultName, facetedMethod));
-
-        super.addFacet(new DescribedAsFacetNone(facetedMethod));
-        super.addFacet(new HelpFacetNone(facetedMethod));
-
+        addFacet(new NamedFacetFallbackFromMemberName(facetedMethod));
+        addFacet(new DescribedAsFacetNone(facetedMethod));
+        addFacet(new HelpFacetNone(facetedMethod));
 
         final FeatureType featureType = facetedMethod.getFeatureType();
         if (featureType.isProperty()) {
-            super.addFacet(new MaxLengthFacetUnlimited(facetedMethod));
-            super.addFacet(new MultiLineFacetNone(facetedMethod));
-
-            super.addFacet(newPropParamLayoutFacetIfAny(facetedMethod, "propertyLayout", getConfiguration().getApplib().getAnnotation().getPropertyLayout()));
+            addFacet(new MaxLengthFacetUnlimited(facetedMethod));
+            addFacet(new MultiLineFacetNone(facetedMethod));
+            addFacet(newPropParamLayoutFacetIfAny(facetedMethod, "propertyLayout", getConfiguration().getApplib().getAnnotation().getPropertyLayout()));
         }
         if (featureType.isAction()) {
-            super.addFacet(new ActionDefaultsFacetNone(facetedMethod));
-            super.addFacet(new ActionChoicesFacetNone(facetedMethod));
+            addFacet(new ActionDefaultsFacetNone(facetedMethod));
+            addFacet(new ActionChoicesFacetNone(facetedMethod));
         }
         if (featureType.isCollection()) {
-            super.addFacet(new PagedFacetFromConfiguration(getConfiguration().getApplib().getAnnotation().getCollectionLayout().getPaged(), facetedMethod));
+            addFacet(
+                    new PagedFacetFromConfiguration(
+                            getConfiguration().getApplib().getAnnotation().getCollectionLayout().getPaged(),
+                            facetedMethod));
         }
 
     }
@@ -117,24 +113,24 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
 
         final TypedHolder typedHolder = processParameterContext.getFacetHolder();
         if (typedHolder.getFeatureType().isActionParameter()) {
-            super.addFacet(new NamedFacetNone(typedHolder));
-            super.addFacet(new DescribedAsFacetNone(typedHolder));
-            super.addFacet(new HelpFacetNone(typedHolder));
-            super.addFacet(new MultiLineFacetNone(typedHolder));
+            addFacet(new NamedFacetNone(typedHolder));
+            addFacet(new DescribedAsFacetNone(typedHolder));
+            addFacet(new HelpFacetNone(typedHolder));
+            addFacet(new MultiLineFacetNone(typedHolder));
 
-            super.addFacet(new MaxLengthFacetUnlimited(typedHolder));
+            addFacet(new MaxLengthFacetUnlimited(typedHolder));
 
-            super.addFacet(newPropParamLayoutFacetIfAny(typedHolder, "parameterLayout", getConfiguration().getApplib().getAnnotation().getParameterLayout()));
+            addFacet(newPropParamLayoutFacetIfAny(typedHolder, "parameterLayout", getConfiguration().getApplib().getAnnotation().getParameterLayout()));
         }
 
     }
 
-    private Facet newPropParamLayoutFacetIfAny(final FacetHolder facetHolder, final String layoutKey, IsisConfiguration.Applib.Annotation.ConfigPropsForPropertyOrParameterLayout configPropsHolder) {
+    private Facet newPropParamLayoutFacetIfAny(final FacetHolder facetHolder, final String layoutKey, final IsisConfiguration.Applib.Annotation.ConfigPropsForPropertyOrParameterLayout configPropsHolder) {
         final LabelPosition labelPosition = from(configPropsHolder);
         return new LabelAtFacetFromLayoutConfiguration(labelPosition, facetHolder);
     }
 
-    private static LabelPosition from(IsisConfiguration.Applib.Annotation.ConfigPropsForPropertyOrParameterLayout configPropsHolder) {
+    private static LabelPosition from(final IsisConfiguration.Applib.Annotation.ConfigPropsForPropertyOrParameterLayout configPropsHolder) {
         return configPropsHolder.getLabelPosition();
     }
 }

@@ -19,28 +19,24 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobject.editing;
 
-import java.util.Map;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacetAbstract;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.val;
 
-public class ImmutableFacetForDomainObjectAnnotation extends ImmutableFacetAbstract {
+public class ImmutableFacetForDomainObjectAnnotation
+extends ImmutableFacetAbstract {
 
-    private final String reason;
+    // -- FACTORY
 
-    public static ImmutableFacet create(
+    public static Optional<ImmutableFacet> create(
             final Optional<DomainObject> domainObjectIfAny,
             final IsisConfiguration configuration,
             final FacetHolder holder) {
@@ -59,50 +55,39 @@ public class ImmutableFacetForDomainObjectAnnotation extends ImmutableFacetAbstr
 
                 if(holder.containsNonFallbackFacet(ImmutableFacet.class)) {
                     // do not replace
-                    return null;
+                    return Optional.empty();
                 }
 
                 return editingDisabledByDefault
-                        ? (ImmutableFacet) new ImmutableFacetForDomainObjectAnnotationAsConfigured(disabledReason, holder)
-                                : null;
+                        ? Optional.of((ImmutableFacet) new ImmutableFacetForDomainObjectAnnotationAsConfigured(disabledReason, holder))
+                        : Optional.empty();
             case DISABLED:
-                return new ImmutableFacetForDomainObjectAnnotation(disabledReason, holder);
+                return Optional.of(new ImmutableFacetForDomainObjectAnnotation(disabledReason, holder));
             case ENABLED:
-                return null; // see also EditingEnabledFacetForDomainObjectAnnotation
+                return Optional.empty(); // see also EditingEnabledFacetForDomainObjectAnnotation
             default:
                 throw _Exceptions.unmatchedCase(domainObject.editing());
             }
         }
 
         return editingDisabledByDefault
-                    ? new ImmutableFacetFromConfiguration("Disabled (by configuration defaults)", holder)
-                    : null;
+                    ? Optional.of(ImmutableFacetFromConfiguration.create(holder))
+                    : Optional.empty();
     }
+
+    // -- CONSTRUCTOR
 
     protected ImmutableFacetForDomainObjectAnnotation(
             final String reason,
             final FacetHolder holder) {
-        super(holder);
-        this.reason = reason;
+        super(reason, holder);
     }
 
-    @Override
-    public String disabledReason(final ManagedObject targetAdapter) {
-        return _Strings.isNotEmpty(reason)
-                ? reason
-                : super.disabledReason(targetAdapter);
-    }
+    // -- IMPL
 
     @Override
-    public void copyOnto(final FacetHolder holder) {
-        final Facet facet = new ImmutableFacetForDomainObjectAnnotation(reason, holder);
-        FacetUtil.addFacet(facet);
-    }
-
-    @Override
-    public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("reason", reason);
+    public ImmutableFacet clone(final FacetHolder holder) {
+        return new ImmutableFacetForDomainObjectAnnotation(reason, holder);
     }
 
 

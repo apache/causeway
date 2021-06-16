@@ -24,10 +24,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -41,8 +45,13 @@ import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 public class MemberSupportAnnotationEnforcesSupportingMethodValidator
 extends MetaModelVisitingValidatorAbstract {
 
+    @Inject
+    public MemberSupportAnnotationEnforcesSupportingMethodValidator(final MetaModelContext mmc) {
+        super(mmc);
+    }
+
     @Override
-    public void validate(ObjectSpecification spec) {
+    public void validate(final ObjectSpecification spec) {
 
         if(spec.isManagedBean()) {
             return;
@@ -56,7 +65,7 @@ extends MetaModelVisitingValidatorAbstract {
                 .filter(ImperativeFacet.class::isInstance)
                 .map(ImperativeFacet.class::cast)
                 .map(ImperativeFacet::getMethods)
-                .flatMap(List::stream)
+                .flatMap(Can::stream)
                 .collect(Collectors.toCollection(HashSet::new));
 
         // methods intended to be included with the meta-model
@@ -80,7 +89,7 @@ extends MetaModelVisitingValidatorAbstract {
             ValidationFailure.raiseFormatted(
                     spec,
                     messageFormat,
-                    spec.getIdentifier().getClassName(),
+                    spec.getFeatureIdentifier().getClassName(),
                     notRecognizedMethod.getName(),
                     MemberSupport.class.getSimpleName(),
                     unmetContraints.stream()
@@ -92,8 +101,8 @@ extends MetaModelVisitingValidatorAbstract {
     // -- VALIDATION LOGIC
 
     private List<String> unmetContraints(
-            ObjectSpecification spec,
-            Method method) {
+            final ObjectSpecification spec,
+            final Method method) {
 
         //val type = spec.getCorrespondingClass();
         final List<String> unmetContraints = _Lists.<String>newArrayList();

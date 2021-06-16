@@ -21,7 +21,10 @@ package org.apache.isis.core.metamodel.facets.object.hidden.method;
 
 import java.lang.reflect.Method;
 
+import javax.inject.Inject;
+
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -34,6 +37,8 @@ import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstr
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
+import lombok.val;
+
 /**
  * Installs the {@link HiddenObjectFacetViaMethod} on the
  * {@link ObjectSpecification}, and copies this facet onto each
@@ -45,12 +50,14 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
  * class is being processed}, the {@link ObjectMember member}s for the
  * {@link ObjectSpecification spec} are not known.
  */
-public class HiddenObjectFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
+public class HiddenObjectFacetViaMethodFactory
+extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.HIDDEN_PREFIX);
 
-    public HiddenObjectFacetViaMethodFactory() {
-        super(FeatureType.EVERYTHING_BUT_PARAMETERS, OrphanValidation.VALIDATE, PREFIXES);
+    @Inject
+    public HiddenObjectFacetViaMethodFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.EVERYTHING_BUT_PARAMETERS, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     @Override
@@ -67,11 +74,11 @@ public class HiddenObjectFacetViaMethodFactory extends MethodPrefixBasedFacetFac
     public void process(final ProcessMethodContext processMethodContext) {
         final FacetedMethod member = processMethodContext.getFacetHolder();
         final Class<?> owningClass = processMethodContext.getCls();
-        final ObjectSpecification owningSpec = getSpecificationLoader().loadSpecification(owningClass);
-        final HiddenObjectFacet facet = owningSpec.getFacet(HiddenObjectFacet.class);
-        if (facet != null) {
-            facet.copyOnto(member);
-        }
+        val owningSpec = getSpecificationLoader().loadSpecification(owningClass);
+
+        owningSpec.lookupFacet(HiddenObjectFacet.class)
+        .map(hiddenObjectFacet->hiddenObjectFacet.clone(member))
+        .ifPresent(FacetUtil::addFacet);
     }
 
     private boolean addFacetIfMethodFound(final ProcessClassContext processClassContext, final Class<?> returnType) {

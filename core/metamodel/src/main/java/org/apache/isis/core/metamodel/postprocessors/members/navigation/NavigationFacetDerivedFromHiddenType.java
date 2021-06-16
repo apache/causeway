@@ -20,18 +20,14 @@
 package org.apache.isis.core.metamodel.postprocessors.members.navigation;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.navigation.NavigationFacet;
 import org.apache.isis.core.metamodel.facets.object.hidden.HiddenTypeFacet;
-import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
 import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 
 import lombok.val;
 
@@ -39,12 +35,12 @@ public class NavigationFacetDerivedFromHiddenType extends FacetAbstract implemen
 
     private final ObjectSpecification navigatedType;
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return NavigationFacet.class;
     }
 
     public NavigationFacetDerivedFromHiddenType(final FacetHolder holder, final ObjectSpecification navigatedType) {
-        super(type(), holder, Derivation.DERIVED);
+        super(type(), holder);
         this.navigatedType = navigatedType;
     }
 

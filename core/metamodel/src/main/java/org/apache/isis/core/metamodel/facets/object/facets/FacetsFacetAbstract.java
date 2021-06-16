@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.facets;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.commons.internal.factory._InstanceUtil;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -32,16 +32,18 @@ import org.apache.isis.core.metamodel.facets.FacetFactory;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public abstract class FacetsFacetAbstract extends FacetAbstract implements FacetsFacet {
+public abstract class FacetsFacetAbstract
+extends FacetAbstract
+implements FacetsFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return FacetsFacet.class;
     }
 
     private final Class<? extends FacetFactory>[] facetFactories;
 
     public FacetsFacetAbstract(final String[] names, final Class<?>[] classes, final FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
         final List<Class<? extends FacetFactory>> facetFactories = new ArrayList<Class<? extends FacetFactory>>();
         for (final String name : names) {
             final Class<? extends FacetFactory> facetFactory = facetFactoryOrNull(name);
@@ -90,8 +92,9 @@ public abstract class FacetsFacetAbstract extends FacetAbstract implements Facet
         return (Class<? extends FacetFactory>) (FacetFactory.class.isAssignableFrom(classCandidate) ? classCandidate : null);
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("facetFactories", facetFactories);
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("facetFactories", facetFactories);
     }
 }

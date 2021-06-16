@@ -19,20 +19,27 @@
 
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.annotation.Redirect;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.redirect.RedirectFacet;
 import org.apache.isis.core.metamodel.facets.actions.redirect.RedirectFacetAbstract;
 
-public class RedirectFacetFromActionXml extends RedirectFacetAbstract {
+public class RedirectFacetFromActionXml
+extends RedirectFacetAbstract {
 
-    public static RedirectFacet create(final ActionLayoutData actionLayout, final FacetHolder holder) {
+    public static Optional<RedirectFacet> create(
+            final ActionLayoutData actionLayout,
+            final FacetHolder holder) {
         if(actionLayout == null) {
-            return null;
+            return Optional.empty();
         }
         final Redirect redirect = actionLayout.getRedirect();
-        return redirect != null ? new RedirectFacetFromActionXml(redirect, holder) : null;
+        return redirect != null
+                ? Optional.of(new RedirectFacetFromActionXml(redirect, holder))
+                : Optional.empty();
     }
 
     public RedirectFacetFromActionXml(

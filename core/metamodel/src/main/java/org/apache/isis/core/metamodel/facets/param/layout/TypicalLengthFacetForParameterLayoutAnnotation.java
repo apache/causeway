@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.param.layout;
 
-import java.util.Map;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -27,34 +26,23 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacetAbstract;
 
-public class TypicalLengthFacetForParameterLayoutAnnotation extends TypicalLengthFacetAbstract {
+public class TypicalLengthFacetForParameterLayoutAnnotation
+extends TypicalLengthFacetAbstract {
 
-    public static TypicalLengthFacet create(
+    public static Optional<TypicalLengthFacet> create(
             final Optional<ParameterLayout> parameterLayoutIfAny,
             final FacetHolder holder) {
 
         return parameterLayoutIfAny
-                .map(ParameterLayout::typicalLength)
-                .filter(typicalLength -> typicalLength != -1)
-                .map(typicalLength -> new TypicalLengthFacetForParameterLayoutAnnotation(typicalLength, holder))
-                .orElse(null);
+        .map(ParameterLayout::typicalLength)
+        .filter(typicalLength -> typicalLength != -1)
+        .map(typicalLength -> new TypicalLengthFacetForParameterLayoutAnnotation(typicalLength, holder));
     }
 
-    private final int value;
-
-    public TypicalLengthFacetForParameterLayoutAnnotation(int typicalLength, FacetHolder holder) {
-        super(holder, Derivation.NOT_DERIVED);
-        this.value = typicalLength;
-    }
-
-    @Override
-    public int value() {
-        return value;
-    }
-
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("value", value);
+    private TypicalLengthFacetForParameterLayoutAnnotation(
+            final int typicalLength,
+            final FacetHolder holder) {
+        super(typicalLength, holder);
     }
 
 }

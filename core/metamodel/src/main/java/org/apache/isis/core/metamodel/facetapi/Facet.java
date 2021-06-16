@@ -19,11 +19,85 @@
 
 package org.apache.isis.core.metamodel.facetapi;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 
-public interface Facet extends FacetWithAttributes {
+public interface Facet
+extends
+    FacetWithAttributes,
+    HasSemanticEquality {
+
+    /**
+     * @implSpec Ordinal dictates precedence. A higher ordinal
+     * (corresponding to the ascending order of appearance) has
+     * higher precedence.
+     */
+    public static enum Precedence {
+
+        /**
+         * Whether this facet implementation is a fallback. Meaning it is treated
+         * with lowest priority, always overruled by any other facet of same type.
+         */
+        FALLBACK,
+
+        /**
+         * Whether this facet implementation is inferred (as opposed to explicit);
+         * <p>
+         * For example, we might derive the typical length of a property based on
+         * its type; but if the typical length has been explicitly specified using
+         * an annotation then that should take precedence.
+         */
+        INFERRED,
+
+        /**
+         * Lower precedence than {@link #DEFAULT}. In other words, is overruled by {@link #DEFAULT}.
+         */
+        LOW,
+
+        /**
+         * The default as used with {@link FacetAbstract}, if not specified otherwise.
+         */
+        DEFAULT,
+
+        /**
+         * Higher precedence than {@link #DEFAULT}. In other words, overrules {@link #DEFAULT}.
+         */
+        HIGH,
+
+        /**
+         * Highest precedence, with special behavior and restrictions:
+         * <ul>
+         * <li>
+         *      There can by only one {@link Facet} with {@link Precedence#EVENT}
+         *      per {@link FacetHolder} and facet-type.
+         * </li>
+         * <li>
+         *      If there are no subscribers to the event or subscribers are indifferent,
+         *      then the 'winning' facet (if any) from the next lower {@link Precedence} rank,
+         *      is used instead.
+         * </li>
+         * </ul>
+         */
+        EVENT,
+        ;
+
+        public boolean isFallback() {
+            return this == FALLBACK;
+        }
+
+        public boolean isInferred() {
+            return this == INFERRED;
+        }
+
+        public boolean isEvent() {
+            return this == EVENT;
+        }
+
+    }
 
     /**
      * The {@link FacetHolder holder} of this facet.
@@ -31,27 +105,22 @@ public interface Facet extends FacetWithAttributes {
     FacetHolder getFacetHolder();
 
     /**
-     * Allows reparenting of Facet.
-     *
-     * <p>
-     * Used by Facet decorators.
-     *
-     * @param facetHolder
+     * Identifier of the feature this facet is associated with.
+     * @see FacetHolder#getFeatureIdentifier()
      */
-    public void setFacetHolder(FacetHolder facetHolder);
+    default Identifier getFeatureIdentifier() {
+        return getFacetHolder().getFeatureIdentifier();
+    }
 
-    /**
-     * Underlying {@link Facet} of the same {@link #facetType() type}, if any.
-     */
-    public Facet getUnderlyingFacet();
+    default Optional<FacetRanking> getSharedFacetRanking() {
+        return getFacetHolder().getFacetRanking(facetType());
+    }
 
-    /**
-     * Sets underlying {@link Facet}, that is, creating a chain.
-     *
-     * <p>
-     * Must be of the same {@link #facetType() type}.
-     */
-    public void setUnderlyingFacet(Facet underlyingFacet);
+    default FacetRanking getSharedFacetRankingElseFail() {
+        return getSharedFacetRanking()
+                .orElseThrow(()->_Exceptions
+                        .noSuchElement("no ranking found with facet holder for facetType %s", facetType()));
+    }
 
     /**
      * Determines the type of this facet to be stored under.
@@ -73,27 +142,10 @@ public interface Facet extends FacetWithAttributes {
     Class<? extends Facet> facetType();
 
     /**
-     * Whether this facet implementation is derived (as opposed to explicit);
-     * used to determine precedence.
-     *
-     * <p>
-     * For example, we might derive the typical length of a property based on
-     * its type; but if the typical length has been explicitly specified using
-     * an annotation then that should take precedence.
+     * Facets with higher precedence override facets with lower precedence.
+     * On same precedence, its unspecified, which one wins. (Warnings should be logged.)
      */
-    public boolean isDerived();
-
-    /**
-     * Whether this facet implementation is a fallback. Meaning it is treated
-     * with lowest priority, always overruled by any other facet of same type.
-     */
-    public boolean isFallback();
-
-    /**
-     * Whether this facet implementation should replace existing (none-fallback)
-     * implementations.
-     */
-    public boolean alwaysReplace();
+    public Precedence getPrecedence();
 
     // -- FACET ALIAS SUPPORT
 
@@ -108,14 +160,5 @@ public interface Facet extends FacetWithAttributes {
      * @since 2.0
      */
     void forEachContributedFacet(Consumer<Facet> onContributedFacet);
-
-    /**
-     * An alternative type this Facet can be looked up via {@link FacetHolder#getFacet(Class)}.
-     * @apiNote like {@link #facetType()} the alias must be unique within any facet-holder's
-     * registered facet-types, otherwise an {@link IllegalArgumentException} is thrown during
-     * facet-processing; this is to ensure unambiguous lookup of facets by their alias type
-     * @since 2.0
-     */
-    Class<? extends Facet> facetAliasType();
 
 }

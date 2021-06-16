@@ -21,6 +21,9 @@ package org.apache.isis.core.metamodel.facets.properties.property;
 
 import java.lang.reflect.Method;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -29,12 +32,10 @@ import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import lombok.val;
 
-public class DisabledAnnotationOnPropertyFacetFactoryTest extends AbstractFacetFactoryTest {
+public class DisabledAnnotationOnPropertyFacetFactoryTest
+extends AbstractFacetFactoryTest {
 
     private PropertyAnnotationFacetFactory facetFactory;
 
@@ -42,7 +43,7 @@ public class DisabledAnnotationOnPropertyFacetFactoryTest extends AbstractFacetF
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new PropertyAnnotationFacetFactory();
+        facetFactory = new PropertyAnnotationFacetFactory(metaModelContext);
     }
 
     @Override
@@ -50,9 +51,9 @@ public class DisabledAnnotationOnPropertyFacetFactoryTest extends AbstractFacetF
         facetFactory = null;
         super.tearDown();
     }
-    
+
     private void processEditing(
-            PropertyAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
+            final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
         val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         facetFactory.processEditing(processMethodContext, propertyIfAny);
     }

@@ -26,23 +26,18 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 public class LayoutGroupFacetFromActionAnnotation
 extends LayoutGroupFacetAbstract {
 
-    public static LayoutGroupFacetFromActionAnnotation create(
+    public static Optional<LayoutGroupFacetFromActionAnnotation> create(
             final Optional<Action> actionIfAny,
             final FacetHolder holder) {
 
         return actionIfAny
             .flatMap(GroupIdAndName::forAction)
-            .map(groupIdAndName->new LayoutGroupFacetFromActionAnnotation(groupIdAndName, holder))
-            .orElse(null);
+            .map(groupIdAndName->new LayoutGroupFacetFromActionAnnotation(groupIdAndName, holder));
     }
 
-    private LayoutGroupFacetFromActionAnnotation(GroupIdAndName groupIdAndName, FacetHolder holder) {
-        super(groupIdAndName, holder);
+    private LayoutGroupFacetFromActionAnnotation(final GroupIdAndName groupIdAndName, final FacetHolder holder) {
+        super(groupIdAndName, holder, Precedence.FALLBACK);
     }
 
-    @Override
-    public boolean isFallback() {
-        return true;
-    }
 
 }

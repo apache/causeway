@@ -23,21 +23,19 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbstract;
 
 
 public class DescribedAsFacetForDomainObjectLayoutAnnotation extends DescribedAsFacetAbstract {
 
-    public static DescribedAsFacet create(
+    public static Optional<DescribedAsFacetForDomainObjectLayoutAnnotation> create(
             final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final FacetHolder holder) {
 
         return domainObjectLayoutIfAny
                 .map(DomainObjectLayout::describedAs)
                 .filter(_Strings::isNotEmpty)
-                .map(describedAs -> new DescribedAsFacetForDomainObjectLayoutAnnotation(describedAs, holder))
-                .orElse(null);
+                .map(describedAs -> new DescribedAsFacetForDomainObjectLayoutAnnotation(describedAs, holder));
     }
 
     private DescribedAsFacetForDomainObjectLayoutAnnotation(final String value, final FacetHolder holder) {

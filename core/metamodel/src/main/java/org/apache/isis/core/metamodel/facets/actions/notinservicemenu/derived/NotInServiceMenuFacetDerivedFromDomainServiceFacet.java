@@ -19,7 +19,7 @@
 package org.apache.isis.core.metamodel.facets.actions.notinservicemenu.derived;
 
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -34,7 +34,7 @@ extends NotInServiceMenuFacetAbstract {
 
     public NotInServiceMenuFacetDerivedFromDomainServiceFacet(
             final NatureOfService natureOfService, final FacetHolder holder) {
-        super(holder, Derivation.DERIVED);
+        super(holder, Precedence.HIGH); // facet has final say, don't override
         this.natureOfService = natureOfService;
     }
 
@@ -47,8 +47,9 @@ extends NotInServiceMenuFacetAbstract {
         return natureOfService;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("natureOfService", natureOfService);
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("natureOfService", natureOfService);
     }
 }

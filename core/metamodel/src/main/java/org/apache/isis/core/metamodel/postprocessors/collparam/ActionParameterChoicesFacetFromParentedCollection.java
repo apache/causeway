@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.postprocessors.collparam;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -57,8 +57,8 @@ extends ActionParameterChoicesFacetAbstract {
     }
 
     @Override
-    public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("oneToManyAssociation", otma);
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("oneToManyAssociation", otma);
     }
 }

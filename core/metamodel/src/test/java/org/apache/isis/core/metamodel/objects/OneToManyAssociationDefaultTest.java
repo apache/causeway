@@ -118,7 +118,7 @@ public class OneToManyAssociationDefaultTest {
     private void allowingPeerToReturnIdentifier() {
         context.checking(new Expectations() {
             {
-                oneOf(mockPeer).getIdentifier();
+                oneOf(mockPeer).getFeatureIdentifier();
                 will(returnValue(Identifier.propertyOrCollectionIdentifier(
                         TypeIdentifierTestFactory.newCustomer(), COLLECTION_ID)));
             }
@@ -131,7 +131,7 @@ public class OneToManyAssociationDefaultTest {
                 oneOf(mockPeer).getFacet(NamedFacet.class);
                 will(returnValue(mockNamedFacet));
 
-                oneOf(mockNamedFacet).value();
+                oneOf(mockNamedFacet).translated();
                 will(returnValue("My name"));
             }
         });

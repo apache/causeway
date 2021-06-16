@@ -20,10 +20,9 @@
 package org.apache.isis.core.metamodel.facets.object.hidden.method;
 
 import java.lang.reflect.Method;
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.object.hidden.HiddenObjectFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -55,13 +54,13 @@ extends HiddenObjectFacetAbstract {
     }
 
     @Override
-    public void copyOnto(final FacetHolder holder) {
-        final HiddenObjectFacetViaMethod clonedFacet = new HiddenObjectFacetViaMethod(this.method, holder);
-        FacetUtil.addFacet(clonedFacet);
+    public HiddenObjectFacetViaMethod clone(final FacetHolder holder) {
+        return new HiddenObjectFacetViaMethod(this.method, holder);
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("method", method);
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("method", method);
     }
 }

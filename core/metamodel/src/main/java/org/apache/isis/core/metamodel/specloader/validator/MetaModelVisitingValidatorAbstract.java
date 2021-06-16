@@ -18,9 +18,15 @@
  */
 package org.apache.isis.core.metamodel.specloader.validator;
 
+import org.apache.isis.core.metamodel.context.MetaModelContext;
+
 public abstract class MetaModelVisitingValidatorAbstract
 extends MetaModelValidatorAbstract
 implements MetaModelVisitingValidator {
+
+    protected MetaModelVisitingValidatorAbstract(final MetaModelContext metaModelContext) {
+        super(metaModelContext);
+    }
 
     @Override
     public final void validate() {

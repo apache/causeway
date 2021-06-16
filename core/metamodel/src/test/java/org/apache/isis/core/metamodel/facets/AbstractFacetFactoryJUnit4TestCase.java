@@ -39,10 +39,9 @@ import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.object.domainobject.autocomplete.AutoCompleteFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
@@ -74,7 +73,7 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
 
 
     protected MetaModelContext metaModelContext;
-    protected IdentifiedHolder facetHolder;
+    protected FacetHolder facetHolder;
     protected FacetedMethod facetedMethod;
     protected FacetedMethodParameter facetedMethodParameter;
 
@@ -117,14 +116,11 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
 
         }});
 
-        facetHolder = new AbstractFacetFactoryTest.IdentifiedHolderImpl(
+        facetHolder = FacetHolderAbstract.simple(
+                metaModelContext,
                 Identifier.propertyOrCollectionIdentifier(LogicalType.fqcn(Customer.class), "firstName"));
-        facetedMethod = FacetedMethod.createForProperty(AbstractFacetFactoryTest.Customer.class, "firstName");
-        facetedMethodParameter = new FacetedMethodParameter(FeatureType.ACTION_PARAMETER_SCALAR, facetedMethod.getOwningType(), facetedMethod.getMethod(), String.class);
-
-        ((MetaModelContextAware)facetHolder).setMetaModelContext(metaModelContext);
-        facetedMethod.setMetaModelContext(metaModelContext);
-        facetedMethodParameter.setMetaModelContext(metaModelContext);
+        facetedMethod = FacetedMethod.createForProperty(metaModelContext, AbstractFacetFactoryTest.Customer.class, "firstName");
+        facetedMethodParameter = new FacetedMethodParameter(metaModelContext, FeatureType.ACTION_PARAMETER_SCALAR, facetedMethod.getOwningType(), facetedMethod.getMethod(), String.class);
 
     }
 

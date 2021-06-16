@@ -18,6 +18,7 @@
  */
 package org.apache.isis.persistence.jdo.metamodel.facets.prop.column;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
@@ -25,24 +26,25 @@ import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault;
+import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet.Semantics;
 import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
-import org.apache.isis.persistence.jdo.metamodel.facets.prop.primarykey.OptionalFacetDerivedFromJdoPrimaryKeyAnnotation;
+import org.apache.isis.persistence.jdo.metamodel.facets.prop.primarykey.OptionalFacetInferredFromJdoPrimaryKeyAnnotation;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
 
-import lombok.Setter;
 import lombok.val;
 
 
@@ -50,10 +52,14 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
-    @Inject @Setter private JdoFacetContext jdoFacetContext;
+    private final JdoFacetContext jdoFacetContext;
 
-    public MandatoryFromJdoColumnAnnotationFacetFactory() {
-        super(FeatureType.PROPERTIES_ONLY);
+    @Inject
+    public MandatoryFromJdoColumnAnnotationFacetFactory(
+            final MetaModelContext mmc,
+            final JdoFacetContext jdoFacetContext) {
+        super(mmc, FeatureType.PROPERTIES_ONLY);
+        this.jdoFacetContext = jdoFacetContext;
     }
 
     @Override
@@ -70,7 +76,7 @@ implements MetaModelRefiner {
         final MandatoryFacet existingFacet = holder.getFacet(MandatoryFacet.class);
         if(existingFacet != null) {
 
-            if (existingFacet instanceof OptionalFacetDerivedFromJdoPrimaryKeyAnnotation) {
+            if (existingFacet instanceof OptionalFacetInferredFromJdoPrimaryKeyAnnotation) {
                 // do not replace this facet;
                 // we must keep an optional facet here for different reasons
                 return;
@@ -82,43 +88,47 @@ implements MetaModelRefiner {
             }
         }
 
-        val jdoColumnAnnotation = processMethodContext.synthesizeOnMethod(Column.class)
-                .orElse(null);
-        boolean required = whetherRequired(processMethodContext, jdoColumnAnnotation);
-        MandatoryFacet facet = jdoColumnAnnotation != null
-                ? new MandatoryFacetDerivedFromJdoColumn(holder, required)
-                : new MandatoryFacetInferredFromAbsenceOfJdoColumn(holder, required);
+        val columnIfAny = processMethodContext.synthesizeOnMethod(Column.class);
 
+        val semantics = inferSemantics(processMethodContext, columnIfAny);
 
-        // as a side-effect, will chain any existing facets.
-        // we'll exploit this fact for meta-model validation (see #refineMetaModelValidator(), below)
-        FacetUtil.addFacet(facet);
+        FacetUtil.addFacet(
+            columnIfAny.isPresent()
+                    ? new MandatoryFacetFromJdoColumnAnnotation(holder, semantics)
+                    : new MandatoryFacetInferredFromAbsenceOfJdoColumnAnnotation(
+                            holder,
+                            semantics,
+                            semantics.isRequired()
+                                ? Precedence.DEFAULT
+                                : Precedence.INFERRED)
+        );
 
-        // however, if a @Column was explicitly provided, and the underlying facet
-        // was the simple MandatoryFacetDefault (from an absence of @Optional or @Mandatory),
-        // then don't chain, simply replace.
-        if(facet instanceof MandatoryFacetDerivedFromJdoColumn && facet.getUnderlyingFacet() instanceof MandatoryFacetDefault) {
-            facet.setUnderlyingFacet(null);
-        }
     }
 
-    private static boolean whetherRequired(final ProcessMethodContext processMethodContext, final Column annotation) {
+    private static Semantics inferSemantics(
+            final ProcessMethodContext processMethodContext,
+            final Optional<Column> columnIfAny) {
 
-        final String allowsNull = annotation != null ? annotation.allowsNull() : null;
+        final String allowsNull = columnIfAny.isPresent()
+                ? columnIfAny.get().allowsNull()
+                : null;
 
         if(_Strings.isNotEmpty(allowsNull)) {
             // if miss-spelled, then DN assumes is not-nullable
-            return !"true".equalsIgnoreCase(allowsNull.trim());
+            return Semantics.of(!"true".equalsIgnoreCase(allowsNull.trim()));
         }
 
         final Class<?> returnType = processMethodContext.getMethod().getReturnType();
         // per JDO spec
-        return returnType != null && returnType.isPrimitive();
+        return returnType != null
+                && returnType.isPrimitive()
+            ? Semantics.REQUIRED
+            : Semantics.OPTIONAL;
 
     }
 
     @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+    public void refineProgrammingModel(final ProgrammingModel programmingModel) {
         programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec->{
 
             final JdoPersistenceCapableFacet pcFacet = objectSpec.getFacet(JdoPersistenceCapableFacet.class);
@@ -138,52 +148,21 @@ implements MetaModelRefiner {
         });
     }
 
-    private static void validateMandatoryFacet(ObjectAssociation association) {
-        MandatoryFacet facet = association.getFacet(MandatoryFacet.class);
+    private static void validateMandatoryFacet(final ObjectAssociation association) {
 
-        MandatoryFacet underlying = (MandatoryFacet) facet.getUnderlyingFacet();
-        if(underlying == null) {
-            return;
-        }
+        association.lookupFacet(MandatoryFacet.class)
+        .map(MandatoryFacet::getSharedFacetRankingElseFail)
+        .ifPresent(facetRanking->facetRanking
+                .visitTopRankPairsSemanticDiffering(MandatoryFacet.class, (a, b)->{
 
-        if(facet instanceof MandatoryFacetDerivedFromJdoColumn) {
+                    ValidationFailure.raiseFormatted(
+                            association,
+                            "%s: inconsistent Mandatory/Optional semantics specified in %s and %s.",
+                            association.getFeatureIdentifier().toString(),
+                            a.getClass().getSimpleName(),
+                            b.getClass().getSimpleName());
+                }));
 
-            if(underlying.isInvertedSemantics() == facet.isInvertedSemantics()) {
-                return;
-            }
-
-            if(underlying.isInvertedSemantics()) {
-                // ie @Optional
-                ValidationFailure.raiseFormatted(
-                        association,
-                        "%s: incompatible usage of Isis' @Optional annotation and @javax.jdo.annotations.Column; use just @javax.jdo.annotations.Column(allowsNull=\"...\")",
-                        association.getIdentifier().getFullIdentityString());
-            } else {
-                ValidationFailure.raiseFormatted(
-                        association,
-                        "%s: incompatible Isis' default of required/optional properties vs JDO; add @javax.jdo.annotations.Column(allowsNull=\"...\")",
-                        association.getIdentifier().getFullIdentityString());
-            }
-        }
-
-        if(facet instanceof MandatoryFacetInferredFromAbsenceOfJdoColumn) {
-
-            if(underlying.isInvertedSemantics() == facet.isInvertedSemantics()) {
-                return;
-            }
-            if(underlying.isInvertedSemantics()) {
-                // ie @Optional
-                ValidationFailure.raiseFormatted(
-                        association,
-                        "%s: incompatible usage of Isis' @Optional annotation and @javax.jdo.annotations.Column; use just @javax.jdo.annotations.Column(allowsNull=\"...\")",
-                        association.getIdentifier().getFullIdentityString());
-            } else {
-                ValidationFailure.raiseFormatted(
-                        association,
-                        "%s: incompatible default handling of required/optional properties between Isis and JDO; add @javax.jdo.annotations.Column(allowsNull=\"...\")",
-                        association.getIdentifier().getFullIdentityString());
-            }
-        }
     }
 
 }

@@ -21,19 +21,24 @@ package org.apache.isis.core.metamodel.facets.object.cssclass.method;
 
 import java.lang.reflect.Method;
 
+import javax.inject.Inject;
+
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
-public class CssClassFacetMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
+public class CssClassFacetMethodFactory
+extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.CSS_CLASS_PREFIX);
 
-    public CssClassFacetMethodFactory() {
-        super(FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
+    @Inject
+    public CssClassFacetMethodFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     @Override
@@ -47,6 +52,6 @@ public class CssClassFacetMethodFactory extends MethodPrefixBasedFacetFactoryAbs
             return;
         }
         processClassContext.removeMethod(method);
-        super.addFacet(new CssClassFacetMethod(method, facetHolder));
+        addFacet(new CssClassFacetMethod(method, facetHolder));
     }
 }

@@ -35,7 +35,7 @@ public abstract class AuthorizationFacetAbstract
 extends FacetAbstract
 implements AuthorizationFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return AuthorizationFacet.class;
     }
 
@@ -44,7 +44,7 @@ implements AuthorizationFacet {
 
     public AuthorizationFacetAbstract(
             final FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
         this.authorizationManager = getAuthorizationManager();
         this.interactionProvider = getInteractionProvider();
     }

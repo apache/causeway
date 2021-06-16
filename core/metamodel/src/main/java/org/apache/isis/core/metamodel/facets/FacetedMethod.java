@@ -23,91 +23,60 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault;
 
+import lombok.Getter;
 import lombok.val;
 
 /**
  * non-final only so it can be mocked if need be.
  */
-public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolder {
+public class FacetedMethod
+extends TypedHolderAbstract {
 
-    // //////////////////////////////////////////////////
-    // Factory methods
-    // //////////////////////////////////////////////////
+    // -- FACTORIES
 
-    /**
-     * Principally for testing purposes.
-     */
-    public static FacetedMethod createForProperty(final Class<?> declaringType, final String propertyName) {
-        try {
-            final Method method = declaringType.getMethod("get" + StringExtensions.asPascal(propertyName));
-            return FacetedMethod.createForProperty(declaringType, method);
-        } catch (final SecurityException | NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * Principally for testing purposes.
-     */
-    public static FacetedMethod createForCollection(final Class<?> declaringType, final String collectionName) {
-        try {
-            final Method method = declaringType.getMethod("get" + StringExtensions.asPascal(collectionName));
-            return FacetedMethod.createForCollection(declaringType, method);
-        } catch (final SecurityException | NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * Principally for testing purposes.
-     */
-    public static FacetedMethod createForAction(
-            final Class<?> declaringType,
-            final String actionName,
-            final Class<?>... parameterTypes) {
-
-        try {
-            final Method method = declaringType.getMethod(actionName, parameterTypes);
-            return FacetedMethod.createForAction(declaringType, method);
-        } catch (final SecurityException | NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
-    public static FacetedMethod createForProperty(final Class<?> declaringType, final Method method) {
-        return new FacetedMethod(FeatureType.PROPERTY, declaringType, method, method.getReturnType(), emptyParameterList());
-    }
-
-    public static FacetedMethod createForCollection(final Class<?> declaringType, final Method method) {
-        return new FacetedMethod(FeatureType.COLLECTION, declaringType, method, null, emptyParameterList());
-    }
-
-    public static FacetedMethod createForAction(
+    public static FacetedMethod createForProperty(
+            final MetaModelContext mmc,
             final Class<?> declaringType,
             final Method method) {
-        return new FacetedMethod(FeatureType.ACTION, declaringType, method, method.getReturnType(),
-                getParameters(declaringType, method));
+        return new FacetedMethod(mmc, FeatureType.PROPERTY,
+                declaringType, method, method.getReturnType(), emptyParameterList());
+    }
+
+    public static FacetedMethod createForCollection(
+            final MetaModelContext mmc,
+            final Class<?> declaringType,
+            final Method method) {
+        return new FacetedMethod(mmc, FeatureType.COLLECTION,
+                declaringType, method, null, emptyParameterList());
+    }
+
+    public static FacetedMethod createForAction(
+            final MetaModelContext mmc,
+            final Class<?> declaringType,
+            final Method method) {
+        return new FacetedMethod(mmc, FeatureType.ACTION,
+                declaringType, method, method.getReturnType(),
+                getParameters(mmc, declaringType, method));
     }
 
     private static List<FacetedMethodParameter> getParameters(
+            final MetaModelContext mmc,
             final Class<?> declaringType,
             final Method actionMethod) {
 
-        final List<FacetedMethodParameter> actionParams = _Lists.newArrayList(actionMethod.getParameterCount());
+        final List<FacetedMethodParameter> actionParams =
+                _Lists.newArrayList(actionMethod.getParameterCount());
 
         for(val param : actionMethod.getParameters()) {
 
@@ -120,58 +89,86 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
                     : FeatureType.ACTION_PARAMETER_SCALAR;
 
             val facetedMethodParam =
-                    new FacetedMethodParameter(featureType, declaringType, actionMethod, parameterType);
-            actionParams.add(facetedMethodParam);
+                    new FacetedMethodParameter(mmc, featureType, declaringType, actionMethod, parameterType);
+
+            if(featureType != FeatureType.ACTION_PARAMETER_COLLECTION) {
+                actionParams.add(facetedMethodParam);
+                continue;
+            }
 
             // this is based on similar logic to ActionAnnotationFacetFactory#processTypeOf
-            if(featureType == FeatureType.ACTION_PARAMETER_COLLECTION) {
 
-                final CollectionSemanticsFacet semanticsFacet =
-                        CollectionSemanticsFacetDefault.forParamType(parameterType, facetedMethodParam);
-                FacetUtil.addFacet(semanticsFacet);
+            FacetUtil.addFacet(
+                    CollectionSemanticsFacetDefault
+                    .forParamType(parameterType, facetedMethodParam));
 
-                TypeOfFacet.inferFromParameterType(facetedMethodParam, param)
-                .ifPresent(typeOfFacet->{
-                    // copy over (corresponds to similar code for OneToManyAssociation in FacetMethodsBuilder).
-                    FacetUtil.addFacet(typeOfFacet);
-                    facetedMethodParam.setType(typeOfFacet.value());
-                });
-            }
+            val facetedMethodParamToUse =
+                    TypeOfFacet
+                    .inferFromParameterType(facetedMethodParam, param)
+                    .map(typeOfFacet->{
+                        // (corresponds to similar code for OneToManyAssociation in FacetMethodsBuilder).
+                        FacetUtil.addFacet(typeOfFacet);
+                        return facetedMethodParam.withType(typeOfFacet.value());
+                    })
+                    .orElse(facetedMethodParam);
+
+            actionParams.add(facetedMethodParamToUse);
 
         }
         return Collections.unmodifiableList(actionParams);
     }
 
-    // //////////////////////////////////////////////////
-    // Constructor
-    // //////////////////////////////////////////////////
+    // -- FACTORIES (JUNIT)
 
-    private final Class<?> owningType;
-    private final Method method;
-    private final Identifier identifier;
-    private final List<FacetedMethodParameter> parameters;
-
-    public List<FacetedMethodParameter> getParameters() {
-        return parameters;
+    /**
+     * Principally for testing purposes.
+     */
+    public static FacetedMethod createForProperty(
+            final MetaModelContext mmc,
+            final Class<?> declaringType,
+            final String propertyName) {
+        try {
+            final Method method = declaringType.getMethod("get" + StringExtensions.asPascal(propertyName));
+            return FacetedMethod.createForProperty(mmc, declaringType, method);
+        } catch (final SecurityException | NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public static List<FacetedMethodParameter> emptyParameterList() {
-        final List<FacetedMethodParameter> emptyList = Collections.emptyList();
-        return Collections.unmodifiableList(emptyList);
+    /**
+     * Principally for testing purposes.
+     */
+    public static FacetedMethod createForCollection(
+            final MetaModelContext mmc,
+            final Class<?> declaringType,
+            final String collectionName) {
+        try {
+            final Method method = declaringType.getMethod("get" + StringExtensions.asPascal(collectionName));
+            return FacetedMethod.createForCollection(mmc, declaringType, method);
+        } catch (final SecurityException | NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private FacetedMethod(final FeatureType featureType, final Class<?> declaringType, final Method method, final Class<?> type, final List<FacetedMethodParameter> parameters) {
-        super(featureType, type);
-        this.owningType = declaringType;
-        this.method = method;
+    /**
+     * Principally for testing purposes.
+     */
+    public static FacetedMethod createForAction(
+            final MetaModelContext mmc,
+            final Class<?> declaringType,
+            final String actionName,
+            final Class<?>... parameterTypes) {
 
-        val logicalType = LogicalType.lazy(
-                declaringType,
-                ()->getSpecificationLoader().loadSpecification(declaringType).getLogicalTypeName());
-
-        this.identifier = featureType.identifierFor(logicalType, method);
-        this.parameters = parameters;
+        try {
+            final Method method = declaringType.getMethod(actionName, parameterTypes);
+            return FacetedMethod.createForAction(mmc, declaringType, method);
+        } catch (final SecurityException | NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
     }
+
+
+    // -- FIELDS
 
     /**
      * The {@link Class} that owns this {@link Method} (as per
@@ -183,30 +180,55 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
      * {@link Class#getDeclaredMethods()} does not return methods from
      * superclasses.
      */
-    public Class<?> getOwningType() {
-        return owningType;
-    }
+    @Getter private final Class<?> owningType;
 
     /**
      * A {@link Method} obtained from the {@link #getOwningType() owning type}
      * using {@link Class#getMethods()}.
      */
-    public Method getMethod() {
-        return method;
+    @Getter private final Method method;
+
+    @Getter private final List<FacetedMethodParameter> parameters;
+
+    public static List<FacetedMethodParameter> emptyParameterList() {
+        final List<FacetedMethodParameter> emptyList = Collections.emptyList();
+        return Collections.unmodifiableList(emptyList);
     }
 
-    @Override
-    public Identifier getIdentifier() {
-        return identifier;
-    }
+    // -- CONSTRUCTOR
 
-    // ////////////////////////////////////////////////////////////////////
-    // toString
-    // ////////////////////////////////////////////////////////////////////
+    private FacetedMethod(
+            final MetaModelContext mmc,
+            final FeatureType featureType,
+            final Class<?> declaringType,
+            final Method method,
+            final Class<?> type,
+            final List<FacetedMethodParameter> parameters) {
+
+        super(mmc,
+                featureType,
+                type,
+                featureType.identifierFor(LogicalType.lazy(
+                        declaringType,
+                        ()->mmc.getSpecificationLoader().specForTypeElseFail(declaringType).getLogicalTypeName()), method));
+        this.owningType = declaringType;
+        this.method = method;
+        this.parameters = parameters;
+    }
 
     @Override
     public String toString() {
-        return getFeatureType().name() + " Peer [identifier=\"" + getIdentifier() + "\",type=" + getType().getName() + " ]";
+        return getFeatureType().name() + " Peer [identifier=\"" + getFeatureIdentifier() + "\",type=" + getType().getName() + " ]";
+    }
+
+    /**
+     * Returns an instance with {@code type} replaced by given {@code elementType}.
+     * @param elementType
+     */
+    public FacetedMethod withType(final Class<?> elementType) {
+        //XXX maybe future refactoring can make the type immutable, so we can remove this method
+        this.type = elementType;
+        return this;
     }
 
 

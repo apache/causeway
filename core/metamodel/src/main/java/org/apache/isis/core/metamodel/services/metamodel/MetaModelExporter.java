@@ -366,7 +366,7 @@ class MetaModelExporter {
 
         final List<org.apache.isis.schema.metamodel.v2.Facet> facetList = facets.getFacet();
         facetHolder.streamFacets()
-        .filter(facet -> !facet.isFallback() || !config.isIgnoreNoop())
+        .filter(facet -> !facet.getPrecedence().isFallback() || !config.isIgnoreNoop())
         .map(facet -> asXsdType(facet, config))
         .forEach(facetList::add);
 
@@ -391,7 +391,7 @@ class MetaModelExporter {
             final Config config) {
 
         Map<String, Object> attributeMap = _Maps.newTreeMap();
-        facet.appendAttributesTo(attributeMap);
+        facet.visitAttributes(attributeMap::put);
 
         for (final String key : attributeMap.keySet()) {
             Object attributeObj = attributeMap.get(key);

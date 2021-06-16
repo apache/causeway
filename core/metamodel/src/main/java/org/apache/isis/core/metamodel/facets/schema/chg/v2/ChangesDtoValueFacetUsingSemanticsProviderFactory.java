@@ -19,13 +19,22 @@
 
 package org.apache.isis.core.metamodel.facets.schema.chg.v2;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.schema.chg.v2.ChangesDto;
 
 import lombok.val;
 
-public class ChangesDtoValueFacetUsingSemanticsProviderFactory extends ValueFacetUsingSemanticsProviderFactory<ChangesDto> {
+public class ChangesDtoValueFacetUsingSemanticsProviderFactory
+extends ValueFacetUsingSemanticsProviderFactory<ChangesDto> {
+
+    @Inject
+    public ChangesDtoValueFacetUsingSemanticsProviderFactory(final MetaModelContext mmc) {
+        super(mmc);
+    }
 
     @Override
     public void process(final ProcessClassContext processClassContext) {

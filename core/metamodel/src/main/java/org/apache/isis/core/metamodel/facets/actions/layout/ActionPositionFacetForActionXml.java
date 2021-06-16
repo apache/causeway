@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
@@ -26,12 +28,16 @@ import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFace
 
 public class ActionPositionFacetForActionXml extends ActionPositionFacetAbstract {
 
-    public static ActionPositionFacet create(ActionLayoutData actionLayout, FacetHolder holder) {
+    public static Optional<ActionPositionFacet> create(
+            final ActionLayoutData actionLayout,
+            final FacetHolder holder) {
         if(actionLayout == null) {
-            return null;
+            return Optional.empty();
         }
         final org.apache.isis.applib.annotation.ActionLayout.Position position = actionLayout.getPosition();
-        return position != null ? new ActionPositionFacetForActionXml(position, holder) : null;
+
+        return Optional.ofNullable(position)
+        .map(pos->new ActionPositionFacetForActionXml(pos, holder));
     }
 
     private ActionPositionFacetForActionXml(final org.apache.isis.applib.annotation.ActionLayout.Position position, final FacetHolder holder) {

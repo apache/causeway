@@ -18,43 +18,35 @@
  */
 package org.apache.isis.core.metamodel.facets.properties.bigdecimal.javaxvaldigits;
 
-import java.util.Map;
+import java.util.Optional;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
+import javax.validation.constraints.Digits;
+
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacetAbstract;
 
 
-public class BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation extends BigDecimalValueFacetAbstract {
+public class BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation
+extends BigDecimalValueFacetAbstract {
 
-    private final int precision;
-    private final int scale;
+    public static Optional<BigDecimalValueFacet> create(
+            final FacetHolder facetHolder,
+            final Optional<Digits> digitsIfAny) {
 
-    public static Class<? extends Facet> type() {
-        return BigDecimalValueFacet.class;
+        return digitsIfAny
+        .map(digits->{
+            final int length = digits.integer() + digits.fraction();
+            final int scale = digits.fraction();
+            return new BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation(facetHolder, length, scale);
+        });
     }
 
-    public BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation(final FacetHolder holder, final Integer precision, final Integer scale) {
-        super(BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation.type(), holder, Derivation.NOT_DERIVED);
-        this.precision = precision;
-        this.scale = scale;
-    }
-
-    @Override
-    public Integer getPrecision() {
-        return precision;
-    }
-
-    @Override
-    public Integer getScale() {
-        return scale;
-    }
-
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("precision", precision);
-        attributeMap.put("scale", scale);
+    private BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation(
+            final FacetHolder holder,
+            final int precision,
+            final int scale) {
+        super(precision, scale, holder);
     }
 
 }

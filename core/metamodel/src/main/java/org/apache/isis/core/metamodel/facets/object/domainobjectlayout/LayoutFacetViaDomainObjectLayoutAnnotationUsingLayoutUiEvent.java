@@ -19,15 +19,14 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
-import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.events.ui.LayoutUiEvent;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacet;
 import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacetAbstract;
@@ -39,7 +38,7 @@ public class LayoutFacetViaDomainObjectLayoutAnnotationUsingLayoutUiEvent
 extends LayoutFacetAbstract
 implements LayoutFacet {
 
-    public static Facet create(
+    public static Optional<LayoutFacetViaDomainObjectLayoutAnnotationUsingLayoutUiEvent> create(
             final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final MetamodelEventService metamodelEventService,
             final IsisConfiguration configuration,
@@ -56,18 +55,17 @@ implements LayoutFacet {
 
                     return new LayoutFacetViaDomainObjectLayoutAnnotationUsingLayoutUiEvent(
                             layoutUiEvent, metamodelEventService, facetHolder);
-                })
-                .orElse(null);
+                });
     }
 
     private final Class<? extends LayoutUiEvent<?>> layoutUiEventClass;
     private final MetamodelEventService metamodelEventService;
 
-    public LayoutFacetViaDomainObjectLayoutAnnotationUsingLayoutUiEvent(
+    private LayoutFacetViaDomainObjectLayoutAnnotationUsingLayoutUiEvent(
             final Class<? extends LayoutUiEvent<?>> layoutUiEventClass,
                     final MetamodelEventService metamodelEventService,
                     final FacetHolder holder) {
-        super(holder);
+        super(holder, Precedence.EVENT);
         this.layoutUiEventClass = layoutUiEventClass;
         this.metamodelEventService = metamodelEventService;
     }
@@ -87,9 +85,12 @@ implements LayoutFacet {
 
         if(layout == null) {
             // ie no subscribers out there...
-            final Facet underlyingFacet = getUnderlyingFacet();
-            if(underlyingFacet instanceof LayoutFacet) {
-                final LayoutFacet underlyingLayoutFacet = (LayoutFacet) underlyingFacet;
+
+            final LayoutFacet underlyingLayoutFacet = getSharedFacetRanking()
+            .flatMap(facetRanking->facetRanking.getWinnerNonEvent(LayoutFacet.class))
+            .orElse(null);
+
+            if(underlyingLayoutFacet!=null) {
                 return underlyingLayoutFacet.layout(owningAdapter);
             }
         }
@@ -113,8 +114,9 @@ implements LayoutFacet {
         }
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("layoutUiEventClass", layoutUiEventClass);
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("layoutUiEventClass", layoutUiEventClass);
     }
 }

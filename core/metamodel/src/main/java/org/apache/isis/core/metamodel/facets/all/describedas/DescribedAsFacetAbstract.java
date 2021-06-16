@@ -21,16 +21,24 @@ package org.apache.isis.core.metamodel.facets.all.describedas;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.SingleStringValueFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.i8n.I8nFacetAbstract;
 
-public abstract class DescribedAsFacetAbstract extends SingleStringValueFacetAbstract implements DescribedAsFacet {
+public abstract class DescribedAsFacetAbstract
+extends I8nFacetAbstract
+implements DescribedAsFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return DescribedAsFacet.class;
     }
 
-    public DescribedAsFacetAbstract(final String value, final FacetHolder holder) {
-        super(type(), holder, value);
+    protected DescribedAsFacetAbstract(String originalText, FacetHolder holder) {
+        this(originalText, holder, Precedence.DEFAULT);
     }
 
+    protected DescribedAsFacetAbstract(String originalText, FacetHolder holder, final Facet.Precedence precedence) {
+        super(type(), originalText, holder, precedence);
+    }
+
+
 }
+

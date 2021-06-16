@@ -18,13 +18,12 @@
  */
 package org.apache.isis.persistence.jdo.metamodel.facets.object.persistencecapable;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import javax.jdo.annotations.IdentityType;
 
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
 public class JdoPersistenceCapableFacetAnnotation
@@ -41,8 +40,7 @@ implements JdoPersistenceCapableFacet {
             final IdentityType identityType,
             final FacetHolder holder) {
 
-        super(JdoPersistenceCapableFacet.class, holder, Derivation.NOT_DERIVED);
-        super.setFacetAliasType(EntityFacet.class);
+        super(JdoPersistenceCapableFacet.class, holder);
         this.schema = schemaName;
         this.table = tableOrTypeName;
         this.identityType = identityType;
@@ -64,11 +62,11 @@ implements JdoPersistenceCapableFacet {
     }
 
     @Override
-    public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("schema", schema);
-        attributeMap.put("table", table);
-        attributeMap.put("identityType", identityType);
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("schema", schema);
+        visitor.accept("table", table);
+        visitor.accept("identityType", identityType);
     }
 
 

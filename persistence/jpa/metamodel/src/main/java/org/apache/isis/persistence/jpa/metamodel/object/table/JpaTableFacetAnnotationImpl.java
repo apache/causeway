@@ -18,7 +18,7 @@
  */
 package org.apache.isis.persistence.jpa.metamodel.object.table;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -35,7 +35,7 @@ implements JpaTableFacetAnnotation {
             final String tableOrTypeName,
             final FacetHolder holder) {
 
-        super(JpaTableFacetAnnotation.class, holder, Derivation.NOT_DERIVED);
+        super(JpaTableFacetAnnotation.class, holder);
         this.schema = schemaName;
         this.tableOrTypeName = tableOrTypeName;
     }
@@ -51,10 +51,10 @@ implements JpaTableFacetAnnotation {
     }
 
     @Override
-    public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("schema", schema);
-        attributeMap.put("table", tableOrTypeName);
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("schema", schema);
+        visitor.accept("table", tableOrTypeName);
     }
 
 

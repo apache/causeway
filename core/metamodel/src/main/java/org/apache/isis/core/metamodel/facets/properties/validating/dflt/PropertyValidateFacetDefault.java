@@ -37,7 +37,7 @@ public class PropertyValidateFacetDefault extends FacetAbstract implements Prope
     }
 
     public PropertyValidateFacetDefault(final FacetHolder holder) {
-        super(PropertyValidateFacet.class, holder, Derivation.NOT_DERIVED);
+        super(PropertyValidateFacet.class, holder);
     }
 
     @Override

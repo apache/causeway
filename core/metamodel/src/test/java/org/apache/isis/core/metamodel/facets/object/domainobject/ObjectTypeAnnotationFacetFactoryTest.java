@@ -42,7 +42,7 @@ public class ObjectTypeAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
 
     @Before
     public void setUp() throws Exception {
-        facetFactory = new DomainObjectAnnotationFacetFactory(new MethodByClassMap());
+        facetFactory = new DomainObjectAnnotationFacetFactory(metaModelContext, new MethodByClassMap());
     }
 
     @Test

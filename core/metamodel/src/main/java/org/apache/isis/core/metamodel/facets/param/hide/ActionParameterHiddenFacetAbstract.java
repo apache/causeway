@@ -31,12 +31,12 @@ public abstract class ActionParameterHiddenFacetAbstract
 extends FacetAbstract
 implements ActionParameterHiddenFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return ActionParameterHiddenFacet.class;
     }
 
     public ActionParameterHiddenFacetAbstract(final FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
     }
 
     @Override
@@ -46,9 +46,9 @@ implements ActionParameterHiddenFacet {
         }
         val actionArgVisibilityContext = (ActionArgVisibilityContext) context;
         return isHidden(
-                actionArgVisibilityContext.getTarget(),
-                actionArgVisibilityContext.getArgs())
+                    actionArgVisibilityContext.getTarget(),
+                    actionArgVisibilityContext.getArgs())
                 ? "Hidden"
-                        : null;
+                : null;
     }
 }

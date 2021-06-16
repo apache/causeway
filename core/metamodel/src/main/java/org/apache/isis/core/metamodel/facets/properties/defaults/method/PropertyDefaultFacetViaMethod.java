@@ -20,37 +20,31 @@
 package org.apache.isis.core.metamodel.facets.properties.defaults.method;
 
 import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.exceptions.unrecoverable.UnknownTypeException;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
+import lombok.Getter;
+import lombok.NonNull;
 import lombok.val;
 
-public class PropertyDefaultFacetViaMethod extends PropertyDefaultFacetAbstract implements ImperativeFacet {
+public class PropertyDefaultFacetViaMethod
+extends PropertyDefaultFacetAbstract
+implements ImperativeFacet {
 
-    private final Method method;
+    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
 
     public PropertyDefaultFacetViaMethod(
             final Method method,
             final FacetHolder holder) {
         super(holder);
-        this.method = method;
-    }
-
-    /**
-     * Returns a singleton list of the {@link Method} provided in the
-     * constructor.
-     */
-    @Override
-    public List<Method> getMethods() {
-        return Collections.singletonList(method);
+        this.methods = Can.ofSingleton(method);
     }
 
     @Override
@@ -60,6 +54,7 @@ public class PropertyDefaultFacetViaMethod extends PropertyDefaultFacetAbstract 
 
     @Override
     public ManagedObject getDefault(final ManagedObject owningAdapter) {
+        val method = methods.getFirstOrFail();
         final Object result = ManagedObjects.InvokeUtil.invoke(method, owningAdapter);
         if (result == null) {
             return null;
@@ -78,12 +73,14 @@ public class PropertyDefaultFacetViaMethod extends PropertyDefaultFacetAbstract 
 
     @Override
     protected String toStringValues() {
+        val method = methods.getFirstOrFail();
         return "method=" + method;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        ImperativeFacet.visitAttributes(this, visitor);
     }
 
 }

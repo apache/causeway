@@ -27,20 +27,20 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbstract;
 
-public class DescribedAsFacetForParameterLayoutAnnotation extends DescribedAsFacetAbstract {
+public class DescribedAsFacetForParameterLayoutAnnotation
+extends DescribedAsFacetAbstract {
 
-    public static DescribedAsFacet create(
+    public static Optional<DescribedAsFacet> create(
             final Optional<ParameterLayout> parameterLayoutIfAny,
             final FacetHolder holder) {
 
         return parameterLayoutIfAny
                 .map(ParameterLayout::describedAs)
                 .filter(_Strings::isNotEmpty)
-                .map(describedAs -> new DescribedAsFacetForParameterLayoutAnnotation(describedAs, holder))
-                .orElse(null);
+                .map(describedAs -> new DescribedAsFacetForParameterLayoutAnnotation(describedAs, holder));
     }
 
-    private DescribedAsFacetForParameterLayoutAnnotation(String value, FacetHolder holder) {
+    private DescribedAsFacetForParameterLayoutAnnotation(final String value, final FacetHolder holder) {
         super(value, holder);
     }
 }

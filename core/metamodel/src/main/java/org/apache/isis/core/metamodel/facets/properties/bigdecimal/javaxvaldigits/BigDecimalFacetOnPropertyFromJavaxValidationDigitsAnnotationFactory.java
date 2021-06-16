@@ -20,19 +20,21 @@ package org.apache.isis.core.metamodel.facets.properties.bigdecimal.javaxvaldigi
 
 import java.math.BigDecimal;
 
+import javax.inject.Inject;
 import javax.validation.constraints.Digits;
 
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 
 import lombok.val;
 
-public class BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory extends FacetFactoryAbstract {
+public class BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory
+extends FacetFactoryAbstract {
 
-    public BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory() {
-        super(FeatureType.PROPERTIES_ONLY);
+    @Inject
+    public BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.PROPERTIES_ONLY);
     }
 
     @Override
@@ -42,18 +44,11 @@ public class BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory
             return;
         }
 
-        val digits = processMethodContext.synthesizeOnMethod(Digits.class).orElse(null);
-        if (digits == null) {
-            return;
-        }
-        super.addFacet(create(processMethodContext, digits));
-    }
+        val digitsIfAny = processMethodContext.synthesizeOnMethod(Digits.class);
 
-    private BigDecimalValueFacet create(final ProcessMethodContext processMethodContext, final Digits annotation) {
-        final FacetedMethod holder = processMethodContext.getFacetHolder();
-        final int length = annotation.integer() + annotation.fraction();
-        final int scale = annotation.fraction();
-        return new BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation(holder, length, scale);
+        addFacetIfPresent(
+                BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation
+                .create(processMethodContext.getFacetHolder(), digitsIfAny));
     }
 
 }

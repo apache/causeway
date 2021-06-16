@@ -21,13 +21,18 @@ package org.apache.isis.core.metamodel.facets.value.biginteger;
 
 import java.math.BigInteger;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 
-public class BigIntegerValueFacetUsingSemanticsProviderFactory extends ValueFacetUsingSemanticsProviderFactory<BigInteger> {
+public class BigIntegerValueFacetUsingSemanticsProviderFactory
+extends ValueFacetUsingSemanticsProviderFactory<BigInteger> {
 
-    public BigIntegerValueFacetUsingSemanticsProviderFactory() {
-        super();
+    @Inject
+    public BigIntegerValueFacetUsingSemanticsProviderFactory(final MetaModelContext mmc) {
+        super(mmc);
     }
 
     @Override

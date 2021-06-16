@@ -21,7 +21,8 @@ package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Method;
 
-public interface ImperativeFacetMulti extends ImperativeFacet {
+public interface ImperativeFacetMulti
+extends ImperativeFacet {
 
     /**
      * Associate an additional method, to be returned from

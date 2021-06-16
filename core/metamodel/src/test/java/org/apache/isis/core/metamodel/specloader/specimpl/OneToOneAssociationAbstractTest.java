@@ -33,8 +33,11 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
@@ -67,7 +70,8 @@ public class OneToOneAssociationAbstractTest {
 
     @Before
     public void setup() {
-        facetedMethod = FacetedMethod.createForProperty(Customer.class, "firstName");
+        MetaModelContext mmc = MetaModelContext_forTesting.buildDefault();
+        facetedMethod = FacetedMethod.createForProperty(mmc, Customer.class, "firstName");
 
         context.checking(new Expectations() {{
             //            allowing(mockServicesInjector).getSpecificationLoader();
@@ -77,7 +81,7 @@ public class OneToOneAssociationAbstractTest {
         }});
 
         objectAssociation = new OneToOneAssociationDefault(
-                facetedMethod.getIdentifier(),
+                facetedMethod.getFeatureIdentifier(),
                 facetedMethod, objectSpecification) {
 
             @Override
@@ -150,14 +154,14 @@ public class OneToOneAssociationAbstractTest {
 
     @Test
     public void notPersistedWhenDerived() throws Exception {
-        final SnapshotExcludeFacet mockFacet = mockFacetIgnoring(SnapshotExcludeFacet.class);
+        final SnapshotExcludeFacet mockFacet = mockFacetIgnoring(SnapshotExcludeFacet.class, Precedence.DEFAULT);
         facetedMethod.addFacet(mockFacet);
         assertTrue(objectAssociation.isNotPersisted());
     }
 
     @Test
     public void notPersistedWhenFlaggedAsNotPersisted() throws Exception {
-        final SnapshotExcludeFacet mockFacet = mockFacetIgnoring(SnapshotExcludeFacet.class);
+        final SnapshotExcludeFacet mockFacet = mockFacetIgnoring(SnapshotExcludeFacet.class, Precedence.DEFAULT);
         facetedMethod.addFacet(mockFacet);
         assertTrue(objectAssociation.isNotPersisted());
     }
@@ -167,15 +171,20 @@ public class OneToOneAssociationAbstractTest {
         assertFalse(objectAssociation.isNotPersisted());
     }
 
-    private <T extends Facet> T mockFacetIgnoring(final Class<T> typeToMock) {
+    private <T extends Facet> T mockFacetIgnoring(final Class<T> typeToMock, Precedence precedence) {
         final T facet = context.mock(typeToMock);
         context.checking(new Expectations() {
             {
                 allowing(facet).facetType();
                 will(returnValue(typeToMock));
+
+                allowing(facet).getPrecedence();
+                will(returnValue(precedence));
+
                 ignoring(facet);
             }
         });
         return facet;
     }
+
 }

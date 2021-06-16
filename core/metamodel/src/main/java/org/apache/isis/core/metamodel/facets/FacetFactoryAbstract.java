@@ -19,27 +19,33 @@
 
 package org.apache.isis.core.metamodel.facets;
 
+import java.util.Optional;
+
+import javax.annotation.Nullable;
+
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NonNull;
 
 public abstract class FacetFactoryAbstract
-implements FacetFactory, MetaModelContextAware, HasMetaModelContext {
+implements FacetFactory, HasMetaModelContext {
 
-    @Getter(onMethod = @__({@Override})) @Setter(onMethod = @__({@Override}))
-    private MetaModelContext metaModelContext;
+    @Getter(onMethod = @__({@Override}))
+    private final @NonNull MetaModelContext metaModelContext;
 
     @Getter(onMethod = @__({@Override}))
     private final ImmutableEnumSet<FeatureType> featureTypes;
 
-    public FacetFactoryAbstract(ImmutableEnumSet<FeatureType> featureTypes) {
+    public FacetFactoryAbstract(
+            final MetaModelContext metaModelContext,
+            final ImmutableEnumSet<FeatureType> featureTypes) {
+        this.metaModelContext = metaModelContext;
         this.featureTypes = featureTypes;
     }
 
@@ -57,13 +63,27 @@ implements FacetFactory, MetaModelContextAware, HasMetaModelContext {
 
     // -- FACET UTILITIES
 
-    public void addFacet(final Facet facet) {
-        FacetUtil.addFacet(facet);
+    /**
+     * Shortcut to {@link FacetUtil#addFacet}.
+     * @param facet - non-null
+     * @return the argument as is
+     */
+    public <F extends Facet> F addFacet(final @NonNull F facet) {
+        return FacetUtil.addFacet(facet);
+    }
+
+    /**
+     * Shortcut to {@link FacetUtil#addFacetIfPresent}. Acts as a no-op if facet is <tt>null</tt>.
+     * @param facetIfAny - null-able
+     * @return the argument as is - or just in case if null converted to an Optional.empty()
+     */
+    public <F extends Facet> Optional<F> addFacetIfPresent(final @Nullable Optional<F> facetIfAny) {
+        return FacetUtil.addFacetIfPresent(facetIfAny);
     }
 
     // -- METHOD UTILITITES
 
-    protected static final Class<?> NO_RETURN = (Class<?>)null;
+    protected static final Class<?> NO_RETURN = null;
     protected static final Class<?>[] NO_ARG = new Class<?>[0];
     protected static final Class<?>[] STRING_ARG = new Class<?>[] {String.class};
 

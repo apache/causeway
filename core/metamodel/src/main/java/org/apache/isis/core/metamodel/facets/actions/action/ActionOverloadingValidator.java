@@ -18,8 +18,11 @@
  */
 package org.apache.isis.core.metamodel.facets.actions.action;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
@@ -40,8 +43,13 @@ import lombok.val;
 public class ActionOverloadingValidator
 extends MetaModelVisitingValidatorAbstract {
 
+    @Inject
+    public ActionOverloadingValidator(final MetaModelContext mmc) {
+        super(mmc);
+    }
+
     @Override
-    public void validate(@NonNull ObjectSpecification spec) {
+    public void validate(@NonNull final ObjectSpecification spec) {
 
         if(spec.getBeanSort()!=BeanSort.UNKNOWN
                 && !spec.isAbstract()) {
@@ -49,7 +57,7 @@ extends MetaModelVisitingValidatorAbstract {
             val overloadedNames = _Sets.<String>newHashSet();
 
             spec.streamActions(ActionType.ANY, MixedIn.EXCLUDED, oa->{
-                overloadedNames.add(oa.getIdentifier().getMemberLogicalName());
+                overloadedNames.add(oa.getFeatureIdentifier().getMemberLogicalName());
             })
             .count(); // consumer the stream
 

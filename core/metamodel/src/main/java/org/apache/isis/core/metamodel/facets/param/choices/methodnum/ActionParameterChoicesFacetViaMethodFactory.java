@@ -21,8 +21,11 @@ package org.apache.isis.core.metamodel.facets.param.choices.methodnum;
 
 import java.util.EnumSet;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.ParameterSupport;
 import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest.ReturnType;
@@ -38,8 +41,9 @@ extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final String PREFIX = MethodLiteralConstants.CHOICES_PREFIX;
 
-    public ActionParameterChoicesFacetViaMethodFactory() {
-        super(FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
+    @Inject
+    public ActionParameterChoicesFacetViaMethodFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
     }
 
     // ///////////////////////////////////////////////////////
@@ -84,7 +88,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
             // add facets directly to parameters, not to actions
             val paramAsHolder = parameters.get(paramIndex);
             val ppmFactory = searchResult.getPpmFactory();
-            super.addFacet(
+            addFacet(
                     new ActionParameterChoicesFacetViaMethod(
                             choicesMethod, returnType, ppmFactory, paramAsHolder));
         });

@@ -26,12 +26,12 @@ public abstract class EntityChangePublishingFacetAbstract
 extends FacetAbstract
 implements EntityChangePublishingFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return EntityChangePublishingFacet.class;
     }
 
     public EntityChangePublishingFacetAbstract(final FacetHolder facetHolder) {
-        super(EntityChangePublishingFacetAbstract.type(), facetHolder, Derivation.NOT_DERIVED);
+        super(EntityChangePublishingFacetAbstract.type(), facetHolder);
     }
 
 }

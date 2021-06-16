@@ -19,23 +19,33 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetAbstract;
 
-public class BookmarkPolicyFacetForDomainObjectXml extends BookmarkPolicyFacetAbstract {
+public class BookmarkPolicyFacetForDomainObjectXml
+extends BookmarkPolicyFacetAbstract {
 
-    public static BookmarkPolicyFacet create(final DomainObjectLayoutData domainObjectLayout, final FacetHolder holder) {
+    public static Optional<BookmarkPolicyFacet> create(
+            final DomainObjectLayoutData domainObjectLayout,
+            final FacetHolder holder) {
         if (domainObjectLayout == null) {
-            return null;
+            return Optional.empty();
         }
         final BookmarkPolicy bookmarkPolicy = domainObjectLayout.getBookmarking();
-        return bookmarkPolicy != null && bookmarkPolicy != BookmarkPolicy.NEVER ? new BookmarkPolicyFacetForDomainObjectXml(bookmarkPolicy, holder) : null;
+        return bookmarkPolicy != null
+                && bookmarkPolicy != BookmarkPolicy.NEVER
+                        ? Optional.of(new BookmarkPolicyFacetForDomainObjectXml(bookmarkPolicy, holder))
+                        : Optional.empty();
     }
 
-    private BookmarkPolicyFacetForDomainObjectXml(final BookmarkPolicy bookmarkPolicy, final FacetHolder holder) {
+    private BookmarkPolicyFacetForDomainObjectXml(
+            final BookmarkPolicy bookmarkPolicy,
+            final FacetHolder holder) {
         super(bookmarkPolicy, holder);
     }
 

@@ -37,7 +37,7 @@ public class FacetsFacetAnnotationFactoryTest extends AbstractFacetFactoryTest {
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new FacetsFacetAnnotationFactory();
+        facetFactory = new FacetsFacetAnnotationFactory(metaModelContext);
     }
 
     @Override

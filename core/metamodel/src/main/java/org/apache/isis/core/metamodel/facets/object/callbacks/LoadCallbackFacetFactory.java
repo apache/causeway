@@ -21,7 +21,10 @@ package org.apache.isis.core.metamodel.facets.object.callbacks;
 
 import java.lang.reflect.Method;
 
+import javax.inject.Inject;
+
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
@@ -29,13 +32,15 @@ import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstr
 
 import lombok.val;
 
-public class LoadCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
+public class LoadCallbackFacetFactory
+extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final Can<String> PREFIXES = Can.of(
             MethodLiteralConstants.LOADED_PREFIX);
 
-    public LoadCallbackFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
+    @Inject
+    public LoadCallbackFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     @Override
@@ -46,7 +51,7 @@ public class LoadCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbstr
         Method method = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.LOADED_PREFIX, void.class, NO_ARG);
         if (method != null) {
             processClassContext.removeMethod(method);
-            super.addFacet(new LoadedCallbackFacetViaMethod(method, facetHolder));
+            addFacet(new LoadedCallbackFacetViaMethod(method, facetHolder));
         }
 
     }

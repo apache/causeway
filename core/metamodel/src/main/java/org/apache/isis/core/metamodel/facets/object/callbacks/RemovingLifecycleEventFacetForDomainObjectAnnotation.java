@@ -25,9 +25,11 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
 
-public class RemovingLifecycleEventFacetForDomainObjectAnnotation extends SingleClassValueFacetAbstract implements LoadedLifecycleEventFacet {
+public class RemovingLifecycleEventFacetForDomainObjectAnnotation
+extends SingleClassValueFacetAbstract
+implements RemovingLifecycleEventFacet {
 
-    static Class<? extends Facet> type() {
+    private static Class<? extends Facet> type() {
         return RemovingLifecycleEventFacet.class;
     }
 

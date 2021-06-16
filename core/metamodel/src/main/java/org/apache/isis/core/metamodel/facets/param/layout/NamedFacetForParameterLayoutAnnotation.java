@@ -29,15 +29,14 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 
 public class NamedFacetForParameterLayoutAnnotation extends NamedFacetAbstract {
 
-    public static NamedFacet create(
+    public static Optional<NamedFacet> create(
             final Optional<ParameterLayout> parameterLayoutIfAny,
             final FacetHolder holder) {
 
         return parameterLayoutIfAny
                 .filter(parameterLayout -> _Strings.emptyToNull(parameterLayout.named()) != null)
                 .map(parameterLayout -> new NamedFacetForParameterLayoutAnnotation(
-                        parameterLayout.named(), parameterLayout.namedEscaped(), holder))
-                .orElse(null);
+                        parameterLayout.named(), parameterLayout.namedEscaped(), holder));
     }
 
     private NamedFacetForParameterLayoutAnnotation(

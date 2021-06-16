@@ -129,7 +129,7 @@ public abstract class ManagedMember implements ManagedFeature {
 
     @Override
     public Identifier getIdentifier() {
-        return getMetaModel().getIdentifier();
+        return getMetaModel().getFeatureIdentifier();
     }
 
     @Override

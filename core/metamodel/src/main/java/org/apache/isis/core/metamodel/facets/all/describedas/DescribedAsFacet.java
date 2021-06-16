@@ -19,7 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.all.describedas;
 
-import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facets.all.i8n.HasTranslation;
 
 /**
  * Describes a class, a property, collection, an action or an action parameter.
@@ -28,6 +29,6 @@ import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
  * In the standard Apache Isis Programming Model, corresponds to annotating the
  * member with <tt>@DescribedAs</tt>.
  */
-public interface DescribedAsFacet extends SingleStringValueFacet {
+public interface DescribedAsFacet extends Facet, HasTranslation {
 
 }

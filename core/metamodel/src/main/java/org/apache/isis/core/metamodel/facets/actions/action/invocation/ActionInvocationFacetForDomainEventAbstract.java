@@ -21,10 +21,9 @@ package org.apache.isis.core.metamodel.facets.actions.action.invocation;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
@@ -60,7 +59,7 @@ extends ActionInvocationFacetAbstract
 implements ImperativeFacet {
 
     @Getter private final Class<? extends ActionDomainEvent<?>> eventType;
-    private final Method method;
+    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
     @Getter(onMethod = @__(@Override)) private final ObjectSpecification onType;
     @Getter(onMethod = @__(@Override)) private final ObjectSpecification returnType;
     private final ServiceRegistry serviceRegistry;
@@ -75,20 +74,11 @@ implements ImperativeFacet {
 
         super(holder);
         this.eventType = eventType;
-        this.method = method;
+        this.methods = Can.ofSingleton(method);
         this.onType = onType;
         this.returnType = returnType;
         this.serviceRegistry = getServiceRegistry();
         this.domainEventHelper = DomainEventHelper.ofServiceRegistry(serviceRegistry);
-    }
-
-    /**
-     * Returns a singleton list of the {@link java.lang.reflect.Method} provided in the
-     * constructor.
-     */
-    @Override
-    public List<Method> getMethods() {
-        return Collections.singletonList(method);
     }
 
     @Override
@@ -115,16 +105,17 @@ implements ImperativeFacet {
     }
 
     @Override
-    public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
-        attributeMap.put("onType", onType);
-        attributeMap.put("returnType", returnType);
-        attributeMap.put("eventType", eventType);
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        ImperativeFacet.visitAttributes(this, visitor);
+        visitor.accept("onType", onType);
+        visitor.accept("returnType", returnType);
+        visitor.accept("eventType", eventType);
     }
 
     @Override
     protected String toStringValues() {
+        val method = methods.getFirstOrFail();
         return "method=" + method;
     }
 
@@ -139,6 +130,8 @@ implements ImperativeFacet {
         _Assert.assertEquals(owningAction.getParameterCount(), argumentAdapters.size(),
                 "action's parameter count and provided argument count must match");
 
+        val method = methods.getFirstOrFail();
+
         return getMemberExecutor().invokeAction(
                 owningAction,
                 head,
@@ -146,14 +139,15 @@ implements ImperativeFacet {
                 interactionInitiatedBy,
                 method,
                 DomainEventMemberExecutor::new,
-                getFacetHolder(),
-                getIdentified());
+                getFacetHolder());
     }
 
     private Object invokeMethodElseFromCache(
             final InteractionHead head,
             final Can<ManagedObject> arguments)
                     throws IllegalAccessException, InvocationTargetException {
+
+        val method = methods.getFirstOrFail();
 
         final Object[] executionParameters = UnwrapUtil.multipleAsArray(arguments);
         final Object targetPojo = UnwrapUtil.single(head.getTarget());

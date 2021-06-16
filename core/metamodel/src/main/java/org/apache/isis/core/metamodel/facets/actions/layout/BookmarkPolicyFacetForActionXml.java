@@ -19,20 +19,28 @@
 
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetAbstract;
 
-public class BookmarkPolicyFacetForActionXml extends BookmarkPolicyFacetAbstract {
+public class BookmarkPolicyFacetForActionXml
+extends BookmarkPolicyFacetAbstract {
 
-    public static BookmarkPolicyFacet create(final ActionLayoutData actionLayout, final FacetHolder holder) {
+    public static Optional<BookmarkPolicyFacet> create(
+            final ActionLayoutData actionLayout,
+            final FacetHolder holder) {
         if (actionLayout == null) {
-            return null;
+            return Optional.empty();
         }
         final BookmarkPolicy bookmarkPolicy = actionLayout.getBookmarking();
-        return bookmarkPolicy != null && bookmarkPolicy != BookmarkPolicy.NEVER ? new BookmarkPolicyFacetForActionXml(bookmarkPolicy, holder) : null;
+        return bookmarkPolicy != null
+                && bookmarkPolicy != BookmarkPolicy.NEVER
+                        ? Optional.of(new BookmarkPolicyFacetForActionXml(bookmarkPolicy, holder))
+                        : Optional.empty();
     }
 
     private BookmarkPolicyFacetForActionXml(final BookmarkPolicy bookmarkPolicy, final FacetHolder holder) {

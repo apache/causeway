@@ -19,23 +19,30 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetSimple;
 
-public class CssClassFacetForDomainObjectXml extends CssClassFacetAbstract {
+public class CssClassFacetForDomainObjectXml
+extends CssClassFacetSimple {
 
-    public static CssClassFacet create(DomainObjectLayoutData domainObjectLayout, FacetHolder holder) {
+    public static Optional<CssClassFacet> create(
+            final DomainObjectLayoutData domainObjectLayout,
+            final FacetHolder holder) {
         if(domainObjectLayout == null) {
-            return null;
+            return Optional.empty();
         }
         final String cssClass = _Strings.emptyToNull(domainObjectLayout.getCssClass());
-        return cssClass != null ? new CssClassFacetForDomainObjectXml(cssClass, holder) : null;
+        return cssClass != null
+                ? Optional.of(new CssClassFacetForDomainObjectXml(cssClass, holder))
+                : Optional.empty();
     }
 
-    private CssClassFacetForDomainObjectXml(String value, FacetHolder holder) {
+    private CssClassFacetForDomainObjectXml(final String value, final FacetHolder holder) {
         super(value, holder);
     }
 

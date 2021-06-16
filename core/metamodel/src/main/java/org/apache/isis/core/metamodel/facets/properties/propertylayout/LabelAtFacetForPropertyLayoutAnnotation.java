@@ -24,20 +24,19 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacetAbstract;
 
-public class LabelAtFacetForPropertyLayoutAnnotation extends LabelAtFacetAbstract {
+public class LabelAtFacetForPropertyLayoutAnnotation
+extends LabelAtFacetAbstract {
 
-    public static LabelAtFacet create(
+    public static Optional<LabelAtFacetForPropertyLayoutAnnotation> create(
             final Optional<PropertyLayout> propertyLayoutIfAny,
             final FacetHolder holder) {
 
         return propertyLayoutIfAny
                 .map(PropertyLayout::labelPosition)
                 .filter(labelPosition -> labelPosition != LabelPosition.NOT_SPECIFIED)
-                .map(labelPosition -> new LabelAtFacetForPropertyLayoutAnnotation(labelPosition, holder))
-                .orElse(null);
+                .map(labelPosition -> new LabelAtFacetForPropertyLayoutAnnotation(labelPosition, holder));
     }
 
     private LabelAtFacetForPropertyLayoutAnnotation(final LabelPosition value, final FacetHolder holder) {

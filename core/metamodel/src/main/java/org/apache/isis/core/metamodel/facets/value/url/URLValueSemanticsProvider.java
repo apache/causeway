@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 public class URLValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<java.net.URL> implements URLValueFacet {
 
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return URLValueFacet.class;
     }
 

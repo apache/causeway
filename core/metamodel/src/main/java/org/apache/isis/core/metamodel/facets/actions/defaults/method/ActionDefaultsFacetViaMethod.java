@@ -20,10 +20,9 @@
 package org.apache.isis.core.metamodel.facets.actions.defaults.method;
 
 import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.function.BiConsumer;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -33,16 +32,22 @@ import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFace
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
-public class ActionDefaultsFacetViaMethod extends ActionDefaultsFacetAbstract implements ImperativeFacet {
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.val;
 
-    private final Method method;
+public class ActionDefaultsFacetViaMethod
+extends ActionDefaultsFacetAbstract
+implements ImperativeFacet {
+
+    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
 
     @SuppressWarnings("unused")
     private final Method actionMethod;
 
     public ActionDefaultsFacetViaMethod(final Method method, final FacetHolder holder) {
-        super(holder, Derivation.NOT_DERIVED);
-        this.method = method;
+        super(holder);
+        this.methods = Can.ofSingleton(method);
         this.actionMethod = determineActionMethod(holder);
     }
 
@@ -51,20 +56,11 @@ public class ActionDefaultsFacetViaMethod extends ActionDefaultsFacetAbstract im
         final Facet actionInvocationFacet = holder.getFacet(ActionInvocationFacet.class);
         if (actionInvocationFacet instanceof ActionInvocationFacetForDomainEventAbstract) {
             final ActionInvocationFacetForDomainEventAbstract facetViaMethod = (ActionInvocationFacetForDomainEventAbstract) actionInvocationFacet;
-            method2 = facetViaMethod.getMethods().get(0);
+            method2 = facetViaMethod.getMethods().getFirstOrFail();
         } else {
             method2 = null;
         }
         return method2;
-    }
-
-    /**
-     * Returns a singleton list of the {@link Method} provided in the
-     * constructor.
-     */
-    @Override
-    public List<Method> getMethods() {
-        return Collections.singletonList(method);
     }
 
     @Override
@@ -74,16 +70,20 @@ public class ActionDefaultsFacetViaMethod extends ActionDefaultsFacetAbstract im
 
     @Override
     public Object[] getDefaults(final ManagedObject owningAdapter) {
+        val method = methods.getFirstOrFail();
         return (Object[]) ManagedObjects.InvokeUtil.invoke(method, owningAdapter);
     }
 
     @Override
     protected String toStringValues() {
+        val method = methods.getFirstOrFail();
         return "method=" + method;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        ImperativeFacet.visitAttributes(this, visitor);
     }
+
 }

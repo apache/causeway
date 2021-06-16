@@ -19,20 +19,25 @@
 
 package org.apache.isis.core.metamodel.facets.object.projection.ident;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
+import lombok.NonNull;
 import lombok.val;
 
-public class IconFacetDerivedFromProjectionFacet extends IconFacetAbstract {
+public class IconFacetDerivedFromProjectionFacet
+extends IconFacetAbstract {
 
-    private final ProjectionFacet projectionFacet;
+    private final @NonNull ProjectionFacet projectionFacet;
 
-    public IconFacetDerivedFromProjectionFacet(final ProjectionFacet projectionFacet, final FacetHolder holder) {
+    public IconFacetDerivedFromProjectionFacet(
+            final ProjectionFacet projectionFacet,
+            final FacetHolder holder) {
         super(holder);
         this.projectionFacet = projectionFacet;
     }
@@ -44,9 +49,17 @@ public class IconFacetDerivedFromProjectionFacet extends IconFacetAbstract {
     }
 
     @Override
-    public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("projectionFacet", projectionFacet.getClass().getName());
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("projectionFacet", projectionFacet.getClass().getName());
+    }
+
+    @Override
+    public boolean semanticEquals(final @NonNull Facet other) {
+        return other instanceof IconFacetDerivedFromProjectionFacet
+                ? this.projectionFacet
+                        .semanticEquals(((IconFacetDerivedFromProjectionFacet)other).projectionFacet)
+                : false;
     }
 
 }

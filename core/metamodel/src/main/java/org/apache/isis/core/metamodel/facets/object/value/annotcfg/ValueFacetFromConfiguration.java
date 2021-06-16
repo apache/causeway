@@ -19,20 +19,41 @@
 
 package org.apache.isis.core.metamodel.facets.object.value.annotcfg;
 
+import java.util.Optional;
+
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderUtil;
 
-public class ValueFacetFromConfiguration extends ValueFacetAbstract {
+import lombok.val;
 
-    public ValueFacetFromConfiguration(
-            String candidateSemanticsProviderName,
-            FacetHolder holder) {
+public class ValueFacetFromConfiguration
+extends ValueFacetAbstract {
+
+    // -- FACTORY
+
+    public static Optional<ValueFacetFromConfiguration> create(
+            final String candidateSemanticsProviderName,
+            final FacetHolder holder) {
+
+        val valueFacet = new ValueFacetFromConfiguration(candidateSemanticsProviderName, holder);
+
+        return valueFacet.hasSemanticsProvider()
+                ? Optional.of(valueFacet)
+                : Optional.empty();
+    }
+
+    // -- CONSTRUCTOR
+
+    private ValueFacetFromConfiguration(
+            final String candidateSemanticsProviderName,
+            final FacetHolder holder) {
 
         super(
                 ValueSemanticsProviderUtil.valueSemanticsProviderOrNull(null, candidateSemanticsProviderName),
                 AddFacetsIfInvalidStrategy.DONT_ADD,
-                holder);
+                holder,
+                Precedence.LOW);
     }
 
 }

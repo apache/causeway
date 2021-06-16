@@ -133,7 +133,7 @@ public class LayoutFacetUtil {
 
         val describedAsFacet = facetHolder.getFacet(DescribedAsFacet.class);
         if(isDoOp(describedAsFacet)) {
-            final String describedAs = describedAsFacet.value();
+            final String describedAs = describedAsFacet.translated();
             if(!_Strings.isNullOrEmpty(describedAs)) {
                 hasDescribedAs.setDescribedAs(describedAs);
             }
@@ -185,7 +185,7 @@ public class LayoutFacetUtil {
 
         val namedFacet = facetHolder.getFacet(NamedFacet.class);
         if(isDoOp(namedFacet)) {
-            final String named = namedFacet.value();
+            final String named = namedFacet.translated();
             if(!_Strings.isNullOrEmpty(named)){
                 hasNamed.setNamed(named);
             }
@@ -215,7 +215,7 @@ public class LayoutFacetUtil {
 
         val pluralFacet = facetHolder.getFacet(PluralFacet.class);
         if(isDoOp(pluralFacet)) {
-            final String plural = pluralFacet.value();
+            final String plural = pluralFacet.translated();
             if(!_Strings.isNullOrEmpty(plural)) {
                 domainObjectLayoutData.setPlural(plural);
             }
@@ -278,27 +278,27 @@ public class LayoutFacetUtil {
 
         private final MetamodelToGridOverridingVisitor helper;
 
-        public static LayoutDataFactory of(ObjectSpecification objectSpec) {
+        public static LayoutDataFactory of(final ObjectSpecification objectSpec) {
             return new LayoutDataFactory(objectSpec);
         }
 
-        private LayoutDataFactory(ObjectSpecification objectSpec) {
+        private LayoutDataFactory(final ObjectSpecification objectSpec) {
             this.helper = MetamodelToGridOverridingVisitor.of(objectSpec);
         }
 
-        public ActionLayoutData createActionLayoutData(String id) {
+        public ActionLayoutData createActionLayoutData(final String id) {
             val layoutData = new ActionLayoutData(id);
             helper.visit(layoutData);
             return layoutData;
         }
 
-        public CollectionLayoutData createCollectionLayoutData(String id) {
+        public CollectionLayoutData createCollectionLayoutData(final String id) {
             val layoutData = new CollectionLayoutData(id);
             helper.visit(layoutData);
             return layoutData;
         }
 
-        public PropertyLayoutData createPropertyLayoutData(String id) {
+        public PropertyLayoutData createPropertyLayoutData(final String id) {
             val layoutData = new PropertyLayoutData(id);
             helper.visit(layoutData);
             return layoutData;
@@ -374,7 +374,8 @@ public class LayoutFacetUtil {
     // -- HELPER
 
     private static boolean isDoOp(final Facet facet) {
-        return facet != null && !facet.isFallback();
+        return facet != null
+                && !facet.getPrecedence().isFallback();
     }
 
 }

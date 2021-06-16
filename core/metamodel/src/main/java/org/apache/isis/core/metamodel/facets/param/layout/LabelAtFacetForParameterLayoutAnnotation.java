@@ -29,15 +29,14 @@ import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacetAbs
 
 public class LabelAtFacetForParameterLayoutAnnotation extends LabelAtFacetAbstract {
 
-    public static LabelAtFacet create(
+    public static Optional<LabelAtFacet> create(
             final Optional<ParameterLayout> parameterLayoutIfAny,
             final FacetHolder holder) {
 
         return parameterLayoutIfAny
                 .map(ParameterLayout::labelPosition)
                 .filter(labelPosition -> labelPosition != LabelPosition.NOT_SPECIFIED)
-                .map(labelPosition -> new LabelAtFacetForParameterLayoutAnnotation(labelPosition, holder))
-                .orElse(null);
+                .map(labelPosition -> new LabelAtFacetForParameterLayoutAnnotation(labelPosition, holder));
     }
 
     private LabelAtFacetForParameterLayoutAnnotation(final LabelPosition value, final FacetHolder holder) {

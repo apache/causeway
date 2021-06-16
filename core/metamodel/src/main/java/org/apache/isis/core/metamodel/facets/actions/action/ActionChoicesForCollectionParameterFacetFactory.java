@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.actions.action;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -39,11 +42,13 @@ import lombok.val;
 /**
  * Ensures that every action that has a collection parameter has a choices facet for that parameter.
  */
-public class ActionChoicesForCollectionParameterFacetFactory extends FacetFactoryAbstract
+public class ActionChoicesForCollectionParameterFacetFactory
+extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
-    public ActionChoicesForCollectionParameterFacetFactory() {
-        super(FeatureType.ACTIONS_ONLY);
+    @Inject
+    public ActionChoicesForCollectionParameterFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.ACTIONS_ONLY);
     }
 
     @Override

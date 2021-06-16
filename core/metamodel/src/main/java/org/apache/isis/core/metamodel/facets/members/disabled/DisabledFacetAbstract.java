@@ -19,76 +19,83 @@
 
 package org.apache.isis.core.metamodel.facets.members.disabled;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
+
+import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.WhereValueFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public abstract class DisabledFacetAbstract extends WhereValueFacetAbstract implements DisabledFacet {
+import lombok.Getter;
+import lombok.NonNull;
 
-    public static Class<? extends Facet> type() {
+public abstract class DisabledFacetAbstract
+extends WhereValueFacetAbstract
+implements DisabledFacet {
+
+    private static final Class<? extends Facet> type() {
         return DisabledFacet.class;
     }
 
-    private final Semantics semantics;
+    @Getter(onMethod_ = {@Override}) private final @NonNull Semantics semantics;
 
-    public enum Semantics {
-        DISABLED,
-        ENABLED;
-    }
+    /**
+     * @apiNote this field is used for reporting purposes only (eg. MM export),
+     * when either sub-classes override {@link #disabledReason(ManagedObject)}
+     * or the semantics is inverted (ENABLED)
+     */
+    private final @Nullable String reason;
 
-    public DisabledFacetAbstract(Where where, final FacetHolder holder) {
-        this(where, holder, Semantics.DISABLED);
-    }
-
-    public DisabledFacetAbstract(
+    protected DisabledFacetAbstract(
             final Where where,
-            final FacetHolder holder,
-            final Semantics semantics) {
-        this(type(), where, holder, semantics);
+            final String reason,
+            final FacetHolder holder) {
+        this(where, reason, holder, Semantics.DISABLED, Precedence.DEFAULT);
     }
 
     protected DisabledFacetAbstract(
-            final Class<? extends Facet> type,
             final Where where,
+            final String reason,
             final FacetHolder holder,
-            final Semantics semantics) {
-        super(type, holder, where);
+            final Semantics semantics,
+            final Precedence precedence) {
+        super(type(), holder, where, precedence);
+        this.reason = reason;
         this.semantics = semantics;
     }
 
     @Override
-    public String disables(final UsabilityContext ic) {
-        if(isInvertedSemantics()) {
+    public String disabledReason(final ManagedObject targetAdapter) {
+        if(getSemantics().isEnabled()) {
             return null;
         }
+        return _Strings.isNotEmpty(reason)
+                ? reason
+                : ALWAYS_DISABLED_REASON;
+    }
 
+    @Override
+    public String disables(final UsabilityContext ic) {
+        if(getSemantics().isEnabled()) {
+            return null;
+        }
         final ManagedObject target = ic.getTarget();
         final String disabledReason = disabledReason(target);
-        if (disabledReason != null) {
-            return disabledReason;
-        }
-        if (getUnderlyingFacet() != null) {
-            final DisabledFacet underlyingFacet = (DisabledFacet) getUnderlyingFacet();
-            return underlyingFacet.disabledReason(target);
-        }
-        return null;
+        return disabledReason;
     }
 
     @Override
-    public boolean isInvertedSemantics() {
-        return semantics == Semantics.ENABLED;
-    }
-
-    @Override
-    public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("semantics", semantics);
-        attributeMap.put("inverted", isInvertedSemantics());
+    public final void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("semantics", semantics);
+        if(_Strings.isNotEmpty(reason)) {
+            visitor.accept("reason", reason);
+        }
     }
 
 }

@@ -19,18 +19,23 @@
 
 package org.apache.isis.core.metamodel.facets.object.defaults;
 
+import java.util.Optional;
+
+import javax.annotation.Nullable;
+
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.commons.ClassUtil;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
+import lombok.NonNull;
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public final class DefaultsProviderUtil {
-
-    private DefaultsProviderUtil() {
-    }
 
     public static final String DEFAULTS_PROVIDER_NAME_KEY_PREFIX = "isis.reflector.java.facets.defaulted.";
     public static final String DEFAULTS_PROVIDER_NAME_KEY_SUFFIX = ".providerName";
@@ -49,7 +54,7 @@ public final class DefaultsProviderUtil {
 
         return !_Strings.isNullOrEmpty(defaultsProviderName)
                 ? defaultsProviderName
-                        : null;
+                : null;
     }
 
     public static Class<?> defaultsProviderOrNull(
@@ -70,6 +75,24 @@ public final class DefaultsProviderUtil {
                                 classCandidateName,
                                 DefaultsProvider.class,
                                 FacetHolder.class);
+    }
+
+    public static Optional<DefaultsProvider<?>> providerFrom(
+            final @Nullable String candidateEncoderDecoderName,
+            final @Nullable Class<?> candidateEncoderDecoderClass,
+            final @NonNull FacetHolder holder) {
+
+        val defaultsProviderClass = DefaultsProviderUtil
+                .defaultsProviderOrNull(candidateEncoderDecoderClass, candidateEncoderDecoderName);
+
+        val defaultsProvider = defaultsProviderClass!=null
+                ? (DefaultsProvider<?>) ClassExtensions
+                        .newInstance(defaultsProviderClass, FacetHolder.class, holder)
+                : null;
+
+        return Optional.ofNullable(defaultsProvider)
+                .map(holder.getServiceInjector()::injectServicesInto);
+
     }
 
 }

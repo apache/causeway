@@ -19,7 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
-import java.util.Map;
+import java.util.Optional;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
@@ -27,19 +28,24 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacetAbstract;
 
-public class PromptStyleFacetForPropertyXml extends PromptStyleFacetAbstract {
+public class PromptStyleFacetForPropertyXml
+extends PromptStyleFacetAbstract {
 
-    public static PromptStyleFacet create(PropertyLayoutData propertyLayout, FacetHolder holder) {
+    public static Optional<PromptStyleFacet> create(
+            final PropertyLayoutData propertyLayout,
+            final FacetHolder holder) {
         if(propertyLayout == null) {
-            return null;
+            return Optional.empty();
         }
         final PromptStyle promptStyle = propertyLayout.getPromptStyle();
-        return promptStyle != null ? new PromptStyleFacetForPropertyXml(promptStyle, holder) : null;
+        return promptStyle != null
+                ? Optional.of(new PromptStyleFacetForPropertyXml(promptStyle, holder))
+                : Optional.empty();
     }
 
     private final PromptStyle promptStyle;
 
-    private PromptStyleFacetForPropertyXml(PromptStyle promptStyle, FacetHolder holder) {
+    private PromptStyleFacetForPropertyXml(final PromptStyle promptStyle, final FacetHolder holder) {
         super(holder);
         this.promptStyle = promptStyle;
     }
@@ -49,9 +55,10 @@ public class PromptStyleFacetForPropertyXml extends PromptStyleFacetAbstract {
         return promptStyle;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("promptStyle", promptStyle);
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("promptStyle", promptStyle);
     }
 
 }

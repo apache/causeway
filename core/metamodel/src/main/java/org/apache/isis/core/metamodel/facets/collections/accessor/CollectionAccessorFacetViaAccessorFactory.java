@@ -23,23 +23,27 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+
+import lombok.val;
 
 public class CollectionAccessorFacetViaAccessorFactory
 extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
 
     private static final Can<String> PREFIXES = Can.empty();
 
-    public CollectionAccessorFacetViaAccessorFactory() {
-        super(FeatureType.COLLECTIONS_ONLY, PREFIXES);
+    @Inject
+    public CollectionAccessorFacetViaAccessorFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.COLLECTIONS_ONLY, PREFIXES);
     }
 
     @Override
@@ -51,15 +55,17 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
         final Method accessorMethod = processMethodContext.getMethod();
         processMethodContext.removeMethod(accessorMethod);
 
-        final Class<?> cls = processMethodContext.getCls();
-        final ObjectSpecification typeSpec = getSpecificationLoader().loadSpecification(cls);
+        val cls = processMethodContext.getCls();
+        val typeSpec = getSpecificationLoader().loadSpecification(cls);
+        val facetHolder = processMethodContext.getFacetHolder();
 
-        final FacetHolder holder = processMethodContext.getFacetHolder();
-        super.addFacet(
+        addFacet(
                 new CollectionAccessorFacetViaAccessor(
-                        typeSpec, accessorMethod, holder));
+                        typeSpec, accessorMethod, facetHolder));
 
-        super.addFacet(CollectionSemanticsFacetDefault.forCollection(accessorMethod, holder));
+        addFacet(
+                CollectionSemanticsFacetDefault
+                .forCollection(accessorMethod, facetHolder));
     }
 
 

@@ -22,36 +22,47 @@ import java.lang.reflect.Method;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
-
-import lombok.val;
 
 public class FacetedMethodParameter
-extends TypedHolderDefault
-implements IdentifiedHolder {
-
-    private final Identifier identifier;
+extends TypedHolderAbstract {
 
     public FacetedMethodParameter(
+            final MetaModelContext mmc,
             final FeatureType featureType,
             final Class<?> declaringType,
             final Method method,
             final Class<?> type) {
 
-        super(featureType, type);
-
-        val logicalType = LogicalType.lazy(
-                declaringType,
-                ()->getSpecificationLoader().loadSpecification(declaringType).getLogicalTypeName());
-
-        // best we can do...
-        this.identifier = FeatureType.ACTION.identifierFor(logicalType, method);
+        super(mmc,
+                featureType,
+                type,
+                FeatureType.ACTION.identifierFor(
+                        LogicalType.lazy(
+                                declaringType,
+                                ()->mmc.getSpecificationLoader().loadSpecification(declaringType).getLogicalTypeName()),
+                        method));
     }
 
-    @Override
-    public Identifier getIdentifier() {
-        return identifier;
+    public FacetedMethodParameter(
+            final MetaModelContext mmc,
+            final FeatureType featureType,
+            final Class<?> type,
+            final Identifier identifier) {
+
+        super(mmc, featureType, type, identifier);
+    }
+
+
+    /**
+     * Returns an instance with {@code type} replaced by given {@code elementType}.
+     * @param elementType
+     */
+    public FacetedMethodParameter withType(final Class<?> elementType) {
+        //XXX maybe future refactoring can make the type immutable, so we can remove this method
+        this.type = elementType;
+        return this;
     }
 
 }

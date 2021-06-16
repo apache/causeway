@@ -21,14 +21,15 @@ package org.apache.isis.core.metamodel.facets.object.ident.title;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
+import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetInferredFromToStringMethod;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaMethodsFactory;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaTitleMethod;
-import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaToStringMethod;
-import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 
 public class TitleFacetViaMethodsFactoryTest extends AbstractFacetFactoryTest {
 
@@ -38,8 +39,7 @@ public class TitleFacetViaMethodsFactoryTest extends AbstractFacetFactoryTest {
     public void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new TitleFacetViaMethodsFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        facetFactory = new TitleFacetViaMethodsFactory(metaModelContext);
     }
 
 
@@ -64,7 +64,7 @@ public class TitleFacetViaMethodsFactoryTest extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof TitleFacetViaTitleMethod);
         final TitleFacetViaTitleMethod titleFacetViaTitleMethod = (TitleFacetViaTitleMethod) facet;
-        assertEquals(titleMethod, titleFacetViaTitleMethod.getMethods().get(0));
+        assertEquals(titleMethod, titleFacetViaTitleMethod.getMethods().getFirstOrFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(titleMethod));
     }
@@ -82,20 +82,19 @@ public class TitleFacetViaMethodsFactoryTest extends AbstractFacetFactoryTest {
 
         final Facet facet = facetedMethod.getFacet(TitleFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof TitleFacetViaToStringMethod);
-        final TitleFacetViaToStringMethod titleFacetViaTitleMethod = (TitleFacetViaToStringMethod) facet;
-        assertEquals(toStringMethod, titleFacetViaTitleMethod.getMethods().get(0));
+        assertTrue(facet instanceof TitleFacetInferredFromToStringMethod);
+        final TitleFacetInferredFromToStringMethod titleFacetViaTitleMethod = (TitleFacetInferredFromToStringMethod) facet;
+        assertEquals(toStringMethod, titleFacetViaTitleMethod.getMethods().getFirstOrFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(toStringMethod));
     }
 
-    /**
-     * This change means that it will be ignored by
-     * {@link ObjectSpecificationAbstract#getFacet(Class)} is the superclass has
-     * a none no-op implementation.
-     */
-    public void testTitleFacetMethodUsingToStringIsClassifiedAsANoop() {
-        assertTrue(new TitleFacetViaToStringMethod(null, facetedMethod).isFallback());
+    public void testTitleFacetMethodUsingToStringIsClassifiedAsANoop() throws NoSuchMethodException, SecurityException {
+
+        final Method sampleMethod = Object.class.getMethod("toString", _Constants.emptyClasses);
+        assertEquals(
+                Precedence.INFERRED,
+                new TitleFacetInferredFromToStringMethod(sampleMethod, facetedMethod).getPrecedence());
     }
 
     public void testNoExplicitTitleOrToStringMethod() {

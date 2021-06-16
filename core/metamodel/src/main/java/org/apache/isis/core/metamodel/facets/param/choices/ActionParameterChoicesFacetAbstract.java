@@ -27,12 +27,16 @@ public abstract class ActionParameterChoicesFacetAbstract
 extends FacetAbstract
 implements ActionParameterChoicesFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return ActionParameterChoicesFacet.class;
     }
 
     public ActionParameterChoicesFacetAbstract(FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
+    }
+
+    public ActionParameterChoicesFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
+        super(type(), holder, precedence);
     }
 
 }

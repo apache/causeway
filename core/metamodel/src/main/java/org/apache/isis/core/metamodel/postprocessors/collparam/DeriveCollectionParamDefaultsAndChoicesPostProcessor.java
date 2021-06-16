@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.metamodel.postprocessors.collparam;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
@@ -40,24 +43,29 @@ import lombok.val;
 public class DeriveCollectionParamDefaultsAndChoicesPostProcessor
 extends ObjectSpecificationPostProcessorAbstract {
 
-    @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification) {
+    @Inject
+    public DeriveCollectionParamDefaultsAndChoicesPostProcessor(final MetaModelContext metaModelContext) {
+        super(metaModelContext);
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction act) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification) {
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction objectAction, ObjectActionParameter param) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction act) {
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, OneToOneAssociation prop) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction, final ObjectActionParameter param) {
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, OneToManyAssociation collection) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToOneAssociation prop) {
+    }
+
+    @Override
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToManyAssociation collection) {
 
         val actionTypes = inferActionTypes();
 

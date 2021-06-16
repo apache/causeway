@@ -34,10 +34,10 @@ import lombok.val;
 public class EntityChangePublishingFacetForDomainObjectAnnotation
 extends EntityChangePublishingFacetAbstract {
 
-    public static EntityChangePublishingFacet create(
-            Optional<Publishing> entityChangePublishingIfAny,
-            IsisConfiguration configuration,
-            FacetHolder holder) {
+    public static Optional<EntityChangePublishingFacet> create(
+            final Optional<Publishing> entityChangePublishingIfAny,
+            final IsisConfiguration configuration,
+            final FacetHolder holder) {
 
         val publish = entityChangePublishingIfAny.orElse(Publishing.AS_CONFIGURED);
 
@@ -48,23 +48,23 @@ extends EntityChangePublishingFacetAbstract {
             val publishingPolicy = PublishingPolicies.entityChangePublishingPolicy(configuration);
             switch (publishingPolicy) {
             case NONE:
-                return null;
+                return Optional.empty();
             default:
-                return entityChangePublishingIfAny.isPresent()
+                return Optional.of(entityChangePublishingIfAny.isPresent()
                         ? new EntityChangePublishingFacetForDomainObjectAnnotationAsConfigured(holder)
-                        : new EntityChangePublishingFacetFromConfiguration(holder);
+                        : new EntityChangePublishingFacetFromConfiguration(holder));
             }
         case DISABLED:
             return null;
         case ENABLED:
-            return new EntityChangePublishingFacetForDomainObjectAnnotation(holder);
+            return Optional.of(new EntityChangePublishingFacetForDomainObjectAnnotation(holder));
 
         default:
             throw _Exceptions.unmatchedCase(publish);
         }
     }
 
-    protected EntityChangePublishingFacetForDomainObjectAnnotation(FacetHolder holder) {
+    protected EntityChangePublishingFacetForDomainObjectAnnotation(final FacetHolder holder) {
         super(holder);
     }
 }

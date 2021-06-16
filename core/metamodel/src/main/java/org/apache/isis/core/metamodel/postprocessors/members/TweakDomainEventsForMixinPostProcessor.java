@@ -21,12 +21,15 @@ package org.apache.isis.core.metamodel.postprocessors.members;
 
 import java.lang.reflect.Method;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.commons.internal.reflection._Annotations;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
@@ -56,13 +59,18 @@ import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationMix
 public class TweakDomainEventsForMixinPostProcessor
 extends ObjectSpecificationPostProcessorAbstract {
 
+    @Inject
+    public TweakDomainEventsForMixinPostProcessor(final MetaModelContext metaModelContext) {
+        super(metaModelContext);
+    }
+
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification) {
         // no-op
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, final ObjectAction objectAction) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction) {
 
         if(objectAction instanceof ObjectActionMixedIn) {
             // unlike collection and property mixins, there is no need to create the DomainEventFacet, it will
@@ -85,12 +93,12 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction objectAction, ObjectActionParameter param) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction, final ObjectActionParameter param) {
         // no-op
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, final OneToOneAssociation property) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToOneAssociation property) {
 
         if(property instanceof OneToOneAssociationMixedIn) {
             final OneToOneAssociationMixedIn propertyMixin = (OneToOneAssociationMixedIn) property;
@@ -110,10 +118,9 @@ extends ObjectSpecificationPostProcessorAbstract {
                             PropertyAnnotationFacetFactory.defaultFromDomainObjectIfRequired(
                                     objectSpecification, propertyAnnot.domainEvent());
                     final PropertyOrCollectionAccessorFacet getterFacetIfAny = null;
-                    final PropertyDomainEventFacetForPropertyAnnotation propertyDomainEventFacet =
+                    FacetUtil.addFacet(
                             new PropertyDomainEventFacetForPropertyAnnotation(
-                                    propertyDomainEventType, getterFacetIfAny, property);
-                    FacetUtil.addFacet(propertyDomainEventFacet);
+                                    propertyDomainEventType, getterFacetIfAny, property));
                 }
             }
             final PropertyDomainEventDefaultFacetForDomainObjectAnnotation propertyDomainEventDefaultFacet =
@@ -132,7 +139,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, final OneToManyAssociation collection) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToManyAssociation collection) {
 
         if(collection instanceof OneToManyAssociationMixedIn) {
             final OneToManyAssociationMixedIn collectionMixin = (OneToManyAssociationMixedIn) collection;
@@ -151,10 +158,9 @@ extends ObjectSpecificationPostProcessorAbstract {
                     final Class<? extends CollectionDomainEvent<?, ?>> collectionDomainEventType =
                             CollectionAnnotationFacetFactory.defaultFromDomainObjectIfRequired(
                                     objectSpecification, collectionAnnot.domainEvent());
-                    final CollectionDomainEventFacetForCollectionAnnotation collectionDomainEventFacet =
+                    FacetUtil.addFacet(
                             new CollectionDomainEventFacetForCollectionAnnotation(
-                                    collectionDomainEventType, collection);
-                    FacetUtil.addFacet(collectionDomainEventFacet);
+                                    collectionDomainEventType, collection));
                 }
 
                 final CollectionDomainEventDefaultFacetForDomainObjectAnnotation collectionDomainEventDefaultFacet =

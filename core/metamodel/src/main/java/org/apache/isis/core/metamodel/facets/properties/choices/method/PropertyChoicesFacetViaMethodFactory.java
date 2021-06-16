@@ -19,7 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.properties.choices.method;
 
+import javax.inject.Inject;
+
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -33,9 +36,10 @@ public class PropertyChoicesFacetViaMethodFactory extends MethodPrefixBasedFacet
 
     private static final String PREFIX = MethodLiteralConstants.CHOICES_PREFIX;
 
-    public PropertyChoicesFacetViaMethodFactory() {
+    @Inject
+    public PropertyChoicesFacetViaMethodFactory(final MetaModelContext mmc) {
      // to also support properties from mixins, need to not only include properties but also actions
-        super(FeatureType.PROPERTIES_AND_ACTIONS, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
+        super(mmc, FeatureType.PROPERTIES_AND_ACTIONS, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
     }
 
     @Override

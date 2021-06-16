@@ -19,23 +19,32 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbstract;
 
-public class DescribedAsFacetForDomainObjectXml extends DescribedAsFacetAbstract {
+public class DescribedAsFacetForDomainObjectXml
+extends DescribedAsFacetAbstract {
 
-    public static DescribedAsFacet create(DomainObjectLayoutData domainObjectLayout, FacetHolder holder) {
+    public static Optional<DescribedAsFacet> create(
+            final DomainObjectLayoutData domainObjectLayout,
+            final FacetHolder holder) {
         if(domainObjectLayout == null) {
-            return null;
+            return Optional.empty();
         }
         final String describedAs = _Strings.emptyToNull(domainObjectLayout.getDescribedAs());
-        return describedAs != null ? new DescribedAsFacetForDomainObjectXml(describedAs, holder) : null;
+        return describedAs != null
+                ? Optional.of(new DescribedAsFacetForDomainObjectXml(describedAs, holder))
+                : Optional.empty();
     }
 
-    private DescribedAsFacetForDomainObjectXml(String value, FacetHolder holder) {
+    private DescribedAsFacetForDomainObjectXml(
+            final String value,
+            final FacetHolder holder) {
         super(value, holder);
     }
 

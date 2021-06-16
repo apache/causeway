@@ -22,7 +22,7 @@ import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet
 
 public enum IntrospectionState implements Comparable<IntrospectionState> {
     /**
-     * {@link ObjectTypeFacet} only.
+     * At this stage, {@link LogicalTypeFacet} only.
      */
     NOT_INTROSPECTED,
 

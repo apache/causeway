@@ -24,40 +24,43 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.commons.internal.collections._Multimaps.SetMultimap;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessor;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.Value;
 import lombok.val;
 
-public abstract class ProgrammingModelAbstract implements ProgrammingModel {
+public abstract class ProgrammingModelAbstract
+implements
+        ProgrammingModel,
+        HasMetaModelContext {
 
-    private final ServiceInjector serviceInjector;
+    @Getter(onMethod_ = {@Override})
+    private final MetaModelContext metaModelContext;
 
     private List<FacetFactory> unmodifiableFactories;
     private List<MetaModelValidator> unmodifiableValidators;
     private List<ObjectSpecificationPostProcessor> unmodifiablePostProcessors;
 
-    public ProgrammingModelAbstract(final ServiceInjector serviceInjector) {
-        this.serviceInjector = serviceInjector;
+    protected ProgrammingModelAbstract(final MetaModelContext metaModelContext) {
+        this.metaModelContext = metaModelContext;
     }
 
     /**
      * Finalizes the factory collection, can not be modified afterwards.
      * @param filter - the final programming model will only contain factories accepted by this filter
-     * @param metaModelContext
      */
-    public void init(ProgrammingModelInitFilter filter, MetaModelContext metaModelContext) {
+    public void init(final ProgrammingModelInitFilter filter) {
 
         assertNotInitialized();
 
@@ -83,36 +86,36 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
 
     @Override
     public <T extends FacetFactory> void addFactory(
-            FacetProcessingOrder order,
-            T instance,
-            Marker ... markers) {
+            final FacetProcessingOrder order,
+            final T instance,
+            final Marker ... markers) {
 
         assertNotInitialized();
-        serviceInjector.injectServicesInto(instance);
+        metaModelContext.getServiceInjector().injectServicesInto(instance);
         val factoryEntry = ProgrammingModelEntry.of(instance, markers);
         factoryEntriesByOrder.putElement(order, factoryEntry);
     }
 
     @Override
     public <T extends MetaModelValidator> void addValidator(
-            ValidationOrder order,
-            T instance,
-            Marker... markers) {
+            final ValidationOrder order,
+            final T instance,
+            final Marker... markers) {
 
         assertNotInitialized();
-        serviceInjector.injectServicesInto(instance);
+        metaModelContext.getServiceInjector().injectServicesInto(instance);
         val validatorEntry = ProgrammingModelEntry.of(instance, markers);
         validatorEntriesByOrder.putElement(order, validatorEntry);
     }
 
     @Override
     public <T extends ObjectSpecificationPostProcessor> void addPostProcessor(
-            PostProcessingOrder order,
-            T instance,
-            Marker... markers) {
+            final PostProcessingOrder order,
+            final T instance,
+            final Marker... markers) {
 
         assertNotInitialized();
-        serviceInjector.injectServicesInto(instance);
+        metaModelContext.getServiceInjector().injectServicesInto(instance);
         val postProcessorEntry = ProgrammingModelEntry.of(instance, markers);
         postProcessorEntriesByOrder.putElement(order, postProcessorEntry);
     }
@@ -151,8 +154,8 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
         factoryEntriesByOrder = _Multimaps.newSetMultimap(LinkedHashSet::new);
 
     private List<FacetFactory> snapshotFactories(
-            ProgrammingModelInitFilter filter,
-            MetaModelContext metaModelContext) {
+            final ProgrammingModelInitFilter filter,
+            final MetaModelContext metaModelContext) {
 
         val factories = _Lists.<FacetFactory>newArrayList();
         for(val order : FacetProcessingOrder.values()) {
@@ -162,8 +165,7 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
             }
             for(val factoryEntry : factoryEntrySet) {
                 if(filter.acceptFactoryType(factoryEntry.getInstance().getClass(), factoryEntry.getMarkers())) {
-                    factories.add(honorMetaModelContextAwareness(
-                            factoryEntry.getInstance(), metaModelContext));
+                    factories.add(factoryEntry.getInstance());
                 }
             }
         }
@@ -174,8 +176,8 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
         validatorEntriesByOrder = _Multimaps.newSetMultimap(LinkedHashSet::new);
 
     private List<MetaModelValidator> snapshotValidators(
-            ProgrammingModelInitFilter filter,
-            MetaModelContext metaModelContext) {
+            final ProgrammingModelInitFilter filter,
+            final MetaModelContext metaModelContext) {
 
         val validators = _Lists.<MetaModelValidator>newArrayList();
         for(val order : ValidationOrder.values()) {
@@ -185,10 +187,7 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
             }
             for(val validatorEntry : validatorEntrySet) {
                 if(filter.acceptValidator(validatorEntry.getInstance().getClass(), validatorEntry.getMarkers())) {
-
-                    validators.add(honorMetaModelContextAwareness(
-                            validatorEntry.getInstance(), metaModelContext));
-
+                    validators.add(validatorEntry.getInstance());
                 }
             }
         }
@@ -199,8 +198,8 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
         postProcessorEntriesByOrder = _Multimaps.newSetMultimap(LinkedHashSet::new);
 
     private List<ObjectSpecificationPostProcessor> snapshotPostProcessors(
-            ProgrammingModelInitFilter filter,
-            MetaModelContext metaModelContext) {
+            final ProgrammingModelInitFilter filter,
+            final MetaModelContext metaModelContext) {
 
         val postProcessors = _Lists.<ObjectSpecificationPostProcessor>newArrayList();
         for(val order : PostProcessingOrder.values()) {
@@ -209,10 +208,10 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
                 continue;
             }
             for(val postProcessorEntry : postProcessorEntrySet) {
-                if(filter.acceptPostProcessor(postProcessorEntry.getInstance().getClass(), postProcessorEntry.getMarkers())) {
-
-                    postProcessors.add(honorMetaModelContextAwareness(
-                            postProcessorEntry.getInstance(), metaModelContext));
+                if(filter.acceptPostProcessor(
+                        postProcessorEntry.getInstance().getClass(),
+                        postProcessorEntry.getMarkers())) {
+                    postProcessors.add(postProcessorEntry.getInstance());
                 }
             }
         }
@@ -238,18 +237,6 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
                     "The programming-model was not initialized yet.");
         }
     }
-
-    // -- METAMODEL CONTEXT AWARE
-
-    private static <T> T honorMetaModelContextAwareness(T pojo, MetaModelContext metaModelContext) {
-        if(pojo instanceof MetaModelContextAware) {
-            val contextAware = (MetaModelContextAware) pojo;
-            contextAware.setMetaModelContext(metaModelContext);
-        }
-        return pojo;
-    }
-
-
 
 
 }

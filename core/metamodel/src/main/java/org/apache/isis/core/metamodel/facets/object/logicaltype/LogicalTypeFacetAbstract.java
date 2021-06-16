@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.object.logicaltype;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -33,31 +33,32 @@ public abstract class LogicalTypeFacetAbstract
 extends FacetAbstract
 implements LogicalTypeFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return LogicalTypeFacet.class;
     }
 
     @Getter(onMethod_ = {@Override})
     private final @NonNull LogicalType logicalType;
 
-    public LogicalTypeFacetAbstract(
+    protected LogicalTypeFacetAbstract(
             final LogicalType logicalType,
             final FacetHolder holder) {
-        this(logicalType, holder, Derivation.NOT_DERIVED);
+        super(LogicalTypeFacetAbstract.type(), holder);
+        this.logicalType = logicalType;
     }
 
     protected LogicalTypeFacetAbstract(
             final LogicalType logicalType,
             final FacetHolder holder,
-            final Derivation derivation) {
-        super(LogicalTypeFacetAbstract.type(), holder, derivation);
+            final Facet.Precedence precedence) {
+        super(LogicalTypeFacetAbstract.type(), holder, precedence);
         this.logicalType = logicalType;
     }
 
     @Override
-    public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("logicalTypeName", logicalType.getLogicalTypeName());
-        attributeMap.put("logicalTypeCorrespondingClass", logicalType.getCorrespondingClass().getName());
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("logicalTypeName", logicalType.getLogicalTypeName());
+        visitor.accept("logicalTypeCorrespondingClass", logicalType.getCorrespondingClass().getName());
     }
 }

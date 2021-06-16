@@ -24,12 +24,11 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 
 public class NamedFacetForCollectionLayoutAnnotation extends NamedFacetAbstract {
 
-    public static NamedFacet create(
+    public static Optional<NamedFacetForCollectionLayoutAnnotation> create(
             final Optional<CollectionLayout> collectionLayoutIfAny,
             final FacetHolder holder) {
 
@@ -37,8 +36,7 @@ public class NamedFacetForCollectionLayoutAnnotation extends NamedFacetAbstract 
                 .filter(collectionLayout -> _Strings.emptyToNull(collectionLayout.named()) != null)
                 .map(collectionLayout ->
                 new NamedFacetForCollectionLayoutAnnotation(
-                        collectionLayout.named(), collectionLayout.namedEscaped(), holder))
-                .orElse(null);
+                        collectionLayout.named(), collectionLayout.namedEscaped(), holder));
     }
 
     private NamedFacetForCollectionLayoutAnnotation(

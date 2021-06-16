@@ -280,7 +280,7 @@ public interface ObjectAction extends ObjectMember {
             }
             final NamedFacet namedFacet = objAction.getFacet(NamedFacet.class);
             if (namedFacet != null) {
-                return namedFacet.value();
+                return namedFacet.translated();
             }
             return "(no name)";
         }
@@ -315,7 +315,7 @@ public interface ObjectAction extends ObjectMember {
 
         public static String actionIdentifierFor(final ObjectAction action) {
             @SuppressWarnings("unused")
-            final Identifier identifier = action.getIdentifier();
+            final Identifier identifier = action.getFeatureIdentifier();
 
             final String className = action.getOnType().getLogicalTypeName().replace(".","-");
             final String actionId = action.getId();
@@ -467,8 +467,9 @@ public interface ObjectAction extends ObjectMember {
             private final @NonNull String memberName;
 
             public ChoicesFrom(final @NonNull ObjectAssociation objectAssociation) {
+
                 this.memberId = _Strings.nullToEmpty(objectAssociation.getId()).toLowerCase();
-                this.memberName = _Strings.nullToEmpty(objectAssociation.getName()).toLowerCase();;
+                this.memberName = _Strings.nullToEmpty(objectAssociation.getName()).toLowerCase();
             }
 
             @Override

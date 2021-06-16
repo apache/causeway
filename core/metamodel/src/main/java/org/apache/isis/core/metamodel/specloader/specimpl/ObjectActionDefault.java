@@ -81,7 +81,7 @@ implements ObjectAction {
     // -- FACTORY
 
     public static ObjectActionDefault forMethod(final FacetedMethod facetedMethod) {
-        return new ObjectActionDefault(facetedMethod.getIdentifier(), facetedMethod);
+        return new ObjectActionDefault(facetedMethod.getFeatureIdentifier(), facetedMethod);
     }
 
     // -- FIELDS
@@ -242,7 +242,7 @@ implements ObjectAction {
         return new ActionVisibilityContext(
                 headFor(target),
                 this,
-                getIdentifier(),
+                getFeatureIdentifier(),
                 interactionInitiatedBy,
                 where);
     }
@@ -255,7 +255,7 @@ implements ObjectAction {
         return new ActionUsabilityContext(
                 headFor(target),
                 this,
-                getIdentifier(),
+                getFeatureIdentifier(),
                 interactionInitiatedBy,
                 where);
     }
@@ -344,7 +344,7 @@ implements ObjectAction {
         return new ActionValidityContext(
                 head,
                 this,
-                getIdentifier(),
+                getFeatureIdentifier(),
                 proposedArguments,
                 interactionInitiatedBy);
     }
@@ -424,7 +424,7 @@ implements ObjectAction {
     public Can<ManagedObject> getDefaults(final ManagedObject target) {
 
         val actionDefaultsFacet = getFacet(ActionDefaultsFacet.class);
-        if (!actionDefaultsFacet.isFallback()) {
+        if (!actionDefaultsFacet.getPrecedence().isFallback()) {
 
             // use the old defaultXxx approach
 
@@ -478,7 +478,7 @@ implements ObjectAction {
         final ActionChoicesFacet facet = getFacet(ActionChoicesFacet.class);
         val parameters = getParameters();
 
-        if (!facet.isFallback()) {
+        if (!facet.getPrecedence().isFallback()) {
             // using the old choicesXxx() approach
             paramChoicesVector = facet.getChoices(target,
                     interactionInitiatedBy);
@@ -502,7 +502,7 @@ implements ObjectAction {
                 val paramSpec = param.getSpecification();
                 val paramFacet = param.getFacet(ActionParameterChoicesFacet.class);
 
-                if (paramFacet != null && !paramFacet.isFallback()) {
+                if (paramFacet != null && !paramFacet.getPrecedence().isFallback()) {
 
                     val visibleChoices = paramFacet.getChoices(
                             paramSpec,

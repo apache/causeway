@@ -20,8 +20,8 @@
 package org.apache.isis.core.metamodel.facets.object.value.vsp;
 
 import java.text.Format;
-import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
@@ -32,7 +32,6 @@ import org.apache.isis.applib.exceptions.unrecoverable.UnknownTypeException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -80,7 +79,14 @@ implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProv
             final EqualByContent equalByContent,
             final T defaultValue) {
 
-        super(adapterFacetType, holder, Derivation.NOT_DERIVED);
+        /*
+         * precedence = LATE
+         * We don't replace any (none no-op) facets.
+         *
+         * For example, if there is already a {@link PropertyDefaultFacet} then we
+         * shouldn't replace it.
+         */
+        super(adapterFacetType, holder, Facet.Precedence.LOW);
         this.adaptedClass = adaptedClass;
         this.typicalLength = typicalLength;
         this.maxLength = maxLength;
@@ -106,18 +112,6 @@ implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProv
      */
     public final Class<T> getAdaptedClass() {
         return adaptedClass;
-    }
-
-    /**
-     * We don't replace any (none no-op) facets.
-     *
-     * <p>
-     * For example, if there is already a {@link PropertyDefaultFacet} then we
-     * shouldn't replace it.
-     */
-    @Override
-    public boolean alwaysReplace() {
-        return false;
     }
 
     // ///////////////////////////////////////////////////////////////////////////
@@ -289,14 +283,15 @@ implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProv
     }
 
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("adaptedClass", adaptedClass);
-        attributeMap.put("typicalLength", this.typicalLength);
-        attributeMap.put("maxLength", this.maxLength);
-        attributeMap.put("immutable", this.immutable);
-        attributeMap.put("equalByContent", this.equalByContent);
-        attributeMap.put("defaultValue", this.defaultValue);
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("adaptedClass", adaptedClass);
+        visitor.accept("typicalLength", this.typicalLength);
+        visitor.accept("maxLength", this.maxLength);
+        visitor.accept("immutable", this.immutable);
+        visitor.accept("equalByContent", this.equalByContent);
+        visitor.accept("defaultValue", this.defaultValue);
     }
 
 

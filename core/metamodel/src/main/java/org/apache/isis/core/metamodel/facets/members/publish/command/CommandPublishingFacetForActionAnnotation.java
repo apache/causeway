@@ -24,6 +24,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.commons.internal.base._Optionals;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -33,7 +34,7 @@ import lombok.val;
 
 public class CommandPublishingFacetForActionAnnotation extends CommandPublishingFacetAbstract {
 
-    public static CommandPublishingFacet create(
+    public static Optional<CommandPublishingFacet> create(
             final Optional<Action> actionsIfAny,
             final IsisConfiguration configuration,
             final ServiceInjector servicesInjector,
@@ -41,56 +42,63 @@ public class CommandPublishingFacetForActionAnnotation extends CommandPublishing
 
         val publishingPolicy = PublishingPolicies.actionCommandPublishingPolicy(configuration);
 
-        return actionsIfAny
-                .filter(action -> action.commandPublishing() != Publishing.NOT_SPECIFIED)
-                .<CommandPublishingFacet>map(action -> {
+        return _Optionals.orNullable(
 
-                    Publishing commandPublishing = action.commandPublishing();
-                    final Class<? extends CommandDtoProcessor> processorClass = action.commandDtoProcessor();
-                    final CommandDtoProcessor processor = newProcessorElseNull(processorClass);
+        actionsIfAny
+        .filter(action -> action.commandPublishing() != Publishing.NOT_SPECIFIED)
+        .<CommandPublishingFacet>map(action -> {
 
-                    if(processor != null) {
-                        commandPublishing = Publishing.ENABLED;
-                    }
+            Publishing commandPublishing = action.commandPublishing();
+            final Class<? extends CommandDtoProcessor> processorClass = action.commandDtoProcessor();
+            final CommandDtoProcessor processor = newProcessorElseNull(processorClass);
 
-                    switch (commandPublishing) {
-                    case AS_CONFIGURED:
-                        switch (publishingPolicy) {
-                        case NONE:
-                            return null;
-                        case IGNORE_QUERY_ONLY:
-                        case IGNORE_SAFE:
-                            if (hasSafeSemantics(holder)) {
-                                return null;
-                            }
-                            // else fall through
-                        default:
-                            return new CommandPublishingFacetForActionAnnotationAsConfigured(
-                                    holder, servicesInjector);
-                        }
-                    case DISABLED:
+            if(processor != null) {
+                commandPublishing = Publishing.ENABLED;
+            }
+
+            switch (commandPublishing) {
+            case AS_CONFIGURED:
+                switch (publishingPolicy) {
+                case NONE:
+                    return null;
+                case IGNORE_QUERY_ONLY:
+                case IGNORE_SAFE:
+                    if (hasSafeSemantics(holder)) {
                         return null;
-                    case ENABLED:
-                        return new CommandPublishingFacetForActionAnnotation(
-                                processor, holder, servicesInjector);
-                    default:
                     }
-                    throw new IllegalStateException("command '" + commandPublishing + "' not recognised");
-                })
-                .orElseGet(() -> {
-                    switch (publishingPolicy) {
-                    case NONE:
-                        return null;
-                    case IGNORE_QUERY_ONLY:
-                    case IGNORE_SAFE:
-                        if (hasSafeSemantics(holder)) {
-                            return null;
-                        }
-                        // else fall through
-                    default:
-                        return CommandPublishingFacetFromConfiguration.create(holder, servicesInjector);
-                    }
-                });
+                    // else fall through
+                default:
+                    return new CommandPublishingFacetForActionAnnotationAsConfigured(
+                            holder, servicesInjector);
+                }
+            case DISABLED:
+                return null;
+            case ENABLED:
+                return new CommandPublishingFacetForActionAnnotation(
+                        processor, holder, servicesInjector);
+            default:
+            }
+            throw new IllegalStateException("command '" + commandPublishing + "' not recognised");
+        })
+
+        ,
+
+        () -> {
+            switch (publishingPolicy) {
+            case NONE:
+                return null;
+            case IGNORE_QUERY_ONLY:
+            case IGNORE_SAFE:
+                if (hasSafeSemantics(holder)) {
+                    return null;
+                }
+                // else fall through
+            default:
+                return CommandPublishingFacetFromConfiguration.create(holder, servicesInjector);
+            }
+        }
+
+        );
     }
 
     private static boolean hasSafeSemantics(final FacetHolder holder) {

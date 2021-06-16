@@ -16,64 +16,75 @@
  * under the License. */
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
 
 import lombok.val;
 
-public class DomainObjectLayoutFacetFactory extends FacetFactoryAbstract {
+public class DomainObjectLayoutFacetFactory
+extends FacetFactoryAbstract {
 
-    public DomainObjectLayoutFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    @Inject
+    public DomainObjectLayoutFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
     }
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
+
         val facetHolder = processClassContext.getFacetHolder();
-
         val domainObjectLayoutIfAny = processClassContext.synthesizeOnType(DomainObjectLayout.class);
-
         val metamodelEventService = this.metamodelEventService.get();
 
-        super.addFacet(
-                TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent.create(
-                        domainObjectLayoutIfAny, metamodelEventService, getConfiguration(), facetHolder));
+        addFacetIfPresent(
+                TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent
+                .create(domainObjectLayoutIfAny, metamodelEventService, getConfiguration(), facetHolder));
 
-        super.addFacet(
-                IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent.create(
-                        domainObjectLayoutIfAny, metamodelEventService, getConfiguration(), facetHolder));
+        addFacetIfPresent(
+                IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent
+                .create(domainObjectLayoutIfAny, metamodelEventService, getConfiguration(), facetHolder));
 
-        super.addFacet(
-                CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent.create(
-                        domainObjectLayoutIfAny, metamodelEventService, getConfiguration(), facetHolder));
+        addFacetIfPresent(
+                CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent
+                .create(domainObjectLayoutIfAny, metamodelEventService, getConfiguration(), facetHolder));
 
-        super.addFacet(
-                LayoutFacetViaDomainObjectLayoutAnnotationUsingLayoutUiEvent.create(
-                        domainObjectLayoutIfAny, metamodelEventService, getConfiguration(), facetHolder));
+        addFacetIfPresent(
+                LayoutFacetViaDomainObjectLayoutAnnotationUsingLayoutUiEvent
+                .create(domainObjectLayoutIfAny, metamodelEventService, getConfiguration(), facetHolder));
 
-        super.addFacet(
-                CssClassFacetForDomainObjectLayoutAnnotation.create(domainObjectLayoutIfAny, facetHolder));
+        addFacetIfPresent(
+                CssClassFacetForDomainObjectLayoutAnnotation
+                .create(domainObjectLayoutIfAny, facetHolder));
 
-        super.addFacet(
-                CssClassFaFacetForDomainObjectLayoutAnnotation.create(domainObjectLayoutIfAny, facetHolder));
+        addFacetIfPresent(
+                CssClassFaFacetForDomainObjectLayoutAnnotation
+                .create(domainObjectLayoutIfAny, facetHolder));
 
-        super.addFacet(
-                DescribedAsFacetForDomainObjectLayoutAnnotation.create(domainObjectLayoutIfAny, facetHolder));
+        addFacetIfPresent(
+                DescribedAsFacetForDomainObjectLayoutAnnotation
+                .create(domainObjectLayoutIfAny, facetHolder));
 
-        super.addFacet(
-                NamedFacetForDomainObjectLayoutAnnotation.create(domainObjectLayoutIfAny, facetHolder));
+        addFacetIfPresent(
+                NamedFacetForDomainObjectLayoutAnnotation
+                .create(domainObjectLayoutIfAny, facetHolder));
 
-        super.addFacet(
-                PagedFacetForDomainObjectLayoutAnnotation.create(domainObjectLayoutIfAny, facetHolder));
+        addFacetIfPresent(
+                PagedFacetForDomainObjectLayoutAnnotation
+                .create(domainObjectLayoutIfAny, facetHolder));
 
-        super.addFacet(
-                PluralFacetForDomainObjectLayoutAnnotation.create(domainObjectLayoutIfAny, facetHolder));
+        addFacetIfPresent(
+                PluralFacetForDomainObjectLayoutAnnotation
+                .create(domainObjectLayoutIfAny, facetHolder));
 
-        super.addFacet(
-                BookmarkPolicyFacetForDomainObjectLayoutAnnotation.create(domainObjectLayoutIfAny, facetHolder));
+        addFacetIfPresent(
+                BookmarkPolicyFacetForDomainObjectLayoutAnnotation
+                .create(domainObjectLayoutIfAny, facetHolder));
 
         return;
     }

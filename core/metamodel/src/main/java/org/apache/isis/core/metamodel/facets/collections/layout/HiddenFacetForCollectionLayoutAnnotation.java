@@ -25,13 +25,13 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public class HiddenFacetForCollectionLayoutAnnotation extends HiddenFacetAbstract {
+public class HiddenFacetForCollectionLayoutAnnotation
+extends HiddenFacetAbstract {
 
-    public static HiddenFacet create(
+    public static Optional<HiddenFacetForCollectionLayoutAnnotation> create(
             final Optional<CollectionLayout> collectionLayoutIfAny,
             final FacetHolder holder) {
 
@@ -39,8 +39,7 @@ public class HiddenFacetForCollectionLayoutAnnotation extends HiddenFacetAbstrac
                 .map(CollectionLayout::hidden)
                 .filter(Objects::nonNull)
                 .filter(where -> where != Where.NOT_SPECIFIED)
-                .map(where -> new HiddenFacetForCollectionLayoutAnnotation(where, holder))
-                .orElse(null);
+                .map(where -> new HiddenFacetForCollectionLayoutAnnotation(where, holder));
     }
 
     private HiddenFacetForCollectionLayoutAnnotation(final Where where, final FacetHolder holder) {

@@ -23,9 +23,11 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
 
-public abstract class TypeOfFacetAbstract extends SingleClassValueFacetAbstract implements TypeOfFacet {
+public abstract class TypeOfFacetAbstract
+extends SingleClassValueFacetAbstract
+implements TypeOfFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return TypeOfFacet.class;
     }
 
@@ -37,4 +39,5 @@ public abstract class TypeOfFacetAbstract extends SingleClassValueFacetAbstract 
     public String toString() {
         return getClass().getSimpleName() + " [type=" + value() + "]";
     }
+
 }

@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -28,7 +28,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 import lombok.NonNull;
 
-public abstract class WhereValueFacetAbstract extends FacetAbstract implements WhereValueFacet {
+public abstract class WhereValueFacetAbstract
+extends FacetAbstract
+implements WhereValueFacet {
 
     private final @NonNull Where where;
 
@@ -37,7 +39,17 @@ public abstract class WhereValueFacetAbstract extends FacetAbstract implements W
             final @NonNull FacetHolder holder,
             final @NonNull Where where) {
 
-        super(facetType, holder, Derivation.NOT_DERIVED);
+        super(facetType, holder);
+        this.where = where;
+    }
+
+    public WhereValueFacetAbstract(
+            final @NonNull Class<? extends Facet> facetType,
+            final @NonNull FacetHolder holder,
+            final @NonNull Where where,
+            final @NonNull Facet.Precedence precedence) {
+
+        super(facetType, holder, precedence);
         this.where = where;
     }
 
@@ -52,9 +64,9 @@ public abstract class WhereValueFacetAbstract extends FacetAbstract implements W
     }
 
     @Override
-    public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("where", where);
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("where", where);
     }
 
 }

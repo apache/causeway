@@ -20,13 +20,11 @@
 package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Method;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Predicate;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -70,7 +68,7 @@ public interface ImperativeFacet extends Facet {
      * }
      * </pre>
      */
-    public List<Method> getMethods();
+    public Can<Method> getMethods();
 
     public static enum Intent {
         CHECK_IF_HIDDEN,
@@ -96,71 +94,45 @@ public interface ImperativeFacet extends Facet {
      */
     public Intent getIntent(Method method);
 
-
-    public static Predicate<Facet> PREDICATE = ImperativeFacet.Util::isImperativeFacet;
-
-    // //////////////////////////////////////
-
-    public static class Util {
-        private Util(){}
-
-        /**
-         * Returns the provided {@link Facet facet} as an {@link ImperativeFacet} if
-         * it either is one or if it wraps one.
-         *
-         * <p>
-         * Otherwise, returns <tt>null</tt>.
-         */
-        public static ImperativeFacet getImperativeFacet(final Facet facet) {
-            if (facet instanceof ImperativeFacet) {
-                return (ImperativeFacet) facet;
-            }
-            if (facet.getUnderlyingFacet() instanceof ImperativeFacet) {
-                return (ImperativeFacet) facet.getUnderlyingFacet();
-            }
-            return null;
-        }
-
-        public static boolean isImperativeFacet(final Facet facet) {
-            return getImperativeFacet(facet) != null;
-        }
-
-        public static Intent getIntent(final ObjectMember member, final Method method) {
-            val imperativeFacets = member.streamFacets()
-                    .map(ImperativeFacet.Util::getImperativeFacet)
-                    .filter(_NullSafe::isPresent)
-                    .filter(imperativeFacet->imperativeFacet.getMethods().contains(method))
-                    .collect(Collectors.toList());
-
-            switch(imperativeFacets.size()) {
-            case 0:
-                break;
-            case 1:
-                return imperativeFacets.get(0).getIntent(method);
-            default:
-                Intent intentToReturn = null;
-                for (ImperativeFacet imperativeFacet : imperativeFacets) {
-                    Intent intent = imperativeFacet.getIntent(method);
-                    if(intentToReturn == null) {
-                        intentToReturn = intent;
-                    } else if(intentToReturn != intent) {
-                        throw new IllegalArgumentException(member.getIdentifier().toString() +  ": more than one ImperativeFacet for method " + method.getName() + " , with inconsistent intents: " + imperativeFacets.toString());
-                    }
-                }
-                return intentToReturn;
-            }
-            throw new IllegalArgumentException(member.getIdentifier().toString() +  ": unable to determine intent of " + method.getName());
-        }
-
-        public static void appendAttributesTo(ImperativeFacet facet, final Map<String, Object> attributeMap) {
-            List<Method> methods = facet.getMethods();
-            attributeMap.put("methods", methods);
-            for (Method method : methods) {
-                Intent intent = facet.getIntent(method);
-                attributeMap.put("intent." + method.getName(), intent);
-            }
-        }
-
+    public static void visitAttributes(final ImperativeFacet imperativeFacet, final BiConsumer<String, Object> visitor) {
+        val methods = imperativeFacet.getMethods();
+        visitor.accept("methods",
+                methods.stream()
+                .map(Method::toString)
+                .collect(Collectors.joining(", ")));
+        methods.forEach(method->
+            visitor.accept(
+                    "intent." + method.getName(), imperativeFacet.getIntent(method)));
     }
+
+    // -- UTILITIES
+
+    public static Intent getIntent(final ObjectMember member, final Method method) {
+        val imperativeFacets = member.streamFacets(ImperativeFacet.class)
+                .filter(imperativeFacet->imperativeFacet.getMethods().contains(method))
+                .collect(Collectors.toList());
+
+        switch(imperativeFacets.size()) {
+        case 0:
+            break;
+        case 1:
+            return imperativeFacets.get(0).getIntent(method);
+        default:
+            Intent intentToReturn = null;
+            for (ImperativeFacet imperativeFacet : imperativeFacets) {
+                Intent intent = imperativeFacet.getIntent(method);
+                if(intentToReturn == null) {
+                    intentToReturn = intent;
+                } else if(intentToReturn != intent) {
+                    throw new IllegalArgumentException(member.getFeatureIdentifier().toString() +  ": more than one ImperativeFacet for method " + method.getName() + " , with inconsistent intents: " + imperativeFacets.toString());
+                }
+            }
+            return intentToReturn;
+        }
+        throw new IllegalArgumentException(member.getFeatureIdentifier().toString() +  ": unable to determine intent of " + method.getName());
+    }
+
+
+
 
 }

@@ -35,18 +35,21 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+
+import lombok.val;
 
 public class ObjectAssociationAbstractTest_alwaysHidden {
 
@@ -69,7 +72,9 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
 
     @Before
     public void setup() {
-        facetedMethod = FacetedMethod.createForProperty(Customer.class, "firstName");
+
+        MetaModelContext mmc = MetaModelContext_forTesting.buildDefault();
+        facetedMethod = FacetedMethod.createForProperty(mmc, Customer.class, "firstName");
 
         context.checking(new Expectations() {{
             //            allowing(mockServicesInjector).getSpecificationLoader();
@@ -80,7 +85,7 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
         }});
 
         objectAssociation = new ObjectAssociationAbstract(
-                facetedMethod.getIdentifier(),
+                facetedMethod.getFeatureIdentifier(),
                 facetedMethod, FeatureType.PROPERTY, mockObjectSpecification) {
 
             @Override
@@ -213,17 +218,17 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
             final Where where,
             final FacetedMethod holder,
             final boolean noop) {
-        HiddenFacet facet = new HiddenFacetAbstract(HiddenFacet.class, where, holder) {
-            @Override
-            protected String hiddenReason(final ManagedObject target, final Where whereContext) {
-                return null;
-            }
 
-            @Override
-            public boolean isFallback() {
-                return noop;
-            }
-        };
-        FacetUtil.addFacet(facet);
+        val precedence = noop
+                ? Facet.Precedence.FALLBACK
+                : Facet.Precedence.DEFAULT;
+
+        FacetUtil.addFacet(
+            new HiddenFacetAbstract(where, holder, precedence) {
+                @Override
+                protected String hiddenReason(final ManagedObject target, final Where whereContext) {
+                    return null;
+                }
+            });
     }
 }

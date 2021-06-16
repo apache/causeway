@@ -19,13 +19,14 @@
 
 package org.apache.isis.core.metamodel.facets.object.value;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacetAbstract;
 
-public class MaxLengthFacetUsingParser extends MaxLengthFacetAbstract{
+public class MaxLengthFacetUsingParser
+extends MaxLengthFacetAbstract{
 
     private final Parser<?> parser;
 
@@ -36,23 +37,18 @@ public class MaxLengthFacetUsingParser extends MaxLengthFacetAbstract{
 
     @Override
     protected String toStringValues() {
-        getServiceInjector().injectServicesInto(parser);
         return parser.toString();
     }
 
-    @Override
-    public int value() {
-        getServiceInjector().injectServicesInto(parser);
-        return parser.maxLength();
-    }
 
     @Override
     public String toString() {
         return "maxLength=" + value();
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("parser", parser);
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("parser", parser);
     }
 }

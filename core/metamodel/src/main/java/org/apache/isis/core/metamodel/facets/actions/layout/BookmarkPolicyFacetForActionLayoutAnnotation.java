@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolic
 
 public class BookmarkPolicyFacetForActionLayoutAnnotation extends BookmarkPolicyFacetAbstract {
 
-    public static BookmarkPolicyFacet create(
+    public static Optional<BookmarkPolicyFacet> create(
             final Optional<ActionLayout> actionLayoutIfAny,
             final FacetHolder holder) {
 
@@ -47,8 +47,7 @@ public class BookmarkPolicyFacetForActionLayoutAnnotation extends BookmarkPolicy
                     }
                     throw new IllegalStateException("bookmarkPolicy '" + bookmarkPolicy + "' not recognised");
                 }
-                        )
-                .orElse(null);
+                        );
     }
 
     private BookmarkPolicyFacetForActionLayoutAnnotation(final BookmarkPolicy bookmarkPolicy, final FacetHolder holder) {

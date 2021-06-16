@@ -22,10 +22,11 @@ package org.apache.isis.core.metamodel.facets.properties.validating;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public class PropertyValidateFacetNone extends PropertyValidateFacetAbstract {
+public class PropertyValidateFacetNone
+extends PropertyValidateFacetAbstract {
 
     public PropertyValidateFacetNone(final FacetHolder holder) {
-        super(holder);
+        super(holder, Precedence.FALLBACK);
     }
 
     /**
@@ -37,11 +38,6 @@ public class PropertyValidateFacetNone extends PropertyValidateFacetAbstract {
     @Override
     public String invalidReason(final ManagedObject inObject, final ManagedObject value) {
         return null;
-    }
-
-    @Override
-    public boolean isFallback() {
-        return true;
     }
 
 }

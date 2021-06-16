@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 
 public abstract class SortedByFacetAbstract extends SingleValueFacetAbstract<Class<? extends Comparator<?>>> implements SortedByFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return SortedByFacet.class;
     }
 

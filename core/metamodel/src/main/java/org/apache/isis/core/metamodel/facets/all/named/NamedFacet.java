@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.all.named;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facets.all.i8n.HasTranslation;
 
 /**
  * The name of a class, a property, collection, an action or a parameter.
@@ -28,15 +29,10 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  * In the standard Apache Isis Programming Model, corresponds to annotating the
  * member with <tt>@Named</tt>.
  */
-public interface NamedFacet extends Facet {
+public interface NamedFacet extends Facet, HasTranslation {
 
     /**
-     * @return The name to use as a label for a collection, a property or a parameter
-     */
-    String value();
-
-    /**
-     * @return A flag indicating whether the label should be show as is, or should be HTML escaped
+     * Flag indicating whether the label should be show as is, or should be HTML escaped.
      */
     boolean escaped();
 }

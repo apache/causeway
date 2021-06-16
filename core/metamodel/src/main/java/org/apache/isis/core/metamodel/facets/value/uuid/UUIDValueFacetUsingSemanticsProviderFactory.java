@@ -21,13 +21,18 @@ package org.apache.isis.core.metamodel.facets.value.uuid;
 
 import java.util.UUID;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 
-public class UUIDValueFacetUsingSemanticsProviderFactory extends ValueFacetUsingSemanticsProviderFactory<UUID> {
+public class UUIDValueFacetUsingSemanticsProviderFactory
+extends ValueFacetUsingSemanticsProviderFactory<UUID> {
 
-    public UUIDValueFacetUsingSemanticsProviderFactory() {
-        super();
+    @Inject
+    public UUIDValueFacetUsingSemanticsProviderFactory(final MetaModelContext mmc) {
+        super(mmc);
     }
 
     @Override

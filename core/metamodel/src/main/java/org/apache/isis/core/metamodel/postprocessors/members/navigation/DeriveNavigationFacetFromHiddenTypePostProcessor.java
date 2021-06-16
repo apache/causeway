@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.metamodel.postprocessors.members.navigation;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.object.hidden.HiddenTypeFacet;
@@ -36,25 +39,35 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
  */
 public class DeriveNavigationFacetFromHiddenTypePostProcessor extends ObjectSpecificationPostProcessorAbstract {
 
-    @Override protected void doPostProcess(ObjectSpecification objectSpecification) {
+    @Inject
+    public DeriveNavigationFacetFromHiddenTypePostProcessor(final MetaModelContext metaModelContext) {
+        super(metaModelContext);
     }
 
-    @Override protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction act) {
+    @Override
+    protected void doPostProcess(final ObjectSpecification objectSpecification) {
+    }
+
+    @Override
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction act) {
         addFacetIfRequired(act, act.getReturnType());
     }
 
-    @Override protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction objectAction, ObjectActionParameter param) {
+    @Override
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction, final ObjectActionParameter param) {
     }
 
-    @Override protected void doPostProcess(ObjectSpecification objectSpecification, OneToOneAssociation prop) {
+    @Override
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToOneAssociation prop) {
         addFacetIfRequired(prop, prop.getSpecification());
     }
 
-    @Override protected void doPostProcess(ObjectSpecification objectSpecification, OneToManyAssociation coll) {
+    @Override
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
         addFacetIfRequired(coll, coll.getSpecification());
     }
 
-    private static void addFacetIfRequired(FacetHolder facetHolder, ObjectSpecification navigatedType) {
+    private static void addFacetIfRequired(final FacetHolder facetHolder, final ObjectSpecification navigatedType) {
         if(navigatedType.containsNonFallbackFacet(HiddenTypeFacet.class)) {
             FacetUtil.addFacet(new NavigationFacetDerivedFromHiddenType(facetHolder, navigatedType));
         }

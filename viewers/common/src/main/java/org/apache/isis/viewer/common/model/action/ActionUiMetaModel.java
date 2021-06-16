@@ -151,7 +151,7 @@ public final class ActionUiMetaModel implements Serializable {
 
         val describedAsFacet = objectAction.getFacet(DescribedAsFacet.class);
         return Optional.ofNullable(describedAsFacet)
-                .map(DescribedAsFacet::value);
+                .map(DescribedAsFacet::translated);
     }
 
 }

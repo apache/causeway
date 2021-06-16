@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
+import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.Navigable;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
@@ -49,6 +50,7 @@ public abstract class MMNode {
     @PropertyLayout(navigable=Navigable.PARENT, hidden=Where.EVERYWHERE)
     public abstract MMNode getParentNode();
 
+    @Collection
     @Setter protected List<MMNode> childNodes;
     public List<MMNode> getChildNodes() {
         if(childNodes==null) {

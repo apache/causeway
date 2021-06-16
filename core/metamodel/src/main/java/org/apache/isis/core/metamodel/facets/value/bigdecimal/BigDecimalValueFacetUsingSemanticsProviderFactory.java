@@ -21,13 +21,18 @@ package org.apache.isis.core.metamodel.facets.value.bigdecimal;
 
 import java.math.BigDecimal;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 
-public class BigDecimalValueFacetUsingSemanticsProviderFactory extends ValueFacetUsingSemanticsProviderFactory<BigDecimal> {
+public class BigDecimalValueFacetUsingSemanticsProviderFactory
+extends ValueFacetUsingSemanticsProviderFactory<BigDecimal> {
 
-    public BigDecimalValueFacetUsingSemanticsProviderFactory() {
-        super();
+    @Inject
+    public BigDecimalValueFacetUsingSemanticsProviderFactory(final MetaModelContext mmc) {
+        super(mmc);
     }
 
     @Override

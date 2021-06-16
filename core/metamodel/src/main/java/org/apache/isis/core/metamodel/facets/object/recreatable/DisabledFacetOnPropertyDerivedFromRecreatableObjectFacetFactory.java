@@ -21,6 +21,9 @@ package org.apache.isis.core.metamodel.facets.object.recreatable;
 
 import java.lang.reflect.Method;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -28,10 +31,12 @@ import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstr
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public class DisabledFacetOnPropertyDerivedFromRecreatableObjectFacetFactory extends FacetFactoryAbstract {
+public class DisabledFacetOnPropertyDerivedFromRecreatableObjectFacetFactory
+extends FacetFactoryAbstract {
 
-    public DisabledFacetOnPropertyDerivedFromRecreatableObjectFacetFactory() {
-        super(FeatureType.PROPERTIES_ONLY);
+    @Inject
+    public DisabledFacetOnPropertyDerivedFromRecreatableObjectFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.PROPERTIES_ONLY);
     }
 
     @Override
@@ -46,7 +51,7 @@ public class DisabledFacetOnPropertyDerivedFromRecreatableObjectFacetFactory ext
         final DisabledFacetAbstract.Semantics semantics = Util.inferSemanticsFrom(facet);
 
         final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
-        super.addFacet(new DisabledFacetOnPropertyDerivedFromRecreatableObject(facetHolder, semantics));
+        addFacet(new DisabledFacetOnPropertyInferredFromRecreatableObject(facetHolder, semantics));
     }
 
 }

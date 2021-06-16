@@ -19,14 +19,41 @@
 
 package org.apache.isis.core.metamodel.facets.object.defaults.annotcfg;
 
+import java.util.Optional;
+
+import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.annotation.Defaulted;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultsProviderUtil;
 
-public class DefaultedFacetAnnotation extends DefaultedFacetAbstract {
+public class DefaultedFacetAnnotation
+extends DefaultedFacetAbstract {
+
+    public static Optional<DefaultedFacet> create(
+            final IsisConfiguration config,
+            final Class<?> annotatedClass,
+            final FacetHolder holder) {
+
+        return DefaultsProviderUtil.providerFrom(
+                providerName(config, annotatedClass),
+                providerClass(annotatedClass),
+                holder)
+        .map(defaultsProvider->new DefaultedFacetAnnotation(defaultsProvider, holder));
+    }
+
+    // -- CONSTRUCTOR
+
+    private DefaultedFacetAnnotation(
+            final DefaultsProvider<?> defaultsProvider,
+            final FacetHolder holder) {
+        super(defaultsProvider, holder);
+    }
+
+    // -- HELPER
 
     private static String providerName(final IsisConfiguration config, final Class<?> annotatedClass) {
 
@@ -41,22 +68,6 @@ public class DefaultedFacetAnnotation extends DefaultedFacetAbstract {
     private static Class<?> providerClass(final Class<?> annotatedClass) {
         final Defaulted annotation = annotatedClass.getAnnotation(Defaulted.class);
         return annotation.defaultsProviderClass();
-    }
-
-    public DefaultedFacetAnnotation(
-            final IsisConfiguration config,
-            final Class<?> annotatedClass,
-            final FacetHolder holder) {
-
-        this(providerName(config, annotatedClass), providerClass(annotatedClass), holder);
-    }
-
-    private DefaultedFacetAnnotation(
-            final String candidateProviderName,
-            final Class<?> candidateProviderClass,
-            final FacetHolder holder) {
-
-        super(candidateProviderName, candidateProviderClass, holder);
     }
 
 }

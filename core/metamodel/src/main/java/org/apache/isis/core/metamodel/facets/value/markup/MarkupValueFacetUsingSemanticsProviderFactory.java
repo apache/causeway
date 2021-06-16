@@ -19,11 +19,20 @@
 
 package org.apache.isis.core.metamodel.facets.value.markup;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.value.Markup;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 
-public class MarkupValueFacetUsingSemanticsProviderFactory extends ValueFacetUsingSemanticsProviderFactory<Markup> {
+public class MarkupValueFacetUsingSemanticsProviderFactory
+extends ValueFacetUsingSemanticsProviderFactory<Markup> {
+
+    @Inject
+    public MarkupValueFacetUsingSemanticsProviderFactory(final MetaModelContext mmc) {
+        super(mmc);
+    }
 
     @Override
     public void process(final ProcessClassContext processClassContext) {

@@ -22,17 +22,17 @@ package org.apache.isis.core.metamodel.facets.value;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.core.metamodel.context.MetaModelContextAware;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
-import org.apache.isis.core.metamodel.facets.value.shortint.ShortValueSemanticsProviderAbstract;
-import org.apache.isis.core.metamodel.facets.value.shortint.ShortWrapperValueSemanticsProvider;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-public class ShortValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
+import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
+import org.apache.isis.core.metamodel.facets.value.shortint.ShortValueSemanticsProviderAbstract;
+import org.apache.isis.core.metamodel.facets.value.shortint.ShortWrapperValueSemanticsProvider;
+
+public class ShortValueSemanticsProviderTest
+extends ValueSemanticsProviderAbstractTestCase {
 
     private ShortValueSemanticsProviderAbstract value;
     private Short short1;
@@ -44,8 +44,7 @@ public class ShortValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
         short1 = Short.valueOf((short) 32);
         allowMockAdapterToReturn(short1);
 
-        holder = new FacetHolderImpl();
-        ((MetaModelContextAware)holder).setMetaModelContext(super.metaModelContext);
+        holder = FacetHolderAbstract.forTesting(metaModelContext);
 
         setValue(value = new ShortWrapperValueSemanticsProvider(holder));
     }

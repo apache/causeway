@@ -24,11 +24,12 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetAbstract;
 
 public class TypeOfFacetOnCollectionFromCollectionAnnotation extends TypeOfFacetAbstract {
 
-    public static TypeOfFacetOnCollectionFromCollectionAnnotation create(
+    public static Optional<TypeOfFacet> create(
             final Optional<Collection> collectionIfAny,
             final FacetedMethod facetHolder) {
 
@@ -36,8 +37,7 @@ public class TypeOfFacetOnCollectionFromCollectionAnnotation extends TypeOfFacet
                 .map(Collection::typeOf)
                 .filter(typeOf -> typeOf != Object.class)
                 .map(typeOf ->
-                new TypeOfFacetOnCollectionFromCollectionAnnotation(typeOf, facetHolder))
-                .orElse(null);
+                new TypeOfFacetOnCollectionFromCollectionAnnotation(typeOf, facetHolder));
     }
 
     private TypeOfFacetOnCollectionFromCollectionAnnotation(final Class<?> type, final FacetHolder holder) {

@@ -39,7 +39,8 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
  *
  * @see ImmutableFacet
  */
-public interface DisabledObjectFacet extends Facet, DisablingInteractionAdvisor {
+public interface DisabledObjectFacet
+extends Facet, DisablingInteractionAdvisor {
 
     /**
      * Clone this facet onto another {@link FacetHolder}.
@@ -49,6 +50,6 @@ public interface DisabledObjectFacet extends Facet, DisablingInteractionAdvisor 
      * {@link ObjectSpecification}, and then copied down onto each of the spec's
      * {@link ObjectMember}s.
      */
-    public void copyOnto(FacetHolder holder);
+    public DisabledObjectFacet clone(FacetHolder holder);
 
 }

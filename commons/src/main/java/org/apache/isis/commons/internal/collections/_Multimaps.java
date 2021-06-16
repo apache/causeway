@@ -27,12 +27,15 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableMap;
+import java.util.Optional;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -41,6 +44,7 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._With;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.val;
 
@@ -86,13 +90,26 @@ public class _Multimaps {
          * <p> In the latter case the List is not put onto this map.
          * @param key
          */
-        default public List<V> getOrElseEmpty(K key) {
+        default List<V> getOrElseEmpty(K key) {
             return getOrDefault(key, Collections.emptyList());
         }
 
-        default public Stream<V> streamElements() {
+        default Stream<V> streamElements() {
             return values().stream()
                     .flatMap(Collection::stream);
+        }
+
+        /**
+         * @return optionally the underlying map, based on whether it implements a {@link NavigableMap}
+         */
+        default Optional<NavigableMap<K, List<V>>> asNavigableMap() {
+            return Optional.empty();
+        }
+
+        default NavigableMap<K, List<V>> asNavigableMapElseFail() {
+            return asNavigableMap()
+                    .orElseThrow(()->_Exceptions
+                            .unrecoverable("underlying map is not an instance of NavigableMap"));
         }
 
     }
@@ -220,6 +237,13 @@ public class _Multimaps {
                 return collection;
             }
 
+            @Override
+            public Optional<NavigableMap<K, List<V>>> asNavigableMap() {
+                return delegate instanceof NavigableMap
+                        ? Optional.of(_Casts.uncheckedCast(delegate))
+                        : Optional.empty();
+            }
+
         };
     }
 
@@ -336,6 +360,13 @@ public class _Multimaps {
      */
     public static <K, V> ListMultimap<K, V> newConcurrentListMultimap(){
         return newListMultimap(ConcurrentHashMap<K, List<V>>::new, CopyOnWriteArrayList::new);
+    }
+
+    /**
+     * @return ConcurrentSkipListMap of CopyOnWriteArrayList (fully concurrent)
+     */
+    public static <K, V> ListMultimap<K, V> newSortedConcurrentListMultimap(){
+        return newListMultimap(ConcurrentSkipListMap<K, List<V>>::new, CopyOnWriteArrayList::new);
     }
 
     /**

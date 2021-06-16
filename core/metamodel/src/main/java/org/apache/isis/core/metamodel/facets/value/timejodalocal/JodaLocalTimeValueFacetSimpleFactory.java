@@ -19,28 +19,36 @@
 
 package org.apache.isis.core.metamodel.facets.value.timejodalocal;
 
+import javax.inject.Inject;
+
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacetSimple;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 
-public class JodaLocalTimeValueFacetSimpleFactory extends ValueFacetUsingSemanticsProviderFactory<LocalDate> {
+import lombok.val;
 
-    public JodaLocalTimeValueFacetSimpleFactory() {
-        super();
+public class JodaLocalTimeValueFacetSimpleFactory
+extends ValueFacetUsingSemanticsProviderFactory<LocalDate> {
+
+    @Inject
+    public JodaLocalTimeValueFacetSimpleFactory(final MetaModelContext mmc) {
+        super(mmc);
     }
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        final Class<?> type = processClassContext.getCls();
-        final FacetHolder holder = processClassContext.getFacetHolder();
+        val type = processClassContext.getCls();
 
         if (type != LocalTime.class) {
             return;
         }
-        super.addFacet(new ValueFacetSimple(holder));
+
+        val facetHolder = processClassContext.getFacetHolder();
+        addFacet(
+                new ValueFacetSimple(facetHolder));
     }
 
 }

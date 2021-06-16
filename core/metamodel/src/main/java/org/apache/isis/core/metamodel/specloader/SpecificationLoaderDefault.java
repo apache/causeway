@@ -363,13 +363,13 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     // -- SPEC LOADING
 
     @Override
-    public void reloadSpecification(Class<?> domainType) {
+    public void reloadSpecification(final Class<?> domainType) {
         invalidateCache(domainType);
         loadSpecification(domainType, IntrospectionState.FULLY_INTROSPECTED);
     }
 
     @Override
-    public boolean loadSpecifications(Class<?>... domainTypes) {
+    public boolean loadSpecifications(final Class<?>... domainTypes) {
         // ensure that all types are loadable
         if (Arrays.stream(domainTypes)
                 .map(classSubstitutorRegistry::getSubstitution)
@@ -396,7 +396,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     }
 
     @Override
-    public void validateLater(ObjectSpecification objectSpec) {
+    public void validateLater(final ObjectSpecification objectSpec) {
         if(!isMetamodelFullyIntrospected()) {
             // don't trigger validation during bootstrapping
             // getValidationResult() is lazily populated later on first request anyway
@@ -443,7 +443,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     }
 
     @Override
-    public void forEach(Consumer<ObjectSpecification> onSpec) {
+    public void forEach(final Consumer<ObjectSpecification> onSpec) {
         val shouldRunConcurrent = isisConfiguration.getCore().getMetaModel().getValidator().isParallelize();
         cache.forEach(onSpec, shouldRunConcurrent);
     }
@@ -486,7 +486,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     private final ValidationFailures validationFailures = new ValidationFailures();
 
     @Override
-    public void addValidationFailure(ValidationFailure validationFailure) {
+    public void addValidationFailure(final ValidationFailure validationFailure) {
 //        if(validationResult.isMemoized()) {
 //            validationResult.clear(); // invalidate
 ////            throw _Exceptions.illegalState(
@@ -510,7 +510,6 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         .map(MetaModelValidatorAbstract.class::cast)
         .forEach(validator -> {
             log.debug("Running validator: {}", validator);
-            validator.setMetaModelContext(metaModelContext);
             try {
                 validator.validate();
             } catch (Throwable t) {

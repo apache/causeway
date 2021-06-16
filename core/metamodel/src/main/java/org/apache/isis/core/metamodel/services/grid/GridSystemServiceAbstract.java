@@ -81,7 +81,8 @@ import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
-import static org.apache.isis.core.metamodel.facetapi.FacetUtil.addOrReplaceFacet;
+import static org.apache.isis.core.metamodel.facetapi.FacetUtil.addFacet;
+import static org.apache.isis.core.metamodel.facetapi.FacetUtil.addFacetIfPresent;
 
 import lombok.Value;
 import lombok.val;
@@ -191,12 +192,12 @@ implements GridSystemService<G> {
             @Override
             public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
 
-                addOrReplaceFacet(BookmarkPolicyFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
-                addOrReplaceFacet(CssClassFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
-                addOrReplaceFacet(CssClassFaFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
-                addOrReplaceFacet(DescribedAsFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
-                addOrReplaceFacet(NamedFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
-                addOrReplaceFacet(PluralFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
+                addFacetIfPresent(BookmarkPolicyFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
+                addFacetIfPresent(CssClassFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
+                addFacetIfPresent(CssClassFaFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
+                addFacetIfPresent(DescribedAsFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
+                addFacetIfPresent(NamedFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
+                addFacetIfPresent(PluralFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
             }
 
             @Override
@@ -235,8 +236,8 @@ implements GridSystemService<G> {
                     groupIdAndName = null;
                     memberOrderSequence = actionDomainObjectSequence++;
                 }
-                addOrReplaceFacet(LayoutOrderFacetFromXml.create(memberOrderSequence, objectAction));
-                addOrReplaceFacet(LayoutGroupFacetFromXml.create(groupIdAndName, objectAction));
+                addFacet(LayoutOrderFacetFromXml.create(memberOrderSequence, objectAction));
+                addFacetIfPresent(LayoutGroupFacetFromXml.create(groupIdAndName, objectAction));
 
                 // fix up the action position if required
                 if(actionLayoutDataOwner instanceof FieldSet) {
@@ -256,19 +257,19 @@ implements GridSystemService<G> {
                     actionLayoutData.setPosition(null);
                 }
 
-                addOrReplaceFacet(ActionPositionFacetForActionXml.create(actionLayoutData, objectAction));
-                addOrReplaceFacet(BookmarkPolicyFacetForActionXml.create(actionLayoutData, objectAction));
-                addOrReplaceFacet(CssClassFacetForActionXml.create(actionLayoutData, objectAction));
-                addOrReplaceFacet(CssClassFaFacetForActionXml.create(actionLayoutData, objectAction));
-                addOrReplaceFacet(DescribedAsFacetForActionXml.create(actionLayoutData, objectAction));
-                addOrReplaceFacet(HiddenFacetForActionXml.create(actionLayoutData, objectAction));
+                addFacetIfPresent(ActionPositionFacetForActionXml.create(actionLayoutData, objectAction));
+                addFacetIfPresent(BookmarkPolicyFacetForActionXml.create(actionLayoutData, objectAction));
+                addFacetIfPresent(CssClassFacetForActionXml.create(actionLayoutData, objectAction));
+                addFacetIfPresent(CssClassFaFacetForActionXml.create(actionLayoutData, objectAction));
+                addFacetIfPresent(DescribedAsFacetForActionXml.create(actionLayoutData, objectAction));
+                addFacetIfPresent(HiddenFacetForActionXml.create(actionLayoutData, objectAction));
                 // preserve translations
                 NamedFacet existingNamedFacet = objectAction.getFacet(NamedFacet.class);
                 if(existingNamedFacet == null) {
-                    addOrReplaceFacet(NamedFacetForActionXml.create(actionLayoutData, objectAction));
+                    addFacetIfPresent(NamedFacetForActionXml.create(actionLayoutData, objectAction));
                 }
-                addOrReplaceFacet(PromptStyleFacetForActionXml.create(actionLayoutData, objectAction));
-                addOrReplaceFacet(RedirectFacetFromActionXml.create(actionLayoutData, objectAction));
+                addFacetIfPresent(PromptStyleFacetForActionXml.create(actionLayoutData, objectAction));
+                addFacetIfPresent(RedirectFacetFromActionXml.create(actionLayoutData, objectAction));
             }
 
             @Override
@@ -278,28 +279,28 @@ implements GridSystemService<G> {
                     return;
                 }
 
-                addOrReplaceFacet(CssClassFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
-                addOrReplaceFacet(DescribedAsFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
-                addOrReplaceFacet(HiddenFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
-                addOrReplaceFacet(LabelAtFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
-                addOrReplaceFacet(MultiLineFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                addFacetIfPresent(CssClassFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                addFacetIfPresent(DescribedAsFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                addFacetIfPresent(HiddenFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                addFacetIfPresent(LabelAtFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                addFacetIfPresent(MultiLineFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 // preserve translations
                 NamedFacet existingNamedFacet = oneToOneAssociation.getFacet(NamedFacet.class);
                 if(existingNamedFacet == null) {
-                	addOrReplaceFacet(NamedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                    addFacetIfPresent(NamedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 }
-                addOrReplaceFacet(PromptStyleFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
-                addOrReplaceFacet(RenderedAdjustedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
-                addOrReplaceFacet(UnchangingFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
-                addOrReplaceFacet(TypicalLengthFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                addFacetIfPresent(PromptStyleFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                addFacetIfPresent(RenderedAdjustedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                addFacetIfPresent(UnchangingFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                addFacetIfPresent(TypicalLengthFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
 
                 // Layout group-name based on owning property group, Layout sequence monotonically increasing
                 // nb for any given field set the sequence won't reset to zero; however this is what we want so that
                 // table columns are shown correctly (by fieldset, then property order within that fieldset).
                 final FieldSet fieldSet = propertyLayoutData.getOwner();
 
-                addOrReplaceFacet(LayoutOrderFacetFromXml.create(propertySequence.incrementAndGet(), oneToOneAssociation));
-                addOrReplaceFacet(LayoutGroupFacetFromXml.create(fieldSet, oneToOneAssociation));
+                addFacet(LayoutOrderFacetFromXml.create(propertySequence.incrementAndGet(), oneToOneAssociation));
+                addFacetIfPresent(LayoutGroupFacetFromXml.create(fieldSet, oneToOneAssociation));
             }
 
             @Override
@@ -309,19 +310,19 @@ implements GridSystemService<G> {
                     return;
                 }
 
-                addOrReplaceFacet(CssClassFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
-                addOrReplaceFacet(DefaultViewFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
-                addOrReplaceFacet(DescribedAsFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
-                addOrReplaceFacet(HiddenFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
+                addFacetIfPresent(CssClassFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
+                addFacetIfPresent(DefaultViewFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
+                addFacetIfPresent(DescribedAsFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
+                addFacetIfPresent(HiddenFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
                 // preserve translations
                 NamedFacet existingNamedFacet = oneToManyAssociation.getFacet(NamedFacet.class);
                 if(existingNamedFacet == null) {
-                    addOrReplaceFacet(NamedFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
+                    addFacetIfPresent(NamedFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
                 }
-                addOrReplaceFacet(PagedFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
-                addOrReplaceFacet(SortedByFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
+                addFacetIfPresent(PagedFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
+                addFacetIfPresent(SortedByFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
 
-                addOrReplaceFacet(LayoutOrderFacetFromXml.create(collectionSequence++, oneToManyAssociation));
+                addFacet(LayoutOrderFacetFromXml.create(collectionSequence++, oneToManyAssociation));
             }
         });
     }

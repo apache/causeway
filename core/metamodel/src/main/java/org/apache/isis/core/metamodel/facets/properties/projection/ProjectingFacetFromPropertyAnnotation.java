@@ -23,17 +23,34 @@ import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Projecting;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 
 import lombok.val;
 
-public class ProjectingFacetFromPropertyAnnotation extends ProjectingFacetAbstract {
+public class ProjectingFacetFromPropertyAnnotation
+extends ProjectingFacetAbstract {
 
-    public static Class<? extends Facet> type() {
-        return ProjectingFacet.class;
+    public static Optional<ProjectingFacet> create(
+            final Optional<Property> propertyIfAny,
+            final FacetedMethod facetHolder) {
+
+        if(!propertyIfAny.isPresent()) {
+            return Optional.empty();
+        }
+
+        val projecting = propertyIfAny.get().projecting();
+        switch (projecting) {
+        case PROJECTED:
+            return Optional.of(new ProjectingFacetFromPropertyAnnotation(projecting, facetHolder));
+        case NOT_SPECIFIED:
+        default:
+            return Optional.empty();
+        }
+
     }
+
+
     private final Projecting projecting;
 
     private ProjectingFacetFromPropertyAnnotation(
@@ -41,25 +58,6 @@ public class ProjectingFacetFromPropertyAnnotation extends ProjectingFacetAbstra
             final FacetHolder holder) {
         super( holder);
         this.projecting = projecting;
-    }
-
-    public static ProjectingFacet create(
-            final Optional<Property> propertyIfAny,
-            final FacetedMethod facetHolder) {
-
-        if(!propertyIfAny.isPresent()) {
-            return null;
-        }
-
-        val projecting = propertyIfAny.get().projecting();
-        switch (projecting) {
-        case PROJECTED:
-            return new ProjectingFacetFromPropertyAnnotation(projecting, facetHolder);
-        case NOT_SPECIFIED:
-        default:
-            return null;
-        }
-
     }
 
     @Override

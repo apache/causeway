@@ -20,25 +20,23 @@
 package org.apache.isis.core.metamodel.facets.fallback;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.HasSemanticEqualityByClass;
 import org.apache.isis.core.metamodel.facets.all.help.HelpFacetAbstract;
 
 /**
  * Has a description of <tt>null</tt>.
  */
-public class HelpFacetNone extends HelpFacetAbstract {
+public class HelpFacetNone
+extends HelpFacetAbstract
+implements HasSemanticEqualityByClass {
 
     public HelpFacetNone(final FacetHolder holder) {
-        super(null, holder);
+        super(null, holder, Precedence.FALLBACK);
     }
 
     @Override
     public String value() {
         return "No help available";
-    }
-
-    @Override
-    public boolean isFallback() {
-        return true;
     }
 
 }

@@ -309,7 +309,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
         // first, order as defined in isis.properties
         for (ManagedObject serviceAdapter : serviceAdapters) {
             final ObjectSpecification serviceSpec = serviceAdapter.getSpecification();
-            String serviceName = serviceSpec.getFacet(NamedFacet.class).value();
+            String serviceName = serviceSpec.getFacet(NamedFacet.class).translated();
             serviceNameOrder.add(serviceName);
         }
         // then, any other services (eg due to misspellings, at the end)
@@ -377,7 +377,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
                     val layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
                     String serviceName = layoutGroupFacet != null ? layoutGroupFacet.getGroupId(): null;
                     if(_Strings.isNullOrEmpty(serviceName)){
-                        serviceName = serviceSpec.getFacet(NamedFacet.class).value();
+                        serviceName = serviceSpec.getFacet(NamedFacet.class).translated();
                     }
                     return new ServiceAndAction(serviceName, serviceAdapter, objectAction);
                 });

@@ -37,8 +37,7 @@ public class JdoVersionAnnotationFacetFactoryTest extends AbstractFacetFactoryTe
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new JdoVersionAnnotationFacetFactory();
-        facetFactory.setJdoFacetContext(jdoFacetContext);
+        facetFactory = new JdoVersionAnnotationFacetFactory(metaModelContext, jdoFacetContext);
     }
 
     @Override

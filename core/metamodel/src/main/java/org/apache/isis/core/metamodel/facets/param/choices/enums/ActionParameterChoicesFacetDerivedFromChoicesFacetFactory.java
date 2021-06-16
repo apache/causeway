@@ -19,18 +19,21 @@
 
 package org.apache.isis.core.metamodel.facets.param.choices.enums;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
-import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 
 import lombok.val;
 
-public class ActionParameterChoicesFacetDerivedFromChoicesFacetFactory extends FacetFactoryAbstract {
+public class ActionParameterChoicesFacetDerivedFromChoicesFacetFactory
+extends FacetFactoryAbstract {
 
-    public ActionParameterChoicesFacetDerivedFromChoicesFacetFactory() {
-        super(FeatureType.PARAMETERS_ONLY);
+    @Inject
+    public ActionParameterChoicesFacetDerivedFromChoicesFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.PARAMETERS_ONLY);
     }
 
     @Override
@@ -42,13 +45,8 @@ public class ActionParameterChoicesFacetDerivedFromChoicesFacetFactory extends F
             return;
         }
 
-        // don't trample over any existing facets.
-        final FacetedMethodParameter facetHolder = processParameterContext.getFacetHolder();
-        if(facetHolder.containsNonFallbackFacet(ActionParameterChoicesFacet.class)) {
-            return;
-        }
-
-        super.addFacet(new ActionParameterChoicesFacetDerivedFromChoicesFacet(facetHolder));
+        val facetHolder = processParameterContext.getFacetHolder();
+        addFacet(new ActionParameterChoicesFacetInferredFromChoicesFacet(facetHolder));
     }
 
 

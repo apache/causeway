@@ -277,7 +277,7 @@ public class ParameterNegotiationModel {
 
         @Override
         public Identifier getIdentifier() {
-            return getMetaModel().getIdentifier();
+            return getMetaModel().getFeatureIdentifier();
         }
 
         @Override

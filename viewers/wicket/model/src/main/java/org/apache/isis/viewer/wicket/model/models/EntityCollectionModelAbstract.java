@@ -63,7 +63,7 @@ implements EntityCollectionModel {
             final @NonNull IsisAppCommonContext commonContext,
             final @NonNull ObjectMember objectMember) {
         super(commonContext);
-        this.identifier = objectMember.getIdentifier();
+        this.identifier = objectMember.getFeatureIdentifier();
 
         val typeOfSpecification = objectMember.lookupFacet(TypeOfFacet.class)
                 .map(TypeOfFacet::valueSpec)

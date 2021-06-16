@@ -26,6 +26,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
@@ -41,7 +42,8 @@ import org.apache.isis.core.metamodel.facets.value.ValueSemanticsProviderAbstrac
 import lombok.Getter;
 import lombok.Setter;
 
-public class JodaDateTimeValueSemanticsProvider extends ValueSemanticsProviderAbstractTemporal<DateTime> {
+public class JodaDateTimeValueSemanticsProvider
+extends ValueSemanticsProviderAbstractTemporal<DateTime> {
 
     private static final Map<String, DateFormat> FORMATS = _Maps.newHashMap();
 
@@ -135,9 +137,9 @@ public class JodaDateTimeValueSemanticsProvider extends ValueSemanticsProviderAb
     }
 
     @Override
-    public void appendAttributesTo(Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("configuredFormat", configuredFormat);
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("configuredFormat", configuredFormat);
     }
 
     @Override

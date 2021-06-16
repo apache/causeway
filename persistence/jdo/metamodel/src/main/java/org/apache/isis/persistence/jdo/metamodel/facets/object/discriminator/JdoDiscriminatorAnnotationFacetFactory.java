@@ -24,6 +24,7 @@ import javax.jdo.annotations.Discriminator;
 
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -31,22 +32,27 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;
-import org.apache.isis.core.metamodel.facets.object.logicaltype.classname.LogicalTypeFacetDerivedFromClassName;
+import org.apache.isis.core.metamodel.facets.object.logicaltype.classname.LogicalTypeFacetInferredFromClassName;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
-import lombok.Setter;
 import lombok.val;
 
 public class JdoDiscriminatorAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements ObjectTypeFacetFactory {
 
-    @Inject private ClassSubstitutorRegistry classSubstitutorRegistry;
-    @Inject @Setter private JdoFacetContext jdoFacetContext;
+    private final ClassSubstitutorRegistry classSubstitutorRegistry;
+    private final JdoFacetContext jdoFacetContext;
 
-    public JdoDiscriminatorAnnotationFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    @Inject
+    public JdoDiscriminatorAnnotationFacetFactory(
+            final MetaModelContext mmc,
+            final JdoFacetContext jdoFacetContext,
+            final ClassSubstitutorRegistry classSubstitutorRegistry) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
+        this.jdoFacetContext = jdoFacetContext;
+        this.classSubstitutorRegistry = classSubstitutorRegistry;
     }
 
     @Override
@@ -65,9 +71,9 @@ implements ObjectTypeFacetFactory {
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         final String annotationValue = annotation.value();
-        final LogicalTypeFacet facet;
+        final LogicalTypeFacet logicalTypeFacet; // non-null
         if (!_Strings.isNullOrEmpty(annotationValue)) {
-            facet = new LogicalTypeFacetInferredFromJdoDiscriminatorValueAnnotation(
+            logicalTypeFacet = new LogicalTypeFacetInferredFromJdoDiscriminatorValueAnnotation(
                         LogicalType.eager(cls, annotationValue),
                         facetHolder);
         } else {
@@ -77,17 +83,17 @@ implements ObjectTypeFacetFactory {
             }
 
             val substituted = substitute.apply(cls);
-            facet = new LogicalTypeFacetDerivedFromClassName(
+            logicalTypeFacet = new LogicalTypeFacetInferredFromClassName(
                             LogicalType.eager(substituted, substituted.getCanonicalName()),
                             facetHolder);
 
         }
-        FacetUtil.addFacet(facet);
+        FacetUtil.addFacet(logicalTypeFacet);
     }
 
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
+    public void process(final ProcessClassContext processClassContext) {
 
         // only applies to JDO entities; ignore any view models
         final Class<?> cls = processClassContext.getCls();

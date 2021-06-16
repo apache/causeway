@@ -24,42 +24,35 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
-import org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
 
 import lombok.val;
 
 class TitleServiceDefaultTest {
 
-    private ProgrammingModelFacetsJava8 programmingModel;
     private MetaModelContext metaModelContext;
     private TitleServiceDefault titleService;
-    
+
     @BeforeEach
     void setUp() throws Exception {
-        
+
         val mockServiceInjector = Mockito.mock(ServiceInjector.class);
         when(mockServiceInjector.injectServicesInto(ArgumentMatchers.any())).thenAnswer(i -> i.getArguments()[0]);
-        programmingModel = new ProgrammingModelFacetsJava8(mockServiceInjector);
-        
+
         metaModelContext = MetaModelContext_forTesting.builder()
-                .programmingModel(programmingModel)
+                .programmingModelFactory(ProgrammingModelFacetsJava8::new)
                 .titleService(new TitleServiceDefault(null, null)) // not used by this test, but required to init
                 .serviceInjector(mockServiceInjector)
                 .build();
-        
-        ((ProgrammingModelAbstract)programmingModel)
-        .init(new ProgrammingModelInitFilterDefault(), metaModelContext);
-        
+
         metaModelContext.getSpecificationLoader().createMetaModel();
-        
+
         titleService = new TitleServiceDefault(null, metaModelContext.getObjectManager());
 
     }
@@ -67,23 +60,23 @@ class TitleServiceDefaultTest {
     @AfterEach
     void tearDown() throws Exception {
     }
-    
+
     // -- FEATURED
 
     public static enum FeaturedEnum {
         FIRST,
         SECOND;
-        
+
         public String title() {
             return name().toLowerCase();
         }
-        
+
         public String iconName() {
             return name().toLowerCase();
         }
-        
+
     }
-    
+
     @Test
     void enum_shouldHonorTitleByMethod() {
 
@@ -93,9 +86,9 @@ class TitleServiceDefaultTest {
         assertEquals("first", title);
 
     }
-    
+
     // -- PLAIN
-    
+
     public static enum PlainEnum {
         FIRST,
         SECOND

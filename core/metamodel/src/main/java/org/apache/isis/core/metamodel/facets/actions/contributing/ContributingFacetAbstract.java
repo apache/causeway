@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.actions.contributing;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -31,21 +31,14 @@ implements ContributingFacet {
 
     private final Contributing contributing;
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return ContributingFacet.class;
     }
 
     public ContributingFacetAbstract(
             final Contributing contributing,
             final FacetHolder holder) {
-        this(contributing, holder, Derivation.NOT_DERIVED);
-    }
-
-    public ContributingFacetAbstract(
-            final Contributing contributing,
-            final FacetHolder holder,
-            final Derivation derivation) {
-        super(type(), holder, derivation);
+        super(type(), holder);
         this.contributing = contributing;
     }
 
@@ -55,9 +48,9 @@ implements ContributingFacet {
     }
 
     @Override
-    public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("contributing", contributing);
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("contributing", contributing);
     }
 
 }

@@ -38,7 +38,10 @@ public class PdfJsViewerFacetFromAnnotation extends PdfJsViewerFacetAbstract {
         super(config, holder);
     }
 
-    public static PdfJsViewerFacetFromAnnotation create(final PdfJsViewer annotation, final FacetHolder holder) {
+    public static PdfJsViewerFacetFromAnnotation create(
+            final PdfJsViewer annotation,
+            final FacetHolder holder) {
+
         PdfJsConfig config = new PdfJsConfig();
 
         int initialPage = annotation.initialPageNum();

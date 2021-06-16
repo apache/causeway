@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.facets.SingleStringValueFacetAbstract;
 
 public abstract class BusinessKeyFacetAbstract extends SingleStringValueFacetAbstract implements BusinessKeyFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return BusinessKeyFacet.class;
     }
 

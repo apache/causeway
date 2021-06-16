@@ -321,7 +321,7 @@ implements
         enlistCreatedInternal(entity);
 
         if(!hasAlreadyBeenEnlisted) {
-            CallbackFacet.Util.callCallback(entity, PersistedCallbackFacet.class);
+            CallbackFacet.callCallback(entity, PersistedCallbackFacet.class);
             postLifecycleEventIfRequired(entity, PersistedLifecycleEventFacet.class);
         }
     }
@@ -330,7 +330,7 @@ implements
     public void enlistDeleting(ManagedObject entity) {
         _Xray.enlistDeleting(entity, interactionProviderProvider);
         enlistDeletingInternal(entity);
-        CallbackFacet.Util.callCallback(entity, RemovingCallbackFacet.class);
+        CallbackFacet.callCallback(entity, RemovingCallbackFacet.class);
         postLifecycleEventIfRequired(entity, RemovingLifecycleEventFacet.class);
     }
 
@@ -344,7 +344,7 @@ implements
 
         if(!hasAlreadyBeenEnlisted) {
             // prevent an infinite loop... don't call the 'updating()' callback on this object if we have already done so
-            CallbackFacet.Util.callCallback(entity, UpdatingCallbackFacet.class);
+            CallbackFacet.callCallback(entity, UpdatingCallbackFacet.class);
             postLifecycleEventIfRequired(entity, UpdatingLifecycleEventFacet.class);
         }
     }
@@ -352,7 +352,7 @@ implements
     @Override
     public void recognizeLoaded(ManagedObject entity) {
         _Xray.recognizeLoaded(entity, interactionProviderProvider);
-        CallbackFacet.Util.callCallback(entity, LoadedCallbackFacet.class);
+        CallbackFacet.callCallback(entity, LoadedCallbackFacet.class);
         postLifecycleEventIfRequired(entity, LoadedLifecycleEventFacet.class);
         numberEntitiesLoaded.increment();
     }
@@ -360,14 +360,14 @@ implements
     @Override
     public void recognizePersisting(ManagedObject entity) {
         _Xray.recognizePersisting(entity, interactionProviderProvider);
-        CallbackFacet.Util.callCallback(entity, PersistingCallbackFacet.class);
+        CallbackFacet.callCallback(entity, PersistingCallbackFacet.class);
         postLifecycleEventIfRequired(entity, PersistingLifecycleEventFacet.class);
     }
 
     @Override
     public void recognizeUpdating(ManagedObject entity) {
         _Xray.recognizeUpdating(entity, interactionProviderProvider);
-        CallbackFacet.Util.callCallback(entity, UpdatedCallbackFacet.class);
+        CallbackFacet.callCallback(entity, UpdatedCallbackFacet.class);
         postLifecycleEventIfRequired(entity, UpdatedLifecycleEventFacet.class);
     }
 

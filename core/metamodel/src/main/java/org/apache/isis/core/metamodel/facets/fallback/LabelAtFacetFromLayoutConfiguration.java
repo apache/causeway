@@ -27,4 +27,5 @@ public class LabelAtFacetFromLayoutConfiguration extends LabelAtFacetAbstract {
     public LabelAtFacetFromLayoutConfiguration(LabelPosition labelPosition, FacetHolder facetHolder) {
         super(labelPosition, facetHolder);
     }
+
 }

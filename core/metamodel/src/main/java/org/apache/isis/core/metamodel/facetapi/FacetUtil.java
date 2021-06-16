@@ -19,75 +19,56 @@
 
 package org.apache.isis.core.metamodel.facetapi;
 
-import java.util.List;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import javax.annotation.Nullable;
 
 import org.apache.isis.core.metamodel.util.snapshot.XmlSchema;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public final class FacetUtil {
 
-    public static void addIfNotAlreadyPresent(final @Nullable Facet facet) {
-        if (facet == null) {
-            return;
-        }
-        val facetHolder = facet.getFacetHolder();
-        if(!facetHolder.containsFacet(facet.facetType())) {
-            facetHolder.addFacet(facet);
-        }
-    }
-
-    public static void replaceIfAlreadyPresent(final @Nullable Facet facet) {
-        if (facet == null) {
-            return;
-        }
-        val facetHolder = facet.getFacetHolder();
-        facetHolder.addOrReplaceFacet(facet);
-        // second call sets the underlying facet as well to this type
-        // hacky, to pass validation
-        facetHolder.addOrReplaceFacet(facet);
-    }
-
-
-    public static void addOrReplaceFacet(final @Nullable Facet facet) {
-        if (facet == null) {
-            return;
-        }
-        facet.getFacetHolder().addOrReplaceFacet(facet);
+    /**
+     * Attaches the {@link Facet} to its {@link Facet#getFacetHolder()}.
+     * @param facet - non-null
+     * @return the argument as is
+     */
+    public static <F extends Facet> F addFacet(final @NonNull F facet) {
+        facet.getFacetHolder().addFacet(facet);
+        return facet;
     }
 
     /**
      * Attaches the {@link Facet} to its {@link Facet#getFacetHolder() facet
-     * holder}.
-     *
-     * @return <tt>true</tt> if a non-<tt>null</tt> facet was added,
-     *         <tt>false</tt> otherwise.
+     * holder} based on precedence. Acts as a no-op if facet is <tt>null</tt>.
+     * @param facetIfAny - null-able (for fail-safety)
+     * @return the argument as is - or just in case if null converted to an Optional.empty()
      */
-    public static boolean addFacet(final @Nullable Facet facet) {
-        if (facet == null) {
-            return false;
+    public static <F extends Facet> Optional<F> addFacetIfPresent(final @Nullable Optional<F> facetIfAny) {
+        if (facetIfAny == null) {
+            return Optional.empty();
         }
-        facet.getFacetHolder().addFacet(facet);
-        return true;
+        facetIfAny
+            .ifPresent(facet->facet.getFacetHolder().addFacet(facet));
+        return facetIfAny;
     }
 
     /**
      * Attaches each {@link Facet} to its {@link Facet#getFacetHolder() facet
-     * holder}.
+     * holder} based on precedence.
      *
-     * @return <tt>true</tt> if any facets were added, <tt>false</tt> otherwise.
+     * @return whether given {@code facetList} contains any non-<tt>null</tt> facets
      */
-    public static boolean addFacets(final @NonNull List<Facet> facetList) {
+    public static boolean addFacets(final @NonNull Iterable<Facet> facetList) {
         boolean addedFacets = false;
         for (val facet : facetList) {
-            addedFacets = addFacet(facet) | addedFacets;
+            addedFacets = addFacetIfPresent(Optional.ofNullable(facet)).isPresent()
+                    | addedFacets;
         }
         return addedFacets;
     }
@@ -103,7 +84,7 @@ public final class FacetUtil {
 
             @SuppressWarnings("unchecked")
             @Override
-            public void visit(BiConsumer<Class<T>, T> elementConsumer) {
+            public void visit(final BiConsumer<Class<T>, T> elementConsumer) {
                 facetHolder.streamFacets()
                 .forEach(facet->elementConsumer.accept((Class<T>)facet.facetType(), (T)facet));
             }
@@ -111,7 +92,7 @@ public final class FacetUtil {
         };
     }
 
-    public static void copyFacets(final FacetHolder source, final FacetHolder target) {
+    public static void copyFacetsTo(final FacetHolder source, final FacetHolder target) {
         source.streamFacets()
         .forEach(target::addFacet);
     }

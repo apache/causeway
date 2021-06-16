@@ -30,7 +30,8 @@ import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-import lombok.Data;
+import lombok.NonNull;
+import lombok.Value;
 import lombok.val;
 
 /**
@@ -42,13 +43,13 @@ final class ObjectLoader_builtinHandlers {
 
     // -- NULL GUARD
 
-    @Data
+    @Value
     public static class GuardAgainstNull implements ObjectLoader.Handler {
 
-        private MetaModelContext metaModelContext;
+        private final @NonNull MetaModelContext metaModelContext;
 
         @Override
-        public boolean isHandling(ObjectLoader.Request objectLoadRequest) {
+        public boolean isHandling(final ObjectLoader.Request objectLoadRequest) {
 
             if(objectLoadRequest==null) {
                 return true;
@@ -66,7 +67,7 @@ final class ObjectLoader_builtinHandlers {
         }
 
         @Override
-        public ManagedObject handle(ObjectLoader.Request objectLoadRequest) {
+        public ManagedObject handle(final ObjectLoader.Request objectLoadRequest) {
             return null; // yes null
         }
 
@@ -74,20 +75,20 @@ final class ObjectLoader_builtinHandlers {
 
     // -- MANAGED BEANS
 
-    @Data
+    @Value
     public static class LoadService implements ObjectLoader.Handler {
 
-        private MetaModelContext metaModelContext;
+        private final @NonNull MetaModelContext metaModelContext;
 
         @Override
-        public boolean isHandling(ObjectLoader.Request objectLoadRequest) {
+        public boolean isHandling(final ObjectLoader.Request objectLoadRequest) {
 
             val spec = objectLoadRequest.getObjectSpecification();
             return spec.isManagedBean();
         }
 
         @Override
-        public ManagedObject handle(ObjectLoader.Request objectLoadRequest) {
+        public ManagedObject handle(final ObjectLoader.Request objectLoadRequest) {
 
             val spec = objectLoadRequest.getObjectSpecification();
             val beanName = spec.getLogicalTypeName();
@@ -107,20 +108,20 @@ final class ObjectLoader_builtinHandlers {
 
     // -- VALUES
 
-    @Data
+    @Value
     public static class LoadValue implements ObjectLoader.Handler {
 
-        private MetaModelContext metaModelContext;
+        private final @NonNull MetaModelContext metaModelContext;
 
         @Override
-        public boolean isHandling(ObjectLoader.Request objectLoadRequest) {
+        public boolean isHandling(final ObjectLoader.Request objectLoadRequest) {
 
             val spec = objectLoadRequest.getObjectSpecification();
             return spec.isValue();
         }
 
         @Override
-        public ManagedObject handle(ObjectLoader.Request objectLoadRequest) {
+        public ManagedObject handle(final ObjectLoader.Request objectLoadRequest) {
 
             // cannot load a value
 
@@ -134,20 +135,20 @@ final class ObjectLoader_builtinHandlers {
 
     // -- VIEW MODELS
 
-    @Data
+    @Value
     public static class LoadViewModel implements ObjectLoader.Handler {
 
-        private MetaModelContext metaModelContext;
+        private final @NonNull MetaModelContext metaModelContext;
 
         @Override
-        public boolean isHandling(ObjectLoader.Request objectLoadRequest) {
+        public boolean isHandling(final ObjectLoader.Request objectLoadRequest) {
 
             val spec = objectLoadRequest.getObjectSpecification();
             return spec.isViewModel();
         }
 
         @Override
-        public ManagedObject handle(ObjectLoader.Request objectLoadRequest) {
+        public ManagedObject handle(final ObjectLoader.Request objectLoadRequest) {
 
             val spec = objectLoadRequest.getObjectSpecification();
             val viewModelFacet = spec.getFacet(ViewModelFacet.class);
@@ -168,7 +169,7 @@ final class ObjectLoader_builtinHandlers {
             return ManagedObject.of(spec, viewModelPojo);
         }
 
-        private Object instantiateAndInjectServices(ObjectSpecification spec) {
+        private Object instantiateAndInjectServices(final ObjectSpecification spec) {
 
             val type = spec.getCorrespondingClass();
             if (type.isArray()) {
@@ -198,20 +199,20 @@ final class ObjectLoader_builtinHandlers {
 
     // -- ENTITIES
 
-    @Data
+    @Value
     public static class LoadEntity implements ObjectLoader.Handler {
 
-        private MetaModelContext metaModelContext;
+        private final @NonNull MetaModelContext metaModelContext;
 
         @Override
-        public boolean isHandling(ObjectLoader.Request objectLoadRequest) {
+        public boolean isHandling(final ObjectLoader.Request objectLoadRequest) {
 
             val spec = objectLoadRequest.getObjectSpecification();
             return spec.isEntity();
         }
 
         @Override
-        public ManagedObject handle(ObjectLoader.Request objectLoadRequest) {
+        public ManagedObject handle(final ObjectLoader.Request objectLoadRequest) {
 
             val spec = objectLoadRequest.getObjectSpecification();
             val entityFacet = spec.getFacet(EntityFacet.class);
@@ -230,18 +231,18 @@ final class ObjectLoader_builtinHandlers {
 
     // -- UNKNOWN LOAD REQUEST
 
-    @Data
+    @Value
     public static class LoadOther implements ObjectLoader.Handler {
 
-        private MetaModelContext metaModelContext;
+        private final @NonNull MetaModelContext metaModelContext;
 
         @Override
-        public boolean isHandling(ObjectLoader.Request objectLoadRequest) {
+        public boolean isHandling(final ObjectLoader.Request objectLoadRequest) {
             return true; // the last handler in the chain
         }
 
         @Override
-        public ManagedObject handle(ObjectLoader.Request objectLoadRequest) {
+        public ManagedObject handle(final ObjectLoader.Request objectLoadRequest) {
 
             // unknown object load request
 

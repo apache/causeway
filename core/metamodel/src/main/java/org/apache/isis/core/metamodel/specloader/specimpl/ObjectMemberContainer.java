@@ -26,7 +26,8 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.Hierarchical;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
@@ -48,11 +49,15 @@ import lombok.val;
  * (current elegant recursive solution will then need some tweaks to be efficient)
  */
 public abstract class ObjectMemberContainer
-extends FacetHolderImpl
+extends FacetHolderAbstract
 implements
     ObjectActionContainer,
     ObjectAssociationContainer,
     Hierarchical {
+
+    protected ObjectMemberContainer(MetaModelContext metaModelContext) {
+        super(metaModelContext);
+    }
 
     // -- ACTIONS
 
@@ -98,7 +103,7 @@ implements
                 return true; // do not filter mixedIn actions based on signature
             }
             val isUnique = actionSignatures
-                    .add(action.getIdentifier().getMemberNameAndParameterClassNamesIdentityString());
+                    .add(action.getFeatureIdentifier().getMemberNameAndParameterClassNamesIdentityString());
             return isUnique;
         })
 

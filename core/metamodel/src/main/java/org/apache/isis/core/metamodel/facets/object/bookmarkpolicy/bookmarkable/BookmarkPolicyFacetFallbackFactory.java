@@ -19,7 +19,12 @@
 
 package org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable;
 
+import java.util.function.Predicate;
+
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -28,55 +33,71 @@ import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolic
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetFallback;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
-public class BookmarkPolicyFacetFallbackFactory extends FacetFactoryAbstract
+import lombok.val;
+
+public class BookmarkPolicyFacetFallbackFactory
+extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
-    public BookmarkPolicyFacetFallbackFactory() {
-        super(FeatureType.OBJECTS_AND_ACTIONS);
+    @Inject
+    public BookmarkPolicyFacetFallbackFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_AND_ACTIONS);
     }
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        super.addFacet(new BookmarkPolicyFacetFallback(processClassContext.getFacetHolder()));
+        addFacet(new BookmarkPolicyFacetFallback(processClassContext.getFacetHolder()));
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        super.addFacet(new BookmarkPolicyFacetFallback(processMethodContext.getFacetHolder()));
+        addFacet(new BookmarkPolicyFacetFallback(processMethodContext.getFacetHolder()));
     }
 
     /**
      * Violation if there is an action that is bookmarkable but does not have safe action semantics.
      */
     @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+    public void refineProgrammingModel(final ProgrammingModel programmingModel) {
 
         programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec -> {
 
-            // as an optimization only checking declared members (skipping inherited ones)
+            // as an optimization only checking 'declared' members (skipping inherited ones)
+            // otherwise inherited would be checked more than once
             objectSpec.streamDeclaredActions(MixedIn.EXCLUDED)
-            .filter(objectAction->{
-                final BookmarkPolicyFacet bookmarkFacet = objectAction.getFacet(BookmarkPolicyFacet.class);
-                if(bookmarkFacet == null || bookmarkFacet.isFallback() ||
-                        bookmarkFacet.value() == BookmarkPolicy.NEVER) {
-                    return false;
-                }
-                return true;
-            })
+            .filter(isBookmarkable())
             .forEach(objectAction->{
-                final ActionSemanticsFacet semanticsFacet = objectAction.getFacet(ActionSemanticsFacet.class);
-                if(semanticsFacet == null || semanticsFacet.isFallback() || !semanticsFacet.value().isSafeInNature()) {
+                val actionSemanticsFacet = objectAction.getFacet(ActionSemanticsFacet.class);
+                if(actionSemanticsFacet == null
+                        || actionSemanticsFacet.getPrecedence().isFallback()
+                        || !actionSemanticsFacet.value().isSafeInNature()) {
                     ValidationFailure.raiseFormatted(
                             objectAction,
-                            "%s: action is bookmarkable but action semantics are not explicitly indicated as being safe.  " +
-                                    "Either add @Action(semantics=SemanticsOf.SAFE) or @Action(semantics=SemanticsOf.SAFE_AND_REQUEST_CACHEABLE), or remove @ActionLayout(bookmarking=...).",
-                            objectAction.getIdentifier().toString());
+                            "%s: action is bookmarkable but action semantics are not explicitly "
+                            + "indicated as being safe. "
+                            + "Either add @Action(semantics=SemanticsOf.SAFE) "
+                            + "or @Action(semantics=SemanticsOf.SAFE_AND_REQUEST_CACHEABLE), "
+                            + "or remove @ActionLayout(bookmarking=...).",
+                            objectAction.getFeatureIdentifier().toString());
                 }
             });
 
         });
+    }
+
+    private static Predicate<ObjectAction> isBookmarkable() {
+        return objectAction->{
+            val bookmarkPolicyFacet = objectAction.getFacet(BookmarkPolicyFacet.class);
+            if(bookmarkPolicyFacet == null
+                    || bookmarkPolicyFacet.getPrecedence().isFallback()
+                    || bookmarkPolicyFacet.value() == BookmarkPolicy.NEVER) {
+                return false;
+            }
+            return true;
+        };
     }
 
 

@@ -39,12 +39,12 @@ implements ObjectAssociation {
     private final ObjectSpecification specification;
 
     public ObjectAssociationAbstract(
-            final Identifier identifier,
+            final Identifier featureIdentifier,
             final FacetedMethod facetedMethod,
             final FeatureType featureType,
             final ObjectSpecification specification) {
 
-        super(identifier, facetedMethod, featureType);
+        super(featureIdentifier, facetedMethod, featureType);
         if (specification == null) {
             throw new IllegalArgumentException("field type for '" + getId() + "' must exist");
         }

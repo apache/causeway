@@ -22,8 +22,8 @@ package org.apache.isis.core.metamodel.objectmanager.create;
 import org.apache.isis.commons.handler.ChainOfResponsibility;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -48,17 +48,17 @@ public interface ObjectCreator {
 
     static interface Handler
     extends
-        MetaModelContextAware,
+        HasMetaModelContext,
         ChainOfResponsibility.Handler<ObjectCreator.Request, ManagedObject> {
 
     }
 
     // -- FACTORY
 
-    public static ObjectCreator createDefault(MetaModelContext metaModelContext) {
+    public static ObjectCreator createDefault(final MetaModelContext mmc) {
 
         val chainOfHandlers = _Lists.of(
-                new ObjectCreator_builtinHandlers.LegacyCreationHandler()
+                new ObjectCreator_builtinHandlers.LegacyCreationHandler(mmc)
 
 //                new ObjectCreator_builtinHandlers.GuardAgainstNull(),
 //                new ObjectCreator_builtinHandlers.LoadService(),
@@ -67,8 +67,6 @@ public interface ObjectCreator {
 //                new ObjectCreator_builtinHandlers.CreateEntity(),
 //                new ObjectCreator_builtinHandlers.CreateOther()
                 );
-
-        chainOfHandlers.forEach(h->h.setMetaModelContext(metaModelContext));
 
         val chainOfRespo = ChainOfResponsibility.of(chainOfHandlers);
 

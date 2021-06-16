@@ -25,6 +25,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Action;
@@ -48,10 +49,10 @@ import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
@@ -75,7 +76,6 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.Lo
 import org.apache.isis.core.metamodel.facets.object.domainobject.recreatable.RecreatableObjectFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.mixin.MetaModelValidatorForMixinTypes;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
@@ -101,15 +101,12 @@ implements
     private final MetaModelValidatorForMixinTypes mixinTypeValidator =
             new MetaModelValidatorForMixinTypes("@DomainObject#nature=MIXIN");
 
+    @Inject
     public DomainObjectAnnotationFacetFactory(
-            final @NonNull MethodByClassMap postConstructMethodsCache) {
-        super(FeatureType.OBJECTS_ONLY);
+            final MetaModelContext mmc,
+            final MethodByClassMap postConstructMethodsCache) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
         this.postConstructMethodsCache = postConstructMethodsCache;
-    }
-
-    @Override
-    public void setMetaModelContext(MetaModelContext metaModelContext) {
-        super.setMetaModelContext(metaModelContext);
     }
 
     @Override
@@ -138,7 +135,7 @@ implements
 
         val domainObject = domainObjectIfAny.get();
 
-        val facetHolder = (IdentifiedHolder)processClassContext.getFacetHolder();
+        val facetHolder = processClassContext.getFacetHolder();
         val cls = processClassContext.getCls();
 
         if(processClassContext.synthesizeOnType(Value.class).isPresent()) {
@@ -205,11 +202,9 @@ implements
         // check for @DomainObject(entityChangePublishing=....)
         val entityChangePublishing = domainObjectIfAny
                 .map(DomainObject::entityChangePublishing);
-        val entityChangePublishingFacet = EntityChangePublishingFacetForDomainObjectAnnotation
-                .create(entityChangePublishing, getConfiguration(), facetHolder);
-
-        // then add
-        super.addFacet(entityChangePublishingFacet);
+        addFacetIfPresent(
+                EntityChangePublishingFacetForDomainObjectAnnotation
+                .create(entityChangePublishing, getConfiguration(), facetHolder));
     }
 
     // -- AUTO COMPLETE
@@ -241,7 +236,7 @@ implements
     }
 
     private static final class AnnotHelper {
-        AnnotHelper(DomainObject domainObject) {
+        AnnotHelper(final DomainObject domainObject) {
             this.autoCompleteRepository = domainObject.autoCompleteRepository();
             this.autoCompleteMethod = domainObject.autoCompleteMethod();
         }
@@ -286,7 +281,7 @@ implements
             final Optional<DomainObject> domainObjectIfAny,
             final ProcessClassContext processClassContext) {
         val facetHolder = processClassContext.getFacetHolder();
-        FacetUtil.addFacet(
+        FacetUtil.addFacetIfPresent(
                 ChoicesFacetForDomainObjectAnnotation
                 .create(domainObjectIfAny, facetHolder));
     }
@@ -297,11 +292,11 @@ implements
             final ProcessClassContext processClassContext) {
         val facetHolder = processClassContext.getFacetHolder();
 
-        FacetUtil.addFacet(
+        FacetUtil.addFacetIfPresent(
                 EditingEnabledFacetForDomainObjectAnnotation
                 .create(domainObjectIfAny, facetHolder));
 
-        FacetUtil.addFacet(
+        FacetUtil.addFacetIfPresent(
                 ImmutableFacetForDomainObjectAnnotation
                 .create(domainObjectIfAny, getConfiguration(), facetHolder));
     }
@@ -314,7 +309,7 @@ implements
         val cls = processClassContext.getCls();
         val facetHolder = processClassContext.getFacetHolder();
 
-        FacetUtil.addFacet(
+        FacetUtil.addFacetIfPresent(
                 LogicalTypeFacetForDomainObjectAnnotation
                 .create(domainObjectIfAny, cls, facetHolder));
     }
@@ -331,15 +326,16 @@ implements
         }
 
         val postConstructMethodCache = this;
-        final ViewModelFacet recreatableObjectFacet =
-                RecreatableObjectFacetForDomainObjectAnnotation.create(
-                    domainObjectIfAny,
-                    facetHolder,
-                    postConstructMethodCache);
 
-        if(recreatableObjectFacet != null) {
-            // handle with least priority
-            FacetUtil.addIfNotAlreadyPresent(recreatableObjectFacet);
+        // handle with least priority
+        if(addFacetIfPresent(
+                RecreatableObjectFacetForDomainObjectAnnotation
+                .create(
+                        domainObjectIfAny,
+                        facetHolder,
+                        postConstructMethodCache,
+                        Precedence.LOW))
+                .isPresent()) {
             return;
         }
 
@@ -357,11 +353,9 @@ implements
                 .filter(domainObject -> domainObject.nature() == Nature.MIXIN)
                 .filter(domainObject -> mixinTypeValidator.ensureMixinType(facetHolder, cls));
 
-        val mixinFacet = MixinFacetForDomainObjectAnnotation
-                .create(mixinDomainObjectIfAny, cls, facetHolder, getServiceInjector(), mixinTypeValidator);
-
-        super.addFacet(mixinFacet);
-
+        addFacetIfPresent(
+                MixinFacetForDomainObjectAnnotation
+                .create(mixinDomainObjectIfAny, cls, facetHolder, getServiceInjector(), mixinTypeValidator));
 
     }
 
@@ -562,20 +556,20 @@ implements
     }
 
     @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+    public void refineProgrammingModel(final ProgrammingModel programmingModel) {
         addValidatorToEnsureUniqueLogicalTypeNames(programmingModel);
     }
 
-    private void addValidatorToEnsureUniqueLogicalTypeNames(ProgrammingModel pm) {
+    private void addValidatorToEnsureUniqueLogicalTypeNames(final ProgrammingModel pm) {
 
         final _Multimaps.ListMultimap<String, ObjectSpecification> collidingSpecsByLogicalTypeName =
                 _Multimaps.newConcurrentListMultimap();
 
         final MetaModelVisitingValidatorAbstract ensureUniqueObjectIds =
-                new MetaModelVisitingValidatorAbstract(){
+                new MetaModelVisitingValidatorAbstract(pm.getMetaModelContext()){
 
                     @Override
-                    public void validate(ObjectSpecification objSpec) {
+                    public void validate(final ObjectSpecification objSpec) {
 
                         // @DomainObject(logicalTypeName=...) must be unique among non-abstract types
                         // Eg. having an ApplicationUser interface and a concrete ApplicationUser (JDO)
@@ -633,7 +627,7 @@ implements
 
     // //////////////////////////////////////
 
-    private final MethodByClassMap postConstructMethodsCache;
+    private final @NonNull MethodByClassMap postConstructMethodsCache;
 
     @Override
     public Method postConstructMethodFor(final Object pojo) {

@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.inspect.model;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -32,10 +33,12 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.schema.metamodel.v2.Facet;
+import org.apache.isis.schema.metamodel.v2.FacetAttr;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.val;
 
 @DomainObject(
         nature=Nature.VIEW_MODEL,
@@ -53,7 +56,11 @@ public class FacetNode extends MMNode {
 
     @Override
     public String createTitle() {
-        return String.format("%s: %s", simpleName(facet.getId()), abbreviate(facet.getFqcn()));
+
+        val facetFqcn = lookupFacetAttributeByName("facet")
+                .orElseGet(facet::getFqcn);
+
+        return String.format("%s: %s", simpleName(facet.getId()), abbreviate(facetFqcn));
     }
 
     @Override
@@ -68,8 +75,19 @@ public class FacetNode extends MMNode {
 
     @Override
     public Stream<MMNode> streamChildNodes() {
-        return _NullSafe.stream(facet.getAttr())
+        return streamFacetAttributes()
                 .map(facetAttr->MMNodeFactory.facetAttr(facetAttr, this));
+    }
+
+    private Stream<FacetAttr> streamFacetAttributes() {
+        return _NullSafe.stream(facet.getAttr());
+    }
+
+    private Optional<String> lookupFacetAttributeByName(final String attributeName) {
+        return streamFacetAttributes()
+                .filter(facetAttr->facetAttr.getName().equals(attributeName))
+                .map(FacetAttr::getValue)
+                .findFirst();
     }
 
 

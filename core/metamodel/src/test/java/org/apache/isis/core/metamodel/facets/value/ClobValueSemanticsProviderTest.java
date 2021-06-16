@@ -22,16 +22,17 @@ package org.apache.isis.core.metamodel.facets.value;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.value.Clob;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
-import org.apache.isis.core.metamodel.facets.value.clobs.ClobValueSemanticsProvider;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 
-public class ClobValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
+import org.apache.isis.applib.value.Clob;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
+import org.apache.isis.core.metamodel.facets.value.clobs.ClobValueSemanticsProvider;
+
+public class ClobValueSemanticsProviderTest
+extends ValueSemanticsProviderAbstractTestCase {
 
     private ClobValueSemanticsProvider value;
     private Clob clob;
@@ -41,7 +42,7 @@ public class ClobValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
     public void setUpObjects() throws Exception {
         clob = new Clob("myfile1.xml", "application", "xml", "abcdef");
         allowMockAdapterToReturn(clob);
-        holder = new FacetHolderImpl();
+        holder = FacetHolderAbstract.forTesting(metaModelContext);
 
         setValue(value = new ClobValueSemanticsProvider(holder));
     }

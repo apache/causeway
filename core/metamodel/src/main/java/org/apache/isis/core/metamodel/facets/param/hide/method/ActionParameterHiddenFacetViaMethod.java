@@ -21,22 +21,27 @@ package org.apache.isis.core.metamodel.facets.param.hide.method;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.param.hide.ActionParameterHiddenFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
-public class ActionParameterHiddenFacetViaMethod extends ActionParameterHiddenFacetAbstract implements ImperativeFacet {
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.val;
 
-    private final Method method;
-    private final Optional<Constructor<?>> ppmFactory;
+public class ActionParameterHiddenFacetViaMethod
+extends ActionParameterHiddenFacetAbstract
+implements ImperativeFacet {
+
+    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
+    private final @NonNull Optional<Constructor<?>> ppmFactory;
 
     public ActionParameterHiddenFacetViaMethod(
             final Method method,
@@ -44,17 +49,8 @@ public class ActionParameterHiddenFacetViaMethod extends ActionParameterHiddenFa
             final FacetHolder holder) {
 
         super(holder);
-        this.method = method;
+        this.methods = Can.ofSingleton(method);
         this.ppmFactory = ppmFactory;
-    }
-
-    /**
-     * Returns a singleton list of the {@link Method} provided in the
-     * constructor.
-     */
-    @Override
-    public List<Method> getMethods() {
-        return Collections.singletonList(method);
     }
 
     @Override
@@ -67,6 +63,7 @@ public class ActionParameterHiddenFacetViaMethod extends ActionParameterHiddenFa
             final ManagedObject owningAdapter,
             final Can<ManagedObject> argumentAdapters) {
 
+        val method = methods.getFirstOrFail();
         final Object returnValue = ppmFactory.isPresent()
                 ? ManagedObjects.InvokeUtil.invokeWithPPM(ppmFactory.get(), method, owningAdapter, argumentAdapters)
                 : ManagedObjects.InvokeUtil.invokeAutofit(method, owningAdapter, argumentAdapters);
@@ -80,12 +77,27 @@ public class ActionParameterHiddenFacetViaMethod extends ActionParameterHiddenFa
 
     @Override
     protected String toStringValues() {
+        val method = methods.getFirstOrFail();
         return "method=" + method;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        Util.appendAttributesTo(this, attributeMap);
+    @Override
+    public boolean semanticEquals(final @NonNull Facet otherFacet) {
+
+        if(! (otherFacet instanceof ActionParameterHiddenFacetViaMethod)) {
+            return false;
+        }
+
+        val other = (ActionParameterHiddenFacetViaMethod)otherFacet;
+        return this.ppmFactory.equals(other.ppmFactory)
+                && this.getMethods().equals(other.getMethods());
     }
+
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        ImperativeFacet.visitAttributes(this, visitor);
+    }
+
 
 }

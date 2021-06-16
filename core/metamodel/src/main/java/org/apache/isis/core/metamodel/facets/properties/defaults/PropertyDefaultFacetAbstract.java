@@ -25,12 +25,16 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public abstract class PropertyDefaultFacetAbstract extends FacetAbstract implements PropertyDefaultFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return PropertyDefaultFacet.class;
     }
 
     public PropertyDefaultFacetAbstract(final FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
+    }
+
+    public PropertyDefaultFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
+        super(type(), holder, precedence);
     }
 
 }

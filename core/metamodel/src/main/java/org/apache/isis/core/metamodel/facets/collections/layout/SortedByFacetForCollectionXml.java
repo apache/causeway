@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.collections.layout;
 
 import java.util.Comparator;
+import java.util.Optional;
 
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.core.metamodel.commons.ClassUtil;
@@ -29,27 +30,30 @@ import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacetA
 
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
-public class SortedByFacetForCollectionXml extends SortedByFacetAbstract {
+public class SortedByFacetForCollectionXml
+extends SortedByFacetAbstract {
 
-    public static SortedByFacet create(CollectionLayoutData collectionLayout, FacetHolder holder) {
+    public static Optional<SortedByFacet> create(
+            final CollectionLayoutData collectionLayout,
+            final FacetHolder holder) {
         if(collectionLayout == null) {
-            return null;
+            return Optional.empty();
         }
         final String sortedBy = collectionLayout.getSortedBy();
         if (sortedBy == null) {
-            return null;
+            return Optional.empty();
         }
         final Class<?> sortedByClass = ClassUtil.forNameElseFail(sortedBy);
         if(sortedByClass == Comparator.class) {
-            return null;
+            return Optional.empty();
         }
 
         return sortedByClass != null
-                ? new SortedByFacetForCollectionXml(uncheckedCast(sortedByClass), holder)
-                : null;
+                ? Optional.of(new SortedByFacetForCollectionXml(uncheckedCast(sortedByClass), holder))
+                : Optional.empty();
     }
 
-    private SortedByFacetForCollectionXml(Class<? extends Comparator<?>> sortedBy, FacetHolder holder) {
+    private SortedByFacetForCollectionXml(final Class<? extends Comparator<?>> sortedBy, final FacetHolder holder) {
         super(sortedBy, holder);
     }
 

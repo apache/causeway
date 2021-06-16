@@ -39,8 +39,7 @@ public class GivenJdoDiscriminatorAnnotationFacetFactoryTest extends AbstractFac
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new JdoDiscriminatorAnnotationFacetFactory();
-        facetFactory.setJdoFacetContext(jdoFacetContext);
+        facetFactory = new JdoDiscriminatorAnnotationFacetFactory(metaModelContext, jdoFacetContext, null);
     }
 
     @Override

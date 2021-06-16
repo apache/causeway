@@ -35,13 +35,14 @@ public class JpaProgrammingModel implements MetaModelRefiner {
     //@Inject private IsisConfiguration config;
 
     @Override
-    public void refineProgrammingModel(ProgrammingModel pm) {
+    public void refineProgrammingModel(final ProgrammingModel pm) {
 
         val step = ProgrammingModel.FacetProcessingOrder.A2_AFTER_FALLBACK_DEFAULTS;
+        val mmc = pm.getMetaModelContext();
 
-        pm.addFactory(step, JpaTableAnnotationFacetFactory.class, Marker.JPA);
-        pm.addFactory(step, JpaTransientAnnotationFacetFactory.class, Marker.JPA);
-        pm.addFactory(step, MandatoryFromJpaColumnAnnotationFacetFactory.class, Marker.JPA);
+        pm.addFactory(step, new JpaTableAnnotationFacetFactory(mmc), Marker.JPA);
+        pm.addFactory(step, new JpaTransientAnnotationFacetFactory(mmc), Marker.JPA);
+        pm.addFactory(step, new MandatoryFromJpaColumnAnnotationFacetFactory(mmc), Marker.JPA);
 
     }
 

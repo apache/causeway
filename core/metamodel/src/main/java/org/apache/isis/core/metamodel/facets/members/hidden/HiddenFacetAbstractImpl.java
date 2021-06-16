@@ -20,24 +20,15 @@
 package org.apache.isis.core.metamodel.facets.members.hidden;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public abstract class HiddenFacetAbstractImpl extends HiddenFacetAbstract {
 
     public HiddenFacetAbstractImpl(
-            final Class<? extends Facet> facetType,
             Where where,
             final FacetHolder holder) {
-        super(facetType, where, holder);
-    }
-
-    /**
-     * For testing only.
-     */
-    public HiddenFacetAbstractImpl(Where where, final FacetHolder holder) {
-        super(HiddenFacetAbstractImpl.class, where, holder);
+        super(where, holder);
     }
 
     @Override

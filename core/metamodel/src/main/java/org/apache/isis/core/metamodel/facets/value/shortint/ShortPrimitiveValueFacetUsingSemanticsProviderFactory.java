@@ -19,13 +19,18 @@
 
 package org.apache.isis.core.metamodel.facets.value.shortint;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 
-public class ShortPrimitiveValueFacetUsingSemanticsProviderFactory extends ValueFacetUsingSemanticsProviderFactory<Short> {
+public class ShortPrimitiveValueFacetUsingSemanticsProviderFactory
+extends ValueFacetUsingSemanticsProviderFactory<Short> {
 
-    public ShortPrimitiveValueFacetUsingSemanticsProviderFactory() {
-        super();
+    @Inject
+    public ShortPrimitiveValueFacetUsingSemanticsProviderFactory(final MetaModelContext mmc) {
+        super(mmc);
     }
 
     @Override

@@ -21,9 +21,12 @@ package org.apache.isis.core.metamodel.facets.param.validate.method;
 
 import java.util.EnumSet;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.ParameterSupport;
 import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest.ReturnType;
@@ -40,8 +43,9 @@ public class ActionParameterValidationFacetViaMethodFactory extends MethodPrefix
 
     private static final String PREFIX = MethodLiteralConstants.VALIDATE_PREFIX;
 
-    public ActionParameterValidationFacetViaMethodFactory() {
-        super(FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
+    @Inject
+    public ActionParameterValidationFacetViaMethodFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
     }
 
 
@@ -82,11 +86,11 @@ public class ActionParameterValidationFacetViaMethodFactory extends MethodPrefix
 
             // add facets directly to parameters, not to actions
             val paramAsHolder = parameters.get(paramNum);
-            val translationContext = TranslationContext.forTranslationContextHolder(paramAsHolder.getIdentifier());
+            val translationContext = TranslationContext.forTranslationContextHolder(paramAsHolder.getFeatureIdentifier());
             val ppmFactory = searchResult.getPpmFactory();
             val translationService = getMetaModelContext().getTranslationService();
 
-            super.addFacet(
+            addFacet(
                     new ActionParameterValidationFacetViaMethod(
                             validateMethod, translationService, translationContext, ppmFactory, paramAsHolder));
 

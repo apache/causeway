@@ -19,7 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.objectvalue.regex;
 
-import javax.validation.constraints.Pattern;
+import java.util.Objects;
+import java.util.function.BiConsumer;
+import java.util.regex.Pattern;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -28,17 +30,26 @@ import org.apache.isis.core.metamodel.interactions.ProposedHolder;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public abstract class RegExFacetAbstract extends FacetAbstract implements RegExFacet {
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.val;
+import lombok.experimental.Accessors;
 
-    public static Class<? extends Facet> type() {
+public abstract class RegExFacetAbstract
+extends FacetAbstract
+implements RegExFacet {
+
+    private static final Class<? extends Facet> type() {
         return RegExFacet.class;
     }
 
-    private final String regexp;
-    private final int patternFlags;
-    private final String message;
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true) @NonNull private final String regexp;
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true) @NonNull private final String message;
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true) private final int patternFlags;
 
-    public RegExFacetAbstract(
+    private final Pattern pattern;
+
+    protected RegExFacetAbstract(
             final String regexp,
             final int patternFlags,
             final String message,
@@ -46,41 +57,11 @@ public abstract class RegExFacetAbstract extends FacetAbstract implements RegExF
         super(type(), holder);
         this.regexp = regexp;
         this.patternFlags = patternFlags;
-        this.message = message != null ? message : "Doesn't match pattern";
+        this.message = message != null
+                ? message
+                : "Doesn't match pattern";
+        this.pattern = Pattern.compile(regexp, patternFlags);
     }
-
-    private static int asMask(final Pattern.Flag[] flags) {
-        int mask = 0;
-        for (Pattern.Flag flag : flags) {
-            mask |= flag.getValue();
-        }
-        return mask;
-    }
-
-    public RegExFacetAbstract(
-            final String regexp,
-            final Pattern.Flag[] flags,
-            final String message,
-            final FacetHolder holder) {
-        this(regexp, asMask(flags), message, holder);
-    }
-
-    @Override
-    public String regexp() {
-        return regexp;
-    }
-
-    @Override
-    public int patternFlags() {
-        return patternFlags;
-    }
-
-    @Override
-    public String message() {
-        return message;
-    }
-
-    // //////////////////////////////////////////////////////////
 
     @Override
     public String invalidates(final ValidityContext context) {
@@ -98,6 +79,40 @@ public abstract class RegExFacetAbstract extends FacetAbstract implements RegExF
         }
 
         return message();
+    }
+
+    @Override
+    public final boolean doesNotMatch(final String text) {
+        return text == null
+                || !pattern.matcher(text).matches();
+    }
+
+    @Override
+    public final void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("pattern", pattern);
+    }
+
+    @Override
+    public boolean semanticEquals(final @NonNull Facet otherFacet) {
+        if(!(otherFacet instanceof RegExFacetAbstract)) {
+            return false;
+        }
+        val other = (RegExFacetAbstract)otherFacet;
+        return Objects.equals(this.regexp(), other.regexp())
+                && this.patternFlags() == other.patternFlags()
+                && Objects.equals(this.message(), other.message());
+    }
+
+
+    // -- UTILITY
+
+    protected static int asMask(final javax.validation.constraints.Pattern.Flag[] flags) {
+        int mask = 0;
+        for (val flag : flags) {
+            mask |= flag.getValue();
+        }
+        return mask;
     }
 
 }

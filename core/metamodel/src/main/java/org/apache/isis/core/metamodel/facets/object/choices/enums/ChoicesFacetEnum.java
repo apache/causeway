@@ -19,7 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.choices.enums;
 
-import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -30,7 +31,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import lombok.NonNull;
 import lombok.val;
 
-public class ChoicesFacetEnum extends ChoicesFacetAbstract {
+public class ChoicesFacetEnum
+extends ChoicesFacetAbstract {
 
     private final @NonNull Can<ManagedObject> choices;
 
@@ -51,9 +53,15 @@ public class ChoicesFacetEnum extends ChoicesFacetAbstract {
         return choices;
     }
 
-    @Override 
-    public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("choices", choices.map(ManagedObject::getPojo).toList());
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("choices",
+                choices.stream()
+                .map(ManagedObject::getPojo)
+                .map(Enum.class::cast)
+                .map(Enum::name)
+                .collect(Collectors.joining(", ")));
+
     }
 }

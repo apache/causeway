@@ -31,7 +31,7 @@ import org.apache.isis.commons.internal.compare._Comparators;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacet;
@@ -217,7 +217,7 @@ public interface ObjectMember extends ObjectFeature {
 
     public static class Comparators {
 
-        public static <T extends IdentifiedHolder> Comparator<T> byMemberOrderSequence(
+        public static <T extends FacetHolder> Comparator<T> byMemberOrderSequence(
                 final boolean ensureInSameGroup) {
 
             return new Comparator<T>() {

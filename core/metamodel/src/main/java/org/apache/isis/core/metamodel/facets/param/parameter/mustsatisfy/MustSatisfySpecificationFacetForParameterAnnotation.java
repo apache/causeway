@@ -19,22 +19,22 @@
 
 package org.apache.isis.core.metamodel.facets.param.parameter.mustsatisfy;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.spec.Specification;
-import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.objectvalue.mustsatisfyspec.MustSatisfySpecificationFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.mustsatisfyspec.MustSatisfySpecificationFacetAbstract;
 
 import lombok.val;
 
-public class MustSatisfySpecificationFacetForParameterAnnotation extends MustSatisfySpecificationFacetAbstract {
+public class MustSatisfySpecificationFacetForParameterAnnotation
+extends MustSatisfySpecificationFacetAbstract {
 
-    public static Facet create(
+    public static Optional<MustSatisfySpecificationFacet> create(
             final Optional<Parameter> parameterIfAny,
             final FacetHolder holder,
             final FactoryService factoryService) {
@@ -42,15 +42,15 @@ public class MustSatisfySpecificationFacetForParameterAnnotation extends MustSat
         val specifications = parameterIfAny
                 .map(Parameter::mustSatisfy)
                 .map(classes -> toSpecifications(factoryService, classes))
-                .orElse(Collections.emptyList());
+                .orElseGet(Can::empty);
 
-        return specifications.size() > 0
-                ? new MustSatisfySpecificationFacetForParameterAnnotation(specifications, holder)
-                        : null;
+        return specifications.isEmpty()
+                ? Optional.empty()
+                : Optional.of(new MustSatisfySpecificationFacetForParameterAnnotation(specifications, holder));
     }
 
     private MustSatisfySpecificationFacetForParameterAnnotation(
-            final List<Specification> specifications,
+            final Can<Specification> specifications,
             final FacetHolder holder) {
         super(specifications, holder);
     }

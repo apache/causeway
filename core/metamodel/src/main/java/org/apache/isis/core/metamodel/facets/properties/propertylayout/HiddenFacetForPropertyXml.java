@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -26,18 +28,24 @@ import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public class HiddenFacetForPropertyXml extends HiddenFacetAbstract {
+public class HiddenFacetForPropertyXml
+extends HiddenFacetAbstract {
 
-    public static HiddenFacet create(final PropertyLayoutData propertyLayout, final FacetHolder holder) {
+    public static Optional<HiddenFacet> create(
+            final PropertyLayoutData propertyLayout,
+            final FacetHolder holder) {
         if (propertyLayout == null) {
-            return null;
+            return Optional.empty();
         }
         final Where where = propertyLayout.getHidden();
-        return where != null && where != Where.NOT_SPECIFIED ? new HiddenFacetForPropertyXml(where, holder) : null;
+        return where != null
+                && where != Where.NOT_SPECIFIED
+                        ? Optional.of(new HiddenFacetForPropertyXml(where, holder))
+                        : Optional.empty();
     }
 
     private HiddenFacetForPropertyXml(final Where where, final FacetHolder holder) {
-        super(HiddenFacetForPropertyXml.class, where, holder);
+        super(where, holder);
     }
 
     @Override

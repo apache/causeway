@@ -31,18 +31,19 @@ import org.apache.isis.core.metamodel.facets.properties.property.notpersisted.Sn
 
 import lombok.val;
 
-public class NotPersistedAnnotationOnPropertyFacetFactoryTest extends AbstractFacetFactoryTest {
+public class NotPersistedAnnotationOnPropertyFacetFactoryTest
+extends AbstractFacetFactoryTest {
 
     private PropertyAnnotationFacetFactory facetFactory;
 
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        facetFactory = new PropertyAnnotationFacetFactory();
+        facetFactory = new PropertyAnnotationFacetFactory(metaModelContext);
     }
 
     private void processNotPersisted(
-            PropertyAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
+            final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
         val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         facetFactory.processNotPersisted(processMethodContext, propertyIfAny);
     }

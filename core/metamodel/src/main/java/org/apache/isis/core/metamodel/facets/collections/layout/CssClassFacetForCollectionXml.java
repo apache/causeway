@@ -19,23 +19,30 @@
 
 package org.apache.isis.core.metamodel.facets.collections.layout;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetSimple;
 
-public class CssClassFacetForCollectionXml extends CssClassFacetAbstract {
+public class CssClassFacetForCollectionXml
+extends CssClassFacetSimple {
 
-    public static CssClassFacet create(CollectionLayoutData collectionLayout, FacetHolder holder) {
+    public static Optional<CssClassFacet> create(
+            final CollectionLayoutData collectionLayout,
+            final FacetHolder holder) {
         if(collectionLayout == null) {
-            return null;
+            return Optional.empty();
         }
         final String cssClass = _Strings.emptyToNull(collectionLayout.getCssClass());
-        return cssClass != null ? new CssClassFacetForCollectionXml(cssClass, holder) : null;
+        return cssClass != null
+                ? Optional.of(new CssClassFacetForCollectionXml(cssClass, holder))
+                : Optional.empty();
     }
 
-    private CssClassFacetForCollectionXml(String value, FacetHolder holder) {
+    private CssClassFacetForCollectionXml(final String value, final FacetHolder holder) {
         super(value, holder);
     }
 

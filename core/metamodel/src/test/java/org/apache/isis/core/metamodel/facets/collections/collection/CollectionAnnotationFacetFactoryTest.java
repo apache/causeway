@@ -26,6 +26,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.commons.matchers.IsisMatchers;
@@ -40,13 +43,11 @@ import org.apache.isis.core.metamodel.facets.collections.collection.hidden.Hidde
 import org.apache.isis.core.metamodel.facets.collections.collection.typeof.TypeOfFacetOnCollectionFromCollectionAnnotation;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import lombok.val;
 
 @SuppressWarnings("unused")
-public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
+public class CollectionAnnotationFacetFactoryTest
+extends AbstractFacetFactoryJUnit4TestCase {
 
     CollectionAnnotationFacetFactory facetFactory;
     Method collectionMethod;
@@ -98,7 +99,7 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
 
     @Before
     public void setUp() throws Exception {
-        facetFactory = new CollectionAnnotationFacetFactory();
+        facetFactory = new CollectionAnnotationFacetFactory(metaModelContext);
     }
 
     @Override
@@ -141,7 +142,7 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
             final HiddenFacetForCollectionAnnotation hiddenFacetImpl = (HiddenFacetForCollectionAnnotation) hiddenFacet;
             assertThat(hiddenFacetImpl.where(), is(Where.REFERENCES_PARENT));
 
-            final Facet hiddenFacetForColl = facetedMethod.getFacet(HiddenFacetForCollectionAnnotation.class);
+            final Facet hiddenFacetForColl = facetedMethod.getFacet(HiddenFacet.class);
             Assert.assertNotNull(hiddenFacetForColl);
             Assert.assertTrue(hiddenFacet == hiddenFacetForColl);
         }

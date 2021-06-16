@@ -20,9 +20,7 @@
 package org.apache.isis.core.metamodel.facets.properties.choices.method;
 
 import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -33,11 +31,15 @@ import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesF
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
+import lombok.Getter;
+import lombok.NonNull;
 import lombok.val;
 
-public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract implements ImperativeFacet {
+public class PropertyChoicesFacetViaMethod
+extends PropertyChoicesFacetAbstract
+implements ImperativeFacet {
 
-    private final Method method;
+    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
     private final Class<?> choicesClass;
 
     public PropertyChoicesFacetViaMethod(
@@ -46,17 +48,8 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
             final FacetHolder holder) {
 
         super(holder);
-        this.method = method;
+        this.methods = Can.ofSingleton(method);
         this.choicesClass = choicesClass;
-    }
-
-    /**
-     * Returns a singleton list of the {@link Method} provided in the
-     * constructor.
-     */
-    @Override
-    public List<Method> getMethods() {
-        return Collections.singletonList(method);
     }
 
     @Override
@@ -69,6 +62,7 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
             final ManagedObject owningAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
+        val method = methods.getFirstOrFail();
         val elementSpec = specForTypeElseFail(((FacetedMethod) getFacetHolder()).getType());
         val optionPojos = ManagedObjects.InvokeUtil.invoke(method, owningAdapter);
 
@@ -88,14 +82,16 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
 
     @Override
     protected String toStringValues() {
+        val method = methods.getFirstOrFail();
         return "method=" + method + ",class=" + choicesClass;
     }
 
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
-        attributeMap.put("choicesType", choicesClass);
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        ImperativeFacet.visitAttributes(this, visitor);
+        visitor.accept("choicesType", choicesClass);
     }
 
 }

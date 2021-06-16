@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.postprocessors;
 
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.spec.ActionType;
@@ -35,19 +34,23 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionParameterAbstract;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NonNull;
 import lombok.val;
 
 public abstract class ObjectSpecificationPostProcessorAbstract
-    implements ObjectSpecificationPostProcessor, MetaModelContextAware {
+implements ObjectSpecificationPostProcessor {
 
-    @Getter(AccessLevel.PROTECTED) @Setter(onMethod = @__(@Override))
-    private MetaModelContext metaModelContext;
+    @Getter(onMethod_ = {@Override})
+    private final @NonNull MetaModelContext metaModelContext;
+
+    protected ObjectSpecificationPostProcessorAbstract(final MetaModelContext metaModelContext) {
+        super();
+        this.metaModelContext = metaModelContext;
+    }
 
     @Override
-    public final void postProcess(ObjectSpecification objectSpecification) {
+    public final void postProcess(final ObjectSpecification objectSpecification) {
 
         doPostProcess(objectSpecification);
 

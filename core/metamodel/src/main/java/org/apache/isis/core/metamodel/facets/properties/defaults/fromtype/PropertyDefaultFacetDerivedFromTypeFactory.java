@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.properties.defaults.fromtype;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -26,11 +29,12 @@ import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public class PropertyDefaultFacetDerivedFromTypeFactory extends FacetFactoryAbstract {
+public class PropertyDefaultFacetDerivedFromTypeFactory
+extends FacetFactoryAbstract {
 
-
-    public PropertyDefaultFacetDerivedFromTypeFactory() {
-        super(FeatureType.PROPERTIES_ONLY);
+    @Inject
+    public PropertyDefaultFacetDerivedFromTypeFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.PROPERTIES_ONLY);
     }
 
     /**
@@ -41,8 +45,10 @@ public class PropertyDefaultFacetDerivedFromTypeFactory extends FacetFactoryAbst
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
         // don't overwrite any defaults that might already picked up
-        final PropertyDefaultFacet existingDefaultFacet = processMethodContext.getFacetHolder().getFacet(PropertyDefaultFacet.class);
-        if (existingDefaultFacet != null && !existingDefaultFacet.isFallback()) {
+        final PropertyDefaultFacet existingDefaultFacet = processMethodContext.getFacetHolder()
+                .lookupNonFallbackFacet(PropertyDefaultFacet.class)
+                .orElse(null);
+        if (existingDefaultFacet != null) {
             return;
         }
 
@@ -50,9 +56,9 @@ public class PropertyDefaultFacetDerivedFromTypeFactory extends FacetFactoryAbst
         final Class<?> returnType = processMethodContext.getMethod().getReturnType();
         final DefaultedFacet returnTypeDefaultedFacet = getDefaultedFacet(returnType);
         if (returnTypeDefaultedFacet != null) {
-            final PropertyDefaultFacetDerivedFromDefaultedFacet propertyFacet =
-                    new PropertyDefaultFacetDerivedFromDefaultedFacet(returnTypeDefaultedFacet, processMethodContext.getFacetHolder());
-            FacetUtil.addFacet(propertyFacet);
+            FacetUtil.addFacet(
+                    new PropertyDefaultFacetDerivedFromDefaultedFacet(
+                            returnTypeDefaultedFacet, processMethodContext.getFacetHolder()));
         }
     }
 

@@ -19,6 +19,7 @@
 package org.apache.isis.persistence.jpa.metamodel.object.domainobject.objectspecid;
 
 import java.util.Locale;
+import java.util.Optional;
 
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.base._Strings;
@@ -30,20 +31,22 @@ import org.apache.isis.persistence.jpa.metamodel.object.table.JpaTableFacetAnnot
 public class LogicalTypeFacetForTableAnnotation
 extends LogicalTypeFacetAbstract {
 
-    public static LogicalTypeFacet create(
+    public static Optional<LogicalTypeFacet> create(
             final JpaTableFacetAnnotation tableFacet,
             final Class<?> correspondingClass,
             final FacetHolder holder) {
 
-        if(tableFacet.isFallback()) {
-            return null;
+        if(tableFacet.getPrecedence().isFallback()) {
+            return Optional.empty();
         }
         final String schema = tableFacet.getSchema();
         if(_Strings.isNullOrEmpty(schema)) {
-            return null;
+            return Optional.empty();
         }
         final String logicalTypeName = schema.toLowerCase(Locale.ROOT) + "." + tableFacet.getTable();
-        return new LogicalTypeFacetForTableAnnotation(LogicalType.eager(correspondingClass, logicalTypeName), holder);
+        return Optional.of(
+                new LogicalTypeFacetForTableAnnotation(
+                        LogicalType.eager(correspondingClass, logicalTypeName), holder));
     }
 
     private LogicalTypeFacetForTableAnnotation(

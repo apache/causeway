@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.value.temporal;
 import java.time.temporal.Temporal;
 import java.util.function.Function;
 
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
@@ -41,9 +42,11 @@ extends ValueFacetUsingSemanticsProviderFactory<T> {
     @NonNull protected final Class<T> valueType;
     @NonNull protected final Function<FacetHolder, ValueSemanticsProviderAndFacetAbstract<T>> facetFactory;
 
-    public TemporalValueFacetUsingSemanticsProviderFactory(Class<T> valueType,
-            Function<FacetHolder, ValueSemanticsProviderAndFacetAbstract<T>> facetFactory) {
-        super();
+    protected TemporalValueFacetUsingSemanticsProviderFactory(
+            final MetaModelContext mmc,
+            final Class<T> valueType,
+            final Function<FacetHolder, ValueSemanticsProviderAndFacetAbstract<T>> facetFactory) {
+        super(mmc);
         this.valueType = valueType;
         this.facetFactory = facetFactory;
     }

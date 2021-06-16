@@ -33,7 +33,7 @@ implements EncodableFacet {
     private final EncoderDecoder<?> encoderDecoder;
 
     public EncodableFacetUsingEncoderDecoder(final EncoderDecoder<?> encoderDecoder, final FacetHolder holder) {
-        super(EncodableFacet.class, holder, Derivation.NOT_DERIVED);
+        super(EncodableFacet.class, holder);
         this.encoderDecoder = encoderDecoder;
     }
 

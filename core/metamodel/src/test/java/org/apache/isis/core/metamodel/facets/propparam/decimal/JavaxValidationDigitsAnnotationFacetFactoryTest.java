@@ -31,10 +31,12 @@ import org.apache.isis.core.metamodel.facets.properties.bigdecimal.javaxvaldigit
 import org.apache.isis.core.metamodel.facets.properties.bigdecimal.javaxvaldigits.BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 
-public class JavaxValidationDigitsAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
+public class JavaxValidationDigitsAnnotationFacetFactoryTest
+extends AbstractFacetFactoryTest {
 
     public void testAnnotationPickedUpOnProperty() {
-        final BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory facetFactory = new BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory();
+        final BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory facetFactory =
+                new BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory(metaModelContext);
 
         class Order {
             @javax.validation.constraints.Digits(integer=14, fraction=4)
@@ -50,17 +52,18 @@ public class JavaxValidationDigitsAnnotationFacetFactoryTest extends AbstractFac
         assertNotNull(facet);
         assertTrue(facet instanceof BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation);
         final BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation annotation = (BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation) facet;
-        assertEquals(Integer.valueOf(18), annotation.getPrecision());
-        assertEquals(Integer.valueOf(4), annotation.getScale());
+        assertEquals(18, annotation.getPrecision());
+        assertEquals(4, annotation.getScale());
     }
 
     public void testAnnotationPickedUpOnActionParameter() {
-        final BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory facetFactory = new BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory();
+        final BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory facetFactory =
+                new BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory(metaModelContext);
 
         class Order {
             @SuppressWarnings("unused")
             public void updateCost(
-                    @javax.validation.constraints.Digits(integer=14, fraction=4) 
+                    @javax.validation.constraints.Digits(integer=14, fraction=4)
                     final BigDecimal cost) {
             }
         }
@@ -72,8 +75,8 @@ public class JavaxValidationDigitsAnnotationFacetFactoryTest extends AbstractFac
         assertNotNull(facet);
         assertTrue(facet instanceof BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation);
         final BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation annotation = (BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation) facet;
-        assertEquals(Integer.valueOf(18), annotation.getPrecision());
-        assertEquals(Integer.valueOf(4), annotation.getScale());
+        assertEquals(18, annotation.getPrecision());
+        assertEquals(4, annotation.getScale());
     }
 
 }

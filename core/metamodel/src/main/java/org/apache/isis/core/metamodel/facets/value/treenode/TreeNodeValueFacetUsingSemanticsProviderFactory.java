@@ -19,13 +19,21 @@
 
 package org.apache.isis.core.metamodel.facets.value.treenode;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.graph.tree.TreeNode;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 
 @SuppressWarnings("rawtypes")
 public class TreeNodeValueFacetUsingSemanticsProviderFactory
 extends ValueFacetUsingSemanticsProviderFactory<TreeNode> {
+
+    @Inject
+    public TreeNodeValueFacetUsingSemanticsProviderFactory(final MetaModelContext mmc) {
+        super(mmc);
+    }
 
     @Override
     public void process(final ProcessClassContext processClassContext) {

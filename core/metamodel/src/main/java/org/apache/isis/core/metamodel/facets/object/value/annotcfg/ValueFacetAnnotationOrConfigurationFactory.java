@@ -19,10 +19,13 @@
 
 package org.apache.isis.core.metamodel.facets.object.value.annotcfg;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -65,8 +68,9 @@ import lombok.val;
  */
 public class ValueFacetAnnotationOrConfigurationFactory extends FacetFactoryAbstract {
 
-    public ValueFacetAnnotationOrConfigurationFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    @Inject
+    public ValueFacetAnnotationOrConfigurationFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
     }
 
     @Override
@@ -88,10 +92,10 @@ public class ValueFacetAnnotationOrConfigurationFactory extends FacetFactoryAbst
                 .semanticsProviderNameFromConfiguration(config, cls);
 
         if (_Strings.isNotEmpty(semanticsProviderName)) {
-            val valueFacet = new ValueFacetFromConfiguration(semanticsProviderName, facetHolder);
-            if (valueFacet.hasSemanticsProvider()) {
-                FacetUtil.addFacet(valueFacet);
-                return;
+            val valueFacet = FacetUtil.addFacetIfPresent(
+                    ValueFacetFromConfiguration.create(semanticsProviderName, facetHolder));
+            if(valueFacet.isPresent()) {
+                return; // could also just fall through, but kept for readability
             }
         }
 

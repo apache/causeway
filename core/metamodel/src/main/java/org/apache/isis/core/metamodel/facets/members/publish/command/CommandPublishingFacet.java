@@ -66,7 +66,7 @@ public interface CommandPublishingFacet extends Facet {
             final @NonNull FacetHolder facetHolder,
             final @NonNull Runnable runnable) {
 
-        val memberId1 = objectMember.getIdentifier().getLogicalIdentityString("#");
+        val memberId1 = objectMember.getFeatureIdentifier().getLogicalIdentityString("#");
         val memberId2 = command.getLogicalMemberIdentifier();
 
         if(Objects.equals(memberId1, memberId2)

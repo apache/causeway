@@ -19,57 +19,45 @@
 
 package org.apache.isis.core.metamodel.facets.members.hidden;
 
+import java.util.function.BiConsumer;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.WhereValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-/**
- * This once implemented {@code org.apache.isis.core.metamodel.facetapi.MultiTypedFacet}
- * so that each concrete implementation
- * is added to the eventual {@link FacetHolder} twice:
- * once under <tt>HiddeFacet.class</tt> and
- * once under its own concrete type class (eg <tt>HiddenFacetForActionAnnotation</tt>).
- * This satisfies a couple of (independent) requirements:
- * <ul>
- *     <li>that we don't have the concept of a single (blessed?) HiddenFacet; rather there are simply facets some of
- *     which implement {@link HidingInteractionAdvisor}</li>
- *     <li>that there is nevertheless always at least one facet that is registered under <tt>HiddenFacet.class</tt>;
- *     this was once used by the
- *     {@code org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson} exporter</li>
- * </ul>
- */
 public abstract class HiddenFacetAbstract
 extends WhereValueFacetAbstract
 implements HiddenFacet {
 
-    public HiddenFacetAbstract(
-            Class<? extends Facet> facetType,
-            Where where,
-            FacetHolder holder) {
-
-        super(facetType, holder, where);
-        super.setFacetAliasType(HiddenFacet.class);
+    private static final Class<? extends Facet> type() {
+        return HiddenFacet.class;
     }
+
+    public HiddenFacetAbstract(
+            final Where where,
+            final FacetHolder holder) {
+        super(type(), holder, where);
+    }
+
+    public HiddenFacetAbstract(
+            final Where where,
+            final FacetHolder holder,
+            final Facet.Precedence precedence) {
+        super(type(), holder, where, precedence);
+    }
+
 
     // to instantiate contributed facets
-    private HiddenFacetAbstract(HiddenFacetAbstract toplevelFacet) {
-        super(HiddenFacet.class, toplevelFacet.getFacetHolder(), toplevelFacet.where());
-    }
-
-    /**
-     * For testing only.
-     */
-    public HiddenFacetAbstract(Where where, FacetHolder holder) {
-        super(HiddenFacetAbstract.class, holder, where);
+    private HiddenFacetAbstract(final HiddenFacetAbstract toplevelFacet) {
+        super(type(), toplevelFacet.getFacetHolder(), toplevelFacet.where());
     }
 
     @Override
-    public String hides(VisibilityContext ic) {
+    public String hides(final VisibilityContext ic) {
         return hiddenReason(ic.getTarget(), ic.getWhere());
     }
 
@@ -78,5 +66,11 @@ implements HiddenFacet {
      * <tt>null</tt> if visible.
      */
     protected abstract String hiddenReason(ManagedObject target, Where whereContext);
+
+    @Override
+    public final void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("semantics", getSemantics());
+    }
 
 }

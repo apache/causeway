@@ -35,11 +35,26 @@ import lombok.val;
  * value being provided. For a mandatory parameter, the action cannot be invoked
  * without the value being provided.
  *
- * <p>
- * In the standard Apache Isis Programming Model, specify mandatory by
- * <i>omitting</i> the <tt>@Optional</tt> annotation.
  */
-public interface MandatoryFacet extends Facet, ValidatingInteractionAdvisor {
+public interface MandatoryFacet
+extends Facet, ValidatingInteractionAdvisor {
+
+    public enum Semantics {
+        REQUIRED,
+        OPTIONAL;
+
+        public static Semantics of(boolean required) {
+            return required ? REQUIRED: OPTIONAL;
+        }
+
+        public boolean isRequired() {
+            return this == REQUIRED;
+        }
+
+        public boolean isOptional() {
+            return this == OPTIONAL;
+        }
+    }
 
     /**
      * Whether this value is required but has not been provided (and is
@@ -56,13 +71,15 @@ public interface MandatoryFacet extends Facet, ValidatingInteractionAdvisor {
      * other words that the {@link FacetHolder} to which this {@link Facet} is
      * attached is <i>not</i> mandatory.
      */
-    public boolean isInvertedSemantics();
+    public Semantics getSemantics();
 
-    static boolean isMandatory(@NonNull FacetHolder facetHolder) {
+    static boolean isMandatory(final @NonNull FacetHolder facetHolder) {
         val mandatoryFacet = facetHolder.getFacet(MandatoryFacet.class);
-        if(mandatoryFacet == null || mandatoryFacet.isFallback() || mandatoryFacet.isInvertedSemantics()) {
+        if(mandatoryFacet == null) {
+            // absence of the mandatory facet indicates OPTIONAL
             return false;
         }
-        return true;
+        return mandatoryFacet.getSemantics()==null
+                || mandatoryFacet.getSemantics().isRequired();
     }
 }

@@ -27,16 +27,16 @@ public abstract class PromptStyleFacetAbstract extends FacetAbstract
 implements PromptStyleFacet {
 
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return PromptStyleFacet.class;
     }
 
     protected PromptStyleFacetAbstract(final FacetHolder holder) {
-        this( holder, Derivation.NOT_DERIVED);
+        super( type(), holder);
     }
 
-    protected PromptStyleFacetAbstract(final FacetHolder holder, final Derivation derivation) {
-        super( type(), holder, derivation);
+    protected PromptStyleFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
+        super( type(), holder, precedence);
     }
 
 }

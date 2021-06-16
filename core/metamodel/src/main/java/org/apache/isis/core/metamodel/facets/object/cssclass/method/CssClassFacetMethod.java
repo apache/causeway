@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.object.cssclass.method;
 
 import java.lang.reflect.Method;
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -29,9 +29,11 @@ import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
-public class CssClassFacetMethod extends FacetAbstract implements CssClassFacet {
+public class CssClassFacetMethod
+extends FacetAbstract
+implements CssClassFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return CssClassFacet.class;
     }
 
@@ -39,7 +41,7 @@ public class CssClassFacetMethod extends FacetAbstract implements CssClassFacet 
 
 
     public CssClassFacetMethod(final Method method, final FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
         this.method = method;
     }
 
@@ -55,8 +57,9 @@ public class CssClassFacetMethod extends FacetAbstract implements CssClassFacet 
         }
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("method", method);
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("method", method);
     }
 }

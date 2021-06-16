@@ -22,12 +22,12 @@ import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetSimple;
 import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFacetMethod;
 
-public class CssClassFacetForDomainObjectLayoutAnnotation extends CssClassFacetAbstract {
+public class CssClassFacetForDomainObjectLayoutAnnotation extends CssClassFacetSimple {
 
-    public static CssClassFacet create(
+    public static Optional<CssClassFacetForDomainObjectLayoutAnnotation> create(
             final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final FacetHolder holder) {
 
@@ -45,8 +45,7 @@ public class CssClassFacetForDomainObjectLayoutAnnotation extends CssClassFacetA
         return domainObjectLayoutIfAny
                 .map(DomainObjectLayout::cssClass)
                 .filter(_Strings::isNotEmpty)
-                .map(cssClass -> new CssClassFacetForDomainObjectLayoutAnnotation(cssClass, holder))
-                .orElse(null);
+                .map(cssClass -> new CssClassFacetForDomainObjectLayoutAnnotation(cssClass, holder));
     }
 
     private CssClassFacetForDomainObjectLayoutAnnotation(

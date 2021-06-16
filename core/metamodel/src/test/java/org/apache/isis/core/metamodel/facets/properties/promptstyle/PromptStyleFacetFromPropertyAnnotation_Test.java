@@ -29,6 +29,9 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.config.IsisConfiguration;
@@ -37,9 +40,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.PromptStyleFacetForPropertyLayoutAnnotation;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 
 public class PromptStyleFacetFromPropertyAnnotation_Test {
 
@@ -67,7 +67,8 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
             }});
 
             PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
-                    .create(Optional.of(mockPropertyLayout), stubConfiguration, mockFacetHolder);
+                    .create(Optional.of(mockPropertyLayout), stubConfiguration, mockFacetHolder)
+                    .orElse(null);
 
             Assert.assertThat(facet, is(anInstanceOf(PromptStyleFacetForPropertyLayoutAnnotation.class)));
             Assert.assertThat(facet.value(), is(PromptStyle.DIALOG));
@@ -85,7 +86,8 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
 
 
             PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
-                    .create(Optional.of(mockPropertyLayout), stubConfiguration, mockFacetHolder);
+                    .create(Optional.of(mockPropertyLayout), stubConfiguration, mockFacetHolder)
+                    .orElse(null);
 
             Assert.assertThat(facet, is(anInstanceOf(PromptStyleFacetForPropertyLayoutAnnotation.class)));
             Assert.assertThat(facet.value(), is(PromptStyle.INLINE));
@@ -104,7 +106,8 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
             }});
 
             PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
-                    .create(Optional.of(mockPropertyLayout), stubConfiguration, mockFacetHolder);
+                    .create(Optional.of(mockPropertyLayout), stubConfiguration, mockFacetHolder)
+                    .orElse(null);
 
             Assert.assertThat(facet, is(anInstanceOf(PromptStyleFacetAsConfigured.class)));
             Assert.assertThat(facet.value(), is(PromptStyle.INLINE));
@@ -123,7 +126,8 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
             }});
 
             PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
-                    .create(Optional.of(mockPropertyLayout), stubConfiguration, mockFacetHolder);
+                    .create(Optional.of(mockPropertyLayout), stubConfiguration, mockFacetHolder)
+                    .orElse(null);
 
             Assert.assertThat(facet, is(nullValue()));
         }
@@ -140,7 +144,8 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
             }});
 
             PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
-                    .create(Optional.of(mockPropertyLayout), stubConfiguration, mockFacetHolder);
+                    .create(Optional.of(mockPropertyLayout), stubConfiguration, mockFacetHolder)
+                    .orElse(null);
 
             Assert.assertThat(facet.value(), is(PromptStyle.INLINE));
             Assert.assertThat(facet, is(anInstanceOf(PromptStyleFacetAsConfigured.class)));
@@ -159,7 +164,8 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
             }});
 
             PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
-                    .create(Optional.of(mockPropertyLayout), stubConfiguration, mockFacetHolder);
+                    .create(Optional.of(mockPropertyLayout), stubConfiguration, mockFacetHolder)
+                    .orElse(null);
 
             Assert.assertThat(facet, is(nullValue()));
         }

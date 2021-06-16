@@ -19,23 +19,22 @@
 
 package org.apache.isis.core.metamodel.specloader.validator;
 
-import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NonNull;
 
 public abstract class MetaModelValidatorAbstract
 implements
     MetaModelValidator,
-    MetaModelContextAware {
+    HasMetaModelContext {
 
-    @Getter @Setter(onMethod = @__(@Override))
-    private MetaModelContext metaModelContext;
+    @Getter(onMethod_ = {@Override})
+    private final @NonNull MetaModelContext metaModelContext;
 
-    protected IsisConfiguration getConfiguration() {
-        return metaModelContext.getConfiguration();
+    protected MetaModelValidatorAbstract(final MetaModelContext metaModelContext) {
+        this.metaModelContext = metaModelContext;
     }
 
     @Override

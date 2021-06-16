@@ -22,8 +22,11 @@ package org.apache.isis.core.metamodel.facets.object.navparent.annotation;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
@@ -43,11 +46,13 @@ import lombok.extern.log4j.Log4j2;
  *
  */
 @Log4j2
-public class NavigableParentAnnotationFacetFactory extends FacetFactoryAbstract
+public class NavigableParentAnnotationFacetFactory
+extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
-    public NavigableParentAnnotationFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    @Inject
+    public NavigableParentAnnotationFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
     }
 
     @Override
@@ -91,14 +96,14 @@ implements MetaModelRefiner {
         }
 
         try {
-            super.addFacet(new NavigableParentFacetMethod(method, facetHolder));
+            addFacet(new NavigableParentFacetMethod(method, facetHolder));
         } catch (IllegalAccessException e) {
             log.warn("failed to create NavigableParentFacetMethod method:{} holder:{}",
                     method, facetHolder, e);
         }
     }
 
-    private static boolean isNavigableParentFlagSet(Annotations.Evaluator<PropertyLayout> evaluator){
+    private static boolean isNavigableParentFlagSet(final Annotations.Evaluator<PropertyLayout> evaluator){
         return evaluator.getAnnotation().navigable().isParent();
     }
 
@@ -108,7 +113,7 @@ implements MetaModelRefiner {
      * <a href="https://issues.apache.org/jira/browse/ISIS-1816">ISIS-1816</a>.
      */
     @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+    public void refineProgrammingModel(final ProgrammingModel programmingModel) {
 
         programmingModel.addVisitingValidatorSkipManagedBeans(spec->{
 
@@ -126,7 +131,7 @@ implements MetaModelRefiner {
                         spec,
                         "%s: conflict for determining a strategy for retrieval of (navigable) parent for class, "
                                 + "contains multiple annotations '@%s' having navigable=PARENT, while at most one is allowed.",
-                                spec.getIdentifier().getClassName(),
+                                spec.getFeatureIdentifier().getClassName(),
                                 PropertyLayout.class.getName());
 
                 return; // continue validation processing
@@ -146,7 +151,7 @@ implements MetaModelRefiner {
                             spec,
                             "%s: unable to determine a strategy for retrieval of (navigable) parent for class, "
                                     + "field '%s' annotated with '@%s' having navigable=PARENT does not provide a getter.",
-                                    spec.getIdentifier().getClassName(),
+                                    spec.getFeatureIdentifier().getClassName(),
                                     fieldEvaluator.getField().getName(),
                                     PropertyLayout.class.getName());
                 }

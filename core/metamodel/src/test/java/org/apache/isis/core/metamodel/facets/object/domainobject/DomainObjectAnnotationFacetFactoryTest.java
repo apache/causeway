@@ -62,14 +62,14 @@ import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 
 import lombok.val;
 
-public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
+public class DomainObjectAnnotationFacetFactoryTest
+extends AbstractFacetFactoryJUnit4TestCase {
 
     DomainObjectAnnotationFacetFactory facetFactory;
 
     @Before
     public void setUp() throws Exception {
-        facetFactory = new DomainObjectAnnotationFacetFactory(new MethodByClassMap());
-        facetFactory.setMetaModelContext(super.metaModelContext);
+        facetFactory = new DomainObjectAnnotationFacetFactory(metaModelContext, new MethodByClassMap());
     }
 
     @Override
@@ -91,14 +91,14 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
     }
 
-    void allowingEntityChangePublishingToReturn(PublishingPolicies.EntityChangePublishingPolicy value) {
+    void allowingEntityChangePublishingToReturn(final PublishingPolicies.EntityChangePublishingPolicy value) {
         if(value!=null) {
             val config = super.metaModelContext.getConfiguration();
             config.getApplib().getAnnotation().getDomainObject().setEntityChangePublishing(value);
         }
     }
 
-    void allowingObjectsEditingToReturn(EditingObjectsConfiguration value) {
+    void allowingObjectsEditingToReturn(final EditingObjectsConfiguration value) {
         if(value!=null) {
             final IsisConfiguration config = super.metaModelContext.getConfiguration();
             config.getApplib().getAnnotation().getDomainObject().setEditing(value);

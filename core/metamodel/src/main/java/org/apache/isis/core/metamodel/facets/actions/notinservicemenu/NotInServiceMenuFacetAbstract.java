@@ -25,16 +25,16 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public abstract class NotInServiceMenuFacetAbstract extends FacetAbstract implements NotInServiceMenuFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return NotInServiceMenuFacet.class;
     }
 
     public NotInServiceMenuFacetAbstract(final FacetHolder holder) {
-        this(holder, Derivation.NOT_DERIVED);
+        super(type(), holder);
     }
 
-    public NotInServiceMenuFacetAbstract(final FacetHolder holder, final Derivation derivation) {
-        super(type(), holder, derivation);
+    public NotInServiceMenuFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
+        super(type(), holder, precedence);
     }
 
 }

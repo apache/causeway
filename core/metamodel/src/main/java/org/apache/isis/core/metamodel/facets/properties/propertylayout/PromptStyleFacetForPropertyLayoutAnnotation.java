@@ -19,11 +19,12 @@
 
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
-import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.commons.internal.base._Optionals;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -32,7 +33,8 @@ import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured;
 
-public class PromptStyleFacetForPropertyLayoutAnnotation extends PromptStyleFacetAbstract {
+public class PromptStyleFacetForPropertyLayoutAnnotation
+extends PromptStyleFacetAbstract {
 
     private final PromptStyle promptStyle;
 
@@ -41,7 +43,7 @@ public class PromptStyleFacetForPropertyLayoutAnnotation extends PromptStyleFace
         this.promptStyle = promptStyle;
     }
 
-    public static PromptStyleFacet create(
+    public static Optional<PromptStyleFacet> create(
             final Optional<PropertyLayout> propertyLayoutIfAny,
             final IsisConfiguration configuration,
             final FacetHolder holder) {
@@ -50,47 +52,53 @@ public class PromptStyleFacetForPropertyLayoutAnnotation extends PromptStyleFace
         if(holder instanceof FacetedMethod) {
             final FacetedMethod facetedMethod = (FacetedMethod) holder;
             if(facetedMethod.getFeatureType() != FeatureType.PROPERTY) {
-                return null;
+                return Optional.empty();
             }
         }
 
-        return propertyLayoutIfAny
-                .map(PropertyLayout::promptStyle)
-                .filter(promptStyle -> promptStyle != PromptStyle.NOT_SPECIFIED)
-                .map(promptStyle -> {
+        return _Optionals.orNullable(
 
-                    switch (promptStyle) {
-                    case DIALOG:
-                    case DIALOG_MODAL:
-                    case DIALOG_SIDEBAR:
-                    case INLINE:
-                        return new PromptStyleFacetForPropertyLayoutAnnotation(promptStyle, holder);
-                    case INLINE_AS_IF_EDIT:
-                        return new PromptStyleFacetForPropertyLayoutAnnotation(PromptStyle.INLINE, holder);
+            propertyLayoutIfAny
+            .map(PropertyLayout::promptStyle)
+            .filter(promptStyle -> promptStyle != PromptStyle.NOT_SPECIFIED)
+            .map(promptStyle -> {
 
-                    case AS_CONFIGURED:
+                switch (promptStyle) {
+                case DIALOG:
+                case DIALOG_MODAL:
+                case DIALOG_SIDEBAR:
+                case INLINE:
+                    return new PromptStyleFacetForPropertyLayoutAnnotation(promptStyle, holder);
+                case INLINE_AS_IF_EDIT:
+                    return new PromptStyleFacetForPropertyLayoutAnnotation(PromptStyle.INLINE, holder);
 
-                        // do not replace
-                        if (holder.containsNonFallbackFacet(PromptStyleFacet.class)) {
-                            return null;
-                        }
-
-                        promptStyle = configuration.getViewer().getWicket().getPromptStyle();
-                        return new PromptStyleFacetAsConfigured(promptStyle, holder);
-                    default:
-                    }
-                    throw new IllegalStateException("promptStyle '" + promptStyle + "' not recognised");
-                })
-                .orElseGet(() -> {
+                case AS_CONFIGURED:
 
                     // do not replace
                     if (holder.containsNonFallbackFacet(PromptStyleFacet.class)) {
                         return null;
                     }
 
-                    PromptStyle promptStyle = configuration.getViewer().getWicket().getPromptStyle();
+                    promptStyle = configuration.getViewer().getWicket().getPromptStyle();
                     return new PromptStyleFacetAsConfigured(promptStyle, holder);
-                });
+                default:
+                }
+                throw new IllegalStateException("promptStyle '" + promptStyle + "' not recognised");
+            })
+
+            ,
+
+            () -> {
+
+                // do not replace
+                if (holder.containsNonFallbackFacet(PromptStyleFacet.class)) {
+                    return null;
+                }
+
+                PromptStyle promptStyle = configuration.getViewer().getWicket().getPromptStyle();
+                return new PromptStyleFacetAsConfigured(promptStyle, holder);
+            }
+        );
     }
 
     @Override
@@ -98,9 +106,10 @@ public class PromptStyleFacetForPropertyLayoutAnnotation extends PromptStyleFace
         return promptStyle;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("promptStyle", promptStyle);
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("promptStyle", promptStyle);
     }
 
 }

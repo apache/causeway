@@ -18,15 +18,11 @@
  */
 package org.apache.isis.extensions.viewer.wicket.pdfjs.metamodel.facet;
 
-import java.lang.reflect.Method;
-import java.util.Optional;
-
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
@@ -37,44 +33,50 @@ import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.annotations.PdfJsVi
 import lombok.val;
 
 
-public class PdfJsViewerFacetFromAnnotationFactory extends FacetFactoryAbstract {
+public class PdfJsViewerFacetFromAnnotationFactory
+extends FacetFactoryAbstract {
 
     @Component
     public static class Register implements MetaModelRefiner {
 
         @Override
-        public void refineProgrammingModel(ProgrammingModel programmingModel) {
+        public void refineProgrammingModel(final ProgrammingModel programmingModel) {
             programmingModel.addFactory(
                     ProgrammingModel.FacetProcessingOrder.Z2_AFTER_FINALLY,
-                    PdfJsViewerFacetFromAnnotationFactory.class);
+                    new PdfJsViewerFacetFromAnnotationFactory(programmingModel.getMetaModelContext()));
         }
     }
-    @Inject ServiceInjector serviceInjector;
 
-    public PdfJsViewerFacetFromAnnotationFactory() {
-        super(FeatureType.PROPERTIES_AND_ACTIONS);
+    @Inject
+    public PdfJsViewerFacetFromAnnotationFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.PROPERTIES_AND_ACTIONS);
     }
 
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        final FacetHolder holder = processMethodContext.getFacetHolder();
-        final Method method = processMethodContext.getMethod();
+        val facetHoder = processMethodContext.getFacetHolder();
 
-        final Optional<PdfJsViewer> pdfjsViewerOpt = processMethodContext.synthesizeOnMethod(PdfJsViewer.class);
+        val pdfjsViewerIfAny = processMethodContext.synthesizeOnMethod(PdfJsViewer.class);
 
-        pdfjsViewerOpt.ifPresent(
+        pdfjsViewerIfAny.ifPresent(
             pdfjsViewer -> {
-                val pdfJsViewerFacet = PdfJsViewerFacetFromAnnotation.create(pdfjsViewer, holder);
-                serviceInjector.injectServicesInto(pdfJsViewerFacet);
-                FacetUtil.addFacet(pdfJsViewerFacet);
+
+                getServiceInjector().injectServicesInto(
+
+                    FacetUtil.addFacet(
+                            PdfJsViewerFacetFromAnnotation
+                            .create(pdfjsViewer, facetHoder))
+
+                );
+
             }
         );
     }
 
     @Override
-    public void processParams(ProcessParameterContext processParameterContext) {
+    public void processParams(final ProcessParameterContext processParameterContext) {
         super.processParams(processParameterContext);
     }
 }

@@ -20,37 +20,36 @@ package org.apache.isis.core.metamodel.facets.param.bigdecimal.javaxvaldigits;
 
 import java.math.BigDecimal;
 
+import javax.inject.Inject;
 import javax.validation.constraints.Digits;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 
-public class BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory extends FacetFactoryAbstract {
+import lombok.val;
 
-    public BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory() {
-        super(FeatureType.PARAMETERS_ONLY);
+public class BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory
+extends FacetFactoryAbstract {
+
+    @Inject
+    public BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.PARAMETERS_ONLY);
     }
 
     @Override
-    public void processParams(ProcessParameterContext processParameterContext) {
+    public void processParams(final ProcessParameterContext processParameterContext) {
 
         if(BigDecimal.class != processParameterContext.getParameterType()) {
             return;
         }
 
-        processParameterContext.synthesizeOnParameter(Digits.class)
-        .ifPresent(digits->{
-            super.addFacet(create(digits, processParameterContext.getFacetHolder()));
-        });
+        val digitsIfAny = processParameterContext.synthesizeOnParameter(Digits.class);
 
-    }
+        addFacetIfPresent(
+                BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation
+                .create(digitsIfAny, processParameterContext.getFacetHolder()));
 
-    private BigDecimalValueFacet create(final Digits annotation, final FacetHolder holder) {
-        final int length = annotation.integer() + annotation.fraction();
-        final int scale = annotation.fraction();
-        return new BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation(holder, length, scale);
     }
 
 }

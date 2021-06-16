@@ -19,23 +19,30 @@
 
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetSimple;
 
-public class CssClassFacetForPropertyXml extends CssClassFacetAbstract {
+public class CssClassFacetForPropertyXml
+extends CssClassFacetSimple {
 
-    public static CssClassFacet create(PropertyLayoutData propertyLayout, FacetHolder holder) {
+    public static Optional<CssClassFacet> create(
+            final PropertyLayoutData propertyLayout,
+            final FacetHolder holder) {
         if(propertyLayout == null) {
-            return null;
+            return Optional.empty();
         }
         final String cssClass = _Strings.emptyToNull(propertyLayout.getCssClass());
-        return cssClass != null ? new CssClassFacetForPropertyXml(cssClass, holder) : null;
+        return cssClass != null
+                ? Optional.of(new CssClassFacetForPropertyXml(cssClass, holder))
+                : Optional.empty();
     }
 
-    private CssClassFacetForPropertyXml(String value, FacetHolder holder) {
+    private CssClassFacetForPropertyXml(final String value, final FacetHolder holder) {
         super(value, holder);
     }
 

@@ -19,24 +19,29 @@
 
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacetAbstract;
 
-public class MultiLineFacetForPropertyXml extends MultiLineFacetAbstract {
+public class MultiLineFacetForPropertyXml
+extends MultiLineFacetAbstract {
 
-    public static MultiLineFacet create(PropertyLayoutData propertyLayout, FacetHolder holder) {
+    public static Optional<MultiLineFacet> create(
+            final PropertyLayoutData propertyLayout,
+            final FacetHolder holder) {
         if(propertyLayout == null) {
-            return null;
+            return Optional.empty();
         }
         final Integer multiLine = propertyLayout.getMultiLine();
         return multiLine != null && multiLine > 1
-                ? new MultiLineFacetForPropertyXml(multiLine, holder)
-                        : null;
+                ? Optional.of(new MultiLineFacetForPropertyXml(multiLine, holder))
+                : Optional.empty();
     }
 
-    private MultiLineFacetForPropertyXml(int numberOfLines, FacetHolder holder) {
+    private MultiLineFacetForPropertyXml(final int numberOfLines, final FacetHolder holder) {
         super(numberOfLines, holder);
     }
 

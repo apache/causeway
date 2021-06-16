@@ -21,13 +21,17 @@ package org.apache.isis.core.metamodel.facets.value.temporal.localtime;
 
 import java.time.LocalTime;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacetUsingSemanticsProviderFactory;
 
 public class LocalTimeValueFacetUsingSemanticsProviderFactory
 extends TemporalValueFacetUsingSemanticsProviderFactory<LocalTime> {
 
-    public LocalTimeValueFacetUsingSemanticsProviderFactory() {
-        super(LocalTime.class, LocalTimeValueSemanticsProvider::new);
+    @Inject
+    public LocalTimeValueFacetUsingSemanticsProviderFactory(final MetaModelContext mmc) {
+        super(mmc, LocalTime.class, LocalTimeValueSemanticsProvider::new);
     }
 
 }

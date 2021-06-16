@@ -17,7 +17,7 @@
 
 package org.apache.isis.core.metamodel.progmodels.dflt;
 
-import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory;
@@ -156,14 +156,16 @@ import org.apache.isis.core.metamodel.postprocessors.propparam.DeriveChoicesFrom
 import org.apache.isis.core.metamodel.postprocessors.propparam.DeriveDefaultFromTypePostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.propparam.DeriveTypicalLengthFromTypePostProcessor;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
+import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.services.title.TitlesAndTranslationsValidator;
 
 import lombok.val;
 
-public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract {
+public final class ProgrammingModelFacetsJava8
+extends ProgrammingModelAbstract {
 
-    public ProgrammingModelFacetsJava8(ServiceInjector serviceInjector) {
-        super(serviceInjector);
+    public ProgrammingModelFacetsJava8(final MetaModelContext mmc) {
+        super(mmc);
 
         // act on the peer objects (FacetedMethod etc), rather than ObjectMembers etc
         addFacetFactories();
@@ -177,228 +179,237 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
 
     private void addFacetFactories() {
 
+        val mmc = getMetaModelContext();
+        val classSubstitutorRegistry = mmc.getServiceRegistry().lookupServiceElseFail(ClassSubstitutorRegistry.class);
+
         // must be first, so any Facets created can be replaced by other
         // FacetFactorys later.
-        addFactory(FacetProcessingOrder.A1_FALLBACK_DEFAULTS, FallbackFacetFactory.class);
+        addFactory(FacetProcessingOrder.A1_FALLBACK_DEFAULTS, new FallbackFacetFactory(mmc));
 
-        addFactory(FacetProcessingOrder.B1_OBJECT_NAMING, LogicalTypeFacetDerivedFromClassNameFactory.class);
-        addFactory(FacetProcessingOrder.B1_OBJECT_NAMING, DomainServiceFacetAnnotationFactory.class);
-        addFactory(FacetProcessingOrder.B1_OBJECT_NAMING, ValueAnnotationFacetFactory.class);
+        addFactory(FacetProcessingOrder.B1_OBJECT_NAMING, new LogicalTypeFacetDerivedFromClassNameFactory(mmc, classSubstitutorRegistry));
+        addFactory(FacetProcessingOrder.B1_OBJECT_NAMING, new DomainServiceFacetAnnotationFactory(mmc));
+        addFactory(FacetProcessingOrder.B1_OBJECT_NAMING, new ValueAnnotationFacetFactory(mmc));
 
-        addFactory(FacetProcessingOrder.C1_METHOD_REMOVING, IteratorFilteringFacetFactory.class);
+        addFactory(FacetProcessingOrder.C1_METHOD_REMOVING, new IteratorFilteringFacetFactory(mmc));
 
-        addFactory(FacetProcessingOrder.C1_METHOD_REMOVING, RemoveMethodsFacetFactory.class);
+        addFactory(FacetProcessingOrder.C1_METHOD_REMOVING, new RemoveMethodsFacetFactory(mmc));
 
-        addFactory(FacetProcessingOrder.C1_METHOD_REMOVING, RemoveAnnotatedMethodsFacetFactory.class);
+        addFactory(FacetProcessingOrder.C1_METHOD_REMOVING, new RemoveAnnotatedMethodsFacetFactory(mmc));
 
         // must be before any other FacetFactories that install MandatoryFacet.class facets
-        addFactory(FacetProcessingOrder.D1_MANDATORY_SUPPORT, MandatoryFacetOnProperyDefaultFactory.class);
-        addFactory(FacetProcessingOrder.D1_MANDATORY_SUPPORT, MandatoryFacetOnParametersDefaultFactory.class);
+        addFactory(FacetProcessingOrder.D1_MANDATORY_SUPPORT, new MandatoryFacetOnProperyDefaultFactory(mmc));
+        addFactory(FacetProcessingOrder.D1_MANDATORY_SUPPORT, new MandatoryFacetOnParametersDefaultFactory(mmc));
 
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, PropertyValidateFacetDefaultFactory.class);
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new PropertyValidateFacetDefaultFactory(mmc));
 
         // enum support
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, EnumFacetUsingValueFacetUsingSemanticsProviderFactory.class);
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new EnumFacetUsingValueFacetUsingSemanticsProviderFactory(mmc));
 
         // properties
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, PropertyAccessorFacetViaAccessorFactory.class);
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, PropertySetterFacetFactory.class);
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new PropertyAccessorFacetViaAccessorFactory(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new PropertySetterFacetFactory(mmc));
 
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, PropertyValidateFacetViaMethodFactory.class);
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, PropertyChoicesFacetViaMethodFactory.class);
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, PropertyAutoCompleteFacetMethodFactory.class);
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, PropertyDefaultFacetViaMethodFactory.class);
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new PropertyValidateFacetViaMethodFactory(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new PropertyChoicesFacetViaMethodFactory(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new PropertyAutoCompleteFacetMethodFactory(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new PropertyDefaultFacetViaMethodFactory(mmc));
 
         // collections
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, CollectionAccessorFacetViaAccessorFactory.class);
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, SortedByFacetAnnotationFactory.class);
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new CollectionAccessorFacetViaAccessorFactory(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new SortedByFacetAnnotationFactory(mmc));
 
         // actions
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, ActionParameterHiddenFacetViaMethodFactory.class);
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, ActionParameterDisabledFacetViaMethodFactory.class);
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, ActionValidationFacetViaMethodFactory.class);
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, ActionParameterValidationFacetViaMethodFactory.class);
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, ActionChoicesFacetViaMethodFactory.class);
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, ActionParameterChoicesFacetViaMethodFactory.class);
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, ActionParameterAutoCompleteFacetViaMethodFactory.class);
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, ActionDefaultsFacetViaMethodFactory.class);
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, ActionParameterDefaultsFacetViaMethodFactory.class);
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new ActionParameterHiddenFacetViaMethodFactory(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new ActionParameterDisabledFacetViaMethodFactory(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new ActionValidationFacetViaMethodFactory(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new ActionParameterValidationFacetViaMethodFactory(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new ActionChoicesFacetViaMethodFactory(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new ActionParameterChoicesFacetViaMethodFactory(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new ActionParameterAutoCompleteFacetViaMethodFactory(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new ActionDefaultsFacetViaMethodFactory(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new ActionParameterDefaultsFacetViaMethodFactory(mmc));
 
         // members in general
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, DisableForContextFacetViaMethodFactory.class);
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new DisableForContextFacetViaMethodFactory(mmc));
 
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, HideForContextFacetViaMethodFactory.class);
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new HideForContextFacetViaMethodFactory(mmc));
 
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, CreatedCallbackFacetFactory.class);
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, LoadCallbackFacetFactory.class);
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, PersistCallbackViaSaveMethodFacetFactory.class);
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, PersistCallbackFacetFactory.class);
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, UpdateCallbackFacetFactory.class);
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, RemoveCallbackFacetFactory.class);
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new CreatedCallbackFacetFactory(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new LoadCallbackFacetFactory(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new PersistCallbackViaSaveMethodFacetFactory(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new PersistCallbackFacetFactory(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new UpdateCallbackFacetFactory(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new RemoveCallbackFacetFactory(mmc));
 
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, ValidateObjectFacetMethodFactory.class);
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, ObjectValidPropertiesFacetImplFactory.class);
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new ValidateObjectFacetMethodFactory(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new ObjectValidPropertiesFacetImplFactory(mmc));
 
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, BookmarkPolicyFacetFallbackFactory.class);
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, HomePageFacetAnnotationFactory.class);
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new BookmarkPolicyFacetFallbackFactory(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new HomePageFacetAnnotationFactory(mmc));
 
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, DefaultedFacetAnnotationElseConfigurationFactory.class);
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new DefaultedFacetAnnotationElseConfigurationFactory(mmc));
 
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, DescribedAsFacetOnMemberFactory.class);
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new DescribedAsFacetOnMemberFactory(mmc));
 
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory.class);
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory.class);
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory(mmc));
 
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory.class);
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory(mmc));
 
 
         // must come after CssClassFacetOnMemberFactory
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, CssClassFacetOnActionFromConfiguredRegexFactory.class);
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new CssClassFacetOnActionFromConfiguredRegexFactory(mmc));
 
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, CssClassFaFacetOnMemberFactory.class);
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new CssClassFaFacetOnMemberFactory(mmc));
 
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, HiddenObjectFacetViaMethodFactory.class);
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, DisabledObjectFacetViaMethodFactory.class);
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new HiddenObjectFacetViaMethodFactory(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new DisabledObjectFacetViaMethodFactory(mmc));
 
         val postConstructMethodsCache = new MethodByClassMap();
 
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new RecreatableObjectFacetFactory(postConstructMethodsCache));
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, JaxbFacetFactory.class);
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new RecreatableObjectFacetFactory(mmc, postConstructMethodsCache));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new JaxbFacetFactory(mmc));
 
         // must come after RecreatableObjectFacetFactory
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new DomainObjectAnnotationFacetFactory(postConstructMethodsCache));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new DomainObjectAnnotationFacetFactory(mmc, postConstructMethodsCache));
 
         // must come after the property/collection accessor+mutator facet factories
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, ActionAnnotationFacetFactory.class);
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new ActionAnnotationFacetFactory(mmc));
         // after the ActionAnnotationFacetFactory so that takes precedent for contributed associations
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, PropertyAnnotationFacetFactory.class);
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new PropertyAnnotationFacetFactory(mmc));
         // after the ActionAnnotationFacetFactory so that takes precedent for contributed associations
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, CollectionAnnotationFacetFactory.class);
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new CollectionAnnotationFacetFactory(mmc));
 
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, ParameterNameFacetFactoryUsingReflection.class);
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, ParameterAnnotationFacetFactory.class);
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new ParameterNameFacetFactoryUsingReflection(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new ParameterAnnotationFacetFactory(mmc));
 
         // must come after DomainObjectAnnotationFacetFactory & MixinFacetFactory
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, ContributingFacetDerivedFromMixinFacetFactory.class);
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new ContributingFacetDerivedFromMixinFacetFactory(mmc));
 
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, HiddenTypeFacetDerivedFromAuthorizationFactory.class);
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new HiddenTypeFacetDerivedFromAuthorizationFactory(mmc));
 
-        addFactory(FacetProcessingOrder.F1_LAYOUT, GridFacetFactory.class);
+        addFactory(FacetProcessingOrder.F1_LAYOUT, new GridFacetFactory(mmc));
 
         // must come before DomainObjectLayoutFacetFactory
         // (so subscribers on titleUi event etc can override)
-        addFactory(FacetProcessingOrder.F1_LAYOUT, TitleAnnotationFacetFactory.class);
-        addFactory(FacetProcessingOrder.F1_LAYOUT, TitleFacetViaMethodsFactory.class);
-        addFactory(FacetProcessingOrder.F1_LAYOUT, IconFacetMethodFactory.class);
-        addFactory(FacetProcessingOrder.F1_LAYOUT, NavigableParentAnnotationFacetFactory.class);
-        addFactory(FacetProcessingOrder.F1_LAYOUT, CssClassFacetMethodFactory.class);
-        addFactory(FacetProcessingOrder.F1_LAYOUT, LayoutFacetFactory.class);
+        addFactory(FacetProcessingOrder.F1_LAYOUT, new TitleAnnotationFacetFactory(mmc));
+        addFactory(FacetProcessingOrder.F1_LAYOUT, new TitleFacetViaMethodsFactory(mmc));
+        addFactory(FacetProcessingOrder.F1_LAYOUT, new IconFacetMethodFactory(mmc));
+        addFactory(FacetProcessingOrder.F1_LAYOUT, new NavigableParentAnnotationFacetFactory(mmc));
+        addFactory(FacetProcessingOrder.F1_LAYOUT, new CssClassFacetMethodFactory(mmc));
+        addFactory(FacetProcessingOrder.F1_LAYOUT, new LayoutFacetFactory(mmc));
 
-        addFactory(FacetProcessingOrder.F1_LAYOUT, DomainServiceLayoutFacetFactory.class);
-        addFactory(FacetProcessingOrder.F1_LAYOUT, DomainObjectLayoutFacetFactory.class);
+        addFactory(FacetProcessingOrder.F1_LAYOUT, new DomainServiceLayoutFacetFactory(mmc));
+        addFactory(FacetProcessingOrder.F1_LAYOUT, new DomainObjectLayoutFacetFactory(mmc));
 
         // must come after MultiLine
-        addFactory(FacetProcessingOrder.F1_LAYOUT, PropertyLayoutFacetFactory.class);
-        addFactory(FacetProcessingOrder.F1_LAYOUT, ParameterLayoutFacetFactory.class);
-        addFactory(FacetProcessingOrder.F1_LAYOUT, ActionLayoutFacetFactory.class);
-        addFactory(FacetProcessingOrder.F1_LAYOUT, CollectionLayoutFacetFactory.class);
+        addFactory(FacetProcessingOrder.F1_LAYOUT, new PropertyLayoutFacetFactory(mmc));
+        addFactory(FacetProcessingOrder.F1_LAYOUT, new ParameterLayoutFacetFactory(mmc));
+        addFactory(FacetProcessingOrder.F1_LAYOUT, new ActionLayoutFacetFactory(mmc));
+        addFactory(FacetProcessingOrder.F1_LAYOUT, new CollectionLayoutFacetFactory(mmc));
 
         // built-in value types for Java language
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, BooleanPrimitiveValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, BooleanWrapperValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, BytePrimitiveValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, ByteWrapperValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, ShortPrimitiveValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, ShortWrapperValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, IntPrimitiveValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, IntWrapperValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, LongPrimitiveValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, LongWrapperValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, FloatPrimitiveValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, FloatWrapperValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, DoublePrimitiveValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, DoubleWrapperValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, CharPrimitiveValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, CharWrapperValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, BigIntegerValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, BigDecimalValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, JavaSqlDateValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, JavaSqlTimeValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, JavaSqlTimeStampValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, JavaUtilDateValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, StringValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, URLValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, LocalResourcePathValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, UUIDValueFacetUsingSemanticsProviderFactory.class);
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new BooleanPrimitiveValueFacetUsingSemanticsProviderFactory(mmc));
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new BooleanWrapperValueFacetUsingSemanticsProviderFactory(mmc));
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new BytePrimitiveValueFacetUsingSemanticsProviderFactory(mmc));
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new ByteWrapperValueFacetUsingSemanticsProviderFactory(mmc));
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new ShortPrimitiveValueFacetUsingSemanticsProviderFactory(mmc));
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new ShortWrapperValueFacetUsingSemanticsProviderFactory(mmc));
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new IntPrimitiveValueFacetUsingSemanticsProviderFactory(mmc));
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new IntWrapperValueFacetUsingSemanticsProviderFactory(mmc));
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new LongPrimitiveValueFacetUsingSemanticsProviderFactory(mmc));
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new LongWrapperValueFacetUsingSemanticsProviderFactory(mmc));
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new FloatPrimitiveValueFacetUsingSemanticsProviderFactory(mmc));
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new FloatWrapperValueFacetUsingSemanticsProviderFactory(mmc));
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new DoublePrimitiveValueFacetUsingSemanticsProviderFactory(mmc));
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new DoubleWrapperValueFacetUsingSemanticsProviderFactory(mmc));
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new CharPrimitiveValueFacetUsingSemanticsProviderFactory(mmc));
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new CharWrapperValueFacetUsingSemanticsProviderFactory(mmc));
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new BigIntegerValueFacetUsingSemanticsProviderFactory(mmc));
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new BigDecimalValueFacetUsingSemanticsProviderFactory(mmc));
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new JavaSqlDateValueFacetUsingSemanticsProviderFactory(mmc));
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new JavaSqlTimeValueFacetUsingSemanticsProviderFactory(mmc));
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new JavaSqlTimeStampValueFacetUsingSemanticsProviderFactory(mmc));
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new JavaUtilDateValueFacetUsingSemanticsProviderFactory(mmc));
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new StringValueFacetUsingSemanticsProviderFactory(mmc));
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new URLValueFacetUsingSemanticsProviderFactory(mmc));
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new LocalResourcePathValueFacetUsingSemanticsProviderFactory(mmc));
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new UUIDValueFacetUsingSemanticsProviderFactory(mmc));
 
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, JavaAwtImageValueFacetUsingSemanticsProviderFactory.class);
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new JavaAwtImageValueFacetUsingSemanticsProviderFactory(mmc));
 
         // applib values
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, BlobValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, ClobValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, PasswordValueFacetUsingSemanticsProviderFactory.class);
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new BlobValueFacetUsingSemanticsProviderFactory(mmc));
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new ClobValueFacetUsingSemanticsProviderFactory(mmc));
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new PasswordValueFacetUsingSemanticsProviderFactory(mmc));
 
         // jodatime values
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, JodaLocalDateValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, JodaLocalDateTimeValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, JodaDateTimeValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, JodaLocalTimeValueFacetSimpleFactory.class);
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new JodaLocalDateValueFacetUsingSemanticsProviderFactory(mmc));
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new JodaLocalDateTimeValueFacetUsingSemanticsProviderFactory(mmc));
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new JodaDateTimeValueFacetUsingSemanticsProviderFactory(mmc));
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new JodaLocalTimeValueFacetSimpleFactory(mmc));
 
         // java 8 time values
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, LocalTimeValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, OffsetTimeValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, LocalDateValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, LocalDateTimeValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, OffsetDateTimeValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, ZonedDateTimeValueFacetUsingSemanticsProviderFactory.class);
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new LocalTimeValueFacetUsingSemanticsProviderFactory(mmc));
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new OffsetTimeValueFacetUsingSemanticsProviderFactory(mmc));
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new LocalDateValueFacetUsingSemanticsProviderFactory(mmc));
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new LocalDateTimeValueFacetUsingSemanticsProviderFactory(mmc));
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new OffsetDateTimeValueFacetUsingSemanticsProviderFactory(mmc));
+        addFactory(FacetProcessingOrder.G1_VALUE_TYPES, new ZonedDateTimeValueFacetUsingSemanticsProviderFactory(mmc));
 
         // written to not trample over TypeOf if already installed
-        addFactory(FacetProcessingOrder.Z1_FINALLY, CollectionFacetFactory.class);
+        addFactory(FacetProcessingOrder.Z1_FINALLY, new CollectionFacetFactory(mmc));
         // must come after CollectionFacetFactory
-        addFactory(FacetProcessingOrder.Z1_FINALLY, ParentedFacetSinceCollectionFactory.class);
+        addFactory(FacetProcessingOrder.Z1_FINALLY, new ParentedFacetSinceCollectionFactory(mmc));
 
         // so we can dogfood the applib "value" types
-        addFactory(FacetProcessingOrder.Z1_FINALLY, ValueFacetAnnotationOrConfigurationFactory.class);
+        addFactory(FacetProcessingOrder.Z1_FINALLY, new ValueFacetAnnotationOrConfigurationFactory(mmc));
 
 
         // should come near the end, after any facets that install PropertySetterFacet have run.
-        addFactory(FacetProcessingOrder.Z1_FINALLY, DisabledFacetOnPropertyInferredFactory.class);
+        addFactory(FacetProcessingOrder.Z1_FINALLY, new DisabledFacetOnPropertyInferredFactory(mmc));
 
-        addFactory(FacetProcessingOrder.Z1_FINALLY, ActionChoicesForCollectionParameterFacetFactory.class);
+        addFactory(FacetProcessingOrder.Z1_FINALLY, new ActionChoicesForCollectionParameterFacetFactory(mmc));
 
-        addFactory(FacetProcessingOrder.Z1_FINALLY, FacetsFacetAnnotationFactory.class);
+        addFactory(FacetProcessingOrder.Z1_FINALLY, new FacetsFacetAnnotationFactory(mmc));
 
-        addFactory(FacetProcessingOrder.Z1_FINALLY, ViewModelSemanticCheckingFacetFactory.class);
+        addFactory(FacetProcessingOrder.Z1_FINALLY, new ViewModelSemanticCheckingFacetFactory(mmc));
     }
 
     private void addPostProcessors() {
-        addPostProcessor(PostProcessingOrder.A0_BEFORE_BUILTIN, DeriveMixinMembersPostProcessor.class);
+
+        val mmc = getMetaModelContext();
+
+        addPostProcessor(PostProcessingOrder.A0_BEFORE_BUILTIN, new DeriveMixinMembersPostProcessor(mmc));
 
         // only after this point have any mixin members been resolved and are available on the ObjectSpecification.
 
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveDescribedAsFromTypePostProcessor.class);
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveTypicalLengthFromTypePostProcessor.class);
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveDefaultFromTypePostProcessor.class);
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveChoicesFromExistingChoicesPostProcessor.class);
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveDisabledFromImmutablePostProcessor.class);
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveDisabledFromViewModelPostProcessor.class);
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveCollectionParamDefaultsAndChoicesPostProcessor.class);
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, TweakDomainEventsForMixinPostProcessor.class);
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveProjectionFacetsPostProcessor.class);
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveNavigationFacetFromHiddenTypePostProcessor.class);
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DeriveDescribedAsFromTypePostProcessor(mmc));
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DeriveTypicalLengthFromTypePostProcessor(mmc));
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DeriveDefaultFromTypePostProcessor(mmc));
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DeriveChoicesFromExistingChoicesPostProcessor(mmc));
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DeriveDisabledFromImmutablePostProcessor(mmc));
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DeriveDisabledFromViewModelPostProcessor(mmc));
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DeriveCollectionParamDefaultsAndChoicesPostProcessor(mmc));
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new TweakDomainEventsForMixinPostProcessor(mmc));
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DeriveProjectionFacetsPostProcessor(mmc));
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DeriveNavigationFacetFromHiddenTypePostProcessor(mmc));
 
         // must be after all named facets and description facets have been installed
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, TranslationPostProcessor.class);
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new TranslationPostProcessor(mmc));
 
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, AuthorizationFacetPostProcessor.class);
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new AuthorizationFacetPostProcessor(mmc));
     }
 
     private void addValidators() {
-        addValidator(new MemberSupportAnnotationEnforcesSupportingMethodValidator());
-        addValidator(new OrphanedSupportingMethodValidator());
-        addValidator(new TitlesAndTranslationsValidator());  // should this instead be a post processor, alongside TranslationPostProcessor ?
-        addValidator(new ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator());
-        addValidator(new ActionOverloadingValidator());
+
+        val mmc = getMetaModelContext();
+
+        addValidator(new MemberSupportAnnotationEnforcesSupportingMethodValidator(mmc));
+        addValidator(new OrphanedSupportingMethodValidator(mmc));
+        addValidator(new TitlesAndTranslationsValidator(mmc));  // should this instead be a post processor, alongside TranslationPostProcessor ?
+        addValidator(new ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator(mmc));
+        addValidator(new ActionOverloadingValidator(mmc));
     }
 
 }

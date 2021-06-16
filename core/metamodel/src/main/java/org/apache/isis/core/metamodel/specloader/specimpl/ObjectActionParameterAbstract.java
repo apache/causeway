@@ -122,8 +122,8 @@ implements ObjectActionParameter, HasFacetHolder {
     }
 
     @Override
-    public Identifier getIdentifier() {
-        return parentAction.getIdentifier();
+    public Identifier getFeatureIdentifier() {
+        return parentAction.getFeatureIdentifier();
     }
 
     @Override
@@ -134,8 +134,8 @@ implements ObjectActionParameter, HasFacetHolder {
     @Override
     public String getName() {
         final NamedFacet facet = getFacet(NamedFacet.class);
-        if (facet != null && facet.value() != null) {
-            return facet.value();
+        if (facet != null && facet.translated() != null) {
+            return facet.translated();
         }
         val singularName = getSpecification().getSingularName();
         val parameters = getAction().getParameters(this::equalsShortIdentifier);
@@ -156,7 +156,7 @@ implements ObjectActionParameter, HasFacetHolder {
     @Override
     public String getDescription() {
         final DescribedAsFacet facet = getFacet(DescribedAsFacet.class);
-        final String description = facet.value();
+        final String description = facet.translated();
         return description == null ? "" : description;
     }
 
@@ -241,7 +241,7 @@ implements ObjectActionParameter, HasFacetHolder {
 
         val paramSpec = getSpecification();
         val defaultsFacet = getFacet(ActionParameterDefaultsFacet.class);
-        if (defaultsFacet != null && !defaultsFacet.isFallback()) {
+        if (defaultsFacet != null && !defaultsFacet.getPrecedence().isFallback()) {
             final Object paramValuePojo = defaultsFacet.getDefault(pendingArgs);
             return ManagedObjects.emptyToDefault(
                     !isOptional(),
@@ -299,7 +299,7 @@ implements ObjectActionParameter, HasFacetHolder {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         return new ActionArgVisibilityContext(
-                head, parentAction, getIdentifier(), pendingArgs, position, interactionInitiatedBy);
+                head, parentAction, getFeatureIdentifier(), pendingArgs, position, interactionInitiatedBy);
     }
 
     @Override
@@ -325,7 +325,7 @@ implements ObjectActionParameter, HasFacetHolder {
         return new ActionArgUsabilityContext(
                 head,
                 parentAction,
-                getIdentifier(),
+                getFeatureIdentifier(),
                 pendingArgs,
                 position,
                 interactionInitiatedBy);
@@ -355,7 +355,7 @@ implements ObjectActionParameter, HasFacetHolder {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         return new ActionArgValidityContext(
-                head, parentAction, getIdentifier(), proposedArguments, position, interactionInitiatedBy);
+                head, parentAction, getFeatureIdentifier(), proposedArguments, position, interactionInitiatedBy);
     }
 
     @Override

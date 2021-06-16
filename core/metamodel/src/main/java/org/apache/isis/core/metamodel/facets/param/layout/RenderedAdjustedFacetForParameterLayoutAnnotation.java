@@ -27,9 +27,10 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacetAbstract;
 
-public class RenderedAdjustedFacetForParameterLayoutAnnotation extends RenderedAdjustedFacetAbstract {
+public class RenderedAdjustedFacetForParameterLayoutAnnotation
+extends RenderedAdjustedFacetAbstract {
 
-    public static RenderedAdjustedFacet create(
+    public static Optional<RenderedAdjustedFacet> create(
             final Optional<ParameterLayout> parameterLayoutIfAny,
             final FacetHolder holder) {
 
@@ -45,13 +46,12 @@ public class RenderedAdjustedFacetForParameterLayoutAnnotation extends RenderedA
                     default:
                     }
                     throw new IllegalStateException("renderDay '" + renderDay + "' not recognised");
-                })
-                .orElse(null);
+                });
     }
 
     public static final int ADJUST_BY = -1;
 
-    private RenderedAdjustedFacetForParameterLayoutAnnotation(FacetHolder holder) {
+    private RenderedAdjustedFacetForParameterLayoutAnnotation(final FacetHolder holder) {
         super(ADJUST_BY, holder);
     }
 

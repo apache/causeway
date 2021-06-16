@@ -20,28 +20,18 @@
 package org.apache.isis.core.metamodel.facets.object.defaults;
 
 import org.apache.isis.applib.adapters.DefaultsProvider;
-import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public class DefaultedFacetUsingDefaultsProvider extends FacetAbstract implements DefaultedFacet {
+public class DefaultedFacetUsingDefaultsProvider
+extends DefaultedFacetAbstract
+implements DefaultedFacet {
 
-    private final DefaultsProvider<?> defaultsProvider;
-
-    public DefaultedFacetUsingDefaultsProvider(final DefaultsProvider<?> parser, final FacetHolder holder) {
-        super(DefaultedFacet.class, holder, Derivation.NOT_DERIVED);
-        this.defaultsProvider = parser;
+    public DefaultedFacetUsingDefaultsProvider(
+            final DefaultsProvider<?> defaultsProvider,
+            final FacetHolder holder) {
+        super(defaultsProvider, holder);
     }
 
-    @Override
-    protected String toStringValues() {
-        getServiceInjector().injectServicesInto(defaultsProvider);
-        return defaultsProvider.toString();
-    }
-
-    @Override
-    public Object getDefault() {
-        getServiceInjector().injectServicesInto(defaultsProvider);
-        return defaultsProvider.getDefaultValue();
-    }
+   
 
 }

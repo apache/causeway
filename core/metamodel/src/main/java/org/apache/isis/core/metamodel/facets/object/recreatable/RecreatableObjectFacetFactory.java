@@ -22,15 +22,15 @@ package org.apache.isis.core.metamodel.facets.object.recreatable;
 import java.lang.reflect.Method;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.isis.applib.RecreatableDomainObject;
 import org.apache.isis.applib.ViewModel;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
@@ -48,9 +48,11 @@ implements
     MetaModelRefiner,
     PostConstructMethodCache {
 
+    @Inject
     public RecreatableObjectFacetFactory(
-            final @NonNull MethodByClassMap postConstructMethodsCache) {
-        super(FeatureType.OBJECTS_ONLY);
+            final MetaModelContext mmc,
+            final MethodByClassMap postConstructMethodsCache) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
         this.postConstructMethodsCache = postConstructMethodsCache;
     }
 
@@ -65,64 +67,65 @@ implements
 
         val facetHolder = processClassContext.getFacetHolder();
         val type = processClassContext.getCls();
+        val postConstructMethodCache = this;
 
         // ViewModel interface
         if (ViewModel.class.isAssignableFrom(processClassContext.getCls())) {
-            final PostConstructMethodCache postConstructMethodCache = this;
-            FacetUtil.addFacet(new RecreatableObjectFacetForRecreatableObjectInterface(
-                    facetHolder, postConstructMethodCache));
+            FacetUtil.addFacet(
+                    new RecreatableObjectFacetForRecreatableObjectInterface(
+                            facetHolder, postConstructMethodCache));
         }
 
         // RecreatableDomainObject interface
         if (RecreatableDomainObject.class.isAssignableFrom(type)) {
-            final PostConstructMethodCache postConstructMethodCache = this;
-            FacetUtil.addFacet(new RecreatableObjectFacetForRecreatableDomainObjectInterface(
-                    facetHolder, postConstructMethodCache));
+            FacetUtil.addFacet(
+                    new RecreatableObjectFacetForRecreatableDomainObjectInterface(
+                            facetHolder, postConstructMethodCache));
         }
 
         // XmlRootElement annotation
-        final XmlRootElement xmlRootElement = Annotations.getAnnotation(type, XmlRootElement.class);
-        // handle with highest precedence
-        FacetUtil.replaceIfAlreadyPresent(create(xmlRootElement, facetHolder));
+        val xmlRootElementIfAny = processClassContext.synthesizeOnType(XmlRootElement.class);
+        if(xmlRootElementIfAny.isPresent()) {
+            FacetUtil.addFacet(
+                    new RecreatableObjectFacetForXmlRootElementAnnotation(
+                            facetHolder, postConstructMethodCache));
+        }
 
         // DomainObject(nature=VIEW_MODEL) is managed by the DomainObjectAnnotationFacetFactory
     }
 
-    private ViewModelFacet create(final XmlRootElement annotation, final FacetHolder holder) {
-        final PostConstructMethodCache postConstructMethodCache = this;
-        return annotation != null
-                ? new RecreatableObjectFacetForXmlRootElementAnnotation(holder, postConstructMethodCache)
-                        : null;
-    }
+
 
     // //////////////////////////////////////
 
     @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+    public void refineProgrammingModel(final ProgrammingModel programmingModel) {
 
         programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec -> {
 
-            val viewModelFacet = objectSpec.getFacet(ViewModelFacet.class);
-            val underlyingFacet = viewModelFacet != null ? viewModelFacet.getUnderlyingFacet() : null;
-            if(underlyingFacet == null) {
-                return;
-            }
-            if(underlyingFacet.getClass() != viewModelFacet.getClass()) {
-                ValidationFailure.raiseFormatted(
-                        objectSpec,
-                        "%s: has multiple incompatible annotations/interfaces indicating that " +
-                                "it is a recreatable object of some sort (%s and %s)",
-                                objectSpec.getFullIdentifier(),
-                                viewModelFacet.getClass().getSimpleName(),
-                                underlyingFacet.getClass().getSimpleName());
-            }
+            objectSpec.lookupFacet(ViewModelFacet.class)
+            .map(ViewModelFacet::getSharedFacetRankingElseFail)
+            .ifPresent(facetRanking->facetRanking
+                    .visitTopRankPairsSemanticDiffering(ViewModelFacet.class, (a, b)->{
+
+                            ValidationFailure.raiseFormatted(
+                                    objectSpec,
+                                    "%s: has multiple incompatible annotations/interfaces indicating that " +
+                                            "it is a recreatable object of some sort (%s and %s)",
+                                            objectSpec.getFullIdentifier(),
+                                            a.getClass().getSimpleName(),
+                                            b.getClass().getSimpleName());
+
+
+                    }));
+
         });
     }
 
 
     // //////////////////////////////////////
 
-    private final MethodByClassMap postConstructMethodsCache;
+    private final @NonNull MethodByClassMap postConstructMethodsCache;
 
     @Override
     public Method postConstructMethodFor(final Object pojo) {

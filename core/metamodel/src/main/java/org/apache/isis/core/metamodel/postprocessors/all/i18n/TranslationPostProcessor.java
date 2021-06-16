@@ -21,13 +21,11 @@ package org.apache.isis.core.metamodel.postprocessors.all.i18n;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.services.i18n.TranslationContext;
-import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -35,83 +33,61 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
-import lombok.val;
-
 public class TranslationPostProcessor
 extends ObjectSpecificationPostProcessorAbstract {
 
-    @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification) {
-        addFacetsFor(objectSpecification);
+    @Inject
+    public TranslationPostProcessor(final MetaModelContext metaModelContext) {
+        super(metaModelContext);
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction act) {
-        addFacetsFor(act);
+    public boolean isEnabled() {
+        // force PoWriter to be called to capture text that needs translating
+        return super.getMetaModelContext().getTranslationService().getMode().isWrite();
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction objectAction, ObjectActionParameter param) {
-        addFacetsFor(param);
+    protected void doPostProcess(final ObjectSpecification objectSpecification) {
+        memoizeTranslations(objectSpecification);
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, OneToOneAssociation prop) {
-        addFacetsFor(prop);
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction act) {
+        memoizeTranslations(act);
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, OneToManyAssociation coll) {
-        addFacetsFor(coll);
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction, final ObjectActionParameter param) {
+        memoizeTranslations(param);
+    }
+
+    @Override
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToOneAssociation prop) {
+        memoizeTranslations(prop);
+    }
+
+    @Override
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
+        memoizeTranslations(coll);
 
     }
 
     // -- HELPER
 
-    private void addFacetsFor(final IdentifiedHolder identifiedHolder) {
-        val translationContext = TranslationContext.forTranslationContextHolder(identifiedHolder.getIdentifier());
-        translateName(identifiedHolder, translationContext);
-        translateDescription(identifiedHolder, translationContext);
+    private void memoizeTranslations(final FacetHolder facetHolder) {
+        facetHolder
+            .lookupFacet(NamedFacet.class)
+            .ifPresent(NamedFacet::translated); // memoize translation
+
+        facetHolder
+            .lookupFacet(DescribedAsFacet.class)
+            .ifPresent(DescribedAsFacet::translated); // memoize translation
+
+        facetHolder
+            .lookupFacet(PluralFacet.class)
+            .ifPresent(PluralFacet::translated); // memoize translation
     }
 
-    void translateName(final IdentifiedHolder identifiedHolder, final TranslationContext translationContext) {
-        final NamedFacet facet = identifiedHolder.getFacet(NamedFacet.class);
-        if(facet == null) {
-            // not expected...
-            return;
-        }
-        final String originalText = facet.value();
-        if (isNullOrEmptyWhenTrimmed(originalText)) {
-            // not expected...
-            return;
-        }
-
-        val namedFacetTranslated
-            = new NamedFacetTranslated(translationContext, originalText, translationService, identifiedHolder);
-        namedFacetTranslated.setUnderlyingFacet(facet);
-        FacetUtil.addFacet(namedFacetTranslated);
-    }
-
-    void translateDescription(final IdentifiedHolder identifiedHolder, final TranslationContext translationContext) {
-
-        val describedAsFacet = identifiedHolder.getFacet(DescribedAsFacet.class);
-        if(describedAsFacet == null) {
-            return;
-        }
-        final String originalText = describedAsFacet.value();
-        if (isNullOrEmptyWhenTrimmed(originalText)) {
-            return;
-        }
-
-        FacetUtil.addFacet(new DescribedAsFacetTranslated(
-                translationContext, originalText, translationService, identifiedHolder));
-    }
-
-    static boolean isNullOrEmptyWhenTrimmed(final String originalText) {
-        return originalText == null || _Strings.isNullOrEmpty(originalText.trim());
-    }
-
-    @Inject
-    TranslationService translationService;
 
 }

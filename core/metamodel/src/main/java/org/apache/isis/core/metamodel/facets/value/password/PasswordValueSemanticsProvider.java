@@ -32,7 +32,7 @@ public class PasswordValueSemanticsProvider
 extends ValueSemanticsProviderAndFacetAbstract<Password>
 implements PasswordValueFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return PasswordValueFacet.class;
     }
 

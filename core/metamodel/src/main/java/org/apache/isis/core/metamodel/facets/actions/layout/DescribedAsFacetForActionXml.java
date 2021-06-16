@@ -19,23 +19,30 @@
 
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbstract;
 
-public class DescribedAsFacetForActionXml extends DescribedAsFacetAbstract {
+public class DescribedAsFacetForActionXml
+extends DescribedAsFacetAbstract {
 
-    public static DescribedAsFacet create(ActionLayoutData actionLayout, FacetHolder holder) {
+    public static Optional<DescribedAsFacet> create(
+            final ActionLayoutData actionLayout,
+            final FacetHolder holder) {
         if(actionLayout == null) {
-            return null;
+            return Optional.empty();
         }
         final String describedAs = _Strings.emptyToNull(actionLayout.getDescribedAs());
-        return describedAs != null ? new DescribedAsFacetForActionXml(describedAs, holder) : null;
+        return describedAs != null
+                ? Optional.of(new DescribedAsFacetForActionXml(describedAs, holder))
+                : Optional.empty();
     }
 
-    private DescribedAsFacetForActionXml(String value, FacetHolder holder) {
+    private DescribedAsFacetForActionXml(final String value, final FacetHolder holder) {
         super(value, holder);
     }
 

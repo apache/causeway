@@ -25,13 +25,12 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public class ValueFacetSimple extends FacetAbstract implements ValueFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return ValueFacet.class;
     }
 
     public ValueFacetSimple(FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
-        super.setFacetAliasType(ValueFacet.class);
+        super(type(), holder);
     }
 
 }

@@ -29,13 +29,10 @@ import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFace
 
 import lombok.val;
 
-public abstract class MandatoryFacetForPropertyAnnotation extends MandatoryFacetAbstract {
+public abstract class MandatoryFacetForPropertyAnnotation
+extends MandatoryFacetAbstract {
 
-    public MandatoryFacetForPropertyAnnotation(final FacetHolder holder, final Semantics semantics) {
-        super(holder, semantics);
-    }
-
-    public static MandatoryFacet create(
+    public static java.util.Optional<MandatoryFacet> create(
             final java.util.Optional<Property> propertyIfAny,
             final Method method,
             final FacetHolder holder) {
@@ -46,7 +43,7 @@ public abstract class MandatoryFacetForPropertyAnnotation extends MandatoryFacet
 
         val returnType = method.getReturnType();
         if (returnType.isPrimitive()) {
-            return new MandatoryFacetForPropertyAnnotation.Primitive(holder);
+            return java.util.Optional.of(new MandatoryFacetForPropertyAnnotation.Primitive(holder));
         }
 
         return propertyIfAny
@@ -65,8 +62,11 @@ public abstract class MandatoryFacetForPropertyAnnotation extends MandatoryFacet
                     default:
                     }
                     throw new IllegalStateException("optionality '" + optionality + "' not recognised");
-                })
-                .orElse(null);
+                });
+    }
+
+    public MandatoryFacetForPropertyAnnotation(final FacetHolder holder, final Semantics semantics) {
+        super(holder, semantics);
     }
 
     public static class Primitive extends MandatoryFacetForPropertyAnnotation {

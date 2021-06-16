@@ -19,15 +19,14 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
-import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.events.ui.IconUiEvent;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacetAbstract;
@@ -35,9 +34,10 @@ import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
-public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent extends IconFacetAbstract {
+public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent
+extends IconFacetAbstract {
 
-    public static Facet create(
+    public static Optional<IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent> create(
             final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final MetamodelEventService metamodelEventService,
             final IsisConfiguration configuration,
@@ -53,8 +53,7 @@ public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent extends Ic
                 .map(iconUiEvent -> {
                     return new IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent(
                             iconUiEvent, metamodelEventService, facetHolder);
-                })
-                .orElse(null);
+                });
     }
 
     private final Class<? extends IconUiEvent<?>> iconUiEventClass;
@@ -64,7 +63,7 @@ public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent extends Ic
             final Class<? extends IconUiEvent<?>> iconUiEventClass,
                     final MetamodelEventService metamodelEventService,
                     final FacetHolder holder) {
-        super(holder);
+        super(holder, Precedence.EVENT);
         this.iconUiEventClass = iconUiEventClass;
         this.metamodelEventService = metamodelEventService;
     }
@@ -84,9 +83,12 @@ public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent extends Ic
 
         if(iconName == null) {
             // ie no subscribers out there...
-            final Facet underlyingFacet = getUnderlyingFacet();
-            if(underlyingFacet instanceof IconFacet) {
-                final IconFacet underlyingIconFacet = (IconFacet) underlyingFacet;
+
+            final IconFacet underlyingIconFacet = getSharedFacetRanking()
+            .flatMap(facetRanking->facetRanking.getWinnerNonEvent(IconFacet.class))
+            .orElse(null);
+
+            if(underlyingIconFacet!=null) {
                 return underlyingIconFacet.iconName(owningAdapter);
             }
         }
@@ -109,9 +111,10 @@ public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent extends Ic
         }
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("iconUiEventClass", iconUiEventClass);
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("iconUiEventClass", iconUiEventClass);
     }
 
 }

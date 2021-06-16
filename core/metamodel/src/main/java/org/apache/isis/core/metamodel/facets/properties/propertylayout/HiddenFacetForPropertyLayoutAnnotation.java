@@ -24,25 +24,24 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public class HiddenFacetForPropertyLayoutAnnotation extends HiddenFacetAbstract {
+public class HiddenFacetForPropertyLayoutAnnotation
+extends HiddenFacetAbstract {
 
-    public static HiddenFacet create(
+    public static Optional<HiddenFacetForPropertyLayoutAnnotation> create(
             final Optional<PropertyLayout> propertyLayoutIfAny,
             final FacetHolder holder) {
 
         return propertyLayoutIfAny
                 .map(PropertyLayout::hidden)
                 .filter(where -> where != null && where != Where.NOT_SPECIFIED)
-                .map(where -> new HiddenFacetForPropertyLayoutAnnotation(where, holder))
-                .orElse(null);
+                .map(where -> new HiddenFacetForPropertyLayoutAnnotation(where, holder));
     }
 
     private HiddenFacetForPropertyLayoutAnnotation(final Where where, final FacetHolder holder) {
-        super(HiddenFacetForPropertyLayoutAnnotation.class, where, holder);
+        super(where, holder);
     }
 
     @Override

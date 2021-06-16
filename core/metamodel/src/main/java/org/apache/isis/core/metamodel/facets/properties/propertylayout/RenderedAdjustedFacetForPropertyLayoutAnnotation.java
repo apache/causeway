@@ -24,34 +24,33 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.RenderDay;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacetAbstract;
 
-public class RenderedAdjustedFacetForPropertyLayoutAnnotation extends RenderedAdjustedFacetAbstract {
+public class RenderedAdjustedFacetForPropertyLayoutAnnotation
+extends RenderedAdjustedFacetAbstract {
 
-    public static RenderedAdjustedFacet create(
+    public static Optional<RenderedAdjustedFacetForPropertyLayoutAnnotation> create(
             final Optional<PropertyLayout> propertyLayoutIfAny,
             final FacetHolder holder) {
 
         return propertyLayoutIfAny
-                .map(PropertyLayout::renderDay)
-                .filter(renderDay -> renderDay != RenderDay.NOT_SPECIFIED)
-                .map(renderDay -> {
-                    switch (renderDay) {
-                    case AS_DAY:
-                        return null;
-                    case AS_DAY_BEFORE:
-                        return new RenderedAdjustedFacetForPropertyLayoutAnnotation(holder);
-                    default:
-                    }
-                    throw new IllegalStateException("renderDay '" + renderDay + "' not recognised");
-                })
-                .orElse(null);
+        .map(PropertyLayout::renderDay)
+        .filter(renderDay -> renderDay != RenderDay.NOT_SPECIFIED)
+        .map(renderDay -> {
+            switch (renderDay) {
+            case AS_DAY:
+                return null;
+            case AS_DAY_BEFORE:
+                return new RenderedAdjustedFacetForPropertyLayoutAnnotation(holder);
+            default:
+            }
+            throw new IllegalStateException("renderDay '" + renderDay + "' not recognised");
+        });
     }
 
     public static final int ADJUST_BY = -1;
 
-    private RenderedAdjustedFacetForPropertyLayoutAnnotation(FacetHolder holder) {
+    private RenderedAdjustedFacetForPropertyLayoutAnnotation(final FacetHolder holder) {
         super(ADJUST_BY, holder);
     }
 

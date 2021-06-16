@@ -21,13 +21,17 @@ package org.apache.isis.core.metamodel.facets.value.temporal.offsetdatetime;
 
 import java.time.OffsetDateTime;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacetUsingSemanticsProviderFactory;
 
 public class OffsetDateTimeValueFacetUsingSemanticsProviderFactory
 extends TemporalValueFacetUsingSemanticsProviderFactory<OffsetDateTime> {
 
-    public OffsetDateTimeValueFacetUsingSemanticsProviderFactory() {
-        super(OffsetDateTime.class, OffsetDateTimeValueSemanticsProvider::new);
+    @Inject
+    public OffsetDateTimeValueFacetUsingSemanticsProviderFactory(final MetaModelContext mmc) {
+        super(mmc, OffsetDateTime.class, OffsetDateTimeValueSemanticsProvider::new);
     }
 
 }

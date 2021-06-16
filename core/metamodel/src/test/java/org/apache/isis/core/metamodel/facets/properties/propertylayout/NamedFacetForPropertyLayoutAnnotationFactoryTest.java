@@ -21,24 +21,24 @@ package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
+import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+
 import lombok.val;
 
-public class NamedFacetForPropertyLayoutAnnotationFactoryTest 
+public class NamedFacetForPropertyLayoutAnnotationFactoryTest
 extends AbstractFacetFactoryTest {
 
     public void testPropertyLayoutAnnotationNamed() {
-        val facetFactory = createPropertyLayoutFacetFactory();
+        val facetFactory = createPropertyLayoutFacetFactory(metaModelContext);
 
         class Customer {
             @PropertyLayout(named = "1st name")
@@ -52,19 +52,19 @@ extends AbstractFacetFactoryTest {
         final FacetFactory.ProcessMethodContext processMethodContext
             = new FacetFactory.ProcessMethodContext(Customer.class, null, method,
                         methodRemover, facetedMethod);
-        
+
         facetFactory.process(processMethodContext);
 
         // then
         final NamedFacet facet = facetedMethod.getFacet(NamedFacet.class);
         assertThat(facet, is(notNullValue()));
         assertThat(facet, is(instanceOf(NamedFacetForPropertyLayoutAnnotation.class)));
-        assertThat(facet.value(), is(equalTo("1st name")));
+        assertThat(facet.text(), is(equalTo("1st name")));
         assertThat(facet.escaped(), is(true));
     }
 
     public void testPropertyLayoutAnnotationNamedEscapedFalse() {
-        val facetFactory = createPropertyLayoutFacetFactory();
+        val facetFactory = createPropertyLayoutFacetFactory(metaModelContext);
 
         class Customer {
             @PropertyLayout(named = "1st name", namedEscaped = false)
@@ -75,21 +75,21 @@ extends AbstractFacetFactoryTest {
         final Method method = findMethod(Customer.class, "getFirstName");
 
         // when
-        final FacetFactory.ProcessMethodContext processMethodContext 
+        final FacetFactory.ProcessMethodContext processMethodContext
             = new FacetFactory.ProcessMethodContext(Customer.class, null, method,
                     methodRemover, facetedMethod);
-        
+
         facetFactory.process(processMethodContext);
 
         // then
         final NamedFacet facet = facetedMethod.getFacet(NamedFacet.class);
         assertThat(facet, is(notNullValue()));
         assertThat(facet, is(instanceOf(NamedFacetForPropertyLayoutAnnotation.class)));
-        assertThat(facet.value(), is(equalTo("1st name")));
+        assertThat(facet.text(), is(equalTo("1st name")));
         assertThat(facet.escaped(), is(false));
     }
 
-    
-    
-    
+
+
+
 }

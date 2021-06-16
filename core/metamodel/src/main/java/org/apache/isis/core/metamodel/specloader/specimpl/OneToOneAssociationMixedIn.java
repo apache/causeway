@@ -21,12 +21,12 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacetForMemberName;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetForContributee;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
@@ -61,7 +61,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
      * use layout metadata to position the contributee in different ways)
      */
     @Getter(onMethod = @__(@Override))
-    private final FacetHolder facetHolder = new FacetHolderImpl();
+    private final FacetHolder facetHolder;
 
     public OneToOneAssociationMixedIn(
             final ObjectActionDefault mixinAction,
@@ -74,8 +74,12 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
                             mixeeSpec.getCorrespondingClass(),
                             mixeeSpec.getLogicalTypeName()),
                     determineIdFrom(mixinAction),
-                    mixinAction.getFacetedMethod().getIdentifier().getMemberParameterClassNames()),
+                    mixinAction.getFacetedMethod().getFeatureIdentifier().getMemberParameterClassNames()),
                 mixinAction.getFacetedMethod(), mixinAction.getReturnType());
+
+        this.facetHolder = FacetHolderAbstract.simple(
+                mixeeSpec.getMetaModelContext(),
+                super.getFeatureIdentifier());
 
         this.mixinType = mixinType;
         this.mixinAction = mixinAction;
@@ -84,9 +88,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
         //
         // ensure the contributed property cannot be modified
         //
-        final DisabledFacet disabledFacet = disabledFacet();
-
-        FacetUtil.addFacet(disabledFacet);
+        FacetUtil.addFacet(disabledFacet());
 
         //
         // in addition, copy over facets from contributed to own.
@@ -95,15 +97,16 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
         // PropertyAnnotationFacetFactory is also run against actions.
         //
 
-        FacetUtil.copyFacets(mixinAction.getFacetedMethod(), facetHolder);
+        FacetUtil.copyFacetsTo(mixinAction.getFacetedMethod(), facetHolder);
 
 
         // adjust name if necessary
-        final String name = getName();
+        val isExplicitlyNamed = lookupNonFallbackFacet(NamedFacet.class)
+                .isPresent();
 
-        if(_Strings.isNullOrEmpty(name) || name.equalsIgnoreCase(mixinMethodName)) {
+        if(!isExplicitlyNamed) {
             String memberName = determineNameFrom(mixinAction);
-            FacetUtil.addFacet(new NamedFacetInferred(memberName, facetHolder));
+            FacetUtil.addFacet(new NamedFacetForMemberName(memberName, facetHolder));
         }
 
     }

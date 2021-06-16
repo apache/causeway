@@ -32,7 +32,9 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
+import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.layout.group.GroupIdAndName;
 import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacetAbstract;
@@ -76,20 +78,21 @@ public class DeweyOrderSetTest extends TestCase {
         }
     }
 
-    private final IdentifiedHolder lastNameMember = FacetedMethod.createForProperty(Customer.class, "Last Name");
-    private final IdentifiedHolder firstNameMember = FacetedMethod.createForProperty(Customer.class, "First Name");
-    private final IdentifiedHolder houseNumberMember = FacetedMethod.createForProperty(Customer.class, "House Number");
-    private final IdentifiedHolder streetNameMember = FacetedMethod.createForProperty(Customer.class, "Street Name");
-    private final IdentifiedHolder postalTownMember = FacetedMethod.createForProperty(Customer.class, "Postal Town");
-    private final List<IdentifiedHolder> lastNameAndFirstName = _Lists.of(lastNameMember, firstNameMember);
-    private final List<IdentifiedHolder> nameAndAddressMembers = _Lists.of(lastNameMember, firstNameMember, houseNumberMember, streetNameMember, postalTownMember);
-    private final List<IdentifiedHolder> lastNameFirstNameAndPostalTown = _Lists.of(lastNameMember, firstNameMember, postalTownMember);
+    private final MetaModelContext mmc = MetaModelContext_forTesting.buildDefault();
+    private final FacetedMethod lastNameMember = FacetedMethod.createForProperty(mmc, Customer.class, "Last Name");
+    private final FacetedMethod firstNameMember = FacetedMethod.createForProperty(mmc, Customer.class, "First Name");
+    private final FacetedMethod houseNumberMember = FacetedMethod.createForProperty(mmc, Customer.class, "House Number");
+    private final FacetedMethod streetNameMember = FacetedMethod.createForProperty(mmc, Customer.class, "Street Name");
+    private final FacetedMethod postalTownMember = FacetedMethod.createForProperty(mmc, Customer.class, "Postal Town");
+    private final List<FacetedMethod> lastNameAndFirstName = _Lists.of(lastNameMember, firstNameMember);
+    private final List<FacetedMethod> nameAndAddressMembers = _Lists.of(lastNameMember, firstNameMember, houseNumberMember, streetNameMember, postalTownMember);
+    private final List<FacetedMethod> lastNameFirstNameAndPostalTown = _Lists.of(lastNameMember, firstNameMember, postalTownMember);
 
     TranslationService mockTranslationService;
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
-    
+
 	static TranslationContext ctx = TranslationContext.ofName("test");
 
     @Override
@@ -120,7 +123,7 @@ public class DeweyOrderSetTest extends TestCase {
     }
 
     public void testDefaultGroup() {
-    	    	
+
         setupLayoutFacets("", "1", lastNameMember);
         setupLayoutFacets("", "2", firstNameMember);
 
@@ -267,10 +270,10 @@ public class DeweyOrderSetTest extends TestCase {
         assertEquals(postalTownMember, orderSet.elementList().get(1));
         assertEquals(firstNameMember, orderSet.elementList().get(2));
     }
-    
+
     // -- HELPER
-    
-    void setupLayoutFacets(String groupId, String sequence, IdentifiedHolder facetedHolder) {
+
+    void setupLayoutFacets(String groupId, String sequence, FacetHolder facetedHolder) {
         facetedHolder.addFacet(new LayoutGroupFacetAbstract(GroupIdAndName.of(groupId, ""), facetedHolder) {});
         facetedHolder.addFacet(new LayoutOrderFacetAbstract(sequence, facetedHolder) {});
     }

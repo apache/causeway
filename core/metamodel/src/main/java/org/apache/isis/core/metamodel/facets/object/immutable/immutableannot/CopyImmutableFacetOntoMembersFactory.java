@@ -19,6 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.object.immutable.immutableannot;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -27,8 +31,9 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class CopyImmutableFacetOntoMembersFactory extends FacetFactoryAbstract {
 
-    public CopyImmutableFacetOntoMembersFactory() {
-        super(FeatureType.MEMBERS);
+    @Inject
+    public CopyImmutableFacetOntoMembersFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.MEMBERS);
     }
 
     @Override
@@ -36,10 +41,14 @@ public class CopyImmutableFacetOntoMembersFactory extends FacetFactoryAbstract {
         final FacetedMethod member = processMethodContext.getFacetHolder();
         final Class<?> owningClass = processMethodContext.getCls();
         final ObjectSpecification owningSpec = getSpecificationLoader().loadSpecification(owningClass);
-        final ImmutableFacet facet = owningSpec.getFacet(ImmutableFacet.class);
-        if (facet != null) {
-            facet.copyOnto(member);
-        }
+
+        // assuming, that immutability is an object-type level concern and not a member-type level concern
+        // it is save to just copy onto members, as ImmutableFacet(s) should never ever be declared
+        // on members individually (such that there cannot be any conflicts while doing this copies)
+        owningSpec
+            .lookupFacet(ImmutableFacet.class)
+            .ifPresent(immutableFacet->
+                FacetUtil.addFacet(immutableFacet.clone(member)));
     }
 
 }

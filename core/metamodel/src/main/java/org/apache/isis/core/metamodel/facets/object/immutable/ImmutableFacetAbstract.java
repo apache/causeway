@@ -19,20 +19,53 @@
 
 package org.apache.isis.core.metamodel.facets.object.immutable;
 
+import java.util.function.BiConsumer;
+
+import javax.annotation.Nullable;
+
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public abstract class ImmutableFacetAbstract extends FacetAbstract implements ImmutableFacet {
+public abstract class ImmutableFacetAbstract
+extends FacetAbstract
+implements ImmutableFacet {
 
-    public static Class<? extends Facet> type() {
+    private static final Class<? extends Facet> type() {
         return ImmutableFacet.class;
     }
 
-    public ImmutableFacetAbstract(final FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+    protected final @Nullable String reason;
+
+    public ImmutableFacetAbstract(
+            final String reason,
+            final FacetHolder holder) {
+        super(type(), holder);
+        this.reason = reason;
+    }
+
+    public ImmutableFacetAbstract(
+            final String reason,
+            final FacetHolder holder,
+            final Facet.Precedence precedence) {
+        super(type(), holder, precedence);
+        this.reason = reason;
+    }
+
+    @Override
+    public final String disabledReason(final ManagedObject targetAdapter) {
+        return !_Strings.isNullOrEmpty(reason)
+                ? reason
+                : "Always immmutable"; // assuming there is no ImmutableFacet(s) with inverted semantics
+    }
+
+    @Override
+    public final void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("reason", reason);
     }
 
     /**

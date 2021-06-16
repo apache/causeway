@@ -19,62 +19,46 @@
 
 package org.apache.isis.core.metamodel.facetapi;
 
-import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
-import lombok.Setter;
+import lombok.Getter;
+import lombok.NonNull;
 import lombok.val;
 
+public abstract class FacetAbstract
+implements Facet, HasMetaModelContext {
 
-public abstract class FacetAbstract implements Facet, HasMetaModelContext {
-
-    public enum Derivation {
-        DERIVED,
-        NOT_DERIVED
-    }
-
-    private Facet underlyingFacet;
-
-    private final Class<? extends Facet> facetType;
-    @Setter private Class<? extends Facet> facetAliasType;
+    private final @NonNull Class<? extends Facet> facetType;
     private Set<Facet> contributedFacets; // lazy init
 
-    private final boolean derived;
-    private FacetHolder holder;
+    @Getter(onMethod_ = {@Override}) private final @NonNull Facet.Precedence precedence;
 
-    /**
-     * Populated in {@link #setFacetHolder(FacetHolder)} if the provided holder
-     * implements {@link IdentifiedHolder}.
-     *
-     * <p>
-     * Otherwise is <tt>null</tt>.
-     */
-    private IdentifiedHolder identifiedHolder;
+    @Getter(onMethod_ = {@Override})
+    private final @NonNull FacetHolder facetHolder;
 
     public FacetAbstract(
-            Class<? extends Facet> facetType,
-            FacetHolder holder,
-            Derivation derivation) {
+            final Class<? extends Facet> facetType,
+            final FacetHolder facetHolder,
+            final Facet.Precedence precedence) {
 
-        this.facetType = requires(facetType, "facetType");
-        setFacetHolder(holder);
-        this.derived = (derivation == Derivation.DERIVED);
+        this.facetType = facetType;
+        this.facetHolder = facetHolder;
+        this.precedence = precedence;
     }
 
     protected FacetAbstract(
-            Class<? extends Facet> facetType,
-            FacetHolder holder) {
+            final Class<? extends Facet> facetType,
+            final FacetHolder facetHolder) {
 
-        this(facetType, holder, Derivation.NOT_DERIVED);
+        this(facetType, facetHolder, Facet.Precedence.DEFAULT);
     }
 
     @Override
@@ -83,106 +67,8 @@ public abstract class FacetAbstract implements Facet, HasMetaModelContext {
     }
 
     @Override
-    public Class<? extends Facet> facetAliasType() {
-        return facetAliasType!=facetType ? facetAliasType : null; // avoids facetAliasType equals facetType
-    }
-
-    @Override
-    public FacetHolder getFacetHolder() {
-        return holder;
-    }
-
-    @Override
     public MetaModelContext getMetaModelContext() {
-        return holder.getMetaModelContext();
-    }
-
-    @Override
-    public boolean isDerived() {
-        return derived;
-    }
-
-    /**
-     * Convenience method that returns {@link #getFacetHolder()} downcast to
-     * {@link IdentifiedHolder} if the implementation does indeed inherit from
-     * {@link IdentifiedHolder}, otherwise <tt>null</tt>.
-     */
-    public IdentifiedHolder getIdentified() {
-        return identifiedHolder;
-    }
-
-    @Override
-    public Facet getUnderlyingFacet() {
-        return underlyingFacet;
-    }
-
-    @Override
-    public void setUnderlyingFacet(final Facet underlyingFacet) {
-        if(underlyingFacet != null) {
-//            if(underlyingFacet instanceof MultiTypedFacet) {
-//                val multiTypedFacet = (MultiTypedFacet) underlyingFacet;
-//                val matches = compatible(multiTypedFacet);
-//                if(!matches) {
-//                    throw new IllegalArgumentException("illegal argument, expected underlying facet (a multi-valued facet) to have equivalent to the facet type (or facet types) of this facet");
-//                }
-//            } else {
-
-                val underlyingFacetType = underlyingFacet.facetType();
-                if(!Objects.equals(underlyingFacetType, facetType)) {
-                    val msg = String.format(
-                            "type-missmatch: underlying facet's type '%s' "
-                            + "must match this facet's type '%s'",
-                            underlyingFacetType, facetType);
-                    throw _Exceptions.unrecoverable(msg);
-                }
-
- //           }
-        }
-        this.underlyingFacet = underlyingFacet;
-    }
-
-//    private boolean compatible(final MultiTypedFacet multiTypedFacet) {
-//
-//        if (!(this instanceof MultiTypedFacet)) {
-//            return multiTypedFacet.containsFacetTypeOf(this.facetType);
-//        }
-//
-//        val thisAsMultiTyped = (MultiTypedFacet) this;
-//
-//        return thisAsMultiTyped.facetTypes()
-//                .anyMatch(multiTypedFacet::containsFacetTypeOf);
-//    }
-
-    /**
-     * Assume implementation is <i>not</i> a no-op.
-     *
-     * <p>
-     * No-op implementations should override and return <tt>true</tt>.
-     */
-    @Override
-    public boolean isFallback() {
-        return false;
-    }
-
-    /**
-     * Default implementation of this method that returns <tt>true</tt>, ie
-     * should replace (none {@link #isFallback() no-op} implementations.
-     *
-     * <p>
-     * Implementations that don't wish to replace none no-op implementations
-     * should override and return <tt>false</tt>.
-     */
-    @Override
-    public boolean alwaysReplace() {
-        return true;
-    }
-
-    @Override
-    public void setFacetHolder(final FacetHolder facetHolder) {
-        this.holder = facetHolder;
-        this.identifiedHolder = (holder!=null && holder instanceof IdentifiedHolder)
-                ? (IdentifiedHolder) holder
-                        : null;
+        return facetHolder.getMetaModelContext();
     }
 
     protected String toStringValues() {
@@ -191,18 +77,9 @@ public abstract class FacetAbstract implements Facet, HasMetaModelContext {
 
     @Override
     public String toString() {
-        String details = "";
-        if (isValidating()) {
-            details += "Validating";
-        }
-        if (isDisabling()) {
-            details += (details.length() > 0 ? ";" : "") + "Disabling";
-        }
-        if (isHiding()) {
-            details += (details.length() > 0 ? ";" : "") + "Hiding";
-        }
-        if (!"".equals(details)) {
-            details = "interaction=" + details + ",";
+        String details = interactionAdvisors(";");
+        if (!details.isEmpty()) {
+            details = "interactionAdvisors=" + details + ",";
         }
 
         final String className = getClass().getName();
@@ -217,48 +94,29 @@ public abstract class FacetAbstract implements Facet, HasMetaModelContext {
         return className.substring(className.lastIndexOf('.') + 1) + "[" + details + stringValues + "]";
     }
 
-    private boolean isHiding() {
-        return Hiding.class.isAssignableFrom(getClass());
-    }
-
-    private boolean isDisabling() {
-        return Disabling.class.isAssignableFrom(getClass());
-    }
-
-    private boolean isValidating() {
-        return Validating.class.isAssignableFrom(getClass());
-    }
-
     @Override
-    public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        if(derived) {
-            attributeMap.put("derived", derived);
-        }
-        attributeMap.put("underlyingFacet", underlyingFacet);
-        if(isFallback()) {
-            attributeMap.put("noop", isFallback());
-        }
-        if(isHiding()) {
-            attributeMap.put("hiding", isHiding());
-        }
-        if(isDisabling()) {
-            attributeMap.put("disabling", isDisabling());
-        }
-        if(isValidating()) {
-            attributeMap.put("validating", isValidating());
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        visitor.accept("facet", this.getClass().getName());
+        visitor.accept("precedence", getPrecedence().name());
+
+        val interactionAdvisors = interactionAdvisors(", ");
+
+        // suppress 'advisors' if none
+        if(!interactionAdvisors.isEmpty()) {
+            visitor.accept("interactionAdvisors", interactionAdvisors);
         }
     }
 
     /**
      * Marker interface used within {@link #toString()}.
      */
-    public static interface Hiding {
+    public static interface HidingOrShowing {
     }
 
     /**
      * Marker interface used within {@link #toString()}.
      */
-    public static interface Disabling {
+    public static interface DisablingOrEnabling {
     }
 
     /**
@@ -267,10 +125,17 @@ public abstract class FacetAbstract implements Facet, HasMetaModelContext {
     public static interface Validating {
     }
 
+    private String interactionAdvisors(final String delimiter) {
+        return Stream.of(Validating.class, HidingOrShowing.class, DisablingOrEnabling.class)
+        .filter(marker->marker.isAssignableFrom(getClass()))
+        .map(Class::getSimpleName)
+        .collect(Collectors.joining(delimiter));
+    }
+
     // -- CONTRIBUTED FACET SUPPORT
 
     @Override
-    public void addContributedFacet(Facet contributedFacet) {
+    public void addContributedFacet(final Facet contributedFacet) {
         if(contributedFacets==null) {
             contributedFacets = _Sets.newHashSet();
         }
@@ -278,7 +143,7 @@ public abstract class FacetAbstract implements Facet, HasMetaModelContext {
     }
 
     @Override
-    public void forEachContributedFacet(Consumer<Facet> onContributedFacet) {
+    public void forEachContributedFacet(final Consumer<Facet> onContributedFacet) {
         if(contributedFacets!=null) {
             contributedFacets.forEach(onContributedFacet);
         }

@@ -19,40 +19,38 @@
 
 package org.apache.isis.core.metamodel.facets.members.describedas.annotprop;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+
+import lombok.val;
 
 public class DescribedAsFacetOnMemberFactory
 extends FacetFactoryAbstract {
 
-
-    public DescribedAsFacetOnMemberFactory() {
-        super(FeatureType.MEMBERS);
+    @Inject
+    public DescribedAsFacetOnMemberFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.MEMBERS);
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        DescribedAsFacet facet = createFromAnnotationOnReturnTypeIfPossible(processMethodContext);
-        // facet derived from type moved to post-processor
+        // (facet derived from type moved to post-processor)
 
-        // no-op if null
-        super.addFacet(facet);
+        val returnType = processMethodContext.getMethod().getReturnType();
+        val paramTypeSpec = getSpecificationLoader().loadSpecification(returnType);
+
+        addFacetIfPresent(
+                paramTypeSpec.lookupFacet(DescribedAsFacet.class)
+                .map(returnTypeDescribedAsFacet->
+                    new DescribedAsFacetOnMemberDerivedFromType(
+                            returnTypeDescribedAsFacet,
+                            processMethodContext.getFacetHolder())));
     }
-
-    private DescribedAsFacet createFromAnnotationOnReturnTypeIfPossible(final ProcessMethodContext processMethodContext) {
-        final Class<?> returnType = processMethodContext.getMethod().getReturnType();
-        final DescribedAsFacet returnTypeDescribedAsFacet = getDescribedAsFacet(returnType);
-        return returnTypeDescribedAsFacet != null ? new DescribedAsFacetOnMemberDerivedFromType(returnTypeDescribedAsFacet, processMethodContext.getFacetHolder()) : null;
-    }
-
-    private DescribedAsFacet getDescribedAsFacet(final Class<?> type) {
-        final ObjectSpecification paramTypeSpec = getSpecificationLoader().loadSpecification(type);
-        return paramTypeSpec.getFacet(DescribedAsFacet.class);
-    }
-
 
 
 }

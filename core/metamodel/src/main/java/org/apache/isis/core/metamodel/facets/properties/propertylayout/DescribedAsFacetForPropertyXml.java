@@ -19,23 +19,30 @@
 
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbstract;
 
-public class DescribedAsFacetForPropertyXml extends DescribedAsFacetAbstract {
+public class DescribedAsFacetForPropertyXml
+extends DescribedAsFacetAbstract {
 
-    public static DescribedAsFacet create(PropertyLayoutData propertyLayout, FacetHolder holder) {
+    public static Optional<DescribedAsFacet> create(
+            final PropertyLayoutData propertyLayout,
+            final FacetHolder holder) {
         if(propertyLayout == null) {
-            return null;
+            return Optional.empty();
         }
         final String describedAs = _Strings.emptyToNull(propertyLayout.getDescribedAs());
-        return describedAs != null ? new DescribedAsFacetForPropertyXml(describedAs, holder) : null;
+        return describedAs != null
+                ? Optional.of(new DescribedAsFacetForPropertyXml(describedAs, holder))
+                : Optional.empty();
     }
 
-    private DescribedAsFacetForPropertyXml(String value, FacetHolder holder) {
+    private DescribedAsFacetForPropertyXml(final String value, final FacetHolder holder) {
         super(value, holder);
     }
 

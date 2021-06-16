@@ -19,11 +19,14 @@
 
 package org.apache.isis.core.metamodel.postprocessors.propparam;
 
+import javax.inject.Inject;
+
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
-import org.apache.isis.core.metamodel.facets.param.choices.enums.ActionParameterChoicesFacetDerivedFromChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.enums.ActionParameterChoicesFacetDerivedFromChoicesFacetFactory;
+import org.apache.isis.core.metamodel.facets.param.choices.enums.ActionParameterChoicesFacetInferredFromChoicesFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.enums.PropertyChoicesFacetDerivedFromChoicesFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.enums.PropertyChoicesFacetDerivedFromChoicesFacetFactory;
@@ -41,38 +44,43 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 public class DeriveChoicesFromExistingChoicesPostProcessor
 extends ObjectSpecificationPostProcessorAbstract {
 
-    @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification) {
+    @Inject
+    public DeriveChoicesFromExistingChoicesPostProcessor(final MetaModelContext metaModelContext) {
+        super(metaModelContext);
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction act) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification) {
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, ObjectAction objectAction, final ObjectActionParameter parameter) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction act) {
+    }
+
+    @Override
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction, final ObjectActionParameter parameter) {
         if(parameter.containsNonFallbackFacet(ActionParameterChoicesFacet.class)) {
             return;
         }
         parameter.getSpecification()
         .lookupNonFallbackFacet(ChoicesFacet.class)
-        .ifPresent(choicesFacet -> FacetUtil.addFacet(new ActionParameterChoicesFacetDerivedFromChoicesFacet(
-                                    peerFor(parameter))));
+        .ifPresent(choicesFacet -> FacetUtil
+                .addFacet(new ActionParameterChoicesFacetInferredFromChoicesFacet(peerFor(parameter))));
     }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, final OneToOneAssociation property) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToOneAssociation property) {
         if(property.containsNonFallbackFacet(PropertyChoicesFacet.class)) {
             return;
         }
         property.getSpecification()
         .lookupNonFallbackFacet(ChoicesFacet.class)
-        .ifPresent(specFacet -> FacetUtil.addFacet(new PropertyChoicesFacetDerivedFromChoicesFacet(
-                                    facetedMethodFor(property))));
+        .ifPresent(specFacet -> FacetUtil
+                .addFacet(new PropertyChoicesFacetDerivedFromChoicesFacet(facetedMethodFor(property))));
    }
 
     @Override
-    protected void doPostProcess(ObjectSpecification objectSpecification, OneToManyAssociation coll) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
     }
 
 }

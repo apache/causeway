@@ -40,7 +40,7 @@ public abstract class HiddenFacetFromLayoutPropertiesAbstract extends HiddenFace
     }
 
     protected HiddenFacetFromLayoutPropertiesAbstract(final Where where, final FacetHolder holder) {
-        super(HiddenFacetFromLayoutPropertiesAbstract.class, where, holder);
+        super(where, holder);
     }
 
     @Override

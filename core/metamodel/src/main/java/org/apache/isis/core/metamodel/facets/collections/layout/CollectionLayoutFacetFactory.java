@@ -18,7 +18,10 @@
  */
 package org.apache.isis.core.metamodel.facets.collections.layout;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromCollectionLayoutAnnotation;
@@ -29,8 +32,9 @@ import lombok.val;
 public class CollectionLayoutFacetFactory
 extends FacetFactoryAbstract {
 
-    public CollectionLayoutFacetFactory() {
-        super(FeatureType.COLLECTIONS_AND_ACTIONS);
+    @Inject
+    public CollectionLayoutFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.COLLECTIONS_AND_ACTIONS);
     }
 
     @Override
@@ -43,37 +47,37 @@ extends FacetFactoryAbstract {
                         () -> MetaModelValidatorForAmbiguousMixinAnnotations
                         .addValidationFailure(processMethodContext.getFacetHolder(), CollectionLayout.class));
 
-        val cssClassFacet = CssClassFacetForCollectionLayoutAnnotation
-                .create(collectionLayoutIfAny, facetHolder);
-        super.addFacet(cssClassFacet);
+        addFacetIfPresent(
+                CssClassFacetForCollectionLayoutAnnotation
+                .create(collectionLayoutIfAny, facetHolder));
 
-        val defaultViewFacet = DefaultViewFacetForCollectionLayoutAnnotation
-                .create(collectionLayoutIfAny, getConfiguration(), facetHolder);
-        super.addFacet(defaultViewFacet);
+        addFacet(
+                DefaultViewFacetForCollectionLayoutAnnotation
+                .create(collectionLayoutIfAny, getConfiguration(), facetHolder));
 
-        val describedAsFacet = DescribedAsFacetForCollectionLayoutAnnotation
-                .create(collectionLayoutIfAny, facetHolder);
-        super.addFacet(describedAsFacet);
+        addFacetIfPresent(
+                DescribedAsFacetForCollectionLayoutAnnotation
+                .create(collectionLayoutIfAny, facetHolder));
 
-        val hiddenFacet = HiddenFacetForCollectionLayoutAnnotation
-                .create(collectionLayoutIfAny, facetHolder);
-        super.addFacet(hiddenFacet);
+        addFacetIfPresent(
+                HiddenFacetForCollectionLayoutAnnotation
+                .create(collectionLayoutIfAny, facetHolder));
 
-        val layoutOrderFacet = LayoutOrderFacetFromCollectionLayoutAnnotation
-                .create(collectionLayoutIfAny, facetHolder);
-        super.addFacet(layoutOrderFacet);
+        addFacetIfPresent(
+                LayoutOrderFacetFromCollectionLayoutAnnotation
+                .create(collectionLayoutIfAny, facetHolder));
 
-        val namedFacet = NamedFacetForCollectionLayoutAnnotation
-                .create(collectionLayoutIfAny, facetHolder);
-        super.addFacet(namedFacet);
+        addFacetIfPresent(
+                NamedFacetForCollectionLayoutAnnotation
+                .create(collectionLayoutIfAny, facetHolder));
 
-        val pagedFacet = PagedFacetForCollectionLayoutAnnotation
-                .create(collectionLayoutIfAny, facetHolder);
-        super.addFacet(pagedFacet);
+        addFacetIfPresent(
+                PagedFacetForCollectionLayoutAnnotation
+                .create(collectionLayoutIfAny, facetHolder));
 
-        val sortedByFacet = SortedByFacetForCollectionLayoutAnnotation
-                .create(collectionLayoutIfAny, facetHolder);
-        super.addFacet(sortedByFacet);
+        addFacetIfPresent(
+                SortedByFacetForCollectionLayoutAnnotation
+                .create(collectionLayoutIfAny, facetHolder));
     }
 
 }

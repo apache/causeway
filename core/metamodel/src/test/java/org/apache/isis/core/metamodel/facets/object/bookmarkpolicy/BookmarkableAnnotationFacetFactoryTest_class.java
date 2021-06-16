@@ -19,16 +19,17 @@
 
 package org.apache.isis.core.metamodel.facets.object.bookmarkpolicy;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetFallbackFactory;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
-public class BookmarkableAnnotationFacetFactoryTest_class extends AbstractFacetFactoryTest {
+public class BookmarkableAnnotationFacetFactoryTest_class
+extends AbstractFacetFactoryTest {
 
     private BookmarkPolicyFacetFallbackFactory facetFactory;
 
@@ -36,7 +37,7 @@ public class BookmarkableAnnotationFacetFactoryTest_class extends AbstractFacetF
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new BookmarkPolicyFacetFallbackFactory();
+        facetFactory = new BookmarkPolicyFacetFallbackFactory(metaModelContext);
     }
 
     @Override
