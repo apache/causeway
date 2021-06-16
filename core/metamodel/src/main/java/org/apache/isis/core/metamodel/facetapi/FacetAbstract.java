@@ -77,7 +77,7 @@ implements Facet, HasMetaModelContext {
 
     @Override
     public String toString() {
-        String details = interactionDetails(";");
+        String details = interactionAdvisors(";");
         if (!details.isEmpty()) {
             details = "interactionAdvisors=" + details + ",";
         }
@@ -99,11 +99,11 @@ implements Facet, HasMetaModelContext {
         visitor.accept("facet", this.getClass().getName());
         visitor.accept("precedence", getPrecedence().name());
 
-        val interactionDetails = interactionDetails(", ");
+        val interactionAdvisors = interactionAdvisors(", ");
 
-        // suppress 'details' if none
-        if(!interactionDetails.isEmpty()) {
-            visitor.accept("interactionAdvisors", interactionDetails);
+        // suppress 'advisors' if none
+        if(!interactionAdvisors.isEmpty()) {
+            visitor.accept("interactionAdvisors", interactionAdvisors);
         }
     }
 
@@ -125,7 +125,7 @@ implements Facet, HasMetaModelContext {
     public static interface Validating {
     }
 
-    private String interactionDetails(final String delimiter) {
+    private String interactionAdvisors(final String delimiter) {
         return Stream.of(Validating.class, HidingOrShowing.class, DisablingOrEnabling.class)
         .filter(marker->marker.isAssignableFrom(getClass()))
         .map(Class::getSimpleName)
