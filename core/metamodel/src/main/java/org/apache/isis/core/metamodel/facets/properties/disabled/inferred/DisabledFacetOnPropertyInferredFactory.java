@@ -55,7 +55,7 @@ extends FacetFactoryAbstract {
         }
 
         // else, infer that this is not modifiable
-        FacetUtil.addFacetIfPresent(new DisabledFacetOnPropertyInferred(property));
+        FacetUtil.addFacetIfPresent(new DisabledFacetOnPropertyInferredFromMissingSetter(property));
     }
 
 }

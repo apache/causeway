@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.properties.disabled.fromimmutable;
 
-import java.util.function.Function;
-
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -32,31 +30,45 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import lombok.NonNull;
 import lombok.val;
 
-public class DisabledFacetOnPropertyDerivedFromImmutable
+public class DisabledFacetOnPropertyInferredFromImmutable
 extends DisabledFacetAbstract {
 
-    private final Function<ManagedObject, String> reasonProvider;
+    // -- FACTORY
 
-    public DisabledFacetOnPropertyDerivedFromImmutable(
+    public static DisabledFacetOnPropertyInferredFromImmutable forImmutable(
+            @NonNull final FacetedMethod facetedMethodFor,
+            @NonNull final ImmutableFacet immutableFacet) {
+
+        return new DisabledFacetOnPropertyInferredFromImmutable(facetedMethodFor, immutableFacet);
+    }
+
+    // -- FIELDS
+
+    private final ImmutableFacet reasonProvidingImmutableFacet;
+
+    // -- CONSTRUCTOR
+
+    private DisabledFacetOnPropertyInferredFromImmutable(
             @NonNull final FacetHolder holder,
-            @NonNull final Function<ManagedObject, String> reasonProvider) {
+            @NonNull final ImmutableFacet reasonProvidingImmutableFacet) {
 
-        super(Where.ANYWHERE, holder);
-        this.reasonProvider = reasonProvider;
+        super(Where.ANYWHERE,
+                "calculated at runtime, delegating to ImmutableFacet " +
+                        reasonProvidingImmutableFacet.getClass(),
+                holder);
+
+        this.reasonProvidingImmutableFacet = reasonProvidingImmutableFacet;
     }
 
     @Override
     public String disabledReason(final ManagedObject target) {
-        val reason = reasonProvider.apply(target);
+        val reason = reasonProvidingImmutableFacet.disabledReason(target);
         // ensure non empty reason
-        return _Strings.isNotEmpty(reason) ? reason : "Immutable";
+        return _Strings.isNotEmpty(reason)
+                ? reason
+                : "Immutable";
     }
 
-    public static DisabledFacetOnPropertyDerivedFromImmutable forImmutable(
-            @NonNull final FacetedMethod facetedMethodFor,
-            @NonNull final ImmutableFacet immutableFacet) {
 
-        return new DisabledFacetOnPropertyDerivedFromImmutable(facetedMethodFor, immutableFacet::disabledReason);
-    }
 
 }

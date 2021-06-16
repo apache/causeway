@@ -28,7 +28,26 @@ import lombok.NonNull;
 /**
  * Hide a property, collection or action.
  */
-public interface HiddenFacet extends WhereValueFacet, HidingInteractionAdvisor {
+public interface HiddenFacet
+extends WhereValueFacet, HidingInteractionAdvisor {
+
+    public enum Semantics {
+        HIDDEN,
+        SHOWING;
+
+        public boolean isHidden() {
+            return this == HIDDEN;
+        }
+
+        public boolean isShowing() {
+            return this == SHOWING;
+        }
+    }
+
+    // default semantics unless inverted
+    default Semantics getSemantics() {
+        return Semantics.HIDDEN;
+    }
 
     // -- PREDICATES
 

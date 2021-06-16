@@ -26,9 +26,10 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstractImpl;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
 
-public class DisabledFacetForPropertyAnnotation extends DisabledFacetAbstractImpl {
+public class DisabledFacetForPropertyAnnotation
+extends DisabledFacetAbstract {
 
     public static DisabledFacet create(
             final Optional<Property> propertyIfAny,

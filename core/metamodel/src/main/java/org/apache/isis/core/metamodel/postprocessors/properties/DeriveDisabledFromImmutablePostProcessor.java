@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.ImmutableFacetFromConfiguration;
 import org.apache.isis.core.metamodel.facets.object.immutable.EditingEnabledFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
-import org.apache.isis.core.metamodel.facets.properties.disabled.fromimmutable.DisabledFacetOnPropertyDerivedFromImmutable;
+import org.apache.isis.core.metamodel.facets.properties.disabled.fromimmutable.DisabledFacetOnPropertyInferredFromImmutable;
 import org.apache.isis.core.metamodel.facets.properties.disabled.fromimmutable.DisabledFacetOnPropertyDerivedFromImmutableFactory;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -89,7 +89,7 @@ extends ObjectSpecificationPostProcessorAbstract {
 
             }
 
-            FacetUtil.addFacetIfPresent(DisabledFacetOnPropertyDerivedFromImmutable
+            FacetUtil.addFacetIfPresent(DisabledFacetOnPropertyInferredFromImmutable
                             .forImmutable(facetedMethodFor(property), immutableFacet));
         });
     }

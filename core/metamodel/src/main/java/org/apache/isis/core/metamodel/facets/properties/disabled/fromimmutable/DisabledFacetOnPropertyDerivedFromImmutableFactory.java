@@ -54,7 +54,7 @@ extends FacetFactoryAbstract {
                 return;
             }
             addFacetIfPresent(
-                    DisabledFacetOnPropertyDerivedFromImmutable
+                    DisabledFacetOnPropertyInferredFromImmutable
                     .forImmutable(facetHolder, immutableFacet));
         });
     }

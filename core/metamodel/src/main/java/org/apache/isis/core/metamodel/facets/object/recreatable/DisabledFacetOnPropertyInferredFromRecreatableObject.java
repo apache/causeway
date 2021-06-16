@@ -33,7 +33,9 @@ extends DisabledFacetAbstract {
     public DisabledFacetOnPropertyInferredFromRecreatableObject(
             final FacetHolder holder,
             final Semantics semantics) {
-        super(Where.ANYWHERE, holder, semantics, Precedence.INFERRED);
+        super(Where.ANYWHERE,
+                "calculated at runtime, based on whether viewmodel is cloneable",
+                holder, semantics, Precedence.INFERRED);
     }
 
     @Override

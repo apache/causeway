@@ -21,7 +21,10 @@ package org.apache.isis.core.metamodel.facets.members.disabled;
 
 import java.util.function.BiConsumer;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.WhereValueFacetAbstract;
@@ -41,17 +44,39 @@ implements DisabledFacet {
 
     @Getter(onMethod_ = {@Override}) private final @NonNull Semantics semantics;
 
-    protected DisabledFacetAbstract(Where where, final FacetHolder holder) {
-        this(where, holder, Semantics.DISABLED, Precedence.DEFAULT);
+    /**
+     * @apiNote this field is used for reporting purposes only (eg. MM export),
+     * when either sub-classes override {@link #disabledReason(ManagedObject)}
+     * or the semantics is inverted (ENABLED)
+     */
+    private final @Nullable String reason;
+
+    protected DisabledFacetAbstract(
+            final Where where,
+            final String reason,
+            final FacetHolder holder) {
+        this(where, reason, holder, Semantics.DISABLED, Precedence.DEFAULT);
     }
 
     protected DisabledFacetAbstract(
             final Where where,
+            final String reason,
             final FacetHolder holder,
             final Semantics semantics,
-            Precedence precedence) {
+            final Precedence precedence) {
         super(type(), holder, where, precedence);
+        this.reason = reason;
         this.semantics = semantics;
+    }
+
+    @Override
+    public String disabledReason(final ManagedObject targetAdapter) {
+        if(getSemantics().isEnabled()) {
+            return null;
+        }
+        return _Strings.isNotEmpty(reason)
+                ? reason
+                : ALWAYS_DISABLED_REASON;
     }
 
     @Override
@@ -65,9 +90,12 @@ implements DisabledFacet {
     }
 
     @Override
-    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+    public final void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("semantics", semantics);
+        if(_Strings.isNotEmpty(reason)) {
+            visitor.accept("reason", reason);
+        }
     }
 
 }

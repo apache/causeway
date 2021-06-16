@@ -17,24 +17,18 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.members.disabled;
+package org.apache.isis.core.metamodel.facets.properties.disabled.inferred;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
 
-public abstract class DisabledFacetAbstractAlwaysEverywhere extends DisabledFacetAbstract {
+public class DisabledFacetOnPropertyInferredFromMissingSetter
+extends DisabledFacetAbstract {
 
-    public DisabledFacetAbstractAlwaysEverywhere(final FacetHolder holder) {
-        super(Where.ANYWHERE, holder);
+    public DisabledFacetOnPropertyInferredFromMissingSetter(final FacetHolder holder) {
+        super(Where.ANYWHERE, ALWAYS_DISABLED_REASON, holder);
     }
 
-    /**
-     * Always returns <i>Always disabled</i>.
-     */
-    @Override
-    public String disabledReason(final ManagedObject target) {
-        return "Always disabled";
-    }
 
 }

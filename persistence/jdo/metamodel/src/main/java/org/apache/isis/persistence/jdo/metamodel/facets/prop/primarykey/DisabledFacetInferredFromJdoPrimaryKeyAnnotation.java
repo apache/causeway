@@ -16,17 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.persistence.jdo.metamodel.facets.prop.primarykey;
 
-package org.apache.isis.core.metamodel.facets.properties.disabled.inferred;
-
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstractAlwaysEverywhere;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
 
-public class DisabledFacetOnPropertyInferred extends DisabledFacetAbstractAlwaysEverywhere {
 
-    public DisabledFacetOnPropertyInferred(final FacetHolder holder) {
-        super(holder);
+/**
+ * Derived by the presence of the primary key.
+ */
+public class DisabledFacetInferredFromJdoPrimaryKeyAnnotation
+extends DisabledFacetAbstract {
+
+    public DisabledFacetInferredFromJdoPrimaryKeyAnnotation(final FacetHolder holder) {
+        super(Where.ANYWHERE, "Primary-keys are immutable", holder);
     }
-
 
 }

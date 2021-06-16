@@ -22,9 +22,10 @@ package org.apache.isis.core.metamodel.facets.members.disabled;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public class DisabledFacetForContributee extends DisabledFacetAbstractImpl {
+public class DisabledFacetForContributee
+extends DisabledFacetAbstract {
 
-    public DisabledFacetForContributee(String reason, FacetHolder holder) {
+    public DisabledFacetForContributee(final String reason, final FacetHolder holder) {
         super(Where.ANYWHERE, reason, holder);
     }
 }

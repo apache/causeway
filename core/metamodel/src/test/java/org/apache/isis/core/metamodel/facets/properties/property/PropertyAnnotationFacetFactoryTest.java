@@ -480,9 +480,9 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             final DisabledFacet disabledFacet = facetedMethod.getFacet(DisabledFacet.class);
             Assert.assertNotNull(disabledFacet);
             Assert.assertTrue(disabledFacet instanceof DisabledFacetForPropertyAnnotation);
-            final DisabledFacetForPropertyAnnotation disabledFacetImpl = (DisabledFacetForPropertyAnnotation) disabledFacet;
+            final DisabledFacetForPropertyAnnotation disabledFacet2 = (DisabledFacetForPropertyAnnotation) disabledFacet;
             assertThat(disabledFacet.where(), is(Where.EVERYWHERE));
-            assertThat(disabledFacetImpl.getReason(), is("you cannot edit the name property"));
+            assertThat(disabledFacet2.disabledReason(null), is("you cannot edit the name property"));
         }
     }
 
