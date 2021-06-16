@@ -34,7 +34,7 @@ public interface BigDecimalValueFacet extends Facet {
      * <li><tt>12345.0</tt> has a length of 6 (and {@link #getScale() scale} of 1)</li>
      * </ul>
      */
-    Integer getPrecision();
+    int getPrecision();
 
     /**
      * The number of digits to the right of the decimal place (fractional part) for this decimal.
@@ -47,6 +47,6 @@ public interface BigDecimalValueFacet extends Facet {
      * <li><tt>12345.0</tt> has a scale of 1 (and a {@link #getPrecision() precision} of 6)</li>
      * </ul>
      */
-    Integer getScale();
+    int getScale();
 
 }

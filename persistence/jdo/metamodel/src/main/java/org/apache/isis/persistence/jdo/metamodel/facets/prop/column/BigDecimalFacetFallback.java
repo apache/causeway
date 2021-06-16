@@ -18,31 +18,18 @@
  */
 package org.apache.isis.persistence.jdo.metamodel.facets.prop.column;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueSemanticsProvider;
-
 
 public class BigDecimalFacetFallback
 extends BigDecimalValueFacetAbstract {
 
-    private static final Class<? extends Facet> type() {
-        return BigDecimalValueFacet.class;
-    }
-
     public BigDecimalFacetFallback(final FacetHolder holder) {
-        super(BigDecimalFacetFallback.type(), holder, Precedence.FALLBACK);
+        super(
+                BigDecimalValueSemanticsProvider.DEFAULT_LENGTH,
+                BigDecimalValueSemanticsProvider.DEFAULT_SCALE,
+                holder, Precedence.FALLBACK);
     }
 
-    @Override
-    public Integer getPrecision() {
-        return BigDecimalValueSemanticsProvider.DEFAULT_LENGTH;
-    }
-
-    @Override
-    public Integer getScale() {
-        return BigDecimalValueSemanticsProvider.DEFAULT_SCALE;
-    }
 }

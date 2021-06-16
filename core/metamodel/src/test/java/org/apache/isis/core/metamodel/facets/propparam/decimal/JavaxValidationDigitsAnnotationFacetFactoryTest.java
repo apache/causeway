@@ -52,8 +52,8 @@ extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation);
         final BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation annotation = (BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation) facet;
-        assertEquals(Integer.valueOf(18), annotation.getPrecision());
-        assertEquals(Integer.valueOf(4), annotation.getScale());
+        assertEquals(18, annotation.getPrecision());
+        assertEquals(4, annotation.getScale());
     }
 
     public void testAnnotationPickedUpOnActionParameter() {
@@ -75,8 +75,8 @@ extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertTrue(facet instanceof BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation);
         final BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation annotation = (BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation) facet;
-        assertEquals(Integer.valueOf(18), annotation.getPrecision());
-        assertEquals(Integer.valueOf(4), annotation.getScale());
+        assertEquals(18, annotation.getPrecision());
+        assertEquals(4, annotation.getScale());
     }
 
 }

@@ -18,11 +18,8 @@
  */
 package org.apache.isis.core.metamodel.facets.param.bigdecimal.javaxvaldigits;
 
-import java.util.function.BiConsumer;
-
 import javax.validation.constraints.Digits;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacetAbstract;
@@ -30,40 +27,17 @@ import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFac
 public class BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation
 extends BigDecimalValueFacetAbstract {
 
-    private final Integer precision;
-    private final Integer scale;
-
-    private static final Class<? extends Facet> type() {
-        return BigDecimalValueFacet.class;
-    }
-
-    public static BigDecimalValueFacet create(final Digits annotation, final FacetHolder holder) {
+     public static BigDecimalValueFacet create(final Digits annotation, final FacetHolder holder) {
         final int length = annotation.integer() + annotation.fraction();
         final int scale = annotation.fraction();
         return new BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation(holder, length, scale);
     }
 
-    private BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation(final FacetHolder holder, final Integer precision, final Integer scale) {
-        super(BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation.type(), holder);
-        this.precision = precision;
-        this.scale = scale;
+    private BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation(
+            final FacetHolder holder, final int precision, final int scale) {
+        super(precision, scale, holder);
     }
 
-    @Override
-    public Integer getPrecision() {
-        return precision;
-    }
 
-    @Override
-    public Integer getScale() {
-        return scale;
-    }
-
-    @Override
-    public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
-        visitor.accept("precision", precision);
-        visitor.accept("scale", scale);
-    }
 
 }

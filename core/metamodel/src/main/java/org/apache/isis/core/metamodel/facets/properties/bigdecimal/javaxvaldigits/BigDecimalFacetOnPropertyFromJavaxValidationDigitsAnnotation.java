@@ -18,11 +18,8 @@
  */
 package org.apache.isis.core.metamodel.facets.properties.bigdecimal.javaxvaldigits;
 
-import java.util.function.BiConsumer;
-
 import javax.validation.constraints.Digits;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -33,13 +30,6 @@ import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFac
 public class BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation
 extends BigDecimalValueFacetAbstract {
 
-    private final int precision;
-    private final int scale;
-
-    private static final Class<? extends Facet> type() {
-        return BigDecimalValueFacet.class;
-    }
-
     public static BigDecimalValueFacet create(
             final ProcessMethodContext processMethodContext,
             final Digits annotation) {
@@ -49,27 +39,11 @@ extends BigDecimalValueFacetAbstract {
         return new BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation(holder, length, scale);
     }
 
-    private BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation(final FacetHolder holder, final Integer precision, final Integer scale) {
-        super(BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation.type(), holder);
-        this.precision = precision;
-        this.scale = scale;
-    }
-
-    @Override
-    public Integer getPrecision() {
-        return precision;
-    }
-
-    @Override
-    public Integer getScale() {
-        return scale;
-    }
-
-    @Override
-    public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
-        visitor.accept("precision", precision);
-        visitor.accept("scale", scale);
+    private BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation(
+            final FacetHolder holder,
+            final int precision,
+            final int scale) {
+        super(precision, scale, holder);
     }
 
 }

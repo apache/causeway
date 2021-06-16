@@ -77,12 +77,12 @@ implements BigDecimalValueFacet {
     // -- SCALE, PRECISION
 
     @Override
-    public Integer getPrecision() {
+    public int getPrecision() {
         return DEFAULT_LENGTH;
     }
 
     @Override
-    public Integer getScale() {
+    public int getScale() {
         return DEFAULT_SCALE;
     }
 
