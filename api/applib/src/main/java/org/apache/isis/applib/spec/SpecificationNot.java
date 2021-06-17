@@ -19,6 +19,8 @@
 
 package org.apache.isis.applib.spec;
 
+import org.apache.isis.applib.annotation.Programmatic;
+
 /**
  * Adapter to make it easy to perform boolean algebra on {@link Specification}s.
  *
@@ -53,6 +55,7 @@ public abstract class SpecificationNot implements Specification {
         this.specification = specification;
     }
 
+    @Programmatic
     @Override
     public String satisfies(final Object obj) {
         final String satisfies = specification.satisfies(obj);

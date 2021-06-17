@@ -21,6 +21,7 @@ package org.apache.isis.applib.spec;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.commons.internal.base._Casts;
 
@@ -82,6 +83,7 @@ public abstract class AbstractSpecification2<T> implements Specification2 {
         this.typeChecking = typeChecking;
     }
 
+    @Programmatic
     @Override
     public final String satisfies(final Object obj) {
         // unused because satisfiesTranslatable will be called instead.
@@ -92,6 +94,7 @@ public abstract class AbstractSpecification2<T> implements Specification2 {
      * Checks not null and is correct type, and delegates to
      * {@link #satisfiesTranslatableSafely(Object)}.
      */
+    @Programmatic
     @Override
     public TranslatableString satisfiesTranslatable(final Object obj) {
         if (obj == null) {
@@ -109,6 +112,7 @@ public abstract class AbstractSpecification2<T> implements Specification2 {
 
     }
 
+    @Programmatic
     public abstract TranslatableString satisfiesTranslatableSafely(T obj);
 
 }
