@@ -18,31 +18,27 @@
  */
 package org.apache.isis.testing.fixtures.applib.services;
 
-import java.lang.reflect.InvocationTargetException;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
+import lombok.extern.log4j.Log4j2;
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.events.MetamodelEvent;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.events.MetamodelEvent;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
-
-import lombok.extern.log4j.Log4j2;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * @since 2.0 {@index}
  */
 @Service
 @Named("isis.testing.fixtures.InitialFixtureScriptsInstaller")
-@Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 @Log4j2
@@ -72,6 +68,7 @@ public class InitialFixtureScriptsInstaller {
     }
 
     @EventListener(MetamodelEvent.class)
+    @Order(OrderPrecedence.LAST - 100)
     public void onMetamodelEvent(final MetamodelEvent event) {
 
         log.debug("received metamodel event {}", event);

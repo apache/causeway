@@ -22,6 +22,7 @@ import java.util.function.Supplier;
 
 import javax.inject.Inject;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.springframework.context.event.EventListener;
 
 import org.apache.isis.core.metamodel.events.MetamodelEvent;
@@ -33,6 +34,7 @@ import lombok.NonNull;
 import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom._infra.values.ValueHolderFixtureFactory;
 import demoapp.dom._infra.values.ValueHolderRepository;
+import org.springframework.core.annotation.Order;
 
 public abstract class SeedServiceAbstract implements SeedService {
 
@@ -49,6 +51,7 @@ public abstract class SeedServiceAbstract implements SeedService {
 
 
     @EventListener(MetamodelEvent.class)
+    @Order(OrderPrecedence.MIDPOINT)
     public void onAppLifecycleEvent(MetamodelEvent event) {
         if (event.isPostMetamodel()) {
             fixtureScripts.run(fixtureScriptSupplier.get());
