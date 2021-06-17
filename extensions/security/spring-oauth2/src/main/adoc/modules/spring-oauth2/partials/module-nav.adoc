@@ -1,2 +1,2 @@
 
-* xref:security:spring:about.adoc[Spring Implementation]
+** xref:security:spring-oauth2:about.adoc[Spring OAuth2 Integration]
