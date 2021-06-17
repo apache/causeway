@@ -19,6 +19,8 @@
 
 package org.apache.isis.applib.spec;
 
+import org.apache.isis.applib.annotation.Programmatic;
+
 import java.lang.reflect.Method;
 
 /**
@@ -83,6 +85,7 @@ public abstract class AbstractSpecification<T> implements Specification {
      * Checks not null and is correct type, and delegates to
      * {@link #satisfiesSafely(Object)}.
      */
+    @Programmatic
     @Override
     @SuppressWarnings({ "unchecked" })
     public final String satisfies(final Object obj) {
@@ -104,6 +107,7 @@ public abstract class AbstractSpecification<T> implements Specification {
      * Subclasses should implement this. The item will already have been checked
      * for the specific type and will never be null.
      */
+    @Programmatic
     public abstract String satisfiesSafely(T obj);
 
 }

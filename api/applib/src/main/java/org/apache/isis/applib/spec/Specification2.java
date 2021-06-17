@@ -19,6 +19,7 @@
 
 package org.apache.isis.applib.spec;
 
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 
 /**
@@ -36,6 +37,7 @@ public interface Specification2 extends Specification {
     /**
      * If <tt>null</tt> then satisfied, otherwise is the reason (as a {@link TranslatableString} translatable string) as to why the specification is not satisfied.
      */
+    @Programmatic
     TranslatableString satisfiesTranslatable(Object obj);
 
 }

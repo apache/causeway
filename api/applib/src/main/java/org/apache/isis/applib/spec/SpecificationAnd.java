@@ -19,6 +19,7 @@
 
 package org.apache.isis.applib.spec;
 
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.util.ReasonBuffer;
 
 /**
@@ -52,6 +53,7 @@ public abstract class SpecificationAnd implements Specification {
         this.specifications = specifications;
     }
 
+    @Programmatic
     @Override
     public String satisfies(final Object obj) {
         final ReasonBuffer buf = new ReasonBuffer();
