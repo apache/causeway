@@ -20,14 +20,13 @@ package org.apache.isis.core.metamodel.services.tablecol;
 
 import java.util.List;
 
+import javax.annotation.Priority;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.tablecol.TableColumnOrderService;
 
 /**
@@ -37,8 +36,7 @@ import org.apache.isis.applib.services.tablecol.TableColumnOrderService;
  */
 @Service
 @Named("isis.metamodel.TableColumnOrderServiceDefault")
-@Order(OrderPrecedence.LATE)
-@Primary
+@Priority(PriorityPrecedence.LATE)
 @Qualifier("Default")
 public class TableColumnOrderServiceDefault implements TableColumnOrderService {
 

@@ -18,18 +18,20 @@
  */
 package org.apache.isis.extensions.secman.applib.seed;
 
-import lombok.extern.log4j.Log4j2;
-import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.core.metamodel.events.MetamodelEvent;
-import org.apache.isis.extensions.secman.applib.seed.scripts.SeedUsersAndRolesFixtureScript;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.core.metamodel.events.MetamodelEvent;
+import org.apache.isis.extensions.secman.applib.seed.scripts.SeedUsersAndRolesFixtureScript;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
+
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Automatically seeds the built-in roles (and permissions) for both Secman
@@ -57,8 +59,8 @@ public class SeedSecurityModuleService {
         this.fixtureScripts = fixtureScripts;
     }
 
-    @Order(OrderPrecedence.MIDPOINT - 100)
     @EventListener(MetamodelEvent.class)
+    @Order(PriorityPrecedence.MIDPOINT - 100)
     public void onMetamodelEvent(final MetamodelEvent event) {
 
         log.debug("received metamodel event {}", event);

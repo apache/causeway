@@ -21,6 +21,7 @@ package org.apache.isis.core.runtimeservices.xml;
 import java.io.StringReader;
 import java.io.StringWriter;
 
+import javax.annotation.Priority;
 import javax.inject.Named;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -32,8 +33,6 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -41,7 +40,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.applib.services.xml.XmlService;
 import org.apache.isis.commons.internal.codec._DocumentFactories;
@@ -53,10 +52,8 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
  */
 @Service
 @Named("isis.runtimeservice.XmlService")
-@Order(OrderPrecedence.EARLY)
-@Primary
+@Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
-//@Log4j2
 public class XmlServiceDefault implements XmlService {
 
     @Override

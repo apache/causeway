@@ -20,16 +20,14 @@ package org.apache.isis.incubator.viewer.vaadin.ui.components.markup;
 
 import com.vaadin.flow.component.Component;
 
-import org.springframework.core.annotation.Order;
-
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentHandlerVaa;
 import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
 
 import lombok.val;
 
 @org.springframework.stereotype.Component
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 public class MarkupFieldFactory implements UiComponentHandlerVaa {
 
     @Override

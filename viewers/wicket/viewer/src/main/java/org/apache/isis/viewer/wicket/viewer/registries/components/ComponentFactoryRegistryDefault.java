@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -32,11 +33,9 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.model.IModel;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
@@ -58,8 +57,7 @@ import lombok.val;
  */
 @Service
 @Named("isis.viewer.wicket.ComponentFactoryRegistryDefault")
-@Order(OrderPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry {
 

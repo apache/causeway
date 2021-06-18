@@ -24,16 +24,15 @@ import java.util.Map;
 
 import javax.inject.Named;
 
-import org.springframework.core.annotation.Order;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
 @Named("isis.metamodel.ValueTypeProviderBuiltIn")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 public class ValueTypeProviderDefault implements ValueTypeProvider {
 
     private final Map<Class<?>, ValueTypeDefinition> definitions =

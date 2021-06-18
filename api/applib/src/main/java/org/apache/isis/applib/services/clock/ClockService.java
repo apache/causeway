@@ -18,16 +18,15 @@
  */
 package org.apache.isis.applib.services.clock;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
@@ -44,8 +43,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Service
 @Named("isis.applib.ClockService")
-@Order(OrderPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ClockService {

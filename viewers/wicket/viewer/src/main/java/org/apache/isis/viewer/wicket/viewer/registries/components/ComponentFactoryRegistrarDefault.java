@@ -19,11 +19,8 @@
 
 package org.apache.isis.viewer.wicket.viewer.registries.components;
 
-import java.util.List;
-
-import javax.inject.Named;
-
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import lombok.extern.log4j.Log4j2;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
@@ -68,14 +65,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.JodaLocalTim
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactories;
 import org.apache.isis.viewer.wicket.ui.components.scalars.oiddto.OidDtoPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.passwd.IsisPasswordPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.BooleanPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.BytePanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.CharacterPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.DoublePanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.FloatPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.IntegerPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.LongPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.ShortPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.*;
 import org.apache.isis.viewer.wicket.ui.components.scalars.reference.ReferencePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.string.StringPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.uuid.UuidPanelFactory;
@@ -89,11 +79,11 @@ import org.apache.isis.viewer.wicket.ui.components.voidreturn.VoidReturnPanelFac
 import org.apache.isis.viewer.wicket.ui.components.welcome.WelcomePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanelFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import lombok.extern.log4j.Log4j2;
+import javax.annotation.Priority;
+import javax.inject.Named;
+import java.util.List;
 
 /**
  * Default implementation of {@link ComponentFactoryRegistrar} that registers a
@@ -102,8 +92,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named("isis.viewer.wicket.ComponentFactoryRegistrarDefault")
-@Order(OrderPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2
 public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistrar {

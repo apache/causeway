@@ -24,12 +24,11 @@ import java.util.Set;
 
 import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.wicket.Session;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.commons.internal.base._Casts;
@@ -39,7 +38,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isis.viewer.wicket.HintStoreUsingWicketSession")
-@Order(OrderPrecedence.EARLY)
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 @Qualifier("Wicket")
 @Log4j2
 public class HintStoreUsingWicketSession implements HintStore {

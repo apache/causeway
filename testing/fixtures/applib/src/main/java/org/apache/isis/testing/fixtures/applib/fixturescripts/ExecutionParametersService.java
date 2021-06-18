@@ -18,15 +18,6 @@
  */
 package org.apache.isis.testing.fixtures.applib.fixturescripts;
 
-import javax.inject.Named;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
-
-import org.apache.isis.applib.annotation.OrderPrecedence;
-
 
 /**
  * Acts as a factory by the {@link FixtureScripts} when

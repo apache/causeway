@@ -28,15 +28,14 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.exceptions.unrecoverable.PersistFailedException;
 import org.apache.isis.applib.exceptions.unrecoverable.RepositoryException;
 import org.apache.isis.applib.query.Query;
@@ -60,8 +59,7 @@ import lombok.val;
 
 @Service
 @Named("isis.runtimeservices.RepositoryServiceDefault")
-@Order(OrderPrecedence.EARLY)
-@Primary
+@Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 //@Log4j2
 public class RepositoryServiceDefault implements RepositoryService {

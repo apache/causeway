@@ -23,10 +23,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
@@ -37,7 +36,7 @@ import org.apache.isis.core.security.authentication.Authenticator;
  */
 @Service
 @Named("isis.security.AuthenticatorSpring")
-@Order(OrderPrecedence.EARLY)
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 @Qualifier("Spring")
 public class AuthenticatorSpring implements Authenticator {
 

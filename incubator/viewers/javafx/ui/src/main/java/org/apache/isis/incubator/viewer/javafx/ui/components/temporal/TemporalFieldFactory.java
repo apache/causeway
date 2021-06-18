@@ -39,7 +39,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @org.springframework.stereotype.Component
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class TemporalFieldFactory implements UiComponentHandlerFx {
 

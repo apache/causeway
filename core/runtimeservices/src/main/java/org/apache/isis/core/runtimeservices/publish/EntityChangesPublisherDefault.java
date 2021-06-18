@@ -18,41 +18,35 @@
  */
 package org.apache.isis.core.runtimeservices.publish;
 
-import java.util.List;
-import java.util.Optional;
-
-import javax.annotation.Nullable;
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
-
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.clock.ClockService;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.publishing.spi.EntityChanges;
 import org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.having.HasEnabling;
-import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.core.transaction.changetracking.EntityChangesPublisher;
 import org.apache.isis.core.transaction.changetracking.HasEnlistedEntityChanges;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
+import javax.annotation.Nullable;
+import javax.annotation.PostConstruct;
+import javax.annotation.Priority;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Named("isis.runtimeservices.EntityChangesPublisherDefault")
-@Order(OrderPrecedence.EARLY)
-@Primary
+@Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-//@Log4j2
 public class EntityChangesPublisherDefault implements EntityChangesPublisher {
 
     private final List<EntityChangesSubscriber> subscribers;

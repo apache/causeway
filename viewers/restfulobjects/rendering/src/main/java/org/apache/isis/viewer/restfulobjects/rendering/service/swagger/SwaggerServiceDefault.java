@@ -18,15 +18,8 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.service.swagger;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
-
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import lombok.val;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.swagger.Format;
 import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.applib.services.swagger.Visibility;
@@ -34,13 +27,16 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.RestEasyConfiguration;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.SwaggerSpecGenerator;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
-import lombok.val;
+import javax.annotation.Priority;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 @Service
 @Named("isis.metamodel.swaggerServiceDefault")
-@Order(OrderPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class SwaggerServiceDefault implements SwaggerService {
 

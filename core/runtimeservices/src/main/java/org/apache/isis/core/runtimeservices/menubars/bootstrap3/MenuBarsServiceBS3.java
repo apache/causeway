@@ -18,25 +18,11 @@
  */
 package org.apache.isis.core.runtimeservices.menubars.bootstrap3;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
-
+import lombok.extern.log4j.Log4j2;
+import lombok.val;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3Menu;
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
@@ -64,14 +50,23 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import javax.annotation.Priority;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Named("isis.runtimeservices.MenuBarsServiceBS3")
-@Order(OrderPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("BS3")
 @Log4j2
 public class MenuBarsServiceBS3 implements MenuBarsService {

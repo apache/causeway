@@ -23,17 +23,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
+import javax.annotation.Priority;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.InteractionScope;
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -65,8 +64,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named("isis.applib.QueryResultsCache")
-@Order(OrderPrecedence.EARLY)
-@Primary
+@Priority(PriorityPrecedence.EARLY)
 @InteractionScope
 @Qualifier("Default")
 @Log4j2

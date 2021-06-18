@@ -20,18 +20,17 @@ package org.apache.isis.core.runtimeservices.recognizer;
 
 import java.util.Optional;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
-import org.apache.isis.applib.services.exceprecog.Recognition;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
+import org.apache.isis.applib.services.exceprecog.Recognition;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
@@ -47,8 +46,7 @@ import lombok.val;
  */
 @Service
 @Named("isis.runtimeservices.ExceptionRecognizerServiceDefault")
-@Order(OrderPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class ExceptionRecognizerServiceDefault
 implements ExceptionRecognizerService {

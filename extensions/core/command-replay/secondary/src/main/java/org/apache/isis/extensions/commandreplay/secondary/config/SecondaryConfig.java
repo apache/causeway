@@ -23,10 +23,9 @@ import java.util.List;
 import javax.inject.Named;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.core.config.IsisConfiguration;
 
 import lombok.Getter;
@@ -37,7 +36,7 @@ import lombok.val;
  */
 @Service
 @Named("isis.ext.commandReplaySecondary.SecondaryConfig")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 //@Log4j2
 public class SecondaryConfig {
 

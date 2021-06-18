@@ -22,20 +22,19 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.commons.collections.Can;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.iactnlayer.ThrowingRunnable;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.interaction.session.IsisInteraction;
@@ -47,8 +46,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isis.interaction.InteractionAwareTransactionalBoundaryHandler")
-@Order(OrderPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2
 public class InteractionAwareTransactionalBoundaryHandler {

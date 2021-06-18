@@ -24,15 +24,14 @@ import java.net.URISyntaxException;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.wicket.Page;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.linking.DeepLinkService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -48,7 +47,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Service
 @Named("isis.viewer.wicket.DeepLinkServiceWicket")
-@Order(OrderPrecedence.EARLY)
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 @Qualifier("Wicket")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class DeepLinkServiceWicket implements DeepLinkService {

@@ -24,13 +24,12 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.jboss.resteasy.core.providerfactory.ResteasyProviderFactoryImpl;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.IsisConfiguration;
@@ -57,7 +56,7 @@ import lombok.val;
  */
 @Service
 @Named("isis.viewer.ro.WebModuleJaxrsRestEasy4") // CAUTION: SwaggerServiceMenu refers to this name
-@Order(OrderPrecedence.MIDPOINT - 80)
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT - 80)
 @Qualifier("JaxrsRestEasy4")
 public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
 

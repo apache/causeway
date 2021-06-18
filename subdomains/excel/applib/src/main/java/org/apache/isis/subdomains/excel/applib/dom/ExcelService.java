@@ -18,37 +18,33 @@
  */
 package org.apache.isis.subdomains.excel.applib.dom;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
-
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.exceptions.RecoverableException;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.subdomains.excel.applib.dom.util.ExcelServiceImpl;
 import org.apache.isis.subdomains.excel.applib.dom.util.Mode;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.Priority;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 
 /**
  * @since 2.0 {@index}
  */
 @Service
 @Named("isis.sub.excel.ExcelService")
-@Order(OrderPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class ExcelService {
 

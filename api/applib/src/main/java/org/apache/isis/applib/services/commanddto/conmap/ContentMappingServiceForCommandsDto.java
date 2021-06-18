@@ -20,16 +20,15 @@ package org.apache.isis.applib.services.commanddto.conmap;
 
 import java.util.List;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.conmap.ContentMappingService;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.CommandsDto;
@@ -40,8 +39,7 @@ import org.apache.isis.schema.cmd.v2.CommandsDto;
  */
 @Service
 @Named("isis.applib.ContentMappingServiceForCommandsDto")
-@Order(OrderPrecedence.EARLY)
-@Primary
+@Priority(PriorityPrecedence.EARLY)
 @Qualifier("CommandsDto")
 public class ContentMappingServiceForCommandsDto implements ContentMappingService {
 

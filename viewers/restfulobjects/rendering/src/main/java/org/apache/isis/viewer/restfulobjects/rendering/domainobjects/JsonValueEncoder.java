@@ -23,6 +23,7 @@ import java.util.function.Function;
 
 import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -30,11 +31,9 @@ import javax.inject.Singleton;
 import com.fasterxml.jackson.databind.node.NullNode;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -58,8 +57,7 @@ import lombok.val;
  */
 @Service
 @Named("isis.viewer.ro.JsonValueEncoder")
-@Order(OrderPrecedence.EARLY)
-@Primary
+@Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @Singleton
 public class JsonValueEncoder {

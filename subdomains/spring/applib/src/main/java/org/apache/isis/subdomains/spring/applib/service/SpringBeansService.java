@@ -24,13 +24,11 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
-
-import org.apache.isis.applib.annotation.OrderPrecedence;
 
 import lombok.experimental.UtilityClass;
 
@@ -41,7 +39,7 @@ import lombok.experimental.UtilityClass;
  */
 @Service
 @Named("isis.sub.spring.SpringBeansService")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class SpringBeansService {
 

@@ -30,7 +30,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 
 @org.springframework.stereotype.Component
-@Order(OrderPrecedence.LAST)
+@javax.annotation.Priority(OrderPrecedence.LAST)
 public class FallbackFieldFactory implements UiComponentHandlerFx {
 
     @Override

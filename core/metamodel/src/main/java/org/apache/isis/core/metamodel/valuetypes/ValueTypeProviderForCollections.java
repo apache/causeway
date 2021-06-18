@@ -25,15 +25,14 @@ import java.util.SortedSet;
 
 import javax.inject.Named;
 
-import org.springframework.core.annotation.Order;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.commons.internal.collections._Lists;
 
 @Component
 @Named("isis.metamodel.ValueTypeProviderCollections")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 public class ValueTypeProviderForCollections implements ValueTypeProvider {
 
     @Override

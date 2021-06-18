@@ -20,14 +20,13 @@ package org.apache.isis.applib.services.session;
 
 import java.util.Date;
 
+import javax.annotation.Priority;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -36,8 +35,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named("isis.applib.SessionLoggingServiceLogging")
-@Order(OrderPrecedence.LATE)
-@Primary
+@Priority(PriorityPrecedence.LATE)
 @Qualifier("logging")
 @Log4j2
 public class SessionLoggingServiceLogging implements SessionLoggingService {

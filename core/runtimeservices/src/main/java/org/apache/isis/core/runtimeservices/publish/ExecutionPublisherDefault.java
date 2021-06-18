@@ -25,21 +25,20 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.InteractionScope;
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.iactn.Execution;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.having.HasEnabling;
-import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.core.metamodel.services.publishing.ExecutionPublisher;
 
 import lombok.RequiredArgsConstructor;
@@ -47,12 +46,10 @@ import lombok.val;
 
 @Service
 @Named("isis.runtimeservices.ExecutionPublisherDefault")
-@Order(OrderPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @InteractionScope
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-//@Log4j2
 public class ExecutionPublisherDefault
 implements ExecutionPublisher {
 

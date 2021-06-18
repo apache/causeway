@@ -18,20 +18,17 @@
  */
 package org.apache.isis.core.metamodel.services;
 
-import javax.annotation.Nullable;
-import javax.inject.Inject;
-import javax.inject.Named;
-
+import lombok.RequiredArgsConstructor;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.inject.ServiceInjector;
-
-import lombok.RequiredArgsConstructor;
+import javax.annotation.Nullable;
+import javax.annotation.Priority;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  *
@@ -40,8 +37,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Service
 @Named("isis.metamodel.ServiceInjectorDefault")
-@Order(OrderPrecedence.EARLY)
-@Primary
+@Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ServiceInjectorDefault implements ServiceInjector {
@@ -49,7 +45,7 @@ public class ServiceInjectorDefault implements ServiceInjector {
     private final AutowireCapableBeanFactory autowireCapableBeanFactory;
 
     @Override
-    public <T> @Nullable T injectServicesInto(final @Nullable T domainObject) {
+    public <T> T injectServicesInto(final @Nullable T domainObject) {
 
         if(domainObject!=null) {
 

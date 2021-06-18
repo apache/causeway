@@ -18,22 +18,9 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus;
 
-import javax.inject.Provider;
-import javax.jdo.JDOException;
-import javax.jdo.PersistenceManagerFactory;
-import javax.sql.DataSource;
-
-import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
-import org.datanucleus.metadata.PersistenceUnitMetaData;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Primary;
-import org.springframework.dao.support.PersistenceExceptionTranslator;
-import org.springframework.transaction.interceptor.TransactionInterceptor;
-
+import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
+import lombok.val;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.config.IsisConfiguration;
@@ -56,10 +43,21 @@ import org.apache.isis.persistence.jdo.spring.integration.JdoDialect;
 import org.apache.isis.persistence.jdo.spring.integration.JdoTransactionManager;
 import org.apache.isis.persistence.jdo.spring.integration.LocalPersistenceManagerFactoryBean;
 import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
+import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
+import org.datanucleus.metadata.PersistenceUnitMetaData;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
+import org.springframework.dao.support.PersistenceExceptionTranslator;
+import org.springframework.transaction.interceptor.TransactionInterceptor;
 
-import lombok.SneakyThrows;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import javax.inject.Provider;
+import javax.jdo.JDOException;
+import javax.jdo.PersistenceManagerFactory;
+import javax.sql.DataSource;
 
 /**
  * @since 2.0 {@index}

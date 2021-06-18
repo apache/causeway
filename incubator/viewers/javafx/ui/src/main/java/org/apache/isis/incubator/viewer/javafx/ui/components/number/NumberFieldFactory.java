@@ -41,7 +41,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @org.springframework.stereotype.Component
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
 public class NumberFieldFactory implements UiComponentHandlerFx {

@@ -21,9 +21,7 @@ package org.apache.isis.incubator.viewer.vaadin.ui.components.text;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.textfield.TextField;
 
-import org.springframework.core.annotation.Order;
-
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.core.metamodel.facets.value.string.StringValueFacet;
 import org.apache.isis.incubator.viewer.vaadin.ui.binding.BindingsVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentHandlerVaa;
@@ -32,7 +30,7 @@ import org.apache.isis.viewer.common.model.components.UiComponentFactory.Compone
 import lombok.val;
 
 @org.springframework.stereotype.Component
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 public class TextFieldFactory implements UiComponentHandlerVaa {
 
     @Override

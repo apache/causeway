@@ -21,16 +21,15 @@ package org.apache.isis.viewer.wicket.viewer.services;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmarkui.BookmarkUiService;
 import org.apache.isis.viewer.wicket.viewer.integration.AuthenticatedWebSessionForIsis;
 
 @Service
 @Named("isis.viewer.wicket.BookmarkUiServiceWicket")
-@Order(OrderPrecedence.EARLY)
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 @Qualifier("Wicket")
 public class BookmarkUiServiceWicket implements BookmarkUiService {
 

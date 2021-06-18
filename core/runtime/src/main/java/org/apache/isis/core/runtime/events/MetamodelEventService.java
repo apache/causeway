@@ -18,16 +18,15 @@
  */
 package org.apache.isis.core.runtime.events;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.confview.ConfigurationViewService;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.metamodel.events.MetamodelEvent;
@@ -40,8 +39,7 @@ import org.apache.isis.core.metamodel.events.MetamodelEvent;
  */
 @Service
 @Named("isis.runtime.MetamodelEventService")
-@Order(OrderPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class MetamodelEventService {
 

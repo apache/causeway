@@ -49,7 +49,7 @@ import javafx.scene.web.WebView;
 import netscape.javascript.JSException;
 
 @org.springframework.stereotype.Component
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class MarkupFieldFactory implements UiComponentHandlerFx {
 

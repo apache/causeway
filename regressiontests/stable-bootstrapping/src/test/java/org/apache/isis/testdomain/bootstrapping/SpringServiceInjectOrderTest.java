@@ -21,6 +21,7 @@ package org.apache.isis.testdomain.bootstrapping;
 import java.io.IOException;
 import java.util.List;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -29,9 +30,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.core.OrderComparator;
-import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -44,6 +43,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.core.config.presets.IsisPresets;
@@ -68,29 +68,22 @@ import lombok.val;
                 // "logging.level.ObjectSpecificationAbstract=TRACE"
         })
 @TestPropertySource({
-    //IsisPresets.DebugDiscovery
     IsisPresets.SilenceMetaModel,
     IsisPresets.SilenceProgrammingModel,
     IsisPresets.UseLog4j2Test
 })
-//@Incubating("with development work on 'v2' the reference list of services constantly changes")
 class SpringServiceInjectOrderTest {
 
     @Configuration
     static class TestConfig {
-// is now in IsisBoot
-//        @Bean
-//        public OrderComparator orderComparator() {
-//            return new AnnotationAwareOrderComparator();
-//        }
     }
-    
+
     interface Rating {
         int getRating();
     }
     
     @Service
-    @Order(1)
+    @Order(PriorityPrecedence.EARLY)
     @Qualifier("tallest")
     @Named("withExcellentName")
     static class Excellent implements Rating {
@@ -102,7 +95,7 @@ class SpringServiceInjectOrderTest {
     }
 
     @Service
-    @Order(2) @Primary
+    @Priority(PriorityPrecedence.MIDPOINT)
     @Qualifier("tall")
     @Named("withGoodName")
     static class Good implements Rating {
@@ -114,7 +107,7 @@ class SpringServiceInjectOrderTest {
     }
 
     @Service
-    @Order(Ordered.LOWEST_PRECEDENCE)
+    @Order(PriorityPrecedence.LAST)
     @Qualifier("middle")
     @Named("withAverageName")
     static class Average implements Rating {

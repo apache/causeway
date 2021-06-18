@@ -21,19 +21,18 @@ package org.apache.isis.testdomain.conf;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.TransactionStatus;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.commons.internal.debug._Probe;
@@ -58,7 +57,7 @@ import lombok.RequiredArgsConstructor;
 public class Configuration_headless {
 
     @Service
-    @Order(OrderPrecedence.MIDPOINT)
+    @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
     @RequiredArgsConstructor(onConstructor_ = {@Inject})
     public static class HeadlessCommandSupport
     implements InteractionScopeAware {

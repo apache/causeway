@@ -23,11 +23,10 @@ import java.util.Optional;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-import org.springframework.core.annotation.Order;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.HomePage;
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.homepage.HomePageResolverService;
 import org.apache.isis.commons.internal.reflection._Annotations;
@@ -37,7 +36,7 @@ import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import lombok.val;
 
 @Service
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 public class HomePageResolverServiceDefault implements HomePageResolverService {
 
     private final FactoryService factoryService;

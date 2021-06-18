@@ -20,22 +20,20 @@ package org.apache.isis.core.runtimeservices.urlencoding;
 
 import java.nio.charset.StandardCharsets;
 
+import javax.annotation.Priority;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
 
 @Service
 @Named("isis.runtimeservices.UrlEncodingServiceWithCompression")
-@Order(OrderPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Compression")
 public class UrlEncodingServiceWithCompression implements UrlEncodingService {
 

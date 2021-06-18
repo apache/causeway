@@ -34,10 +34,9 @@ import javax.inject.Named;
 import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.isis.applib.query.Query;
@@ -64,7 +63,7 @@ import lombok.val;
  */
 @Service
 @Named("isis.ext.commandLog.CommandJdoRepository")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Jpa")
 @RequiredArgsConstructor
 //@Log4j2

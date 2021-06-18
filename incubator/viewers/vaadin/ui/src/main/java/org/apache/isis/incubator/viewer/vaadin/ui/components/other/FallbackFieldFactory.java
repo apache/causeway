@@ -25,9 +25,7 @@ import javax.inject.Provider;
 
 import com.vaadin.flow.component.Component;
 
-import org.springframework.core.annotation.Order;
-
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -40,7 +38,7 @@ import org.apache.isis.viewer.common.model.debug.DebugUiModel;
 import lombok.val;
 
 @org.springframework.stereotype.Component
-@Order(OrderPrecedence.LAST)
+@javax.annotation.Priority(PriorityPrecedence.LAST)
 public class FallbackFieldFactory implements UiComponentHandlerVaa {
 
     @Inject private Provider<UiComponentFactoryVaa> uiComponentFactory;

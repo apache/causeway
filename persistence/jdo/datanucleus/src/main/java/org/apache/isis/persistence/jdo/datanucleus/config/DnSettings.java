@@ -22,13 +22,15 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Priority;
 import javax.inject.Named;
 
 import org.datanucleus.PropertyNames;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
+
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -39,7 +41,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Configuration
 @Named("isis.persistence.jdo.DnSettings")
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Dn5")
 @ConfigurationProperties(
         prefix = "",

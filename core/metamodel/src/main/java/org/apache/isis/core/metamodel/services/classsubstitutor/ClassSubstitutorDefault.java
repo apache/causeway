@@ -21,15 +21,14 @@ package org.apache.isis.core.metamodel.services.classsubstitutor;
 
 import javax.inject.Named;
 
-import org.springframework.core.annotation.Order;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.graph.tree.TreeAdapter;
 
 @Component
 @Named("isis.metamodel.ClassSubstitutorDefault")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 public class ClassSubstitutorDefault extends ClassSubstitutorAbstract {
 
     public ClassSubstitutorDefault() {

@@ -18,13 +18,13 @@
  */
 package org.apache.isis.testing.fixtures.applib.fixturescripts;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.config.IsisConfiguration;
 
 import lombok.val;
@@ -34,7 +34,7 @@ import lombok.val;
  *
  * @since 2.0 {@index}
  */
-@AutoConfigureOrder(OrderPrecedence.LATE)
+@AutoConfigureOrder(PriorityPrecedence.LATE)
 @Configuration
 public class FixtureScriptsSpecificationProviderAutoConfiguration  {
 

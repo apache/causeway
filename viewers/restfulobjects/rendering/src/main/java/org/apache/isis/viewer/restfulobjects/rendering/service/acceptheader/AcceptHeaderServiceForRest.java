@@ -18,11 +18,13 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.service.acceptheader;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
+import org.apache.isis.applib.annotation.InteractionScope;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.services.acceptheader.AcceptHeaderService;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Named;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -31,28 +33,20 @@ import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.Provider;
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-
-import org.apache.isis.applib.annotation.InteractionScope;
-import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.acceptheader.AcceptHeaderService;
-import org.apache.isis.commons.internal.base._NullSafe;
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 /**
  * @since 1.x {@index}
  */
 @Service
 @Named("isis.viewer.ro.AcceptHeaderServiceForRest")
-@Order(OrderPrecedence.MIDPOINT)
-@Primary
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("ForRest")
 @InteractionScope
-//@Log4j2
 public class AcceptHeaderServiceForRest implements AcceptHeaderService {
 
     private static ThreadLocal<List<MediaType>> mediaTypesByThread = new ThreadLocal<>();

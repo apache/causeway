@@ -25,15 +25,14 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.services.grid.GridLoaderService;
 import org.apache.isis.applib.services.message.MessageService;
@@ -51,8 +50,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isis.metamodel.GridLoaderServiceDefault")
-@Order(OrderPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2
 public class GridLoaderServiceDefault implements GridLoaderService {

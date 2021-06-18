@@ -22,11 +22,10 @@ import java.util.Optional;
 
 import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.user.ImpersonatedUserHolder;
 import org.apache.isis.applib.services.user.UserMemento;
 
@@ -47,7 +46,7 @@ import org.apache.isis.applib.services.user.UserMemento;
  */
 @Service
 @Named("isis.runtimeservices.ImpersonatedUserHolderDefault")
-@Order(OrderPrecedence.LAST)
+@javax.annotation.Priority(PriorityPrecedence.LAST)
 @Qualifier("Default")
 public class ImpersonatedUserHolderDefault implements ImpersonatedUserHolder {
 

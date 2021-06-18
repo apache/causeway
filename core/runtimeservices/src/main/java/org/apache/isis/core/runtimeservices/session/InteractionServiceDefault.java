@@ -29,22 +29,22 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayer;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.iactnlayer.ThrowingRunnable;
 import org.apache.isis.applib.services.inject.ServiceInjector;
@@ -61,7 +61,6 @@ import org.apache.isis.core.interaction.integration.InteractionAwareTransactiona
 import org.apache.isis.core.interaction.scope.InteractionScopeAware;
 import org.apache.isis.core.interaction.scope.InteractionScopeBeanFactoryPostProcessor;
 import org.apache.isis.core.interaction.scope.InteractionScopeLifecycleHandler;
-import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.core.interaction.session.IsisInteraction;
 import org.apache.isis.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -83,8 +82,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named("isis.runtimeservices.InteractionServiceDefault")
-@Order(OrderPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2
 public class InteractionServiceDefault

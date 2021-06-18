@@ -35,7 +35,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 
 @org.springframework.stereotype.Component
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ObjectReferenceFieldFactory implements UiComponentHandlerFx {
 

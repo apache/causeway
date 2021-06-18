@@ -30,7 +30,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.RestEasyConfiguration;
 
@@ -61,7 +61,7 @@ public class IsisModuleExtCors {
         final FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
         filterRegistrationBean.setFilter(createCorsFilter(isisConfiguration));
         filterRegistrationBean.setUrlPatterns(Collections.singletonList(resteasyBase));
-        filterRegistrationBean.setOrder(OrderPrecedence.EARLY - 100);
+        filterRegistrationBean.setOrder(PriorityPrecedence.EARLY - 100);
 
         return filterRegistrationBean;
     }

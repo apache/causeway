@@ -19,24 +19,20 @@
 
 package org.apache.isis.core.security.authorization.manager;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
-
+import lombok.val;
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.core.security.authorization.Authorizor;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
-import lombok.val;
+import javax.annotation.Nullable;
+import javax.annotation.Priority;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.List;
 
 /**
  * Authorizes the user in the current session view and use members of an object.
@@ -45,8 +41,7 @@ import lombok.val;
  */
 @Service
 @Named("isis.security.AuthorizationManager")
-@Order(OrderPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class AuthorizationManager {
 

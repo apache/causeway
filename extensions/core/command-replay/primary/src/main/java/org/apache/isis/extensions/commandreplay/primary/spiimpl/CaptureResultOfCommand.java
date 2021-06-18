@@ -20,10 +20,9 @@ package org.apache.isis.extensions.commandreplay.primary.spiimpl;
 
 import javax.inject.Named;
 
-import org.springframework.core.annotation.Order;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
@@ -46,7 +45,7 @@ import lombok.val;
 @Named("isis.ext.commandReplayPrimary.CaptureResultOfCommand")
 // specify quite a high priority since custom processors will probably want to run after this one
 // (but can choose to run before if they wish)
-@Order(OrderPrecedence.EARLY)
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class CaptureResultOfCommand implements CommandDtoProcessorService {
 
     @Override

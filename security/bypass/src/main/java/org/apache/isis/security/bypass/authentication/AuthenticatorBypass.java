@@ -21,11 +21,10 @@ package org.apache.isis.security.bypass.authentication;
 
 import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.standard.AuthenticatorAbstract;
 
@@ -36,7 +35,7 @@ import org.apache.isis.core.security.authentication.standard.AuthenticatorAbstra
  */
 @Service
 @Named("isis.security.AuthenticatorBypass")
-@Order(OrderPrecedence.LATE)
+@javax.annotation.Priority(PriorityPrecedence.LATE)
 @Qualifier("Bypass")
 public class AuthenticatorBypass extends AuthenticatorAbstract {
 

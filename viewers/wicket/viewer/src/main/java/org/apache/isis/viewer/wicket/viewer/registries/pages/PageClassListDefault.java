@@ -19,15 +19,7 @@
 
 package org.apache.isis.viewer.wicket.viewer.registries.pages;
 
-import javax.inject.Named;
-
-import org.apache.wicket.Page;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
-
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistrySpi;
@@ -41,6 +33,12 @@ import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
 import org.apache.isis.viewer.wicket.ui.pages.standalonecollection.StandaloneCollectionPage;
 import org.apache.isis.viewer.wicket.ui.pages.value.ValuePage;
 import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
+import org.apache.wicket.Page;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Priority;
+import javax.inject.Named;
 
 /**
  * Default implementation of {@link PageClassList}, specifying the default pages
@@ -48,8 +46,7 @@ import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
  */
 @Service
 @Named("isis.viewer.wicket.PageClassListDefault")
-@Order(OrderPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class PageClassListDefault implements PageClassList {
 

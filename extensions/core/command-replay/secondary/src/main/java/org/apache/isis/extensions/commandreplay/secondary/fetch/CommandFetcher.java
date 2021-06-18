@@ -29,10 +29,9 @@ import javax.inject.Named;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
-import org.springframework.core.annotation.Order;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.jaxb.JaxbService.Simple;
 import org.apache.isis.extensions.commandlog.model.command.CommandModel;
@@ -53,7 +52,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service()
 @Named("isis.ext.commandReplaySecondary.CommandFetcher")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Log4j2
 public class CommandFetcher {
 
