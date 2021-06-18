@@ -76,7 +76,7 @@ public class PriorityPrecedence {
     /**
      * For framework services that are expected to be overridden by application code, or that act as a fallback.
      */
-    public static final int LATE = (LAST - MIDPOINT) / 2;
+    public static final int LATE = MIDPOINT + (LAST - MIDPOINT) / 2;
 
 
 }
