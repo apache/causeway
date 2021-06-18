@@ -24,36 +24,36 @@ import org.springframework.core.Ordered;
 import lombok.experimental.UtilityClass;
 
 /**
- * 
+ * Constants for use with {@link javax.annotation.Priority}, used both to determine which service to inject into a
+ * scalar field when there are multiple candidates, and also to order services if injecting into a vector field (in
+ * other words, into a {@link java.util.List}).
+ *
+ * @see javax.annotation.Priority
+ * @see org.springframework.core.annotation.Order
+ *
  * @since 2.0 {@index}
  */
 @UtilityClass
 public class OrderPrecedence {
 
     /**
-     * For domain services with the highest precedence value.
+     * For domain services with the highest precedence (priority) value.
+     *
+     * <p>
      * No framework services use this constant, but some very fundamental services (eg for security)
      * that are not expected to be overridden use a value that is only a little after this first value.
+     * </p>
      *
-     * @see java.lang.Integer#MIN_VALUE
-     * @see Ordered#HIGHEST_PRECEDENCE
+     * <p>
+     *     Note that this is a non-negative value, because {@link javax.annotation.Priority}'s javadoc states:
+     *     &quot;priority values should generally be non-negative, with negative values * reserved for special meanings
+     *     such as <i>undefined</i> or <i>not specified</i>.&quot;.  In particular, it is <i>not</i> the same as
+     *     {@link Ordered#HIGHEST_PRECEDENCE}.
+     * </p>
+     *
+     * @see javax.annotation.Priority
      */
-    public static final int FIRST = Ordered.HIGHEST_PRECEDENCE;
-
-    /**
-     * For framework for services that are unlikely to be overridden by application code.
-     */
-    public static final int EARLY = FIRST / 2;
-
-    /**
-     * For framework for services that could be overridden by application code (though not commonly).
-     */
-    public static final int MIDPOINT = 0;
-
-    /**
-     * For framework services that are expected to be overridden by application code, or that act as a fallback.
-     */
-    public static final int LATE = OrderPrecedence.LAST / 2;
+    public static final int FIRST = 0;
 
     /**
      * For domain services that act as a fallback, and which will typically be overridden.
@@ -62,6 +62,22 @@ public class OrderPrecedence {
      * @see Ordered#LOWEST_PRECEDENCE
      */
     public static final int LAST = Ordered.LOWEST_PRECEDENCE;
+
+    /**
+     * For framework for services that could be overridden by application code (though not commonly).
+     */
+    public static final int MIDPOINT = (LAST - FIRST) / 2;
+
+    /**
+     * For framework for services that are unlikely to be overridden by application code.
+     */
+    public static final int EARLY = (MIDPOINT - FIRST) / 2;
+
+    /**
+     * For framework services that are expected to be overridden by application code, or that act as a fallback.
+     */
+    public static final int LATE = (LAST - MIDPOINT) / 2;
+
 
 }
 
