@@ -53,11 +53,14 @@ import org.apache.isis.testdomain.conf.Configuration_headless;
 import lombok.Getter;
 import lombok.val;
 
+=======
+        >>>>>>>4dd5fb2460(ISIS-2751:fixes ModuleWithFixturesService)
+
 @SpringBootTest(
-        classes = { 
+        classes = {
                 Configuration_headless.class,
                 SpringServiceInjectOrderTest.TestConfig.class,
-                
+
                 SpringServiceInjectOrderTest.Average.class,
                 SpringServiceInjectOrderTest.Excellent.class,
                 SpringServiceInjectOrderTest.Good.class,
@@ -68,89 +71,19 @@ import lombok.val;
                 // "logging.level.ObjectSpecificationAbstract=TRACE"
         })
 @TestPropertySource({
-    IsisPresets.SilenceMetaModel,
-    IsisPresets.SilenceProgrammingModel,
-    IsisPresets.UseLog4j2Test
+        IsisPresets.SilenceMetaModel,
+        IsisPresets.SilenceProgrammingModel,
+        IsisPresets.UseLog4j2Test
 })
 class SpringServiceInjectOrderTest {
 
-    @Configuration
-    static class TestConfig {
-    }
+    @Inject
+    DummyService dummyService;
+    @Inject
+    ServiceInjector serviceInjector;
+    @Inject
+    OrderComparator orderComparator;
 
-    interface Rating {
-        int getRating();
-    }
-    
-    @Service
-    @Order(PriorityPrecedence.EARLY)
-    @Qualifier("tallest")
-    @Named("withExcellentName")
-    static class Excellent implements Rating {
-
-        @Override
-        public int getRating() {
-            return 1;
-        }
-    }
-
-    @Service
-    @Priority(PriorityPrecedence.MIDPOINT)
-    @Qualifier("tall")
-    @Named("withGoodName")
-    static class Good implements Rating {
-
-        @Override
-        public int getRating() {
-            return 2;
-        }
-    }
-
-    @Service
-    @Order(PriorityPrecedence.LAST)
-    @Qualifier("middle")
-    @Named("withAverageName")
-    static class Average implements Rating {
-     
-        @Override
-        public int getRating() {
-            return 3;
-        }
-    }
-    
-    @Service
-    static class DummyService {
-        @Inject @Getter MessageService messageService;
-        @Inject @Getter List<Rating> ratings;
-        @Inject @Getter Rating primaryRating;
-        @Inject @Getter Rating someArbitraryRating;
-        @Inject @Getter @Qualifier("tallest") Rating qualifiedRating1;
-        @Inject @Getter @Qualifier("tall") Rating qualifiedRating2;
-        @Inject @Getter @Qualifier("middle") Rating qualifiedRating3;
-        @Inject @Getter Rating tallest;
-        @Inject @Getter Rating mostExcellentName;
-
-        // this doesn't bootstrap, because matching is done using the service's @Qualifier, not the service's @Name
-        // @Inject @Getter @Qualifier("mostExcellentName") Rating namedRating1;
-    }
-    
-    @DomainObject
-    static class DummyObject {
-        @Inject @Getter MessageService messageService;
-        @Inject @Getter List<Rating> ratings;
-        @Inject @Getter Rating someArbitraryRating;
-        @Inject @Getter @Qualifier("tallest") Rating qualifiedRating1;
-        @Inject @Getter @Qualifier("tall") Rating qualifiedRating2;
-        @Inject @Getter @Qualifier("middle") Rating qualifiedRating3;
-        @Inject @Getter Rating tallest;
-        @Inject @Getter Rating mostExcellentName;
-    }
-    
-    
-    @Inject DummyService dummyService;
-    @Inject ServiceInjector serviceInjector;
-    @Inject OrderComparator orderComparator;
-    
     @BeforeEach
     void beforeEach() {
 
@@ -160,7 +93,7 @@ class SpringServiceInjectOrderTest {
     void defaultOrdering_shouldConsiderAnnotations() throws IOException {
         assertTrue(orderComparator instanceof AnnotationAwareOrderComparator);
     }
-    
+
     @Test
     void injectionOnServices_shouldFollowOrder() throws IOException {
 
@@ -188,7 +121,7 @@ class SpringServiceInjectOrderTest {
         // does NOT match field name to @Qualifier
         assertThat(dummyService.getMostExcellentName().getRating(), is(equalTo(2)));  // rather than '1'... so defaulted to @Primary
     }
-    
+
     @Test
     void injectionOnObjects_shouldFollowOrder() throws IOException {
 
@@ -219,6 +152,119 @@ class SpringServiceInjectOrderTest {
         // does NOT match field name to @Qualifier
         assertThat(dummyObject.getMostExcellentName().getRating(), is(equalTo(2)));  // rather than '1'... so defaulted to @Primary
 
+    }
+
+
+    interface Rating {
+        int getRating();
+    }
+
+    @Configuration
+    static class TestConfig {
+    }
+
+    @Service
+    @Order(PriorityPrecedence.EARLY)
+    @Qualifier("tallest")
+    @Named("withExcellentName")
+    static class Excellent implements Rating {
+
+        @Override
+        public int getRating() {
+            return 1;
+        }
+    }
+
+    @Service
+    @Priority(PriorityPrecedence.MIDPOINT)
+    @Qualifier("tall")
+    @Named("withGoodName")
+    static class Good implements Rating {
+
+        @Override
+        public int getRating() {
+            return 2;
+        }
+    }
+
+    @Service
+    @Order(PriorityPrecedence.LAST)
+    @Qualifier("middle")
+    @Named("withAverageName")
+    static class Average implements Rating {
+
+        @Override
+        public int getRating() {
+            return 3;
+        }
+    }
+
+    @Service
+    static class DummyService {
+        @Inject
+        @Getter
+        MessageService messageService;
+        @Inject
+        @Getter
+        List<Rating> ratings;
+        @Inject
+        @Getter
+        Rating primaryRating;
+        @Inject
+        @Getter
+        Rating someArbitraryRating;
+        @Inject
+        @Getter
+        @Qualifier("tallest")
+        Rating qualifiedRating1;
+        @Inject
+        @Getter
+        @Qualifier("tall")
+        Rating qualifiedRating2;
+        @Inject
+        @Getter
+        @Qualifier("middle")
+        Rating qualifiedRating3;
+        @Inject
+        @Getter
+        Rating tallest;
+        @Inject
+        @Getter
+        Rating mostExcellentName;
+
+        // this doesn't bootstrap, because matching is done using the service's @Qualifier, not the service's @Name
+        // @Inject @Getter @Qualifier("mostExcellentName") Rating namedRating1;
+    }
+
+    @DomainObject
+    static class DummyObject {
+        @Inject
+        @Getter
+        MessageService messageService;
+        @Inject
+        @Getter
+        List<Rating> ratings;
+        @Inject
+        @Getter
+        Rating someArbitraryRating;
+        @Inject
+        @Getter
+        @Qualifier("tallest")
+        Rating qualifiedRating1;
+        @Inject
+        @Getter
+        @Qualifier("tall")
+        Rating qualifiedRating2;
+        @Inject
+        @Getter
+        @Qualifier("middle")
+        Rating qualifiedRating3;
+        @Inject
+        @Getter
+        Rating tallest;
+        @Inject
+        @Getter
+        Rating mostExcellentName;
     }
 
 }
