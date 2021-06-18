@@ -32,14 +32,13 @@ import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.Provider;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.InteractionScope;
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.acceptheader.AcceptHeaderService;
 import org.apache.isis.commons.internal.base._NullSafe;
 
@@ -48,7 +47,7 @@ import org.apache.isis.commons.internal.base._NullSafe;
  */
 @Service
 @Named("isis.viewer.ro.AcceptHeaderServiceForRest")
-@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Primary
 @Qualifier("ForRest")
 @InteractionScope

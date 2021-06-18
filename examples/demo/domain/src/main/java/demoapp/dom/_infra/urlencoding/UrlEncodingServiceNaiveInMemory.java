@@ -25,12 +25,11 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._NullSafe;
@@ -48,7 +47,7 @@ import lombok.val;
  */
 @Service
 @Named("demo.UrlEncodingServiceInMemory")
-@javax.annotation.Priority(OrderPrecedence.EARLY)
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 @Primary
 @Qualifier("InMemory")
 public class UrlEncodingServiceNaiveInMemory implements UrlEncodingService {

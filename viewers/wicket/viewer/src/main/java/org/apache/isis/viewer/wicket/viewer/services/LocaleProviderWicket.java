@@ -22,14 +22,13 @@ import java.util.Locale;
 
 import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.wicket.Application;
 import org.apache.wicket.Session;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.i18n.LocaleProvider;
 
 
@@ -38,7 +37,7 @@ import org.apache.isis.applib.services.i18n.LocaleProvider;
  */
 @Service
 @Named("isis.viewer.wicket.LocaleProviderWicket")
-@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Wicket")
 public class LocaleProviderWicket implements LocaleProvider {
 

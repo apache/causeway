@@ -24,9 +24,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.data.converter.DateToSqlDateConverter;
 import com.vaadin.flow.data.converter.LocalDateToDateConverter;
 
-import org.springframework.core.annotation.Order;
-
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet.OffsetCharacteristic;
@@ -38,7 +36,7 @@ import org.apache.isis.viewer.common.model.components.UiComponentFactory.Compone
 import lombok.val;
 
 @org.springframework.stereotype.Component
-@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 public class TemporalFieldFactory implements UiComponentHandlerVaa {
 
     @Override

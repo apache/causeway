@@ -22,15 +22,14 @@ import javax.inject.Singleton;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 
 @Component
 @Provider
 @Singleton
-@javax.annotation.Priority(OrderPrecedence.LATE)
+@javax.annotation.Priority(PriorityPrecedence.LATE)
 public class ExceptionMapperForRuntimeException extends ExceptionMapperAbstract<RuntimeException> {
 
     @Override

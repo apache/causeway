@@ -39,11 +39,10 @@ import org.apache.shiro.web.env.WebEnvironment;
 import org.apache.shiro.web.filter.mgt.PathMatchingFilterChainResolver;
 import org.apache.shiro.web.servlet.ShiroFilter;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal._Constants;
@@ -66,7 +65,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named("isis.security.WebModuleShiro")
-@javax.annotation.Priority(OrderPrecedence.FIRST + 200)
+@javax.annotation.Priority(PriorityPrecedence.FIRST + 200)
 @Qualifier("Shiro")
 @Log4j2
 public class WebModuleShiro extends WebModuleAbstract {

@@ -3,11 +3,10 @@ package org.apache.isis.extensions.secman.integration.spiimpl;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.tablecol.TableColumnVisibilityService;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -20,7 +19,7 @@ import lombok.val;
 
 @Service
 @Named("isis.ext.secman.TableColumnVisibilityServiceForSecman")
-@javax.annotation.Priority(OrderPrecedence.LATE - 10)
+@javax.annotation.Priority(PriorityPrecedence.LATE - 10)
 @Qualifier("Secman")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class TableColumnVisibilityServiceForSecman implements TableColumnVisibilityService {

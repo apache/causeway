@@ -29,11 +29,10 @@ import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Element;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.xml.XmlService;
 import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -42,7 +41,7 @@ import org.apache.isis.core.metamodel.util.snapshot.XmlSnapshot;
 
 @Service
 @Named("isis.runtimeservices.XmlSnapshotServiceDefault")
-@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 public class XmlSnapshotServiceDefault implements XmlSnapshotService {

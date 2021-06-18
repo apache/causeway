@@ -18,15 +18,9 @@
  */
 package org.apache.isis.extensions.secman.applib;
 
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.extensions.secman.applib.feature.api.ApplicationFeatureChoices;
 import org.apache.isis.extensions.secman.applib.feature.contributions.ApplicationFeatureViewModel_permissions;
 import org.apache.isis.extensions.secman.applib.permission.app.ApplicationOrphanedPermissionManager;
@@ -39,9 +33,6 @@ import org.apache.isis.extensions.secman.applib.permission.dom.mixins.Applicatio
 import org.apache.isis.extensions.secman.applib.permission.dom.mixins.ApplicationPermission_veto;
 import org.apache.isis.extensions.secman.applib.permission.dom.mixins.ApplicationPermission_viewing;
 import org.apache.isis.extensions.secman.applib.permission.menu.ApplicationPermissionMenu;
-import org.apache.isis.extensions.secman.applib.permission.spi.PermissionsEvaluationService;
-import org.apache.isis.extensions.secman.applib.permission.spi.PermissionsEvaluationServiceAllowBeatsVeto;
-import org.apache.isis.extensions.secman.applib.permission.spi.PermissionsEvaluationServiceVetoBeatsAllow;
 import org.apache.isis.extensions.secman.applib.role.dom.mixins.ApplicationRole_addPermission;
 import org.apache.isis.extensions.secman.applib.role.dom.mixins.ApplicationRole_addUser;
 import org.apache.isis.extensions.secman.applib.role.dom.mixins.ApplicationRole_delete;
@@ -84,8 +75,6 @@ import org.apache.isis.extensions.secman.applib.user.dom.mixins.perms.Applicatio
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.perms.UserPermissionViewModel;
 import org.apache.isis.extensions.secman.applib.user.menu.ApplicationUserMenu;
 import org.apache.isis.extensions.secman.applib.user.menu.MeService;
-
-import lombok.val;
 
 /**
  * @since 2.0 {@index}

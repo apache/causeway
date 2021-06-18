@@ -20,12 +20,11 @@ package org.apache.isis.extensions.secman.encryption.jbcrypt.services;
 
 import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.extensions.secman.applib.user.spi.PasswordEncryptionService;
 
 /**
@@ -33,7 +32,7 @@ import org.apache.isis.extensions.secman.applib.user.spi.PasswordEncryptionServi
  */
 @Service
 @Named("isis.ext.secman.PasswordEncryptionServiceUsingJBcrypt")
-@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("JBCrypt")
 public class PasswordEncryptionServiceUsingJBcrypt implements PasswordEncryptionService {
 

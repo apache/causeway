@@ -18,13 +18,13 @@
  */
 package org.apache.isis.extensions.secman.integration.authenticator;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.security.authentication.Authenticator;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.applib.user.spi.PasswordEncryptionService;
@@ -32,7 +32,7 @@ import org.apache.isis.extensions.secman.applib.user.spi.PasswordEncryptionServi
 /**
  * @since 2.0 {@index}
  */
-@AutoConfigureOrder(OrderPrecedence.LATE)
+@AutoConfigureOrder(PriorityPrecedence.LATE)
 @Configuration
 public class AuthenticatorSecmanAutoConfiguration  {
 

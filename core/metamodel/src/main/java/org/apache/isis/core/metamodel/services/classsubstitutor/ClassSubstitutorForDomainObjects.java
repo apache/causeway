@@ -22,10 +22,9 @@ package org.apache.isis.core.metamodel.services.classsubstitutor;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.core.config.beans.IsisBeanMetaData;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 
@@ -34,7 +33,7 @@ import lombok.val;
 
 @Component
 @Named("isis.metamodel.ClassSubstitutorForDomainObjects")
-@javax.annotation.Priority(OrderPrecedence.MIDPOINT - 20) // before ClassSubstitutorForCollections
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT - 20) // before ClassSubstitutorForCollections
 public class ClassSubstitutorForDomainObjects implements ClassSubstitutor {
 
     private IsisBeanTypeRegistry isisBeanTypeRegistry;

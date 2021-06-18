@@ -20,11 +20,10 @@ package demoapp.webapp.wicket.common.ui.custom;
 
 import javax.inject.Inject;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
-import org.springframework.core.annotation.Order;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -35,7 +34,7 @@ import demoapp.dom.featured.customui.vm.WhereInTheWorldVm;
 
 //tag::class[]
 @org.springframework.stereotype.Component
-@javax.annotation.Priority(OrderPrecedence.EARLY)                                             // <.>
+@javax.annotation.Priority(PriorityPrecedence.EARLY)                                             // <.>
 public class WhereInTheWorldPanelFactory extends EntityComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;

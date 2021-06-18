@@ -28,10 +28,9 @@ import javax.inject.Named;
 import org.apache.wicket.Page;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
@@ -44,7 +43,7 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistrySpi;
  */
 @Service
 @Named("isis.viewer.wicket.PageClassRegistryDefault")
-@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 public class PageClassRegistryDefault implements PageClassRegistry, PageClassRegistrySpi {

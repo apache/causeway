@@ -25,11 +25,10 @@ import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.core.annotation.Order;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.user.ImpersonatedUserHolder;
 import org.apache.isis.applib.services.user.UserMemento;
 
@@ -42,7 +41,7 @@ import org.apache.isis.applib.services.user.UserMemento;
 @Component
 @RequestScope
 @Named("isis.webapp.ImpersonatedUserHolderUsingHttpSession")
-@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 public class ImpersonatedUserHolderUsingHttpSession implements ImpersonatedUserHolder {
 
     private final Optional<HttpSession> httpSession;

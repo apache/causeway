@@ -37,13 +37,12 @@ import javax.jdo.Query;
 import javax.jdo.datastore.JDOConnection;
 import javax.jdo.query.BooleanExpression;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.datanucleus.store.rdbms.RDBMSPropertyNames;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.applib.exceptions.unrecoverable.ObjectPersistenceException;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -58,7 +57,7 @@ import lombok.val;
 
 @Service
 @Named("isis.persistence.jdo.JdoSupportServiceDefault")
-@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Primary
 @Qualifier("DN5")
 public class JdoSupportServiceDefault implements JdoSupportService {

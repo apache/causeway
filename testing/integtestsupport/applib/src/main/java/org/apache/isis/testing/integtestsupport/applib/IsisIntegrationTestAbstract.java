@@ -21,11 +21,10 @@ package org.apache.isis.testing.integtestsupport.applib;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
@@ -55,7 +54,7 @@ public abstract class IsisIntegrationTestAbstract {
      * therefore also {@link Command}s (currently unused).
      */
     @Service
-    @javax.annotation.Priority(OrderPrecedence.MIDPOINT)
+    @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
     @RequiredArgsConstructor(onConstructor_ = {@Inject})
     public static class InteractionSupport {
 

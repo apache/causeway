@@ -31,13 +31,12 @@ import java.util.function.Consumer;
 import javax.persistence.Entity;
 
 import org.springframework.context.event.EventListener;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
@@ -607,7 +606,7 @@ implements
     }
 
     @Service
-    @javax.annotation.Priority(OrderPrecedence.LATE - 10) // before the framework's own default.
+    @javax.annotation.Priority(PriorityPrecedence.LATE - 10) // before the framework's own default.
     public static class TableColumnOrderDefault extends TableColumnOrderForCollectionTypeAbstract<CommandJpa> {
 
         public TableColumnOrderDefault() { super(CommandJpa.class); }

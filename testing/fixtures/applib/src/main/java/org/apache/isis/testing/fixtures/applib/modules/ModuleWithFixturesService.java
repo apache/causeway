@@ -36,10 +36,9 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.subdomains.spring.applib.service.BeanDescriptor;
 import org.apache.isis.subdomains.spring.applib.service.ContextBeans;
@@ -55,7 +54,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named("isis.testing.fixtures.ModuleWithFixturesService")
-@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 @Log4j2

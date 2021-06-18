@@ -22,10 +22,9 @@ import java.util.Collection;
 
 import javax.inject.Named;
 
-import org.springframework.core.annotation.Order;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.graph.SimpleEdge;
 import org.apache.isis.applib.graph.tree.TreeNode;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -35,7 +34,7 @@ import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
 @Named("isis.metamodel.ValueTypeProviderForBuiltin")
-@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 public class ValueTypeProviderForBuiltin implements ValueTypeProvider {
 
     @Override

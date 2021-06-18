@@ -28,7 +28,7 @@ public class MyLocaleProvider implements LocaleProvider {
     }
 }
 ----
-<.> `OrderPrecedence` (in the Apache Isis applib) provides some standard values.
+<.> `PriorityPrecedence` (in the Apache Isis applib) provides some standard values.
 
 
 == Decorating existing implementations

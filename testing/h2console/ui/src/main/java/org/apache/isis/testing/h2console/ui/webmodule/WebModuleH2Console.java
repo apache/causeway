@@ -24,15 +24,14 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.h2.server.web.ConnectionInfo;
 import org.h2.server.web.WebServer;
 import org.h2.server.web.WebServlet;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.commons.collections.Can;
@@ -53,7 +52,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named("isis.test.WebModuleH2Console")
-@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("H2Console")
 @Log4j2
 public class WebModuleH2Console extends WebModuleAbstract {

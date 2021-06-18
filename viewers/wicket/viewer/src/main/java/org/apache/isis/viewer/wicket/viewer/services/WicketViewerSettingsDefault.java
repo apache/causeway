@@ -22,12 +22,11 @@ package org.apache.isis.viewer.wicket.viewer.services;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
@@ -35,7 +34,7 @@ import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 
 @Service
 @Named("isis.viewer.wicket..WicketViewerSettingsDefault")
-@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 public class WicketViewerSettingsDefault implements WicketViewerSettings {

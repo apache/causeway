@@ -21,12 +21,11 @@ package org.apache.isis.extensions.secman.integration.authorizor;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.core.security.authorization.Authorizor;
@@ -39,7 +38,7 @@ import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserReposito
  */
 @Service
 @Named("isis.ext.secman.AuthorizorSecman")
-@javax.annotation.Priority(OrderPrecedence.EARLY - 10)
+@javax.annotation.Priority(PriorityPrecedence.EARLY - 10)
 @Qualifier("Secman")
 public class AuthorizorSecman implements Authorizor {
 

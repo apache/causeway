@@ -21,10 +21,9 @@ package demoapp.dom.domain._commands;
 import java.util.Arrays;
 import java.util.List;
 
-import org.springframework.core.annotation.Order;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.tablecol.TableColumnOrderForCollectionTypeAbstract;
 import org.apache.isis.extensions.commandlog.model.command.CommandModel;
 
@@ -35,7 +34,7 @@ import org.apache.isis.extensions.commandlog.model.command.CommandModel;
 public interface ExposePersistedCommands {
 
     @Service
-    @javax.annotation.Priority(OrderPrecedence.EARLY)
+    @javax.annotation.Priority(PriorityPrecedence.EARLY)
     public static class TableColumnOrderDefault extends TableColumnOrderForCollectionTypeAbstract<CommandModel> {
 
         public TableColumnOrderDefault() { super(CommandModel.class); }

@@ -19,7 +19,7 @@
 package org.apache.isis.testing.fixtures.applib.services;
 
 import lombok.extern.log4j.Log4j2;
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.events.MetamodelEvent;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
@@ -27,7 +27,6 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.event.EventListener;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -68,7 +67,7 @@ public class InitialFixtureScriptsInstaller {
     }
 
     @EventListener(MetamodelEvent.class)
-    @javax.annotation.Priority(OrderPrecedence.LAST - 100)
+    @javax.annotation.Priority(PriorityPrecedence.LAST - 100)
     public void onMetamodelEvent(final MetamodelEvent event) {
 
         log.debug("received metamodel event {}", event);

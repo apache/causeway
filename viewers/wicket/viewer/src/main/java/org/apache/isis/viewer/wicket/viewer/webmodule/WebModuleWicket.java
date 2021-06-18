@@ -28,10 +28,9 @@ import javax.servlet.ServletException;
 
 import org.apache.wicket.protocol.http.WicketFilter;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
@@ -47,7 +46,7 @@ import lombok.Getter;
  */
 @Service
 @Named("isis.viewer.wicket.WebModuleWicket")
-@javax.annotation.Priority(OrderPrecedence.MIDPOINT - 80)
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT - 80)
 @Qualifier("Wicket")
 public final class WebModuleWicket extends WebModuleAbstract {
 

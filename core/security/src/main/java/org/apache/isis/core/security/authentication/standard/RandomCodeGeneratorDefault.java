@@ -22,16 +22,14 @@ import java.security.SecureRandom;
 
 import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-
-import org.apache.isis.applib.annotation.OrderPrecedence;
 
 @Component
 @Named("isis.security.RandomCodeGenerator10Chars")
-@javax.annotation.Priority(OrderPrecedence.LATE)
+@javax.annotation.Priority(PriorityPrecedence.LATE)
 @Primary
 @Qualifier("Default")
 public class RandomCodeGeneratorDefault implements RandomCodeGenerator {

@@ -30,17 +30,16 @@ import java.util.stream.Stream;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.core.annotation.Order;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.val;
 
 @Component
 @Named("isis.metamodel.ValueTypeRegistry")
-@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 public class ValueTypeRegistry {
 
     private final List<ValueTypeProvider> valueTypeProviders;

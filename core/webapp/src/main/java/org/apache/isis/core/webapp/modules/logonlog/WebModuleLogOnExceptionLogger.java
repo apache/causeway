@@ -24,11 +24,10 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.webapp.modules.WebModuleAbstract;
@@ -42,7 +41,7 @@ import lombok.Getter;
  */
 @Service
 @Named("isis.webapp.WebModuleLogOnExceptionLogger")
-@javax.annotation.Priority(OrderPrecedence.EARLY - 100)
+@javax.annotation.Priority(PriorityPrecedence.EARLY - 100)
 @Qualifier("LogOnExceptionLogger")
 public final class WebModuleLogOnExceptionLogger extends WebModuleAbstract {
 

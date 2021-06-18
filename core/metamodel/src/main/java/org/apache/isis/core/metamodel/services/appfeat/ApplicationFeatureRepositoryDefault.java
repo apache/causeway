@@ -33,9 +33,8 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.context.event.EventListener;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -93,7 +92,7 @@ implements ApplicationFeatureRepository {
     }
 
     // -- init
-    @javax.annotation.Priority(OrderPrecedence.MIDPOINT)
+    @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
     @EventListener(MetamodelEvent.class)
     public void onMetamodelEvent(MetamodelEvent event) {
         if (event.isPostMetamodel()

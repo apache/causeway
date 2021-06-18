@@ -29,10 +29,9 @@ import javax.ws.rs.core.Response;
 import com.fasterxml.jackson.databind.node.POJONode;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.client.RepresentationTypeSimplifiedV2;
 import org.apache.isis.applib.client.SuppressionType;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -59,7 +58,7 @@ import lombok.val;
  */
 @Service
 @Named("isis.viewer.ro.ContentNegotiationServiceOrgApacheIsisV2")
-@javax.annotation.Priority(OrderPrecedence.MIDPOINT - 200)
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT - 200)
 @Qualifier("OrgApacheIsisV2")
 public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiationServiceAbstract {
 

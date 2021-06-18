@@ -20,9 +20,7 @@ package org.apache.isis.incubator.viewer.vaadin.ui.components.blob;
 
 import com.vaadin.flow.component.Component;
 
-import org.springframework.core.annotation.Order;
-
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.core.metamodel.facets.value.blobs.BlobValueFacet;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentHandlerVaa;
@@ -31,7 +29,7 @@ import org.apache.isis.viewer.common.model.components.UiComponentFactory.Compone
 import lombok.val;
 
 @org.springframework.stereotype.Component
-@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 public class BlobFieldFactory implements UiComponentHandlerVaa {
 
     @Override

@@ -3,12 +3,11 @@ package org.apache.isis.extensions.spring.security.oauth2.authconverters;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.springframework.core.annotation.Order;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.security.spring.authconverters.AuthenticationConverter;
 
@@ -36,7 +35,7 @@ import lombok.var;
  * </pre>
  */
 @Component
-@javax.annotation.Priority(OrderPrecedence.LATE - 150)
+@javax.annotation.Priority(PriorityPrecedence.LATE - 150)
 public class AuthenticationConverterOfOAuth2UserPrincipal implements AuthenticationConverter {
 
     @Override

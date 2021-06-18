@@ -18,14 +18,12 @@
  */
 package org.apache.isis.testing.fixtures.applib.fixturescripts;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.core.config.IsisConfiguration;
 
 
 /**
@@ -33,7 +31,7 @@ import org.apache.isis.core.config.IsisConfiguration;
  * none has been provided explicitly by the application itself.
  *
  */
-@AutoConfigureOrder(OrderPrecedence.LATE)
+@AutoConfigureOrder(PriorityPrecedence.LATE)
 @Configuration
 public class ExecutionParametersServiceAutoConfiguration {
 

@@ -19,13 +19,12 @@
 package org.apache.isis.extensions.secman.applib.seed;
 
 import lombok.extern.log4j.Log4j2;
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.core.metamodel.events.MetamodelEvent;
 import org.apache.isis.extensions.secman.applib.seed.scripts.SeedUsersAndRolesFixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.event.EventListener;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -57,7 +56,7 @@ public class SeedSecurityModuleService {
         this.fixtureScripts = fixtureScripts;
     }
 
-    @javax.annotation.Priority(OrderPrecedence.MIDPOINT - 100)
+    @javax.annotation.Priority(PriorityPrecedence.MIDPOINT - 100)
     @EventListener(MetamodelEvent.class)
     public void onMetamodelEvent(final MetamodelEvent event) {
 

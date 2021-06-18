@@ -27,10 +27,9 @@ import javax.inject.Named;
 import javax.ws.rs.core.Response;
 
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
@@ -65,7 +64,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named("isis.viewer.ro.RepresentationService")
-@javax.annotation.Priority(OrderPrecedence.EARLY)
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 @Primary
 @Log4j2
 public class RepresentationService {

@@ -21,12 +21,11 @@ package org.apache.isis.viewer.common.model.userprofile;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.user.UserMemento;
@@ -39,7 +38,7 @@ import lombok.val;
 
 @Service
 @Named("isis.viewer.common.UserProfileServiceDefault")
-@javax.annotation.Priority(OrderPrecedence.LATE)
+@javax.annotation.Priority(PriorityPrecedence.LATE)
 @Primary
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

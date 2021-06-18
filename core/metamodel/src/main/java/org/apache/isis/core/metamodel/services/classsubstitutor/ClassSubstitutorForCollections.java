@@ -27,16 +27,14 @@ import java.util.Vector;
 
 import javax.inject.Named;
 
-import org.springframework.core.annotation.Order;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.stereotype.Component;
-
-import org.apache.isis.applib.annotation.OrderPrecedence;
 
 import lombok.NonNull;
 
 @Component
 @Named("isis.metamodel.ClassSubstitutorForCollections")
-@javax.annotation.Priority(OrderPrecedence.MIDPOINT - 10)
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT - 10)
 public class ClassSubstitutorForCollections implements ClassSubstitutor {
 
     @Override
