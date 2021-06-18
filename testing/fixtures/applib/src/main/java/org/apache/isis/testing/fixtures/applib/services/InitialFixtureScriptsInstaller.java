@@ -26,6 +26,7 @@ import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
@@ -70,7 +71,7 @@ public class InitialFixtureScriptsInstaller {
     }
 
     @EventListener(MetamodelEvent.class)
-    @javax.annotation.Priority(PriorityPrecedence.LAST - 100)
+    @Order(PriorityPrecedence.LAST - 100)
     public void onMetamodelEvent(final MetamodelEvent event) {
 
         log.debug("received metamodel event {}", event);
