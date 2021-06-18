@@ -36,10 +36,10 @@ import lombok.NonNull;
 public abstract class FacetFactoryAbstract
 implements FacetFactory, HasMetaModelContext {
 
-    @Getter(onMethod = @__({@Override}))
+    @Getter(onMethod_ = {@Override}))
     private final @NonNull MetaModelContext metaModelContext;
 
-    @Getter(onMethod = @__({@Override}))
+    @Getter(onMethod_ = {@Override}))
     private final ImmutableEnumSet<FeatureType> featureTypes;
 
     public FacetFactoryAbstract(
