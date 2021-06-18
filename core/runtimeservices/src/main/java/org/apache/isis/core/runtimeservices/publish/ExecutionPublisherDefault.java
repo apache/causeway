@@ -47,7 +47,7 @@ import lombok.val;
 
 @Service
 @Named("isis.runtimeservices.ExecutionPublisherDefault")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 @InteractionScope

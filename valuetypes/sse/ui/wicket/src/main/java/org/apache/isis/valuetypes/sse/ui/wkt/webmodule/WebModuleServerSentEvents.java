@@ -43,7 +43,7 @@ import lombok.Getter;
 @Service
 @Named("isis.val.WebModuleServerSentEvents")
 @Qualifier("ServerSentEvents")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 public final class WebModuleServerSentEvents extends WebModuleAbstract {
 
     private static final String SERVLET_NAME = "ServerSentEventsServlet";

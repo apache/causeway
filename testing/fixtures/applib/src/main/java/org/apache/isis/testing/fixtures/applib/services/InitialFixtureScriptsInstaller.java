@@ -68,7 +68,7 @@ public class InitialFixtureScriptsInstaller {
     }
 
     @EventListener(MetamodelEvent.class)
-    @Order(OrderPrecedence.LAST - 100)
+    @javax.annotation.Priority(OrderPrecedence.LAST - 100)
     public void onMetamodelEvent(final MetamodelEvent event) {
 
         log.debug("received metamodel event {}", event);

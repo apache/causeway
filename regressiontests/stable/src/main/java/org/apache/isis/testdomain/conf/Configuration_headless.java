@@ -58,7 +58,7 @@ import lombok.RequiredArgsConstructor;
 public class Configuration_headless {
 
     @Service
-    @Order(OrderPrecedence.MIDPOINT)
+    @javax.annotation.Priority(OrderPrecedence.MIDPOINT)
     @RequiredArgsConstructor(onConstructor_ = {@Inject})
     public static class HeadlessCommandSupport
     implements InteractionScopeAware {

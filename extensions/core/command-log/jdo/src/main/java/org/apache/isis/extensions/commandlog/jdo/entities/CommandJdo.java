@@ -622,7 +622,7 @@ implements
     }
 
     @Service
-    @Order(OrderPrecedence.LATE - 10) // before the framework's own default.
+    @javax.annotation.Priority(OrderPrecedence.LATE - 10) // before the framework's own default.
     public static class TableColumnOrderDefault extends TableColumnOrderForCollectionTypeAbstract<CommandJdo> {
 
         public TableColumnOrderDefault() { super(CommandJdo.class); }

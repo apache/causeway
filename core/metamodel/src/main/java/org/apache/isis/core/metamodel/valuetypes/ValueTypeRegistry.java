@@ -40,7 +40,7 @@ import lombok.val;
 
 @Component
 @Named("isis.metamodel.ValueTypeRegistry")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 public class ValueTypeRegistry {
 
     private final List<ValueTypeProvider> valueTypeProviders;

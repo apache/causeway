@@ -58,7 +58,7 @@ import lombok.val;
 
 @Service
 @Named("isis.persistence.jdo.JdoSupportServiceDefault")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("DN5")
 public class JdoSupportServiceDefault implements JdoSupportService {

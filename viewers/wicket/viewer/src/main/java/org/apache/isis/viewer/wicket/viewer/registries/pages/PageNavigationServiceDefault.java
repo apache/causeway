@@ -42,7 +42,7 @@ import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
  */
 @Service
 @Named("isis.viewer.wicket.PageNavigationServiceDefault")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 public class PageNavigationServiceDefault implements PageNavigationService {

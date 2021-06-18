@@ -35,7 +35,7 @@ import org.apache.isis.core.security.authorization.Authorizor;
  */
 @Service
 @Named("isis.security.AuthorizorBypass")
-@Order(OrderPrecedence.LATE)
+@javax.annotation.Priority(OrderPrecedence.LATE)
 @Qualifier("Bypass")
 public class AuthorizorBypass implements Authorizor {
 

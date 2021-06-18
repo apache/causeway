@@ -41,7 +41,7 @@ import lombok.experimental.UtilityClass;
  */
 @Service
 @Named("isis.sub.spring.SpringBeansService")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class SpringBeansService {
 

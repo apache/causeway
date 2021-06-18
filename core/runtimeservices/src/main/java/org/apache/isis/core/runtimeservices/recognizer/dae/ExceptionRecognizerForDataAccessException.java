@@ -50,7 +50,7 @@ import lombok.val;
  */
 @Service
 @Named("isis.runtime.ExceptionRecognizerForDataAccessException")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class ExceptionRecognizerForDataAccessException
 implements ExceptionRecognizer {

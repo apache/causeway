@@ -32,7 +32,7 @@ import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
 @Component
 @Provider
 @Singleton
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 public class ExceptionMapperForObjectNotFound extends ExceptionMapperAbstract<ObjectNotFoundException> {
 
     @Override

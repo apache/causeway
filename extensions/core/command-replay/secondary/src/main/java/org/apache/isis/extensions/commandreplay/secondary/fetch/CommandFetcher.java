@@ -53,7 +53,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service()
 @Named("isis.ext.commandReplaySecondary.CommandFetcher")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Log4j2
 public class CommandFetcher {
 

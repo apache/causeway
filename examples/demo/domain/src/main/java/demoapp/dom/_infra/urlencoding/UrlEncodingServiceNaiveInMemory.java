@@ -48,7 +48,7 @@ import lombok.val;
  */
 @Service
 @Named("demo.UrlEncodingServiceInMemory")
-@Order(OrderPrecedence.EARLY)
+@javax.annotation.Priority(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("InMemory")
 public class UrlEncodingServiceNaiveInMemory implements UrlEncodingService {

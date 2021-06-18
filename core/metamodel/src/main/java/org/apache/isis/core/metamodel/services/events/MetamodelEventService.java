@@ -45,7 +45,7 @@ import lombok.Builder;
  */
 @Service
 @Named("isis.metamodel.MetamodelEventService")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 @Builder //for JUnit Test support

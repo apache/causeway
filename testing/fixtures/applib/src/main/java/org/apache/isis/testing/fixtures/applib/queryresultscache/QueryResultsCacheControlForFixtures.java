@@ -38,7 +38,7 @@ import org.apache.isis.testing.fixtures.applib.events.FixturesInstallingEvent;
  */
 @Service
 @Named("isis.testing.fixtures.QueryResultsCacheControlForFixtures")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("ForFixtures")
 public class QueryResultsCacheControlForFixtures implements QueryResultsCacheControl {

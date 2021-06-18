@@ -42,7 +42,7 @@ import lombok.val;
  */
 @Service
 @Named("isis.ext.commandReplaySecondary.CommandReplayAnalyserException")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @RequiredArgsConstructor
 public class CommandReplayAnalyserException implements CommandReplayAnalyser {
 

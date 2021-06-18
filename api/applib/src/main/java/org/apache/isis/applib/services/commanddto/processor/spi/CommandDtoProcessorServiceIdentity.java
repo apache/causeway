@@ -33,7 +33,7 @@ import org.apache.isis.schema.cmd.v2.CommandDto;
  */
 @Service
 @Named("isis.applib.CommandDtoProcessorServiceIdentity")
-@Order(OrderPrecedence.LAST)
+@javax.annotation.Priority(OrderPrecedence.LAST)
 public class CommandDtoProcessorServiceIdentity implements CommandDtoProcessorService {
 
     @Override

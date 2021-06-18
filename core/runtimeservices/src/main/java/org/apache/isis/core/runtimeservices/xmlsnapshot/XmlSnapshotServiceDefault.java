@@ -42,7 +42,7 @@ import org.apache.isis.core.metamodel.util.snapshot.XmlSnapshot;
 
 @Service
 @Named("isis.runtimeservices.XmlSnapshotServiceDefault")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 public class XmlSnapshotServiceDefault implements XmlSnapshotService {

@@ -32,7 +32,7 @@ import org.apache.isis.applib.services.routing.RoutingService;
 
 @Service
 @Named("isis.runtimeservices.RoutingServiceDefault")
-@Order(OrderPrecedence.EARLY)
+@javax.annotation.Priority(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
 //@Log4j2

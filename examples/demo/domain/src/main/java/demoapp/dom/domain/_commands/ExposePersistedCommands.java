@@ -35,7 +35,7 @@ import org.apache.isis.extensions.commandlog.model.command.CommandModel;
 public interface ExposePersistedCommands {
 
     @Service
-    @Order(OrderPrecedence.EARLY)
+    @javax.annotation.Priority(OrderPrecedence.EARLY)
     public static class TableColumnOrderDefault extends TableColumnOrderForCollectionTypeAbstract<CommandModel> {
 
         public TableColumnOrderDefault() { super(CommandModel.class); }

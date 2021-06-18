@@ -42,7 +42,7 @@ import lombok.Getter;
  */
 @Service
 @Named("isis.security.WebModuleKeycloak")
-@Order(OrderPrecedence.FIRST + 100)
+@javax.annotation.Priority(OrderPrecedence.FIRST + 100)
 @Qualifier("Keycloak")
 public final class WebModuleKeycloak extends WebModuleAbstract {
 

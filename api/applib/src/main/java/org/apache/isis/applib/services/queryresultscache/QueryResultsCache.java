@@ -65,7 +65,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named("isis.applib.QueryResultsCache")
-@Order(OrderPrecedence.EARLY)
+@javax.annotation.Priority(OrderPrecedence.EARLY)
 @Primary
 @InteractionScope
 @Qualifier("Default")

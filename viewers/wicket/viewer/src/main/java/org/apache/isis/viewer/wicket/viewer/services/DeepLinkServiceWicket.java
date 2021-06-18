@@ -48,7 +48,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Service
 @Named("isis.viewer.wicket.DeepLinkServiceWicket")
-@Order(OrderPrecedence.EARLY)
+@javax.annotation.Priority(OrderPrecedence.EARLY)
 @Qualifier("Wicket")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class DeepLinkServiceWicket implements DeepLinkService {

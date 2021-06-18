@@ -51,7 +51,7 @@ import lombok.val;
  */
 @Service
 @Named("isis.security.AuthorizorShiro")
-@Order(OrderPrecedence.EARLY)
+@javax.annotation.Priority(OrderPrecedence.EARLY)
 @Qualifier("Shiro")
 public class AuthorizorShiro implements Authorizor {
 

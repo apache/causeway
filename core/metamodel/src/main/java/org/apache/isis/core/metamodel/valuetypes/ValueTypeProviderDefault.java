@@ -33,7 +33,7 @@ import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
 @Named("isis.metamodel.ValueTypeProviderBuiltIn")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 public class ValueTypeProviderDefault implements ValueTypeProvider {
 
     private final Map<Class<?>, ValueTypeDefinition> definitions =

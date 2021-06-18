@@ -66,7 +66,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named("isis.security.WebModuleShiro")
-@Order(OrderPrecedence.FIRST + 200)
+@javax.annotation.Priority(OrderPrecedence.FIRST + 200)
 @Qualifier("Shiro")
 @Log4j2
 public class WebModuleShiro extends WebModuleAbstract {

@@ -24,7 +24,7 @@ import org.apache.isis.applib.services.user.ImpersonateMenuAdvisor;
  */
 @Service
 @Named("isis.runtimeservices.ImpersonateMenuAdvisorDefault")
-@Order(OrderPrecedence.LAST)
+@javax.annotation.Priority(OrderPrecedence.LAST)
 @Qualifier("Default")
 public class ImpersonateMenuAdvisorDefault implements ImpersonateMenuAdvisor {
 

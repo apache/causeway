@@ -70,7 +70,7 @@ import lombok.val;
  */
 @Service
 @Named("isis.viewer.ro.ContentNegotiationServiceForRestfulObjectsV1_0")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("RestfulObjectsV1_0")
 public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNegotiationService {

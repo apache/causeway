@@ -46,7 +46,7 @@ import lombok.val;
 
 @Service
 @Named("isis.runtimeservices.TranslationServicePo")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Po")
 public class TranslationServicePo implements TranslationService {

@@ -55,7 +55,7 @@ import images.Images;
  */
 @Service
 @Named("isis.viewer.wicket.ImageResourceCacheClassPath")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("ClassPath")
 public class ImageResourceCacheClassPath implements ImageResourceCache {

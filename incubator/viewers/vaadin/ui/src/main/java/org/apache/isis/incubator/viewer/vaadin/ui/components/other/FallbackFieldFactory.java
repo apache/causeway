@@ -40,7 +40,7 @@ import org.apache.isis.viewer.common.model.debug.DebugUiModel;
 import lombok.val;
 
 @org.springframework.stereotype.Component
-@Order(OrderPrecedence.LAST)
+@javax.annotation.Priority(OrderPrecedence.LAST)
 public class FallbackFieldFactory implements UiComponentHandlerVaa {
 
     @Inject private Provider<UiComponentFactoryVaa> uiComponentFactory;

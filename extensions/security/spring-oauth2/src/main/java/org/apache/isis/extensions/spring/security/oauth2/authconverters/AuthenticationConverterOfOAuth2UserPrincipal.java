@@ -36,7 +36,7 @@ import lombok.var;
  * </pre>
  */
 @Component
-@Order(OrderPrecedence.LATE - 150)
+@javax.annotation.Priority(OrderPrecedence.LATE - 150)
 public class AuthenticationConverterOfOAuth2UserPrincipal implements AuthenticationConverter {
 
     @Override

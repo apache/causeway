@@ -49,7 +49,7 @@ import lombok.val;
 
 @Service
 @Named("isis.runtimeservices.EntityPropertyChangePublisherDefault")
-@Order(OrderPrecedence.EARLY)
+@javax.annotation.Priority(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

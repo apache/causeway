@@ -37,7 +37,7 @@ import org.apache.isis.core.security.authentication.Authenticator;
  */
 @Service
 @Named("isis.security.AuthenticatorKeycloak")
-@Order(OrderPrecedence.EARLY)
+@javax.annotation.Priority(OrderPrecedence.EARLY)
 @Qualifier("Keycloak")
 @Singleton
 public class AuthenticatorKeycloak implements Authenticator {

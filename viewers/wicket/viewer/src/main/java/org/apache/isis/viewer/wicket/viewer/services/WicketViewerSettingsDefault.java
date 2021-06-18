@@ -35,7 +35,7 @@ import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 
 @Service
 @Named("isis.viewer.wicket..WicketViewerSettingsDefault")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 public class WicketViewerSettingsDefault implements WicketViewerSettings {

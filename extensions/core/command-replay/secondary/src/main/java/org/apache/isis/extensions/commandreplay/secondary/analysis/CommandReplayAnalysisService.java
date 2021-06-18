@@ -37,7 +37,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named("isis.ext.commandReplaySecondary.CommandReplayAnalysisService")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Log4j2
 public class CommandReplayAnalysisService {
 

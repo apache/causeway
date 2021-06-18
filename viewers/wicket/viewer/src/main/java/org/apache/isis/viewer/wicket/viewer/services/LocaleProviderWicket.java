@@ -38,7 +38,7 @@ import org.apache.isis.applib.services.i18n.LocaleProvider;
  */
 @Service
 @Named("isis.viewer.wicket.LocaleProviderWicket")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Qualifier("Wicket")
 public class LocaleProviderWicket implements LocaleProvider {
 

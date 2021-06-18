@@ -57,7 +57,7 @@ import lombok.val;
  */
 @Service
 @Named("isis.viewer.wicket.ObjectMementoServiceWicket")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Qualifier("Wicket")
 @Singleton
 public class ObjectMementoServiceWicket implements ObjectMementoService {

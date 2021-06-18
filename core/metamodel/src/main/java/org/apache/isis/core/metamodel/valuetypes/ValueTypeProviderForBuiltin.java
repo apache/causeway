@@ -35,7 +35,7 @@ import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
 @Named("isis.metamodel.ValueTypeProviderForBuiltin")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 public class ValueTypeProviderForBuiltin implements ValueTypeProvider {
 
     @Override

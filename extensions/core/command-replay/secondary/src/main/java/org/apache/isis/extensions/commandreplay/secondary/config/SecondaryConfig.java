@@ -37,7 +37,7 @@ import lombok.val;
  */
 @Service
 @Named("isis.ext.commandReplaySecondary.SecondaryConfig")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 //@Log4j2
 public class SecondaryConfig {
 

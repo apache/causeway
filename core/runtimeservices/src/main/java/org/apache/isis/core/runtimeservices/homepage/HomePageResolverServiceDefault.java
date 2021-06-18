@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import lombok.val;
 
 @Service
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 public class HomePageResolverServiceDefault implements HomePageResolverService {
 
     private final FactoryService factoryService;

@@ -33,7 +33,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 
 @Component
 @Named("isis.metamodel.ValueTypeProviderCollections")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 public class ValueTypeProviderForCollections implements ValueTypeProvider {
 
     @Override

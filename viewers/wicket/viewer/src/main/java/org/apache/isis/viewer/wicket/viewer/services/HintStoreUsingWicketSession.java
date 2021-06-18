@@ -39,7 +39,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isis.viewer.wicket.HintStoreUsingWicketSession")
-@Order(OrderPrecedence.EARLY)
+@javax.annotation.Priority(OrderPrecedence.EARLY)
 @Qualifier("Wicket")
 @Log4j2
 public class HintStoreUsingWicketSession implements HintStore {

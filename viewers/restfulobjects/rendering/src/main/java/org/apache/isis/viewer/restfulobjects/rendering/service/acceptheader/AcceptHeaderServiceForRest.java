@@ -48,7 +48,7 @@ import org.apache.isis.commons.internal.base._NullSafe;
  */
 @Service
 @Named("isis.viewer.ro.AcceptHeaderServiceForRest")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("ForRest")
 @InteractionScope

@@ -11,7 +11,7 @@ import org.apache.isis.applib.services.user.UserMemento;
 import lombok.val;
 
 @Component
-@Order(OrderPrecedence.LATE - 100)
+@javax.annotation.Priority(OrderPrecedence.LATE - 100)
 public class AuthenticationConverterOfAuthenticatedPrincipal implements AuthenticationConverter {
 
     @Override

@@ -37,7 +37,7 @@ import org.apache.isis.core.security.authentication.Authenticator;
  */
 @Service
 @Named("isis.security.AuthenticatorSpring")
-@Order(OrderPrecedence.EARLY)
+@javax.annotation.Priority(OrderPrecedence.EARLY)
 @Qualifier("Spring")
 public class AuthenticatorSpring implements Authenticator {
 

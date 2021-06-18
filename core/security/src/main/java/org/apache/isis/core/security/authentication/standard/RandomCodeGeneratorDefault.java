@@ -31,7 +31,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 
 @Component
 @Named("isis.security.RandomCodeGenerator10Chars")
-@Order(OrderPrecedence.LATE)
+@javax.annotation.Priority(OrderPrecedence.LATE)
 @Primary
 @Qualifier("Default")
 public class RandomCodeGeneratorDefault implements RandomCodeGenerator {

@@ -26,7 +26,7 @@ import lombok.val;
 
 @Service
 @Named("isis.ext.secman.ImpersonateMenuAdvisorForSecman")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Qualifier("SecMan")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ImpersonateMenuAdvisorForSecman implements ImpersonateMenuAdvisor {

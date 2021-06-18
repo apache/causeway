@@ -20,7 +20,7 @@ import lombok.val;
 
 @Service
 @Named("isis.ext.secman.TableColumnVisibilityServiceForSecman")
-@Order(OrderPrecedence.LATE - 10)
+@javax.annotation.Priority(OrderPrecedence.LATE - 10)
 @Qualifier("Secman")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class TableColumnVisibilityServiceForSecman implements TableColumnVisibilityService {

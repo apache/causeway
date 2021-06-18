@@ -62,7 +62,7 @@ import lombok.val;
  */
 @Service
 @Named("isis.runtimeservices.CommandDtoFactoryDefault")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 public class CommandDtoFactoryDefault implements CommandDtoFactory {

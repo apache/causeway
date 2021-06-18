@@ -42,7 +42,7 @@ import org.apache.isis.applib.services.user.UserMemento;
 @Component
 @RequestScope
 @Named("isis.webapp.ImpersonatedUserHolderUsingHttpSession")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 public class ImpersonatedUserHolderUsingHttpSession implements ImpersonatedUserHolder {
 
     private final Optional<HttpSession> httpSession;

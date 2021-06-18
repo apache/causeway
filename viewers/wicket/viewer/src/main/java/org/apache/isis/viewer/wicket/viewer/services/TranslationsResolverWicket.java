@@ -54,7 +54,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named("isis.viewer.wicket.TranslationsResolverWicket")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Qualifier("Wicket")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2

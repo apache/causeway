@@ -60,7 +60,7 @@ import lombok.val;
 
 @Service
 @Named("isis.metamodel.MetaModelServiceDefault")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 public class MetaModelServiceDefault implements MetaModelService {

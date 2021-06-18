@@ -58,7 +58,7 @@ import lombok.val;
  */
 @Service
 @Named("isis.runtimeservices.BookmarkServiceDefault")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 public class BookmarkServiceDefault implements BookmarkService, SerializingAdapter {

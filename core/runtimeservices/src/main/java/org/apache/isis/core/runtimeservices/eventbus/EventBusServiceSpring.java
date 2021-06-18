@@ -32,7 +32,7 @@ import org.apache.isis.applib.services.eventbus.EventBusService;
 
 @Service
 @Named("isis.runtimeservices.EventBusServiceSpring")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Spring")
 public class EventBusServiceSpring implements EventBusService {

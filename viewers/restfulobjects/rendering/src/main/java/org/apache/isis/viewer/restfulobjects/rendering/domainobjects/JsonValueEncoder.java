@@ -58,7 +58,7 @@ import lombok.val;
  */
 @Service
 @Named("isis.viewer.ro.JsonValueEncoder")
-@Order(OrderPrecedence.EARLY)
+@javax.annotation.Priority(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
 @Singleton

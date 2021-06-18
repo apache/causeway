@@ -29,7 +29,7 @@ import org.apache.isis.applib.graph.tree.TreeAdapter;
 
 @Component
 @Named("isis.metamodel.ClassSubstitutorDefault")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 public class ClassSubstitutorDefault extends ClassSubstitutorAbstract {
 
     public ClassSubstitutorDefault() {

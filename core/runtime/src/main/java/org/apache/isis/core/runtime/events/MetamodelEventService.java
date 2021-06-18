@@ -40,7 +40,7 @@ import org.apache.isis.core.metamodel.events.MetamodelEvent;
  */
 @Service
 @Named("isis.runtime.MetamodelEventService")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 public class MetamodelEventService {

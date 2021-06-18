@@ -34,7 +34,7 @@ import lombok.val;
 
 @Component
 @Named("isis.metamodel.ClassSubstitutorForDomainObjects")
-@Order(OrderPrecedence.MIDPOINT - 20) // before ClassSubstitutorForCollections
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT - 20) // before ClassSubstitutorForCollections
 public class ClassSubstitutorForDomainObjects implements ClassSubstitutor {
 
     private IsisBeanTypeRegistry isisBeanTypeRegistry;

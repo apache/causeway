@@ -30,7 +30,7 @@ import org.apache.isis.viewer.wicket.viewer.integration.AuthenticatedWebSessionF
 
 @Service
 @Named("isis.viewer.wicket.BookmarkUiServiceWicket")
-@Order(OrderPrecedence.EARLY)
+@javax.annotation.Priority(OrderPrecedence.EARLY)
 @Qualifier("Wicket")
 public class BookmarkUiServiceWicket implements BookmarkUiService {
 

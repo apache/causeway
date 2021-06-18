@@ -34,7 +34,7 @@ import org.apache.isis.commons.internal.collections._Maps;
 
 @Service
 @Named("isis.runtimeservices.Scratchpad")
-@Order(OrderPrecedence.EARLY)
+@javax.annotation.Priority(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
 @InteractionScope

@@ -30,7 +30,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 @Component
 @Provider
 @Singleton
-@Order(OrderPrecedence.LATE)
+@javax.annotation.Priority(OrderPrecedence.LATE)
 public class ExceptionMapperForRuntimeException extends ExceptionMapperAbstract<RuntimeException> {
 
     @Override

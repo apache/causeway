@@ -39,7 +39,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named("isis.applib.ExecutionLogger")
-@Order(OrderPrecedence.LATE)
+@javax.annotation.Priority(OrderPrecedence.LATE)
 @Primary
 @Qualifier("Logging")
 @Log4j2

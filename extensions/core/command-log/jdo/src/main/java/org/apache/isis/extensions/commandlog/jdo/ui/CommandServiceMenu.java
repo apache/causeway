@@ -62,7 +62,7 @@ import lombok.RequiredArgsConstructor;
 )
 @Service
 @Named(CommandServiceMenu.LOGICAL_TYPE_NAME)
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Qualifier("Jdo")
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class CommandServiceMenu {

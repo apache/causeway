@@ -53,7 +53,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
  */
 @Service
 @Named("isis.runtimeservice.XmlService")
-@Order(OrderPrecedence.EARLY)
+@javax.annotation.Priority(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
 //@Log4j2

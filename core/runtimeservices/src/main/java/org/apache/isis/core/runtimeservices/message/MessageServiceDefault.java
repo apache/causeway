@@ -40,7 +40,7 @@ import org.apache.isis.core.interaction.session.MessageBroker;
 
 @Service
 @Named("isis.runtimeservices.MessageServiceDefault")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 public class MessageServiceDefault implements MessageService {

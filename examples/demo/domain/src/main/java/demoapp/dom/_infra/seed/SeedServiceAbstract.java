@@ -51,7 +51,7 @@ public abstract class SeedServiceAbstract implements SeedService {
 
 
     @EventListener(MetamodelEvent.class)
-    @Order(OrderPrecedence.MIDPOINT)
+    @javax.annotation.Priority(OrderPrecedence.MIDPOINT)
     public void onAppLifecycleEvent(MetamodelEvent event) {
         if (event.isPostMetamodel()) {
             fixtureScripts.run(fixtureScriptSupplier.get());

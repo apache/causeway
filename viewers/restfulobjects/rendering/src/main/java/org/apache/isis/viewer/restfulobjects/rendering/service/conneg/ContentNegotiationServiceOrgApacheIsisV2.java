@@ -59,7 +59,7 @@ import lombok.val;
  */
 @Service
 @Named("isis.viewer.ro.ContentNegotiationServiceOrgApacheIsisV2")
-@Order(OrderPrecedence.MIDPOINT - 200)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT - 200)
 @Qualifier("OrgApacheIsisV2")
 public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiationServiceAbstract {
 

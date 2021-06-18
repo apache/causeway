@@ -74,7 +74,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isis.runtimeservices.MemberExecutorServiceDefault")
-@Order(OrderPrecedence.EARLY)
+@javax.annotation.Priority(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

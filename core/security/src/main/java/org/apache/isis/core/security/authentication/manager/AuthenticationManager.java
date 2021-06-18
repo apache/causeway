@@ -52,7 +52,7 @@ import lombok.val;
 
 @Service
 @Named("isis.security.AuthenticationManager")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 public class AuthenticationManager {

@@ -58,7 +58,7 @@ import lombok.val;
  */
 @Service
 @Named("isis.viewer.wicket.ComponentFactoryRegistryDefault")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry {

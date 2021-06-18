@@ -57,7 +57,7 @@ public class SeedSecurityModuleService {
         this.fixtureScripts = fixtureScripts;
     }
 
-    @Order(OrderPrecedence.MIDPOINT - 100)
+    @javax.annotation.Priority(OrderPrecedence.MIDPOINT - 100)
     @EventListener(MetamodelEvent.class)
     public void onMetamodelEvent(final MetamodelEvent event) {
 

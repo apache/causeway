@@ -46,7 +46,7 @@ import lombok.val;
 @Named("isis.ext.commandReplayPrimary.CaptureResultOfCommand")
 // specify quite a high priority since custom processors will probably want to run after this one
 // (but can choose to run before if they wish)
-@Order(OrderPrecedence.EARLY)
+@javax.annotation.Priority(OrderPrecedence.EARLY)
 public class CaptureResultOfCommand implements CommandDtoProcessorService {
 
     @Override

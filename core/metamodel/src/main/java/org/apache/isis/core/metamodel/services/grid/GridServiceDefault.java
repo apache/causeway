@@ -43,7 +43,7 @@ import lombok.val;
 
 @Service
 @Named("isis.metamodel.GridServiceDefault")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 public class GridServiceDefault implements GridService {

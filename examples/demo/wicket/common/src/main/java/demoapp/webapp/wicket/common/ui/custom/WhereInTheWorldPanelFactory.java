@@ -35,7 +35,7 @@ import demoapp.dom.featured.customui.vm.WhereInTheWorldVm;
 
 //tag::class[]
 @org.springframework.stereotype.Component
-@Order(OrderPrecedence.EARLY)                                             // <.>
+@javax.annotation.Priority(OrderPrecedence.EARLY)                                             // <.>
 public class WhereInTheWorldPanelFactory extends EntityComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;

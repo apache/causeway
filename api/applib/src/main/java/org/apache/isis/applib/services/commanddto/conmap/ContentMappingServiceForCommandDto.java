@@ -46,7 +46,7 @@ import lombok.val;
  */
 @Service
 @Named("isis.applib.ContentMappingServiceForCommandDto")
-@Order(OrderPrecedence.EARLY)
+@javax.annotation.Priority(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("CommandDto")
 public class ContentMappingServiceForCommandDto implements ContentMappingService {

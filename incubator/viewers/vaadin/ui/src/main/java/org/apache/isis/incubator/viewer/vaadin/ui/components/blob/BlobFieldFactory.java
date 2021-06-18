@@ -31,7 +31,7 @@ import org.apache.isis.viewer.common.model.components.UiComponentFactory.Compone
 import lombok.val;
 
 @org.springframework.stereotype.Component
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 public class BlobFieldFactory implements UiComponentHandlerVaa {
 
     @Override

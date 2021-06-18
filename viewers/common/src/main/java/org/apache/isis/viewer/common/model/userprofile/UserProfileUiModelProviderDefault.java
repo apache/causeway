@@ -39,7 +39,7 @@ import lombok.val;
 
 @Service
 @Named("isis.viewer.common.UserProfileServiceDefault")
-@Order(OrderPrecedence.LATE)
+@javax.annotation.Priority(OrderPrecedence.LATE)
 @Primary
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

@@ -46,7 +46,7 @@ import lombok.val;
 
 @Service
 @Named("isis.metamodel.ServiceRegistryDefault")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 public final class ServiceRegistryDefault implements ServiceRegistry {

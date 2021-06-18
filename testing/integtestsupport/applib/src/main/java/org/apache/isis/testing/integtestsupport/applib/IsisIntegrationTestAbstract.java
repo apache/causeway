@@ -55,7 +55,7 @@ public abstract class IsisIntegrationTestAbstract {
      * therefore also {@link Command}s (currently unused).
      */
     @Service
-    @Order(OrderPrecedence.MIDPOINT)
+    @javax.annotation.Priority(OrderPrecedence.MIDPOINT)
     @RequiredArgsConstructor(onConstructor_ = {@Inject})
     public static class InteractionSupport {
 

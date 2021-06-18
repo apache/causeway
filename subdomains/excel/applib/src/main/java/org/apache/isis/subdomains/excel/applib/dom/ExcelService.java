@@ -47,7 +47,7 @@ import org.apache.isis.subdomains.excel.applib.dom.util.Mode;
  */
 @Service
 @Named("isis.sub.excel.ExcelService")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 public class ExcelService {

@@ -34,7 +34,7 @@ import org.apache.isis.commons.internal.base._Strings;
 
 @Service
 @Named("isis.runtimeservices.UrlEncodingServiceWithCompression")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Compression")
 public class UrlEncodingServiceWithCompression implements UrlEncodingService {

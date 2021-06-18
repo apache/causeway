@@ -45,7 +45,7 @@ import lombok.val;
  */
 @Service
 @Named("isis.security.AuthorizationManager")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 public class AuthorizationManager {

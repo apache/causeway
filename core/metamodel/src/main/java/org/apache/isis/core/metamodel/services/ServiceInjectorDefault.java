@@ -40,7 +40,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Service
 @Named("isis.metamodel.ServiceInjectorDefault")
-@Order(OrderPrecedence.EARLY)
+@javax.annotation.Priority(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

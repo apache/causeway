@@ -50,7 +50,7 @@ import lombok.val;
  */
 @Service
 @Named("isis.ext.secman.UserRegistrationServiceForSecman")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Qualifier("SecMan")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class UserRegistrationServiceForSecman implements UserRegistrationService {

@@ -45,7 +45,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named("isis.viewer.ro.ContentNegotiationServiceOrgApacheIsisV1")
-@Order(OrderPrecedence.MIDPOINT - 200)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT - 200)
 @Qualifier("OrgApacheIsisV1")
 @Log4j2
 public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiationServiceAbstract {

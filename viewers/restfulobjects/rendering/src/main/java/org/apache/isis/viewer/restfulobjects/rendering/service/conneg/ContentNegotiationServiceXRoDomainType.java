@@ -56,7 +56,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndAc
  */
 @Service
 @Named("isis.viewer.ro.ContentNegotiationServiceXRoDomainType")
-@Order(OrderPrecedence.MIDPOINT - 100)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT - 100)
 @Qualifier("XRoDomainType")
 public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationServiceAbstract {
 

@@ -39,7 +39,7 @@ import lombok.val;
 
 @Service
 @Named("isis.metamodel.swaggerServiceDefault")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 public class SwaggerServiceDefault implements SwaggerService {

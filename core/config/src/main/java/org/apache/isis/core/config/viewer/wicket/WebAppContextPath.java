@@ -44,7 +44,7 @@ import lombok.val;
 @Service
 @Singleton
 @Named("isis.config.WebAppContextPath")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 public class WebAppContextPath implements Serializable {

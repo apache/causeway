@@ -31,7 +31,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplication
 @Component
 @Provider
 @Singleton
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 public class ExceptionMapperForRestfulObjectsApplication
 extends ExceptionMapperAbstract<RestfulObjectsApplicationException> {
 

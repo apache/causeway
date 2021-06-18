@@ -44,7 +44,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Service
 @Named("isis.applib.ClockService")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

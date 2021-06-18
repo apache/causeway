@@ -93,7 +93,7 @@ implements ApplicationFeatureRepository {
     }
 
     // -- init
-    @Order(OrderPrecedence.MIDPOINT)
+    @javax.annotation.Priority(OrderPrecedence.MIDPOINT)
     @EventListener(MetamodelEvent.class)
     public void onMetamodelEvent(MetamodelEvent event) {
         if (event.isPostMetamodel()

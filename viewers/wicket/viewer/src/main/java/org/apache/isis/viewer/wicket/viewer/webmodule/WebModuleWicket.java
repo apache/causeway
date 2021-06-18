@@ -47,7 +47,7 @@ import lombok.Getter;
  */
 @Service
 @Named("isis.viewer.wicket.WebModuleWicket")
-@Order(OrderPrecedence.MIDPOINT - 80)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT - 80)
 @Qualifier("Wicket")
 public final class WebModuleWicket extends WebModuleAbstract {
 

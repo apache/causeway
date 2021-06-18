@@ -60,7 +60,7 @@ import lombok.val;
 
 @Service
 @Named("isis.runtimeservices.RepositoryServiceDefault")
-@Order(OrderPrecedence.EARLY)
+@javax.annotation.Priority(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
 //@Log4j2

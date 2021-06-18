@@ -44,7 +44,7 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistrySpi;
  */
 @Service
 @Named("isis.viewer.wicket.PageClassRegistryDefault")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 public class PageClassRegistryDefault implements PageClassRegistry, PageClassRegistrySpi {

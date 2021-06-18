@@ -44,7 +44,7 @@ import lombok.val;
 
 @Service
 @Named("isis.config.IsisBeanTypeRegistryImpl")
-@Order(OrderPrecedence.EARLY)
+@javax.annotation.Priority(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
 //@Log4j2

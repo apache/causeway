@@ -53,7 +53,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named("isis.test.WebModuleH2Console")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Qualifier("H2Console")
 @Log4j2
 public class WebModuleH2Console extends WebModuleAbstract {

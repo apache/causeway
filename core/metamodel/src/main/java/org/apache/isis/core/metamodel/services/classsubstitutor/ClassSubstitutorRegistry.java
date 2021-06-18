@@ -42,7 +42,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Component
 @Named("isis.metamodel.ClassSubstitutorRegistry")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Log4j2
 public class ClassSubstitutorRegistry {
 

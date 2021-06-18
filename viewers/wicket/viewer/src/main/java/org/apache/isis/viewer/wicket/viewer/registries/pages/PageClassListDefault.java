@@ -48,7 +48,7 @@ import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
  */
 @Service
 @Named("isis.viewer.wicket.PageClassListDefault")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 public class PageClassListDefault implements PageClassList {

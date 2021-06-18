@@ -47,7 +47,7 @@ import lombok.val;
 
 @Service
 @Named("isis.metamodel.LayoutServiceDefault")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 public class LayoutServiceDefault implements LayoutService {

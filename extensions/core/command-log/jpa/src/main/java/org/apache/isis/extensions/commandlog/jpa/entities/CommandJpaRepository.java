@@ -64,7 +64,7 @@ import lombok.val;
  */
 @Service
 @Named("isis.ext.commandLog.CommandJdoRepository")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Qualifier("Jpa")
 @RequiredArgsConstructor
 //@Log4j2

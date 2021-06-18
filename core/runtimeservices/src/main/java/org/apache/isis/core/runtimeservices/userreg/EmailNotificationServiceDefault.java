@@ -46,7 +46,7 @@ import org.apache.isis.commons.internal.resources._Resources;
 
 @Service
 @Named("isis.runtimeservices.EmailNotificationServiceDefault")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 public class EmailNotificationServiceDefault implements EmailNotificationService {

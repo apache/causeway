@@ -48,7 +48,7 @@ import lombok.Getter;
     logicalTypeName = CommandRetrievalService.LOGICAL_TYPE_NAME
 )
 @Named(CommandRetrievalService.LOGICAL_TYPE_NAME)
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 //@Log4j2
 public class CommandRetrievalService {
 

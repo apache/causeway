@@ -67,7 +67,7 @@ import lombok.val;
  */
 @Service
 @Named("isis.applib.UserService")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

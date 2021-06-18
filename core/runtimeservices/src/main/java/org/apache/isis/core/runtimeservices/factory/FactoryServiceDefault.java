@@ -51,7 +51,7 @@ import lombok.val;
 
 @Service
 @Named("isis.runtimeservices.FactoryServiceDefault")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 public class FactoryServiceDefault implements FactoryService {

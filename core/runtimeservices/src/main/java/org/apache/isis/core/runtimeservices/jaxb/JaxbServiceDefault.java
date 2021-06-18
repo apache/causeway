@@ -51,7 +51,7 @@ import lombok.val;
 
 @Service
 @Named("isis.runtimeservices.JaxbServiceDefault")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

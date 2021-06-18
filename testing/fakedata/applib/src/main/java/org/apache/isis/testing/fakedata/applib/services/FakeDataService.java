@@ -43,7 +43,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
  */
 @Service
 @Named("isis.test.FakeDataService")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 public class FakeDataService {

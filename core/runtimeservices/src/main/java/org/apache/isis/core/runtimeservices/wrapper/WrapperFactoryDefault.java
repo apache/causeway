@@ -112,7 +112,7 @@ import lombok.val;
 
 @Service
 @Named("isis.runtimeservices.WrapperFactoryDefault")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 //@Log4j2

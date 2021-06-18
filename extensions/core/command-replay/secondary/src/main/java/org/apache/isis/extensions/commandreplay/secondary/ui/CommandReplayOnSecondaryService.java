@@ -56,7 +56,7 @@ import lombok.val;
     menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
 @Named("isis.ext.commandReplaySecondary.CommandReplayOnSecondaryService")
-@Order(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
 @RequiredArgsConstructor
 //@Log4j2
 public class CommandReplayOnSecondaryService {
