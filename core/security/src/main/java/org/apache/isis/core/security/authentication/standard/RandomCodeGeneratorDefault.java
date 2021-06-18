@@ -23,10 +23,10 @@ import java.security.SecureRandom;
 import javax.annotation.Priority;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
+
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 
 @Component
 @Named("isis.security.RandomCodeGenerator10Chars")

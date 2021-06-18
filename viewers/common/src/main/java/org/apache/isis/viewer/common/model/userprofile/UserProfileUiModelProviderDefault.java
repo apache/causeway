@@ -22,17 +22,16 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.user.UserService;
-import org.apache.isis.viewer.common.applib.services.userprof.UserProfileUiModelProvider;
 import org.apache.isis.viewer.common.applib.services.userprof.UserProfileUiModel;
+import org.apache.isis.viewer.common.applib.services.userprof.UserProfileUiModelProvider;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

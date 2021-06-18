@@ -18,21 +18,23 @@
  */
 package org.apache.isis.testing.fixtures.applib.services;
 
-import lombok.extern.log4j.Log4j2;
+import java.lang.reflect.InvocationTargetException;
+
+import javax.annotation.Priority;
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.events.MetamodelEvent;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Service;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.lang.reflect.InvocationTargetException;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * @since 2.0 {@index}

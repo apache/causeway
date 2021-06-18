@@ -25,12 +25,12 @@ import java.util.Map;
 import javax.annotation.Priority;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.datanucleus.PropertyNames;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
+
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 
 import lombok.Getter;
 import lombok.Setter;

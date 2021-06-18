@@ -26,11 +26,10 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.Mode;
 import org.apache.isis.applib.services.i18n.TranslationContext;
@@ -39,8 +38,8 @@ import org.apache.isis.applib.services.i18n.TranslationsResolver;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 
 import lombok.val;
 

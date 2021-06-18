@@ -21,12 +21,11 @@ package org.apache.isis.testing.fixtures.applib.queryresultscache;
 import javax.annotation.Priority;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCacheControl;
 import org.apache.isis.testing.fixtures.applib.events.FixturesInstalledEvent;

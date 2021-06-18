@@ -22,16 +22,15 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.applib.services.user.UserService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.mixins.updates.OnUpdatedAt;
 import org.apache.isis.applib.mixins.updates.OnUpdatedBy;
+import org.apache.isis.applib.services.clock.ClockService;
+import org.apache.isis.applib.services.user.UserService;
 
 import lombok.val;
 

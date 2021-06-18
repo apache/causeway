@@ -19,9 +19,6 @@
 
 package org.apache.isis.core.runtimeservices.factory;
 
-import static org.apache.isis.commons.internal.reflection._Reflect.Filter.paramAssignableFrom;
-import static org.apache.isis.commons.internal.reflection._Reflect.Filter.paramCount;
-
 import java.lang.reflect.InvocationTargetException;
 
 import javax.annotation.Nullable;
@@ -30,21 +27,23 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
-import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+
+import static org.apache.isis.commons.internal.reflection._Reflect.Filter.paramAssignableFrom;
+import static org.apache.isis.commons.internal.reflection._Reflect.Filter.paramCount;
 
 import lombok.NonNull;
 import lombok.val;
