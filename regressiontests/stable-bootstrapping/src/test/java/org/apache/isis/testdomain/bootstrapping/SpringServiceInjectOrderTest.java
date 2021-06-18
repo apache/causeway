@@ -53,9 +53,6 @@ import org.apache.isis.testdomain.conf.Configuration_headless;
 import lombok.Getter;
 import lombok.val;
 
-=======
-        >>>>>>>4dd5fb2460(ISIS-2751:fixes ModuleWithFixturesService)
-
 @SpringBootTest(
         classes = {
                 Configuration_headless.class,
