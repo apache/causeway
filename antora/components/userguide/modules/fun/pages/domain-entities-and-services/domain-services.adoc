@@ -15,7 +15,7 @@ xref:https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/
 orxref:https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/stereotype/Repository.html[@Repository].
 
 Apache Isis runs on top of Spring Boot, and relies on Spring Boot for dependency injection using `@javax.inject.Inject`.
-The Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[@Order] annotation is used to prioritize multiple service implementations, effectively allowing any framework-provided domain service to be substituted out by a user-defined one with higher priority if required.
+The `@javax.annotation.Priority` annotation is used to prioritize multiple service implementations, effectively allowing any framework-provided domain service to be substituted out by a user-defined one encountered with an earlier precedence (= higher priority) if required.
 
 This section looks at the programming model for writing your own domain services.
 

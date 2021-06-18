@@ -32,7 +32,7 @@ import org.springframework.stereotype.Service;
 import lombok.val;
 
 @Service
-@Order(OrderPrecedence.HIGH)                                              // <.>
+@Priority(PriorityPrecedence.EARLY)                                              // <.>
 public class RoutingServiceUsingBreadcrumbs
                   extends RoutingServiceDefault {
     @Override

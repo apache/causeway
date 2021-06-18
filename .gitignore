@@ -87,3 +87,4 @@ rebel.xml
 _commit.sh
 
 /incubator/clients/kroviz/package.json
+create-db-schema.sql

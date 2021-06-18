@@ -5,7 +5,7 @@
 
 
 The `WebModule` interface allows modules to dynamically configure ``Filter``s, ``Servlet``s and ``ServletContextListener`s.
-                                                                                          The Spring `@Order` annotation is used to ensure that the request chain is sequenced correctly.
+The `@javax.annotation.Priority` annotation is used to ensure that the request chain is sequenced correctly.
 
 .WebModules (highest first)
 [cols="6m,^2a,^2a,^3a,^4a,6a", options="header"]
@@ -14,7 +14,7 @@ The `WebModule` interface allows modules to dynamically configure ``Filter``s, `
 
 
 |Web module|listener?|servlet?|filter?
-|@Order|Notes
+|`@Priority`|Notes
 
 |WebModule +
 Keycloak
@@ -22,7 +22,7 @@ Keycloak
 |N
 |Y +
 `/*`
-|HIGHEST + 100
+|FIRST + 100
 |Either this or shiro
 
 |WebModule +
@@ -31,7 +31,7 @@ Shiro
 |N
 |Y +
 `/*`
-|HIGHEST + 200
+|FIRST + 200
 |Either this or keycloak
 
 |WebModule +
@@ -40,7 +40,7 @@ LogOnExceptionLogger
 |N
 |Y +
 `/wicket` & `/restful`
-|HIGH - 100
+|EARLY - 100
 |Filter is passthru, with no side-effects. +
 Mapping depends on which viewers configured.
 
@@ -50,7 +50,7 @@ Cors
 |N
 |Y +
 `/wicket` & `/restful`
-|HIGH
+|EARLY
 |Mapping depends on which viewers configured.
 
 

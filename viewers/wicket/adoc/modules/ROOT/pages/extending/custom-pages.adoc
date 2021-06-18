@@ -64,7 +64,7 @@ If you are just tweaking the defaults, then its easiest to override `PageClassLi
 [source,java]
 ----
 @Service
-@Order(OrderPrecedence.EARLY)
+@Priority(PriorityPrecedence.EARLY)
 public class MyPageClassList extends PageClassListDefault {
     protected Class<? extends Page> getSignInPageClass() {
         return MySignInPage.class;

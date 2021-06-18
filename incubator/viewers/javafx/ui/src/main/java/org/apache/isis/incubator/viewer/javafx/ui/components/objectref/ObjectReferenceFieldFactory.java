@@ -22,7 +22,7 @@ import javax.inject.Inject;
 
 import org.springframework.core.annotation.Order;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerFx;
@@ -35,7 +35,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 
 @org.springframework.stereotype.Component
-@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ObjectReferenceFieldFactory implements UiComponentHandlerFx {
 

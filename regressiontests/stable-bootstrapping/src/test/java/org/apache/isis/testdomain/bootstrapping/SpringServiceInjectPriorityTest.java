@@ -25,14 +25,11 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.OrderComparator;
-import org.springframework.core.annotation.AnnotationAwareOrderComparator;
-import org.springframework.core.annotation.Order;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.test.context.TestPropertySource;
 
@@ -56,12 +53,12 @@ import lombok.val;
 @SpringBootTest(
         classes = {
                 Configuration_headless.class,
-                SpringServiceInjectOrderTest.TestConfig.class,
+                SpringServiceInjectPriorityTest.TestConfig.class,
 
-                SpringServiceInjectOrderTest.Average.class,
-                SpringServiceInjectOrderTest.Excellent.class,
-                SpringServiceInjectOrderTest.Good.class,
-                SpringServiceInjectOrderTest.DummyService.class
+                SpringServiceInjectPriorityTest.Average.class,
+                SpringServiceInjectPriorityTest.Excellent.class,
+                SpringServiceInjectPriorityTest.Good.class,
+                SpringServiceInjectPriorityTest.DummyService.class
         },
         properties = {
                 // "isis.core.meta-model.introspector.parallelize=false",
@@ -72,33 +69,21 @@ import lombok.val;
         IsisPresets.SilenceProgrammingModel,
         IsisPresets.UseLog4j2Test
 })
-class SpringServiceInjectOrderTest {
+class SpringServiceInjectPriorityTest {
 
     @Inject
     DummyService dummyService;
     @Inject
     ServiceInjector serviceInjector;
-    @Inject
-    OrderComparator orderComparator;
-
-    @BeforeEach
-    void beforeEach() {
-
-    }
 
     @Test
-    void defaultOrdering_shouldConsiderAnnotations() throws IOException {
-        assertTrue(orderComparator instanceof AnnotationAwareOrderComparator);
-    }
-
-    @Test
-    void injectionOnServices_shouldFollowOrder() throws IOException {
+    void injectionOnServices_shouldFollowPriority() throws IOException {
 
         val messageService = dummyService.getMessageService();
         assertNotNull(messageService);
         assertTrue(messageService instanceof MessageServiceDefault);
 
-        // injected as per @Order
+        // injected as per @Priority
         val ratings = dummyService.getRatings();
         assertThat(ratings.get(0).getRating(), is(equalTo(1)));
         assertThat(ratings.get(1).getRating(), is(equalTo(2)));
@@ -129,7 +114,7 @@ class SpringServiceInjectOrderTest {
         assertNotNull(messageService);
         assertTrue(messageService instanceof MessageServiceDefault);
 
-        // injected as per @Order
+        // injected as per @Priority
         val ratings = dummyObject.getRatings();
         assertThat(ratings.get(0).getRating(), is(equalTo(1)));
         assertThat(ratings.get(1).getRating(), is(equalTo(2)));
@@ -161,7 +146,7 @@ class SpringServiceInjectOrderTest {
     }
 
     @Service
-    @Order(PriorityPrecedence.EARLY)
+    @Priority(PriorityPrecedence.EARLY)
     @Qualifier("tallest")
     @Named("withExcellentName")
     static class Excellent implements Rating {
@@ -174,6 +159,7 @@ class SpringServiceInjectOrderTest {
 
     @Service
     @Priority(PriorityPrecedence.MIDPOINT)
+    @Primary
     @Qualifier("tall")
     @Named("withGoodName")
     static class Good implements Rating {
@@ -185,7 +171,7 @@ class SpringServiceInjectOrderTest {
     }
 
     @Service
-    @Order(PriorityPrecedence.LAST)
+    @Priority(PriorityPrecedence.LAST)
     @Qualifier("middle")
     @Named("withAverageName")
     static class Average implements Rating {

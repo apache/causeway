@@ -7,7 +7,7 @@
 
 Unlike most other domain services, the framework will check _all_ available implementations of `RoutingService` to return a route, rather than the first implementation found; in other words it uses the chain-of-responsibility pattern.
 
-Services are called in the order defined by the Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[@Order] annotation (or equivalent).
+Services are called in the order defined by the `@javax.annotation.Priority` annotation.
 The route used will be the result of the first implementation checked that declares that it can provide a route.
 
 
