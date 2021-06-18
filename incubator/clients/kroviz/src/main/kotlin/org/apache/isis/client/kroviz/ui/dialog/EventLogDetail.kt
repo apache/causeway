@@ -40,7 +40,7 @@ class EventLogDetail(val logEntryFromTabulator: LogEntry) : Command() {
         // For a yet unknown reason, aggregators are not transmitted via tabulator.
         // As a WORKAROUND, we fetch the full blown LogEntry from the EventStore again.
         val rs = ResourceSpecification(logEntryFromTabulator.title)
-        logEntry = EventStore.findBy(rs)!!
+        logEntry = EventStore.findBy(rs)?: logEntryFromTabulator  // in case of xml, we use the entry passed in
     }
 
     private val LOG: String = "log"
@@ -56,7 +56,7 @@ class EventLogDetail(val logEntryFromTabulator: LogEntry) : Command() {
 
         val led = LogEntryDecorator(logEntry)
         val children = led.findChildren()
-        var kids:String = ""
+        var kids = ""
         children.forEach { kids += it.url + "\n" }
         var orphans = ""
         led.findOrphans(children).forEach { orphans += it + "\n" }

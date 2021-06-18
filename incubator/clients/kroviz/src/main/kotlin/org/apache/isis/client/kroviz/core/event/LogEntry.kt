@@ -212,17 +212,25 @@ data class LogEntry(
     }
 
     fun selfHref(): String {
-        return selfLink().href
+        if (selfLink() != null) {
+            return selfLink()!!.href
+        } else return ""
     }
 
-    fun selfLink(): Link {
-        return getLinks().first { it.relation() == Relation.SELF }
+    fun selfLink(): Link? {
+        getLinks().forEach { if (it.relation() == Relation.SELF) return it }
+        return null
     }
 
     fun getLinks(): List<Link> {
-        return (obj as HasLinks).getLinks()
+        return if (obj is HasLinks) {
+            (obj as HasLinks).getLinks()
+        } else {
+            console.log("[LE.getLinks]")
+            console.log(obj)
+            console.log(response)
+            emptyList<Link>()
+        }
     }
-
-
 
 }

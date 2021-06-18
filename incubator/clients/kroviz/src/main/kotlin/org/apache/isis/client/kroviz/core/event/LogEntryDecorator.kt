@@ -116,7 +116,10 @@ class LogEntryDecorator(val logEntry: LogEntry) {
     }
 
     fun selfType(): String {
-        return logEntry.selfLink().representation().type
+        val selfLink = logEntry.selfLink()
+        if (selfLink != null) {
+            return selfLink.representation().type
+        } else return ""
     }
 
     private fun hasUp(): Boolean {
