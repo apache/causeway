@@ -51,7 +51,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named("isis.config.IsisSystemEnvironment")
-@Order(-1_073_741_824) // same as OrderedPrecedence#HIGH
+@javax.annotation.Priority(0) // same as OrderedPrecedence#HIGH
 @Primary
 @Qualifier("Default")
 @Singleton
