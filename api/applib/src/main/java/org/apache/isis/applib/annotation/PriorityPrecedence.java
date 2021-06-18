@@ -34,7 +34,7 @@ import lombok.experimental.UtilityClass;
  * @since 2.0 {@index}
  */
 @UtilityClass
-public class OrderPrecedence {
+public class PriorityPrecedence {
 
     /**
      * For domain services with the highest precedence (priority) value.
