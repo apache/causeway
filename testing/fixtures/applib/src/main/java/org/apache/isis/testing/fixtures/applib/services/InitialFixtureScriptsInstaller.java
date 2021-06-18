@@ -29,6 +29,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.lang.reflect.InvocationTargetException;
@@ -38,7 +39,7 @@ import java.lang.reflect.InvocationTargetException;
  */
 @Service
 @Named("isis.testing.fixtures.InitialFixtureScriptsInstaller")
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2
 public class InitialFixtureScriptsInstaller {

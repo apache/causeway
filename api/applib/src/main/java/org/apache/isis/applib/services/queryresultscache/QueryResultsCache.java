@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
+import javax.annotation.Priority;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.DisposableBean;
@@ -64,8 +65,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named("isis.applib.QueryResultsCache")
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
-@Primary
+@Priority(PriorityPrecedence.EARLY)
 @InteractionScope
 @Qualifier("Default")
 @Log4j2

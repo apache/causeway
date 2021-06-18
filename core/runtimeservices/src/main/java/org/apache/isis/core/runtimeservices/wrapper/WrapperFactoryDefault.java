@@ -30,6 +30,7 @@ import java.util.concurrent.Callable;
 import java.util.function.BiConsumer;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
@@ -111,10 +112,8 @@ import lombok.val;
 
 @Service
 @Named("isis.runtimeservices.WrapperFactoryDefault")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-//@Log4j2
 public class WrapperFactoryDefault implements WrapperFactory {
 
     @Inject InteractionLayerTracker interactionLayerTracker;

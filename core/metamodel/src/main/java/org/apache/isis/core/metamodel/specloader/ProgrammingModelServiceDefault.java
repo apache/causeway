@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.specloader;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -39,8 +40,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isis.metamodel.ProgrammingModelServiceDefault")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2
 public class ProgrammingModelServiceDefault

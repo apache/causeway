@@ -18,20 +18,8 @@
  */
 package org.apache.isis.core.runtimeservices.bookmarks;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
-import javax.annotation.Nullable;
-import javax.inject.Inject;
-import javax.inject.Named;
-
+import lombok.val;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Service;
-
 import org.apache.isis.applib.exceptions.unrecoverable.ObjectNotFoundException;
 import org.apache.isis.applib.graph.tree.TreeState;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -49,16 +37,24 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
-import lombok.val;
+import javax.annotation.Nullable;
+import javax.annotation.Priority;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.Serializable;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * This service enables a serializable 'bookmark' to be created for an entity.
  */
 @Service
 @Named("isis.runtimeservices.BookmarkServiceDefault")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class BookmarkServiceDefault implements BookmarkService, SerializingAdapter {
 

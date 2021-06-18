@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.services.title;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -38,8 +39,7 @@ import lombok.val;
 
 @Service
 @Named("isis.metamodel.TitleServiceDefault")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = @Inject)
 public class TitleServiceDefault implements TitleService {

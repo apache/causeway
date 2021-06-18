@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Priority;
 import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
@@ -54,8 +55,7 @@ import images.Images;
  */
 @Service
 @Named("isis.viewer.wicket.ImageResourceCacheClassPath")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("ClassPath")
 public class ImageResourceCacheClassPath implements ImageResourceCache {
 

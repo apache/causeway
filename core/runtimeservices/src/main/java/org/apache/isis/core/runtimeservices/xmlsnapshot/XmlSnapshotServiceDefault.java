@@ -24,6 +24,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -41,8 +42,7 @@ import org.apache.isis.core.metamodel.util.snapshot.XmlSnapshot;
 
 @Service
 @Named("isis.runtimeservices.XmlSnapshotServiceDefault")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class XmlSnapshotServiceDefault implements XmlSnapshotService {
 

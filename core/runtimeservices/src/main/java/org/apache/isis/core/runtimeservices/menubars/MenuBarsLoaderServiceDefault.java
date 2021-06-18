@@ -20,6 +20,7 @@ package org.apache.isis.core.runtimeservices.menubars;
 
 import java.nio.charset.StandardCharsets;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -43,8 +44,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isis.runtimeservices.MenuBarsLoaderServiceDefault")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2
 public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {

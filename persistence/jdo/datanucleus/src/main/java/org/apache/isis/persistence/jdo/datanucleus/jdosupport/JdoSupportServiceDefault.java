@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.jdo.Extent;
@@ -57,8 +58,7 @@ import lombok.val;
 
 @Service
 @Named("isis.persistence.jdo.JdoSupportServiceDefault")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("DN5")
 public class JdoSupportServiceDefault implements JdoSupportService {
 

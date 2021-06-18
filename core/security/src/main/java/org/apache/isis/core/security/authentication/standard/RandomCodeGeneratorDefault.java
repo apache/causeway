@@ -20,6 +20,7 @@ package org.apache.isis.core.security.authentication.standard;
 
 import java.security.SecureRandom;
 
+import javax.annotation.Priority;
 import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
@@ -29,8 +30,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Named("isis.security.RandomCodeGenerator10Chars")
-@javax.annotation.Priority(PriorityPrecedence.LATE)
-@Primary
+@Priority(PriorityPrecedence.LATE)
 @Qualifier("Default")
 public class RandomCodeGeneratorDefault implements RandomCodeGenerator {
 

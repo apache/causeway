@@ -20,6 +20,7 @@ package org.apache.isis.core.runtimeservices.recognizer;
 
 import java.util.Optional;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -46,8 +47,7 @@ import lombok.val;
  */
 @Service
 @Named("isis.runtimeservices.ExceptionRecognizerServiceDefault")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class ExceptionRecognizerServiceDefault
 implements ExceptionRecognizerService {

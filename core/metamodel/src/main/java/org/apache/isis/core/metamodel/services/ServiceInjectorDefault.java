@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.services;
 
 import javax.annotation.Nullable;
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -39,8 +40,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Service
 @Named("isis.metamodel.ServiceInjectorDefault")
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
-@Primary
+@Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ServiceInjectorDefault implements ServiceInjector {

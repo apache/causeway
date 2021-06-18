@@ -18,6 +18,7 @@
  */
 package org.apache.isis.applib.services.publishing.log;
 
+import javax.annotation.Priority;
 import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
@@ -36,8 +37,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named("isis.applib.EntityPropertyChangeLogger")
-@javax.annotation.Priority(PriorityPrecedence.LATE)
-@Primary
+@Priority(PriorityPrecedence.LATE)
 @Qualifier("logging")
 @Log4j2
 public class EntityPropertyChangeLogger implements EntityPropertyChangeSubscriber {

@@ -27,6 +27,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -77,8 +78,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isis.metamodel.GridSystemServiceBootstrap")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Bootstrap")
 @Log4j2
 public class GridSystemServiceBootstrap extends GridSystemServiceAbstract<BS3Grid> {

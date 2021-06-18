@@ -25,6 +25,7 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -46,12 +47,10 @@ import lombok.val;
 
 @Service
 @Named("isis.runtimeservices.ExecutionPublisherDefault")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @InteractionScope
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-//@Log4j2
 public class ExecutionPublisherDefault
 implements ExecutionPublisher {
 

@@ -20,6 +20,7 @@ package org.apache.isis.applib.services.commanddto.conmap;
 
 import java.util.List;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.core.MediaType;
@@ -39,8 +40,7 @@ import org.apache.isis.schema.cmd.v2.CommandsDto;
  */
 @Service
 @Named("isis.applib.ContentMappingServiceForCommandsDto")
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
-@Primary
+@Priority(PriorityPrecedence.EARLY)
 @Qualifier("CommandsDto")
 public class ContentMappingServiceForCommandsDto implements ContentMappingService {
 

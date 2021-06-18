@@ -29,6 +29,7 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -82,8 +83,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named("isis.runtimeservices.InteractionServiceDefault")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2
 public class InteractionServiceDefault

@@ -18,6 +18,7 @@
  */
 package org.apache.isis.testing.fixtures.applib.queryresultscache;
 
+import javax.annotation.Priority;
 import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
@@ -37,8 +38,7 @@ import org.apache.isis.testing.fixtures.applib.events.FixturesInstallingEvent;
  */
 @Service
 @Named("isis.testing.fixtures.QueryResultsCacheControlForFixtures")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("ForFixtures")
 public class QueryResultsCacheControlForFixtures implements QueryResultsCacheControl {
 

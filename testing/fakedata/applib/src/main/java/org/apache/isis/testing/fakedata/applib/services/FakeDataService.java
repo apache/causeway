@@ -22,6 +22,7 @@ import java.util.Locale;
 import java.util.Random;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -42,8 +43,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
  */
 @Service
 @Named("isis.test.FakeDataService")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class FakeDataService {
 

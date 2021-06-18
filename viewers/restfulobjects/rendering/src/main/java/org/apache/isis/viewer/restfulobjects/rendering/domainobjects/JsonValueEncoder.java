@@ -23,6 +23,7 @@ import java.util.function.Function;
 
 import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -57,8 +58,7 @@ import lombok.val;
  */
 @Service
 @Named("isis.viewer.ro.JsonValueEncoder")
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
-@Primary
+@Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @Singleton
 public class JsonValueEncoder {

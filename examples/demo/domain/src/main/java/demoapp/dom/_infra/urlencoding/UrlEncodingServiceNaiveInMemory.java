@@ -22,6 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -47,8 +48,7 @@ import lombok.val;
  */
 @Service
 @Named("demo.UrlEncodingServiceInMemory")
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
-@Primary
+@Priority(PriorityPrecedence.EARLY)
 @Qualifier("InMemory")
 public class UrlEncodingServiceNaiveInMemory implements UrlEncodingService {
 

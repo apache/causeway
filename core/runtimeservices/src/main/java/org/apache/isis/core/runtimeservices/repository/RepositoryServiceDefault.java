@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -59,8 +60,7 @@ import lombok.val;
 
 @Service
 @Named("isis.runtimeservices.RepositoryServiceDefault")
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
-@Primary
+@Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 //@Log4j2
 public class RepositoryServiceDefault implements RepositoryService {

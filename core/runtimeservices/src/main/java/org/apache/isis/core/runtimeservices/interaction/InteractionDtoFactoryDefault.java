@@ -21,6 +21,7 @@ package org.apache.isis.core.runtimeservices.interaction;
 
 import java.util.List;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -64,8 +65,7 @@ import lombok.val;
  */
 @Service
 @Named("isis.runtimeservices.InteractionDtoServiceInternalDefault")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
 

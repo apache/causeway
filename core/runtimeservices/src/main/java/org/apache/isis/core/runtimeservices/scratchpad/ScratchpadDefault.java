@@ -20,6 +20,7 @@ package org.apache.isis.core.runtimeservices.scratchpad;
 
 import java.util.Map;
 
+import javax.annotation.Priority;
 import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
@@ -33,8 +34,7 @@ import org.apache.isis.commons.internal.collections._Maps;
 
 @Service
 @Named("isis.runtimeservices.Scratchpad")
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
-@Primary
+@Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @InteractionScope
 //@Log4j2

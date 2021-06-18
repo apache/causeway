@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.objectmanager;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -46,8 +47,7 @@ import lombok.val;
  */
 @Service
 @Named("isis.metamodel.ObjectManagerDefault")
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
-@Primary
+@Priority(PriorityPrecedence.EARLY)
 @Qualifier("DEFAULT")
 public class ObjectManagerDefault implements ObjectManager {
 

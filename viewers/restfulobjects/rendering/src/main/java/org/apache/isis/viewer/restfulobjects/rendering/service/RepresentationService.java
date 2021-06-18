@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.core.Response;
@@ -64,8 +65,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named("isis.viewer.ro.RepresentationService")
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
-@Primary
+@Priority(PriorityPrecedence.EARLY)
 @Log4j2
 public class RepresentationService {
 

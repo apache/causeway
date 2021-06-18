@@ -20,6 +20,7 @@ package org.apache.isis.core.runtimeservices.urlencoding;
 
 import java.nio.charset.StandardCharsets;
 
+import javax.annotation.Priority;
 import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
@@ -33,8 +34,7 @@ import org.apache.isis.commons.internal.base._Strings;
 
 @Service
 @Named("isis.runtimeservices.UrlEncodingServiceWithCompression")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Compression")
 public class UrlEncodingServiceWithCompression implements UrlEncodingService {
 

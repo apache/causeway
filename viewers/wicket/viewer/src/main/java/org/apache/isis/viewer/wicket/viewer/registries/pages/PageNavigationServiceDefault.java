@@ -19,30 +19,28 @@
 
 package org.apache.isis.viewer.wicket.viewer.registries.pages;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.viewer.wicket.model.models.PageType;
+import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
+import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
 import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.viewer.wicket.model.models.PageType;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
-import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
+import javax.annotation.Priority;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * Default implementation of {@link org.apache.isis.viewer.wicket.ui.pages.PageNavigationService}
  */
 @Service
 @Named("isis.viewer.wicket.PageNavigationServiceDefault")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class PageNavigationServiceDefault implements PageNavigationService {
 

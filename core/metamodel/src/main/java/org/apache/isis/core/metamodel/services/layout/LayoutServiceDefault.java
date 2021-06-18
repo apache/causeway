@@ -18,17 +18,8 @@
  */
 package org.apache.isis.core.metamodel.services.layout;
 
-import java.io.File;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.xml.bind.Marshaller;
-
+import lombok.val;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Service;
-
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.layout.menubars.MenuBars;
 import org.apache.isis.applib.services.grid.GridService;
@@ -41,13 +32,18 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
-import lombok.val;
+import javax.annotation.Priority;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.xml.bind.Marshaller;
+import java.io.File;
 
 @Service
 @Named("isis.metamodel.LayoutServiceDefault")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class LayoutServiceDefault implements LayoutService {
 

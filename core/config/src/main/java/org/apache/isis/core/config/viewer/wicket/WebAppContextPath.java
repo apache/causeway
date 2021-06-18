@@ -23,6 +23,7 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nullable;
+import javax.annotation.Priority;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
@@ -43,8 +44,7 @@ import lombok.val;
 @Service
 @Singleton
 @Named("isis.config.WebAppContextPath")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class WebAppContextPath implements Serializable {
 

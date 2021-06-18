@@ -18,29 +18,26 @@
  */
 package org.apache.isis.core.config.environment;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.context.event.ApplicationFailedEvent;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Primary;
-import org.springframework.context.event.ContextClosedEvent;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.EventListener;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
-
+import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
+import lombok.val;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.ioc._IocContainer;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.context.event.ApplicationFailedEvent;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.event.ContextClosedEvent;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
 
-import lombok.Getter;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.annotation.Priority;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 
 /**
  * Represents configuration, that is required in an early bootstrapping phase.
@@ -51,8 +48,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named("isis.config.IsisSystemEnvironment")
-@javax.annotation.Priority(0) // same as PriorityPrecedence#FIRST
-@Primary
+@Priority(0) // same as PriorityPrecedence#FIRST
 @Qualifier("Default")
 @Singleton
 @Log4j2

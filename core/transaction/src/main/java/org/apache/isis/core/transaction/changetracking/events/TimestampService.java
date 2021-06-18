@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.transaction.changetracking.events;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -36,8 +37,7 @@ import lombok.val;
 
 @Service
 @Named("isis.transaction.TimestampService")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class TimestampService {
 

@@ -25,6 +25,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -43,10 +44,8 @@ import lombok.val;
 
 @Service
 @Named("isis.config.IsisBeanTypeRegistryImpl")
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
-@Primary
+@Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
-//@Log4j2
 public class IsisBeanTypeRegistryDefault implements IsisBeanTypeRegistry {
 
     /**

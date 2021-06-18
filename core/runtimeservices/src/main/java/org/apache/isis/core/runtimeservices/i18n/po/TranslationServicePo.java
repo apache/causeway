@@ -22,6 +22,7 @@ import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -45,8 +46,7 @@ import lombok.val;
 
 @Service
 @Named("isis.runtimeservices.TranslationServicePo")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Po")
 public class TranslationServicePo implements TranslationService {
 

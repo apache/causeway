@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.runtimeservices.routing;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -31,8 +32,7 @@ import org.apache.isis.applib.services.routing.RoutingService;
 
 @Service
 @Named("isis.runtimeservices.RoutingServiceDefault")
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
-@Primary
+@Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 //@Log4j2
 public class RoutingServiceDefault implements RoutingService {

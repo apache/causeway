@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.services.events;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -44,8 +45,7 @@ import lombok.Builder;
  */
 @Service
 @Named("isis.metamodel.MetamodelEventService")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Builder //for JUnit Test support
 public class MetamodelEventService {

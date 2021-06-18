@@ -18,26 +18,23 @@
  */
 package org.apache.isis.applib.services.commanddto.conmap;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.ws.rs.core.MediaType;
-
+import lombok.val;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Service;
-
 import org.apache.isis.applib.services.commanddto.HasCommandDto;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.applib.services.commanddto.processor.spi.CommandDtoProcessorService;
 import org.apache.isis.applib.services.conmap.ContentMappingService;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.schema.cmd.v2.CommandDto;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
-import lombok.val;
+import javax.annotation.Nullable;
+import javax.annotation.Priority;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 /**
  * 
@@ -45,8 +42,7 @@ import lombok.val;
  */
 @Service
 @Named("isis.applib.ContentMappingServiceForCommandDto")
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
-@Primary
+@Priority(PriorityPrecedence.EARLY)
 @Qualifier("CommandDto")
 public class ContentMappingServiceForCommandDto implements ContentMappingService {
 

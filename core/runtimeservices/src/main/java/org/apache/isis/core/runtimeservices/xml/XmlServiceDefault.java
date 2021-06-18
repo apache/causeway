@@ -21,6 +21,7 @@ package org.apache.isis.core.runtimeservices.xml;
 import java.io.StringReader;
 import java.io.StringWriter;
 
+import javax.annotation.Priority;
 import javax.inject.Named;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -52,10 +53,8 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
  */
 @Service
 @Named("isis.runtimeservice.XmlService")
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
-@Primary
+@Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
-//@Log4j2
 public class XmlServiceDefault implements XmlService {
 
     @Override

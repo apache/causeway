@@ -28,6 +28,7 @@ import static java.util.regex.Pattern.compile;
 import static java.util.regex.Pattern.quote;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -45,8 +46,7 @@ import org.apache.isis.commons.internal.resources._Resources;
 
 @Service
 @Named("isis.runtimeservices.EmailNotificationServiceDefault")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class EmailNotificationServiceDefault implements EmailNotificationService {
 

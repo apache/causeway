@@ -25,6 +25,7 @@ import static org.apache.isis.commons.internal.reflection._Reflect.Filter.paramC
 import java.lang.reflect.InvocationTargetException;
 
 import javax.annotation.Nullable;
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -50,8 +51,7 @@ import lombok.val;
 
 @Service
 @Named("isis.runtimeservices.FactoryServiceDefault")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class FactoryServiceDefault implements FactoryService {
 

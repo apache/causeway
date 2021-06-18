@@ -22,10 +22,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -45,7 +47,7 @@ import lombok.val;
  */
 @Configuration
 @Named("isis.persistence.jpa.ElSettings")
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Eclipselink")
 @ConfigurationProperties(
         prefix = "",

@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.runtime.events;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -39,8 +40,7 @@ import org.apache.isis.core.metamodel.events.MetamodelEvent;
  */
 @Service
 @Named("isis.runtime.MetamodelEventService")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class MetamodelEventService {
 

@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.services.exceprecog;
 
+import javax.annotation.Priority;
 import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
@@ -38,8 +39,7 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
  */
 @Service
 @Named("isis.metamodel.ExceptionRecognizerForRecoverableException")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class ExceptionRecognizerForRecoverableException extends ExceptionRecognizerForType {
 

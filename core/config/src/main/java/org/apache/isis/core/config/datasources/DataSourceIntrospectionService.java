@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import javax.annotation.Priority;
 import javax.inject.Named;
 import javax.sql.DataSource;
 
@@ -52,8 +53,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named("isis.config.DataSourceIntrospectionService")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2
 public class DataSourceIntrospectionService {

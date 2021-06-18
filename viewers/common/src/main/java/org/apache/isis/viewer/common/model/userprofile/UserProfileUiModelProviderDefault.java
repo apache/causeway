@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.common.model.userprofile;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -38,8 +39,7 @@ import lombok.val;
 
 @Service
 @Named("isis.viewer.common.UserProfileServiceDefault")
-@javax.annotation.Priority(PriorityPrecedence.LATE)
-@Primary
+@Priority(PriorityPrecedence.LATE)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class UserProfileUiModelProviderDefault implements UserProfileUiModelProvider {

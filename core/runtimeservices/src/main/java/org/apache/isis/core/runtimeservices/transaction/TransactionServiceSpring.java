@@ -23,6 +23,7 @@ import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.LongAdder;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -64,8 +65,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named("isis.runtimeservices.TransactionServiceSpring")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Spring")
 @Log4j2
 public class TransactionServiceSpring

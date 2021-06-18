@@ -18,28 +18,24 @@
  */
 package org.apache.isis.subdomains.base.applib.services.calendar;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
+import lombok.RequiredArgsConstructor;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.services.clock.ClockService;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.clock.ClockService;
-
-import lombok.RequiredArgsConstructor;
+import javax.annotation.Priority;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 /**
  * @since 2.0 {@index}
  */
 @Service
 @Named("isis.sub.base.CalendarService")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@Primary
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class CalendarService {
