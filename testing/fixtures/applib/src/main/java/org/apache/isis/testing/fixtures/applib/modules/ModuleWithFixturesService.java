@@ -18,18 +18,15 @@
  */
 package org.apache.isis.testing.fixtures.applib.modules;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
-
+import lombok.Data;
+import lombok.extern.log4j.Log4j2;
+import lombok.val;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.subdomains.spring.applib.service.BeanDescriptor;
+import org.apache.isis.subdomains.spring.applib.service.ContextBeans;
+import org.apache.isis.subdomains.spring.applib.service.SpringBeansService;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Configuration;
@@ -38,16 +35,11 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.core.metamodel.facets.Annotations;
-import org.apache.isis.subdomains.spring.applib.service.BeanDescriptor;
-import org.apache.isis.subdomains.spring.applib.service.ContextBeans;
-import org.apache.isis.subdomains.spring.applib.service.SpringBeansService;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
-
-import lombok.Data;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import javax.annotation.Priority;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @since 2.x {@index}
@@ -95,10 +87,14 @@ public class ModuleWithFixturesService {
     }
 
     public List<ModuleWithFixturesDescriptor> modules() {
+        val beans = springBeansService.beans();
+        val modules = modulesWithin(beans);
+        return sequenced(modules);
+    }
 
+    static List<ModuleWithFixturesDescriptor> modulesWithin(Map<String, ContextBeans> beans) {
         final List<ModuleWithFixturesDescriptor> descriptors = new ArrayList<>();
-        final Map<String, ContextBeans> contexts = springBeansService.beans();
-        for (Map.Entry<String, ContextBeans> contextEntry : contexts.entrySet()) {
+        for (Map.Entry<String, ContextBeans> contextEntry : beans.entrySet()) {
             final String contextId = contextEntry.getKey();
             final ContextBeans contextBeans = contextEntry.getValue();
             final ConfigurableApplicationContext context = contextBeans.getContext();
@@ -148,6 +144,52 @@ public class ModuleWithFixturesService {
             }
         }
         return descriptors;
+    }
+
+
+    static List<ModuleWithFixturesDescriptor> sequenced(List<ModuleWithFixturesDescriptor> modules) {
+        val remaining = new ArrayList<>(modules);
+        val sequenced = new ArrayList<ModuleWithFixturesDescriptor>();
+
+        val moduleByName = new LinkedHashMap<String, ModuleWithFixturesDescriptor>();
+        modules.forEach(module -> {
+            moduleByName.put(module.getBeanName(), module);
+        });
+
+        while(!remaining.isEmpty()) {
+            ModuleWithFixturesDescriptor added = addNextModule(sequenced, remaining, moduleByName);
+            if (added == null) {
+                throw new IllegalStateException(String.format(
+                        "Unable to determine next module.\nfound = %s\nremaining = %s",
+                        beanNamesOf(sequenced), beanNamesOf(remaining)));
+            }
+            remaining.remove(added);
+        }
+
+        return sequenced;
+    }
+
+    static List<String> beanNamesOf(ArrayList<ModuleWithFixturesDescriptor> result) {
+        return result.stream().map(ModuleWithFixturesDescriptor::getBeanName).collect(Collectors.toList());
+    }
+
+    static ModuleWithFixturesDescriptor addNextModule(
+            final List<ModuleWithFixturesDescriptor> result,
+            final List<ModuleWithFixturesDescriptor> remaining,
+            final LinkedHashMap<String, ModuleWithFixturesDescriptor> moduleByName) {
+
+        for (ModuleWithFixturesDescriptor module : remaining) {
+            val numDependenciesNotYetEncountered =
+                    module.getDependenciesByName().keySet().stream()
+                            .map(moduleByName::get)
+                            .filter(dependency -> !result.contains(dependency)) // ignore if already known about
+                            .count();
+            if(numDependenciesNotYetEncountered == 0) {
+                result.add(module);
+                return module;
+            }
+        }
+        return null;
     }
 
     @EventListener(ContextRefreshedEvent.class)
