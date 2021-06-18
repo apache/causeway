@@ -27,7 +27,7 @@ import org.springframework.core.annotation.Order;
 import org.w3c.dom.events.EventTarget;
 import org.w3c.dom.html.HTMLAnchorElement;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.value.HasHtml;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerFx;
 import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
@@ -49,7 +49,7 @@ import javafx.scene.web.WebView;
 import netscape.javascript.JSException;
 
 @org.springframework.stereotype.Component
-@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class MarkupFieldFactory implements UiComponentHandlerFx {
 

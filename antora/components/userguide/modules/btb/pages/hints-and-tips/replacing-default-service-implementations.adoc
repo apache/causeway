@@ -10,7 +10,7 @@ The framework provides default implementations for many of the xref:refguide:app
 This is convenient, but sometimes you will want to replace the default implementation with your own service implementation.
 
 For example, suppose you wanted to provide your own implementation of xref:refguide:applib:index/services/i18n/LocaleProvider.adoc[LocaleProvider].
-The trick is to use the Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[@Order] annotation or equivalent mechanism.
+The trick is to use the `@javax.annotation.Priority` annotation.
 
 Here's how:
 
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.core.Ordered;
 
 @Service
-@Order(OrderPrecedence.HIGH)                                // <.>
+@Priority(PriorityPrecedence.EARLY)                                // <.>
 public class MyLocaleProvider implements LocaleProvider {
     @Override
     public Locale getLocale() {
@@ -41,7 +41,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.core.Ordered;
 
 @Service
-@Order(OrderPrecedence.HIGHEST)                             // <.>
+@Priority(PriorityPrecedence.FIRST)                             // <.>
 public class MyLocaleProvider implements LocaleProvider {
 
     @Inject List<LocaleProvider> localeProviders;           // <.>

@@ -288,7 +288,7 @@ The service below will set up the default roles and permissions for the framewor
 .SeedUsersAndRoles.java
 ----
 @Service
-@Order(OrderPrecedence.MIDPOINT + 10)
+@Priority(PriorityPrecedence.MIDPOINT + 10)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class SeedSecurityService {
 

@@ -98,7 +98,7 @@ class SpringServiceInjectOrderTest {
         assertNotNull(messageService);
         assertTrue(messageService instanceof MessageServiceDefault);
 
-        // injected as per @Order
+        // injected as per @Priority
         val ratings = dummyService.getRatings();
         assertThat(ratings.get(0).getRating(), is(equalTo(1)));
         assertThat(ratings.get(1).getRating(), is(equalTo(2)));
@@ -129,7 +129,7 @@ class SpringServiceInjectOrderTest {
         assertNotNull(messageService);
         assertTrue(messageService instanceof MessageServiceDefault);
 
-        // injected as per @Order
+        // injected as per @Priority
         val ratings = dummyObject.getRatings();
         assertThat(ratings.get(0).getRating(), is(equalTo(1)));
         assertThat(ratings.get(1).getRating(), is(equalTo(2)));
@@ -161,7 +161,7 @@ class SpringServiceInjectOrderTest {
     }
 
     @Service
-    @Order(PriorityPrecedence.EARLY)
+    @Priority(PriorityPrecedence.EARLY)
     @Qualifier("tallest")
     @Named("withExcellentName")
     static class Excellent implements Rating {
@@ -185,7 +185,7 @@ class SpringServiceInjectOrderTest {
     }
 
     @Service
-    @Order(PriorityPrecedence.LAST)
+    @Priority(PriorityPrecedence.LAST)
     @Qualifier("middle")
     @Named("withAverageName")
     static class Average implements Rating {

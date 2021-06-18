@@ -24,7 +24,7 @@ import javax.inject.Inject;
 
 import org.springframework.core.annotation.Order;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.core.metamodel.facets.value.string.StringValueFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
@@ -41,7 +41,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @org.springframework.stereotype.Component
-@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class TextFieldFactory implements UiComponentHandlerFx {
 

@@ -20,9 +20,9 @@ What distinguishes API from SPI is primarily whether it is called by the domain 
 
 In one sense all API domain services are also SPI, in that they can be overridden by the domain programmer providing another domain service implementing the same type.
 For example, the framework-provided implementation of xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService] could be overridden this way, perhaps for more monitoring or caching purposes.
-This is most easily done using the Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[@Order] annotation.
+This is done using the `@javax.annotation.Priority` annotation.
 
-Generally speaking in such cases higher precedence implementation will be used instead of the framework-provided implementation.
+Generally speaking in such cases the earliest encountered implementation (= highest priority) will be used instead of the framework-provided implementation.
 For some services, though, _all_ available implementations are delegated to; these are typically subscribers such as xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber].
 
 A small number of domain services can be considered both API and SPI; a good example is the xref:refguide:applib:index/services/email/EmailService.adoc[EmailService] that is of direct use for domain objects wishing to send out emails, but is also used by the framework to support the xref:vw:ROOT:features.adoc#user-registration[user registration] functionality supported by the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)].
@@ -98,14 +98,13 @@ Alternatively the object can be instantiated simply using `new`, then services i
 
 The framework provides default implementations for many of the domain services.
 This is convenient, but sometimes you will want to replace the default implementation with your own service implementation.
-This is most commonly done using the Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[@Order] annotation.
-Inspect the source code of the default implementation to determine which value to use.
-The xref:refguide:applib:index/annotation/OrderPrecedence.adoc[OrderPrecedence] class provides some pre-defined precedences.
+This is most commonly done using the `@javax.annotation.Priority` annotation.
+The xref:refguide:applib:index/annotation/PriorityPrecedence.adoc[PriorityPrecedence] class provides some pre-defined precedences.
 
+* If a scalar field is being injected to, the earliest implementation encountered (= highest priority) is used
+* If a list is being injected to, then all available implementations are injected, again with the beans with earlier precedences sorting before those with later precedences.
 
-Spring offers a number of other mechanisms to specify the ordering; these can also be used.
-
-For some domain services, all framework will delegate to all available implementation, using a chain-of-responsibility pattern):
+For some domain services, all framework will delegate to all available implementation (ie consumes a list of implementations), and uses a chain-of-responsibility pattern):
 These include:
 
 xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[ContentMappingService],
@@ -119,7 +118,7 @@ The default implementation has these annotations:
 ----
 @Service
 @Named("isisWicketViewer.LocaleProviderWicket")
-@Order(OrderPrecedence.MIDPOINT)
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Wicket")
 @Log4j2
 public class LocaleProviderWicket implements LocaleProvider { /* ... */ }
@@ -130,7 +129,7 @@ To override this, use something like:
 [source,java]
 ----
 @Service
-@Order(OrderPrecedence.HIGH)
+@Priority(PriorityPrecedence.EARLY)
 public class MyLocaleProvider implements LocaleProvider { /* ... */ }
 ----
 

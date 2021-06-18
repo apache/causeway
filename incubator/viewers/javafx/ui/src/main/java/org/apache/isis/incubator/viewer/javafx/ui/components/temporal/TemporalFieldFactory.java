@@ -22,7 +22,7 @@ import javax.inject.Inject;
 
 import org.springframework.core.annotation.Order;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet.OffsetCharacteristic;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet.TemporalCharacteristic;
@@ -39,7 +39,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @org.springframework.stereotype.Component
-@javax.annotation.Priority(OrderPrecedence.MIDPOINT)
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class TemporalFieldFactory implements UiComponentHandlerFx {
 

@@ -44,7 +44,7 @@ There are various subclasses available; as we want to replace the component for 
 include::../../../../webapp/wicket/ui/custom/WhereInTheWorldPanelFactory.java[tags=class]
 ----
 <.> the framework use the chain-of-responsibility pattern to look for a component factory to render the domain object.
-This `@Order` precedence ensures that this custom implementation is consulted early on.
+This `@javax.annotation.Priority` precedence ensures that this custom implementation is consulted early on.
 <.> indicates that this component applies when rendering a domain object (applies to view models as well as domain entities)
 <.> the superclass ensures that an `EntityModel` is provided to inspect.
 This is a Wicket model that is a serializable equivalent to the core framework's notion of a domain object.

@@ -27,7 +27,7 @@ The order of these properties of `Order`, when rendered in the context of its ow
 [source,java]
 ----
 @Service
-@Order(100)                                             // <.>
+@Priority(PriorityPrecedence.EARLY)                     // <.>
 public class TableColumnOrderServiceForCustomerOrders
                  implements TableColumnOrderService {
     public List<String> orderParented(
@@ -47,7 +47,7 @@ public class TableColumnOrderServiceForCustomerOrders
     }
 }
 ----
-<.> specifies the order in which the `TableColumnOrderService` implementations are called.
+<.> specifies the priority in which the xref:refguide:applib:index/services/tablecol/TableColumnOrderService.adoc[TableColumnOrderService] implementations are called.
 <.> represents the collection that this service can advise upon
 <.> provides no advice
 
