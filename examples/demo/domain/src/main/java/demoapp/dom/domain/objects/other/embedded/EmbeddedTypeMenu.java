@@ -18,16 +18,23 @@
  */
 package demoapp.dom.domain.objects.other.embedded;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.factory.FactoryService;
 
 import lombok.RequiredArgsConstructor;
 
-@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.EmbeddedTypeMenu")
-@RequiredArgsConstructor
+@DomainService(
+        nature=NatureOfService.VIEW,
+        logicalTypeName = "demo.EmbeddedTypeMenu"
+)
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class EmbeddedTypeMenu {
 
     private final FactoryService factoryService;

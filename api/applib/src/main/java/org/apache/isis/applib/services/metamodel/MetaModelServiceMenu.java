@@ -34,9 +34,11 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.jaxb.JaxbService;
@@ -54,11 +56,15 @@ import org.apache.isis.schema.metamodel.v2.MetamodelDto;
  * @since 2.0 {@index}
  */
 @Named(MetaModelServiceMenu.LOGICAL_TYPE_NAME)
-@DomainService(logicalTypeName = MetaModelServiceMenu.LOGICAL_TYPE_NAME)
+@DomainService(
+        nature = NatureOfService.VIEW,
+        logicalTypeName = MetaModelServiceMenu.LOGICAL_TYPE_NAME
+)
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class MetaModelServiceMenu {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".MetaModelServiceMenu";

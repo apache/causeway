@@ -20,6 +20,7 @@ package org.apache.isis.extensions.secman.applib.user.menu;
 
 import java.util.concurrent.Callable;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
@@ -27,12 +28,15 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserRepository;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * @since 2.0 {@index}
@@ -44,6 +48,8 @@ import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserReposito
 @DomainServiceLayout(
         menuBar = DomainServiceLayout.MenuBar.TERTIARY
 )
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class MeService {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApplib.NAMESPACE + ".MeService";
@@ -52,9 +58,9 @@ public class MeService {
     public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApplib.CollectionDomainEvent<MeService, T> {}
     public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApplib.ActionDomainEvent<MeService> {}
 
-    @Inject private ApplicationUserRepository applicationUserRepository;
-    @Inject private UserService userService;
-    @Inject private javax.inject.Provider<QueryResultsCache> queryResultsCacheProvider;
+    final ApplicationUserRepository applicationUserRepository;
+    final UserService userService;
+    final javax.inject.Provider<QueryResultsCache> queryResultsCacheProvider;
 
     // -- iconName
     public String iconName() {

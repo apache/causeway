@@ -31,6 +31,8 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
@@ -43,16 +45,21 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Named(LogoutMenu.LOGICAL_TYPE_NAME)
-@DomainService(logicalTypeName = LogoutMenu.LOGICAL_TYPE_NAME)
-@DomainServiceLayout(menuBar = DomainServiceLayout.MenuBar.TERTIARY)
+@DomainService(
+        nature = NatureOfService.VIEW,
+        logicalTypeName = LogoutMenu.LOGICAL_TYPE_NAME
+)
+@DomainServiceLayout(
+        menuBar = DomainServiceLayout.MenuBar.TERTIARY
+)
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class LogoutMenu {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleCoreSecurity.NAMESPACE + ".LogoutMenu"; // referenced by secman seeding
 
-    private final List<LogoutHandler> logoutHandler;
-    private final InteractionProvider interactionProvider;
-    //private final IsisConfiguration configuration;
+    final List<LogoutHandler> logoutHandler;
+    final InteractionProvider interactionProvider;
 
     public static class LogoutDomainEvent
         extends IsisModuleApplib.ActionDomainEvent<LogoutMenu> {}
@@ -104,7 +111,6 @@ public class LogoutMenu {
 
         return new LocalResourcePath(logoutRedirect, OpenUrlStrategy.SAME_WINDOW);
     }
-
 
 }
 

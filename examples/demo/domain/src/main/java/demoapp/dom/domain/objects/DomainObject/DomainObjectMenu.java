@@ -24,6 +24,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
@@ -33,8 +34,11 @@ import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObje
 import demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.StatefulVmJaxbRefsEntity;
 import demoapp.dom.domain.objects.DomainObject.nature.viewmodels.usingjaxb.StatefulVmUsingJaxb;
 
-@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.DomainObjectMenu")
-//@Log4j2
+@DomainService(
+        nature=NatureOfService.VIEW,
+        logicalTypeName = "demo.DomainObjectMenu"
+)
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class DomainObjectMenu {
 

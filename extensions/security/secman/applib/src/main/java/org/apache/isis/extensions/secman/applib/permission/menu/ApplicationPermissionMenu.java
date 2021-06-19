@@ -27,6 +27,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.factory.FactoryService;
@@ -43,6 +44,7 @@ import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermis
         menuBar = DomainServiceLayout.MenuBar.SECONDARY,
         named="Security"
 )
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class ApplicationPermissionMenu {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationPermissionMenu";

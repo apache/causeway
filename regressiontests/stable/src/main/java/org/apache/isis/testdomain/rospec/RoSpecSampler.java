@@ -24,12 +24,15 @@ import java.util.List;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.commons.internal.collections._Lists;
 
 @DomainService(
         nature = NatureOfService.REST,
-        logicalTypeName = "testdomain.RoSpecSampler")
+        logicalTypeName = "testdomain.RoSpecSampler"
+)
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class RoSpecSampler {
 
     // -- VOID

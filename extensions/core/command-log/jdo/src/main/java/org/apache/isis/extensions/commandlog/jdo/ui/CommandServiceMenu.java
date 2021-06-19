@@ -59,9 +59,8 @@ import lombok.RequiredArgsConstructor;
     named = "Activity",
     menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
-@Service
 @Named(CommandServiceMenu.LOGICAL_TYPE_NAME)
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 @Qualifier("Jdo")
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class CommandServiceMenu {

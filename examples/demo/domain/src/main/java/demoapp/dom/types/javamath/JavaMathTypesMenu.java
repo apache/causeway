@@ -24,6 +24,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.extern.log4j.Log4j2;
@@ -31,9 +32,14 @@ import lombok.extern.log4j.Log4j2;
 import demoapp.dom.types.javamath.bigdecimals.JavaMathBigDecimals;
 import demoapp.dom.types.javamath.bigintegers.JavaMathBigIntegers;
 
-@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.JavaMathTypesMenu")
-@DomainObjectLayout(named="JavaMathTypes")
-@Log4j2
+@DomainService(
+        nature=NatureOfService.VIEW,
+        logicalTypeName = "demo.JavaMathTypesMenu"
+)
+@DomainObjectLayout(
+        named="JavaMathTypes"
+)
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class JavaMathTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)

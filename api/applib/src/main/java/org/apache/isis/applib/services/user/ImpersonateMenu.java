@@ -15,6 +15,7 @@ import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -48,6 +49,7 @@ import lombok.experimental.Accessors;
         named = "Security",
         menuBar = DomainServiceLayout.MenuBar.TERTIARY
 )
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ImpersonateMenu {
 

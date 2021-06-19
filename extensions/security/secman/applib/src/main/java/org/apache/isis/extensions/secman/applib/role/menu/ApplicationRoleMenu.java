@@ -30,6 +30,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
@@ -45,6 +46,7 @@ import lombok.RequiredArgsConstructor;
         named = "Security",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ApplicationRoleMenu {
 

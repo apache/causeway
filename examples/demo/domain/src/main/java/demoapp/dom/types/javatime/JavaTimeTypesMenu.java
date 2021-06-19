@@ -24,6 +24,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import demoapp.dom.types.javatime.javatimelocaldate.JavaTimeLocalDates;
@@ -32,9 +33,14 @@ import demoapp.dom.types.javatime.javatimeoffsetdatetime.JavaTimeOffsetDateTimes
 import demoapp.dom.types.javatime.javatimeoffsettime.JavaTimeOffsetTimes;
 import demoapp.dom.types.javatime.javatimezoneddatetime.JavaTimeZonedDateTimes;
 
-@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.JavaTimeTypesMenu")
-@DomainObjectLayout(named="JavaTimeTypes")
-//@Log4j2
+@DomainService(
+        nature=NatureOfService.VIEW,
+        logicalTypeName = "demo.JavaTimeTypesMenu"
+)
+@DomainObjectLayout(
+        named="JavaTimeTypes"
+)
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class JavaTimeTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)

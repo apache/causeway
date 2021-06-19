@@ -25,6 +25,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.mixins.layout.Object_downloadLayoutXml;
 import org.apache.isis.applib.mixins.rest.Object_openRestApi;
@@ -36,7 +37,10 @@ import org.apache.isis.core.metamodel.inspect.Object_inspectMetamodel;
         nature = NatureOfService.VIEW,
         logicalTypeName = "demo.PrototypeActionsVisibilityAdvisor"
 )
-@DomainServiceLayout(menuBar = DomainServiceLayout.MenuBar.TERTIARY)
+@DomainServiceLayout(
+        menuBar = DomainServiceLayout.MenuBar.TERTIARY
+)
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class PrototypeActionsVisibilityAdvisor {
 
     @EventListener(Object_downloadMetamodelXml.ActionDomainEvent.class)

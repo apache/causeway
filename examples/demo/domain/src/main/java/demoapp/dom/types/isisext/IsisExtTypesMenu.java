@@ -24,6 +24,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.extern.log4j.Log4j2;
@@ -31,9 +32,12 @@ import lombok.extern.log4j.Log4j2;
 import demoapp.dom.types.isisext.asciidocs.IsisAsciiDocs;
 import demoapp.dom.types.isisext.markdowns.IsisMarkdowns;
 
-@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.IsisExtTypesMenu")
+@DomainService(
+        nature=NatureOfService.VIEW,
+        logicalTypeName = "demo.IsisExtTypesMenu"
+)
 @DomainObjectLayout(named="IsisExtTypes")
-@Log4j2
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class IsisExtTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)

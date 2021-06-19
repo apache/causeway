@@ -26,6 +26,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
@@ -51,8 +52,11 @@ import demoapp.dom.domain.properties.Property.regexPattern.PropertyRegexPatternV
 import demoapp.dom.domain.properties.Property.snapshot.PropertySnapshotVm;
 import demoapp.dom.types.Samples;
 
-@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.PropertyMenu")
-//@Log4j2
+@DomainService(
+        nature=NatureOfService.VIEW,
+        logicalTypeName = "demo.PropertyMenu"
+)
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class PropertyMenu {
 

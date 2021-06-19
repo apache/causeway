@@ -39,10 +39,11 @@ import org.apache.isis.applib.services.repository.RepositoryService;
         named = "Demo",
         menuOrder = "10.4"
 )
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class PdfJsDemoObjectWithBlobMenu {
 
-
-    //region > listAll (action)
+    final RepositoryService repositoryService;
 
     @Action(
             semantics = SemanticsOf.SAFE
@@ -55,9 +56,6 @@ public class PdfJsDemoObjectWithBlobMenu {
         return repositoryService.allInstances(PdfJsDemoObjectWithBlob.class);
     }
 
-    //endregion
-
-    //region > create (action)
 
     @MemberOrder(sequence = "2")
     public PdfJsDemoObjectWithBlob createDemoObjectWithBlob(
@@ -69,9 +67,6 @@ public class PdfJsDemoObjectWithBlobMenu {
         return obj;
     }
 
-    //endregion
 
-    @javax.inject.Inject
-    RepositoryService repositoryService;
 
 }

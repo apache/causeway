@@ -31,20 +31,25 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @DomainService(
         nature = NatureOfService.REST,
-        logicalTypeName = "testdomain.jdo.InventoryResource")
+        logicalTypeName = "testdomain.jdo.InventoryResource"
+)
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class JdoInventoryResource {
 
-    @Inject private RepositoryService repository;
+    final RepositoryService repository;
 
     @Action
     public List<JdoProduct> listProducts() {

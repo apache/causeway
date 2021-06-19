@@ -28,6 +28,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.util.ZipWriter;
@@ -37,9 +38,9 @@ import org.apache.isis.persistence.jdo.applib.services.JdoSupportService;
 import org.apache.isis.persistence.jdo.metamodel.IsisModuleJdoMetamodel;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@Named(JdoMetamodelMenu.LOGICAL_TYPE_NAME)
 @DomainService(
         logicalTypeName = JdoMetamodelMenu.LOGICAL_TYPE_NAME
 )
@@ -47,12 +48,15 @@ import lombok.val;
         menuBar = DomainServiceLayout.MenuBar.SECONDARY,
         named = "Prototyping"
 )
+@Named(JdoMetamodelMenu.LOGICAL_TYPE_NAME)
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class JdoMetamodelMenu {
 
     public final static String LOGICAL_TYPE_NAME = IsisModuleJdoMetamodel.NAMESPACE + ".JdoMetamodelMenu";
 
-    @Inject private JdoSupportService jdoSupport;
-    @Inject private JdoFacetContext jdoFacetContext;
+    final JdoSupportService jdoSupport;
+    final JdoFacetContext jdoFacetContext;
 
     public static abstract class ActionDomainEvent
     extends IsisModuleApplib.ActionDomainEvent<JdoMetamodelMenu> {}

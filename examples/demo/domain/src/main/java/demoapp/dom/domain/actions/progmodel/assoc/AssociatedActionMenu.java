@@ -25,10 +25,17 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.factory.FactoryService;
 
-@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.AssociatedActionMenu")
-@DomainObjectLayout(named="Associated Action")
+@DomainService(
+        nature=NatureOfService.VIEW,
+        logicalTypeName = "demo.AssociatedActionMenu"
+)
+@DomainObjectLayout(
+        named="Associated Action"
+)
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class AssociatedActionMenu {
 
     @Inject private FactoryService factoryService;

@@ -28,6 +28,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.commons.internal.base._Strings;
@@ -44,11 +45,12 @@ import lombok.extern.log4j.Log4j2;
 @DomainService(
         nature = NatureOfService.VIEW,
         logicalTypeName = HsqlDbManagerMenu.LOGICAL_TYPE_NAME
-        )
+)
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
-        )
+)
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 @Log4j2
 public class HsqlDbManagerMenu {
 

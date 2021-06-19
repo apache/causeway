@@ -39,6 +39,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.services.eventbus.EventBusService;
@@ -59,6 +60,7 @@ import org.apache.isis.testing.fixtures.applib.personas.BuilderScriptAbstract;
 import org.apache.isis.testing.fixtures.applib.personas.PersonaWithBuilderScript;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.val;
 
@@ -77,6 +79,7 @@ import lombok.val;
         named="Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class FixtureScripts {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleTestingFixturesApplib.NAMESPACE + ".FixtureScripts"; // secman seeding

@@ -26,6 +26,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.value.Blob;
@@ -47,9 +48,13 @@ import demoapp.dom.domain.properties.PropertyLayout.repainting.PropertyLayoutRep
 import demoapp.dom.domain.properties.PropertyLayout.typicalLength.PropertyLayoutTypicalLengthVm;
 import demoapp.dom.types.Samples;
 
-@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.PropertyLayoutMenu")
-@Log4j2
+@DomainService(
+        nature=NatureOfService.VIEW,
+        logicalTypeName = "demo.PropertyLayoutMenu"
+)
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
+@Log4j2
 public class PropertyLayoutMenu {
 
     final ClockService clockService;

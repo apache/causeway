@@ -24,6 +24,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,7 @@ import demoapp.dom.domain.actions.Action.typeOf.ActionTypeOfVm;
 import demoapp.dom.domain.actions.Action.typeOf.child.ActionTypeOfChildVm;
 
 @DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.ActionMenu")
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ActionMenu {
 

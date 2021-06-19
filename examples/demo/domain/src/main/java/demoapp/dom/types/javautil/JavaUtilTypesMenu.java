@@ -23,6 +23,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.extern.log4j.Log4j2;
@@ -30,9 +31,14 @@ import lombok.extern.log4j.Log4j2;
 import demoapp.dom.types.javautil.javautildate.JavaUtilDates;
 import demoapp.dom.types.javautil.uuids.JavaUtilUuids;
 
-@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.JavaUtilTypesMenu")
-@DomainObjectLayout(named="JavaUtilTypes")
-@Log4j2
+@DomainService(
+        nature=NatureOfService.VIEW,
+        logicalTypeName = "demo.JavaUtilTypesMenu"
+)
+@DomainObjectLayout(
+        named="JavaUtilTypes"
+)
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class JavaUtilTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)

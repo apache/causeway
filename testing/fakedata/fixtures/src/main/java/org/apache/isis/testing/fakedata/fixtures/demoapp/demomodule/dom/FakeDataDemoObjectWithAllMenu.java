@@ -28,6 +28,7 @@ import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.repository.RepositoryService;
 
@@ -37,7 +38,10 @@ import lombok.val;
         nature = NatureOfService.VIEW,
         logicalTypeName = "libFakeDataFixture.FakeDataDemoObjectWithAllMenu"
 )
-@DomainServiceLayout(named = "Demo")
+@DomainServiceLayout(
+        named = "Demo"
+)
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class FakeDataDemoObjectWithAllMenu {
 
 

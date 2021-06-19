@@ -24,10 +24,15 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.commandreplay.secondary.spi.ReplayCommandExecutionController;
 
-@DomainService(nature = NatureOfService.VIEW, logicalTypeName = "demo.web.DemoReplayController")
+@DomainService(
+        nature = NatureOfService.VIEW,
+        logicalTypeName = "demo.web.DemoReplayController"
+)
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 @Profile("secondary")
 public class DemoReplayController implements ReplayCommandExecutionController {
 
