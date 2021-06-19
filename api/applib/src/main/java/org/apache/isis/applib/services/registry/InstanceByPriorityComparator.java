@@ -22,6 +22,9 @@ import java.util.Comparator;
 
 import javax.annotation.Priority;
 
+import org.springframework.context.annotation.Primary;
+
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.commons.internal.reflection._Reflect;
 
 import lombok.val;
@@ -47,18 +50,23 @@ public class InstanceByPriorityComparator implements Comparator<Object> {
             if (o2 == null) {
                 return 0;
             } else {
-                return -1; // o1 < o2
+                return -1; // o1 later (lower) priority than o2
             }
         }
         if (o2 == null) {
-            return 1; // o1 > o2
+            return 1; // o1 earlier (higher) priority than o2
         }
+
+        val primaryAnnot1 = _Reflect.getAnnotation(o1.getClass(), Primary.class);
+        val primaryAnnot2 = _Reflect.getAnnotation(o2.getClass(), Primary.class);
+        if(primaryAnnot1 != null && primaryAnnot2 == null) { return +1; }
+        if(primaryAnnot1 == null && primaryAnnot2 != null) { return -1; }
 
         val prioAnnot1 = _Reflect.getAnnotation(o1.getClass(), Priority.class);
         val prioAnnot2 = _Reflect.getAnnotation(o2.getClass(), Priority.class);
-        val prio1 = prioAnnot1 != null ? prioAnnot1.value() : 0;
-        val prio2 = prioAnnot2 != null ? prioAnnot2.value() : 0;
-        return Integer.compare(prio1, prio2);
+        val prio1 = prioAnnot1 != null ? prioAnnot1.value() : PriorityPrecedence.LAST;
+        val prio2 = prioAnnot2 != null ? prioAnnot2.value() : PriorityPrecedence.LAST;
+        return Integer.compare(prio2, prio1);
     }
 
 }
