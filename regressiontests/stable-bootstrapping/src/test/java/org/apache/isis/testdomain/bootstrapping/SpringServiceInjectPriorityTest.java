@@ -43,6 +43,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.message.MessageServiceDefault;
 import org.apache.isis.testdomain.conf.Configuration_headless;
@@ -75,9 +76,11 @@ class SpringServiceInjectPriorityTest {
     DummyService dummyService;
     @Inject
     ServiceInjector serviceInjector;
+    @Inject
+    ServiceRegistry serviceRegistry;
 
     @Test
-    void injectionOnServices_shouldFollowPriority() throws IOException {
+    void injectionOnServices() throws IOException {
 
         val messageService = dummyService.getMessageService();
         assertNotNull(messageService);
@@ -105,7 +108,7 @@ class SpringServiceInjectPriorityTest {
     }
 
     @Test
-    void injectionOnObjects_shouldFollowOrder() throws IOException {
+    void injectionOnObjects() throws IOException {
 
         val dummyObject = new DummyObject();
         serviceInjector.injectServicesInto(dummyObject);
@@ -136,8 +139,22 @@ class SpringServiceInjectPriorityTest {
 
     }
 
+    @Test
+    void lookupByService() throws IOException {
+
+        // uses the @Primary
+        assertThat(serviceRegistry.lookupServiceElseFail(Rating.class).getRating(), is(equalTo(2)));
+
+        // uses the @Priority (we exclude the "Good" that doesn't implement PriorityRating)
+        assertThat(serviceRegistry.lookupServiceElseFail(PriorityRating.class).getRating(), is(equalTo(1)));
+    }
+
 
     interface Rating {
+        int getRating();
+    }
+
+    interface PriorityRating {
         int getRating();
     }
 
@@ -149,7 +166,7 @@ class SpringServiceInjectPriorityTest {
     @Priority(PriorityPrecedence.EARLY)
     @Qualifier("tallest")
     @Named("withExcellentName")
-    static class Excellent implements Rating {
+    static class Excellent implements Rating, PriorityRating {
 
         @Override
         public int getRating() {
@@ -174,7 +191,7 @@ class SpringServiceInjectPriorityTest {
     @Priority(PriorityPrecedence.LAST)
     @Qualifier("middle")
     @Named("withAverageName")
-    static class Average implements Rating {
+    static class Average implements Rating, PriorityRating {
 
         @Override
         public int getRating() {

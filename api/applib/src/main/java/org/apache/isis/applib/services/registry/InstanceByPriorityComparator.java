@@ -50,17 +50,17 @@ public class InstanceByPriorityComparator implements Comparator<Object> {
             if (o2 == null) {
                 return 0;
             } else {
-                return -1; // o1 < o2
+                return -1; // o1 later (lower) priority than o2
             }
         }
         if (o2 == null) {
-            return 1; // o1 > o2
+            return 1; // o1 earlier (higher) priority than o2
         }
 
         val primaryAnnot1 = _Reflect.getAnnotation(o1.getClass(), Primary.class);
         val primaryAnnot2 = _Reflect.getAnnotation(o2.getClass(), Primary.class);
-        if(primaryAnnot1 != null && primaryAnnot2 == null) { return -1; }
-        if(primaryAnnot1 == null && primaryAnnot2 != null) { return +1; }
+        if(primaryAnnot1 != null && primaryAnnot2 == null) { return +1; }
+        if(primaryAnnot1 == null && primaryAnnot2 != null) { return -1; }
 
         val prioAnnot1 = _Reflect.getAnnotation(o1.getClass(), Priority.class);
         val prioAnnot2 = _Reflect.getAnnotation(o2.getClass(), Priority.class);
