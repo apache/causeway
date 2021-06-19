@@ -28,9 +28,11 @@ import org.apache.isis.applib.events.EventObjectBase;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.Getter;
+import lombok.val;
 
 /**
  * Superclass for all domain events that are raised by the framework when
@@ -117,9 +119,10 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
      * {@link #getSource() source} for a regular action, or the
      * {@link #getMixedIn() mixed-in} domain object for a mixin.
      */
-    public Object getSubject() {
-        final Object mixedIn = getMixedIn();
-        return mixedIn != null ? mixedIn : getSource();
+    public <T> T getSubject() {
+        val mixedIn = getMixedIn();
+        val mixedInElseSource = mixedIn != null ? mixedIn : getSource();
+        return _Casts.uncheckedCast(mixedInElseSource);
     }
 
     /**
