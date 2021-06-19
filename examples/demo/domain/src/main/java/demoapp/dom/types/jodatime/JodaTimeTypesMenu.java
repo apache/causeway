@@ -27,6 +27,7 @@ import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
@@ -36,9 +37,14 @@ import demoapp.dom.types.jodatime.jodalocaldate.JodaLocalDates;
 import demoapp.dom.types.jodatime.jodalocaldatetime.JodaLocalDateTimes;
 import demoapp.dom.types.jodatime.jodalocaltime.JodaLocalTimes;
 
-@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.JodaTimeTypesMenu")
-@DomainObjectLayout(named="JodaTimeTypes")
-//@Log4j2
+@DomainService(
+        nature=NatureOfService.VIEW,
+        logicalTypeName = "demo.JodaTimeTypesMenu"
+)
+@DomainObjectLayout(
+        named="JodaTimeTypes"
+)
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class JodaTimeTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)

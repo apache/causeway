@@ -27,8 +27,12 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.factory.FactoryService;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * Simply provides a UI in order to access the configuration properties
@@ -36,9 +40,16 @@ import org.apache.isis.applib.services.factory.FactoryService;
  *
  * @since 2.0 {@index}
  */
+@DomainService(
+        nature = NatureOfService.VIEW,
+        logicalTypeName = ConfigurationMenu.LOGICAL_TYPE_NAME
+)
+@DomainServiceLayout(
+        menuBar = DomainServiceLayout.MenuBar.TERTIARY
+)
 @Named(ConfigurationMenu.LOGICAL_TYPE_NAME)
-@DomainService(logicalTypeName = ConfigurationMenu.LOGICAL_TYPE_NAME)
-@DomainServiceLayout(menuBar = DomainServiceLayout.MenuBar.TERTIARY)
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class ConfigurationMenu {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE_CONF + ".ConfigurationMenu";
@@ -46,12 +57,8 @@ public class ConfigurationMenu {
     public static abstract class ActionDomainEvent
             extends IsisModuleApplib.ActionDomainEvent<ConfigurationMenu> {}
 
-    private final FactoryService factoryService;
+    final FactoryService factoryService;
 
-    @Inject
-    public ConfigurationMenu(FactoryService factoryService) {
-        this.factoryService = factoryService;
-    }
 
     public static class ConfigurationDomainEvent
             extends ActionDomainEvent {}

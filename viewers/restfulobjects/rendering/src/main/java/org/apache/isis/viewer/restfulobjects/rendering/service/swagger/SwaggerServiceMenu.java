@@ -29,6 +29,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -51,6 +52,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.IsisModuleRestfulObjectsR
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class SwaggerServiceMenu {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleRestfulObjectsRendering.NAMESPACE +  ".SwaggerServiceMenu";

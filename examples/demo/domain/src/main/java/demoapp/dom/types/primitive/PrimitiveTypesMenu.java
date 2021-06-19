@@ -23,9 +23,8 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
-
-import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom.types.primitive.booleans.PrimitiveBooleans;
 import demoapp.dom.types.primitive.bytes.PrimitiveBytes;
@@ -36,9 +35,14 @@ import demoapp.dom.types.primitive.ints.PrimitiveInts;
 import demoapp.dom.types.primitive.longs.PrimitiveLongs;
 import demoapp.dom.types.primitive.shorts.PrimitiveShorts;
 
-@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.PrimitiveTypesMenu")
-@DomainObjectLayout(named="PrimitiveTypes")
-@Log4j2
+@DomainService(
+        nature=NatureOfService.VIEW,
+        logicalTypeName = "demo.PrimitiveTypesMenu"
+)
+@DomainObjectLayout(
+        named="PrimitiveTypes"
+)
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class PrimitiveTypesMenu {
 
 

@@ -22,11 +22,13 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.extern.log4j.Log4j2;
 
 @DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.ActionLayoutMenu")
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 @Log4j2
 public class ActionLayoutMenu {
 

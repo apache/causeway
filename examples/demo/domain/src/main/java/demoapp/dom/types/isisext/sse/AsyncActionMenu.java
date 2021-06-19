@@ -25,13 +25,20 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.value.Markup;
 
 import lombok.val;
 
-@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.AsyncActionMenu")
-@DomainObjectLayout(named="Async Actions")
+@DomainService(
+        nature=NatureOfService.VIEW,
+        logicalTypeName = "demo.AsyncActionMenu"
+)
+@DomainObjectLayout(
+        named="Async Actions"
+)
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class AsyncActionMenu {
 
     @Inject private FactoryService factoryService;

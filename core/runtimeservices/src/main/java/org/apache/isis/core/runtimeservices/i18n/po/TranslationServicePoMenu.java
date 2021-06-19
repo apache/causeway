@@ -27,9 +27,12 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Clob;
+
+import lombok.RequiredArgsConstructor;
 
 @Named(TranslationServicePoMenu.LOGICAL_TYPE_NAME)
 @DomainService(logicalTypeName = TranslationServicePoMenu.LOGICAL_TYPE_NAME)
@@ -37,15 +40,16 @@ import org.apache.isis.applib.value.Clob;
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class TranslationServicePoMenu {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".TranslationServicePoMenu";
 
-    @Inject private TranslationServicePo translationService;
-
     public static abstract class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<TranslationServicePoMenu> {}
 
-    // //////////////////////////////////////
+    final TranslationServicePo translationService;
+
 
     public static class DownloadPotFileDomainEvent extends ActionDomainEvent {}
 
@@ -74,7 +78,7 @@ public class TranslationServicePoMenu {
                 : null;
     }
 
-    // //////////////////////////////////////
+
 
     public static class ResetTranslationCacheDomainEvent extends ActionDomainEvent { }
 
@@ -97,7 +101,6 @@ public class TranslationServicePoMenu {
     }
 
 
-    // //////////////////////////////////////
 
     public static class SwitchToReadingTranslationsDomainEvent extends ActionDomainEvent {}
 
@@ -118,7 +121,8 @@ public class TranslationServicePoMenu {
                 : null;
     }
 
-    // //////////////////////////////////////
+
+
 
     public static class SwitchToWritingTranslationsDomainEvent extends ActionDomainEvent {}
 

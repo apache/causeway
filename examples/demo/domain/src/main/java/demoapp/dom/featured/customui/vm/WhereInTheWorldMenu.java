@@ -27,6 +27,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.val;
@@ -34,7 +35,11 @@ import lombok.val;
 import demoapp.dom.featured.customui.geocoding.GeoapifyClient;
 import demoapp.dom.featured.customui.latlng.Zoom;
 
-@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.WhereInTheWorldMenu")
+@DomainService(
+        nature=NatureOfService.VIEW,
+        logicalTypeName = "demo.WhereInTheWorldMenu"
+)
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class WhereInTheWorldMenu {
 
 //tag::action[]

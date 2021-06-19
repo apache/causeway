@@ -25,12 +25,19 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.factory.FactoryService;
 
 import lombok.val;
 
-@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "regressiontests.BlobDemoMenu")
-@DomainObjectLayout(named="Blob Demo Menu")
+@DomainService(
+        nature=NatureOfService.VIEW,
+        logicalTypeName = "regressiontests.BlobDemoMenu"
+)
+@DomainObjectLayout(
+        named="Blob Demo Menu"
+)
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class BlobDemoMenu {
 
     @Inject private FactoryService factoryService;

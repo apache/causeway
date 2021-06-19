@@ -25,15 +25,22 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.factory.FactoryService;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.DependentArgsActionMenu")
+@DomainService(
+        nature=NatureOfService.VIEW,
+        logicalTypeName = "demo.DependentArgsActionMenu"
+)
 @DomainObjectLayout(named="Associated Action")
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class DependentArgsActionMenu {
 
-    @Inject private FactoryService factoryService;
+    final FactoryService factoryService;
 
     @Action
     @ActionLayout(cssClassFa="fa-bolt")

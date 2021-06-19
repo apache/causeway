@@ -21,16 +21,21 @@ package demoapp.dom.domain.actions.Action.domainEvent.subscribers;
 import javax.inject.Inject;
 
 import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+
+import lombok.RequiredArgsConstructor;
 
 import demoapp.dom.domain.actions.Action.domainEvent.ActionDomainEventVm;
 import demoapp.dom.domain.actions.Action.domainEvent.ActionDomainEventVm_mixinUpdateText;
 
 // tag::class[]
-@DomainService(logicalTypeName = "demo.ActionDomainEventControlService")
+@Service
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 class ActionDomainEventControlService {
+
+    final ServiceRegistry serviceRegistry;
 
     ActionDomainEventControlStrategy controlStrategy = ActionDomainEventControlStrategy.DO_NOTHING;         // <.>
 
@@ -44,7 +49,5 @@ class ActionDomainEventControlService {
         controlStrategy.on(ev, serviceRegistry);
     }
 
-    @Inject
-    ServiceRegistry serviceRegistry;
 }
 // end::class[]

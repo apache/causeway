@@ -34,6 +34,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.query.Query;
@@ -42,16 +43,20 @@ import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.user.UserService;
 
+import lombok.RequiredArgsConstructor;
+
 @DomainService(
         nature = NatureOfService.VIEW,
         logicalTypeName = "libExcelFixture.ExcelDemoToDoItemMenu"
 )
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ExcelDemoToDoItemMenu {
 
-    @Inject private MessageService messageService;
-    @Inject private RepositoryService repositoryService;
-    @Inject private UserService userService;
-    @Inject private ClockService clockService;
+    final MessageService messageService;
+    final RepositoryService repositoryService;
+    final UserService userService;
+    final ClockService clockService;
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, sequence = "1")

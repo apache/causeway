@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.core.interaction.session.IsisInteraction;
@@ -35,9 +36,13 @@ import lombok.extern.log4j.Log4j2;
  * REST endpoint to allow for remote application shutdown
  *
  */
-@DomainService(nature = NatureOfService.REST, logicalTypeName = "demo.LineBreaker")
-@Log4j2
+@DomainService(
+        nature = NatureOfService.REST,
+        logicalTypeName = "demo.LineBreaker"
+)
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
+@Log4j2
 public class LineBreaker {
 
     final InteractionLayerTracker iInteractionLayerTracker;

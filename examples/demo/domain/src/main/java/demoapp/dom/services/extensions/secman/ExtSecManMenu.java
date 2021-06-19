@@ -23,15 +23,21 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom.services.extensions.secman.apptenancy.AppTenancyVm;
 
-@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.ExtSecManMenu")
-@DomainObjectLayout(named="SecMan")
-@Log4j2
+@DomainService(
+        nature=NatureOfService.VIEW,
+        logicalTypeName = "demo.ExtSecManMenu"
+)
+@DomainObjectLayout(
+        named="SecMan"
+)
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class ExtSecManMenu {
 
     @Action(semantics = SemanticsOf.SAFE)

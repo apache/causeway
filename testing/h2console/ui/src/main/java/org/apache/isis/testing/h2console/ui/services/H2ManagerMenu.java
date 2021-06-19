@@ -26,6 +26,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.LocalResourcePath;
@@ -38,11 +39,12 @@ import org.apache.isis.testing.h2console.ui.webmodule.WebModuleH2Console;
 @DomainService(
         nature = NatureOfService.VIEW,
         logicalTypeName = H2ManagerMenu.LOGICAL_TYPE_NAME
-        )
+)
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
-        )
+)
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class H2ManagerMenu {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleTestingH2ConsoleUi.NAMESPACE + ".H2ManagerMenu";

@@ -23,15 +23,21 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom.types.javanet.urls.JavaNetUrls;
 
-@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.JavaNetTypesMenu")
-@DomainObjectLayout(named="JavaNetTypes")
-@Log4j2
+@DomainService(
+        nature=NatureOfService.VIEW,
+        logicalTypeName = "demo.JavaNetTypesMenu"
+)
+@DomainObjectLayout(
+        named="JavaNetTypes"
+)
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class JavaNetTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)

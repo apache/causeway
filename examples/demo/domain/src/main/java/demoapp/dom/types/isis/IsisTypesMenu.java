@@ -24,6 +24,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import demoapp.dom.types.isis.blobs.IsisBlobs;
@@ -32,9 +33,14 @@ import demoapp.dom.types.isis.localresourcepaths.IsisLocalResourcePaths;
 import demoapp.dom.types.isis.markups.IsisMarkups;
 import demoapp.dom.types.isis.passwords.IsisPasswords;
 
-@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.IsisTypesMenu")
-@DomainObjectLayout(named="Isis Types")
-//@Log4j2
+@DomainService(
+        nature=NatureOfService.VIEW,
+        logicalTypeName = "demo.IsisTypesMenu"
+)
+@DomainObjectLayout(
+        named="Isis Types"
+)
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class IsisTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)

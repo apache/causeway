@@ -23,6 +23,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.extern.log4j.Log4j2;
@@ -36,9 +37,14 @@ import demoapp.dom.types.javalang.integers.WrapperIntegers;
 import demoapp.dom.types.javalang.longs.WrapperLongs;
 import demoapp.dom.types.javalang.shorts.WrapperShorts;
 
-@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.JavaLangWrapperTypesMenu")
-@DomainObjectLayout(named="JavaLangWrapperTypes")
-@Log4j2
+@DomainService(
+        nature=NatureOfService.VIEW,
+        logicalTypeName = "demo.JavaLangWrapperTypesMenu"
+)
+@DomainObjectLayout(
+        named="JavaLangWrapperTypes"
+)
+@javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class JavaLangWrapperTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
