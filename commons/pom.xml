@@ -79,11 +79,11 @@
 			<artifactId>javaee-api</artifactId>
 		</dependency>
 -->
-<!--
 		<dependency>
 			<groupId>javax.enterprise</groupId>
 			<artifactId>cdi-api</artifactId>
 		</dependency>
+<!--
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
