@@ -73,10 +73,12 @@
 	<dependencies>
 
 		<!-- JEE API -->
+<!--
 		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
 		</dependency>
+-->
 
 		<dependency>
 			<groupId>com.google.code.findbugs</groupId>
