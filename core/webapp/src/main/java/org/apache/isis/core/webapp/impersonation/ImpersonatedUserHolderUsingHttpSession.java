@@ -20,15 +20,14 @@ package org.apache.isis.core.webapp.impersonation;
 
 import java.util.Optional;
 
-import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.annotation.RequestScope;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.user.ImpersonatedUserHolder;
 import org.apache.isis.applib.services.user.UserMemento;
 
@@ -39,36 +38,28 @@ import org.apache.isis.applib.services.user.UserMemento;
  * @since 2.0 {@index}
  */
 @Component
-@RequestScope
 @Named("isis.webapp.ImpersonatedUserHolderUsingHttpSession")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 public class ImpersonatedUserHolderUsingHttpSession implements ImpersonatedUserHolder {
 
-    private final Optional<HttpSession> httpSession;
-
     private static final String HTTP_SESSION_KEY_IMPERSONATED_USER =
             ImpersonatedUserHolderUsingHttpSession.class.getName() + "#userMemento";
 
-    @Inject
-    public ImpersonatedUserHolderUsingHttpSession(final HttpServletRequest httpServletRequest) {
-        this.httpSession = Optional.ofNullable(httpServletRequest.getSession(false));
-    }
-
     @Override
     public boolean supportsImpersonation() {
-        return httpSession.isPresent();
+        return httpSession().isPresent();
     }
 
     @Override
     public void setUserMemento(final UserMemento userMemento) {
-        httpSession
+        httpSession()
         .ifPresent(session->
             session.setAttribute(HTTP_SESSION_KEY_IMPERSONATED_USER, userMemento));
     }
 
     @Override
     public Optional<UserMemento> getUserMemento() {
-        return httpSession
+        return httpSession()
             .map(session->session.getAttribute(HTTP_SESSION_KEY_IMPERSONATED_USER))
             .filter(UserMemento.class::isInstance)
             .map(UserMemento.class::cast);
@@ -76,9 +67,17 @@ public class ImpersonatedUserHolderUsingHttpSession implements ImpersonatedUserH
 
     @Override
     public void clearUserMemento() {
-        httpSession.ifPresent(session->
+        httpSession()
+        .ifPresent(session->
             session.removeAttribute(HTTP_SESSION_KEY_IMPERSONATED_USER));
     }
 
+    private static Optional<HttpSession> httpSession() {
+        return Optional.ofNullable(RequestContextHolder.getRequestAttributes())
+                .filter(ServletRequestAttributes.class::isInstance)
+                .map(ServletRequestAttributes.class::cast)
+                .map(ServletRequestAttributes::getRequest)
+                .map(x -> x.getSession(false));
+    }
 
 }
