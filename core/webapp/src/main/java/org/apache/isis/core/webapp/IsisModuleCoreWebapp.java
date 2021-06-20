@@ -24,6 +24,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.request.RequestContextListener;
 
 import org.apache.isis.core.interaction.session.MessageBroker;
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
@@ -61,6 +62,18 @@ public class IsisModuleCoreWebapp {
             proxyMode = ScopedProxyMode.TARGET_CLASS)
     public MessageBroker sessionScopedMessageBroker() {
         return new MessageBroker();
+    }
+
+    /**
+     * for implementation of {@link ImpersonatedUserHolderUsingHttpSession}, using {@link org.springframework.web.context.request.RequestContextHolder}.
+     *
+     * @see org.springframework.web.context.request.RequestContextHolder
+     * @see <a href="https://stackoverflow.com/a/44830684/56880">https://stackoverflow.com/a/44830684/56880</a>
+     * @see <a href="https://stackoverflow.com/a/61431621/56880">https://stackoverflow.com/a/61431621/56880</a>
+     */
+    @Bean
+    public RequestContextListener requestContextListener() {
+        return new RequestContextListener();
     }
 
 }

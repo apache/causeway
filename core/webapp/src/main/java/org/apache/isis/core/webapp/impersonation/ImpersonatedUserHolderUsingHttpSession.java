@@ -24,7 +24,6 @@ import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
