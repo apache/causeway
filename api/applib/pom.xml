@@ -81,12 +81,11 @@
             <artifactId>isis-schema</artifactId>
         </dependency>
 
-<!--
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
         </dependency>
--->
+<!--
         <dependency>
             <groupId>javax.enterprise</groupId>
             <artifactId>cdi-api</artifactId>
@@ -111,6 +110,7 @@
             <groupId>javax.transaction</groupId>
             <artifactId>jta</artifactId>
         </dependency>
+-->
 
 
         <dependency>
