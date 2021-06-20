@@ -126,9 +126,12 @@
 
 		<jakarta.annotation-api.version>2.0.0</jakarta.annotation-api.version>
 		<javaee.version>8.0.1</javaee.version>
+		<javaee-javax.annotation-api.version>1.3</javaee-javax.annotation-api.version>
+		<javaee-javax-validation-api.version>2.0.1.Final</javaee-javax-validation-api.version>
+		<javaee-javax-servlet.version>4.0.1</javaee-javax-servlet.version>
+
 		<javafaker.version>1.0.2</javafaker.version>
 		<javassist.version>3.28.0-GA</javassist.version>
-		<javax-servlet.version>4.0.1</javax-servlet.version>
 		<jaxb-core.version>2.3.0.1</jaxb-core.version> <!-- 2.3.2 is not yet available -->
 		<jaxb-impl.version>2.3.4</jaxb-impl.version>
 		<jaxws-ri.version>2.3.4</jaxws-ri.version>
@@ -1078,7 +1081,19 @@
 			<dependency>
 				<groupId>javax.servlet</groupId>
 				<artifactId>javax.servlet-api</artifactId>
-				<version>${javax-servlet.version}</version>
+				<version>${javaee-javax-servlet.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>javax.validation</groupId>
+				<artifactId>validation-api</artifactId>
+				<version>${javaee-javax-validation-api.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>javax.annotation</groupId>
+				<artifactId>javax.annotation-api</artifactId>
+				<version>${javaee-javax.annotation-api.version}</version>
 			</dependency>
 
 			<dependency>
