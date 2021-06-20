@@ -92,7 +92,6 @@
 
 		<camel.version>3.10.0</camel.version>
 
-		<cdi-api.version>2.0.SP1</cdi-api.version>
 		<commons-email.version>1.5</commons-email.version>
 		<commons-httpclient.version>4.5.12</commons-httpclient.version>
 		<commons-io.version>2.10.0</commons-io.version>
@@ -126,9 +125,9 @@
 
 		<jakarta.annotation-api.version>2.0.0</jakarta.annotation-api.version>
 		<javaee.version>8.0.1</javaee.version>
-
 		<javafaker.version>1.0.2</javafaker.version>
 		<javassist.version>3.28.0-GA</javassist.version>
+		<javax-servlet.version>4.0.1</javax-servlet.version>
 		<jaxb-core.version>2.3.0.1</jaxb-core.version> <!-- 2.3.2 is not yet available -->
 		<jaxb-impl.version>2.3.4</jaxb-impl.version>
 		<jaxws-ri.version>2.3.4</jaxws-ri.version>
@@ -929,12 +928,6 @@
 				<version>${error_prone_annotations.version}</version>
 			</dependency>
 
-			<dependency>
-				<groupId>javax.enterprise</groupId>
-				<artifactId>cdi-api</artifactId>
-				<version>${cdi-api.version}</version>
-			</dependency>
-
 			<!-- provides @Nullable -->
 			<dependency>
 				<groupId>com.google.code.findbugs</groupId>
@@ -1073,6 +1066,12 @@
 				<groupId>javax</groupId>
 				<artifactId>javaee-api</artifactId>
 				<version>${javaee.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>javax.servlet-api</artifactId>
+				<version>${javax-servlet.version}</version>
 			</dependency>
 
 			<dependency>
