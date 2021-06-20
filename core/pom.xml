@@ -204,6 +204,7 @@
 
 		<xdocreport.version>1.0.6</xdocreport.version>
 
+		<javaee-javax.ws.rs-api.version>2.1.1</javaee-javax.ws.rs-api.version>
 	</properties>
 
 	<pluginRepositories>
@@ -1094,6 +1095,12 @@
 				<groupId>javax.annotation</groupId>
 				<artifactId>javax.annotation-api</artifactId>
 				<version>${javaee-javax.annotation-api.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>javax.ws.rs</groupId>
+				<artifactId>javax.ws.rs-api</artifactId>
+				<version>${javaee-javax.ws.rs-api.version}</version>
 			</dependency>
 
 			<dependency>
