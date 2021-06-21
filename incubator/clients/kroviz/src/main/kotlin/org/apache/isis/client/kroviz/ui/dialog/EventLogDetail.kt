@@ -43,9 +43,9 @@ class EventLogDetail(val logEntryFromTabulator: LogEntry) : Command() {
         logEntry = EventStore.findBy(rs)?: logEntryFromTabulator  // in case of xml, we use the entry passed in
     }
 
+    // callback parameter
     private val LOG: String = "log"
     private val OBJ: String = "obj"
-
 
     fun open() {
         val responseStr = if (logEntry.subType == Constants.subTypeJson) {

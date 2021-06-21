@@ -42,6 +42,8 @@ class CollectionDM(override val title: String) : DisplayModelWithLayout() {
 
     // canBeDisplayed checks for grid AND layout - for parented collection there seems to be no layout
     fun parentedCollectionCanBeDisplayed(): Boolean {
+        console.log("[CDM.parentedCollectionCanBeDisplayed] propertyDescriptionList")
+        console.log(propertyDescriptionList)
         return when {
             grid == null -> false
             propertyDescriptionList.isEmpty() -> false

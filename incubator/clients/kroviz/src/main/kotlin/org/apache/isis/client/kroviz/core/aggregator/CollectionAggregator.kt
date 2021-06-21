@@ -87,8 +87,14 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
         console.log("[CA.handleDomainType]")
         obj.links.forEach {
             if (it.relation() == Relation.LAYOUT) {
-                console.log(it)
                 invoke(it, this)
+            }
+        }
+        obj.members.forEach {
+            val m = it.value
+            if (m.isProperty()) {
+                console.log(m)
+                invoke(m, this)
             }
         }
     }
