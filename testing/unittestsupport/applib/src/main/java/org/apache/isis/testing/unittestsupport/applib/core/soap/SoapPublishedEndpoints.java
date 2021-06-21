@@ -39,7 +39,7 @@ import lombok.val;
  *     {@link #dispose() dispose}d of.
  * </p>
  */
-public class PublishedEndpoints {
+public class SoapPublishedEndpoints {
 
     /**
      * For any endpoints where the address is not specified, ports are assigned starting from this.
@@ -49,9 +49,9 @@ public class PublishedEndpoints {
     /**
      * Lazily instantiates the singleton, using the {@link #INITIAL_PORT_DEFAULT default initial port}.
      */
-    public static PublishedEndpoints instance() {
+    public static SoapPublishedEndpoints instance() {
         if(instance == null) {
-            return new PublishedEndpoints();
+            return new SoapPublishedEndpoints();
         }
         return instance;
     }
@@ -63,14 +63,14 @@ public class PublishedEndpoints {
      *     If called again with a different port, then will {@link #dispose() discard} the singleton and start over.
      * </p>
      */
-    public static PublishedEndpoints instance(final int initialPort) {
+    public static SoapPublishedEndpoints instance(final int initialPort) {
         if (instance != null) {
             if (instance.port != initialPort) {
                 dispose();
             }
         }
         if (instance == null) {
-            instance = new PublishedEndpoints(initialPort);
+            instance = new SoapPublishedEndpoints(initialPort);
         }
         return instance;
     }
@@ -82,12 +82,12 @@ public class PublishedEndpoints {
         instance = null;
     }
 
-    private static PublishedEndpoints instance;
+    private static SoapPublishedEndpoints instance;
 
-    PublishedEndpoints(){
+    SoapPublishedEndpoints(){
         this(INITIAL_PORT_DEFAULT);
     }
-    PublishedEndpoints(int initialPort){
+    SoapPublishedEndpoints(int initialPort){
         this.initialPort = initialPort;
         this.port = this.initialPort;
     }
@@ -96,37 +96,37 @@ public class PublishedEndpoints {
     private final Map<Class<?>, SoapEndpoint> soapEndpointByType = _Maps.newLinkedHashMap();
 
 
-    public PublishedEndpoints publishIfRequired(final Class<?> endpointClass, final String endpointAddress) {
+    public SoapPublishedEndpoints publishIfRequired(final Class<?> endpointClass, final String endpointAddress) {
         return publishIfRequired(new SoapEndpointSpec(endpointClass, endpointAddress));
     }
 
-    public PublishedEndpoints publishIfRequired(Class<?>... endpointClasses) {
+    public SoapPublishedEndpoints publishIfRequired(Class<?>... endpointClasses) {
         val soapEndpointSpecs = stream(endpointClasses)
                 .map(SoapEndpointSpec::asSoapEndpointSpec)
                 .collect(Collectors.toCollection(ArrayList::new));
         return publishIfRequired(soapEndpointSpecs);
     }
 
-    public PublishedEndpoints publishIfRequired(final List<Class<?>> endpointClasses) {
+    public SoapPublishedEndpoints publishIfRequired(final List<Class<?>> endpointClasses) {
         val soapEndpointSpecs = stream(endpointClasses)
                 .map(SoapEndpointSpec::asSoapEndpointSpec)
                 .collect(Collectors.toCollection(ArrayList::new));
         return publishIfRequired(soapEndpointSpecs);
     }
 
-    public PublishedEndpoints publishIfRequired(SoapEndpointSpec... soapEndpointSpecs) {
+    public SoapPublishedEndpoints publishIfRequired(SoapEndpointSpec... soapEndpointSpecs) {
         val soapEndpointSpecs2 = stream(soapEndpointSpecs)
                 .collect(Collectors.toCollection(ArrayList::new));
         return instance.publishIfRequired(soapEndpointSpecs2);
     }
 
-    public PublishedEndpoints publishIfRequired(final Iterable<SoapEndpointSpec> soapEndpointSpecs) {
+    public SoapPublishedEndpoints publishIfRequired(final Iterable<SoapEndpointSpec> soapEndpointSpecs) {
         val soapEndpointSpecs2 = stream(soapEndpointSpecs)
                 .collect(Collectors.toCollection(ArrayList::new));
         return instance.publishIfRequired(soapEndpointSpecs2);
     }
 
-    public PublishedEndpoints publishEndpointIfRequired(final List<SoapEndpointSpec> soapEndpointSpecs) {
+    public SoapPublishedEndpoints publishEndpointIfRequired(final List<SoapEndpointSpec> soapEndpointSpecs) {
         // merge in any new endpoints to static cache
         for (SoapEndpointSpec soapEndpointSpec : soapEndpointSpecs) {
             final Class<?> endpointClass = soapEndpointSpec.getEndpointClass();
