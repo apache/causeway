@@ -21,6 +21,7 @@ package org.apache.isis.testing.unittestsupport.applib.core.files;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
+import java.util.Objects;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
@@ -34,10 +35,6 @@ import lombok.experimental.UtilityClass;
 public final class Files {
 
 
-    // /////////////////////////////////////////////////////
-    // delete files
-    // /////////////////////////////////////////////////////
-
     public enum Recursion {
         DO_RECURSE, DONT_RECURSE
     }
@@ -48,7 +45,7 @@ public final class Files {
      *            directory to start deleting from
      * @param filePrefix
      *            file name prefix (no wild cards)
-     * @param recursion
+     * @param recursion - whether to recurse or not
      */
     public static void deleteFilesWithPrefix(final String directoryName, final String filePrefix, Recursion recursion) {
         deleteFiles(directoryName, filterFileNamePrefix(filePrefix), recursion);
@@ -84,25 +81,22 @@ public final class Files {
 
     static void deleteFiles(final File directory, final FilenameFilter filter, Recursion recursion, Deleter deleter) {
         try {
-            for (final File file : directory.listFiles(filter)) {
+            for (final File file : Objects.requireNonNull(directory.listFiles(filter))) {
                 deleter.deleteFile(file);
             }
-        } catch (NullPointerException e) {
+        } catch (NullPointerException ignored) {
         }
 
         if (recursion == Recursion.DO_RECURSE) {
             try {
-                for (final File subdir : directory.listFiles(filterDirectory())) {
+                for (final File subdir : Objects.requireNonNull(directory.listFiles(filterDirectory()))) {
                     deleteFiles(subdir, filter, recursion, deleter);
                 }
-            } catch (NullPointerException e) {
+            } catch (NullPointerException ignored) {
             }
         }
     }
 
-    // /////////////////////////////////////////////////////
-    // filters
-    // /////////////////////////////////////////////////////
 
     public static FilenameFilter and(final FilenameFilter... filters) {
         return new FilenameFilter() {
@@ -120,32 +114,15 @@ public final class Files {
     }
 
     public static FilenameFilter filterFileNameExtension(final String fileExtension) {
-        return new FilenameFilter() {
-
-            @Override
-            public boolean accept(final File arg0, final String arg1) {
-                return arg1.endsWith(fileExtension);
-            }
-        };
+        return (directory, fileName) -> fileName.endsWith(fileExtension);
     }
 
     public static FilenameFilter filterFileNamePrefix(final String filePrefix) {
-        return new FilenameFilter() {
-
-            @Override
-            public boolean accept(final File arg0, final String arg1) {
-                return arg1.startsWith(filePrefix);
-            }
-        };
+        return (directory, fileName) -> fileName.startsWith(filePrefix);
     }
 
     public static FileFilter filterDirectory() {
-        return new FileFilter() {
-            @Override
-            public boolean accept(File arg0) {
-                return arg0.isDirectory();
-            }
-        };
+        return File::isDirectory;
     }
 
 }

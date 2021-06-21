@@ -18,22 +18,115 @@
  */
 package org.apache.isis.testing.unittestsupport.applib.core.soap;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Maps;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
+import lombok.val;
+
 /**
  * Collection of SOAP endpoints that have been published; will automatically assign a unique address to any
  * that have not been {@link SoapEndpoint}s whose {@link SoapEndpointSpec} does not specify an {@link SoapEndpointSpec#getEndpointAddress() address}.
+ *
+ * <p>
+ *     Intended to be used as a singleton, reused across multiple tests.  If necessary the singleton can be
+ *     {@link #dispose() dispose}d of.
+ * </p>
  */
-class PublishedEndpoints {
+public class PublishedEndpoints {
 
-    private int port = SoapEndpointPublishingRule.INITIAL_PORT;
-    private Map<Class<?>, SoapEndpoint> soapEndpointByType = _Maps.newLinkedHashMap();
+    /**
+     * For any endpoints where the address is not specified, ports are assigned starting from this.
+     */
+    public static final int INITIAL_PORT_DEFAULT = 54345;
 
-    void publishEndpointIfRequired(final List<SoapEndpointSpec> soapEndpointSpecs) {
+    /**
+     * Lazily instantiates the singleton, using the {@link #INITIAL_PORT_DEFAULT default initial port}.
+     */
+    public static PublishedEndpoints instance() {
+        if(instance == null) {
+            return new PublishedEndpoints();
+        }
+        return instance;
+    }
+
+    /**
+     * Lazily instantiates the singleton, on specified port.
+     *
+     * <p>
+     *     If called again with a different port, then will {@link #dispose() discard} the singleton and start over.
+     * </p>
+     */
+    public static PublishedEndpoints instance(final int initialPort) {
+        if (instance != null) {
+            if (instance.port != initialPort) {
+                dispose();
+            }
+        }
+        if (instance == null) {
+            instance = new PublishedEndpoints(initialPort);
+        }
+        return instance;
+    }
+
+    /**
+     * Dispose of the singleton.
+     */
+    public static void dispose() {
+        instance = null;
+    }
+
+    private static PublishedEndpoints instance;
+
+    PublishedEndpoints(){
+        this(INITIAL_PORT_DEFAULT);
+    }
+    PublishedEndpoints(int initialPort){
+        this.initialPort = initialPort;
+        this.port = this.initialPort;
+    }
+    private final int initialPort;
+    private int port;
+    private final Map<Class<?>, SoapEndpoint> soapEndpointByType = _Maps.newLinkedHashMap();
+
+
+    public PublishedEndpoints publishIfRequired(final Class<?> endpointClass, final String endpointAddress) {
+        return publishIfRequired(new SoapEndpointSpec(endpointClass, endpointAddress));
+    }
+
+    public PublishedEndpoints publishIfRequired(Class<?>... endpointClasses) {
+        val soapEndpointSpecs = stream(endpointClasses)
+                .map(SoapEndpointSpec::asSoapEndpointSpec)
+                .collect(Collectors.toCollection(ArrayList::new));
+        return publishIfRequired(soapEndpointSpecs);
+    }
+
+    public PublishedEndpoints publishIfRequired(final List<Class<?>> endpointClasses) {
+        val soapEndpointSpecs = stream(endpointClasses)
+                .map(SoapEndpointSpec::asSoapEndpointSpec)
+                .collect(Collectors.toCollection(ArrayList::new));
+        return publishIfRequired(soapEndpointSpecs);
+    }
+
+    public PublishedEndpoints publishIfRequired(SoapEndpointSpec... soapEndpointSpecs) {
+        val soapEndpointSpecs2 = stream(soapEndpointSpecs)
+                .collect(Collectors.toCollection(ArrayList::new));
+        return instance.publishIfRequired(soapEndpointSpecs2);
+    }
+
+    public PublishedEndpoints publishIfRequired(final Iterable<SoapEndpointSpec> soapEndpointSpecs) {
+        val soapEndpointSpecs2 = stream(soapEndpointSpecs)
+                .collect(Collectors.toCollection(ArrayList::new));
+        return instance.publishIfRequired(soapEndpointSpecs2);
+    }
+
+    public PublishedEndpoints publishEndpointIfRequired(final List<SoapEndpointSpec> soapEndpointSpecs) {
         // merge in any new endpoints to static cache
         for (SoapEndpointSpec soapEndpointSpec : soapEndpointSpecs) {
             final Class<?> endpointClass = soapEndpointSpec.getEndpointClass();
@@ -45,13 +138,14 @@ class PublishedEndpoints {
                 port = soapEndpoint.publish(port) + 1;
             }
         }
+        return this;
     }
 
-    String getEndpointAddress(Class<?> endpointClass) {
+    public String getEndpointAddress(Class<?> endpointClass) {
         return soapEndpointByType.get(endpointClass).getSpec().getEndpointAddress();
     }
 
-    <T> T getEndpointImplementor(Class<T> endpointClass) {
+    public <T> T getEndpointImplementor(Class<T> endpointClass) {
         return _Casts.uncheckedCast( soapEndpointByType.get(endpointClass).getImplementor() );
     }
 }
