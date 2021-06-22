@@ -170,7 +170,7 @@
 
 		<quartz-scheduler.version>2.3.2</quartz-scheduler.version>
 
-		<resteasy4-spring-boot-starter.version>4.8.0.Final</resteasy4-spring-boot-starter.version>
+		<resteasy-spring-boot-starter.version>4.8.0.Final</resteasy-spring-boot-starter.version>
 		<resteasy.version>4.6.0.Final</resteasy.version> <!-- keep in sync with property defined in resteasy4-spring-boot-starter -->
 
 		<select2.version>4.0.13</select2.version>
@@ -1387,7 +1387,7 @@
 			<dependency>
 				<groupId>org.jboss.resteasy</groupId>
 				<artifactId>resteasy-spring-boot-starter</artifactId>
-				<version>${resteasy4-spring-boot-starter.version}</version>
+				<version>${resteasy-spring-boot-starter.version}</version>
 			</dependency>
 			<dependency>
 			    <groupId>org.jboss.resteasy</groupId>

@@ -33,7 +33,7 @@
 	<name>Apache Isis Starter Parent</name>
 	<description>
 		Parent pom providing dependency and plugin management for Apache Isis applications
-		built with Maven.  Builds on top of spring-boot-starter-parent.
+		built with Maven. Builds on top of spring-boot-starter-parent.
 	</description>
 	<url>https://isis.apache.org</url>
 
@@ -43,8 +43,8 @@
 
 		<spring-boot.version>2.5.1</spring-boot.version>
 		<approvaltests.version>11.6.0</approvaltests.version>
-
-		<resteasy.version>4.4.1.Final</resteasy.version>
+		
+		<resteasy.version>4.6.0.Final</resteasy.version> <!-- keep in sync with property defined in resteasy4-spring-boot-starter -->
 
 	</properties>
 
