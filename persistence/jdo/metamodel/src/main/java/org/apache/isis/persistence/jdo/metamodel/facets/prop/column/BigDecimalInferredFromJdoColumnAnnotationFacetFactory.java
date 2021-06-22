@@ -41,7 +41,7 @@ import org.apache.isis.persistence.jdo.provider.metamodel.facets.prop.notpersist
 import lombok.val;
 
 
-public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactory
+public class BigDecimalInferredFromJdoColumnAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
@@ -49,7 +49,7 @@ implements MetaModelRefiner {
     private static final int DEFAULT_SCALE = BigDecimalValueSemanticsProvider.DEFAULT_SCALE;
 
     @Inject
-    public BigDecimalDerivedFromJdoColumnAnnotationFacetFactory(final MetaModelContext mmc) {
+    public BigDecimalInferredFromJdoColumnAnnotationFacetFactory(final MetaModelContext mmc) {
         super(mmc, FeatureType.PROPERTIES_ONLY);
     }
 

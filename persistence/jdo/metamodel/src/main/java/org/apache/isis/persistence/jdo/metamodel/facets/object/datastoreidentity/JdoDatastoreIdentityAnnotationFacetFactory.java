@@ -21,14 +21,14 @@ package org.apache.isis.persistence.jdo.metamodel.facets.object.datastoreidentit
 
 import javax.inject.Inject;
 import javax.jdo.annotations.DatastoreIdentity;
-import javax.jdo.annotations.IdGeneratorStrategy;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
+
+import lombok.val;
 
 public class JdoDatastoreIdentityAnnotationFacetFactory
 extends FacetFactoryAbstract {
@@ -52,15 +52,12 @@ extends FacetFactoryAbstract {
             return;
         }
 
-        final DatastoreIdentity annotation = Annotations.getAnnotation(cls, DatastoreIdentity.class);
-        if (annotation == null) {
-            return;
-        }
-        IdGeneratorStrategy strategyAttribute = annotation.strategy();
+        val datastoreIdentityIfAny = processClassContext.synthesizeOnType(DatastoreIdentity.class);
 
-        FacetUtil.addFacet(new JdoDatastoreIdentityFacetAnnotation(
-                strategyAttribute, processClassContext.getFacetHolder()));
-        return;
+        FacetUtil.addFacetIfPresent(
+                JdoDatastoreIdentityFacetAnnotation
+                .create(datastoreIdentityIfAny, processClassContext.getFacetHolder()));
+
     }
 
 

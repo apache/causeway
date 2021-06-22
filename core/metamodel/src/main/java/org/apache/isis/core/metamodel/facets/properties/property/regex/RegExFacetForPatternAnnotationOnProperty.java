@@ -23,7 +23,6 @@ import java.util.Optional;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacetAbstract;
 
@@ -35,7 +34,7 @@ extends RegExFacetAbstract {
             final Class<?> returnType,
             final FacetHolder holder) {
 
-        if (!Annotations.isString(returnType)) {
+        if (!returnType.equals(String.class)) {
             return null;
         }
 

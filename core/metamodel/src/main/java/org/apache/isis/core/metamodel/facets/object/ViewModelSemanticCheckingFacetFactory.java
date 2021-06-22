@@ -28,7 +28,6 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
@@ -54,8 +53,8 @@ extends FacetFactoryAbstract {
         val cls = processClassContext.getCls();
         val facetHolder = processClassContext.getFacetHolder();
 
-        final DomainObjectLayout domainObjectLayout = Annotations.getAnnotation(cls, DomainObjectLayout.class);
-        final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
+        final DomainObjectLayout domainObjectLayout = processClassContext.synthesizeOnType(DomainObjectLayout.class).orElse(null);
+        final DomainObject domainObject = processClassContext.synthesizeOnType(DomainObject.class).orElse(null);
         final boolean implementsViewModel = org.apache.isis.applib.ViewModel.class.isAssignableFrom(cls);
         final boolean implementsRecreatableDomainObject = org.apache.isis.applib.RecreatableDomainObject.class.isAssignableFrom(cls);
 

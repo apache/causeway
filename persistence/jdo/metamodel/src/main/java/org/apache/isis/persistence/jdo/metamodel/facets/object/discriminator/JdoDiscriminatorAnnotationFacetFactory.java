@@ -28,7 +28,6 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;
@@ -64,7 +63,7 @@ implements ObjectTypeFacetFactory {
             return;
         }
 
-        final Discriminator annotation = Annotations.getAnnotation(cls, Discriminator.class);
+        final Discriminator annotation = processClassContext.synthesizeOnType(Discriminator.class).orElse(null);
         if (annotation == null) {
             return;
         }
@@ -101,7 +100,7 @@ implements ObjectTypeFacetFactory {
             return;
         }
 
-        final Discriminator annotation = Annotations.getAnnotation(processClassContext.getCls(), Discriminator.class);
+        final Discriminator annotation = processClassContext.synthesizeOnType(Discriminator.class).orElse(null);
         if (annotation == null) {
             return;
         }

@@ -26,7 +26,6 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactory;
@@ -50,7 +49,7 @@ implements ObjectTypeFacetFactory {
     public void process(final ObjectTypeFacetFactory.ProcessObjectTypeContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
 
-        final Table annotation = Annotations.getAnnotation(cls, Table.class);
+        final Table annotation = processClassContext.synthesizeOnType(Table.class).orElse(null);
         if (annotation == null) {
             return;
         }

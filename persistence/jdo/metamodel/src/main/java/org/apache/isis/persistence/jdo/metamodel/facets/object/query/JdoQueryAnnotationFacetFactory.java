@@ -29,7 +29,6 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
@@ -58,7 +57,7 @@ implements MetaModelRefiner {
             return;
         }
 
-        final Queries namedQueriesAnnotation = Annotations.getAnnotation(cls, Queries.class);
+        final Queries namedQueriesAnnotation = processClassContext.synthesizeOnType(Queries.class).orElse(null);
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         if (namedQueriesAnnotation != null) {
@@ -67,7 +66,7 @@ implements MetaModelRefiner {
             return;
         }
 
-        final Query namedQueryAnnotation = Annotations.getAnnotation(cls, Query.class);
+        final Query namedQueryAnnotation = processClassContext.synthesizeOnType(Query.class).orElse(null);
         if (namedQueryAnnotation != null) {
             addFacet(
                     new JdoQueryFacetAnnotation(namedQueryAnnotation, facetHolder));

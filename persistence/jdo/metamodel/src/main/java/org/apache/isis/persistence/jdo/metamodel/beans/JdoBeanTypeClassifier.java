@@ -28,7 +28,6 @@ import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.beans.IsisBeanTypeClassifier;
 import org.apache.isis.core.config.util.LogicalTypeNameUtil;
-import org.apache.isis.core.metamodel.facets.Annotations;
 
 import static org.apache.isis.commons.internal.reflection._Annotations.findNearestAnnotation;
 
@@ -52,7 +51,7 @@ public class JdoBeanTypeClassifier implements IsisBeanTypeClassifier {
             // Whether objects of this type can only be embedded,
             // hence have no ID that binds them to the persistence layer
             final boolean embeddedOnly = Boolean.valueOf(embeddedOnlyAttribute)
-                    || Annotations.getAnnotation(type, EmbeddedOnly.class)!=null;
+                    || findNearestAnnotation(type, EmbeddedOnly.class).isPresent();
             if(embeddedOnly) {
                 return null; // don't categorize as entity ... fall through in the caller's logic
             }

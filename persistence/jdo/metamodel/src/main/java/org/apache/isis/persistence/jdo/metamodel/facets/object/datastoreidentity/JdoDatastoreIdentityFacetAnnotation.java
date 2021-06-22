@@ -18,14 +18,30 @@
  */
 package org.apache.isis.persistence.jdo.metamodel.facets.object.datastoreidentity;
 
+import java.util.Optional;
+
+import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityFacet;
 
 
-public class JdoDatastoreIdentityFacetAnnotation extends JdoDatastoreIdentityFacetImpl {
+public class JdoDatastoreIdentityFacetAnnotation
+extends JdoDatastoreIdentityFacetAbstract {
 
-    public JdoDatastoreIdentityFacetAnnotation(IdGeneratorStrategy strategy, FacetHolder facetHolder) {
+    public static Optional<JdoDatastoreIdentityFacet> create(
+            final Optional<DatastoreIdentity> datastoreIdentityIfAny,
+            final FacetHolder facetHolder) {
+
+        return datastoreIdentityIfAny
+                .map(DatastoreIdentity::strategy)
+                .map(strategy->new JdoDatastoreIdentityFacetAnnotation(strategy, facetHolder));
+    }
+
+    private JdoDatastoreIdentityFacetAnnotation(
+            final IdGeneratorStrategy strategy,
+            final FacetHolder facetHolder) {
         super(strategy, facetHolder);
     }
 

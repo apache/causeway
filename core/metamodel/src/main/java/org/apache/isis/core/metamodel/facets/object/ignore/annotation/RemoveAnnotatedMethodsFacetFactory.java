@@ -31,11 +31,11 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.commons.ClassUtil;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
-import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
@@ -93,10 +93,9 @@ extends FacetFactoryAbstract {
             final Method method,
             final Class<T> annotationClass) {
 
-        if (!Annotations.isAnnotationPresent(method, annotationClass)) {
-            return;
+        if(_Reflect.getAnnotation(method, annotationClass, true, true)!=null) {
+            methodRemover.removeMethod(method);
         }
-        methodRemover.removeMethod(method);
     }
 
 

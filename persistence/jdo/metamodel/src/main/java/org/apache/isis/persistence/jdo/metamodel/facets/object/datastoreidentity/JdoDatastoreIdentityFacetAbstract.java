@@ -27,11 +27,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityFacet;
 
-
 public abstract class JdoDatastoreIdentityFacetAbstract
 extends FacetAbstract
 implements JdoDatastoreIdentityFacet {
-
 
     private static final Class<? extends Facet> type() {
         return JdoDatastoreIdentityFacet.class;
@@ -39,7 +37,9 @@ implements JdoDatastoreIdentityFacet {
 
     private final IdGeneratorStrategy strategy;
 
-    public JdoDatastoreIdentityFacetAbstract(IdGeneratorStrategy strategy, FacetHolder facetHolder) {
+    protected JdoDatastoreIdentityFacetAbstract(
+            final IdGeneratorStrategy strategy,
+            final FacetHolder facetHolder) {
         super(JdoDatastoreIdentityFacetAbstract.type(), facetHolder);
         this.strategy = strategy;
     }

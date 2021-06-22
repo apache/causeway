@@ -36,7 +36,7 @@ import org.apache.isis.persistence.jdo.metamodel.facets.object.datastoreidentity
 import org.apache.isis.persistence.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacetFactory;
 import org.apache.isis.persistence.jdo.metamodel.facets.object.query.JdoQueryAnnotationFacetFactory;
 import org.apache.isis.persistence.jdo.metamodel.facets.object.version.JdoVersionAnnotationFacetFactory;
-import org.apache.isis.persistence.jdo.metamodel.facets.prop.column.BigDecimalDerivedFromJdoColumnAnnotationFacetFactory;
+import org.apache.isis.persistence.jdo.metamodel.facets.prop.column.BigDecimalInferredFromJdoColumnAnnotationFacetFactory;
 import org.apache.isis.persistence.jdo.metamodel.facets.prop.column.MandatoryFromJdoColumnAnnotationFacetFactory;
 import org.apache.isis.persistence.jdo.metamodel.facets.prop.column.MaxLengthDerivedFromJdoColumnAnnotationFacetFactory;
 import org.apache.isis.persistence.jdo.metamodel.facets.prop.notpersistent.JdoNotPersistentAnnotationFacetFactory;
@@ -82,7 +82,7 @@ public class JdoProgrammingModel implements MetaModelRefiner {
 
         pm.addFactory(step2, new JdoQueryAnnotationFacetFactory(mmc, jdoFacetContext), Marker.JDO);
 
-        pm.addFactory(step2, new BigDecimalDerivedFromJdoColumnAnnotationFacetFactory(mmc), Marker.JDO);
+        pm.addFactory(step2, new BigDecimalInferredFromJdoColumnAnnotationFacetFactory(mmc), Marker.JDO);
         pm.addFactory(step2, new MaxLengthDerivedFromJdoColumnAnnotationFacetFactory(mmc), Marker.JDO);
         // must appear after JdoPrimaryKeyAnnotationFacetFactory (above)
         // and also MandatoryFacetOnPropertyMandatoryAnnotationFactory

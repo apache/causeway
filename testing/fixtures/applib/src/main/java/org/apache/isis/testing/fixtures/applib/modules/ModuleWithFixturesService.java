@@ -18,15 +18,19 @@
  */
 package org.apache.isis.testing.fixtures.applib.modules;
 
-import lombok.Data;
-import lombok.extern.log4j.Log4j2;
-import lombok.val;
-import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.core.metamodel.facets.Annotations;
-import org.apache.isis.subdomains.spring.applib.service.BeanDescriptor;
-import org.apache.isis.subdomains.spring.applib.service.ContextBeans;
-import org.apache.isis.subdomains.spring.applib.service.SpringBeansService;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import javax.annotation.Priority;
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Configuration;
@@ -35,11 +39,16 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.*;
-import java.util.stream.Collectors;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.commons.internal.reflection._Reflect;
+import org.apache.isis.subdomains.spring.applib.service.BeanDescriptor;
+import org.apache.isis.subdomains.spring.applib.service.ContextBeans;
+import org.apache.isis.subdomains.spring.applib.service.SpringBeansService;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
+
+import lombok.Data;
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * @since 2.x {@index}
@@ -92,7 +101,7 @@ public class ModuleWithFixturesService {
         return sequenced(modules);
     }
 
-    static List<ModuleWithFixturesDescriptor> modulesWithin(Map<String, ContextBeans> beans) {
+    static List<ModuleWithFixturesDescriptor> modulesWithin(final Map<String, ContextBeans> beans) {
         final List<ModuleWithFixturesDescriptor> descriptors = new ArrayList<>();
         for (Map.Entry<String, ContextBeans> contextEntry : beans.entrySet()) {
             final String contextId = contextEntry.getKey();
@@ -115,7 +124,7 @@ public class ModuleWithFixturesService {
                     final Map<String, ModuleWithFixtures> importedModulesByBeanName = new LinkedHashMap<>();
                     if(annotatedWithConfiguration != null && annotatedWithImport != null) {
 
-                        final Import importAnnot = Annotations.getAnnotation(annotatedWithImport.getClass(), Import.class);
+                        final Import importAnnot = _Reflect.getAnnotation(annotatedWithImport.getClass(), Import.class);
                         if(importAnnot!=null) {
                             final Class<?>[] importedClasses = importAnnot.value();
 
@@ -147,7 +156,7 @@ public class ModuleWithFixturesService {
     }
 
 
-    static List<ModuleWithFixturesDescriptor> sequenced(List<ModuleWithFixturesDescriptor> modules) {
+    static List<ModuleWithFixturesDescriptor> sequenced(final List<ModuleWithFixturesDescriptor> modules) {
         val remaining = new ArrayList<>(modules);
         val sequenced = new ArrayList<ModuleWithFixturesDescriptor>();
 
@@ -169,7 +178,7 @@ public class ModuleWithFixturesService {
         return sequenced;
     }
 
-    static List<String> beanNamesOf(ArrayList<ModuleWithFixturesDescriptor> result) {
+    static List<String> beanNamesOf(final ArrayList<ModuleWithFixturesDescriptor> result) {
         return result.stream().map(ModuleWithFixturesDescriptor::getBeanName).collect(Collectors.toList());
     }
 
@@ -193,7 +202,7 @@ public class ModuleWithFixturesService {
     }
 
     @EventListener(ContextRefreshedEvent.class)
-    public void onContextRefreshed(ContextRefreshedEvent event) {
+    public void onContextRefreshed(final ContextRefreshedEvent event) {
         log.info("onContextRefreshed");
         for (final ModuleWithFixturesDescriptor descriptor : modules()) {
             log.info(descriptor);
