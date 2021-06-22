@@ -19,6 +19,8 @@
 package org.apache.isis.testdomain.domainmodel.jdo;
 
 import javax.inject.Inject;
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.IdentityType;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,7 +35,9 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityFacet;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
+import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.version.JdoVersionFacet;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.entities.JdoEntityMetaAnnotated;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
@@ -89,7 +93,20 @@ class DomainModelTest {
 
         assertEquals(BeanSort.ENTITY, entitySpec.getBeanSort());
         assertNotNull(entitySpec.getFacet(EntityFacet.class));
-        assertNotNull(entitySpec.getFacet(JdoPersistenceCapableFacet.class));
+
+        //@PersistenceCapable(identityType = IdentityType.DATASTORE)
+        val persistenceCapableFacet = entitySpec.getFacet(JdoPersistenceCapableFacet.class);
+        assertNotNull(persistenceCapableFacet);
+        assertEquals(IdentityType.DATASTORE, persistenceCapableFacet.getIdentityType());
+
+        //@DatastoreIdentity(strategy = IdGeneratorStrategy.NATIVE)
+        val datastoreIdentityFacet = entitySpec.getFacet(JdoDatastoreIdentityFacet.class);
+        assertNotNull(datastoreIdentityFacet);
+        assertEquals(IdGeneratorStrategy.NATIVE, datastoreIdentityFacet.getStrategy());
+
+        //@Version(strategy = VersionStrategy.VERSION_NUMBER)
+        val versionFacet = entitySpec.getFacet(JdoVersionFacet.class);
+        assertNotNull(versionFacet);
     }
 
 
