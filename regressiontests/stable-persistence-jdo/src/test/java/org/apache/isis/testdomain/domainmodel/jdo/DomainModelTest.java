@@ -99,6 +99,9 @@ class DomainModelTest {
         assertNotNull(persistenceCapableFacet);
         assertEquals(IdentityType.DATASTORE, persistenceCapableFacet.getIdentityType());
 
+        //@EntityWithIdAndVersion(schema = "ORGANISATION")
+        assertEquals("ORGANISATION", persistenceCapableFacet.getSchema());
+
         //@DatastoreIdentity(strategy = IdGeneratorStrategy.NATIVE)
         val datastoreIdentityFacet = entitySpec.getFacet(JdoDatastoreIdentityFacet.class);
         assertNotNull(datastoreIdentityFacet);
