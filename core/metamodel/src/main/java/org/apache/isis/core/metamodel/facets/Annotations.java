@@ -24,302 +24,25 @@ import java.lang.annotation.Annotation;
 import java.lang.invoke.MethodHandle;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
-import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
 import org.apache.isis.core.metamodel.commons.ThrowableExtensions;
 
+import lombok.Getter;
+import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
 
+@UtilityClass
 @Log4j2
 public final class Annotations  {
 
-    private Annotations() {}
-
-    /**
-     * For convenience of the several annotations that apply only to
-     * {@link String}s.
-     */
-    public static boolean isString(final Class<?> cls) {
-        return cls.equals(String.class);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T extends Annotation> T getDeclaredAnnotation(Class<?> cls, Class<T> annotationClass) {
-        final Annotation[] declaredAnnotations = cls.getDeclaredAnnotations();
-        if(declaredAnnotations == null) {
-            return null;
-        }
-        for (Annotation annotation : declaredAnnotations) {
-            if(annotationClass.isAssignableFrom(annotation.getClass())) {
-                return (T) annotation;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Searches for annotation on provided class, and if not found for the
-     * superclass.
-     *
-     * <p>
-     * Added to allow bytecode-mangling libraries such as CGLIB to be supported.
-     */
-    public static <T extends Annotation> T getAnnotation(final Class<?> cls, final Class<T> annotationClass) {
-        return _Reflect.getAnnotation(cls, annotationClass);
-    }
-
-
-    static class AnnotationAndDepth<T extends Annotation>
-    implements Comparable<AnnotationAndDepth<T>> {
-        AnnotationAndDepth(final T annotation, final int depth) {
-            this.annotation = annotation;
-            this.depth = depth;
-        }
-        T annotation;
-
-        private static <T extends Annotation> List<T> sorted(
-                final List<AnnotationAndDepth<T>> annotationAndDepths) {
-            Collections.sort(annotationAndDepths);
-            return annotationAndDepths.stream()
-                    .map(AnnotationAndDepth::getAnnotation)
-                    .collect(Collectors.toList());
-        }
-
-        T getAnnotation() {
-            return annotation;
-        }
-        int depth;
-
-        @Override
-        public int compareTo(final AnnotationAndDepth<T> o) {
-            return depth - o.depth;
-        }
-    }
-
-
-    /**
-     * Searches for annotation on provided class, and if not found for the
-     * superclass.
-     * @deprecated use {@link _Annotations} instead
-     */
-    public static <T extends Annotation> List<T> getAnnotations(
-            final Class<?> cls,
-            final Class<T> annotationClass) {
-
-        if (cls == null) {
-            return Collections.emptyList();
-        }
-
-        final List<AnnotationAndDepth<T>> annotationAndDepths = _Lists.newArrayList();
-        for (final Annotation annotation : cls.getAnnotations()) {
-            append(annotation, annotationClass, annotationAndDepths);
-        }
-        if(!annotationAndDepths.isEmpty()) {
-            return AnnotationAndDepth.sorted(annotationAndDepths);
-        }
-
-        // search superclasses
-        final Class<?> superclass = cls.getSuperclass();
-        if (superclass != null) {
-            try {
-                final List<T> annotationsFromSuperclass = getAnnotations(superclass, annotationClass);
-                if (!annotationsFromSuperclass.isEmpty()) {
-                    return annotationsFromSuperclass;
-                }
-            } catch (final SecurityException e) {
-                // fall through
-            }
-        }
-
-        // search implemented interfaces
-        final Class<?>[] interfaces = cls.getInterfaces();
-        for (final Class<?> iface : interfaces) {
-            final List<T> annotationsFromInterface = getAnnotations(iface, annotationClass);
-            if (!annotationsFromInterface.isEmpty()) {
-                return annotationsFromInterface;
-            }
-        }
-        return Collections.emptyList();
-    }
-
-    private static <T extends Annotation> void append(
-            final Annotation annotation,
-            final Class<T> annotationClass,
-            final List<AnnotationAndDepth<T>> annotationAndDepths) {
-
-        appendWithDepth(annotation, annotationClass, annotationAndDepths, 0, _Lists.newArrayList());
-    }
-
-    private static <T extends Annotation> void appendWithDepth(
-            final Annotation annotation,
-            final Class<T> annotationClass,
-            final List<AnnotationAndDepth<T>> annotationAndDepths,
-            final int depth,
-            final List<Annotation> visited) {
-        if (visited.contains(annotation)) {
-            return;
-        } else {
-            // prevent infinite loop
-            visited.add(annotation);
-        }
-        final Class<? extends Annotation> annotationType = annotation.annotationType();
-
-        // directly annotated
-        if(annotationClass.isAssignableFrom(annotationType)) {
-            annotationAndDepths.add(new AnnotationAndDepth<>(_Casts.uncheckedCast(annotation), depth));
-        }
-
-        // if meta-annotation
-        //if(annotationType.getAnnotation(Meta.class) != null) {
-        final Annotation[] annotationsOnAnnotation = annotationType.getAnnotations();
-        for (final Annotation annotationOnAnnotation : annotationsOnAnnotation) {
-            appendWithDepth(annotationOnAnnotation, annotationClass, annotationAndDepths, depth+1, visited);
-        }
-        //}
-    }
-
-// no longer used
-//    /**
-//     * Searches for annotation on provided method, and if not found for any
-//     * inherited methods up from the superclass.
-//     *
-//     * <p>
-//     *     WARN: this method does NOT search for meta-annotations; use {@link #getAnnotations(Class, Class)} for that.
-//     * </p>
-//     */
-//    private static <T extends Annotation> T getAnnotation(
-//            final Method method,
-//            final Class<T> annotationClass) {
-//        if (method == null) {
-//            return null;
-//        }
-//        final T annotation = method.getAnnotation(annotationClass);
-//        if (annotation != null) {
-//            return annotation;
-//        }
-//
-//        final Class<?> methodDeclaringClass = method.getDeclaringClass();
-//
-//        // search for field
-//        if ( shouldSearchForField(annotationClass) ) {
-//            final Field field = firstDeclaredField_matching(
-//                    methodDeclaringClass, isFieldForGetter(method));
-//            if(field!=null) {
-//                final T fieldAnnotation = field.getAnnotation(annotationClass);
-//                if(fieldAnnotation != null) {
-//                    return fieldAnnotation;
-//                }
-//            }
-//
-//        }
-//
-//        // search superclasses
-//        final Class<?> superclass = methodDeclaringClass.getSuperclass();
-//        if (superclass != null) {
-//            final Method parentClassMethod =
-//                    firstDeclaredMethod_matching(method, superclass, isSuperMethodFor(method));
-//
-//            if(parentClassMethod!=null) {
-//                final T methodAnnotation = getAnnotation(parentClassMethod, annotationClass);
-//                if(methodAnnotation != null) {
-//                    return methodAnnotation;
-//                }
-//            }
-//        }
-//
-//        // search implemented interfaces
-//        final Class<?>[] interfaces = methodDeclaringClass.getInterfaces();
-//        for (final Class<?> iface : interfaces) {
-//            final Method ifaceMethod =
-//                    firstDeclaredMethod_matching(method, iface, isSuperMethodFor(method));
-//
-//            if(ifaceMethod!=null) {
-//                final T methodAnnotation = getAnnotation(ifaceMethod, annotationClass);
-//                if(methodAnnotation != null) {
-//                    return methodAnnotation;
-//                }
-//            }
-//        }
-//
-//        return null;
-//    }
-//
-//    /**
-//     * Searches for annotation on provided method, and if not found for any
-//     * inherited methods up from the superclass.
-//     * @deprecated use {@link _Annotations} instead
-//     */
-//    private static <T extends Annotation> List<T> getAnnotations(
-//            final Method method,
-//            final Class<T> annotationClass) {
-//        if (method == null) {
-//            return Collections.emptyList();
-//        }
-//
-//        final List<AnnotationAndDepth<T>> annotationAndDepths = _Lists.newArrayList();
-//        for (final Annotation annotation : method.getAnnotations()) {
-//            append(annotation, annotationClass, annotationAndDepths);
-//        }
-//        if(!annotationAndDepths.isEmpty()) {
-//            return AnnotationAndDepth.sorted(annotationAndDepths);
-//        }
-//
-//
-//        // search for field
-//        if ( shouldSearchForField(annotationClass) ) {
-//            declaredFields_matching(method.getDeclaringClass(), isFieldForGetter(method), field->{
-//                for(final Annotation annotation: field.getAnnotations()) {
-//                    append(annotation, annotationClass, annotationAndDepths);
-//                }
-//            });
-//        }
-//        if(!annotationAndDepths.isEmpty()) {
-//            return AnnotationAndDepth.sorted(annotationAndDepths);
-//        }
-//
-//        // search superclasses
-//        final Class<?> superclass = method.getDeclaringClass().getSuperclass();
-//        if (superclass != null) {
-//            final Method parentClassMethod =
-//                    firstDeclaredMethod_matching(method, superclass, isSuperMethodFor(method));
-//
-//            if(parentClassMethod!=null) {
-//                final List<T> annotationsFromSuperclass =
-//                        getAnnotations(parentClassMethod, annotationClass);
-//                if(!annotationsFromSuperclass.isEmpty()) {
-//                    return annotationsFromSuperclass;
-//                }
-//            }
-//        }
-//
-//        // search implemented interfaces
-//        final Class<?>[] interfaces = method.getDeclaringClass().getInterfaces();
-//        for (final Class<?> iface : interfaces) {
-//            final Method ifaceMethod =
-//                    firstDeclaredMethod_matching(method, iface, isSuperMethodFor(method));
-//
-//            if(ifaceMethod!=null) {
-//                final List<T> annotationsFromInterfaces = getAnnotations(ifaceMethod, annotationClass);
-//                if(!annotationsFromInterfaces.isEmpty()) {
-//                    return annotationsFromInterfaces;
-//                }
-//            }
-//        }
-//
-//        return Collections.emptyList();
-//    }
 
     /**
      * Searches for all no-arg methods or fields with a specified title, returning an
@@ -380,7 +103,7 @@ public final class Annotations  {
     private static <T extends Annotation> void visitEvaluatorsWhile(
             final Class<?> cls,
             final Class<T> annotationClass,
-            Predicate<Class<?>> filter,
+            final Predicate<Class<?>> filter,
             final Consumer<Evaluator<T>> visitor) {
 
         if(!filter.test(cls))
@@ -462,7 +185,7 @@ public final class Annotations  {
     }
 
     public static class MethodEvaluator<T extends Annotation> extends Evaluator<T> {
-        private final Method method;
+        @Getter private final Method method;
 
         MethodEvaluator(final Method method, final T annotation) {
             super(annotation);
@@ -474,10 +197,6 @@ public final class Annotations  {
             return method.getName();
         }
 
-        public Method getMethod() {
-            return method;
-        }
-
         @Override
         protected MethodHandle createMethodHandle() throws IllegalAccessException {
             return _Reflect.handleOf(method);
@@ -485,7 +204,7 @@ public final class Annotations  {
     }
 
     public static class FieldEvaluator<T extends Annotation> extends Evaluator<T> {
-        private final Field field;
+        @Getter private final Field field;
 
         FieldEvaluator(final Field field, final T annotation) {
             super(annotation);
@@ -502,11 +221,7 @@ public final class Annotations  {
             return _Reflect.handleOfGetterOn(field);
         }
 
-        public Field getField() {
-            return field;
-        }
-
-        public Optional<Method> getGetter(Class<?> originatingClass) {
+        public Optional<Method> getGetter(final Class<?> originatingClass) {
             try {
                 return Optional.ofNullable(
                         _Reflect.getGetter(originatingClass, field.getName())    );
@@ -518,170 +233,5 @@ public final class Annotations  {
         }
 
     }
-
-// no longer used
-//    private static Set<Class<? extends Annotation>> fieldAnnotationClasses =
-//            _Sets.of(
-//                    Property.class,
-//                    PropertyLayout.class,
-//                    Collection.class,
-//                    CollectionLayout.class,
-//                    Programmatic.class,
-//                    MemberOrder.class,
-//                    Pattern.class,
-//                    javax.annotation.Nullable.class,
-//                    Title.class,
-//                    XmlJavaTypeAdapter.class,
-//                    XmlTransient.class
-//                    //javax.jdo.annotations.Column.class
-//                    );
-//
-//    private static boolean shouldSearchForField(final Class<?> annotationClass) {
-//        if(annotationClass.getName().equals("javax.jdo.annotations.Column")) {
-//            return true;
-//        }
-//        return fieldAnnotationClasses.contains(annotationClass);
-//    }
-
-    static List<String> fieldNameCandidatesFor(final String methodName) {
-        if(methodName == null) {
-            return Collections.emptyList();
-        }
-        int beginIndex;
-        if (methodName.startsWith("get")) {
-            beginIndex = 3;
-        } else if (methodName.startsWith("is")) {
-            beginIndex = 2;
-        } else {
-            beginIndex = -1;
-        }
-        if(beginIndex == -1) {
-            return Collections.emptyList();
-        }
-        final String suffix = methodName.substring(beginIndex);
-        if(suffix.length() == 0) {
-            return Collections.emptyList();
-        }
-        final char c = suffix.charAt(0);
-        final char lower = Character.toLowerCase(c);
-        final String candidate = "" + lower + suffix.substring(1);
-        return Arrays.asList(candidate, "_" + candidate);
-    }
-
-    /**
-     * Searches for annotation on provided method, and if not found for any
-     * inherited methods up from the superclass.
-     *
-     * <p>
-     * Added to allow bytecode-mangling libraries such as CGLIB to be supported.
-     */
-    public static boolean isAnnotationPresent(
-            final Method method,
-            final Class<? extends Annotation> annotationClass) {
-
-        if (method == null) {
-            return false;
-        }
-
-        return _Reflect.getAnnotation(method, annotationClass, true, true)!=null;
-    }
-
-    /**
-     * Searches for parameter annotations on provided method, and if not found
-     * for any inherited methods up from the superclass.
-     *
-     * <p>
-     * Added to allow bytecode-mangling libraries such as CGLIB to be supported.
-     * @deprecated use {@link _Annotations} instead
-     */
-    public static <T extends Annotation> List<T> getAnnotations(
-            final Method method,
-            final int paramNum,
-            final Class<T> annotationClass) {
-
-        if(method == null || paramNum < 0 || paramNum >= method.getParameterCount()) {
-            return Collections.emptyList();
-        }
-
-        final List<AnnotationAndDepth<T>> annotationAndDepths = _Lists.newArrayList();
-        final Annotation[] parameterAnnotations = method.getParameterAnnotations()[paramNum];
-        for (Annotation annotation : parameterAnnotations) {
-            append(annotation, annotationClass, annotationAndDepths);
-        }
-        if(!annotationAndDepths.isEmpty()) {
-            return AnnotationAndDepth.sorted(annotationAndDepths);
-        }
-
-        return Collections.emptyList();
-    }
-
-// no longer used
-//    // -- HELPER
-//
-//    private static Method firstDeclaredMethod_matching(
-//            Method method,
-//            Class<?> type,
-//            Predicate<Method> filter) {
-//
-//        return stream(type.getDeclaredMethods())
-//                .filter(filter)
-//                .findFirst()
-//                .orElse(null);
-//    }
-//
-//    private static Field firstDeclaredField_matching(
-//            Class<?> type,
-//            Predicate<Field> filter) {
-//
-//        return stream(type.getDeclaredFields())
-//                .filter(filter)
-//                .findFirst()
-//                .orElse(null);
-//    }
-//
-//    private static void declaredFields_matching(
-//            Class<?> type,
-//            Predicate<Field> filter,
-//            Consumer<Field> onField) {
-//
-//        stream(type.getDeclaredFields())
-//        .filter(filter)
-//        .forEach(onField);
-//
-//    }
-//
-//    // -- HELPER - PREDICATES
-//
-//    private static Predicate<Method> isSuperMethodFor(final Method method) {
-//        return m->_Reflect.same(method, m);
-//    }
-//
-//    private static Predicate<Field> isFieldForGetter(final Method getter) {
-//        return field->{
-//            int beginIndex;
-//            final String methodName = getter.getName();
-//            if (methodName.startsWith("get")) {
-//                beginIndex = 3;
-//            } else if (methodName.startsWith("is")) {
-//                beginIndex = 2;
-//            } else {
-//                return false;
-//            }
-//            if(methodName.length()==beginIndex) {
-//                return false;
-//            }
-//            final String suffix = methodName.substring(beginIndex);
-//            final char c = suffix.charAt(0);
-//            final char lower = Character.toLowerCase(c);
-//            final String candidate = "" + lower + suffix.substring(1);
-//            if(field.getName().equals(candidate)) {
-//                return true;
-//            }
-//            if(field.getName().equals("_" + candidate)) {
-//                return true;
-//            }
-//            return false;
-//        };
-//    }
 
 }
