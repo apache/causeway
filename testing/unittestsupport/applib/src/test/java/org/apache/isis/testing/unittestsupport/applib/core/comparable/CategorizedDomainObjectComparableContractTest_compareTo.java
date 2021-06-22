@@ -20,6 +20,8 @@ package org.apache.isis.testing.unittestsupport.applib.core.comparable;
 
 import java.util.List;
 
+import org.apache.isis.testing.unittestsupport.applib.dom.comparable.ComparableContractTest_compareTo;
+
 public class CategorizedDomainObjectComparableContractTest_compareTo extends ComparableContractTest_compareTo<CategorizedDomainObject> {
 
     @Override

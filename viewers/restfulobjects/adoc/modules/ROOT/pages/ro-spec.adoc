@@ -119,8 +119,7 @@ chapter.
 
 The Restful Objects viewer supports the `x-ro-follow-links` query parameter in a way very similar to that suggested in the RO spec (section link:https://www.restfulobjects.org/spec/1.0/section-e/chapter-34.html#34.4-minimizing-round-trips-(x-ro-follow-links)[34.4]), the main point being to avoid the "N+1" problem of too many (slow) network calls.
 For example, using this feature one can load a grid of data in a single call.
-(That said, the xref:vro:ROOT:simplified-representations.adoc[simplified representations]
-supported by Restful Objects viewer also support this use case, albeit in way that deviates from the RO spec).
+(That said, the xref:vro:ROOT:content-negotiation/apache-isis-v2-profile.adoc[Apache Isis v2 simplified representation] supported by Restful Objects viewer also support this use case, albeit in way that deviates from the RO spec).
 
 For example, with an app containing three entities, `Grandparent`, `Parent` and `ChildJdo` that define a hierarchy of 1:m relationships, we could define the following queries:
 

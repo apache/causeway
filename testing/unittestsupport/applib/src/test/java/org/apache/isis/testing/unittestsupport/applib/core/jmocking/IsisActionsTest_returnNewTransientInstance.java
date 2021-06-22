@@ -31,6 +31,9 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import org.apache.isis.testing.unittestsupport.applib.jmocking.IsisActions;
+import org.apache.isis.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2;
+
 public class IsisActionsTest_returnNewTransientInstance {
 
     // we can't use the 'real' DomainObjectConainter because applib depends on this module, not vice versa

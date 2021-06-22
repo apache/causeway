@@ -28,8 +28,9 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.testing.unittestsupport.applib.core.jmocking.JUnitRuleMockery2.ClassUnderTest;
-import org.apache.isis.testing.unittestsupport.applib.core.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2;
+import org.apache.isis.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2.ClassUnderTest;
+import org.apache.isis.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2.Mode;
 
 public class JUnitRuleMockery2Test_autoWiring_constructorInjection_happyCase {
 

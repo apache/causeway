@@ -24,6 +24,8 @@ import org.junit.rules.ExpectedException;
 
 import static org.hamcrest.Matchers.containsString;
 
+import org.apache.isis.testing.unittestsupport.applib.dom.pojo.PojoTester;
+
 public class PojoTesterTest_interference {
     
     @Rule

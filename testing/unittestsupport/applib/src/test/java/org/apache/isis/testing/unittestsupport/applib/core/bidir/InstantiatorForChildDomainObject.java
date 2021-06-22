@@ -20,6 +20,8 @@ package org.apache.isis.testing.unittestsupport.applib.core.bidir;
 
 import java.util.SortedSet;
 
+import org.apache.isis.testing.unittestsupport.applib.dom.bidir.Instantiator;
+
 /**
  * To ensure that different ({@link Comparable}) {@link ChildDomainObject}s
  * are not equivalent when placed into the {@link ParentDomainObject#getChildren() children} (a {@link SortedSet}.)

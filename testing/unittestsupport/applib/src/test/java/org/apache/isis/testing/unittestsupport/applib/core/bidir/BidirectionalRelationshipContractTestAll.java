@@ -19,12 +19,15 @@
 package org.apache.isis.testing.unittestsupport.applib.core.bidir;
 
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.testing.unittestsupport.applib.dom.bidir.BidirectionalRelationshipContractTestAbstract;
+import org.apache.isis.testing.unittestsupport.applib.dom.bidir.Instantiator;
+import org.apache.isis.testing.unittestsupport.applib.dom.bidir.InstantiatorSimple;
 
 public class BidirectionalRelationshipContractTestAll extends BidirectionalRelationshipContractTestAbstract {
 
     public BidirectionalRelationshipContractTestAll() {
         super("org.apache.isis.core.unittestsupport.bidir",
-                _Maps.<Class<?>,Instantiator>unmodifiable(
+                _Maps.<Class<?>, Instantiator>unmodifiable(
                         // no instantiator need be registered for ParentDomainObject.class;
                         // will default to using new InstantiatorSimple(AgreementForTesting.class),
                         ChildDomainObject.class, new InstantiatorForChildDomainObject(),

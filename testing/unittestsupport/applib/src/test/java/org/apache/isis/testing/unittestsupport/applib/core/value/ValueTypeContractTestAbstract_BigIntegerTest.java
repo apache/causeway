@@ -22,6 +22,8 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.isis.testing.unittestsupport.applib.dom.value.ValueTypeContractTestAbstract;
+
 public class ValueTypeContractTestAbstract_BigIntegerTest extends ValueTypeContractTestAbstract<BigInteger> {
 
     @Override

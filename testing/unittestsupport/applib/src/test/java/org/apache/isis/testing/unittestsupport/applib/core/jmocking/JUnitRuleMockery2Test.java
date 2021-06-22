@@ -24,7 +24,8 @@ import org.jmock.auto.Mock;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.testing.unittestsupport.applib.core.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2;
+import org.apache.isis.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2.Mode;
 
 public class JUnitRuleMockery2Test {
 

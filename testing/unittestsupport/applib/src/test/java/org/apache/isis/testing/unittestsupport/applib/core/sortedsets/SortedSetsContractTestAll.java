@@ -18,6 +18,8 @@
  */
 package org.apache.isis.testing.unittestsupport.applib.core.sortedsets;
 
+import org.apache.isis.testing.unittestsupport.applib.dom.sortedsets.SortedSetsContractTestAbstract;
+
 public class SortedSetsContractTestAll extends SortedSetsContractTestAbstract {
 
     public SortedSetsContractTestAll() {

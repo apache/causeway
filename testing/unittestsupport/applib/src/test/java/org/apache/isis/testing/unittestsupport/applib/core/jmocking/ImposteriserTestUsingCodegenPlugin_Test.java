@@ -26,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.reflection._Reflect;
+import org.apache.isis.testing.unittestsupport.applib.jmocking.Imposterisers;
 
 import java.io.File;
 import java.net.URL;
