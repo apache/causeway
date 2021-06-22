@@ -16,38 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testing.unittestsupport.applib.dom.comparable;
+package org.apache.isis.testing.unittestsupport.applib.dom.bidir;
 
-import java.util.Arrays;
-import java.util.List;
-
-import org.junit.Test;
+import java.util.SortedSet;
 
 /**
- * @since 2.0 {@index}
+ * To ensure that different ({@link Comparable}) {@link ChildDomainObject}s
+ * are not equivalent when placed into the {@link ParentDomainObject#getChildren() children} (a {@link SortedSet}.)
  */
-public abstract class ComparableContractTest_compareTo<T extends Comparable<T>> {
+public class InstantiatorForChildDomainObject implements Instantiator {
 
-    /**
-     * Return an array of tuples; each tuple should consist of 4 elements, whereby
-     * item0  < item1 = item2 < item3
-     *
-     * Typically item0 should be null valued (if supported by the impl).
-     */
-    protected abstract List<List<T>> orderedTuples();
+    private int i;
 
-    @Test
-    public void compareAllOrderedTuples() {
-
-        new ComparableContractTester<T>(orderedTuples()).test();
-    }
-
-    /**
-     * Syntax sugar to remove boilerplate from subclasses.
-     */
-    @SafeVarargs
-    protected static <E> List<E> listOf(E... elements) {
-        return Arrays.asList(elements);
+    @Override
+    public Object instantiate() {
+        final ChildDomainObject cdo = new ChildDomainObject();
+        cdo.setIndex(++i);
+        return cdo;
     }
 
 }

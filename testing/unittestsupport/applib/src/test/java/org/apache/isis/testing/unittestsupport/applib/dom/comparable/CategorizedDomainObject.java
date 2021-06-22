@@ -18,36 +18,44 @@
  */
 package org.apache.isis.testing.unittestsupport.applib.dom.comparable;
 
-import java.util.Arrays;
-import java.util.List;
+import static org.apache.isis.commons.internal.base._Objects.compareNullsFirst;
 
-import org.junit.Test;
+public class CategorizedDomainObject implements Comparable<CategorizedDomainObject> {
 
-/**
- * @since 2.0 {@index}
- */
-public abstract class ComparableContractTest_compareTo<T extends Comparable<T>> {
+    // --
 
-    /**
-     * Return an array of tuples; each tuple should consist of 4 elements, whereby
-     * item0  < item1 = item2 < item3
-     *
-     * Typically item0 should be null valued (if supported by the impl).
-     */
-    protected abstract List<List<T>> orderedTuples();
+    private Integer category;
 
-    @Test
-    public void compareAllOrderedTuples() {
-
-        new ComparableContractTester<T>(orderedTuples()).test();
+    public Integer getCategory() {
+        return category;
     }
 
-    /**
-     * Syntax sugar to remove boilerplate from subclasses.
-     */
-    @SafeVarargs
-    protected static <E> List<E> listOf(E... elements) {
-        return Arrays.asList(elements);
+    public void setCategory(final Integer category) {
+        this.category = category;
     }
+
+    // --
+
+    private Integer subcategory;
+
+    public Integer getSubcategory() {
+        return subcategory;
+    }
+
+    public void setSubcategory(final Integer subcategory) {
+        this.subcategory = subcategory;
+    }
+
+    // --
+
+    @Override
+    public int compareTo(CategorizedDomainObject other) {
+        int c = compareNullsFirst(this.getCategory(), other.getCategory());
+        if(c!=0) {
+            return c;
+        }
+        return compareNullsFirst(this.getSubcategory(), other.getSubcategory());        
+    }
+
 
 }

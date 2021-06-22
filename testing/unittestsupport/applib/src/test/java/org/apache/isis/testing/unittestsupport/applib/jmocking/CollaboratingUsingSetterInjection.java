@@ -16,38 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testing.unittestsupport.applib.dom.comparable;
 
-import java.util.Arrays;
-import java.util.List;
+package org.apache.isis.testing.unittestsupport.applib.jmocking;
 
-import org.junit.Test;
+public class CollaboratingUsingSetterInjection {
+    Collaborator collaborator;
 
-/**
- * @since 2.0 {@index}
- */
-public abstract class ComparableContractTest_compareTo<T extends Comparable<T>> {
-
-    /**
-     * Return an array of tuples; each tuple should consist of 4 elements, whereby
-     * item0  < item1 = item2 < item3
-     *
-     * Typically item0 should be null valued (if supported by the impl).
-     */
-    protected abstract List<List<T>> orderedTuples();
-
-    @Test
-    public void compareAllOrderedTuples() {
-
-        new ComparableContractTester<T>(orderedTuples()).test();
+    public CollaboratingUsingSetterInjection() {
     }
 
-    /**
-     * Syntax sugar to remove boilerplate from subclasses.
-     */
-    @SafeVarargs
-    protected static <E> List<E> listOf(E... elements) {
-        return Arrays.asList(elements);
+    public void setCollaborator(Collaborator collaborator) {
+        this.collaborator = collaborator;
+    }
+
+    public void collaborateWithCollaborator() {
+        collaborator.doOtherStuff();
+    }
+
+    public void dontCollaborateWithCollaborator() {
+
     }
 
 }

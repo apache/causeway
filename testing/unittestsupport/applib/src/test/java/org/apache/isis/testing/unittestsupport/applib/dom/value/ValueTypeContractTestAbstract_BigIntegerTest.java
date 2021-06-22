@@ -16,38 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testing.unittestsupport.applib.dom.comparable;
+package org.apache.isis.testing.unittestsupport.applib.dom.value;
 
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Test;
+import org.apache.isis.testing.unittestsupport.applib.dom.value.ValueTypeContractTestAbstract;
 
-/**
- * @since 2.0 {@index}
- */
-public abstract class ComparableContractTest_compareTo<T extends Comparable<T>> {
+public class ValueTypeContractTestAbstract_BigIntegerTest extends ValueTypeContractTestAbstract<BigInteger> {
 
-    /**
-     * Return an array of tuples; each tuple should consist of 4 elements, whereby
-     * item0  < item1 = item2 < item3
-     *
-     * Typically item0 should be null valued (if supported by the impl).
-     */
-    protected abstract List<List<T>> orderedTuples();
-
-    @Test
-    public void compareAllOrderedTuples() {
-
-        new ComparableContractTester<T>(orderedTuples()).test();
+    @Override
+    protected List<BigInteger> getObjectsWithSameValue() {
+        return Arrays.asList(new BigInteger("1"), new BigInteger("1"));
     }
 
-    /**
-     * Syntax sugar to remove boilerplate from subclasses.
-     */
-    @SafeVarargs
-    protected static <E> List<E> listOf(E... elements) {
-        return Arrays.asList(elements);
+    @Override
+    protected List<BigInteger> getObjectsWithDifferentValue() {
+        return Arrays.asList(new BigInteger("2"));
     }
 
 }

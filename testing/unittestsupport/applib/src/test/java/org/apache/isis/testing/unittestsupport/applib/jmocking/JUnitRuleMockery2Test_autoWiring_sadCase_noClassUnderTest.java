@@ -16,38 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testing.unittestsupport.applib.dom.comparable;
 
-import java.util.Arrays;
-import java.util.List;
+package org.apache.isis.testing.unittestsupport.applib.jmocking;
 
+import org.jmock.auto.Mock;
+import org.junit.Rule;
 import org.junit.Test;
 
-/**
- * @since 2.0 {@index}
- */
-public abstract class ComparableContractTest_compareTo<T extends Comparable<T>> {
+import org.apache.isis.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2.Mode;
 
-    /**
-     * Return an array of tuples; each tuple should consist of 4 elements, whereby
-     * item0  < item1 = item2 < item3
-     *
-     * Typically item0 should be null valued (if supported by the impl).
-     */
-    protected abstract List<List<T>> orderedTuples();
+public class JUnitRuleMockery2Test_autoWiring_sadCase_noClassUnderTest {
 
-    @Test
-    public void compareAllOrderedTuples() {
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
-        new ComparableContractTester<T>(orderedTuples()).test();
-    }
+    @Mock
+    private Collaborator collaborator;
 
-    /**
-     * Syntax sugar to remove boilerplate from subclasses.
-     */
-    @SafeVarargs
-    protected static <E> List<E> listOf(E... elements) {
-        return Arrays.asList(elements);
+    // @ClassUnderTest
+    @SuppressWarnings("unused")
+    private CollaboratingUsingConstructorInjection collaborating;
+
+    @Test(expected=IllegalStateException.class)
+    public void cannotFindClassUnderTest() {
+        context.getClassUnderTest();
     }
 
 }
