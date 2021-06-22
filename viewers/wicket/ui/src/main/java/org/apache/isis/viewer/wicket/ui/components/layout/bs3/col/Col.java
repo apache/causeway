@@ -44,7 +44,6 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelUtil;
 import org.apache.isis.viewer.wicket.ui.components.entity.fieldset.PropertyGroup;
-import org.apache.isis.viewer.wicket.ui.components.layout.bs3.Util;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.row.Row;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.tabs.TabGroupPanel;
 import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
@@ -92,7 +91,6 @@ implements HasDynamicallyVisibleContent {
         final WebMarkupContainer div = new WebMarkupContainer(ID_COL);
 
         CssClassAppender.appendCssClassTo(div, bs3Col.toCssClass());
-        Util.appendCssClass(div, bs3Col, ID_COL);
 
         // icon/title
         final DomainObjectLayoutData domainObject = bs3Col.getDomainObject();
