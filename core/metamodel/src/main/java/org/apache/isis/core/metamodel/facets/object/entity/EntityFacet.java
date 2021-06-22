@@ -25,6 +25,7 @@ import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -56,5 +57,13 @@ public interface EntityFacet extends Facet {
     <T> T detach(T pojo);
 
     PersistenceStandard getPersistenceStandard();
+
+    // -- JUNIT SUPPORT
+
+    static EntityFacet forTesting(
+            final PersistenceStandard persistenceStandard,
+            final FacetHolder facetHolder) {
+        return new _EntityFacetForTesting(persistenceStandard, facetHolder);
+    }
 
 }

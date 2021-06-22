@@ -21,8 +21,10 @@ package org.apache.isis.persistence.jdo.provider.entities;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.services.repository.EntityState;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 
-//XXX if there is a way to do this more directly given a PersistenceManager, we can remove this
+// dependency inversion
 public interface JdoFacetContext {
 
     EntityState getEntityState(Object pojo);
@@ -31,5 +33,6 @@ public interface JdoFacetContext {
 
     boolean isMethodProvidedByEnhancement(Method method);
 
+    EntityFacet createEntityFacet(FacetHolder facetHolder);
 
 }

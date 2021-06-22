@@ -31,7 +31,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.entities.JdoEntityMetaAnnotated;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
@@ -86,7 +88,8 @@ class DomainModelTest {
         val entitySpec = specificationLoader.loadSpecification(JdoEntityMetaAnnotated.class);
 
         assertEquals(BeanSort.ENTITY, entitySpec.getBeanSort());
-        //assertNotNull(entitySpec.getFacet(EntityFacet.class)); //TODO
+        assertNotNull(entitySpec.getFacet(EntityFacet.class));
+        assertNotNull(entitySpec.getFacet(JdoPersistenceCapableFacet.class));
     }
 
 

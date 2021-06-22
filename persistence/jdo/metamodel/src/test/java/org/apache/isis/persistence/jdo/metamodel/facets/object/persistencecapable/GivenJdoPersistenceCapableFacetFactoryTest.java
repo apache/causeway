@@ -30,16 +30,16 @@ import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persiste
 
 import lombok.val;
 
-public class GivenJdoPersistenceCapableAnnotationFacetFactoryTest
+public class GivenJdoPersistenceCapableFacetFactoryTest
 extends AbstractFacetFactoryTest {
 
-    private JdoPersistenceCapableAnnotationFacetFactory facetFactory;
+    private JdoPersistenceCapableFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new JdoPersistenceCapableAnnotationFacetFactory(metaModelContext, jdoFacetContext);
+        facetFactory = new JdoPersistenceCapableFacetFactory(metaModelContext, jdoFacetContext);
     }
 
     @Override
@@ -67,7 +67,7 @@ extends AbstractFacetFactoryTest {
 
         final Facet facet = facetHolder.getFacet(JdoPersistenceCapableFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof JdoPersistenceCapableFacetAnnotation);
+        assertTrue(facet instanceof JdoPersistenceCapableFacetFromAnnotation);
     }
 
     public void testIfNoPersistenceCapableAnnotationThenNoFacet() {

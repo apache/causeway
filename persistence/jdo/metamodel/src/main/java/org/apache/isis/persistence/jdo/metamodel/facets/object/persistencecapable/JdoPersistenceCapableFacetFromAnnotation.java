@@ -18,15 +18,21 @@
  */
 package org.apache.isis.persistence.jdo.metamodel.facets.object.persistencecapable;
 
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
+import javax.jdo.annotations.EmbeddedOnly;
 import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.PersistenceCapable;
 
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
-public class JdoPersistenceCapableFacetAnnotation
+import lombok.val;
+
+public class JdoPersistenceCapableFacetFromAnnotation
 extends FacetAbstract
 implements JdoPersistenceCapableFacet {
 
@@ -34,7 +40,44 @@ implements JdoPersistenceCapableFacet {
     private final String table;
     private final IdentityType identityType;
 
-    public JdoPersistenceCapableFacetAnnotation(
+    public static Optional<JdoPersistenceCapableFacet> create(
+            final Optional<PersistenceCapable> persistenceCapableIfAny,
+            final Optional<EmbeddedOnly> embeddedOnlyIfAny,
+            final Class<?> cls,
+            final FacetHolder facetHolder) {
+
+        if(!persistenceCapableIfAny.isPresent()) {
+            return Optional.empty();
+        }
+
+        val persistenceCapable = persistenceCapableIfAny.get();
+
+        // Whether objects of this type can only be embedded,
+        // hence have no ID that binds them to the persistence layer
+        final boolean isEmbeddedOnly = Boolean.valueOf(persistenceCapable.embeddedOnly())
+                || embeddedOnlyIfAny.isPresent();
+
+        if(isEmbeddedOnly) {
+            return Optional.empty();
+        }
+
+        val schema = _Strings.emptyToNull(persistenceCapable.schema());
+
+        val table = _Strings.isNotEmpty(persistenceCapable.table())
+            ? persistenceCapable.table()
+            : cls.getSimpleName();
+
+        val identityType = persistenceCapable.identityType();
+
+        return Optional.of(new JdoPersistenceCapableFacetFromAnnotation(
+                schema,
+                table,
+                identityType,
+                facetHolder));
+
+    }
+
+    private JdoPersistenceCapableFacetFromAnnotation(
             final String schemaName,
             final String tableOrTypeName,
             final IdentityType identityType,

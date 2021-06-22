@@ -28,14 +28,14 @@ import org.apache.isis.commons.internal.collections._Sets;
 
 public class JdoMetamodelUtil {
 
-    public static boolean isPersistenceEnhanced(@Nullable Class<?> cls) {
+    public static boolean isPersistenceEnhanced(@Nullable final Class<?> cls) {
         if(cls==null) {
             return false;
         }
         return org.datanucleus.enhancement.Persistable.class.isAssignableFrom(cls);
     }
 
-    public static boolean isMethodProvidedByEnhancement(@Nullable Method method) {
+    public static boolean isMethodProvidedByEnhancement(@Nullable final Method method) {
         if(method==null) {
             return false;
         }

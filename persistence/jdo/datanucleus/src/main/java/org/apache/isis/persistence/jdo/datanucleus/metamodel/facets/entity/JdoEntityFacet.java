@@ -62,6 +62,7 @@ import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+// does not have its own (exclusive) FacetFactory, but is installed via
 @Log4j2
 public class JdoEntityFacet
 extends FacetAbstract
@@ -83,7 +84,7 @@ implements EntityFacet {
     }
 
     @Override
-    public String identifierFor(ObjectSpecification spec, Object pojo) {
+    public String identifierFor(final ObjectSpecification spec, final Object pojo) {
 
         if(pojo==null) {
             throw _Exceptions.illegalArgument(
@@ -161,7 +162,7 @@ implements EntityFacet {
     }
 
     @Override
-    public Can<ManagedObject> fetchByQuery(ObjectSpecification spec, Query<?> query) {
+    public Can<ManagedObject> fetchByQuery(final ObjectSpecification spec, final Query<?> query) {
         if(!spec.isEntity()) {
             throw _Exceptions.unexpectedCodeReach();
         }
@@ -281,7 +282,7 @@ implements EntityFacet {
     }
 
     @Override
-    public void refresh(Object pojo) {
+    public void refresh(final Object pojo) {
 
         if(pojo==null
                 || !isPersistableType(pojo.getClass())
@@ -301,23 +302,23 @@ implements EntityFacet {
     }
 
     @Override
-    public EntityState getEntityState(Object pojo) {
+    public EntityState getEntityState(final Object pojo) {
         return DnEntityStateProvider.entityState(pojo);
     }
 
     @Override
-    public <T> T detach(T pojo) {
+    public <T> T detach(final T pojo) {
         return getPersistenceManager().detachCopy(pojo);
     }
 
     // -- HELPER
 
-    private static boolean isPersistableType(Class<?> type) {
+    private static boolean isPersistableType(final Class<?> type) {
         return Persistable.class.isAssignableFrom(type);
     }
 
     @Override
-    public boolean isProxyEnhancement(Method method) {
+    public boolean isProxyEnhancement(final Method method) {
         return JdoMetamodelUtil.isMethodProvidedByEnhancement(method);
     }
 
@@ -351,7 +352,7 @@ implements EntityFacet {
 
     // -- HELPER
 
-    private Can<ManagedObject> fetchWithinTransaction(Supplier<List<?>> fetcher) {
+    private Can<ManagedObject> fetchWithinTransaction(final Supplier<List<?>> fetcher) {
 
         val entityChangeTracker = getFacetHolder().getServiceRegistry().lookupServiceElseFail(EntityChangeTracker.class);
 

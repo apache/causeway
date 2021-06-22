@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel.Marker;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.isis.persistence.jdo.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityAnnotationFacetFactory;
-import org.apache.isis.persistence.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableAnnotationFacetFactory;
+import org.apache.isis.persistence.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacetFactory;
 import org.apache.isis.persistence.jdo.metamodel.facets.object.query.JdoQueryAnnotationFacetFactory;
 import org.apache.isis.persistence.jdo.metamodel.facets.object.version.JdoVersionAnnotationFacetFactory;
 import org.apache.isis.persistence.jdo.metamodel.facets.prop.column.BigDecimalDerivedFromJdoColumnAnnotationFacetFactory;
@@ -69,7 +69,7 @@ public class JdoProgrammingModel implements MetaModelRefiner {
         val step2 = ProgrammingModel.FacetProcessingOrder.A2_AFTER_FALLBACK_DEFAULTS;
         val jdoFacetContext = mmc.getServiceRegistry().lookupServiceElseFail(JdoFacetContext.class);
 
-        pm.addFactory(step2, new JdoPersistenceCapableAnnotationFacetFactory(mmc, jdoFacetContext), Marker.JDO);
+        pm.addFactory(step2, new JdoPersistenceCapableFacetFactory(mmc, jdoFacetContext), Marker.JDO);
         pm.addFactory(step2, new JdoDatastoreIdentityAnnotationFacetFactory(mmc, jdoFacetContext), Marker.JDO);
 
         pm.addFactory(step2, new JdoPrimaryKeyAnnotationFacetFactory(mmc, jdoFacetContext), Marker.JDO);

@@ -40,6 +40,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
+import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
+import org.apache.isis.core.metamodel.facets.object.entity.PersistenceStandard;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.security.authentication.InteractionContextFactory;
@@ -152,14 +154,18 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
 
     public static JdoFacetContext jdoFacetContextForTesting() {
         return new JdoFacetContext() {
-            @Override public boolean isPersistenceEnhanced(Class<?> cls) {
+            @Override public boolean isPersistenceEnhanced(final Class<?> cls) {
                 return true;
             }
-            @Override public boolean isMethodProvidedByEnhancement(Method method) {
+            @Override public boolean isMethodProvidedByEnhancement(final Method method) {
                 return false;
             }
-            @Override public EntityState getEntityState(Object pojo) {
+            @Override public EntityState getEntityState(final Object pojo) {
                 return null;
+            }
+            @Override
+            public EntityFacet createEntityFacet(final FacetHolder facetHolder) {
+                return EntityFacet.forTesting(PersistenceStandard.JDO, facetHolder);
             }
         };
     }

@@ -16,75 +16,72 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity;
+package org.apache.isis.persistence.jdo.metamodel.facets.object.persistencecapable;
 
 
 import javax.inject.Inject;
 import javax.jdo.annotations.EmbeddedOnly;
 import javax.jdo.annotations.PersistenceCapable;
 
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactory;
-import org.apache.isis.persistence.jdo.datanucleus.metamodel.JdoMetamodelUtil;
+import org.apache.isis.persistence.jdo.metamodel.facets.object.domainobject.objectspecid.LogicalTypeFacetInferredFromJdoPersistenceCapableAnnotation;
+import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
 import lombok.val;
 
 /**
- * Implements {@link ObjectTypeFacetFactory} only because
- * is a prereq of {@link DomainObjectAnnotationFacetFactory}.
+ * Implements {@link ObjectTypeFacetFactory} only because is a prereq of {@link DomainObjectAnnotationFacetFactory}.
  */
-public class JdoEntityFacetFactory
+public class JdoPersistenceCapableFacetFactory
 extends FacetFactoryAbstract
 implements ObjectTypeFacetFactory {
 
+    private final JdoFacetContext jdoFacetContext;
+
     @Inject
-    public JdoEntityFacetFactory(final MetaModelContext mmc) {
+    public JdoPersistenceCapableFacetFactory(
+            final MetaModelContext mmc,
+            final JdoFacetContext jdoFacetContext) {
         super(mmc, FeatureType.OBJECTS_ONLY);
+        this.jdoFacetContext = jdoFacetContext;
     }
 
     @Override
     public void process(final ObjectTypeFacetFactory.ProcessObjectTypeContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
-
-        // only applies to JDO entities; ignore any view models
-        if(!JdoMetamodelUtil.isPersistenceEnhanced(cls)) {
-            return;
-        }
-
-        final PersistenceCapable annotation = Annotations.getAnnotation(cls, PersistenceCapable.class);
-        if (annotation == null) {
-            return;
-        }
-        String annotationSchemaAttribute = annotation.schema();
-        if(_Strings.isNullOrEmpty(annotationSchemaAttribute)) {
-            annotationSchemaAttribute = null;
-        }
-        String annotationTableAttribute = annotation.table();
-        if (_Strings.isNullOrEmpty(annotationTableAttribute)) {
-            annotationTableAttribute = cls.getSimpleName();
-        }
-
+        val cls = processClassContext.getCls();
         val facetHolder = processClassContext.getFacetHolder();
 
-        val embeddedOnlyAttribute = annotation.embeddedOnly();
-        // Whether objects of this type can only be embedded,
-        // hence have no ID that binds them to the persistence layer
-        final boolean embeddedOnly = Boolean.valueOf(embeddedOnlyAttribute)
-                || Annotations.getAnnotation(cls, EmbeddedOnly.class)!=null;
-
-        if(embeddedOnly) {
-            // suppress
-        } else {
-            FacetUtil.addFacet(new JdoEntityFacet(facetHolder));
+        // only applies to JDO entities; ignore any view models
+        if(!jdoFacetContext.isPersistenceEnhanced(cls)) {
+            return;
         }
 
-        return;
+        val persistenceCapableIfAny = processClassContext.synthesizeOnType(PersistenceCapable.class);
+        if (!persistenceCapableIfAny.isPresent()) {
+            return;
+        }
+
+        val embeddedOnlyIfAny = processClassContext.synthesizeOnType(EmbeddedOnly.class);
+
+        FacetUtil.addFacetIfPresent(
+                JdoPersistenceCapableFacetFromAnnotation
+                .create(persistenceCapableIfAny, embeddedOnlyIfAny, cls, facetHolder))
+        .ifPresent(jdoPersistenceCapableFacet->{
+
+            FacetUtil.addFacetIfPresent(
+                    LogicalTypeFacetInferredFromJdoPersistenceCapableAnnotation
+                    .create(jdoPersistenceCapableFacet, cls, facetHolder));
+
+            FacetUtil.addFacet(
+                    jdoFacetContext.createEntityFacet(facetHolder));
+
+        });
+
     }
 
 

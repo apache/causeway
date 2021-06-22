@@ -29,6 +29,9 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.JdoEntityFacet;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
 import lombok.val;
@@ -37,12 +40,12 @@ import lombok.val;
 public class DnEntityStateProvider implements JdoFacetContext {
 
     @Override
-    public EntityState getEntityState(Object pojo) {
+    public EntityState getEntityState(final Object pojo) {
         return entityState(pojo);
     }
 
     @Override
-    public boolean isPersistenceEnhanced(@Nullable Class<?> cls) {
+    public boolean isPersistenceEnhanced(@Nullable final Class<?> cls) {
         if(cls==null) {
             return false;
         }
@@ -50,7 +53,7 @@ public class DnEntityStateProvider implements JdoFacetContext {
     }
 
     @Override
-    public boolean isMethodProvidedByEnhancement(@Nullable Method method) {
+    public boolean isMethodProvidedByEnhancement(@Nullable final Method method) {
         if(method==null) {
             return false;
         }
@@ -59,7 +62,7 @@ public class DnEntityStateProvider implements JdoFacetContext {
                 jdoMethodsProvidedByEnhancement.contains(method.toString());
     }
 
-    public static EntityState entityState(Object pojo) {
+    public static EntityState entityState(final Object pojo) {
 
         if(pojo==null) {
             return EntityState.NOT_PERSISTABLE;
@@ -94,6 +97,11 @@ public class DnEntityStateProvider implements JdoFacetContext {
             .map(Method::toString)
             .forEach(jdoMethodsProvidedByEnhancement::add);
         }
+    }
+
+    @Override
+    public EntityFacet createEntityFacet(final FacetHolder facetHolder) {
+        return new JdoEntityFacet(facetHolder);
     }
 
 }
