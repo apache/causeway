@@ -56,13 +56,19 @@ import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
 import org.apache.isis.persistence.jdo.datanucleus.metamodel.JdoMetamodelUtil;
 import org.apache.isis.persistence.jdo.datanucleus.oid.JdoObjectIdSerializer;
+import org.apache.isis.persistence.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacetFactory;
+import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
 
 import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-// does not have its own (exclusive) FacetFactory, but is installed via
+/**
+ * @apiNote Does not have its own (exclusive) FacetFactory, but is installed via
+ * {@link JdoPersistenceCapableFacetFactory} by means of dependency inversion using
+ * {@link JdoFacetContext}
+ */
 @Log4j2
 public class JdoEntityFacet
 extends FacetAbstract
