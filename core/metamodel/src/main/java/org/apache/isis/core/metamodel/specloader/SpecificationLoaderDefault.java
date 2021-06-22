@@ -201,6 +201,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         instance.metaModelContext = serviceRegistry.lookupServiceElseFail(MetaModelContext.class);
         instance.facetProcessor = new FacetProcessor(programmingModel, instance.metaModelContext);
+        instance.facetProcessor.init();
 
         return instance;
     }

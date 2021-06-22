@@ -56,29 +56,32 @@ implements ObjectTypeFacetFactory {
 
     @Override
     public void process(final ObjectTypeFacetFactory.ProcessObjectTypeContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
+        val cls = processClassContext.getCls();
 
         // only applies to JDO entities; ignore any view models
         if(!jdoFacetContext.isPersistenceEnhanced(cls)) {
             return;
         }
 
-        final PersistenceCapable annotation = Annotations.getAnnotation(cls, PersistenceCapable.class);
-        if (annotation == null) {
+        val persistenceCapableIfAny = processClassContext.synthesizeOnType(PersistenceCapable.class);
+        if (!persistenceCapableIfAny.isPresent()) {
             return;
         }
-        String annotationSchemaAttribute = annotation.schema();
+
+        val persistenceCapable = persistenceCapableIfAny.get();
+
+        String annotationSchemaAttribute = persistenceCapable.schema();
         if(_Strings.isNullOrEmpty(annotationSchemaAttribute)) {
             annotationSchemaAttribute = null;
         }
-        String annotationTableAttribute = annotation.table();
+        String annotationTableAttribute = persistenceCapable.table();
         if (_Strings.isNullOrEmpty(annotationTableAttribute)) {
             annotationTableAttribute = cls.getSimpleName();
         }
 
         val facetHolder = processClassContext.getFacetHolder();
 
-        val embeddedOnlyAttribute = annotation.embeddedOnly();
+        val embeddedOnlyAttribute = persistenceCapable.embeddedOnly();
         // Whether objects of this type can only be embedded,
         // hence have no ID that binds them to the persistence layer
         final boolean embeddedOnly = Boolean.valueOf(embeddedOnlyAttribute)
@@ -88,7 +91,7 @@ implements ObjectTypeFacetFactory {
             // suppress
         } else {
 
-            final IdentityType annotationIdentityType = annotation.identityType();
+            final IdentityType annotationIdentityType = persistenceCapable.identityType();
             val jdoPersistenceCapableFacet =
             FacetUtil.addFacet(new JdoPersistenceCapableFacetAnnotation(
                     annotationSchemaAttribute,

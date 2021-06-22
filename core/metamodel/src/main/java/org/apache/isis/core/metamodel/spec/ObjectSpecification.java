@@ -132,7 +132,7 @@ extends
      * @param onType
      * @since 2.0
      */
-    public default Optional<MixedInMember> getMixedInMember(ObjectSpecification onType) {
+    public default Optional<MixedInMember> getMixedInMember(final ObjectSpecification onType) {
         return streamAnyActions(MixedIn.INCLUDED)
                 .filter(MixedInMember.class::isInstance)
                 .map(MixedInMember.class::cast)
@@ -490,7 +490,7 @@ extends
 
     // -- TYPE COMPATIBILITY UTILITIES
 
-    default public void assertPojoCompatible(@Nullable Object pojo) {
+    default public void assertPojoCompatible(@Nullable final Object pojo) {
 
         // can do this check only when the pojo is not null, otherwise is always considered valid
         if(pojo==null) {
@@ -508,7 +508,7 @@ extends
         }
     }
 
-    default public boolean isPojoCompatible(Object pojo) {
+    default public boolean isPojoCompatible(final Object pojo) {
 
         val expectedType = getCorrespondingClass();
         val actualType = pojo.getClass();
@@ -543,6 +543,12 @@ extends
 
     default String fqcn() {
         return  getCorrespondingClass().getName();
+    }
+
+    default Stream<ObjectSpecification> streamTypeHierarchy() {
+        return superclass()!=null
+                ? Stream.concat(Stream.of(this), superclass().streamTypeHierarchy())
+                : Stream.of(this);
     }
 
 }

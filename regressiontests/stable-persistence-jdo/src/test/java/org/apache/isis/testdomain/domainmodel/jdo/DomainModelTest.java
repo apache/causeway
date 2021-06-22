@@ -24,13 +24,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
+import org.apache.isis.testdomain.jdo.entities.JdoEntityMetaAnnotated;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
 import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
 import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
@@ -53,7 +57,7 @@ import lombok.val;
     IsisPresets.SilenceMetaModel,
     IsisPresets.SilenceProgrammingModel
 })
-class DomainModelTest_jdoMixins {
+class DomainModelTest {
 
     @Inject private ServiceRegistry serviceRegistry;
     @Inject private SpecificationLoader specificationLoader;
@@ -70,11 +74,20 @@ class DomainModelTest_jdoMixins {
     @Test
     void pluginProvidedMixins_shouldBePickedUp() {
 
-        val holderSpec = specificationLoader.loadSpecification(JdoProduct.class);
+        val entitySpec = specificationLoader.loadSpecification(JdoProduct.class);
 
-        val mx_datanucleusVersionLong = holderSpec.getAssociationElseFail("datanucleusVersionLong"); // plugged in mixin
+        val mx_datanucleusVersionLong = entitySpec.getAssociationElseFail("datanucleusVersionLong"); // plugged in mixin
         assertNotNull(mx_datanucleusVersionLong);
 
+    }
+
+    @Test
+    void metaAnnotatedEntities_shouldBeRecognized() {
+
+        val entitySpec = specificationLoader.loadSpecification(JdoEntityMetaAnnotated.class);
+
+        assertEquals(BeanSort.ENTITY, entitySpec.getBeanSort());
+        assertNotNull(entitySpec.getFacet(EntityFacet.class));
     }
 
 

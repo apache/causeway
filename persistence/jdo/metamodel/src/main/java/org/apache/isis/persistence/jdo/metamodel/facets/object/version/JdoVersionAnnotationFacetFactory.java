@@ -22,20 +22,18 @@ package org.apache.isis.persistence.jdo.metamodel.facets.object.version;
 import javax.inject.Inject;
 import javax.jdo.annotations.Version;
 
+import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
+import lombok.val;
+
 public class JdoVersionAnnotationFacetFactory
-extends FacetFactoryAbstract
-implements MetaModelRefiner {
+extends FacetFactoryAbstract {
 
     private final JdoFacetContext jdoFacetContext;
 
@@ -49,46 +47,42 @@ implements MetaModelRefiner {
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        // deliberately do NOT search superclasses/superinterfaces
-        final Class<?> cls = processClassContext.getCls();
+
+        val cls = processClassContext.getCls();
 
         // only applies to JDO entities; ignore any view models
         if(!jdoFacetContext.isPersistenceEnhanced(cls)) {
             return;
         }
 
-        final Version annotation = Annotations.getDeclaredAnnotation(cls, Version.class);
-        if (annotation == null) {
+        val versionIfAny = processClassContext.synthesizeOnType(Version.class);
+        FacetUtil.addFacetIfPresent(
+                JdoVersionFacetFromAnnotation
+                .create(versionIfAny, processClassContext.getFacetHolder()));
+
+        if(versionIfAny.isPresent()) {
+            guardAgainstVersionInAnySuper(processClassContext, cls.getSuperclass());
+        }
+
+    }
+
+    private void guardAgainstVersionInAnySuper(
+            final ProcessClassContext processClassContext,
+            final Class<?> superclass) {
+        if(superclass == null) {
             return;
         }
-        FacetUtil.addFacet(new JdoVersionFacetFromAnnotation(processClassContext.getFacetHolder()));
-    }
+        val cls = processClassContext.getCls();
+        val synth = _Annotations.synthesizeInherited(superclass, Version.class);
+        if(synth.isPresent()) {
+            ValidationFailure.raiseFormatted(
+                    processClassContext.getFacetHolder(),
+                    "%s: cannot have @Version annotated on this subclass and any of its supertypes; superclass: %s",
+                    cls.getName(),
+                    superclass.getName());
+        }
+        guardAgainstVersionInAnySuper(processClassContext, superclass.getSuperclass()); // recursive call
 
-    @Override
-    public void refineProgrammingModel(final ProgrammingModel programmingModel) {
-        programmingModel.addVisitingValidatorSkipManagedBeans(spec->{
-
-            if(!declaresVersionAnnotation(spec)) {
-                return;
-            }
-
-            ObjectSpecification superclassSpec = spec.superclass();
-            while(superclassSpec != null) {
-                if(declaresVersionAnnotation(superclassSpec)) {
-                    ValidationFailure.raiseFormatted(
-                            spec,
-                            "%s: cannot have @Version annotated on this subclass and any of its supertypes; superclass: %s",
-                            spec.getFullIdentifier(),
-                            superclassSpec.getFullIdentifier() );
-                    return;
-                }
-                superclassSpec = superclassSpec.superclass();
-            }
-        });
-    }
-
-    private static boolean declaresVersionAnnotation(final ObjectSpecification spec) {
-        return Annotations.getDeclaredAnnotation(spec.getCorrespondingClass(), Version.class)!=null;
     }
 
 

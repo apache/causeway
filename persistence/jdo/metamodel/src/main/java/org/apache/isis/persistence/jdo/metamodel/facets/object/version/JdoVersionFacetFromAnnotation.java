@@ -18,14 +18,29 @@
  */
 package org.apache.isis.persistence.jdo.metamodel.facets.object.version;
 
+import java.util.Optional;
+
+import javax.jdo.annotations.Version;
+
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.version.JdoVersionFacet;
 
-public class JdoVersionFacetFromAnnotation extends FacetAbstract implements JdoVersionFacet {
+public class JdoVersionFacetFromAnnotation
+extends FacetAbstract
+implements JdoVersionFacet {
 
-    public JdoVersionFacetFromAnnotation(FacetHolder holder) {
+    public static Optional<JdoVersionFacet> create(
+            final Optional<Version> versionIfAny,
+            final FacetHolder facetHolder) {
+
+        return versionIfAny
+                .map(__->new JdoVersionFacetFromAnnotation(facetHolder));
+    }
+
+    private JdoVersionFacetFromAnnotation(final FacetHolder holder) {
         super(JdoVersionFacet.class, holder);
     }
+
 
 }
