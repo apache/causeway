@@ -32,7 +32,6 @@ import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet;
-import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -62,7 +61,6 @@ class ObjectReflectorDefaultTest_object extends SpecificationLoaderTestAbstract 
         assertNotNull(specification.getFacet(NamedFacet.class));
         assertNotNull(specification.getFacet(DescribedAsFacet.class));
         assertNotNull(specification.getFacet(TitleFacet.class));
-        assertNotNull(specification.getFacet(PluralFacet.class));
         assertNotNull(specification.getFacet(ObjectValidPropertiesFacet.class));
     }
 

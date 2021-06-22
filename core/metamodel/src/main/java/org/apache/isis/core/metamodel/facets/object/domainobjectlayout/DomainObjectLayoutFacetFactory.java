@@ -79,10 +79,6 @@ extends FacetFactoryAbstract {
                 .create(domainObjectLayoutIfAny, facetHolder));
 
         addFacetIfPresent(
-                PluralFacetForDomainObjectLayoutAnnotation
-                .create(domainObjectLayoutIfAny, facetHolder));
-
-        addFacetIfPresent(
                 BookmarkPolicyFacetForDomainObjectLayoutAnnotation
                 .create(domainObjectLayoutIfAny, facetHolder));
 

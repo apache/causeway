@@ -65,7 +65,6 @@ import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.CssClassF
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.CssClassFacetForDomainObjectXml;
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.DescribedAsFacetForDomainObjectXml;
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.NamedFacetForDomainObjectXml;
-import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.PluralFacetForDomainObjectXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.CssClassFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.DescribedAsFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.HiddenFacetForPropertyXml;
@@ -197,7 +196,6 @@ implements GridSystemService<G> {
                 addFacetIfPresent(CssClassFaFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
                 addFacetIfPresent(DescribedAsFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
                 addFacetIfPresent(NamedFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
-                addFacetIfPresent(PluralFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
             }
 
             @Override

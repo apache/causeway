@@ -21,6 +21,10 @@ package org.apache.isis.core.metamodel.facets.all.named;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
+import org.apache.isis.core.metamodel.facets.all.i8n.NounForms;
+
+import lombok.NonNull;
 
 public abstract class NamedFacetFromMemberNameAbstract
 extends NamedFacetAbstract {
@@ -28,11 +32,23 @@ extends NamedFacetAbstract {
     public static final boolean ESCAPED = true;
 
     protected NamedFacetFromMemberNameAbstract(
-            final String name,
+            final @NonNull NounForm preferredNounForm,
+            final String memberName,
             final FacetHolder holder,
             final Facet.Precedence precedence) {
         super(
-                name,
+                preferredNounForm.isSingular()
+                ? NounForms
+                        .builder()
+                        .preferredNounForm(preferredNounForm)
+                        .singular(memberName)
+                        .build()
+                : NounForms
+                        .builder()
+                        .preferredNounForm(preferredNounForm)
+                        .plural(memberName)
+                        .build()
+                ,
                 ESCAPED,
                 holder,
                 precedence);

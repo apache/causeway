@@ -24,27 +24,32 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.all.i8n.NounForms;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 
-public class NamedFacetForParameterLayoutAnnotation extends NamedFacetAbstract {
+public class NamedFacetForParameterLayoutAnnotation
+extends NamedFacetAbstract {
 
     public static Optional<NamedFacet> create(
             final Optional<ParameterLayout> parameterLayoutIfAny,
             final FacetHolder holder) {
 
         return parameterLayoutIfAny
-                .filter(parameterLayout -> _Strings.emptyToNull(parameterLayout.named()) != null)
-                .map(parameterLayout -> new NamedFacetForParameterLayoutAnnotation(
-                        parameterLayout.named(), parameterLayout.namedEscaped(), holder));
+                .filter(parameterLayout -> _Strings.isNotEmpty(parameterLayout.named()))
+                .map(parameterLayout ->
+                        new NamedFacetForParameterLayoutAnnotation(
+                            parameterLayout.named(),
+                            parameterLayout.namedEscaped(),
+                            holder));
     }
 
     private NamedFacetForParameterLayoutAnnotation(
-            final String value,
+            final String singularName,
             final boolean escaped,
             final FacetHolder holder) {
 
-        super(value, escaped, holder);
+        super(NounForms.preferredSingular().singular(singularName).build(), escaped, holder);
     }
 
 }

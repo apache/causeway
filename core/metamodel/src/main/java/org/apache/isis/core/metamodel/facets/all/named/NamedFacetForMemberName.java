@@ -20,12 +20,18 @@
 package org.apache.isis.core.metamodel.facets.all.named;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
+
+import lombok.NonNull;
 
 public class NamedFacetForMemberName
 extends NamedFacetFromMemberNameAbstract {
 
-    public NamedFacetForMemberName(String memberName, FacetHolder holder) {
-        super(memberName, holder, Precedence.DEFAULT);
+    public NamedFacetForMemberName(
+            final @NonNull NounForm preferredNounForm,
+            final String memberName,
+            final FacetHolder holder) {
+        super(preferredNounForm, memberName, holder, Precedence.DEFAULT);
     }
 
 }

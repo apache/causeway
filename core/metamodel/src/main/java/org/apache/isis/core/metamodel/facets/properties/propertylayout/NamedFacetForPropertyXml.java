@@ -24,30 +24,47 @@ import java.util.Optional;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.all.i8n.NounForms;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 
-public class NamedFacetForPropertyXml extends NamedFacetAbstract {
+import lombok.val;
+
+public class NamedFacetForPropertyXml
+extends NamedFacetAbstract {
 
     public static Optional<NamedFacet> create(
             final PropertyLayoutData propertyLayout,
             final FacetHolder holder) {
+
         if(propertyLayout == null) {
             return Optional.empty();
         }
-        final String named = _Strings.emptyToNull(propertyLayout.getNamed());
-        final Boolean escaped = propertyLayout.getNamedEscaped();
-        return named != null
-                ? Optional.of(new NamedFacetForPropertyXml(named, (escaped == null || escaped), holder))
-                : Optional.empty();
+
+        val nounForms = NounForms
+                .preferredSingular()
+                .singular(_Strings.emptyToNull(propertyLayout.getNamed()))
+                .build();
+
+        if(nounForms.getSupportedNounForms().isEmpty()) {
+            return Optional.empty();
+        }
+
+        final Boolean _escaped = propertyLayout.getNamedEscaped();
+        final boolean escaped = (_escaped == null || _escaped);
+
+        return Optional.of(
+                new NamedFacetForPropertyXml(
+                            nounForms,
+                            escaped,
+                            holder));
     }
 
     private NamedFacetForPropertyXml(
-            final String value,
+            final NounForms nounForms,
             final boolean escaped,
             final FacetHolder holder) {
-
-        super(value, escaped, holder);
+        super(nounForms, escaped, holder);
     }
 
 }

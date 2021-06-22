@@ -29,6 +29,17 @@ import org.apache.isis.core.metamodel.facets.all.i8n.HasTranslation;
  * In the standard Apache Isis Programming Model, corresponds to annotating the
  * member with <tt>@DescribedAs</tt>.
  */
-public interface DescribedAsFacet extends Facet, HasTranslation {
+public interface DescribedAsFacet
+extends
+    Facet,
+    HasTranslation {
+
+    default String text() {
+        return preferredText();
+    }
+
+    default String translated() {
+        return preferredTranslated();
+    }
 
 }

@@ -32,6 +32,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
@@ -40,12 +41,12 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
-import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class DomainObjectLayoutFactoryTest
@@ -291,12 +292,11 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
                 facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
-                final Facet facet = facetHolder.getFacet(NamedFacet.class);
-                assertNotNull(facet);
-                assertTrue(facet instanceof NamedFacetForDomainObjectLayoutAnnotation);
+                final NamedFacet namedFacet = facetHolder.getFacet(NamedFacet.class);
+                assertNotNull(namedFacet);
+                assertTrue(namedFacet instanceof NamedFacetForDomainObjectLayoutAnnotation);
 
-                final NamedFacetForDomainObjectLayoutAnnotation facetImpl = (NamedFacetForDomainObjectLayoutAnnotation) facet;
-                Assert.assertThat(facetImpl.text(), is("Name override"));
+                assertEquals("Name override", namedFacet.text(NounForm.SINGULAR));
 
                 expectNoMethodsRemoved();
             }
@@ -380,12 +380,10 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
                 facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
-                final Facet facet = facetHolder.getFacet(PluralFacet.class);
-                assertNotNull(facet);
-                assertTrue(facet instanceof PluralFacetForDomainObjectLayoutAnnotation);
+                final NamedFacet namedFacet = facetHolder.getFacet(NamedFacet.class);
+                assertNotNull(namedFacet);
 
-                final PluralFacetForDomainObjectLayoutAnnotation facetImpl = (PluralFacetForDomainObjectLayoutAnnotation) facet;
-                Assert.assertThat(facetImpl.text(), is("Customers Plural Form"));
+                assertEquals("Customers Plural Form", namedFacet.translated(NounForm.PLURAL));
 
                 expectNoMethodsRemoved();
             }
@@ -397,9 +395,10 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
                 facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
-                final PluralFacet facet = facetHolder.getFacet(PluralFacet.class);
-                assertNotNull(facet);
-                Assert.assertThat(facet.text(), is(""));
+                final NamedFacet namedFacet = facetHolder.getFacet(NamedFacet.class);
+                assertNull(namedFacet);
+
+                //assertEquals("", namedFacet.translated(NounForm.PLURAL));
 
                 expectNoMethodsRemoved();
             }

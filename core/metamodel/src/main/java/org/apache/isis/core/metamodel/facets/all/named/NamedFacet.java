@@ -29,7 +29,10 @@ import org.apache.isis.core.metamodel.facets.all.i8n.HasTranslation;
  * In the standard Apache Isis Programming Model, corresponds to annotating the
  * member with <tt>@Named</tt>.
  */
-public interface NamedFacet extends Facet, HasTranslation {
+public interface NamedFacet
+extends
+    Facet,
+    HasTranslation {
 
     /**
      * Flag indicating whether the label should be show as is, or should be HTML escaped.

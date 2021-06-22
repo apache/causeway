@@ -54,6 +54,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.help.HelpFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
@@ -64,7 +65,6 @@ import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFacet;
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
-import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
@@ -313,7 +313,7 @@ implements ObjectSpecification {
         }
     }
 
-    boolean isLessThan(IntrospectionState upTo) {
+    boolean isLessThan(final IntrospectionState upTo) {
         return this.introspectionState.compareTo(upTo) < 0;
     }
 
@@ -491,35 +491,34 @@ implements ObjectSpecification {
 
     // -- NAME, DESCRIPTION, PERSISTABILITY
 
-    /**
-     * The name according to any available {@link NamedFacet},
-     * but falling back to {@link #getFullIdentifier()} otherwise.
-     */
     @Override
     public String getSingularName() {
         val namedFacet = getFacet(NamedFacet.class);
-        return namedFacet != null? namedFacet.translated() : this.getFullIdentifier();
+        return namedFacet != null
+                && namedFacet.getSupportedNounForms().contains(NounForm.SINGULAR)
+                        ? namedFacet.translated(NounForm.SINGULAR)
+                        : this.getFullIdentifier();
     }
 
-    /**
-     * The pluralized name according to any available {@link PluralFacet},
-     * else <tt>null</tt>.
-     */
     @Override
     public String getPluralName() {
-        val pluralFacet = getFacet(PluralFacet.class);
-        return pluralFacet.translated();
+        val namedFacet = getFacet(NamedFacet.class);
+        return namedFacet != null
+                && namedFacet.getSupportedNounForms().contains(NounForm.PLURAL)
+                        ? namedFacet.translated(NounForm.PLURAL)
+                        : this.getFullIdentifier();
     }
 
     /**
-     * The description according to any available {@link PluralFacet},
+     * The translated description according to any available {@link DescribedAsFacet},
      * else empty string (<tt>""</tt>).
      */
     @Override
     public String getDescription() {
         val describedAsFacet = getFacet(DescribedAsFacet.class);
-        val describedAs = describedAsFacet.translated();
-        return describedAs == null ? "" : describedAs;
+        return describedAsFacet != null
+                ? _Strings.nullToEmpty(describedAsFacet.translated())
+                : "";
     }
 
     /*
@@ -569,7 +568,7 @@ implements ObjectSpecification {
         Q noopFacet;
 
         @Override
-        public boolean test(Q facet) {
+        public boolean test(final Q facet) {
             if(facet==null) {
                 return false;
             }
@@ -703,7 +702,7 @@ implements ObjectSpecification {
     }
 
     @Override
-    public Stream<ObjectAction> streamRuntimeActions(MixedIn mixedIn) {
+    public Stream<ObjectAction> streamRuntimeActions(final MixedIn mixedIn) {
         val actionTypes = getMetaModelContext().getSystemEnvironment().isPrototyping()
                 ? ActionType.USER_AND_PROTOTYPE
                 : ActionType.USER_ONLY;

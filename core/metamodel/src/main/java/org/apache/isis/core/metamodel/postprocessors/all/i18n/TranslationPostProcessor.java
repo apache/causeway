@@ -25,7 +25,6 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -78,15 +77,12 @@ extends ObjectSpecificationPostProcessorAbstract {
     private void memoizeTranslations(final FacetHolder facetHolder) {
         facetHolder
             .lookupFacet(NamedFacet.class)
-            .ifPresent(NamedFacet::translated); // memoize translation
+            .ifPresent(NamedFacet::memoizeTranslations);
 
         facetHolder
             .lookupFacet(DescribedAsFacet.class)
-            .ifPresent(DescribedAsFacet::translated); // memoize translation
+            .ifPresent(DescribedAsFacet::memoizeTranslations);
 
-        facetHolder
-            .lookupFacet(PluralFacet.class)
-            .ifPresent(PluralFacet::translated); // memoize translation
     }
 
 

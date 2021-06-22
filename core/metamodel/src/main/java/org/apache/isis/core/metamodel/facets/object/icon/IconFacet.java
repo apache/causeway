@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.object.icon;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
@@ -38,7 +37,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
  * In the standard Apache Isis Programming Model, typically corresponds to a method named {@code iconName}.
  *
  * @see TitleFacet
- * @see PluralFacet
  */
 public interface IconFacet extends Facet {
 

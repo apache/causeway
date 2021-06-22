@@ -44,7 +44,6 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
-import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -157,12 +156,6 @@ abstract class SpecificationLoaderTestAbstract {
     @Test
     public void testNamedFaced() throws Exception {
         final Facet facet = specification.getFacet(NamedFacet.class);
-        assertNotNull(facet);
-    }
-
-    @Test
-    public void testPluralFaced() throws Exception {
-        final Facet facet = specification.getFacet(PluralFacet.class);
         assertNotNull(facet);
     }
 

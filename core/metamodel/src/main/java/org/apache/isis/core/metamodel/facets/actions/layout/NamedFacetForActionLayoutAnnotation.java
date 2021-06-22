@@ -24,6 +24,7 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.all.i8n.NounForms;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 
 public class NamedFacetForActionLayoutAnnotation extends NamedFacetAbstract {
@@ -38,9 +39,9 @@ public class NamedFacetForActionLayoutAnnotation extends NamedFacetAbstract {
                 .map(named -> new NamedFacetForActionLayoutAnnotation(named, holder));
     }
 
-    private NamedFacetForActionLayoutAnnotation(final String value, final FacetHolder holder) {
+    private NamedFacetForActionLayoutAnnotation(final String singularName, final FacetHolder holder) {
 
-        super(value, /*escaped*/ true, holder);
+        super(NounForms.preferredSingular().singular(singularName).build(), /*escaped*/ true, holder);
     }
 
 }

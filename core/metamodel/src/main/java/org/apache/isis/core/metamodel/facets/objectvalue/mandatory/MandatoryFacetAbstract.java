@@ -25,6 +25,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.isis.core.metamodel.interactions.PropertyModifyContext;
@@ -104,7 +105,7 @@ implements MandatoryFacet {
         }
         final NamedFacet namedFacet = getFacetHolder().getFacet(NamedFacet.class);
         final String name = namedFacet != null
-                ? namedFacet.translated()
+                ? namedFacet.translated(NounForm.SINGULAR)
                 : null;
         return name != null
                 ? "'" + name + "' is mandatory"

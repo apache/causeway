@@ -37,6 +37,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.HasFacetHolder;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
@@ -134,8 +135,9 @@ implements ObjectActionParameter, HasFacetHolder {
     @Override
     public String getName() {
         final NamedFacet facet = getFacet(NamedFacet.class);
-        if (facet != null && facet.translated() != null) {
-            return facet.translated();
+        if (facet != null
+                && facet.translated(NounForm.SINGULAR) != null) {
+            return facet.translated(NounForm.SINGULAR);
         }
         val singularName = getSpecification().getSingularName();
         val parameters = getAction().getParameters(this::equalsShortIdentifier);
@@ -360,9 +362,9 @@ implements ObjectActionParameter, HasFacetHolder {
 
     @Override
     public Consent isValid(
-            InteractionHead head,
-            Can<ManagedObject> pendingArgs,
-            InteractionInitiatedBy interactionInitiatedBy) {
+            final InteractionHead head,
+            final Can<ManagedObject> pendingArgs,
+            final InteractionInitiatedBy interactionInitiatedBy) {
 
         val validityContext = createProposedArgumentInteractionContext(
                 head, pendingArgs, getNumber(), interactionInitiatedBy);

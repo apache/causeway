@@ -16,16 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.core.metamodel.facets.all.i8n;
 
-package org.apache.isis.core.metamodel.specloader.specimpl.standalonelist;
+public enum NounForm {
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
+    INDIFFERENT,
+    EMPTY,
+    SINGULAR,
+    PLURAL
+    ;
 
-public class NamedFacetOnStandaloneList extends NamedFacetAbstract {
+    public boolean isIndifferent() {
+        return this == INDIFFERENT;
+    }
 
-    public NamedFacetOnStandaloneList(final String value, final FacetHolder holder) {
-        super(value, /*escaped*/ true, holder);
+    public boolean isEmpty() {
+        return this == EMPTY;
+    }
+
+    public boolean isSingular() {
+        return this == SINGULAR;
+    }
+
+    public boolean isPlural() {
+        return this == PLURAL;
     }
 
 }

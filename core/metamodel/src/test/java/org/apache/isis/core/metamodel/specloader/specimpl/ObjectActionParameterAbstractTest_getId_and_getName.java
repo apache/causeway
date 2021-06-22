@@ -38,6 +38,7 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
+import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -91,8 +92,8 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
         }
 
         @Override
-        public Consent isValid(InteractionHead head, Can<ManagedObject> pendingArgs,
-                InteractionInitiatedBy interactionInitiatedBy) {
+        public Consent isValid(final InteractionHead head, final Can<ManagedObject> pendingArgs,
+                final InteractionInitiatedBy interactionInitiatedBy) {
             return null;
         }
 
@@ -136,7 +137,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
                 oneOf(actionParamPeer).getFacet(NamedFacet.class);
                 will(returnValue(namedFacet));
 
-                atLeast(1).of(namedFacet).translated();
+                atLeast(1).of(namedFacet).translated(NounForm.SINGULAR);
                 will(returnValue("Some parameter name"));
             }
         });
@@ -154,7 +155,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
                 oneOf(actionParamPeer).getFacet(NamedFacet.class);
                 will(returnValue(namedFacet));
 
-                atLeast(1).of(namedFacet).translated();
+                atLeast(1).of(namedFacet).translated(NounForm.SINGULAR);
                 will(returnValue("Some parameter name"));
             }
         });

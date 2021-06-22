@@ -40,10 +40,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetForMemberName;
-import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
-import org.apache.isis.core.metamodel.facets.object.plural.inferred.PluralFacetInferred;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.object.wizard.WizardFacet;
@@ -119,7 +118,7 @@ implements FacetHolder {
         facetedMethodsBuilder.introspectClass();
 
         // name
-        addNamedFacetAndPluralFacetIfRequired();
+        addNamedFacetIfRequired(NounForm.SINGULAR);
 
         // go no further if a value
         if(this.containsFacet(ValueFacet.class)) {
@@ -178,22 +177,15 @@ implements FacetHolder {
         postProcess();
     }
 
-    private void addNamedFacetAndPluralFacetIfRequired() {
-        NamedFacet namedFacet = getFacet(NamedFacet.class);
-        if (namedFacet == null) {
-            namedFacet = new NamedFacetForMemberName(
+    private void addNamedFacetIfRequired(final NounForm nounForm) {
+        if (getFacet(NamedFacet.class) == null) {
+
+            addFacet(new NamedFacetForMemberName(
+                    nounForm,
                     StringExtensions.asNaturalName2(getShortIdentifier()),
-                    this);
-            addFacet(namedFacet);
+                    this));
         }
 
-        PluralFacet pluralFacet = getFacet(PluralFacet.class);
-        if (pluralFacet == null) {
-            pluralFacet = new PluralFacetInferred(
-                    StringExtensions.asPluralName(namedFacet.text()),
-                    this);
-            addFacet(pluralFacet);
-        }
     }
 
 
@@ -244,7 +236,7 @@ implements FacetHolder {
     // -- PREDICATES
 
     @Override
-    public boolean isViewModelCloneable(ManagedObject targetAdapter) {
+    public boolean isViewModelCloneable(final ManagedObject targetAdapter) {
         final ViewModelFacet facet = getFacet(ViewModelFacet.class);
         if(facet == null) {
             return false;
@@ -303,7 +295,7 @@ implements FacetHolder {
         return membersByMethod;
     }
 
-    private void cataloguePropertiesAndCollections(BiConsumer<Method, ObjectMember> onMember) {
+    private void cataloguePropertiesAndCollections(final BiConsumer<Method, ObjectMember> onMember) {
         streamDeclaredAssociations(MixedIn.EXCLUDED)
         .forEach(field->
             field.streamFacets(ImperativeFacet.class)
@@ -312,7 +304,7 @@ implements FacetHolder {
                 .forEach(imperativeFacetMethod->onMember.accept(imperativeFacetMethod, field)));
     }
 
-    private void catalogueActions(BiConsumer<Method, ObjectMember> onMember) {
+    private void catalogueActions(final BiConsumer<Method, ObjectMember> onMember) {
         streamDeclaredActions(MixedIn.INCLUDED)
         .forEach(userAction->
             userAction.streamFacets(ImperativeFacet.class)

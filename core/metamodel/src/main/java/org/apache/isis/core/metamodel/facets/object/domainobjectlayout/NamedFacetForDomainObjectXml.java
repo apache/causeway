@@ -24,8 +24,12 @@ import java.util.Optional;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
+import org.apache.isis.core.metamodel.facets.all.i8n.NounForms;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
+
+import lombok.val;
 
 public class NamedFacetForDomainObjectXml
 extends NamedFacetAbstract {
@@ -33,21 +37,40 @@ extends NamedFacetAbstract {
     public static Optional<NamedFacet> create(
             final DomainObjectLayoutData domainObjectLayout,
             final FacetHolder holder) {
+
         if(domainObjectLayout == null) {
             return Optional.empty();
         }
-        final String named = _Strings.emptyToNull(domainObjectLayout.getNamed());
-        Boolean escaped = domainObjectLayout.getNamedEscaped();
-        return named != null
-                ? Optional.of(new NamedFacetForDomainObjectXml(named, (escaped == null || escaped), holder))
-                : Optional.empty();
+
+        val singular = _Strings.emptyToNull(domainObjectLayout.getNamed());
+        val plural = _Strings.emptyToNull(domainObjectLayout.getPlural());
+
+        val nounForms = NounForms
+                .builder()
+                .preferredNounForm(singular!=null ? NounForm.SINGULAR : NounForm.PLURAL)
+                .singular(singular)
+                .plural(plural)
+                .build();
+
+        if(nounForms.getSupportedNounForms().isEmpty()) {
+            return Optional.empty();
+        }
+
+        final Boolean _escaped = domainObjectLayout.getNamedEscaped();
+        final boolean escaped = (_escaped == null || _escaped);
+
+        return Optional.of(
+                new NamedFacetForDomainObjectXml(
+                            nounForms,
+                            escaped,
+                            holder));
     }
 
     private NamedFacetForDomainObjectXml(
-            final String value,
+            final NounForms nounForms,
             final boolean escaped,
             final FacetHolder holder) {
-        super(value, escaped, holder);
+        super(nounForms, escaped, holder);
     }
 
 }

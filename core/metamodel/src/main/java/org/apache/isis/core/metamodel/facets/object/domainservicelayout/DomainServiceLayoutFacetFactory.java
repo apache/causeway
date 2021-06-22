@@ -18,13 +18,10 @@
  */
 package org.apache.isis.core.metamodel.facets.object.domainservicelayout;
 
-import java.util.Objects;
-
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -64,15 +61,9 @@ extends FacetFactoryAbstract {
         addFacet(
                 new DomainServiceLayoutFacetAnnotation(facetHolder, menuBar));
 
-        val named = domainServiceLayoutIfAny
-                .map(DomainServiceLayout::named)
-                .map(_Strings::emptyToNull)
-                .filter(Objects::nonNull)
-                .orElse(null);
-
         addFacetIfPresent(
                 NamedFacetForDomainServiceLayoutAnnotation
-                .create(named, facetHolder));
+                .create(domainServiceLayoutIfAny, facetHolder));
     }
 
 }

@@ -24,6 +24,7 @@ import java.util.function.BiConsumer;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.i8n.I8nFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.i8n.NounForms;
 
 import lombok.NonNull;
 import lombok.val;
@@ -38,12 +39,19 @@ implements NamedFacet {
 
     private final boolean escaped;
 
-    protected NamedFacetAbstract(String originalText, boolean escaped, FacetHolder holder) {
-        this(originalText, escaped, holder, Precedence.DEFAULT);
+    protected NamedFacetAbstract(
+            final NounForms namedNounForms,
+            final boolean escaped,
+            final FacetHolder holder) {
+        this(namedNounForms, escaped, holder, Precedence.DEFAULT);
     }
 
-    protected NamedFacetAbstract(String originalText, boolean escaped, FacetHolder holder, final Facet.Precedence precedence) {
-        super(type(), originalText, holder, precedence);
+    protected NamedFacetAbstract(
+            final NounForms namedNounForms,
+            final boolean escaped,
+            final FacetHolder holder,
+            final Facet.Precedence precedence) {
+        super(type(), namedNounForms, holder, precedence);
         this.escaped = escaped;
     }
 
@@ -64,7 +72,7 @@ implements NamedFacet {
             return false;
         }
 
-        val otherNamedFacet =  (NamedFacetAbstract)other;
+        val otherNamedFacet = (NamedFacetAbstract)other;
 
         return this.escaped() == otherNamedFacet.escaped()
                 && super.semanticEquals(otherNamedFacet);

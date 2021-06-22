@@ -42,7 +42,6 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
 import org.apache.isis.core.metamodel.facets.actions.action.associateWith.ChoicesFromFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
@@ -257,7 +256,7 @@ public interface ObjectAction extends ObjectMember {
             final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy);
 
-    default String getCssClass(String prefix) {
+    default String getCssClass(final String prefix) {
         final String ownerId = getOnType().getLogicalTypeName().replace(".", "-");
         return prefix + ownerId + "-" + getId();
     }
@@ -273,19 +272,7 @@ public interface ObjectAction extends ObjectMember {
 
     public static final class Util {
 
-        public static String nameFor(final ObjectAction objAction) {
-            final String actionName = objAction.getName();
-            if (actionName != null) {
-                return actionName;
-            }
-            final NamedFacet namedFacet = objAction.getFacet(NamedFacet.class);
-            if (namedFacet != null) {
-                return namedFacet.translated();
-            }
-            return "(no name)";
-        }
-
-        public static SemanticsOf semanticsOf(final ObjectAction objectAction) {
+        private static SemanticsOf semanticsOf(final ObjectAction objectAction) {
             return objectAction.getSemantics();
         }
 
@@ -293,12 +280,12 @@ public interface ObjectAction extends ObjectMember {
             return semanticsOf(objectAction).isAreYouSure();
         }
 
-        public static boolean isIdempotentOrCachable(ObjectAction objectAction) {
+        public static boolean isIdempotentOrCachable(final ObjectAction objectAction) {
             final SemanticsOf semantics = semanticsOf(objectAction);
             return semantics.isIdempotentInNature() || semantics.isSafeAndRequestCacheable();
         }
 
-        public static boolean isNoParameters(ObjectAction objectAction) {
+        public static boolean isNoParameters(final ObjectAction objectAction) {
             return objectAction.getParameterCount()==0;
         }
 
@@ -322,11 +309,11 @@ public interface ObjectAction extends ObjectMember {
             return className + "-" + actionId;
         }
 
-        public static String descriptionOf(ObjectAction action) {
+        public static String descriptionOf(final ObjectAction action) {
             return action.getDescription();
         }
 
-        public static ActionLayout.Position actionLayoutPositionOf(ObjectAction action) {
+        public static ActionLayout.Position actionLayoutPositionOf(final ObjectAction action) {
             final ActionPositionFacet layoutFacet = action.getFacet(ActionPositionFacet.class);
             return layoutFacet != null ? layoutFacet.position() : ActionLayout.Position.BELOW;
         }
@@ -406,7 +393,7 @@ public interface ObjectAction extends ObjectMember {
     public static final class Predicates {
 
         public static Predicate<ObjectAction> ofActionType(final ActionType type) {
-            return (ObjectAction oa) -> oa.getType() == type;
+            return (final ObjectAction oa) -> oa.getType() == type;
         }
 
         public static Predicate<ObjectAction> isSameLayoutGroupAs(
@@ -414,7 +401,7 @@ public interface ObjectAction extends ObjectMember {
 
             final String assocIdLower = association.getId();
 
-            return (ObjectAction objectAction) -> {
+            return (final ObjectAction objectAction) -> {
 
                 val layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
                 if (layoutGroupFacet == null) {
@@ -435,7 +422,7 @@ public interface ObjectAction extends ObjectMember {
                     .map(ObjectAssociation::getId)
                     .collect(Collectors.toCollection(HashSet::new));
 
-            return (ObjectAction objectAction) -> {
+            return (final ObjectAction objectAction) -> {
 
                 val layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
                 if (layoutGroupFacet == null) {
@@ -507,7 +494,7 @@ public interface ObjectAction extends ObjectMember {
                 final InteractionInitiatedBy interactionInitiatedBy,
                 final Where where) {
 
-            return (ObjectAction objectAction) -> {
+            return (final ObjectAction objectAction) -> {
                 final Consent visible = objectAction.isVisible(target, interactionInitiatedBy, where);
                 return visible.isAllowed();
             };
@@ -518,7 +505,7 @@ public interface ObjectAction extends ObjectMember {
         }
 
         private static Predicate<ObjectAction> isWizard(final ObjectSpecification objectSpecification) {
-            return (ObjectAction input) -> {
+            return (final ObjectAction input) -> {
                 if (objectSpecification == null) {
                     return false;
                 }

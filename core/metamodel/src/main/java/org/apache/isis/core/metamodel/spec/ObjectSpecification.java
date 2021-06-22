@@ -46,6 +46,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.help.HelpFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
@@ -55,7 +56,6 @@ import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
-import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
@@ -167,7 +167,7 @@ extends
      * Returns the (singular) name for objects of this specification.
      *
      * <p>
-     * Corresponds to the {@link NamedFacet#value()} of {@link NamedFacet}; is
+     * Corresponds to the {@link NamedFacet#translated(NounForm)} of {@link NamedFacet}; is
      * not necessarily immutable.
      */
     String getSingularName();
@@ -185,7 +185,7 @@ extends
      * Returns the description, if any, of the specification.
      *
      * <p>
-     * Corresponds to the {@link DescribedAsFacet#value() value} of
+     * Corresponds to the {@link DescribedAsFacet#translated() value} of
      * {@link DescribedAsFacet}; is not necessarily immutable.
      */
     @Override

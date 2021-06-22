@@ -37,11 +37,14 @@ import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel._testing.TranslationService_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.all.i8n.NounForms;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 import org.apache.isis.core.metamodel.id.TypeIdentifierTestFactory;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionDefault;
+
+import lombok.val;
 
 public class ObjectActionLayoutXmlDefaultTest {
 
@@ -81,8 +84,13 @@ public class ObjectActionLayoutXmlDefaultTest {
     @Test
     public void testNameDefaultsToActionsMethodName() {
         final String name = "Reduceheadcount";
-        final NamedFacet facet = new NamedFacetAbstract(name, true, mockFacetedMethod) {
-        };
+
+        val nounForms = NounForms.preferredSingular()
+        .singular(name)
+        .build();
+
+        final NamedFacet facet =
+                new NamedFacetAbstract(nounForms, true, mockFacetedMethod) {};
         context.checking(new Expectations() {
             {
                 oneOf(mockFacetedMethod).getFacet(NamedFacet.class);

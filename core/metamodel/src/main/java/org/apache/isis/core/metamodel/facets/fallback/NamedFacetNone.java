@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.fallback;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.all.i8n.NounForms;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 
 /**
@@ -28,12 +29,13 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
  * <p>
  * TODO: should this instead be the empty string?
  */
-public class NamedFacetNone extends NamedFacetAbstract {
+public class NamedFacetNone
+extends NamedFacetAbstract {
 
     public static final boolean ESCAPED = true;
 
     public NamedFacetNone(final FacetHolder holder) {
-        super(null, ESCAPED, holder, Precedence.FALLBACK);
+        super(NounForms.preferredSingular().build(), ESCAPED, holder, Precedence.FALLBACK);
     }
 
 }

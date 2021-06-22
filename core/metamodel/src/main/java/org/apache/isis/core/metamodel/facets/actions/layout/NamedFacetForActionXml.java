@@ -24,6 +24,7 @@ import java.util.Optional;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.all.i8n.NounForms;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 
@@ -43,9 +44,9 @@ extends NamedFacetAbstract {
                 : Optional.empty();
     }
 
-    private NamedFacetForActionXml(final String value, final boolean escaped, final FacetHolder holder) {
+    private NamedFacetForActionXml(final String singularName, final boolean escaped, final FacetHolder holder) {
 
-        super(value, escaped, holder);
+        super(NounForms.preferredSingular().singular(singularName).build(), escaped, holder);
     }
 
 }

@@ -18,23 +18,51 @@
  */
 package org.apache.isis.core.metamodel.facets.object.domainservicelayout;
 
+import java.util.Objects;
 import java.util.Optional;
 
+import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.all.i8n.NounForms;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
+
+import lombok.val;
 
 public class NamedFacetForDomainServiceLayoutAnnotation
 extends NamedFacetAbstract {
 
     public static Optional<NamedFacet> create(
-            final String named,
-            final FacetHolder holder) {
-        return Optional.ofNullable(named)
-                .map(name->new NamedFacetForDomainServiceLayoutAnnotation(name, holder));
+            final Optional<DomainServiceLayout> domainServiceLayoutIfAny,
+            final FacetHolder facetHolder) {
+
+        val serviceNamed = domainServiceLayoutIfAny
+                .map(DomainServiceLayout::named)
+                .map(_Strings::emptyToNull)
+                .filter(Objects::nonNull)
+                .orElse(null);
+
+        if(_Strings.isEmpty(serviceNamed)) {
+            return Optional.empty();
+        }
+
+        val nounForms = NounForms
+                .preferredSingular()
+                .singular(serviceNamed)
+                .build();
+
+        return Optional.of(
+                new NamedFacetForDomainServiceLayoutAnnotation(
+                            nounForms,
+                            facetHolder));
     }
 
-    private NamedFacetForDomainServiceLayoutAnnotation(final String value, final FacetHolder holder) {
-        super(value, /*escaped*/ true, holder);
+    private NamedFacetForDomainServiceLayoutAnnotation(
+            final NounForms nounForms,
+            final FacetHolder holder) {
+        super(nounForms, /*escaped*/ true, holder);
     }
+
+
 }

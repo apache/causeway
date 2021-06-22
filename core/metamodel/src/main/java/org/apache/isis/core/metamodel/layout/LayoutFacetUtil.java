@@ -42,6 +42,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
@@ -49,7 +50,6 @@ import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
-import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacet;
@@ -183,9 +183,10 @@ public class LayoutFacetUtil {
             final HasNamed hasNamed,
             final FacetHolder facetHolder) {
 
-        val namedFacet = facetHolder.getFacet(NamedFacet.class);
-        if(isDoOp(namedFacet)) {
-            final String named = namedFacet.translated();
+        facetHolder.lookupNonFallbackFacet(NamedFacet.class)
+        .filter(namedFacet->namedFacet.getSupportedNounForms().contains(NounForm.SINGULAR))
+        .ifPresent(namedFacet->{
+            final String named = namedFacet.translated(NounForm.SINGULAR);
             if(!_Strings.isNullOrEmpty(named)){
                 hasNamed.setNamed(named);
             }
@@ -193,7 +194,7 @@ public class LayoutFacetUtil {
             if(!escaped) {
                 hasNamed.setNamedEscaped(escaped);
             }
-        }
+        });
     }
 
     public void setPagedIfAny(
@@ -213,15 +214,15 @@ public class LayoutFacetUtil {
             final DomainObjectLayoutData domainObjectLayoutData,
             final FacetHolder facetHolder) {
 
-        val pluralFacet = facetHolder.getFacet(PluralFacet.class);
-        if(isDoOp(pluralFacet)) {
-            final String plural = pluralFacet.translated();
+        facetHolder.lookupNonFallbackFacet(NamedFacet.class)
+        .filter(namedFacet->namedFacet.getSupportedNounForms().contains(NounForm.PLURAL))
+        .ifPresent(namedFacet->{
+            val plural = namedFacet.translated(NounForm.PLURAL);
             if(!_Strings.isNullOrEmpty(plural)) {
                 domainObjectLayoutData.setPlural(plural);
             }
-        }
+        });
     }
-
 
     public void setActionPositionIfAny(
             final ActionLayoutData actionLayoutData,

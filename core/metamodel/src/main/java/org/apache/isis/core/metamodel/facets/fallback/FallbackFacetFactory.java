@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
+import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
 
 import lombok.val;
 
@@ -85,7 +86,7 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
 
         final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
 
-        addFacet(new NamedFacetFallbackFromMemberName(facetedMethod));
+        addFacet(new NamedFacetFallbackFromMemberName(NounForm.SINGULAR, facetedMethod));
         addFacet(new DescribedAsFacetNone(facetedMethod));
         addFacet(new HelpFacetNone(facetedMethod));
 

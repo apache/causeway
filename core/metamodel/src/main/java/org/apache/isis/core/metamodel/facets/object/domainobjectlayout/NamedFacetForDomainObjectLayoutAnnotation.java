@@ -24,22 +24,51 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
+import org.apache.isis.core.metamodel.facets.all.i8n.NounForms;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 
+import lombok.val;
 
-public class NamedFacetForDomainObjectLayoutAnnotation extends NamedFacetAbstract {
+
+public class NamedFacetForDomainObjectLayoutAnnotation
+extends NamedFacetAbstract {
 
     public static Optional<NamedFacetForDomainObjectLayoutAnnotation> create(
             final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final FacetHolder holder) {
 
-        return domainObjectLayoutIfAny
-                .map(DomainObjectLayout::named)
-                .filter(_Strings::isNotEmpty)
-                .map(named -> new NamedFacetForDomainObjectLayoutAnnotation(named, holder));
+        if(!domainObjectLayoutIfAny.isPresent()) {
+            return Optional.empty();
+        }
+
+        val domainObjectLayout = domainObjectLayoutIfAny.get();
+
+        val singular = _Strings.emptyToNull(domainObjectLayout.named());
+        val plural = _Strings.emptyToNull(domainObjectLayout.plural());
+
+        val nounForms = NounForms
+                .builder()
+                .preferredNounForm(singular!=null ? NounForm.SINGULAR : NounForm.PLURAL)
+                .singular(singular)
+                .plural(plural)
+                .build();
+
+        if(nounForms.getSupportedNounForms().isEmpty()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(
+                new NamedFacetForDomainObjectLayoutAnnotation(
+                            nounForms,
+                            holder));
+
     }
 
-    private NamedFacetForDomainObjectLayoutAnnotation(final String value, final FacetHolder holder) {
-        super(value, /*escaped*/ true, holder);
+    private NamedFacetForDomainObjectLayoutAnnotation(
+            final NounForms nounForms,
+            final FacetHolder holder) {
+        super(nounForms, /*escaped*/ true, holder);
     }
+
 }

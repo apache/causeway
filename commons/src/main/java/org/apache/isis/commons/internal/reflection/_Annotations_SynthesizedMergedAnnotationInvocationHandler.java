@@ -24,7 +24,6 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Arrays;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 
 import org.springframework.core.annotation.AnnotationConfigurationException;
@@ -66,8 +65,8 @@ implements InvocationHandler {
 
 
     private _Annotations_SynthesizedMergedAnnotationInvocationHandler(
-            MergedAnnotations mergedAnnotations,
-            Class<A> type) {
+            final MergedAnnotations mergedAnnotations,
+            final Class<A> type) {
 
         Assert.notNull(mergedAnnotations, "MergedAnnotations must not be null");
         Assert.notNull(type, "Type must not be null");
@@ -83,7 +82,7 @@ implements InvocationHandler {
 
 
     @Override
-    public Object invoke(Object proxy, Method method, Object[] args) {
+    public Object invoke(final Object proxy, final Method method, final Object[] args) {
         if (ReflectionUtils.isEqualsMethod(method)) {
             return annotationEquals(args[0]);
         }
@@ -103,7 +102,7 @@ implements InvocationHandler {
                 "Method [%s] is unsupported for synthesized annotation type [%s]", method, this.type));
     }
 
-    private boolean isAnnotationTypeMethod(Method method) {
+    private boolean isAnnotationTypeMethod(final Method method) {
         return (Objects.equals(method.getName(), "annotationType") && method.getParameterCount() == 0);
     }
 
@@ -111,7 +110,7 @@ implements InvocationHandler {
      * See {@link Annotation#equals(Object)} for a definition of the required algorithm.
      * @param other the other object to compare against
      */
-    private boolean annotationEquals(Object other) {
+    private boolean annotationEquals(final Object other) {
         if (this == other) {
             return true;
         }
@@ -151,7 +150,7 @@ implements InvocationHandler {
         return hashCode;
     }
 
-    private int getValueHashCode(Object value) {
+    private int getValueHashCode(final Object value) {
         // Use Arrays.hashCode since ObjectUtils doesn't comply to to
         // Annotation#hashCode()
         if (value instanceof boolean[]) {
@@ -184,7 +183,8 @@ implements InvocationHandler {
         return value.hashCode();
     }
 
-    private Object getAttributeValue(Method method) {
+    @Nullable
+    private Object getAttributeValue(final Method method) {
         String name = method.getName();
         Class<?> type = ClassUtils.resolvePrimitiveIfNecessary(method.getReturnType());
 
@@ -198,20 +198,13 @@ implements InvocationHandler {
         .findFirst()
         .orElse(defaultValue);
 
-        if(attributeValue==null) {
-            throw new NoSuchElementException("No value found for attribute named '" + name +
-                    "' in merged annotation " + this.type.getName());
-        }
-
         return attributeValue;
-
-
     }
 
     @SuppressWarnings("unchecked")
     static <A extends Annotation> A createProxy(
-            MergedAnnotations mergedAnnotations,
-            Class<A> type) {
+            final MergedAnnotations mergedAnnotations,
+            final Class<A> type) {
 
         ClassLoader classLoader = type.getClassLoader();
         InvocationHandler handler =
@@ -221,7 +214,7 @@ implements InvocationHandler {
         return (A) Proxy.newProxyInstance(classLoader, interfaces, handler);
     }
 
-    private static boolean isVisible(ClassLoader classLoader, Class<?> interfaceClass) {
+    private static boolean isVisible(final ClassLoader classLoader, final Class<?> interfaceClass) {
         try {
             return Class.forName(interfaceClass.getName(), false, classLoader) == interfaceClass;
         }

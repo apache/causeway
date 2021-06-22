@@ -24,6 +24,7 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.all.i8n.NounForms;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 
 public class NamedFacetForCollectionLayoutAnnotation extends NamedFacetAbstract {
@@ -40,11 +41,11 @@ public class NamedFacetForCollectionLayoutAnnotation extends NamedFacetAbstract 
     }
 
     private NamedFacetForCollectionLayoutAnnotation(
-            final String value,
+            final String pluralName,
             final boolean escaped,
             final FacetHolder holder) {
 
-        super(value, escaped, holder);
+        super(NounForms.preferredPlural().plural(pluralName).build(), escaped, holder);
     }
 
 }

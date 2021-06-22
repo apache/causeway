@@ -18,8 +18,21 @@
  */
 package org.apache.isis.core.runtimeservices.menubars.bootstrap3;
 
-import lombok.extern.log4j.Log4j2;
-import lombok.val;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.annotation.Priority;
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
@@ -40,6 +53,7 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
+import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
@@ -50,19 +64,9 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isis.runtimeservices.MenuBarsServiceBS3")
@@ -107,7 +111,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
 
     // -- HELPER
 
-    private BS3MenuBars loadOrElse(BS3MenuBars fallbackMenuBars) {
+    private BS3MenuBars loadOrElse(final BS3MenuBars fallbackMenuBars) {
 
         val menuBars = Optional.ofNullable(menuBarsLoaderService.menuBars())
                 .map(this::addTnsAndSchemaLocation)
@@ -149,20 +153,20 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
         return menuBars;
     }
 
-    private BS3MenuBars addTnsAndSchemaLocation(BS3MenuBars menuBars) {
+    private BS3MenuBars addTnsAndSchemaLocation(final BS3MenuBars menuBars) {
         menuBars.setTnsAndSchemaLocation(tnsAndSchemaLocation());
         return menuBars;
     }
 
-    private static BS3MenuSection addSectionToMenu(BS3Menu menu) {
+    private static BS3MenuSection addSectionToMenu(final BS3Menu menu) {
         val section = new BS3MenuSection();
         menu.getSections().add(section);
         return section;
     }
 
     private static void bindActionToSection(
-            ServiceActionLayoutData serviceAction,
-            BS3MenuSection section) {
+            final ServiceActionLayoutData serviceAction,
+            final BS3MenuSection section) {
 
         // detach from fallback, attach to this section
         serviceAction.setOwner(section);
@@ -218,7 +222,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
         return menuBars;
     }
 
-    private boolean isVisibleAdapterForMenu(ManagedObject objectAdapter) {
+    private boolean isVisibleAdapterForMenu(final ManagedObject objectAdapter) {
         val spec = objectAdapter.getSpecification();
         if (spec.isHidden()) {
             // however, this isn't the same as HiddenObjectFacet, so doesn't filter out
@@ -304,7 +308,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
         // first, order as defined in isis.properties
         for (ManagedObject serviceAdapter : serviceAdapters) {
             final ObjectSpecification serviceSpec = serviceAdapter.getSpecification();
-            String serviceName = serviceSpec.getFacet(NamedFacet.class).translated();
+            String serviceName = serviceSpec.getFacet(NamedFacet.class).translated(NounForm.SINGULAR);
             serviceNameOrder.add(serviceName);
         }
         // then, any other services (eg due to misspellings, at the end)
@@ -370,9 +374,11 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
                 .filter(objectAction->objectAction.getFacet(NotInServiceMenuFacet.class) == null)
                 .map(objectAction->{
                     val layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
-                    String serviceName = layoutGroupFacet != null ? layoutGroupFacet.getGroupId(): null;
+                    String serviceName = layoutGroupFacet != null
+                            ? layoutGroupFacet.getGroupId()
+                            : null;
                     if(_Strings.isNullOrEmpty(serviceName)){
-                        serviceName = serviceSpec.getFacet(NamedFacet.class).translated();
+                        serviceName = serviceSpec.getFacet(NamedFacet.class).translated(NounForm.SINGULAR);
                     }
                     return new ServiceAndAction(serviceName, serviceAdapter, objectAction);
                 });
@@ -380,7 +386,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
     }
 
     private static Predicate<ManagedObject> with(final DomainServiceLayout.MenuBar menuBar) {
-        return (ManagedObject input) -> {
+        return (final ManagedObject input) -> {
             final DomainServiceLayoutFacet facet =
                     input.getSpecification().getFacet(DomainServiceLayoutFacet.class);
             return facet != null && facet.getMenuBar() == menuBar;

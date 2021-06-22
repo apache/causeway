@@ -27,6 +27,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetForMemberName;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
@@ -95,7 +96,7 @@ implements MixedInMember {
 
         if(!isExplicitlyNamed) {
             val memberName = determineNameFrom(mixinAction);
-            this.addFacet(new NamedFacetForMemberName(memberName, facetHolder));
+            this.addFacet(new NamedFacetForMemberName(NounForm.SINGULAR, memberName, facetHolder));
         }
     }
 
@@ -127,7 +128,7 @@ implements MixedInMember {
     }
 
     @Override
-    public ActionInteractionHead interactionHead(@NonNull ManagedObject actionOwner) {
+    public ActionInteractionHead interactionHead(@NonNull final ManagedObject actionOwner) {
         return ActionInteractionHead.of(this, actionOwner, mixinAdapterFor(actionOwner));
     }
 

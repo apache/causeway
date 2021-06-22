@@ -32,10 +32,12 @@ import static org.hamcrest.Matchers.is;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.id.TypeIdentifierTestFactory;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -131,8 +133,12 @@ public class OneToManyAssociationDefaultTest {
                 oneOf(mockPeer).getFacet(NamedFacet.class);
                 will(returnValue(mockNamedFacet));
 
-                oneOf(mockNamedFacet).translated();
+                allowing(mockNamedFacet).preferredTranslated();
                 will(returnValue("My name"));
+
+                allowing(mockNamedFacet).getSupportedNounForms();
+                will(returnValue(ImmutableEnumSet.of(NounForm.SINGULAR)));
+
             }
         });
     }

@@ -27,6 +27,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetForMemberName;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
@@ -123,7 +124,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
 
         if(!isExplicitlyNamed) {
             String memberName = determineNameFrom(mixinAction);
-            FacetUtil.addFacet(new NamedFacetForMemberName(memberName, facetHolder));
+            FacetUtil.addFacet(new NamedFacetForMemberName(NounForm.PLURAL, memberName, facetHolder));
         }
 
     }
