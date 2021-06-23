@@ -67,7 +67,7 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
         if (collectionMap.isEmpty()) return true
         return collectionMap.all {
             val cdm = it.value.dpm as CollectionDM
-            cdm.parentedCollectionCanBeDisplayed()
+            cdm.canBeDisplayed()
         }
     }
 

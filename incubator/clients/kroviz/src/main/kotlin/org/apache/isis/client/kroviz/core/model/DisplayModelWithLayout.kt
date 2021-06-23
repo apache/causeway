@@ -47,18 +47,18 @@ abstract class DisplayModelWithLayout : DisplayModel() {
         }
     }
 
-    fun addLayout(layout:Layout) {
+    fun addLayout(layout: Layout) {
         this.layout = layout
         initPropertyLayoutList(layout)
     }
 
-    private fun initPropertyLayoutList(layout:Layout) {
+    private fun initPropertyLayoutList(layout: Layout) {
         layout.row.forEach { r ->
             initLayout4Row(r)
         }
     }
 
-    private fun initLayout4Row(r:RowLt) {
+    private fun initLayout4Row(r: RowLt) {
         r.cols.forEach { cs ->
             val c = cs.getCol()
             c.fieldSet.forEach { fs ->
@@ -74,18 +74,14 @@ abstract class DisplayModelWithLayout : DisplayModel() {
         }
     }
 
-   fun addPropertyDescription(p:Property) {
+    fun addPropertyDescription(p: Property) {
         val id = p.id
-        val e:Extensions = p.extensions!!
+        val e: Extensions = p.extensions!!
         val friendlyName = e.friendlyName
-        addPropertyDescription(id, friendlyName)
+        propertyDescriptionList.put(id, friendlyName)
     }
 
-    fun addPropertyDescription(key: String, value: String) {
-        propertyDescriptionList.put(key, value)
-    }
-
-    fun addProperty(property:Property) {
+    fun addProperty(property: Property) {
         propertyList.add(property)
     }
 

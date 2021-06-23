@@ -63,6 +63,10 @@ abstract class BaseAggregator {
         return links.firstOrNull { it.isLayout() }
     }
 
+    fun TObject.getIconLink(): Link? {
+        return links.firstOrNull { it.isIcon() }
+    }
+
     override fun toString(): String {
         return "[${this::class} \n" +
                 "TObject: ${this.getObject()} ]\n"
@@ -72,7 +76,11 @@ abstract class BaseAggregator {
         return href.isNotEmpty() && href.contains("layout")
     }
 
-    protected fun invoke(link:Link, aggregator: BaseAggregator, subType :String = Constants.subTypeJson) {
+    private fun Link.isIcon(): Boolean {
+        return href.isNotEmpty() && href.endsWith("object-icon")
+    }
+
+    protected fun invoke(link: Link, aggregator: BaseAggregator, subType: String = Constants.subTypeJson) {
         RoXmlHttpRequest().invoke(link, aggregator, subType)
     }
 

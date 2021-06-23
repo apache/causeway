@@ -31,4 +31,9 @@ abstract class AggregatorWithLayout : BaseAggregator() {
         }
     }
 
+    protected fun invokeIconLink(obj: TObject, aggregator: AggregatorWithLayout) {
+        val l = obj.getIconLink()!!
+        invoke(l, aggregator)
+    }
+
 }

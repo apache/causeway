@@ -61,6 +61,12 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
                     headerFilter = Editor.INPUT,
                     width = "20"),
             ColumnDefinition("req.len", field = "requestLength", width = "100", hozAlign = Align.RIGHT, download = false),
+            ColumnDefinition(
+                    download = false,
+                    title = "response",
+                    field = "response",
+                    headerFilter = Editor.INPUT,
+                    width = "200"),
             ColumnDefinition("resp.len", field = "responseLength", width = "100", hozAlign = Align.RIGHT, download = false),
             ColumnDefinition("cacheHits", field = "cacheHits", width = "100", hozAlign = Align.RIGHT, download = false),
             ColumnDefinition("duration", field = "duration", width = "100", hozAlign = Align.RIGHT, download = false),

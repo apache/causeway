@@ -54,6 +54,7 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
                 is Grid -> handleGrid(obj)
                 is Property -> handleProperty(obj)
                 is Collection -> handleCollection(obj)
+                is Icon -> handleIcon(obj)
                 else -> log(logEntry)
             }
 
@@ -78,9 +79,15 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
     }
 
     private fun handleObject(obj: TObject) {
+        console.log("[CA.handleObject]")
+        console.log(obj)
         dpm.addData(obj)
         invokeLayoutLink(obj, this)
-//TODO        invokeIconLink(obj)
+//        invokeIconLink(obj, this)
+    }
+
+    private fun handleIcon(obj: TransferObject?) {
+        (dpm as CollectionDM).addIcon(obj)
     }
 
     private fun handleDomainType(obj: DomainType) {
