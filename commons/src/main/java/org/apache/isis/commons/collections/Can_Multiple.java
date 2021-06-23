@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -88,7 +89,7 @@ final class Can_Multiple<T> implements Can<T> {
     }
 
     @Override
-    public boolean contains(T element) {
+    public boolean contains(final T element) {
         if(element==null) {
             return false; // an optimization: Can's dont't contain null
         }
@@ -96,7 +97,7 @@ final class Can_Multiple<T> implements Can<T> {
     }
 
     @Override
-    public Optional<T> get(int elementIndex) {
+    public Optional<T> get(final int elementIndex) {
         // we do an index out of bounds check ourselves, in order to prevent any stack-traces,
         // that pollute the heap
         val size = size();
@@ -109,6 +110,13 @@ final class Can_Multiple<T> implements Can<T> {
             return Optional.empty();
         }
         return Optional.of(elements.get(elementIndex));
+    }
+
+    @Override
+    public Can<T> unique() {
+        val set = new LinkedHashSet<T>(); // preserve order
+        set.addAll(elements);
+        return Can.ofCollection(set);
     }
 
     @Override
@@ -161,7 +169,7 @@ final class Can_Multiple<T> implements Can<T> {
 
 
     @Override
-    public <R> void zip(@NonNull Iterable<R> zippedIn, @NonNull BiConsumer<? super T, ? super R> action) {
+    public <R> void zip(@NonNull final Iterable<R> zippedIn, @NonNull final BiConsumer<? super T, ? super R> action) {
         val zippedInIterator = zippedIn.iterator();
         stream().forEach(t->{
             action.accept(t, zippedInIterator.next());
@@ -169,19 +177,19 @@ final class Can_Multiple<T> implements Can<T> {
     }
 
     @Override
-    public <R, Z> Can<R> zipMap(@NonNull Iterable<Z> zippedIn, @NonNull BiFunction<? super T, ? super Z, R> mapper) {
+    public <R, Z> Can<R> zipMap(@NonNull final Iterable<Z> zippedIn, @NonNull final BiFunction<? super T, ? super Z, R> mapper) {
         val zippedInIterator = zippedIn.iterator();
         return map(t->mapper.apply(t, zippedInIterator.next()));
     }
 
     @Override
-    public Can<T> add(@NonNull T element) {
+    public Can<T> add(@NonNull final T element) {
         val elementStream = Stream.concat(elements.stream(), Stream.of(element)); // append
         return Can.ofStream(elementStream);
     }
 
     @Override
-    public Can<T> addAll(@NonNull Can<T> other) {
+    public Can<T> addAll(@NonNull final Can<T> other) {
         if(other.isEmpty()) {
             return this;
         }
@@ -192,28 +200,28 @@ final class Can_Multiple<T> implements Can<T> {
     }
 
     @Override
-    public Can<T> add(int index, @NonNull T element) {
+    public Can<T> add(final int index, @NonNull final T element) {
         val newElements = new ArrayList<T>(elements);
         newElements.add(index, element);
         return Can.ofCollection(newElements);
     }
 
     @Override
-    public Can<T> replace(int index, T element) {
+    public Can<T> replace(final int index, final T element) {
         val newElements = new ArrayList<T>(elements);
         newElements.set(index, element);
         return Can.ofCollection(newElements);
     }
 
     @Override
-    public Can<T> remove(int index) {
+    public Can<T> remove(final int index) {
         val newElements = new ArrayList<T>(elements);
         newElements.remove(index);
         return Can.ofCollection(newElements);
     }
 
     @Override
-    public Can<T> remove(T element) {
+    public Can<T> remove(final T element) {
         val newElements = new ArrayList<T>(elements);
         newElements.remove(element);
         return Can.ofCollection(newElements);
@@ -237,7 +245,7 @@ final class Can_Multiple<T> implements Can<T> {
     }
 
     @Override
-    public int indexOf(@NonNull T element) {
+    public int indexOf(@NonNull final T element) {
         return this.elements.indexOf(element);
     }
 
@@ -250,7 +258,7 @@ final class Can_Multiple<T> implements Can<T> {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if(obj instanceof Can) {
             return ((Can<?>) obj).isEqualTo(this);
         }
@@ -322,7 +330,7 @@ final class Can_Multiple<T> implements Can<T> {
     }
 
     @Override
-    public Set<T> toSet(@NonNull Consumer<T> onDuplicated) {
+    public Set<T> toSet(@NonNull final Consumer<T> onDuplicated) {
         val set = _Sets.<T>newHashSet(); // serializable
         elements
         .forEach(s->{
@@ -334,14 +342,14 @@ final class Can_Multiple<T> implements Can<T> {
     }
 
     @Override
-    public <C extends Collection<T>> C toCollection(@NonNull Supplier<C> collectionFactory) {
+    public <C extends Collection<T>> C toCollection(@NonNull final Supplier<C> collectionFactory) {
         val collection = collectionFactory.get();
         collection.addAll(elements);
         return collection;
     }
 
     @Override
-    public T[] toArray(@NonNull Class<T> elementType) {
+    public T[] toArray(@NonNull final Class<T> elementType) {
         val array = _Casts.<T[]>uncheckedCast(Array.newInstance(elementType, size()));
         return elements.toArray(array);
     }

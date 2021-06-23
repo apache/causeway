@@ -81,12 +81,12 @@ final class Can_Empty<T> implements Can<T> {
     }
 
     @Override
-    public Optional<T> get(int elementIndex) {
+    public Optional<T> get(final int elementIndex) {
         return Optional.empty();
     }
 
     @Override
-    public boolean contains(T element) {
+    public boolean contains(final T element) {
         return false;
     }
 
@@ -101,6 +101,11 @@ final class Can_Empty<T> implements Can<T> {
     }
 
     @Override
+    public Can<T> unique() {
+        return this;
+    }
+
+    @Override
     public Can<T> reverse() {
         return this;
     }
@@ -111,41 +116,41 @@ final class Can_Empty<T> implements Can<T> {
     }
 
     @Override
-    public void forEach(Consumer<? super T> action) {
+    public void forEach(final Consumer<? super T> action) {
     }
 
     @Override
-    public Can<T> filter(@Nullable Predicate<? super T> predicate) {
+    public Can<T> filter(@Nullable final Predicate<? super T> predicate) {
         return this; // identity
     }
 
     @Override
-    public <R> void zip(Iterable<R> zippedIn, BiConsumer<? super T, ? super R> action) {
+    public <R> void zip(final Iterable<R> zippedIn, final BiConsumer<? super T, ? super R> action) {
         // no-op
     }
 
     @Override
-    public <R, Z> Can<R> zipMap(Iterable<Z> zippedIn, BiFunction<? super T, ? super Z, R> mapper) {
+    public <R, Z> Can<R> zipMap(final Iterable<Z> zippedIn, final BiFunction<? super T, ? super Z, R> mapper) {
         return Can.empty();
     }
 
     @Override
-    public Can<T> add(@NonNull T element) {
+    public Can<T> add(@NonNull final T element) {
         return Can.ofSingleton(element);
     }
 
     @Override
-    public Can<T> addUnique(@NonNull T element) {
+    public Can<T> addUnique(@NonNull final T element) {
         return Can.ofSingleton(element);
     }
 
     @Override
-    public Can<T> addAll(@NonNull Can<T> other) {
+    public Can<T> addAll(@NonNull final Can<T> other) {
         return other;
     }
 
     @Override
-    public Can<T> add(int index, @NonNull T element) {
+    public Can<T> add(final int index, @NonNull final T element) {
         if(index!=0) {
             throw new IndexOutOfBoundsException(
                     "cannot add to empty can with index other than 0; got " + index);
@@ -154,17 +159,17 @@ final class Can_Empty<T> implements Can<T> {
     }
 
     @Override
-    public Can<T> replace(int index, T element) {
+    public Can<T> replace(final int index, final T element) {
         throw _Exceptions.unsupportedOperation("cannot replace an element in an empty Can");
     }
 
     @Override
-    public Can<T> remove(int index) {
+    public Can<T> remove(final int index) {
         throw new IndexOutOfBoundsException("cannot remove anything from an empty Can");
     }
 
     @Override
-    public Can<T> remove(T element) {
+    public Can<T> remove(final T element) {
         return this; // on an empty can this is a no-op
     }
 
@@ -174,7 +179,7 @@ final class Can_Empty<T> implements Can<T> {
     }
 
     @Override
-    public int indexOf(T element) {
+    public int indexOf(final T element) {
         return -1;
     }
 
@@ -220,17 +225,17 @@ final class Can_Empty<T> implements Can<T> {
     }
 
     @Override
-    public Set<T> toSet(@NonNull Consumer<T> onDuplicated) {
+    public Set<T> toSet(@NonNull final Consumer<T> onDuplicated) {
         return Collections.emptySet(); // serializable and immutable
     }
 
     @Override
-    public <C extends Collection<T>> C toCollection(@NonNull Supplier<C> collectionFactory) {
+    public <C extends Collection<T>> C toCollection(@NonNull final Supplier<C> collectionFactory) {
         return collectionFactory.get();
     }
 
     @Override
-    public T[] toArray(@NonNull Class<T> elementType) {
+    public T[] toArray(@NonNull final Class<T> elementType) {
         val array = _Casts.<T[]>uncheckedCast(Array.newInstance(elementType, 0));
         return array;
     }

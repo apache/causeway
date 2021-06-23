@@ -183,7 +183,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @param element
      * @return non-null
      */
-    public static <T> Can<T> ofNullable(@Nullable T element) {
+    public static <T> Can<T> ofNullable(@Nullable final T element) {
         if(element==null) {
             return empty();
         }
@@ -198,7 +198,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @return non-null
      * @throws NullPointerException if {@code element} is {@code null}
      */
-    public static <T> Can<T> ofSingleton(T element) {
+    public static <T> Can<T> ofSingleton(final T element) {
         requires(element, "element");
         return Can_Singleton.of(element);
     }
@@ -211,7 +211,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @see Can#ofArray(Object[])
      */
     @SafeVarargs
-    public static <T> Can<T> of(T ... array) {
+    public static <T> Can<T> of(final T ... array) {
         return ofArray(array);
     }
 
@@ -223,7 +223,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @param array
      * @return non-null
      */
-    public static <T> Can<T> ofArray(@Nullable T[] array) {
+    public static <T> Can<T> ofArray(@Nullable final T[] array) {
 
         if(_NullSafe.size(array)==0) {
             return empty();
@@ -261,7 +261,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @param collection
      * @return non-null
      */
-    public static <T> Can<T> ofCollection(@Nullable Collection<T> collection) {
+    public static <T> Can<T> ofCollection(@Nullable final Collection<T> collection) {
 
         if(_NullSafe.size(collection)==0) {
             return empty();
@@ -298,7 +298,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @param iterable
      * @return non-null
      */
-    public static <T> Can<T> ofIterable(@Nullable Iterable<T> iterable) {
+    public static <T> Can<T> ofIterable(@Nullable final Iterable<T> iterable) {
 
         if(iterable==null) {
             return empty();
@@ -320,7 +320,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @param enumeration
      * @return non-null
      */
-    public static <T> Can<T> ofEnumeration(@Nullable Enumeration<T> enumeration) {
+    public static <T> Can<T> ofEnumeration(@Nullable final Enumeration<T> enumeration) {
 
         if(enumeration==null) {
             return empty();
@@ -343,7 +343,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @param stream
      * @return non-null
      */
-    public static <T> Can<T> ofStream(@Nullable Stream<T> stream) {
+    public static <T> Can<T> ofStream(@Nullable final Stream<T> stream) {
 
         if(stream==null) {
             return empty();
@@ -374,7 +374,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @param instance
      * @return non-null
      */
-    public static <T> Can<T> ofInstance(@Nullable Instance<T> instance) {
+    public static <T> Can<T> ofInstance(@Nullable final Instance<T> instance) {
         if(instance==null || instance.isUnsatisfied()) {
             return empty();
         }
@@ -391,7 +391,15 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
     // -- OPERATORS
 
     /**
-     * Returns a {@code Can} with all the elements from this {@code Can} but
+     * Returns a {@code Can} with all the elements from this {@code Can}, but
+     * duplicated elements removed, based on
+     * {@link Object#equals(Object)} object equality.
+     * @return non-null
+     */
+    public Can<T> unique();
+
+    /**
+     * Returns a {@code Can} with all the elements from this {@code Can}, but
      * contained in reversed order.
      * @return non-null
      */
@@ -415,7 +423,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @param mapper - if absent throws if this {@code Can} is non-empty
      * @return non-null
      */
-    default <R> Can<R> map(Function<? super T, R> mapper) {
+    default <R> Can<R> map(final Function<? super T, R> mapper) {
 
         if(isEmpty()) {
             return empty();
@@ -443,7 +451,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @param element - nullable
      * @return non-null
      */
-    public static <T> Can<T> concat(@Nullable Can<T> can, @Nullable T element) {
+    public static <T> Can<T> concat(@Nullable final Can<T> can, @Nullable final T element) {
         if(can==null || can.isEmpty()) {
             return ofNullable(element);
         }
@@ -494,7 +502,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @param element
      * @return same or new instance
      */
-    default Can<T> addUnique(@NonNull T element) {
+    default Can<T> addUnique(@NonNull final T element) {
         if(contains(element)) {
             return this;
         }
@@ -723,7 +731,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      *          same runtime type is allocated for this purpose.
      * @return a non-null array, containing the elements of this Can
      */
-    default T[] toArray(T[] a) {
+    default T[] toArray(final T[] a) {
         return toList().toArray(a);
     }
 
