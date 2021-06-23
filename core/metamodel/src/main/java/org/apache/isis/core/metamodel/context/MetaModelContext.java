@@ -106,6 +106,20 @@ public interface MetaModelContext {
 
     ManagedObject lookupServiceAdapterById(String serviceId);
 
+    /**
+     * Requires that there is AT LEAST one implementation of the service, and returns it.
+     *
+     * <p>
+     *     If there is more than one implementation, then the one with the &quot;highest&quot;
+     *     priority (either annotated with {@link org.springframework.context.annotation.Primary},
+     *     else with encountered with earliest {@link org.apache.isis.applib.annotation.PriorityPrecedence precedence})
+     *     is used instead.
+     * </p>
+     *
+     * @param type
+     * @param <T>
+     * @return
+     */
     <T> T getSingletonElseFail(Class<T> type);
 
     default Optional<ManagedObject> loadObject(final @Nullable Oid oid) {
