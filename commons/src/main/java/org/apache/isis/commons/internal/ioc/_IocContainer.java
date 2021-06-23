@@ -21,7 +21,6 @@ package org.apache.isis.commons.internal.ioc;
 import java.lang.annotation.Annotation;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
@@ -29,6 +28,7 @@ import javax.annotation.Nullable;
 import org.springframework.context.ApplicationContext;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.collections.Cardinality;
 import org.apache.isis.commons.internal.base._With;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
@@ -60,26 +60,57 @@ public interface _IocContainer {
      */
     <T> Optional<T> get(Class<T> requiredType);
 
+    /**
+     * Returns all available implementations of the service, ordered by priority.
+     *
+     * <p>
+     *     If there is more than one implementation, then the one with the &quot;highest&quot;
+     *     priority (either annotated with {@link org.springframework.context.annotation.Primary},
+     *     else with encountered with earliest {@link org.apache.isis.applib.annotation.PriorityPrecedence precedence})
+     *     is used instead.
+     * </p>
+     *
+     * @param <T>  - the genericised type (to save the caller from having to downcast)
+     * @param requiredType - the required type
+     * @throws NoSuchElementException - if the singleton is not resolvable
+     * 
+     * @see #select(Class, Annotation[])
+     * @see #getSingletonElseFail(Class)
+     */
     <T> Can<T> select(Class<T> requiredType);
 
     /**
-     * @param <T>
-     * @param requiredType
+     * Returns all available implementations of the service that matche the additional qualifiers, ordered by priority.
+     *
+     * <p>
+     *     If there is more than one implementation, then the one with the &quot;highest&quot;
+     *     priority (either annotated with {@link org.springframework.context.annotation.Primary},
+     *     else with encountered with earliest {@link org.apache.isis.applib.annotation.PriorityPrecedence precedence})
+     *     is used instead.
+     * </p>
+     *
+     * @param <T>  - the genericised type (to save the caller from having to downcast)
+     * @param requiredType - the required type
      * @param qualifiersRequired - if contains annotations, that are not qualifiers, these are just ignored
+     * @throws NoSuchElementException - if the singleton is not resolvable
+     * 
+     * @see #select(Class)
      */
     <T> Can<T> select(Class<T> requiredType, Annotation[] qualifiersRequired);
 
-    /**
-     * @return IoC managed singleton wrapped in an Optional
-     */
-    public default <T> Optional<T> getSingleton(@Nullable Class<T> type) {
-        if(type==null) {
-            return Optional.empty();
-        }
-        return select(type).getSingleton();
-    }
 
     /**
+     * Requires that there is AT LEAST one implementation of the service, and returns it.
+     *
+     * <p>
+     *     If there is more than one implementation, then the one with the &quot;highest&quot;
+     *     priority (either annotated with {@link org.springframework.context.annotation.Primary},
+     *     else with encountered with earliest {@link org.apache.isis.applib.annotation.PriorityPrecedence precedence})
+     *     is used instead.
+     * </p>
+     *
+     * @param type - the required type
+     * @param <T>  - the genericised type (to save the caller from having to downcast)
      * @return IoC managed singleton
      * @throws NoSuchElementException - if the singleton is not resolvable
      */
@@ -87,22 +118,10 @@ public interface _IocContainer {
         _With.requires(type, "type");
 
         val candidates = select(type);
-
-        switch (candidates.getCardinality()) {
-        case ZERO:
+        if (candidates.getCardinality() == Cardinality.ZERO) {
             throw _Exceptions.noSuchElement("Cannot resolve singleton '%s'", type);
-        case ONE:
-            return candidates.getFirstOrFail();
-        default:
-            throw _Exceptions.unrecoverableFormatted("Cannot resolve singleton '%s' got more than one: {%s}",
-                    type,
-                    candidates.stream()
-                    .map(Object::getClass)
-                    .map(Class::getName)
-                    .collect(Collectors.joining(", "))
-                    );
         }
-
+        return candidates.getFirstOrFail();
     }
 
     // -- FACTORIES
@@ -110,8 +129,6 @@ public interface _IocContainer {
     static _IocContainer spring(ApplicationContext springContext) {
         return _IocContainer_Spring.of(springContext);
     }
-
-
 
 
 
