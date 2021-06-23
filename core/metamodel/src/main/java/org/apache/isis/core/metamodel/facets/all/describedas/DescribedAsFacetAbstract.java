@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.all.describedas;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.i8n.I8nFacetAbstract;
-import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
 import org.apache.isis.core.metamodel.facets.all.i8n.NounForms;
 
 public abstract class DescribedAsFacetAbstract
@@ -45,9 +44,7 @@ implements DescribedAsFacet {
             final Facet.Precedence precedence) {
         super(type(),
                 NounForms
-                    .builder()
-                    .indifferent(originalText)
-                    .preferredNounForm(NounForm.INDIFFERENT)
+                    .preferredIndifferent(originalText)
                     .build(),
                 holder,
                 precedence);

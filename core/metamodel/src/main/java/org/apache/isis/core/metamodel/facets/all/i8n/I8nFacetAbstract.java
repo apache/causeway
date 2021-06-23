@@ -2,6 +2,7 @@ package org.apache.isis.core.metamodel.facets.all.i8n;
 
 import java.util.Objects;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
@@ -10,7 +11,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 
@@ -19,7 +19,6 @@ extends FacetAbstract
 implements HasTranslation {
 
     protected final TranslationContext translationContext;
-    @Getter(onMethod_ = {@Override}) private final ImmutableEnumSet<NounForm> supportedNounForms;
 
     private final @NonNull NounForms nounForms;
     private final @NonNull _Lazy<NounForms> translatedNounForms;
@@ -38,7 +37,6 @@ implements HasTranslation {
             final Precedence precedence) {
         super(facetType, holder, precedence);
         this.nounForms = nounForms;
-        this.supportedNounForms = ImmutableEnumSet.from(nounForms.getSupportedNounForms());
         this.translationContext = TranslationContext
                 .forTranslationContextHolder(holder.getFeatureIdentifier());
         this.translatedNounForms = _Lazy.threadSafe(()->
@@ -65,13 +63,23 @@ implements HasTranslation {
         return translatedNounForms.get().get(nounForm);
     }
 
+    @Override
+    public ImmutableEnumSet<NounForm> getSupportedNounForms() {
+        return nounForms.getSupportedNounForms();
+    }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("context", translationContext);
-        visitor.accept("supportedNounForms", supportedNounForms);
-        supportedNounForms.forEach(nounForm->{
+        visitor.accept("nounForms",
+                getSupportedNounForms()
+                .stream()
+                .map(NounForm::name)
+                .collect(Collectors.joining(", ")));
+
+        getSupportedNounForms()
+        .forEach(nounForm->{
             visitor.accept("originalText." + nounForm, text(nounForm));
             visitor.accept("translated." + nounForm, translated(nounForm)); // memoizes as a side-effect
         });
@@ -80,7 +88,7 @@ implements HasTranslation {
     @Override
     public boolean semanticEquals(final @NonNull Facet other) {
 
-        // equality by facet-type, text and context
+        // equality by facet-type, (original) text and translation-context
 
         if(!this.facetType().equals(other.facetType())) {
             return false;
@@ -88,18 +96,8 @@ implements HasTranslation {
 
         val otherFacet =  (I8nFacetAbstract)other;
 
-        if(!Objects.equals(this.supportedNounForms, otherFacet.supportedNounForms)
-                || !Objects.equals(this.translationContext, otherFacet.translationContext)) {
-            return false;
-        }
-
-        for(val nounForm : supportedNounForms) {
-            if(!Objects.equals(this.text(nounForm), otherFacet.text(nounForm))){
-                return false;
-            }
-        }
-
-        return true;
+        return Objects.equals(this.nounForms, otherFacet.nounForms)
+                && Objects.equals(this.translationContext, otherFacet.translationContext);
 
     }
 

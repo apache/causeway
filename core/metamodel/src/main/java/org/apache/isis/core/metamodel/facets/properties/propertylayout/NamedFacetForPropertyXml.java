@@ -42,8 +42,7 @@ extends NamedFacetAbstract {
         }
 
         val nounForms = NounForms
-                .preferredSingular()
-                .singular(_Strings.emptyToNull(propertyLayout.getNamed()))
+                .preferredSingular(_Strings.emptyToNull(propertyLayout.getNamed()))
                 .build();
 
         if(nounForms.getSupportedNounForms().isEmpty()) {

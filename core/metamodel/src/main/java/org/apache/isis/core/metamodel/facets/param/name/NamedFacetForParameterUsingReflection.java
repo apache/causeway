@@ -30,7 +30,7 @@ public class NamedFacetForParameterUsingReflection
 extends NamedFacetAbstract {
 
     public NamedFacetForParameterUsingReflection(final String singularName, final FacetHolder holder) {
-        super(NounForms.preferredSingular().singular(singularName).build(), false, holder);
+        super(NounForms.preferredSingular(singularName).build(), false, holder);
     }
 
 }

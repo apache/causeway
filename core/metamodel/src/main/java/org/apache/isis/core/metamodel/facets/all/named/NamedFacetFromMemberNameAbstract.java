@@ -39,14 +39,10 @@ extends NamedFacetAbstract {
         super(
                 preferredNounForm.isSingular()
                 ? NounForms
-                        .builder()
-                        .preferredNounForm(preferredNounForm)
-                        .singular(memberName)
+                        .preferredSingular(memberName)
                         .build()
                 : NounForms
-                        .builder()
-                        .preferredNounForm(preferredNounForm)
-                        .plural(memberName)
+                        .preferredPlural(memberName)
                         .build()
                 ,
                 ESCAPED,

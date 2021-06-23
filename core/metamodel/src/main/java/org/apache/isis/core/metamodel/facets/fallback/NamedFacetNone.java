@@ -25,9 +25,6 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 
 /**
  * Has a name of <tt>null</tt>.
- *
- * <p>
- * TODO: should this instead be the empty string?
  */
 public class NamedFacetNone
 extends NamedFacetAbstract {
@@ -35,7 +32,7 @@ extends NamedFacetAbstract {
     public static final boolean ESCAPED = true;
 
     public NamedFacetNone(final FacetHolder holder) {
-        super(NounForms.preferredSingular().build(), ESCAPED, holder, Precedence.FALLBACK);
+        super(NounForms.preferredSingular(null).build(), ESCAPED, holder, Precedence.FALLBACK);
     }
 
 }

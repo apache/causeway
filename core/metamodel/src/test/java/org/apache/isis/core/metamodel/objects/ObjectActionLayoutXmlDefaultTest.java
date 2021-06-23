@@ -85,8 +85,7 @@ public class ObjectActionLayoutXmlDefaultTest {
     public void testNameDefaultsToActionsMethodName() {
         final String name = "Reduceheadcount";
 
-        val nounForms = NounForms.preferredSingular()
-        .singular(name)
+        val nounForms = NounForms.preferredSingular(name)
         .build();
 
         final NamedFacet facet =

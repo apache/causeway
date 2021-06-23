@@ -41,7 +41,7 @@ public class NamedFacetForActionLayoutAnnotation extends NamedFacetAbstract {
 
     private NamedFacetForActionLayoutAnnotation(final String singularName, final FacetHolder holder) {
 
-        super(NounForms.preferredSingular().singular(singularName).build(), /*escaped*/ true, holder);
+        super(NounForms.preferredSingular(singularName).build(), /*escaped*/ true, holder);
     }
 
 }

@@ -34,43 +34,43 @@ implements Iterable<E>, java.io.Serializable {
 
     private final EnumSet<E> delegate;
 
-    private ImmutableEnumSet(EnumSet<E> delegate) {
+    private ImmutableEnumSet(final EnumSet<E> delegate) {
         this.delegate = delegate;
     }
 
-    public static <E extends Enum<E>> ImmutableEnumSet<E> from(EnumSet<E> delegate) {
+    public static <E extends Enum<E>> ImmutableEnumSet<E> from(final EnumSet<E> delegate) {
         return new ImmutableEnumSet<>(delegate);
     }
 
-    public static <E extends Enum<E>> ImmutableEnumSet<E> noneOf(Class<E> enumType) {
+    public static <E extends Enum<E>> ImmutableEnumSet<E> noneOf(final Class<E> enumType) {
         return from(EnumSet.noneOf(enumType));
     }
 
-    public static <E extends Enum<E>> ImmutableEnumSet<E> of(E e1) {
+    public static <E extends Enum<E>> ImmutableEnumSet<E> of(final E e1) {
         return from(EnumSet.of(e1));
     }
 
-    public static <E extends Enum<E>> ImmutableEnumSet<E> of(E e1, E e2) {
+    public static <E extends Enum<E>> ImmutableEnumSet<E> of(final E e1, final E e2) {
         return from(EnumSet.of(e1, e2));
     }
 
-    public static <E extends Enum<E>> ImmutableEnumSet<E> of(E e1, E e2, E e3) {
+    public static <E extends Enum<E>> ImmutableEnumSet<E> of(final E e1, final E e2, final E e3) {
         return from(EnumSet.of(e1, e2, e3));
     }
 
-    public static <E extends Enum<E>> ImmutableEnumSet<E> of(E e1, E e2, E e3, E e4) {
+    public static <E extends Enum<E>> ImmutableEnumSet<E> of(final E e1, final E e2, final E e3, final E e4) {
         return from(EnumSet.of(e1, e2, e3, e4));
     }
 
-    public static <E extends Enum<E>> ImmutableEnumSet<E> complementOf(ImmutableEnumSet<E> other) {
+    public static <E extends Enum<E>> ImmutableEnumSet<E> complementOf(final ImmutableEnumSet<E> other) {
         return from(EnumSet.complementOf(other.delegate));
     }
 
-    public static <E extends Enum<E>> ImmutableEnumSet<E> allOf(Class<E> enumType) {
+    public static <E extends Enum<E>> ImmutableEnumSet<E> allOf(final Class<E> enumType) {
         return from(EnumSet.allOf(enumType));
     }
 
-    public boolean contains(E element) {
+    public boolean contains(final E element) {
         return delegate.contains(element);
     }
 
@@ -85,6 +85,10 @@ implements Iterable<E>, java.io.Serializable {
 
     public Stream<E> stream() {
         return delegate.stream();
+    }
+
+    public boolean isEmpty() {
+        return delegate.isEmpty();
     }
 
 }

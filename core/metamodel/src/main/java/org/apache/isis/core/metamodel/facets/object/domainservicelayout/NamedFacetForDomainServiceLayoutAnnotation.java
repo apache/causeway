@@ -48,8 +48,7 @@ extends NamedFacetAbstract {
         }
 
         val nounForms = NounForms
-                .preferredSingular()
-                .singular(serviceNamed)
+                .preferredSingular(serviceNamed)
                 .build();
 
         return Optional.of(

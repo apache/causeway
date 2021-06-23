@@ -49,7 +49,7 @@ extends NamedFacetAbstract {
             final boolean escaped,
             final FacetHolder holder) {
 
-        super(NounForms.preferredPlural().plural(pluralName).build(), escaped, holder);
+        super(NounForms.preferredPlural(pluralName).build(), escaped, holder);
     }
 
 }

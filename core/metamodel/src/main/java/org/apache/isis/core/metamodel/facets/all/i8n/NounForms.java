@@ -24,6 +24,7 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.Builder;
@@ -32,17 +33,29 @@ import lombok.NonNull;
 import lombok.Value;
 import lombok.val;
 
+/**
+ * Immutable value object that holds literals for its various supported {@link NounForm}(s).
+ * @since 2.0
+ */
 @Value @Builder
 public class NounForms {
 
-    public static NounFormsBuilder preferredSingular() {
+    public static NounFormsBuilder preferredIndifferent(@Nullable final String indifferent) {
         return NounForms.builder()
-                .preferredNounForm(NounForm.SINGULAR);
+                .preferredNounForm(NounForm.INDIFFERENT)
+                .indifferent(indifferent);
     }
 
-    public static NounFormsBuilder preferredPlural() {
+    public static NounFormsBuilder preferredSingular(@Nullable final String singular) {
         return NounForms.builder()
-                .preferredNounForm(NounForm.PLURAL);
+                .preferredNounForm(NounForm.SINGULAR)
+                .singular(singular);
+    }
+
+    public static NounFormsBuilder preferredPlural(@Nullable final String plural) {
+        return NounForms.builder()
+                .preferredNounForm(NounForm.PLURAL)
+                .plural(plural);
     }
 
     private final @Nullable String indifferent;
@@ -53,9 +66,9 @@ public class NounForms {
     private final @NonNull NounForm preferredNounForm;
 
     @Getter(lazy = true)
-    final EnumSet<NounForm> supportedNounForms = supportedNounForms();
+    final ImmutableEnumSet<NounForm> supportedNounForms = supportedNounForms();
 
-    private EnumSet<NounForm> supportedNounForms() {
+    private ImmutableEnumSet<NounForm> supportedNounForms() {
 
         val supportedNounForms = EnumSet.noneOf(NounForm.class);
 
@@ -75,7 +88,7 @@ public class NounForms {
             supportedNounForms.add(NounForm.PLURAL);
         }
 
-        return supportedNounForms;
+        return ImmutableEnumSet.from(supportedNounForms);
     }
 
     public String get(final @NonNull NounForm nounForm) {

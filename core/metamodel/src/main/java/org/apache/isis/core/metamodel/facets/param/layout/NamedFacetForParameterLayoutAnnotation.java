@@ -49,7 +49,7 @@ extends NamedFacetAbstract {
             final boolean escaped,
             final FacetHolder holder) {
 
-        super(NounForms.preferredSingular().singular(singularName).build(), escaped, holder);
+        super(NounForms.preferredSingular(singularName).build(), escaped, holder);
     }
 
 }

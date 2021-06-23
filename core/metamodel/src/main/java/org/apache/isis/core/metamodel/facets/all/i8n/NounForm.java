@@ -18,11 +18,34 @@
  */
 package org.apache.isis.core.metamodel.facets.all.i8n;
 
+import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
+
+/**
+ * Represents various linguistic forms, based on <i>cardinality</i>.
+ * @since 2.0
+ */
 public enum NounForm {
 
+    /**
+     * Use, if there is no semantic difference between EMPTY, SINGULAR or PLURAL.
+     * eg. {@link DescribedAsFacet}
+     */
     INDIFFERENT,
+
+    /**
+     * Represents the absence of a scalar or non-scalar object.
+     * @apiNote for future use (not yet implemented)
+     */
     EMPTY,
+
+    /**
+     * Represents the singular linguistic form.
+     */
     SINGULAR,
+
+    /**
+     * Represents the plural linguistic form.
+     */
     PLURAL
     ;
 
