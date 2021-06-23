@@ -26,7 +26,7 @@ import org.w3c.dom.asList
 class Property(node: Node) {
     var id: String
     var link: Link? = null
-    var hidden: String // USE ENUM Where? = null
+    var hidden: String = "" // USE ENUM Where? = null
     var typicalLength: Int = 0
     var multiLine: Int = 1
     var describedAs: String? = null
@@ -35,7 +35,9 @@ class Property(node: Node) {
 
     init {
         val dn = node.asDynamic()
-        hidden = dn.getAttribute("hidden")
+        if (dn.hasOwnProperty("hidden")) {
+            id = dn.getAttribute("hidden") as String
+        }
         id = dn.getAttribute("id") as String
         typicalLength = dn.getAttribute("typicalLength")
         multiLine = dn.getAttribute("multiLine")

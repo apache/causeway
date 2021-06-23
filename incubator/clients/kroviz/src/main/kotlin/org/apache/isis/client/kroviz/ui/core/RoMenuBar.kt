@@ -146,7 +146,7 @@ object RoMenuBar : SimplePanel() {
     }
 
     private fun logoButton() {
-        val classes = setOf("logo-button-image", "logo-button")
+        val classes = setOf("isis-logo-button-image", "logo-button")
         val logo = Button("", style = ButtonStyle.LINK, classes = classes)
                 .onClick {
                     window.open("https://isis.apache.org")
