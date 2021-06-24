@@ -20,16 +20,24 @@ package org.apache.isis.core.metamodel.facets.members.described.method;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacetDynamic;
+import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.all.i8n.I8nImperativeFacetAbstract;
 
 public class DescribedAsFacetForMemberViaMethod
-extends DescribedAsFacetDynamic {
+extends I8nImperativeFacetAbstract
+implements
+    DescribedAsFacet {
+
+    private static final Class<? extends Facet> type() {
+        return DescribedAsFacet.class;
+    }
 
     public DescribedAsFacetForMemberViaMethod(
             final Method describedMethod,
             final FacetHolder holder) {
-        super(describedMethod, holder);
+        super(type(), describedMethod, holder);
     }
 
 }

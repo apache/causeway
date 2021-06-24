@@ -53,7 +53,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         val cls = processMethodContext.getCls();
         //val actionOrGetter = processMethodContext.getMethod();
 
-        val namingConvention = getNamingConventionForMemberSupport(processMethodContext, PREFIX);
+        val namingConvention = processMethodContext.memberSupportCandidates(PREFIX);
 
         val describedMethod = MethodFinder.findMethod_returningText(
                 cls,

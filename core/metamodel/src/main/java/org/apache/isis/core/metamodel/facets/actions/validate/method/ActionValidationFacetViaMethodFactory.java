@@ -59,7 +59,7 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
 
         val facetHolder = processMethodContext.getFacetHolder();
 
-        val namingConvention = getNamingConventionForActionSupport(processMethodContext, PREFIX);
+        val namingConvention = processMethodContext.memberSupportCandidates(PREFIX);
 
         val searchRequest = ActionSupport.ActionSupportingMethodSearchRequest.builder()
                 .processMethodContext(processMethodContext)

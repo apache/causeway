@@ -56,7 +56,7 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
 
         Method disableMethod = null;
 
-        val namingConvention = getNamingConventionForPropertyAndCollectionSupport(processMethodContext, PREFIX);
+        val namingConvention = processMethodContext.memberSupportCandidates(PREFIX);
 
         boolean noParamsOnly = getConfiguration().getCore().getMetaModel().getValidator().isNoParamsOnly();
         boolean searchExactMatch = !noParamsOnly;

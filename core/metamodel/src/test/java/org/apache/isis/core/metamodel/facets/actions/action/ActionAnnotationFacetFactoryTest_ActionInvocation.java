@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -204,7 +205,7 @@ extends AbstractFacetFactoryTest {
 
         final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(metaModelContext, CustomerEx.class, actionMethod);
 
-        final ProcessMethodContext processMethodContext = new ProcessMethodContext(CustomerEx.class, null, actionMethod, methodRemover, facetHolderWithParms);
+        final ProcessMethodContext processMethodContext = new ProcessMethodContext(CustomerEx.class, FeatureType.ACTION, actionMethod, methodRemover, facetHolderWithParms);
         processInvocation(facetFactory, processMethodContext);
 
         facetFactoryForChoices.process(processMethodContext);

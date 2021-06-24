@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
+import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 
 import lombok.Getter;
@@ -90,7 +91,7 @@ public interface FacetFactory {
          * Annotation lookup on this context's type (cls).
          * @since 2.0
          */
-        public <A extends Annotation> Optional<A> synthesizeOnType(Class<A> annotationType) {
+        public <A extends Annotation> Optional<A> synthesizeOnType(final Class<A> annotationType) {
             return _Annotations.synthesizeInherited(cls, annotationType);
         }
 
@@ -120,7 +121,7 @@ public interface FacetFactory {
         }
 
         @Override
-        public void removeMethods(Predicate<Method> filter, Consumer<Method> onRemoval) {
+        public void removeMethods(final Predicate<Method> filter, final Consumer<Method> onRemoval) {
             methodRemover.removeMethods(filter, onRemoval);
         }
 
@@ -172,7 +173,7 @@ public interface FacetFactory {
         }
 
         @Override
-        public void removeMethods(Predicate<Method> filter, Consumer<Method> onRemoval) {
+        public void removeMethods(final Predicate<Method> filter, final Consumer<Method> onRemoval) {
             methodRemover.removeMethods(filter, onRemoval);
         }
 
@@ -244,7 +245,7 @@ public interface FacetFactory {
          * Annotation lookup on this context's method. Also honors annotations on fields, if this method is a getter.
          * @since 2.0
          */
-        public <A extends Annotation> Optional<A> synthesizeOnMethod(Class<A> annotationType) {
+        public <A extends Annotation> Optional<A> synthesizeOnMethod(final Class<A> annotationType) {
             return _Annotations.synthesizeInherited(getMethod(), annotationType);
         }
 
@@ -274,6 +275,62 @@ public interface FacetFactory {
             }
             return onType;
         }
+
+        public Can<String> memberSupportCandidates(
+                final String methodPrefix) {
+            switch(getFeatureType()) {
+            case ACTION:
+                return namingConventionForActionSupport(methodPrefix);
+            case PROPERTY:
+            case COLLECTION:
+                return isMixinMain()
+                        ? namingConventionForActionSupport(methodPrefix)
+                        : namingConventionForPropertyAndCollectionSupport(methodPrefix); // handles getters
+
+                //return namingConventionForPropertyAndCollectionSupport(methodPrefix);
+            default:
+                return Can.empty();
+            }
+        }
+
+        public Can<java.util.function.IntFunction<String>> parameterSupportCandidates(
+                final String methodPrefix) {
+
+            switch(getFeatureType()) {
+            case ACTION:
+                return namingConventionForParameterSupport(methodPrefix);
+            default:
+                return Can.empty();
+            }
+        }
+
+
+        // -- SUPPORTING METHOD NAMING CONVENTIONS
+
+        private Can<String> namingConventionForActionSupport(
+                final String prefix) {
+            val actionMethod = getMethod();
+            val isMixin = isMixinMain();
+            return MethodLiteralConstants.NAMING_ACTIONS
+                    .map(naming->naming.getActionSupportingMethodName(actionMethod, prefix, isMixin));
+        }
+
+        private Can<java.util.function.IntFunction<String>> namingConventionForParameterSupport(
+                final String prefix) {
+            val actionMethod = getMethod();
+            val isMixin = isMixinMain();
+            return MethodLiteralConstants.NAMING_PARAMETERS
+                    .map(naming->naming.providerForParam(actionMethod, prefix, isMixin));
+        }
+
+        private Can<String> namingConventionForPropertyAndCollectionSupport(
+                final String prefix) {
+            val getterMethod = getMethod();
+            val isMixin = isMixinMain();
+            return MethodLiteralConstants.NAMING_PROPERTIES_AND_COLLECTIONS
+                    .map(naming->naming.getMemberSupportingMethodName(getterMethod, prefix, isMixin));
+        }
+
 
     }
 
@@ -312,7 +369,7 @@ public interface FacetFactory {
          * Annotation lookup on this context's method parameter.
          * @since 2.0
          */
-        public <A extends Annotation> Optional<A> synthesizeOnParameter(Class<A> annotationType) {
+        public <A extends Annotation> Optional<A> synthesizeOnParameter(final Class<A> annotationType) {
             return _Annotations.synthesizeInherited(parameter, annotationType);
         }
 

@@ -20,16 +20,29 @@ package org.apache.isis.core.metamodel.facets.members.named.method;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacetDynamic;
+import org.apache.isis.core.metamodel.facets.all.i8n.I8nImperativeFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 
 public class NamedFacetForMemberViaMethod
-extends NamedFacetDynamic {
+extends I8nImperativeFacetAbstract
+implements NamedFacet {
 
-    protected NamedFacetForMemberViaMethod(
+    private static final Class<? extends Facet> type() {
+        return NamedFacet.class;
+    }
+
+    public NamedFacetForMemberViaMethod(
             final Method namedMethod,
             final FacetHolder holder) {
-        super(holder);
+        super(type(), namedMethod, holder);
     }
+
+    @Override
+    public boolean escaped() {
+        return true; // dynamic names are always escaped
+    }
+
 
 }

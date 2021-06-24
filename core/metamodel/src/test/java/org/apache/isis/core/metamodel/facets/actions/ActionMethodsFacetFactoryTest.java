@@ -31,6 +31,7 @@ import org.jmock.Expectations;
 import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -126,7 +127,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method actionMethod = findMethod(Customer.class, "someAction");
         final Method validateMethod = findMethod(Customer.class, "validateSomeAction");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, FeatureType.ACTION, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionValidationFacet.class);
         assertNotNull(facet);
@@ -156,7 +157,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class, int.class });
         final Method validateMethod = findMethod(Customer.class, "validateSomeAction", new Class[] { int.class, int.class });
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, FeatureType.ACTION, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionValidationFacet.class);
         assertNotNull(facet);
@@ -186,7 +187,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class, Long.class });
         final Method defaultMethod = findMethod(Customer.class, "defaultSomeAction", new Class[] {});
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, FeatureType.ACTION, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionDefaultsFacet.class);
         assertNotNull(facet);
@@ -215,7 +216,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class, Long.class });
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, FeatureType.ACTION, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionDefaultsFacet.class);
         assertNull(facet);
@@ -239,7 +240,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
         allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, FeatureType.ACTION, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionChoicesFacet.class);
         assertNotNull(facet);
@@ -268,7 +269,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class, Long.class });
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.process(new ProcessMethodContext(Customer.class, FeatureType.ACTION, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionChoicesFacet.class);
         assertNull(facet);
@@ -304,7 +305,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final FacetedMethod facetHolderWithParms = FacetedMethod
                 .createForAction(metaModelContext, Customer.class, actionMethod);
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetHolderWithParms));
+        facetFactory.process(new ProcessMethodContext(Customer.class, FeatureType.ACTION, actionMethod, methodRemover, facetHolderWithParms));
 
         final Facet facet0 = facetHolderWithParms.getParameters().get(0).getFacet(ActionParameterDefaultsFacet.class);
         assertNotNull(facet0);
@@ -359,7 +360,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(
                 metaModelContext, Customer.class, actionMethod);
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetHolderWithParms));
+        facetFactory.process(new ProcessMethodContext(Customer.class, FeatureType.ACTION, actionMethod, methodRemover, facetHolderWithParms));
 
         final Facet facet0 = facetHolderWithParms.getParameters().get(0).getFacet(ActionParameterChoicesFacet.class);
         assertNotNull(facet0);
@@ -411,7 +412,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final FacetedMethod facetHolderWithParms = FacetedMethod
                 .createForAction(metaModelContext, Customer.class, actionMethod);
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetHolderWithParms));
+        facetFactory.process(new ProcessMethodContext(Customer.class, FeatureType.ACTION, actionMethod, methodRemover, facetHolderWithParms));
 
         final Facet facet0 = facetHolderWithParms.getParameters().get(0).getFacet(ActionParameterAutoCompleteFacet.class);
         assertNotNull(facet0);
@@ -459,7 +460,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final FacetedMethod facetHolderWithParms = FacetedMethod
                 .createForAction(metaModelContext, Customer.class, actionMethod);
 
-        final ProcessMethodContext processMethodContext = new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetHolderWithParms);
+        final ProcessMethodContext processMethodContext = new ProcessMethodContext(Customer.class, FeatureType.ACTION, actionMethod, methodRemover, facetHolderWithParms);
         facetFactory.process(processMethodContext);
         try {
             facetFactoryForParams.process(processMethodContext);
@@ -506,7 +507,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final FacetedMethod facetHolderWithParms = FacetedMethod
                 .createForAction(metaModelContext, Customer.class, actionMethod);
 
-        final ProcessMethodContext processMethodContext = new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetHolderWithParms);
+        final ProcessMethodContext processMethodContext = new ProcessMethodContext(Customer.class, FeatureType.ACTION, actionMethod, methodRemover, facetHolderWithParms);
         facetFactory.process(processMethodContext);
         try {
             facetFactoryForParams.process(processMethodContext);

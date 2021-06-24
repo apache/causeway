@@ -16,35 +16,47 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
-package org.apache.isis.core.metamodel.facets.all.described;
+package org.apache.isis.core.metamodel.facets.all.i8n;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.i8n.I8nFacetAbstract;
-import org.apache.isis.core.metamodel.facets.all.i8n.NounForms;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 
-//TODO[1720] just a stub yet
-public abstract class DescribedAsFacetDynamic
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NonNull;
+
+public class I8nImperativeFacetAbstract
 extends I8nFacetAbstract
-implements DescribedAsFacet {
+implements ImperativeFacet {
 
-    private static final Class<? extends Facet> type() {
-        return DescribedAsFacet.class;
-    }
+    @Getter(value = AccessLevel.PROTECTED)
+    private final @NonNull Method method;
 
-    protected DescribedAsFacetDynamic(
-            final Method describedMethod,
+    protected I8nImperativeFacetAbstract(
+            final Class<? extends Facet> facetType,
+            final Method method,
             final FacetHolder holder) {
-        super(type(),
+        super(facetType,
                 NounForms
-                    .preferredIndifferent("TODO")
-                    .build(),
+                .preferredIndifferent("TODO")
+                .build(),
                 holder,
                 Precedence.HIGH);
+        this.method = method;
+    }
+
+    @Override
+    public Can<Method> getMethods() {
+        return Can.ofSingleton(method);
+    }
+
+    @Override
+    public Intent getIntent(final Method method) {
+        return Intent.UI_HINT;
     }
 
 }
-

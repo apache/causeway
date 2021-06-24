@@ -44,7 +44,9 @@ import lombok.Setter;
  * choices         x             x
  * default         x             x
  * disable     x   x    x    x
+ * described       x    x    x
  * hide            x    x    x
+ * named           x    x    x
  * validate        x         x   x
  * </pre>
  *
@@ -55,8 +57,18 @@ public class ProperMemberSupport {
     // -- PROPER ACTION
 
     @Action
-    public void myAction(String p0, String p1) {
+    public void myAction(final String p0, final String p1) {
 
+    }
+
+    @MemberSupport
+    public String namedMyAction() {
+        return null;
+    }
+
+    @MemberSupport
+    public String describedMyAction() {
+        return null;
     }
 
     @MemberSupport
@@ -65,7 +77,7 @@ public class ProperMemberSupport {
     }
 
     @MemberSupport // variant with dependent args
-    public String disable1MyAction(String p0) {
+    public String disable1MyAction(final String p0) {
         return null;
     }
 
@@ -75,22 +87,22 @@ public class ProperMemberSupport {
     }
 
     @MemberSupport // variant with dependent args
-    public boolean hide1MyAction(String p0) {
+    public boolean hide1MyAction(final String p0) {
         return false;
     }
 
     @MemberSupport
-    public String validateMyAction(String p0, String p1) {
+    public String validateMyAction(final String p0, final String p1) {
         return null;
     }
 
     @MemberSupport
-    public Set<String> autoComplete0MyAction(@MinLength(3) String search) {
+    public Set<String> autoComplete0MyAction(@MinLength(3) final String search) {
         return null;
     }
 
     @MemberSupport
-    public Set<String> autoComplete1MyAction(@MinLength(3) String search) {
+    public Set<String> autoComplete1MyAction(@MinLength(3) final String search) {
         return null;
     }
 
@@ -121,12 +133,12 @@ public class ProperMemberSupport {
     }
 
     @MemberSupport
-    public String validate0MyAction(String p0) {
+    public String validate0MyAction(final String p0) {
         return null;
     }
 
     @MemberSupport
-    public String validate1MyAction(String p1) {
+    public String validate1MyAction(final String p1) {
         return null;
     }
 
@@ -143,7 +155,17 @@ public class ProperMemberSupport {
     @Getter @Setter private String myProp;
 
     @MemberSupport
-    public Set<String> autoCompleteMyProp(@MinLength(3) String search) {
+    public String namedMyProp() {
+        return null;
+    }
+
+    @MemberSupport
+    public String describedMyProp() {
+        return null;
+    }
+
+    @MemberSupport
+    public Set<String> autoCompleteMyProp(@MinLength(3) final String search) {
         return null;
     }
 
@@ -168,7 +190,7 @@ public class ProperMemberSupport {
     }
 
     @MemberSupport
-    public String validateMyProp(String x) {
+    public String validateMyProp(final String x) {
         return "think twice";
     }
 
@@ -177,6 +199,17 @@ public class ProperMemberSupport {
     @Collection
     @CollectionLayout(named = "foo", describedAs = "bar")
     @Getter @Setter private List<String> myColl;
+
+    @MemberSupport
+    public String namedMyColl() {
+        return null;
+    }
+
+    @MemberSupport
+    public String describedMyColl() {
+        return null;
+    }
+
 
     @MemberSupport
     public String disableMyColl() {

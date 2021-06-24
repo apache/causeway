@@ -18,8 +18,6 @@
  */
 package org.apache.isis.core.metamodel.methods;
 
-import java.util.function.IntFunction;
-
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -59,44 +57,6 @@ implements MethodPrefixBasedFacetFactory {
         this.orphanValidation = orphanValidation;
         this.prefixes = prefixes;
     }
-
-    // -- SUPPORTING METHOD NAMING CONVENTIONS
-
-    protected static final Can<String> getNamingConventionForActionSupport(
-            final ProcessMethodContext pmContext,
-            final String prefix) {
-        val actionMethod = pmContext.getMethod();
-        val isMixin = pmContext.isMixinMain();
-        return MethodLiteralConstants.NAMING_ACTIONS
-                .map(naming->naming.getActionSupportingMethodName(actionMethod, prefix, isMixin));
-    }
-
-    protected static final Can<IntFunction<String>> getNamingConventionForParameterSupport(
-            final ProcessMethodContext pmContext,
-            final String prefix) {
-        val actionMethod = pmContext.getMethod();
-        val isMixin = pmContext.isMixinMain();
-        return MethodLiteralConstants.NAMING_PARAMETERS
-                .map(naming->naming.providerForParam(actionMethod, prefix, isMixin));
-    }
-
-    protected static final Can<String> getNamingConventionForPropertyAndCollectionSupport(
-            final ProcessMethodContext pmContext,
-            final String prefix) {
-        val getterMethod = pmContext.getMethod();
-        val isMixin = pmContext.isMixinMain();
-        return MethodLiteralConstants.NAMING_PROPERTIES_AND_COLLECTIONS
-                .map(naming->naming.getMemberSupportingMethodName(getterMethod, prefix, isMixin));
-    }
-
-    protected static final Can<String> getNamingConventionForMemberSupport(
-            final ProcessMethodContext pmContext,
-            final String prefix) {
-        return getNamingConventionForActionSupport(pmContext, prefix)
-                .addAll(getNamingConventionForPropertyAndCollectionSupport(pmContext, prefix))
-                .unique();
-    }
-
 
     // -- PROGRAMMING MODEL
 
