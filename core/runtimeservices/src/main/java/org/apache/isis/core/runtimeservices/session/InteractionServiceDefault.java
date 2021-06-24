@@ -88,7 +88,7 @@ import lombok.extern.log4j.Log4j2;
 public class InteractionServiceDefault
 implements
     InteractionService,
-        InteractionLayerTracker {
+    InteractionLayerTracker {
 
     @Inject AuthenticationManager authenticationManager;
     @Inject MetamodelEventService runtimeEventService;
@@ -110,7 +110,7 @@ implements
 
     //@PostConstruct .. too early, needs services to be provisioned first
     @EventListener
-    public void init(ContextRefreshedEvent event) {
+    public void init(final ContextRefreshedEvent event) {
 
         requires(authenticationManager, "authenticationManager");
 
@@ -311,7 +311,7 @@ implements
     	return interactionLayerStack.get().size()==1;
     }
 
-    private void postInteractionOpened(IsisInteraction interaction) {
+    private void postInteractionOpened(final IsisInteraction interaction) {
         interactionId.set(interaction.getInteractionId());
         interactionScopeAwareBeans.forEach(bean->bean.beforeEnteringTransactionalBoundary(interaction));
         txBoundaryHandler.onOpen(interaction);
@@ -320,7 +320,7 @@ implements
         interactionScopeLifecycleHandler.onTopLevelInteractionOpened();
     }
 
-    private void preInteractionClosed(IsisInteraction interaction) {
+    private void preInteractionClosed(final IsisInteraction interaction) {
         completeAndPublishCurrentCommand();
         interactionScopeLifecycleHandler.onTopLevelInteractionClosing(); // cleanup the isis-session scope
         val isSynchronizationActive = TransactionSynchronizationManager.isSynchronizationActive();
@@ -330,7 +330,7 @@ implements
         interaction.close(); // do this last
     }
 
-    private void closeInteractionLayerStackDownToStackSize(int downToStackSize) {
+    private void closeInteractionLayerStackDownToStackSize(final int downToStackSize) {
 
         log.debug("about to close authenication stack down to size {} (conversation-id={}, total-sessions-on-stack={}, {})",
                 downToStackSize,

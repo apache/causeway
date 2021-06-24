@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.restfulobjects.viewer.resources;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
 
@@ -45,12 +44,9 @@ import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.layout.links.Link;
-import org.apache.isis.commons.internal.base._Bytes;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.codec._UrlDecoderUtil;
-import org.apache.isis.commons.internal.resources._Resources;
-import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
+import org.apache.isis.commons.internal.codec._UrlDecoderUtil;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -60,7 +56,6 @@ import org.apache.isis.core.metamodel.interactions.managed.MemberInteraction.Acc
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -102,7 +97,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    public Response persist(@PathParam("domainType") String domainType, final InputStream object) {
+    public Response persist(@PathParam("domainType") final String domainType, final InputStream object) {
 
         val resourceContext = createResourceContext(
                 RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS, RepresentationService.Intent.JUST_CREATED);
@@ -158,7 +153,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    public Response object(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId) {
+    public Response object(@PathParam("domainType") final String domainType, @PathParam("instanceId") final String instanceId) {
 
         val resourceContext = createResourceContext(
                 RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS, RepresentationService.Intent.ALREADY_PERSISTENT);
@@ -178,7 +173,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    public Response object(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, final InputStream object) {
+    public Response object(@PathParam("domainType") final String domainType, @PathParam("instanceId") final String instanceId, final InputStream object) {
 
         val resourceContext = createResourceContext(
                 RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS, RepresentationService.Intent.ALREADY_PERSISTENT);
@@ -209,14 +204,14 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @DELETE
     @Path("/{domainType}/{instanceId}")
     @Override
-    public Response deleteMethodNotSupported(@PathParam("domainType") String domainType, @PathParam("instanceId") String instanceId) {
+    public Response deleteMethodNotSupported(@PathParam("domainType") final String domainType, @PathParam("instanceId") final String instanceId) {
         throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.METHOD_NOT_ALLOWED, "Deleting objects is not supported.");
     }
 
     @POST
     @Path("/{domainType}/{instanceId}")
     @Override
-    public Response postMethodNotAllowed(@PathParam("domainType") String domainType, @PathParam("instanceId") String instanceId) {
+    public Response postMethodNotAllowed(@PathParam("domainType") final String domainType, @PathParam("instanceId") final String instanceId) {
         throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.METHOD_NOT_ALLOWED, "Posting to object resource is not allowed.");
     }
 
@@ -225,64 +220,9 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     // domain object layout
     // //////////////////////////////////////////////////////////
 
-    static class IconKey {
-        private final Class<?> domainClass;
-        private final String modifier;
-
-        IconKey(final Class<?> domainClass, final String modifier) {
-            this.domainClass = domainClass;
-            this.modifier = modifier;
-        }
-
-        String getImageName() {
-            final StringBuilder buf = new StringBuilder(domainClass.getSimpleName());
-            if(!_Strings.isNullOrEmpty(modifier)) {
-                buf.append("-").append(modifier);
-            }
-            buf.append(".png");
-            return buf.toString();
-        }
-
-        @Override
-        public boolean equals(final Object o) {
-            if (this == o)
-                return true;
-            if (o == null || getClass() != o.getClass())
-                return false;
-
-            final IconKey iconKey = (IconKey) o;
-
-            if (domainClass != null ? !domainClass.equals(iconKey.domainClass) : iconKey.domainClass != null) {
-                return false;
-            }
-            return modifier != null ? modifier.equals(iconKey.modifier) : iconKey.modifier == null;
-        }
-
-        @Override
-        public int hashCode() {
-            int result = domainClass != null ? domainClass.hashCode() : 0;
-            result = 31 * result + (modifier != null ? modifier.hashCode() : 0);
-            return result;
-        }
-
-        byte[] toBytes() {
-            String imageName =  getImageName();
-
-            try {
-
-                final InputStream resource = _Resources.load(domainClass, imageName);
-                return _Bytes.of(resource);
-
-            } catch (IOException e) {
-                return null;
-            }
-
-        }
-    }
-
     @Override
     @GET
-    @Path("/{domainType}/{instanceId}/image")
+    @Path("/{domainType}/{instanceId}/object-icon")
     @Consumes({ MediaType.WILDCARD })
     @Produces({
         "image/png"
@@ -293,18 +233,15 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             @PathParam("instanceId")
             final String instanceId) {
 
-        createResourceContext(
-                RepresentationType.OBJECT_LAYOUT, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
+//        createResourceContext(
+//                RepresentationType.OBJECT_ICON, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        final ManagedObject objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
-        final ObjectSpecification objectSpec = objectAdapter.getSpecification();
-        final String iconName = objectSpec.getIconName(objectAdapter);
-        final Class<?> correspondingClass = objectSpec.getCorrespondingClass();
-        final IconKey iconKey = new IconKey(correspondingClass, iconName);
-        final byte[] bytes = iconKey.toBytes();
-        return bytes != null
-                ? Response.ok(bytes).build()
-                        : Response.status(Response.Status.NOT_FOUND).build();
+        val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+
+        return _DomainObjectIcons.loadIcon(objectAdapter)
+            .map(Response::ok)
+            .orElseGet(Responses::ofNotFound)
+            .build();
     }
 
     @Override
@@ -426,7 +363,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR,
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    public Response propertyDetails(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId) {
+    public Response propertyDetails(@PathParam("domainType") final String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId) {
 
         val resourceContext = createResourceContext(
                 RepresentationType.OBJECT_PROPERTY, Where.OBJECT_FORMS, RepresentationService.Intent.NOT_APPLICABLE);
@@ -448,7 +385,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR,
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    public Response modifyProperty(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId, final InputStream body) {
+    public Response modifyProperty(@PathParam("domainType") final String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId, final InputStream body) {
 
         val resourceContext = createResourceContext(
                 ResourceDescriptor.generic(Where.OBJECT_FORMS, RepresentationService.Intent.NOT_APPLICABLE));
@@ -478,7 +415,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR,
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    public Response clearProperty(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId) {
+    public Response clearProperty(@PathParam("domainType") final String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId) {
 
         val resourceContext = createResourceContext(
                 ResourceDescriptor.generic(Where.OBJECT_FORMS, RepresentationService.Intent.NOT_APPLICABLE));
@@ -498,7 +435,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @POST
     @Path("/{domainType}/{instanceId}/properties/{propertyId}")
     @Override
-    public Response postPropertyNotAllowed(@PathParam("domainType") String domainType, @PathParam("instanceId") String instanceId, @PathParam("propertyId") String propertyId) {
+    public Response postPropertyNotAllowed(@PathParam("domainType") final String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId) {
         throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.METHOD_NOT_ALLOWED, "Posting to a property resource is not allowed.");
     }
 
@@ -514,7 +451,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    public Response accessCollection(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId) {
+    public Response accessCollection(@PathParam("domainType") final String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId) {
 
         val resourceContext = createResourceContext(
                 RepresentationType.OBJECT_COLLECTION, Where.PARENTED_TABLES, RepresentationService.Intent.NOT_APPLICABLE);
@@ -534,7 +471,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    public Response addToSet(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId, final InputStream body) {
+    public Response addToSet(@PathParam("domainType") final String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId, final InputStream body) {
 
         throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.METHOD_NOT_ALLOWED, "The framework no longer supports mutable collections.");
     }
@@ -547,7 +484,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    public Response addToList(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId, final InputStream body) {
+    public Response addToList(@PathParam("domainType") final String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId, final InputStream body) {
 
         throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.METHOD_NOT_ALLOWED, "The framework no longer supports mutable collections.");
     }
@@ -560,7 +497,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    public Response removeFromCollection(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId) {
+    public Response removeFromCollection(@PathParam("domainType") final String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId) {
 
         throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.METHOD_NOT_ALLOWED, "The framework no longer supports mutable collections.");
     }
@@ -577,7 +514,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR,
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_ACTION, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    public Response actionPrompt(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId) {
+    public Response actionPrompt(@PathParam("domainType") final String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId) {
 
         val resourceContext = createResourceContext(
                 RepresentationType.OBJECT_ACTION, Where.OBJECT_FORMS, RepresentationService.Intent.NOT_APPLICABLE);
@@ -591,21 +528,21 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @DELETE
     @Path("/{domainType}/{instanceId}/actions/{actionId}")
     @Override
-    public Response deleteActionPromptNotAllowed(@PathParam("domainType") String domainType, @PathParam("instanceId") String instanceId, @PathParam("actionId") String actionId) {
+    public Response deleteActionPromptNotAllowed(@PathParam("domainType") final String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId) {
         throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.METHOD_NOT_ALLOWED, "Deleting action prompt resource is not allowed.");
     }
 
     @POST
     @Path("/{domainType}/{instanceId}/actions/{actionId}")
     @Override
-    public Response postActionPromptNotAllowed(@PathParam("domainType") String domainType, @PathParam("instanceId") String instanceId, @PathParam("actionId") String actionId) {
+    public Response postActionPromptNotAllowed(@PathParam("domainType") final String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId) {
         throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.METHOD_NOT_ALLOWED, "Posting to an action prompt resource is not allowed.");
     }
 
     @PUT
     @Path("/{domainType}/{instanceId}/actions/{actionId}")
     @Override
-    public Response putActionPromptNotAllowed(@PathParam("domainType") String domainType, @PathParam("instanceId") String instanceId, @PathParam("actionId") String actionId) {
+    public Response putActionPromptNotAllowed(@PathParam("domainType") final String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId) {
         throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.METHOD_NOT_ALLOWED, "Putting to an action prompt resource is not allowed.");
     }
 
@@ -676,7 +613,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
     public Response invokeAction(
-            @PathParam("domainType") String domainType,
+            @PathParam("domainType") final String domainType,
             @PathParam("instanceId") final String instanceId,
             @PathParam("actionId") final String actionId,
             final InputStream body) {
@@ -696,7 +633,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @DELETE
     @Path("/{domainType}/{instanceId}/actions/{actionId}/invoke")
     @Override
-    public Response deleteInvokeActionNotAllowed(@PathParam("domainType") String domainType, @PathParam("instanceId") String instanceId, @PathParam("actionId") String actionId) {
+    public Response deleteInvokeActionNotAllowed(@PathParam("domainType") final String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId) {
         throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Deleting an action invocation resource is not allowed.");
     }
 

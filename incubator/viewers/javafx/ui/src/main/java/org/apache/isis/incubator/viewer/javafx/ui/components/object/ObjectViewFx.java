@@ -77,6 +77,11 @@ public class ObjectViewFx extends VBox {
             final Consumer<ManagedAction> actionEventHandler,
             final ManagedObject managedObject) {
 
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(managedObject)) {
+            log.warn("invalid managedObject, skipping");
+            return;
+        }
+
         log.info("binding object interaction to owner {}", managedObject.getSpecification().getFeatureIdentifier());
         _Assert.assertTrue(uiContext.getInteractionService().isInInteraction(), "requires an active interaction");
 
@@ -87,20 +92,20 @@ public class ObjectViewFx extends VBox {
         val gridVisitor = new UiGridLayout.Visitor<Pane, TabPane>(this) {
 
             @Override
-            protected void onObjectTitle(Pane container, DomainObjectLayoutData domainObjectData) {
+            protected void onObjectTitle(final Pane container, final DomainObjectLayoutData domainObjectData) {
                 val label = _fx.h2(_fx.newLabel(container, objectTitle));
                 label.maxWidthProperty().bind(
                         container.widthProperty());
             }
 
             @Override
-            protected Pane newRow(Pane container, BS3Row bs3Row) {
+            protected Pane newRow(final Pane container, final BS3Row bs3Row) {
                 val uiRow = _fx.newFlowPane(container);
                 return uiRow;
             }
 
             @Override
-            protected Pane newCol(Pane container, BS3Col bs3col) {
+            protected Pane newCol(final Pane container, final BS3Col bs3col) {
 
                 val uiCol = _fx.newVBox(container);
 
@@ -119,7 +124,7 @@ public class ObjectViewFx extends VBox {
             }
 
             @Override
-            protected Pane newActionPanel(Pane container) {
+            protected Pane newActionPanel(final Pane container) {
                 val uiActionPanel = _fx.newFlowPane(container);
                 _fx.toolbarLayout(uiActionPanel);
 
@@ -127,13 +132,13 @@ public class ObjectViewFx extends VBox {
             }
 
             @Override
-            protected TabPane newTabGroup(Pane container, BS3TabGroup tabGroupData) {
+            protected TabPane newTabGroup(final Pane container, final BS3TabGroup tabGroupData) {
                 val uiTabGroup = _fx.newTabGroup(container);
                 return uiTabGroup;
             }
 
             @Override
-            protected Pane newTab(TabPane container, BS3Tab tabData) {
+            protected Pane newTab(final TabPane container, final BS3Tab tabData) {
                 val uiTab = _fx.newTab(container, tabData.getName());
                 val uiTabContentPane = new VBox();
                 uiTab.setContent(uiTabContentPane);
@@ -141,7 +146,7 @@ public class ObjectViewFx extends VBox {
             }
 
             @Override
-            protected Pane newFieldSet(Pane container, FieldSet fieldSetData) {
+            protected Pane newFieldSet(final Pane container, final FieldSet fieldSetData) {
 
                 val titledPanel = _fx.add(container, new TitledPanel(fieldSetData.getName()));
 
@@ -156,12 +161,12 @@ public class ObjectViewFx extends VBox {
 
 
             @Override
-            protected void onClearfix(Pane container, BS3ClearFix clearFixData) {
+            protected void onClearfix(final Pane container, final BS3ClearFix clearFixData) {
                 // TODO Auto-generated method stub
             }
 
             @Override
-            protected void onAction(Pane container, ActionLayoutData actionData) {
+            protected void onAction(final Pane container, final ActionLayoutData actionData) {
 
                 val owner = managedObject;
                 val interaction = ActionInteraction.start(owner, actionData.getId(), Where.OBJECT_FORMS);
@@ -188,7 +193,7 @@ public class ObjectViewFx extends VBox {
             }
 
             @Override
-            protected void onProperty(Pane container, PropertyLayoutData propertyData) {
+            protected void onProperty(final Pane container, final PropertyLayoutData propertyData) {
 
                 val owner = managedObject;
 
@@ -222,7 +227,7 @@ public class ObjectViewFx extends VBox {
             }
 
             @Override
-            protected void onCollection(Pane container, CollectionLayoutData collectionData) {
+            protected void onCollection(final Pane container, final CollectionLayoutData collectionData) {
 
                 val owner = managedObject;
 

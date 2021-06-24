@@ -32,14 +32,16 @@ import org.apache.isis.valuetypes.asciidoc.ui.wkt.IsisModuleValAsciidocUiWkt;
 import org.apache.isis.valuetypes.sse.ui.wkt.IsisModuleValSseUiWkt;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
-import demoapp.web.DemoAppManifestCommon;
+import demoapp.dom.DemoModuleCommon;
+import demoapp.web.DemoAppManifestJdo;
 
 /**
  * Bootstrap the application.
  */
 @SpringBootApplication
 @Import({
-    DemoAppManifestCommon.class,
+    DemoModuleCommon.class,
+    DemoAppManifestJdo.class,
 
     // INCUBATING
     IsisModuleIncViewerVaadinViewer.class, // vaadin viewer
@@ -59,12 +61,14 @@ public class DemoAppVaadin extends SpringBootServletInitializer {
      * @implNote this is to support the <em>Spring Boot Maven Plugin</em>, which auto-detects an
      * entry point by searching for classes having a {@code main(...)}
      */
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
 
         IsisPresets.logging(InteractionServiceDefault.class, "debug");
 //        IsisPresets.logging(VaadinAuthenticationHandler.class, "debug");
 //        IsisPresets.logging(IsisServletForVaadin.class, "debug");
         IsisPresets.logging(_Probe.class, "debug"); // enable debug entry logging
+
+        System.setProperty("spring.profiles.active", "demo-jdo");
 
         SpringApplication.run(new Class[] { DemoAppVaadin.class }, args);
     }

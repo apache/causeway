@@ -108,7 +108,7 @@ public enum RepresentationType {
             RestfulMediaType.APPLICATION_JSON_OBJECT_LAYOUT_BS3,
             RestfulMediaType.APPLICATION_XML_OBJECT_LAYOUT_BS3,
             null),
-    OBJECT_IMAGE(
+    OBJECT_ICON(
             "image/png",
             "image/png",
             null),
@@ -198,16 +198,16 @@ public enum RepresentationType {
      * Clones the (immutable) {@link #getMediaType() media type}, adding in one additional
      * parameter value.
      */
-    public MediaType getMediaType(String parameter, String paramValue) {
+    public MediaType getMediaType(final String parameter, final String paramValue) {
         return getJsonMediaType(Collections.singletonMap(parameter, paramValue));
     }
 
-    public MediaType getJsonMediaType(Map<String, String> mediaTypeParams) {
+    public MediaType getJsonMediaType(final Map<String, String> mediaTypeParams) {
         Map<String, String> parameters = new HashMap<>(jsonMediaType.getParameters());
         parameters.putAll(mediaTypeParams);
         return new MediaType(jsonMediaType.getType(), jsonMediaType.getSubtype(), parameters);
     }
-    public MediaType getXmlMediaType(Map<String, String> mediaTypeParams) {
+    public MediaType getXmlMediaType(final Map<String, String> mediaTypeParams) {
         if(xmlMediaType == null) {
             return null;
         }

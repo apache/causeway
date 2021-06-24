@@ -81,8 +81,8 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
         final Rel rel = Rel.OBJECT_ICON;
         final String objectRef = ManagedObjects.stringifyElseFail(objectAdapter, "/");
-        final String url = "objects/" + objectRef + "/image";
-        return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.OBJECT_IMAGE, url);
+        final String url = "objects/" + objectRef + "/object-icon";
+        return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.OBJECT_ICON, url);
     }
 
     private static enum Mode {
@@ -457,7 +457,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     }
 
 
-    public static Object valueOrRef(IResourceContext context, JsonValueEncoder jsonValueEncoder, ManagedObject adapter) {
+    public static Object valueOrRef(final IResourceContext context, final JsonValueEncoder jsonValueEncoder, final ManagedObject adapter) {
 
         val spec = adapter.getSpecification();
         if(spec.isValue()) {

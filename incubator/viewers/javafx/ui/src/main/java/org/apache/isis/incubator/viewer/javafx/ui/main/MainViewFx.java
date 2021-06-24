@@ -26,6 +26,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContextFx;
 import org.apache.isis.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
@@ -112,7 +113,7 @@ public class MainViewFx {
         header.getTertiary().buildMenuItems(commonContext, rightMenuBuilder);
     }
 
-    private void replaceContent(Node node) {
+    private void replaceContent(final Node node) {
         contentPane.getChildren().clear();
         contentPane.getChildren().add(node);
     }
@@ -122,8 +123,9 @@ public class MainViewFx {
         uiContext.route(metaModelContext::getHomePageAdapter);
     }
 
-    private Node uiComponentForActionResult(ManagedObject actionResult) {
-        if (actionResult.getSpecification().isParentedOrFreeCollection()) {
+    private Node uiComponentForActionResult(final ManagedObject actionResult) {
+        if (ManagedObjects.isSpecified(actionResult)
+                && actionResult.getSpecification().isParentedOrFreeCollection()) {
             return TableViewFx.fromCollection(uiContext, actionResult, Where.STANDALONE_TABLES);
         } else {
             return ObjectViewFx.fromObject(
