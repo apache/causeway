@@ -98,7 +98,7 @@ implements ObjectIconService {
 
         return icon;
 
-        //XXX cannot use computeIfAbsent, as does not support recursive update
+        //XXX cannot use computeIfAbsent, as it does not support recursive update
         // return iconByKey.computeIfAbsent(iconResourceKey, key->
         //     findIcon(spec, iconNameModifier));
     }
@@ -119,9 +119,11 @@ implements ObjectIconService {
                 ? domainClass.getSimpleName() + "-" + iconNameModifier
                 : domainClass.getSimpleName();
 
+        // search for image in corresponding class'es resource path
+
         for(val imageType : IMAGE_TYPES) {
 
-            val objectIcon1 = imageType
+            val objectIcon = imageType
                 .getProposedFileExtensions()
                 .stream()
                 .map(suffix->iconResourceNameNoExt + "." + suffix)
@@ -135,13 +137,17 @@ implements ObjectIconService {
                 .map(Optional::get)
                 .findFirst();
 
-            if(objectIcon1.isPresent()) {
-                return objectIcon1.get(); // short-circuit if found
+            if(objectIcon.isPresent()) {
+                return objectIcon.get(); // short-circuit if found
             }
 
-            // also search the default image resource path
+        }
 
-            val objectIcon2 = imageType
+        // also search the default image resource path
+
+        for(val imageType : IMAGE_TYPES) {
+
+            val objectIcon = imageType
                     .getProposedFileExtensions()
                     .stream()
                     .map(suffix->DEFAULT_IMAGE_RESOURCE_PATH + "/" + iconResourceNameNoExt + "." + suffix)
@@ -155,8 +161,8 @@ implements ObjectIconService {
                     .map(Optional::get)
                     .findFirst();
 
-            if(objectIcon2.isPresent()) {
-                return objectIcon2.get(); // short-circuit if found
+            if(objectIcon.isPresent()) {
+                return objectIcon.get(); // short-circuit if found
             }
 
         }
