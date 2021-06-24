@@ -55,6 +55,7 @@ import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.session.SessionLoggingServiceLogging;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.user.ImpersonateMenu;
+import org.apache.isis.applib.services.user.ImpersonateStopMenu;
 import org.apache.isis.applib.services.user.RoleMemento;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.user.UserService;
@@ -100,6 +101,7 @@ import org.apache.isis.schema.IsisModuleSchema;
         ConfigurationMenu.class,
         LayoutServiceMenu.class,
         ImpersonateMenu.class,
+        ImpersonateStopMenu.class,
         MetaModelServiceMenu.class,
         QueryResultsCache.class,
         UserService.class,

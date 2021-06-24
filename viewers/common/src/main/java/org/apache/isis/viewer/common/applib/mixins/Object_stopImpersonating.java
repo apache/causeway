@@ -28,12 +28,12 @@ import org.apache.isis.applib.annotation.Redirect;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
-import org.apache.isis.applib.services.user.ImpersonateMenu;
+import org.apache.isis.applib.services.user.ImpersonateStopMenu;
 
 import lombok.RequiredArgsConstructor;
 
 /**
- * Same as {@link ImpersonateMenu#stopImpersonating()},
+ * Same as {@link ImpersonateStopMenu#stopImpersonating()},
  * but implemented as a mixin so that can be invoked while accessing an object.
  *
  * @since 2.0 {@index}
@@ -61,18 +61,15 @@ public class Object_stopImpersonating {
     private final Object holder;
 
     public Object act() {
-        impersonateMenu.stopImpersonating();
+        impersonateStopMenu.stopImpersonating();
         return holder;
     }
 
     @MemberSupport public boolean hideAct() {
-        return impersonateMenu.hideStopImpersonating();
-    }
-    @MemberSupport public String disableAct() {
-        return impersonateMenu.disableStopImpersonating();
-
+        return impersonateStopMenu.hideStopImpersonating();
     }
 
-    @Inject ImpersonateMenu impersonateMenu;
+    @Inject
+    ImpersonateStopMenu impersonateStopMenu;
 
 }

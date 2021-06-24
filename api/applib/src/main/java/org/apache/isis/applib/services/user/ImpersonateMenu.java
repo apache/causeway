@@ -10,21 +10,15 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.services.message.MessageService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.experimental.Accessors;
 
 /**
  * Provides the UI to allow a current user to be impersonated.
@@ -149,29 +143,5 @@ public class ImpersonateMenu {
         return impersonateMenuAdvisors.get(0);
     }
 
-
-
-
-
-    public static class StopImpersonatingDomainEvent extends ActionDomainEvent { }
-
-    @Action(
-            domainEvent = ImpersonateMenu.StopImpersonatingDomainEvent.class,
-            semantics = SemanticsOf.IDEMPOTENT,
-            commandPublishing = Publishing.DISABLED,
-            executionPublishing = Publishing.DISABLED,
-            restrictTo = RestrictTo.PROTOTYPING
-    )
-    @ActionLayout(sequence = "100.3")
-    public void stopImpersonating() {
-        this.userService.stopImpersonating();
-        this.messageService.informUser("No longer impersonating another user");
-    }
-    public boolean hideStopImpersonating() {
-        return ! this.userService.supportsImpersonation();
-    }
-    public String disableStopImpersonating() {
-        return ! this.userService.isImpersonating() ? "no user is currently being impersonated": null;
-    }
 
 }
