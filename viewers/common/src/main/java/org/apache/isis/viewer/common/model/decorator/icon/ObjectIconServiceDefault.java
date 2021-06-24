@@ -24,9 +24,11 @@ import java.util.Optional;
 
 import javax.annotation.Nullable;
 import javax.annotation.Priority;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
@@ -34,29 +36,33 @@ import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.val;
 
 @Service
 @Named("isis.viewer.common.ObjectIconServiceDefault")
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("Default")
-//@RequiredArgsConstructor(onConstructor_ = {@Inject})
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ObjectIconServiceDefault
 implements ObjectIconService {
 
-    private static final String DEFAULT_IMAGE_RESOURCE_PATH = "/images";
+    private static final String DEFAULT_IMAGE_RESOURCE_PATH = "classpath:images";
     private static final Can<CommonMimeType> IMAGE_TYPES =
             Can.of(
                 CommonMimeType.PNG,
                 CommonMimeType.GIF,
                 CommonMimeType.JPEG,
                 CommonMimeType.SVG);
+
+
+    private final ResourceLoader resourceLoader;
 
     private final Map<String, ObjectIcon> iconByKey = _Maps.newConcurrentHashMap();
 
@@ -166,14 +172,17 @@ implements ObjectIconService {
 
     // -- HELPER
 
-    private static Optional<URL> classPathResource(
+    @SneakyThrows
+    private Optional<URL> classPathResource(
             final @NonNull String absoluteResourceName) {
-        if(!absoluteResourceName.startsWith("/")) {
+        if(!absoluteResourceName.startsWith("classpath:")) {
             throw _Exceptions
             .illegalArgument("invalid absolute resourceName %s", absoluteResourceName);
         }
-        val resourceUrl = _Context.getDefaultClassLoader().getResource(absoluteResourceName);
-        return Optional.ofNullable(resourceUrl);
+        val resource = resourceLoader.getResource(absoluteResourceName);
+        return resource.exists()
+                ? Optional.ofNullable(resource.getURL())
+                : Optional.empty();
     }
 
     private static Optional<URL> classPathResource(
