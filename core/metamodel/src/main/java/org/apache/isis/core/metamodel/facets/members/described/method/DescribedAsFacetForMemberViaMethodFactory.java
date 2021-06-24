@@ -23,7 +23,6 @@ import javax.inject.Inject;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
@@ -66,11 +65,10 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         }
         processMethodContext.removeMethod(describedMethod);
 
-        final FacetHolder facetedMethod = processMethodContext.getFacetHolder();
         FacetUtil.addFacet(
                 new DescribedAsFacetForMemberViaMethod(
                         describedMethod,
-                        facetedMethod));
+                        processMethodContext.getFacetHolder()));
     }
 
 }

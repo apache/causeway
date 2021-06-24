@@ -102,10 +102,13 @@ implements MandatoryFacet {
         if (!required) {
             return null;
         }
-        final NamedFacet namedFacet = getFacetHolder().getFacet(NamedFacet.class);
-        final String name = namedFacet != null
-                ? namedFacet.preferredTranslated()
-                : null;
+        val name = getFacetHolder().lookupFacet(NamedFacet.class)
+        .map(NamedFacet::getSpecialization)
+        .map(specialization->specialization
+                .fold(textFacet->textFacet.preferredTranslated(),
+                      textFacet->textFacet.textElseNull(context.getHead().getTarget())))
+        .orElse(null);
+
         return name != null
                 ? "'" + name + "' is mandatory"
                 : "Mandatory";

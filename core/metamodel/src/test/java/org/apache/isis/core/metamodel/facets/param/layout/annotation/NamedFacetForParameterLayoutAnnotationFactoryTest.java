@@ -30,6 +30,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.all.i8n.HasTranslation;
 import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.param.layout.NamedFacetForParameterLayoutAnnotation;
@@ -54,7 +55,7 @@ public class NamedFacetForParameterLayoutAnnotationFactoryTest extends AbstractF
         final NamedFacet facet = facetedMethodParameter.getFacet(NamedFacet.class);
         assertThat(facet, is(notNullValue()));
         assertThat(facet, is(instanceOf(NamedFacetForParameterLayoutAnnotation.class)));
-        assertEquals(NAME, facet.text(NounForm.SINGULAR));
+        assertEquals(NAME, ((HasTranslation)facet).text(NounForm.SINGULAR));
         assertThat(facet.escaped(), is(true));
     }
 
@@ -73,8 +74,8 @@ public class NamedFacetForParameterLayoutAnnotationFactoryTest extends AbstractF
         final NamedFacet facet = facetedMethodParameter.getFacet(NamedFacet.class);
         assertThat(facet, is(notNullValue()));
         assertThat(facet, is(instanceOf(NamedFacetForParameterLayoutAnnotation.class)));
-        assertThat(facet.text(NounForm.SINGULAR), is(equalTo(NAME)));
-        assertEquals(NAME, facet.text(NounForm.SINGULAR));
+        assertThat(((HasTranslation)facet).text(NounForm.SINGULAR), is(equalTo(NAME)));
+        assertEquals(NAME, ((HasTranslation)facet).text(NounForm.SINGULAR));
         assertThat(facet.escaped(), is(false));
     }
 

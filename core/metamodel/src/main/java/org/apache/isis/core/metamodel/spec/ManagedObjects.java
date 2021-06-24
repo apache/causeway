@@ -35,8 +35,11 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Objects;
@@ -77,7 +80,7 @@ public final class ManagedObjects {
     // -- CATEGORISATION
 
     /** is null or has neither an ObjectSpecification and a value (pojo) */
-    public static boolean isNullOrUnspecifiedOrEmpty(@Nullable ManagedObject adapter) {
+    public static boolean isNullOrUnspecifiedOrEmpty(@Nullable final ManagedObject adapter) {
         if(adapter==null || adapter==ManagedObject.unspecified()) {
             return true;
         }
@@ -85,7 +88,7 @@ public final class ManagedObjects {
     }
 
     /** whether has at least a spec */
-    public static boolean isSpecified(@Nullable ManagedObject adapter) {
+    public static boolean isSpecified(@Nullable final ManagedObject adapter) {
         return adapter!=null && adapter!=ManagedObject.unspecified();
     }
 
@@ -93,40 +96,40 @@ public final class ManagedObjects {
      * @return whether the corresponding type can be mapped onto a REFERENCE (schema) or an Oid,
      * that is, the type is 'identifiable' (aka 'referencable' or 'bookmarkable')
      */
-    public static boolean isIdentifiable(@Nullable ManagedObject managedObject) {
+    public static boolean isIdentifiable(@Nullable final ManagedObject managedObject) {
         return spec(managedObject)
                 .map(ObjectSpecification::isIdentifiable)
                 .orElse(false);
     }
 
-    public static boolean isEntity(ManagedObject managedObject) {
+    public static boolean isEntity(final ManagedObject managedObject) {
         return spec(managedObject)
                 .map(ObjectSpecification::isEntity)
                 .orElse(false);
     }
 
-    public static boolean isValue(ManagedObject managedObject) {
+    public static boolean isValue(final ManagedObject managedObject) {
         return spec(managedObject)
                 .map(ObjectSpecification::isValue)
                 .orElse(false);
     }
 
-    public static Optional<String> getDomainType(ManagedObject managedObject) {
+    public static Optional<String> getDomainType(final ManagedObject managedObject) {
         return spec(managedObject)
                 .map(ObjectSpecification::getLogicalTypeName);
     }
 
     // -- IDENTIFICATION
 
-    public static Optional<ObjectSpecification> spec(@Nullable ManagedObject managedObject) {
+    public static Optional<ObjectSpecification> spec(@Nullable final ManagedObject managedObject) {
         return isSpecified(managedObject) ? Optional.of(managedObject.getSpecification()) : Optional.empty();
     }
 
-    public static Optional<Bookmark> bookmark(@Nullable ManagedObject managedObject) {
+    public static Optional<Bookmark> bookmark(@Nullable final ManagedObject managedObject) {
         return isSpecified(managedObject) ? managedObject.getBookmark() : Optional.empty();
     }
 
-    public static Bookmark bookmarkElseFail(@Nullable ManagedObject managedObject) {
+    public static Bookmark bookmarkElseFail(@Nullable final ManagedObject managedObject) {
         return bookmark(managedObject)
                 .orElseThrow(()->_Exceptions.illegalArgument("cannot identify %s", managedObject));
     }
@@ -136,12 +139,12 @@ public final class ManagedObjects {
      * @return optionally a String representing a reference to the <em>identifiable</em>
      * {@code managedObject}, usually made up of the object's type and its ID.
      */
-    public static Optional<String> stringify(@Nullable ManagedObject managedObject) {
+    public static Optional<String> stringify(@Nullable final ManagedObject managedObject) {
         return bookmark(managedObject)
                 .map(Bookmark::stringify);
     }
 
-    public static String stringifyElseFail(@Nullable ManagedObject managedObject) {
+    public static String stringifyElseFail(@Nullable final ManagedObject managedObject) {
         return stringify(managedObject)
                 .orElseThrow(()->_Exceptions.illegalArgument("cannot stringify %s", managedObject));
     }
@@ -154,14 +157,14 @@ public final class ManagedObjects {
      * {@code managedObject}, made of the form &lt;object-type&gt; &lt;separator&gt; &lt;object-id&gt;.
      */
     public static Optional<String> stringify(
-            @Nullable ManagedObject managedObject,
+            @Nullable final ManagedObject managedObject,
             @NonNull final String separator) {
         return bookmark(managedObject)
                 .map(oid->oid.getLogicalTypeName() + separator + oid.getIdentifier());
     }
 
     public static String stringifyElseFail(
-            @Nullable ManagedObject managedObject,
+            @Nullable final ManagedObject managedObject,
             @NonNull final String separator) {
         return stringify(managedObject, separator)
                 .orElseThrow(()->_Exceptions.illegalArgument("cannot stringify %s", managedObject));
@@ -170,11 +173,11 @@ public final class ManagedObjects {
 
     // -- COMPARE UTILITIES
 
-    public static int compare(@Nullable ManagedObject p, @Nullable ManagedObject q) {
+    public static int compare(@Nullable final ManagedObject p, @Nullable final ManagedObject q) {
         return NATURAL_NULL_FIRST.compare(p, q);
     }
 
-    public static Comparator<ManagedObject> orderingBy(ObjectAssociation sortProperty, boolean ascending) {
+    public static Comparator<ManagedObject> orderingBy(final ObjectAssociation sortProperty, final boolean ascending) {
 
         final Comparator<ManagedObject> comparator = ascending
                 ? NATURAL_NULL_FIRST
@@ -193,7 +196,7 @@ public final class ManagedObjects {
     private static final Comparator<ManagedObject> NATURAL_NULL_FIRST = new Comparator<ManagedObject>(){
         @SuppressWarnings({"rawtypes" })
         @Override
-        public int compare(@Nullable ManagedObject p, @Nullable ManagedObject q) {
+        public int compare(@Nullable final ManagedObject p, @Nullable final ManagedObject q) {
             val pPojo = UnwrapUtil.single(p);
             val qPojo = UnwrapUtil.single(q);
             if(pPojo instanceof Comparable && qPojo instanceof Comparable) {
@@ -216,7 +219,7 @@ public final class ManagedObjects {
     // -- COPY UTILITIES
 
     @Nullable
-    public static ManagedObject copyIfClonable(@Nullable ManagedObject adapter) {
+    public static ManagedObject copyIfClonable(@Nullable final ManagedObject adapter) {
 
         if(adapter==null) {
             return null;
@@ -238,7 +241,7 @@ public final class ManagedObjects {
 
     // -- DEFAULTS UTILITIES
 
-    public static ManagedObject emptyToDefault(boolean mandatory, @NonNull ManagedObject input) {
+    public static ManagedObject emptyToDefault(final boolean mandatory, @NonNull final ManagedObject input) {
         if(!isSpecified(input)) {
             return input;
         }
@@ -264,15 +267,15 @@ public final class ManagedObjects {
 
     // -- TITLE UTILITIES
 
-    public static String abbreviatedTitleOf(ManagedObject adapter, int maxLength, String suffix) {
+    public static String abbreviatedTitleOf(final ManagedObject adapter, final int maxLength, final String suffix) {
         return abbreviated(titleOf(adapter), maxLength, suffix);
     }
 
-    public static String titleOf(ManagedObject adapter) {
+    public static String titleOf(final ManagedObject adapter) {
         return adapter!=null?adapter.titleString():"";
     }
 
-    private static String abbreviated(final String str, final int maxLength, String suffix) {
+    private static String abbreviated(final String str, final int maxLength, final String suffix) {
         return str.length() < maxLength ? str : str.substring(0, maxLength - 3) + suffix;
     }
 
@@ -345,7 +348,7 @@ public final class ManagedObjects {
      */
     @Deprecated
     @SneakyThrows
-    public static void warnIfAttachedEntity(ManagedObject adapter, String logMessage) {
+    public static void warnIfAttachedEntity(final ManagedObject adapter, final String logMessage) {
         if(isNullOrUnspecifiedOrEmpty(adapter)) {
             return;
         }
@@ -358,7 +361,7 @@ public final class ManagedObjects {
     /**
      * eg. in order to prevent wrapping an object that is already wrapped
      */
-    public static void assertPojoNotManaged(@Nullable Object pojo) {
+    public static void assertPojoNotManaged(@Nullable final Object pojo) {
         // can do this check only when the pojo is not null, otherwise is always considered valid
         if(pojo==null) {
             return;
@@ -373,6 +376,40 @@ public final class ManagedObjects {
         }
     }
 
+    // -- IMPERATIVE TEXT UTILITY
+
+    public static Result<String> imperativeText(
+            final @Nullable ManagedObject object,
+            final @NonNull Method method,
+            final @Nullable TranslationContext translationContext) {
+
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(object)) {
+            return Result.success(null);
+        }
+
+        val mmc = object.getSpecification().getMetaModelContext();
+
+        val result =  Result.of(()->{
+            final Object returnValue = ManagedObjects.InvokeUtil.invoke(method, object);
+            if(returnValue instanceof String) {
+                return (String) returnValue;
+            }
+            if(returnValue instanceof TranslatableString) {
+                final TranslatableString ts = (TranslatableString) returnValue;
+                return ts.translate(mmc.getTranslationService(), translationContext);
+            }
+            return null;
+        });
+
+        if(result.isFailure()) {
+            val isUnitTesting = mmc.getSystemEnvironment().isUnitTesting();
+            if(!isUnitTesting) {
+                log.warn("imperative text failure (context: {})", translationContext, result.getFailure().get());
+            }
+        }
+
+        return result;
+    }
 
     // -- ENTITY UTILITIES
 
@@ -380,7 +417,7 @@ public final class ManagedObjects {
     public static final class EntityUtil {
 
         @NonNull
-        public static Optional<PersistenceStandard> getPersistenceStandard(@Nullable ManagedObject adapter) {
+        public static Optional<PersistenceStandard> getPersistenceStandard(@Nullable final ManagedObject adapter) {
             if(adapter==null) {
                 return Optional.empty();
             }
@@ -398,7 +435,7 @@ public final class ManagedObjects {
         }
 
         @NonNull
-        public static EntityState getEntityState(@Nullable ManagedObject adapter) {
+        public static EntityState getEntityState(@Nullable final ManagedObject adapter) {
             if(isNullOrUnspecifiedOrEmpty(adapter)) {
                 return EntityState.NOT_PERSISTABLE;
             }
@@ -417,21 +454,21 @@ public final class ManagedObjects {
             return entityFacet.getEntityState(pojo);
         }
 
-        public static void persistInCurrentTransaction(ManagedObject managedObject) {
+        public static void persistInCurrentTransaction(final ManagedObject managedObject) {
             requiresEntity(managedObject);
             val spec = managedObject.getSpecification();
             val entityFacet = spec.getFacet(EntityFacet.class);
             entityFacet.persist(spec, managedObject.getPojo());
         }
 
-        public static void destroyInCurrentTransaction(ManagedObject managedObject) {
+        public static void destroyInCurrentTransaction(final ManagedObject managedObject) {
             requiresEntity(managedObject);
             val spec = managedObject.getSpecification();
             val entityFacet = spec.getFacet(EntityFacet.class);
             entityFacet.delete(spec, managedObject.getPojo());
         }
 
-        public static void requiresEntity(ManagedObject managedObject) {
+        public static void requiresEntity(final ManagedObject managedObject) {
             if(isNullOrUnspecifiedOrEmpty(managedObject)) {
                 throw _Exceptions.illegalArgument("requires an entity object but got null, unspecified or empty");
             }
@@ -449,7 +486,7 @@ public final class ManagedObjects {
          * @throws AssertionError if managedObject is a detached entity
          */
         @NonNull
-        public static ManagedObject requiresAttached(@NonNull ManagedObject managedObject) {
+        public static ManagedObject requiresAttached(@NonNull final ManagedObject managedObject) {
             val entityState = EntityUtil.getEntityState(managedObject);
             if(entityState.isPersistable()) {
                 // ensure we have an attached entity
@@ -463,7 +500,7 @@ public final class ManagedObjects {
         }
 
         @Nullable
-        public static ManagedObject reattach(@Nullable ManagedObject managedObject) {
+        public static ManagedObject reattach(@Nullable final ManagedObject managedObject) {
             if(isNullOrUnspecifiedOrEmpty(managedObject)) {
                 return managedObject;
             }
@@ -500,8 +537,8 @@ public final class ManagedObjects {
         }
 
         public static void requiresWhenFirstIsBookmarkableSecondIsAttached(
-                ManagedObject first,
-                ManagedObject second) {
+                final ManagedObject first,
+                final ManagedObject second) {
 
             if(!ManagedObjects.isIdentifiable(first) || !ManagedObjects.isSpecified(second)) {
                 return;
@@ -521,16 +558,16 @@ public final class ManagedObjects {
 
         // -- SHORTCUTS
 
-        public static boolean isAttached(@Nullable ManagedObject adapter) {
+        public static boolean isAttached(@Nullable final ManagedObject adapter) {
             return EntityUtil.getEntityState(adapter).isAttached();
         }
 
-        public static boolean isDetachedOrRemoved(@Nullable ManagedObject adapter) {
+        public static boolean isDetachedOrRemoved(@Nullable final ManagedObject adapter) {
             return EntityUtil.getEntityState(adapter).isDetachedOrRemoved();
         }
 
         /** only supported by JDO - always false with JPA */
-        public static boolean isRemoved(@Nullable ManagedObject adapter) {
+        public static boolean isRemoved(@Nullable final ManagedObject adapter) {
             return EntityUtil.getEntityState(adapter).isRemoved();
         }
 
@@ -541,7 +578,7 @@ public final class ManagedObjects {
     @UtilityClass
     public static final class VisibilityUtil {
 
-        public static Predicate<? super ManagedObject> filterOn(InteractionInitiatedBy interactionInitiatedBy) {
+        public static Predicate<? super ManagedObject> filterOn(final InteractionInitiatedBy interactionInitiatedBy) {
             return $->ManagedObjects.VisibilityUtil.isVisible($, interactionInitiatedBy);
         }
 
@@ -594,8 +631,8 @@ public final class ManagedObjects {
          * @param interactionInitiatedBy
          */
         public static boolean isVisible(
-                ManagedObject adapter,
-                InteractionInitiatedBy interactionInitiatedBy) {
+                final ManagedObject adapter,
+                final InteractionInitiatedBy interactionInitiatedBy) {
 
             if(isNullOrUnspecifiedOrEmpty(adapter)) {
                 // a choices list could include a null (eg example in ToDoItems#choices1Categorized()); want to show as "visible"
@@ -659,27 +696,27 @@ public final class ManagedObjects {
             return invokeWithPPM(ppmConstructor, method, adapter, argumentAdapters, Collections.emptyList());
         }
 
-        public static void invokeAll(Iterable<Method> methods, final ManagedObject adapter) {
+        public static void invokeAll(final Iterable<Method> methods, final ManagedObject adapter) {
             MethodUtil.invoke(methods, UnwrapUtil.single(adapter));
         }
 
-        public static Object invoke(Method method, ManagedObject adapter) {
+        public static Object invoke(final Method method, final ManagedObject adapter) {
             return MethodExtensions.invoke(method, UnwrapUtil.single(adapter));
         }
 
-        public static Object invoke(Method method, ManagedObject adapter, Object arg0) {
+        public static Object invoke(final Method method, final ManagedObject adapter, final Object arg0) {
             return MethodExtensions.invoke(method, UnwrapUtil.single(adapter), new Object[] {arg0});
         }
 
-        public static Object invoke(Method method, ManagedObject adapter, Can<ManagedObject> argumentAdapters) {
+        public static Object invoke(final Method method, final ManagedObject adapter, final Can<ManagedObject> argumentAdapters) {
             return MethodExtensions.invoke(method, UnwrapUtil.single(adapter), UnwrapUtil.multipleAsArray(argumentAdapters));
         }
 
-        public static Object invoke(Method method, ManagedObject adapter, ManagedObject arg0Adapter) {
+        public static Object invoke(final Method method, final ManagedObject adapter, final ManagedObject arg0Adapter) {
             return invoke(method, adapter, UnwrapUtil.single(arg0Adapter));
         }
 
-        public static Object invoke(Method method, ManagedObject adapter, ManagedObject[] argumentAdapters) {
+        public static Object invoke(final Method method, final ManagedObject adapter, final ManagedObject[] argumentAdapters) {
             return MethodExtensions.invoke(method, UnwrapUtil.single(adapter), UnwrapUtil.multipleAsArray(argumentAdapters));
         }
 
@@ -691,7 +728,7 @@ public final class ManagedObjects {
          * <li>if the method declares parameters but arguments are missing, then will provide 'null' defaults for these.</li>
          * </ul>
          */
-        public static Object invokeAutofit(Method method, ManagedObject adapter) {
+        public static Object invokeAutofit(final Method method, final ManagedObject adapter) {
             return invoke(method, adapter, new ManagedObject[method.getParameterTypes().length]);
         }
 
@@ -759,7 +796,7 @@ public final class ManagedObjects {
 
         }
 
-        private static Iterator<? extends ManagedObject> argIteratorFrom(Can<? extends ManagedObject> pendingArgs) {
+        private static Iterator<? extends ManagedObject> argIteratorFrom(final Can<? extends ManagedObject> pendingArgs) {
             return pendingArgs!=null ? pendingArgs.iterator() : Collections.emptyIterator();
         }
 
@@ -791,7 +828,7 @@ public final class ManagedObjects {
         }
 
         @Nullable
-        public static String singleAsStringOrElse(@Nullable final ManagedObject adapter, @Nullable String orElse) {
+        public static String singleAsStringOrElse(@Nullable final ManagedObject adapter, @Nullable final String orElse) {
             final Object obj = UnwrapUtil.single(adapter);
             if (obj == null) {
                 return null;
@@ -868,6 +905,8 @@ public final class ManagedObjects {
         }
 
     }
+
+
 
 
 }

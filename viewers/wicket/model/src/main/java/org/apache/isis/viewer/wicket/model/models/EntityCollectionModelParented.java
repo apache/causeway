@@ -182,9 +182,14 @@ implements
         return entityModel.memento();
     }
 
+    @Override
+    public ManagedObject getParentObject() {
+        return getManagedCollection().getOwner();
+    }
+
     // -- ACTION ORDER
 
-    private int deweyOrderCompare(ObjectAction a, ObjectAction b) {
+    private int deweyOrderCompare(final ObjectAction a, final ObjectAction b) {
         val seqA = a.lookupFacet(LayoutOrderFacet.class)
             .map(LayoutOrderFacet::getSequence)
             .orElse("1");

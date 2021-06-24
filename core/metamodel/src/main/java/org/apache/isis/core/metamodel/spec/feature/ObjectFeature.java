@@ -50,13 +50,17 @@ public interface ObjectFeature extends Specification {
      * the name of this member.
      *
      * @see #getFeatureIdentifier()
+     * @deprecated TODO[ISIS-1720] must take ManagedObject as an argument
      */
+    @Deprecated
     String getName();
 
     /**
      * Returns a description of how the member is used - this complements the
      * help text.
+     * @deprecated TODO[ISIS-1720] must take ManagedObject as an argument
      */
+    @Deprecated
     @Override
     String getDescription();
 

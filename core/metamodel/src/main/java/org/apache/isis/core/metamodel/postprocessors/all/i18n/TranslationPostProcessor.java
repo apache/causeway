@@ -21,9 +21,11 @@ package org.apache.isis.core.metamodel.postprocessors.all.i18n;
 
 import javax.inject.Inject;
 
+import org.apache.isis.commons.internal.functions._Functions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.all.i8n.HasTranslation;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -77,11 +79,17 @@ extends ObjectSpecificationPostProcessorAbstract {
     private void memoizeTranslations(final FacetHolder facetHolder) {
         facetHolder
             .lookupFacet(NamedFacet.class)
-            .ifPresent(NamedFacet::memoizeTranslations);
+            .map(NamedFacet::getSpecialization)
+            .ifPresent(specialization->specialization
+                    .accept(  HasTranslation::memoizeTranslations,
+                              _Functions.noopConsumer()));
 
         facetHolder
             .lookupFacet(DescribedAsFacet.class)
-            .ifPresent(DescribedAsFacet::memoizeTranslations);
+            .map(DescribedAsFacet::getSpecialization)
+            .ifPresent(specialization->specialization
+                    .accept(  HasTranslation::memoizeTranslations,
+                              _Functions.noopConsumer()));
 
     }
 

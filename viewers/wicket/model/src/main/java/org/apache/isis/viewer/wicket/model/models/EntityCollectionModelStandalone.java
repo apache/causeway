@@ -96,9 +96,13 @@ extends EntityCollectionModelAbstract {
 
     @Override
     public String getName() {
-        return getTypeOfSpecification().lookupFacet(NamedFacet.class)
-                .map(namedFacet->namedFacet.translated(NounForm.PLURAL))
-                .orElse(getIdentifier().getMemberLogicalName());
+        return getTypeOfSpecification()
+            .lookupFacet(NamedFacet.class)
+            .map(NamedFacet::getSpecialization)
+            .map(specialization->specialization
+                    .fold(namedFacet->namedFacet.translated(NounForm.PLURAL),
+                          namedFacet->namedFacet.textElseNull(actionModel.getOwner())))
+            .orElse(getIdentifier().getMemberLogicalName());
     }
 
     @Override
@@ -106,5 +110,9 @@ extends EntityCollectionModelAbstract {
         return actionModel.getMetaModel();
     }
 
+    @Override
+    public ManagedObject getParentObject() {
+        return actionModel.getOwner();
+    }
 
 }

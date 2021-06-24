@@ -53,6 +53,7 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
+import org.apache.isis.core.metamodel.facets.all.i8n.HasTranslation;
 import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
@@ -308,7 +309,9 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
         // first, order as defined in isis.properties
         for (ManagedObject serviceAdapter : serviceAdapters) {
             final ObjectSpecification serviceSpec = serviceAdapter.getSpecification();
-            String serviceName = serviceSpec.getFacet(NamedFacet.class).translated(NounForm.SINGULAR);
+            // assuming services have immutable names (no imperative naming support)
+            String serviceName = ((HasTranslation)serviceSpec.getFacet(NamedFacet.class))
+                    .translated(NounForm.SINGULAR);
             serviceNameOrder.add(serviceName);
         }
         // then, any other services (eg due to misspellings, at the end)
@@ -378,7 +381,9 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
                             ? layoutGroupFacet.getGroupId()
                             : null;
                     if(_Strings.isNullOrEmpty(serviceName)){
-                        serviceName = serviceSpec.getFacet(NamedFacet.class).translated(NounForm.SINGULAR);
+                        // assuming services have immutable names (no imperative naming support)
+                        serviceName = ((HasTranslation)serviceSpec.getFacet(NamedFacet.class))
+                                .translated(NounForm.SINGULAR);
                     }
                     return new ServiceAndAction(serviceName, serviceAdapter, objectAction);
                 });

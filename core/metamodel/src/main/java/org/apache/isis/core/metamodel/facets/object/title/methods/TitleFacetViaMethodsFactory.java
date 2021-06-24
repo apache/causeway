@@ -68,13 +68,12 @@ extends MethodPrefixBasedFacetFactoryAbstract {
                 NO_ARG);
         if (method != null) {
             processClassContext.removeMethod(method);
-            val translationService = getTranslationService();
             // sadness: same as in TranslationFactory
             val translationContext = TranslationContext.forMethod(method);
 
             FacetUtil.addFacet(
                     new TitleFacetViaTitleMethod(
-                            method, translationService, translationContext, facetHolder));
+                            method, translationContext, facetHolder));
             return;
         }
 

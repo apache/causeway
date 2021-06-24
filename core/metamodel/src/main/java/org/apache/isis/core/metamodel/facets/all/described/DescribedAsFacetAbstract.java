@@ -19,10 +19,15 @@
 
 package org.apache.isis.core.metamodel.facets.all.described;
 
+import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.all.i8n.HasTranslation;
 import org.apache.isis.core.metamodel.facets.all.i8n.I8nFacetAbstract;
 import org.apache.isis.core.metamodel.facets.all.i8n.NounForms;
+import org.apache.isis.core.metamodel.facets.all.i8n.imperative.HasImperativeText;
+
+import lombok.Getter;
 
 public abstract class DescribedAsFacetAbstract
 extends I8nFacetAbstract
@@ -31,6 +36,9 @@ implements DescribedAsFacet {
     private static final Class<? extends Facet> type() {
         return DescribedAsFacet.class;
     }
+
+    @Getter(onMethod_ = {@Override})
+    private final _Either<HasTranslation, HasImperativeText> specialization = _Either.left(this);
 
     protected DescribedAsFacetAbstract(
             final String originalText,
@@ -49,6 +57,15 @@ implements DescribedAsFacet {
                 holder,
                 precedence);
     }
+
+    public final String text() {
+        return preferredText();
+    }
+
+    public final String translated() {
+        return preferredTranslated();
+    }
+
 
 }
 

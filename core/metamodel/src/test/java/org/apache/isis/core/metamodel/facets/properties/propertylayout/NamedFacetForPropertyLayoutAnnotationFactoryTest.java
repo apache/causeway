@@ -30,6 +30,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.all.i8n.HasTranslation;
 import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 
@@ -60,7 +61,7 @@ extends AbstractFacetFactoryTest {
         final NamedFacet facet = facetedMethod.getFacet(NamedFacet.class);
         assertThat(facet, is(notNullValue()));
         assertThat(facet, is(instanceOf(NamedFacetForPropertyLayoutAnnotation.class)));
-        assertThat(facet.text(NounForm.SINGULAR), is(equalTo("1st name")));
+        assertThat(((HasTranslation)facet).text(NounForm.SINGULAR), is(equalTo("1st name")));
         assertThat(facet.escaped(), is(true));
     }
 
@@ -86,7 +87,7 @@ extends AbstractFacetFactoryTest {
         final NamedFacet facet = facetedMethod.getFacet(NamedFacet.class);
         assertThat(facet, is(notNullValue()));
         assertThat(facet, is(instanceOf(NamedFacetForPropertyLayoutAnnotation.class)));
-        assertThat(facet.text(NounForm.SINGULAR), is(equalTo("1st name")));
+        assertThat(((HasTranslation)facet).text(NounForm.SINGULAR), is(equalTo("1st name")));
         assertThat(facet.escaped(), is(false));
     }
 

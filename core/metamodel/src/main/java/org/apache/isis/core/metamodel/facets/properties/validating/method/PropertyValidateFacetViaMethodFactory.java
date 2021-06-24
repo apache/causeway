@@ -67,12 +67,11 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
         processMethodContext.removeMethod(validateMethod);
 
         val facetHolder = processMethodContext.getFacetHolder();
-        val translationService = getTranslationService();
         // sadness: same as in TranslationFactory
         val translationContext = TranslationContext.forTranslationContextHolder(facetHolder.getFeatureIdentifier());
         addFacet(
                 new PropertyValidateFacetViaMethod(
-                        validateMethod, translationService, translationContext, facetHolder));
+                        validateMethod, translationContext, facetHolder));
     }
 
 

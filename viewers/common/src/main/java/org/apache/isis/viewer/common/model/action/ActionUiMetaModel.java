@@ -86,7 +86,7 @@ public final class ActionUiMetaModel implements Serializable {
 
         this(   objectAction.getMemento(),
                 objectAction.getName(),
-                getDescription(objectAction).orElse(ObjectAction.Util.descriptionOf(objectAction)),
+                getDescription(actionHolder, objectAction).orElse(ObjectAction.Util.descriptionOf(objectAction)),
                 ObjectAction.Util.returnsBlobOrClob(objectAction),
                 objectAction.isPrototype(),
                 ObjectAction.Util.actionIdentifierFor(objectAction),
@@ -147,11 +147,15 @@ public final class ActionUiMetaModel implements Serializable {
     // -- DESCRIBED AS
 
     private static Optional<String> getDescription(
+            @NonNull final ManagedObject actionHolder,
             @NonNull final ObjectAction objectAction) {
 
-        val describedAsFacet = objectAction.getFacet(DescribedAsFacet.class);
-        return Optional.ofNullable(describedAsFacet)
-                .map(DescribedAsFacet::translated);
+        return objectAction.lookupFacet(DescribedAsFacet.class)
+        .map(DescribedAsFacet::getSpecialization)
+        .map(specialization->specialization
+                .fold(textFacet->textFacet.preferredTranslated(),
+                      textFacet->textFacet.textElseNull(actionHolder)));
+
     }
 
 }

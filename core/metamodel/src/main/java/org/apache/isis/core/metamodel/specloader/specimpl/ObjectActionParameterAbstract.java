@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.HasFacetHolder;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
+import org.apache.isis.core.metamodel.facets.all.i8n.HasTranslation;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
@@ -134,10 +134,16 @@ implements ObjectActionParameter, HasFacetHolder {
 
     @Override
     public String getName() {
-        final NamedFacet facet = getFacet(NamedFacet.class);
-        if (facet != null
-                && facet.translated(NounForm.SINGULAR) != null) {
-            return facet.translated(NounForm.SINGULAR);
+
+        // assuming parameters don't have imperative naming support
+        val name = lookupFacet(NamedFacet.class)
+        .filter(namedFacet->namedFacet instanceof HasTranslation)
+        .map(HasTranslation.class::cast)
+        .map(HasTranslation::preferredTranslated)
+        .orElse(null);
+
+        if (name!=null) {
+            return name;
         }
         val singularName = getSpecification().getSingularName();
         val parameters = getAction().getParameters(this::equalsShortIdentifier);
@@ -157,9 +163,12 @@ implements ObjectActionParameter, HasFacetHolder {
 
     @Override
     public String getDescription() {
-        final DescribedAsFacet facet = getFacet(DescribedAsFacet.class);
-        final String description = facet.translated();
-        return description == null ? "" : description;
+        // assuming parameters don't have imperative description support
+        return lookupFacet(DescribedAsFacet.class)
+        .filter(describedAsFacet->describedAsFacet instanceof HasTranslation)
+        .map(HasTranslation.class::cast)
+        .map(HasTranslation::preferredTranslated)
+        .orElse("");
     }
 
     public Consent isUsable() {

@@ -60,8 +60,11 @@ extends ObjectSpecificationPostProcessorAbstract {
         }
         objectAction.getReturnType()
         .lookupNonFallbackFacet(DescribedAsFacet.class)
-        .ifPresent(specFacet -> FacetUtil.addFacet(new DescribedAsFacetOnMemberDerivedFromType(specFacet,
-                                    facetedMethodFor(objectAction))));
+        .ifPresent(specFacet -> FacetUtil.addFacetIfPresent(
+                DescribedAsFacetOnMemberDerivedFromType
+                .create(
+                        specFacet,
+                        facetedMethodFor(objectAction))));
     }
 
     @Override
@@ -70,13 +73,12 @@ extends ObjectSpecificationPostProcessorAbstract {
             return;
         }
         final ObjectSpecification paramSpec = parameter.getSpecification();
-        final DescribedAsFacet specFacet = paramSpec.getFacet(DescribedAsFacet.class);
-
-        //TODO: this ought to check if a do-op; if you come across this, you can probably change it (just taking smaller steps for now)
-        //if(existsAndIsDoOp(specFacet)) {
-        if(specFacet != null) {
-            FacetUtil.addFacet(new DescribedAsFacetOnParameterDerivedFromType(specFacet, peerFor(parameter)));
-        }
+        paramSpec.lookupNonFallbackFacet(DescribedAsFacet.class)
+        .ifPresent(describedAsFacet->{
+            FacetUtil.addFacetIfPresent(
+                    DescribedAsFacetOnParameterDerivedFromType
+                    .create(describedAsFacet, peerFor(parameter)));
+        });
     }
 
     @Override
@@ -95,8 +97,9 @@ extends ObjectSpecificationPostProcessorAbstract {
         }
         objectAssociation.getSpecification()
         .lookupNonFallbackFacet(DescribedAsFacet.class)
-        .ifPresent(specFacet -> FacetUtil.addFacet(new DescribedAsFacetOnMemberDerivedFromType(
-                                    specFacet, facetedMethodFor(objectAssociation))));
+        .ifPresent(specFacet -> FacetUtil.addFacetIfPresent(
+                DescribedAsFacetOnMemberDerivedFromType
+                .create(specFacet, facetedMethodFor(objectAssociation))));
     }
 
 }

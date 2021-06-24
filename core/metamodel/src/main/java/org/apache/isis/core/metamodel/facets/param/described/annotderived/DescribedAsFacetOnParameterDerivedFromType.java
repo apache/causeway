@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.param.described.annotderived;
 
+import java.util.Optional;
+
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacetAbstract;
@@ -26,8 +28,24 @@ import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacetAbstr
 public class DescribedAsFacetOnParameterDerivedFromType
 extends DescribedAsFacetAbstract {
 
-    public DescribedAsFacetOnParameterDerivedFromType(
+    /**
+     * As {@link DescribedAsFacet}(s) have either static or dynamic (imperative) text,
+     * we yet only support inferring from those with static text.
+     */
+    public static Optional<DescribedAsFacet> create(
             final DescribedAsFacet describedAsFacet,
+            final FacetHolder holder) {
+
+        return describedAsFacet instanceof DescribedAsFacetAbstract
+                ? Optional.of(
+                        new DescribedAsFacetOnParameterDerivedFromType(
+                                (DescribedAsFacetAbstract) describedAsFacet,
+                                holder))
+                : Optional.empty();
+    }
+
+    private DescribedAsFacetOnParameterDerivedFromType(
+            final DescribedAsFacetAbstract describedAsFacet,
             final FacetHolder holder) {
         super(describedAsFacet.text(), holder);
     }

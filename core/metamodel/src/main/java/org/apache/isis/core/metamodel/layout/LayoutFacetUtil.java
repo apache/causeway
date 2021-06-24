@@ -42,6 +42,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.isis.core.metamodel.facets.all.i8n.HasTranslation;
 import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
@@ -131,13 +132,15 @@ public class LayoutFacetUtil {
             final HasDescribedAs hasDescribedAs,
             final FacetHolder facetHolder) {
 
-        val describedAsFacet = facetHolder.getFacet(DescribedAsFacet.class);
-        if(isDoOp(describedAsFacet)) {
-            final String describedAs = describedAsFacet.translated();
+        facetHolder.lookupNonFallbackFacet(DescribedAsFacet.class)
+        .filter(describedAsFacet->describedAsFacet instanceof HasTranslation)
+        .map(HasTranslation.class::cast)
+        .ifPresent(describedAsFacet->{
+            final String describedAs = describedAsFacet.preferredTranslated();
             if(!_Strings.isNullOrEmpty(describedAs)) {
                 hasDescribedAs.setDescribedAs(describedAs);
             }
-        }
+        });
     }
 
     public void setHiddenIfAny(
@@ -184,13 +187,15 @@ public class LayoutFacetUtil {
             final FacetHolder facetHolder) {
 
         facetHolder.lookupNonFallbackFacet(NamedFacet.class)
+        .filter(namedFacet->namedFacet instanceof HasTranslation)
+        .map(HasTranslation.class::cast)
         .filter(namedFacet->namedFacet.getSupportedNounForms().contains(NounForm.SINGULAR))
         .ifPresent(namedFacet->{
             final String named = namedFacet.translated(NounForm.SINGULAR);
             if(!_Strings.isNullOrEmpty(named)){
                 hasNamed.setNamed(named);
             }
-            final boolean escaped = namedFacet.escaped();
+            final boolean escaped = ((NamedFacet)namedFacet).escaped();
             if(!escaped) {
                 hasNamed.setNamedEscaped(escaped);
             }
@@ -215,6 +220,8 @@ public class LayoutFacetUtil {
             final FacetHolder facetHolder) {
 
         facetHolder.lookupNonFallbackFacet(NamedFacet.class)
+        .filter(namedFacet->namedFacet instanceof HasTranslation)
+        .map(HasTranslation.class::cast)
         .filter(namedFacet->namedFacet.getSupportedNounForms().contains(NounForm.PLURAL))
         .ifPresent(namedFacet->{
             val plural = namedFacet.translated(NounForm.PLURAL);

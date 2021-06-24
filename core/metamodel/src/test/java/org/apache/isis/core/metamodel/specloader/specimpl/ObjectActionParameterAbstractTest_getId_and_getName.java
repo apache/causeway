@@ -38,7 +38,7 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
-import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
+import org.apache.isis.core.metamodel.facets.all.i8n.HasTranslation;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -56,7 +56,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
     @Mock
     private TypedHolder actionParamPeer;
     @Mock
-    private NamedFacet namedFacet;
+    private NamedFacetStatic namedFacet;
 
     @Mock
     private ObjectSpecification stubSpecForString;
@@ -65,6 +65,8 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
     @Mock
     private ObjectActionParameter stubObjectActionParameterString2;
 
+
+    private static interface NamedFacetStatic extends NamedFacet, HasTranslation {};
 
     private static final class ObjectActionParameterAbstractToTest extends ObjectActionParameterAbstract {
         private ObjectActionParameterAbstractToTest(final int number, final ObjectActionDefault objectAction, final TypedHolder peer) {
@@ -137,7 +139,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
                 oneOf(actionParamPeer).getFacet(NamedFacet.class);
                 will(returnValue(namedFacet));
 
-                atLeast(1).of(namedFacet).translated(NounForm.SINGULAR);
+                atLeast(1).of(namedFacet).preferredTranslated();
                 will(returnValue("Some parameter name"));
             }
         });
@@ -155,7 +157,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
                 oneOf(actionParamPeer).getFacet(NamedFacet.class);
                 will(returnValue(namedFacet));
 
-                atLeast(1).of(namedFacet).translated(NounForm.SINGULAR);
+                atLeast(1).of(namedFacet).preferredTranslated();
                 will(returnValue("Some parameter name"));
             }
         });

@@ -19,8 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.all.described;
 
+import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.all.i8n.HasTranslation;
+import org.apache.isis.core.metamodel.facets.all.i8n.imperative.HasImperativeText;
 
 /**
  * Describes a class, a property, collection, an action or an action parameter.
@@ -31,15 +33,8 @@ import org.apache.isis.core.metamodel.facets.all.i8n.HasTranslation;
  */
 public interface DescribedAsFacet
 extends
-    Facet,
-    HasTranslation {
+    Facet {
 
-    default String text() {
-        return preferredText();
-    }
-
-    default String translated() {
-        return preferredTranslated();
-    }
+    _Either<HasTranslation, HasImperativeText> getSpecialization();
 
 }

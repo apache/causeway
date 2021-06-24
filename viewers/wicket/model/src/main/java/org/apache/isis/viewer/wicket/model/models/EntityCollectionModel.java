@@ -83,8 +83,8 @@ extends
     }
 
     static EntityCollectionModelStandalone createStandalone(
-            ManagedObject collectionAsAdapter,
-            ActionModel actionModel) {
+            final ManagedObject collectionAsAdapter,
+            final ActionModel actionModel) {
         return EntityCollectionModelStandalone.forActionModel(collectionAsAdapter, actionModel);
     }
 
@@ -107,6 +107,7 @@ extends
 
     ObjectSpecification getTypeOfSpecification();
     ObjectMember getMetaModel();
+    ManagedObject getParentObject();
 
     /**
      * Returns all actions that are associated with this collection,

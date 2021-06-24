@@ -466,47 +466,28 @@ implements ObjectSpecification {
 
         return thisClass == otherClass
                 || otherClass.isAssignableFrom(thisClass);
-
-//XXX legacy of ...
-//
-//        for (val interfaceSpec : interfaces()) {
-//            if (interfaceSpec.isOfType(other)) {
-//                return true;
-//            }
-//        }
-//
-//        // this is a bit of a workaround; the metamodel doesn't have the interfaces for enums.
-//        val correspondingClass = getCorrespondingClass();
-//        val possibleSupertypeClass = other.getCorrespondingClass();
-//        if(correspondingClass != null && possibleSupertypeClass != null &&
-//                Enum.class.isAssignableFrom(correspondingClass) && possibleSupertypeClass.isInterface()) {
-//            if(possibleSupertypeClass.isAssignableFrom(correspondingClass)) {
-//                return true;
-//            }
-//        }
-//
-//        val superclassSpec = superclass();
-//        return superclassSpec != null && superclassSpec.isOfType(other);
     }
 
     // -- NAME, DESCRIPTION, PERSISTABILITY
 
     @Override
     public String getSingularName() {
-        val namedFacet = getFacet(NamedFacet.class);
-        return namedFacet != null
-                && namedFacet.getSupportedNounForms().contains(NounForm.SINGULAR)
-                        ? namedFacet.translated(NounForm.SINGULAR)
-                        : this.getFullIdentifier();
+        return lookupFacet(NamedFacet.class)
+            .map(NamedFacet::getSpecialization)
+            .map(specialization->specialization
+                    .fold(  textFacet->textFacet.translatedElseNull(NounForm.SINGULAR),
+                            textFacet->textFacet.textElseNull(null)))
+            .orElseGet(this::getFullIdentifier);
     }
 
     @Override
     public String getPluralName() {
-        val namedFacet = getFacet(NamedFacet.class);
-        return namedFacet != null
-                && namedFacet.getSupportedNounForms().contains(NounForm.PLURAL)
-                        ? namedFacet.translated(NounForm.PLURAL)
-                        : this.getFullIdentifier();
+        return lookupFacet(NamedFacet.class)
+                .map(NamedFacet::getSpecialization)
+                .map(specialization->specialization
+                        .fold(  textFacet->textFacet.translatedElseNull(NounForm.PLURAL),
+                                textFacet->textFacet.textElseNull(null)))
+                .orElseGet(this::getFullIdentifier);
     }
 
     /**
@@ -515,10 +496,12 @@ implements ObjectSpecification {
      */
     @Override
     public String getDescription() {
-        val describedAsFacet = getFacet(DescribedAsFacet.class);
-        return describedAsFacet != null
-                ? _Strings.nullToEmpty(describedAsFacet.translated())
-                : "";
+        return lookupFacet(DescribedAsFacet.class)
+                .map(DescribedAsFacet::getSpecialization)
+                .map(specialization->specialization
+                        .fold(  textFacet->textFacet.preferredTranslated(),
+                                textFacet->textFacet.textElseNull(null)))
+                .orElse("");
     }
 
     /*

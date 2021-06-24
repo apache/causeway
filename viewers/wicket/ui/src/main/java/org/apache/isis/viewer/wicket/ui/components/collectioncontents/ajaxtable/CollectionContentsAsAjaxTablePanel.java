@@ -58,8 +58,6 @@ import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterToggleboxColumn;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
-import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
-
 import lombok.NonNull;
 import lombok.val;
 
@@ -276,7 +274,7 @@ implements CollectionCountProvider {
         if(parentSpec == null) {
             return _Predicates.alwaysTrue();
         }
-        return (ObjectAssociation property) -> {
+        return (final ObjectAssociation property) -> {
                 val hiddenFacet = property.getFacet(HiddenFacet.class);
                 if(hiddenFacet == null) {
                     return true;
@@ -293,18 +291,25 @@ implements CollectionCountProvider {
 
     private ObjectAdapterPropertyColumn createObjectAdapterPropertyColumn(final ObjectAssociation property) {
 
+        val collectionModel = getModel();
+
         final NamedFacet facet = property.getFacet(NamedFacet.class);
         final boolean escaped = facet == null || facet.escaped();
 
         final String parentTypeName = property.getOnType().getLogicalTypeName();
-        final String describedAs = mapIfPresentElse(property.getFacet(DescribedAsFacet.class),
-                DescribedAsFacet::translated, null);
+
+        final String describedAs = property.lookupFacet(DescribedAsFacet.class)
+                .map(DescribedAsFacet::getSpecialization)
+                .map(specialization->specialization
+                        .fold(textFacet->textFacet.preferredTranslated(),
+                              textFacet->textFacet.textElseNull(collectionModel.getParentObject())))
+                .orElse(null);
 
         val commonContext = super.getCommonContext();
 
         return new ObjectAdapterPropertyColumn(
                 commonContext,
-                getModel().getVariant(),
+                collectionModel.getVariant(),
                 Model.of(property.getName()),
                 property.getId(),
                 property.getId(),

@@ -1,5 +1,7 @@
 package org.apache.isis.core.metamodel.facets.all.i8n;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 
 public interface HasTranslation {
@@ -25,6 +27,13 @@ public interface HasTranslation {
     String translated(NounForm nounForm);
 
     ImmutableEnumSet<NounForm> getSupportedNounForms();
+
+    @Nullable
+    default String translatedElseNull(final NounForm nounForm) {
+        return getSupportedNounForms().contains(nounForm)
+                ? translated(nounForm)
+                : null;
+    }
 
     default void memoizeTranslations() {
         getSupportedNounForms().forEach(this::translated);

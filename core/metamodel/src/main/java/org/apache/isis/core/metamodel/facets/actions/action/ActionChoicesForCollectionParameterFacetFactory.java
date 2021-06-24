@@ -59,7 +59,7 @@ implements MetaModelRefiner {
     }
 
     @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+    public void refineProgrammingModel(final ProgrammingModel programmingModel) {
 
         val shouldCheck = getConfiguration().getCore().getMetaModel().getValidator().isActionCollectionParameterChoices();
         if(!shouldCheck) {
@@ -112,7 +112,7 @@ implements MetaModelRefiner {
                         String.format(
                                 messageFormat,
                                 objectSpec.getFullIdentifier(),
-                                objectAction.getName(),
+                                objectAction.getId(),
                                 paramNum));
 
                 return;
@@ -136,7 +136,7 @@ implements MetaModelRefiner {
                 String.format(
                         messageFormat,
                         objectSpec.getFullIdentifier(),
-                        objectAction.getName(),
+                        objectAction.getId(),
                         paramNum));
     }
 

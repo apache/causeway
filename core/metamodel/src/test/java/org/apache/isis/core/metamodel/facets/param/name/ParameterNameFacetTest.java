@@ -32,6 +32,7 @@ import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.all.i8n.HasTranslation;
 import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
@@ -111,7 +112,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
         // then
         val namedFacet = facetedMethodParameter.getFacet(NamedFacet.class);
 
-        assertEquals("An Awesome Name", namedFacet.text(NounForm.SINGULAR));
+        assertEquals("An Awesome Name", ((HasTranslation)namedFacet).text(NounForm.SINGULAR));
 
     }
 
@@ -141,7 +142,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
         // then
         val namedFacet = facetedMethodParameter.getFacet(NamedFacet.class);
         assertNotNull(namedFacet);
-        assertEquals("Even Better Name", namedFacet.text(NounForm.SINGULAR));
+        assertEquals("Even Better Name", ((HasTranslation)namedFacet).text(NounForm.SINGULAR));
 
     }
 

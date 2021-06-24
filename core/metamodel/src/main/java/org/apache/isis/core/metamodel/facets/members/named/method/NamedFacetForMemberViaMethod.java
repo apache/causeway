@@ -20,10 +20,15 @@ package org.apache.isis.core.metamodel.facets.members.named.method;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.i8n.I8nImperativeFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.i8n.HasTranslation;
+import org.apache.isis.core.metamodel.facets.all.i8n.imperative.HasImperativeText;
+import org.apache.isis.core.metamodel.facets.all.i8n.imperative.I8nImperativeFacetAbstract;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+
+import lombok.Getter;
 
 public class NamedFacetForMemberViaMethod
 extends I8nImperativeFacetAbstract
@@ -32,6 +37,9 @@ implements NamedFacet {
     private static final Class<? extends Facet> type() {
         return NamedFacet.class;
     }
+
+    @Getter(onMethod_ = {@Override})
+    private final _Either<HasTranslation, HasImperativeText> specialization = _Either.right(this);
 
     public NamedFacetForMemberViaMethod(
             final Method namedMethod,

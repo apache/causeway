@@ -123,19 +123,32 @@ implements ObjectMember, HasMetaModelContext, HasFacetHolder {
      */
     @Override
     public String getName() {
+
+        final ManagedObject owner = null; //TODO[ISIS-1720] must take ManagedObject (owner) as an argument
+
         val namedFacet = getFacet(NamedFacet.class);
 
         if(namedFacet==null) {
-            throw _Exceptions.unrecoverableFormatted("no namedFacet preset on %s", getFeatureIdentifier());
+            throw _Exceptions.unrecoverableFormatted("no NamedFacet preset on %s", getFeatureIdentifier());
         }
 
-        return namedFacet.preferredTranslated();
+        return namedFacet
+            .getSpecialization()
+            .fold(  textFacet->textFacet.preferredTranslated(),
+                    textFacet->textFacet.textElseNull(owner));
     }
 
     @Override
     public String getDescription() {
-        val describedAsFacet = getFacet(DescribedAsFacet.class);
-        return describedAsFacet.translated();
+
+        final ManagedObject owner = null; //TODO[ISIS-1720] must take ManagedObject (owner) as an argument
+
+        return lookupFacet(DescribedAsFacet.class)
+        .map(DescribedAsFacet::getSpecialization)
+        .map(specialization->specialization
+                .fold(textFacet->textFacet.preferredTranslated(),
+                      textFacet->textFacet.textElseNull(owner)))
+        .orElse(null);
     }
 
     @Override

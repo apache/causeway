@@ -33,10 +33,12 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
+import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.all.i8n.HasTranslation;
 import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.id.TypeIdentifierTestFactory;
@@ -65,10 +67,12 @@ public class OneToManyAssociationDefaultTest {
     @Mock ObjectSpecification mockOwnerAdapterSpec;
     @Mock MessageService mockMessageService;
     @Mock FacetedMethod mockPeer;
-    @Mock NamedFacet mockNamedFacet;
+    @Mock NamedFacetStatic mockNamedFacet;
 
     private OneToManyAssociation association;
     private MetaModelContext_forTesting metaModelContext;
+
+    private static interface NamedFacetStatic extends NamedFacet, HasTranslation {};
 
     @Before
     public void setUp() {
@@ -132,6 +136,9 @@ public class OneToManyAssociationDefaultTest {
             {
                 oneOf(mockPeer).getFacet(NamedFacet.class);
                 will(returnValue(mockNamedFacet));
+
+                allowing(mockNamedFacet).getSpecialization();
+                will(returnValue(_Either.left(mockNamedFacet)));
 
                 allowing(mockNamedFacet).preferredTranslated();
                 will(returnValue("My name"));

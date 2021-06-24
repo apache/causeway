@@ -21,11 +21,15 @@ package org.apache.isis.core.metamodel.facets.all.named;
 
 import java.util.function.BiConsumer;
 
+import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.all.i8n.HasTranslation;
 import org.apache.isis.core.metamodel.facets.all.i8n.I8nFacetAbstract;
 import org.apache.isis.core.metamodel.facets.all.i8n.NounForms;
+import org.apache.isis.core.metamodel.facets.all.i8n.imperative.HasImperativeText;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 
@@ -36,6 +40,9 @@ implements NamedFacet {
     private static final Class<? extends Facet> type() {
         return NamedFacet.class;
     }
+
+    @Getter(onMethod_ = {@Override})
+    private final _Either<HasTranslation, HasImperativeText> specialization = _Either.left(this);
 
     private final boolean escaped;
 

@@ -68,4 +68,9 @@ extends EntityCollectionModelAbstract {
         throw _Exceptions.unsupportedOperation();
     }
 
+    @Override
+    public ManagedObject getParentObject() {
+        throw _Exceptions.unsupportedOperation();
+    }
+
 }

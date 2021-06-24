@@ -16,29 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.core.metamodel.facets.all.i8n.imperative;
 
-package org.apache.isis.core.metamodel.facets.all.named;
+import javax.annotation.Nullable;
 
-import org.apache.isis.commons.internal.base._Either;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.all.i8n.HasTranslation;
-import org.apache.isis.core.metamodel.facets.all.i8n.imperative.HasImperativeText;
+import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.commons.functional.Result;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-/**
- * The name of a class, a property, collection, an action or a parameter.
- *
- * <p>
- * In the standard Apache Isis Programming Model, corresponds to annotating the
- * member with <tt>@Named</tt>.
- */
-public interface NamedFacet
-extends
-    Facet {
-
-    _Either<HasTranslation, HasImperativeText> getSpecialization();
+public interface HasImperativeText {
 
     /**
-     * Flag indicating whether the label should be show as is, or should be HTML escaped.
+     * Provide text for the target object.
+     * <p>
+     * Translated or not, based on whether corresponding support method returns
+     * {@link TranslatableString} or just {@link String}.
+     * <p>
+     * eg. title, name, description
      */
-    boolean escaped();
+    Result<String> text(ManagedObject object);
+
+    @Nullable
+    default String textElseNull(final ManagedObject object) {
+        return text(object).optionalElseFail().orElse(null);
+    }
+
 }

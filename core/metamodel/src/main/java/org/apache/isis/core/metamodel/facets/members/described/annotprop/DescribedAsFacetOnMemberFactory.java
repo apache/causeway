@@ -46,8 +46,9 @@ extends FacetFactoryAbstract {
 
         addFacetIfPresent(
                 paramTypeSpec.lookupFacet(DescribedAsFacet.class)
-                .map(returnTypeDescribedAsFacet->
-                    new DescribedAsFacetOnMemberDerivedFromType(
+                .flatMap(returnTypeDescribedAsFacet->
+                    DescribedAsFacetOnMemberDerivedFromType
+                    .create(
                             returnTypeDescribedAsFacet,
                             processMethodContext.getFacetHolder())));
     }
