@@ -10,6 +10,7 @@ import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.applib.annotation.Redirect;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.message.MessageService;
@@ -61,7 +62,7 @@ public class ImpersonateStopMenu {
             executionPublishing = Publishing.DISABLED,
             restrictTo = RestrictTo.PROTOTYPING
     )
-    @ActionLayout(sequence = "100.3")
+    @ActionLayout(sequence = "100.3", redirectPolicy = Redirect.EVEN_IF_SAME)
     public void stopImpersonating() {
         this.userService.stopImpersonating();
         this.messageService.informUser("No longer impersonating another user");
