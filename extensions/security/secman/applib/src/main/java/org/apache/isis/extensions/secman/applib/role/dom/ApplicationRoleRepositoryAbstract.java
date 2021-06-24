@@ -140,7 +140,7 @@ implements ApplicationRoleRepository {
         user.getRoles().add(role);
         role.getUsers().add(user);
 
-        repository.persistAndFlush(user);
+        repository.persistAndFlush(user, role);
     }
 
     @Override
@@ -151,7 +151,7 @@ implements ApplicationRoleRepository {
         user.getRoles().remove(role);
         role.getUsers().remove(user);
 
-        repository.persistAndFlush(user);
+        repository.persistAndFlush(user, role);
     }
 
     @Override

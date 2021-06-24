@@ -280,7 +280,7 @@ public class ApplicationUser
 
     // ROLES
 
-    @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "users", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(
             name = "ApplicationUserRoles",
             joinColumns = {@JoinColumn(name = "userId")},
