@@ -30,6 +30,7 @@ import org.apache.isis.applib.query.QueryRange;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
+import lombok.val;
 
 /**
  * Collects together methods for creating, persisting and searching for
@@ -106,8 +107,34 @@ public interface RepositoryService {
      * </p>
      *
      * @see #persist(Object)
+     * @see #persistAndFlush(Object[])
      */
     <T> T persistAndFlush(T domainObject);
+
+    /**
+     * Persist the specified objects (or do nothing if already persistent) and
+     * flushes changes to the database.
+     *
+     * <p>
+     *     Flushing will also result in ORM-maintained bidirectional
+     *     relationships being updated.
+     * </p>
+     *
+     * @see #persist(Object)
+     * @see #persistAndFlush(Object)
+     */
+    default void persistAndFlush(Object... domainObjects) {
+        final int length = domainObjects.length;
+        for (int i = 0; i < length; i++) {
+            val domainObject = domainObjects[i];
+            if (i < length - 1) {
+                // not at the end
+                persist(domainObject);
+            } else {
+                persistAndFlush(domainObject);
+            }
+        }
+    }
 
     /**
      * Remove (ie delete) an object from the persistent object store
