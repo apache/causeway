@@ -40,7 +40,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;

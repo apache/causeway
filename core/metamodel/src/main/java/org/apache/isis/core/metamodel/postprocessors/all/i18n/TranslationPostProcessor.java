@@ -23,7 +23,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;

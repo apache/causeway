@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
 import lombok.NonNull;
 
 public class NamedFacetForMemberName
-extends NamedFacetFromMemberNameAbstract {
+extends NamedFacetForMemberNameAbstract {
 
     public NamedFacetForMemberName(
             final @NonNull NounForm preferredNounForm,

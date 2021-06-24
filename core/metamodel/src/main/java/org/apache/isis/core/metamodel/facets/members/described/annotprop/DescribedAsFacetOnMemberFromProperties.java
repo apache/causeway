@@ -17,12 +17,12 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.members.describedas.annotprop;
+package org.apache.isis.core.metamodel.facets.members.described.annotprop;
 
 import java.util.Properties;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacetAbstract;
 
 public class DescribedAsFacetOnMemberFromProperties extends DescribedAsFacetAbstract {
 

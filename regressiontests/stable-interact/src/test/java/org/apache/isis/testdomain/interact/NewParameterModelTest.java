@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.testdomain.conf.Configuration_headless;

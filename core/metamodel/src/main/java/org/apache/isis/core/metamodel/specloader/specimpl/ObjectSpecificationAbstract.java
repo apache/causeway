@@ -51,7 +51,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.help.HelpFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;

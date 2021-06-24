@@ -16,29 +16,39 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
-import java.util.Optional;
+package org.apache.isis.core.metamodel.facets.all.described;
 
-import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.i8n.I8nFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.i8n.NounForms;
 
+public abstract class DescribedAsFacetAbstract
+extends I8nFacetAbstract
+implements DescribedAsFacet {
 
-public class DescribedAsFacetForDomainObjectLayoutAnnotation extends DescribedAsFacetAbstract {
+    private static final Class<? extends Facet> type() {
+        return DescribedAsFacet.class;
+    }
 
-    public static Optional<DescribedAsFacetForDomainObjectLayoutAnnotation> create(
-            final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
+    protected DescribedAsFacetAbstract(
+            final String originalText,
             final FacetHolder holder) {
-
-        return domainObjectLayoutIfAny
-                .map(DomainObjectLayout::describedAs)
-                .filter(_Strings::isNotEmpty)
-                .map(describedAs -> new DescribedAsFacetForDomainObjectLayoutAnnotation(describedAs, holder));
+        this(originalText, holder, Precedence.DEFAULT);
     }
 
-    private DescribedAsFacetForDomainObjectLayoutAnnotation(final String value, final FacetHolder holder) {
-        super(value, holder);
+    protected DescribedAsFacetAbstract(
+            final String originalText,
+            final FacetHolder holder,
+            final Facet.Precedence precedence) {
+        super(type(),
+                NounForms
+                    .preferredIndifferent(originalText)
+                    .build(),
+                holder,
+                precedence);
     }
+
 }
+

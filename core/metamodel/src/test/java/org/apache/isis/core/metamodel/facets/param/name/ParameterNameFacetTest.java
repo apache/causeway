@@ -63,7 +63,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
         programmingModel = metaModelContext.getProgrammingModel();
 
         // verify that
-        assertEquals(119, programmingModel.streamFactories().count());
+        assertEquals(121, programmingModel.streamFactories().count());
     }
 
     @Override

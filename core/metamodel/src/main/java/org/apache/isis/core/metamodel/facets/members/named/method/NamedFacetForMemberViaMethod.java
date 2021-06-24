@@ -16,20 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.core.metamodel.facets.members.named.method;
 
-package org.apache.isis.core.metamodel.facets.members.describedas.annotprop;
+import java.lang.reflect.Method;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacetDynamic;
 
-public class DescribedAsFacetOnMemberDerivedFromType
-extends DescribedAsFacetAbstract {
+public class NamedFacetForMemberViaMethod
+extends NamedFacetDynamic {
 
-    public DescribedAsFacetOnMemberDerivedFromType(
-            final DescribedAsFacet describedAsFacet,
+    protected NamedFacetForMemberViaMethod(
+            final Method namedMethod,
             final FacetHolder holder) {
-        super(describedAsFacet.text(), holder);
+        super(holder);
     }
 
 }

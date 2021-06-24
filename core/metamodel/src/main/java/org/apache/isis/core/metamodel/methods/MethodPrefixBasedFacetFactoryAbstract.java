@@ -83,11 +83,20 @@ implements MethodPrefixBasedFacetFactory {
     protected static final Can<String> getNamingConventionForPropertyAndCollectionSupport(
             final ProcessMethodContext pmContext,
             final String prefix) {
-        val actionMethod = pmContext.getMethod();
+        val getterMethod = pmContext.getMethod();
         val isMixin = pmContext.isMixinMain();
         return MethodLiteralConstants.NAMING_PROPERTIES_AND_COLLECTIONS
-                .map(naming->naming.getMemberSupportingMethodName(actionMethod, prefix, isMixin));
+                .map(naming->naming.getMemberSupportingMethodName(getterMethod, prefix, isMixin));
     }
+
+    protected static final Can<String> getNamingConventionForMemberSupport(
+            final ProcessMethodContext pmContext,
+            final String prefix) {
+        return getNamingConventionForActionSupport(pmContext, prefix)
+                .addAll(getNamingConventionForPropertyAndCollectionSupport(pmContext, prefix))
+                .unique();
+    }
+
 
     // -- PROGRAMMING MODEL
 

@@ -24,8 +24,8 @@ import java.util.Optional;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacetAbstract;
 
 public class DescribedAsFacetForCollectionXml
 extends DescribedAsFacetAbstract {

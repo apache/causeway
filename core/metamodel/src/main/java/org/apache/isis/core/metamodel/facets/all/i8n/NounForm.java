@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.all.i8n;
 
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
 
 /**
  * Represents various linguistic forms, based on <i>cardinality</i>.

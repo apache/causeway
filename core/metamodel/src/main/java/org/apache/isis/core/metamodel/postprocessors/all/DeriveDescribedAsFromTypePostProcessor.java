@@ -23,11 +23,11 @@ import javax.inject.Inject;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberDerivedFromType;
-import org.apache.isis.core.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberFactory;
-import org.apache.isis.core.metamodel.facets.param.describedas.annotderived.DescribedAsFacetOnParameterAnnotationElseDerivedFromTypeFactory;
-import org.apache.isis.core.metamodel.facets.param.describedas.annotderived.DescribedAsFacetOnParameterDerivedFromType;
+import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.members.described.annotprop.DescribedAsFacetOnMemberDerivedFromType;
+import org.apache.isis.core.metamodel.facets.members.described.annotprop.DescribedAsFacetOnMemberFactory;
+import org.apache.isis.core.metamodel.facets.param.described.annotderived.DescribedAsFacetOnParameterAnnotationElseDerivedFromTypeFactory;
+import org.apache.isis.core.metamodel.facets.param.described.annotderived.DescribedAsFacetOnParameterDerivedFromType;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;

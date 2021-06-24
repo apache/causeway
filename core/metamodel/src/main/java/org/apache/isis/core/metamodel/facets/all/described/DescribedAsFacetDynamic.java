@@ -17,38 +17,34 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.all.named;
+package org.apache.isis.core.metamodel.facets.all.described;
+
+import java.lang.reflect.Method;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
+import org.apache.isis.core.metamodel.facets.all.i8n.I8nFacetAbstract;
 import org.apache.isis.core.metamodel.facets.all.i8n.NounForms;
 
-import lombok.NonNull;
+//TODO[1720] just a stub yet
+public abstract class DescribedAsFacetDynamic
+extends I8nFacetAbstract
+implements DescribedAsFacet {
 
-public abstract class NamedFacetFromMemberNameAbstract
-extends NamedFacetAbstract {
-
-    public static final boolean ESCAPED = true;
-
-    protected NamedFacetFromMemberNameAbstract(
-            final @NonNull NounForm preferredNounForm,
-            final String memberName,
-            final FacetHolder holder,
-            final Facet.Precedence precedence) {
-        super(
-                preferredNounForm.isSingular()
-                ? NounForms
-                        .preferredSingular(memberName)
-                        .build()
-                : NounForms
-                        .preferredPlural(memberName)
-                        .build()
-                ,
-                ESCAPED,
-                holder,
-                precedence);
+    private static final Class<? extends Facet> type() {
+        return DescribedAsFacet.class;
     }
 
+    protected DescribedAsFacetDynamic(
+            final Method describedMethod,
+            final FacetHolder holder) {
+        super(type(),
+                NounForms
+                    .preferredIndifferent("TODO")
+                    .build(),
+                holder,
+                Precedence.HIGH);
+    }
 
 }
+

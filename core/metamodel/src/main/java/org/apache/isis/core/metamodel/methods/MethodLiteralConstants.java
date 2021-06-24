@@ -43,6 +43,9 @@ public final class MethodLiteralConstants {
     public static final String DISABLE_PREFIX = "disable";
     public static final String VALIDATE_PREFIX = "validate";
 
+    public static final String NAMED_PREFIX = "named"; // dynamic naming
+    public static final String DESCRIBED_PREFIX = "described"; // dynamic description
+
     public static final String CREATED_PREFIX = "created";
     public static final String LOADED_PREFIX = "loaded";
     public static final String SAVED_PREFIX = "saved";
@@ -75,7 +78,7 @@ public final class MethodLiteralConstants {
         @Nullable String getParameterSupportingMethodName(Method actionMethod, String prefix, boolean isMixin, int paramNum);
 
         /** paramNum to param-supporting-method name provider */
-        default IntFunction<String> providerForParam(Method actionMethod, String prefix, boolean isMixin) {
+        default IntFunction<String> providerForParam(final Method actionMethod, final String prefix, final boolean isMixin) {
             return paramNum->getParameterSupportingMethodName(actionMethod, prefix, isMixin, paramNum);
         }
     }
@@ -89,27 +92,27 @@ public final class MethodLiteralConstants {
     // -- SUPPORTING METHOD NAMING CONVENTION
 
     public static final Can<SupportingMethodNameProviderForAction> NAMING_ACTIONS = Can.of(
-            (Method actionMethod, String prefix, boolean isMixin)->
+            (final Method actionMethod, final String prefix, final boolean isMixin)->
                 prefix + StringExtensions.asCapitalizedName(actionMethod.getName()),
-            (Method actionMethod, String prefix, boolean isMixin)->
+            (final Method actionMethod, final String prefix, final boolean isMixin)->
                 isMixin
                     // prefix only notation is restricted to mixins
                     ? prefix
                     : null
             );
     public static final Can<SupportingMethodNameProviderForParameter> NAMING_PARAMETERS = Can.of(
-            (Method actionMethod, String prefix, boolean isMixin, int paramNum)->
+            (final Method actionMethod, final String prefix, final boolean isMixin, final int paramNum)->
                 prefix + paramNum + StringExtensions.asCapitalizedName(actionMethod.getName()),
-            (Method actionMethod, String prefix, boolean isMixin, int paramNum)->
+            (final Method actionMethod, final String prefix, final boolean isMixin, final int paramNum)->
                 isMixin
                     // no action name reference notation is restricted to mixins
                     ? prefix + StringExtensions.asCapitalizedName(actionMethod.getParameters()[paramNum].getName())
                     : null
             );
     public static final Can<SupportingMethodNameProviderForPropertyAndCollection> NAMING_PROPERTIES_AND_COLLECTIONS = Can.of(
-            (Member member, String prefix, boolean isMixin)->
+            (final Member member, final String prefix, final boolean isMixin)->
                 prefix + getCapitalizedMemberName(member),
-            (Member member, String prefix, boolean isMixin)->
+            (final Member member, final String prefix, final boolean isMixin)->
                 isMixin
                     // prefix only notation is restricted to mixins
                     ? prefix
@@ -118,7 +121,7 @@ public final class MethodLiteralConstants {
 
     // -- HELPER
 
-    private static String getCapitalizedMemberName(Member member) {
+    private static String getCapitalizedMemberName(final Member member) {
         if(member instanceof Method) {
             final Method method = (Method)member;
             if(method.getParameterCount()>0) {

@@ -41,7 +41,7 @@ import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;

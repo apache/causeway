@@ -17,16 +17,16 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.param.describedas.annotderived;
+package org.apache.isis.core.metamodel.facets.members.described.annotprop;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacetAbstract;
 
-public class DescribedAsFacetOnParameterDerivedFromType
+public class DescribedAsFacetOnMemberDerivedFromType
 extends DescribedAsFacetAbstract {
 
-    public DescribedAsFacetOnParameterDerivedFromType(
+    public DescribedAsFacetOnMemberDerivedFromType(
             final DescribedAsFacet describedAsFacet,
             final FacetHolder holder) {
         super(describedAsFacet.text(), holder);

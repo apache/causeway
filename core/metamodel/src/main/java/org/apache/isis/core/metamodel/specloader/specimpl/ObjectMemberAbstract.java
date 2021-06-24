@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.HasFacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.help.HelpFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;

@@ -17,38 +17,53 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.all.describedas;
+package org.apache.isis.core.metamodel.facets.all.named;
+
+import java.util.function.BiConsumer;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.i8n.I8nFacetAbstract;
 import org.apache.isis.core.metamodel.facets.all.i8n.NounForms;
 
-public abstract class DescribedAsFacetAbstract
+import lombok.NonNull;
+import lombok.val;
+
+//TODO[1720] just a stub yet
+public abstract class NamedFacetDynamic
 extends I8nFacetAbstract
-implements DescribedAsFacet {
+implements NamedFacet {
 
     private static final Class<? extends Facet> type() {
-        return DescribedAsFacet.class;
+        return NamedFacet.class;
     }
 
-    protected DescribedAsFacetAbstract(
-            final String originalText,
+    protected NamedFacetDynamic(
             final FacetHolder holder) {
-        this(originalText, holder, Precedence.DEFAULT);
+        super(type(), NounForms.preferredSingular("TODO").build(), holder, Precedence.HIGH);
     }
 
-    protected DescribedAsFacetAbstract(
-            final String originalText,
-            final FacetHolder holder,
-            final Facet.Precedence precedence) {
-        super(type(),
-                NounForms
-                    .preferredIndifferent(originalText)
-                    .build(),
-                holder,
-                precedence);
+    @Override
+    public boolean escaped() {
+        return true; // dynamic names are always escaped
+    }
+
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("escaped", escaped());
+    }
+
+    @Override
+    public boolean semanticEquals(final @NonNull Facet other) {
+        if(! (other instanceof NamedFacetDynamic)) {
+            return false;
+        }
+
+        val otherNamedFacet = (NamedFacetDynamic)other;
+
+        return this.escaped() == otherNamedFacet.escaped()
+                && super.semanticEquals(otherNamedFacet);
     }
 
 }
-

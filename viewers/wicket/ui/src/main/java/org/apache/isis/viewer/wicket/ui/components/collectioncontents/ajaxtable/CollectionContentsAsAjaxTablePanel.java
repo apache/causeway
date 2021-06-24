@@ -41,7 +41,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.core.metamodel.facets.WhereValueFacet;
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;

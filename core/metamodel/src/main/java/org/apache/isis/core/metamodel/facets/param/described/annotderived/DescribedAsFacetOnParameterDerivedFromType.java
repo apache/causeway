@@ -17,22 +17,19 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.fallback;
+package org.apache.isis.core.metamodel.facets.param.described.annotderived;
 
-import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacetForMemberNameAbstract;
+import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacetAbstract;
 
-public class NamedFacetFallbackFromMemberName
-extends NamedFacetForMemberNameAbstract {
+public class DescribedAsFacetOnParameterDerivedFromType
+extends DescribedAsFacetAbstract {
 
-    protected NamedFacetFallbackFromMemberName(final NounForm nounForm, final FacetHolder holder) {
-        super(
-                nounForm,
-                StringExtensions.asNaturalName2(holder.getFeatureIdentifier().getMemberLogicalName()),
-                holder,
-                Precedence.FALLBACK);
+    public DescribedAsFacetOnParameterDerivedFromType(
+            final DescribedAsFacet describedAsFacet,
+            final FacetHolder holder) {
+        super(describedAsFacet.text(), holder);
     }
 
 }

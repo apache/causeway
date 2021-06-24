@@ -24,7 +24,7 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacetAbstract;
 
 public class DescribedAsFacetForActionLayoutAnnotation
 extends DescribedAsFacetAbstract {

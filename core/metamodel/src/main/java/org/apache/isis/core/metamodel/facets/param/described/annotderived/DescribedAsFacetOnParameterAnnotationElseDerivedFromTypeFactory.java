@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.param.describedas.annotderived;
+package org.apache.isis.core.metamodel.facets.param.described.annotderived;
 
 import javax.inject.Inject;
 
@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;

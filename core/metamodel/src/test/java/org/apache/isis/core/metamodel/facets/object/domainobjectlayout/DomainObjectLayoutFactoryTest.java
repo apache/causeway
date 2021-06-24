@@ -40,7 +40,7 @@ import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;

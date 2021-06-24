@@ -30,7 +30,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;

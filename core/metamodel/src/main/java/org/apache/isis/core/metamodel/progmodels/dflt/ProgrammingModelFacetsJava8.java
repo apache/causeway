@@ -38,9 +38,11 @@ import org.apache.isis.core.metamodel.facets.fallback.FallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.jaxb.JaxbFacetFactory;
 import org.apache.isis.core.metamodel.facets.members.cssclass.annotprop.CssClassFacetOnActionFromConfiguredRegexFactory;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.annotprop.CssClassFaFacetOnMemberFactory;
-import org.apache.isis.core.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberFactory;
+import org.apache.isis.core.metamodel.facets.members.described.annotprop.DescribedAsFacetOnMemberFactory;
+import org.apache.isis.core.metamodel.facets.members.described.method.DescribedAsFacetForMemberViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethodFactory;
+import org.apache.isis.core.metamodel.facets.members.named.method.NamedFacetForMemberViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.object.ViewModelSemanticCheckingFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetFallbackFactory;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacetFactory;
@@ -230,8 +232,9 @@ extends ProgrammingModelAbstract {
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new ActionParameterDefaultsFacetViaMethodFactory(mmc));
 
         // members in general
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new NamedFacetForMemberViaMethodFactory(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new DescribedAsFacetForMemberViaMethodFactory(mmc));
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new DisableForContextFacetViaMethodFactory(mmc));
-
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new HideForContextFacetViaMethodFactory(mmc));
 
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new CreatedCallbackFacetFactory(mmc));

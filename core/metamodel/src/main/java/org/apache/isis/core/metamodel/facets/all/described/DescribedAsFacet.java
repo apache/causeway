@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.all.describedas;
+package org.apache.isis.core.metamodel.facets.all.described;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.all.i8n.HasTranslation;
