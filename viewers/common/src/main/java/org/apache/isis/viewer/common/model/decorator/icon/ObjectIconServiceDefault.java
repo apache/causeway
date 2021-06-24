@@ -80,8 +80,21 @@ implements ObjectIconService {
                 : domainClass.getName();
 
         // also memoize unsuccessful icon lookups, so we don't search repeatedly
-        return iconByKey.computeIfAbsent(iconResourceKey, key->
-            findIcon(spec, iconNameModifier));
+
+        val cachedIcon = iconByKey.get(iconResourceKey);
+        if(cachedIcon!=null) {
+            return cachedIcon;
+        }
+
+        val icon = findIcon(spec, iconNameModifier);
+
+        iconByKey.put(iconResourceKey, icon);
+
+        return icon;
+
+        //XXX cannot use computeIfAbsent, as does not support recursive update
+        // return iconByKey.computeIfAbsent(iconResourceKey, key->
+        //     findIcon(spec, iconNameModifier));
     }
 
     @Override
