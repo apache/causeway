@@ -56,6 +56,8 @@ import org.apache.isis.core.metamodel.interactions.managed.MemberInteraction.Acc
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
+import org.apache.isis.viewer.common.model.decorator.icon.ObjectIcon;
+import org.apache.isis.viewer.common.model.decorator.icon.ObjectIconService;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -69,6 +71,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 import org.apache.isis.viewer.restfulobjects.viewer.context.ResourceContext;
 
+import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -76,12 +79,16 @@ import lombok.extern.log4j.Log4j2;
 @Path("/objects") @Log4j2
 public class DomainObjectResourceServerside extends ResourceAbstract implements DomainObjectResource {
 
+    private final ObjectIconService objectIconService;
+
     @Inject
     public DomainObjectResourceServerside(
             final MetaModelContext metaModelContext,
             final IsisConfiguration isisConfiguration,
+            final ObjectIconService objectIconService,
             final InteractionLayerTracker iInteractionLayerTracker) {
         super(metaModelContext, isisConfiguration, iInteractionLayerTracker);
+        this.objectIconService = objectIconService;
         log.debug("<init>");
     }
 
@@ -225,7 +232,11 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Path("/{domainType}/{instanceId}/object-icon")
     @Consumes({ MediaType.WILDCARD })
     @Produces({
-        "image/png"
+        "image/png",
+        "image/gif",
+        "image/jpeg",
+        "image/jpg",
+        "image/svg+xml"
     })
     public Response image(
             @PathParam("domainType")
@@ -237,11 +248,17 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 //                RepresentationType.OBJECT_ICON, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
         val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+        val objectIcon = objectIconService.getObjectIcon(objectAdapter);
 
-        return _DomainObjectIcons.loadIcon(objectAdapter)
-            .map(Response::ok)
-            .orElseGet(Responses::ofNotFound)
+        return Response.ok(
+                objectIcon.asBytes(),
+                objectIcon.getMimeType().getBaseType())
             .build();
+    }
+
+    public Response.ResponseBuilder objectIconResponse(
+            final @NonNull ObjectIcon objectIcon) {
+        return Response.ok();
     }
 
     @Override

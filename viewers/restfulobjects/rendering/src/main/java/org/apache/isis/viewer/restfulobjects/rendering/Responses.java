@@ -86,7 +86,7 @@ public final class Responses {
         return response;
     }
 
-    private static Date now(ReprRenderer<?, ?> renderer) {
+    private static Date now(final ReprRenderer<?, ?> renderer) {
         if(renderer instanceof ReprRendererAbstract) {
             ((ReprRendererAbstract<?, ?>)renderer).getResourceContext().getMetaModelContext().getServiceRegistry()
             .lookupServiceElseFail(ClockService.class).getClock().javaUtilDate();
@@ -105,7 +105,7 @@ public final class Responses {
         return responseBuilder;
     }
 
-    public static JsonMapper.PrettyPrinting inferPrettyPrinting(ReprRenderer<?, ?> renderer) {
+    public static JsonMapper.PrettyPrinting inferPrettyPrinting(final ReprRenderer<?, ?> renderer) {
 
         if(renderer instanceof ReprRendererAbstract) {
             val systemEnvironment =  ((ReprRendererAbstract<?, ?>) renderer).getResourceContext()

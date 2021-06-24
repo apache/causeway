@@ -16,18 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.commons.internal.resources;
 
-package images;
-
-import org.apache.wicket.request.resource.PackageResource;
+import java.io.InputStream;
+import java.util.function.Consumer;
 
 /**
- * This is a bit of a hack, but the Isis convention is to plonk all the images
- * in an images package. This empty class allows Wicket to pick them up as
- * {@link PackageResource}s.
+ * <h1>- internal use only -</h1>
+ * Data Sink (as opposed to Data Source)
+ * <p>
+ * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
+ * These may be changed or removed without notice!
+ * </p>
+ * @since 2.0
  */
-public final class Images {
+public interface _DataSink extends Consumer<InputStream>  {
 
-    private Images() {
-    }
 }

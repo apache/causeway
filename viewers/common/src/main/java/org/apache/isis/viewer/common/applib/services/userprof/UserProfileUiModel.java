@@ -40,6 +40,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserProfileUiModel implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * Returns an alternate name for the current user, typically for use on the
      * viewer's menu bar to identify the currently logged in user.

@@ -25,6 +25,7 @@ import org.apache.isis.viewer.common.applib.mixins.Object_impersonate;
 import org.apache.isis.viewer.common.applib.mixins.Object_impersonateWithRoles;
 import org.apache.isis.viewer.common.applib.mixins.Object_stopImpersonating;
 import org.apache.isis.viewer.common.model.branding.BrandingUiModelProvider;
+import org.apache.isis.viewer.common.model.decorator.icon.ObjectIconServiceDefault;
 import org.apache.isis.viewer.common.model.header.HeaderUiModelProvider;
 import org.apache.isis.viewer.common.model.menu.MenuUiModelProvider;
 import org.apache.isis.viewer.common.model.userprofile.UserProfileUiModelProviderDefault;
@@ -37,6 +38,7 @@ import org.apache.isis.viewer.common.model.userprofile.UserProfileUiModelProvide
     UserProfileUiModelProviderDefault.class,
     MenuUiModelProvider.class,
     HeaderUiModelProvider.class,
+    ObjectIconServiceDefault.class,
 
     // @Mixin's
     Object_impersonate.class,

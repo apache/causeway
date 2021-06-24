@@ -150,18 +150,20 @@ public interface NamedWithMimeType extends Serializable {
 
         ;
 
-        private CommonMimeType(String primaryType, String ... additionalProposedFileExtension) {
+        private CommonMimeType(final String primaryType, final String ... additionalProposedFileExtension) {
             this.mimeType = newMimeType(primaryType);
             this.proposedFileExtensions = Can.ofSingleton(name().toLowerCase())
                     .addAll(Can.ofArray(additionalProposedFileExtension));
         }
 
-        @Getter
-        final MimeType mimeType;
-        @Getter
-        final Can<String> proposedFileExtensions;
+        @Getter final MimeType mimeType;
+        @Getter final Can<String> proposedFileExtensions;
 
-        static MimeType newMimeType(String primaryType, String subtype) {
+        public String getBaseType() {
+            return getMimeType().getBaseType();
+        }
+
+        static MimeType newMimeType(final String primaryType, final String subtype) {
             try {
                 return new MimeType(primaryType, subtype);
             } catch (MimeTypeParseException e) {
@@ -169,7 +171,7 @@ public interface NamedWithMimeType extends Serializable {
             }
         }
 
-        static MimeType newMimeType(String baseType) {
+        static MimeType newMimeType(final String baseType) {
             try {
                 return new MimeType(baseType);
             } catch (MimeTypeParseException e) {
