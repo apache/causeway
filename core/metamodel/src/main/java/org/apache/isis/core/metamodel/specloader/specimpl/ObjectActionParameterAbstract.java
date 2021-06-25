@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.HasFacetHolder;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.all.i8n.HasTranslation;
+import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
@@ -137,9 +137,9 @@ implements ObjectActionParameter, HasFacetHolder {
 
         // assuming parameters don't have imperative naming support
         val name = lookupFacet(NamedFacet.class)
-        .filter(namedFacet->namedFacet instanceof HasTranslation)
-        .map(HasTranslation.class::cast)
-        .map(HasTranslation::preferredTranslated)
+        .filter(namedFacet->namedFacet instanceof HasStaticText)
+        .map(HasStaticText.class::cast)
+        .map(HasStaticText::preferredTranslated)
         .orElse(null);
 
         if (name!=null) {
@@ -165,9 +165,9 @@ implements ObjectActionParameter, HasFacetHolder {
     public String getDescription() {
         // assuming parameters don't have imperative description support
         return lookupFacet(DescribedAsFacet.class)
-        .filter(describedAsFacet->describedAsFacet instanceof HasTranslation)
-        .map(HasTranslation.class::cast)
-        .map(HasTranslation::preferredTranslated)
+        .filter(describedAsFacet->describedAsFacet instanceof HasStaticText)
+        .map(HasStaticText.class::cast)
+        .map(HasStaticText::preferredTranslated)
         .orElse("");
     }
 

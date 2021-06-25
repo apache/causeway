@@ -53,8 +53,8 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
-import org.apache.isis.core.metamodel.facets.all.i8n.HasTranslation;
-import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
+import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
+import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForm;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
@@ -310,7 +310,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
         for (ManagedObject serviceAdapter : serviceAdapters) {
             final ObjectSpecification serviceSpec = serviceAdapter.getSpecification();
             // assuming services have immutable names (no imperative naming support)
-            String serviceName = ((HasTranslation)serviceSpec.getFacet(NamedFacet.class))
+            String serviceName = ((HasStaticText)serviceSpec.getFacet(NamedFacet.class))
                     .translated(NounForm.SINGULAR);
             serviceNameOrder.add(serviceName);
         }
@@ -382,7 +382,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
                             : null;
                     if(_Strings.isNullOrEmpty(serviceName)){
                         // assuming services have immutable names (no imperative naming support)
-                        serviceName = ((HasTranslation)serviceSpec.getFacet(NamedFacet.class))
+                        serviceName = ((HasStaticText)serviceSpec.getFacet(NamedFacet.class))
                                 .translated(NounForm.SINGULAR);
                     }
                     return new ServiceAndAction(serviceName, serviceAdapter, objectAction);

@@ -1,10 +1,10 @@
-package org.apache.isis.core.metamodel.facets.all.i8n;
+package org.apache.isis.core.metamodel.facets.all.i8n.staatic;
 
 import javax.annotation.Nullable;
 
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 
-public interface HasTranslation {
+public interface HasStaticText {
 
     /**
      * Originating text of preferred NounForm to be translated before use in the UI.

@@ -33,8 +33,8 @@ import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.facets.all.i8n.HasTranslation;
-import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
+import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
+import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForm;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.layout.CollectionLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.layout.NamedFacetForCollectionLayoutAnnotation;
@@ -59,7 +59,7 @@ public class NamedFacetForCollectionLayoutAnnotationFactoryTest extends Abstract
         final NamedFacet facet = facetedMethod.getFacet(NamedFacet.class);
         assertThat(facet, is(notNullValue()));
         assertThat(facet, is(instanceOf(NamedFacetForCollectionLayoutAnnotation.class)));
-        assertThat(((HasTranslation)facet).text(NounForm.PLURAL), is(equalTo("1st names")));
+        assertThat(((HasStaticText)facet).text(NounForm.PLURAL), is(equalTo("1st names")));
         assertThat(facet.escaped(), is(true));
     }
 
@@ -79,7 +79,7 @@ public class NamedFacetForCollectionLayoutAnnotationFactoryTest extends Abstract
         final NamedFacet facet = facetedMethod.getFacet(NamedFacet.class);
         assertThat(facet, is(notNullValue()));
         assertThat(facet, is(instanceOf(NamedFacetForCollectionLayoutAnnotation.class)));
-        assertThat(((HasTranslation)facet).text(NounForm.PLURAL), is(equalTo("1st names")));
+        assertThat(((HasStaticText)facet).text(NounForm.PLURAL), is(equalTo("1st names")));
         assertThat(facet.escaped(), is(false));
     }
 

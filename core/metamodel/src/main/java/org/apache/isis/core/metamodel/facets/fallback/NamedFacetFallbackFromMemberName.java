@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.fallback;
 
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
+import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForm;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetForMemberNameAbstract;
 
 public class NamedFacetFallbackFromMemberName

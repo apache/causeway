@@ -61,7 +61,10 @@ import lombok.NonNull;
 import lombok.val;
 
 public abstract class ObjectMemberAbstract
-implements ObjectMember, HasMetaModelContext, HasFacetHolder {
+implements
+    ObjectMember,
+    HasMetaModelContext,
+    HasFacetHolder {
 
     protected ObjectSpecification specificationOf(final Class<?> type) {
         return type != null

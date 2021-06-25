@@ -42,8 +42,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.isis.core.metamodel.facets.all.i8n.HasTranslation;
-import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
+import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
+import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForm;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
@@ -133,8 +133,8 @@ public class LayoutFacetUtil {
             final FacetHolder facetHolder) {
 
         facetHolder.lookupNonFallbackFacet(DescribedAsFacet.class)
-        .filter(describedAsFacet->describedAsFacet instanceof HasTranslation)
-        .map(HasTranslation.class::cast)
+        .filter(describedAsFacet->describedAsFacet instanceof HasStaticText)
+        .map(HasStaticText.class::cast)
         .ifPresent(describedAsFacet->{
             final String describedAs = describedAsFacet.preferredTranslated();
             if(!_Strings.isNullOrEmpty(describedAs)) {
@@ -187,8 +187,8 @@ public class LayoutFacetUtil {
             final FacetHolder facetHolder) {
 
         facetHolder.lookupNonFallbackFacet(NamedFacet.class)
-        .filter(namedFacet->namedFacet instanceof HasTranslation)
-        .map(HasTranslation.class::cast)
+        .filter(namedFacet->namedFacet instanceof HasStaticText)
+        .map(HasStaticText.class::cast)
         .filter(namedFacet->namedFacet.getSupportedNounForms().contains(NounForm.SINGULAR))
         .ifPresent(namedFacet->{
             final String named = namedFacet.translated(NounForm.SINGULAR);
@@ -220,8 +220,8 @@ public class LayoutFacetUtil {
             final FacetHolder facetHolder) {
 
         facetHolder.lookupNonFallbackFacet(NamedFacet.class)
-        .filter(namedFacet->namedFacet instanceof HasTranslation)
-        .map(HasTranslation.class::cast)
+        .filter(namedFacet->namedFacet instanceof HasStaticText)
+        .map(HasStaticText.class::cast)
         .filter(namedFacet->namedFacet.getSupportedNounForms().contains(NounForm.PLURAL))
         .ifPresent(namedFacet->{
             val plural = namedFacet.translated(NounForm.PLURAL);

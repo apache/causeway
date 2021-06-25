@@ -24,9 +24,9 @@ import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.all.i8n.HasTranslation;
 import org.apache.isis.core.metamodel.facets.all.i8n.imperative.HasImperativeText;
 import org.apache.isis.core.metamodel.facets.all.i8n.imperative.I8nImperativeFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 
 import lombok.Getter;
 
@@ -40,7 +40,7 @@ implements
     }
 
     @Getter(onMethod_ = {@Override})
-    private final _Either<HasTranslation, HasImperativeText> specialization = _Either.right(this);
+    private final _Either<HasStaticText, HasImperativeText> specialization = _Either.right(this);
 
     public DescribedAsFacetForMemberViaMethod(
             final Method describedMethod,

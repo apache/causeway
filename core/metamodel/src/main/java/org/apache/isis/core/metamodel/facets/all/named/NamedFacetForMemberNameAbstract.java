@@ -21,8 +21,8 @@ package org.apache.isis.core.metamodel.facets.all.named;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
-import org.apache.isis.core.metamodel.facets.all.i8n.NounForms;
+import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForm;
+import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForms;
 
 import lombok.NonNull;
 

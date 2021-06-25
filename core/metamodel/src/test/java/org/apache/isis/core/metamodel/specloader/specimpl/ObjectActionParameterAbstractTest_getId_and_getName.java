@@ -38,7 +38,7 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
-import org.apache.isis.core.metamodel.facets.all.i8n.HasTranslation;
+import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -66,7 +66,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
     private ObjectActionParameter stubObjectActionParameterString2;
 
 
-    private static interface NamedFacetStatic extends NamedFacet, HasTranslation {};
+    private static interface NamedFacetStatic extends NamedFacet, HasStaticText {};
 
     private static final class ObjectActionParameterAbstractToTest extends ObjectActionParameterAbstract {
         private ObjectActionParameterAbstractToTest(final int number, final ObjectActionDefault objectAction, final TypedHolder peer) {

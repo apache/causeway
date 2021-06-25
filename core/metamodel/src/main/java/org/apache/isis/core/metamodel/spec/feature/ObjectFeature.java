@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.spec.feature;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Specification;
 
@@ -56,13 +57,30 @@ public interface ObjectFeature extends Specification {
     String getName();
 
     /**
+     * Returns the (friendly) name for this member - the field or action.
+     * If not specified, defaults to the java-source code name of this member.
+     *
+     * @see #getFeatureIdentifier()
+     */
+    default String getName(final ManagedObject domainObject) {
+        return getName();
+    }
+
+    /**
      * Returns a description of how the member is used - this complements the
      * help text.
      * @deprecated TODO[ISIS-1720] must take ManagedObject as an argument
      */
     @Deprecated
-    @Override
     String getDescription();
+
+    /**
+     * Returns a description of how the member is used - this complements the
+     * help text.
+     */
+    default String getDescription(final ManagedObject domainObject) {
+        return getDescription();
+    }
 
     /**
      * The specification of the underlying type.

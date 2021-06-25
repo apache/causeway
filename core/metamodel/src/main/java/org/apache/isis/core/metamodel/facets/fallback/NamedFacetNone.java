@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.fallback;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.i8n.NounForms;
+import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForms;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 
 /**

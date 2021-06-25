@@ -32,7 +32,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.all.i8n.HasTranslation;
+import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.testdomain.conf.Configuration_headless;
@@ -86,7 +86,7 @@ class NewParameterModelTest extends InteractionTestAbstract {
         assertNotNull(describedAsFacet);
 
         assertEquals(2, maxLengthFacet.value());
-        assertEquals("first", ((HasTranslation)describedAsFacet).preferredText());
+        assertEquals("first", ((HasStaticText)describedAsFacet).preferredText());
     }
 
     @Test

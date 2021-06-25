@@ -1,4 +1,4 @@
-package org.apache.isis.core.metamodel.facets.all.i8n;
+package org.apache.isis.core.metamodel.facets.all.i8n.staatic;
 
 import java.util.Objects;
 import java.util.function.BiConsumer;
@@ -14,23 +14,23 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import lombok.NonNull;
 import lombok.val;
 
-public abstract class I8nFacetAbstract
+public abstract class I8nStaticFacetAbstract
 extends FacetAbstract
-implements HasTranslation {
+implements HasStaticText {
 
     protected final TranslationContext translationContext;
 
     private final @NonNull NounForms nounForms;
     private final @NonNull _Lazy<NounForms> translatedNounForms;
 
-    protected I8nFacetAbstract(
+    protected I8nStaticFacetAbstract(
             final Class<? extends Facet> facetType,
             final NounForms nounForms,
             final FacetHolder holder) {
         this(facetType, nounForms, holder, Precedence.DEFAULT);
     }
 
-    protected I8nFacetAbstract(
+    protected I8nStaticFacetAbstract(
             final Class<? extends Facet> facetType,
             final NounForms nounForms,
             final FacetHolder holder,
@@ -94,7 +94,7 @@ implements HasTranslation {
             return false;
         }
 
-        val otherFacet =  (I8nFacetAbstract)other;
+        val otherFacet =  (I8nStaticFacetAbstract)other;
 
         return Objects.equals(this.nounForms, otherFacet.nounForms)
                 && Objects.equals(this.translationContext, otherFacet.translationContext);

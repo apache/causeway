@@ -25,7 +25,7 @@ import org.apache.isis.commons.internal.functions._Functions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.all.i8n.HasTranslation;
+import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -81,14 +81,14 @@ extends ObjectSpecificationPostProcessorAbstract {
             .lookupFacet(NamedFacet.class)
             .map(NamedFacet::getSpecialization)
             .ifPresent(specialization->specialization
-                    .accept(  HasTranslation::memoizeTranslations,
+                    .accept(  HasStaticText::memoizeTranslations,
                               _Functions.noopConsumer()));
 
         facetHolder
             .lookupFacet(DescribedAsFacet.class)
             .map(DescribedAsFacet::getSpecialization)
             .ifPresent(specialization->specialization
-                    .accept(  HasTranslation::memoizeTranslations,
+                    .accept(  HasStaticText::memoizeTranslations,
                               _Functions.noopConsumer()));
 
     }

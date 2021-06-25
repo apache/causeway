@@ -24,17 +24,17 @@ import java.util.function.BiConsumer;
 import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.i8n.HasTranslation;
-import org.apache.isis.core.metamodel.facets.all.i8n.I8nFacetAbstract;
-import org.apache.isis.core.metamodel.facets.all.i8n.NounForms;
 import org.apache.isis.core.metamodel.facets.all.i8n.imperative.HasImperativeText;
+import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
+import org.apache.isis.core.metamodel.facets.all.i8n.staatic.I8nStaticFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForms;
 
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 
 public abstract class NamedFacetAbstract
-extends I8nFacetAbstract
+extends I8nStaticFacetAbstract
 implements NamedFacet {
 
     private static final Class<? extends Facet> type() {
@@ -42,7 +42,7 @@ implements NamedFacet {
     }
 
     @Getter(onMethod_ = {@Override})
-    private final _Either<HasTranslation, HasImperativeText> specialization = _Either.left(this);
+    private final _Either<HasStaticText, HasImperativeText> specialization = _Either.left(this);
 
     private final boolean escaped;
 

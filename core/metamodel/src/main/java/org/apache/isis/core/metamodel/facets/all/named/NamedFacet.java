@@ -21,8 +21,8 @@ package org.apache.isis.core.metamodel.facets.all.named;
 
 import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.all.i8n.HasTranslation;
 import org.apache.isis.core.metamodel.facets.all.i8n.imperative.HasImperativeText;
+import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 
 /**
  * The name of a class, a property, collection, an action or a parameter.
@@ -35,7 +35,7 @@ public interface NamedFacet
 extends
     Facet {
 
-    _Either<HasTranslation, HasImperativeText> getSpecialization();
+    _Either<HasStaticText, HasImperativeText> getSpecialization();
 
     /**
      * Flag indicating whether the label should be show as is, or should be HTML escaped.

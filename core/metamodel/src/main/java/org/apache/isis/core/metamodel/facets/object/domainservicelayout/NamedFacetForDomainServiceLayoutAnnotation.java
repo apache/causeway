@@ -24,7 +24,7 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.i8n.NounForms;
+import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForms;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 

@@ -41,8 +41,8 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.all.i8n.HasTranslation;
-import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
+import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
+import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForm;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
@@ -297,7 +297,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
                 assertNotNull(namedFacet);
                 assertTrue(namedFacet instanceof NamedFacetForDomainObjectLayoutAnnotation);
 
-                assertEquals("Name override", ((HasTranslation)namedFacet).text(NounForm.SINGULAR));
+                assertEquals("Name override", ((HasStaticText)namedFacet).text(NounForm.SINGULAR));
 
                 expectNoMethodsRemoved();
             }
@@ -384,7 +384,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
                 final NamedFacet namedFacet = facetHolder.getFacet(NamedFacet.class);
                 assertNotNull(namedFacet);
 
-                assertEquals("Customers Plural Form", ((HasTranslation)namedFacet).translated(NounForm.PLURAL));
+                assertEquals("Customers Plural Form", ((HasStaticText)namedFacet).translated(NounForm.PLURAL));
 
                 expectNoMethodsRemoved();
             }

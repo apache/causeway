@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel._testing.TranslationService_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.all.i8n.NounForms;
+import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForms;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 import org.apache.isis.core.metamodel.id.TypeIdentifierTestFactory;

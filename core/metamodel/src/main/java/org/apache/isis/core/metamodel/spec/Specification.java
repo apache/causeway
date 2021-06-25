@@ -41,10 +41,4 @@ public interface Specification extends FacetHolder {
 
     FeatureType getFeatureType();
 
-    /**
-     * Returns a description of how the member is used.
-     */
-    String getDescription();
-
-
 }

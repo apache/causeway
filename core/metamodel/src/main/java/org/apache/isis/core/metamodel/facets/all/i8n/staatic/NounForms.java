@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.all.i8n;
+package org.apache.isis.core.metamodel.facets.all.i8n.staatic;
 
 import java.util.EnumSet;
 
