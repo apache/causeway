@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.facets.object.icon;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
@@ -27,9 +28,13 @@ import lombok.NonNull;
 /**
  * Creates {@link ObjectIcon}(s), which are class-path resource references.
  * <p>
- * Internally used by the metamodel.
- * Clients should use {@link ObjectSpecification#getIcon(org.apache.isis.core.metamodel.spec.ManagedObject)}.
+ * Clients should not use this service directly. Either use
+ * {@link ManagedObject#getIcon()} or
+ * {@link ObjectSpecification#getIcon(org.apache.isis.core.metamodel.spec.ManagedObject)}.
  *
+ * @apiNote internal service, used by the metamodel
+ *
+ * @see ManagedObject#getIcon()
  * @see ObjectSpecification#getIcon(org.apache.isis.core.metamodel.spec.ManagedObject)
  * @since 2.0
  */
@@ -44,19 +49,4 @@ public interface ObjectIconService {
             @NonNull ObjectSpecification specification,
             @Nullable String iconNameSuffixIfAny);
 
-//    ObjectIcon getObjectFallbackIcon();
-//
-//    // -- SHORTCUTS
-//
-//    default ObjectIcon getObjectIcon(final ObjectSpecification spec) {
-//        return getObjectIcon(spec, null);
-//    }
-//
-//    default ObjectIcon getObjectIcon(final ManagedObject adapter) {
-//        return ManagedObjects.isSpecified(adapter)
-//                ? getObjectIcon(
-//                        adapter.getSpecification(),
-//                        adapter.getSpecification().getIconName(adapter))
-//                : getObjectFallbackIcon();
-//    }
 }

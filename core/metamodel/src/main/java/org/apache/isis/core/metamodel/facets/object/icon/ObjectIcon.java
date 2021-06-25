@@ -35,6 +35,12 @@ import lombok.Synchronized;
 import lombok.ToString;
 import lombok.val;
 
+/**
+ * Icon image data class-path resource reference.
+ *
+ * @see ObjectIconService
+ * @since 2.0
+ */
 @RequiredArgsConstructor
 @ToString
 @EqualsAndHashCode
