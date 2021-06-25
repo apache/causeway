@@ -16,27 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.all.i8n.staatic;
-
-import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
+package org.apache.isis.core.metamodel.facets.all.i8n.noun;
 
 /**
  * Represents various linguistic forms, based on <i>cardinality</i>.
  * @since 2.0
  */
 public enum NounForm {
-
-    /**
-     * Use, if there is no semantic difference between EMPTY, SINGULAR or PLURAL.
-     * eg. {@link DescribedAsFacet}
-     */
-    INDIFFERENT,
-
-    /**
-     * Represents the absence of a scalar or non-scalar object.
-     * @apiNote for future use (not yet implemented)
-     */
-    EMPTY,
 
     /**
      * Represents the singular linguistic form.
@@ -48,14 +34,6 @@ public enum NounForm {
      */
     PLURAL
     ;
-
-    public boolean isIndifferent() {
-        return this == INDIFFERENT;
-    }
-
-    public boolean isEmpty() {
-        return this == EMPTY;
-    }
 
     public boolean isSingular() {
         return this == SINGULAR;

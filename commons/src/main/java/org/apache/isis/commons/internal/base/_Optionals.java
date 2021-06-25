@@ -28,30 +28,32 @@ public class _Optionals {
 
     // can be replaced by Java 9 firstOptional.or(() -> secondOptional);
     public static <T> Optional<T> or(
-            final Optional<T> a,
+            final Optional<? extends T> a,
             final Supplier<Optional<? extends T>> b) {
         return a.isPresent()
-                ? a
+                ? _Casts.uncheckedCast(a)
                 : b.get().map(_Casts::uncheckedCast);
     }
 
     public static <T> Optional<T> or(
-            final Optional<T> a,
+            final Optional<? extends T> a,
             final Supplier<Optional<? extends T>> b,
             final Supplier<Optional<? extends T>> c) {
         return or(or(a, b), c);
     }
 
     public static <T> Optional<T> orNullable(
-            final Optional<T> a,
-            final Supplier<T> b) {
-        return a.isPresent() ? a : Optional.ofNullable(b.get());
+            final Optional<? extends T> a,
+            final Supplier<? extends T> b) {
+        return a.isPresent()
+                ? _Casts.uncheckedCast(a)
+                : Optional.ofNullable(b.get());
     }
 
     public static <T> Optional<T> orNullable(
-            final Optional<T> a,
-            final Supplier<T> b,
-            final Supplier<T> c) {
+            final Optional<? extends T> a,
+            final Supplier<? extends T> b,
+            final Supplier<? extends T> c) {
         return orNullable(orNullable(a, b), c);
     }
 

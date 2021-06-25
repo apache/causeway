@@ -16,78 +16,80 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.all.i8n.imperative;
+package org.apache.isis.core.metamodel.facets.all.i8n.staatic;
 
-import java.lang.reflect.Method;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.services.i18n.TranslationContext;
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 import lombok.NonNull;
 import lombok.val;
 
-public class I8nImperativeFacetAbstract
+public abstract class HasStaticTextFacetAbstract
 extends FacetAbstract
-implements
-    ImperativeFacet,
-    HasImperativeText {
+implements HasStaticText {
 
     protected final TranslationContext translationContext;
-    protected final @NonNull Method method;
 
-    protected I8nImperativeFacetAbstract(
+    private final @NonNull String originalText;
+    private final @NonNull _Lazy<String> translatedText;
+
+    protected HasStaticTextFacetAbstract(
             final Class<? extends Facet> facetType,
-            final Method method,
+            final TranslationContext translationContext,
+            final String originalText,
             final FacetHolder holder) {
-        super(facetType, holder, Precedence.HIGH);
-        this.method = method;
-        this.translationContext = TranslationContext
-                .forTranslationContextHolder(holder.getFeatureIdentifier());
+        this(facetType, translationContext, originalText, holder, Precedence.DEFAULT);
+    }
+
+    protected HasStaticTextFacetAbstract(
+            final Class<? extends Facet> facetType,
+            final TranslationContext translationContext,
+            final String originalText,
+            final FacetHolder holder,
+            final Precedence precedence) {
+        super(facetType, holder, precedence);
+        this.originalText = originalText;
+        this.translationContext = translationContext;
+        this.translatedText = _Lazy.threadSafe(()->
+            holder.getTranslationService().translate(translationContext, originalText));
     }
 
     @Override
-    public final Result<String> text(final ManagedObject object) {
-        return ManagedObjects.imperativeText(object, method, translationContext);
+    public final String text() {
+        return originalText;
     }
 
     @Override
-    public final Can<Method> getMethods() {
-        return Can.ofSingleton(method);
+    public final String translated() {
+        return translatedText.get();
     }
 
     @Override
-    public final Intent getIntent(final Method method) {
-        return Intent.UI_HINT;
-    }
-
-    @Override
-    public final void visitAttributes(final BiConsumer<String, Object> visitor) {
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("context", translationContext);
-        ImperativeFacet.visitAttributes(this, visitor);
+        visitor.accept("originalText", text());
+        visitor.accept("translated", translated()); // memoizes as a side-effect
     }
 
     @Override
-    public final boolean semanticEquals(final @NonNull Facet other) {
+    public boolean semanticEquals(final @NonNull Facet other) {
 
-        // equality by facet-type, java-method and translation-context
+        // equality by facet-type, (original) text and translation-context
 
         if(!this.facetType().equals(other.facetType())) {
             return false;
         }
 
-        val otherFacet = (I8nImperativeFacetAbstract)other;
+        val otherFacet =  (HasStaticTextFacetAbstract)other;
 
-        return Objects.equals(this.method, otherFacet.method)
+        return Objects.equals(this.originalText, otherFacet.originalText)
                 && Objects.equals(this.translationContext, otherFacet.translationContext);
 
     }

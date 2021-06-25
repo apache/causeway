@@ -40,9 +40,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForm;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacetForMemberName;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.object.wizard.WizardFacet;
@@ -118,7 +117,7 @@ implements FacetHolder {
         facetedMethodsBuilder.introspectClass();
 
         // name
-        addNamedFacetIfRequired(NounForm.SINGULAR);
+        addNamedFacetIfRequired();
 
         // go no further if a value
         if(this.containsFacet(ValueFacet.class)) {
@@ -177,15 +176,12 @@ implements FacetHolder {
         postProcess();
     }
 
-    private void addNamedFacetIfRequired(final NounForm nounForm) {
-        if (getFacet(NamedFacet.class) == null) {
-
-            addFacet(new NamedFacetForMemberName(
-                    nounForm,
+    private void addNamedFacetIfRequired() {
+        if (getFacet(MemberNamedFacet.class) == null) {
+            addFacet(new MemberNamedFacetForStaticMemberName(
                     StringExtensions.asNaturalName2(getShortIdentifier()),
                     this));
         }
-
     }
 
 

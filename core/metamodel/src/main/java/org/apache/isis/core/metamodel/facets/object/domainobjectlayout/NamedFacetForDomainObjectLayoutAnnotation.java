@@ -18,23 +18,22 @@
  */
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
-
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForm;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForms;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.i8n.noun.NounForm;
+import org.apache.isis.core.metamodel.facets.all.i8n.noun.NounForms;
+import org.apache.isis.core.metamodel.facets.all.named.ObjectNamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.ObjectNamedFacetAbstract;
 
 import lombok.val;
 
-
 public class NamedFacetForDomainObjectLayoutAnnotation
-extends NamedFacetAbstract {
+extends ObjectNamedFacetAbstract {
 
-    public static Optional<NamedFacetForDomainObjectLayoutAnnotation> create(
+    public static Optional<ObjectNamedFacet> create(
             final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final FacetHolder holder) {
 
@@ -47,6 +46,7 @@ extends NamedFacetAbstract {
         val singular = _Strings.emptyToNull(domainObjectLayout.named());
         val plural = _Strings.emptyToNull(domainObjectLayout.plural());
 
+        //TODO[1720] if singular is not explicit (is empty), infer
         val nounForms = NounForms
                 .builder()
                 .preferredNounForm(singular!=null ? NounForm.SINGULAR : NounForm.PLURAL)
@@ -62,13 +62,12 @@ extends NamedFacetAbstract {
                 new NamedFacetForDomainObjectLayoutAnnotation(
                             nounForms,
                             holder));
-
     }
 
     private NamedFacetForDomainObjectLayoutAnnotation(
             final NounForms nounForms,
             final FacetHolder holder) {
-        super(nounForms, /*escaped*/ true, holder);
+        super(nounForms, holder);
     }
 
 }

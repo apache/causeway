@@ -24,22 +24,27 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
+import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacetWithStaticTextAbstract;
 
-public class DescribedAsFacetForCollectionLayoutAnnotation extends DescribedAsFacetAbstract {
+public class DescribedAsFacetForCollectionLayoutAnnotation
+extends MemberDescribedFacetWithStaticTextAbstract {
 
-    public static Optional<DescribedAsFacetForCollectionLayoutAnnotation> create(
+    public static Optional<MemberDescribedFacet> create(
             final Optional<CollectionLayout> collectionLayoutIfAny,
             final FacetHolder holder) {
 
         return collectionLayoutIfAny
                 .map(CollectionLayout::describedAs)
                 .filter(_Strings::isNotEmpty)
-                .map(describedAs -> new DescribedAsFacetForCollectionLayoutAnnotation(describedAs, holder));
+                .map(describedAs ->
+                    new DescribedAsFacetForCollectionLayoutAnnotation(describedAs, holder));
     }
 
-    private DescribedAsFacetForCollectionLayoutAnnotation(final String value, final FacetHolder holder) {
-        super(value, holder);
+    private DescribedAsFacetForCollectionLayoutAnnotation(
+            final String described,
+            final FacetHolder holder) {
+        super(described, holder);
     }
 
 }

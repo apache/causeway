@@ -19,14 +19,21 @@
 package org.apache.isis.core.metamodel.postprocessors.all.i18n;
 
 
+import java.util.Optional;
+import java.util.stream.Stream;
+
 import javax.inject.Inject;
 
-import org.apache.isis.commons.internal.functions._Functions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
+import org.apache.isis.core.metamodel.facets.all.described.ObjectDescribedFacet;
+import org.apache.isis.core.metamodel.facets.all.described.ParamDescribedFacet;
+import org.apache.isis.core.metamodel.facets.all.i8n.HasMemoizableTranslation;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.ObjectNamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.ParamNamedFacet;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -77,19 +84,19 @@ extends ObjectSpecificationPostProcessorAbstract {
     // -- HELPER
 
     private void memoizeTranslations(final FacetHolder facetHolder) {
-        facetHolder
-            .lookupFacet(NamedFacet.class)
-            .map(NamedFacet::getSpecialization)
-            .ifPresent(specialization->specialization
-                    .accept(  HasStaticText::memoizeTranslations,
-                              _Functions.noopConsumer()));
 
-        facetHolder
-            .lookupFacet(DescribedAsFacet.class)
-            .map(DescribedAsFacet::getSpecialization)
-            .ifPresent(specialization->specialization
-                    .accept(  HasStaticText::memoizeTranslations,
-                              _Functions.noopConsumer()));
+        Stream.<Optional<? extends Facet>>of(
+                facetHolder.lookupFacet(ObjectNamedFacet.class),
+                facetHolder.lookupFacet(MemberNamedFacet.class),
+                facetHolder.lookupFacet(ParamNamedFacet.class),
+                facetHolder.lookupFacet(ObjectDescribedFacet.class),
+                facetHolder.lookupFacet(MemberDescribedFacet.class),
+                facetHolder.lookupFacet(ParamDescribedFacet.class))
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .filter(facet->facet instanceof HasMemoizableTranslation)
+        .map(HasMemoizableTranslation.class::cast)
+        .forEach(HasMemoizableTranslation::memoizeTranslations);
 
     }
 

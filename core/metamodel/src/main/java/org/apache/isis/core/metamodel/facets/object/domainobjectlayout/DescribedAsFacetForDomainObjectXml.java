@@ -24,13 +24,13 @@ import java.util.Optional;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.described.ObjectDescribedFacet;
+import org.apache.isis.core.metamodel.facets.all.described.ObjectDescribedFacetAbstract;
 
 public class DescribedAsFacetForDomainObjectXml
-extends DescribedAsFacetAbstract {
+extends ObjectDescribedFacetAbstract {
 
-    public static Optional<DescribedAsFacet> create(
+    public static Optional<ObjectDescribedFacet> create(
             final DomainObjectLayoutData domainObjectLayout,
             final FacetHolder holder) {
         if(domainObjectLayout == null) {
@@ -43,9 +43,9 @@ extends DescribedAsFacetAbstract {
     }
 
     private DescribedAsFacetForDomainObjectXml(
-            final String value,
+            final String described,
             final FacetHolder holder) {
-        super(value, holder);
+        super(described, holder);
     }
 
 }

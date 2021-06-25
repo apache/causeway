@@ -22,9 +22,10 @@ package org.apache.isis.core.metamodel.facets.members.described.annotprop;
 import java.util.Properties;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacetWithStaticTextAbstract;
 
-public class DescribedAsFacetOnMemberFromProperties extends DescribedAsFacetAbstract {
+public class DescribedAsFacetOnMemberFromProperties
+extends MemberDescribedFacetWithStaticTextAbstract {
 
     public DescribedAsFacetOnMemberFromProperties(final Properties properties, final FacetHolder holder) {
         super(valueFrom(properties), holder);

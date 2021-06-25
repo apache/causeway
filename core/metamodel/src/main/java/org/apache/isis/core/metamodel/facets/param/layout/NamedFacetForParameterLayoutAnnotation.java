@@ -24,14 +24,13 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForms;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.named.ParamNamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.ParamNamedFacetAbstract;
 
 public class NamedFacetForParameterLayoutAnnotation
-extends NamedFacetAbstract {
+extends ParamNamedFacetAbstract {
 
-    public static Optional<NamedFacet> create(
+    public static Optional<ParamNamedFacet> create(
             final Optional<ParameterLayout> parameterLayoutIfAny,
             final FacetHolder holder) {
 
@@ -40,16 +39,14 @@ extends NamedFacetAbstract {
                 .map(parameterLayout ->
                         new NamedFacetForParameterLayoutAnnotation(
                             parameterLayout.named(),
-                            parameterLayout.namedEscaped(),
                             holder));
     }
 
     private NamedFacetForParameterLayoutAnnotation(
-            final String singularName,
-            final boolean escaped,
+            final String named,
             final FacetHolder holder) {
 
-        super(NounForms.preferredSingular(singularName).build(), escaped, holder);
+        super(named, holder);
     }
 
 }

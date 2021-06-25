@@ -32,9 +32,7 @@ import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForm;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.ParamNamedFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 
@@ -64,7 +62,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
         programmingModel = metaModelContext.getProgrammingModel();
 
         // verify that
-        assertEquals(121, programmingModel.streamFactories().count());
+        assertEquals(120, programmingModel.streamFactories().count());
     }
 
     @Override
@@ -110,9 +108,9 @@ extends AbstractFacetFactoryJUnit4TestCase {
         .forEach(facetFactory->facetFactory.processParams(processParameterContext));
 
         // then
-        val namedFacet = facetedMethodParameter.getFacet(NamedFacet.class);
+        val namedFacet = facetedMethodParameter.getFacet(ParamNamedFacet.class);
 
-        assertEquals("An Awesome Name", ((HasStaticText)namedFacet).text(NounForm.SINGULAR));
+        assertEquals("An Awesome Name", namedFacet.text());
 
     }
 
@@ -140,9 +138,9 @@ extends AbstractFacetFactoryJUnit4TestCase {
         programmingModel.streamFactories().forEach(facetFactory->facetFactory.processParams(processParameterContext));
 
         // then
-        val namedFacet = facetedMethodParameter.getFacet(NamedFacet.class);
+        val namedFacet = facetedMethodParameter.getFacet(ParamNamedFacet.class);
         assertNotNull(namedFacet);
-        assertEquals("Even Better Name", ((HasStaticText)namedFacet).text(NounForm.SINGULAR));
+        assertEquals("Even Better Name", namedFacet.text());
 
     }
 

@@ -32,15 +32,13 @@ import static org.hamcrest.Matchers.is;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForm;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.id.TypeIdentifierTestFactory;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -67,12 +65,11 @@ public class OneToManyAssociationDefaultTest {
     @Mock ObjectSpecification mockOwnerAdapterSpec;
     @Mock MessageService mockMessageService;
     @Mock FacetedMethod mockPeer;
-    @Mock NamedFacetStatic mockNamedFacet;
+    @Mock MemberNamedFacet mockNamedFacet;
+    @Mock HasStaticText mockHasStaticText;
 
     private OneToManyAssociation association;
     private MetaModelContext_forTesting metaModelContext;
-
-    private static interface NamedFacetStatic extends NamedFacet, HasStaticText {};
 
     @Before
     public void setUp() {
@@ -134,17 +131,14 @@ public class OneToManyAssociationDefaultTest {
     private void expectPeerToReturnNamedFacet() {
         context.checking(new Expectations() {
             {
-                oneOf(mockPeer).getFacet(NamedFacet.class);
+                oneOf(mockPeer).getFacet(MemberNamedFacet.class);
                 will(returnValue(mockNamedFacet));
 
                 allowing(mockNamedFacet).getSpecialization();
-                will(returnValue(_Either.left(mockNamedFacet)));
+                will(returnValue(_Either.left(mockHasStaticText)));
 
-                allowing(mockNamedFacet).preferredTranslated();
+                allowing(mockHasStaticText).translated();
                 will(returnValue("My name"));
-
-                allowing(mockNamedFacet).getSupportedNounForms();
-                will(returnValue(ImmutableEnumSet.of(NounForm.SINGULAR)));
 
             }
         });

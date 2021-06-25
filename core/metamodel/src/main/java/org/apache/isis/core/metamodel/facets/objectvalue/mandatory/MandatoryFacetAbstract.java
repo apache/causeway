@@ -25,7 +25,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.isis.core.metamodel.interactions.PropertyModifyContext;
 import org.apache.isis.core.metamodel.interactions.ProposedHolder;
@@ -87,31 +87,26 @@ implements MandatoryFacet {
 
     @Override
     public String invalidates(final ValidityContext context) {
-        if (!(context instanceof PropertyModifyContext)
-                && !(context instanceof ActionArgValidityContext)) {
-            return null;
-        }
-        // TODO: IntelliJ says the following is always false, so looks like it can be removed...
-        if (!(context instanceof ProposedHolder)) {
-            // shouldn't happen, since both the above should hold a proposed
-            // value/argument
-            return null;
-        }
-        final ProposedHolder proposedHolder = (ProposedHolder) context;
-        final boolean required = isRequiredButNull(proposedHolder.getProposed());
-        if (!required) {
-            return null;
-        }
-        val name = getFacetHolder().lookupFacet(NamedFacet.class)
-        .map(NamedFacet::getSpecialization)
-        .map(specialization->specialization
-                .fold(textFacet->textFacet.preferredTranslated(),
-                      textFacet->textFacet.textElseNull(context.getHead().getTarget())))
-        .orElse(null);
 
-        return name != null
-                ? "'" + name + "' is mandatory"
-                : "Mandatory";
+        val proposedHolder =
+                context instanceof PropertyModifyContext
+                || context instanceof ActionArgValidityContext
+                        ? (ProposedHolder) context
+                        : null;
+
+        if(proposedHolder==null
+                || !isRequiredButNull(proposedHolder.getProposed())) {
+            return null;
+        }
+
+        return getFacetHolder()
+                .lookupFacet(MemberNamedFacet.class)
+                .map(MemberNamedFacet::getSpecialization)
+                .map(specialization->specialization
+                        .fold(textFacet->textFacet.translated(),
+                              textFacet->textFacet.textElseNull(context.getHead().getTarget())))
+                .map(named->"'" + named + "' is mandatory")
+                .orElse("Mandatory");
     }
 
     @Override

@@ -24,23 +24,27 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
+import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacetWithStaticTextAbstract;
 
 public class DescribedAsFacetForActionLayoutAnnotation
-extends DescribedAsFacetAbstract {
+extends MemberDescribedFacetWithStaticTextAbstract {
 
-    public static Optional<DescribedAsFacetForActionLayoutAnnotation> create(
+    public static Optional<MemberDescribedFacet> create(
             final Optional<ActionLayout> actionLayoutIfAny,
             final FacetHolder holder) {
 
         return actionLayoutIfAny
                 .map(ActionLayout::describedAs)
                 .filter(_Strings::isNotEmpty)
-                .map(describedAs -> new DescribedAsFacetForActionLayoutAnnotation(describedAs, holder));
+                .map(describedAs ->
+                    new DescribedAsFacetForActionLayoutAnnotation(describedAs, holder));
     }
 
-    private DescribedAsFacetForActionLayoutAnnotation(final String value, final FacetHolder holder) {
-        super(value, holder);
+    private DescribedAsFacetForActionLayoutAnnotation(
+            final String described,
+            final FacetHolder holder) {
+        super(described, holder);
     }
 
 }

@@ -17,21 +17,24 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.fallback;
+package org.apache.isis.core.metamodel.facets.all.named;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.HasSemanticEqualityByClass;
-import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacetAbstract;
 
-/**
- * Has a description of the empty string.
- */
-public class DescribedAsFacetNone
-extends DescribedAsFacetAbstract
-implements HasSemanticEqualityByClass {
+public class MemberNamedFacetForStaticMemberName
+extends MemberNamedFacetWithStaticTextAbstract {
 
-    public DescribedAsFacetNone(final FacetHolder holder) {
-        super("", holder, Precedence.FALLBACK);
+    public MemberNamedFacetForStaticMemberName(
+            final String memberName,
+            final FacetHolder holder) {
+        super(memberName, holder, Precedence.DEFAULT);
+    }
+
+    public MemberNamedFacetForStaticMemberName(
+            final String memberName,
+            final FacetHolder holder,
+            final Precedence precedence) {
+        super(memberName, holder, precedence);
     }
 
 }

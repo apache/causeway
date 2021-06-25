@@ -22,8 +22,7 @@ import java.util.List;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForm;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.runtime.memento.ObjectMemento;
@@ -96,11 +95,12 @@ extends EntityCollectionModelAbstract {
 
     @Override
     public String getName() {
+
         return getTypeOfSpecification()
-            .lookupFacet(NamedFacet.class)
-            .map(NamedFacet::getSpecialization)
+            .lookupFacet(MemberNamedFacet.class)
+            .map(MemberNamedFacet::getSpecialization)
             .map(specialization->specialization
-                    .fold(namedFacet->namedFacet.translated(NounForm.PLURAL),
+                    .fold(namedFacet->namedFacet.translated(),
                           namedFacet->namedFacet.textElseNull(actionModel.getOwner())))
             .orElse(getIdentifier().getMemberLogicalName());
     }

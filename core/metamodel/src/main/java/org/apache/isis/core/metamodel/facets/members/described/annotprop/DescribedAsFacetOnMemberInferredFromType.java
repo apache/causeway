@@ -21,33 +21,33 @@ package org.apache.isis.core.metamodel.facets.members.described.annotprop;
 
 import java.util.Optional;
 
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
+import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacetWithStaticTextAbstract;
+import org.apache.isis.core.metamodel.facets.all.described.ObjectDescribedFacet;
 
-public class DescribedAsFacetOnMemberDerivedFromType
-extends DescribedAsFacetAbstract {
+import lombok.val;
 
-    /**
-     * As {@link DescribedAsFacet}(s) have either static or dynamic (imperative) text,
-     * we yet only support inferring from those with static text.
-     */
-    public static Optional<DescribedAsFacet> create(
-            final DescribedAsFacet describedAsFacet,
+public class DescribedAsFacetOnMemberInferredFromType
+extends MemberDescribedFacetWithStaticTextAbstract {
+
+    public static Optional<MemberDescribedFacet> create(
+            final ObjectDescribedFacet objectDescribedFacet,
             final FacetHolder holder) {
 
-        return describedAsFacet instanceof DescribedAsFacetAbstract
-                ? Optional.of(
-                        new DescribedAsFacetOnMemberDerivedFromType(
-                                (DescribedAsFacetAbstract) describedAsFacet,
-                                holder))
-                : Optional.empty();
+        val describedIfAny = _Strings.emptyToNull(objectDescribedFacet.text());
+
+        return Optional.ofNullable(describedIfAny)
+        .map(described->
+            new DescribedAsFacetOnMemberInferredFromType(described, holder));
+
     }
 
-    private DescribedAsFacetOnMemberDerivedFromType(
-            final DescribedAsFacetAbstract describedAsFacet,
+    private DescribedAsFacetOnMemberInferredFromType(
+            final String described,
             final FacetHolder holder) {
-        super(describedAsFacet.text(), holder);
+        super(described, holder, Precedence.INFERRED);
     }
 
 }

@@ -38,8 +38,7 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.ParamNamedFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -56,7 +55,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
     @Mock
     private TypedHolder actionParamPeer;
     @Mock
-    private NamedFacetStatic namedFacet;
+    private ParamNamedFacet namedFacet;
 
     @Mock
     private ObjectSpecification stubSpecForString;
@@ -64,9 +63,6 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
     private ObjectActionParameter stubObjectActionParameterString;
     @Mock
     private ObjectActionParameter stubObjectActionParameterString2;
-
-
-    private static interface NamedFacetStatic extends NamedFacet, HasStaticText {};
 
     private static final class ObjectActionParameterAbstractToTest extends ObjectActionParameterAbstract {
         private ObjectActionParameterAbstractToTest(final int number, final ObjectActionDefault objectAction, final TypedHolder peer) {
@@ -136,10 +132,10 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
 
         context.checking(new Expectations() {
             {
-                oneOf(actionParamPeer).getFacet(NamedFacet.class);
+                oneOf(actionParamPeer).getFacet(ParamNamedFacet.class);
                 will(returnValue(namedFacet));
 
-                atLeast(1).of(namedFacet).preferredTranslated();
+                atLeast(1).of(namedFacet).translated();
                 will(returnValue("Some parameter name"));
             }
         });
@@ -154,10 +150,10 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
 
         context.checking(new Expectations() {
             {
-                oneOf(actionParamPeer).getFacet(NamedFacet.class);
+                oneOf(actionParamPeer).getFacet(ParamNamedFacet.class);
                 will(returnValue(namedFacet));
 
-                atLeast(1).of(namedFacet).preferredTranslated();
+                atLeast(1).of(namedFacet).translated();
                 will(returnValue("Some parameter name"));
             }
         });
@@ -173,7 +169,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
 
         context.checking(new Expectations() {
             {
-                oneOf(actionParamPeer).getFacet(NamedFacet.class);
+                oneOf(actionParamPeer).getFacet(ParamNamedFacet.class);
                 will(returnValue(null));
 
                 oneOf(parentAction).getParameters(with(Expectations.<Predicate<ObjectActionParameter>>anything()));
@@ -192,7 +188,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
 
         context.checking(new Expectations() {
             {
-                oneOf(actionParamPeer).getFacet(NamedFacet.class);
+                oneOf(actionParamPeer).getFacet(ParamNamedFacet.class);
                 will(returnValue(null));
 
                 oneOf(parentAction).getParameters(with(Expectations.<Predicate<ObjectActionParameter>>anything()));
@@ -211,7 +207,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
 
         context.checking(new Expectations() {
             {
-                oneOf(actionParamPeer).getFacet(NamedFacet.class);
+                oneOf(actionParamPeer).getFacet(ParamNamedFacet.class);
                 will(returnValue(null));
 
                 oneOf(parentAction).getParameters(with(Expectations.<Predicate<ObjectActionParameter>>anything()));

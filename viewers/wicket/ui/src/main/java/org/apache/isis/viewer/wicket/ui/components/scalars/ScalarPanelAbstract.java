@@ -48,7 +48,6 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -439,7 +438,7 @@ implements ScalarModelSubscriber {
     /**
      * The widget starts off read-only, and CANNOT be activated into edit mode.
      */
-    protected void onInitializeReadonly(String disableReason) {
+    protected void onInitializeReadonly(final String disableReason) {
     }
 
     /**
@@ -518,7 +517,7 @@ implements ScalarModelSubscriber {
         }
 
         @Override
-        protected void onUpdate(AjaxRequestTarget target) {
+        protected void onUpdate(final AjaxRequestTarget target) {
 
             _Probe.entryPoint(EntryPoint.USER_INTERACTION, "Wicket Ajax Request, "
                     + "originating from User either having changed a Property value during inline editing "
@@ -530,7 +529,7 @@ implements ScalarModelSubscriber {
         }
 
         @Override
-        protected void onError(AjaxRequestTarget target, RuntimeException e) {
+        protected void onError(final AjaxRequestTarget target, final RuntimeException e) {
             super.onError(target, e);
             for (ScalarModelSubscriber subscriber : scalarPanel.subscribers) {
                 subscriber.onError(target, scalarPanel);
@@ -614,7 +613,7 @@ implements ScalarModelSubscriber {
 
         public abstract void buildGui(ScalarPanelAbstract panel);
 
-        private static Rendering renderingFor(EntityModel.RenderingHint renderingHint) {
+        private static Rendering renderingFor(final EntityModel.RenderingHint renderingHint) {
             return renderingHint.isRegular()? Rendering.REGULAR :Rendering.COMPACT;
         }
     }
@@ -658,10 +657,8 @@ implements ScalarModelSubscriber {
                 scalarName.add(new CssClassAppender("mandatory"));
             }
         }
-        NamedFacet namedFacet = model.getFacet(NamedFacet.class);
-        if (namedFacet != null) {
-            scalarName.setEscapeModelStrings(namedFacet.escaped());
-        }
+
+        scalarName.setEscapeModelStrings(true);
         return scalarName;
     }
 
@@ -824,7 +821,7 @@ implements ScalarModelSubscriber {
                 private static final long serialVersionUID = -3561635292986591682L;
 
                 @Override
-                protected void onEvent(AjaxRequestTarget target) {
+                protected void onEvent(final AjaxRequestTarget target) {
 
                     final ObjectSpecification specification = scalarModel.getTypeOfSpecification();
                     final MetaModelService metaModelService = getServiceRegistry()
@@ -895,7 +892,7 @@ implements ScalarModelSubscriber {
         CssClassAppender.appendCssClassTo(markupContainer, determineActionLayoutPositioningCss(actionLinks));
     }
 
-    private static String determinePropParamLayoutCss(ScalarModel model) {
+    private static String determinePropParamLayoutCss(final ScalarModel model) {
         final LabelAtFacet facet = model.getFacet(LabelAtFacet.class);
         if (facet != null) {
             switch (facet.label()) {
@@ -916,7 +913,7 @@ implements ScalarModelSubscriber {
         return "label-left";
     }
 
-    private static String determineActionLayoutPositioningCss(Can<LinkAndLabel> entityActionLinks) {
+    private static String determineActionLayoutPositioningCss(final Can<LinkAndLabel> entityActionLinks) {
         boolean actionsPositionedOnRight = hasActionsPositionedOn(entityActionLinks, ActionLayout.Position.RIGHT);
         return actionsPositionedOnRight ? "actions-right" : null;
     }
@@ -937,7 +934,7 @@ implements ScalarModelSubscriber {
      *
      * @param target The Ajax request handler
      */
-    public void repaint(AjaxRequestTarget target) {
+    public void repaint(final AjaxRequestTarget target) {
         target.add(this);
     }
 

@@ -19,18 +19,19 @@
 package org.apache.isis.core.metamodel.facets.param.name;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForms;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.named.ParamNamedFacetAbstract;
 
 /**
  *
  * @since 2.0
  */
 public class NamedFacetForParameterUsingReflection
-extends NamedFacetAbstract {
+extends ParamNamedFacetAbstract {
 
-    public NamedFacetForParameterUsingReflection(final String singularName, final FacetHolder holder) {
-        super(NounForms.preferredSingular(singularName).build(), false, holder);
+    public NamedFacetForParameterUsingReflection(
+            final String named,
+            final FacetHolder holder) {
+        super(named, holder);
     }
 
 }

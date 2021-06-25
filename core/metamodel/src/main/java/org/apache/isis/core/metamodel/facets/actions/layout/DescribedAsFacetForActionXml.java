@@ -24,13 +24,13 @@ import java.util.Optional;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
+import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacetWithStaticTextAbstract;
 
 public class DescribedAsFacetForActionXml
-extends DescribedAsFacetAbstract {
+extends MemberDescribedFacetWithStaticTextAbstract {
 
-    public static Optional<DescribedAsFacet> create(
+    public static Optional<MemberDescribedFacet> create(
             final ActionLayoutData actionLayout,
             final FacetHolder holder) {
         if(actionLayout == null) {
@@ -42,8 +42,8 @@ extends DescribedAsFacetAbstract {
                 : Optional.empty();
     }
 
-    private DescribedAsFacetForActionXml(final String value, final FacetHolder holder) {
-        super(value, holder);
+    private DescribedAsFacetForActionXml(final String described, final FacetHolder holder) {
+        super(described, holder);
     }
 
 }

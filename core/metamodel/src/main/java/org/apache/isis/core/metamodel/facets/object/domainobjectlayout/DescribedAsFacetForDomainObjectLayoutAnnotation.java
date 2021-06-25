@@ -23,10 +23,11 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.described.ObjectDescribedFacetAbstract;
 
 
-public class DescribedAsFacetForDomainObjectLayoutAnnotation extends DescribedAsFacetAbstract {
+public class DescribedAsFacetForDomainObjectLayoutAnnotation
+extends ObjectDescribedFacetAbstract {
 
     public static Optional<DescribedAsFacetForDomainObjectLayoutAnnotation> create(
             final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
@@ -38,7 +39,9 @@ public class DescribedAsFacetForDomainObjectLayoutAnnotation extends DescribedAs
                 .map(describedAs -> new DescribedAsFacetForDomainObjectLayoutAnnotation(describedAs, holder));
     }
 
-    private DescribedAsFacetForDomainObjectLayoutAnnotation(final String value, final FacetHolder holder) {
-        super(value, holder);
+    private DescribedAsFacetForDomainObjectLayoutAnnotation(
+            final String described,
+            final FacetHolder holder) {
+        super(described, holder);
     }
 }

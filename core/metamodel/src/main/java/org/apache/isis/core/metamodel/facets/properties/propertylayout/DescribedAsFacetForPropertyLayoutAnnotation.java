@@ -24,11 +24,13 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
+import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacetWithStaticTextAbstract;
 
-public class DescribedAsFacetForPropertyLayoutAnnotation extends DescribedAsFacetAbstract {
+public class DescribedAsFacetForPropertyLayoutAnnotation
+extends MemberDescribedFacetWithStaticTextAbstract {
 
-    public static Optional<DescribedAsFacetForPropertyLayoutAnnotation> create(
+    public static Optional<MemberDescribedFacet> create(
             final Optional<PropertyLayout> propertyLayoutIfAny,
             final FacetHolder holder) {
 
@@ -38,8 +40,10 @@ public class DescribedAsFacetForPropertyLayoutAnnotation extends DescribedAsFace
                 .map(describedAs -> new DescribedAsFacetForPropertyLayoutAnnotation(describedAs, holder));
     }
 
-    private DescribedAsFacetForPropertyLayoutAnnotation(final String value, final FacetHolder holder) {
-        super(value, holder);
+    private DescribedAsFacetForPropertyLayoutAnnotation(
+            final String described,
+            final FacetHolder holder) {
+        super(described, holder);
     }
 
 }

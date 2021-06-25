@@ -32,7 +32,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForm;
 
 import lombok.val;
 
@@ -73,7 +72,6 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
 
         val facetHolder = processClassContext.getFacetHolder();
 
-        addFacet(new DescribedAsFacetNone(facetHolder));
         addFacet(new TitleFacetNone(facetHolder));
         addFacet(
                 new PagedFacetFromConfiguration(
@@ -86,8 +84,7 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
 
         final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
 
-        addFacet(new NamedFacetFallbackFromMemberName(NounForm.SINGULAR, facetedMethod));
-        addFacet(new DescribedAsFacetNone(facetedMethod));
+        addFacet(new NamedFacetFallbackFromMemberName(facetedMethod));
         addFacet(new HelpFacetNone(facetedMethod));
 
         final FeatureType featureType = facetedMethod.getFeatureType();
@@ -114,8 +111,6 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
 
         final TypedHolder typedHolder = processParameterContext.getFacetHolder();
         if (typedHolder.getFeatureType().isActionParameter()) {
-            addFacet(new NamedFacetNone(typedHolder));
-            addFacet(new DescribedAsFacetNone(typedHolder));
             addFacet(new HelpFacetNone(typedHolder));
             addFacet(new MultiLineFacetNone(typedHolder));
 

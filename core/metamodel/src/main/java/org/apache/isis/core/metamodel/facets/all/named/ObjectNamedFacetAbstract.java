@@ -16,39 +16,33 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.all.named;
 
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForm;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForms;
+import org.apache.isis.core.metamodel.facets.all.i8n.noun.HasNounFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.i8n.noun.NounForms;
 
-import lombok.NonNull;
+/**
+ * The base for the {@link ObjectNamedFacet}.
+ * @since 2.0
+ */
+public class ObjectNamedFacetAbstract
+extends HasNounFacetAbstract
+implements ObjectNamedFacet {
 
-public abstract class NamedFacetForMemberNameAbstract
-extends NamedFacetAbstract {
-
-    public static final boolean ESCAPED = true;
-
-    protected NamedFacetForMemberNameAbstract(
-            final @NonNull NounForm preferredNounForm,
-            final String memberName,
-            final FacetHolder holder,
-            final Facet.Precedence precedence) {
-        super(
-                preferredNounForm.isSingular()
-                ? NounForms
-                        .preferredSingular(memberName)
-                        .build()
-                : NounForms
-                        .preferredPlural(memberName)
-                        .build()
-                ,
-                ESCAPED,
-                holder,
-                precedence);
+    private static final Class<? extends Facet> type() {
+        return ObjectNamedFacet.class;
     }
 
+    protected ObjectNamedFacetAbstract(
+            final NounForms nounForms,
+            final FacetHolder holder) {
+        super(type(),
+                TranslationContext.forTranslationContextHolder(holder.getFeatureIdentifier()),
+                nounForms,
+                holder);
+    }
 
 }

@@ -109,6 +109,7 @@ public @interface ParameterLayout {
      * @see CollectionLayout#namedEscaped()
      * @see ParameterLayout#named()
      */
+    @Deprecated
     boolean namedEscaped()
             default true;
 

@@ -24,13 +24,13 @@ import java.util.Optional;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
+import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacetWithStaticTextAbstract;
 
 public class DescribedAsFacetForPropertyXml
-extends DescribedAsFacetAbstract {
+extends MemberDescribedFacetWithStaticTextAbstract {
 
-    public static Optional<DescribedAsFacet> create(
+    public static Optional<MemberDescribedFacet> create(
             final PropertyLayoutData propertyLayout,
             final FacetHolder holder) {
         if(propertyLayout == null) {
@@ -42,8 +42,10 @@ extends DescribedAsFacetAbstract {
                 : Optional.empty();
     }
 
-    private DescribedAsFacetForPropertyXml(final String value, final FacetHolder holder) {
-        super(value, holder);
+    private DescribedAsFacetForPropertyXml(
+            final String described,
+            final FacetHolder holder) {
+        super(described, holder);
     }
 
 }

@@ -27,7 +27,7 @@ import javax.enterprise.inject.Vetoed;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
@@ -60,7 +60,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * of the parameter, we have to do figure out the name of the parameter
      * ourselves:
      * <ul>
-     * <li>If there is a {@link NamedFacet} associated with this parameter then
+     * <li>If there is a {@link MemberNamedFacet} associated with this parameter then
      * we infer a name from this, eg "First Name" becomes "firstName".
      * <li>Otherwise we use the type, eg "string".
      * <li>If there is more than one parameter of the same type, then we use a
@@ -130,7 +130,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
     }
 
     /** default value as result of a initial param value fixed point search */
-    default ManagedObject getDefault(ManagedObject actionOnwer) {
+    default ManagedObject getDefault(final ManagedObject actionOnwer) {
         return getAction()
                 .interactionHead(actionOnwer).defaults()
                 .getParamValues()
@@ -261,7 +261,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
         }
     }
 
-    default String getCssClass(String prefix) {
+    default String getCssClass(final String prefix) {
         return getAction().getCssClass(prefix) + "-" + getId();
     }
 

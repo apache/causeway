@@ -16,25 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.core.metamodel.facets.all.i8n;
 
-package org.apache.isis.core.metamodel.facets.all.described;
+public interface HasMemoizableTranslation {
 
-import org.apache.isis.commons.internal.base._Either;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.all.i8n.imperative.HasImperativeText;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
-
-/**
- * Describes a class, a property, collection, an action or an action parameter.
- *
- * <p>
- * In the standard Apache Isis Programming Model, corresponds to annotating the
- * member with <tt>@DescribedAs</tt>.
- */
-public interface DescribedAsFacet
-extends
-    Facet {
-
-    _Either<HasStaticText, HasImperativeText> getSpecialization();
+    void memoizeTranslations();
 
 }

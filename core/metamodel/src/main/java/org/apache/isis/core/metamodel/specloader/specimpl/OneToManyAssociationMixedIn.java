@@ -27,9 +27,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetAbstract;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForm;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacetForMemberName;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetForContributee;
 import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacetAbstract;
@@ -119,12 +118,13 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
         FacetUtil.copyFacetsTo(mixinAction.getFacetedMethod(), facetHolder);
 
         // adjust name if necessary
-        val isExplicitlyNamed = lookupNonFallbackFacet(NamedFacet.class)
+        val isExplicitlyNamed = lookupNonFallbackFacet(MemberNamedFacet.class)
                 .isPresent();
 
         if(!isExplicitlyNamed) {
             String memberName = determineNameFrom(mixinAction);
-            FacetUtil.addFacet(new NamedFacetForMemberName(NounForm.PLURAL, memberName, facetHolder));
+            FacetUtil.addFacet(
+                    new MemberNamedFacetForStaticMemberName(memberName, facetHolder));
         }
 
     }

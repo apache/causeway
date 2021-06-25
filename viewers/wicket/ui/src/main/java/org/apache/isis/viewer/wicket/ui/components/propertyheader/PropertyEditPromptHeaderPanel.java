@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.ui.components.propertyheader;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
@@ -36,7 +35,7 @@ extends PanelAbstract<ManagedObject, ScalarPropertyModel> {
     private static final long serialVersionUID = 1L;
     private static final String ID_PROPERTY_NAME = "propertyName";
 
-    public PropertyEditPromptHeaderPanel(String id, final ScalarPropertyModel model) {
+    public PropertyEditPromptHeaderPanel(final String id, final ScalarPropertyModel model) {
         super(id, model);
 
         val targetAdapter = model.getParentUiModel().getManagedObject();
@@ -54,10 +53,8 @@ extends PanelAbstract<ManagedObject, ScalarPropertyModel> {
                 return model.getName();
             }
         });
-        val namedFacet = model.getMetaModel().getFacet(NamedFacet.class);
-        if(namedFacet != null) {
-            label.setEscapeModelStrings(namedFacet.escaped());
-        }
+
+        label.setEscapeModelStrings(true);
         add(label);
     }
 

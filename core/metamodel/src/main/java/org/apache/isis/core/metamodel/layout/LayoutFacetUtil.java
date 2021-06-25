@@ -37,14 +37,16 @@ import org.apache.isis.applib.layout.component.HasNamed;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.functions._Functions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
-import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
+import org.apache.isis.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForm;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.all.i8n.noun.NounForm;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
@@ -128,19 +130,66 @@ public class LayoutFacetUtil {
         }
     }
 
-    public void setDescribedAsIfAny(
+    private void setObjectNamedIfAny(
+            final HasNamed hasNamed,
+            final FacetHolder facetHolder) {
+
+        facetHolder.lookupNonFallbackFacet(ObjectNamedFacet.class)
+        .filter(namedFacet->namedFacet.getSupportedNounForms().contains(NounForm.SINGULAR))
+        .ifPresent(namedFacet->{
+            final String named = namedFacet.translated(NounForm.SINGULAR);
+            if(!_Strings.isNullOrEmpty(named)){
+                hasNamed.setNamed(named);
+            }
+            hasNamed.setNamedEscaped(true);
+        });
+    }
+
+    private void setObjectDescribedIfAny(
             final HasDescribedAs hasDescribedAs,
             final FacetHolder facetHolder) {
 
-        facetHolder.lookupNonFallbackFacet(DescribedAsFacet.class)
-        .filter(describedAsFacet->describedAsFacet instanceof HasStaticText)
-        .map(HasStaticText.class::cast)
-        .ifPresent(describedAsFacet->{
-            final String describedAs = describedAsFacet.preferredTranslated();
-            if(!_Strings.isNullOrEmpty(describedAs)) {
+        facetHolder.lookupNonFallbackFacet(ObjectDescribedFacet.class)
+        .map(ObjectDescribedFacet::translated)
+        .ifPresent(describedAs->{
+            if(_Strings.isNotEmpty(describedAs)) {
                 hasDescribedAs.setDescribedAs(describedAs);
             }
         });
+    }
+
+    private void setMemberNamedIfAny(
+            final HasNamed hasNamed,
+            final FacetHolder facetHolder) {
+
+        facetHolder.lookupNonFallbackFacet(MemberNamedFacet.class)
+        .map(MemberNamedFacet::getSpecialization)
+        .ifPresent(specialization->
+            specialization.accept(
+                    hasStaticText->{
+                        val describedAs = hasStaticText.translated();
+                        if(_Strings.isNotEmpty(describedAs)) {
+                            hasNamed.setNamed(describedAs);
+                        }
+                    },
+                    _Functions.noopConsumer())); // not supported for imperative text
+    }
+
+    private void setMemberDescribedIfAny(
+            final HasDescribedAs hasDescribedAs,
+            final FacetHolder facetHolder) {
+
+        facetHolder.lookupNonFallbackFacet(MemberDescribedFacet.class)
+        .map(MemberDescribedFacet::getSpecialization)
+        .ifPresent(specialization->
+            specialization.accept(
+                    hasStaticText->{
+                        val describedAs = hasStaticText.translated();
+                        if(_Strings.isNotEmpty(describedAs)) {
+                            hasDescribedAs.setDescribedAs(describedAs);
+                        }
+                    },
+                    _Functions.noopConsumer())); // not supported for imperative text
     }
 
     public void setHiddenIfAny(
@@ -182,25 +231,7 @@ public class LayoutFacetUtil {
         }
     }
 
-    public void setNamedIfAny(
-            final HasNamed hasNamed,
-            final FacetHolder facetHolder) {
 
-        facetHolder.lookupNonFallbackFacet(NamedFacet.class)
-        .filter(namedFacet->namedFacet instanceof HasStaticText)
-        .map(HasStaticText.class::cast)
-        .filter(namedFacet->namedFacet.getSupportedNounForms().contains(NounForm.SINGULAR))
-        .ifPresent(namedFacet->{
-            final String named = namedFacet.translated(NounForm.SINGULAR);
-            if(!_Strings.isNullOrEmpty(named)){
-                hasNamed.setNamed(named);
-            }
-            final boolean escaped = ((NamedFacet)namedFacet).escaped();
-            if(!escaped) {
-                hasNamed.setNamedEscaped(escaped);
-            }
-        });
-    }
 
     public void setPagedIfAny(
             final CollectionLayoutData collectionLayoutData,
@@ -219,9 +250,7 @@ public class LayoutFacetUtil {
             final DomainObjectLayoutData domainObjectLayoutData,
             final FacetHolder facetHolder) {
 
-        facetHolder.lookupNonFallbackFacet(NamedFacet.class)
-        .filter(namedFacet->namedFacet instanceof HasStaticText)
-        .map(HasStaticText.class::cast)
+        facetHolder.lookupNonFallbackFacet(ObjectNamedFacet.class)
         .filter(namedFacet->namedFacet.getSupportedNounForms().contains(NounForm.PLURAL))
         .ifPresent(namedFacet->{
             val plural = namedFacet.translated(NounForm.PLURAL);
@@ -332,9 +361,9 @@ public class LayoutFacetUtil {
                 setBookmarkingIfAny(actionLayoutData, objectAction);
                 setCssClassIfAny(actionLayoutData, objectAction);
                 setCssClassFaIfAny(actionLayoutData, objectAction);
-                setDescribedAsIfAny(actionLayoutData, objectAction);
+                setMemberDescribedIfAny(actionLayoutData, objectAction);
                 setHiddenIfAny(actionLayoutData, objectAction);
-                setNamedIfAny(actionLayoutData, objectAction);
+                setMemberNamedIfAny(actionLayoutData, objectAction);
                 setActionPositionIfAny(actionLayoutData, objectAction);
             });
         }
@@ -345,9 +374,9 @@ public class LayoutFacetUtil {
             .ifPresent(collection->{
                 setCssClassIfAny(collectionLayoutData, collection);
                 setDefaultViewIfAny(collectionLayoutData, collection);
-                setDescribedAsIfAny(collectionLayoutData, collection);
+                setMemberDescribedIfAny(collectionLayoutData, collection);
                 setHiddenIfAny(collectionLayoutData, collection);
-                setNamedIfAny(collectionLayoutData, collection);
+                setMemberNamedIfAny(collectionLayoutData, collection);
                 setPagedIfAny(collectionLayoutData, collection);
                 setSortedByIfAny(collectionLayoutData, collection);
             });
@@ -358,9 +387,9 @@ public class LayoutFacetUtil {
             objectSpec.getAssociation(propertyLayoutData.getId())
             .ifPresent(property->{
                 setCssClassIfAny(propertyLayoutData, property);
-                setDescribedAsIfAny(propertyLayoutData, property);
+                setMemberDescribedIfAny(propertyLayoutData, property);
                 setHiddenIfAny(propertyLayoutData, property);
-                setNamedIfAny(propertyLayoutData, property);
+                setMemberNamedIfAny(propertyLayoutData, property);
                 setLabelPositionIfAny(propertyLayoutData, property);
                 setMultiLineIfAny(propertyLayoutData, property);
                 setRenderedAsDayBeforeIfAny(propertyLayoutData, property);
@@ -373,8 +402,8 @@ public class LayoutFacetUtil {
             setBookmarkingIfAny(domainObjectLayoutData, objectSpec);
             setCssClassIfAny(domainObjectLayoutData, objectSpec);
             setCssClassFaIfAny(domainObjectLayoutData, objectSpec);
-            setDescribedAsIfAny(domainObjectLayoutData, objectSpec);
-            setNamedIfAny(domainObjectLayoutData, objectSpec);
+            setObjectDescribedIfAny(domainObjectLayoutData, objectSpec);
+            setObjectNamedIfAny(domainObjectLayoutData, objectSpec);
             setPluralIfAny(domainObjectLayoutData, objectSpec);
         }
     }

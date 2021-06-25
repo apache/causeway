@@ -1,4 +1,22 @@
-package org.apache.isis.core.metamodel.facets.all.i8n.staatic;
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+package org.apache.isis.core.metamodel.facets.all.i8n.noun;
 
 import java.util.Objects;
 import java.util.function.BiConsumer;
@@ -14,31 +32,32 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import lombok.NonNull;
 import lombok.val;
 
-public abstract class I8nStaticFacetAbstract
+public abstract class HasNounFacetAbstract
 extends FacetAbstract
-implements HasStaticText {
+implements HasNoun {
 
     protected final TranslationContext translationContext;
 
     private final @NonNull NounForms nounForms;
     private final @NonNull _Lazy<NounForms> translatedNounForms;
 
-    protected I8nStaticFacetAbstract(
+    protected HasNounFacetAbstract(
             final Class<? extends Facet> facetType,
+            final TranslationContext translationContext,
             final NounForms nounForms,
             final FacetHolder holder) {
-        this(facetType, nounForms, holder, Precedence.DEFAULT);
+        this(facetType, translationContext, nounForms, holder, Precedence.DEFAULT);
     }
 
-    protected I8nStaticFacetAbstract(
+    protected HasNounFacetAbstract(
             final Class<? extends Facet> facetType,
+            final TranslationContext translationContext,
             final NounForms nounForms,
             final FacetHolder holder,
             final Precedence precedence) {
         super(facetType, holder, precedence);
         this.nounForms = nounForms;
-        this.translationContext = TranslationContext
-                .forTranslationContextHolder(holder.getFeatureIdentifier());
+        this.translationContext = translationContext;
         this.translatedNounForms = _Lazy.threadSafe(()->
             nounForms.translate(holder.getTranslationService(), translationContext));
     }
@@ -94,7 +113,7 @@ implements HasStaticText {
             return false;
         }
 
-        val otherFacet =  (I8nStaticFacetAbstract)other;
+        val otherFacet =  (HasNounFacetAbstract)other;
 
         return Objects.equals(this.nounForms, otherFacet.nounForms)
                 && Objects.equals(this.translationContext, otherFacet.translationContext);

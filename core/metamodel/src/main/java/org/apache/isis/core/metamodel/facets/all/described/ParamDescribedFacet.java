@@ -16,22 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.members.named.method;
+package org.apache.isis.core.metamodel.facets.all.described;
 
-import java.lang.reflect.Method;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacetWithImperativeTextAbstract;
+public interface ParamDescribedFacet
+extends
+    Facet,
+    HasStaticText {
 
-public class NamedFacetForMemberViaMethod
-extends MemberNamedFacetWithImperativeTextAbstract {
-
-    public NamedFacetForMemberViaMethod(
-            final Method namedMethod,
-            final FacetHolder holder) {
-        super(
-                namedMethod,
-                holder);
-    }
+    // not yet - future extension
+    //_Either<HasStaticText, HasImperativeText> getSpecialization();
 
 }

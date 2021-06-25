@@ -40,15 +40,17 @@ import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForm;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.all.described.ObjectDescribedFacet;
+import org.apache.isis.core.metamodel.facets.all.i8n.noun.HasNoun;
+import org.apache.isis.core.metamodel.facets.all.i8n.noun.NounForm;
+import org.apache.isis.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+
+import lombok.val;
 
 public class DomainObjectLayoutFactoryTest
 extends AbstractFacetFactoryJUnit4TestCase {
@@ -248,7 +250,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
                 facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
-                final Facet facet = facetHolder.getFacet(DescribedAsFacet.class);
+                final Facet facet = facetHolder.getFacet(ObjectDescribedFacet.class);
                 assertNotNull(facet);
                 assertTrue(facet instanceof DescribedAsFacetForDomainObjectLayoutAnnotation);
 
@@ -265,7 +267,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
                 facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
-                final Facet facet = facetHolder.getFacet(DescribedAsFacet.class);
+                final Facet facet = facetHolder.getFacet(ObjectDescribedFacet.class);
                 assertNull(facet);
 
                 expectNoMethodsRemoved();
@@ -293,11 +295,11 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
                 facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
-                final NamedFacet namedFacet = facetHolder.getFacet(NamedFacet.class);
+                val namedFacet = facetHolder.getFacet(ObjectNamedFacet.class);
                 assertNotNull(namedFacet);
                 assertTrue(namedFacet instanceof NamedFacetForDomainObjectLayoutAnnotation);
 
-                assertEquals("Name override", ((HasStaticText)namedFacet).text(NounForm.SINGULAR));
+                assertEquals("Name override", ((HasNoun)namedFacet).text(NounForm.SINGULAR));
 
                 expectNoMethodsRemoved();
             }
@@ -309,7 +311,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
                 facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
-                final Facet facet = facetHolder.getFacet(NamedFacet.class);
+                val facet = facetHolder.getFacet(ObjectNamedFacet.class);
                 assertNull(facet);
 
                 expectNoMethodsRemoved();
@@ -381,10 +383,10 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
                 facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
-                final NamedFacet namedFacet = facetHolder.getFacet(NamedFacet.class);
+                val namedFacet = facetHolder.getFacet(ObjectNamedFacet.class);
                 assertNotNull(namedFacet);
 
-                assertEquals("Customers Plural Form", ((HasStaticText)namedFacet).translated(NounForm.PLURAL));
+                assertEquals("Customers Plural Form", ((HasNoun)namedFacet).translated(NounForm.PLURAL));
 
                 expectNoMethodsRemoved();
             }
@@ -396,7 +398,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
                 facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
-                final NamedFacet namedFacet = facetHolder.getFacet(NamedFacet.class);
+                val namedFacet = facetHolder.getFacet(ObjectNamedFacet.class);
                 assertNull(namedFacet);
 
                 //assertEquals("", namedFacet.translated(NounForm.PLURAL));

@@ -52,11 +52,11 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.isis.core.metamodel.facets.all.help.HelpFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForm;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.all.i8n.noun.NounForm;
+import org.apache.isis.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
@@ -484,35 +484,26 @@ implements ObjectSpecification {
 
     @Override
     public String getSingularName() {
-        return lookupFacet(NamedFacet.class)
-            .map(NamedFacet::getSpecialization)
-            .map(specialization->specialization
-                    .fold(  textFacet->textFacet.translatedElseNull(NounForm.SINGULAR),
-                            textFacet->textFacet.textElseNull(null)))
+        return lookupFacet(ObjectNamedFacet.class)
+            .map(textFacet->textFacet.translatedElseNull(NounForm.SINGULAR))
             .orElseGet(this::getFullIdentifier);
     }
 
     @Override
     public String getPluralName() {
-        return lookupFacet(NamedFacet.class)
-                .map(NamedFacet::getSpecialization)
-                .map(specialization->specialization
-                        .fold(  textFacet->textFacet.translatedElseNull(NounForm.PLURAL),
-                                textFacet->textFacet.textElseNull(null)))
+        return lookupFacet(ObjectNamedFacet.class)
+                .map(textFacet->textFacet.translatedElseNull(NounForm.PLURAL))
                 .orElseGet(this::getFullIdentifier);
     }
 
     /**
-     * The translated description according to any available {@link DescribedAsFacet},
+     * The translated description according to any available {@link ObjectDescribedFacet},
      * else empty string (<tt>""</tt>).
      */
     @Override
     public String getDescription() {
-        return lookupFacet(DescribedAsFacet.class)
-                .map(DescribedAsFacet::getSpecialization)
-                .map(specialization->specialization
-                        .fold(  textFacet->textFacet.preferredTranslated(),
-                                textFacet->textFacet.textElseNull(null)))
+        return lookupFacet(ObjectDescribedFacet.class)
+                .map(ObjectDescribedFacet::translated)
                 .orElse("");
     }
 

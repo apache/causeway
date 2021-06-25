@@ -41,9 +41,8 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.core.metamodel.facets.WhereValueFacet;
-import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -293,15 +292,14 @@ implements CollectionCountProvider {
 
         val collectionModel = getModel();
 
-        final NamedFacet facet = property.getFacet(NamedFacet.class);
-        final boolean escaped = facet == null || facet.escaped();
+        final boolean escaped = true;
 
         final String parentTypeName = property.getOnType().getLogicalTypeName();
 
-        final String describedAs = property.lookupFacet(DescribedAsFacet.class)
-                .map(DescribedAsFacet::getSpecialization)
+        final String describedAs = property.lookupFacet(MemberDescribedFacet.class)
+                .map(MemberDescribedFacet::getSpecialization)
                 .map(specialization->specialization
-                        .fold(textFacet->textFacet.preferredTranslated(),
+                        .fold(textFacet->textFacet.translated(),
                               textFacet->textFacet.textElseNull(collectionModel.getParentObject())))
                 .orElse(null);
 

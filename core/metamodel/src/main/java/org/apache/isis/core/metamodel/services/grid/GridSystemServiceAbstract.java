@@ -49,7 +49,7 @@ import org.apache.isis.core.metamodel.facets.actions.layout.HiddenFacetForAction
 import org.apache.isis.core.metamodel.facets.actions.layout.NamedFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.PromptStyleFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.RedirectFacetFromActionXml;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.layout.CssClassFacetForCollectionXml;
 import org.apache.isis.core.metamodel.facets.collections.layout.DefaultViewFacetForCollectionXml;
 import org.apache.isis.core.metamodel.facets.collections.layout.DescribedAsFacetForCollectionXml;
@@ -262,7 +262,7 @@ implements GridSystemService<G> {
                 addFacetIfPresent(DescribedAsFacetForActionXml.create(actionLayoutData, objectAction));
                 addFacetIfPresent(HiddenFacetForActionXml.create(actionLayoutData, objectAction));
                 // preserve translations
-                NamedFacet existingNamedFacet = objectAction.getFacet(NamedFacet.class);
+                val existingNamedFacet = objectAction.getFacet(MemberNamedFacet.class);
                 if(existingNamedFacet == null) {
                     addFacetIfPresent(NamedFacetForActionXml.create(actionLayoutData, objectAction));
                 }
@@ -283,7 +283,7 @@ implements GridSystemService<G> {
                 addFacetIfPresent(LabelAtFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 addFacetIfPresent(MultiLineFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 // preserve translations
-                NamedFacet existingNamedFacet = oneToOneAssociation.getFacet(NamedFacet.class);
+                val existingNamedFacet = oneToOneAssociation.getFacet(MemberNamedFacet.class);
                 if(existingNamedFacet == null) {
                     addFacetIfPresent(NamedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 }
@@ -313,7 +313,7 @@ implements GridSystemService<G> {
                 addFacetIfPresent(DescribedAsFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
                 addFacetIfPresent(HiddenFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
                 // preserve translations
-                NamedFacet existingNamedFacet = oneToManyAssociation.getFacet(NamedFacet.class);
+                val existingNamedFacet = oneToManyAssociation.getFacet(MemberNamedFacet.class);
                 if(existingNamedFacet == null) {
                     addFacetIfPresent(NamedFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
                 }

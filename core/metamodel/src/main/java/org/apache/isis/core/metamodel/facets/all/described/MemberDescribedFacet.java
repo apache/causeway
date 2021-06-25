@@ -16,23 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.core.metamodel.facets.all.described;
 
-package org.apache.isis.core.metamodel.facets.fallback;
+import org.apache.isis.commons.internal.base._Either;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facets.all.i8n.imperative.HasImperativeText;
+import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForms;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
+public interface MemberDescribedFacet
+extends
+    Facet {
 
-/**
- * Has a name of <tt>null</tt>.
- */
-public class NamedFacetNone
-extends NamedFacetAbstract {
-
-    public static final boolean ESCAPED = true;
-
-    public NamedFacetNone(final FacetHolder holder) {
-        super(NounForms.preferredSingular(null).build(), ESCAPED, holder, Precedence.FALLBACK);
-    }
+    _Either<HasStaticText, HasImperativeText> getSpecialization();
 
 }

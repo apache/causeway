@@ -20,32 +20,18 @@ package org.apache.isis.core.metamodel.facets.members.described.method;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.commons.internal.base._Either;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.all.i8n.imperative.HasImperativeText;
-import org.apache.isis.core.metamodel.facets.all.i8n.imperative.I8nImperativeFacetAbstract;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
-
-import lombok.Getter;
+import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacetWithImperativeTextAbstract;
 
 public class DescribedAsFacetForMemberViaMethod
-extends I8nImperativeFacetAbstract
-implements
-    DescribedAsFacet {
-
-    private static final Class<? extends Facet> type() {
-        return DescribedAsFacet.class;
-    }
-
-    @Getter(onMethod_ = {@Override})
-    private final _Either<HasStaticText, HasImperativeText> specialization = _Either.right(this);
+extends MemberDescribedFacetWithImperativeTextAbstract {
 
     public DescribedAsFacetForMemberViaMethod(
             final Method describedMethod,
             final FacetHolder holder) {
-        super(type(), describedMethod, holder);
+        super(
+                describedMethod,
+                holder);
     }
 
 }

@@ -37,10 +37,10 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.HasFacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
 import org.apache.isis.core.metamodel.facets.all.help.HelpFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.interactions.AccessContext;
 import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
@@ -129,15 +129,15 @@ implements
 
         final ManagedObject owner = null; //TODO[ISIS-1720] must take ManagedObject (owner) as an argument
 
-        val namedFacet = getFacet(NamedFacet.class);
+        val namedFacet = getFacet(MemberNamedFacet.class);
 
         if(namedFacet==null) {
-            throw _Exceptions.unrecoverableFormatted("no NamedFacet preset on %s", getFeatureIdentifier());
+            throw _Exceptions.unrecoverableFormatted("no MemberNamedFacet preset on %s", getFeatureIdentifier());
         }
 
         return namedFacet
             .getSpecialization()
-            .fold(  textFacet->textFacet.preferredTranslated(),
+            .fold(  textFacet->textFacet.translated(),
                     textFacet->textFacet.textElseNull(owner));
     }
 
@@ -146,10 +146,10 @@ implements
 
         final ManagedObject owner = null; //TODO[ISIS-1720] must take ManagedObject (owner) as an argument
 
-        return lookupFacet(DescribedAsFacet.class)
-        .map(DescribedAsFacet::getSpecialization)
+        return lookupFacet(MemberDescribedFacet.class)
+        .map(MemberDescribedFacet::getSpecialization)
         .map(specialization->specialization
-                .fold(textFacet->textFacet.preferredTranslated(),
+                .fold(textFacet->textFacet.translated(),
                       textFacet->textFacet.textElseNull(owner)))
         .orElse(null);
     }

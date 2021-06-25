@@ -33,7 +33,6 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -134,8 +133,7 @@ implements HasDynamicallyVisibleContent {
 
 
             Label labelComponent = collectionPanel.createLabel(ID_COLLECTION_NAME, collectionMetaModel.getName());
-            final NamedFacet namedFacet = collectionMetaModel.getFacet(NamedFacet.class);
-            labelComponent.setEscapeModelStrings(namedFacet == null || namedFacet.escaped());
+            labelComponent.setEscapeModelStrings(true);
             div.add(labelComponent);
 
             final String description = collectionMetaModel.getDescription();
@@ -174,7 +172,7 @@ implements HasDynamicallyVisibleContent {
         return div;
     }
 
-    protected CollectionPanel newCollectionModel(String id, EntityCollectionModelParented entityCollectionModel) {
+    protected CollectionPanel newCollectionModel(final String id, final EntityCollectionModelParented entityCollectionModel) {
         return new CollectionPanel(id, entityCollectionModel);
     }
 

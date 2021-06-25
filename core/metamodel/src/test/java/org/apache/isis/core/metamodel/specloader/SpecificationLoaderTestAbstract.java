@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.specloader;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -36,13 +37,16 @@ import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.title.TitleService;
+import org.apache.isis.commons.internal.base._Optionals;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
+import org.apache.isis.core.metamodel.facets.all.described.ObjectDescribedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -153,13 +157,25 @@ abstract class SpecificationLoaderTestAbstract {
 
     @Test
     public void testNamedFaced() throws Exception {
-        final Facet facet = specification.getFacet(NamedFacet.class);
+
+        val facet =
+                _Optionals.<Facet>or(
+                        specification.lookupFacet(ObjectNamedFacet.class),
+                        ()->specification.lookupFacet(MemberNamedFacet.class))
+                .orElse(null);
+
         assertNotNull(facet);
     }
 
-    @Test
+    @Test @Disabled("we allow descriptions to be absent - no need to install empty fallbacks")
     public void testDescriptionFacet() throws Exception {
-        final Facet facet = specification.getFacet(DescribedAsFacet.class);
+
+        val facet =
+                _Optionals.<Facet>or(
+                        specification.lookupFacet(ObjectDescribedFacet.class),
+                        ()->specification.lookupFacet(MemberDescribedFacet.class))
+                .orElse(null);
+
         assertNotNull(facet);
     }
 

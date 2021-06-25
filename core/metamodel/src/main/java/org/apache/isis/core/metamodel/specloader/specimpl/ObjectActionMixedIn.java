@@ -27,9 +27,8 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForm;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacetForMemberName;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -91,12 +90,13 @@ implements MixedInMember {
 
         // adjust name if necessary
 
-        val isExplicitlyNamed = lookupNonFallbackFacet(NamedFacet.class)
+        val isExplicitlyNamed = lookupNonFallbackFacet(MemberNamedFacet.class)
                 .isPresent();
 
         if(!isExplicitlyNamed) {
             val memberName = determineNameFrom(mixinAction);
-            this.addFacet(new NamedFacetForMemberName(NounForm.SINGULAR, memberName, facetHolder));
+            this.addFacet(
+                    new MemberNamedFacetForStaticMemberName(memberName, facetHolder));
         }
     }
 

@@ -16,22 +16,33 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.all.named;
 
+import org.apache.isis.applib.services.i18n.TranslationContext;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForm;
+import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticTextFacetAbstract;
 
-import lombok.NonNull;
+/**
+ * The base for the {@link ParamNamedFacet}.
+ * @since 2.0
+ */
+public class ParamNamedFacetAbstract
+extends HasStaticTextFacetAbstract
+implements ParamNamedFacet {
 
-public class NamedFacetForMemberName
-extends NamedFacetForMemberNameAbstract {
-
-    public NamedFacetForMemberName(
-            final @NonNull NounForm preferredNounForm,
-            final String memberName,
-            final FacetHolder holder) {
-        super(preferredNounForm, memberName, holder, Precedence.DEFAULT);
+    private static final Class<? extends Facet> type() {
+        return ParamNamedFacet.class;
     }
+
+    protected ParamNamedFacetAbstract(
+            final String originalText,
+            final FacetHolder holder) {
+        super(type(),
+                TranslationContext.forTranslationContextHolder(holder.getFeatureIdentifier()),
+                originalText,
+                holder);
+    }
+
 
 }

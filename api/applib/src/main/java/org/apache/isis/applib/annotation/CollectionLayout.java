@@ -121,6 +121,7 @@ public @interface CollectionLayout {
      *
      * @see CollectionLayout#named()
      */
+    @Deprecated
     boolean namedEscaped()
             default true;
 
@@ -142,7 +143,7 @@ public @interface CollectionLayout {
             default -1;
 
     /**
-     * The order of this member relative to other members in the same (layout) group, 
+     * The order of this member relative to other members in the same (layout) group,
      * given in <i>Dewey-decimal</i> notation.
      * <p>
      *     An alternative is to use the <code>Xxx.layout.xml</code> file,
@@ -153,7 +154,7 @@ public @interface CollectionLayout {
      */
     String sequence()
             default "";
-    
+
     /**
      * Indicates that the elements in a ({@link java.util.SortedSet}) collection should be sorted according to a different order than the
      * natural sort order, as defined by the specified{@link java.util.Comparator}.

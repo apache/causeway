@@ -24,16 +24,15 @@ import java.util.Optional;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForms;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacetWithStaticTextAbstract;
 
 import lombok.val;
 
 public class NamedFacetForPropertyXml
-extends NamedFacetAbstract {
+extends MemberNamedFacetWithStaticTextAbstract {
 
-    public static Optional<NamedFacet> create(
+    public static Optional<MemberNamedFacet> create(
             final PropertyLayoutData propertyLayout,
             final FacetHolder holder) {
 
@@ -41,29 +40,22 @@ extends NamedFacetAbstract {
             return Optional.empty();
         }
 
-        val nounForms = NounForms
-                .preferredSingular(_Strings.emptyToNull(propertyLayout.getNamed()))
-                .build();
+        val named = propertyLayout.getNamed();
 
-        if(nounForms.getSupportedNounForms().isEmpty()) {
+        if(_Strings.isEmpty(named)) {
             return Optional.empty();
         }
 
-        final Boolean _escaped = propertyLayout.getNamedEscaped();
-        final boolean escaped = (_escaped == null || _escaped);
-
         return Optional.of(
                 new NamedFacetForPropertyXml(
-                            nounForms,
-                            escaped,
+                            named,
                             holder));
     }
 
     private NamedFacetForPropertyXml(
-            final NounForms nounForms,
-            final boolean escaped,
+            final String named,
             final FacetHolder holder) {
-        super(nounForms, escaped, holder);
+        super(named, holder);
     }
 
 }

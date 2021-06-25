@@ -31,8 +31,7 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForm;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 
 import lombok.val;
 
@@ -58,40 +57,11 @@ extends AbstractFacetFactoryTest {
         facetFactory.process(processMethodContext);
 
         // then
-        final NamedFacet facet = facetedMethod.getFacet(NamedFacet.class);
+        val facet = facetedMethod.getFacet(MemberNamedFacet.class);
         assertThat(facet, is(notNullValue()));
         assertThat(facet, is(instanceOf(NamedFacetForPropertyLayoutAnnotation.class)));
-        assertThat(((HasStaticText)facet).text(NounForm.SINGULAR), is(equalTo("1st name")));
-        assertThat(facet.escaped(), is(true));
+        assertThat(((HasStaticText)facet).text(), is(equalTo("1st name")));
     }
-
-    public void testPropertyLayoutAnnotationNamedEscapedFalse() {
-        val facetFactory = createPropertyLayoutFacetFactory(metaModelContext);
-
-        class Customer {
-            @PropertyLayout(named = "1st name", namedEscaped = false)
-            public String getFirstName() {
-                return null;
-            }
-        }
-        final Method method = findMethod(Customer.class, "getFirstName");
-
-        // when
-        final FacetFactory.ProcessMethodContext processMethodContext
-            = new FacetFactory.ProcessMethodContext(Customer.class, null, method,
-                    methodRemover, facetedMethod);
-
-        facetFactory.process(processMethodContext);
-
-        // then
-        final NamedFacet facet = facetedMethod.getFacet(NamedFacet.class);
-        assertThat(facet, is(notNullValue()));
-        assertThat(facet, is(instanceOf(NamedFacetForPropertyLayoutAnnotation.class)));
-        assertThat(((HasStaticText)facet).text(NounForm.SINGULAR), is(equalTo("1st name")));
-        assertThat(facet.escaped(), is(false));
-    }
-
-
 
 
 }

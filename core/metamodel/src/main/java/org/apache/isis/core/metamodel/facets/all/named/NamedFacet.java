@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets.all.named;
 import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.all.i8n.imperative.HasImperativeText;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
+import org.apache.isis.core.metamodel.facets.all.i8n.noun.HasNoun;
 
 /**
  * The name of a class, a property, collection, an action or a parameter.
@@ -31,11 +31,12 @@ import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
  * In the standard Apache Isis Programming Model, corresponds to annotating the
  * member with <tt>@Named</tt>.
  */
+@Deprecated
 public interface NamedFacet
 extends
     Facet {
 
-    _Either<HasStaticText, HasImperativeText> getSpecialization();
+    _Either<HasNoun, HasImperativeText> getSpecialization();
 
     /**
      * Flag indicating whether the label should be show as is, or should be HTML escaped.

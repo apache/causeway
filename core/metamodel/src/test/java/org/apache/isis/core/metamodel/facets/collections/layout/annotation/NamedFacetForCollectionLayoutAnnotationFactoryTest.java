@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.collections.layout.annotation;
 
 import java.lang.reflect.Method;
-import java.util.Set;
 import java.util.SortedSet;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -34,8 +33,7 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForm;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.layout.CollectionLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.layout.NamedFacetForCollectionLayoutAnnotation;
 
@@ -56,31 +54,10 @@ public class NamedFacetForCollectionLayoutAnnotationFactoryTest extends Abstract
 
         facetFactory.process(new FacetFactory.ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
 
-        final NamedFacet facet = facetedMethod.getFacet(NamedFacet.class);
+        val facet = facetedMethod.getFacet(MemberNamedFacet.class);
         assertThat(facet, is(notNullValue()));
         assertThat(facet, is(instanceOf(NamedFacetForCollectionLayoutAnnotation.class)));
-        assertThat(((HasStaticText)facet).text(NounForm.PLURAL), is(equalTo("1st names")));
-        assertThat(facet.escaped(), is(true));
-    }
-
-    public void testCollectionLayoutAnnotationNamedEscapedFalse() {
-        val facetFactory = new CollectionLayoutFacetFactory(metaModelContext);
-
-        class Customer {
-            @CollectionLayout(named = "1st names", namedEscaped = false)
-            public Set<String> getFirstNames() {
-                return _Sets.newTreeSet();
-            }
-        }
-        final Method method = findMethod(Customer.class, "getFirstNames");
-
-        facetFactory.process(new FacetFactory.ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
-
-        final NamedFacet facet = facetedMethod.getFacet(NamedFacet.class);
-        assertThat(facet, is(notNullValue()));
-        assertThat(facet, is(instanceOf(NamedFacetForCollectionLayoutAnnotation.class)));
-        assertThat(((HasStaticText)facet).text(NounForm.PLURAL), is(equalTo("1st names")));
-        assertThat(facet.escaped(), is(false));
+        assertThat(((HasStaticText)facet).text(), is(equalTo("1st names")));
     }
 
 }

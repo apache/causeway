@@ -24,32 +24,29 @@ import java.util.Optional;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForms;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacetWithStaticTextAbstract;
 
 public class NamedFacetForCollectionXml
-extends NamedFacetAbstract {
+extends MemberNamedFacetWithStaticTextAbstract {
 
-    public static Optional<NamedFacet> create(
+    public static Optional<MemberNamedFacet> create(
             final CollectionLayoutData collectionLayout,
             final FacetHolder holder) {
         if(collectionLayout == null) {
             return Optional.empty();
         }
         final String named = _Strings.emptyToNull(collectionLayout.getNamed());
-        final Boolean escaped = collectionLayout.getNamedEscaped();
         return named != null
-                ? Optional.of(new NamedFacetForCollectionXml(named, escaped == null || escaped, holder))
+                ? Optional.of(new NamedFacetForCollectionXml(named, holder))
                 : Optional.empty();
     }
 
     private NamedFacetForCollectionXml(
-            final String pluralName,
-            final boolean escaped,
+            final String named,
             final FacetHolder holder) {
 
-        super(NounForms.preferredPlural(pluralName).build(), escaped, holder);
+        super(named, holder);
     }
 
 }

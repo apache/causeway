@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.param.layout.annotation;
 import java.lang.reflect.Method;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -30,11 +29,11 @@ import static org.hamcrest.Matchers.notNullValue;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForm;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.ParamNamedFacet;
 import org.apache.isis.core.metamodel.facets.param.layout.NamedFacetForParameterLayoutAnnotation;
 import org.apache.isis.core.metamodel.facets.param.layout.ParameterLayoutFacetFactory;
+
+import lombok.val;
 
 public class NamedFacetForParameterLayoutAnnotationFactoryTest extends AbstractFacetFactoryTest {
 
@@ -52,31 +51,10 @@ public class NamedFacetForParameterLayoutAnnotationFactoryTest extends AbstractF
 
         facetFactory.processParams(new FacetFactory.ProcessParameterContext(Customer.class, method, 0, null, facetedMethodParameter));
 
-        final NamedFacet facet = facetedMethodParameter.getFacet(NamedFacet.class);
+        val facet = facetedMethodParameter.getFacet(ParamNamedFacet.class);
         assertThat(facet, is(notNullValue()));
         assertThat(facet, is(instanceOf(NamedFacetForParameterLayoutAnnotation.class)));
-        assertEquals(NAME, ((HasStaticText)facet).text(NounForm.SINGULAR));
-        assertThat(facet.escaped(), is(true));
-    }
-
-    public void testParameterLayoutAnnotationNamedEscapedFalse() {
-        final ParameterLayoutFacetFactory facetFactory = new ParameterLayoutFacetFactory(metaModelContext);
-
-        class Customer {
-            @SuppressWarnings("unused")
-            public void someAction(@ParameterLayout(named = NAME, namedEscaped = false) final String foo) {
-            }
-        }
-        final Method method = findMethod(Customer.class, "someAction", new Class[]{String.class});
-
-        facetFactory.processParams(new FacetFactory.ProcessParameterContext(Customer.class, method, 0, null, facetedMethodParameter));
-
-        final NamedFacet facet = facetedMethodParameter.getFacet(NamedFacet.class);
-        assertThat(facet, is(notNullValue()));
-        assertThat(facet, is(instanceOf(NamedFacetForParameterLayoutAnnotation.class)));
-        assertThat(((HasStaticText)facet).text(NounForm.SINGULAR), is(equalTo(NAME)));
-        assertEquals(NAME, ((HasStaticText)facet).text(NounForm.SINGULAR));
-        assertThat(facet.escaped(), is(false));
+        assertEquals(NAME, facet.text());
     }
 
 }

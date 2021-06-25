@@ -23,7 +23,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -77,7 +76,7 @@ extends PanelAbstract<ManagedObject, ScalarPropertyModel> {
         return super.getModel();
     }
 
-    public PropertyEditPanel setShowHeader(boolean showHeader) {
+    public PropertyEditPanel setShowHeader(final boolean showHeader) {
         this.showHeader = showHeader;
         return this;
     }
@@ -93,11 +92,7 @@ extends PanelAbstract<ManagedObject, ScalarPropertyModel> {
         val propertyName = property.getName();
         val label = new Label(ID_PROPERTY_NAME, Model.of(propertyName));
 
-        val namedFacet = property.getFacet(NamedFacet.class);
-        if (namedFacet != null) {
-            label.setEscapeModelStrings(namedFacet.escaped());
-        }
-
+        label.setEscapeModelStrings(true);
         header.add(label);
     }
 

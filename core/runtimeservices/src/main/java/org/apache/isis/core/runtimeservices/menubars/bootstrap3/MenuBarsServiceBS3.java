@@ -53,9 +53,6 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForm;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
@@ -283,9 +280,10 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
                 }
 
                 ObjectAction objectAction = serviceAndAction.getObjectAction();
+                val service = serviceAndAction.getServiceAdapter();
                 final String logicalTypeName = serviceAndAction.getServiceAdapter().getSpecification().getLogicalTypeName();
                 ServiceActionLayoutData action = new ServiceActionLayoutData(logicalTypeName, objectAction.getId());
-                action.setNamed(objectAction.getName());
+                action.setNamed(objectAction.getName(service));
                 menuSection.getServiceActions().add(action);
             }
             if(!menuSection.getServiceActions().isEmpty()) {
@@ -308,10 +306,9 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
 
         // first, order as defined in isis.properties
         for (ManagedObject serviceAdapter : serviceAdapters) {
-            final ObjectSpecification serviceSpec = serviceAdapter.getSpecification();
-            // assuming services have immutable names (no imperative naming support)
-            String serviceName = ((HasStaticText)serviceSpec.getFacet(NamedFacet.class))
-                    .translated(NounForm.SINGULAR);
+            val serviceSpec = serviceAdapter.getSpecification();
+            // assuming services always provide singular NounForm
+            String serviceName = serviceSpec.getSingularName();
             serviceNameOrder.add(serviceName);
         }
         // then, any other services (eg due to misspellings, at the end)
@@ -381,9 +378,8 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
                             ? layoutGroupFacet.getGroupId()
                             : null;
                     if(_Strings.isNullOrEmpty(serviceName)){
-                        // assuming services have immutable names (no imperative naming support)
-                        serviceName = ((HasStaticText)serviceSpec.getFacet(NamedFacet.class))
-                                .translated(NounForm.SINGULAR);
+                        // assuming services always provide singular NounForm
+                        serviceName = serviceSpec.getSingularName();
                     }
                     return new ServiceAndAction(serviceName, serviceAdapter, objectAction);
                 });

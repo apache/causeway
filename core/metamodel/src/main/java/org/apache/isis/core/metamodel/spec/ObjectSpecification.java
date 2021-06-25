@@ -43,12 +43,13 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.isis.core.metamodel.facets.all.help.HelpFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.isis.core.metamodel.facets.all.i8n.noun.HasNoun;
+import org.apache.isis.core.metamodel.facets.all.i8n.noun.NounForm;
 import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForm;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
@@ -168,18 +169,18 @@ extends
     /**
      * Returns the (singular) name for objects of this specification.
      * <p>
-     * Corresponds to the {@link HasStaticText#translated(NounForm)}
+     * Corresponds to the {@link HasNoun#translated(NounForm)}
      * with {@link NounForm#SINGULAR}
-     * of {@link NamedFacet}; is
+     * of {@link ObjectNamedFacet}; is
      * not necessarily immutable.
      */
     String getSingularName();
 
     /**
      * Returns the plural name for objects of this specification.
-     * Corresponds to the {@link HasStaticText#translated(NounForm)}
+     * Corresponds to the {@link HasNoun#translated(NounForm)}
      * with {@link NounForm#PLURAL}
-     * of {@link NamedFacet}; is
+     * of {@link ObjectNamedFacet}; is
      * not necessarily immutable.
      */
     String getPluralName();
@@ -188,8 +189,8 @@ extends
      * Returns the description, if any, of the specification.
      *
      * <p>
-     * Corresponds to the {@link HasStaticText#preferredTranslated() value} of
-     * {@link DescribedAsFacet}; is not necessarily immutable.
+     * Corresponds to the {@link HasStaticText#translated() value} of
+     * {@link ObjectDescribedFacet}; is not necessarily immutable.
      */
     String getDescription();
 

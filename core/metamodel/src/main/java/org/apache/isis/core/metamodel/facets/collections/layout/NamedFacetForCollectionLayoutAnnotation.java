@@ -24,28 +24,27 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForms;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacetWithStaticTextAbstract;
 
-public class NamedFacetForCollectionLayoutAnnotation extends NamedFacetAbstract {
+public class NamedFacetForCollectionLayoutAnnotation
+extends MemberNamedFacetWithStaticTextAbstract {
 
-    public static Optional<NamedFacetForCollectionLayoutAnnotation> create(
+    public static Optional<MemberNamedFacet> create(
             final Optional<CollectionLayout> collectionLayoutIfAny,
             final FacetHolder holder) {
 
         return collectionLayoutIfAny
-                .filter(collectionLayout -> _Strings.emptyToNull(collectionLayout.named()) != null)
-                .map(collectionLayout ->
-                new NamedFacetForCollectionLayoutAnnotation(
-                        collectionLayout.named(), collectionLayout.namedEscaped(), holder));
+        .filter(collectionLayout -> _Strings.emptyToNull(collectionLayout.named()) != null)
+        .map(collectionLayout ->
+            new NamedFacetForCollectionLayoutAnnotation(collectionLayout.named(), holder));
     }
 
     private NamedFacetForCollectionLayoutAnnotation(
-            final String pluralName,
-            final boolean escaped,
+            final String named,
             final FacetHolder holder) {
 
-        super(NounForms.preferredPlural(pluralName).build(), escaped, holder);
+        super(named, holder);
     }
 
 }

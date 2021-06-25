@@ -24,12 +24,13 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForms;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacetWithStaticTextAbstract;
 
-public class NamedFacetForActionLayoutAnnotation extends NamedFacetAbstract {
+public class NamedFacetForActionLayoutAnnotation
+extends MemberNamedFacetWithStaticTextAbstract {
 
-    public static Optional<NamedFacetForActionLayoutAnnotation> create(
+    public static Optional<MemberNamedFacet> create(
             final Optional<ActionLayout> actionLayoutIfAny,
             final FacetHolder holder) {
 
@@ -39,9 +40,8 @@ public class NamedFacetForActionLayoutAnnotation extends NamedFacetAbstract {
                 .map(named -> new NamedFacetForActionLayoutAnnotation(named, holder));
     }
 
-    private NamedFacetForActionLayoutAnnotation(final String singularName, final FacetHolder holder) {
-
-        super(NounForms.preferredSingular(singularName).build(), /*escaped*/ true, holder);
+    private NamedFacetForActionLayoutAnnotation(final String named, final FacetHolder holder) {
+        super(named, holder);
     }
 
 }

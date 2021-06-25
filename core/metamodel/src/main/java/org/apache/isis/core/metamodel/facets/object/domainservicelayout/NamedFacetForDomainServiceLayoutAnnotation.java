@@ -24,16 +24,16 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForms;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.i8n.noun.NounForms;
+import org.apache.isis.core.metamodel.facets.all.named.ObjectNamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.ObjectNamedFacetAbstract;
 
 import lombok.val;
 
 public class NamedFacetForDomainServiceLayoutAnnotation
-extends NamedFacetAbstract {
+extends ObjectNamedFacetAbstract {
 
-    public static Optional<NamedFacet> create(
+    public static Optional<ObjectNamedFacet> create(
             final Optional<DomainServiceLayout> domainServiceLayoutIfAny,
             final FacetHolder facetHolder) {
 
@@ -60,7 +60,7 @@ extends NamedFacetAbstract {
     private NamedFacetForDomainServiceLayoutAnnotation(
             final NounForms nounForms,
             final FacetHolder holder) {
-        super(nounForms, /*escaped*/ true, holder);
+        super(nounForms, holder);
     }
 
 

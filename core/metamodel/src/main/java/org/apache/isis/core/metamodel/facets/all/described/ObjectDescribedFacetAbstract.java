@@ -16,21 +16,31 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.members.named.method;
+package org.apache.isis.core.metamodel.facets.all.described;
 
-import java.lang.reflect.Method;
-
+import org.apache.isis.applib.services.i18n.TranslationContext;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacetWithImperativeTextAbstract;
+import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticTextFacetAbstract;
 
-public class NamedFacetForMemberViaMethod
-extends MemberNamedFacetWithImperativeTextAbstract {
+/**
+ * The base for the {@link ObjectDescribedFacet}.
+ * @since 2.0
+ */
+public class ObjectDescribedFacetAbstract
+extends HasStaticTextFacetAbstract
+implements ObjectDescribedFacet {
 
-    public NamedFacetForMemberViaMethod(
-            final Method namedMethod,
+    private static final Class<? extends Facet> type() {
+        return ObjectDescribedFacet.class;
+    }
+
+    protected ObjectDescribedFacetAbstract(
+            final String originalText,
             final FacetHolder holder) {
-        super(
-                namedMethod,
+        super(type(),
+                TranslationContext.forTranslationContextHolder(holder.getFeatureIdentifier()),
+                originalText,
                 holder);
     }
 

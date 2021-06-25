@@ -24,29 +24,26 @@ import java.util.Optional;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.NounForms;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacetWithStaticTextAbstract;
 
 public class NamedFacetForActionXml
-extends NamedFacetAbstract {
+extends MemberNamedFacetWithStaticTextAbstract {
 
-    public static Optional<NamedFacet> create(
+    public static Optional<MemberNamedFacet> create(
             final ActionLayoutData actionLayout,
             final FacetHolder holder) {
         if(actionLayout == null) {
             return Optional.empty();
         }
         final String named = _Strings.emptyToNull(actionLayout.getNamed());
-        Boolean escaped = actionLayout.getNamedEscaped();
         return named != null
-                ? Optional.of(new NamedFacetForActionXml(named, (escaped == null || escaped), holder))
+                ? Optional.of(new NamedFacetForActionXml(named, holder))
                 : Optional.empty();
     }
 
-    private NamedFacetForActionXml(final String singularName, final boolean escaped, final FacetHolder holder) {
-
-        super(NounForms.preferredSingular(singularName).build(), escaped, holder);
+    private NamedFacetForActionXml(final String named, final FacetHolder holder) {
+        super(named, holder);
     }
 
 }

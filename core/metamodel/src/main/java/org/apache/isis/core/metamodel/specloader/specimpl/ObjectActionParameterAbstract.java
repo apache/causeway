@@ -36,9 +36,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.HasFacetHolder;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
-import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.all.described.ParamDescribedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.ParamNamedFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
@@ -135,11 +134,8 @@ implements ObjectActionParameter, HasFacetHolder {
     @Override
     public String getName() {
 
-        // assuming parameters don't have imperative naming support
-        val name = lookupFacet(NamedFacet.class)
-        .filter(namedFacet->namedFacet instanceof HasStaticText)
-        .map(HasStaticText.class::cast)
-        .map(HasStaticText::preferredTranslated)
+        val name = lookupFacet(ParamNamedFacet.class)
+        .map(ParamNamedFacet::translated)
         .orElse(null);
 
         if (name!=null) {
@@ -163,11 +159,8 @@ implements ObjectActionParameter, HasFacetHolder {
 
     @Override
     public String getDescription() {
-        // assuming parameters don't have imperative description support
-        return lookupFacet(DescribedAsFacet.class)
-        .filter(describedAsFacet->describedAsFacet instanceof HasStaticText)
-        .map(HasStaticText.class::cast)
-        .map(HasStaticText::preferredTranslated)
+        return lookupFacet(ParamDescribedFacet.class)
+        .map(ParamDescribedFacet::translated)
         .orElse("");
     }
 

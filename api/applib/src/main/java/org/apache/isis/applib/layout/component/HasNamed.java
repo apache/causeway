@@ -30,6 +30,7 @@ public interface HasNamed {
     String getNamed();
     void setNamed(String named);
 
+    @Deprecated // ignored
     @XmlAttribute(required = false)
     Boolean getNamedEscaped();
     void setNamedEscaped(Boolean namedEscaped);

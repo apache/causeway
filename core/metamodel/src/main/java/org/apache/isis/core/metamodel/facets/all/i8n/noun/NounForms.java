@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.all.i8n.staatic;
+package org.apache.isis.core.metamodel.facets.all.i8n.noun;
 
 import java.util.EnumSet;
 
@@ -40,12 +40,6 @@ import lombok.val;
 @Value @Builder
 public class NounForms {
 
-    public static NounFormsBuilder preferredIndifferent(@Nullable final String indifferent) {
-        return NounForms.builder()
-                .preferredNounForm(NounForm.INDIFFERENT)
-                .indifferent(indifferent);
-    }
-
     public static NounFormsBuilder preferredSingular(@Nullable final String singular) {
         return NounForms.builder()
                 .preferredNounForm(NounForm.SINGULAR)
@@ -58,8 +52,6 @@ public class NounForms {
                 .plural(plural);
     }
 
-    private final @Nullable String indifferent;
-    private final @Nullable String empty;
     private final @Nullable String singular;
     private final @Nullable String plural;
 
@@ -71,14 +63,6 @@ public class NounForms {
     private ImmutableEnumSet<NounForm> supportedNounForms() {
 
         val supportedNounForms = EnumSet.noneOf(NounForm.class);
-
-        if(indifferent!=null) {
-            supportedNounForms.add(NounForm.INDIFFERENT);
-        }
-
-        if(empty!=null) {
-            supportedNounForms.add(NounForm.EMPTY);
-        }
 
         if(singular!=null) {
             supportedNounForms.add(NounForm.SINGULAR);
@@ -96,10 +80,6 @@ public class NounForms {
             throw _Exceptions.illegalArgument("NounForm %s not supported with this instance", nounForm);
         };
         switch(nounForm) {
-        case INDIFFERENT:
-            return getIndifferent();
-        case EMPTY:
-            return getEmpty();
         case SINGULAR:
             return getSingular();
         case PLURAL:
@@ -123,12 +103,6 @@ public class NounForms {
         .forEach(nounForm->{
 
             switch(nounForm) {
-            case INDIFFERENT:
-                builder.indifferent(translationService.translate(context, indifferent));
-                break;
-            case EMPTY:
-                builder.empty(translationService.translate(context, empty));
-                break;
             case SINGULAR:
                 builder.singular(translationService.translate(context, singular));
                 break;
