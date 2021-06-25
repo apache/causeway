@@ -4,11 +4,11 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
-The `WebModule` interface allows modules to dynamically configure ``Filter``s, ``Servlet``s and ``ServletContextListener`s.
+The `WebModule` interface allows modules to dynamically configure ``Filter``s, ``Servlet``s and ``ServletContextListener``s.
 The `@javax.annotation.Priority` annotation is used to ensure that the request chain is sequenced correctly.
 
-.WebModules (highest first)
-[cols="6m,^2a,^2a,^3a,^4a,6a", options="header"]
+.WebModules (highest priority first, ie lowest value of `@Priority`)
+[cols="6m,^2a,^2a,^3a,^4a,8a", options="header"]
 |===
 
 
@@ -23,7 +23,7 @@ Keycloak
 |Y +
 `/*`
 |FIRST + 100
-|Either this or shiro
+|Either this, spring or shiro
 
 |WebModule +
 Shiro
@@ -31,8 +31,17 @@ Shiro
 |N
 |Y +
 `/*`
-|FIRST + 200
-|Either this or keycloak
+|FIRST + 100
+|Either this, spring or keycloak
+
+|WebModule +
+SpringSecurity
+|Y
+|N
+|Y +
+`/*`
+|FIRST + 100
+|Either this, shiro or keycloak
 
 |WebModule +
 LogOnExceptionLogger
