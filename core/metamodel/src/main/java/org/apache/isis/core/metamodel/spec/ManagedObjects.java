@@ -52,6 +52,7 @@ import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.commons.MethodExtensions;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.facets.object.entity.PersistenceStandard;
@@ -409,6 +410,125 @@ public final class ManagedObjects {
         }
 
         return result;
+    }
+
+    // -- UNSPECIFIED OBJECT
+
+    static final ManagedObject UNSPECIFIED = new ManagedObject() {
+
+        @Override
+        public ObjectSpecification getSpecification() {
+            throw _Exceptions.unsupportedOperation();
+        }
+
+        @Override
+        public Object getPojo() {
+            return null;
+        }
+
+        @Override
+        public Optional<Bookmark> getBookmark() {
+            return Optional.empty();
+        }
+
+        @Override
+        public boolean isBookmarkMemoized() {
+            return false;
+        }
+
+    };
+
+    // -- TITLE UTILITIES
+
+    @UtilityClass
+    static final class TitleUtil {
+
+        // -- TITLE SUPPORT
+
+        String titleString(
+                final @Nullable ManagedObject managedObject,
+                final @NonNull Predicate<ManagedObject> isContextAdapter) {
+
+            if(!ManagedObjects.isSpecified(managedObject)) {
+                return "unspecified object";
+            }
+
+            if (managedObject.getSpecification().isParentedOrFreeCollection()) {
+                final CollectionFacet facet = managedObject.getSpecification().getFacet(CollectionFacet.class);
+                return collectionTitleString(managedObject, facet);
+            } else {
+                return objectTitleString(managedObject, isContextAdapter);
+            }
+        }
+
+        // -- HELPER
+
+        private String objectTitleString(final ManagedObject managedObject, final Predicate<ManagedObject> isContextAdapter) {
+            if (managedObject.getPojo() instanceof String) {
+                return (String) managedObject.getPojo();
+            }
+            val spec = managedObject.getSpecification();
+            return Optional.ofNullable(spec.getTitle(isContextAdapter, managedObject))
+                    .orElseGet(()->getDefaultTitle(managedObject));
+        }
+
+        private String collectionTitleString(final ManagedObject managedObject, final CollectionFacet facet) {
+            final int size = facet.size(managedObject);
+            final ObjectSpecification elementSpecification = managedObject.getElementSpecification().orElse(null);
+            if (elementSpecification == null || elementSpecification.getFullIdentifier().equals(Object.class.getName())) {
+                switch (size) {
+                case -1:
+                    return "Objects";
+                case 0:
+                    return "No objects";
+                case 1:
+                    return "1 object";
+                default:
+                    return size + " objects";
+                }
+            } else {
+                switch (size) {
+                case -1:
+                    return elementSpecification.getPluralName();
+                case 0:
+                    return "No " + elementSpecification.getPluralName();
+                case 1:
+                    return "1 " + elementSpecification.getSingularName();
+                default:
+                    return size + " " + elementSpecification.getPluralName();
+                }
+            }
+        }
+
+        private String getDefaultTitle(final ManagedObject managedObject) {
+            return "A" + (" " + managedObject.getSpecification().getSingularName()).toLowerCase();
+        }
+    }
+
+    // -- BOOKMARK UTILITIES
+
+    @UtilityClass
+    static final class BookmarkUtil {
+
+        Optional<Bookmark> bookmark(final @Nullable ManagedObject adapter) {
+
+            if(!ManagedObjects.isIdentifiable(adapter)
+                    && ManagedObjects.isSpecified(adapter)) {
+                log.warn("about to create a random UUID bookmark for {}; this is probably an invalid code-path taken (TODO)",
+                        adapter.getSpecification());
+            }
+
+            return ManagedObjects.spec(adapter)
+                    .map(ObjectSpecification::getMetaModelContext)
+                    .map(MetaModelContext::getObjectManager)
+                    .map(objectManager->objectManager.bookmarkObject(adapter));
+
+    //TODO[2686] strictly forbid dummy UUID bookmark creation
+//            return ManagedObjects.isIdentifiable(adapter)
+//                    ? objectManager(adapter)
+//                            .map(objectManager->objectManager.bookmarkObject(adapter))
+//                    : Optional.empty();
+        }
     }
 
     // -- ENTITY UTILITIES

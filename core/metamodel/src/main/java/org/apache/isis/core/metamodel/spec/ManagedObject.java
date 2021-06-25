@@ -28,6 +28,7 @@ import javax.annotation.Nullable;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -74,16 +75,21 @@ public interface ManagedObject {
     }
 
     default String titleString(final @NonNull Predicate<ManagedObject> isContextAdapter) {
-        return ManagedObjectInternalUtil.titleString(this, isContextAdapter);
+        return ManagedObjects.TitleUtil.titleString(this, isContextAdapter);
     }
 
-    // -- SHORTCUT - OBJECT MANAGER
+    // -- SHORTCUTS - MM CONTEXT
+
+    default MetaModelContext getMetaModelContext() {
+        return ManagedObjects.spec(this)
+                .map(ObjectSpecification::getMetaModelContext)
+                .orElseThrow(()->_Exceptions
+                        .illegalArgument("Can only retrieve MetaModelContext from ManagedObjects "
+                                + "that have an ObjectSpecification."));
+    }
 
     default ObjectManager getObjectManager() {
-        return ManagedObjectInternalUtil.objectManager(this)
-                .orElseThrow(()->_Exceptions
-                        .illegalArgument("Can only retrieve ObjectManager from ManagedObjects "
-                                + "that are 'specified'."));
+        return getMetaModelContext().getObjectManager();
     }
 
     // -- SHORTCUT - ELEMENT SPECIFICATION
@@ -180,7 +186,7 @@ public interface ManagedObject {
 
     /** has no ObjectSpecification and no value (pojo) */
     static ManagedObject unspecified() {
-        return ManagedObjectInternalUtil.UNSPECIFIED;
+        return ManagedObjects.UNSPECIFIED;
     }
 
     /** has an ObjectSpecification, but no value (pojo) */
@@ -215,7 +221,7 @@ public interface ManagedObject {
 
         // -- LAZY ID HANDLING
         private final _Lazy<Optional<Bookmark>> bookmarkLazy =
-                _Lazy.threadSafe(()->ManagedObjectInternalUtil.bookmark(this));
+                _Lazy.threadSafe(()->ManagedObjects.BookmarkUtil.bookmark(this));
 
         @Override
         public boolean isBookmarkMemoized() {
@@ -240,7 +246,7 @@ public interface ManagedObject {
 
         // -- LAZY ID HANDLING
         private final _Lazy<Optional<Bookmark>> bookmarkLazy =
-                _Lazy.threadSafe(()->ManagedObjectInternalUtil.bookmark(this));
+                _Lazy.threadSafe(()->ManagedObjects.BookmarkUtil.bookmark(this));
 
         @Override
         public boolean isBookmarkMemoized() {

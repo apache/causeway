@@ -46,6 +46,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.described.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.help.HelpFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.isis.core.metamodel.facets.all.i8n.HasTranslation;
 import org.apache.isis.core.metamodel.facets.all.i8n.NounForm;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
@@ -166,19 +167,20 @@ extends
 
     /**
      * Returns the (singular) name for objects of this specification.
-     *
      * <p>
-     * Corresponds to the {@link NamedFacet#translated(NounForm)} of {@link NamedFacet}; is
+     * Corresponds to the {@link HasTranslation#translated(NounForm)}
+     * with {@link NounForm#SINGULAR}
+     * of {@link NamedFacet}; is
      * not necessarily immutable.
      */
     String getSingularName();
 
     /**
      * Returns the plural name for objects of this specification.
-     *
-     * <p>
-     * Corresponds to the {@link PluralFacet#value() value} of
-     * {@link PluralFacet}; is not necessarily immutable.
+     * Corresponds to the {@link HasTranslation#translated(NounForm)}
+     * with {@link NounForm#PLURAL}
+     * of {@link NamedFacet}; is
+     * not necessarily immutable.
      */
     String getPluralName();
 
@@ -186,7 +188,7 @@ extends
      * Returns the description, if any, of the specification.
      *
      * <p>
-     * Corresponds to the {@link DescribedAsFacet#translated() value} of
+     * Corresponds to the {@link HasTranslation#preferredTranslated() value} of
      * {@link DescribedAsFacet}; is not necessarily immutable.
      */
     @Override
