@@ -280,8 +280,9 @@ public class ApplicationUser
 
     // ROLES
 
-    @ManyToMany(mappedBy = "users", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(
+            schema = "isisExtensionsSecman",
             name = "ApplicationUserRoles",
             joinColumns = {@JoinColumn(name = "userId")},
             inverseJoinColumns = {@JoinColumn(name = "roleId")})
