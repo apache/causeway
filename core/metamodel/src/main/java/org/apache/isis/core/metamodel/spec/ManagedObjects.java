@@ -454,8 +454,8 @@ public final class ManagedObjects {
             }
 
             if (managedObject.getSpecification().isParentedOrFreeCollection()) {
-                final CollectionFacet facet = managedObject.getSpecification().getFacet(CollectionFacet.class);
-                return collectionTitleString(managedObject, facet);
+                val collectionFacet = managedObject.getSpecification().getFacet(CollectionFacet.class);
+                return collectionTitleString(managedObject, collectionFacet);
             } else {
                 return objectTitleString(managedObject, isContextAdapter);
             }
@@ -474,8 +474,9 @@ public final class ManagedObjects {
 
         private String collectionTitleString(final ManagedObject managedObject, final CollectionFacet facet) {
             final int size = facet.size(managedObject);
-            final ObjectSpecification elementSpecification = managedObject.getElementSpecification().orElse(null);
-            if (elementSpecification == null || elementSpecification.getFullIdentifier().equals(Object.class.getName())) {
+            val elementSpec = managedObject.getElementSpecification().orElse(null);
+            if (elementSpec == null
+                    || elementSpec.getFullIdentifier().equals(Object.class.getName())) {
                 switch (size) {
                 case -1:
                     return "Objects";
@@ -489,13 +490,13 @@ public final class ManagedObjects {
             } else {
                 switch (size) {
                 case -1:
-                    return elementSpecification.getPluralName();
+                    return elementSpec.getPluralName();
                 case 0:
-                    return "No " + elementSpecification.getPluralName();
+                    return "No " + elementSpec.getPluralName();
                 case 1:
-                    return "1 " + elementSpecification.getSingularName();
+                    return "1 " + elementSpec.getSingularName();
                 default:
-                    return size + " " + elementSpecification.getPluralName();
+                    return size + " " + elementSpec.getPluralName();
                 }
             }
         }

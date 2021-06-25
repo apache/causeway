@@ -28,6 +28,7 @@ import javax.annotation.Nullable;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
@@ -71,7 +72,7 @@ public interface ManagedObject {
     // -- TITLE
 
     public default String titleString() {
-        return titleString(__->false);
+        return titleString(_Predicates.alwaysFalse());
     }
 
     default String titleString(final @NonNull Predicate<ManagedObject> isContextAdapter) {
@@ -99,6 +100,12 @@ public interface ManagedObject {
      */
     default Optional<ObjectSpecification> getElementSpecification() {
         return getSpecification().getElementSpecification();
+    }
+
+    // -- SHORTCUT - TITLE
+
+    default String getTitle() {
+        return ManagedObjects.titleOf(this);
     }
 
     // -- SHORTCUT - ICON
@@ -282,6 +289,8 @@ public interface ManagedObject {
         }
 
     }
+
+
 
 
 

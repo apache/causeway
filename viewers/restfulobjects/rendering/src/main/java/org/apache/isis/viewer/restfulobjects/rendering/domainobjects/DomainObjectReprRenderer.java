@@ -26,7 +26,6 @@ import java.util.stream.Stream;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
-import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
@@ -457,20 +456,22 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     }
 
 
-    public static Object valueOrRef(final IResourceContext context, final JsonValueEncoder jsonValueEncoder, final ManagedObject adapter) {
+    public static Object valueOrRef(
+            final IResourceContext context,
+            final JsonValueEncoder jsonValueEncoder,
+            final ManagedObject domainObject) {
 
-        val spec = adapter.getSpecification();
+        val spec = domainObject.getSpecification();
         if(spec.isValue()) {
             String format = null; // TODO
-            return jsonValueEncoder.asObject(adapter, format);
+            return jsonValueEncoder.asObject(domainObject, format);
         }
-        val titleFacet = spec.getFacet(TitleFacet.class);
-        final String title = titleFacet.title(adapter);
+
         return DomainObjectReprRenderer.newLinkToBuilder(
                 context,
                 Rel.VALUE,
-                adapter)
-                .withTitle(title)
+                domainObject)
+                .withTitle(domainObject.getTitle())
                 .build();
     }
 

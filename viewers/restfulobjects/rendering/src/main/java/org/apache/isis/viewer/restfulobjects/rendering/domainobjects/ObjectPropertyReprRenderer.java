@@ -28,7 +28,6 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
-import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.core.metamodel.facets.value.biginteger.BigIntegerValueFacet;
@@ -47,7 +46,7 @@ import lombok.val;
 public class ObjectPropertyReprRenderer
 extends AbstractObjectMemberReprRenderer<ObjectPropertyReprRenderer, OneToOneAssociation> {
 
-    public ObjectPropertyReprRenderer(IResourceContext context) {
+    public ObjectPropertyReprRenderer(final IResourceContext context) {
         this(context, null, null, JsonRepresentation.newMap());
     }
 
@@ -87,7 +86,9 @@ extends AbstractObjectMemberReprRenderer<ObjectPropertyReprRenderer, OneToOneAss
         val valueAdapterIfAny = objectMember.get(objectAdapter, getInteractionInitiatedBy());
 
         // use the runtime type if we have a value, else the compile time type of the member otherwise
-        val spec = valueAdapterIfAny != null? valueAdapterIfAny.getSpecification(): objectMember.getSpecification();
+        val spec = valueAdapterIfAny != null
+                ? valueAdapterIfAny.getSpecification()
+                : objectMember.getSpecification();
 
         val valueFacet = spec.getFacet(ValueFacet.class);
         if (valueFacet != null) {
@@ -125,34 +126,38 @@ extends AbstractObjectMemberReprRenderer<ObjectPropertyReprRenderer, OneToOneAss
             final NullNode value = NullNode.getInstance();
             representation.mapPut("value", value);
             return value;
-        } else {
-            final TitleFacet titleFacet = spec.getFacet(TitleFacet.class);
-            final String title = titleFacet.title(valueAdapterIfAny);
+        }
 
-            final LinkBuilder valueLinkBuilder = DomainObjectReprRenderer.newLinkToBuilder(resourceContext, Rel.VALUE, valueAdapterIfAny).withTitle(title);
-            if(eagerlyRender) {
-                final DomainObjectReprRenderer renderer =
-                        new DomainObjectReprRenderer(resourceContext, linkFollower, JsonRepresentation.newMap());
-                renderer.with(valueAdapterIfAny);
-                if(mode.isEventSerialization()) {
-                    renderer.asEventSerialization();
-                }
+        val valueAdapter = valueAdapterIfAny;
 
-                valueLinkBuilder.withValue(renderer.render());
+        final String title = valueAdapter.getTitle();
+
+        final LinkBuilder valueLinkBuilder = DomainObjectReprRenderer
+                .newLinkToBuilder(resourceContext, Rel.VALUE, valueAdapterIfAny).withTitle(title);
+        if(eagerlyRender) {
+            final DomainObjectReprRenderer renderer =
+                    new DomainObjectReprRenderer(resourceContext, linkFollower, JsonRepresentation.newMap());
+            renderer.with(valueAdapter);
+            if(mode.isEventSerialization()) {
+                renderer.asEventSerialization();
             }
 
-            final JsonRepresentation valueJsonRepr = valueLinkBuilder.build();
-            representation.mapPut("value", valueJsonRepr);
-            return valueJsonRepr;
+            valueLinkBuilder.withValue(renderer.render());
         }
+
+        final JsonRepresentation valueJsonRepr = valueLinkBuilder.build();
+        representation.mapPut("value", valueJsonRepr);
+        return valueJsonRepr;
+
     }
 
     private boolean renderEagerly() {
         final DefaultViewFacet defaultViewFacet = objectMember.getFacet(DefaultViewFacet.class);
-        return defaultViewFacet != null && Objects.equals(defaultViewFacet.value(), "table");
+        return defaultViewFacet != null
+                && Objects.equals(defaultViewFacet.value(), "table");
     }
 
-    private static <T extends Facet> T getFacet(Class<T> facetType, FacetHolder... holders) {
+    private static <T extends Facet> T getFacet(final Class<T> facetType, final FacetHolder... holders) {
         for (FacetHolder holder : holders) {
             if(holder == null) {
                 continue;
