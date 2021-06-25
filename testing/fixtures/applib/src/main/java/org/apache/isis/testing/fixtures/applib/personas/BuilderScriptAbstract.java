@@ -18,10 +18,7 @@
  */
 package org.apache.isis.testing.fixtures.applib.personas;
 
-import java.util.List;
-
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScriptWithExecutionStrategy;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
@@ -39,7 +36,7 @@ import lombok.Getter;
  * @since 2.x {@index}
  */
 public abstract class BuilderScriptAbstract<T>
-extends FixtureScript implements WithPrereqs<T>, FixtureScriptWithExecutionStrategy {
+extends FixtureScript implements FixtureScriptWithExecutionStrategy {
 
     @Getter(onMethod=@__({@Override}))
     private final FixtureScripts.MultipleExecutionStrategy multipleExecutionStrategy;
@@ -70,8 +67,6 @@ extends FixtureScript implements WithPrereqs<T>, FixtureScriptWithExecutionStrat
 
         parentFixtureScript.getServiceInjector().injectServicesInto(this);
 
-        execPrereqs(executionContext);
-
         // returns the fixture script that is run
         // (either this one, or possibly one previously executed).
         return executionContext.executeChildT(parentFixtureScript, this);
@@ -98,24 +93,6 @@ extends FixtureScript implements WithPrereqs<T>, FixtureScriptWithExecutionStrat
         }
         return persona.findUsing(serviceRegistry);
     }
-
-    // -- PREREQUISITES
-
-    private final List<WithPrereqs.Block<T>> prereqs = _Lists.newArrayList();
-
-    @Override
-    public BuilderScriptAbstract<T> addPrereq(WithPrereqs.Block<T> prereq) {
-        prereqs.add(prereq);
-        return this;
-    }
-
-    @Override
-    public void execPrereqs(final ExecutionContext executionContext) {
-        for (final WithPrereqs.Block<T> prereq : prereqs) {
-            prereq.execute(this, executionContext);
-        }
-    }
-
 
 }
 
