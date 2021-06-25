@@ -51,7 +51,6 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.testing.fixtures.applib.personas.BuilderScriptAbstract;
 import org.apache.isis.testing.fixtures.applib.personas.PersonaWithBuilderScript;
-import org.apache.isis.testing.fixtures.applib.personas.WithPrereqs;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -578,14 +577,6 @@ public abstract class FixtureScript {
             case EXECUTE_ONCE_BY_CLASS:
                 previouslyExecutedScript = fixtureScriptByClass.get(childFixtureScript.getClass());
                 if (previouslyExecutedScript == null) {
-                    if (childFixtureScript instanceof WithPrereqs) {
-                        final WithPrereqs<?> withPrereqs = (WithPrereqs<?>) childFixtureScript;
-                        withPrereqs.execPrereqs(this);
-                    }
-                }
-                // the prereqs might now result in a match, so we check again.
-                previouslyExecutedScript = fixtureScriptByClass.get(childFixtureScript.getClass());
-                if (previouslyExecutedScript == null) {
                     childFixtureScript.execute(this);
                     this.previouslyExecuted.add(childFixtureScript);
                     fixtureScriptByClass.put(childFixtureScript.getClass(), childFixtureScript);
@@ -622,14 +613,6 @@ public abstract class FixtureScript {
 
         private <T extends FixtureScript> T executeChildIfNotAlreadyWithValueSemantics(final T childFixtureScript) {
             FixtureScript previouslyExecutedScript = fixtureScriptByValue.get(childFixtureScript);
-            if (previouslyExecutedScript == null) {
-                if (childFixtureScript instanceof WithPrereqs) {
-                    final WithPrereqs<?> withPrereqs = (WithPrereqs<?>) childFixtureScript;
-                    withPrereqs.execPrereqs(this);
-                }
-            }
-            // the prereqs might now result in a match, so we check again.
-            previouslyExecutedScript = fixtureScriptByValue.get(childFixtureScript);
             if (previouslyExecutedScript == null) {
                 childFixtureScript.execute(this);
                 this.previouslyExecuted.add(childFixtureScript);
