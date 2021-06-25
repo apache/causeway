@@ -41,7 +41,7 @@
 
 		<maven.compiler.arg>-parameters</maven.compiler.arg>
 
-		<spring-boot.version>2.5.1</spring-boot.version>
+		<spring-boot.version>2.5.2</spring-boot.version>
 		<approvaltests.version>11.7.0</approvaltests.version>
 		
 		<resteasy.version>4.6.0.Final</resteasy.version> <!-- keep in sync with property defined in resteasy4-spring-boot-starter -->
