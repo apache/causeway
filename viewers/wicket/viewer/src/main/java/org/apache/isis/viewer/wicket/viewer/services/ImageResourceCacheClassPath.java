@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.viewer.services;
 import java.io.ByteArrayInputStream;
 
 import javax.annotation.Priority;
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.wicket.Application;
@@ -34,10 +33,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.viewer.common.model.decorator.icon.ObjectIcon;
-import org.apache.isis.viewer.common.model.decorator.icon.ObjectIconService;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 
 import lombok.NonNull;
@@ -55,23 +53,21 @@ import lombok.val;
 @Named("isis.viewer.wicket.ImageResourceCacheClassPath")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("ClassPath")
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
+//@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ImageResourceCacheClassPath
 implements ImageResourceCache {
 
     private static final long serialVersionUID = 1L;
 
-    private final ObjectIconService objectIconService;
-
     @Override
     public ResourceReference resourceReferenceFor(final ManagedObject adapter) {
-        val objectIcon = objectIconService.getObjectIcon(adapter);
+        val objectIcon = adapter.getIcon();
         return resourceReferenceForObjectIcon(objectIcon);
     }
 
     @Override
     public ResourceReference resourceReferenceForSpec(final ObjectSpecification spec) {
-        val objectIcon = objectIconService.getObjectIcon(spec);
+        val objectIcon = spec.getIcon(null);
         return resourceReferenceForObjectIcon(objectIcon);
     }
 

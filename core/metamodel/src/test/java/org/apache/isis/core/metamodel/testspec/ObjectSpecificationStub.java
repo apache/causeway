@@ -38,6 +38,7 @@ import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
@@ -145,7 +146,12 @@ implements ObjectSpecification {
     }
 
     @Override
-    public Object getNavigableParent(Object object) {
+    public ObjectIcon getIcon(final ManagedObject object) {
+        return null;
+    }
+
+    @Override
+    public Object getNavigableParent(final Object object) {
         return null;
     }
 
@@ -277,18 +283,18 @@ implements ObjectSpecification {
 
     @Override
     public ObjectValidityContext createValidityInteractionContext(
-            ManagedObject targetAdapter, InteractionInitiatedBy interactionInitiatedBy) {
+            final ManagedObject targetAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
         return null;
     }
 
     @Override
     public ObjectTitleContext createTitleInteractionContext(
-            ManagedObject targetObjectAdapter, InteractionInitiatedBy invocationMethod) {
+            final ManagedObject targetObjectAdapter, final InteractionInitiatedBy invocationMethod) {
         return null;
     }
 
     @Override
-    public InteractionResult isValidResult(ManagedObject targetAdapter, InteractionInitiatedBy interactionInitiatedBy) {
+    public InteractionResult isValidResult(final ManagedObject targetAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
         return null;
     }
 
@@ -303,7 +309,7 @@ implements ObjectSpecification {
     }
 
     @Override
-    public Stream<ObjectAction> streamDeclaredActions(ImmutableEnumSet<ActionType> types, MixedIn contributed) {
+    public Stream<ObjectAction> streamDeclaredActions(final ImmutableEnumSet<ActionType> types, final MixedIn contributed) {
         return null;
     }
 
@@ -337,7 +343,7 @@ implements ObjectSpecification {
     }
 
     @Override
-    public void introspectUpTo(IntrospectionState upTo) {
+    public void introspectUpTo(final IntrospectionState upTo) {
         // [2158] not implemented yet
     }
 
@@ -348,39 +354,39 @@ implements ObjectSpecification {
     }
 
     @Override
-    public Optional<? extends ObjectMember> getMember(Method method) {
+    public Optional<? extends ObjectMember> getMember(final Method method) {
         return Optional.empty();
     }
 
     @Override
-    public Optional<ObjectAction> getAction(String id, ActionType type) {
+    public Optional<ObjectAction> getAction(final String id, final ActionType type) {
         // poorly implemented, inheritance not supported
         return getDeclaredAction(id, type);
     }
 
     @Override
     public Stream<ObjectAction> streamActions(
-            ImmutableEnumSet<ActionType> types,
-            MixedIn contributed,
+            final ImmutableEnumSet<ActionType> types,
+            final MixedIn contributed,
             final Consumer<ObjectAction> onActionOverloaded) {
         // poorly implemented, inheritance not supported
         return streamDeclaredActions(contributed);
     }
 
     @Override
-    public Optional<ObjectAssociation> getAssociation(String id) {
+    public Optional<ObjectAssociation> getAssociation(final String id) {
         // poorly implemented, inheritance not supported
         return getDeclaredAssociation(id);
     }
 
     @Override
-    public Stream<ObjectAssociation> streamAssociations(MixedIn contributed) {
+    public Stream<ObjectAssociation> streamAssociations(final MixedIn contributed) {
         // poorly implemented, inheritance not supported
         return streamDeclaredAssociations(contributed);
     }
 
     @Override
-    public Stream<ObjectAction> streamRuntimeActions(MixedIn mixedIn) {
+    public Stream<ObjectAction> streamRuntimeActions(final MixedIn mixedIn) {
         val actionTypes = getMetaModelContext().getSystemEnvironment().isPrototyping()
                 ? ActionType.USER_AND_PROTOTYPE
                 : ActionType.USER_ONLY;

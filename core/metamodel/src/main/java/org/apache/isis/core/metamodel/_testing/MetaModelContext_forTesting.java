@@ -53,6 +53,7 @@ import org.apache.isis.core.config.beans.IsisBeanTypeRegistryDefault;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.execution.MemberExecutorService;
+import org.apache.isis.core.metamodel.facets.object.icon.ObjectIconService;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManagerDefault;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
@@ -117,6 +118,8 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
 
     @Builder.Default
     private TitleService titleService = new TitleServiceDefault(null, null);
+
+    private ObjectIconService objectIconService;
 
     private RepositoryService repositoryService;
 

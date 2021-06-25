@@ -28,6 +28,7 @@ import javax.annotation.Nullable;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
@@ -90,11 +91,11 @@ public interface ManagedObject {
     /**
      * Used only for (standalone or parented) collections.
      */
-    default public Optional<ObjectSpecification> getElementSpecification() {
+    default Optional<ObjectSpecification> getElementSpecification() {
         return getSpecification().getElementSpecification();
     }
 
-    // -- SHORTCUT - ICON NAME
+    // -- SHORTCUT - ICON
 
     /**
      * Returns the name of an icon to use if this object is to be displayed
@@ -102,8 +103,12 @@ public interface ManagedObject {
      * <p>
      * May return <code>null</code> if no icon is specified.
      */
-    default public String getIconName() {
+    default String getIconName() {
         return getSpecification().getIconName(this);
+    }
+
+    default ObjectIcon getIcon() {
+        return getSpecification().getIcon(this);
     }
 
     // -- FACTORIES
@@ -114,8 +119,8 @@ public interface ManagedObject {
      * @param pojo - might also be a collection of pojos
      */
     public static ManagedObject of(
-            @NonNull ObjectSpecification specification,
-            @Nullable Object pojo) {
+            @NonNull final ObjectSpecification specification,
+            @Nullable final Object pojo) {
 
         ManagedObjects.assertPojoNotManaged(pojo);
         specification.assertPojoCompatible(pojo);
@@ -141,9 +146,9 @@ public interface ManagedObject {
      * Optimized for cases, when the pojo's specification and bookmark are already available.
      */
     public static ManagedObject bookmarked(
-            @NonNull ObjectSpecification specification,
-            @NonNull Object pojo,
-            @NonNull Bookmark bookmark) {
+            @NonNull final ObjectSpecification specification,
+            @NonNull final Object pojo,
+            @NonNull final Bookmark bookmark) {
 
         if(!specification.getCorrespondingClass().isAssignableFrom(pojo.getClass())) {
             throw _Exceptions.illegalArgument(
@@ -163,8 +168,8 @@ public interface ManagedObject {
      * @param pojo
      */
     public static ManagedObject lazy(
-            SpecificationLoader specLoader,
-            Object pojo) {
+            final SpecificationLoader specLoader,
+            final Object pojo) {
         ManagedObjects.assertPojoNotManaged(pojo);
         val adapter = new LazyManagedObject(cls->specLoader.specForType(cls).orElse(null), pojo);
         //ManagedObjects.warnIfAttachedEntity(adapter, "consider using ManagedObject.identified(...) for entity");
@@ -244,7 +249,7 @@ public interface ManagedObject {
 
         private final _Lazy<ObjectSpecification> specification = _Lazy.threadSafe(this::loadSpec);
 
-        public LazyManagedObject(@NonNull Function<Class<?>, ObjectSpecification> specLoader, @NonNull Object pojo) {
+        public LazyManagedObject(@NonNull final Function<Class<?>, ObjectSpecification> specLoader, @NonNull final Object pojo) {
             this.specLoader = specLoader;
             this.pojo = pojo;
         }
@@ -271,6 +276,8 @@ public interface ManagedObject {
         }
 
     }
+
+
 
 
 

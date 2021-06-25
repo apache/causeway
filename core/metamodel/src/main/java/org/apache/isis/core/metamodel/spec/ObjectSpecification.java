@@ -53,6 +53,7 @@ import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
+import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
@@ -217,6 +218,8 @@ extends
      * returned by the {@link IconFacet}; is not necessarily immutable.
      */
     String getIconName(ManagedObject object);
+
+    ObjectIcon getIcon(ManagedObject object);
 
     /**
      * Returns this object's navigable parent, if any.

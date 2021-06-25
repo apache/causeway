@@ -54,7 +54,6 @@ import static org.apache.isis.commons.internal.functions._Predicates.not;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
@@ -98,13 +97,13 @@ public final class _Strings {
      * @return a non-empty Optional, if (and only if) the {@code keyValueLiteral}
      * does contain at least one {@code separator}
      */
-    public static Optional<KeyValuePair> parseKeyValuePair(@Nullable String keyValueLiteral, char separator) {
+    public static Optional<KeyValuePair> parseKeyValuePair(@Nullable final String keyValueLiteral, final char separator) {
         return _Strings_KeyValuePair.parse(keyValueLiteral, separator);
     }
 
     // -- FILLING
 
-    public static String of(int length, char c) {
+    public static String of(final int length, final char c) {
         if(length<=0) {
             return "";
         }
@@ -210,7 +209,7 @@ public final class _Strings {
      * @param input
      * @return null if the {@code input} is null or empty, the {@code input} otherwise
      */
-    public static @Nullable String emptyToNull(@Nullable String input) {
+    public static @Nullable String emptyToNull(@Nullable final String input) {
         if(isEmpty(input)) {
             return null;
         }
@@ -221,7 +220,7 @@ public final class _Strings {
      * @param input
      * @return the empty string if the {@code input} is null, the {@code input} otherwise
      */
-    public static String nullToEmpty(@Nullable String input) {
+    public static String nullToEmpty(@Nullable final String input) {
         if(input==null) {
             return "";
         }
@@ -234,7 +233,7 @@ public final class _Strings {
      * @param input
      * @return null if the {@code input} is null
      */
-    public static String trim(@Nullable String input) {
+    public static String trim(@Nullable final String input) {
         return mapIfPresentElse(input, String::trim, null);
     }
 
@@ -294,7 +293,7 @@ public final class _Strings {
 
     // -- SPECIAL UNARY OPERATORS
 
-    public static String htmlEscape(String source) {
+    public static String htmlEscape(final String source) {
         return _Strings_HtmlEscaper.htmlEscape(source);
     }
 
@@ -348,7 +347,7 @@ public final class _Strings {
      * @return non-null
      */
     public static String combineWithDelimiter(
-            @Nullable String left, @Nullable String right, String delimiter) {
+            @Nullable final String left, @Nullable final String right, final String delimiter) {
 
         requiresNotEmpty(delimiter, "pathDelimiter");
 
@@ -377,7 +376,7 @@ public final class _Strings {
      * @param minLength
      * @param c
      */
-    public static String padStart(@Nullable String str, int minLength, char c) {
+    public static String padStart(@Nullable final String str, final int minLength, final char c) {
         if(minLength<=0) {
             return str;
         }
@@ -398,7 +397,7 @@ public final class _Strings {
      * @param minLength
      * @param c
      */
-    public static String padEnd(@Nullable String str, int minLength, char c) {
+    public static String padEnd(@Nullable final String str, final int minLength, final char c) {
         if(minLength<=0) {
             return str;
         }
@@ -450,7 +449,7 @@ public final class _Strings {
      * @param input
      * @param delimiterPattern
      */
-    public static Stream<String> splitThenStream(@Nullable final CharSequence input, Pattern delimiterPattern) {
+    public static Stream<String> splitThenStream(@Nullable final CharSequence input, final Pattern delimiterPattern) {
         if(isEmpty(input)) {
             return Stream.of();
         }
@@ -518,7 +517,7 @@ public final class _Strings {
                 .map(s->s.replace("\r", ""));
     }
 
-    public static Stream<String> grep(@Nullable final String input, @Nullable String contains){
+    public static Stream<String> grep(@Nullable final String input, @Nullable final String contains){
         final Predicate<String> matcher = contains!=null ? line->line.contains(contains) : _Predicates.alwaysTrue();
         return grep(input, matcher);
     }
@@ -586,7 +585,7 @@ public final class _Strings {
 
     // -- READ FROM INPUT STREAM
 
-    public static String read(@Nullable final InputStream input, Charset charset) {
+    public static String read(@Nullable final InputStream input, final Charset charset) {
         requires(charset, "charset");
         if(input==null) {
             return "";
@@ -603,7 +602,7 @@ public final class _Strings {
             final @NonNull Class<?> resourceLocation,
             final @NonNull String resourceName,
             final @NonNull Charset charset) {
-        try(val input = resourceLocation.getResourceAsStream(resourceName)){
+        try(lombok.val input = resourceLocation.getResourceAsStream(resourceName)){
             return read(input, charset);
         }
     }
@@ -616,7 +615,7 @@ public final class _Strings {
      * @param charset
      * @return null if {@code str} is null
      */
-    public static final byte[] toBytes(@Nullable final String str, Charset charset) {
+    public static final byte[] toBytes(@Nullable final String str, final Charset charset) {
         requires(charset, "charset");
         return mapIfPresentElse(str, __->str.getBytes(charset), null);
     }
@@ -627,7 +626,7 @@ public final class _Strings {
      * @param charset
      * @return null if {@code bytes} is null
      */
-    public static final String ofBytes(@Nullable final byte[] bytes, Charset charset) {
+    public static final String ofBytes(@Nullable final byte[] bytes, final Charset charset) {
         requires(charset, "charset");
         return mapIfPresentElse(bytes, __->new String(bytes, charset), null);
     }
@@ -656,15 +655,15 @@ public final class _Strings {
 
         private final UnaryOperator<String> operator;
 
-        private StringOperator(UnaryOperator<String> operator) {
+        private StringOperator(final UnaryOperator<String> operator) {
             this.operator = requires(operator, "operator");
         }
 
-        public String apply(String input) {
+        public String apply(final String input) {
             return operator.apply(input);
         }
 
-        public StringOperator andThen(UnaryOperator<String> andThen) {
+        public StringOperator andThen(final UnaryOperator<String> andThen) {
             return new StringOperator(s->andThen.apply(operator.apply(s)));
         }
 
@@ -692,7 +691,7 @@ public final class _Strings {
             .andThen(s->_Strings_NaturalNames.naturalName2(s, true));
 
 
-    public static final String asFileNameWithExtension(final String fileName, String fileExtension) {
+    public static final String asFileNameWithExtension(final String fileName, final String fileExtension) {
         requires(fileName, "fileName");
         requires(fileExtension, "fileExtension");
         return suffix(fileName, prefix(fileExtension, "."));
@@ -705,7 +704,7 @@ public final class _Strings {
      * empty chunks.
      * @return empty stream if {@code input} is null
      */
-    public static Stream<String> splitThenStreamTrimmed(@Nullable String input, String separator) {
+    public static Stream<String> splitThenStreamTrimmed(@Nullable final String input, final String separator) {
         return splitThenStream(input, separator)
                 .map(String::trim)
                 .filter(not(String::isEmpty));
@@ -716,17 +715,17 @@ public final class _Strings {
      * then discarding empty chunks.
      * @return empty stream if {@code input} is null
      */
-    public static Stream<String> splitThenStreamTrimmed(@Nullable CharSequence input, Pattern delimiterPattern) {
+    public static Stream<String> splitThenStreamTrimmed(@Nullable final CharSequence input, final Pattern delimiterPattern) {
         return splitThenStream(input, delimiterPattern)
                 .map(String::trim)
                 .filter(not(String::isEmpty));
     }
 
-    public static String base64UrlDecode(final String str) {
+    public static String base64UrlDecode(final @Nullable String str) {
         return _Strings.convert(str, _Bytes.ofUrlBase64, StandardCharsets.UTF_8);
     }
 
-    public static String base64UrlEncode(final String str) {
+    public static String base64UrlEncode(final @Nullable String str) {
         return _Strings.convert(str, _Bytes.asUrlBase64, StandardCharsets.UTF_8);
     }
 

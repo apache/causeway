@@ -33,6 +33,7 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.metamodel.execution.MemberExecutorService;
+import org.apache.isis.core.metamodel.facets.object.icon.ObjectIconService;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -97,11 +98,11 @@ public interface HasMetaModelContext {
         return getMetaModelContext().getTitleService();
     }
 
-    default Optional<ObjectSpecification> specForType(Class<?> type) {
+    default Optional<ObjectSpecification> specForType(final Class<?> type) {
         return getMetaModelContext().specForType(type);
     }
 
-    default ObjectSpecification specForTypeElseFail(Class<?> type) {
+    default ObjectSpecification specForTypeElseFail(final Class<?> type) {
         return getMetaModelContext().specForTypeElseFail(type);
     }
 
@@ -117,6 +118,10 @@ public interface HasMetaModelContext {
         return getMetaModelContext().getTransactionService();
     }
 
+    default ObjectIconService getObjectIconService() {
+        return getMetaModelContext().getObjectIconService();
+    }
+
     default ObjectManager getObjectManager() {
         return getMetaModelContext().getObjectManager();
     }
@@ -127,11 +132,11 @@ public interface HasMetaModelContext {
 
     // -- ADVANCED SHORTCUTS
 
-    default ManagedObject lookupServiceAdapterById(String serviceId) {
+    default ManagedObject lookupServiceAdapterById(final String serviceId) {
         return getMetaModelContext().lookupServiceAdapterById(serviceId);
     }
 
-    default <T> T getSingletonElseFail(Class<T> type) {
+    default <T> T getSingletonElseFail(final Class<T> type) {
         return getMetaModelContext().getSingletonElseFail(type);
     }
 

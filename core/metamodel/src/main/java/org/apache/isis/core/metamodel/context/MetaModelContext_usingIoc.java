@@ -40,6 +40,7 @@ import org.apache.isis.commons.internal.ioc._ManagedBeanAdapter;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.metamodel.execution.MemberExecutorService;
+import org.apache.isis.core.metamodel.facets.object.icon.ObjectIconService;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -54,7 +55,7 @@ import lombok.val;
 class MetaModelContext_usingIoc implements MetaModelContext {
 
     private final _IocContainer iocContainer;
-    public MetaModelContext_usingIoc(_IocContainer iocContainer) {
+    public MetaModelContext_usingIoc(final _IocContainer iocContainer) {
         this.iocContainer = iocContainer;
     }
 
@@ -97,6 +98,10 @@ class MetaModelContext_usingIoc implements MetaModelContext {
     @Getter(lazy=true)
     private final InteractionProvider interactionProvider =
     getSingletonElseFail(InteractionProvider.class);
+
+    @Getter(lazy=true)
+    private final ObjectIconService objectIconService =
+    getSingletonElseFail(ObjectIconService.class);
 
     @Getter(lazy=true)
     private final TitleService titleService =
@@ -153,7 +158,7 @@ class MetaModelContext_usingIoc implements MetaModelContext {
     // -- LOOKUP
 
     @Override
-    public <T> T getSingletonElseFail(Class<T> type) {
+    public <T> T getSingletonElseFail(final Class<T> type) {
         return iocContainer.getSingletonElseFail(type);
     }
 
@@ -171,7 +176,7 @@ class MetaModelContext_usingIoc implements MetaModelContext {
                 .collect(Collectors.toMap(ServiceUtil::idOfAdapter, v->v, (o,n)->n, LinkedHashMap::new));
     }
 
-    private ManagedObject toManagedObject(_ManagedBeanAdapter managedBeanAdapter) {
+    private ManagedObject toManagedObject(final _ManagedBeanAdapter managedBeanAdapter) {
 
         val servicePojo = managedBeanAdapter.getInstance().getFirst()
                 .orElseThrow(()->_Exceptions.unrecoverableFormatted(

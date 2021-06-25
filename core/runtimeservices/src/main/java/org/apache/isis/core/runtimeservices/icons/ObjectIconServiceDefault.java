@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.common.model.decorator.icon;
+package org.apache.isis.core.runtimeservices.icons;
 
 import java.net.URL;
 import java.util.Map;
@@ -38,6 +38,8 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.resources._Resources;
+import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
+import org.apache.isis.core.metamodel.facets.object.icon.ObjectIconService;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
@@ -46,8 +48,8 @@ import lombok.SneakyThrows;
 import lombok.val;
 
 @Service
-@Named("isis.viewer.common.ObjectIconServiceDefault")
-@Priority(PriorityPrecedence.LATE)
+@Named("isis.runtimeservices.ObjectIconServiceDefault")
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ObjectIconServiceDefault
@@ -67,7 +69,7 @@ implements ObjectIconService {
     private final Map<String, ObjectIcon> iconByKey = _Maps.newConcurrentHashMap();
 
     private final ObjectIcon fallbackIcon =
-            new ObjectIcon(
+            ObjectIcon.eager(
                     "ObjectIconFallback",
                     _Resources.getResourceUrl(
                             ObjectIconServiceDefault.class,
@@ -85,7 +87,7 @@ implements ObjectIconService {
                 ? domainClass.getName() + "-" + iconNameModifier
                 : domainClass.getName();
 
-        // also memoize unsuccessful icon lookups, so we don't search repeatedly
+        // also memoize unsuccessful icon lookups (as fallback), so we don't search repeatedly
 
         val cachedIcon = iconByKey.get(iconResourceKey);
         if(cachedIcon!=null) {
@@ -103,8 +105,8 @@ implements ObjectIconService {
         //     findIcon(spec, iconNameModifier));
     }
 
-    @Override
-    public ObjectIcon getObjectFallbackIcon() {
+    //@Override
+    private ObjectIcon getObjectFallbackIcon() {
         return fallbackIcon;
     }
 
@@ -129,7 +131,7 @@ implements ObjectIconService {
                 .map(suffix->iconResourceNameNoExt + "." + suffix)
                 .map(iconResourceName->
                         classPathResource(domainClass, iconResourceName)
-                        .map(url->new ObjectIcon(
+                        .map(url->ObjectIcon.lazy(
                                 iconResourceNameNoExt,
                                 url,
                                 imageType)))
@@ -153,7 +155,7 @@ implements ObjectIconService {
                     .map(suffix->DEFAULT_IMAGE_RESOURCE_PATH + "/" + iconResourceNameNoExt + "." + suffix)
                     .map(iconResourcePath->
                             classPathResource(iconResourcePath)
-                            .map(url->new ObjectIcon(
+                            .map(url->ObjectIcon.lazy(
                                     iconResourceNameNoExt,
                                     url,
                                     imageType)))

@@ -34,6 +34,7 @@ import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
@@ -59,6 +60,7 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
+import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
@@ -72,6 +74,7 @@ import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -402,7 +405,6 @@ implements ObjectSpecification {
         updateFromFacetValues();
     }
 
-
     @Override
     public String getTitle(
             final Predicate<ManagedObject> isContextAdapter,
@@ -417,17 +419,27 @@ implements ObjectSpecification {
         return (this.isManagedBean() ? "" : "Untitled ") + getSingularName();
     }
 
+    @Override
+    public String getIconName(final ManagedObject domainObject) {
+
+        if(ManagedObjects.isSpecified(domainObject)) {
+            _Assert.assertEquals(domainObject.getSpecification(), this);
+        }
+
+        return iconFacet == null ? null : iconFacet.iconName(domainObject);
+    }
 
     @Override
-    public String getIconName(final ManagedObject reference) {
-        return iconFacet == null ? null : iconFacet.iconName(reference);
+    public ObjectIcon getIcon(final ManagedObject domainObject) {
+        val iconNameModifier = getIconName(domainObject);
+        return getObjectIconService().getObjectIcon(this, iconNameModifier);
     }
 
     @Override
     public Object getNavigableParent(final Object object) {
         return navigableParentFacet == null
                 ? null
-                        : navigableParentFacet.navigableParent(object);
+                : navigableParentFacet.navigableParent(object);
     }
 
     @Override

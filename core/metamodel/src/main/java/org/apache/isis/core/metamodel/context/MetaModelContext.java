@@ -36,6 +36,7 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.metamodel.execution.MemberExecutorService;
+import org.apache.isis.core.metamodel.facets.object.icon.ObjectIconService;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -92,6 +93,8 @@ public interface MetaModelContext {
 
     TitleService getTitleService();
 
+    ObjectIconService getObjectIconService();
+
     RepositoryService getRepositoryService();
 
     FactoryService getFactoryService();
@@ -118,7 +121,6 @@ public interface MetaModelContext {
      *
      * @param type
      * @param <T>
-     * @return
      */
     <T> T getSingletonElseFail(Class<T> type);
 
@@ -137,9 +139,11 @@ public interface MetaModelContext {
 
     // -- EXTRACTORS
 
-    public static MetaModelContext from(ManagedObject adapter) {
+    public static MetaModelContext from(final ManagedObject adapter) {
         return adapter.getSpecification().getMetaModelContext();
     }
+
+
 
 
 }

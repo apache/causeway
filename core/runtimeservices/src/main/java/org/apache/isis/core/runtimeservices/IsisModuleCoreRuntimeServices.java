@@ -38,6 +38,7 @@ import org.apache.isis.core.runtimeservices.factory.FactoryServiceDefault;
 import org.apache.isis.core.runtimeservices.homepage.HomePageResolverServiceDefault;
 import org.apache.isis.core.runtimeservices.i18n.po.TranslationServicePo;
 import org.apache.isis.core.runtimeservices.i18n.po.TranslationServicePoMenu;
+import org.apache.isis.core.runtimeservices.icons.ObjectIconServiceDefault;
 import org.apache.isis.core.runtimeservices.interaction.InteractionDtoFactoryDefault;
 import org.apache.isis.core.runtimeservices.jaxb.JaxbServiceDefault;
 import org.apache.isis.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault;
@@ -92,6 +93,7 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         MenuBarsLoaderServiceDefault.class,
         MenuBarsServiceBS3.class,
         MessageServiceDefault.class,
+        ObjectIconServiceDefault.class,
         ScratchpadDefault.class,
         TransactionServiceSpring.class,
         UrlEncodingServiceWithCompression.class,
