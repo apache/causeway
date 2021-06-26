@@ -34,6 +34,9 @@ there is no counterpart for _Collection_
 | `@Model` (from extensions) removed
 | use `@MemberSupport`  (Applib) instead
 
+| `@PropertyLayout(namedEscaped=...)` removed
+| (translatable) text is now always escaped
+
 |===
 
 == Configuration

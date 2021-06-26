@@ -32,7 +32,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.links.Link;
 
 /**
- * Describes the layout of a single collection, broadly corresponds to the 
+ * Describes the layout of a single collection, broadly corresponds to the
  * {@link org.apache.isis.applib.annotation.CollectionLayout} annotation.
  *
  * @since 1.x {@index}
@@ -76,7 +76,7 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -91,7 +91,7 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed {
     }
 
     @Override
-    public void setCssClass(String cssClass) {
+    public void setCssClass(final String cssClass) {
         this.cssClass = cssClass;
     }
 
@@ -106,7 +106,7 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed {
     }
 
     @Override
-    public void setDescribedAs(String describedAs) {
+    public void setDescribedAs(final String describedAs) {
         this.describedAs = describedAs;
     }
 
@@ -123,7 +123,7 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed {
         return defaultView;
     }
 
-    public void setDefaultView(String defaultView) {
+    public void setDefaultView(final String defaultView) {
         this.defaultView = defaultView;
     }
 
@@ -137,7 +137,7 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed {
     }
 
     @Override
-    public void setHidden(Where hidden) {
+    public void setHidden(final Where hidden) {
         this.hidden = hidden;
     }
 
@@ -151,24 +151,9 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed {
     }
 
     @Override
-    public void setNamed(String named) {
+    public void setNamed(final String named) {
         this.named = named;
     }
-
-
-    private Boolean namedEscaped;
-
-    @Override
-    @XmlAttribute(required = false)
-    public Boolean getNamedEscaped() {
-        return namedEscaped;
-    }
-
-    @Override
-    public void setNamedEscaped(Boolean namedEscaped) {
-        this.namedEscaped = namedEscaped;
-    }
-
 
     private Integer paged;
 
@@ -177,7 +162,7 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed {
         return paged;
     }
 
-    public void setPaged(Integer paged) {
+    public void setPaged(final Integer paged) {
         this.paged = paged;
     }
 
@@ -190,7 +175,7 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed {
         return sortedBy;
     }
 
-    public void setSortedBy(String sortedBy) {
+    public void setSortedBy(final String sortedBy) {
         this.sortedBy = sortedBy;
     }
 
@@ -206,7 +191,7 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed {
     }
 
     @Override
-    public void setActions(List<ActionLayoutData> actionLayoutDatas) {
+    public void setActions(final List<ActionLayoutData> actionLayoutDatas) {
         this.actions = actionLayoutDatas;
     }
 

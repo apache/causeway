@@ -33,7 +33,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.links.Link;
 
 /**
- * Describes the layout of a single action, broadly corresponding to 
+ * Describes the layout of a single action, broadly corresponding to
  * {@link org.apache.isis.applib.annotation.ActionLayout}.
  *
  * @since 1.x {@index}
@@ -75,7 +75,7 @@ HasDescribedAs, HasHidden, HasNamed, HasBookmarking {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -90,7 +90,7 @@ HasDescribedAs, HasHidden, HasNamed, HasBookmarking {
     }
 
     @Override
-    public void setBookmarking(BookmarkPolicy bookmarking) {
+    public void setBookmarking(final BookmarkPolicy bookmarking) {
         this.bookmarking = bookmarking;
     }
 
@@ -104,7 +104,7 @@ HasDescribedAs, HasHidden, HasNamed, HasBookmarking {
     }
 
     @Override
-    public void setCssClass(String cssClass) {
+    public void setCssClass(final String cssClass) {
         this.cssClass = cssClass;
     }
 
@@ -118,7 +118,7 @@ HasDescribedAs, HasHidden, HasNamed, HasBookmarking {
     }
 
     @Override
-    public void setCssClassFa(String cssClassFa) {
+    public void setCssClassFa(final String cssClassFa) {
         this.cssClassFa = cssClassFa;
     }
 
@@ -132,7 +132,7 @@ HasDescribedAs, HasHidden, HasNamed, HasBookmarking {
     }
 
     @Override
-    public void setCssClassFaPosition(CssClassFaPosition cssClassFaPosition) {
+    public void setCssClassFaPosition(final CssClassFaPosition cssClassFaPosition) {
         this.cssClassFaPosition = cssClassFaPosition;
     }
 
@@ -146,7 +146,7 @@ HasDescribedAs, HasHidden, HasNamed, HasBookmarking {
     }
 
     @Override
-    public void setDescribedAs(String describedAs) {
+    public void setDescribedAs(final String describedAs) {
         this.describedAs = describedAs;
     }
 
@@ -161,7 +161,7 @@ HasDescribedAs, HasHidden, HasNamed, HasBookmarking {
     }
 
     @Override
-    public void setHidden(Where hidden) {
+    public void setHidden(final Where hidden) {
         this.hidden = hidden;
     }
 
@@ -176,26 +176,9 @@ HasDescribedAs, HasHidden, HasNamed, HasBookmarking {
     }
 
     @Override
-    public void setNamed(String named) {
+    public void setNamed(final String named) {
         this.named = named;
     }
-
-
-
-    private Boolean namedEscaped;
-
-    @Override
-    @XmlAttribute(required = false)
-    public Boolean getNamedEscaped() {
-        return namedEscaped;
-    }
-
-    @Override
-    public void setNamedEscaped(Boolean namedEscaped) {
-        this.namedEscaped = namedEscaped;
-    }
-
-
 
     private org.apache.isis.applib.annotation.ActionLayout.Position position;
 
@@ -204,7 +187,7 @@ HasDescribedAs, HasHidden, HasNamed, HasBookmarking {
         return position;
     }
 
-    public void setPosition(org.apache.isis.applib.annotation.ActionLayout.Position position) {
+    public void setPosition(final org.apache.isis.applib.annotation.ActionLayout.Position position) {
         this.position = position;
     }
 
@@ -216,7 +199,7 @@ HasDescribedAs, HasHidden, HasNamed, HasBookmarking {
         return promptStyle;
     }
 
-    public void setPromptStyle(PromptStyle promptStyle) {
+    public void setPromptStyle(final PromptStyle promptStyle) {
         this.promptStyle = promptStyle;
     }
 
@@ -229,7 +212,7 @@ HasDescribedAs, HasHidden, HasNamed, HasBookmarking {
         return redirect;
     }
 
-    public void setRedirect(Redirect redirect) {
+    public void setRedirect(final Redirect redirect) {
         this.redirect = redirect;
     }
 

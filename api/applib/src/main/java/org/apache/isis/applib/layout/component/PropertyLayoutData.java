@@ -78,7 +78,7 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -93,7 +93,7 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
     }
 
     @Override
-    public void setCssClass(String cssClass) {
+    public void setCssClass(final String cssClass) {
         this.cssClass = cssClass;
     }
 
@@ -107,7 +107,7 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
     }
 
     @Override
-    public void setDescribedAs(String describedAs) {
+    public void setDescribedAs(final String describedAs) {
         this.describedAs = describedAs;
     }
 
@@ -121,7 +121,7 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
     }
 
     @Override
-    public void setHidden(Where hidden) {
+    public void setHidden(final Where hidden) {
         this.hidden = hidden;
     }
 
@@ -133,7 +133,7 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
         return labelPosition;
     }
 
-    public void setLabelPosition(LabelPosition labelPosition) {
+    public void setLabelPosition(final LabelPosition labelPosition) {
         this.labelPosition = labelPosition;
     }
 
@@ -145,7 +145,7 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
         return multiLine;
     }
 
-    public void setMultiLine(Integer multiLine) {
+    public void setMultiLine(final Integer multiLine) {
         this.multiLine = multiLine;
     }
 
@@ -159,22 +159,8 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
     }
 
     @Override
-    public void setNamed(String named) {
+    public void setNamed(final String named) {
         this.named = named;
-    }
-
-
-    private Boolean namedEscaped;
-
-    @Override
-    @XmlAttribute(required = false)
-    public Boolean getNamedEscaped() {
-        return namedEscaped;
-    }
-
-    @Override
-    public void setNamedEscaped(Boolean namedEscaped) {
-        this.namedEscaped = namedEscaped;
     }
 
 
@@ -185,7 +171,7 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
         return promptStyle;
     }
 
-    public void setPromptStyle(PromptStyle promptStyle) {
+    public void setPromptStyle(final PromptStyle promptStyle) {
         this.promptStyle = promptStyle;
     }
 
@@ -208,7 +194,7 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
         return typicalLength;
     }
 
-    public void setTypicalLength(Integer typicalLength) {
+    public void setTypicalLength(final Integer typicalLength) {
         this.typicalLength = typicalLength;
     }
 
@@ -234,7 +220,7 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
     }
 
     @Override
-    public void setActions(List<ActionLayoutData> actionLayoutDatas) {
+    public void setActions(final List<ActionLayoutData> actionLayoutDatas) {
         this.actions = actionLayoutDatas;
     }
 

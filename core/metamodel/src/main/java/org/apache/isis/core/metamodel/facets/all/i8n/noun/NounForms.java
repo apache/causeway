@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.facets.all.i8n.noun;
 
 import java.util.EnumSet;
+import java.util.Optional;
 
 import javax.annotation.Nullable;
 
@@ -75,15 +76,17 @@ public class NounForms {
         return ImmutableEnumSet.from(supportedNounForms);
     }
 
-    public String get(final @NonNull NounForm nounForm) {
+    public Optional<String> lookup(final @NonNull NounForm nounForm) {
         if(!getSupportedNounForms().contains(nounForm)) {
-            throw _Exceptions.illegalArgument("NounForm %s not supported with this instance", nounForm);
+            return Optional.empty();
         };
         switch(nounForm) {
         case SINGULAR:
-            return getSingular();
+            // non-null, as nulls are guarded by getSupportedNounForms()
+            return Optional.of(getSingular());
         case PLURAL:
-            return getPlural();
+            // non-null, as nulls are guarded by getSupportedNounForms()
+            return Optional.of(getPlural());
         default:
             break;
         }
@@ -97,7 +100,6 @@ public class NounForms {
         val builder = NounForms
                 .builder()
                 .preferredNounForm(preferredNounForm);
-
 
         getSupportedNounForms()
         .forEach(nounForm->{

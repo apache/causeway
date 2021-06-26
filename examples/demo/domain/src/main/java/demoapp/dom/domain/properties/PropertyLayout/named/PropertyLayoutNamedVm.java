@@ -31,9 +31,10 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.Setter;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -99,34 +100,6 @@ public class PropertyLayoutNamedVm implements HasAsciiDocDescription {
     @Getter @Setter
     private String propertyUsingMetaAnnotationButOverridden;
 //end::meta-annotated-overridden[]
-
-    //tag::markup[]
-    @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(
-        named = "Named <b>uses</b> <i>markup</i>",          // <.>
-        namedEscaped = false                                // <.>
-        , describedAs =
-            "@PropertyLayout(named= \"...\", namedEscaped=false)",
-        fieldSetId = "markup", sequence = "1")
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String propertyUsingMarkup;
-//end::markup[]
-
-    //tag::markup-escaped[]
-    @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(
-        named = "Named <b>but</b> <i>escaped</i>",          // <.>
-        namedEscaped = true                                 // <.>
-        , describedAs =
-            "@PropertyLayout(" +
-            "named = \"...\", namedEscaped=true)",
-        fieldSetId = "markup", sequence = "2")
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String propertyUsingEscapedMarkup;
-//end::markup-escaped[]
-
 
 }
 //end::class[]

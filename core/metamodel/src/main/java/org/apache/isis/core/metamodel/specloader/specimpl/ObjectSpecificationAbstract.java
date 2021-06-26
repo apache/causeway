@@ -485,15 +485,15 @@ implements ObjectSpecification {
     @Override
     public String getSingularName() {
         return lookupFacet(ObjectNamedFacet.class)
-            .map(textFacet->textFacet.translatedElseNull(NounForm.SINGULAR))
+            .flatMap(textFacet->textFacet.translated(NounForm.SINGULAR))
             .orElseGet(this::getFullIdentifier);
     }
 
     @Override
     public String getPluralName() {
         return lookupFacet(ObjectNamedFacet.class)
-                .map(textFacet->textFacet.translatedElseNull(NounForm.PLURAL))
-                .orElseGet(this::getFullIdentifier);
+            .flatMap(textFacet->textFacet.translated(NounForm.PLURAL))
+            .orElseGet(this::getFullIdentifier);
     }
 
     /**

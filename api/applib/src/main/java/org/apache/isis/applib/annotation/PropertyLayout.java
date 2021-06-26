@@ -183,22 +183,9 @@ public @interface PropertyLayout {
      * @see CollectionLayout#named()
      * @see DomainObjectLayout#named()
      * @see DomainServiceLayout#named()
-     * @see PropertyLayout#namedEscaped()
      */
     String named()
             default "";
-
-    /**
-     * A flag indicating whether the value of {@linkplain #named()} should be
-     * HTML escaped or not.
-     *
-     * @see ParameterLayout#namedEscaped()
-     * @see CollectionLayout#namedEscaped()
-     * @see PropertyLayout#named()
-     */
-    @Deprecated
-    boolean namedEscaped()
-            default true;
 
     /**
      * Whether this property should be used to construct the navigable chain of breadcrumbs in the UI.

@@ -18,7 +18,6 @@
  */
 package org.apache.isis.applib.layout.component;
 
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
@@ -29,10 +28,5 @@ public interface HasNamed {
     @XmlElement(required = false)
     String getNamed();
     void setNamed(String named);
-
-    @Deprecated // ignored
-    @XmlAttribute(required = false)
-    Boolean getNamedEscaped();
-    void setNamedEscaped(Boolean namedEscaped);
 
 }

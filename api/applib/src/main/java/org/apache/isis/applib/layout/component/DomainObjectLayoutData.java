@@ -65,7 +65,7 @@ HasBookmarking, HasCssClass, HasCssClassFa, HasDescribedAs, HasNamed {
     }
 
     @Override
-    public void setBookmarking(BookmarkPolicy bookmarking) {
+    public void setBookmarking(final BookmarkPolicy bookmarking) {
         this.bookmarking = bookmarking;
     }
 
@@ -80,7 +80,7 @@ HasBookmarking, HasCssClass, HasCssClassFa, HasDescribedAs, HasNamed {
     }
 
     @Override
-    public void setCssClass(String cssClass) {
+    public void setCssClass(final String cssClass) {
         this.cssClass = cssClass;
     }
 
@@ -94,7 +94,7 @@ HasBookmarking, HasCssClass, HasCssClassFa, HasDescribedAs, HasNamed {
     }
 
     @Override
-    public void setCssClassFa(String cssClassFa) {
+    public void setCssClassFa(final String cssClassFa) {
         this.cssClassFa = cssClassFa;
     }
 
@@ -109,7 +109,7 @@ HasBookmarking, HasCssClass, HasCssClassFa, HasDescribedAs, HasNamed {
     }
 
     @Override
-    public void setCssClassFaPosition(CssClassFaPosition cssClassFaPosition) {
+    public void setCssClassFaPosition(final CssClassFaPosition cssClassFaPosition) {
         this.cssClassFaPosition = cssClassFaPosition;
     }
 
@@ -123,7 +123,7 @@ HasBookmarking, HasCssClass, HasCssClassFa, HasDescribedAs, HasNamed {
     }
 
     @Override
-    public void setDescribedAs(String describedAs) {
+    public void setDescribedAs(final String describedAs) {
         this.describedAs = describedAs;
     }
 
@@ -138,23 +138,10 @@ HasBookmarking, HasCssClass, HasCssClassFa, HasDescribedAs, HasNamed {
     }
 
     @Override
-    public void setNamed(String named) {
+    public void setNamed(final String named) {
         this.named = named;
     }
 
-
-    private Boolean namedEscaped;
-
-    @Override
-    @XmlAttribute(required = false)
-    public Boolean getNamedEscaped() {
-        return namedEscaped;
-    }
-
-    @Override
-    public void setNamedEscaped(Boolean namedEscaped) {
-        this.namedEscaped = namedEscaped;
-    }
 
 
 
@@ -165,7 +152,7 @@ HasBookmarking, HasCssClass, HasCssClassFa, HasDescribedAs, HasNamed {
         return plural;
     }
 
-    public void setPlural(String plural) {
+    public void setPlural(final String plural) {
         this.plural = plural;
     }
 

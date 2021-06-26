@@ -136,13 +136,8 @@ public class LayoutFacetUtil {
 
         facetHolder.lookupNonFallbackFacet(ObjectNamedFacet.class)
         .filter(namedFacet->namedFacet.getSupportedNounForms().contains(NounForm.SINGULAR))
-        .ifPresent(namedFacet->{
-            final String named = namedFacet.translated(NounForm.SINGULAR);
-            if(!_Strings.isNullOrEmpty(named)){
-                hasNamed.setNamed(named);
-            }
-            hasNamed.setNamedEscaped(true);
-        });
+        .map(ObjectNamedFacet::singularTranslated)
+        .ifPresent(hasNamed::setNamed);
     }
 
     private void setObjectDescribedIfAny(
@@ -151,11 +146,8 @@ public class LayoutFacetUtil {
 
         facetHolder.lookupNonFallbackFacet(ObjectDescribedFacet.class)
         .map(ObjectDescribedFacet::translated)
-        .ifPresent(describedAs->{
-            if(_Strings.isNotEmpty(describedAs)) {
-                hasDescribedAs.setDescribedAs(describedAs);
-            }
-        });
+        .filter(_Strings::isNotEmpty)
+        .ifPresent(hasDescribedAs::setDescribedAs);
     }
 
     private void setMemberNamedIfAny(
@@ -250,14 +242,11 @@ public class LayoutFacetUtil {
             final DomainObjectLayoutData domainObjectLayoutData,
             final FacetHolder facetHolder) {
 
-        facetHolder.lookupNonFallbackFacet(ObjectNamedFacet.class)
+        facetHolder
+        .lookupNonFallbackFacet(ObjectNamedFacet.class)
         .filter(namedFacet->namedFacet.getSupportedNounForms().contains(NounForm.PLURAL))
-        .ifPresent(namedFacet->{
-            val plural = namedFacet.translated(NounForm.PLURAL);
-            if(!_Strings.isNullOrEmpty(plural)) {
-                domainObjectLayoutData.setPlural(plural);
-            }
-        });
+        .map(ObjectNamedFacet::pluralTranslated)
+        .ifPresent(domainObjectLayoutData::setPlural);
     }
 
     public void setActionPositionIfAny(

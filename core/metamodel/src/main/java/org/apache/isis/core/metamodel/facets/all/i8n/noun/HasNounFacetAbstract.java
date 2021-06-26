@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.facets.all.i8n.noun;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
@@ -63,23 +64,13 @@ implements HasNoun {
     }
 
     @Override
-    public final String preferredText() {
-        return text(nounForms.getPreferredNounForm());
+    public final Optional<String> text(final @NonNull NounForm nounForm) {
+        return nounForms.lookup(nounForm);
     }
 
     @Override
-    public final String preferredTranslated() {
-        return translated(nounForms.getPreferredNounForm());
-    }
-
-    @Override
-    public final String text(final @NonNull NounForm nounForm) {
-        return nounForms.get(nounForm);
-    }
-
-    @Override
-    public final String translated(final NounForm nounForm) {
-        return translatedNounForms.get().get(nounForm);
+    public final Optional<String> translated(final @NonNull NounForm nounForm) {
+        return translatedNounForms.get().lookup(nounForm);
     }
 
     @Override

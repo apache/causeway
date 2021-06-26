@@ -18,46 +18,66 @@
  */
 package org.apache.isis.core.metamodel.facets.all.i8n.noun;
 
+import java.util.Optional;
+
 import javax.annotation.Nullable;
 
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.metamodel.facets.all.i8n.HasMemoizableTranslation;
 
+import lombok.NonNull;
+
 public interface HasNoun
 extends HasMemoizableTranslation {
 
     /**
-     * Originating text of preferred NounForm to be translated before use in the UI.
-     */
-    String preferredText();
-
-    /**
-     * Translated text of preferred NounForm to be used in the UI.
-     */
-    String preferredTranslated();
-
-    /**
      * Originating text to be translated before use in the UI.
+     * @return {@code Optional.empty()} if {@code nounForm} is not supported
      */
-    String text(NounForm nounForm);
+    Optional<String> text(@NonNull NounForm nounForm);
 
     /**
      * Translated text to be used in the UI.
+     * @return {@code Optional.empty()} if {@code nounForm} is not supported
      */
-    String translated(NounForm nounForm);
+    Optional<String> translated(@NonNull NounForm nounForm);
 
     ImmutableEnumSet<NounForm> getSupportedNounForms();
-
-    @Nullable
-    default String translatedElseNull(final NounForm nounForm) {
-        return getSupportedNounForms().contains(nounForm)
-                ? translated(nounForm)
-                : null;
-    }
 
     @Override
     default void memoizeTranslations() {
         getSupportedNounForms().forEach(this::translated);
     }
+
+    // -- SHORTCUTS
+
+    /**
+     * Originating text of singular noun-form to be translated before use in the UI.
+     */
+    default @Nullable String singular() {
+        return text(NounForm.SINGULAR).orElse(null);
+    }
+
+    /**
+     * Translated text of singular noun-form to be used in the UI.
+     */
+    default @Nullable String singularTranslated() {
+        return translated(NounForm.SINGULAR).orElse(null);
+    }
+
+    /**
+     * Originating text of plural noun-form to be translated before use in the UI.
+     */
+    default @Nullable String plural() {
+        return text(NounForm.PLURAL).orElse(null);
+    }
+
+    /**
+     * Translated text of plural noun-form to be used in the UI.
+     */
+    default @Nullable String pluralTranslated() {
+        return translated(NounForm.PLURAL).orElse(null);
+    }
+
 
 }
