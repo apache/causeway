@@ -82,9 +82,9 @@ implements
         this.number = number;
         this.parentAction = objectAction;
         this.peer = requires(peer, "peer");
-        
-        this.javaSourceParamName = 
-                objectAction.getFacetedMethod().getMethod().getParameters()[number].getName(); 
+
+        this.javaSourceParamName =
+                objectAction.getFacetedMethod().getMethod().getParameters()[number].getName();
     }
 
     @Override
@@ -153,7 +153,7 @@ implements
     private String staticFriendlyName() {
         return lookupFacet(ParamNamedFacet.class)
         .map(ParamNamedFacet::translated)
-//
+// TODO[ISIS-1720] it seems the orElseGet(...) clause is only used for testing, need to double check and probably remove
 //        .orElseThrow(()->_Exceptions
 //                .unrecoverableFormatted("action parameters must have a ParamNamedFacet %s", this));
         .orElseGet(()->{
