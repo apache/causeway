@@ -41,8 +41,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.all.described.ObjectDescribedFacet;
-import org.apache.isis.core.metamodel.facets.all.i8n.noun.HasNoun;
-import org.apache.isis.core.metamodel.facets.all.i8n.noun.NounForm;
 import org.apache.isis.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
@@ -299,7 +297,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
                 assertNotNull(namedFacet);
                 assertTrue(namedFacet instanceof NamedFacetForDomainObjectLayoutAnnotation);
 
-                assertEquals("Name override", ((HasNoun)namedFacet).text(NounForm.SINGULAR));
+                assertEquals("Name override", namedFacet.singular());
 
                 expectNoMethodsRemoved();
             }
@@ -386,7 +384,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
                 val namedFacet = facetHolder.getFacet(ObjectNamedFacet.class);
                 assertNotNull(namedFacet);
 
-                assertEquals("Customers Plural Form", ((HasNoun)namedFacet).translated(NounForm.PLURAL));
+                assertEquals("Customers Plural Form", namedFacet.pluralTranslated());
 
                 expectNoMethodsRemoved();
             }
