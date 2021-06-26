@@ -61,7 +61,7 @@ extends PanelAbstract<ManagedObject, ActionModel> {
      *
      * REVIEW: I wonder if this is necessary... there isn't anything exactly the same for property edits...
      */
-    public void setActionPrompt(ActionPrompt actionPrompt) {
+    public void setActionPrompt(final ActionPrompt actionPrompt) {
         ActionFormExecutorStrategy formExecutor = new ActionFormExecutorStrategy(getActionModel());
         formExecutor.setActionPrompt(actionPrompt);
     }
@@ -94,7 +94,7 @@ extends PanelAbstract<ManagedObject, ActionModel> {
         getComponentFactoryRegistry().addOrReplaceComponent(header, ComponentType.ENTITY_ICON_AND_TITLE, actionModel
                 .getParentUiModel());
 
-        final String actionName = getActionModel().getMetaModel().getName();
+        final String actionName = getActionModel().getFriendlyName();
         header.add(new Label(ID_ACTION_NAME, Model.of(actionName)));
 
 

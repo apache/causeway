@@ -45,7 +45,7 @@ extends PanelAbstract<ManagedObject, ScalarModel> {
     }
 
     private void buildGui() {
-        val scalarName = getModel().getName();
+        val scalarName = getModel().getFriendlyName();
         val scalarNameLabel = new Label(ID_SCALAR_NAME, scalarName);
         addOrReplace(scalarNameLabel);
 

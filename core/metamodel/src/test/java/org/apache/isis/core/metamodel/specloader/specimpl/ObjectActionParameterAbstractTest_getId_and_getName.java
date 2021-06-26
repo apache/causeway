@@ -50,21 +50,16 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
-    @Mock
-    private ObjectActionDefault parentAction;
-    @Mock
-    private TypedHolder actionParamPeer;
-    @Mock
-    private ParamNamedFacet namedFacet;
+    @Mock private ObjectActionDefault parentAction;
+    @Mock private TypedHolder actionParamPeer;
+    @Mock private ParamNamedFacet namedFacet;
 
-    @Mock
-    private ObjectSpecification stubSpecForString;
-    @Mock
-    private ObjectActionParameter stubObjectActionParameterString;
-    @Mock
-    private ObjectActionParameter stubObjectActionParameterString2;
+    @Mock private ObjectSpecification stubSpecForString;
+    @Mock private ObjectActionParameter stubObjectActionParameterString;
+    @Mock private ObjectActionParameter stubObjectActionParameterString2;
 
-    private static final class ObjectActionParameterAbstractToTest extends ObjectActionParameterAbstract {
+    private static final class ObjectActionParameterAbstractToTest
+    extends ObjectActionParameterAbstract {
         private ObjectActionParameterAbstractToTest(final int number, final ObjectActionDefault objectAction, final TypedHolder peer) {
             super(FeatureType.ACTION_PARAMETER_SCALAR, number, objectAction, peer);
         }
@@ -135,8 +130,9 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
                 oneOf(actionParamPeer).getFacet(ParamNamedFacet.class);
                 will(returnValue(namedFacet));
 
-                atLeast(1).of(namedFacet).translated();
-                will(returnValue("Some parameter name"));
+                oneOf(namedFacet).text();
+                will(returnValue("someParameterName"));
+
             }
         });
 
@@ -158,7 +154,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
             }
         });
 
-        assertThat(objectActionParameter.getName(), is("Some parameter name"));
+        assertThat(objectActionParameter.getStaticFriendlyName().get(), is("Some parameter name"));
     }
 
     @Test
@@ -177,7 +173,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
             }
         });
 
-        assertThat(objectActionParameter.getName(), is("string"));
+        assertThat(objectActionParameter.getStaticFriendlyName().get(), is("string"));
     }
 
     @Test
@@ -188,7 +184,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
 
         context.checking(new Expectations() {
             {
-                oneOf(actionParamPeer).getFacet(ParamNamedFacet.class);
+                allowing(actionParamPeer).getFacet(ParamNamedFacet.class);
                 will(returnValue(null));
 
                 oneOf(parentAction).getParameters(with(Expectations.<Predicate<ObjectActionParameter>>anything()));
@@ -207,7 +203,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
 
         context.checking(new Expectations() {
             {
-                oneOf(actionParamPeer).getFacet(ParamNamedFacet.class);
+                allowing(actionParamPeer).getFacet(ParamNamedFacet.class);
                 will(returnValue(null));
 
                 oneOf(parentAction).getParameters(with(Expectations.<Predicate<ObjectActionParameter>>anything()));
@@ -215,7 +211,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
             }
         });
 
-        assertThat(objectActionParameter.getName(), is("string 2"));
+        assertThat(objectActionParameter.getStaticFriendlyName().get(), is("string 2"));
     }
 
 }

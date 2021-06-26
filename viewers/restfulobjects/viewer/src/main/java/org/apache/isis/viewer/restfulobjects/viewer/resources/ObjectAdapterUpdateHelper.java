@@ -45,7 +45,9 @@ public class ObjectAdapterUpdateHelper {
     private final ManagedObject objectAdapter;
     private final ResourceContext resourceContext;
 
-    public ObjectAdapterUpdateHelper(ResourceContext resourceContext, ManagedObject objectAdapter) {
+    public ObjectAdapterUpdateHelper(
+            final ResourceContext resourceContext,
+            final ManagedObject objectAdapter) {
         this.objectAdapter = objectAdapter;
         this.resourceContext = resourceContext;
     }
@@ -117,9 +119,9 @@ public class ObjectAdapterUpdateHelper {
             // otherwise, is an error.
             final String invalidReason = propertiesMap.getString("x-ro-invalidReason");
             if(invalidReason != null) {
-                propertiesMap.mapPut("x-ro-invalidReason", invalidReason + "; " + property.getName());
+                propertiesMap.mapPut("x-ro-invalidReason", invalidReason + "; " + property.getFriendlyName(objectAdapter.asProvider()));
             } else {
-                propertiesMap.mapPut("x-ro-invalidReason", "Mandatory field(s) missing: " + property.getName());
+                propertiesMap.mapPut("x-ro-invalidReason", "Mandatory field(s) missing: " + property.getFriendlyName(objectAdapter.asProvider()));
             }
             allOk = false;
             return allOk;

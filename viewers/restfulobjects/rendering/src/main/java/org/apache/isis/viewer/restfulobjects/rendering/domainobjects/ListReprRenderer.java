@@ -31,7 +31,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 
-public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Stream<ManagedObject>> {
+public class ListReprRenderer
+extends ReprRendererAbstract<Stream<ManagedObject>> {
 
     private ObjectAdapterLinkTo linkTo;
     private List<ManagedObject> objectAdapters;
@@ -59,7 +60,7 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Str
                         return this;
     }
 
-    public ListReprRenderer withElementRel(Rel elementRel) {
+    public ListReprRenderer withElementRel(final Rel elementRel) {
         this.elementRel = elementRel;
         return this;
     }

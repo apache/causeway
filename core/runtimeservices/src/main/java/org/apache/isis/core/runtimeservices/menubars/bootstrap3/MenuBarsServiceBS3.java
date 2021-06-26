@@ -283,7 +283,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
                 val service = serviceAndAction.getServiceAdapter();
                 final String logicalTypeName = serviceAndAction.getServiceAdapter().getSpecification().getLogicalTypeName();
                 ServiceActionLayoutData action = new ServiceActionLayoutData(logicalTypeName, objectAction.getId());
-                action.setNamed(objectAction.getName(service));
+                action.setNamed(objectAction.getFriendlyName(service.asProvider()));
                 menuSection.getServiceActions().add(action);
             }
             if(!menuSection.getServiceActions().isEmpty()) {

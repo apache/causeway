@@ -67,7 +67,7 @@ implements CollectionCountProvider, CollectionSelectorProvider {
 
         ActionModel actionModel = collectionModel.getActionModel();
         ObjectAction action = actionModel.getMetaModel();
-        outerDiv.addOrReplace(new Label(StandaloneCollectionPanel.ID_ACTION_NAME, Model.of(action.getName())));
+        outerDiv.addOrReplace(new Label(StandaloneCollectionPanel.ID_ACTION_NAME, Model.of(actionModel.getFriendlyName())));
 
         CssClassAppender.appendCssClassTo(outerDiv,
                 CssClassAppender.asCssStyle("isis-" + action.getOnType().getLogicalTypeName().replace('.', '-') + "-" + action.getId()));

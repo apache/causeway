@@ -47,6 +47,6 @@ extends PanelAbstract<ManagedObject, ActionModel> {
         // TODO: render instead as links (providing isn't a service; provide a
         // component for this?)
         add(new Label(ID_TARGET, targetAdapter.titleString()));
-        add(new Label(ID_ACTION_NAME, objectAction.getName()));
+        add(new Label(ID_ACTION_NAME, objectAction.getFriendlyName(targetAdapter.asProvider())));
     }
 }

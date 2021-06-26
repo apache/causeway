@@ -30,7 +30,6 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -85,8 +84,8 @@ public final class ActionUiMetaModel implements Serializable {
             final ObjectAction objectAction) {
 
         this(   objectAction.getMemento(),
-                objectAction.getName(),
-                getDescription(actionHolder, objectAction).orElse(ObjectAction.Util.descriptionOf(objectAction)),
+                objectAction.getFriendlyName(actionHolder.asProvider()),
+                objectAction.getDescription(actionHolder.asProvider()),
                 ObjectAction.Util.returnsBlobOrClob(objectAction),
                 objectAction.isPrototype(),
                 ObjectAction.Util.actionIdentifierFor(objectAction),
@@ -144,18 +143,5 @@ public final class ActionUiMetaModel implements Serializable {
         return DisablingUiModel.of(!enabled, usability.getReason()) ;
     }
 
-    // -- DESCRIBED AS
-
-    private static Optional<String> getDescription(
-            @NonNull final ManagedObject actionHolder,
-            @NonNull final ObjectAction objectAction) {
-
-        return objectAction.lookupFacet(MemberDescribedFacet.class)
-        .map(MemberDescribedFacet::getSpecialization)
-        .map(specialization->specialization
-                .fold(textFacet->textFacet.translated(),
-                      textFacet->textFacet.textElseNull(actionHolder)));
-
-    }
 
 }

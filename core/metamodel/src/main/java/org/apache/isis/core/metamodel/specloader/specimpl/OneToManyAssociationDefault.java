@@ -41,7 +41,8 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import lombok.val;
 
 public class OneToManyAssociationDefault
-extends ObjectAssociationAbstract implements OneToManyAssociation {
+extends ObjectAssociationAbstract
+implements OneToManyAssociation {
 
     public static OneToManyAssociationDefault forMethod(final FacetedMethod facetedMethod) {
         return new OneToManyAssociationDefault(
@@ -153,8 +154,8 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
 
     @Override
     public Can<ManagedObject> getAutoComplete(
-            ManagedObject object,
-            String searchArg,
+            final ManagedObject object,
+            final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         return Can.empty();

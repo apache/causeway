@@ -20,6 +20,8 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.ArrayList;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.exceptions.unrecoverable.DomainModelException;
@@ -61,7 +63,9 @@ import lombok.NonNull;
 import lombok.val;
 
 public abstract class ObjectActionParameterAbstract
-implements ObjectActionParameter, HasFacetHolder {
+implements
+    ObjectActionParameter,
+    HasFacetHolder {
 
     private final FeatureType featureType;
     private final int number;
@@ -128,26 +132,42 @@ implements ObjectActionParameter, HasFacetHolder {
 
     @Override
     public String getId() {
-        return StringExtensions.asCamelLowerFirst(getName());
+        return lookupFacet(ParamNamedFacet.class)
+        .map(ParamNamedFacet::text)
+        .map(StringExtensions::asCamelLowerFirst)
+//                .orElseThrow(()->_Exceptions
+//                        .unrecoverableFormatted("action parameters must have a ParamNamedFacet %s", this));
+        .orElseGet(()->StringExtensions.asCamelLowerFirst(staticFriendlyName()));
     }
 
     @Override
-    public String getName() {
+    public String getFriendlyName(final Supplier<ManagedObject> domainObjectProvider) {
+        //as we don't support imperative naming for parameters yet ..
+        return staticFriendlyName();
+    }
 
-        val name = lookupFacet(ParamNamedFacet.class)
+    @Override
+    public Optional<String> getStaticFriendlyName() {
+        return Optional.of(staticFriendlyName());
+    }
+
+
+    private String staticFriendlyName() {
+        return lookupFacet(ParamNamedFacet.class)
         .map(ParamNamedFacet::translated)
-        .orElse(null);
+//
+//        .orElseThrow(()->_Exceptions
+//                .unrecoverableFormatted("action parameters must have a ParamNamedFacet %s", this));
+        .orElseGet(()->{
+            val singularName = getSpecification().getSingularName();
+            val parameters = getAction().getParameters(this::equalsShortIdentifier);
+            if (parameters.isCardinalityOne()) {
+                return singularName;
+            }
+            final int indexOf = parameters.indexOf(this);
+            return singularName + " " + (indexOf + 1);
 
-        if (name!=null) {
-            return name;
-        }
-        val singularName = getSpecification().getSingularName();
-        val parameters = getAction().getParameters(this::equalsShortIdentifier);
-        if (parameters.isCardinalityOne()) {
-            return singularName;
-        }
-        final int indexOf = parameters.indexOf(this);
-        return singularName + " " + (indexOf + 1);
+        });
     }
 
     private boolean equalsShortIdentifier(final ObjectActionParameter objParam) {
@@ -158,7 +178,17 @@ implements ObjectActionParameter, HasFacetHolder {
     }
 
     @Override
-    public String getDescription() {
+    public String getDescription(final Supplier<ManagedObject> domainObjectProvider) {
+        //as we don't support imperative naming for parameters yet ..
+        return staticDescription();
+    }
+
+    @Override
+    public Optional<String> getStaticDescription() {
+        return Optional.of(staticDescription());
+    }
+
+    private String staticDescription() {
         return lookupFacet(ParamDescribedFacet.class)
         .map(ParamDescribedFacet::translated)
         .orElse("");

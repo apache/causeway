@@ -27,7 +27,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 
-public class UserReprRenderer extends ReprRendererAbstract<UserReprRenderer, InteractionContext> {
+public class UserReprRenderer
+extends ReprRendererAbstract<InteractionContext> {
 
     UserReprRenderer(final IResourceContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, RepresentationType.USER, representation);

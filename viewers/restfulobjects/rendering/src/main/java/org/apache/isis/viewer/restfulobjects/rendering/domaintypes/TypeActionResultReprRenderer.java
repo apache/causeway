@@ -27,20 +27,24 @@ import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 
-public class TypeActionResultReprRenderer extends ReprRendererAbstract<TypeActionResultReprRenderer, ObjectSpecification> {
+public class TypeActionResultReprRenderer
+extends ReprRendererAbstract<ObjectSpecification> {
 
     private ObjectSpecification objectSpecification;
     private LinkRepresentation selfLink;
     private Object value;
 
-    public TypeActionResultReprRenderer(final IResourceContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
+    public TypeActionResultReprRenderer(
+            final IResourceContext resourceContext,
+            final LinkFollowSpecs linkFollower,
+            final JsonRepresentation representation) {
         super(resourceContext, linkFollower, RepresentationType.TYPE_ACTION_RESULT, representation);
     }
 
     @Override
     public TypeActionResultReprRenderer with(final ObjectSpecification objectSpecification) {
         this.objectSpecification = objectSpecification;
-        return cast(this);
+        return this;
     }
 
     public TypeActionResultReprRenderer withValue(final Object value) {

@@ -101,7 +101,7 @@ public class TableViewFx extends VBox {
                 : new TableViewFx(uiContext, elementSpec, elements, where);
     }
 
-    private Can<OneToOneAssociation> columnProperties(ObjectSpecification elementSpec, Where where) {
+    private Can<OneToOneAssociation> columnProperties(final ObjectSpecification elementSpec, final Where where) {
 
         //TODO honor column order (as per layout)
         return elementSpec.streamProperties(MixedIn.INCLUDED)
@@ -163,7 +163,7 @@ public class TableViewFx extends VBox {
 
         // property columns
         columnProperties.forEach(property->{
-            val column = _fx.newColumn(objectGrid, property.getName(), String.class);
+            val column = _fx.newColumn(objectGrid, property.getColumnName(), String.class);
             column.setCellValueFactory(cellDataFeatures -> {
                 log.debug("about to get property value for property {}", property.getId());
                 val targetObject = cellDataFeatures.getValue();
@@ -188,8 +188,8 @@ public class TableViewFx extends VBox {
     }
 
     private String stringifyPropertyValue(
-            ObjectAssociation property,
-            ManagedObject targetObject) {
+            final ObjectAssociation property,
+            final ManagedObject targetObject) {
 
         try {
             val propertyValue = property.get(targetObject);

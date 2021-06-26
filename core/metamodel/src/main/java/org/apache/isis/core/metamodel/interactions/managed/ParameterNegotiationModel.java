@@ -30,6 +30,7 @@ import org.apache.isis.commons.internal.binding._BindableAbstract;
 import org.apache.isis.commons.internal.binding._Bindables;
 import org.apache.isis.commons.internal.binding._Observables;
 import org.apache.isis.commons.internal.binding._Observables.LazyObservable;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
@@ -113,7 +114,7 @@ public class ParameterNegotiationModel {
         return validationFeedbackActive;
     }
 
-    public void setParamValues(@NonNull Can<ManagedObject> paramValues) {
+    public void setParamValues(@NonNull final Can<ManagedObject> paramValues) {
         // allow overflow and underflow
         val valueIterator = paramValues.iterator();
         paramModels.forEach(paramModel->{
@@ -128,23 +129,23 @@ public class ParameterNegotiationModel {
         return paramModels;
     }
 
-    @NonNull public ObjectActionParameter getParamMetamodel(int paramNr) {
+    @NonNull public ObjectActionParameter getParamMetamodel(final int paramNr) {
         return paramModels.getElseFail(paramNr).getMetaModel();
     }
 
-    @NonNull public Bindable<ManagedObject> getBindableParamValue(int paramNr) {
+    @NonNull public Bindable<ManagedObject> getBindableParamValue(final int paramNr) {
         return paramModels.getElseFail(paramNr).getBindableParamValue();
     }
 
-    @NonNull public Observable<Can<ManagedObject>> getObservableParamChoices(int paramNr) {
+    @NonNull public Observable<Can<ManagedObject>> getObservableParamChoices(final int paramNr) {
         return paramModels.getElseFail(paramNr).getObservableParamChoices();
     }
 
-    @NonNull public Observable<String> getObservableParamValidation(int paramNr) {
+    @NonNull public Observable<String> getObservableParamValidation(final int paramNr) {
         return paramModels.getElseFail(paramNr).getObservableParamValidation();
     }
 
-    @NonNull public Bindable<String> getBindableParamSearchArgument(int paramNr) {
+    @NonNull public Bindable<String> getBindableParamSearchArgument(final int paramNr) {
         return paramModels.getElseFail(paramNr).getBindableParamSearchArgument();
     }
 
@@ -171,15 +172,15 @@ public class ParameterNegotiationModel {
     }
 
 
-    @NonNull public ManagedObject getParamValue(int paramNr) {
+    @NonNull public ManagedObject getParamValue(final int paramNr) {
         return paramModels.getElseFail(paramNr).getValue().getValue();
     }
 
-    public void setParamValue(int paramNr, @NonNull ManagedObject newParamValue) {
+    public void setParamValue(final int paramNr, @NonNull final ManagedObject newParamValue) {
         paramModels.getElseFail(paramNr).getBindableParamValue().setValue(newParamValue);
     }
 
-    @NonNull public ManagedObject adaptParamValuePojo(int paramNr, @Nullable Object newParamValuePojo) {
+    @NonNull public ManagedObject adaptParamValuePojo(final int paramNr, @Nullable final Object newParamValuePojo) {
         val paramMeta = getParamMetamodel(paramNr);
         val paramSpec = paramMeta.getSpecification();
         val paramValue = newParamValuePojo!=null
@@ -221,9 +222,9 @@ public class ParameterNegotiationModel {
         @Getter @NonNull private final LazyObservable<Can<ManagedObject>> observableParamChoices;
 
         private ParameterModel(
-                int paramNr,
-                @NonNull ParameterNegotiationModel negotiationModel,
-                @NonNull ManagedObject initialValue) {
+                final int paramNr,
+                @NonNull final ParameterNegotiationModel negotiationModel,
+                @NonNull final ManagedObject initialValue) {
 
             this.paramNr = paramNr;
             this.metaModel = negotiationModel.getHead().getMetaModel().getParameters().getElseFail(paramNr);
@@ -282,7 +283,8 @@ public class ParameterNegotiationModel {
 
         @Override
         public String getDisplayLabel() {
-            return getMetaModel().getName();
+            return getMetaModel().getStaticFriendlyName()
+                    .orElseThrow(_Exceptions::unexpectedCodeReach);
         }
 
         @Override

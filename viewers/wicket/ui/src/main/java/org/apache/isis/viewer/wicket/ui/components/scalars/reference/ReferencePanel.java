@@ -83,7 +83,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     protected Component createComponentForCompact() {
 
         final ScalarModel scalarModel = getModel();
-        final String name = scalarModel.getName();
+        final String name = scalarModel.getFriendlyName();
 
         entitySimpleLink = (EntityLinkSimplePanel) getComponentFactoryRegistry()
                 .createComponent(ComponentType.ENTITY_LINK, scalarModel);
@@ -128,13 +128,13 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
         // (as per the isEditableWithEitherAutoCompleteOrChoices() guard above)
         if(getModel().hasChoices()) {
 
-            settings.setPlaceholder(getModel().getName());
+            settings.setPlaceholder(getModel().getFriendlyName());
 
         } else if(getModel().hasAutoComplete()) {
 
             final int minLength = getModel().getAutoCompleteMinLength();
             settings.setMinimumInputLength(minLength);
-            settings.setPlaceholder(getModel().getName());
+            settings.setPlaceholder(getModel().getFriendlyName());
 
         } else if(hasObjectAutoComplete()) {
             final ObjectSpecification typeOfSpecification = getModel().getTypeOfSpecification();

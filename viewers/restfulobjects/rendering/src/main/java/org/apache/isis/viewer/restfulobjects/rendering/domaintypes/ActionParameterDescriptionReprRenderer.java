@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domaintypes;
 
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -29,18 +30,30 @@ import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 
-public class ActionParameterDescriptionReprRenderer extends AbstractTypeFeatureReprRenderer<ActionParameterDescriptionReprRenderer, ObjectActionParameter> {
+import lombok.val;
 
-    public static LinkBuilder newLinkToBuilder(final IResourceContext resourceContext, final Rel rel, final ObjectSpecification objectSpecification, final ObjectActionParameter objectActionParameter) {
+public class ActionParameterDescriptionReprRenderer
+extends AbstractTypeFeatureReprRenderer<ObjectActionParameter> {
+
+    public static LinkBuilder newLinkToBuilder(
+            final IResourceContext resourceContext,
+            final Rel rel,
+            final ObjectSpecification objectSpecification,
+            final ObjectActionParameter objectActionParameter) {
         final String domainType = objectSpecification.getLogicalTypeName();
         final ObjectAction objectAction = objectActionParameter.getAction();
         final String actionId = objectAction.getId();
-        final String paramName = objectActionParameter.getName();
+        final String paramName = objectActionParameter
+                .getStaticFriendlyName()
+                .orElseThrow(_Exceptions::unexpectedCodeReach);;
         final String url = String.format("domain-types/%s/actions/%s/params/%s", domainType, actionId, paramName);
         return LinkBuilder.newBuilder(resourceContext, rel.andParam("id", deriveId(objectActionParameter)), RepresentationType.ACTION_PARAMETER_DESCRIPTION, url);
     }
 
-    public ActionParameterDescriptionReprRenderer(final IResourceContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
+    public ActionParameterDescriptionReprRenderer(
+            final IResourceContext resourceContext,
+            final LinkFollowSpecs linkFollower,
+            final JsonRepresentation representation) {
         super(resourceContext, linkFollower, RepresentationType.ACTION_PARAMETER_DESCRIPTION, representation);
     }
 
@@ -59,7 +72,10 @@ public class ActionParameterDescriptionReprRenderer extends AbstractTypeFeatureR
     }
 
     private static String deriveId(final ObjectActionParameter objectActionParameter) {
-        return objectActionParameter.getAction().getId() + "-" + objectActionParameter.getName();
+        val named = objectActionParameter
+                .getStaticFriendlyName()
+                .orElseThrow(_Exceptions::unexpectedCodeReach);
+        return objectActionParameter.getAction().getId() + "-" + named;
     }
 
     @Override
@@ -80,7 +96,9 @@ public class ActionParameterDescriptionReprRenderer extends AbstractTypeFeatureR
 
     @Override
     protected void addPropertiesSpecificToFeature() {
-        representation.mapPut("name", getObjectFeature().getName());
+        representation.mapPut("name", getObjectFeature()
+                .getStaticFriendlyName()
+                .orElseThrow(_Exceptions::unexpectedCodeReach));
         representation.mapPut("number", getObjectFeature().getNumber());
         representation.mapPut("optional", getObjectFeature().isOptional());
         getObjectFeature()

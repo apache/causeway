@@ -30,7 +30,6 @@ import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAdapterLinkTo;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
@@ -99,7 +98,7 @@ public interface IResourceContext {
 
     // -- UTILITY
 
-    default Optional<ManagedObject> getObjectAdapterForOidFromHref(String oidFromHref) {
+    default Optional<ManagedObject> getObjectAdapterForOidFromHref(final String oidFromHref) {
         String oidStrUnencoded = UrlDecoderUtils.urlDecode(oidFromHref);
         return Bookmark.parse(oidStrUnencoded)
         .flatMap(getMetaModelContext()::loadObject);

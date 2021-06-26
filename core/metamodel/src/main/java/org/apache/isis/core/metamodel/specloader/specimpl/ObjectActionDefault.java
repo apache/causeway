@@ -34,6 +34,7 @@ import org.apache.isis.commons.collections.CanVector;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
@@ -153,7 +154,7 @@ implements ObjectAction {
     }
 
     @Override
-    public ActionInteractionHead interactionHead(@NonNull ManagedObject actionOwner) {
+    public ActionInteractionHead interactionHead(@NonNull final ManagedObject actionOwner) {
         return ActionInteractionHead.of(this, actionOwner, actionOwner);
     }
 
@@ -209,7 +210,8 @@ implements ObjectAction {
     @Override
     public ObjectActionParameter getParameterByName(final String paramName) {
         return getParameters().stream()
-                .filter(param->Objects.equals(paramName, param.getName()))
+                .filter(param->Objects.equals(paramName, param.getStaticFriendlyName()
+                        .orElseThrow(_Exceptions::unexpectedCodeReach)))
                 .findAny()
                 .orElse(null);
     }

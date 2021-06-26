@@ -48,7 +48,7 @@ public class ValuePage extends PageAbstract {
     }
 
 
-    private ValuePage(ValueModel valueModel, String actionName) {
+    private ValuePage(final ValueModel valueModel, final String actionName) {
         super(PageParametersUtils.newPageParameters(), actionName, ComponentType.VALUE);
 
         themeDiv.addOrReplace(new Label(ID_ACTION_NAME, actionName));
@@ -62,7 +62,7 @@ public class ValuePage extends PageAbstract {
     private static String actionNameFrom(final ValueModel valueModel) {
         ActionModel actionModel = valueModel.getActionModelHint();
         if(actionModel != null) {
-            return actionModel.getMetaModel().getName();
+            return actionModel.getFriendlyName();
         }
         return "Results"; // fallback, probably not required because hint should always exist on the model.
     }

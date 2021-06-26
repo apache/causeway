@@ -95,7 +95,7 @@ public class TableViewVaa extends VerticalLayout {
                 : new TableViewVaa(elementSpec, elements, where);
     }
 
-    private Can<OneToOneAssociation> columnProperties(ObjectSpecification elementSpec, Where where) {
+    private Can<OneToOneAssociation> columnProperties(final ObjectSpecification elementSpec, final Where where) {
 
         //TODO honor column order (as per layout)
         return elementSpec.streamProperties(MixedIn.INCLUDED)
@@ -161,7 +161,7 @@ public class TableViewVaa extends VerticalLayout {
                 log.debug("about to get property value for property {}", property.getId());
                 return stringifyPropertyValue(property, targetObject);
             })
-            .setHeader(property.getName());
+            .setHeader(property.getColumnName());
         });
 
         // populate the model
@@ -172,8 +172,8 @@ public class TableViewVaa extends VerticalLayout {
     }
 
     private String stringifyPropertyValue(
-            ObjectAssociation property,
-            ManagedObject targetObject) {
+            final ObjectAssociation property,
+            final ManagedObject targetObject) {
         try {
             val propertyValue = property.get(targetObject);
             return propertyValue == null

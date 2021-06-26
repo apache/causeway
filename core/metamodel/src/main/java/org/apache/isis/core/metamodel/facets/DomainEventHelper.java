@@ -135,7 +135,8 @@ public class DomainEventHelper {
                     val parameters = objectAction.getParameters();
 
                     val parameterNames = parameters.stream()
-                            .map(ObjectActionParameter::getName)
+                            .map(ObjectActionParameter::getStaticFriendlyName)
+                            .map(optional->optional.orElseThrow(_Exceptions::unexpectedCodeReach))
                             .collect(_Lists.toUnmodifiable());
 
                     final List<Class<?>> parameterTypes = parameters.stream()
@@ -257,7 +258,7 @@ public class DomainEventHelper {
         }
     }
 
-    private static <S,T> void setEventNewValue(PropertyDomainEvent<S, T> event, T newValue) {
+    private static <S,T> void setEventNewValue(final PropertyDomainEvent<S, T> event, final T newValue) {
         event.setNewValue(newValue);
     }
 

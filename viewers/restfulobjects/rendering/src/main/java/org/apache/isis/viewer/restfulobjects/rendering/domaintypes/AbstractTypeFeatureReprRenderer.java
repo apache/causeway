@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domaintypes;
 
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -27,12 +26,17 @@ import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 
-public abstract class AbstractTypeFeatureReprRenderer<R extends ReprRendererAbstract<R, ParentSpecAndFeature<T>>, T extends ObjectFeature> extends ReprRendererAbstract<R, ParentSpecAndFeature<T>> {
+public abstract class AbstractTypeFeatureReprRenderer<T extends ObjectFeature>
+extends ReprRendererAbstract<ParentSpecAndFeature<T>> {
 
     protected ObjectSpecification objectSpecification;
     protected T objectFeature;
 
-    public AbstractTypeFeatureReprRenderer(final IResourceContext resourceContext, final LinkFollowSpecs linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
+    public AbstractTypeFeatureReprRenderer(
+            final IResourceContext resourceContext,
+            final LinkFollowSpecs linkFollower,
+            final RepresentationType representationType,
+            final JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
     }
 
@@ -45,11 +49,11 @@ public abstract class AbstractTypeFeatureReprRenderer<R extends ReprRendererAbst
     }
 
     @Override
-    public R with(final ParentSpecAndFeature<T> specAndFeature) {
+    public AbstractTypeFeatureReprRenderer<T> with(final ParentSpecAndFeature<T> specAndFeature) {
         objectSpecification = specAndFeature.getParentSpec();
         objectFeature = specAndFeature.getObjectFeature();
 
-        return cast(this);
+        return this;
     }
 
     @Override
@@ -94,15 +98,17 @@ public abstract class AbstractTypeFeatureReprRenderer<R extends ReprRendererAbst
     protected abstract void putExtensionsSpecificToFeature();
 
     protected void putExtensionsName() {
-        final String friendlyName = getObjectFeature().getName();
-        getExtensions().mapPut("friendlyName", friendlyName);
+        getExtensions()
+        .mapPut("friendlyName",
+                getObjectFeature().getStaticFriendlyName()
+                .orElse("!imperative"));
     }
 
     protected void putExtensionsDescriptionIfAvailable() {
-        final String description = getObjectFeature().getDescription();
-        if (!_Strings.isNullOrEmpty(description)) {
-            getExtensions().mapPut("description", description);
-        }
+        getExtensions()
+        .mapPut("description",
+                getObjectFeature().getStaticDescription()
+                .orElse("!imperative"));
     }
 
 }

@@ -112,7 +112,7 @@ public class GridSystemServiceBootstrap extends GridSystemServiceAbstract<BS3Gri
     // only ever called if fail to load DefaultGrid.layout.xml,
     // which *really* shouldn't happen
     //
-    private BS3Grid fallback(Class<?> domainClass) {
+    private BS3Grid fallback(final Class<?> domainClass) {
         final BS3Grid bs3Grid = withDomainClass(new BS3Grid(), domainClass);
 
         final BS3Row headerRow = new BS3Row();
@@ -137,7 +137,7 @@ public class GridSystemServiceBootstrap extends GridSystemServiceAbstract<BS3Gri
         return bs3Grid;
     }
 
-    private static BS3Grid withDomainClass(BS3Grid bs3Grid, Class<?> domainClass) {
+    private static BS3Grid withDomainClass(final BS3Grid bs3Grid, final Class<?> domainClass) {
         bs3Grid.setDomainClass(domainClass);
         return bs3Grid;
     }
@@ -479,7 +479,9 @@ public class GridSystemServiceBootstrap extends GridSystemServiceAbstract<BS3Gri
 
         for (final String collectionId : collectionIds) {
             final BS3Tab bs3Tab = new BS3Tab();
-            bs3Tab.setName(objectSpec.getAssociationElseFail(collectionId).getName());
+
+            // TODO[ISIS-1720] we have no imperative friendly name support here, what to do?
+            bs3Tab.setName(objectSpec.getCollectionElseFail(collectionId).getFeatureIdentifier().getMemberNaturalName());
             tabGroup.getTabs().add(bs3Tab);
             bs3Tab.setOwner(tabGroup);
 

@@ -34,6 +34,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.domain.DomainObjectList;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
@@ -62,7 +63,7 @@ import lombok.NonNull;
 import lombok.val;
 
 /**
- * Rreturns representations according to the
+ * Returns representations according to the
  * <a href="https://restfulobjects.org">Restful Objects</a> spec.
  *
  * @since 1.x {@index}
@@ -71,7 +72,8 @@ import lombok.val;
 @Named("isis.viewer.ro.ContentNegotiationServiceForRestfulObjectsV1_0")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("RestfulObjectsV1_0")
-public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNegotiationService {
+public class ContentNegotiationServiceForRestfulObjectsV1_0
+implements ContentNegotiationService {
 
 
     protected final IsisConfiguration configuration;
@@ -129,7 +131,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
 
         ensureCompatibleAcceptHeader(RepresentationType.OBJECT_PROPERTY, resourceContext);
 
-        final ObjectPropertyReprRenderer renderer =
+        val renderer =
                 new ObjectPropertyReprRenderer(resourceContext)
                 .with(objectAndProperty)
                 .usingLinkTo(resourceContext.getObjectAdapterLinkTo());
@@ -180,7 +182,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
 
         ensureCompatibleAcceptHeader(RepresentationType.OBJECT_ACTION, resourceContext);
 
-        final ObjectActionReprRenderer renderer =
+        val renderer =
                 new ObjectActionReprRenderer(resourceContext)
                 .with(objectAndAction)
                 .usingLinkTo(resourceContext.getObjectAdapterLinkTo())
@@ -273,8 +275,11 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
                 if(buf.length() > 0) {
                     buf.append(",");
                 }
-                buf.append(param.getName()).append("=");
-                buf.append(abbreviated(titleOf(argAdapter), 8));
+                buf
+                .append(param.getStaticFriendlyName()
+                        .orElseThrow(_Exceptions::unexpectedCodeReach))
+                .append("=")
+                .append(abbreviated(titleOf(argAdapter), 8));
             }
         }
 
@@ -368,7 +373,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
          * Any unrecognized Accept headers will result in an HTTP Not Acceptable Response code (406).
          */
         STRICT;
-        static AcceptChecking fromConfig(IsisConfiguration configuration) {
+        static AcceptChecking fromConfig(final IsisConfiguration configuration) {
             return configuration.getViewer().getRestfulobjects().isStrictAcceptChecking()
                     ? AcceptChecking.STRICT
                     : AcceptChecking.RELAXED;

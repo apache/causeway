@@ -31,7 +31,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 import org.apache.isis.viewer.restfulobjects.viewer.jaxrsapp.RestfulObjectsSpec;
 
-public class VersionReprRenderer extends ReprRendererAbstract<VersionReprRenderer, Void> {
+public class VersionReprRenderer
+extends ReprRendererAbstract<Void> {
 
     private static final String META_INF_POM_PROPERTIES = "/META-INF/maven/org.apache.isis.viewer/isis-viewer-restfulobjects-server/pom.properties";
 

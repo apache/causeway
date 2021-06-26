@@ -48,6 +48,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsProvider;
@@ -158,7 +159,7 @@ implements CollectionCountProvider {
         val parentSpecIfAny =  collectionModel.parentedParentObjectSpecification()
                 .orElse(null);
 
-        val propertyById = _Maps.<String, ObjectAssociation>newLinkedHashMap();
+        val propertyById = _Maps.<String, OneToOneAssociation>newLinkedHashMap();
 
         elementTypeSpec.streamProperties(MixedIn.INCLUDED)
         .filter(property->property.streamFacets()
@@ -288,7 +289,7 @@ implements CollectionCountProvider {
         };
     }
 
-    private ObjectAdapterPropertyColumn createObjectAdapterPropertyColumn(final ObjectAssociation property) {
+    private ObjectAdapterPropertyColumn createObjectAdapterPropertyColumn(final OneToOneAssociation property) {
 
         val collectionModel = getModel();
 
@@ -308,7 +309,7 @@ implements CollectionCountProvider {
         return new ObjectAdapterPropertyColumn(
                 commonContext,
                 collectionModel.getVariant(),
-                Model.of(property.getName()),
+                Model.of(property.getColumnName()),
                 property.getId(),
                 property.getId(),
                 escaped,

@@ -24,10 +24,15 @@ import java.util.Map;
 import org.apache.isis.core.metamodel.commons.ObjectExtensions;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
-class MapInvocationHandler<T, C> extends AbstractCollectionInvocationHandler<T, C> {
+class MapInvocationHandler<T, C>
+extends AbstractCollectionInvocationHandler<T, C> {
 
-    public MapInvocationHandler(final C collectionToProxy, final String collectionName, final DomainObjectInvocationHandler<T> handler, final OneToManyAssociation otma) {
-        super(collectionToProxy, collectionName, handler, otma);
+    public MapInvocationHandler(
+            final C collectionToProxy,
+            final DomainObjectInvocationHandler<T> handler,
+            final OneToManyAssociation otma) {
+
+        super(collectionToProxy, handler, otma);
 
         try {
             intercept(ObjectExtensions.getMethod(collectionToProxy, "containsKey", Object.class));

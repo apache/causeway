@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
@@ -40,7 +41,8 @@ import lombok.NonNull;
 /**
  * Analogous to {@link ObjectAssociation}.
  */
-public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
+public interface ObjectActionParameter
+extends ObjectFeature, CurrentHolder {
 
     /**
      * Owning {@link ObjectAction}.
@@ -69,7 +71,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * </ul>
      */
     @Override
-    String getName();
+    Optional<String> getStaticFriendlyName();
 
     // internal API
     ActionArgValidityContext createProposedArgumentInteractionContext(

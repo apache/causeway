@@ -165,7 +165,7 @@ implements TextFieldValueModel.ScalarModelProvider {
 
     protected MarkupContainer createScalarIfRegularFormGroup() {
         Fragment textFieldFragment = createTextFieldFragment("scalarValueContainer");
-        final String name = getModel().getName();
+        final String name = getModel().getFriendlyName();
         textField.setLabel(Model.of(name));
 
         final FormGroup formGroup = new FormGroup(ID_SCALAR_IF_REGULAR, this.textField);

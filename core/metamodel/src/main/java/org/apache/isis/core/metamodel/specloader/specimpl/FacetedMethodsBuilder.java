@@ -74,14 +74,14 @@ implements HasMetaModelContext {
 
         private final Set<Method> methodsRemaining;
 
-        private FacetedMethodsMethodRemover(final Class<?> introspectedClass, Method[] methods) {
+        private FacetedMethodsMethodRemover(final Class<?> introspectedClass, final Method[] methods) {
             this.methodsRemaining = Stream.of(methods)
                     .filter(_NullSafe::isPresent)
                     .collect(Collectors.toCollection(_Sets::newConcurrentHashSet));
         }
 
         @Override
-        public void removeMethods(Predicate<Method> removeIf, Consumer<Method> onRemoval) {
+        public void removeMethods(final Predicate<Method> removeIf, final Consumer<Method> onRemoval) {
             methodsRemaining.removeIf(method -> {
                 val doRemove = removeIf.test(method);
                 if(doRemove) {
@@ -92,7 +92,7 @@ implements HasMetaModelContext {
         }
 
         @Override
-        public void removeMethod(Method method) {
+        public void removeMethod(final Method method) {
             if(method==null) {
                 return;
             }
@@ -252,7 +252,7 @@ implements HasMetaModelContext {
      * Since the value properties and collections have already been processed,
      * this will pick up the remaining reference properties.
      */
-    private void findAndRemovePropertyAccessorsAndCreateCorrespondingFacetedMethods(Consumer<FacetedMethod> onNewField) {
+    private void findAndRemovePropertyAccessorsAndCreateCorrespondingFacetedMethods(final Consumer<FacetedMethod> onNewField) {
         val propertyAccessors = _Lists.<Method>newArrayList();
         getFacetProcessor().findAndRemovePropertyAccessors(methodRemover, propertyAccessors);
 
@@ -540,7 +540,7 @@ implements HasMetaModelContext {
             final Class<?> returnType,
             final CanBeVoid canBeVoid,
             final int paramCount,
-            Consumer<Method> onMatch) {
+            final Consumer<Method> onMatch) {
 
         val filter = MethodUtil.Predicates.prefixed(prefix, returnType, canBeVoid, paramCount);
         methodRemover.removeMethods(filter, onMatch);
@@ -553,7 +553,7 @@ implements HasMetaModelContext {
      *
      * @param method
      */
-    private boolean isMixinMain(Method method) {
+    private boolean isMixinMain(final Method method) {
         val mixinFacet = inspectedTypeSpec.lookupNonFallbackFacet(MixinFacet.class)
                 .orElse(null);
         if(mixinFacet==null) {
@@ -563,13 +563,14 @@ implements HasMetaModelContext {
             // members are not introspected yet, so make a guess
             return mixinFacet.isCandidateForMain(method);
         }
-        val mixinMember = inspectedTypeSpec.getMixedInMember(inspectedTypeSpec);
-        if(!mixinMember.isPresent()) {
-            return false;
-        }
-        val actionMethod_ofMixinMember = ((ObjectActionMixedIn)mixinMember.get())
-                .getFacetedMethod().getMethod();
-        return method.equals(actionMethod_ofMixinMember);
+
+        return inspectedTypeSpec
+                .lookupMixedInMember(inspectedTypeSpec)
+                .map(ObjectActionMixedIn.class::cast)
+                .map(ObjectActionMixedIn::getFacetedMethod)
+                .map(FacetedMethod::getMethod)
+                .map(method::equals)
+                .orElse(false);
     }
 
     // ////////////////////////////////////////////////////////////////////////////

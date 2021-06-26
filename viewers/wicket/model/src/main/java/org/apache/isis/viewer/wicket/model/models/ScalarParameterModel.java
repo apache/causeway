@@ -54,7 +54,7 @@ implements ParameterUiModel {
      * object, with the {@link #getObject() value of this model} to be default
      * value (if any) of that action parameter.
      */
-    public ScalarParameterModel(EntityModel parentEntityModel, ActionParameterMemento paramMemento) {
+    public ScalarParameterModel(final EntityModel parentEntityModel, final ActionParameterMemento paramMemento) {
         super(parentEntityModel, paramMemento);
         this.paramMemento = paramMemento;
     }
@@ -132,7 +132,7 @@ implements ParameterUiModel {
 
     @Override
     public String toStringOf() {
-        return getName() + ": " + paramMemento.toString();
+        return getFriendlyName() + ": " + paramMemento.toString();
     }
 
     @Override
@@ -146,7 +146,7 @@ implements ParameterUiModel {
     }
 
     @Override
-    public void setValue(ManagedObject paramValue) {
+    public void setValue(final ManagedObject paramValue) {
         super.setObject(paramValue);
     }
 

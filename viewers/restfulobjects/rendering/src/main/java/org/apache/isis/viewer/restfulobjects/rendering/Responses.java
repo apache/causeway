@@ -51,7 +51,7 @@ public final class Responses {
     }
 
     public static Response.ResponseBuilder ofOk(
-            final ReprRenderer<?, ?> renderer,
+            final ReprRenderer<?> renderer,
             final Caching caching) {
         return ofOk(renderer, caching, null);
     }
@@ -60,7 +60,7 @@ public final class Responses {
      * @param rootRepresentationIfAny - if specified, is used for entity; otherwise the renderer is used.  The idea is that the renderer will be set up to render to some sub-node of root representation
      */
     public static Response.ResponseBuilder ofOk(
-            final ReprRenderer<?, ?> renderer,
+            final ReprRenderer<?> renderer,
             final Caching caching,
             final JsonRepresentation rootRepresentationIfAny) {
 
@@ -86,9 +86,9 @@ public final class Responses {
         return response;
     }
 
-    private static Date now(final ReprRenderer<?, ?> renderer) {
+    private static Date now(final ReprRenderer<?> renderer) {
         if(renderer instanceof ReprRendererAbstract) {
-            ((ReprRendererAbstract<?, ?>)renderer).getResourceContext().getMetaModelContext().getServiceRegistry()
+            ((ReprRendererAbstract<?>)renderer).getResourceContext().getMetaModelContext().getServiceRegistry()
             .lookupServiceElseFail(ClockService.class).getClock().javaUtilDate();
         }
         return new Date();
@@ -105,14 +105,14 @@ public final class Responses {
         return responseBuilder;
     }
 
-    public static JsonMapper.PrettyPrinting inferPrettyPrinting(final ReprRenderer<?, ?> renderer) {
+    public static JsonMapper.PrettyPrinting inferPrettyPrinting(final ReprRenderer<?> renderer) {
 
         if(renderer instanceof ReprRendererAbstract) {
-            val systemEnvironment =  ((ReprRendererAbstract<?, ?>) renderer).getResourceContext()
+            val systemEnvironment =  ((ReprRendererAbstract<?>) renderer).getResourceContext()
                     .getMetaModelContext().getSystemEnvironment();
             return systemEnvironment.isPrototyping()
                     ? JsonMapper.PrettyPrinting.ENABLE
-                            : JsonMapper.PrettyPrinting.DISABLE;
+                    : JsonMapper.PrettyPrinting.DISABLE;
         }
 
         return JsonMapper.PrettyPrinting.DISABLE;

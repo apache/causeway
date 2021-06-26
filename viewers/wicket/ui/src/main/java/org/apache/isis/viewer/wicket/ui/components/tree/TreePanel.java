@@ -57,7 +57,7 @@ public class TreePanel extends ScalarPanelTextFieldParseableAbstract {
         final Behavior treeTheme = getTreeThemeProvider().treeThemeFor(super.getModel());
 
 
-        getTextField().setLabel(Model.of(getModel().getName()));
+        getTextField().setLabel(Model.of(getModel().getFriendlyName()));
 
         final FormGroup formGroup = new FormGroup(ID_SCALAR_IF_REGULAR, getTextField());
         formGroup.add(treeComponent);
@@ -83,7 +83,7 @@ public class TreePanel extends ScalarPanelTextFieldParseableAbstract {
 
     // -- HELPER
 
-    private Component createTreeComponent(String id) {
+    private Component createTreeComponent(final String id) {
         return IsisToWicketTreeAdapter.adapt(id, getModel());
     }
 

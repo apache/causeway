@@ -439,7 +439,7 @@ public class XmlSnapshot implements Snapshot {
         }
 
         // take the first field name from the list, and remove
-        final String fieldName = (String) names.elementAt(0);
+        final String fieldName = names.elementAt(0);
         names.removeElementAt(0);
 
         if (log.isDebugEnabled()) {
@@ -473,7 +473,7 @@ public class XmlSnapshot implements Snapshot {
             }
             return false;
         }
-        final Element xmlFieldElement = (Element) xmlFieldElements.elementAt(0);
+        final Element xmlFieldElement = xmlFieldElements.elementAt(0);
 
         if (names.size() == 0 && annotation != null) {
             // nothing left in the path, so we will apply the annotation now
@@ -630,20 +630,20 @@ public class XmlSnapshot implements Snapshot {
             log.debug("objectToElement({})", log("object", adapter));
         }
 
-        final ObjectSpecification nos = adapter.getSpecification();
+        final ObjectSpecification spec = adapter.getSpecification();
 
         if (log.isDebugEnabled()) {
             log.debug("objectToElement(NO): create element and isis:title");
         }
-        final Element element = schema.createElement(getXmlDocument(), nos.getShortIdentifier(),
-                nos.getFullIdentifier(), nos.getSingularName(), nos.getPluralName());
+        final Element element = schema.createElement(getXmlDocument(), spec.getShortIdentifier(),
+                spec.getFullIdentifier(), spec.getSingularName(), spec.getPluralName());
         isisMetaModel.appendIsisTitle(element, adapter.titleString());
 
         if (log.isDebugEnabled()) {
             log.debug("objectToElement(NO): create XS element for Isis class");
         }
         final Element xsElement = schema.createXsElementForNofClass(getXsdDocument(), element, topLevelElementWritten,
-                FacetUtil.getFacetsByType(nos));
+                FacetUtil.getFacetsByType(spec));
 
         // hack: every element in the XSD schema apart from first needs minimum
         // cardinality setting.
@@ -653,7 +653,7 @@ public class XmlSnapshot implements Snapshot {
 
         isisMetaModel.setAttributesForClass(element, oidAsString(adapter).toString());
 
-        final List<ObjectAssociation> fields = nos.streamAssociations(MixedIn.INCLUDED)
+        final List<ObjectAssociation> fields = spec.streamAssociations(MixedIn.INCLUDED)
                 .collect(Collectors.toList());
         if (log.isDebugEnabled()) {
             log.debug("objectToElement(NO): processing fields");
@@ -668,7 +668,7 @@ public class XmlSnapshot implements Snapshot {
 
             // Skip field if we have seen the name already
             for (int j = 0; j < i; j++) {
-                if (Objects.equals(fieldName, fields.get(i).getName())) {
+                if (Objects.equals(fieldName, fields.get(i).getFriendlyName(adapter.asProvider()))) {
                     log.debug("objectToElement(NO): {} SKIPPED", log("field", fieldName));
                     continue eachField;
                 }
@@ -744,7 +744,7 @@ public class XmlSnapshot implements Snapshot {
                 }
 
                 final OneToOneAssociation oneToOneAssociation = ((OneToOneAssociation) field);
-                final String fullyQualifiedClassName = nos.getFullIdentifier();
+                final String fullyQualifiedClassName = spec.getFullIdentifier();
                 final Element xmlReferenceElement = xmlFieldElement; // more meaningful locally scoped name
 
                 ManagedObject referencedObjectAdapter;

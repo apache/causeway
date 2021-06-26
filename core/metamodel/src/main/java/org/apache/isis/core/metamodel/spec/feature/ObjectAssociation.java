@@ -50,7 +50,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
     /**
      * As per {@link #get(ManagedObject, InteractionInitiatedBy)}, with {@link InteractionInitiatedBy#USER}.
      */
-    public default ManagedObject get(ManagedObject owner) {
+    public default ManagedObject get(final ManagedObject owner) {
         return get(owner, InteractionInitiatedBy.USER);
     }
 
@@ -196,7 +196,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
             getFrom(associationsByGroup, LAYOUT_DEFAULT_GROUP).add(association);
         }
 
-        private static List<ObjectAssociation> getFrom(Map<String, List<ObjectAssociation>> associationsByGroup, final String groupName) {
+        private static List<ObjectAssociation> getFrom(final Map<String, List<ObjectAssociation>> associationsByGroup, final String groupName) {
             List<ObjectAssociation> list = associationsByGroup.get(groupName);
             if(list == null) {
                 list = _Lists.newArrayList();
@@ -205,4 +205,6 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
             return list;
         }
     }
+
+
 }

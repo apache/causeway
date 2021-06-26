@@ -40,7 +40,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.CollectionDes
 
 import lombok.val;
 
-public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRenderer<ObjectCollectionReprRenderer, OneToManyAssociation> {
+public class ObjectCollectionReprRenderer
+extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
 
     public ObjectCollectionReprRenderer(
             final IResourceContext resourceContext,
@@ -126,7 +127,7 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
         representation.mapPut("value", list);
     }
 
-    private boolean renderEagerly(ManagedObject valueAdapter) {
+    private boolean renderEagerly(final ManagedObject valueAdapter) {
         return renderEagerly() && resourceContext.canEagerlyRender(valueAdapter);
     }
 

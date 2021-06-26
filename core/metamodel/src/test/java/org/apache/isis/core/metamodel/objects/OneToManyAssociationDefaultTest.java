@@ -106,7 +106,7 @@ public class OneToManyAssociationDefaultTest {
     @Test
     public void name() {
         expectPeerToReturnNamedFacet();
-        assertThat(association.getName(), is(equalTo("My name")));
+        assertThat(association.getStaticFriendlyName().get(), is(equalTo("My name")));
     }
 
     private void allowingPeerToReturnCollectionType() {

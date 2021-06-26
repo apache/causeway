@@ -25,10 +25,9 @@ import org.apache.isis.core.metamodel.facets.object.objectvalidprops.ObjectValid
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
-public class ObjectValidPropertiesFacetImpl extends ObjectValidPropertiesFacetAbstract {
+public class ObjectValidPropertiesFacetImpl
+extends ObjectValidPropertiesFacetAbstract {
 
     // REVIEW: should provide this rendering context, rather than hardcoding.
     // the net effect currently is that class members annotated with
@@ -47,18 +46,16 @@ public class ObjectValidPropertiesFacetImpl extends ObjectValidPropertiesFacetAb
         final StringBuilder buf = new StringBuilder();
         final ManagedObject adapter = context.getTarget();
 
-        adapter.getSpecification().streamAssociations(MixedIn.EXCLUDED)
-        .filter(ObjectAssociation.Predicates.PROPERTIES)
+        adapter.getSpecification().streamProperties(MixedIn.EXCLUDED)
         .filter(property->property.isVisible(adapter, context.getInitiatedBy(), where).isVetoed()) // ignore hidden properties
         .filter(property->property.isUsable(adapter, context.getInitiatedBy(), where).isVetoed())  // ignore disabled properties
         .forEach(property->{
-            final OneToOneAssociation otoa = (OneToOneAssociation) property;
-            final ManagedObject value = otoa.get(adapter, context.getInitiatedBy());
-            if (otoa.isAssociationValid(adapter, value, context.getInitiatedBy()).isVetoed()) {
+            final ManagedObject value = property.get(adapter, context.getInitiatedBy());
+            if (property.isAssociationValid(adapter, value, context.getInitiatedBy()).isVetoed()) {
                 if (buf.length() > 0) {
                     buf.append(", ");
                 }
-                buf.append(property.getName());
+                buf.append(property.getFriendlyName(context::getTarget));
             }
         });
         if (buf.length() > 0) {

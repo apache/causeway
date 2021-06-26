@@ -39,10 +39,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 
 import lombok.NonNull;
 
-public abstract class AbstractObjectMemberReprRenderer<
-    R extends ReprRendererAbstract<R, ManagedMember>,
-    T extends ObjectMember>
-extends ReprRendererAbstract<R, ManagedMember> {
+public abstract class AbstractObjectMemberReprRenderer<T extends ObjectMember>
+extends ReprRendererAbstract<ManagedMember> {
 
     protected enum Mode {
         INLINE, FOLLOWED, STANDALONE, MUTATED, ARGUMENTS, EVENT_SERIALIZATION;
@@ -109,45 +107,45 @@ extends ReprRendererAbstract<R, ManagedMember> {
 
 
     @Override
-    public R with(final ManagedMember objectAndMember) {
+    public AbstractObjectMemberReprRenderer<T> with(final ManagedMember objectAndMember) {
         this.objectAdapter = objectAndMember.getOwner();
         this.objectMember = _Casts.uncheckedCast(objectAndMember.getMetaModel());
         this.objectMemberType = MemberType.determineFrom(objectMember);
         this.memberId = objectMember.getId();
         usingLinkTo(new DomainObjectLinkTo());
 
-        return cast(this);
+        return this;
     }
 
     /**
      * Must be called after {@link #with(ManagedMember)} (which provides the
      * {@link #objectAdapter}).
      */
-    public R usingLinkTo(final ObjectAdapterLinkTo linkTo) {
+    public AbstractObjectMemberReprRenderer<T> usingLinkTo(final ObjectAdapterLinkTo linkTo) {
         this.linkTo = linkTo.usingUrlBase(resourceContext).with(objectAdapter);
-        return cast(this);
+        return this;
     }
 
     /**
      * Indicate that this is a standalone representation.
      */
-    public R asStandalone() {
+    public AbstractObjectMemberReprRenderer<T> asStandalone() {
         mode = Mode.STANDALONE;
-        return cast(this);
+        return this;
     }
 
-    public R asEventSerialization() {
+    public AbstractObjectMemberReprRenderer<T> asEventSerialization() {
         mode = Mode.EVENT_SERIALIZATION;
-        return cast(this);
+        return this;
     }
 
     /**
      * Indicate that this is a representation to include as the result of a
      * followed link.
      */
-    public R asFollowed() {
+    public AbstractObjectMemberReprRenderer<T> asFollowed() {
         mode = Mode.FOLLOWED;
-        return cast(this);
+        return this;
     }
 
     /**
@@ -157,14 +155,14 @@ extends ReprRendererAbstract<R, ManagedMember> {
      * <p>
      * The effect of this is to suppress the link to self.
      */
-    public R asMutated() {
+    public AbstractObjectMemberReprRenderer<T> asMutated() {
         mode = Mode.MUTATED;
-        return cast(this);
+        return this;
     }
 
-    public R asArguments() {
+    public AbstractObjectMemberReprRenderer<T> asArguments() {
         mode = Mode.ARGUMENTS;
-        return cast(this);
+        return this;
     }
 
     /**
@@ -202,7 +200,7 @@ extends ReprRendererAbstract<R, ManagedMember> {
         }
     }
 
-    public void withMemberMode(ManagedMember.RepresentationMode memberMode) {
+    public void withMemberMode(final ManagedMember.RepresentationMode memberMode) {
         if(memberMode.isWrite()) {
             this.asMutated();
         } else {

@@ -50,8 +50,7 @@ public enum MemberType {
         }
     },
     /**
-     * {@link #getMutators()} are keyed by
-     * {@link CollectionSemantics#getAddToKey()}
+     * {@link #getMutators()} are empty}
      */
     COLLECTION("collections/", RepresentationType.OBJECT_COLLECTION,
             Collections.emptyMap()

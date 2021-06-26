@@ -173,11 +173,11 @@ extends DelegatingInvocationHandlerDefault<T> {
         }
 
         val objectMember = targetSpec.getMemberElseFail(method);
-        val memberName = objectMember.getName();
+        val memberId = objectMember.getId();
 
         val intent = ImperativeFacet.getIntent(objectMember, method);
         if(intent == Intent.CHECK_IF_HIDDEN || intent == Intent.CHECK_IF_DISABLED) {
-            throw new UnsupportedOperationException(String.format("Cannot invoke supporting method '%s'", memberName));
+            throw new UnsupportedOperationException(String.format("Cannot invoke supporting method '%s'", memberId));
         }
 
         if (intent == Intent.DEFAULTS || intent == Intent.CHOICES_OR_AUTOCOMPLETE) {
@@ -187,7 +187,7 @@ extends DelegatingInvocationHandlerDefault<T> {
         if (objectMember.isOneToOneAssociation()) {
 
             if (intent == Intent.CHECK_IF_VALID || intent == Intent.MODIFY_PROPERTY_SUPPORTING) {
-                throw new UnsupportedOperationException(String.format("Cannot invoke supporting method for '%s'; use only property accessor/mutator", memberName));
+                throw new UnsupportedOperationException(String.format("Cannot invoke supporting method for '%s'; use only property accessor/mutator", memberId));
             }
 
             final OneToOneAssociation otoa = (OneToOneAssociation) objectMember;
@@ -203,19 +203,19 @@ extends DelegatingInvocationHandlerDefault<T> {
         if (objectMember.isOneToManyAssociation()) {
 
             if (intent == Intent.CHECK_IF_VALID) {
-                throw new UnsupportedOperationException(String.format("Cannot invoke supporting method '%s'; use only collection accessor/mutator", memberName));
+                throw new UnsupportedOperationException(String.format("Cannot invoke supporting method '%s'; use only collection accessor/mutator", memberId));
             }
 
             final OneToManyAssociation otma = (OneToManyAssociation) objectMember;
             if (intent == Intent.ACCESSOR) {
-                return handleGetterMethodOnCollection(targetAdapter, args, otma, memberName);
+                return handleGetterMethodOnCollection(targetAdapter, args, otma, memberId);
             }
         }
 
         if (objectMember instanceof ObjectAction) {
 
             if (intent == Intent.CHECK_IF_VALID) {
-                throw new UnsupportedOperationException(String.format("Cannot invoke supporting method '%s'; use only the 'invoke' method", memberName));
+                throw new UnsupportedOperationException(String.format("Cannot invoke supporting method '%s'; use only the 'invoke' method", memberId));
             }
 
             val objectAction = (ObjectAction) objectMember;
@@ -239,7 +239,7 @@ extends DelegatingInvocationHandlerDefault<T> {
                         return handleGetterMethodOnProperty(mixeeAdapter, new Object[0], (OneToOneAssociation)mixinMember);
                     }
                     if(mixinMember instanceof OneToManyAssociation) {
-                        return handleGetterMethodOnCollection(mixeeAdapter, new Object[0], (OneToManyAssociation)mixinMember, memberName);
+                        return handleGetterMethodOnCollection(mixeeAdapter, new Object[0], (OneToManyAssociation)mixinMember, memberId);
                     }
                 } else {
                     throw _Exceptions.illegalState(String.format(
@@ -391,7 +391,7 @@ extends DelegatingInvocationHandlerDefault<T> {
             final ManagedObject targetAdapter,
             final Object[] args,
             final OneToManyAssociation collection,
-            final String memberName) {
+            final String memberId) {
 
         zeroArgsElseThrow(args, "get");
 
@@ -411,12 +411,12 @@ extends DelegatingInvocationHandlerDefault<T> {
             val collectionAccessEvent = new CollectionAccessEvent(getDelegate(), collection.getFeatureIdentifier());
 
             if (currentReferencedObj instanceof Collection) {
-                val collectionViewObject = lookupWrappingObject(memberName,
+                val collectionViewObject = lookupWrappingObject(
                         (Collection<?>) currentReferencedObj, collection);
                 notifyListeners(collectionAccessEvent);
                 return collectionViewObject;
             } else if (currentReferencedObj instanceof Map) {
-                val mapViewObject = lookupWrappingObject(memberName, (Map<?, ?>) currentReferencedObj,
+                val mapViewObject = lookupWrappingObject((Map<?, ?>) currentReferencedObj,
                         collection);
                 notifyListeners(collectionAccessEvent);
                 return mapViewObject;
@@ -430,7 +430,6 @@ extends DelegatingInvocationHandlerDefault<T> {
     }
 
     private Collection<?> lookupWrappingObject(
-            final String memberName,
             final Collection<?> collectionToLookup,
             final OneToManyAssociation otma) {
         if (collectionToLookup instanceof WrappingObject) {
@@ -439,11 +438,10 @@ extends DelegatingInvocationHandlerDefault<T> {
         if(proxyContextHandler == null) {
             throw new IllegalStateException("Unable to create proxy for collection; proxyContextHandler not provided");
         }
-        return proxyContextHandler.proxy(collectionToLookup, memberName, this, otma);
+        return proxyContextHandler.proxy(collectionToLookup, this, otma);
     }
 
     private Map<?, ?> lookupWrappingObject(
-            final String memberName,
             final Map<?, ?> mapToLookup,
             final OneToManyAssociation otma) {
         if (mapToLookup instanceof WrappingObject) {
@@ -452,7 +450,7 @@ extends DelegatingInvocationHandlerDefault<T> {
         if(proxyContextHandler == null) {
             throw new IllegalStateException("Unable to create proxy for collection; proxyContextHandler not provided");
         }
-        return proxyContextHandler.proxy(mapToLookup, memberName, this, otma);
+        return proxyContextHandler.proxy(mapToLookup, this, otma);
     }
 
 
@@ -583,7 +581,7 @@ extends DelegatingInvocationHandlerDefault<T> {
         return !getSyncControl().getExecutionModes().contains(ExecutionMode.SKIP_EXECUTION);
     }
 
-    private void runValidationTask(Runnable task) {
+    private void runValidationTask(final Runnable task) {
         if(!shouldEnforceRules()) {
             return;
         }
@@ -594,7 +592,7 @@ extends DelegatingInvocationHandlerDefault<T> {
         }
     }
 
-    private <X> X runExecutionTask(Supplier<X> task) {
+    private <X> X runExecutionTask(final Supplier<X> task) {
         if(!shouldExecute()) {
             return null;
         }
@@ -606,7 +604,7 @@ extends DelegatingInvocationHandlerDefault<T> {
     }
 
     @SneakyThrows
-    private Object handleException(Exception ex) {
+    private Object handleException(final Exception ex) {
         val exceptionHandler = getSyncControl().getExceptionHandler()
                 .orElse(null);
 
@@ -619,7 +617,7 @@ extends DelegatingInvocationHandlerDefault<T> {
                 : null;
     }
 
-    private Object singleArgUnderlyingElseNull(Object[] args, String name) {
+    private Object singleArgUnderlyingElseNull(final Object[] args, final String name) {
         if (args.length != 1) {
             throw new IllegalArgumentException(String.format(
                     "Invoking '%s' should only have a single argument", name));
@@ -628,7 +626,7 @@ extends DelegatingInvocationHandlerDefault<T> {
         return argumentObj;
     }
 
-    private void zeroArgsElseThrow(Object[] args, String name) {
+    private void zeroArgsElseThrow(final Object[] args, final String name) {
         if (args.length != 0) {
             throw new IllegalArgumentException(String.format(
                     "Invoking '%s' should have no arguments", name));

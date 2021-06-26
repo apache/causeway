@@ -132,14 +132,15 @@ extends
     }
 
     /**
-     * @param onType
      * @since 2.0
      */
-    public default Optional<MixedInMember> getMixedInMember(final ObjectSpecification onType) {
-        return streamAnyActions(MixedIn.INCLUDED)
+    public default Optional<MixedInMember> lookupMixedInMember(final ObjectSpecification mixinSpec) {
+        return Stream.concat(
+                streamAnyActions(MixedIn.INCLUDED),
+                streamAssociations(MixedIn.INCLUDED))
                 .filter(MixedInMember.class::isInstance)
                 .map(MixedInMember.class::cast)
-                .filter(member->member.getMixinType() == onType)
+                .filter(member->member.getMixinType().getFeatureIdentifier().equals(mixinSpec.getFeatureIdentifier()))
                 .findAny();
     }
 

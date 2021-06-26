@@ -18,7 +18,15 @@
  */
 package org.apache.isis.core.runtimeservices.command;
 
-import lombok.val;
+import java.util.UUID;
+
+import javax.annotation.Priority;
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
@@ -27,6 +35,7 @@ import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
@@ -42,13 +51,8 @@ import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.PropertyDto;
 import org.apache.isis.schema.common.v2.InteractionType;
 import org.apache.isis.schema.common.v2.OidsDto;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.UUID;
+import lombok.val;
 
 /**
  * The design of this service is similar to
@@ -124,12 +128,14 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
 
             val paramDto = actionParameter.getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION
                     ? CommonDtoUtils.newParamDtoNonScalar(
-                            actionParameter.getName(),
+                            actionParameter.getStaticFriendlyName()
+                                .orElseThrow(_Exceptions::unexpectedCodeReach),
                             paramTypeOrElementType,
                             arg,
                             bookmarkService)
                     : CommonDtoUtils.newParamDto(
-                            actionParameter.getName(),
+                            actionParameter.getStaticFriendlyName()
+                                .orElseThrow(_Exceptions::unexpectedCodeReach),
                             paramTypeOrElementType,
                             arg,
                             bookmarkService);

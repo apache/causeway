@@ -41,16 +41,17 @@ import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.ActionDescrip
 
 import lombok.val;
 
-public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<ObjectActionReprRenderer, ObjectAction> {
+public class ObjectActionReprRenderer
+extends AbstractObjectMemberReprRenderer<ObjectAction> {
 
-    public ObjectActionReprRenderer(IResourceContext resourceContext) {
+    public ObjectActionReprRenderer(final IResourceContext resourceContext) {
         this(resourceContext, null, null, JsonRepresentation.newMap());
     }
 
     public ObjectActionReprRenderer(
             final IResourceContext resourceContext,
             final LinkFollowSpecs linkFollowSpecs,
-            String actionId,
+            final String actionId,
             final JsonRepresentation representation) {
         super(resourceContext, linkFollowSpecs, actionId, RepresentationType.OBJECT_ACTION, representation,
                 Where.OBJECT_FORMS);
@@ -141,8 +142,8 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         final JsonRepresentation paramRep = JsonRepresentation.newMap();
         paramRep.mapPut("num", param.getNumber());
         paramRep.mapPut("id", param.getId());
-        paramRep.mapPut("name", param.getName());
-        paramRep.mapPut("description", param.getDescription());
+        paramRep.mapPut("name", param.getFriendlyName(objectAdapter.asProvider()));
+        paramRep.mapPut("description", param.getDescription(objectAdapter.asProvider()));
         final Object paramChoices = choicesFor(param, interactionInitiatedBy);
         if (paramChoices != null) {
             paramRep.mapPut("choices", paramChoices);

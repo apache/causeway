@@ -33,7 +33,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 
 import lombok.val;
 
-public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprRenderer, ObjectSpecification> {
+public class DomainTypeReprRenderer
+extends ReprRendererAbstract<ObjectSpecification> {
 
     public static LinkBuilder newLinkToBuilder(final IResourceContext resourceContext, final Rel rel, final ObjectSpecification objectSpec) {
         final String typeFullName = objectSpec.getLogicalTypeName();
@@ -59,7 +60,7 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
     @Override
     public DomainTypeReprRenderer with(final ObjectSpecification objectSpecification) {
         this.objectSpecification = objectSpecification;
-        return cast(this);
+        return this;
     }
 
     @Override

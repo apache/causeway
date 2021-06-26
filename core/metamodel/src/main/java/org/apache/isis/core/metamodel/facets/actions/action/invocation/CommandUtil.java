@@ -24,6 +24,7 @@ import java.util.List;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Arrays;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -43,10 +44,6 @@ import lombok.val;
 public class CommandUtil {
 
     private CommandUtil(){}
-
-    public static String targetMemberNameFor(final ObjectMember objectMember) {
-        return objectMember.getName();
-    }
 
     public static String targetClassNameFor(final ManagedObject targetAdapter) {
         return targetClassNameFor(targetAdapter.getSpecification());
@@ -121,7 +118,8 @@ public class CommandUtil {
             final ObjectActionParameter param,
             final ManagedObject objectAdapter) {
 
-        final String name = param.getName();
+        final String name = param.getStaticFriendlyName()
+                .orElseThrow(_Exceptions::unexpectedCodeReach);
         appendArg(buf, name, objectAdapter);
     }
 

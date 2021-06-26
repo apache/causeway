@@ -75,7 +75,16 @@ implements OneToOneAssociation {
         super(featureIdentifier, facetedMethod, FeatureType.PROPERTY, objectSpec);
     }
 
-    // -- visible, usable
+    // -- NAMED
+
+    @Override
+    public String getColumnName() {
+        //TODO[ISIS-1720] use a synthetic facet inferred from any static names instead
+        return getStaticFriendlyName()
+                .orElseGet(()->getFeatureIdentifier().getMemberNaturalName());
+    }
+
+    // -- VISIBLE, USABLE
 
     @Override
     public VisibilityContext createVisibleInteractionContext(
@@ -96,9 +105,8 @@ implements OneToOneAssociation {
                 headFor(ownerAdapter), getFeatureIdentifier(), interactionInitiatedBy, where);
     }
 
+    // -- VALIDITY
 
-
-    // -- Validity
     private ValidityContext createValidateInteractionContext(
             final ManagedObject ownerAdapter,
             final ManagedObject proposedToReferenceAdapter,
@@ -126,9 +134,8 @@ implements OneToOneAssociation {
         return InteractionUtils.isValidResult(this, validityContext);
     }
 
+    // -- INIT
 
-
-    // -- init
     @Override
     public void initAssociation(
             final ManagedObject ownerAdapter,
@@ -140,9 +147,7 @@ implements OneToOneAssociation {
         }
     }
 
-
-
-    // -- Access (get, isEmpty)
+    // -- ACCESS (get, isEmpty)
 
     @Override
     public ManagedObject get(
@@ -165,7 +170,7 @@ implements OneToOneAssociation {
         return get(ownerAdapter, interactionInitiatedBy) == null;
     }
 
-    // -- Set
+    // -- ACCESS (set)
 
     /**
      * Sets up the {@link Command}, then delegates to the appropriate facet
@@ -214,9 +219,8 @@ implements OneToOneAssociation {
         return propertyClearFacet.clearProperty(this, ownerAdapter, interactionInitiatedBy);
     }
 
+    // -- DEFAULTS
 
-
-    // -- defaults
     @Override
     public ManagedObject getDefault(final ManagedObject ownerAdapter) {
         PropertyDefaultFacet propertyDefaultFacet = lookupNonFallbackFacet(PropertyDefaultFacet.class)
@@ -246,9 +250,8 @@ implements OneToOneAssociation {
         }
     }
 
+    // -- CHOICES AND AUTO-COMPLETE
 
-
-    // -- choices and autoComplete
     @Override
     public boolean hasChoices() {
         return getFacet(PropertyChoicesFacet.class) != null;
@@ -298,8 +301,6 @@ implements OneToOneAssociation {
         return propertyAutoCompleteFacet != null? propertyAutoCompleteFacet.getMinLength(): MinLengthUtil.MIN_LENGTH_DEFAULT;
     }
 
-
-
     /**
      * Internal API
      */
@@ -312,8 +313,7 @@ implements OneToOneAssociation {
                 .asCommandDto(interactionId, Can.ofSingleton(head), this, valueAdapterOrNull));
     }
 
-
-    // -- toString
+    // -- OBJECT CONTRACT
 
     @Override
     public String toString() {

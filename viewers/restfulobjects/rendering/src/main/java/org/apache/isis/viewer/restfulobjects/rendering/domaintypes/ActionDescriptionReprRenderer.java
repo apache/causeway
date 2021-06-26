@@ -31,16 +31,24 @@ import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 
 import lombok.val;
 
-public class ActionDescriptionReprRenderer extends AbstractTypeMemberReprRenderer<ActionDescriptionReprRenderer, ObjectAction> {
+public class ActionDescriptionReprRenderer
+extends AbstractTypeMemberReprRenderer<ObjectAction> {
 
-    public static LinkBuilder newLinkToBuilder(final IResourceContext resourceContext, final Rel rel, final ObjectSpecification objectSpecification, final ObjectAction objectAction) {
+    public static LinkBuilder newLinkToBuilder(
+            final IResourceContext resourceContext,
+            final Rel rel,
+            final ObjectSpecification objectSpecification,
+            final ObjectAction objectAction) {
         final String domainType = objectSpecification.getLogicalTypeName();
         final String actionId = objectAction.getId();
         final String url = "domain-types/" + domainType + "/actions/" + actionId;
         return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.ACTION_DESCRIPTION, url);
     }
 
-    public ActionDescriptionReprRenderer(final IResourceContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
+    public ActionDescriptionReprRenderer(
+            final IResourceContext resourceContext,
+            final LinkFollowSpecs linkFollower,
+            final JsonRepresentation representation) {
         super(resourceContext, linkFollower, RepresentationType.ACTION_DESCRIPTION, representation);
     }
 
@@ -51,40 +59,47 @@ public class ActionDescriptionReprRenderer extends AbstractTypeMemberReprRendere
         addLinkToElementTypeIfAny();
     }
 
+    @Override
+    protected void putExtensionsSpecificToFeature() {
+        putExtensionsName();
+        putExtensionsDescriptionIfAvailable();
+    }
+
+    // -- HELPER
+
     private void addParameters() {
         final JsonRepresentation parameterList = JsonRepresentation.newArray();
         val parameters = getObjectFeature().getParameters();
         for (final ObjectActionParameter parameter : parameters) {
-            final LinkBuilder linkBuilder = ActionParameterDescriptionReprRenderer.newLinkToBuilder(getResourceContext(), Rel.ACTION_PARAM, objectSpecification, parameter);
-            parameterList.arrayAdd(linkBuilder.build());
+            parameterList.arrayAdd(
+                    ActionParameterDescriptionReprRenderer
+                    .newLinkToBuilder(getResourceContext(), Rel.ACTION_PARAM, objectSpecification, parameter)
+                    .build());
         }
 
         representation.mapPut("parameters", parameterList);
     }
 
-    protected void addLinkToElementTypeIfAny() {
-        final TypeOfFacet facet = getObjectFeature().getFacet(TypeOfFacet.class);
-        if (facet == null) {
-            return;
-        }
-        final ObjectSpecification typeOfSpec = facet.valueSpec();
-        final LinkBuilder linkBuilder = DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), Rel.ELEMENT_TYPE, typeOfSpec);
-        getLinks().arrayAdd(linkBuilder.build());
+    private void addLinkToElementTypeIfAny() {
+        getObjectFeature()
+        .lookupFacet(TypeOfFacet.class)
+        .map(TypeOfFacet::valueSpec)
+        .ifPresent(typeOfSpec->
+            getLinks().arrayAdd(
+                DomainTypeReprRenderer
+                .newLinkToBuilder(getResourceContext(), Rel.ELEMENT_TYPE, typeOfSpec)
+                .build()));
     }
 
     private void addLinkToReturnTypeIfAny() {
-        final ObjectSpecification returnType = getObjectFeature().getReturnType();
-        if (returnType == null) {
+        val returnTypeSpec = getObjectFeature().getReturnType();
+        if (returnTypeSpec == null) {
             return;
         }
-        final LinkBuilder linkBuilder = DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), Rel.RETURN_TYPE, returnType);
-        getLinks().arrayAdd(linkBuilder.build());
-    }
-
-    @Override
-    protected void putExtensionsSpecificToFeature() {
-        putExtensionsName();
-        putExtensionsDescriptionIfAvailable();
+        getLinks().arrayAdd(
+                DomainTypeReprRenderer
+                .newLinkToBuilder(getResourceContext(), Rel.RETURN_TYPE, returnTypeSpec)
+                .build());
     }
 
 }

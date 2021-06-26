@@ -77,17 +77,17 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
 
     // -- FACTORY METHODS
 
-    public static ActionModel of(EntityModel actionOwner, ObjectAction action) {
+    public static ActionModel of(final EntityModel actionOwner, final ObjectAction action) {
         return of(actionOwner, action.getMemento());
     }
 
-    public static ActionModel of(EntityModel actionOwner, ActionMemento actionMemento) {
+    public static ActionModel of(final EntityModel actionOwner, final ActionMemento actionMemento) {
         return new ActionModel(actionOwner, actionMemento);
     }
 
     public static ActionModel ofPageParameters(
-            IsisAppCommonContext commonContext,
-            PageParameters pageParameters) {
+            final IsisAppCommonContext commonContext,
+            final PageParameters pageParameters) {
 
         return PageParameterUtil.actionModelFor(commonContext, pageParameters);
     }
@@ -143,7 +143,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
                 getMetaModel());
     }
 
-    private ActionModel(EntityModel entityModel, ActionMemento actionMemento) {
+    private ActionModel(final EntityModel entityModel, final ActionMemento actionMemento) {
         super(entityModel.getCommonContext());
         this.ownerModel = entityModel;
         this.actionMemento = actionMemento;
@@ -152,7 +152,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
     /**
      * Copy constructor, as called by {@link #copy()}.
      */
-    private ActionModel(ActionModel actionModel) {
+    private ActionModel(final ActionModel actionModel) {
         super(actionModel.getCommonContext());
         this.ownerModel = actionModel.ownerModel;
         this.actionMemento = actionModel.actionMemento;
@@ -388,15 +388,15 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
         return inlinePromptContext;
     }
 
-    public void setInlinePromptContext(InlinePromptContext inlinePromptContext) {
+    public void setInlinePromptContext(final InlinePromptContext inlinePromptContext) {
         this.inlinePromptContext = inlinePromptContext;
     }
 
-    public void setParameterValue(ObjectActionParameter actionParameter, ManagedObject newParamValue) {
+    public void setParameterValue(final ObjectActionParameter actionParameter, final ManagedObject newParamValue) {
         argCache().setParameterValue(actionParameter, newParamValue);
     }
 
-    public void clearParameterValue(ObjectActionParameter actionParameter) {
+    public void clearParameterValue(final ObjectActionParameter actionParameter) {
         argCache().clearParameterValue(actionParameter);
     }
 
@@ -417,7 +417,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
 
     }
 
-    public void reassessPendingParamUiModels(int skipCount) {
+    public void reassessPendingParamUiModels(final int skipCount) {
 
         val pendingArgs = getArgumentsAsParamModel();
 
@@ -506,7 +506,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
 
     // -- CLIENT SIDE CACHING ASPECTS ...
 
-    private static IRequestHandler enforceNoCacheOnClientSide(IRequestHandler downloadHandler){
+    private static IRequestHandler enforceNoCacheOnClientSide(final IRequestHandler downloadHandler){
         if(downloadHandler==null) {
             return downloadHandler;
         }

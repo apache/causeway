@@ -44,7 +44,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.PropertyDescr
 import lombok.val;
 
 public class ObjectPropertyReprRenderer
-extends AbstractObjectMemberReprRenderer<ObjectPropertyReprRenderer, OneToOneAssociation> {
+extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
 
     public ObjectPropertyReprRenderer(final IResourceContext context) {
         this(context, null, null, JsonRepresentation.newMap());

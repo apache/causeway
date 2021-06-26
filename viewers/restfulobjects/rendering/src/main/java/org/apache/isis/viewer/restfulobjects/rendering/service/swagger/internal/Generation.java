@@ -124,19 +124,19 @@ class Generation {
         return swagger;
     }
 
-    private Map<String, Path> sorted(Map<String, Path> paths) {
+    private Map<String, Path> sorted(final Map<String, Path> paths) {
 
         final List<Map.Entry<String, Path>> entries = new ArrayList<>(paths.entrySet());
         entries.sort(new Comparator<Map.Entry<String, Path>>() {
             @Override
-            public int compare(Map.Entry<String, Path> o1, Map.Entry<String, Path> o2) {
+            public int compare(final Map.Entry<String, Path> o1, final Map.Entry<String, Path> o2) {
                 final String tag1 = tagFor(o1);
                 final String tag2 = tagFor(o2);
                 final int tag = tag1.compareTo(tag2);
                 return tag != 0 ? tag : o1.getKey().compareTo(o2.getKey());
             }
 
-            protected String tagFor(Map.Entry<String, Path> o1) {
+            protected String tagFor(final Map.Entry<String, Path> o1) {
                 return o1.getValue().getOperations().stream().findFirst().map(operation -> operation.getTags().stream().findFirst().orElse("(no tag)")).orElse("(no tag)");
             }
         });
@@ -450,11 +450,17 @@ class Generation {
             path.get(invokeOperation);
 
             for (final ObjectActionParameter parameter : parameters) {
+
+                val describedAs = parameter.getStaticDescription().orElse(null);
+
                 invokeOperation
                 .parameter(
                         new QueryParameter()
                         .name(parameter.getId())
-                        .description(Util.roSpec("2.9.1") + (!_Strings.isNullOrEmpty(parameter.getDescription())? (": " + parameter.getDescription()) : ""))
+                        .description(Util.roSpec("2.9.1")
+                                + (_Strings.isNotEmpty(describedAs)
+                                        ? (": " + describedAs)
+                                        : ""))
                         .required(false)
                         .type("string")
                         );
@@ -563,11 +569,17 @@ class Generation {
             path.get(invokeOperation);
 
             for (final ObjectActionParameter parameter : parameters) {
+
+                val describedAs = parameter.getStaticDescription().orElse(null);
+
                 invokeOperation
                 .parameter(
                         new QueryParameter()
                         .name(parameter.getId())
-                        .description(Util.roSpec("2.9.1") + (!_Strings.isNullOrEmpty(parameter.getDescription())? (": " + parameter.getDescription()) : ""))
+                        .description(Util.roSpec("2.9.1")
+                                + (_Strings.isNotEmpty(describedAs)
+                                        ? (": " + describedAs)
+                                        : ""))
                         .required(false)
                         .type("string")
                         );
@@ -768,7 +780,7 @@ class Generation {
         return new StringProperty();
     }
 
-    static StringProperty stringPropertyEnum(String... enumValues) {
+    static StringProperty stringPropertyEnum(final String... enumValues) {
         StringProperty stringProperty = stringProperty();
         stringProperty._enum(Arrays.asList(enumValues));
         if(enumValues.length >= 1) {
@@ -826,7 +838,7 @@ class Generation {
         return referencesCopy;
     }
 
-    private static Operation newOperation(String ... reprTypes) {
+    private static Operation newOperation(final String ... reprTypes) {
         Operation operation = new Operation()
                 .produces("application/json");
 

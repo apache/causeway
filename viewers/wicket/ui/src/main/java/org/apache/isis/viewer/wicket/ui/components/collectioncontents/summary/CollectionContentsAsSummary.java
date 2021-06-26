@@ -38,6 +38,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -87,8 +88,8 @@ implements CollectionCountProvider {
         feedback.setOutputMarkupId(true);
         addOrReplace(feedback);
 
-        final Stream<ObjectAssociation> numberAssociations = elementSpec
-                .streamAssociations(MixedIn.EXCLUDED)
+        final Stream<OneToOneAssociation> numberAssociations = elementSpec
+                .streamProperties(MixedIn.EXCLUDED)
                 .filter(CollectionContentsAsSummaryFactory.OF_TYPE_BIGDECIMAL);
 
         final RepeatingView repeating = new RepeatingView(ID_REPEATING_SUMMARY);
@@ -99,7 +100,7 @@ implements CollectionCountProvider {
 
             repeating.add(item);
 
-            String propertyName = numberAssociation.getName();
+            String propertyName = numberAssociation.getColumnName();
             item.add(new Label(ID_PROPERTY_NAME, new Model<String>(propertyName)));
 
 
@@ -123,11 +124,11 @@ implements CollectionCountProvider {
         private BigDecimal average;
         private String propertyName;
 
-        public Summary(List<ManagedObject> adapters, ObjectAssociation numberAssociation) {
+        public Summary(final List<ManagedObject> adapters, final ObjectAssociation numberAssociation) {
             this(null, adapters, numberAssociation);
         }
 
-        public Summary(String propertyName, List<ManagedObject> adapters, ObjectAssociation numberAssociation) {
+        public Summary(final String propertyName, final List<ManagedObject> adapters, final ObjectAssociation numberAssociation) {
             this.propertyName = propertyName;
             int nonNullCount = 0;
             for (val adapter : adapters) {
@@ -179,19 +180,19 @@ implements CollectionCountProvider {
             return asNumbers(getValues());
         }
 
-        private static List<Number> asNumbers(List<BigDecimal> values) {
+        private static List<Number> asNumbers(final List<BigDecimal> values) {
             return _Lists.map(values, Number.class::cast);
         }
 
 
     }
 
-    private void addItem(AbstractItem item, String id, BigDecimal amt) {
+    private void addItem(final AbstractItem item, final String id, final BigDecimal amt) {
         TextField<String> textField = new TextField<String>(id, new Model<String>(format(amt)));
         item.add(textField);
     }
 
-    private String format(BigDecimal amt) {
+    private String format(final BigDecimal amt) {
         return amt != null ? amt.setScale(2, RoundingMode.HALF_UP).toPlainString() : "";
     }
 

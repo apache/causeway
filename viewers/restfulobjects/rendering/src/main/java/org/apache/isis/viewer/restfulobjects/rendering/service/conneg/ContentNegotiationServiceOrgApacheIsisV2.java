@@ -370,10 +370,10 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
             }
 
             final JsonRepresentation propertyRepresentation = JsonRepresentation.newMap();
-            final ObjectPropertyReprRenderer renderer =
+            val renderer =
                     new ObjectPropertyReprRenderer(resourceContext, null, property.getId(), propertyRepresentation)
-                    .asStandalone();
-            renderer.with(ManagedProperty.of(objectAdapter, property, where));
+                    .asStandalone()
+                    .with(ManagedProperty.of(objectAdapter, property, where));
 
             final JsonRepresentation propertyValueRepresentation = renderer.render();
 

@@ -121,15 +121,13 @@ implements MemberExecutorService {
         log.debug("about to invoke action {}", actionId);
 
         val targetAdapter = head.getTarget();
-        val mixedInAdapter = head.getMixedIn().orElse(null);
-
         val targetPojo = UnwrapUtil.single(targetAdapter);
 
         val argumentPojos = argumentAdapters.stream()
                 .map(UnwrapUtil::single)
                 .collect(_Lists.toUnmodifiable());
 
-        val targetMemberName = targetNameFor(owningAction, mixedInAdapter);
+        val targetMemberName = ObjectAction.Util.friendlyNameFor(owningAction, head);
         val targetClass = CommandUtil.targetClassNameFor(targetAdapter);
 
         val actionInvocation =
@@ -203,7 +201,7 @@ implements MemberExecutorService {
         val target = UnwrapUtil.single(targetManagedObject);
         val argValue = UnwrapUtil.single(newValueAdapter);
 
-        val targetMemberName = CommandUtil.targetMemberNameFor(owningProperty);
+        val targetMemberName = owningProperty.getFriendlyName(head::getTarget);
         val targetClass = CommandUtil.targetClassNameFor(targetManagedObject);
 
         val propertyEdit = new PropertyEdit(interaction, propertyId, target, argValue, targetMemberName, targetClass);
@@ -240,12 +238,9 @@ implements MemberExecutorService {
 
     // -- HELPER
 
-    private static String targetNameFor(ObjectAction owningAction, ManagedObject mixedInAdapter) {
-        return ObjectAction.Util.targetNameFor(owningAction, mixedInAdapter)
-                .orElseGet(()->CommandUtil.targetMemberNameFor(owningAction));
-    }
-
-    private void setCommandResultIfEntity(final Command command, final ManagedObject resultAdapter) {
+    private void setCommandResultIfEntity(
+            final Command command,
+            final ManagedObject resultAdapter) {
         if(command.getResult() != null) {
             // don't trample over any existing result, eg subsequent mixins.
             return;

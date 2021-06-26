@@ -50,7 +50,7 @@ extends PanelAbstract<ManagedObject, ScalarPropertyModel> {
 
             @Override
             public String getObject() {
-                return model.getName();
+                return model.getFriendlyName();
             }
         });
 

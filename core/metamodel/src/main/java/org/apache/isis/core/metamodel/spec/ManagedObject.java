@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.spec;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
@@ -68,6 +69,10 @@ public interface ManagedObject {
     Optional<Bookmark> getBookmark();
 
     boolean isBookmarkMemoized();
+
+    default Supplier<ManagedObject> asProvider() {
+        return ()->this;
+    }
 
     // -- TITLE
 
@@ -289,6 +294,8 @@ public interface ManagedObject {
         }
 
     }
+
+
 
 
 }

@@ -37,7 +37,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.TypeListReprR
 
 import lombok.val;
 
-public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRenderer, Void> {
+public class HomePageReprRenderer
+extends ReprRendererAbstract<Void> {
 
     HomePageReprRenderer(final IResourceContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, RepresentationType.HOME_PAGE, representation);
@@ -107,7 +108,7 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
         getLinks().arrayAdd(link);
     }
 
-    private void addLinkToServices(Stream<ManagedObject> serviceAdapters) {
+    private void addLinkToServices(final Stream<ManagedObject> serviceAdapters) {
 
         final JsonRepresentation link = LinkBuilder.newBuilder(
                 getResourceContext(),
@@ -135,7 +136,7 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
         getLinks().arrayAdd(link);
     }
 
-    private void addLinkToUser(InteractionContext authentication) {
+    private void addLinkToUser(final InteractionContext authentication) {
         final JsonRepresentation link = LinkBuilder.newBuilder(
                 getResourceContext(),
                 Rel.USER.getName(),

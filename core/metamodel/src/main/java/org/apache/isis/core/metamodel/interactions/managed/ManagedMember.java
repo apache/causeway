@@ -104,7 +104,7 @@ public abstract class ManagedMember implements ManagedFeature {
      *
      * @param managedObject
      */
-    protected void setOwner(@NonNull ManagedObject managedObject) {
+    protected void setOwner(@NonNull final ManagedObject managedObject) {
         this.owner = managedObject;
     }
 
@@ -124,7 +124,7 @@ public abstract class ManagedMember implements ManagedFeature {
     }
 
     public String getName() {
-        return getMetaModel().getName();
+        return getMetaModel().getFriendlyName(null);
     }
 
     @Override
@@ -134,7 +134,7 @@ public abstract class ManagedMember implements ManagedFeature {
 
     @Override
     public String getDisplayLabel() {
-        return getMetaModel().getName();
+        return getMetaModel().getFriendlyName(this::getOwner);
     }
 
     @Getter @Setter @NonNull

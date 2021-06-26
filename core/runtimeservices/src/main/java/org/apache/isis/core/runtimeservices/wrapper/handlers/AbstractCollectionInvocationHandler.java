@@ -33,13 +33,11 @@ extends DelegatingInvocationHandlerDefault<C> {
     private final List<Method> interceptedMethods = _Lists.newArrayList();
     private final List<Method> vetoedMethods = _Lists.newArrayList();
 
-    private final String collectionName;
     private final OneToManyAssociation oneToManyAssociation;
     private final T domainObject;
 
     public AbstractCollectionInvocationHandler(
             final C collectionOrMapToProxy,
-            final String collectionName,
             final DomainObjectInvocationHandler<T> handler,
             final OneToManyAssociation otma) {
 
@@ -47,7 +45,6 @@ extends DelegatingInvocationHandlerDefault<C> {
                 collectionOrMapToProxy,
                 handler.getSyncControl());
 
-        this.collectionName = collectionName;
         this.oneToManyAssociation = otma;
         this.domainObject = handler.getDelegate();
     }
@@ -60,10 +57,6 @@ extends DelegatingInvocationHandlerDefault<C> {
     protected Method veto(final Method method) {
         this.vetoedMethods.add(method);
         return method;
-    }
-
-    public String getCollectionName() {
-        return collectionName;
     }
 
     public OneToManyAssociation getCollection() {

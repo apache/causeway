@@ -24,6 +24,7 @@ import java.util.stream.Stream;
 
 import javax.ws.rs.core.MediaType;
 
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -39,8 +40,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.DomainTypeRep
 import lombok.Getter;
 import lombok.val;
 
-public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>, T>
-implements ReprRenderer<R, T> {
+public abstract class ReprRendererAbstract<T>
+implements ReprRenderer<T> {
 
     @Getter protected final IResourceContext resourceContext;
     @Getter protected final JsonValueEncoder jsonValueEncoder;
@@ -95,24 +96,23 @@ implements ReprRenderer<R, T> {
         return representationType.getJsonMediaType(mediaTypeParams);
     }
 
-    protected void addMediaTypeParams(String param, String paramValue) {
+    protected void addMediaTypeParams(final String param, final String paramValue) {
         mediaTypeParams.put(param, paramValue);
     }
 
-    @SuppressWarnings("unchecked")
-    public R includesSelf() {
+    public <R extends ReprRendererAbstract<T>> R includesSelf() {
         this.includesSelf = true;
-        return (R) this;
+        return _Casts.uncheckedCast(this);
     }
 
-    public R withLink(final Rel rel, final String href) {
+    public <R extends ReprRendererAbstract<T>> R withLink(final Rel rel, final String href) {
         if (href != null) {
             getLinks().arrayAdd(LinkBuilder.newBuilder(resourceContext, rel.getName(), representationType, href).build());
         }
-        return cast(this);
+        return _Casts.uncheckedCast(this);
     }
 
-    public R withLink(final Rel rel, final JsonRepresentation link) {
+    public <R extends ReprRendererAbstract<T>> R withLink(final Rel rel, final JsonRepresentation link) {
         final String relStr = link.getString("rel");
         if (relStr == null || !relStr.equals(rel.getName())) {
             throw new IllegalArgumentException("Provided link does not have a 'rel' of '" + rel.getName() + "'; was: " + link);
@@ -120,7 +120,7 @@ implements ReprRenderer<R, T> {
         if (link != null) {
             getLinks().arrayAdd(link);
         }
-        return cast(this);
+        return _Casts.uncheckedCast(this);
     }
 
 
@@ -165,18 +165,14 @@ implements ReprRenderer<R, T> {
         return extensions;
     }
 
-    public R withExtensions(final JsonRepresentation extensions) {
+    public ReprRendererAbstract<T> withExtensions(final JsonRepresentation extensions) {
         if (!extensions.isMap()) {
             throw new IllegalArgumentException("extensions must be a map");
         }
         representation.mapPut("extensions", extensions);
-        return cast(this);
+        return this;
     }
 
-    @SuppressWarnings("unchecked")
-    protected static <R extends ReprRendererAbstract<R, T>, T> R cast(final ReprRendererAbstract<R, T> builder) {
-        return (R) builder;
-    }
 
     @Override
     public abstract JsonRepresentation render();

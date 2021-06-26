@@ -37,9 +37,9 @@ public class ProxyContextHandler {
     @NonNull private final ProxyCreator proxyCreator;
 
     public <T> T proxy(
-            T domainObject,
-            ManagedObject adapter,
-            SyncControl syncControl) {
+            final T domainObject,
+            final ManagedObject adapter,
+            final SyncControl syncControl) {
 
         val invocationHandler = new DomainObjectInvocationHandler<T>(
                 domainObject,
@@ -52,10 +52,10 @@ public class ProxyContextHandler {
     }
 
     public <T> T mixinProxy(
-            T mixin,
-            ManagedObject mixeeAdapter,
-            ManagedObject mixinAdapter,
-            SyncControl syncControl) {
+            final T mixin,
+            final ManagedObject mixeeAdapter,
+            final ManagedObject mixinAdapter,
+            final SyncControl syncControl) {
 
         val invocationHandler = new DomainObjectInvocationHandler<T>(
                 mixin,
@@ -74,12 +74,11 @@ public class ProxyContextHandler {
      */
     public <T, E> Collection<E> proxy(
             final Collection<E> collectionToProxy,
-            final String collectionName,
             final DomainObjectInvocationHandler<T> handler,
             final OneToManyAssociation otma) {
 
         val collectionInvocationHandler = new CollectionInvocationHandler<T, Collection<E>>(
-                        collectionToProxy, collectionName, handler, otma);
+                        collectionToProxy, handler, otma);
         collectionInvocationHandler.setResolveObjectChangedEnabled(
                 handler.isResolveObjectChangedEnabled());
 
@@ -92,12 +91,11 @@ public class ProxyContextHandler {
      */
     public <T, P, Q> Map<P, Q> proxy(
             final Map<P, Q> collectionToProxy,
-            final String collectionName,
             final DomainObjectInvocationHandler<T> handler,
             final OneToManyAssociation otma) {
 
         val mapInvocationHandler = new MapInvocationHandler<T, Map<P, Q>>(
-                collectionToProxy, collectionName, handler, otma);
+                collectionToProxy, handler, otma);
         mapInvocationHandler.setResolveObjectChangedEnabled(handler.isResolveObjectChangedEnabled());
 
         return proxyCreator.instantiateProxy(mapInvocationHandler);

@@ -25,8 +25,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.annotation.Nullable;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -37,6 +35,7 @@ import org.apache.isis.applib.value.Clob;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.CanVector;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
@@ -53,7 +52,6 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.memento.ActionMemento;
-import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
@@ -309,10 +307,6 @@ public interface ObjectAction extends ObjectMember {
             return className + "-" + actionId;
         }
 
-        public static String descriptionOf(final ObjectAction action) {
-            return action.getDescription();
-        }
-
         public static ActionLayout.Position actionLayoutPositionOf(final ObjectAction action) {
             final ActionPositionFacet layoutFacet = action.getFacet(ActionPositionFacet.class);
             return layoutFacet != null ? layoutFacet.position() : ActionLayout.Position.BELOW;
@@ -371,19 +365,20 @@ public interface ObjectAction extends ObjectMember {
             return promptStyle;
         }
 
-        public static Optional<String> targetNameFor(
-                final ObjectAction owningAction,
-                final @Nullable ManagedObject mixedInAdapter) {
+        public static String friendlyNameFor(
+                final @NonNull ObjectAction action,
+                final @NonNull InteractionHead head) {
 
-            if(mixedInAdapter != null) {
-                final ObjectSpecification onType = owningAction.getOnType();
-                final ObjectSpecification mixedInSpec = mixedInAdapter.getSpecification();
-                final Optional<String> mixinName = mixedInSpec.getMixedInMember(onType)
-                        .map(MixedInMember::getName);
+            val mixeeAdapter = head.getMixedIn().orElse(null);
 
-                return mixinName;
+            if(mixeeAdapter != null) {
+                val mixinSpec = action.getOnType();
+                val ownerSpec = mixeeAdapter.getSpecification();
+                return ownerSpec.lookupMixedInMember(mixinSpec)
+                        .map(mixedInMember->mixedInMember.getFriendlyName(mixeeAdapter.asProvider()))
+                        .orElseThrow(_Exceptions::unexpectedCodeReach);
             }
-            return Optional.empty();
+            return action.getFriendlyName(head::getOwner);
         }
     }
 
@@ -451,12 +446,12 @@ public interface ObjectAction extends ObjectMember {
 
         private static class ChoicesFrom implements Predicate<ObjectAction> {
             private final @NonNull String memberId;
-            private final @NonNull String memberName;
+//            private final @NonNull String memberName;
 
             public ChoicesFrom(final @NonNull ObjectAssociation objectAssociation) {
 
                 this.memberId = _Strings.nullToEmpty(objectAssociation.getId()).toLowerCase();
-                this.memberName = _Strings.nullToEmpty(objectAssociation.getName()).toLowerCase();
+//                this.memberName = _Strings.nullToEmpty(objectAssociation.getName()).toLowerCase();
             }
 
             @Override
@@ -470,8 +465,9 @@ public interface ObjectAction extends ObjectMember {
                     return false;
                 }
                 val memberNameLowerCase = choicesFromMemberName.toLowerCase();
-                return Objects.equals(memberName, memberNameLowerCase)
-                        || Objects.equals(memberId, memberNameLowerCase);
+//                return Objects.equals(memberName, memberNameLowerCase)
+//                        || Objects.equals(memberId, memberNameLowerCase);
+                return Objects.equals(memberId, memberNameLowerCase);
             }
 
         }

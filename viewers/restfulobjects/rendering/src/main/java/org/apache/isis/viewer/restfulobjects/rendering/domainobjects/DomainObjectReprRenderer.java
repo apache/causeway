@@ -50,7 +50,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.DomainTypeRep
 
 import lombok.val;
 
-public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectReprRenderer, ManagedObject> {
+public class DomainObjectReprRenderer
+extends ReprRendererAbstract<ManagedObject> {
 
     private static final String X_RO_DOMAIN_TYPE = "x-ro-domain-type";
 

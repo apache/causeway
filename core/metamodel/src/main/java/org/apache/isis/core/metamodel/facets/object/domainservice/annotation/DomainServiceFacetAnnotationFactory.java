@@ -68,9 +68,9 @@ implements MetaModelRefiner {
 
             final String associationNames = spec
                     .streamAssociations(MixedIn.EXCLUDED)
-                    .map(ObjectAssociation::getName)
-                    // it's okay to have an "association" called "Id" (corresponding to getId() method)
-                    .filter(associationName->!"Id".equalsIgnoreCase(associationName))
+                    .map(ObjectAssociation::getId)
+//                    // it's okay to have an "association" called "Id" (corresponding to getId() method)
+//                    .filter(associationName->!"Id".equalsIgnoreCase(associationName))
                     .collect(Collectors.joining(", "));
 
             if(associationNames.isEmpty()) {
@@ -79,7 +79,9 @@ implements MetaModelRefiner {
 
             ValidationFailure.raiseFormatted(
                     spec,
-                    "%s: services can only have actions ('%s' config property), not properties or collections; annotate with @Programmatic if required.  Found: %s",
+                    "%s: services can only have actions ('%s' config property), "
+                    + "not properties or collections; "
+                    + "annotate with @Programmatic if required. Found: %s",
                     spec.getFullIdentifier(),
                     "'isis.core.meta-model.validator.serviceActionsOnly'",
                     associationNames);

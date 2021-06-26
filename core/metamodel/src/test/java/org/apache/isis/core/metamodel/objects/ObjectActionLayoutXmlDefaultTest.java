@@ -90,7 +90,7 @@ public class ObjectActionLayoutXmlDefaultTest {
                 will(returnValue(facet));
             }
         });
-        assertThat(action.getName(), is(equalTo(name)));
+        assertThat(action.getStaticFriendlyName().get(), is(equalTo(name)));
     }
 
     @Test

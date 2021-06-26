@@ -46,10 +46,10 @@ implements PropertyUiModel {
      * property.
      */
     public ScalarPropertyModel(
-            EntityModel parentEntityModel,
-            PropertyMemento propertyMemento,
-            EntityModel.Mode mode,
-            EntityModel.RenderingHint renderingHint) {
+            final EntityModel parentEntityModel,
+            final PropertyMemento propertyMemento,
+            final EntityModel.Mode mode,
+            final EntityModel.RenderingHint renderingHint) {
 
         super(parentEntityModel, propertyMemento, mode, renderingHint);
         this.propertyMemento = propertyMemento;
@@ -57,8 +57,8 @@ implements PropertyUiModel {
     }
 
     public ScalarPropertyModel copyHaving(
-            EntityModel.Mode mode,
-            EntityModel.RenderingHint renderingHint) {
+            final EntityModel.Mode mode,
+            final EntityModel.RenderingHint renderingHint) {
         return new ScalarPropertyModel(
                 getParentUiModel(),
                 propertyMemento,
@@ -142,7 +142,7 @@ implements PropertyUiModel {
 
     @Override
     public String toStringOf() {
-        return getName() + ": " + propertyMemento.toString();
+        return getFriendlyName() + ": " + propertyMemento.toString();
     }
 
     public String getReasonInvalidIfAny() {

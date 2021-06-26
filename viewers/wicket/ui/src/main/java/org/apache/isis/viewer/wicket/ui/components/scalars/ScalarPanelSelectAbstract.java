@@ -85,7 +85,7 @@ public abstract class ScalarPanelSelectAbstract extends ScalarPanelAbstract {
         setOutputMarkupId(true);
         select2.component().setOutputMarkupId(true);
 
-        final String name = scalarModel.getName();
+        final String name = scalarModel.getFriendlyName();
         select2.setLabel(Model.of(name));
 
         final FormGroup formGroup = createFormGroupAndName(formComponent, ID_SCALAR_IF_REGULAR, ID_SCALAR_NAME);
@@ -211,7 +211,7 @@ public abstract class ScalarPanelSelectAbstract extends ScalarPanelAbstract {
      * @param target The Ajax request handler
      */
     @Override
-    public void repaint(AjaxRequestTarget target) {
+    public void repaint(final AjaxRequestTarget target) {
         //target.add(select2.component());
         target.add(this);
     }

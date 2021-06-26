@@ -78,12 +78,12 @@ extends ScalarPanelAbstract {
     @Override
     protected FormGroup createComponentForRegular() {
         fileUploadField = createFileUploadField(ID_SCALAR_VALUE);
-        fileUploadField.setLabel(Model.of(getModel().getName()));
+        fileUploadField.setLabel(Model.of(getModel().getFriendlyName()));
 
         final FormGroup scalarIfRegularFormGroup = new FormGroup(ID_SCALAR_IF_REGULAR, fileUploadField);
         scalarIfRegularFormGroup.add(fileUploadField);
 
-        final Label scalarName = new Label(ID_SCALAR_NAME, getModel().getName());
+        final Label scalarName = new Label(ID_SCALAR_NAME, getModel().getFriendlyName());
         scalarIfRegularFormGroup.add(scalarName);
 
         wicketImage = asWicketImage(ID_IMAGE);
@@ -131,7 +131,7 @@ extends ScalarPanelAbstract {
 
     // //////////////////////////////////////
 
-    private Image asWicketImage(String id) {
+    private Image asWicketImage(final String id) {
 
         val adapter = getModel().getObject();
         if(adapter == null) {
@@ -166,7 +166,7 @@ extends ScalarPanelAbstract {
         updateRegularFormComponents(InputFieldVisibility.VISIBLE, InputFieldEditability.EDITABLE, null, Optional.empty());
     }
 
-    private FileUploadField createFileUploadField(String componentId) {
+    private FileUploadField createFileUploadField(final String componentId) {
         final BootstrapFileInputField fileUploadField = new BootstrapFileInputField(
                 componentId, new IModel<List<FileUpload>>() {
 
@@ -219,7 +219,7 @@ extends ScalarPanelAbstract {
         return adapter != null? (T) adapter.getPojo(): null;
     }
 
-    public IsisBlobOrClobPanelAbstract(String id, ScalarModel scalarModel) {
+    public IsisBlobOrClobPanelAbstract(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
     }
 
@@ -298,7 +298,7 @@ extends ScalarPanelAbstract {
         return scalarModel.getFileAccept();
     }
 
-    private void addAcceptFilterTo(Component component){
+    private void addAcceptFilterTo(final Component component){
         final String filter = getAcceptFilter();
         if(component==null || filter==null || filter.isEmpty())
             return; // ignore
@@ -312,7 +312,7 @@ extends ScalarPanelAbstract {
         component.add(new AttributeModifier("accept", new AcceptAttributeModel()));
     }
 
-    private Label updateFileNameLabel(String idFileName, MarkupContainer formComponent) {
+    private Label updateFileNameLabel(final String idFileName, final MarkupContainer formComponent) {
         class FileNameModel extends Model<String> {
             private static final long serialVersionUID = 1L;
             @Override
@@ -340,7 +340,7 @@ extends ScalarPanelAbstract {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick(final AjaxRequestTarget target) {
                 setEnabled(false);
                 ScalarModel model = IsisBlobOrClobPanelAbstract.this.getModel();
                 model.setObject(null);
@@ -364,7 +364,7 @@ extends ScalarPanelAbstract {
 
     }
 
-    private MarkupContainer updateDownloadLink(String downloadId, MarkupContainer container) {
+    private MarkupContainer updateDownloadLink(final String downloadId, final MarkupContainer container) {
         val resourceLink = createResourceLink(downloadId);
         if(resourceLink != null) {
             container.addOrReplace(resourceLink);
@@ -374,7 +374,7 @@ extends ScalarPanelAbstract {
         return resourceLink;
     }
 
-    private ResourceLinkVolatile createResourceLink(String id) {
+    private ResourceLinkVolatile createResourceLink(final String id) {
         final T blob = getBlobOrClobFromModel();
         if(blob == null) {
             return null;

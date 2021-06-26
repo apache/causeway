@@ -37,8 +37,8 @@ public interface ScalarUiModel {
     ManagedObject getOwner();
 
     /** feature name */
-    default String getName() {
-        return getMetaModel().getName();
+    default String getFriendlyName() {
+        return getMetaModel().getFriendlyName(this::getOwner);
     }
 
     default boolean isCollection() {
@@ -47,7 +47,7 @@ public interface ScalarUiModel {
     }
 
     default String getDescribedAs() {
-        return getMetaModel().getDescription();
+        return getMetaModel().getDescription(this::getOwner);
     }
 
     /**

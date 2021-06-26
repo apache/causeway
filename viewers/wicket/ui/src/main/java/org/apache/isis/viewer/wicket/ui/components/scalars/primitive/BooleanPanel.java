@@ -60,7 +60,7 @@ public class BooleanPanel extends ScalarPanelAbstract {
 
     @Override
     protected MarkupContainer createComponentForRegular() {
-        final String name = getModel().getName();
+        final String name = getModel().getFriendlyName();
 
         checkBox = createCheckBox(ID_SCALAR_VALUE, CheckBoxXConfig.Sizes.lg);
 

@@ -31,6 +31,7 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
@@ -132,14 +133,15 @@ implements HasDynamicallyVisibleContent {
             div.addOrReplace(collectionPanel);
 
 
-            Label labelComponent = collectionPanel.createLabel(ID_COLLECTION_NAME, collectionMetaModel.getName());
+            final Label labelComponent = collectionPanel
+                    .createLabel(
+                            ID_COLLECTION_NAME,
+                            collectionMetaModel.getFriendlyName(collectionModel::getParentObject));
             labelComponent.setEscapeModelStrings(true);
             div.add(labelComponent);
 
-            final String description = collectionMetaModel.getDescription();
-            if(description != null) {
-                Tooltips.addTooltip(labelComponent, description);
-            }
+            _Strings.nonEmpty(collectionMetaModel.getDescription(collectionModel::getParentObject))
+            .ifPresent(description->Tooltips.addTooltip(labelComponent, description));
 
             final Can<LinkAndLabel> links = collectionModel.getLinks();
             AdditionalLinksPanel.addAdditionalLinks(div,ID_ADDITIONAL_LINKS, links, AdditionalLinksPanel.Style.INLINE_LIST);

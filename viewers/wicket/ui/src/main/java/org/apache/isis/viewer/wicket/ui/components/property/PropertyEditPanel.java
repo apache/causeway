@@ -88,8 +88,7 @@ extends PanelAbstract<ManagedObject, ScalarPropertyModel> {
         getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PROPERTY_EDIT_FORM, getScalarModel());
         getComponentFactoryRegistry().addOrReplaceComponent(header, ComponentType.ENTITY_ICON_AND_TITLE, scalarModel.getParentUiModel());
 
-        val property = getScalarModel().getMetaModel();
-        val propertyName = property.getName();
+        val propertyName = getScalarModel().getFriendlyName();
         val label = new Label(ID_PROPERTY_NAME, Model.of(propertyName));
 
         label.setEscapeModelStrings(true);

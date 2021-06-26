@@ -119,7 +119,7 @@ class ExcelConverter {
 
     // //////////////////////////////////////
 
-    File appendSheet(final List<WorksheetContent> worksheetContents, XSSFWorkbook workbook) throws IOException {
+    File appendSheet(final List<WorksheetContent> worksheetContents, final XSSFWorkbook workbook) throws IOException {
         final Set<String> worksheetNames = worksheetContents.stream()
                 .map(x -> x.getSpec().getSheetName())
                 .collect(Collectors.toSet());
@@ -157,10 +157,10 @@ class ExcelConverter {
                 .map(objectManager::adapt)
                 .collect(Collectors.toList());
 
-        final List<ObjectAssociation> propertyList = _Lists.newArrayList();
+        final List<OneToOneAssociation> propertyList = _Lists.newArrayList();
 
         specificationLoader.specForType(factory.getCls())
-        .ifPresent(spec->spec.streamAssociations(MixedIn.INCLUDED)
+        .ifPresent(spec->spec.streamProperties(MixedIn.INCLUDED)
                 .filter(VISIBLE_PROPERTIES)
                 .forEach(propertyList::add));
 
@@ -179,9 +179,9 @@ class ExcelConverter {
 
         // header row
         int i = 0;
-        for (final ObjectAssociation property : propertyList) {
+        for (val property : propertyList) {
             final Cell cell = headerRow.createCell(i++);
-            cell.setCellValue(property.getName());
+            cell.setCellValue(property.getColumnName());
         }
 
         final CellMarshaller cellMarshaller = newCellMarshaller(workbook);
@@ -190,13 +190,12 @@ class ExcelConverter {
         for (final ManagedObject objectAdapter : adapters) {
             final Row detailRow = rowFactory.newRow();
             i = 0;
-            for (final ObjectAssociation oa : propertyList) {
+            for (val property : propertyList) {
                 final Cell cell = detailRow.createCell(i++);
-                final OneToOneAssociation otoa = (OneToOneAssociation) oa;
-                if (annotatedAsHyperlink.contains(oa)){
-                    cellMarshaller.setCellValueForHyperlink(objectAdapter, otoa, cell);
+                if (annotatedAsHyperlink.contains(property)){
+                    cellMarshaller.setCellValueForHyperlink(objectAdapter, property, cell);
                 } else {
-                    cellMarshaller.setCellValue(objectAdapter, otoa, cell);
+                    cellMarshaller.setCellValue(objectAdapter, property, cell);
                 }
             }
         }
@@ -296,7 +295,7 @@ class ExcelConverter {
         pivotSourceSheet.shiftRows(3, pivotSourceSheet.getLastRowNum(), -3);
     }
 
-    private void validateAnnotations(final List<? extends ObjectAssociation> list, Class<?> cls) throws IllegalArgumentException{
+    private void validateAnnotations(final List<? extends ObjectAssociation> list, final Class<?> cls) throws IllegalArgumentException{
 
         if (fieldsAnnotatedWith(cls, PivotRow.class).size()==0){
             throw new IllegalArgumentException("No annotation for row found");
@@ -557,7 +556,7 @@ class ExcelConverter {
         }
 
         return objectSpec.streamProperties(MixedIn.INCLUDED)
-        .filter(association -> propertyNameOrId.equalsIgnoreCase(association.getName())
+        .filter(association -> propertyNameOrId.equalsIgnoreCase(association.getColumnName())
                             || propertyNameOrId.equalsIgnoreCase(association.getId()))
         .findFirst()
         .orElse(null);

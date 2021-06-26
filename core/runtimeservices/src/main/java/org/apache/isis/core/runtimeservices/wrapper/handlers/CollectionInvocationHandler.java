@@ -29,11 +29,10 @@ class CollectionInvocationHandler<T, R> extends AbstractCollectionInvocationHand
 
     public CollectionInvocationHandler(
             final R collectionToProxy,
-            final String collectionName,
             final DomainObjectInvocationHandler<T> handler,
             final OneToManyAssociation otma) {
 
-        super(collectionToProxy, collectionName, handler, otma);
+        super(collectionToProxy, handler, otma);
 
         try {
             intercept(ObjectExtensions.getMethod(collectionToProxy, "contains", Object.class));

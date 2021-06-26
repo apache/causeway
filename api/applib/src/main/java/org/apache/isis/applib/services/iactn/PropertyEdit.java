@@ -28,7 +28,8 @@ import lombok.Getter;
 /**
  * @since 1.x {@index}
  */
-public class PropertyEdit extends Execution<PropertyEditDto, PropertyDomainEvent<?, ?>> {
+public class PropertyEdit
+extends Execution<PropertyEditDto, PropertyDomainEvent<?, ?>> {
 
     @Getter
     private final Object newValue;

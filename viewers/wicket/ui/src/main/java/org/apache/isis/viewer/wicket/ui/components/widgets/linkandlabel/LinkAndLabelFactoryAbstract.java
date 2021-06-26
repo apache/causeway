@@ -183,8 +183,7 @@ implements Serializable {
                     private static final long serialVersionUID = 1L;
                     @Override
                     public String getObject() {
-                        final ObjectAction action = actionModel.getMetaModel();
-                        return action.getName();
+                        return actionModel.getFriendlyName();
                     }
                 });
                 prompt.setTitle(label, target);

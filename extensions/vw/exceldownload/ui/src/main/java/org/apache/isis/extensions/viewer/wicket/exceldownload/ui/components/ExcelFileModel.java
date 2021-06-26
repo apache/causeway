@@ -55,7 +55,7 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
 
     private final EntityCollectionModel model;
 
-    public ExcelFileModel(EntityCollectionModel model) {
+    public ExcelFileModel(final EntityCollectionModel model) {
         this.model = model;
     }
 
@@ -63,7 +63,7 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
         private final Sheet sheet;
         private int rowNum;
 
-        RowFactory(Sheet sheet) {
+        RowFactory(final Sheet sheet) {
             this.sheet = sheet;
         }
 
@@ -111,7 +111,7 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
                 int i=0;
                 for (ObjectAssociation property : columnProperties) {
                     final Cell cell = row.createCell((short) i++);
-                    cell.setCellValue(property.getName());
+                    cell.setCellValue(property.getFriendlyName(model::getParentObject));
                 }
 
                 final CellStyle dateCellStyle = createDateFormatCellStyle(wb);
@@ -137,7 +137,7 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
         }
     }
 
-    protected void autoSize(final Sheet sh, int numProps) {
+    protected void autoSize(final Sheet sh, final int numProps) {
         for(int prop=0; prop<numProps; prop++) {
             sh.autoSizeColumn(prop);
         }
@@ -155,7 +155,7 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
             final ManagedObject objectAdapter,
             final ObjectAssociation property,
             final Cell cell,
-            CellStyle dateCellStyle) {
+            final CellStyle dateCellStyle) {
 
         val valueAdapter = property.get(objectAdapter);
         val valueAsObj = valueAdapter!=null ? valueAdapter.getPojo() : null;
@@ -201,12 +201,12 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
         // number
         if(valueAsObj instanceof Double) {
             Double value = (Double) valueAsObj;
-            setCellValueForDouble(cell, (double)value);
+            setCellValueForDouble(cell, value);
             return;
         }
         if(valueAsObj instanceof Float) {
             Float value = (Float) valueAsObj;
-            setCellValueForDouble(cell, (double)value);
+            setCellValueForDouble(cell, value);
             return;
         }
         if(valueAsObj instanceof BigDecimal) {
@@ -221,22 +221,22 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
         }
         if(valueAsObj instanceof Long) {
             Long value = (Long) valueAsObj;
-            setCellValueForDouble(cell, (double)value);
+            setCellValueForDouble(cell, value);
             return;
         }
         if(valueAsObj instanceof Integer) {
             Integer value = (Integer) valueAsObj;
-            setCellValueForDouble(cell, (double)value);
+            setCellValueForDouble(cell, value);
             return;
         }
         if(valueAsObj instanceof Short) {
             Short value = (Short) valueAsObj;
-            setCellValueForDouble(cell, (double)value);
+            setCellValueForDouble(cell, value);
             return;
         }
         if(valueAsObj instanceof Byte) {
             Byte value = (Byte) valueAsObj;
-            setCellValueForDouble(cell, (double)value);
+            setCellValueForDouble(cell, value);
             return;
         }
 
@@ -245,11 +245,11 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
         return;
     }
 
-    private static void setCellValueForDouble(final Cell cell, double value2) {
+    private static void setCellValueForDouble(final Cell cell, final double value2) {
         cell.setCellValue(value2);
     }
 
-    private static void setCellValueForDate(final Cell cell, Date date, CellStyle dateCellStyle) {
+    private static void setCellValueForDate(final Cell cell, final Date date, final CellStyle dateCellStyle) {
         cell.setCellValue(date);
         cell.setCellStyle(dateCellStyle);
     }

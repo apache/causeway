@@ -22,12 +22,12 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
-public interface ReprRenderer<R extends ReprRenderer<R, T>, T> {
+public interface ReprRenderer<T> {
 
     MediaType getMediaType();
 
-    R with(T t);
+    ReprRenderer<T> with(T t);
 
-    public JsonRepresentation render();
+    JsonRepresentation render();
 
 }

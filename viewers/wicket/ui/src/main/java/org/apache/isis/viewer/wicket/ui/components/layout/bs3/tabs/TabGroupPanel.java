@@ -64,16 +64,16 @@ implements HasDynamicallyVisibleContent {
 
         for (val bs3Tab : tablist) {
             val repeatingViewWithDynamicallyVisibleContent = TabPanel.newRows(entityModel, bs3Tab);
+            // TODO[ISIS-1720] seems strange that viewer needs to do a translation here, should be already provided
             val translateContext = TranslationContext
                     .forTabIdentifier(entityModel.getTypeOfSpecification().getFeatureIdentifier());
-
             String bs3TabName = bs3Tab.getName();
             String tabName = translationService.translate(translateContext, bs3TabName);
             tabs.add(new AbstractTab(Model.of(tabName)) {
                 private static final long serialVersionUID = 1L;
 
                 @Override
-                public Panel getPanel(String panelId) {
+                public Panel getPanel(final String panelId) {
                     return new TabPanel(panelId, entityModel, bs3Tab, repeatingViewWithDynamicallyVisibleContent);
                 }
 
@@ -86,7 +86,7 @@ implements HasDynamicallyVisibleContent {
         return tabs;
     }
 
-    public TabGroupPanel(String id, final EntityModel entityModel, final BS3TabGroup bs3TabGroup) {
+    public TabGroupPanel(final String id, final EntityModel entityModel, final BS3TabGroup bs3TabGroup) {
         super(id, tabsFor(entityModel, bs3TabGroup));
         this.entityModel = entityModel;
 

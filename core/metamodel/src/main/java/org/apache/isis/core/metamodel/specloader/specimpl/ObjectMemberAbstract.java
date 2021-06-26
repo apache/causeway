@@ -20,8 +20,10 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
@@ -118,16 +120,9 @@ implements
     }
 
     // -- Name, Description, Help (convenience for facets)
-    /**
-     * Return the default label for this member. This is based on the name of
-     * this member.
-     *
-     * @see #getId()
-     */
-    @Override
-    public String getName() {
 
-        final ManagedObject owner = null; //TODO[ISIS-1720] must take ManagedObject (owner) as an argument
+    @Override
+    public String getFriendlyName(final Supplier<ManagedObject> domainObjectProvider) {
 
         val namedFacet = getFacet(MemberNamedFacet.class);
 
@@ -138,21 +133,41 @@ implements
         return namedFacet
             .getSpecialization()
             .fold(  textFacet->textFacet.translated(),
-                    textFacet->textFacet.textElseNull(owner));
+                    textFacet->textFacet.textElseNull(domainObjectProvider.get()));
     }
 
     @Override
-    public String getDescription() {
+    public Optional<String> getStaticFriendlyName() {
+        return lookupFacet(MemberNamedFacet.class)
+        .map(MemberNamedFacet::getSpecialization)
+        .flatMap(specialization->specialization
+                .fold(
+                        textFacet->Optional.of(textFacet.translated()),
+                        textFacet->Optional.empty()));
+    }
 
-        final ManagedObject owner = null; //TODO[ISIS-1720] must take ManagedObject (owner) as an argument
+
+    @Override
+    public String getDescription(final Supplier<ManagedObject> domainObjectProvider) {
 
         return lookupFacet(MemberDescribedFacet.class)
         .map(MemberDescribedFacet::getSpecialization)
         .map(specialization->specialization
                 .fold(textFacet->textFacet.translated(),
-                      textFacet->textFacet.textElseNull(owner)))
+                      textFacet->textFacet.textElseNull(domainObjectProvider.get())))
         .orElse(null);
     }
+
+    @Override
+    public Optional<String> getStaticDescription() {
+        return lookupFacet(MemberDescribedFacet.class)
+                .map(MemberDescribedFacet::getSpecialization)
+                .flatMap(specialization->specialization
+                        .fold(
+                                textFacet->Optional.of(textFacet.translated()),
+                                textFacet->Optional.empty()));
+    }
+
 
     @Override
     public String getHelp() {
@@ -309,7 +324,9 @@ implements
 
     @Override
     public String toString() {
-        return String.format("id=%s,name='%s'", getId(), getName());
+        return getStaticFriendlyName()
+                .map(name->String.format("id=%s,name='%s'", getId(), name))
+                .orElseGet(()->String.format("id=%s,name=imperative", getId()));
     }
 
     // -- Dependencies

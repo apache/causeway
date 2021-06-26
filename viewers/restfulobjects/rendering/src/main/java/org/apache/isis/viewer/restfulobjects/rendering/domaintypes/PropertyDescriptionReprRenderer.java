@@ -28,16 +28,26 @@ import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 
-public class PropertyDescriptionReprRenderer extends AbstractTypeMemberReprRenderer<PropertyDescriptionReprRenderer, OneToOneAssociation> {
+import lombok.val;
 
-    public static LinkBuilder newLinkToBuilder(final IResourceContext resourceContext, final Rel rel, final ObjectSpecification objectSpecification, final OneToOneAssociation property) {
+public class PropertyDescriptionReprRenderer
+extends AbstractTypeMemberReprRenderer<OneToOneAssociation> {
+
+    public static LinkBuilder newLinkToBuilder(
+            final IResourceContext resourceContext,
+            final Rel rel,
+            final ObjectSpecification objectSpecification,
+            final OneToOneAssociation property) {
         final String domainType = objectSpecification.getLogicalTypeName();
         final String propertyId = property.getId();
         final String url = "domain-types/" + domainType + "/properties/" + propertyId;
         return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.PROPERTY_DESCRIPTION, url);
     }
 
-    public PropertyDescriptionReprRenderer(final IResourceContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
+    public PropertyDescriptionReprRenderer(
+            final IResourceContext resourceContext,
+            final LinkFollowSpecs linkFollower,
+            final JsonRepresentation representation) {
         super(resourceContext, linkFollower, RepresentationType.PROPERTY_DESCRIPTION, representation);
     }
 
@@ -54,19 +64,25 @@ public class PropertyDescriptionReprRenderer extends AbstractTypeMemberReprRende
             .ifPresent(maxLengthFacet->representation.mapPut("maxLength", maxLengthFacet.value()));
     }
 
-    private void addLinkToReturnTypeIfAny() {
-        final ObjectSpecification returnType = getObjectFeature().getSpecification();
-        if (returnType == null) {
-            return;
-        }
-        final LinkBuilder linkBuilder = DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), Rel.RETURN_TYPE, returnType);
-        getLinks().arrayAdd(linkBuilder.build());
-    }
 
     @Override
     protected void putExtensionsSpecificToFeature() {
         putExtensionsName();
         putExtensionsDescriptionIfAvailable();
     }
+
+    // -- HELPER
+
+    private void addLinkToReturnTypeIfAny() {
+        val returnTypeSpec = getObjectFeature().getSpecification();
+        if (returnTypeSpec == null) {
+            return;
+        }
+        getLinks().arrayAdd(
+                DomainTypeReprRenderer
+                .newLinkToBuilder(getResourceContext(), Rel.RETURN_TYPE, returnTypeSpec)
+                .build());
+    }
+
 
 }

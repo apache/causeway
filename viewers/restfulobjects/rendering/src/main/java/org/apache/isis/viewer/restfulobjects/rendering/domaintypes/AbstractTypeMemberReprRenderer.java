@@ -25,14 +25,18 @@ import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
-import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberType;
 
-public abstract class AbstractTypeMemberReprRenderer<R extends ReprRendererAbstract<R, ParentSpecAndFeature<T>>, T extends ObjectMember> extends AbstractTypeFeatureReprRenderer<R, T> {
+public abstract class AbstractTypeMemberReprRenderer<T extends ObjectMember>
+extends AbstractTypeFeatureReprRenderer<T> {
 
     protected MemberType memberType;
 
-    public AbstractTypeMemberReprRenderer(final IResourceContext resourceContext, final LinkFollowSpecs linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
+    public AbstractTypeMemberReprRenderer(
+            final IResourceContext resourceContext,
+            final LinkFollowSpecs linkFollower,
+            final RepresentationType representationType,
+            final JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
     }
 
@@ -44,7 +48,7 @@ public abstract class AbstractTypeMemberReprRenderer<R extends ReprRendererAbstr
     }
 
     @Override
-    public R with(final ParentSpecAndFeature<T> specAndFeature) {
+    public AbstractTypeMemberReprRenderer<T> with(final ParentSpecAndFeature<T> specAndFeature) {
         super.with(specAndFeature);
         memberType = MemberType.determineFrom(objectFeature);
 
@@ -52,7 +56,7 @@ public abstract class AbstractTypeMemberReprRenderer<R extends ReprRendererAbstr
         representation.mapPut("id", objectFeature.getId());
         representation.mapPut("memberType", memberType.getName());
 
-        return cast(this);
+        return this;
     }
 
     @Override

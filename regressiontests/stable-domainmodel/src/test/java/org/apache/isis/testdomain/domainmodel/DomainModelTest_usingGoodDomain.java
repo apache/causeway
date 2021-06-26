@@ -143,8 +143,8 @@ class DomainModelTest_usingGoodDomain {
         val mx_action = holderSpec.getActionElseFail("action"); // when @Action at type level
         assertNotNull(mx_action);
         assertEquals("action", mx_action.getId());
-        assertEquals("foo", mx_action.getName());
-        assertEquals("bar", mx_action.getDescription());
+        assertEquals("foo", mx_action.getStaticFriendlyName().get());
+        assertEquals("bar", mx_action.getStaticDescription().get());
         assertHasPublishedActionFacet(mx_action);
 
         val mx_action2 = holderSpec.getActionElseFail("action2"); // proper mixed-in action support
@@ -154,26 +154,26 @@ class DomainModelTest_usingGoodDomain {
         val mx_property = holderSpec.getAssociationElseFail("property"); // when @Property at type level
         assertNotNull(mx_property);
         assertEquals("property", mx_property.getId());
-        assertEquals("foo", mx_property.getName());
-        assertEquals("bar", mx_property.getDescription());
+        assertEquals("foo", mx_property.getStaticFriendlyName().get());
+        assertEquals("bar", mx_property.getStaticDescription().get());
 
         val mx_property2 = holderSpec.getAssociationElseFail("property2"); // when @Property at method level
         assertNotNull(mx_property2);
         assertEquals("property2", mx_property2.getId());
-        assertEquals("foo", mx_property2.getName());
-        assertEquals("bar", mx_property2.getDescription());
+        assertEquals("foo", mx_property2.getStaticFriendlyName().get());
+        assertEquals("bar", mx_property2.getStaticDescription().get());
 
         val mx_collection = holderSpec.getAssociationElseFail("collection"); // when @Collection at type level
         assertNotNull(mx_collection);
         assertEquals("collection", mx_collection.getId());
-        assertEquals("foo", mx_collection.getName());
-        assertEquals("bar", mx_collection.getDescription());
+        assertEquals("foo", mx_collection.getStaticFriendlyName().get());
+        assertEquals("bar", mx_collection.getStaticDescription().get());
 
         val mx_collection2 = holderSpec.getAssociationElseFail("collection2"); // when @Collection at method level
         assertNotNull(mx_collection2);
         assertEquals("collection2", mx_collection2.getId());
-        assertEquals("foo", mx_collection2.getName());
-        assertEquals("bar", mx_collection2.getDescription());
+        assertEquals("foo", mx_collection2.getStaticFriendlyName().get());
+        assertEquals("bar", mx_collection2.getStaticDescription().get());
 
     }
 
@@ -191,7 +191,7 @@ class DomainModelTest_usingGoodDomain {
 
     @ParameterizedTest
     @MethodSource("provideProperMemberInheritanceTypes")
-    void titleAndIconName_shouldBeInheritable(Class<?> type) {
+    void titleAndIconName_shouldBeInheritable(final Class<?> type) {
 
         val spec = specificationLoader.specForTypeElseFail(type);
 
@@ -208,33 +208,33 @@ class DomainModelTest_usingGoodDomain {
 
     @ParameterizedTest
     @MethodSource("provideProperMemberInheritanceTypes")
-    void metamodelContributingMembers_shouldBeInheritable(Class<?> type) {
+    void metamodelContributingMembers_shouldBeInheritable(final Class<?> type) {
 
         val holderSpec = specificationLoader.specForTypeElseFail(type);
 
         val action = holderSpec.getActionElseFail("sampleAction");
         assertNotNull(action);
         assertEquals("sampleAction", action.getId());
-        assertEquals("foo", action.getName());
-        assertEquals("bar", action.getDescription());
+        assertEquals("foo", action.getStaticFriendlyName().get());
+        assertEquals("bar", action.getStaticDescription().get());
 
         val property = holderSpec.getAssociationElseFail("sampleProperty");
         assertNotNull(property);
         assertEquals("sampleProperty", property.getId());
-        assertEquals("foo", property.getName());
-        assertEquals("bar", property.getDescription());
+        assertEquals("foo", property.getStaticFriendlyName().get());
+        assertEquals("bar", property.getStaticDescription().get());
 
         val collection = holderSpec.getAssociationElseFail("sampleCollection");
         assertNotNull(collection);
         assertEquals("sampleCollection", collection.getId());
-        assertEquals("foo", collection.getName());
-        assertEquals("bar", collection.getDescription());
+        assertEquals("foo", collection.getStaticFriendlyName().get());
+        assertEquals("bar", collection.getStaticDescription().get());
 
     }
 
     @ParameterizedTest
     @MethodSource("provideProperMemberInheritanceTypes")
-    void metamodelContributingActions_shouldBeUnique_whenOverridden(Class<?> type) {
+    void metamodelContributingActions_shouldBeUnique_whenOverridden(final Class<?> type) {
 
         if(type.isInterface()
                 && type.getSuperclass()==null) {
@@ -246,8 +246,8 @@ class DomainModelTest_usingGoodDomain {
         val super_action = holderSpec.getActionElseFail("sampleActionOverride");
         assertNotNull(super_action);
         assertEquals("sampleActionOverride", super_action.getId());
-        assertEquals("foo", super_action.getName());
-        assertEquals("bar", super_action.getDescription());
+        assertEquals("foo", super_action.getStaticFriendlyName().get());
+        assertEquals("bar", super_action.getStaticDescription().get());
 
         assertEquals(1L, holderSpec.streamAnyActions(MixedIn.EXCLUDED)
                 .filter(prop->prop.getId().equals("sampleActionOverride"))
@@ -257,7 +257,7 @@ class DomainModelTest_usingGoodDomain {
 
     @ParameterizedTest
     @MethodSource("provideProperMemberInheritanceTypes")
-    void metamodelContributingProperties_shouldBeUnique_whenOverridden(Class<?> type) {
+    void metamodelContributingProperties_shouldBeUnique_whenOverridden(final Class<?> type) {
 
         if(type.isInterface()
                 && type.getSuperclass()==null) {
@@ -269,8 +269,8 @@ class DomainModelTest_usingGoodDomain {
         val super_property = holderSpec.getAssociationElseFail("samplePropertyOverride");
         assertNotNull(super_property);
         assertEquals("samplePropertyOverride", super_property.getId());
-        assertEquals("foo", super_property.getName());
-        assertEquals("bar", super_property.getDescription());
+        assertEquals("foo", super_property.getStaticFriendlyName().get());
+        assertEquals("bar", super_property.getStaticDescription().get());
 
         assertEquals(1L, holderSpec.streamProperties(MixedIn.EXCLUDED)
                 .filter(prop->prop.getId().equals("samplePropertyOverride"))
@@ -386,15 +386,15 @@ class DomainModelTest_usingGoodDomain {
 
     // -- HELPER
 
-    private void assertHasProperty(ObjectSpecification spec, String propertyId) {
+    private void assertHasProperty(final ObjectSpecification spec, final String propertyId) {
         spec.getPropertyElseFail(propertyId);
     }
 
-    private void assertHasAction(ObjectSpecification spec, String actionId) {
+    private void assertHasAction(final ObjectSpecification spec, final String actionId) {
         spec.getActionElseFail(actionId);
     }
 
-    private void assertHasPublishedActionFacet(FacetHolder facetHolder) {
+    private void assertHasPublishedActionFacet(final FacetHolder facetHolder) {
         val facet = facetHolder.getFacet(ExecutionPublishingFacet.class);
         assertNotNull(facet);
     }

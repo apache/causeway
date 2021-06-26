@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
+import java.util.Optional;
+import java.util.function.Supplier;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
@@ -47,40 +50,45 @@ public interface ObjectFeature extends Specification {
     String getId();
 
     /**
-     * Return the name for this member - the field or action. This is based on
-     * the name of this member.
+     * Returns the (translated friendly) name for this member - the field or action.
+     * If not specified, defaults to the java-source-code name of this member.
      *
-     * @see #getFeatureIdentifier()
-     * @deprecated TODO[ISIS-1720] must take ManagedObject as an argument
-     */
-    @Deprecated
-    String getName();
-
-    /**
-     * Returns the (friendly) name for this member - the field or action.
-     * If not specified, defaults to the java-source code name of this member.
+     * @apiNote argument is a {@link Supplier}, because the {@link ManagedObject}
+     * is only required when the name is provided imperatively and domain-object
+     * retrieval might be expensive
      *
      * @see #getFeatureIdentifier()
      */
-    default String getName(final ManagedObject domainObject) {
-        return getName();
-    }
+    String getFriendlyName(Supplier<ManagedObject> domainObjectProvider);
 
     /**
-     * Returns a description of how the member is used - this complements the
-     * help text.
-     * @deprecated TODO[ISIS-1720] must take ManagedObject as an argument
+     * Optionally returns the (translated friendly) name for this member -
+     * the field or action, based on whether the name is provided statically
+     * and not imperatively.
+     * <p>
+     * If not specified, defaults to the java-source-code name of this member.
+     *
+     * @see #getFeatureIdentifier()
      */
-    @Deprecated
-    String getDescription();
+    Optional<String> getStaticFriendlyName();
 
     /**
-     * Returns a description of how the member is used - this complements the
+     * Returns a (translated) description of how the member is used - this complements the
      * help text.
+     *
+     * @apiNote argument is a {@link Supplier}, because the {@link ManagedObject}
+     * is only required when the description is provided imperatively and domain-object
+     * retrieval might be expensive
+     *
      */
-    default String getDescription(final ManagedObject domainObject) {
-        return getDescription();
-    }
+    String getDescription(final Supplier<ManagedObject> domainObjectProvider);
+
+    /**
+     * Optionally returns the (translated) description of how the member is used,
+     * based on whether the description is provided statically
+     * and not imperatively.
+     */
+    Optional<String> getStaticDescription();
 
     /**
      * The specification of the underlying type.

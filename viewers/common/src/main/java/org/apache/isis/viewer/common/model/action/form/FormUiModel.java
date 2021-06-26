@@ -87,6 +87,15 @@ public interface FormUiModel extends HasTitle {
 
     }
 
+    // -- NAME
+
+    /**
+     * Action's friendly (translated) name.
+     */
+    default String getFriendlyName() {
+        return getMetaModel().getFriendlyName(this::getOwner);
+    }
+
     // -- HAS TITLE
 
     @Override
@@ -106,7 +115,10 @@ public interface FormUiModel extends HasTitle {
             }
             buf.append(ManagedObjects.abbreviatedTitleOf(paramValue, 8, "..."));
         });
-        return target.titleString() + "." + objectAction.getName() + (buf.length()>0?"(" + buf.toString() + ")":"");
+        return target.titleString() + "." + getFriendlyName()
+            + (buf.length()>0
+                    ?"(" + buf.toString() + ")"
+                    :"");
     }
 
     // -- SHORTCUTS

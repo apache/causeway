@@ -29,7 +29,11 @@ import org.apache.isis.core.metamodel.spec.feature.memento.PropertyMemento;
  * Provides reflective access to a field on a domain object that is used to
  * reference another domain object.
  */
-public interface OneToOneAssociation extends ObjectAssociation, OneToOneFeature, MutableCurrentHolder {
+public interface OneToOneAssociation
+extends
+    ObjectAssociation,
+    OneToOneFeature,
+    MutableCurrentHolder {
 
     /**
      * Initialise this field in the specified object with the specified
@@ -40,8 +44,6 @@ public interface OneToOneAssociation extends ObjectAssociation, OneToOneFeature,
      */
     void initAssociation(ManagedObject inObject, ManagedObject associate);
 
-
-
     /**
      * Determines if the specified reference is valid for setting this field in
      * the specified object, represented as a {@link Consent}.
@@ -51,7 +53,6 @@ public interface OneToOneAssociation extends ObjectAssociation, OneToOneFeature,
             final ManagedObject proposedAdapter,
             final InteractionInitiatedBy interactionInitiatedBy);
 
-
     /**
      * Returns true if calculated from other data in the object, that is, should
      * not be persisted.
@@ -60,9 +61,7 @@ public interface OneToOneAssociation extends ObjectAssociation, OneToOneFeature,
         return containsFacet(SnapshotExcludeFacet.class);
     }
 
-
-
-    default String getCssClass(String prefix) {
+    default String getCssClass(final String prefix) {
         final String ownerObjectType = getOnType().getLogicalTypeName().replace(".", "-");
         final String memberId = getFeatureIdentifier().getMemberLogicalName();
         return prefix + ownerObjectType + "-" + memberId;
@@ -74,5 +73,12 @@ public interface OneToOneAssociation extends ObjectAssociation, OneToOneFeature,
     default PropertyMemento getMemento() {
         return PropertyMemento.forProperty(this);
     }
+
+    /**
+     * When rendering a domain-object collection as table,
+     * the table's column names are inferred
+     * from the property column-names.
+     */
+    String getColumnName();
 
 }

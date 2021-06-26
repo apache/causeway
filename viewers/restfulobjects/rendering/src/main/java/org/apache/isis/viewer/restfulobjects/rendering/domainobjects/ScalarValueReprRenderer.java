@@ -30,7 +30,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererException;
 
-public class ScalarValueReprRenderer extends ReprRendererAbstract<ScalarValueReprRenderer, ManagedObject> {
+public class ScalarValueReprRenderer
+extends ReprRendererAbstract<ManagedObject> {
 
     private ObjectSpecification returnType;
 

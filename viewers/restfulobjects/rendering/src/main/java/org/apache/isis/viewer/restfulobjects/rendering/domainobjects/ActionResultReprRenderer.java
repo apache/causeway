@@ -37,7 +37,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 
-public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultReprRenderer, ObjectAndActionInvocation> {
+public class ActionResultReprRenderer
+extends ReprRendererAbstract<ObjectAndActionInvocation> {
 
     private ObjectAdapterLinkTo adapterLinkTo = new DomainObjectLinkTo();
 
@@ -123,13 +124,13 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
 
         // we have a returnedAdapter with a spec, but it might hold no pojo (null)
 
-        final ReprRendererAbstract<?, ?> renderer = buildResultRenderer(resultType, representation);
+        final ReprRendererAbstract<?> renderer = buildResultRenderer(resultType, representation);
         if(renderer != null) {
             renderer.render();
         }
     }
 
-    private ReprRendererAbstract<?, ?> buildResultRenderer(
+    private ReprRendererAbstract<?> buildResultRenderer(
             final ResultType resultType,
             final JsonRepresentation representation) {
 
