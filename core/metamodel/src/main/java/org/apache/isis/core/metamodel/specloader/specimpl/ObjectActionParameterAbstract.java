@@ -28,7 +28,6 @@ import org.apache.isis.applib.exceptions.unrecoverable.DomainModelException;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
-import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -71,6 +70,7 @@ implements
     private final int number;
     private final ObjectActionDefault parentAction;
     private final TypedHolder peer;
+    private final String javaSourceParamName;
 
     protected ObjectActionParameterAbstract(
             final FeatureType featureType,
@@ -82,6 +82,9 @@ implements
         this.number = number;
         this.parentAction = objectAction;
         this.peer = requires(peer, "peer");
+        
+        this.javaSourceParamName = 
+                objectAction.getFacetedMethod().getMethod().getParameters()[number].getName(); 
     }
 
     @Override
@@ -132,12 +135,7 @@ implements
 
     @Override
     public String getId() {
-        return lookupFacet(ParamNamedFacet.class)
-        .map(ParamNamedFacet::text)
-        .map(StringExtensions::asCamelLowerFirst)
-//                .orElseThrow(()->_Exceptions
-//                        .unrecoverableFormatted("action parameters must have a ParamNamedFacet %s", this));
-        .orElseGet(()->StringExtensions.asCamelLowerFirst(staticFriendlyName()));
+        return javaSourceParamName;
     }
 
     @Override

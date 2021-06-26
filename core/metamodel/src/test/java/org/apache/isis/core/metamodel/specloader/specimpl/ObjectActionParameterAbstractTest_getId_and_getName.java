@@ -37,6 +37,7 @@ import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.all.named.ParamNamedFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
@@ -53,6 +54,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
     @Mock private ObjectActionDefault parentAction;
     @Mock private TypedHolder actionParamPeer;
     @Mock private ParamNamedFacet namedFacet;
+    @Mock private FacetedMethod mockFacetedMethod;
 
     @Mock private ObjectSpecification stubSpecForString;
     @Mock private ObjectActionParameter stubObjectActionParameterString;
@@ -60,7 +62,8 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
 
     private static final class ObjectActionParameterAbstractToTest
     extends ObjectActionParameterAbstract {
-        private ObjectActionParameterAbstractToTest(final int number, final ObjectActionDefault objectAction, final TypedHolder peer) {
+        private ObjectActionParameterAbstractToTest(
+                final int number, final ObjectActionDefault objectAction, final TypedHolder peer) {
             super(FeatureType.ACTION_PARAMETER_SCALAR, number, objectAction, peer);
         }
 
@@ -103,6 +106,11 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
 
     private ObjectActionParameterAbstractToTest objectActionParameter;
 
+    @SuppressWarnings("unused")
+    private static class Customer {
+        public void aMethod(final Object someParameterName, final Object arg1, final Object arg2) {}
+    }
+
     @Before
     public void setUp() throws Exception {
         context.checking(new Expectations() {
@@ -115,6 +123,12 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
 
                 allowing(stubObjectActionParameterString2).getSpecification();
                 will(returnValue(stubSpecForString));
+
+                allowing(parentAction).getFacetedMethod();
+                will(returnValue(mockFacetedMethod));
+
+                allowing(mockFacetedMethod).getMethod();
+                will(returnValue(Customer.class.getMethod("aMethod", new Class[] {Object.class, Object.class, Object.class})));
             }
         });
 
@@ -124,17 +138,6 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
     public void getId_whenNamedFacetPresent() throws Exception {
 
         objectActionParameter = new ObjectActionParameterAbstractToTest(0, parentAction, actionParamPeer);
-
-        context.checking(new Expectations() {
-            {
-                oneOf(actionParamPeer).getFacet(ParamNamedFacet.class);
-                will(returnValue(namedFacet));
-
-                oneOf(namedFacet).text();
-                will(returnValue("someParameterName"));
-
-            }
-        });
 
         assertThat(objectActionParameter.getId(), is("someParameterName"));
     }
@@ -174,25 +177,6 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
         });
 
         assertThat(objectActionParameter.getStaticFriendlyName().get(), is("string"));
-    }
-
-    @Test
-    public void getId_whenNamedFaceNotPresentAndMultipleParamsOfSameType() throws Exception {
-
-        objectActionParameter = new ObjectActionParameterAbstractToTest(2, parentAction, actionParamPeer);
-        objectActionParameter.setSpecification(stubSpecForString);
-
-        context.checking(new Expectations() {
-            {
-                allowing(actionParamPeer).getFacet(ParamNamedFacet.class);
-                will(returnValue(null));
-
-                oneOf(parentAction).getParameters(with(Expectations.<Predicate<ObjectActionParameter>>anything()));
-                will(returnValue(Can.ofCollection(_Lists.of(stubObjectActionParameterString, objectActionParameter, stubObjectActionParameterString2))));
-            }
-        });
-
-        assertThat(objectActionParameter.getId(), is("string2"));
     }
 
     @Test
