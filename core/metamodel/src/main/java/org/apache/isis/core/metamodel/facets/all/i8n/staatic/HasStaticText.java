@@ -38,12 +38,4 @@ extends HasMemoizableTranslation {
         translated();
     }
 
-    /**
-     * Flag indicating whether the label should be show as is, or should be HTML escaped.
-     * @deprecated - never bypass escaping
-     */
-    @Deprecated
-    default boolean escaped() {
-        return true;
-    }
 }
