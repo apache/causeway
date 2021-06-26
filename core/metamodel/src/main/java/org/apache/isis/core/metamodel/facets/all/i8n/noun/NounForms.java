@@ -41,22 +41,18 @@ import lombok.val;
 @Value @Builder
 public class NounForms {
 
-    public static NounFormsBuilder preferredSingular(@Nullable final String singular) {
+    public static NounFormsBuilder builderSingular(@Nullable final String singular) {
         return NounForms.builder()
-                .preferredNounForm(NounForm.SINGULAR)
                 .singular(singular);
     }
 
-    public static NounFormsBuilder preferredPlural(@Nullable final String plural) {
+    public static NounFormsBuilder builderPlural(@Nullable final String plural) {
         return NounForms.builder()
-                .preferredNounForm(NounForm.PLURAL)
                 .plural(plural);
     }
 
     private final @Nullable String singular;
     private final @Nullable String plural;
-
-    private final @NonNull NounForm preferredNounForm;
 
     @Getter(lazy = true)
     final ImmutableEnumSet<NounForm> supportedNounForms = supportedNounForms();
@@ -98,8 +94,7 @@ public class NounForms {
             final TranslationContext context) {
 
         val builder = NounForms
-                .builder()
-                .preferredNounForm(preferredNounForm);
+                .builder();
 
         getSupportedNounForms()
         .forEach(nounForm->{

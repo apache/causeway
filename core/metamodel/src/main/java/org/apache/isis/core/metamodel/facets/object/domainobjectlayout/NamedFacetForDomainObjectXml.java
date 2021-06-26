@@ -24,7 +24,6 @@ import java.util.Optional;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.i8n.noun.NounForm;
 import org.apache.isis.core.metamodel.facets.all.i8n.noun.NounForms;
 import org.apache.isis.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.ObjectNamedFacetAbstract;
@@ -45,10 +44,8 @@ extends ObjectNamedFacetAbstract {
         val singular = _Strings.emptyToNull(domainObjectLayout.getNamed());
         val plural = _Strings.emptyToNull(domainObjectLayout.getPlural());
 
-        //TODO[1720] if singular is not explicit (is empty), infer
         val nounForms = NounForms
                 .builder()
-                .preferredNounForm(singular!=null ? NounForm.SINGULAR : NounForm.PLURAL)
                 .singular(singular)
                 .plural(plural)
                 .build();

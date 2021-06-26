@@ -486,14 +486,14 @@ implements ObjectSpecification {
     public String getSingularName() {
         return lookupFacet(ObjectNamedFacet.class)
             .flatMap(textFacet->textFacet.translated(NounForm.SINGULAR))
-            .orElseGet(this::getFullIdentifier);
+            .orElseGet(this::getFullIdentifier); // unexpected code reach, however keep for JUnit testing
     }
 
     @Override
     public String getPluralName() {
         return lookupFacet(ObjectNamedFacet.class)
             .flatMap(textFacet->textFacet.translated(NounForm.PLURAL))
-            .orElseGet(this::getFullIdentifier);
+            .orElseGet(this::getFullIdentifier); // unexpected code reach, however keep for JUnit testing
     }
 
     /**

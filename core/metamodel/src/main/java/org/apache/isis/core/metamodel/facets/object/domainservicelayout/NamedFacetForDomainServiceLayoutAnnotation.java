@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.facets.object.domainservicelayout;
 
-import java.util.Objects;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
@@ -28,8 +27,6 @@ import org.apache.isis.core.metamodel.facets.all.i8n.noun.NounForms;
 import org.apache.isis.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.ObjectNamedFacetAbstract;
 
-import lombok.val;
-
 public class NamedFacetForDomainServiceLayoutAnnotation
 extends ObjectNamedFacetAbstract {
 
@@ -37,24 +34,15 @@ extends ObjectNamedFacetAbstract {
             final Optional<DomainServiceLayout> domainServiceLayoutIfAny,
             final FacetHolder facetHolder) {
 
-        val serviceNamed = domainServiceLayoutIfAny
+        return domainServiceLayoutIfAny
                 .map(DomainServiceLayout::named)
-                .map(_Strings::emptyToNull)
-                .filter(Objects::nonNull)
-                .orElse(null);
-
-        if(_Strings.isEmpty(serviceNamed)) {
-            return Optional.empty();
-        }
-
-        val nounForms = NounForms
-                .preferredSingular(serviceNamed)
-                .build();
-
-        return Optional.of(
-                new NamedFacetForDomainServiceLayoutAnnotation(
-                            nounForms,
-                            facetHolder));
+                .filter(_Strings::isNotEmpty)
+                .map(serviceNamed->NounForms
+                        .builderSingular(serviceNamed)
+                        .build())
+                .map(nounForms->new NamedFacetForDomainServiceLayoutAnnotation(
+                        nounForms,
+                        facetHolder));
     }
 
     private NamedFacetForDomainServiceLayoutAnnotation(

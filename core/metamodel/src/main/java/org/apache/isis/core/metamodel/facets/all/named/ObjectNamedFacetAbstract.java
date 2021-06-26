@@ -39,10 +39,21 @@ implements ObjectNamedFacet {
     protected ObjectNamedFacetAbstract(
             final NounForms nounForms,
             final FacetHolder holder) {
+        this(
+                nounForms,
+                holder,
+                Precedence.DEFAULT);
+    }
+
+    protected ObjectNamedFacetAbstract(
+            final NounForms nounForms,
+            final FacetHolder holder,
+            final Precedence precedence) {
         super(type(),
                 TranslationContext.forTranslationContextHolder(holder.getFeatureIdentifier()),
                 nounForms,
-                holder);
+                holder,
+                precedence);
     }
 
 }

@@ -25,6 +25,7 @@ import java.util.function.Consumer;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
+import org.apache.isis.core.metamodel.facets.all.named.ObjectNamedFacet;
 
 public interface Facet
 extends
@@ -67,6 +68,14 @@ extends
          * Higher precedence than {@link #DEFAULT}. In other words, overrules {@link #DEFAULT}.
          */
         HIGH,
+
+        /**
+         * Higher precedence than {@link #HIGH}. In other words, overrules {@link #HIGH}.
+         * <p>
+         * Reserved for facet post-processing, when synthesizing a 'virtual' facet
+         * from facets of lower rank. (eg. {@link ObjectNamedFacet} with its singular and plural noun-form support)
+         */
+        SYNTHESIZED,
 
         /**
          * Highest precedence, with special behavior and restrictions:
