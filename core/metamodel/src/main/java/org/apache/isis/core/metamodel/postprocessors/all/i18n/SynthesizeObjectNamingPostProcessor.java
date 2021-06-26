@@ -26,11 +26,8 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.all.i8n.noun.NounForm;
-import org.apache.isis.core.metamodel.facets.all.i8n.noun.NounForms;
 import org.apache.isis.core.metamodel.facets.all.named.ObjectNamedFacet;
-import org.apache.isis.core.metamodel.facets.all.named.ObjectNamedFacetSynthesized;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -40,11 +37,11 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.val;
 
-public class SynthesizeObjectNaming
+public class SynthesizeObjectNamingPostProcessor
 extends ObjectSpecificationPostProcessorAbstract {
 
     @Inject
-    public SynthesizeObjectNaming(final MetaModelContext metaModelContext) {
+    public SynthesizeObjectNamingPostProcessor(final MetaModelContext metaModelContext) {
         super(metaModelContext);
     }
 
@@ -74,14 +71,14 @@ extends ObjectSpecificationPostProcessorAbstract {
                 .filter(_Strings::isNotEmpty)
                 .orElseGet(()->getPluralFallbackNoun(singular));
 
-        FacetUtil.addFacet(
-                new ObjectNamedFacetSynthesized(
-                        NounForms.builder()
-                            .singular(singular)
-                            .plural(plural)
-                            .build(),
-                        objectSpecification)
-                );
+//        FacetUtil.addFacet(
+//                new ObjectNamedFacetSynthesized(
+//                        NounForms.builder()
+//                            .singular(singular)
+//                            .plural(plural)
+//                            .build(),
+//                        objectSpecification)
+//                );
 
     }
 

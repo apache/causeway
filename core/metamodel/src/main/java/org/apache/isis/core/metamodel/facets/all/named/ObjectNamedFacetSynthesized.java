@@ -1,5 +1,6 @@
 package org.apache.isis.core.metamodel.facets.all.named;
 
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.i8n.noun.NounForms;
 
@@ -16,6 +17,8 @@ extends ObjectNamedFacetAbstract {
             final NounForms nounForms,
             final FacetHolder holder) {
         super(nounForms, holder, Precedence.SYNTHESIZED);
+        // assert that both noun-forms are populated
+        _Assert.assertTrue(nounForms.getSupportedNounForms().stream().count() == 2L);
     }
 
 }
