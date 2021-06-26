@@ -565,8 +565,7 @@ implements HasMetaModelContext {
         }
 
         return inspectedTypeSpec
-                .lookupMixedInMember(inspectedTypeSpec)
-                .map(ObjectActionMixedIn.class::cast)
+                .lookupMixedInAction(inspectedTypeSpec)
                 .map(ObjectActionMixedIn::getFacetedMethod)
                 .map(FacetedMethod::getMethod)
                 .map(method::equals)

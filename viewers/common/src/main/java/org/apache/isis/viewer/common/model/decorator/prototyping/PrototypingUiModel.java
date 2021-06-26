@@ -35,31 +35,31 @@ import lombok.RequiredArgsConstructor;
 public class PrototypingUiModel {
 
     private final Class<?> featureType;
-    private final String featureShortLabel;
-    private final String featureFullLabel;
+    private final String featureFriendlyName;
+    private final String featureFriendlyIdentifier;
     private final Supplier<Stream<Facet>> facetStreamProvider;
 
-    public static PrototypingUiModel of(ActionUiMetaModel actionMeta) {
+    public static PrototypingUiModel of(final ActionUiMetaModel actionMeta) {
         return null; // used by wicket, not supported yet
     }
 
-    public static PrototypingUiModel of(ManagedAction managedAction) {
+    public static PrototypingUiModel of(final ManagedAction managedAction) {
         Class<?> featureType = managedAction.getAction().getReturnType().getCorrespondingClass();
-        String featureShortLabel = managedAction.getName();
+        String featureShortLabel = managedAction.getFriendlyName();
         String featureFullLabel = String.format("%s: %s",
                 managedAction.getMemberType(),
-                managedAction.getName());
+                managedAction.getId());
 
         return new PrototypingUiModel(featureType, featureShortLabel, featureFullLabel,
                 managedAction.getAction()::streamFacets);
     }
 
-    public static PrototypingUiModel of(ManagedMember managedMember) {
+    public static PrototypingUiModel of(final ManagedMember managedMember) {
         Class<?> featureType = managedMember.getSpecification().getCorrespondingClass();
-        String featureShortLabel = managedMember.getName();
+        String featureShortLabel = managedMember.getFriendlyName();
         String featureFullLabel = String.format("%s: %s",
                 managedMember.getMemberType(),
-                managedMember.getName());
+                managedMember.getId());
 
         return new PrototypingUiModel(featureType, featureShortLabel, featureFullLabel,
                 managedMember.getSpecification()::streamFacets);

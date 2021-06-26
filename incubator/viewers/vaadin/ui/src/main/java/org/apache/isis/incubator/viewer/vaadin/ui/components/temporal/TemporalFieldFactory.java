@@ -40,7 +40,7 @@ import lombok.val;
 public class TemporalFieldFactory implements UiComponentHandlerVaa {
 
     @Override
-    public boolean isHandling(ComponentRequest request) {
+    public boolean isHandling(final ComponentRequest request) {
         return request.isFeatureTypeEqualTo(java.sql.Date.class)
             ||(request.hasFeatureTypeFacet(TemporalValueFacet.class)
                 // TODO lift this restrictions, as we support more types
@@ -51,7 +51,7 @@ public class TemporalFieldFactory implements UiComponentHandlerVaa {
     }
 
     @Override
-    public Component handle(ComponentRequest request) {
+    public Component handle(final ComponentRequest request) {
 
         val temporalCharacteristic = getTemporalCharacteristic(request);
         val offsetCharacteristic = getOffsetCharacteristic(request);
@@ -59,7 +59,7 @@ public class TemporalFieldFactory implements UiComponentHandlerVaa {
         switch(temporalCharacteristic) {
         case DATE_ONLY:{
 
-            val uiField = new DateField(request.getDisplayLabel());
+            val uiField = new DateField(request.getFriendlyName());
             val managedFeature = request.getManagedFeature();
 
             if(request.isFeatureTypeEqualTo(LocalDate.class)) {
@@ -92,7 +92,7 @@ public class TemporalFieldFactory implements UiComponentHandlerVaa {
 
     // -- HELPER
 
-    private TemporalCharacteristic getTemporalCharacteristic(ComponentRequest request) {
+    private TemporalCharacteristic getTemporalCharacteristic(final ComponentRequest request) {
         @SuppressWarnings("rawtypes")
         val temporalFacet = request.getFeatureTypeSpec().getFacet(TemporalValueFacet.class);
         if(temporalFacet!=null) {
@@ -107,7 +107,7 @@ public class TemporalFieldFactory implements UiComponentHandlerVaa {
         throw _Exceptions.unrecoverableFormatted("type %s not handled", request.getFeatureType());
     }
 
-    private OffsetCharacteristic getOffsetCharacteristic(ComponentRequest request) {
+    private OffsetCharacteristic getOffsetCharacteristic(final ComponentRequest request) {
         @SuppressWarnings("rawtypes")
         val temporalFacet = request.getFeatureTypeSpec().getFacet(TemporalValueFacet.class);
         if(temporalFacet!=null) {

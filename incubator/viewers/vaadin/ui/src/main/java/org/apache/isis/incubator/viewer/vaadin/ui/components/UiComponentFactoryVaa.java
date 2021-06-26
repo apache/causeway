@@ -45,7 +45,7 @@ public class UiComponentFactoryVaa implements UiComponentFactory<Component, Comp
     private final List<Class<?>> registeredHandlers;
 
     @Inject
-    private UiComponentFactoryVaa(List<Handler<Component>> handlers) {
+    private UiComponentFactoryVaa(final List<Handler<Component>> handlers) {
         this.chainOfHandlers = ChainOfResponsibility.of(handlers);
         this.registeredHandlers = handlers.stream()
                 .map(Handler::getClass)
@@ -53,13 +53,13 @@ public class UiComponentFactoryVaa implements UiComponentFactory<Component, Comp
     }
 
     @Override
-    public Component buttonFor(ButtonRequest request) {
+    public Component buttonFor(final ButtonRequest request) {
 
         val managedAction = request.getManagedAction();
         val disablingUiModelIfAny = request.getDisablingUiModelIfAny();
         val actionEventHandler = request.getActionEventHandler();
 
-        val uiButton = _vaa.newButton(managedAction.getName());
+        val uiButton = _vaa.newButton(managedAction.getFriendlyName());
 
         disablingUiModelIfAny.ifPresent(disablingUiModel->{
 //            uiContext.getDisablingDecoratorForButton()
@@ -76,7 +76,7 @@ public class UiComponentFactoryVaa implements UiComponentFactory<Component, Comp
     }
 
     @Override
-    public Component componentFor(ComponentRequest request) {
+    public Component componentFor(final ComponentRequest request) {
         return chainOfHandlers
                 .handle(request)
                 .orElseThrow(()->_Exceptions.unrecoverableFormatted(
@@ -84,7 +84,7 @@ public class UiComponentFactoryVaa implements UiComponentFactory<Component, Comp
     }
 
     @Override
-    public Component parameterFor(ComponentRequest request) {
+    public Component parameterFor(final ComponentRequest request) {
         return chainOfHandlers
                 .handle(request)
                 .orElseThrow(()->_Exceptions.unrecoverableFormatted(
@@ -92,7 +92,7 @@ public class UiComponentFactoryVaa implements UiComponentFactory<Component, Comp
     }
 
     @Override
-    public LabelAndPosition<Component> labelFor(ComponentRequest request) {
+    public LabelAndPosition<Component> labelFor(final ComponentRequest request) {
         throw _Exceptions.unsupportedOperation("unlikely to be needed for Vaadin, "
                 + "since Field components already have their own label");
     }

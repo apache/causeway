@@ -44,12 +44,12 @@ public class FallbackFieldFactory implements UiComponentHandlerVaa {
     @Inject private Provider<UiComponentFactoryVaa> uiComponentFactory;
 
     @Override
-    public boolean isHandling(ComponentRequest request) {
+    public boolean isHandling(final ComponentRequest request) {
         return true; // the last handler in the chain
     }
 
     @Override
-    public Component handle(ComponentRequest request) {
+    public Component handle(final ComponentRequest request) {
 
         val spec = request.getManagedFeature().getSpecification();
 
@@ -73,12 +73,12 @@ public class FallbackFieldFactory implements UiComponentHandlerVaa {
         });
 
 
-        val uiField = new DebugField(request.getManagedFeature().getDisplayLabel());
+        val uiField = new DebugField(request.getManagedFeature().getFriendlyName());
         uiField.setValue(debugUiModel);
         return uiField;
     }
 
-    private String summarize(Facet facet) {
+    private String summarize(final Facet facet) {
         val sb = new StringBuilder();
         sb.append(facet.getClass().getSimpleName());
         if(facet instanceof FacetAbstract) {

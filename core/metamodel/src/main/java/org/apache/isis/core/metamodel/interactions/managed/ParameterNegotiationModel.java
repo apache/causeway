@@ -282,7 +282,7 @@ public class ParameterNegotiationModel {
         }
 
         @Override
-        public String getDisplayLabel() {
+        public String getFriendlyName() {
             return getMetaModel().getStaticFriendlyName()
                     .orElseThrow(_Exceptions::unexpectedCodeReach);
         }

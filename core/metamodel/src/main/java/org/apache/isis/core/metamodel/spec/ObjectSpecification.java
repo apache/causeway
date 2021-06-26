@@ -73,6 +73,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationContainer;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 
 import lombok.NonNull;
 import lombok.val;
@@ -143,6 +144,19 @@ extends
                 .filter(member->member.getMixinType().getFeatureIdentifier().equals(mixinSpec.getFeatureIdentifier()))
                 .findAny();
     }
+
+    /**
+     * @since 2.0
+     */
+    public default Optional<ObjectActionMixedIn> lookupMixedInAction(final ObjectSpecification mixinSpec) {
+        return
+                streamAnyActions(MixedIn.INCLUDED)
+                .filter(ObjectActionMixedIn.class::isInstance)
+                .map(ObjectActionMixedIn.class::cast)
+                .filter(member->member.getMixinType().getFeatureIdentifier().equals(mixinSpec.getFeatureIdentifier()))
+                .findAny();
+    }
+
 
     /**
      * @return Java class this specification is associated with

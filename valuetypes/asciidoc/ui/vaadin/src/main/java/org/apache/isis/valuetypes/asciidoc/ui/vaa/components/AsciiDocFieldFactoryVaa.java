@@ -34,13 +34,13 @@ public class AsciiDocFieldFactoryVaa implements UiComponentHandlerVaa {
     //private final static int TYPICAL_LENGTH = 48;
 
     @Override
-    public boolean isHandling(ComponentRequest request) {
+    public boolean isHandling(final ComponentRequest request) {
         return request.isFeatureTypeAssignableFrom(AsciiDoc.class);
     }
 
     @Override
-    public Component handle(ComponentRequest request) {
-        val uiField = new AsciiDocFieldVaa(request.getDisplayLabel());
+    public Component handle(final ComponentRequest request) {
+        val uiField = new AsciiDocFieldVaa(request.getFriendlyName());
         uiField.setValue(request.getFeatureValue(AsciiDoc.class).orElse(null));
 
 //not compatible with flexibly growing grids

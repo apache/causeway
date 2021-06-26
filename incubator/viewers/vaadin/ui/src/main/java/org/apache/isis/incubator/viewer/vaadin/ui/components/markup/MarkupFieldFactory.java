@@ -31,13 +31,13 @@ import lombok.val;
 public class MarkupFieldFactory implements UiComponentHandlerVaa {
 
     @Override
-    public boolean isHandling(ComponentRequest request) {
+    public boolean isHandling(final ComponentRequest request) {
         return request.isFeatureTypeEqualTo(org.apache.isis.applib.value.Markup.class);
     }
 
     @Override
-    public Component handle(ComponentRequest request) {
-        val uiField = new MarkupField(request.getDisplayLabel());
+    public Component handle(final ComponentRequest request) {
+        val uiField = new MarkupField(request.getFriendlyName());
         uiField.setValue(request.getFeatureValue(org.apache.isis.applib.value.Markup.class).orElse(null));
         return uiField;
     }

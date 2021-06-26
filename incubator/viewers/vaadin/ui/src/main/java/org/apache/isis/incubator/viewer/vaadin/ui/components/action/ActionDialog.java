@@ -95,11 +95,11 @@ public class ActionDialog extends Dialog {
 
     // -- HELPER
 
-    private Component header(ManagedAction managedAction, Can<Component> hidableComponents) {
+    private Component header(final ManagedAction managedAction, final Can<Component> hidableComponents) {
 
         val resizeHandler = DialogResizeHandler.of(this, hidableComponents);
 
-        val title = new H2(managedAction.getName());
+        val title = new H2(managedAction.getFriendlyName());
         title.addClassName("dialog-title");
 
         val minButton = new Button(VaadinIcon.ANGLE_DOWN.create());
@@ -123,9 +123,9 @@ public class ActionDialog extends Dialog {
     }
 
     private Component footer(
-            ManagedAction managedAction,
-            ParameterNegotiationModel pendingArgs,
-            Predicate<Can<ManagedObject>> submitCallback) {
+            final ManagedAction managedAction,
+            final ParameterNegotiationModel pendingArgs,
+            final Predicate<Can<ManagedObject>> submitCallback) {
 
         val okButton = new Button("Ok");
         val cancelButton = new Button("Cancel");
@@ -166,12 +166,12 @@ public class ActionDialog extends Dialog {
         private Button minButton;
         private Button maxButton;
 
-        public void bindMinimise(Button minButton) {
+        public void bindMinimise(final Button minButton) {
             this.minButton = minButton;
             minButton.addClickListener(event -> minimise());
         }
 
-        public void bindMaximise(Button maxButton) {
+        public void bindMaximise(final Button maxButton) {
             this.maxButton = maxButton;
             maxButton.addClickListener(event -> maximise());
         }

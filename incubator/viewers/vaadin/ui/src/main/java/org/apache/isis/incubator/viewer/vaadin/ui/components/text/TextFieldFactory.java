@@ -34,14 +34,14 @@ import lombok.val;
 public class TextFieldFactory implements UiComponentHandlerVaa {
 
     @Override
-    public boolean isHandling(ComponentRequest request) {
+    public boolean isHandling(final ComponentRequest request) {
         return request.hasFeatureTypeFacet(StringValueFacet.class);
     }
 
     @Override
-    public Component handle(ComponentRequest request) {
+    public Component handle(final ComponentRequest request) {
 
-        val uiField = new TextField(request.getDisplayLabel());
+        val uiField = new TextField(request.getFriendlyName());
 
         val managedFeature = request.getManagedFeature();
 

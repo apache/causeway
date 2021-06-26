@@ -236,7 +236,7 @@ public class ObjectViewFx extends VBox {
                 .getManagedCollection()
                 .ifPresent(managedCollection -> {
 
-                    val titledPanel = _fx.add(container, new TitledPanel(managedCollection.getName()));
+                    val titledPanel = _fx.add(container, new TitledPanel(managedCollection.getFriendlyName()));
 
                     // handle associated actions
                     for(val actionData : collectionData.getActions()) {

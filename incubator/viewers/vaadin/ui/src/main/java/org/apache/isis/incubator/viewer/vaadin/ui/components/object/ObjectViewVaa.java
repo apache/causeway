@@ -97,7 +97,7 @@ public class ObjectViewVaa extends VerticalLayout {
         val gridVisitor = new UiGridLayout.Visitor<HasComponents, Tabs>(this) {
 
             @Override
-            protected void onObjectTitle(HasComponents container, DomainObjectLayoutData domainObjectData) {
+            protected void onObjectTitle(final HasComponents container, final DomainObjectLayoutData domainObjectData) {
                 val uiTitle = _vaa.add(container, new H1(objectTitle));
                 //                uiTitle.addThemeVariants(
                 //                        ButtonVariant.LUMO_LARGE,
@@ -105,7 +105,7 @@ public class ObjectViewVaa extends VerticalLayout {
             }
 
             @Override
-            protected HasComponents newRow(HasComponents container, BS3Row bs3Row) {
+            protected HasComponents newRow(final HasComponents container, final BS3Row bs3Row) {
                 val uiRow = _vaa.add(container, new FlexLayout());
 
                 uiRow.setWidthFull();
@@ -122,7 +122,7 @@ public class ObjectViewVaa extends VerticalLayout {
             }
 
             @Override
-            protected HasComponents newCol(HasComponents container, BS3Col bs3col) {
+            protected HasComponents newCol(final HasComponents container, final BS3Col bs3col) {
 
                 val uiCol = _vaa.add(container, new VerticalLayout());
 
@@ -136,7 +136,7 @@ public class ObjectViewVaa extends VerticalLayout {
             }
 
             @Override
-            protected HasComponents newActionPanel(HasComponents container) {
+            protected HasComponents newActionPanel(final HasComponents container) {
                 val uiActionPanel = _vaa.add(container, new FlexLayout());
 
                 uiActionPanel.setWrapMode(FlexLayout.WrapMode.WRAP); // allow line breaking
@@ -145,7 +145,7 @@ public class ObjectViewVaa extends VerticalLayout {
             }
 
             @Override
-            protected Tabs newTabGroup(HasComponents container, BS3TabGroup tabGroupData) {
+            protected Tabs newTabGroup(final HasComponents container, final BS3TabGroup tabGroupData) {
                 val uiTabGroup = _vaa.add(container, new Tabs());
 
                 uiTabGroup.setOrientation(Tabs.Orientation.HORIZONTAL);
@@ -153,13 +153,13 @@ public class ObjectViewVaa extends VerticalLayout {
             }
 
             @Override
-            protected HasComponents newTab(Tabs container, BS3Tab tabData) {
+            protected HasComponents newTab(final Tabs container, final BS3Tab tabData) {
                 val uiTab = _vaa.add(container, new Tab(tabData.getName()));
                 return uiTab;
             }
 
             @Override
-            protected HasComponents newFieldSet(HasComponents container, FieldSet fieldSetData) {
+            protected HasComponents newFieldSet(final HasComponents container, final FieldSet fieldSetData) {
 
                 _vaa.add(container, new H2(fieldSetData.getName()));
 
@@ -179,13 +179,13 @@ public class ObjectViewVaa extends VerticalLayout {
 
 
             @Override
-            protected void onClearfix(HasComponents container, BS3ClearFix clearFixData) {
+            protected void onClearfix(final HasComponents container, final BS3ClearFix clearFixData) {
                 // TODO Auto-generated method stub
             }
 
             @SuppressWarnings("unused")
             @Override
-            protected void onAction(HasComponents container, ActionLayoutData actionData) {
+            protected void onAction(final HasComponents container, final ActionLayoutData actionData) {
 
                 val owner = managedObject;
                 val interaction = ActionInteraction.start(owner, actionData.getId(), Where.OBJECT_FORMS);
@@ -207,7 +207,7 @@ public class ObjectViewVaa extends VerticalLayout {
 
             @SuppressWarnings("unused")
             @Override
-            protected void onProperty(HasComponents container, PropertyLayoutData propertyData) {
+            protected void onProperty(final HasComponents container, final PropertyLayoutData propertyData) {
 
                 val owner = managedObject;
 
@@ -234,7 +234,7 @@ public class ObjectViewVaa extends VerticalLayout {
             }
 
             @Override
-            protected void onCollection(HasComponents container, CollectionLayoutData collectionData) {
+            protected void onCollection(final HasComponents container, final CollectionLayoutData collectionData) {
 
                 val owner = managedObject;
 
@@ -242,7 +242,7 @@ public class ObjectViewVaa extends VerticalLayout {
                 .checkVisibility()
                 .getManagedCollection()
                 .ifPresent(managedCollection -> {
-                    _vaa.add(container, new H3(managedCollection.getName()));
+                    _vaa.add(container, new H3(managedCollection.getFriendlyName()));
 
                     // handle associated actions
                     val actionBar = newActionPanel(container);

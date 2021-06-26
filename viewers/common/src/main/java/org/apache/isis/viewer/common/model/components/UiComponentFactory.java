@@ -68,14 +68,14 @@ public interface UiComponentFactory<B, C> {
         @NonNull private final ManagedFeature managedFeature;
         @NonNull private final Optional<DisablingUiModel> disablingUiModelIfAny;
 
-        public static ComponentRequest of(ManagedParameter managedParameter) {
+        public static ComponentRequest of(final ManagedParameter managedParameter) {
             return of(managedParameter, Optional.empty());
         }
 
         // -- SHORTCUTS
 
-        public String getDisplayLabel() {
-            return managedFeature.getDisplayLabel();
+        public String getFriendlyName() {
+            return managedFeature.getFriendlyName();
         }
 
         public ObjectSpecification getFeatureTypeSpec() {
@@ -86,17 +86,17 @@ public interface UiComponentFactory<B, C> {
             return managedFeature.getCorrespondingClass();
         }
 
-        public boolean isFeatureTypeEqualTo(@Nullable Class<?> type) {
+        public boolean isFeatureTypeEqualTo(@Nullable final Class<?> type) {
             return getFeatureType() == type;
         }
 
-        public boolean isFeatureTypeAssignableFrom(@Nullable Class<?> type) {
+        public boolean isFeatureTypeAssignableFrom(@Nullable final Class<?> type) {
             return type!=null
                     ? getFeatureType().isAssignableFrom(type)
                     : false;
         }
 
-        public boolean isFeatureTypeInstanceOf(@Nullable Class<?> type) {
+        public boolean isFeatureTypeInstanceOf(@Nullable final Class<?> type) {
             return type!=null
                     ? type.isAssignableFrom(getFeatureType())
                     : false;
@@ -107,14 +107,14 @@ public interface UiComponentFactory<B, C> {
          * @return Whether there exists a facet for this feature, that is of the
          * specified {@code facetType} (as per the type it reports from {@link Facet#facetType()}).
          */
-        public <T extends Facet> boolean hasFeatureTypeFacet(@Nullable Class<T> facetType) {
+        public <T extends Facet> boolean hasFeatureTypeFacet(@Nullable final Class<T> facetType) {
             return facetType!=null
                     ? getFeatureTypeSpec().getFacet(facetType)!=null
                     : false;
         }
 
         public <T extends Facet> boolean hasFeatureTypeFacetAnyOf(
-                @NonNull Can<Class<? extends Facet>> facetTypes) {
+                @NonNull final Can<Class<? extends Facet>> facetTypes) {
             return facetTypes.stream()
                     .map(getFeatureTypeSpec()::getFacet)
                     .anyMatch(_NullSafe::isPresent);
@@ -126,7 +126,7 @@ public interface UiComponentFactory<B, C> {
         }
 
         @Deprecated
-        public <T> Optional<T> getFeatureValue(@Nullable Class<T> type) {
+        public <T> Optional<T> getFeatureValue(@Nullable final Class<T> type) {
             val managedProperty = (ManagedProperty)managedFeature;
             //TODO do a type check before the cast, so we can throw a more detailed exception
             // that is, given type must be assignable from the actual pojo type
@@ -137,7 +137,7 @@ public interface UiComponentFactory<B, C> {
         }
 
         @Deprecated
-        public Optional<InteractionVeto> setFeatureValue(Object proposedNewValuePojo) {
+        public Optional<InteractionVeto> setFeatureValue(final Object proposedNewValuePojo) {
             //TODO we are loosing any fields that are cached within ManagedObject
             val proposedNewValue = ManagedObject.of(getFeatureTypeSpec(), proposedNewValuePojo);
             return ((ManagedProperty)managedFeature).modifyProperty(proposedNewValue);

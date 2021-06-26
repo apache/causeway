@@ -123,17 +123,13 @@ public abstract class ManagedMember implements ManagedFeature {
         return getMetaModel().getId();
     }
 
-    public String getName() {
-        return getMetaModel().getFriendlyName(null);
-    }
-
     @Override
     public Identifier getIdentifier() {
         return getMetaModel().getFeatureIdentifier();
     }
 
     @Override
-    public String getDisplayLabel() {
+    public String getFriendlyName() {
         return getMetaModel().getFriendlyName(this::getOwner);
     }
 

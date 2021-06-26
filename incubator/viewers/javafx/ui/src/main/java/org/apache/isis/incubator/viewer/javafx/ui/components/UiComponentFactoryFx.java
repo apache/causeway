@@ -27,8 +27,8 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.commons.handler.ChainOfResponsibility;
-import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContextFx;
@@ -55,9 +55,9 @@ public class UiComponentFactoryFx implements UiComponentFactory<Node, Node> {
 
     @Inject
     private UiComponentFactoryFx(
-            IsisSystemEnvironment isisSystemEnvironment,
-            UiContextFx uiContext,
-            List<UiComponentHandlerFx> handlers) {
+            final IsisSystemEnvironment isisSystemEnvironment,
+            final UiContextFx uiContext,
+            final List<UiComponentHandlerFx> handlers) {
 
         this.isPrototyping = isisSystemEnvironment.isPrototyping();
         this.uiContext = uiContext;
@@ -68,7 +68,7 @@ public class UiComponentFactoryFx implements UiComponentFactory<Node, Node> {
     }
 
     @Override
-    public Node componentFor(ComponentRequest request) {
+    public Node componentFor(final ComponentRequest request) {
 
         val formField = chainOfHandlers
                 .handle(request)
@@ -89,13 +89,13 @@ public class UiComponentFactoryFx implements UiComponentFactory<Node, Node> {
     }
 
     @Override
-    public Node buttonFor(ButtonRequest request) {
+    public Node buttonFor(final ButtonRequest request) {
 
         val managedAction = request.getManagedAction();
         val disablingUiModelIfAny = request.getDisablingUiModelIfAny();
         val actionEventHandler = request.getActionEventHandler();
 
-        val uiButton = new Button(managedAction.getName());
+        val uiButton = new Button(managedAction.getFriendlyName());
         uiButton.setOnAction(event->actionEventHandler.accept(managedAction));
 
         disablingUiModelIfAny.ifPresent(disablingUiModel->{
@@ -110,7 +110,7 @@ public class UiComponentFactoryFx implements UiComponentFactory<Node, Node> {
     }
 
     @Override
-    public Node parameterFor(ComponentRequest request) {
+    public Node parameterFor(final ComponentRequest request) {
         val formField = chainOfHandlers
                 .handle(request)
                 .orElseThrow(()->_Exceptions.unrecoverableFormatted(
@@ -119,11 +119,11 @@ public class UiComponentFactoryFx implements UiComponentFactory<Node, Node> {
     }
 
     @Override
-    public LabelAndPosition<Node> labelFor(ComponentRequest request) {
+    public LabelAndPosition<Node> labelFor(final ComponentRequest request) {
         val labelPosition = request.getManagedFeature().getFacet(LabelAtFacet.class)
                 .map(LabelAtFacet::label)
                 .orElse(LabelPosition.NOT_SPECIFIED);
-        val uiLabel = new Label(request.getDisplayLabel());
+        val uiLabel = new Label(request.getFriendlyName());
         return LabelAndPosition.of(labelPosition, uiLabel);
     }
 

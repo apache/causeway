@@ -33,13 +33,13 @@ import lombok.val;
 public class ClobFieldFactory implements UiComponentHandlerVaa {
 
     @Override
-    public boolean isHandling(ComponentRequest request) {
+    public boolean isHandling(final ComponentRequest request) {
         return request.hasFeatureTypeFacet(ClobValueFacet.class);
     }
 
     @Override
-    public Component handle(ComponentRequest request) {
-        val uiField = new ClobField(request.getDisplayLabel());
+    public Component handle(final ComponentRequest request) {
+        val uiField = new ClobField(request.getFriendlyName());
         uiField.setValue(request.getFeatureValue(Clob.class).orElse(null));
         return uiField;
     }

@@ -53,7 +53,7 @@ public class PrototypingInfoPopupProvider {
 
     public void showPrototypingPopup(final PrototypingUiModel prototypingUiModel) {
         val infoNode = getPrototypingInfoUiComponent(prototypingUiModel);
-        val headerText = prototypingUiModel.getFeatureFullLabel();
+        val headerText = prototypingUiModel.getFeatureFriendlyIdentifier();
         val contentText = prototypingUiModel.getFeatureType().toString();
         Dialogs.message("Inspect Metamodel", headerText, contentText, infoNode);
     }
@@ -65,7 +65,7 @@ public class PrototypingInfoPopupProvider {
         private final String key;
         private final String value;
         @Override
-        public int compareTo(Info other) {
+        public int compareTo(final Info other) {
             return this.getKey().compareTo(other.getKey());
         }
     }
@@ -119,7 +119,7 @@ public class PrototypingInfoPopupProvider {
         return scrollPane;
     }
 
-    private String summarize(Facet facet) {
+    private String summarize(final Facet facet) {
         val sb = new StringBuilder();
         sb.append(facet.getClass().getSimpleName());
         if(facet instanceof FacetAbstract) {
