@@ -27,10 +27,10 @@ import java.time.ZoneOffset;
 /**
  * @since 2.0 {@index}
  */
-public class FixtureDatumFactoriesForTime {
+public class DataForJavaTime {
 
-    public static PojoTester.FixtureDatumFactory<LocalTime> localTimes() {
-        return new PojoTester.FixtureDatumFactory<>(
+    public static PojoTester.DatumFactory<LocalTime> localTimes() {
+        return new PojoTester.DatumFactory<>(
                 LocalTime.class,
                 LocalTime.of(11, 15),
                 LocalTime.of(12, 20),
@@ -39,8 +39,8 @@ public class FixtureDatumFactoriesForTime {
         );
     }
 
-	public static PojoTester.FixtureDatumFactory<LocalDate> localDates() {
-		return new PojoTester.FixtureDatumFactory<>(
+	public static PojoTester.DatumFactory<LocalDate> localDates() {
+		return new PojoTester.DatumFactory<>(
 				LocalDate.class,
 				LocalDate.of(2012, 7, 19),
 				LocalDate.of(2012, 7, 20),
@@ -49,8 +49,8 @@ public class FixtureDatumFactoriesForTime {
 		);
 	}
 
-	public static PojoTester.FixtureDatumFactory<LocalDateTime> localDateTimes() {
-		return new PojoTester.FixtureDatumFactory<>(
+	public static PojoTester.DatumFactory<LocalDateTime> localDateTimes() {
+		return new PojoTester.DatumFactory<>(
 				LocalDateTime.class,
 				LocalDateTime.of(2012, 7, 19, 11, 15),
 				LocalDateTime.of(2012, 7, 20, 12, 20),
@@ -60,8 +60,8 @@ public class FixtureDatumFactoriesForTime {
 	}
 
 
-	public static PojoTester.FixtureDatumFactory<OffsetDateTime> offsetDateTimes() {
-		return new PojoTester.FixtureDatumFactory<>(
+	public static PojoTester.DatumFactory<OffsetDateTime> offsetDateTimes() {
+		return new PojoTester.DatumFactory<>(
 		        OffsetDateTime.class,
 				OffsetDateTime.of(2012, 7, 19, 11, 15, 0, 0, ZoneOffset.UTC),
 				OffsetDateTime.of(2012, 7, 20, 12, 20, 0, 0, ZoneOffset.UTC),

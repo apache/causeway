@@ -18,28 +18,32 @@
  */
 package org.apache.isis.testing.unittestsupport.applib.dom.pojo;
 
-import org.apache.isis.applib.value.Blob;
-import org.apache.isis.applib.value.Clob;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-/**
- * @since 2.0 {@index}
- */
-public class FixtureDatumFactoriesForApplib {
+import org.apache.isis.testing.unittestsupport.applib.dom.pojo.holders.JodaLocalDateHolder;
 
-	public static PojoTester.FixtureDatumFactory<Blob> blobs() {
-		return new PojoTester.FixtureDatumFactory<>(Blob.class,
-				new Blob("foo", "application/pdf", new byte[]{1,2,3}),
-				new Blob("bar", "application/docx", new byte[]{4,5}),
-				new Blob("baz", "application/xlsx", new byte[]{7,8,9,0})
-				);
-	}
+import lombok.val;
 
-	public static PojoTester.FixtureDatumFactory<Clob> clobs() {
-		return new PojoTester.FixtureDatumFactory<>(Clob.class,
-				new Clob("foo", "text/html", "<html/>".toCharArray()),
-				new Clob("bar", "text/plain", "hello world".toCharArray()),
-				new Clob("baz", "text/ini", "foo=bar".toCharArray())
-				);
-	}
+import junit.framework.AssertionFailedError;
+
+public class PojoTester_datatypes_no_data_factory_Test {
+
+    @Test
+    public void exercise_data_not_provided() {
+
+        // given
+        val holder = new JodaLocalDateHolder();
+
+        // when
+        Assertions.assertThatThrownBy(() -> {
+            PojoTester.create()
+                    // .usingData(DataForJodaTime.localDates()) // not provided
+                    .exercise(holder);
+        }).isInstanceOf(AssertionFailedError.class)
+                .hasMessageContaining("No fixture test data is available for setSomeLocalDate");
+    }
+
+
 
 }

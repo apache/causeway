@@ -18,24 +18,28 @@
  */
 package org.apache.isis.testing.unittestsupport.applib.dom.pojo;
 
+import org.apache.isis.applib.value.Blob;
+import org.apache.isis.applib.value.Clob;
+
 /**
  * @since 2.0 {@index}
  */
-public class FixtureDatumFactoriesForAnyPojo {
+public class DataForApplib {
 
-    @SuppressWarnings("unchecked")
-    public static <T> PojoTester.FixtureDatumFactory<T> pojos(Class<T> compileTimeType, Class<? extends T> runtimeType) {
-        try {
-            final T obj1 = runtimeType.newInstance();
-            final T obj2 = runtimeType.newInstance();
-            return new PojoTester.FixtureDatumFactory<>(compileTimeType, obj1, obj2);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+	public static PojoTester.DatumFactory<Blob> blobs() {
+		return new PojoTester.DatumFactory<>(Blob.class,
+				new Blob("foo", "application/pdf", new byte[]{1,2,3}),
+				new Blob("bar", "application/docx", new byte[]{4,5}),
+				new Blob("baz", "application/xlsx", new byte[]{7,8,9,0})
+				);
+	}
 
-    public static <T> PojoTester.FixtureDatumFactory<T> pojos(Class<T> type) {
-        return pojos(type, type);
-    }
+	public static PojoTester.DatumFactory<Clob> clobs() {
+		return new PojoTester.DatumFactory<>(Clob.class,
+				new Clob("foo", "text/html", "<html/>".toCharArray()),
+				new Clob("bar", "text/plain", "hello world".toCharArray()),
+				new Clob("baz", "text/ini", "foo=bar".toCharArray())
+				);
+	}
 
 }

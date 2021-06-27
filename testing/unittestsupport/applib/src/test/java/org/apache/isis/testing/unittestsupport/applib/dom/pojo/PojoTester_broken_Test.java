@@ -18,41 +18,13 @@
  */
 package org.apache.isis.testing.unittestsupport.applib.dom.pojo;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.Matchers.containsString;
+import junit.framework.AssertionFailedError;
 
-public class PojoTesterTest_interference {
-    
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none().handleAssertionErrors();
+public class PojoTester_broken_Test {
 
-    public static class Customer {
-        private String firstName;
-        public String getFirstName() {
-            return firstName;
-        }
-        public void setFirstName(String firstName) {
-            this.firstName = firstName;
-        }
-        
-        private String lastName;
-        public String getLastName() {
-            return lastName;
-        }
-        public void setLastName(String lastName) {
-            this.lastName = lastName;
-        }
-    }
-    
-    @Test
-    public void strict_happyCase() {
-        PojoTester.strict().exercise(new Customer());
-    }
-
-    
     public static class CustomerWithInterferingProperties {
         private String firstName = "";
         public String getFirstName() {
@@ -72,9 +44,36 @@ public class PojoTesterTest_interference {
     }
     
     @Test
-    public void strict_whenInterferenceBetweenProperties() {
-        expectedException.expectMessage(containsString("firstName"));
-        PojoTester.strict().exercise(new CustomerWithInterferingProperties());
+    public void strict_when_interference_between_properties() {
+        Assertions.assertThatThrownBy(() -> {
+            PojoTester.create().exercise(new CustomerWithInterferingProperties());
+        }).isInstanceOf(AssertionFailedError.class)
+                .hasMessageContaining("firstName");
+    }
+
+    public static class BrokenCustomer {
+        private String someString;
+        public String getSomeString() {
+            return someString;
+        }
+        public void setSomeString(String someString) {
+            // no-op
+        }
+    }
+
+    @org.junit.jupiter.api.Test
+    public void exercise_broken() {
+
+        // given
+        final BrokenCustomer customer = new BrokenCustomer();
+
+        // when, then
+        Assertions.assertThatThrownBy(() -> {
+            PojoTester.create()
+                    .exercise(customer);
+        }).isInstanceOf(junit.framework.AssertionFailedError.class)
+                .withFailMessage(() -> "someString: null");
+
     }
 
 }

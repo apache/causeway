@@ -21,14 +21,15 @@ package org.apache.isis.testing.unittestsupport.applib.dom.pojo;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
+import org.joda.time.LocalTime;
 
 /**
  * @since 2.0 {@index}
  */
-public class FixtureDatumFactoriesForJoda {
+public class DataForJodaTime {
 
-	public static PojoTester.FixtureDatumFactory<LocalDate> dates() {
-		return new PojoTester.FixtureDatumFactory<>(
+	public static PojoTester.DatumFactory<LocalDate> localDates() {
+		return new PojoTester.DatumFactory<>(
 				LocalDate.class,
 				new LocalDate(2012, 7, 19),
 				new LocalDate(2012, 7, 20),
@@ -37,8 +38,18 @@ public class FixtureDatumFactoriesForJoda {
 		);
 	}
 
-	public static PojoTester.FixtureDatumFactory<LocalDateTime> localDateTimes() {
-		return new PojoTester.FixtureDatumFactory<>(
+	public static PojoTester.DatumFactory<LocalTime> localTimes() {
+		return new PojoTester.DatumFactory<>(
+				LocalTime.class,
+				new LocalTime(7, 19, 11, 15),
+				new LocalTime(7, 20, 12, 20),
+				new LocalTime(8, 19, 13, 30),
+				new LocalTime(7, 19, 14, 45)
+		);
+	}
+
+	public static PojoTester.DatumFactory<LocalDateTime> localDateTimes() {
+		return new PojoTester.DatumFactory<>(
 				LocalDateTime.class,
 				new LocalDateTime(2012, 7, 19, 11, 15),
 				new LocalDateTime(2012, 7, 20, 12, 20),
@@ -48,8 +59,8 @@ public class FixtureDatumFactoriesForJoda {
 	}
 
 
-	public static PojoTester.FixtureDatumFactory<DateTime> dateTimes() {
-		return new PojoTester.FixtureDatumFactory<>(
+	public static PojoTester.DatumFactory<DateTime> dateTimes() {
+		return new PojoTester.DatumFactory<>(
 				DateTime.class,
 				new DateTime(2012, 7, 19, 11, 15),
 				new DateTime(2012, 7, 20, 12, 20),
