@@ -19,14 +19,7 @@ Libraries and utilities for bounded context (BC) mappings.
 In other words, tools to help integrating system together.
 
 
-There are two further catalogues:
+There is also the xref:incubator:ROOT:about.adoc[Incubator], that includes functionality that is currently experimental or unstable, but which may end up graduating as a component or to one of the library catalogues listed above.
 
-* xref:incubator:ROOT:about.adoc[Incubator]
-+
-Functionality that is experimental or unstable, but which may end up graduating to one of the library catalogues listed above, or to the xref:extensions:ROOT:about.adoc[extensions catalogue].
-
-* xref:legacy:ROOT:about.adoc[Legacy]
-+
-Functionality that has been deprecated or has become defunct, and which is likely to be removed in future versions.
 
 
