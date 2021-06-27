@@ -22,16 +22,25 @@ Provides a human-usable UI, implemented using https://wicket.apache.org[Apache W
 Presents your domain objects in JSON representations, compliant either with link:http://restfulobjects.org[Restful Objects] specification or one of a number of other representations.
 
 
-== Security
-
-The xref:security:ROOT:about.adoc[Security Guide] describes how to configure each of the various security implementations that integrate with Apache Isis.
-
 
 == Persistence
 
-The framework allows xref:userguide:fun:overview.adoc#domain-entities[domain entities] to be persisted using the xref:pjdo:ROOT:about.adoc[JDO/DataNucleus object store], for use with the JDO API.
+The framework allows xref:userguide:fun:overview.adoc#domain-entities[domain entities] to be persisted using either:
 
-Alternatively, if you restrict yourself to xref:userguide:fun:overview.adoc#view-models[view models] then these can be persisted with any data persistence technology that is supported by Spring Boot.
+* the xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] object store
++
+for use with JPA and link:https://spring.io/projects/spring-data-jpa[Spring Data JPA].
+
+* the xref:pjdo:ROOT:about.adoc[JDO/DataNucleus object store]
++
+for use with the JDO API.
+
+Alternatively, you can "roll your own" (by implementing the xref:refguide:applib:index/ViewModel.adoc[ViewModel] interface) and persist with any data persistence technology that is supported by Spring Boot.
+
+
+== Security
+
+The xref:security:ROOT:about.adoc[Security Guide] describes how to configure each of the various security implementations that integrate with Apache Isis.
 
 
 == Extensions
@@ -40,6 +49,6 @@ The xref:extensions:ROOT:about.adoc[Extensions Catalog] describes a number of ex
 
 For example, the "Excel Download" extension allows collections to be downloaded as an Excel `.xlsx` spreadsheet in the Wicket viewer.
 
-As well as the current extensions,  the xref:incubator:ROOT:about.adoc[Incubator] has additional extensions that may end up graduating to the extensions catalog, while the xref:legacy:ROOT:about.adoc[Legacy Catalog] may contain extensions that have been deprecated and are on the way out.
+As well as the current extensions,  the xref:incubator:ROOT:about.adoc[Incubator] has additional components and extensions that may end up graduating.
 
 

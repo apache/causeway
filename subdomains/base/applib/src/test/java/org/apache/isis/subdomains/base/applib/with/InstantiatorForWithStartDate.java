@@ -20,7 +20,7 @@ package org.apache.isis.subdomains.base.applib.with;
 
 import org.joda.time.LocalDate;
 
-import org.apache.isis.testing.unittestsupport.applib.core.bidir.Instantiator;
+import org.apache.isis.testing.unittestsupport.applib.dom.bidir.Instantiator;
 
 
 public class InstantiatorForWithStartDate implements Instantiator {

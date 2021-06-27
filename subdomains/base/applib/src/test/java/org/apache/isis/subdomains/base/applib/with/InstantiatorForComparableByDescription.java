@@ -18,7 +18,7 @@
  */
 package org.apache.isis.subdomains.base.applib.with;
 
-import org.apache.isis.testing.unittestsupport.applib.core.bidir.Instantiator;
+import org.apache.isis.testing.unittestsupport.applib.dom.bidir.Instantiator;
 
 public class InstantiatorForComparableByDescription implements Instantiator {
     public final Class<? extends WithDescriptionComparable<?>> cls;

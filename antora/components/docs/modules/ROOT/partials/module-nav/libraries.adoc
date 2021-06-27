@@ -13,4 +13,3 @@
 
 ** Other
 ***  xref:incubator:ROOT:about.adoc[Incubator]
-***  xref:legacy:ROOT:about.adoc[Legacy]

@@ -28,7 +28,7 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.testing.unittestsupport.applib.core.jmocking.JUnitRuleMockery2;
+import org.apache.isis.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2;
 
 public abstract class WithIntervalMutableContractTestAbstract_changeDates<T extends WithIntervalMutable<T>> {
     @Rule

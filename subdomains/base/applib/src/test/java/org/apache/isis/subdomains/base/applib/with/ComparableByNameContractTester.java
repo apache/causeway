@@ -24,7 +24,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.testing.unittestsupport.applib.core.comparable.ComparableContractTester;
+import org.apache.isis.testing.unittestsupport.applib.dom.comparable.ComparableContractTester;
 
 
 public class ComparableByNameContractTester<T extends WithNameComparable<T>> {

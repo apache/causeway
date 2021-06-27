@@ -33,7 +33,7 @@ import org.junit.rules.ExpectedException;
 import org.apache.isis.subdomains.xdocreport.applib.service.example.models.Developer;
 import org.apache.isis.subdomains.xdocreport.applib.service.example.models.Project;
 import org.apache.isis.subdomains.xdocreport.applib.service.example.models.ProjectDevelopersModel;
-import org.apache.isis.testing.unittestsupport.applib.core.jmocking.JUnitRuleMockery2;
+import org.apache.isis.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2;
 
 import fr.opensagres.xdocreport.core.io.IOUtils;
 
