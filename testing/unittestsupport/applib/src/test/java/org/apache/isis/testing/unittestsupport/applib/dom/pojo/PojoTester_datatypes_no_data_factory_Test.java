@@ -41,7 +41,7 @@ public class PojoTester_datatypes_no_data_factory_Test {
                     // .usingData(DataForJodaTime.localDates()) // not provided
                     .exercise(holder);
         }).isInstanceOf(AssertionFailedError.class)
-                .hasMessageContaining("No fixture test data is available for setSomeLocalDate");
+                .hasMessageContaining("No test data is available for setSomeLocalDate");
     }
 
 
