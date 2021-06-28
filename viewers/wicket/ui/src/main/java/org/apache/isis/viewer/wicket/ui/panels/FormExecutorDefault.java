@@ -176,6 +176,9 @@ implements FormExecutor {
                     targetAdapter = targetEntityModel.getManagedObject();
                 }
                 if(!EntityUtil.isDetachedOrRemoved(targetAdapter)) {
+                    if(targetAdapter != null) {
+                        getCommonContext().injectServicesInto(targetAdapter.getPojo());
+                    }
                     targetEntityModel.resetPropertyModels();
                 }
 
