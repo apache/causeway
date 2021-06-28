@@ -18,6 +18,8 @@
  */
 package org.apache.isis.extensions.secman.applib.role.fixtures;
 
+import java.util.function.Supplier;
+
 import javax.inject.Inject;
 
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
@@ -41,14 +43,24 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
     @Inject private ApplicationRoleRepository applicationRoleRepository;
     @Inject private ApplicationPermissionRepository applicationPermissionRepository;
 
-    private final String roleName;
-    private final String roleDescription;
+    private final Supplier<String> roleNameSupplier;
+    private final Supplier<String> roleDescriptionSupplier;
 
     protected AbstractRoleAndPermissionsFixtureScript(
             final String roleName,
             final String roleDescriptionIfAny) {
-        this.roleName = roleName;
-        this.roleDescription = roleDescriptionIfAny;
+        this(() -> roleName, () -> roleDescriptionIfAny);
+    }
+
+    protected AbstractRoleAndPermissionsFixtureScript(
+            final Supplier<String> roleNameSupplier,
+            final Supplier<String> roleDescriptionSupplier) {
+        this.roleNameSupplier = nullSafe(roleNameSupplier);
+        this.roleDescriptionSupplier = nullSafe(roleDescriptionSupplier);
+    }
+
+    private static <T> Supplier<T> nullSafe(Supplier<T> supplier) {
+        return supplier != null ? supplier : () -> null;
     }
 
     /**
@@ -71,8 +83,9 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
             return;
         }
 
+        val roleName = roleNameSupplier.get();
         val securityRole = applicationRoleRepository.findByName(roleName)
-                .orElseGet(() -> applicationRoleRepository.newRole(roleName, roleDescription));
+                .orElseGet(() -> applicationRoleRepository.newRole(roleName, roleDescriptionSupplier.get()));
 
         for(val featureId : featureIds) {
             val featureFqn = featureId.getFullyQualifiedName();
