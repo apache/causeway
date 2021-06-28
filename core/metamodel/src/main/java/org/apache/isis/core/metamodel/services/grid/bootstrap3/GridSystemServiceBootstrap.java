@@ -354,8 +354,12 @@ public class GridSystemServiceBootstrap extends GridSystemServiceAbstract<BS3Gri
 
                 if(layoutGroupFacet.isExplicitBinding()) {
                     final PropertyLayoutData propertyLayoutData = propertyLayoutDataById.get(layoutGroupName);
-                    final ActionLayoutData actionLayoutData = new ActionLayoutData(actionId);
-                    final ActionPositionFacet actionPositionFacet = objectAction.getFacet(ActionPositionFacet.class);
+                    if(propertyLayoutData == null) {
+                        log.warn(String.format("Could not find propertyLayoutData for layoutGroupName of '%s'", layoutGroupName));
+                        continue;
+                    }
+                    val actionLayoutData = new ActionLayoutData(actionId);
+                    val actionPositionFacet = objectAction.getFacet(ActionPositionFacet.class);
                     final ActionLayoutDataOwner owner;
                     final ActionLayout.Position position;
                     if(actionPositionFacet != null) {
