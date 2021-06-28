@@ -18,6 +18,8 @@
  */
 package org.apache.isis.extensions.secman.applib.user.fixtures;
 
+import java.util.function.Supplier;
+
 import javax.inject.Inject;
 
 import org.apache.isis.applib.value.Password;
@@ -31,6 +33,7 @@ import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserStatus;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 import lombok.Getter;
+import lombok.val;
 
 /**
  * Convenience fixture script intended to be easily subclassed in order to set up an
@@ -43,12 +46,12 @@ public abstract class AbstractUserAndRolesFixtureScript extends FixtureScript {
     @Inject private ApplicationUserRepository applicationUserRepository;
     @Inject private ApplicationRoleRepository applicationRoleRepository;
 
-    private final String username;
-    private final String password;
-    private final String emailAddress;
-    private final String tenancyPath;
-    private final AccountType accountType;
-    private final Can<String> roleNames;
+    private final Supplier<String> usernameSupplier;
+    private final Supplier<String> passwordSupplier;
+    private final Supplier<String> emailAddressSupplier;
+    private final Supplier<String> tenancyPathSupplier;
+    private final Supplier<AccountType> accountTypeSupplier;
+    private final Supplier<Can<String>> roleNamesSupplier;
 
     /**
      * The {@link ApplicationUser}
@@ -65,56 +68,79 @@ public abstract class AbstractUserAndRolesFixtureScript extends FixtureScript {
     }
 
     public AbstractUserAndRolesFixtureScript(
+            final Supplier<String> usernameSupplier,
+            final Supplier<String> passwordSupplier,
+            final Supplier<AccountType> accountTypeSupplier,
+            final Supplier<Can<String>> roleNamesSupplier) {
+        this(usernameSupplier, passwordSupplier, () -> null, () -> null, accountTypeSupplier, roleNamesSupplier);
+    }
+
+    public AbstractUserAndRolesFixtureScript(
             final String username,
             final String password,
             final String emailAddress,
             final String tenancyPath,
             final AccountType accountType,
             final Can<String> roleNames) {
+        this(() -> username, () -> password, () -> emailAddress, () -> tenancyPath, () -> accountType, () -> roleNames);
+    }
 
-        this.username = username;
-        this.password = password;
-        this.emailAddress = emailAddress;
-        this.tenancyPath = tenancyPath;
-        this.accountType = accountType;
-        this.roleNames = roleNames;
+    public AbstractUserAndRolesFixtureScript(
+            final Supplier<String> usernameSupplier,
+            final Supplier<String> passwordSupplier,
+            final Supplier<String> emailAddressSupplier,
+            final Supplier<String> tenancyPathSupplier,
+            final Supplier<AccountType> accountTypeSupplier,
+            final Supplier<Can<String>> roleNamesSupplier) {
+
+        this.usernameSupplier = nullSafe(usernameSupplier);
+        this.passwordSupplier = nullSafe(passwordSupplier);
+        this.emailAddressSupplier = nullSafe(emailAddressSupplier);
+        this.tenancyPathSupplier = nullSafe(tenancyPathSupplier);
+        this.accountTypeSupplier = nullSafe(accountTypeSupplier);
+        this.roleNamesSupplier = nullSafe(roleNamesSupplier);
+    }
+
+    private static <T> Supplier<T> nullSafe(Supplier<T> supplier) {
+        return supplier != null ? supplier : () -> null;
     }
 
     @Override
     protected void execute(final ExecutionContext executionContext) {
 
         // create user if does not exist, and assign to the role
+        val username = usernameSupplier.get();
         applicationUser = applicationUserRepository.findByUsername(username)
                 .orElse(null);
         if(applicationUser == null) {
 
-            switch (accountType) {
+            switch (accountTypeSupplier.get()) {
             case DELEGATED:
                 applicationUser = applicationUserRepository
                     .newDelegateUser(username, ApplicationUserStatus.UNLOCKED);
                 break;
             case LOCAL:
-                final Password pwd = new Password(password);
+                final Password pwd = new Password(passwordSupplier.get());
                 applicationUser = applicationUserRepository
                         .newLocalUser(username, pwd, ApplicationUserStatus.UNLOCKED);
-                applicationUser.setEmailAddress(emailAddress);
+                applicationUser.setEmailAddress(emailAddressSupplier.get());
             }
 
             if(applicationUser == null) {
-                throw _Exceptions.unrecoverableFormatted("failed to create user '%s'", username);
+                throw _Exceptions.unrecoverableFormatted("failed to create user '%s'", usernameSupplier);
             }
 
             // update tenancy (repository checks for null)
-            applicationUser.setAtPath(tenancyPath);
+            applicationUser.setAtPath(tenancyPathSupplier.get());
         }
 
-        for (final String roleName : roleNames) {
+        for (final String roleName : roleNamesSupplier.get()) {
             applicationRoleRepository.findByName(roleName)
             .map(securityRole->{
                 applicationRoleRepository.addRoleToUser(securityRole, applicationUser);
                 return Boolean.TRUE;
             })
-            .orElseThrow(()->_Exceptions.unrecoverable("role not found by name: "+roleName));
+            .orElseThrow(()->_Exceptions.unrecoverable("role not found by name: " + roleName));
         }
 
     }
