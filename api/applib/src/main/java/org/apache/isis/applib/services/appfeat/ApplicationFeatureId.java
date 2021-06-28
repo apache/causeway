@@ -137,6 +137,10 @@ implements
         return newType(logicalType.getLogicalTypeName());
     }
 
+    public static ApplicationFeatureId newMember(final LogicalType logicalType, final String memberLogicalName) {
+        return newMember(logicalType.getLogicalTypeName(), memberLogicalName);
+    }
+
     public static ApplicationFeatureId newMember(final String logicalTypeName, final String memberLogicalName) {
         val featureId = new ApplicationFeatureId(ApplicationFeatureSort.MEMBER);
         initType(featureId, logicalTypeName);
