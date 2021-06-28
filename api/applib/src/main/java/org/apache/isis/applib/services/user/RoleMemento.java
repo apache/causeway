@@ -18,23 +18,38 @@
  */
 package org.apache.isis.applib.services.user;
 
-import lombok.Getter;
-import lombok.Value;
+import java.io.Serializable;
+
+import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
+
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
-import java.io.Serializable;
+import lombok.Getter;
+import lombok.Value;
+import lombok.val;
 
 /**
  * Immutable serializable value held by {@link UserMemento}.
  *
  * @since 1.x revised for 2.0 {@index}
  */
-@DomainObject(nature = Nature.VIEW_MODEL, logicalTypeName = RoleMemento.LOGICAL_TYPE_NAME)
+@DomainObject(
+        nature = Nature.VIEW_MODEL,
+        logicalTypeName = RoleMemento.LOGICAL_TYPE_NAME
+)
+@DomainObjectLayout(
+        titleUiEvent = RoleMemento.TitleUiEvent.class
+)
 @Value
 public class RoleMemento implements Serializable {
+
+    public static class TitleUiEvent extends IsisModuleApplib.TitleUiEvent<RoleMemento> {}
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".RoleMemento";
 
@@ -61,8 +76,13 @@ public class RoleMemento implements Serializable {
         this.description = description;
     }
 
-    public String title() {
-        return name;
+    public static class UiSubscriber {
+        @Order(PriorityPrecedence.LATE)
+        @EventListener(RoleMemento.TitleUiEvent.class)
+        public void on(RoleMemento.TitleUiEvent ev) {
+            val roleMemento = ev.getSource();
+            ev.setTitle(roleMemento.getName());
+        }
     }
 
     @PropertyLayout(sequence = "1.1")

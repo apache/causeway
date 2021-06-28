@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.services.user;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.List;
@@ -25,8 +27,21 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
+import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
+
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.annotation.*;
+import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
@@ -35,15 +50,28 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.With;
+import lombok.val;
 
 /**
  * Immutable serializable value holding details about a user and its roles.
  *
  * @since 1.x revised for 2.0 {@index}
  */
-@DomainObject(nature = Nature.VIEW_MODEL, logicalTypeName = UserMemento.LOGICAL_TYPE_NAME)
+@DomainObject(
+        nature = Nature.VIEW_MODEL,
+        logicalTypeName = UserMemento.LOGICAL_TYPE_NAME
+)
+@DomainObjectLayout(
+        titleUiEvent = UserMemento.TitleUiEvent.class
+)
 @lombok.Value @lombok.Builder
 public class UserMemento implements Serializable {
+
+    public static class TitleUiEvent extends IsisModuleApplib.TitleUiEvent<UserMemento> {}
+
+    private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
+        ois.defaultReadObject();
+    }
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".UserMemento";
 
@@ -116,8 +144,14 @@ public class UserMemento implements Serializable {
 
     // -- UI TITLE
 
-    public String title() {
-        return name;
+    public static class UiSubscriber {
+        @Order(PriorityPrecedence.LATE)
+        @EventListener(UserMemento.TitleUiEvent.class)
+        public void on(UserMemento.TitleUiEvent ev) {
+            val userMemento = ev.getSource();
+            val title = String.format("%s %s", userMemento.getName(), userMemento.isImpersonating() ? " (impersonating)" : null);
+            ev.setTitle(title);
+        }
     }
 
     // -- PROPERTIES
@@ -202,6 +236,7 @@ public class UserMemento implements Serializable {
     @Getter @Builder.Default @With(onMethod_ = {@Programmatic})
     @NonNull AuthenticationSource authenticationSource = AuthenticationSource.DEFAULT;
 
+
     public enum AuthenticationSource {
         DEFAULT,
         /**
@@ -227,8 +262,7 @@ public class UserMemento implements Serializable {
      * It should return an empty string {@literal ""}
      * if this is an anonymous (unauthenticated) user.
      */
-    @Property
-    @PropertyLayout(sequence = "2.1")
+    @Property(hidden = Where.EVERYWHERE)
     @Getter @Builder.Default @With(onMethod_ = {@Programmatic})
     @NonNull String authenticationCode = DEFAULT_AUTH_VALID_CODE;
 
