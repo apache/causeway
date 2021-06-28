@@ -27,10 +27,12 @@ import javax.inject.Inject;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.all.described.ColumnDescribedFacet;
 import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
 import org.apache.isis.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.isis.core.metamodel.facets.all.described.ParamDescribedFacet;
 import org.apache.isis.core.metamodel.facets.all.i8n.HasMemoizableTranslation;
+import org.apache.isis.core.metamodel.facets.all.named.ColumnNamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.ParamNamedFacet;
@@ -88,9 +90,11 @@ extends ObjectSpecificationPostProcessorAbstract {
         Stream.<Optional<? extends Facet>>of(
                 facetHolder.lookupFacet(ObjectNamedFacet.class),
                 facetHolder.lookupFacet(MemberNamedFacet.class),
+                facetHolder.lookupFacet(ColumnNamedFacet.class),
                 facetHolder.lookupFacet(ParamNamedFacet.class),
                 facetHolder.lookupFacet(ObjectDescribedFacet.class),
                 facetHolder.lookupFacet(MemberDescribedFacet.class),
+                facetHolder.lookupFacet(ColumnDescribedFacet.class),
                 facetHolder.lookupFacet(ParamDescribedFacet.class))
         .filter(Optional::isPresent)
         .map(Optional::get)
