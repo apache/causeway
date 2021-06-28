@@ -65,6 +65,8 @@ import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.CssClassF
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.CssClassFacetForDomainObjectXml;
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.DescribedAsFacetForDomainObjectXml;
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.NamedFacetForDomainObjectXml;
+import org.apache.isis.core.metamodel.facets.properties.propertylayout.ColumnDescribedFacetForPropertyXml;
+import org.apache.isis.core.metamodel.facets.properties.propertylayout.ColumnNamedFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.CssClassFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.DescribedAsFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.HiddenFacetForPropertyXml;
@@ -279,14 +281,12 @@ implements GridSystemService<G> {
 
                 addFacetIfPresent(CssClassFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 addFacetIfPresent(DescribedAsFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                addFacetIfPresent(ColumnDescribedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 addFacetIfPresent(HiddenFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 addFacetIfPresent(LabelAtFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 addFacetIfPresent(MultiLineFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
-                // preserve translations
-                val existingNamedFacet = oneToOneAssociation.getFacet(MemberNamedFacet.class);
-                if(existingNamedFacet == null) {
-                    addFacetIfPresent(NamedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
-                }
+                addFacetIfPresent(NamedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                addFacetIfPresent(ColumnNamedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 addFacetIfPresent(PromptStyleFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 addFacetIfPresent(RenderedAdjustedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 addFacetIfPresent(UnchangingFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));

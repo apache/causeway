@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
 import java.util.Optional;
@@ -27,29 +26,19 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacetWithStaticTextAbstract;
 
-import lombok.val;
-
 public class NamedFacetForPropertyXml
 extends MemberNamedFacetWithStaticTextAbstract {
 
     public static Optional<MemberNamedFacet> create(
-            final PropertyLayoutData propertyLayout,
+            final PropertyLayoutData propertyLayoutData,
             final FacetHolder holder) {
 
-        if(propertyLayout == null) {
-            return Optional.empty();
-        }
-
-        val named = propertyLayout.getNamed();
-
-        if(_Strings.isEmpty(named)) {
-            return Optional.empty();
-        }
-
-        return Optional.of(
-                new NamedFacetForPropertyXml(
-                            named,
-                            holder));
+        return Optional.ofNullable(propertyLayoutData)
+        .map(PropertyLayoutData::getNamed)
+        .filter(_Strings::isEmpty)
+        .map(named->new NamedFacetForPropertyXml(
+                named,
+                holder));
     }
 
     private NamedFacetForPropertyXml(

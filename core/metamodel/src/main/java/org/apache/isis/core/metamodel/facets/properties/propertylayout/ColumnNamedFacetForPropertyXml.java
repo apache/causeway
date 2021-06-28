@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
 import java.util.Optional;
@@ -24,28 +23,28 @@ import java.util.Optional;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
-import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacetWithStaticTextAbstract;
+import org.apache.isis.core.metamodel.facets.all.named.ColumnNamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.ColumnNamedFacetAbstract;
 
-public class DescribedAsFacetForPropertyXml
-extends MemberDescribedFacetWithStaticTextAbstract {
+public class ColumnNamedFacetForPropertyXml
+extends ColumnNamedFacetAbstract {
 
-    public static Optional<MemberDescribedFacet> create(
+    public static Optional<ColumnNamedFacet> create(
             final PropertyLayoutData propertyLayoutData,
             final FacetHolder holder) {
 
         return Optional.ofNullable(propertyLayoutData)
-        .map(PropertyLayoutData::getDescribedAs)
+        .map(PropertyLayoutData::getNamed)
         .filter(_Strings::isEmpty)
-        .map(describedAs->new DescribedAsFacetForPropertyXml(
-                describedAs,
+        .map(named->new ColumnNamedFacetForPropertyXml(
+                named,
                 holder));
     }
 
-    private DescribedAsFacetForPropertyXml(
-            final String described,
+    private ColumnNamedFacetForPropertyXml(
+            final String named,
             final FacetHolder holder) {
-        super(described, holder);
+        super(named, holder);
     }
 
 }

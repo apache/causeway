@@ -24,25 +24,25 @@ import java.util.Optional;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
-import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacetWithStaticTextAbstract;
+import org.apache.isis.core.metamodel.facets.all.described.ColumnDescribedFacet;
+import org.apache.isis.core.metamodel.facets.all.described.ColumnDescribedFacetAbstract;
 
-public class DescribedAsFacetForPropertyXml
-extends MemberDescribedFacetWithStaticTextAbstract {
+public class ColumnDescribedFacetForPropertyXml
+extends ColumnDescribedFacetAbstract {
 
-    public static Optional<MemberDescribedFacet> create(
+    public static Optional<ColumnDescribedFacet> create(
             final PropertyLayoutData propertyLayoutData,
             final FacetHolder holder) {
 
         return Optional.ofNullable(propertyLayoutData)
         .map(PropertyLayoutData::getDescribedAs)
         .filter(_Strings::isEmpty)
-        .map(describedAs->new DescribedAsFacetForPropertyXml(
+        .map(describedAs->new ColumnDescribedFacetForPropertyXml(
                 describedAs,
                 holder));
     }
 
-    private DescribedAsFacetForPropertyXml(
+    private ColumnDescribedFacetForPropertyXml(
             final String described,
             final FacetHolder holder) {
         super(described, holder);

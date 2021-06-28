@@ -39,16 +39,15 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContextFx;
 import org.apache.isis.incubator.viewer.javafx.model.util._fx;
 
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableView;
+import javafx.scene.layout.VBox;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
-
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
-import javafx.scene.layout.VBox;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Log4j2
@@ -163,7 +162,7 @@ public class TableViewFx extends VBox {
 
         // property columns
         columnProperties.forEach(property->{
-            val column = _fx.newColumn(objectGrid, property.getColumnName(), String.class);
+            val column = _fx.newColumn(objectGrid, property.getColumnFriendlyName(), String.class);
             column.setCellValueFactory(cellDataFeatures -> {
                 log.debug("about to get property value for property {}", property.getId());
                 val targetObject = cellDataFeatures.getValue();
@@ -173,6 +172,8 @@ public class TableViewFx extends VBox {
                         .orElseGet(()->String.format("table cell not found for object '%s' (property-id: '%s')",
                                 ""+targetObject,
                                 property.getId()));
+
+                //TODO add column description as is provided via property.getColumnDescription()
 
                 return _fx.newStringReadonly(cellValue);
             });

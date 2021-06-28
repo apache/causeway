@@ -21,28 +21,26 @@ package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.layout.component.PropertyLayoutData;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
-import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacetWithStaticTextAbstract;
+import org.apache.isis.core.metamodel.facets.all.described.ColumnDescribedFacet;
+import org.apache.isis.core.metamodel.facets.all.described.ColumnDescribedFacetAbstract;
 
-public class DescribedAsFacetForPropertyXml
-extends MemberDescribedFacetWithStaticTextAbstract {
+public class ColumnDescribedFacetForPropertyLayoutAnnotation
+extends ColumnDescribedFacetAbstract {
 
-    public static Optional<MemberDescribedFacet> create(
-            final PropertyLayoutData propertyLayoutData,
+    public static Optional<ColumnDescribedFacet> create(
+            final Optional<PropertyLayout> propertyLayoutIfAny,
             final FacetHolder holder) {
 
-        return Optional.ofNullable(propertyLayoutData)
-        .map(PropertyLayoutData::getDescribedAs)
-        .filter(_Strings::isEmpty)
-        .map(describedAs->new DescribedAsFacetForPropertyXml(
-                describedAs,
-                holder));
+        return propertyLayoutIfAny
+                .map(PropertyLayout::describedAs)
+                .filter(_Strings::isNotEmpty)
+                .map(describedAs -> new ColumnDescribedFacetForPropertyLayoutAnnotation(describedAs, holder));
     }
 
-    private DescribedAsFacetForPropertyXml(
+    private ColumnDescribedFacetForPropertyLayoutAnnotation(
             final String described,
             final FacetHolder holder) {
         super(described, holder);

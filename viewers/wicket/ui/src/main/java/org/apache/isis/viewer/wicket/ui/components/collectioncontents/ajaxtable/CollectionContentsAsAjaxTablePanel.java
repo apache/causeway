@@ -41,7 +41,6 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.core.metamodel.facets.WhereValueFacet;
-import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -297,24 +296,17 @@ implements CollectionCountProvider {
 
         final String parentTypeName = property.getOnType().getLogicalTypeName();
 
-        final String describedAs = property.lookupFacet(MemberDescribedFacet.class)
-                .map(MemberDescribedFacet::getSpecialization)
-                .map(specialization->specialization
-                        .fold(textFacet->textFacet.translated(),
-                              textFacet->textFacet.textElseNull(collectionModel.getParentObject())))
-                .orElse(null);
-
         val commonContext = super.getCommonContext();
 
         return new ObjectAdapterPropertyColumn(
                 commonContext,
                 collectionModel.getVariant(),
-                Model.of(property.getColumnName()),
+                Model.of(property.getColumnFriendlyName()),
                 property.getId(),
                 property.getId(),
                 escaped,
                 parentTypeName,
-                describedAs);
+                property.getColumnDescription());
     }
 
 

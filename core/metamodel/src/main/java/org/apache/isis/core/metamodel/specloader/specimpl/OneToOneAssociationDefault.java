@@ -31,6 +31,8 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.all.described.ColumnDescribedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.ColumnNamedFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
@@ -75,13 +77,23 @@ implements OneToOneAssociation {
         super(featureIdentifier, facetedMethod, FeatureType.PROPERTY, objectSpec);
     }
 
-    // -- NAMED
+    // -- COLUMN NAMED
 
     @Override
-    public String getColumnName() {
-        //TODO[ISIS-1720] use a synthetic facet inferred from any static names instead
-        return getStaticFriendlyName()
-                .orElseGet(()->getFeatureIdentifier().getMemberNaturalName());
+    public String getColumnFriendlyName() {
+        return lookupFacet(ColumnNamedFacet.class)
+        .map(ColumnNamedFacet::translated)
+        //TODO[ISIS-1720] this fallback does not support translation, instead eg. install a synthetic facet that does
+        .orElseGet(()->getFeatureIdentifier().getMemberNaturalName());
+    }
+
+    // -- COLUMN DESCRIBED AS
+
+    @Override
+    public String getColumnDescription() {
+        return lookupFacet(ColumnDescribedFacet.class)
+        .map(ColumnDescribedFacet::translated)
+        .orElseGet(null);
     }
 
     // -- VISIBLE, USABLE

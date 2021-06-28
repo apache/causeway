@@ -21,31 +21,32 @@ package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.layout.component.PropertyLayoutData;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
-import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacetWithStaticTextAbstract;
+import org.apache.isis.core.metamodel.facets.all.named.ColumnNamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.ColumnNamedFacetAbstract;
 
-public class DescribedAsFacetForPropertyXml
-extends MemberDescribedFacetWithStaticTextAbstract {
+public class ColumnNamedFacetForPropertyLayoutAnnotation
+extends ColumnNamedFacetAbstract {
 
-    public static Optional<MemberDescribedFacet> create(
-            final PropertyLayoutData propertyLayoutData,
+    public static Optional<ColumnNamedFacet> create(
+            final Optional<PropertyLayout> propertyLayoutIfAny,
             final FacetHolder holder) {
 
-        return Optional.ofNullable(propertyLayoutData)
-        .map(PropertyLayoutData::getDescribedAs)
-        .filter(_Strings::isEmpty)
-        .map(describedAs->new DescribedAsFacetForPropertyXml(
-                describedAs,
-                holder));
+        return propertyLayoutIfAny
+                .filter(propertyLayout->_Strings.isNotEmpty(propertyLayout.named()))
+                .map(propertyLayout ->
+                    new ColumnNamedFacetForPropertyLayoutAnnotation(
+                        propertyLayout.named(),
+                        holder));
     }
 
-    private DescribedAsFacetForPropertyXml(
-            final String described,
+    private ColumnNamedFacetForPropertyLayoutAnnotation(
+            final String named,
             final FacetHolder holder) {
-        super(described, holder);
+
+        super(named, holder);
     }
 
 }

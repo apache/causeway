@@ -161,7 +161,8 @@ public class TableViewVaa extends VerticalLayout {
                 log.debug("about to get property value for property {}", property.getId());
                 return stringifyPropertyValue(property, targetObject);
             })
-            .setHeader(property.getColumnName());
+            .setHeader(property.getColumnFriendlyName());
+            //TODO add column description as is provided via property.getColumnDescription()
         });
 
         // populate the model

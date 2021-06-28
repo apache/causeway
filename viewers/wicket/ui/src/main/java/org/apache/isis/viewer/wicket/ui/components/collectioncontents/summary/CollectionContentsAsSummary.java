@@ -43,9 +43,8 @@ import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
-import lombok.val;
-
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+import lombok.val;
 
 /**
  * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel
@@ -100,7 +99,7 @@ implements CollectionCountProvider {
 
             repeating.add(item);
 
-            String propertyName = numberAssociation.getColumnName();
+            String propertyName = numberAssociation.getColumnFriendlyName();
             item.add(new Label(ID_PROPERTY_NAME, new Model<String>(propertyName)));
 
 

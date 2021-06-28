@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet;
@@ -76,9 +78,21 @@ extends
 
     /**
      * When rendering a domain-object collection as table,
-     * the table's column names are inferred
-     * from the property column-names.
+     * the table's (translated friendly) column names are inferred
+     * from the corresponding domain-object-property column-name(s).
+     * @since 2.0
      */
-    String getColumnName();
+    String getColumnFriendlyName();
+
+    /**
+     * When rendering a domain-object collection as table,
+     * the table's (translated friendly) column descriptions are inferred
+     * from the corresponding domain-object-property column-description(s).
+     * @return null-able; if empty, no description is available,
+     * consequently eg. viewers should not provide any tooltip
+     * @since 2.0
+     */
+    @Nullable String getColumnDescription();
+
 
 }

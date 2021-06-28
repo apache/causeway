@@ -181,7 +181,7 @@ class ExcelConverter {
         int i = 0;
         for (val property : propertyList) {
             final Cell cell = headerRow.createCell(i++);
-            cell.setCellValue(property.getColumnName());
+            cell.setCellValue(property.getColumnFriendlyName());
         }
 
         final CellMarshaller cellMarshaller = newCellMarshaller(workbook);
@@ -556,7 +556,7 @@ class ExcelConverter {
         }
 
         return objectSpec.streamProperties(MixedIn.INCLUDED)
-        .filter(association -> propertyNameOrId.equalsIgnoreCase(association.getColumnName())
+        .filter(association -> propertyNameOrId.equalsIgnoreCase(association.getColumnFriendlyName())
                             || propertyNameOrId.equalsIgnoreCase(association.getId()))
         .findFirst()
         .orElse(null);
