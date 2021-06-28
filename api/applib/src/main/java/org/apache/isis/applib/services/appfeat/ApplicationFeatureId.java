@@ -127,6 +127,16 @@ implements
         return featureId;
     }
 
+    /**
+     * Creates a new {@link ApplicationFeatureId} based on the {@link LogicalType#getNamespace() namespace}
+     * of the provided {@link LogicalType}.
+     *
+     * @param logicalType - from which the namespace is inferred.
+     */
+    public static ApplicationFeatureId newNamespace(final LogicalType logicalType) {
+        return newNamespace(logicalType.getNamespace());
+    }
+
     public static ApplicationFeatureId newType(final String logicalTypeName) {
         val featureId = new ApplicationFeatureId(ApplicationFeatureSort.TYPE);
         initType(featureId, logicalTypeName);
