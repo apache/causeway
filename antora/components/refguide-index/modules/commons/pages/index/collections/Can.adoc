@@ -30,25 +30,26 @@ interface Can<T> {
   T getSingletonOrFail()     // <.>
   boolean contains(T element)     // <.>
   Can<T> empty()     // <.>
-  Can<T> ofNullable(T element)     // <.>
-  Can<T> ofSingleton(T element)     // <.>
-  Can<T> of(T... array)     // <.>
-  Can<T> ofArray(T[] array)     // <.>
-  Can<T> ofCollection(Collection<T> collection)     // <.>
-  Can<T> ofIterable(Iterable<T> iterable)     // <.>
-  Can<T> ofEnumeration(Enumeration<T> enumeration)     // <.>
-  Can<T> ofStream(Stream<T> stream)     // <.>
-  Can<T> ofInstance(Instance<T> instance)     // <.>
+  Can<T> ofNullable(final T element)     // <.>
+  Can<T> ofSingleton(final T element)     // <.>
+  Can<T> of(final T... array)     // <.>
+  Can<T> ofArray(final T[] array)     // <.>
+  Can<T> ofCollection(final Collection<T> collection)     // <.>
+  Can<T> ofIterable(final Iterable<T> iterable)     // <.>
+  Can<T> ofEnumeration(final Enumeration<T> enumeration)     // <.>
+  Can<T> ofStream(final Stream<T> stream)     // <.>
+  Can<T> ofInstance(final Instance<T> instance)     // <.>
+  Can<T> unique()     // <.>
   Can<T> reverse()     // <.>
   Can<T> filter(Predicate<? super T> predicate)     // <.>
-  Can<R> map(Function<? super T, R> mapper)     // <.>
-  Can<T> concat(Can<T> can, T element)     // <.>
+  Can<R> map(final Function<? super T, R> mapper)     // <.>
+  Can<T> concat(final Can<T> can, final T element)     // <.>
   Iterator<T> reverseIterator()
   void forEach(Consumer<? super T> action)
   void zip(Iterable<R> zippedIn, BiConsumer<? super T, ? super R> action)     // <.>
   Can<R> zipMap(Iterable<Z> zippedIn, BiFunction<? super T, ? super Z, R> mapper)     // <.>
   Can<T> add(T element)
-  Can<T> addUnique(T element)     // <.>
+  Can<T> addUnique(final T element)     // <.>
   Can<T> addAll(Can<T> other)
   Can<T> add(int index, T element)     // <.>
   Can<T> replace(int index, T element)
@@ -68,7 +69,7 @@ interface Can<T> {
   Set<T> toSet()     // <.>
   Set<T> toSet(Consumer<T> onDuplicated)     // <.>
   C toCollection(Supplier<C> collectionFactory)     // <.>
-  T[] toArray(T[] a)     // <.>
+  T[] toArray(final T[] a)     // <.>
   T[] toArray(Class<T> elementType)     // <.>
 }
 ----
@@ -161,10 +162,15 @@ Returns either a _Can_ with all the elements from given _stream_ or an empty _Ca
 --
 Returns either a _Can_ with all the elements from given _instance_ or an empty _Can_ if the _instance_ is _null_ . Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
 --
+<.> xref:#unique__[unique()]
++
+--
+Returns a _Can_ with all the elements from this _Can_ , but duplicated elements removed, based on _Object#equals(Object)_ object equality.
+--
 <.> xref:#reverse__[reverse()]
 +
 --
-Returns a _Can_ with all the elements from this _Can_ but contained in reversed order.
+Returns a _Can_ with all the elements from this _Can_ , but contained in reversed order.
 --
 <.> xref:#filter__Predicate[filter(Predicate)]
 +
@@ -346,10 +352,15 @@ As side-effect, consumes given _stream_ .
 
 Returns either a _Can_ with all the elements from given _instance_ or an empty _Can_ if the _instance_ is _null_ . Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
 
+[#unique__]
+=== unique()
+
+Returns a _Can_ with all the elements from this _Can_ , but duplicated elements removed, based on _Object#equals(Object)_ object equality.
+
 [#reverse__]
 === reverse()
 
-Returns a _Can_ with all the elements from this _Can_ but contained in reversed order.
+Returns a _Can_ with all the elements from this _Can_ , but contained in reversed order.
 
 [#filter__Predicate]
 === filter(Predicate)

@@ -3,11 +3,11 @@
 
 Indicates that a method is a supporting-method, one that contributes (hide, validate, ...) to an _Action_ , _Property_ or _Collection_ .
 
-For _mixins _is also allowed to be placed on the mixin's main method._ _ 
+For _mixins_ is also allowed to be placed on the mixin's main method.
 
- _ _By placing the xref:refguide:applib:index/annotation/MemberSupport.adoc[MemberSupport] annotation on a method, a contract with the meta-model is enforced, such that this method must be recognized by the meta-model and cannot be ignored._ _ 
+By placing the xref:refguide:applib:index/annotation/MemberSupport.adoc[MemberSupport] annotation on a method, a contract with the meta-model is enforced, such that this method must be recognized by the meta-model and cannot be ignored.
 
- _ _In some sense acts as the semantic counterpart to xref:refguide:applib:index/annotation/Programmatic.adoc[Programmatic] ._ _ 
+In some sense acts as the semantic counterpart to xref:refguide:applib:index/annotation/Programmatic.adoc[Programmatic] .
 
 == API
 

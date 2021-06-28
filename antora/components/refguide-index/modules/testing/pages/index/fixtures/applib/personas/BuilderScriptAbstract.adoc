@@ -14,8 +14,6 @@ class BuilderScriptAbstract<T> {
   BuilderScriptAbstract<T> build(final FixtureScript parentFixtureScript, final ExecutionContext executionContext)
   T objectFor(final PersonaWithBuilderScript<BuilderScriptAbstract<T>> persona, final ExecutionContext executionContext)
   T findUsing(final PersonaWithFinder<T> persona)
-  BuilderScriptAbstract<T> addPrereq(WithPrereqs.Block<T> prereq)
-  void execPrereqs(final ExecutionContext executionContext)
 }
 ----
 

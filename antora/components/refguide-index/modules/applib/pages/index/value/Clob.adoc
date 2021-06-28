@@ -25,6 +25,7 @@ class Clob {
   String getName()
   MimeType getMimeType()
   CharSequence getChars()
+  Blob toBlob(final Charset charset)
   void writeCharsTo(final Writer wr)
   boolean equals(final Object o)
   int hashCode()

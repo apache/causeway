@@ -17,12 +17,15 @@ If there is a member name clash involving an _action_ and an _association_ , the
 class ApplicationFeatureId {
   public static final ApplicationFeatureId NAMESPACE_DEFAULT;
   ApplicationFeatureId fromIdentifier(final Identifier identifier)
-  ApplicationFeatureId newFeature(final ApplicationFeatureSort featureSort, final String qualifiedName)
+  ApplicationFeatureId newFeature(final ApplicationFeatureSort featureSort, final String qualifiedLogicalName)
   ApplicationFeatureId newFeature(final String namespace, final String logicalTypeSimpleName, final String memberName)
   ApplicationFeatureId newNamespace(final String namespace)
+  ApplicationFeatureId newNamespace(final LogicalType logicalType)     // <.>
   ApplicationFeatureId newType(final String logicalTypeName)
+  ApplicationFeatureId newType(final LogicalType logicalType)
+  ApplicationFeatureId newMember(final LogicalType logicalType, final String memberLogicalName)
   ApplicationFeatureId newMember(final String logicalTypeName, final String memberLogicalName)
-  ApplicationFeatureId newMember(String fullyQualifiedName)
+  ApplicationFeatureId newMember(String fullyQualifiedLogicalName)
   String title()     // <.>
   ApplicationFeatureId getParentTypeFeatureId()     // <.>
   String getFullyQualifiedName()
@@ -43,6 +46,11 @@ class ApplicationFeatureId {
 }
 ----
 
+<.> xref:#newNamespace__LogicalType[newNamespace(LogicalType)]
++
+--
+Creates a new xref:refguide:applib:index/services/appfeat/ApplicationFeatureId.adoc[ApplicationFeatureId] based on the _LogicalType#getNamespace() namespace_ of the provided xref:refguide:applib:index/id/LogicalType.adoc[LogicalType] .
+--
 <.> xref:#title__[title()]
 +
 --
@@ -75,6 +83,11 @@ Returns a new instance that is a clone of this, except for the namespace, which 
 --
 
 == Members
+
+[#newNamespace__LogicalType]
+=== newNamespace(LogicalType)
+
+Creates a new xref:refguide:applib:index/services/appfeat/ApplicationFeatureId.adoc[ApplicationFeatureId] based on the _LogicalType#getNamespace() namespace_ of the provided xref:refguide:applib:index/id/LogicalType.adoc[LogicalType] .
 
 [#title__]
 === title()

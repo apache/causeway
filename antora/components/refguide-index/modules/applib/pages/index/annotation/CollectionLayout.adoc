@@ -14,7 +14,8 @@ Layout hints for collections.
   String describedAs() default "";     // <.>
   Where hidden() default Where.NOT_SPECIFIED;     // <.>
   String named() default "";     // <.>
-  boolean namedEscaped() default true;     // <.>
+  @Deprecated
+boolean namedEscaped() default true;     // <.>
   int paged() default -1;     // <.>
   String sequence() default "";     // <.>
   @SuppressWarnings("rawtypes")

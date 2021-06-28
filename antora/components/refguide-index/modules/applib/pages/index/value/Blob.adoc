@@ -22,7 +22,12 @@ class Blob {
   String getName()
   MimeType getMimeType()
   byte[] getBytes()
+  Clob toClob(final Charset charset)
   void writeBytesTo(final OutputStream os)     // <.>
+  void consume(Consumer<InputStream> consumer)     // <.>
+  R digest(final Function<InputStream, R> digester)     // <.>
+  Blob zip()
+  Blob unZip(final CommonMimeType resultingMimeType)
   boolean equals(final Object o)
   int hashCode()
   String toString()
@@ -39,6 +44,16 @@ Returns a new xref:refguide:applib:index/value/Blob.adoc[Blob] of given _name_ ,
 +
 --
 Does not close the OutputStream.
+--
+<.> xref:#consume__Consumer[consume(Consumer)]
++
+--
+The _InputStream_ involved is closed after consumption.
+--
+<.> xref:#digest__Function[digest(Function)]
++
+--
+The _InputStream_ involved is closed after digestion.
 --
 <.> xref:#asImage__[asImage()]
 
@@ -57,6 +72,16 @@ For more fine-grained control use one of the xref:refguide:applib:index/value/Bl
 === writeBytesTo(OutputStream)
 
 Does not close the OutputStream.
+
+[#consume__Consumer]
+=== consume(Consumer)
+
+The _InputStream_ involved is closed after consumption.
+
+[#digest__Function]
+=== digest(Function)
+
+The _InputStream_ involved is closed after digestion.
 
 [#asImage__]
 === asImage()

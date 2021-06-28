@@ -17,7 +17,7 @@ isis.testing.fixtures. +
 fixture-scripts-specification. +
 context-class
 
-|
+| 
 | Specifies the base package from which to search for fixture scripts.
 
 Either this or packagePrefix must be specified. This property is used by preference.
@@ -31,12 +31,12 @@ isis.testing.fixtures. +
 fixture-scripts-specification. +
 multiple-execution-strategy
 
-|
+| 
 | Indicates whether, if a fixture script (or more precisely any other fixture scripts of the same class) is encountered more than once in a graph of dependencies, it should be executed again or skipped.
 
 The default is to fixture scripts are executed only once per class.
 
-Note that this policy can be overridden on a fixture-by-fixture basis if the fixture implements xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScriptWithExecutionStrategy.adoc[ FixtureScriptWithExecutionStrategy].
+Note that this policy can be overridden on a fixture-by-fixture basis if the fixture implements ``FixtureScriptWithExecutionStrategy``.
 
 
 |
@@ -45,7 +45,7 @@ isis.testing.fixtures. +
 fixture-scripts-specification. +
 non-persisted-objects-strategy
 
-|
+| 
 | Indicates whether objects that are returned as a fixture result should be automatically persisted if required (the default) or not.
 
 
@@ -55,7 +55,7 @@ isis.testing.fixtures. +
 fixture-scripts-specification. +
 package-prefix
 
-|
+| 
 | Specifies the base package from which to search for fixture scripts.
 
 Either this or ``#getContextClass()`` must be specified; ``#getContextClass()`` is used by preference.
@@ -69,7 +69,7 @@ isis.testing.fixtures. +
 fixture-scripts-specification. +
 recreate
 
-|
+| 
 | null
 
 
@@ -79,7 +79,7 @@ isis.testing.fixtures. +
 fixture-scripts-specification. +
 run-script-default
 
-|
+| 
 | null
 
 
@@ -88,7 +88,7 @@ run-script-default
 isis.testing.fixtures. +
 initial-script
 
-|
+| 
 | Indicates the fixture script class to run initially.
 
 Intended for use when prototyping against an in-memory database (but will run in production mode as well if required).

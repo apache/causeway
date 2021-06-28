@@ -17,7 +17,6 @@ Collects together all layout hints for a property of a domain object.
   LabelPosition labelPosition() default LabelPosition.NOT_SPECIFIED;     // <.>
   int multiLine() default -1;     // <.>
   String named() default "";     // <.>
-  boolean namedEscaped() default true;     // <.>
   Navigable navigable() default Navigable.NOT_SPECIFIED;     // <.>
   PromptStyle promptStyle() default PromptStyle.NOT_SPECIFIED;     // <.>
   RenderDay renderDay() default RenderDay.NOT_SPECIFIED;     // <.>
@@ -66,11 +65,6 @@ For string properties (and parameters), render as a text area over specified num
 +
 --
 Name of this property (overriding the name derived from its name in code).
---
-<.> xref:#namedEscaped[namedEscaped]
-+
---
-A flag indicating whether the value of _#named()_ should be HTML escaped or not.
 --
 <.> xref:#navigable[navigable]
 +
@@ -166,11 +160,6 @@ If set to > 1, then _#labelPosition()_ defaults to _LabelPosition#TOP top_ .
 Name of this property (overriding the name derived from its name in code).
 
 A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
-
-[#namedEscaped]
-=== namedEscaped
-
-A flag indicating whether the value of _#named()_ should be HTML escaped or not.
 
 [#navigable]
 === navigable

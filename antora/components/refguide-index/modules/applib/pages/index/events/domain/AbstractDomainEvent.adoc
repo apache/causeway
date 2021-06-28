@@ -17,7 +17,7 @@ class AbstractDomainEvent<S> {
   AbstractDomainEvent(final S source, final Identifier identifier)
   S getSource()     // <.>
   void setMixedIn(final Object mixedIn)     // <.>
-  Object getSubject()     // <.>
+  T getSubject()     // <.>
   void setEventPhase(Phase phase)     // <.>
   void setIdentifier(final Identifier identifier)     // <.>
   void hide()     // <.>

@@ -13,7 +13,8 @@ Collects together all layout hints for action parameters in a single annotation.
   String describedAs() default "";     // <.>
   LabelPosition labelPosition() default LabelPosition.NOT_SPECIFIED;     // <.>
   String named() default "";     // <.>
-  boolean namedEscaped() default true;     // <.>
+  @Deprecated
+boolean namedEscaped() default true;     // <.>
   int multiLine() default -1;     // <.>
   RenderDay renderDay() default RenderDay.NOT_SPECIFIED;     // <.>
   int typicalLength() default -1;     // <.>

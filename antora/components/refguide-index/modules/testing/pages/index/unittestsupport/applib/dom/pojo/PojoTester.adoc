@@ -1,18 +1,18 @@
-= WithPrereqs _(interface)_
+= PojoTester
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
-
-Provides a mechanism for xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] s to specify prerequisites to be executed first.
-
-Most commonly used to chain xref:refguide:testing:index/fixtures/applib/personas/BuilderScriptAbstract.adoc[BuilderScriptAbstract] s in conjunction with personas.
 
 == API
 
 [source,java]
-.WithPrereqs.java
+.PojoTester.java
 ----
-interface WithPrereqs<T> {
-  BuilderScriptAbstract<T> addPrereq(Block<T> prereq)
-  void execPrereqs(FixtureScript.ExecutionContext executionContext)
+class PojoTester {
+  PojoTester create()
+  AtomicInteger getCounter()
+  PojoTester usingData(Class<T> c, final T... data)
+  PojoTester usingData(DatumFactory<T> factory)
+  void exercise(Object bean)
+  void exercise(Object bean, FilterSet filterSet)
 }
 ----
 

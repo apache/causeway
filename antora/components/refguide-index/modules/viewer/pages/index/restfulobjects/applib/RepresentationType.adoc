@@ -21,7 +21,7 @@ enum RepresentationType {
   DOMAIN_TYPE
   LAYOUT
   OBJECT_LAYOUT
-  OBJECT_IMAGE
+  OBJECT_ICON
   MENUBARS
   PROPERTY_DESCRIPTION
   COLLECTION_DESCRIPTION
@@ -35,9 +35,9 @@ enum RepresentationType {
   MediaType getJsonMediaType()
   MediaType getXmlMediaType()
   MediaType getJsonElseXmlMediaType()
-  MediaType getMediaType(String parameter, String paramValue)     // <.>
-  MediaType getJsonMediaType(Map<String, String> mediaTypeParams)
-  MediaType getXmlMediaType(Map<String, String> mediaTypeParams)
+  MediaType getMediaType(final String parameter, final String paramValue)     // <.>
+  MediaType getJsonMediaType(final Map<String, String> mediaTypeParams)
+  MediaType getXmlMediaType(final Map<String, String> mediaTypeParams)
   String getMediaTypeProfile()
   Class<? extends JsonRepresentation> getRepresentationClass()
   RepresentationType lookup(final String name)

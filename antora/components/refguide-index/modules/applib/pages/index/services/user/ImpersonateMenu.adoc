@@ -22,9 +22,6 @@ public static final String LOGICAL_TYPE_NAME;
   List<String> choices0ImpersonateWithRoles()
   List<String> choices1ImpersonateWithRoles(final String userName)
   List<String> default1ImpersonateWithRoles(final String userName)
-  void stopImpersonating()
-  boolean hideStopImpersonating()
-  String disableStopImpersonating()
 }
 ----
 

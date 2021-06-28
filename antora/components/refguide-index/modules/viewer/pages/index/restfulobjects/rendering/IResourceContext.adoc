@@ -28,7 +28,7 @@ interface IResourceContext {
   RepresentationService.Intent getIntent()     // <.>
   InteractionProvider getInteractionProvider()
   MetaModelContext getMetaModelContext()
-  Optional<ManagedObject> getObjectAdapterForOidFromHref(String oidFromHref)
+  Optional<ManagedObject> getObjectAdapterForOidFromHref(final String oidFromHref)
 }
 ----
 

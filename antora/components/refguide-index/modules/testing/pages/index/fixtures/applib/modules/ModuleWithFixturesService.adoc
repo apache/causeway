@@ -11,7 +11,11 @@ class ModuleWithFixturesService {
   FixtureScript getRefDataSetupFixture()
   FixtureScript getTeardownFixture()
   List<ModuleWithFixturesDescriptor> modules()
-  void onContextRefreshed(ContextRefreshedEvent event)
+  List<ModuleWithFixturesDescriptor> modulesWithin(final Map<String, ContextBeans> beans)
+  List<ModuleWithFixturesDescriptor> sequenced(final List<ModuleWithFixturesDescriptor> modules)
+  List<String> beanNamesOf(final ArrayList<ModuleWithFixturesDescriptor> result)
+  ModuleWithFixturesDescriptor addNextModule(final List<ModuleWithFixturesDescriptor> result, final List<ModuleWithFixturesDescriptor> remaining, final LinkedHashMap<String, ModuleWithFixturesDescriptor> moduleByName)
+  void onContextRefreshed(final ContextRefreshedEvent event)
 }
 ----
 

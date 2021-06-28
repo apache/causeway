@@ -9,8 +9,6 @@
 interface HasNamed {
   String getNamed()
   void setNamed(String named)
-  Boolean getNamedEscaped()
-  void setNamedEscaped(Boolean namedEscaped)
 }
 ----
 

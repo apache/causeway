@@ -9,7 +9,6 @@ Implementation that supports impersonation, using the _HttpSession_ to store the
 .ImpersonatedUserHolderUsingHttpSession.java
 ----
 class ImpersonatedUserHolderUsingHttpSession {
-  ImpersonatedUserHolderUsingHttpSession(final HttpServletRequest httpServletRequest)
   boolean supportsImpersonation()
   void setUserMemento(final UserMemento userMemento)
   Optional<UserMemento> getUserMemento()
