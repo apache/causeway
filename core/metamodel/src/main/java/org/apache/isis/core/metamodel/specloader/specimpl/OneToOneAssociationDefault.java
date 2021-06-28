@@ -94,7 +94,7 @@ implements OneToOneAssociation {
     public String getColumnDescription() {
         return lookupFacet(ColumnDescribedFacet.class)
         .map(ColumnDescribedFacet::translated)
-        .orElseGet(null);
+        .orElseGet(() -> null);
     }
 
     // -- VISIBLE, USABLE
