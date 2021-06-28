@@ -25,7 +25,7 @@ import org.apache.isis.testing.unittestsupport.applib.dom.pojo.holders.JodaLocal
 
 import lombok.val;
 
-import junit.framework.AssertionFailedError;
+import org.opentest4j.AssertionFailedError;
 
 public class PojoTester_datatypes_no_data_factory_Test {
 

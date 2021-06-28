@@ -20,8 +20,7 @@ package org.apache.isis.testing.unittestsupport.applib.dom.pojo;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import junit.framework.AssertionFailedError;
+import org.opentest4j.AssertionFailedError;
 
 public class PojoTester_broken_Test {
 
@@ -71,7 +70,7 @@ public class PojoTester_broken_Test {
         Assertions.assertThatThrownBy(() -> {
             PojoTester.create()
                     .exercise(customer);
-        }).isInstanceOf(junit.framework.AssertionFailedError.class)
+        }).isInstanceOf(org.opentest4j.AssertionFailedError.class)
                 .withFailMessage(() -> "someString: null");
 
     }
