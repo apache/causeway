@@ -20,6 +20,7 @@ package org.apache.isis.testing.unittestsupport.applib.dom.pojo;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.opentest4j.AssertionFailedError;
 
 import org.apache.isis.testing.unittestsupport.applib.dom.pojo.holders.JavaLocalDateHolder;
 import org.apache.isis.testing.unittestsupport.applib.dom.pojo.holders.JavaLocalDateTimeHolder;
@@ -27,8 +28,6 @@ import org.apache.isis.testing.unittestsupport.applib.dom.pojo.holders.JavaLocal
 import org.apache.isis.testing.unittestsupport.applib.dom.pojo.holders.JavaOffsetDateTimeHolder;
 
 import lombok.val;
-
-import junit.framework.AssertionFailedError;
 
 public class PojoTester_datatypes_java_time_Test {
 

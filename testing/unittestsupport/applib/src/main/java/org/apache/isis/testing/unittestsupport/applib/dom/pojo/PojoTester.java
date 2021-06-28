@@ -42,9 +42,11 @@ import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
+import org.opentest4j.AssertionFailedError;
+
 import org.apache.isis.commons.internal.collections._Lists;
 
-import junit.framework.AssertionFailedError;
+import lombok.val;
 
 /**
  * @since 2.0 {@index}
@@ -320,11 +322,7 @@ public final class PojoTester {
 					lastCause = te.getCause();
 				}
 			}
-			final AssertionFailedError err = new AssertionFailedError(
-					b.toString());
-			if (lastCause != null) {
-				err.initCause(lastCause);
-			}
+			val err = new AssertionFailedError(b.toString(), lastCause);
 			throw err;
 		}
 	}
