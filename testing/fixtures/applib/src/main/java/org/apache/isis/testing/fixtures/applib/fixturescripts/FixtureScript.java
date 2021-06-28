@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
@@ -695,13 +696,14 @@ public abstract class FixtureScript {
         return defaultValue;
     }
 
-    protected <T> T checkParam(final String parameterName, final ExecutionContext ec, final Class<T> cls) {
-
+    protected <T> Optional<T> optionalParam(final String parameterName, final ExecutionContext ec, final Class<T> cls) {
         final T value = readParam(parameterName, ec, cls);
-        if(value != null) { return (T) value; }
+        return Optional.ofNullable(value);
+    }
 
-        // else throw exception
-        throw new IllegalArgumentException(String.format("No value for '%s'", parameterName));
+    protected <T> T checkParam(final String parameterName, final ExecutionContext ec, final Class<T> cls) {
+        return optionalParam(parameterName, ec, cls)
+                .orElseThrow(() -> new IllegalArgumentException(String.format("No value for '%s'", parameterName)));
     }
 
     private <T> T readParam(final String parameterName, final ExecutionContext ec, final Class<T> cls) {
