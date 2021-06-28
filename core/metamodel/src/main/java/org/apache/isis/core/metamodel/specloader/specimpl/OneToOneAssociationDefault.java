@@ -83,7 +83,8 @@ implements OneToOneAssociation {
     public String getColumnFriendlyName() {
         return lookupFacet(ColumnNamedFacet.class)
         .map(ColumnNamedFacet::translated)
-        //TODO[ISIS-1720] this fallback does not support translation, instead eg. install a synthetic facet that does
+        //we have a facet-post-processor to ensure following code path is unreachable,
+        // however, we keep it in support of JUnit testing
         .orElseGet(()->getFeatureIdentifier().getMemberNaturalName());
     }
 
