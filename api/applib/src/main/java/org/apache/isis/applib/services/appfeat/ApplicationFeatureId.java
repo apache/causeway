@@ -31,6 +31,7 @@ import javax.annotation.Nullable;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.util.Equality;
 import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
@@ -90,15 +91,15 @@ implements
 
     public static ApplicationFeatureId newFeature(
             final @NonNull ApplicationFeatureSort featureSort,
-            final @NonNull String qualifiedName) {
+            final @NonNull String qualifiedLogicalName) {
 
         switch (featureSort) {
         case NAMESPACE:
-            return newNamespace(qualifiedName);
+            return newNamespace(qualifiedLogicalName);
         case TYPE:
-            return newType(qualifiedName);
+            return newType(qualifiedLogicalName);
         case MEMBER:
-            return newMember(qualifiedName);
+            return newMember(qualifiedLogicalName);
         }
         throw _Exceptions.illegalArgument("Unknown feature sort '%s'", featureSort);
     }
@@ -143,14 +144,14 @@ implements
         return featureId;
     }
 
-    public static ApplicationFeatureId newMember(String fullyQualifiedName) {
+    public static ApplicationFeatureId newMember(String fullyQualifiedLogicalName) {
         val featureId = new ApplicationFeatureId(ApplicationFeatureSort.MEMBER);
-        final int i = fullyQualifiedName.lastIndexOf("#");
+        val i = fullyQualifiedLogicalName.lastIndexOf("#");
         if(i == -1) {
-            throw new IllegalArgumentException("Malformed, expected a '#': " + fullyQualifiedName);
+            throw new IllegalArgumentException("Malformed, expected a '#': " + fullyQualifiedLogicalName);
         }
-        val logicalTypeName = fullyQualifiedName.substring(0, i);
-        val memberName = fullyQualifiedName.substring(i + 1);
+        val logicalTypeName = fullyQualifiedLogicalName.substring(0, i);
+        val memberName = fullyQualifiedLogicalName.substring(i + 1);
         initType(featureId, logicalTypeName);
         initMember(featureId, memberName);
         return featureId;
