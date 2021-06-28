@@ -53,7 +53,7 @@ public class TimestampService {
         }
 
         if(persistableObject instanceof OnUpdatedAt) {
-            ((OnUpdatedAt)persistableObject).setUpdatedAt(clockService.getClock().javaSqlTimestamp());
+            ((OnUpdatedAt)persistableObject).setUpdatedAt(clockService.getClock().nowAsJavaSqlTimestamp());
         }
 
     }

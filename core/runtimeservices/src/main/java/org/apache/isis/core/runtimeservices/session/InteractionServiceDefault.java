@@ -384,7 +384,7 @@ implements
                         // the best we can do is to use the current time
 
                         // REVIEW: as for the interaction object, it is left somewhat high-n-dry.
-                         clockService.getClock().javaSqlTimestamp();
+                         clockService.getClock().nowAsJavaSqlTimestamp();
 
             command.updater().setCompletedAt(completedAt);
         }

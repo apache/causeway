@@ -173,7 +173,7 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
 
         dto.setInteractionId(interactionId.toString());
         dto.setUser(userService.currentUserNameElseNobody());
-        dto.setTimestamp(clockService.getClock().xmlGregorianCalendar());
+        dto.setTimestamp(clockService.getClock().nowAsXmlGregorianCalendar());
 
         for (val targetHead : targets) {
             final Bookmark bookmark = ManagedObjects.bookmarkElseFail(targetHead.getOwner());

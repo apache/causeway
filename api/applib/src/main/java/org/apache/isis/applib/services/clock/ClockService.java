@@ -59,7 +59,7 @@ public class ClockService {
     // -- SHORTCUTS
 
     public long getEpochMillis() {
-        return getClock().getEpochMillis();
+        return getClock().nowAsEpochMilli();
     }
 
 //    public java.time.LocalDate now() {

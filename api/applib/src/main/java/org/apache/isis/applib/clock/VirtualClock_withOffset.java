@@ -35,7 +35,7 @@ final class VirtualClock_withOffset implements VirtualClock {
     private final long millisOffset;
     
     @Override
-    public Instant now() {
+    public Instant nowAsInstant() {
         return Instant.now().plusMillis(millisOffset);
     }
     
@@ -43,7 +43,7 @@ final class VirtualClock_withOffset implements VirtualClock {
     
     @Override
     public String toString() {
-        return String.format("%s: %s", this.getClass().getSimpleName(), xmlGregorianCalendar());
+        return String.format("%s: %s", this.getClass().getSimpleName(), nowAsXmlGregorianCalendar());
     }
     
     @Override

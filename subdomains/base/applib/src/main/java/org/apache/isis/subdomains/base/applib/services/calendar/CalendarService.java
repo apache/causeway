@@ -85,7 +85,7 @@ public class CalendarService {
     }
 
     private LocalDate nowAsLocalDate() {
-        return clockService.getClock().localDate(ZoneId.systemDefault());
+        return clockService.getClock().nowAsLocalDate(ZoneId.systemDefault());
     }
 
 }

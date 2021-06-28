@@ -61,12 +61,13 @@ public interface VirtualClock extends Serializable {
      * @apiNote This is a universal time difference, that does not depend on
      * where you are (eg. your current timezone), just on when you are.
      */
-    Instant now();
+    Instant nowAsInstant();
+
 
     // -- FACTORIES
 
     /**
-     * Returns a the system's default ticking clock.
+     * Returns the system's default ticking clock.
      */
     static VirtualClock system() {
         return new VirtualClock_system();
@@ -103,73 +104,139 @@ public interface VirtualClock extends Serializable {
      * Returns the (virtual) time as the number of milliseconds since the epoch start.
      *
      * @apiNote This is a universal time difference, that does not depend on
-     * where you are (eg. your current timezone), just on when you are.
+     * where you are (eg your current timezone), just on when you are.
      *
-     * @see {@link Instant}
+     * @see #nowAsInstant()
      */
-    default long getEpochMillis() {
-        return now().toEpochMilli();
+    default long nowAsEpochMilli() {
+        return nowAsInstant().toEpochMilli();
     }
 
     /**
      * Returns the (virtual) time as {@link LocalDate}, using the {@link ZoneId} timezone.
      * @param zoneId - the time-zone, which may be an offset, not null
+     *
+     * @see #nowAsInstant()
+     * @see #nowAsLocalDate()
      */
-    default LocalDate localDate(final @NonNull ZoneId zoneId) {
-        return localDateTime(zoneId).toLocalDate();
+    default LocalDate nowAsLocalDate(final @NonNull ZoneId zoneId) {
+        return nowAsLocalDateTime(zoneId).toLocalDate();
+    }
+
+    /**
+     * Returns the (virtual) time as {@link LocalDate}, using the {@link ZoneId#systemDefault() system default} timezone.
+     *
+     * @see #nowAsInstant()
+     * @see #nowAsLocalDate(ZoneId)
+     */
+    default LocalDate nowAsLocalDate() {
+        return nowAsLocalDate(ZoneId.systemDefault());
     }
 
     /**
      * Returns the (virtual) time as {@link LocalDateTime}, using the {@link ZoneId} timezone.
      * @param zoneId - the time-zone, which may be an offset, not null
+     *
+     * @see #nowAsInstant()
+     * @see #nowAsLocalDateTime()
      */
-    default LocalDateTime localDateTime(final @NonNull ZoneId zoneId) {
-        return LocalDateTime.ofInstant(now(), zoneId);
+    default LocalDateTime nowAsLocalDateTime(final @NonNull ZoneId zoneId) {
+        return LocalDateTime.ofInstant(nowAsInstant(), zoneId);
+    }
+
+    /**
+     * Returns the (virtual) time as {@link LocalDateTime}, using the {@link ZoneId#systemDefault() system default} timezone.
+     *
+     * @see #nowAsLocalDateTime(ZoneId)
+     */
+    default LocalDateTime nowAsLocalDateTime() {
+        return nowAsLocalDateTime(ZoneId.systemDefault());
     }
 
     /**
      * Returns the (virtual) time as {@link OffsetDateTime}, using the {@link ZoneId} timezone.
      * @param zoneId - the time-zone, which may be an offset, not null
+     *
+     * @see #nowAsOffsetDateTime()
      */
-    default OffsetDateTime offsetDateTime(final @NonNull ZoneId zoneId) {
-        return OffsetDateTime.ofInstant(now(), zoneId);
-    }
-
-    default java.util.Date javaUtilDate() {
-        return new java.util.Date(getEpochMillis());
-    }
-
-    default java.sql.Timestamp javaSqlTimestamp() {
-        return new java.sql.Timestamp(getEpochMillis());
-    }
-
-    default XMLGregorianCalendar xmlGregorianCalendar() {
-        return JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(javaSqlTimestamp());
-    }
-
-    // -- DEPRECATIONS
-
-    /**
-     * Returns the time as a Joda {@link org.joda.time.DateTime},
-     * using the {@link ZoneId#systemDefault() system default} timezone.
-     * @deprecated please migrate to java.time.*
-     */
-    @Deprecated
-    default org.joda.time.DateTime asJodaDateTime(final @NonNull ZoneId zoneId) {
-        return new org.joda.time.DateTime(getEpochMillis(), DateTimeZone.forID(zoneId.getId()));
+    default OffsetDateTime nowAsOffsetDateTime(final @NonNull ZoneId zoneId) {
+        return OffsetDateTime.ofInstant(nowAsInstant(), zoneId);
     }
 
     /**
-     * Returns the time as a Joda {@link DateTime},
-     * using the {@link ZoneId#systemDefault() system default} timezone.
-     * @deprecated please migrate to java.time.*
+     * Returns the (virtual) time as {@link OffsetDateTime}, using the {@link ZoneId#systemDefault() system default} timezone.
+     *
+     * @see #nowAsOffsetDateTime(ZoneId)
      */
-    @Deprecated
-    default org.joda.time.LocalDate asJodaLocalDate(final @NonNull ZoneId zoneId) {
-        return new org.joda.time.LocalDate(getEpochMillis(), DateTimeZone.forID(zoneId.getId()));
+    default OffsetDateTime nowAsOffsetDateTime() {
+        return nowAsOffsetDateTime(ZoneId.systemDefault());
+    }
+
+    /**
+     * Returns the (virtual)time as {@link java.util.Date}.
+     */
+    default java.util.Date nowAsJavaUtilDate() {
+        return new java.util.Date(nowAsEpochMilli());
+    }
+
+    /**
+     * Returns the (virtual) time as {@link java.sql.Timestamp}.
+     */
+    default java.sql.Timestamp nowAsJavaSqlTimestamp() {
+        return new java.sql.Timestamp(nowAsEpochMilli());
+    }
+
+    /**
+     * Returns the (virtual) time as {@link XMLGregorianCalendar}.
+     */
+    default XMLGregorianCalendar nowAsXmlGregorianCalendar() {
+        return JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(nowAsJavaSqlTimestamp());
     }
 
 
+    /**
+     * Returns the time as a Joda {@link org.joda.time.DateTime}, using the specified {@link ZoneId} timezone.
+     *
+     * @apiNote - we recommend migrating to java.time.*, however this API is not (for the moment) deprecated.
+     *
+     * @see #nowAsJodaDateTime()
+     */
+    default org.joda.time.DateTime nowAsJodaDateTime(final @NonNull ZoneId zoneId) {
+        return new org.joda.time.DateTime(nowAsEpochMilli(), DateTimeZone.forID(zoneId.getId()));
+    }
 
+    /**
+     * Returns the time as a Joda {@link org.joda.time.DateTime}, using the {@link ZoneId#systemDefault() system default} timezone.
+     *
+     * @apiNote - we recommend migrating to java.time.*, however this API is not (for the moment) deprecated.
+     *
+     * @see #nowAsJodaDateTime(ZoneId)
+     */
+    default org.joda.time.DateTime nowAsJodaDateTime() {
+        return nowAsJodaDateTime(ZoneId.systemDefault());
+    }
+
+    /**
+     * Returns the time as a Joda {@link DateTime}, using the specified {@link ZoneId} timezone.
+     *
+     * @apiNote - we recommend migrating to java.time.*, however this API is not (for the moment) deprecated.
+     * 
+     * @see #nowAsJodaDateTime() 
+     */
+    default org.joda.time.LocalDate nowAsJodaLocalDate(final @NonNull ZoneId zoneId) {
+        return new org.joda.time.LocalDate(nowAsEpochMilli(), DateTimeZone.forID(zoneId.getId()));
+    }
+
+    /**
+     * Returns the time as a Joda {@link DateTime}, using the {@link ZoneId#systemDefault() system default} timezone.
+     *
+     * @apiNote - we recommend migrating to java.time.*, however this API is not (for the moment) deprecated.
+     * 
+     * @see #nowAsJodaLocalDate(ZoneId)
+     */
+    default org.joda.time.LocalDate nowAsJodaLocalDate() {
+        val zoneId = ZoneId.systemDefault();
+        return nowAsJodaLocalDate(zoneId);
+    }
 
 }

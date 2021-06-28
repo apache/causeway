@@ -28,7 +28,7 @@ final class VirtualClock_system implements VirtualClock {
     private static final long serialVersionUID = 4019699893189814294L;
 
     @Override
-    public Instant now() {
+    public Instant nowAsInstant() {
         return Instant.now();
     }
 
@@ -36,7 +36,7 @@ final class VirtualClock_system implements VirtualClock {
     
     @Override
     public String toString() {
-        return String.format("%s: %s", this.getClass().getSimpleName(), xmlGregorianCalendar());
+        return String.format("%s: %s", this.getClass().getSimpleName(), nowAsXmlGregorianCalendar());
     }
     
     @Override

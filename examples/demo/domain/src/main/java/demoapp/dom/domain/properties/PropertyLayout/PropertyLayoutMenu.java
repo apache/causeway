@@ -143,7 +143,7 @@ public class PropertyLayoutMenu {
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-step-forward", describedAs = "Inclusive and exclusive date ranges")
     public PropertyLayoutRenderDayVm renderDay(){
-        return new PropertyLayoutRenderDayVm(clockService.getClock().localDate(ZoneId.systemDefault()));
+        return new PropertyLayoutRenderDayVm(clockService.getClock().nowAsLocalDate(ZoneId.systemDefault()));
     }
 
 

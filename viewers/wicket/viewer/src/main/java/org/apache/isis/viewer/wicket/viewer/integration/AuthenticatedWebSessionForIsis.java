@@ -242,7 +242,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
 
         final Runnable loggingTask = ()->{
 
-            val now = virtualClock().javaUtilDate();
+            val now = virtualClock().nowAsJavaUtilDate();
 
             // use hashcode as session identifier, to avoid re-binding http sessions if using Session#getId()
             int sessionHashCode = System.identityHashCode(AuthenticatedWebSessionForIsis.this);

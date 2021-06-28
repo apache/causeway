@@ -56,6 +56,6 @@ public class JodaLocalDates extends AbstractRandomValueGenerator{
     }
 
     private LocalDate now() {
-        return fake.clockService.getClock().asJodaLocalDate(ZoneId.systemDefault());
+        return fake.clockService.getClock().nowAsJodaLocalDate(ZoneId.systemDefault());
     }
 }

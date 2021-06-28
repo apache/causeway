@@ -169,7 +169,7 @@ extends ValueSemanticsProviderAbstractTemporal<java.util.Date> {
     protected Date now() {
         return getServiceRegistry().lookupService(ClockService.class)
                 .map(ClockService::getClock)
-                .map(VirtualClock::getEpochMillis)
+                .map(VirtualClock::nowAsEpochMilli)
                 .map(Date::new)
                 .orElseGet(Date::new); // fallback to system time
     }

@@ -40,13 +40,13 @@ public class J8LocalDates extends AbstractRandomValueGenerator {
 
     @Programmatic
     public LocalDate before(final Period period) {
-        final LocalDate now = fake.clockService.getClock().localDate(ZoneId.systemDefault());
+        final LocalDate now = fake.clockService.getClock().nowAsLocalDate(ZoneId.systemDefault());
         return now.minus(period);
     }
 
     @Programmatic
     public LocalDate after(final Period period) {
-        final LocalDate now = fake.clockService.getClock().localDate(ZoneId.systemDefault());
+        final LocalDate now = fake.clockService.getClock().nowAsLocalDate(ZoneId.systemDefault());
         return now.plus(period);
     }
 

@@ -87,7 +87,7 @@ public class EntityChangesPublisherDefault implements EntityChangesPublisher {
         return enabledSubscribers.isEmpty()
                 ? Optional.empty()
                 : hasEnlistedEntityChanges.getEntityChanges(
-                        clockService.getClock().javaSqlTimestamp(), // current time
+                        clockService.getClock().nowAsJavaSqlTimestamp(), // current time
                         userService.currentUserNameElseNobody()); // current user
     }
 

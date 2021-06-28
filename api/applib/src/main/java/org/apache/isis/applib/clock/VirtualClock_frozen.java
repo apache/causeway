@@ -31,7 +31,7 @@ final class VirtualClock_frozen implements VirtualClock {
     private final Instant frozenInstant;
     
     @Override
-    public Instant now() {
+    public Instant nowAsInstant() {
         return frozenInstant;
     }
     
@@ -39,7 +39,7 @@ final class VirtualClock_frozen implements VirtualClock {
     
     @Override
     public String toString() {
-        return String.format("%s: %s", this.getClass().getSimpleName(), xmlGregorianCalendar());
+        return String.format("%s: %s", this.getClass().getSimpleName(), nowAsXmlGregorianCalendar());
     }
     
     @Override
