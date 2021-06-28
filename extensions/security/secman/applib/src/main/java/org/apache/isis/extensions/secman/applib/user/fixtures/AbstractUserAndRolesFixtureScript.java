@@ -101,40 +101,61 @@ public abstract class AbstractUserAndRolesFixtureScript extends FixtureScript {
         this.roleNamesSupplier = nullSafe(roleNamesSupplier);
     }
 
-    private static <T> Supplier<T> nullSafe(Supplier<T> supplier) {
-        return supplier != null ? supplier : () -> null;
+    protected final String getUsername() {
+        return usernameSupplier.get();
     }
+
+    protected String getPassword() {
+        return passwordSupplier.get();
+    }
+
+    protected final String getEmailAddress() {
+        return emailAddressSupplier.get();
+    }
+
+    protected final String getTenancyPath() {
+        return tenancyPathSupplier.get();
+    }
+
+    protected final AccountType getAccountType() {
+        return accountTypeSupplier.get();
+    }
+
+    protected final Can<String> getRoleNames() {
+        return roleNamesSupplier.get();
+    }
+
 
     @Override
     protected void execute(final ExecutionContext executionContext) {
 
         // create user if does not exist, and assign to the role
-        val username = usernameSupplier.get();
+        val username = getUsername();
         applicationUser = applicationUserRepository.findByUsername(username)
                 .orElse(null);
         if(applicationUser == null) {
 
-            switch (accountTypeSupplier.get()) {
+            switch (getAccountType()) {
             case DELEGATED:
                 applicationUser = applicationUserRepository
                     .newDelegateUser(username, ApplicationUserStatus.UNLOCKED);
                 break;
             case LOCAL:
-                final Password pwd = new Password(passwordSupplier.get());
+                final Password pwd = new Password(getPassword());
                 applicationUser = applicationUserRepository
                         .newLocalUser(username, pwd, ApplicationUserStatus.UNLOCKED);
-                applicationUser.setEmailAddress(emailAddressSupplier.get());
+                applicationUser.setEmailAddress(getEmailAddress());
             }
 
             if(applicationUser == null) {
-                throw _Exceptions.unrecoverableFormatted("failed to create user '%s'", usernameSupplier);
+                throw _Exceptions.unrecoverableFormatted("failed to create user '%s'", username);
             }
 
             // update tenancy (repository checks for null)
-            applicationUser.setAtPath(tenancyPathSupplier.get());
+            applicationUser.setAtPath(getTenancyPath());
         }
 
-        for (final String roleName : roleNamesSupplier.get()) {
+        for (final String roleName : getRoleNames()) {
             applicationRoleRepository.findByName(roleName)
             .map(securityRole->{
                 applicationRoleRepository.addRoleToUser(securityRole, applicationUser);
@@ -143,6 +164,10 @@ public abstract class AbstractUserAndRolesFixtureScript extends FixtureScript {
             .orElseThrow(()->_Exceptions.unrecoverable("role not found by name: " + roleName));
         }
 
+    }
+
+    private static <T> Supplier<T> nullSafe(Supplier<T> supplier) {
+        return supplier != null ? supplier : () -> null;
     }
 
 }

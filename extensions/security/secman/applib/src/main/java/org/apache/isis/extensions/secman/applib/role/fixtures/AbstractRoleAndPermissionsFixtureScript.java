@@ -59,8 +59,12 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
         this.roleDescriptionSupplier = nullSafe(roleDescriptionSupplier);
     }
 
-    private static <T> Supplier<T> nullSafe(Supplier<T> supplier) {
-        return supplier != null ? supplier : () -> null;
+    protected final String getRoleName() {
+        return roleNameSupplier.get();
+    }
+
+    protected final String getRoleDescription() {
+        return roleDescriptionSupplier.get();
     }
 
     /**
@@ -83,9 +87,9 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
             return;
         }
 
-        val roleName = roleNameSupplier.get();
+        val roleName = getRoleName();
         val securityRole = applicationRoleRepository.findByName(roleName)
-                .orElseGet(() -> applicationRoleRepository.newRole(roleName, roleDescriptionSupplier.get()));
+                .orElseGet(() -> applicationRoleRepository.newRole(roleName, getRoleDescription()));
 
         for(val featureId : featureIds) {
             val featureFqn = featureId.getFullyQualifiedName();
@@ -100,6 +104,10 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
                     featureId.getSort(),
                     featureFqn);
         }
+    }
+
+    private static <T> Supplier<T> nullSafe(Supplier<T> supplier) {
+        return supplier != null ? supplier : () -> null;
     }
 
 }
