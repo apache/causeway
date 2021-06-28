@@ -46,6 +46,7 @@ public interface ObjectBookmarker {
                 new ObjectBookmarker_builtinHandlers.GuardAgainstOid(),
                 new ObjectBookmarker_builtinHandlers.BookmarkForServices(),
                 new ObjectBookmarker_builtinHandlers.BookmarkForValues(),
+                new ObjectBookmarker_builtinHandlers.BookmarkForSerializable(),
                 new ObjectBookmarker_builtinHandlers.BookmarkForViewModels(),
                 new ObjectBookmarker_builtinHandlers.BookmarkForEntities(),
                 new ObjectBookmarker_builtinHandlers.BookmarkForOthers());
