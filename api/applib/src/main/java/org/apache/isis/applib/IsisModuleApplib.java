@@ -120,6 +120,8 @@ import org.apache.isis.schema.IsisModuleSchema;
         SessionLoggingServiceLogging.class,
         SudoService.class,
         UserService.class,
+        UserMemento.UiSubscriber.class,
+        RoleMemento.UiSubscriber.class,
 
 })
 public class IsisModuleApplib {
