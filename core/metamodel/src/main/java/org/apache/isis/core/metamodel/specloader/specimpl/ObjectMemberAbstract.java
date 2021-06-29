@@ -302,6 +302,7 @@ implements
     }
 
     private static String suffix(final ObjectAction mixinAction) {
+        // getSingularName() implicitly uses an ObjectNamedFacet, which supports translation
         return deriveMemberNameFrom(mixinAction.getOnType().getSingularName());
     }
 
@@ -321,11 +322,12 @@ implements
         final int indexOfSeparator = singularName.lastIndexOf(separator);
         return occursNotAtEnd(singularName, indexOfSeparator)
                 ? singularName.substring(indexOfSeparator + 1)
-                        : singularName;
+                : singularName;
     }
 
     private static boolean occursNotAtEnd(final String singularName, final int indexOfUnderscore) {
-        return indexOfUnderscore != -1 && indexOfUnderscore != singularName.length() - 1;
+        return indexOfUnderscore != -1
+                && indexOfUnderscore != singularName.length() - 1;
     }
 
     // -- toString
