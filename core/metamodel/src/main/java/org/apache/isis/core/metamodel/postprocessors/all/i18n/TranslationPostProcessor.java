@@ -26,7 +26,6 @@ import javax.inject.Inject;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.described.ColumnDescribedFacet;
 import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
 import org.apache.isis.core.metamodel.facets.all.described.ObjectDescribedFacet;
@@ -58,50 +57,60 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification) {
-        memoizeTranslations(objectSpecification);
+    protected void doPostProcess(final ObjectSpecification objectSpec) {
+        memoizeTranslations(
+                Stream.of(
+                        objectSpec.lookupFacet(ObjectNamedFacet.class),
+                        objectSpec.lookupFacet(ObjectDescribedFacet.class)));
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction act) {
-        memoizeTranslations(act);
+    protected void doPostProcess(final ObjectSpecification objectSpec, final ObjectAction act) {
+        memoizeTranslations(
+                Stream.of(
+                        act.lookupFacet(MemberNamedFacet.class),
+                        act.lookupFacet(MemberDescribedFacet.class)));
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction, final ObjectActionParameter param) {
-        memoizeTranslations(param);
+    protected void doPostProcess(
+            final ObjectSpecification objectSpecification,
+            final ObjectAction objectAction,
+            final ObjectActionParameter param) {
+        memoizeTranslations(
+                Stream.of(
+                        param.lookupFacet(ParamNamedFacet.class),
+                        param.lookupFacet(ParamDescribedFacet.class)));
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToOneAssociation prop) {
-        memoizeTranslations(prop);
+    protected void doPostProcess(final ObjectSpecification objectSpec, final OneToOneAssociation prop) {
+        memoizeTranslations(
+                Stream.of(
+                        prop.lookupFacet(MemberNamedFacet.class),
+                        prop.lookupFacet(MemberDescribedFacet.class),
+                        prop.lookupFacet(ColumnNamedFacet.class),
+                        prop.lookupFacet(ColumnDescribedFacet.class)));
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
-        memoizeTranslations(coll);
+    protected void doPostProcess(final ObjectSpecification objectSpec, final OneToManyAssociation coll) {
+        memoizeTranslations(
+                Stream.of(
+                        coll.lookupFacet(MemberNamedFacet.class),
+                        coll.lookupFacet(MemberDescribedFacet.class)));
 
     }
 
     // -- HELPER
 
-    private void memoizeTranslations(final FacetHolder facetHolder) {
-
-        Stream.<Optional<? extends Facet>>of(
-                facetHolder.lookupFacet(ObjectNamedFacet.class),
-                facetHolder.lookupFacet(MemberNamedFacet.class),
-                facetHolder.lookupFacet(ColumnNamedFacet.class),
-                facetHolder.lookupFacet(ParamNamedFacet.class),
-                facetHolder.lookupFacet(ObjectDescribedFacet.class),
-                facetHolder.lookupFacet(MemberDescribedFacet.class),
-                facetHolder.lookupFacet(ColumnDescribedFacet.class),
-                facetHolder.lookupFacet(ParamDescribedFacet.class))
+    private void memoizeTranslations(final Stream<Optional<? extends Facet>> facetStream) {
+        facetStream
         .filter(Optional::isPresent)
         .map(Optional::get)
         .filter(facet->facet instanceof HasMemoizableTranslation)
         .map(HasMemoizableTranslation.class::cast)
         .forEach(HasMemoizableTranslation::memoizeTranslations);
-
     }
 
 
