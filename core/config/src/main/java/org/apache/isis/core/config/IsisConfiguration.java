@@ -67,6 +67,7 @@ import org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber;
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
+import org.apache.isis.applib.services.userui.UserMenu;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.config.metamodel.facets.DefaultViewConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
@@ -3352,6 +3353,24 @@ public class IsisConfiguration {
                  */
                 private final List<String> initialRoleNames = new ArrayList<>();
             }
+
+            public enum UserMenuMeActionPolicy {
+                HIDE,
+                DISABLE,
+                ENABLE
+            }
+
+            /**
+             * Whether the presence of SecMan should result in the automatic suppression of the {@link org.apache.isis.applib.services.userui.UserMenu}'s
+             * {@link UserMenu#me() me} action.
+             *
+             * <p>
+             *     This is normally what is required as SecMan's <code>ApplicationUser</code> is a more comprehensive
+             *     representation of the current user.  If the default {@link UserMenu#me() me} action is not
+             *     suppressed, then the end-user will see two actions with the name &quot;me&quot; in the tertiary menu.
+             * </p>
+             */
+            private UserMenuMeActionPolicy userMenuMeActionPolicy = UserMenuMeActionPolicy.HIDE;
         }
     }
 

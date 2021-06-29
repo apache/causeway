@@ -59,6 +59,7 @@ import org.apache.isis.applib.services.user.ImpersonateStopMenu;
 import org.apache.isis.applib.services.user.RoleMemento;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.user.UserService;
+import org.apache.isis.applib.services.userui.UserMenu;
 import org.apache.isis.schema.IsisModuleSchema;
 
 /**
@@ -104,8 +105,8 @@ import org.apache.isis.schema.IsisModuleSchema;
         ImpersonateStopMenu.class,
         MetaModelServiceMenu.class,
         QueryResultsCache.class,
-        UserService.class,
         ApplicationFeatureMenu.class,
+        UserMenu.class,
 
 
         // @Service(s)
@@ -118,6 +119,9 @@ import org.apache.isis.schema.IsisModuleSchema;
         ExecutionLogger.class,
         SessionLoggingServiceLogging.class,
         SudoService.class,
+        UserService.class,
+        UserMemento.UiSubscriber.class,
+        RoleMemento.UiSubscriber.class,
 
 })
 public class IsisModuleApplib {
