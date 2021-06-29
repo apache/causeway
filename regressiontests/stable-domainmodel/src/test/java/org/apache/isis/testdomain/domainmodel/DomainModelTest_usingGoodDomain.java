@@ -29,11 +29,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.metamodel.Config;
@@ -49,6 +44,7 @@ import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoice
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
 import org.apache.isis.core.metamodel.postprocessors.collparam.ActionParameterChoicesFacetFromParentedCollection;
 import org.apache.isis.core.metamodel.postprocessors.collparam.ActionParameterDefaultsFacetFromAssociatedCollection;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -66,6 +62,11 @@ import org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingAbstra
 import org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingInterface;
 import org.apache.isis.testdomain.model.good.ProperMemberSupport;
 import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import lombok.val;
 
@@ -384,6 +385,18 @@ class DomainModelTest_usingGoodDomain {
 
     }
 
+    @ParameterizedTest
+    @MethodSource("provideImperativelyNamed")
+    void imperativelyNamedMembers(final String memberId, final String named, final String described) {
+
+        val objectSpec = specificationLoader.specForTypeElseFail(ProperMemberSupport.class);
+        val member = objectSpec.getMemberElseFail(memberId);
+        val sampleObject = ManagedObject.of(objectSpec, new ProperMemberSupport());
+
+        assertEquals(named, member.getFriendlyName(()->sampleObject));
+        assertEquals(described, member.getDescription(()->sampleObject));
+    }
+
     // -- HELPER
 
     private void assertHasProperty(final ObjectSpecification spec, final String propertyId) {
@@ -404,6 +417,19 @@ class DomainModelTest_usingGoodDomain {
                 Arguments.of(ProperMemberInheritance_usingAbstract.class),
                 Arguments.of(ProperMemberInheritance_usingInterface.class),
                 Arguments.of(ProperMemberInheritanceInterface.class)
+        );
+    }
+
+    static Stream<Arguments> provideImperativelyNamed() {
+        return Stream.of(
+                // regular on type
+                Arguments.of("myAction", "named-imperative[MyAction]", "described-imperative[MyAction]"),
+                Arguments.of("myProp", "named-imperative[MyProp]", "described-imperative[MyProp]"),
+                Arguments.of("myColl", "named-imperative[MyColl]", "described-imperative[MyColl]"),
+                // contributed by mixin(s)
+                Arguments.of("action5", "named-imperative[action5]", "described-imperative[action5]"),
+                Arguments.of("property3", "named-imperative[property3]", "described-imperative[property3]"),
+                Arguments.of("collection3", "named-imperative[collection3]", "described-imperative[collection3]")
         );
     }
 

@@ -16,32 +16,35 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.testdomain.model.good;
 
-package org.apache.isis.applib.services.wrapper.events;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.Publishing;
 
-import org.apache.isis.applib.Identifier;
+import lombok.RequiredArgsConstructor;
 
-/**
- * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i>
- * represents an access (reading) of an object's title.
- *
- * <p>
- * The {@link #getReason()} will always be <tt>null</tt>; access is always
- * allowed.
- *
- * @since 1.x {@index}
- */
-public class ObjectTitleEvent extends AccessEvent {
+@Action(executionPublishing = Publishing.ENABLED)
+@RequiredArgsConstructor
+public class ProperMemberSupport_action5 {
 
-    private final String title;
+    private final ProperMemberSupport mixee;
 
-    public ObjectTitleEvent(final Object source, final Identifier classIdentifier, final String title) {
-        super(source, classIdentifier);
-        this.title = title;
+    public ProperMemberSupport act() {
+        return mixee;
     }
 
-    public String getTitle() {
-        return title;
+    // -- IMPERATIVE NAMING AND DESCRIBING
+
+    @MemberSupport
+    public String namedAct() {
+        return "named-imperative[action5]";
     }
+
+    @MemberSupport
+    public String describedAct() {
+        return "described-imperative[action5]";
+    }
+
 
 }

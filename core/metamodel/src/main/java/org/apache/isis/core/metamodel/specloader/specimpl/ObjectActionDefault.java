@@ -230,10 +230,6 @@ implements ObjectAction {
         return parameters.getElseFail(position);
     }
 
-    protected InteractionHead headFor(final ManagedObject target) {
-        return InteractionHead.regular(target);
-    }
-
     // -- visable, usable
 
     @Override

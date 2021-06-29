@@ -63,12 +63,12 @@ public class ProperMemberSupport {
 
     @MemberSupport
     public String namedMyAction() {
-        return null;
+        return "named-imperative[MyAction]";
     }
 
     @MemberSupport
     public String describedMyAction() {
-        return null;
+        return "described-imperative[MyAction]";
     }
 
     @MemberSupport
@@ -156,12 +156,12 @@ public class ProperMemberSupport {
 
     @MemberSupport
     public String namedMyProp() {
-        return null;
+        return "named-imperative[MyProp]";
     }
 
     @MemberSupport
     public String describedMyProp() {
-        return null;
+        return "described-imperative[MyProp]";
     }
 
     @MemberSupport
@@ -202,14 +202,13 @@ public class ProperMemberSupport {
 
     @MemberSupport
     public String namedMyColl() {
-        return null;
+        return "named-imperative[MyColl]";
     }
 
     @MemberSupport
     public String describedMyColl() {
-        return null;
+        return "described-imperative[MyColl]";
     }
-
 
     @MemberSupport
     public String disableMyColl() {

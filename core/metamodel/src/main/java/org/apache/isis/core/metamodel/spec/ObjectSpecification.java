@@ -116,6 +116,14 @@ extends
      */
     Optional<? extends ObjectMember> getMember(String memberId);
 
+    default ObjectMember getMemberElseFail(final String memberId) {
+        return getMember(memberId).orElseThrow(()->{
+            val msg = "Member '" + memberId + "' does not correspond "
+                    + "to any of the object's fields or actions.";
+            return new UnsupportedOperationException(msg);
+        });
+    }
+
     /**
      * @param method
      * @return optionally the ObjectMember associated with given {@code method},

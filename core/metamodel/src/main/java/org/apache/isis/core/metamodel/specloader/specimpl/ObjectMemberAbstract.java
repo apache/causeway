@@ -74,6 +74,10 @@ implements
                 : null;
     }
 
+    protected InteractionHead headFor(final ManagedObject ownerAdapter) {
+        return InteractionHead.regular(ownerAdapter);
+    }
+
     // -- fields
 
     private final Identifier featureIdentifier;
@@ -133,7 +137,7 @@ implements
         return namedFacet
             .getSpecialization()
             .fold(  textFacet->textFacet.translated(),
-                    textFacet->textFacet.textElseNull(domainObjectProvider.get()));
+                    textFacet->textFacet.textElseNull(headFor(domainObjectProvider.get()).getTarget()));
     }
 
     @Override
@@ -154,7 +158,7 @@ implements
         .map(MemberDescribedFacet::getSpecialization)
         .map(specialization->specialization
                 .fold(textFacet->textFacet.translated(),
-                      textFacet->textFacet.textElseNull(domainObjectProvider.get())))
+                      textFacet->textFacet.textElseNull(headFor(domainObjectProvider.get()).getTarget())))
         .orElse(null);
     }
 
