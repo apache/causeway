@@ -19,13 +19,14 @@
 
 package org.apache.isis.core.metamodel.facets.objectvalue.mandatory;
 
+import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.isis.core.metamodel.interactions.PropertyModifyContext;
 import org.apache.isis.core.metamodel.interactions.ProposedHolder;
@@ -99,14 +100,11 @@ implements MandatoryFacet {
             return null;
         }
 
-        return getFacetHolder()
-                .lookupFacet(MemberNamedFacet.class)
-                .map(MemberNamedFacet::getSpecialization)
-                .map(specialization->specialization
-                        .fold(textFacet->textFacet.translated(),
-                              textFacet->textFacet.textElseNull(context.getHead().getTarget())))
-                .map(named->"'" + named + "' is mandatory")
-                .orElse("Mandatory");
+        return Optional.ofNullable(context.getFriendlyNameProvider())
+        .map(Supplier::get)
+        .filter(_Strings::isNotEmpty)
+        .map(named->"'" + named + "' is mandatory")
+        .orElse("Mandatory");
     }
 
     @Override

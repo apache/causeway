@@ -19,11 +19,15 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
+import java.util.function.Supplier;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+
+import lombok.Getter;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -33,12 +37,16 @@ public abstract class ValidityContext
 extends InteractionContext
 implements InteractionEventSupplier<ValidityEvent> {
 
+    @Getter private final Supplier<String> friendlyNameProvider;
+
     public ValidityContext(
             final InteractionContextType interactionType,
             final InteractionHead head,
             final Identifier identifier,
+            final Supplier<String> friendlyNameProvider,
             final InteractionInitiatedBy invocationMethod) {
         super(interactionType, invocationMethod, identifier, head, Where.NOT_SPECIFIED);
+        this.friendlyNameProvider = friendlyNameProvider;
     }
 
 }

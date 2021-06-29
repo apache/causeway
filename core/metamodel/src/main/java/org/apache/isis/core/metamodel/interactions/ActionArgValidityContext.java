@@ -54,9 +54,9 @@ implements ProposedHolder, ActionInteractionContext {
         super(InteractionContextType.ACTION_PROPOSED_ARGUMENT,
                 head,
                 id,
+                ()->objectAction.getParameters().getElseFail(position).getFriendlyName(()->head.getTarget()),
                 interactionInitiatedBy);
         this.objectAction = objectAction;
-
         this.args = args;
         this.position = position;
         this.proposed = args.getElseFail(position);

@@ -125,7 +125,10 @@ implements OneToOneAssociation {
             final ManagedObject proposedToReferenceAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         return new PropertyModifyContext(
-                headFor(ownerAdapter), getFeatureIdentifier(), proposedToReferenceAdapter,
+                headFor(ownerAdapter),
+                getFeatureIdentifier(),
+                proposedToReferenceAdapter,
+                ()->getFriendlyName(()->headFor(ownerAdapter).getTarget()),
                 interactionInitiatedBy);
     }
 

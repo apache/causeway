@@ -42,7 +42,7 @@ implements ProposedHolder {
             final ManagedObject proposed,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        super(InteractionContextType.PARSE_VALUE, head, identifier, interactionInitiatedBy);
+        super(InteractionContextType.PARSE_VALUE, head, identifier, /*friendlyNameProvider*/null, interactionInitiatedBy);
         this.proposed = proposed;
     }
 

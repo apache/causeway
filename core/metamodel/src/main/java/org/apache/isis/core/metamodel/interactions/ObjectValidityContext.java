@@ -40,7 +40,10 @@ implements ProposedHolder {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         super(InteractionContextType.OBJECT_VALIDATE,
-                InteractionHead.regular(targetAdapter), identifier, interactionInitiatedBy);
+                InteractionHead.regular(targetAdapter),
+                identifier,
+                ()->targetAdapter.getSpecification().getSingularName(),
+                interactionInitiatedBy);
     }
 
     @Override

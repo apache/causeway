@@ -48,7 +48,11 @@ implements ActionInteractionContext {
             final Can<ManagedObject> args,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        super(InteractionContextType.ACTION_INVOKE, head, id, interactionInitiatedBy);
+        super(InteractionContextType.ACTION_INVOKE,
+                head,
+                id,
+                ()->objectAction.getFriendlyName(()->head.getTarget()),
+                interactionInitiatedBy);
         this.objectAction = objectAction;
         this.args = args;
     }
