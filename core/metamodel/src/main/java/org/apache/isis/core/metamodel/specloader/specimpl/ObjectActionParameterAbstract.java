@@ -153,26 +153,8 @@ implements
     private String staticFriendlyName() {
         return lookupFacet(ParamNamedFacet.class)
         .map(ParamNamedFacet::translated)
-// TODO[ISIS-1720] it seems the orElseGet(...) clause is only used for testing, need to double check and probably remove
-//        .orElseThrow(()->_Exceptions
-//                .unrecoverableFormatted("action parameters must have a ParamNamedFacet %s", this));
-        .orElseGet(()->{
-            val singularName = getSpecification().getSingularName();
-            val parameters = getAction().getParameters(this::equalsShortIdentifier);
-            if (parameters.isCardinalityOne()) {
-                return singularName;
-            }
-            final int indexOf = parameters.indexOf(this);
-            return singularName + " " + (indexOf + 1);
-
-        });
-    }
-
-    private boolean equalsShortIdentifier(final ObjectActionParameter objParam) {
-        val spec1 = objParam.getSpecification();
-        val spec2 = getSpecification();
-        return spec1.getShortIdentifier().toLowerCase()
-                .equals(spec2.getShortIdentifier().toLowerCase());
+        .orElseThrow(()->_Exceptions
+                .unrecoverableFormatted("action parameters must have a ParamNamedFacet %s", this));
     }
 
     @Override

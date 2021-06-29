@@ -74,6 +74,10 @@ implements
                 : null;
     }
 
+    /**
+     * To be overridden (only) by mixed in members!
+     * @see MixedInMember
+     */
     protected InteractionHead headFor(final ManagedObject ownerAdapter) {
         return InteractionHead.regular(ownerAdapter);
     }

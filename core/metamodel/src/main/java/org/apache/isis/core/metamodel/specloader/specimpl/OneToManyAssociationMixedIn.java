@@ -41,7 +41,9 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import lombok.Getter;
 import lombok.val;
 
-public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault implements MixedInMember {
+public class OneToManyAssociationMixedIn
+extends OneToManyAssociationDefault
+implements MixedInMember {
 
     /**
      * The type of the mixin (providing the action), eg annotated with {@link org.apache.isis.applib.annotation.Mixin}.

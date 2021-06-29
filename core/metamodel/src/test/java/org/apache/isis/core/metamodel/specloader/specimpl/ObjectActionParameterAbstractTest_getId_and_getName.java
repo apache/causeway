@@ -24,11 +24,9 @@ import java.util.function.Predicate;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -44,6 +42,9 @@ import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 
 public class ObjectActionParameterAbstractTest_getId_and_getName {
@@ -160,7 +161,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
         assertThat(objectActionParameter.getStaticFriendlyName().get(), is("Some parameter name"));
     }
 
-    @Test
+    @Test @Ignore("ParamNamedFacet is always present - ensured by facet post processing")
     public void whenNamedFaceNotPresentAndOnlyOneParamOfType() throws Exception {
 
         objectActionParameter = new ObjectActionParameterAbstractToTest(0, parentAction, actionParamPeer);
@@ -179,7 +180,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
         assertThat(objectActionParameter.getStaticFriendlyName().get(), is("string"));
     }
 
-    @Test
+    @Test @Ignore("ParamNamedFacet is always present - ensured by facet post processing")
     public void getName_whenNamedFaceNotPresentAndMultipleParamsOfSameType() throws Exception {
 
         objectActionParameter = new ObjectActionParameterAbstractToTest(2, parentAction, actionParamPeer);
