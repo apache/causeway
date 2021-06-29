@@ -18,10 +18,15 @@
  */
 package org.apache.isis.core.metamodel.objectmanager.identify;
 
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.Oid;
+import org.apache.isis.commons.internal.base._Bytes;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
@@ -29,6 +34,7 @@ import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.objectmanager.identify.ObjectBookmarker.Handler;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
+import lombok.SneakyThrows;
 import lombok.val;
 
 class ObjectBookmarker_builtinHandlers {
@@ -110,6 +116,28 @@ class ObjectBookmarker_builtinHandlers {
 
     }
 
+    static class BookmarkForSerializable implements Handler {
+
+        @Override
+        public boolean isHandling(ManagedObject managedObject) {
+            val spec = managedObject.getSpecification();
+            return spec.isViewModel() && java.io.Serializable.class.isAssignableFrom(spec.getCorrespondingClass());
+        }
+
+        @SneakyThrows
+        @Override
+        public Bookmark handle(ManagedObject managedObject) {
+            val spec = managedObject.getSpecification();
+            val baos = new ByteArrayOutputStream();
+            val oos = new ObjectOutputStream(baos);
+            oos.writeObject(managedObject.getPojo());
+            val identifier = _Strings.ofBytes(_Bytes.asUrlBase64.apply(baos.toByteArray()), StandardCharsets.UTF_8);
+            oos.close();
+            return Bookmark.forLogicalTypeAndIdentifier(spec.getLogicalType(), identifier);
+        }
+
+    }
+
     static class BookmarkForViewModels implements Handler {
 
         @Override
@@ -140,8 +168,6 @@ class ObjectBookmarker_builtinHandlers {
             val identifier = UUID.randomUUID().toString();
             return Bookmark.forLogicalTypeAndIdentifier(spec.getLogicalType(), identifier);
         }
-
     }
-
 
 }

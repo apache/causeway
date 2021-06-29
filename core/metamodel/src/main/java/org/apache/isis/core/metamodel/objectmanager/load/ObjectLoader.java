@@ -62,6 +62,7 @@ public interface ObjectLoader {
                 new ObjectLoader_builtinHandlers.GuardAgainstNull(mmc),
                 new ObjectLoader_builtinHandlers.LoadService(mmc),
                 new ObjectLoader_builtinHandlers.LoadValue(mmc),
+                new ObjectLoader_builtinHandlers.LoadSerializable(mmc),
                 new ObjectLoader_builtinHandlers.LoadViewModel(mmc),
                 new ObjectLoader_builtinHandlers.LoadEntity(mmc),
                 new ObjectLoader_builtinHandlers.LoadOther(mmc));
