@@ -149,7 +149,8 @@ public class UserMemento implements Serializable {
         @EventListener(UserMemento.TitleUiEvent.class)
         public void on(UserMemento.TitleUiEvent ev) {
             val userMemento = ev.getSource();
-            val title = String.format("%s %s", userMemento.getName(), userMemento.isImpersonating() ? " (impersonating)" : null);
+            assert userMemento != null;
+            val title = String.format("%s %s", userMemento.getName(), userMemento.isImpersonating() ? " (impersonating)" : "");
             ev.setTitle(title);
         }
     }
@@ -160,33 +161,74 @@ public class UserMemento implements Serializable {
      * The user's login name.
      */
     @Property
-    @PropertyLayout(sequence = "1.1")
+    @PropertyLayout(fieldSetId = "identity", sequence = "1")
     @Getter
     @NonNull
     String name;
 
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(sequence = "1.2")
+    @PropertyLayout(fieldSetId = "details", sequence = "1")
     @Getter @With(onMethod_ = {@Programmatic})
     @Nullable
     String realName;
 
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(sequence = "1.3")
+    @PropertyLayout(fieldSetId = "details", sequence = "2")
     @Getter @With(onMethod_ = {@Programmatic})
     @Nullable
     URL avatarUrl;
 
+    /**
+     * To support external security mechanisms such as keycloak,
+     * where the validity of the session is defined by headers in the request.
+     */
+    @Property
+    @PropertyLayout(fieldSetId = "authentication", sequence = "1")
+    @Getter @Builder.Default @With(onMethod_ = {@Programmatic})
+    @NonNull
+    AuthenticationSource authenticationSource = AuthenticationSource.DEFAULT;
+
+
+    public enum AuthenticationSource {
+        DEFAULT,
+        /**
+         * Instructs the <code>AuthenticationManager</code>
+         * to <i>not</i> cache this session in its internal map of sessions by validation code,
+         * and therefore to ignore this aspect when considering if an {@link InteractionContext} is valid or not.
+         */
+        EXTERNAL;
+
+        public boolean isExternal() {
+            return this == EXTERNAL;
+        }
+    }
+
+
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(sequence = "1.4")
+    @PropertyLayout(fieldSetId = "authentication", sequence = "2")
     @Getter @Builder.Default @With(onMethod_ = {@Programmatic})
     boolean impersonating = false;
+
+
+    private static final String DEFAULT_AUTH_VALID_CODE = "";
+
+    /**
+     * A unique code given to this user during authentication.
+     * <p>
+     * This can be used to confirm that the user has been authenticated.
+     * It should return an empty string {@literal ""}
+     * if this is an anonymous (unauthenticated) user.
+     */
+    @Property(hidden = Where.EVERYWHERE)
+    @Getter @Builder.Default @With(onMethod_ = {@Programmatic})
+    @NonNull
+    String authenticationCode = DEFAULT_AUTH_VALID_CODE;
 
     /**
      * The roles associated with this user.
      */
     @Collection
-    @CollectionLayout(sequence = "1.4")
+    @CollectionLayout(sequence = "1")
     public List<RoleMemento> getRoles() {
         return roles.toList();
     }
@@ -225,46 +267,7 @@ public class UserMemento implements Serializable {
         return streamRoleNames().anyMatch(myRoleName->myRoleName.equals(roleName));
     }
 
-    // -- AUTHENTICATION
 
-    /**
-     * To support external security mechanisms such as keycloak,
-     * where the validity of the session is defined by headers in the request.
-     */
-    @Property
-    @PropertyLayout(sequence = "2.0")
-    @Getter @Builder.Default @With(onMethod_ = {@Programmatic})
-    @NonNull AuthenticationSource authenticationSource = AuthenticationSource.DEFAULT;
-
-
-    public enum AuthenticationSource {
-        DEFAULT,
-        /**
-         * Instructs the {@link org.apache.isis.core.security.authentication.manager.AuthenticationManager}
-         * to not cache this session in its internal map of sessions by validation code,
-         * and therefore to ignore this aspect when considering if an {@link InteractionContext} is
-         * {@link org.apache.isis.core.security.authentication.manager.AuthenticationManager#isSessionValid(InteractionContext) valid}
-         * or not.
-         */
-        EXTERNAL;
-
-        public boolean isExternal() {
-            return this == EXTERNAL;
-        }
-    }
-
-    private static final String DEFAULT_AUTH_VALID_CODE = "";
-
-    /**
-     * A unique code given to this user during authentication.
-     * <p>
-     * This can be used to confirm that the user has been authenticated.
-     * It should return an empty string {@literal ""}
-     * if this is an anonymous (unauthenticated) user.
-     */
-    @Property(hidden = Where.EVERYWHERE)
-    @Getter @Builder.Default @With(onMethod_ = {@Programmatic})
-    @NonNull String authenticationCode = DEFAULT_AUTH_VALID_CODE;
 
 
     // -- UTILITY

@@ -33,9 +33,7 @@ under the License.
                 <bs3:tab name="Identity">
                     <bs3:row>
                         <bs3:col span="12">
-                            <cpt:fieldSet name="Identity" id="identity">
-                                <cpt:property id="name"/>
-                            </cpt:fieldSet>
+                            <cpt:fieldSet name="Identity" id="identity"/>
                         </bs3:col>
                     </bs3:row>
                 </bs3:tab>
@@ -54,14 +52,8 @@ under the License.
                     </bs3:row>
                 </bs3:tab>
             </bs3:tabGroup>
-            <cpt:fieldSet name="Details" id="details">
-                <cpt:property id="realName"/>
-                <cpt:property id="avatarUrl"/>
-            </cpt:fieldSet>
-            <cpt:fieldSet name="Authentication" id="authentication">
-                <cpt:property id="authenticationSource"/>
-                <cpt:property id="impersonating"/>
-            </cpt:fieldSet>
+            <cpt:fieldSet name="Details" id="details"/>
+            <cpt:fieldSet name="Authentication" id="authentication"/>
         </bs3:col>
         <bs3:col span="6">
             <cpt:collection id="roles"/>

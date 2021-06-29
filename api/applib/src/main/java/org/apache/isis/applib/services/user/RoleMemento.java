@@ -19,6 +19,7 @@
 package org.apache.isis.applib.services.user;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
@@ -31,6 +32,7 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Value;
 import lombok.val;
 
@@ -65,14 +67,10 @@ public class RoleMemento implements Serializable {
     /**
      * Creates a new role with the specified name and description.
      */
-    public RoleMemento(final String name, final String description) {
-        if (name == null) {
-            throw new IllegalArgumentException("Name not specified");
-        }
+    public RoleMemento(
+            @NonNull final String name,
+            @NonNull final String description) {
         this.name = name;
-        if (description == null) {
-            throw new IllegalArgumentException("Description not specified");
-        }
         this.description = description;
     }
 
@@ -81,15 +79,16 @@ public class RoleMemento implements Serializable {
         @EventListener(RoleMemento.TitleUiEvent.class)
         public void on(RoleMemento.TitleUiEvent ev) {
             val roleMemento = ev.getSource();
+            assert roleMemento != null;
             ev.setTitle(roleMemento.getName());
         }
     }
 
-    @PropertyLayout(sequence = "1.1")
+    @PropertyLayout(fieldSetId = "identity", sequence = "1")
     @Getter
     String name;
 
-    @PropertyLayout(sequence = "1.2")
+    @PropertyLayout(fieldSetId = "details", sequence = "1")
     @Getter
     String description;
 

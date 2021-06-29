@@ -29,12 +29,8 @@ under the License.
     </bs3:row>
     <bs3:row>
         <bs3:col span="6">
-            <cpt:fieldSet name="Identity" id="identity">
-                <cpt:property id="name"/>
-            </cpt:fieldSet>
-            <cpt:fieldSet name="Details" id="details">
-                <cpt:property id="description"/>
-            </cpt:fieldSet>
+            <cpt:fieldSet name="Identity" id="identity"/>
+            <cpt:fieldSet name="Details" id="details"/>
             <cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
         </bs3:col>
         <bs3:col span="6">
