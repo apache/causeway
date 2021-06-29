@@ -37,7 +37,7 @@ public interface ServiceInjector {
      * @param <T>
      * @return domainObject with injection points resolved
      */
-    <T> @Nullable T injectServicesInto(final @Nullable T domainObject);
+    <T> T injectServicesInto(final @Nullable T domainObject);
 
 
 }
