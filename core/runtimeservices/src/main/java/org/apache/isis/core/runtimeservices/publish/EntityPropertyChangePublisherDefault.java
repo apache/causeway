@@ -95,7 +95,7 @@ public class EntityPropertyChangePublisherDefault implements EntityPropertyChang
             return Can.empty();
         }
 
-        val currentTime = clockService.getClock().javaSqlTimestamp();
+        val currentTime = clockService.getClock().nowAsJavaSqlTimestamp();
         val currentUser = userService.currentUserNameElseNobody();
         val currentTransactionId = transactionService.currentTransactionId()
                 .orElse(TransactionId.empty());

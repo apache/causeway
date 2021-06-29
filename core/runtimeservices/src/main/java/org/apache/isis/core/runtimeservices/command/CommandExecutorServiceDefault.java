@@ -160,7 +160,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
         val startedAt = currentExecution != null
                 ? currentExecution.getStartedAt()
-                : clockService.getClock().javaSqlTimestamp();
+                : clockService.getClock().nowAsJavaSqlTimestamp();
 
         commandOutcomeHandler.setStartedAt(startedAt);
     }

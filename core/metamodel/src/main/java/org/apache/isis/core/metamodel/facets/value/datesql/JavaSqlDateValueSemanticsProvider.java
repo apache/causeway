@@ -173,7 +173,7 @@ extends ValueSemanticsProviderAbstractTemporal<Date> {
     protected Date now() {
         return getServiceRegistry().lookupService(ClockService.class)
                 .map(ClockService::getClock)
-                .map(VirtualClock::getEpochMillis)
+                .map(VirtualClock::nowAsEpochMilli)
                 .map(Date::new)
                 .orElseGet(()->new Date(System.currentTimeMillis())); // fallback to system time
     }

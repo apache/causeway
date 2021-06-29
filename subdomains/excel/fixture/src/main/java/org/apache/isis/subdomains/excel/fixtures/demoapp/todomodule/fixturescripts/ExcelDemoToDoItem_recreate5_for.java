@@ -99,7 +99,7 @@ public class ExcelDemoToDoItem_recreate5_for extends FixtureScript {
     }
 
     private LocalDate daysFromToday(final int i) {
-        final LocalDate date = clockService.getClock().localDate(ZoneId.systemDefault());
+        final LocalDate date = clockService.getClock().nowAsLocalDate(ZoneId.systemDefault());
         return date.plusDays(i);
     }
 

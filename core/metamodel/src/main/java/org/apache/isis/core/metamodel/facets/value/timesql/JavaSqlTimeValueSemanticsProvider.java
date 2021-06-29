@@ -161,7 +161,7 @@ extends ValueSemanticsProviderAbstractTemporal<Time> {
     protected Time now() {
         return getServiceRegistry().lookupService(ClockService.class)
                 .map(ClockService::getClock)
-                .map(VirtualClock::getEpochMillis)
+                .map(VirtualClock::nowAsEpochMilli)
                 .map(Time::new)
                 .orElseGet(()->new Time(System.currentTimeMillis())); // fallback to system time
     }

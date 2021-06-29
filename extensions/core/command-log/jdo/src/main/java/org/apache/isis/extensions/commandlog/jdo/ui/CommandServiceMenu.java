@@ -27,7 +27,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -134,7 +133,7 @@ public class CommandServiceMenu {
 
 
     private LocalDate now() {
-        return clockService.getClock().localDate(ZoneId.systemDefault());
+        return clockService.getClock().nowAsLocalDate(ZoneId.systemDefault());
     }
 
 }

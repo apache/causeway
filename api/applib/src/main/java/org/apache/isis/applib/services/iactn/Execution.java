@@ -191,7 +191,7 @@ public abstract class Execution<T extends MemberExecutionDto, E extends Abstract
             final ClockService clockService,
             final MetricsService metricsService) {
 
-        val startedAt = clockService.getClock().javaSqlTimestamp();
+        val startedAt = clockService.getClock().nowAsJavaSqlTimestamp();
         syncMetrics(When.BEFORE, startedAt, metricsService);
         return startedAt;
 

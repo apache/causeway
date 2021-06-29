@@ -93,7 +93,7 @@ public class DemoToDoItemRowHandler implements ExcelFixtureRowHandler {
         if(i == null) {
             return null;
         }
-        final LocalDate date = clockService.getClock().localDate(ZoneId.systemDefault());
+        final LocalDate date = clockService.getClock().nowAsLocalDate(ZoneId.systemDefault());
         return date.plusDays(i);
     }
 

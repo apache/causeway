@@ -56,7 +56,7 @@ public class JodaDateTimes extends AbstractRandomValueGenerator{
     }
 
     private DateTime now() {
-        return fake.clockService.getClock().asJodaDateTime(ZoneId.systemDefault());
+        return fake.clockService.getClock().nowAsJodaDateTime(ZoneId.systemDefault());
     }
 
 }

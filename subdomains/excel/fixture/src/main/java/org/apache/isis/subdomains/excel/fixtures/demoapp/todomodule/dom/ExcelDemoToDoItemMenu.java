@@ -208,7 +208,7 @@ public class ExcelDemoToDoItemMenu {
     }
 
     private LocalDate currentDate() {
-        return clockService.getClock().localDate(ZoneId.systemDefault());
+        return clockService.getClock().nowAsLocalDate(ZoneId.systemDefault());
     }
 
 

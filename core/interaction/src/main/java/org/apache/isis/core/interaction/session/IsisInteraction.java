@@ -212,7 +212,7 @@ implements InteractionInternal {
         }
         final Execution<?,?> popped = currentExecution;
 
-        final Timestamp completedAt = clockService.getClock().javaSqlTimestamp();
+        final Timestamp completedAt = clockService.getClock().nowAsJavaSqlTimestamp();
         popped.setCompletedAt(completedAt, metricsService);
 
         moveCurrentTo(currentExecution.getParent());

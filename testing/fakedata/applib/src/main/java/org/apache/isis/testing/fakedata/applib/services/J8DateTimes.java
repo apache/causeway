@@ -40,13 +40,13 @@ public class J8DateTimes extends AbstractRandomValueGenerator {
 
     @Programmatic
     public OffsetDateTime before(final Period period) {
-        final OffsetDateTime now = fake.clockService.getClock().offsetDateTime(ZoneId.systemDefault());
+        final OffsetDateTime now = fake.clockService.getClock().nowAsOffsetDateTime(ZoneId.systemDefault());
         return now.minus(period);
     }
 
     @Programmatic
     public OffsetDateTime after(final Period period) {
-        final OffsetDateTime now = fake.clockService.getClock().offsetDateTime(ZoneId.systemDefault());
+        final OffsetDateTime now = fake.clockService.getClock().nowAsOffsetDateTime(ZoneId.systemDefault());
         return now.plus(period);
     }
 
