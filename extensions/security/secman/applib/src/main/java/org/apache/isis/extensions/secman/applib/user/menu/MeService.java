@@ -20,8 +20,10 @@ package org.apache.isis.extensions.secman.applib.user.menu;
 
 import java.util.concurrent.Callable;
 
-import javax.annotation.Priority;
 import javax.inject.Inject;
+
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -32,6 +34,8 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.user.UserService;
+import org.apache.isis.applib.services.userui.UserMenu;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserRepository;
@@ -100,6 +104,25 @@ public class MeService {
     }
 
 
+    @Component
+    @RequiredArgsConstructor(onConstructor_ = {@Inject})
+    public static class UserMenuMeActionAdvisor {
 
+        final IsisConfiguration isisConfiguration;
+
+        @EventListener(UserMenu.MeDomainEvent.class)
+        public void on(UserMenu.MeDomainEvent event) {
+            switch (isisConfiguration.getExtensions().getSecman().getUserMenuMeActionPolicy()) {
+                case HIDE:
+                    event.hide();
+                    break;
+                case DISABLE:
+                    event.disable("Use security manager's action to view the current user");
+                    break;
+                case ENABLE:
+                    break;
+            }
+        }
+    }
 
 }

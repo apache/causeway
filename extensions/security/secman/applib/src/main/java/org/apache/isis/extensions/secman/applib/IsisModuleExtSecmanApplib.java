@@ -91,6 +91,7 @@ import org.apache.isis.extensions.secman.applib.user.menu.MeService;
         ApplicationUserMenu.class,
 
         MeService.class,
+        MeService.UserMenuMeActionAdvisor.class,
 
 
         // -- ViewModels
