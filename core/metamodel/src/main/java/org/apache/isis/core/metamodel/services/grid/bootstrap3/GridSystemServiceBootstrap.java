@@ -52,6 +52,7 @@ import org.apache.isis.applib.layout.grid.bootstrap3.Size;
 import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
@@ -497,6 +498,7 @@ public class GridSystemServiceBootstrap extends GridSystemServiceAbstract<BS3Gri
                         hasStaticText->hasStaticText.translated(),
                         // imperative naming not supported here
                         hasImperativeText->null))
+            .filter(_Strings::isNotEmpty)
             .orElseGet(()->
                 // falling back to member-natural-name
                 objectSpec.getTranslationService()
