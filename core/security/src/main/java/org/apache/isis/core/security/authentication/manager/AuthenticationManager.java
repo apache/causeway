@@ -35,7 +35,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.exceptions.unrecoverable.NoAuthenticatorException;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+import org.apache.isis.applib.services.iactnlayer.InteractionContextUtil;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
+import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Timing;
@@ -61,16 +63,19 @@ public class AuthenticationManager {
     private final @NonNull InteractionService interactionService;
     private final @NonNull RandomCodeGenerator randomCodeGenerator;
     private final @NonNull Can<Registrar> registrars;
+    private final @NonNull List<UserMementoRefiner> userMementoRefiners;
 
     @Inject
     public AuthenticationManager(
             final List<Authenticator> authenticators,
             // needs @Lazy due to circular provisioning dependency
             final @Lazy InteractionService anonymousInteractionFactory,
-            final RandomCodeGenerator randomCodeGenerator) {
+            final RandomCodeGenerator randomCodeGenerator,
+            final List<UserMementoRefiner> userMementoRefiners) {
         this.interactionService = anonymousInteractionFactory;
         this.randomCodeGenerator = randomCodeGenerator;
         this.authenticators = Can.ofCollection(authenticators);
+        this.userMementoRefiners = userMementoRefiners;
         if (this.authenticators.isEmpty()) {
             throw new NoAuthenticatorException("No authenticators specified");
         }
@@ -102,18 +107,39 @@ public class AuthenticationManager {
         return interactionService.callAnonymous(()->{
 
             for (val authenticator : compatibleAuthenticators) {
-                val authentication = authenticator.authenticate(request, getUnusedRandomCode());
-                if (authentication != null) {
-                    val userMemento = authentication.getUser();
+                val interactionContext = authenticator.authenticate(request, getUnusedRandomCode());
+                if (interactionContext != null) {
+                    val userMemento = refineUserWithin(interactionContext);
                     userByValidationCode.put(
                             userMemento.getAuthenticationCode(),
                             userMemento.getName());
-                    return authentication;
+                    return interactionContext;
                 }
             }
 
             return null;
         });
+    }
+
+    /**
+     * Iterates over all available {@link UserMementoRefiner}s; if at the end the {@link UserMemento} has been changed,
+     * then replaces (using a private API) the {@link UserMemento} held within {@link InteractionContext}.
+     *
+     * @param interactionContext
+     * @return
+     */
+    @NonNull
+    private UserMemento refineUserWithin(InteractionContext interactionContext) {
+        val userMementoOrig = interactionContext.getUser();
+        UserMemento userMemento = userMementoOrig;
+        for (UserMementoRefiner refiner : userMementoRefiners) {
+            final UserMemento refined = refiner.refine(userMemento);
+            userMemento = refined != null ? refined : userMemento;
+        }
+        if(userMemento != userMementoOrig) {
+            InteractionContextUtil.replaceUserIn(interactionContext, userMemento);
+        }
+        return interactionContext.getUser();
     }
 
     private String getUnusedRandomCode() {
