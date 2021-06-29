@@ -30,15 +30,13 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
-import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 
-import lombok.val;
-
 import de.agilecoders.wicket.core.markup.html.bootstrap.tabs.AjaxBootstrapTabbedPanel;
+import lombok.val;
 
 // hmmm... not sure how to make this implement HasDynamicallyVisibleContent
 public class TabGroupPanel
@@ -60,15 +58,9 @@ implements HasDynamicallyVisibleContent {
                 .filter(BS3Tab.Predicates.notEmpty())
                 .collect(Collectors.toList());
 
-        val translationService = entityModel.getCommonContext().getTranslationService();
-
         for (val bs3Tab : tablist) {
             val repeatingViewWithDynamicallyVisibleContent = TabPanel.newRows(entityModel, bs3Tab);
-            // TODO[ISIS-1720] seems strange that viewer needs to do a translation here, should be already provided
-            val translateContext = TranslationContext
-                    .forTabIdentifier(entityModel.getTypeOfSpecification().getFeatureIdentifier());
-            String bs3TabName = bs3Tab.getName();
-            String tabName = translationService.translate(translateContext, bs3TabName);
+            String tabName = bs3Tab.getName();
             tabs.add(new AbstractTab(Model.of(tabName)) {
                 private static final long serialVersionUID = 1L;
 

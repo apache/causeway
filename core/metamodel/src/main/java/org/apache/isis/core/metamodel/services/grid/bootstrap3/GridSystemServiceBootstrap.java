@@ -50,6 +50,7 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
 import org.apache.isis.applib.layout.grid.bootstrap3.Size;
 import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -57,6 +58,7 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.facets.members.layout.group.GroupIdAndName;
 import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.isis.core.metamodel.layout.LayoutFacetUtil.LayoutDataFactory;
@@ -484,8 +486,26 @@ public class GridSystemServiceBootstrap extends GridSystemServiceAbstract<BS3Gri
         for (final String collectionId : collectionIds) {
             final BS3Tab bs3Tab = new BS3Tab();
 
-            // TODO[ISIS-1720] we have no imperative friendly name support here, what to do?
-            bs3Tab.setName(objectSpec.getCollectionElseFail(collectionId).getFeatureIdentifier().getMemberNaturalName());
+            val feature = objectSpec.getCollectionElseFail(collectionId);
+            val featureId = feature.getFeatureIdentifier();
+
+            val featureFriendlyName =
+            feature.lookupNonFallbackFacet(MemberNamedFacet.class)
+            .map(MemberNamedFacet::getSpecialization)
+            .map(specialization->
+                specialization.fold(
+                        hasStaticText->hasStaticText.translated(),
+                        // imperative naming not supported here
+                        hasImperativeText->null))
+            .orElseGet(()->
+                // falling back to member-natural-name
+                objectSpec.getTranslationService()
+                        .translate(
+                                TranslationContext.forTabIdentifier(featureId),
+                                featureId.getMemberNaturalName())
+            );
+
+            bs3Tab.setName(featureFriendlyName);
             tabGroup.getTabs().add(bs3Tab);
             bs3Tab.setOwner(tabGroup);
 
