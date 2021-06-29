@@ -1205,6 +1205,6 @@ ul.navbar-wrap {
 	flex-wrap:wrap;
 }
 
-div.col > div.tabGroups {
-    margin-bottom: 10px;
+.tabGroups {
+    margin-bottom: 21px;
 }
