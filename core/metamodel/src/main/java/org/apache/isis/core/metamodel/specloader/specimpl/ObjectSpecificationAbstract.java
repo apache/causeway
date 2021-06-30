@@ -272,6 +272,10 @@ implements ObjectSpecification {
             log.debug("introspectingUpTo: {}, {}", getFullIdentifier(), upTo);
         }
 
+        if(this.getCorrespondingClass().getName().endsWith("WrapperInteractionTest3$Task$MixinAbstract")) {
+            //System.out.printf("introspectUpTo[%s]: %s%n", this.getCorrespondingClass(), upTo);
+        }
+
         boolean revalidate = false;
 
         switch (introspectionState) {
@@ -769,11 +773,10 @@ implements ObjectSpecification {
 
     // -- mixin actions
     /**
-     * All contributee actions (each wrapping a service's contributed action) for this spec.
-     *
+     * All mixed in actions for this spec.
      * <p>
-     * If this specification {@link #isManagedBean() is actually for} a service,
-     * then returns an empty list.
+     * If this specification represents a service ({@link #isManagedBean()} or a value or
+     * a mixin, then is a no-op.
      */
     private void createMixedInActions(final Consumer<ObjectAction> onNewMixedInAction) {
         if (isManagedBean() || isValue() || isMixin()) {
@@ -784,6 +787,12 @@ implements ObjectSpecification {
             return;
         }
         for (val mixinType : mixinTypes) {
+
+            if(mixinType.getName().contains("WrapperInteractionTest")
+                    && this.getCorrespondingClass().getName().endsWith("WrapperInteractionTest3$Task")) {
+                System.out.printf("mixinType[%s]: %s%n", this.getCorrespondingClass(), mixinType);
+            }
+
             forEachMixedInAction(mixinType, onNewMixedInAction);
         }
     }
@@ -876,8 +885,8 @@ implements ObjectSpecification {
 
     // -- GUARDS
 
-    private boolean contributeeAndMixedInAssociationsAdded;
-    private boolean contributeeAndMixedInActionsAdded;
+    private boolean mixedInAssociationsAdded;
+    private boolean mixedInActionsAdded;
 
     private void createMixedInActions() {
         // update our list of actions if requesting for contributed actions
@@ -885,13 +894,13 @@ implements ObjectSpecification {
         // the "contributed.isIncluded()" guard is required because we cannot do this too early;
         // there must be a session available
         synchronized (unmodifiableActions) {
-            if(!contributeeAndMixedInActionsAdded) {
+            if(!mixedInActionsAdded) {
                 val actions = _Lists.newArrayList(this.objectActions);
                 if (isEntityOrViewModelOrAbstract()) {
                     createMixedInActions(actions::add);
                 }
                 sortCacheAndUpdateActions(actions);
-                contributeeAndMixedInActionsAdded = true;
+                mixedInActionsAdded = true;
             }
         }
     }
@@ -900,13 +909,13 @@ implements ObjectSpecification {
         // the "contributed.isIncluded()" guard is required because we cannot do this too early;
         // there must be a session available
         synchronized (unmodifiableAssociations) {
-            if(!contributeeAndMixedInAssociationsAdded) {
+            if(!mixedInAssociationsAdded) {
                 val associations = _Lists.newArrayList(this.associations);
                 if(isEntityOrViewModelOrAbstract()) {
                     createMixedInAssociations(associations::add);
                 }
                 sortAndUpdateAssociations(associations);
-                contributeeAndMixedInAssociationsAdded = true;
+                mixedInAssociationsAdded = true;
             }
         }
     }

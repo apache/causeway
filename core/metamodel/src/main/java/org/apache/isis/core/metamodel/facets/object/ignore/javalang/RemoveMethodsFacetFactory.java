@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
@@ -77,15 +78,20 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
     public void process(final ProcessClassContext processClassContext) {
         super.process(processClassContext);
 
-        Class<?> cls = processClassContext.getCls();
-        Method[] methods = cls.getMethods();
+        val cls = processClassContext.getCls();
+        val facetHolder = processClassContext.getFacetHolder();
+        val isConcreteMixin = facetHolder instanceof ObjectSpecification
+                ? ((ObjectSpecification)facetHolder).getBeanSort().isMixin()
+                : false;
+        final Method[] methods = cls.getMethods();
 
         val config = processClassContext.getFacetHolder().getMetaModelContext().getConfiguration();
         val isExplicitAction = config.getApplib().getAnnotation().getAction().isExplicit();
 
         for (Method method : methods) {
-            // remove synthetic methods
-            if (method.isSynthetic()) {
+            // remove synthetic methods (except when is a mixin)
+            if (!isConcreteMixin
+                    && method.isSynthetic()) {
                 processClassContext.removeMethod(method);
             }
 
