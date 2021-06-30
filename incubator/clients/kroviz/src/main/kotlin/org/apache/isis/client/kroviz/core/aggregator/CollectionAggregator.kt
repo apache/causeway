@@ -79,8 +79,6 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
     }
 
     private fun handleObject(obj: TObject) {
-        console.log("[CA.handleObject]")
-        console.log(obj)
         dpm.addData(obj)
         invokeLayoutLink(obj, this)
 //        invokeIconLink(obj, this)
@@ -91,7 +89,6 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
     }
 
     private fun handleDomainType(obj: DomainType) {
-        console.log("[CA.handleDomainType]")
         obj.links.forEach {
             if (it.relation() == Relation.LAYOUT) {
                 invoke(it, this)
@@ -100,7 +97,6 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
         obj.members.forEach {
             val m = it.value
             if (m.isProperty()) {
-                console.log(m)
                 invoke(m, this)
             }
         }
@@ -112,12 +108,14 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
 
     private fun handleProperty(p: Property) {
         val dm = dpm as CollectionDM
-        console.log("[CA.handleProperty]")
         if (p.isPropertyDescription()) {
             dm.addPropertyDescription(p)
         } else {
             dm.addProperty(p)
-            invoke(p.descriptionLink()!!, this)
+            val pdl = p.descriptionLink()
+            if (pdl != null) {
+                invoke(pdl, this)
+            }
         }
     }
 
@@ -138,8 +136,6 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
     }
 
     private fun Property.descriptionLink(): Link? {
-        console.log("[CA.Property.descriptionLink]")
-        console.log(this)
         return links.find {
             it.relation() == Relation.ELEMENT_TYPE
         }

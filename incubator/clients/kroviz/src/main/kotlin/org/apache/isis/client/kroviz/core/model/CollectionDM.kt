@@ -30,11 +30,13 @@ class CollectionDM(override val title: String) : DisplayModelWithLayout() {
         if (!rawData.contains(obj)) {
             rawData.add(obj)
             val exo = Exposer(obj as TObject)
-            data.add(exo.dynamise())  //if exposer is not dynamised, data access in tables won't work
+            data.add(exo.dynamise())  //if exposer is not dynamised, data access in Tabulator tables won't work
         }
     }
 
     fun addIcon(obj: TransferObject?) {
+        console.log("[CDM.addIcon]")
+        console.log(obj)
         TODO("Not yet implemented")
     }
 

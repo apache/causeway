@@ -203,7 +203,7 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
         }
         panel.height = auto
         panel.width = auto
-        panel.overflow = Overflow.SCROLL
+        panel.overflow = Overflow.AUTO
         return panel
     }
 
@@ -211,7 +211,7 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
         val panel = SvgPanel()
         panel.height = auto
         panel.width = auto
-        panel.overflow = Overflow.SCROLL
+        panel.overflow = Overflow.AUTO
         fi.callBack = panel
         return panel
     }

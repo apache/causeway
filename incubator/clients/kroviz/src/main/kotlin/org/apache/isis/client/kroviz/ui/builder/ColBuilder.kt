@@ -45,6 +45,8 @@ class ColBuilder : UiBuilder() {
         for (fs in col.fieldSetList) {
             val fsCpt = FieldSetBuilder().create(fs, tObject, dsp)!!
             val fsPanel = FieldsetPanel(legend = fs.name).add(fsCpt)
+            val tto = TooltipOptions(title = fs.id)
+            fsPanel.enableTooltip(tto)
             panel.add(fsPanel)
         }
         for (row in col.rowList) {
@@ -53,14 +55,15 @@ class ColBuilder : UiBuilder() {
         }
         for (c in col.collectionList) {
             console.log("[CB.create]")
-            console.log(c)
             // analogous to UiManager.openCollectionView
             val key = c.id  // entities
             val objectDM = dsp.displayModel
             val collectionDM = objectDM.collections.get(key)!!
-            console.log(collectionDM)
+            console.log(collectionDM.grid)
+            console.log(collectionDM.layout)
             val tblCpt = RoTable(collectionDM)
-            panel.add(tblCpt)
+            val fsPanel = FieldsetPanel(legend = key).add(tblCpt)
+            panel.add(fsPanel)
             collectionDM.isRendered = true
         }
         return panel

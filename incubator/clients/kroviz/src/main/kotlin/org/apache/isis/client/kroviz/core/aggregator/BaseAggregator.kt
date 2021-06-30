@@ -56,7 +56,9 @@ abstract class BaseAggregator {
 
     protected fun log(logEntry: LogEntry) {
         logEntry.setUndefined("no handler found")
-        throw Throwable("[BaseAggregator.log] no handler found: ${this::class.simpleName}")
+        console.log("[BaseAggregator.log] ")
+        console.log(logEntry)
+        throw Throwable("no handler found: ${this::class.simpleName}")
     }
 
     fun TObject.getLayoutLink(): Link? {

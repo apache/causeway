@@ -23,6 +23,7 @@ object Constants {
     const val restInfix = "restful/"
     const val stdMimeType = "text/plain"
     const val svgMimeType = "image/svg+xml"
+    const val pngMimeType = "image/png"
     const val xmlMimeType = "application/xml"
     const val calcHeight = "calc(100vh - 88px)"
     const val actionSeparator = "\n"

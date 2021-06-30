@@ -113,8 +113,6 @@ object UiManager {
     }
 
     fun closeView(tab: SimplePanel) {
-        console.log("[UM.closeView]")
-        console.log(tab)
         val tt = tab.title
         if (tt != null) {
             EventStore.closeView(tt)

@@ -53,8 +53,6 @@ object MenuFactory {
             val link = buildActionLink(it.id, text)
             val invokeLink = it.getInvokeLink()!!
             link.onClick {
-                console.log("[MF.buildForObject]")
-                console.log(invokeLink)
                 RoXmlHttpRequest().invoke(invokeLink)
             }
             dd.add(link)

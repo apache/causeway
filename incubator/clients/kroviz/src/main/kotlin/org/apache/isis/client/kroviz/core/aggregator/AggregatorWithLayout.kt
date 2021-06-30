@@ -14,7 +14,7 @@ abstract class AggregatorWithLayout : BaseAggregator() {
             dm.propertyLayoutList.forEach { p ->
                 val l = p.link!!
                 val isDn = l.href.contains("datanucleus")
-                if (isDn) {
+                if (!isDn) {
                     //invoking DN links leads to an error
                     invoke(l, this)
                 }

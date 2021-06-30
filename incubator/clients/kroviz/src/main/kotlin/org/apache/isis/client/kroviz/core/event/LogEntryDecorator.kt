@@ -104,11 +104,9 @@ class LogEntryDecorator(val logEntry: LogEntry) {
 
     private fun findChildrenByReference(): Set<LogEntry> {
         val str = logEntry.response
-        console.log("[LED.findChildrenByReference]")
         val children = mutableSetOf<LogEntry>()
         linked.forEach {
             if (it != logEntry && str.contains(it.url)) {
-                console.log(it.url)
                 children.add(it)
             }
         }

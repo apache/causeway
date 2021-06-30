@@ -18,25 +18,18 @@
  */
 package org.apache.isis.client.kroviz.handler
 
-import kotlinx.serialization.json.Json
-import org.apache.isis.client.kroviz.layout.Layout
+import org.apache.isis.client.kroviz.to.Icon
 import org.apache.isis.client.kroviz.to.TransferObject
-import org.apache.isis.client.kroviz.utils.XmlHelper
+import org.w3c.files.Blob
 
-class LayoutHandler : BaseHandler() {
+class IconHandler : BaseHandler() {
 
     override fun canHandle(response: String): Boolean {
-        val isJsonLayout = !XmlHelper.isXml(response)
-                && logEntry.url.endsWith("layout")
-        if (isJsonLayout) {
-            return super.canHandle(response)
-        }
-        return false
+        return logEntry.url.endsWith("object-icon")
     }
 
-
-    override fun parse(response: String): TransferObject {
-        return Json.decodeFromString(Layout.serializer(), response)
+    override fun parse(response: String): TransferObject? {
+        return Icon(response as Blob)
     }
 
 }

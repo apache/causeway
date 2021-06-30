@@ -35,9 +35,7 @@ class Property(node: Node) {
 
     init {
         val dn = node.asDynamic()
-        if (dn.hasOwnProperty("hidden")) {
-            id = dn.getAttribute("hidden") as String
-        }
+        id = dn.getAttribute("hidden")
         id = dn.getAttribute("id") as String
         typicalLength = dn.getAttribute("typicalLength")
         multiLine = dn.getAttribute("multiLine")

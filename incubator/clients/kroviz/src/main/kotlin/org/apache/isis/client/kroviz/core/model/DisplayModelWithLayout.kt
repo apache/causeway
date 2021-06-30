@@ -34,6 +34,7 @@ abstract class DisplayModelWithLayout : DisplayModel() {
     var propertyLayoutList = mutableListOf<PropertyLt>()
 
     override fun canBeDisplayed(): Boolean {
+//        testPropertyNamesMatch()
         return when {
             isRendered -> false
             layout == null -> false
@@ -45,6 +46,23 @@ abstract class DisplayModelWithLayout : DisplayModel() {
                 descriptionsComplete
             }
         }
+    }
+
+    /*
+    check that property names match in:
+    * propertyList
+    * propertyLayoutList
+    * propertyDescriptionList
+     */
+    fun testPropertyNamesMatch() {
+        val ps = propertyList.size
+        val pls = propertyLayoutList.size
+        val pds = propertyDescriptionList.size
+        val sizeOK = (ps >= pds) && (pds >= pls)
+        console.log("[DMWL.testPropertyNamesMatch] $sizeOK")
+        console.log(propertyList)
+        console.log(propertyLayoutList)
+        console.log(propertyDescriptionList)
     }
 
     fun addLayout(layout: Layout) {
@@ -62,6 +80,8 @@ abstract class DisplayModelWithLayout : DisplayModel() {
         r.cols.forEach { cs ->
             val c = cs.getCol()
             c.fieldSet.forEach { fs ->
+                console.log("[DMWL.initLayout4Row]")
+                console.log(fs.property)
                 propertyLayoutList.addAll(fs.property)
             }
             c.tabGroup.forEach { tg ->

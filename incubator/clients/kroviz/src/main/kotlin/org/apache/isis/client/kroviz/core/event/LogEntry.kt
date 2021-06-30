@@ -30,6 +30,8 @@ import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Relation
 import org.apache.isis.client.kroviz.to.TransferObject
 import org.apache.isis.client.kroviz.ui.core.Constants
+import org.apache.isis.client.kroviz.ui.core.UiManager
+import org.apache.isis.client.kroviz.utils.Utils
 import kotlin.js.Date
 
 // use color codes from css instead?
@@ -63,10 +65,11 @@ data class LogEntry(
     var requestLength: Int = 0 // must be accessible (public) for LogEntryTable
     var response = ""
     var responseLength: Int = 0 // must be accessible (public) for LogEntryTable
+    var type: String = ""
 
     init {
         state = EventState.RUNNING
-        title = url // stripHostPort(url)
+        title = url
         requestLength = request?.length
                 ?: 0 // ?. is required, otherwise Tabulator.js/EventLogTable shows no entries
     }
@@ -152,7 +155,19 @@ data class LogEntry(
 
     fun setTransferObject(to: TransferObject) {
         this.obj = to
+        initType()
     }
+
+    fun initType() {
+        if (obj != null && obj is HasLinks) {
+            val self = (obj as HasLinks).getLinks().firstOrNull() { it.relation() == Relation.SELF }
+            if (self != null) {
+                val t = self.type.removePrefix("application/json;profile=\"urn:org.restfulobjects:repr-types/")
+                this.type = t.removeSuffix("\"")
+            }
+        }
+    }
+
 
     // region response
     /**

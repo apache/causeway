@@ -18,9 +18,6 @@
  */
 package org.apache.isis.client.kroviz.ui.core
 
-import org.apache.isis.client.kroviz.core.event.EventStore
-import org.apache.isis.client.kroviz.core.model.Exposer
-import org.apache.isis.client.kroviz.core.model.CollectionDM
 import io.kvision.html.Button
 import io.kvision.html.ButtonStyle
 import io.kvision.tabulator.Align
@@ -29,6 +26,9 @@ import io.kvision.tabulator.Editor
 import io.kvision.tabulator.Formatter
 import io.kvision.tabulator.js.Tabulator
 import io.kvision.utils.obj
+import org.apache.isis.client.kroviz.core.event.EventStore
+import org.apache.isis.client.kroviz.core.model.CollectionDM
+import org.apache.isis.client.kroviz.core.model.Exposer
 
 /**
  * Create ColumnDefinitions for Tabulator tables
@@ -53,17 +53,18 @@ class ColumnFactory {
             displayCollection: CollectionDM,
             withCheckBox: Boolean = false): List<ColumnDefinition<dynamic>> {
 
+        console.log("[CF.buildColumns]")
+        console.log(displayCollection)
         val columns = mutableListOf<ColumnDefinition<dynamic>>()
         if (withCheckBox) {
             val checkBox = buildCheckBox()
             columns.add(checkBox)
         }
 
-        val menu = buildMenu()
-        columns.add(menu)
+        if (hasIcon(displayCollection)) {
+            val menu = buildMenu()
+            columns.add(menu)
 
-        val model = displayCollection.data as List<dynamic>
-        if (model[0].hasOwnProperty("iconName") as Boolean) {
             val icon = buildLinkIcon()
             columns.add(icon)
         }
@@ -82,6 +83,11 @@ class ColumnFactory {
             columns.add(cd)
         }
         return columns
+    }
+
+    private fun hasIcon(displayCollection: CollectionDM): Boolean {
+        val model = displayCollection.data as List<dynamic>
+        return (model[0].hasOwnProperty("iconName") as Boolean)
     }
 
     private fun buildLinkIcon(): ColumnDefinition<Exposer> {

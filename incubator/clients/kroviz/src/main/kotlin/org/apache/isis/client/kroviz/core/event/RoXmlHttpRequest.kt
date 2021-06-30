@@ -69,7 +69,7 @@ class RoXmlHttpRequest {
         xhr.open(method, url, true)
         xhr.setRequestHeader("Authorization", "Basic $credentials")
         xhr.setRequestHeader(CONTENT_TYPE, "application/$subType;charset=UTF-8")
-        xhr.setRequestHeader(ACCEPT, "application/$subType")
+        xhr.setRequestHeader(ACCEPT, "application/$subType, ${Constants.pngMimeType}")
 
         val body = buildBody(link, aggregator)
         val rs = buildResourceSpecificationAndSetupHandler(url, subType, body, xhr)

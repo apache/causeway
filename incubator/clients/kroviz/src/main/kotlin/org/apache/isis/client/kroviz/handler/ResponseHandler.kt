@@ -47,6 +47,7 @@ object ResponseHandler {
     private var _12 = DomainTypesHandler()
     private var _13 = DomainTypeHandler()
     private var _14 = DiagramHandler()
+    private var _15 = IconHandler()
     private var last = DefaultHandler()
 
     init {
@@ -69,7 +70,8 @@ object ResponseHandler {
         _11.successor = _12
         _12.successor = _13
         _13.successor = _14
-        _14.successor = last
+        _14.successor = _15
+        _15.successor = last
     }
 
     fun handle(logEntry: LogEntry) {
