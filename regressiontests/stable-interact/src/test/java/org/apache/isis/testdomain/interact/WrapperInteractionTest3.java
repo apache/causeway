@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -37,6 +38,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.interaction.Configuration_usingInteractionDomain;
@@ -132,9 +134,9 @@ extends InteractionTestAbstract {
         assertEquals(
                 2L,
                 objectSpec.streamRuntimeActions(MixedIn.INCLUDED)
-                //.filter(ObjectAction::isMixedIn)
+                .filter(ObjectAction::isMixedIn)
                 .peek(act->{
-                    System.out.println("act: " + act);
+                    //System.out.println("act: " + act);
                     val memberNamedFacet = act.getFacet(MemberNamedFacet.class);
                     assertNotNull(memberNamedFacet);
                     assertTrue(memberNamedFacet.getSpecialization().isLeft());
@@ -142,7 +144,7 @@ extends InteractionTestAbstract {
                 .count());
     }
 
-    @Test
+    @Test @Disabled("TODO[ISIS-1720]")
     void mixinActionValidation() {
 
         final Task task = new Task();
