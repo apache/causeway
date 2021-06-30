@@ -66,23 +66,11 @@ import lombok.extern.log4j.Log4j2;
 public class FacetedMethodsBuilder
 implements HasMetaModelContext {
 
-    private void debug(String format, Object...args) {
-        if(introspectedClass.getName().contains("WrapperInteractionTest3$Task$")) {
-            System.out.printf(format+"%n", args);
-        }
-    }
-
     private static final String GET_PREFIX = "get";
     private static final String IS_PREFIX = "is";
 
     /* thread-safety ... make sure every methodsRemaining access is synchronized! */
     private static final class ConcurrentMethodRemover implements MethodRemover {
-
-        private void debug(String format, Method method) {
-            if(method.getDeclaringClass().getName().contains("WrapperInteractionTest3$Task$")) {
-                System.out.printf(format+"%n", method);
-            }
-        }
 
         private final Set<Method> methodsRemaining;
 
@@ -98,9 +86,7 @@ implements HasMetaModelContext {
                 val doRemove = removeIf.test(method);
                 if(doRemove) {
                     onRemoval.accept(method);
-                    //debug("accept method-2 %s", method);
                 }
-                //debug("skipping method-2 %s", method);
                 return doRemove;
             });
         }
@@ -110,10 +96,6 @@ implements HasMetaModelContext {
             if(method==null) {
                 return;
             }
-            if(method.toString().contains("Succeeded.act(")) {
-                System.out.println("!!!gotcha " + method);
-            }
-            debug("remove method %s", method);
             methodsRemaining.remove(method);
         }
 
@@ -161,10 +143,6 @@ implements HasMetaModelContext {
 
         this.explicitAnnotationsForActions =
                 getConfiguration().getApplib().getAnnotation().getAction().isExplicit();
-
-        if(introspectedClass.getName().endsWith("WrapperInteractionTest3$Task$Succeeded")) {
-            System.out.printf("introspectedClass[%s]: %s%n", introspectedClass, Can.ofArray(introspectedClass.getMethods()));
-        }
 
         val methodsRemaining = introspectedClass.getMethods();
         this.methodRemover = new ConcurrentMethodRemover(introspectedClass, methodsRemaining);
@@ -389,7 +367,6 @@ implements HasMetaModelContext {
                 onActionFacetedMethod.accept(actionPeer);
                 return true;
             }
-            debug("skipping method %s", method);
             return false;
         });
 
@@ -397,8 +374,6 @@ implements HasMetaModelContext {
 
     private FacetedMethod findActionFacetedMethod(
             final Method actionMethod) {
-
-        debug("represents action %s -> %b", actionMethod, representsAction(actionMethod));
 
         if (!representsAction(actionMethod)) {
             return null;

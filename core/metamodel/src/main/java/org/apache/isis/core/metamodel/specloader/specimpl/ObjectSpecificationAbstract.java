@@ -272,10 +272,6 @@ implements ObjectSpecification {
             log.debug("introspectingUpTo: {}, {}", getFullIdentifier(), upTo);
         }
 
-        if(this.getCorrespondingClass().getName().endsWith("WrapperInteractionTest3$Task$MixinAbstract")) {
-            //System.out.printf("introspectUpTo[%s]: %s%n", this.getCorrespondingClass(), upTo);
-        }
-
         boolean revalidate = false;
 
         switch (introspectionState) {
@@ -787,12 +783,6 @@ implements ObjectSpecification {
             return;
         }
         for (val mixinType : mixinTypes) {
-
-            if(mixinType.getName().contains("WrapperInteractionTest")
-                    && this.getCorrespondingClass().getName().endsWith("WrapperInteractionTest3$Task")) {
-                System.out.printf("mixinType[%s]: %s%n", this.getCorrespondingClass(), mixinType);
-            }
-
             forEachMixedInAction(mixinType, onNewMixedInAction);
         }
     }

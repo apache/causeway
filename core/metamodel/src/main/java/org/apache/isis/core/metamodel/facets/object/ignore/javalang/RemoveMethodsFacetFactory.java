@@ -90,6 +90,7 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
 
         for (Method method : methods) {
             // remove synthetic methods (except when is a mixin)
+            // (it seems that javac marks methods synthetic in the context of non-static inner classes)
             if (!isConcreteMixin
                     && method.isSynthetic()) {
                 processClassContext.removeMethod(method);
