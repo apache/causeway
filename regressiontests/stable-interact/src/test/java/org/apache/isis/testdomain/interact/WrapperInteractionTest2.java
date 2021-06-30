@@ -58,7 +58,7 @@ import lombok.val;
     IsisPresets.SilenceMetaModel,
     IsisPresets.SilenceProgrammingModel
 })
-public class WrapperInteractionTest2
+class WrapperInteractionTest2
 extends InteractionTestAbstract {
 
     @Data @DomainObject(nature = Nature.VIEW_MODEL)
