@@ -58,8 +58,8 @@ implements CssClassFaStaticFacet {
     @Getter(onMethod_ = {@Override})
     private final _Either<CssClassFaStaticFacet, CssClassFaImperativeFacet> specialization = _Either.left(this);
 
-    @Getter(onMethod = @__(@Override)) private CssClassFaPosition position;
-    private List<String> cssClasses; // serializable list implementation
+    @Getter(onMethod_ = {@Override}) private CssClassFaPosition position;
+    private final List<String> cssClasses; // serializable list implementation
 
     protected CssClassFaStaticFacetAbstract(
             final String value,
@@ -97,7 +97,8 @@ implements CssClassFaStaticFacet {
      * @return The original CSS classes plus <em>fa</em> and <em>fa-fw</em> if not already provided
      */
     static List<String> parse(String value) {
-        val cssClassesSet = _Sets.<String>newLinkedHashSet(); // preserved order
+        //XXX cannot use lombok val here
+        final Set<String> cssClassesSet = _Sets.<String>newLinkedHashSet(); // preserved order
         _Strings.splitThenStreamTrimmed(value.trim(), WHITESPACE)
         .map(CssClassFaStaticFacetAbstract::faPrefix)
         .forEach(cssClass->cssClassesSet.add(faPrefix(cssClass)));

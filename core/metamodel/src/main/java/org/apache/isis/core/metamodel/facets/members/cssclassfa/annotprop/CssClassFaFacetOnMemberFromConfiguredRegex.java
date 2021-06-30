@@ -38,7 +38,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * Installed by {@link CssClassFaFacetOnMemberPostProcessor},
@@ -109,9 +108,9 @@ extends CssClassFaImperativeFacetAbstract {
     private Optional<CssClassFaStaticFacetAbstract> createFromConfiguredRegexIfPossible(
             final Supplier<ManagedObject> domainObjectProvider) {
 
-        val memberFriendlyName = memberNamedFacet
+        final String memberFriendlyName = memberNamedFacet
         .getSpecialization()
-        .<String>fold(
+        .fold(
                 hasStaticName->hasStaticName.translated(),
                 hasImperativeName->hasImperativeName.textElseNull(domainObjectProvider.get()));
 
