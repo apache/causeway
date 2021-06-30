@@ -25,7 +25,7 @@ import java.util.stream.Stream;
 
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -41,19 +41,18 @@ public class FontAwesomeUiModel implements Serializable {
     @NonNull private final String cssClassesSpaceSeparated;
     @NonNull private final CssClassFaPosition position;
 
-    public static Optional<FontAwesomeUiModel> of(Optional<CssClassFaFacet> cssClassFaFacetIfAny) {
+    public static Optional<FontAwesomeUiModel> of(Optional<CssClassFaFactory> cssClassFaFactoryIfAny) {
 
-        return cssClassFaFacetIfAny
-        .map(cssClassFaFacet->new FontAwesomeUiModel(
-                cssClassFaFacet.streamCssClasses().collect(Collectors.joining(" ")),
-                Optional.ofNullable(cssClassFaFacet.getPosition()).orElse(CssClassFaPosition.LEFT)));
+        return cssClassFaFactoryIfAny
+        .map(cssClassFaFactory->new FontAwesomeUiModel(
+                cssClassFaFactory.streamCssClasses().collect(Collectors.joining(" ")),
+                Optional.ofNullable(cssClassFaFactory.getPosition()).orElse(CssClassFaPosition.LEFT)));
 
     }
 
     public Stream<String> streamCssClasses() {
         return _Strings.splitThenStream(getCssClassesSpaceSeparated(), " ");
     }
-
 
 }
 

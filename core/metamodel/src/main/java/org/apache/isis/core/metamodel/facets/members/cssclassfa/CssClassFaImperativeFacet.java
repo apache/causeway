@@ -19,19 +19,14 @@
 
 package org.apache.isis.core.metamodel.facets.members.cssclassfa;
 
-import org.apache.isis.commons.internal.base._Either;
-import org.apache.isis.core.metamodel.facetapi.Facet;
+import java.util.function.Supplier;
 
-/**
- * The <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> css class(es) for an action.
- *
- * <p>
- * In the standard Apache Isis Programming Model, corresponds to annotating the
- * member with <tt>{@literal @}{@link org.apache.isis.applib.annotation.ActionLayout#cssClassFa()  ActionLayout}</tt>#cssClassFa().
- */
-public interface CssClassFaFacet extends Facet {
+import javax.annotation.Nullable;
 
-    _Either<CssClassFaStaticFacet, CssClassFaImperativeFacet> getSpecialization();
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
+public interface CssClassFaImperativeFacet
+extends CssClassFaFacet {
 
+    CssClassFaFactory getCssClassFaFactory(@Nullable Supplier<ManagedObject> domainObjectProvider);
 }

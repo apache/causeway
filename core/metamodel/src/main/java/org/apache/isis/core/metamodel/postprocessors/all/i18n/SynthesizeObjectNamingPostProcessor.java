@@ -54,6 +54,7 @@ extends ObjectSpecificationPostProcessorAbstract {
         if(!(objectSpecification.isEntityOrViewModelOrAbstract()
                 || objectSpecification.isManagedBean())) {
 
+            //TODO[ISIS-1720] remove this requirement ...
             // installed, so a mixin's object spec supports getSingularName() which is used to infer a
             // (translated friendly) member name for mixin contributed members
             // see ObjectMemberAbstract#determineNameFrom(final ObjectAction mixinAction)

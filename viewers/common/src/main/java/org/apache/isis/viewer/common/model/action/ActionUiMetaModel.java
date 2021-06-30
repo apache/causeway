@@ -90,7 +90,7 @@ public final class ActionUiMetaModel implements Serializable {
                 objectAction.isPrototype(),
                 ObjectAction.Util.actionIdentifierFor(objectAction),
                 ObjectAction.Util.cssClassFor(objectAction, actionHolder),
-                FontAwesomeUiModel.of(ObjectAction.Util.cssClassFaFacetFor(objectAction)),
+                FontAwesomeUiModel.of(ObjectAction.Util.cssClassFaFactoryFor(objectAction, actionHolder)),
                 ObjectAction.Util.actionLayoutPositionOf(objectAction),
                 objectAction.getSemantics(),
                 ObjectAction.Util.promptStyleFor(objectAction),

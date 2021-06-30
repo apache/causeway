@@ -496,7 +496,7 @@ public class GridSystemServiceBootstrap extends GridSystemServiceAbstract<BS3Gri
             .map(specialization->
                 specialization.fold(
                         hasStaticText->hasStaticText.translated(),
-                        // imperative naming not supported here
+                        //TODO[ISIS-1720] imperative naming not supported here, is this an issue?
                         hasImperativeText->null))
             .filter(_Strings::isNotEmpty)
             .orElseGet(()->

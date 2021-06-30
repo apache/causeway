@@ -26,10 +26,10 @@ import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
-import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaStaticFacetAbstract;
 
 public class CssClassFaFacetForActionXml
-extends CssClassFaFacetAbstract {
+extends CssClassFaStaticFacetAbstract {
 
     public static Optional<CssClassFaFacet> create(
             final ActionLayoutData actionLayout,

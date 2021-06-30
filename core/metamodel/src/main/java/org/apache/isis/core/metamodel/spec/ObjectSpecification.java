@@ -52,6 +52,7 @@ import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.isis.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
@@ -263,6 +264,8 @@ extends
      * @param objectAdapter - to evaluate (may be <tt>null</tt> if called by deprecated {@link #getCssClass}).
      */
     String getCssClass(ManagedObject objectAdapter);
+
+    Optional<CssClassFaFactory> getCssClassFaFactory();
 
     /**
      * @return optionally the element type spec based on presence of the TypeOfFacet

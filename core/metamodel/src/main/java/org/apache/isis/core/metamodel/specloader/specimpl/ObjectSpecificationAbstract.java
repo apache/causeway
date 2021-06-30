@@ -58,6 +58,8 @@ import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.i8n.noun.NounForm;
 import org.apache.isis.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
@@ -445,6 +447,15 @@ implements ObjectSpecification {
     @Override
     public String getCssClass(final ManagedObject reference) {
         return cssClassFacet == null ? null : cssClassFacet.cssClass(reference);
+    }
+
+    @Override
+    public Optional<CssClassFaFactory> getCssClassFaFactory() {
+        return lookupFacet(CssClassFaFacet.class)
+        .map(CssClassFaFacet::getSpecialization)
+        // assuming CssClassFaFacet on objects are always 'static' not 'imperative'
+        .flatMap(either->either.left())
+        .map(CssClassFaFactory.class::cast);
     }
 
     // -- HIERARCHICAL

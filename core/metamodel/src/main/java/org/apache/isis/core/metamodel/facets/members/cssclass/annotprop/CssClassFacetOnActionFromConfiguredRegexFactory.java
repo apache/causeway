@@ -36,9 +36,12 @@ import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 public class CssClassFacetOnActionFromConfiguredRegexFactory
 extends FacetFactoryAbstract {
 
+    private final Map<Pattern, String> cssClassByPattern;
+
     @Inject
     public CssClassFacetOnActionFromConfiguredRegexFactory(final MetaModelContext mmc) {
         super(mmc, FeatureType.ACTIONS_ONLY);
+        this.cssClassByPattern = getConfiguration().getApplib().getAnnotation().getActionLayout().getCssClass().getPatterns();
     }
 
     @Override
@@ -77,7 +80,6 @@ extends FacetFactoryAbstract {
     }
 
     private Optional<String> cssIfAnyFor(final String name) {
-        final Map<Pattern, String> cssClassByPattern = getCssClassByPattern();
 
         for (Map.Entry<Pattern, String> entry : cssClassByPattern.entrySet()) {
             final Pattern pattern = entry.getKey();
@@ -87,16 +89,6 @@ extends FacetFactoryAbstract {
             }
         }
         return Optional.empty();
-    }
-
-    private Map<Pattern,String> cssClassByPattern;
-
-    private Map<Pattern, String> getCssClassByPattern() {
-        if (cssClassByPattern == null) {
-            // build lazily
-            this.cssClassByPattern = getConfiguration().getApplib().getAnnotation().getActionLayout().getCssClass().getPatterns();
-        }
-        return cssClassByPattern;
     }
 
 }

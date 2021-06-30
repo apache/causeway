@@ -24,42 +24,56 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
+import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.functions._Predicates;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 import lombok.Getter;
 import lombok.val;
 
-public class CssClassFaFacetAbstract
+/**
+ * One of two bases for the {@link CssClassFaFacet}.
+ *
+ * @see CssClassFaImperativeFacetAbstract
+ * @since 2.0
+ */
+public abstract class CssClassFaStaticFacetAbstract
 extends FacetAbstract
-implements CssClassFaFacet {
+implements CssClassFaStaticFacet {
+
+    private static final Class<? extends Facet> type() {
+        return CssClassFaFacet.class;
+    }
 
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
     private static final String FIXED_WIDTH = "fa-fw";
     private static final String DEFAULT_PRIMARY_PREFIX = "fa";
 
+    @Getter(onMethod_ = {@Override})
+    private final _Either<CssClassFaStaticFacet, CssClassFaImperativeFacet> specialization = _Either.left(this);
 
     @Getter(onMethod = @__(@Override)) private CssClassFaPosition position;
     private List<String> cssClasses; // serializable list implementation
 
-    public CssClassFaFacetAbstract(
+    protected CssClassFaStaticFacetAbstract(
             final String value,
             final CssClassFaPosition position,
             final FacetHolder holder) {
 
-        super(CssClassFaFacet.class, holder);
+        super(type(), holder);
         this.position = position;
         this.cssClasses = parse(value);
     }
 
     @Override
     public Stream<String> streamCssClasses() {
-        return _NullSafe.stream(cssClasses);
+        return cssClasses.stream();
     }
 
     @Override
@@ -85,7 +99,7 @@ implements CssClassFaFacet {
     static List<String> parse(String value) {
         val cssClassesSet = _Sets.<String>newLinkedHashSet(); // preserved order
         _Strings.splitThenStreamTrimmed(value.trim(), WHITESPACE)
-        .map(CssClassFaFacetAbstract::faPrefix)
+        .map(CssClassFaStaticFacetAbstract::faPrefix)
         .forEach(cssClass->cssClassesSet.add(faPrefix(cssClass)));
 
         return sanitize(cssClassesSet);
@@ -95,7 +109,7 @@ implements CssClassFaFacet {
         val cssClasses = _Lists.<String>newArrayList();
 
         val primaryPrefix = parsedClasses.stream()
-        .filter(CssClassFaFacetAbstract::isFaPrimaryPrefix)
+        .filter(CssClassFaStaticFacetAbstract::isFaPrimaryPrefix)
         .findFirst()
         .orElse(DEFAULT_PRIMARY_PREFIX);
 
@@ -103,16 +117,17 @@ implements CssClassFaFacet {
         cssClasses.add(FIXED_WIDTH);
 
         parsedClasses.stream()
-        .filter(_Predicates.not(CssClassFaFacetAbstract::isFaPrimaryPrefix))
-        .filter(_Predicates.not(CssClassFaFacetAbstract::isFixedWidth))
+        .filter(_Predicates.not(CssClassFaStaticFacetAbstract::isFaPrimaryPrefix))
+        .filter(_Predicates.not(CssClassFaStaticFacetAbstract::isFixedWidth))
         .forEach(cssClasses::add);
 
         return cssClasses;
     }
 
     private static String faPrefix(final String cssClass) {
-        return cssClass.startsWith("fa-") || isFaPrimaryPrefix(cssClass)
-                ? cssClass
+        return cssClass.startsWith("fa-")
+                || isFaPrimaryPrefix(cssClass)
+                        ? cssClass
                         : "fa-" + cssClass;
     }
 
@@ -135,7 +150,5 @@ implements CssClassFaFacet {
         }
 
     }
-
-
 
 }

@@ -30,7 +30,6 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
@@ -55,7 +54,6 @@ import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.services.command.CommandDtoFactory;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
@@ -252,7 +250,8 @@ implements
         return InteractionUtils.isUsableResult(this, usabilityContext).createConsent();
     }
 
-    // -- isAssociation, isAction
+    // -- PREDICATES
+
     @Override
     public boolean isAction() {
         return featureType.isAction();
@@ -273,12 +272,9 @@ implements
         return featureType.isProperty();
     }
 
+    // -- MIXIN ADAPTER FACTORY
 
-    // -- mixinAdapterFor
-    /**
-     * For mixins
-     */
-    ManagedObject mixinAdapterFor(
+    protected ManagedObject mixinAdapterFor(
             @NonNull final Class<?> mixinType,
             @NonNull final ManagedObject mixee) {
 
@@ -288,49 +284,7 @@ implements
         return ManagedObject.of(spec, Objects.requireNonNull(mixinPojo));
     }
 
-    static String determineNameFrom(final ObjectAction mixinAction) {
-        return StringExtensions.asCapitalizedName(suffix(mixinAction));
-    }
-
-    static String determineIdFrom(final ObjectActionDefault mixinAction) {
-        final String id = StringExtensions.asCamelLowerFirst(compress(suffix(mixinAction)));
-        return id;
-    }
-
-    private static String compress(final String suffix) {
-        return suffix.replaceAll(" ","");
-    }
-
-    private static String suffix(final ObjectAction mixinAction) {
-        // getSingularName() implicitly uses an ObjectNamedFacet, which supports translation
-        return deriveMemberNameFrom(mixinAction.getOnType().getSingularName());
-    }
-
-    public static String deriveMemberNameFrom(final String mixinClassName) {
-        final String deriveFromUnderscore = derive(mixinClassName, "_");
-        if(!Objects.equals(mixinClassName, deriveFromUnderscore)) {
-            return deriveFromUnderscore;
-        }
-        final String deriveFromDollar = derive(mixinClassName, "$");
-        if(!Objects.equals(mixinClassName, deriveFromDollar)) {
-            return deriveFromDollar;
-        }
-        return mixinClassName;
-    }
-
-    private static String derive(final String singularName, final String separator) {
-        final int indexOfSeparator = singularName.lastIndexOf(separator);
-        return occursNotAtEnd(singularName, indexOfSeparator)
-                ? singularName.substring(indexOfSeparator + 1)
-                : singularName;
-    }
-
-    private static boolean occursNotAtEnd(final String singularName, final int indexOfUnderscore) {
-        return indexOfUnderscore != -1
-                && indexOfUnderscore != singularName.length() - 1;
-    }
-
-    // -- toString
+    // -- OBJECT CONTRACT
 
     @Override
     public String toString() {
@@ -339,17 +293,7 @@ implements
                 .orElseGet(()->String.format("id=%s,name=imperative", getId()));
     }
 
-    // -- Dependencies
-
-    protected InteractionProvider getInteractionContext() {
-        return getServiceRegistry().lookupServiceElseFail(InteractionProvider.class);
-    }
-
-    protected CommandDtoFactory getCommandDtoFactory() {
-        return getServiceRegistry().lookupServiceElseFail(CommandDtoFactory.class);
-    }
-
-    // -- command (setup)
+    // -- COMMAND SETUP
 
     protected void setupCommand(
             final InteractionHead head,
@@ -369,6 +313,16 @@ implements
             command.updater().setCommandDto(dto);
         }
 
+    }
+
+    // -- DEPENDENCIES
+
+    protected InteractionProvider getInteractionContext() {
+        return getServiceRegistry().lookupServiceElseFail(InteractionProvider.class);
+    }
+
+    protected CommandDtoFactory getCommandDtoFactory() {
+        return getServiceRegistry().lookupServiceElseFail(CommandDtoFactory.class);
     }
 
     @Override

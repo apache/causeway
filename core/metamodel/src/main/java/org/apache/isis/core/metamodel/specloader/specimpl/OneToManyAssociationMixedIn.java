@@ -92,7 +92,7 @@ implements MixedInMember {
                     LogicalType.eager(
                             mixeeSpec.getCorrespondingClass(),
                             mixeeSpec.getLogicalTypeName()),
-                    determineIdFrom(mixinAction),
+                    _MixedInMemberNamingStrategy.determineIdFrom(mixinAction),
                     mixinAction.getFacetedMethod().getFeatureIdentifier().getMemberParameterClassNames()),
                 mixinAction.getFacetedMethod(), typeOfSpec(mixinAction));
 
@@ -124,7 +124,7 @@ implements MixedInMember {
                 .isPresent();
 
         if(!isExplicitlyNamed) {
-            String memberName = determineNameFrom(mixinAction);
+            String memberName = _MixedInMemberNamingStrategy.determineNameFrom(mixinAction);
             FacetUtil.addFacet(
                     new MemberNamedFacetForStaticMemberName(memberName, facetHolder));
         }

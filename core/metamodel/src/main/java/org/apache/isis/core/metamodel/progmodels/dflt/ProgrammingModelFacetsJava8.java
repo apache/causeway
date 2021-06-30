@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.facets.collections.sortedby.annotation.Sor
 import org.apache.isis.core.metamodel.facets.fallback.FallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.jaxb.JaxbFacetFactory;
 import org.apache.isis.core.metamodel.facets.members.cssclass.annotprop.CssClassFacetOnActionFromConfiguredRegexFactory;
-import org.apache.isis.core.metamodel.facets.members.cssclassfa.annotprop.CssClassFaFacetOnMemberFactory;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.annotprop.CssClassFaFacetOnMemberPostProcessor;
 import org.apache.isis.core.metamodel.facets.members.described.method.DescribedAsFacetForMemberViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethodFactory;
@@ -262,8 +262,6 @@ extends ProgrammingModelAbstract {
         // must come after CssClassFacetOnMemberFactory
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new CssClassFacetOnActionFromConfiguredRegexFactory(mmc));
 
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new CssClassFaFacetOnMemberFactory(mmc));
-
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new HiddenObjectFacetViaMethodFactory(mmc));
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new DisabledObjectFacetViaMethodFactory(mmc));
 
@@ -389,6 +387,9 @@ extends ProgrammingModelAbstract {
         // must run before Object nouns are used
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new SynthesizeObjectNamingPostProcessor(mmc));
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new InferColumnNamingPostProcessor(mmc));
+
+        // requires member names to have settled
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new CssClassFaFacetOnMemberPostProcessor(mmc));
 
 
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DeriveDescribedAsFromTypePostProcessor(mmc));

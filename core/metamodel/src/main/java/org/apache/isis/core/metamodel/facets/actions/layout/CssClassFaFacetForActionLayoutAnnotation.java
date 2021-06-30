@@ -25,9 +25,9 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaStaticFacetAbstract;
 
-public class CssClassFaFacetForActionLayoutAnnotation extends CssClassFaFacetAbstract {
+public class CssClassFaFacetForActionLayoutAnnotation extends CssClassFaStaticFacetAbstract {
 
     public static Optional<CssClassFaFacetForActionLayoutAnnotation> create(
             final Optional<ActionLayout> actionLayoutIfAny,

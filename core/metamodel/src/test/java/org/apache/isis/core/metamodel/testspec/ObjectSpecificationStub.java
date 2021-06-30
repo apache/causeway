@@ -38,6 +38,7 @@ import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;
@@ -391,6 +392,11 @@ implements ObjectSpecification {
                 ? ActionType.USER_AND_PROTOTYPE
                 : ActionType.USER_ONLY;
         return streamActions(actionTypes, mixedIn);
+    }
+
+    @Override
+    public Optional<CssClassFaFactory> getCssClassFaFactory() {
+        return Optional.empty();
     }
 
 }

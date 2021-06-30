@@ -28,7 +28,7 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ResourceReference;
 
-import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
 import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -121,14 +121,14 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
             val spec = adapterIfAny.getSpecification();
 
             final String iconName = spec.getIconName(adapterIfAny);
-            final CssClassFaFacet cssClassFaFacet = spec.getFacet(CssClassFaFacet.class);
-            if (iconName != null || cssClassFaFacet == null) {
+            final CssClassFaFactory cssClassFaFactory = spec.getCssClassFaFactory().orElse(null);
+            if (iconName != null || cssClassFaFactory == null) {
                 link.addOrReplace(this.image = newImage(ID_ENTITY_ICON, adapterIfAny));
                 Components.permanentlyHide(link, ID_ENTITY_FONT_AWESOME);
             } else {
                 Label dummy = new Label(ID_ENTITY_FONT_AWESOME, "");
                 link.addOrReplace(dummy);
-                dummy.add(new CssClassAppender(cssClassFaFacet.asSpaceSeparatedWithAdditional("fa-2x")));
+                dummy.add(new CssClassAppender(cssClassFaFactory.asSpaceSeparatedWithAdditional("fa-2x")));
                 Components.permanentlyHide(link, ID_ENTITY_ICON);
             }
 

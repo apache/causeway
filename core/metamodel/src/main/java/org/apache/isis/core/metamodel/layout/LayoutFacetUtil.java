@@ -107,14 +107,18 @@ public class LayoutFacetUtil {
             final HasCssClassFa hasCssClassFa,
             final FacetHolder facetHolder) {
 
-        val cssClassFaFacet = facetHolder.getFacet(CssClassFaFacet.class);
-        if (isDoOp(cssClassFaFacet)) {
-            final String cssClassFa = cssClassFaFacet.asSpaceSeparated();
-            if(!_Strings.isNullOrEmpty(cssClassFa)) {
-                hasCssClassFa.setCssClassFa(cssClassFa);
-                hasCssClassFa.setCssClassFaPosition(cssClassFaFacet.getPosition());
-            }
-        }
+        facetHolder.lookupNonFallbackFacet(CssClassFaFacet.class)
+        .map(CssClassFaFacet::getSpecialization)
+        .ifPresent(specialization->
+            specialization.accept(
+                    hasStaticFaIcon->{
+                        final String cssClassFa = hasStaticFaIcon.asSpaceSeparated();
+                        if(!_Strings.isNullOrEmpty(cssClassFa)) {
+                            hasCssClassFa.setCssClassFa(cssClassFa);
+                            hasCssClassFa.setCssClassFaPosition(hasStaticFaIcon.getPosition());
+                        }
+                    },
+                    _Functions.noopConsumer())); // not supported for imperative fa-icons
     }
 
     public void setDefaultViewIfAny(

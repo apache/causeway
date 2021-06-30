@@ -34,6 +34,7 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.CanVector;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -43,6 +44,7 @@ import org.apache.isis.core.metamodel.facets.actions.action.associateWith.Choice
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
 import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.facets.object.wizard.WizardFacet;
@@ -50,6 +52,7 @@ import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.memento.ActionMemento;
 
@@ -312,14 +315,25 @@ public interface ObjectAction extends ObjectMember {
             return layoutFacet != null ? layoutFacet.position() : ActionLayout.Position.BELOW;
         }
 
-        public static Optional<CssClassFaFacet> cssClassFaFacetFor(final ObjectAction action) {
-            return Optional.ofNullable(action)
-            .map(a->a.getFacet(CssClassFaFacet.class));
+        public static Optional<CssClassFaFactory> cssClassFaFactoryFor(
+                final ObjectAction action,
+                final ManagedObject domainObject) {
+
+            return Optional.ofNullable(action.getFacet(CssClassFaFacet.class))
+            .map(CssClassFaFacet::getSpecialization)
+            .map(specialization->specialization
+                    .fold(
+                            hasStaticFaIcon->hasStaticFaIcon, // identity operator
+                            hasImperativeFaIcon->
+                                ManagedObjects.isNullOrUnspecifiedOrEmpty(domainObject)
+                                    ? null
+                                    : hasImperativeFaIcon.getCssClassFaFactory(domainObject.asProvider())))
+            .filter(_NullSafe::isPresent);
         }
 
-        public static String cssClassFor(final ObjectAction action, final ManagedObject objectAdapter) {
+        public static String cssClassFor(final ObjectAction action, final ManagedObject domainObject) {
             final CssClassFacet cssClassFacet = action.getFacet(CssClassFacet.class);
-            return cssClassFacet != null ? cssClassFacet.cssClass(objectAdapter) : null;
+            return cssClassFacet != null ? cssClassFacet.cssClass(domainObject) : null;
         }
 
         /**
