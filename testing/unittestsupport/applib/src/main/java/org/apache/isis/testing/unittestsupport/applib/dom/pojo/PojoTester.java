@@ -67,7 +67,7 @@ import lombok.Getter;
  *
  * @since 2.0 {@index}
  */
-public final class PojoTester {
+public class PojoTester {
 
 	/**
 	 * Provides a set of data instances for the specified type.
@@ -137,7 +137,7 @@ public final class PojoTester {
 	private final Map<Class<?>, DatumFactory<?>> dataByType = new HashMap<>();
 
 
-	private PojoTester() {
+	protected PojoTester() {
 
 		final var booleanDatumFactory = new DatumFactoryImpl<>(Boolean.class) {
 			@Override

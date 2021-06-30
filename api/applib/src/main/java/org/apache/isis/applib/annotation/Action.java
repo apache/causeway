@@ -82,23 +82,21 @@ public @interface Action {
             default "";
 
     /**
-     * Associates this action with a property or collection, specifying its id.
+     * References a collection of a certain element type, for an action with a collection parameter of that
+     * element type; the action's choices will be automatically populated from checkboxes rendered in the collection.
      *
      * <p>
-     *     To specify the layout order use {@link ActionLayout#sequence()}.
+     *     This will also result in the action being rendered near to the collection, similar to the way in
+     *     which {@link ActionLayout#associateWith()} does.
      * </p>
      *
      * <p>
-     *     For example <code>@Action(associateWith="items") @ActionLayout(sequence="2.1")</code>
+     *     If there are multiple actions associated with a collection, either by way of {@link Action#choicesFrom()} or
+     *     using {@link ActionLayout#associateWith()}, then their order in the UI can be influenced using
+     *     {@link ActionLayout#sequence()}.
      * </p>
      *
-     * <p>
-     *     If an action is associated with a collection, then any matching parameters will have
-     *     their choices automatically inferred from the collection (if not otherwise specified)
-     *     and any collection parameter defaults can be specified using checkboxes
-     *     (in the Wicket UI, at least).
-     * </p>
-     *
+     * @see ActionLayout#associateWith()
      * @see ActionLayout#sequence()
      */
     String choicesFrom()

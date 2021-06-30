@@ -60,6 +60,13 @@ public @interface ActionLayout {
      *     For example <code>@ActionLayout(associateWith="items") @ActionLayout(sequence="2.1")</code>
      * </p>
      *
+     * <p>
+     *     Note that it is also possible to associate an action with a collection using {@link Action#choicesFrom()}
+     *     (which has the additional semantic of the rows of the element being used as choices for that action's
+     *     collection parameter of the same type as the elements of the collection).
+     * </p>
+     *
+     * @see Action#choicesFrom()
      * @see ActionLayout#sequence()
      * @see ActionLayout#fieldSetId()
      * @see ActionLayout#fieldSetName()
