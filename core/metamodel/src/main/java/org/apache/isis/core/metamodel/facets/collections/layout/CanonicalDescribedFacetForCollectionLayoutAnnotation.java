@@ -17,33 +17,34 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.layout;
+package org.apache.isis.core.metamodel.facets.collections.layout;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.layout.component.ActionLayoutData;
+import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
-import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacetWithStaticTextAbstract;
+import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
+import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacetWithStaticTextAbstract;
 
-public class NamedFacetForActionXml
-extends MemberNamedFacetWithStaticTextAbstract {
+public class CanonicalDescribedFacetForCollectionLayoutAnnotation
+extends MemberDescribedFacetWithStaticTextAbstract {
 
-    public static Optional<MemberNamedFacet> create(
-            final ActionLayoutData actionLayout,
+    public static Optional<MemberDescribedFacet> create(
+            final Optional<CollectionLayout> collectionLayoutIfAny,
             final FacetHolder holder) {
-        if(actionLayout == null) {
-            return Optional.empty();
-        }
-        final String named = _Strings.emptyToNull(actionLayout.getNamed());
-        return named != null
-                ? Optional.of(new NamedFacetForActionXml(named, holder))
-                : Optional.empty();
+
+        return collectionLayoutIfAny
+                .map(CollectionLayout::describedAs)
+                .filter(_Strings::isNotEmpty)
+                .map(describedAs ->
+                    new CanonicalDescribedFacetForCollectionLayoutAnnotation(describedAs, holder));
     }
 
-    private NamedFacetForActionXml(final String named, final FacetHolder holder) {
-        super(named, holder);
+    private CanonicalDescribedFacetForCollectionLayoutAnnotation(
+            final String described,
+            final FacetHolder holder) {
+        super(described, holder);
     }
 
 }

@@ -17,32 +17,30 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.properties.propertylayout;
+package org.apache.isis.core.metamodel.facets.collections.layout;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.named.ColumnNamedFacet;
-import org.apache.isis.core.metamodel.facets.all.named.ColumnNamedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacetWithStaticTextAbstract;
 
-public class ColumnNamedFacetForPropertyLayoutAnnotation
-extends ColumnNamedFacetAbstract {
+public class CanonicalNamedFacetForCollectionLayoutAnnotation
+extends MemberNamedFacetWithStaticTextAbstract {
 
-    public static Optional<ColumnNamedFacet> create(
-            final Optional<PropertyLayout> propertyLayoutIfAny,
+    public static Optional<MemberNamedFacet> create(
+            final Optional<CollectionLayout> collectionLayoutIfAny,
             final FacetHolder holder) {
 
-        return propertyLayoutIfAny
-                .filter(propertyLayout->_Strings.isNotEmpty(propertyLayout.named()))
-                .map(propertyLayout ->
-                    new ColumnNamedFacetForPropertyLayoutAnnotation(
-                        propertyLayout.named(),
-                        holder));
+        return collectionLayoutIfAny
+        .filter(collectionLayout -> _Strings.emptyToNull(collectionLayout.named()) != null)
+        .map(collectionLayout ->
+            new CanonicalNamedFacetForCollectionLayoutAnnotation(collectionLayout.named(), holder));
     }
 
-    private ColumnNamedFacetForPropertyLayoutAnnotation(
+    private CanonicalNamedFacetForCollectionLayoutAnnotation(
             final String named,
             final FacetHolder holder) {
 

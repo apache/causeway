@@ -21,31 +21,32 @@ package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.layout.component.PropertyLayoutData;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.described.ColumnDescribedFacet;
-import org.apache.isis.core.metamodel.facets.all.described.ColumnDescribedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.named.CanonicalNamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.CanonicalNamedFacetAbstract;
 
-public class ColumnDescribedFacetForPropertyXml
-extends ColumnDescribedFacetAbstract {
+public class CanonicalNamedFacetForPropertyLayoutAnnotation
+extends CanonicalNamedFacetAbstract {
 
-    public static Optional<ColumnDescribedFacet> create(
-            final PropertyLayoutData propertyLayoutData,
+    public static Optional<CanonicalNamedFacet> create(
+            final Optional<PropertyLayout> propertyLayoutIfAny,
             final FacetHolder holder) {
 
-        return Optional.ofNullable(propertyLayoutData)
-        .map(PropertyLayoutData::getDescribedAs)
-        .filter(_Strings::isEmpty)
-        .map(describedAs->new ColumnDescribedFacetForPropertyXml(
-                describedAs,
-                holder));
+        return propertyLayoutIfAny
+                .filter(propertyLayout->_Strings.isNotEmpty(propertyLayout.named()))
+                .map(propertyLayout ->
+                    new CanonicalNamedFacetForPropertyLayoutAnnotation(
+                        propertyLayout.named(),
+                        holder));
     }
 
-    private ColumnDescribedFacetForPropertyXml(
-            final String described,
+    private CanonicalNamedFacetForPropertyLayoutAnnotation(
+            final String named,
             final FacetHolder holder) {
-        super(described, holder);
+
+        super(named, holder);
     }
 
 }

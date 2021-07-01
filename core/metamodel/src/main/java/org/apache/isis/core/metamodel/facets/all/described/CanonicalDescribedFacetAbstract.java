@@ -24,18 +24,18 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticTextFacetAbstract;
 
 /**
- * The base for the {@link ColumnDescribedFacet}.
+ * The base for the {@link CanonicalDescribedFacet}.
  * @since 2.0
  */
-public class ColumnDescribedFacetAbstract
+public class CanonicalDescribedFacetAbstract
 extends HasStaticTextFacetAbstract
-implements ColumnDescribedFacet {
+implements CanonicalDescribedFacet {
 
     private static final Class<? extends Facet> type() {
-        return ColumnDescribedFacet.class;
+        return CanonicalDescribedFacet.class;
     }
 
-    protected ColumnDescribedFacetAbstract(
+    protected CanonicalDescribedFacetAbstract(
             final String originalText,
             final FacetHolder holder) {
         super(type(),

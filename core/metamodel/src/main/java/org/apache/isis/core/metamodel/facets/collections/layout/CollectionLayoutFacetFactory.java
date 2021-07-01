@@ -56,7 +56,11 @@ extends FacetFactoryAbstract {
                 .create(collectionLayoutIfAny, getConfiguration(), facetHolder));
 
         addFacetIfPresent(
-                DescribedAsFacetForCollectionLayoutAnnotation
+                MemberDescribedFacetForCollectionLayoutAnnotation
+                .create(collectionLayoutIfAny, facetHolder));
+
+        addFacetIfPresent(
+                CanonicalDescribedFacetForCollectionLayoutAnnotation
                 .create(collectionLayoutIfAny, facetHolder));
 
         addFacetIfPresent(
@@ -68,7 +72,11 @@ extends FacetFactoryAbstract {
                 .create(collectionLayoutIfAny, facetHolder));
 
         addFacetIfPresent(
-                NamedFacetForCollectionLayoutAnnotation
+                MemberNamedFacetForCollectionLayoutAnnotation
+                .create(collectionLayoutIfAny, facetHolder));
+
+        addFacetIfPresent(
+                CanonicalNamedFacetForCollectionLayoutAnnotation
                 .create(collectionLayoutIfAny, facetHolder));
 
         addFacetIfPresent(

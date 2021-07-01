@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacetWithStaticTextAbstract;
 
-public class NamedFacetForCollectionXml
+public class MemberNamedFacetForCollectionXml
 extends MemberNamedFacetWithStaticTextAbstract {
 
     public static Optional<MemberNamedFacet> create(
@@ -38,11 +38,11 @@ extends MemberNamedFacetWithStaticTextAbstract {
         }
         final String named = _Strings.emptyToNull(collectionLayout.getNamed());
         return named != null
-                ? Optional.of(new NamedFacetForCollectionXml(named, holder))
+                ? Optional.of(new MemberNamedFacetForCollectionXml(named, holder))
                 : Optional.empty();
     }
 
-    private NamedFacetForCollectionXml(
+    private MemberNamedFacetForCollectionXml(
             final String named,
             final FacetHolder holder) {
 

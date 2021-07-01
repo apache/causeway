@@ -20,14 +20,16 @@ package org.apache.isis.core.metamodel.facets.all.described;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.facets.all.named.CanonicalNamedFacet;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
 /**
- * Provides the text that's returned by {@link OneToOneAssociation#getColumnDescription()}.
- * @see OneToOneAssociation#getColumnDescription()
+ * Provides the text that's returned by {@link ObjectAssociation#getCanonicalDescription()}.
+ * @see ObjectAssociation#getCanonicalDescription()
+ * @see CanonicalNamedFacet
  * @since 2.0
  */
-public interface ColumnDescribedFacet
+public interface CanonicalDescribedFacet
 extends
     Facet,
     HasStaticText {

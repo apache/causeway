@@ -99,12 +99,12 @@ implements CollectionCountProvider {
 
             repeating.add(item);
 
-            String propertyName = numberAssociation.getColumnFriendlyName();
-            item.add(new Label(ID_PROPERTY_NAME, new Model<String>(propertyName)));
+            String propertyColumnName = numberAssociation.getCanonicalFriendlyName();
+            item.add(new Label(ID_PROPERTY_NAME, new Model<String>(propertyColumnName)));
 
 
             List<ManagedObject> adapters = model.getObject();
-            Summary summary = new Summary(propertyName, adapters, numberAssociation);
+            Summary summary = new Summary(propertyColumnName, adapters, numberAssociation);
             addItem(item, ID_SUM, summary.getTotal());
             addItem(item, ID_AVG, summary.getAverage());
             addItem(item, ID_MIN, summary.getMin());

@@ -17,33 +17,32 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.collections.layout;
+package org.apache.isis.core.metamodel.facets.actions.layout;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacetWithStaticTextAbstract;
 
-public class NamedFacetForCollectionLayoutAnnotation
+public class MemberNamedFacetForActionXml
 extends MemberNamedFacetWithStaticTextAbstract {
 
     public static Optional<MemberNamedFacet> create(
-            final Optional<CollectionLayout> collectionLayoutIfAny,
+            final ActionLayoutData actionLayout,
             final FacetHolder holder) {
-
-        return collectionLayoutIfAny
-        .filter(collectionLayout -> _Strings.emptyToNull(collectionLayout.named()) != null)
-        .map(collectionLayout ->
-            new NamedFacetForCollectionLayoutAnnotation(collectionLayout.named(), holder));
+        if(actionLayout == null) {
+            return Optional.empty();
+        }
+        final String named = _Strings.emptyToNull(actionLayout.getNamed());
+        return named != null
+                ? Optional.of(new MemberNamedFacetForActionXml(named, holder))
+                : Optional.empty();
     }
 
-    private NamedFacetForCollectionLayoutAnnotation(
-            final String named,
-            final FacetHolder holder) {
-
+    private MemberNamedFacetForActionXml(final String named, final FacetHolder holder) {
         super(named, holder);
     }
 

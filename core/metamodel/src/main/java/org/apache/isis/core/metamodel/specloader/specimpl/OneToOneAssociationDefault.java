@@ -31,8 +31,6 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.all.described.ColumnDescribedFacet;
-import org.apache.isis.core.metamodel.facets.all.named.ColumnNamedFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
@@ -75,26 +73,6 @@ implements OneToOneAssociation {
             final ObjectSpecification objectSpec) {
 
         super(featureIdentifier, facetedMethod, FeatureType.PROPERTY, objectSpec);
-    }
-
-    // -- COLUMN NAMED
-
-    @Override
-    public String getColumnFriendlyName() {
-        return lookupFacet(ColumnNamedFacet.class)
-        .map(ColumnNamedFacet::translated)
-        //we have a facet-post-processor to ensure following code path is unreachable,
-        // however, we keep it in support of JUnit testing
-        .orElseGet(()->getFeatureIdentifier().getMemberNaturalName());
-    }
-
-    // -- COLUMN DESCRIBED AS
-
-    @Override
-    public String getColumnDescription() {
-        return lookupFacet(ColumnDescribedFacet.class)
-        .map(ColumnDescribedFacet::translated)
-        .orElse(null);
     }
 
     // -- VISIBLE, USABLE

@@ -23,23 +23,26 @@ import javax.inject.Inject;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facets.all.named.ColumnNamedFacet;
-import org.apache.isis.core.metamodel.facets.all.named.ColumnNamedFacetInferredFromPropertyNaturalName;
+import org.apache.isis.core.metamodel.facets.all.named.CanonicalNamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.CanonicalNamedFacetInferredFromAssociationNaturalName;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 /**
- * Installs {@link ColumnNamedFacet}(s) on members of type PROPERTY, if not already present.
+ * Installs {@link CanonicalNamedFacet}(s) on members of type PROPERTY and COLLECTION, if not already present.
+ * @see CanonicalNamedFacet
+ * @since 2.0
  */
-public class InferColumnNamingPostProcessor
+public class InferCanonicalNamingPostProcessor
 extends ObjectSpecificationPostProcessorAbstract {
 
     @Inject
-    public InferColumnNamingPostProcessor(final MetaModelContext metaModelContext) {
+    public InferCanonicalNamingPostProcessor(final MetaModelContext metaModelContext) {
         super(metaModelContext);
     }
 
@@ -57,14 +60,21 @@ extends ObjectSpecificationPostProcessorAbstract {
 
     @Override
     protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToOneAssociation prop) {
-        if(!prop.lookupFacet(ColumnNamedFacet.class).isPresent()) {
-            FacetUtil.addFacet(
-                    new ColumnNamedFacetInferredFromPropertyNaturalName(prop));
-        }
+        doPostProcessAssociation(prop);
     }
 
     @Override
     protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
+        doPostProcessAssociation(coll);
+    }
+
+    // -- HELPER
+
+    private void doPostProcessAssociation(ObjectAssociation association) {
+        if(!association.lookupFacet(CanonicalNamedFacet.class).isPresent()) {
+            FacetUtil.addFacet(
+                    new CanonicalNamedFacetInferredFromAssociationNaturalName(association));
+        }
     }
 
 }

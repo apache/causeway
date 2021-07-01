@@ -26,12 +26,12 @@ import javax.inject.Inject;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.all.described.ColumnDescribedFacet;
+import org.apache.isis.core.metamodel.facets.all.described.CanonicalDescribedFacet;
 import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
 import org.apache.isis.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.isis.core.metamodel.facets.all.described.ParamDescribedFacet;
 import org.apache.isis.core.metamodel.facets.all.i8n.HasMemoizableTranslation;
-import org.apache.isis.core.metamodel.facets.all.named.ColumnNamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.CanonicalNamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.ParamNamedFacet;
@@ -89,8 +89,8 @@ extends ObjectSpecificationPostProcessorAbstract {
                 Stream.of(
                         prop.lookupFacet(MemberNamedFacet.class),
                         prop.lookupFacet(MemberDescribedFacet.class),
-                        prop.lookupFacet(ColumnNamedFacet.class),
-                        prop.lookupFacet(ColumnDescribedFacet.class)));
+                        prop.lookupFacet(CanonicalNamedFacet.class),
+                        prop.lookupFacet(CanonicalDescribedFacet.class)));
     }
 
     @Override
@@ -98,7 +98,9 @@ extends ObjectSpecificationPostProcessorAbstract {
         memoizeTranslations(
                 Stream.of(
                         coll.lookupFacet(MemberNamedFacet.class),
-                        coll.lookupFacet(MemberDescribedFacet.class)));
+                        coll.lookupFacet(MemberDescribedFacet.class),
+                        coll.lookupFacet(CanonicalNamedFacet.class),
+                        coll.lookupFacet(CanonicalDescribedFacet.class)));
 
     }
 

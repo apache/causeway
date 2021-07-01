@@ -17,33 +17,36 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.properties.propertylayout;
+package org.apache.isis.core.metamodel.facets.collections.layout;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.described.ColumnDescribedFacet;
-import org.apache.isis.core.metamodel.facets.all.described.ColumnDescribedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacetWithStaticTextAbstract;
 
-public class ColumnDescribedFacetForPropertyLayoutAnnotation
-extends ColumnDescribedFacetAbstract {
+public class CanonicalNamedFacetForCollectionXml
+extends MemberNamedFacetWithStaticTextAbstract {
 
-    public static Optional<ColumnDescribedFacet> create(
-            final Optional<PropertyLayout> propertyLayoutIfAny,
+    public static Optional<MemberNamedFacet> create(
+            final CollectionLayoutData collectionLayout,
             final FacetHolder holder) {
-
-        return propertyLayoutIfAny
-                .map(PropertyLayout::describedAs)
-                .filter(_Strings::isNotEmpty)
-                .map(describedAs -> new ColumnDescribedFacetForPropertyLayoutAnnotation(describedAs, holder));
+        if(collectionLayout == null) {
+            return Optional.empty();
+        }
+        final String named = _Strings.emptyToNull(collectionLayout.getNamed());
+        return named != null
+                ? Optional.of(new CanonicalNamedFacetForCollectionXml(named, holder))
+                : Optional.empty();
     }
 
-    private ColumnDescribedFacetForPropertyLayoutAnnotation(
-            final String described,
+    private CanonicalNamedFacetForCollectionXml(
+            final String named,
             final FacetHolder holder) {
-        super(described, holder);
+
+        super(named, holder);
     }
 
 }

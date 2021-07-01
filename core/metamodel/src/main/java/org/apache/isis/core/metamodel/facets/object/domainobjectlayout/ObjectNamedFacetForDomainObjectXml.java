@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.facets.all.named.ObjectNamedFacetAbstract;
 
 import lombok.val;
 
-public class NamedFacetForDomainObjectXml
+public class ObjectNamedFacetForDomainObjectXml
 extends ObjectNamedFacetAbstract {
 
     public static Optional<ObjectNamedFacet> create(
@@ -55,12 +55,12 @@ extends ObjectNamedFacetAbstract {
         }
 
         return Optional.of(
-                new NamedFacetForDomainObjectXml(
+                new ObjectNamedFacetForDomainObjectXml(
                             nounForms,
                             holder));
     }
 
-    private NamedFacetForDomainObjectXml(
+    private ObjectNamedFacetForDomainObjectXml(
             final NounForms nounForms,
             final FacetHolder holder) {
         super(nounForms, holder);

@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
 import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacetWithStaticTextAbstract;
 
-public class DescribedAsFacetForPropertyXml
+public class MemberDescribedFacetForPropertyXml
 extends MemberDescribedFacetWithStaticTextAbstract {
 
     public static Optional<MemberDescribedFacet> create(
@@ -37,12 +37,12 @@ extends MemberDescribedFacetWithStaticTextAbstract {
         return Optional.ofNullable(propertyLayoutData)
         .map(PropertyLayoutData::getDescribedAs)
         .filter(_Strings::isEmpty)
-        .map(describedAs->new DescribedAsFacetForPropertyXml(
+        .map(describedAs->new MemberDescribedFacetForPropertyXml(
                 describedAs,
                 holder));
     }
 
-    private DescribedAsFacetForPropertyXml(
+    private MemberDescribedFacetForPropertyXml(
             final String described,
             final FacetHolder holder) {
         super(described, holder);

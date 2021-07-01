@@ -17,31 +17,30 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.collections.layout;
+package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
-import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacetWithStaticTextAbstract;
+import org.apache.isis.core.metamodel.facets.all.described.CanonicalDescribedFacet;
+import org.apache.isis.core.metamodel.facets.all.described.CanonicalDescribedFacetAbstract;
 
-public class DescribedAsFacetForCollectionLayoutAnnotation
-extends MemberDescribedFacetWithStaticTextAbstract {
+public class CanonicalDescribedFacetForPropertyLayoutAnnotation
+extends CanonicalDescribedFacetAbstract {
 
-    public static Optional<MemberDescribedFacet> create(
-            final Optional<CollectionLayout> collectionLayoutIfAny,
+    public static Optional<CanonicalDescribedFacet> create(
+            final Optional<PropertyLayout> propertyLayoutIfAny,
             final FacetHolder holder) {
 
-        return collectionLayoutIfAny
-                .map(CollectionLayout::describedAs)
+        return propertyLayoutIfAny
+                .map(PropertyLayout::describedAs)
                 .filter(_Strings::isNotEmpty)
-                .map(describedAs ->
-                    new DescribedAsFacetForCollectionLayoutAnnotation(describedAs, holder));
+                .map(describedAs -> new CanonicalDescribedFacetForPropertyLayoutAnnotation(describedAs, holder));
     }
 
-    private DescribedAsFacetForCollectionLayoutAnnotation(
+    private CanonicalDescribedFacetForPropertyLayoutAnnotation(
             final String described,
             final FacetHolder holder) {
         super(described, holder);

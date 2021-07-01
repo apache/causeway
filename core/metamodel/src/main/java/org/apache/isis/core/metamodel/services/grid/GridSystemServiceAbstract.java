@@ -46,15 +46,16 @@ import org.apache.isis.core.metamodel.facets.actions.layout.CssClassFaFacetForAc
 import org.apache.isis.core.metamodel.facets.actions.layout.CssClassFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.DescribedAsFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.HiddenFacetForActionXml;
-import org.apache.isis.core.metamodel.facets.actions.layout.NamedFacetForActionXml;
+import org.apache.isis.core.metamodel.facets.actions.layout.MemberNamedFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.PromptStyleFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.RedirectFacetFromActionXml;
-import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
+import org.apache.isis.core.metamodel.facets.collections.layout.CanonicalDescribedFacetForCollectionXml;
+import org.apache.isis.core.metamodel.facets.collections.layout.CanonicalNamedFacetForCollectionXml;
 import org.apache.isis.core.metamodel.facets.collections.layout.CssClassFacetForCollectionXml;
 import org.apache.isis.core.metamodel.facets.collections.layout.DefaultViewFacetForCollectionXml;
-import org.apache.isis.core.metamodel.facets.collections.layout.DescribedAsFacetForCollectionXml;
 import org.apache.isis.core.metamodel.facets.collections.layout.HiddenFacetForCollectionXml;
-import org.apache.isis.core.metamodel.facets.collections.layout.NamedFacetForCollectionXml;
+import org.apache.isis.core.metamodel.facets.collections.layout.MemberDescribedFacetForCollectionXml;
+import org.apache.isis.core.metamodel.facets.collections.layout.MemberNamedFacetForCollectionXml;
 import org.apache.isis.core.metamodel.facets.collections.layout.PagedFacetForCollectionXml;
 import org.apache.isis.core.metamodel.facets.collections.layout.SortedByFacetForCollectionXml;
 import org.apache.isis.core.metamodel.facets.members.layout.group.GroupIdAndName;
@@ -64,15 +65,15 @@ import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.BookmarkP
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.CssClassFaFacetForDomainObjectXml;
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.CssClassFacetForDomainObjectXml;
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.DescribedAsFacetForDomainObjectXml;
-import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.NamedFacetForDomainObjectXml;
-import org.apache.isis.core.metamodel.facets.properties.propertylayout.ColumnDescribedFacetForPropertyXml;
-import org.apache.isis.core.metamodel.facets.properties.propertylayout.ColumnNamedFacetForPropertyXml;
+import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.ObjectNamedFacetForDomainObjectXml;
+import org.apache.isis.core.metamodel.facets.properties.propertylayout.CanonicalDescribedFacetForPropertyXml;
+import org.apache.isis.core.metamodel.facets.properties.propertylayout.CanonicalNamedFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.CssClassFacetForPropertyXml;
-import org.apache.isis.core.metamodel.facets.properties.propertylayout.DescribedAsFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.HiddenFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.LabelAtFacetForPropertyXml;
+import org.apache.isis.core.metamodel.facets.properties.propertylayout.MemberDescribedFacetForPropertyXml;
+import org.apache.isis.core.metamodel.facets.properties.propertylayout.MemberNamedFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.MultiLineFacetForPropertyXml;
-import org.apache.isis.core.metamodel.facets.properties.propertylayout.NamedFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.PromptStyleFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.RenderedAdjustedFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.TypicalLengthFacetForPropertyXml;
@@ -197,7 +198,7 @@ implements GridSystemService<G> {
                 addFacetIfPresent(CssClassFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
                 addFacetIfPresent(CssClassFaFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
                 addFacetIfPresent(DescribedAsFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
-                addFacetIfPresent(NamedFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
+                addFacetIfPresent(ObjectNamedFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
             }
 
             @Override
@@ -263,11 +264,7 @@ implements GridSystemService<G> {
                 addFacetIfPresent(CssClassFaFacetForActionXml.create(actionLayoutData, objectAction));
                 addFacetIfPresent(DescribedAsFacetForActionXml.create(actionLayoutData, objectAction));
                 addFacetIfPresent(HiddenFacetForActionXml.create(actionLayoutData, objectAction));
-                // preserve translations
-                val existingNamedFacet = objectAction.getFacet(MemberNamedFacet.class);
-                if(existingNamedFacet == null) {
-                    addFacetIfPresent(NamedFacetForActionXml.create(actionLayoutData, objectAction));
-                }
+                addFacetIfPresent(MemberNamedFacetForActionXml.create(actionLayoutData, objectAction));
                 addFacetIfPresent(PromptStyleFacetForActionXml.create(actionLayoutData, objectAction));
                 addFacetIfPresent(RedirectFacetFromActionXml.create(actionLayoutData, objectAction));
             }
@@ -280,13 +277,13 @@ implements GridSystemService<G> {
                 }
 
                 addFacetIfPresent(CssClassFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
-                addFacetIfPresent(DescribedAsFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
-                addFacetIfPresent(ColumnDescribedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                addFacetIfPresent(MemberDescribedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                addFacetIfPresent(CanonicalDescribedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 addFacetIfPresent(HiddenFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 addFacetIfPresent(LabelAtFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 addFacetIfPresent(MultiLineFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
-                addFacetIfPresent(NamedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
-                addFacetIfPresent(ColumnNamedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                addFacetIfPresent(MemberNamedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                addFacetIfPresent(CanonicalNamedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 addFacetIfPresent(PromptStyleFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 addFacetIfPresent(RenderedAdjustedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 addFacetIfPresent(UnchangingFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
@@ -310,13 +307,11 @@ implements GridSystemService<G> {
 
                 addFacetIfPresent(CssClassFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
                 addFacetIfPresent(DefaultViewFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
-                addFacetIfPresent(DescribedAsFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
+                addFacetIfPresent(MemberDescribedFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
+                addFacetIfPresent(CanonicalDescribedFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
                 addFacetIfPresent(HiddenFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
-                // preserve translations
-                val existingNamedFacet = oneToManyAssociation.getFacet(MemberNamedFacet.class);
-                if(existingNamedFacet == null) {
-                    addFacetIfPresent(NamedFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
-                }
+                addFacetIfPresent(MemberNamedFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
+                addFacetIfPresent(CanonicalNamedFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
                 addFacetIfPresent(PagedFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
                 addFacetIfPresent(SortedByFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
 

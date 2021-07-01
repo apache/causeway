@@ -6,20 +6,20 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticTextFacetAbstract;
 
 /**
- * The base for the {@link ColumnNamedFacet}.
+ * The base for the {@link CanonicalNamedFacet}.
  *
- * @see ColumnNamedFacet
+ * @see CanonicalNamedFacet
  * @since 2.0
  */
-public abstract class ColumnNamedFacetAbstract
+public abstract class CanonicalNamedFacetAbstract
 extends HasStaticTextFacetAbstract
-implements ColumnNamedFacet {
+implements CanonicalNamedFacet {
 
     private static final Class<? extends Facet> type() {
-        return ColumnNamedFacet.class;
+        return CanonicalNamedFacet.class;
     }
 
-    protected ColumnNamedFacetAbstract(
+    protected CanonicalNamedFacetAbstract(
             final String originalText,
             final FacetHolder holder) {
         this(
@@ -28,7 +28,7 @@ implements ColumnNamedFacet {
                 Precedence.DEFAULT);
     }
 
-    protected ColumnNamedFacetAbstract(
+    protected CanonicalNamedFacetAbstract(
             final String originalText,
             final FacetHolder holder,
             final Precedence precedence) {

@@ -24,6 +24,8 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.all.described.CanonicalDescribedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.CanonicalNamedFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
@@ -91,5 +93,22 @@ implements ObjectAssociation {
         return !isOneToManyAssociation();
     }
 
+    // -- CANONICAL NAMING
+
+    @Override
+    public final String getCanonicalFriendlyName() {
+        return lookupFacet(CanonicalNamedFacet.class)
+        .map(CanonicalNamedFacet::translated)
+        //we have a facet-post-processor to ensure following code path is unreachable,
+        // however, we keep it in support of JUnit testing
+        .orElseGet(()->getFeatureIdentifier().getMemberNaturalName());
+    }
+
+    @Override
+    public final String getCanonicalDescription() {
+        return lookupFacet(CanonicalDescribedFacet.class)
+        .map(CanonicalDescribedFacet::translated)
+        .orElse(null);
+    }
 
 }

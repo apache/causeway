@@ -21,28 +21,27 @@ package org.apache.isis.core.metamodel.facets.collections.layout;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.layout.component.CollectionLayoutData;
+import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
 import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacetWithStaticTextAbstract;
 
-public class DescribedAsFacetForCollectionXml
+public class MemberDescribedFacetForCollectionLayoutAnnotation
 extends MemberDescribedFacetWithStaticTextAbstract {
 
     public static Optional<MemberDescribedFacet> create(
-            final CollectionLayoutData collectionLayout,
+            final Optional<CollectionLayout> collectionLayoutIfAny,
             final FacetHolder holder) {
-        if(collectionLayout == null) {
-            return Optional.empty();
-        }
-        final String describedAs = _Strings.emptyToNull(collectionLayout.getDescribedAs());
-        return describedAs != null
-                ? Optional.of(new DescribedAsFacetForCollectionXml(describedAs, holder))
-                : Optional.empty();
+
+        return collectionLayoutIfAny
+                .map(CollectionLayout::describedAs)
+                .filter(_Strings::isNotEmpty)
+                .map(describedAs ->
+                    new MemberDescribedFacetForCollectionLayoutAnnotation(describedAs, holder));
     }
 
-    private DescribedAsFacetForCollectionXml(
+    private MemberDescribedFacetForCollectionLayoutAnnotation(
             final String described,
             final FacetHolder holder) {
         super(described, holder);

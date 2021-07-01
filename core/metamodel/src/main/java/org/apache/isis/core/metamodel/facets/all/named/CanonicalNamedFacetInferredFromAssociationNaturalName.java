@@ -18,13 +18,13 @@
  */
 package org.apache.isis.core.metamodel.facets.all.named;
 
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
-public class ColumnNamedFacetInferredFromPropertyNaturalName
-extends ColumnNamedFacetAbstract {
+public class CanonicalNamedFacetInferredFromAssociationNaturalName
+extends CanonicalNamedFacetAbstract {
 
-    public ColumnNamedFacetInferredFromPropertyNaturalName(OneToOneAssociation property) {
-        super(property.getFeatureIdentifier().getMemberNaturalName(), property, Precedence.INFERRED);
+    public CanonicalNamedFacetInferredFromAssociationNaturalName(ObjectAssociation association) {
+        super(association.getFeatureIdentifier().getMemberNaturalName(), association, Precedence.INFERRED);
     }
 
 }

@@ -145,7 +145,7 @@ import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 import org.apache.isis.core.metamodel.methods.OrphanedSupportingMethodValidator;
 import org.apache.isis.core.metamodel.postprocessors.DeriveMixinMembersPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.all.DeriveDescribedAsFromTypePostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.all.i18n.InferColumnNamingPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.all.i18n.InferCanonicalNamingPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.all.i18n.SynthesizeObjectNamingPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.all.i18n.TranslationPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetPostProcessor;
@@ -386,7 +386,7 @@ extends ProgrammingModelAbstract {
 
         // must run before Object nouns are used
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new SynthesizeObjectNamingPostProcessor(mmc));
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new InferColumnNamingPostProcessor(mmc));
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new InferCanonicalNamingPostProcessor(mmc));
 
         // requires member names to have settled
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new CssClassFaFacetOnMemberPostProcessor(mmc));

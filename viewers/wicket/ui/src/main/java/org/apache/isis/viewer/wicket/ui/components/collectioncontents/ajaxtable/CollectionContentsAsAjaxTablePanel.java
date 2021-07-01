@@ -301,12 +301,12 @@ implements CollectionCountProvider {
         return new ObjectAdapterPropertyColumn(
                 commonContext,
                 collectionModel.getVariant(),
-                Model.of(property.getColumnFriendlyName()),
+                Model.of(property.getCanonicalFriendlyName()),
                 property.getId(),
                 property.getId(),
                 escaped,
                 parentTypeName,
-                property.getColumnDescription());
+                property.getCanonicalDescription());
     }
 
 

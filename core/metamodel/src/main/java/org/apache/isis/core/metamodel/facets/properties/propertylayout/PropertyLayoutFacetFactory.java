@@ -58,7 +58,7 @@ extends FacetFactoryAbstract {
                 .create(propertyLayoutIfAny, facetHolder));
 
         addFacetIfPresent(
-                ColumnDescribedFacetForPropertyLayoutAnnotation
+                CanonicalDescribedFacetForPropertyLayoutAnnotation
                 .create(propertyLayoutIfAny, facetHolder));
 
         addFacetIfPresent(
@@ -86,7 +86,7 @@ extends FacetFactoryAbstract {
                 .create(propertyLayoutIfAny, facetHolder));
 
         addFacetIfPresent(
-                ColumnNamedFacetForPropertyLayoutAnnotation
+                CanonicalNamedFacetForPropertyLayoutAnnotation
                 .create(propertyLayoutIfAny, facetHolder));
 
         addFacetIfPresent(

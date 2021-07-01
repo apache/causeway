@@ -162,7 +162,7 @@ public class TableViewFx extends VBox {
 
         // property columns
         columnProperties.forEach(property->{
-            val column = _fx.newColumn(objectGrid, property.getColumnFriendlyName(), String.class);
+            val column = _fx.newColumn(objectGrid, property.getCanonicalFriendlyName(), String.class);
             column.setCellValueFactory(cellDataFeatures -> {
                 log.debug("about to get property value for property {}", property.getId());
                 val targetObject = cellDataFeatures.getValue();

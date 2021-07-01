@@ -35,7 +35,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.layout.CollectionLayoutFacetFactory;
-import org.apache.isis.core.metamodel.facets.collections.layout.NamedFacetForCollectionLayoutAnnotation;
+import org.apache.isis.core.metamodel.facets.collections.layout.MemberNamedFacetForCollectionLayoutAnnotation;
 
 import lombok.val;
 
@@ -56,7 +56,7 @@ public class NamedFacetForCollectionLayoutAnnotationFactoryTest extends Abstract
 
         val facet = facetedMethod.getFacet(MemberNamedFacet.class);
         assertThat(facet, is(notNullValue()));
-        assertThat(facet, is(instanceOf(NamedFacetForCollectionLayoutAnnotation.class)));
+        assertThat(facet, is(instanceOf(MemberNamedFacetForCollectionLayoutAnnotation.class)));
         assertThat(((HasStaticText)facet).text(), is(equalTo("1st names")));
     }
 

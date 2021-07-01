@@ -20,14 +20,17 @@ package org.apache.isis.core.metamodel.facets.all.named;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
 /**
- * Provides the text that's returned by {@link OneToOneAssociation#getColumnFriendlyName()}.
- * @see OneToOneAssociation#getColumnFriendlyName()
+ * Provides the text that's returned by {@link ObjectAssociation#getCanonicalFriendlyName()}.
+ *
+ * @apiNote yet used for properties and collections, but could be extended to actions as well, should there be an use-case
+ *
+ * @see ObjectAssociation#getCanonicalFriendlyName()
  * @since 2.0
  */
-public interface ColumnNamedFacet
+public interface CanonicalNamedFacet
 extends
     Facet,
     HasStaticText {
