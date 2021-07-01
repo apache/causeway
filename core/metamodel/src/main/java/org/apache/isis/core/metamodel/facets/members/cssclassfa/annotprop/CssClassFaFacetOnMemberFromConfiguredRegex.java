@@ -62,13 +62,17 @@ extends CssClassFaImperativeFacetAbstract {
             final FacetHolder holder) {
         super(holder);
         this.faIconByPattern = getConfiguration().getApplib().getAnnotation().getActionLayout().getCssClassFa().getPatterns();
-        //TODO[ISIS-1720] if the memberNamedFacet provides static names, we can also provide static fa-icons (no imperative logic required)
         this.memberNamedFacet = memberNamedFacet;
     }
 
     @Override
     public CssClassFaFactory getCssClassFaFactory(final Supplier<ManagedObject> domainObjectProvider) {
-        return new CssClassFaFactory() {
+
+        return memberNamedFacet
+        .getSpecialization()
+        .left() // if the memberNamedFacet provides static names, just reuse its specialization as CssClassFaFactory
+        .map(CssClassFaFactory.class::cast)
+        .orElseGet(()->new CssClassFaFactory() {
 
             @Override
             public CssClassFaPosition getPosition() {
@@ -84,7 +88,7 @@ extends CssClassFaImperativeFacetAbstract {
                         .orElseGet(Stream::empty);
             }
 
-        };
+        });
     }
 
     // -- HELPER
