@@ -52,6 +52,11 @@ extends CssClassFaImperativeFacetAbstract {
     private final @NonNull Map<Pattern, String> faIconByPattern;
     private final @NonNull MemberNamedFacet memberNamedFacet;
 
+    /**
+     * if the memberNamedFacet provides static names, we can also provide a static CssClassFaFactory
+     */
+    private final @NonNull Optional<CssClassFaFactory> staticCssClassFaFactory;
+
     public static Optional<CssClassFaFacet> create(final ObjectAction objectAction) {
         return objectAction.lookupFacet(MemberNamedFacet.class)
         .map(memberNamedFacet->new CssClassFaFacetOnMemberFromConfiguredRegex(memberNamedFacet, objectAction));
@@ -63,28 +68,32 @@ extends CssClassFaImperativeFacetAbstract {
         super(holder);
         this.faIconByPattern = getConfiguration().getApplib().getAnnotation().getActionLayout().getCssClassFa().getPatterns();
         this.memberNamedFacet = memberNamedFacet;
+
+        // an optimization, not strictly required
+        this.staticCssClassFaFactory = memberNamedFacet
+                .getSpecialization()
+                .left()
+                .map(hasStaticName->hasStaticName.translated())
+                .flatMap(this::cssClassFaFactoryForMemberFriendlyName);
     }
 
     @Override
     public CssClassFaFactory getCssClassFaFactory(final Supplier<ManagedObject> domainObjectProvider) {
 
-        return memberNamedFacet
-        .getSpecialization()
-        .left() // if the memberNamedFacet provides static names, just reuse its specialization as CssClassFaFactory
-        .map(CssClassFaFactory.class::cast)
+        return staticCssClassFaFactory
         .orElseGet(()->new CssClassFaFactory() {
 
             @Override
             public CssClassFaPosition getPosition() {
-                return createFromConfiguredRegexIfPossible(domainObjectProvider)
-                        .map(CssClassFaStaticFacetAbstract::getPosition)
+                return cssClassFaFactoryForConfiguredRegexIfPossible(domainObjectProvider)
+                        .map(CssClassFaFactory::getPosition)
                         .orElse(CssClassFaPosition.LEFT);
             }
 
             @Override
             public Stream<String> streamCssClasses() {
-                return createFromConfiguredRegexIfPossible(domainObjectProvider)
-                        .map(CssClassFaStaticFacetAbstract::streamCssClasses)
+                return cssClassFaFactoryForConfiguredRegexIfPossible(domainObjectProvider)
+                        .map(CssClassFaFactory::streamCssClasses)
                         .orElseGet(Stream::empty);
             }
 
@@ -105,18 +114,25 @@ extends CssClassFaImperativeFacetAbstract {
         return Optional.empty();
     }
 
-    /**
-     * @implNote because {@link CssClassFaStaticFacetAbstract} has all the fa-icon logic,
-     * we simply reuse it here by creating an anonymous instance
-     */
-    private Optional<CssClassFaStaticFacetAbstract> createFromConfiguredRegexIfPossible(
+    private Optional<CssClassFaFactory> cssClassFaFactoryForConfiguredRegexIfPossible(
             final Supplier<ManagedObject> domainObjectProvider) {
 
         final String memberFriendlyName = memberNamedFacet
         .getSpecialization()
         .fold(
-                hasStaticName->hasStaticName.translated(),
+                hasStaticName->hasStaticName.translated(), // unexpected code reach, due to optimization above
                 hasImperativeName->hasImperativeName.textElseNull(domainObjectProvider.get()));
+
+        return cssClassFaFactoryForMemberFriendlyName(memberFriendlyName);
+
+    }
+
+    /**
+     * @implNote because {@link CssClassFaStaticFacetAbstract} has all the fa-icon logic,
+     * we simply reuse it here by creating an anonymous instance
+     */
+    private Optional<CssClassFaFactory> cssClassFaFactoryForMemberFriendlyName(
+            final String memberFriendlyName) {
 
         return _Strings.nonEmpty(memberFriendlyName)
         .flatMap(this::faIconIfAnyFor)
@@ -137,4 +153,5 @@ extends CssClassFaImperativeFacetAbstract {
         });
 
     }
+
 }
