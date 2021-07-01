@@ -24,13 +24,13 @@ import java.util.Optional;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
-import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacetWithStaticTextAbstract;
+import org.apache.isis.core.metamodel.facets.all.named.CanonicalNamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.CanonicalNamedFacetAbstract;
 
 public class CanonicalNamedFacetForCollectionXml
-extends MemberNamedFacetWithStaticTextAbstract {
+extends CanonicalNamedFacetAbstract {
 
-    public static Optional<MemberNamedFacet> create(
+    public static Optional<CanonicalNamedFacet> create(
             final CollectionLayoutData collectionLayout,
             final FacetHolder holder) {
         if(collectionLayout == null) {

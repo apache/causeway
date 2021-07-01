@@ -24,13 +24,13 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
-import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacetWithStaticTextAbstract;
+import org.apache.isis.core.metamodel.facets.all.described.CanonicalDescribedFacet;
+import org.apache.isis.core.metamodel.facets.all.described.CanonicalDescribedFacetAbstract;
 
 public class CanonicalDescribedFacetForCollectionLayoutAnnotation
-extends MemberDescribedFacetWithStaticTextAbstract {
+extends CanonicalDescribedFacetAbstract {
 
-    public static Optional<MemberDescribedFacet> create(
+    public static Optional<CanonicalDescribedFacet> create(
             final Optional<CollectionLayout> collectionLayoutIfAny,
             final FacetHolder holder) {
 
