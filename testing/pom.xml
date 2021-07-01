@@ -127,6 +127,7 @@
 
 
 	<modules>
+		<module>archtestsupport</module>
 		<module>fakedata</module>
 		<module>fixtures</module>
 		<module>h2console</module>

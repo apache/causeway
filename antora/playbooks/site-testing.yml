@@ -47,6 +47,9 @@ content:
       start_path: testing/adoc # testing
       branches: HEAD
     - url: .
+      start_path: testing/archtestsupport/adoc # testing
+      branches: HEAD
+    - url: .
       start_path: testing/fakedata/adoc # testing
       branches: HEAD
     - url: .
