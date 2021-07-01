@@ -1,0 +1,132 @@
+= Architecture Test Support
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Apache Isis provides a library of link:https://www.archunit.org/[ArchUnit] tests to verify the structure of your domain applications.
+
+
+
+== Setup
+
+
+TODO: explain using similar format to elsewhere.
+
+=== Maven Configuration
+
+CAUTION: TODO
+
+=== Recommended Naming Convention
+
+Architecture tests run quickly, so it generally makes sense to name them as xref:testing:unittestsupport:about.adoc[unit tests] (with a `Test` suffix, to be picked up by surefire).
+
+== Module Tests
+
+CAUTION: TODO - to flesh out
+
+[source,java]
+.ModuleTests.java
+----
+@AnalyzeClasses(
+        packagesOf = {
+                CustomerModule.class                                                // <.>
+                , OrderModule.class
+                , ProductModule.class
+        },
+        importOptions = { ImportOption.DoNotIncludeTests.class }
+)
+public class ModuleTests {
+
+    @ArchTest
+    public static ArchRule code_dependencies_follow_module_Imports =
+        ArchitectureModuleRules.code_dependencies_follow_module_Imports(            // <.>
+            ArchitectureModuleRules.analyzeClasses_packagesOf(ModuleTests.class));  // <.>
+}
+----
+
+<.> the modules of the application to be scanned
+<.> invoke the rule
+<.> just obtains the list of modules
+
+
+== Package Tests
+
+CAUTION: TODO - to flesh out
+
+[source,java]
+.Subpackage
+----
+public interface Subpackage {
+    String getName();
+
+    SubpackageType getSubpackageType();
+
+    String packageIdentifierWithin(Class<?> moduleClass);
+
+    default void defineLayer(Architectures.LayeredArchitecture layeredArchitecture, Class<?> moduleClass) {
+        val layerDefinition = getSubpackageType().defineLayer(this, moduleClass, layeredArchitecture);
+        layerDefinition.definedBy(packageIdentifierWithin(moduleClass));
+    }
+
+    boolean canReference(Subpackage referenced);
+}
+----
+
+The `SubpackageEnum` provides an off the shelf implementation.
+
+[source,java]
+.PackageTestsForCustomerModule.java
+----
+@AnalyzeClasses(
+    packagesOf = {CustomerModule.class},                                            // <.>
+    importOptions = {ImportOption.DoNotIncludeTests.class}
+)
+public class PackageTestsForCustomerModule {
+
+    @ArchTest public static ArchRule code_dependencies_follow_module_subpackages =
+      ArchitecturePackageRules.code_dependencies_follow_module_subpackages(         // <.>
+        CustomerModule.class,                                                       // <1>
+        Arrays.asList(SubpackageEnum.values()));                                    // <.>
+
+}
+----
+
+<.> the module to be analyzed.
+A similar test should be created for each and every module in the app.
+<.> xxx
+<.> xxx
+
+
+== Class Tests
+
+CAUTION: TODO - to flesh out
+
+[source,java]
+.ClassTests.java
+----
+@AnalyzeClasses(
+        packagesOf = {
+                CustomerModule.class                                                // <.>
+                , OrderModule.class
+                , ProductModule.class
+        },
+        importOptions = { ImportOption.DoNotIncludeTests.class }
+)
+public class ClassTests {
+
+    @ArchTest
+    static ArchRule classes_annotated_with_Entity_are_also_annotated_with_DomainObject =
+      ArchitectureClassRules.classes_annotated_with_Entity_must_also_be_annotated_with_DomainObject();  // <.>
+
+    @ArchTest
+    static ArchRule classes_annotated_with_Entity_are_also_annotated_with_XmlJavaTypeAdapter =
+      ArchitectureClassRules.classes_annotated_with_Entity_must_also_be_annotated_with_XmlJavaAdapter(); // <.>
+
+    @ArchTest
+    static ArchRule classes_annotated_with_DomainObject_are_also_annotated_with_DomainObjectLayout =
+      ArchitectureClassRules.classes_annotated_with_DomainObject_must_also_be_annotated_with_DomainObjectLayout(); // <.>
+----
+
+<.> the modules of the application to be scanned
+<.> xxx
+<.> xxx
+<.> xxx
