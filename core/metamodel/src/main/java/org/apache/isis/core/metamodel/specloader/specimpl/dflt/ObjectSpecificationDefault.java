@@ -285,13 +285,7 @@ implements FacetHolder {
         }
 
         val member = membersByMethod.get(method);
-        if(member==null) {
-            // also search in super (effectively recursive)
-            return Optional.ofNullable(superclass())
-                    .flatMap(superSpec->superSpec.getMember(method));
-        }
-
-        return Optional.of(member);
+        return Optional.ofNullable(member);
     }
 
     private Map<Method, ObjectMember> catalogueMembers() {

@@ -32,6 +32,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Spliterator;
@@ -571,9 +572,17 @@ public final class _Reflect {
 
         return streamTypeHierarchy(syntheticMethod.getDeclaringClass(), InterfacePolicy.INCLUDE)
         .flatMap(type->_NullSafe.stream(type.getDeclaredMethods()))
-        .filter(method->syntheticMethod.getName().equals(method.getName()))
+        .filter(methodMatcherOnNameAndSignature(syntheticMethod))
         .filter(method->!method.isSynthetic())
         .findFirst();
+    }
+
+    private static Predicate<Method> methodMatcherOnNameAndSignature(final @NonNull Method ref) {
+        val refSignature = ref.getParameterTypes();
+        return other->
+            (!ref.getName().equals(other.getName()))
+            ? false
+            : Arrays.equals(refSignature, other.getParameterTypes());
     }
 
 
