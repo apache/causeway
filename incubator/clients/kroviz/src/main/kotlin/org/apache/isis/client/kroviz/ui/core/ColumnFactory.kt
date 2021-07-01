@@ -69,18 +69,22 @@ class ColumnFactory {
             columns.add(icon)
         }
 
-        val propertyLabels = displayCollection.propertyDescriptionList
+        val propertyLabels = displayCollection.properties.list
         for (pl in propertyLabels) {
-            val id = pl.key
-            val friendlyName = pl.value
-            var cd = ColumnDefinition<Exposer>(
-                    title = friendlyName,
-                    field = id,
-                    headerFilter = Editor.INPUT)
-            if (id == "object") {
-                cd = buildLink()
+            console.log("[CF.buildColumns]")
+            console.log(pl.hidden())
+            if (!pl.hidden()) {
+                val id = pl.key
+                val friendlyName = pl.friendlyName
+                var cd = ColumnDefinition<Exposer>(
+                        title = friendlyName,
+                        field = id,
+                        headerFilter = Editor.INPUT)
+                if (id == "object") {
+                    cd = buildLink()
+                }
+                columns.add(cd)
             }
-            columns.add(cd)
         }
         return columns
     }

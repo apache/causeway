@@ -25,17 +25,17 @@ import org.w3c.dom.asList
 //IMPROVE class differs in many aspects from org.ro.to.Property - to be refactored?
 class Property(node: Node) {
     var id: String
+    var named = ""
     var link: Link? = null
     var hidden: String = "" // USE ENUM Where? = null
     var typicalLength: Int = 0
     var multiLine: Int = 1
     var describedAs: String? = null
-    var named = ""
     lateinit var action: Action
 
     init {
         val dn = node.asDynamic()
-        id = dn.getAttribute("hidden")
+        hidden = dn.getAttribute("hidden")
         id = dn.getAttribute("id") as String
         typicalLength = dn.getAttribute("typicalLength")
         multiLine = dn.getAttribute("multiLine")

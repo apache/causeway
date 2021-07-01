@@ -21,7 +21,6 @@ package org.apache.isis.client.kroviz.core.model
 import org.apache.isis.client.kroviz.layout.Layout
 import org.apache.isis.client.kroviz.layout.PropertyLt
 import org.apache.isis.client.kroviz.layout.RowLt
-import org.apache.isis.client.kroviz.to.Extensions
 import org.apache.isis.client.kroviz.to.Property
 import org.apache.isis.client.kroviz.to.bs3.Grid
 
@@ -29,40 +28,18 @@ abstract class DisplayModelWithLayout : DisplayModel() {
 
     var layout: Layout? = null
     var grid: Grid? = null
-    var propertyDescriptionList = mutableMapOf<String, String>()
-    var propertyList = mutableListOf<Property>()
+    var propertyDescriptionList = mutableListOf<Property>()
     var propertyLayoutList = mutableListOf<PropertyLt>()
+    val properties = Properties()
 
     override fun canBeDisplayed(): Boolean {
-//        testPropertyNamesMatch()
         return when {
             isRendered -> false
             layout == null -> false
             grid == null -> false
-            else -> {
-                val pls = propertyLayoutList.size
-                val pds = propertyDescriptionList.size
-                val descriptionsComplete = pds >= pls
-                descriptionsComplete
-            }
+            propertyDescriptionList.isEmpty() -> false
+            else -> true
         }
-    }
-
-    /*
-    check that property names match in:
-    * propertyList
-    * propertyLayoutList
-    * propertyDescriptionList
-     */
-    fun testPropertyNamesMatch() {
-        val ps = propertyList.size
-        val pls = propertyLayoutList.size
-        val pds = propertyDescriptionList.size
-        val sizeOK = (ps >= pds) && (pds >= pls)
-        console.log("[DMWL.testPropertyNamesMatch] $sizeOK")
-        console.log(propertyList)
-        console.log(propertyLayoutList)
-        console.log(propertyDescriptionList)
     }
 
     fun addLayout(layout: Layout) {
@@ -83,6 +60,7 @@ abstract class DisplayModelWithLayout : DisplayModel() {
                 console.log("[DMWL.initLayout4Row]")
                 console.log(fs.property)
                 propertyLayoutList.addAll(fs.property)
+                properties.addAllPropertyLayout(fs.property)
             }
             c.tabGroup.forEach { tg ->
                 tg.tab.forEach { t ->
@@ -95,14 +73,12 @@ abstract class DisplayModelWithLayout : DisplayModel() {
     }
 
     fun addPropertyDescription(p: Property) {
-        val id = p.id
-        val e: Extensions = p.extensions!!
-        val friendlyName = e.friendlyName
-        propertyDescriptionList.put(id, friendlyName)
+        propertyDescriptionList.add(p)
+        properties.addPropertyDescription(p)
     }
 
     fun addProperty(property: Property) {
-        propertyList.add(property)
+        properties.addProperty(property)
     }
 
 }
