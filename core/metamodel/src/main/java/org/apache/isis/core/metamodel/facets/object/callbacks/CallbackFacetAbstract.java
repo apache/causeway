@@ -26,6 +26,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -42,7 +43,7 @@ implements CallbackFacet {
     private final List<Method> methods = _Lists.newConcurrentList();
     private final _Lazy<Can<Method>> methodsUnmodifiable = _Lazy.threadSafe(()->Can.ofCollection(methods));
 
-    public CallbackFacetAbstract(final Class<? extends Facet> facetType, final FacetHolder holder) {
+    protected CallbackFacetAbstract(final Class<? extends Facet> facetType, final FacetHolder holder) {
         super(facetType, holder);
     }
 
@@ -57,7 +58,9 @@ implements CallbackFacet {
             throw _Exceptions
                 .illegalState("getMethods() was already called, can no longer add any method: %s", method);
         }
-        methods.add(method);
+        _Reflect
+        .lookupRegularMethodForSynthetic(method)
+        .ifPresent(methods::add);
     }
 
     @Override

@@ -40,7 +40,7 @@ implements ImperativeFacet {
 
     public PropertyInitializationFacetViaSetterMethod(final Method method, final FacetHolder holder) {
         super(holder);
-        this.methods = Can.ofSingleton(method);
+        this.methods = ImperativeFacet.singleMethod(method);
     }
 
     @Override

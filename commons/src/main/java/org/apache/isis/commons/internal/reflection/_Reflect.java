@@ -33,6 +33,7 @@ import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.Consumer;
@@ -557,6 +558,22 @@ public final class _Reflect {
             return ex->ex.getParameterTypes()[paramIndex].isAssignableFrom(value.getClass());
         }
 
+    }
+
+    /**
+     * Lookup regular method for a synthetic one in the method's declaring class type-hierarchy.
+     */
+    public static Optional<Method> lookupRegularMethodForSynthetic(final @NonNull Method syntheticMethod) {
+
+        if(!syntheticMethod.isSynthetic()) {
+            return Optional.of(syntheticMethod);
+        }
+
+        return streamTypeHierarchy(syntheticMethod.getDeclaringClass(), InterfacePolicy.INCLUDE)
+        .flatMap(type->_NullSafe.stream(type.getDeclaredMethods()))
+        .filter(method->syntheticMethod.getName().equals(method.getName()))
+        .filter(method->!method.isSynthetic())
+        .findFirst();
     }
 
 

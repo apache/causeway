@@ -46,7 +46,7 @@ implements ImperativeFacet {
     public ValidateObjectFacetMethod(final Method method, final TranslationService translationService,
     		final TranslationContext translationContext, final FacetHolder holder) {
         super(holder);
-        this.methods = Can.ofSingleton(method);
+        this.methods = ImperativeFacet.singleMethod(method);
         this.translationService = translationService;
         this.translationContext = translationContext;
     }

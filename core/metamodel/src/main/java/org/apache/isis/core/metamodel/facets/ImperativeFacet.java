@@ -25,10 +25,13 @@ import java.util.stream.Collectors;
 
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -132,6 +135,12 @@ public interface ImperativeFacet extends Facet {
         throw new IllegalArgumentException(member.getFeatureIdentifier().toString() +  ": unable to determine intent of " + method.getName());
     }
 
+    public static Can<Method> singleMethod(final @NonNull Method method) {
+        return _Reflect
+                .lookupRegularMethodForSynthetic(method)
+                .map(Can::ofSingleton)
+                .orElseThrow(()->_Exceptions.illegalArgument("cannot resolve syntetic method %s to a regular one", method));
+    }
 
 
 

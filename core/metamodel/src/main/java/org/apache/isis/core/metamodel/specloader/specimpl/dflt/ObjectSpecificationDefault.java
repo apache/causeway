@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.specloader.specimpl.dflt;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -33,6 +34,7 @@ import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -281,13 +283,22 @@ implements FacetHolder {
         if (membersByMethod == null) {
             this.membersByMethod = catalogueMembers();
         }
-        return Optional.ofNullable(membersByMethod.get(method));
+
+        val member = membersByMethod.get(method);
+        if(member==null) {
+            // also search in super (effectively recursive)
+            return Optional.ofNullable(superclass())
+                    .flatMap(superSpec->superSpec.getMember(method));
+        }
+
+        return Optional.of(member);
     }
 
     private Map<Method, ObjectMember> catalogueMembers() {
         val membersByMethod = _Maps.<Method, ObjectMember>newHashMap();
         cataloguePropertiesAndCollections(membersByMethod::put);
         catalogueActions(membersByMethod::put);
+        postprocessSyntheticMembers(membersByMethod);
         return membersByMethod;
     }
 
@@ -306,8 +317,32 @@ implements FacetHolder {
             userAction.streamFacets(ImperativeFacet.class)
                 .map(ImperativeFacet::getMethods)
                 .flatMap(Can::stream)
-                .forEach(imperativeFacetMethod->onMember.accept(imperativeFacetMethod, userAction)));
+                .forEach(imperativeFacetMethod->
+                onMember.accept(imperativeFacetMethod, userAction)));
     }
+
+    /**
+     * for any synthetic method also add an entry with its regular method,
+     * as found in the method's declaring class type-hierarchy
+     */
+    private void postprocessSyntheticMembers(HashMap<Method, ObjectMember> membersByMethod) {
+        val syntheticEntries = Can.ofStream(
+            membersByMethod
+            .entrySet()
+            .stream()
+            .filter(entry->entry.getKey().isSynthetic()));
+
+        syntheticEntries
+        .forEach(entry->{
+            val objectMember = entry.getValue();
+            val syntheticMethod = entry.getKey();
+            _Reflect
+            .lookupRegularMethodForSynthetic(syntheticMethod)
+            .ifPresent(regularMethod->
+                membersByMethod.computeIfAbsent(regularMethod, key->objectMember));
+        });
+    }
+
 
     // -- toString
 

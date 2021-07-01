@@ -48,7 +48,7 @@ implements ImperativeFacet {
             final FacetHolder holder) {
 
         super(typeSpec, holder);
-        this.methods = Can.ofSingleton(method);
+        this.methods = ImperativeFacet.singleMethod(method);
     }
 
     @Override

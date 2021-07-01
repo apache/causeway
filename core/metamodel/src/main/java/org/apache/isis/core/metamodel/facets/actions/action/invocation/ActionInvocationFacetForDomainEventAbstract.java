@@ -74,7 +74,7 @@ implements ImperativeFacet {
 
         super(holder);
         this.eventType = eventType;
-        this.methods = Can.ofSingleton(method);
+        this.methods = ImperativeFacet.singleMethod(method);
         this.onType = onType;
         this.returnType = returnType;
         this.serviceRegistry = getServiceRegistry();

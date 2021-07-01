@@ -53,7 +53,7 @@ implements ImperativeFacet {
             final FacetHolder holder) {
 
         super(holder);
-        this.methods = Can.ofSingleton(method);
+        this.methods = ImperativeFacet.singleMethod(method);
         this.choicesType = choicesType;
         this.ppmFactory = ppmFactory;
     }

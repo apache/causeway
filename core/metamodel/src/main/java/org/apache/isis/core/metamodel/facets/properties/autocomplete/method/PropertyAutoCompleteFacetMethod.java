@@ -48,7 +48,7 @@ implements ImperativeFacet {
             final Class<?> choicesClass,
             final FacetHolder holder) {
         super(holder);
-        this.methods = Can.ofSingleton(method);
+        this.methods = ImperativeFacet.singleMethod(method);
         this.choicesClass = choicesClass;
         this.minLength = MinLengthUtil.determineMinLength(method);
     }

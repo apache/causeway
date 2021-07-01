@@ -39,7 +39,7 @@ implements ImperativeFacet {
 
     public TitleFacetInferredFromToStringMethod(final Method method, final FacetHolder holder) {
         super(holder, Precedence.INFERRED);
-        this.methods = Can.ofSingleton(method);
+        this.methods = ImperativeFacet.singleMethod(method);
     }
 
     @Override
