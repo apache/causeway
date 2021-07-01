@@ -125,9 +125,6 @@ extends InteractionTestAbstract {
         assertTrue(objectSpec1.isMixin());
         assertTrue(objectSpec2.isMixin());
 
-        assertEquals("Succeeded", objectSpec1.getSingularName());
-        assertEquals("Failed", objectSpec2.getSingularName());
-
         val objectSpec = specificationLoader.specForType(Task.class).get();
 
         assertEquals(

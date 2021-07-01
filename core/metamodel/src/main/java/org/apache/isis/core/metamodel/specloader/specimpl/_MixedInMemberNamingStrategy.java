@@ -50,8 +50,7 @@ class _MixedInMemberNamingStrategy {
     }
 
     private static String suffix(final ObjectActionDefault mixinActionAsRegular) {
-        // getSingularName() implicitly uses an ObjectNamedFacet, which supports translation
-        return deriveMemberNameFrom(mixinActionAsRegular.getOnType().getSingularName());
+        return deriveMemberNameFrom(mixinActionAsRegular.getOnType().getFeatureIdentifier().getClassNaturalName());
     }
 
     // subject of JUnit testing

@@ -53,19 +53,6 @@ extends ObjectSpecificationPostProcessorAbstract {
 
         if(!(objectSpecification.isEntityOrViewModelOrAbstract()
                 || objectSpecification.isManagedBean())) {
-
-            //TODO[ISIS-1720] remove this requirement ...
-            // installed, so a mixin's object spec supports getSingularName() which is used to infer a
-            // (translated friendly) member name for mixin contributed members
-            // see ObjectMemberAbstract#determineNameFrom(final ObjectAction mixinAction)
-            if(objectSpecification.isMixin()) {
-                FacetUtil.addFacet(
-                        new ObjectNamedFacetSynthesized(
-                                nounFormsForMixin(objectSpecification),
-                                objectSpecification)
-                        );
-            }
-
             return;
         }
 
@@ -127,13 +114,6 @@ extends ObjectSpecificationPostProcessorAbstract {
 
     private String getPluralFallbackNoun(final String singular) {
         return StringExtensions.asPluralName(singular);
-    }
-
-    private NounForms nounFormsForMixin(ObjectSpecification mixinSpec) {
-        return NounForms.builder()
-            .singular(mixinSpec.getFeatureIdentifier().getClassNaturalName())
-            .plural("") // not expected to be used
-            .build();
     }
 
 }
