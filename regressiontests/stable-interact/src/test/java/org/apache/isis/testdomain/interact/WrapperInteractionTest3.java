@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -144,7 +143,7 @@ extends InteractionTestAbstract {
                 .count());
     }
 
-    @Test @Disabled("TODO[ISIS-1720]")
+    @Test
     void mixinActionValidation() {
 
         final Task task = new Task();

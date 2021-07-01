@@ -30,6 +30,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
@@ -40,6 +42,7 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.reflection._Annotations;
+import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.commons.CanBeVoid;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
 import org.apache.isis.core.metamodel.commons.ToString;
@@ -379,10 +382,16 @@ implements HasMetaModelContext {
             return null;
         }
 
-        // build action
-        return createActionFacetedMethod(actionMethod);
+        // build action (first convert any synthetic method to a regular one)
+
+        return _Reflect
+        .lookupRegularMethodForSynthetic(actionMethod)
+        .map(this::createActionFacetedMethod)
+        .filter(_NullSafe::isPresent)
+        .orElse(null);
     }
 
+    @Nullable
     private FacetedMethod createActionFacetedMethod(
             final Method actionMethod) {
 

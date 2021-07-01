@@ -58,7 +58,7 @@ extends FacetFactoryAbstract {
         val parameter = processParameterContext.getParameter();
         val parameterName = parameter.getName();
 
-        // if not compiled with -parameters flag, then ignore
+        // if not compiled with -parameters flag or synthetic, then ignore
         val argXMatcher = argXPattern.matcher(parameterName);
         if (argXMatcher.matches()){
             return;
