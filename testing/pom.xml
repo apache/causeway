@@ -65,6 +65,12 @@
 
 			<dependency>
 				<groupId>org.apache.isis.testing</groupId>
+				<artifactId>isis-testing-archtestsupport-applib</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.testing</groupId>
 				<artifactId>isis-testing-integtestsupport-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
@@ -114,6 +120,7 @@
 				<artifactId>isis-testing-unittestsupport-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
+
 
 			<!-- dependencies -->
 			<dependency>
