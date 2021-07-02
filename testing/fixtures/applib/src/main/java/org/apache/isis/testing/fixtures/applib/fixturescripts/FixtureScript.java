@@ -866,10 +866,10 @@ public abstract class FixtureScript {
     }
 
     /**
-     * Convenience method, {@link #wrap(Object) wraps} a {@link #mixin(Class, Object) mixin}.
+     * Convenience method, simply delegates to {@link WrapperFactory#wrapMixin(Class, Object)}.
      */
     protected <T> T wrapMixin(final Class<T> mixinClass, final Object mixedIn) {
-        return wrap(mixin(mixinClass, mixedIn));
+        return wrapperFactory.wrapMixin(mixinClass, mixedIn);
     }
 
     /**
