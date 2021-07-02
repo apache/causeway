@@ -104,15 +104,21 @@ public enum RepresentationTypeSimplifiedV2 {
 
     // -- HELPER
 
-    private static String trimFirstAndLastCharacter(String s) {
+    private static String trimQuotesIfAny(String s) {
         if(s.length()<2) {
             return s;
         }
-        return s.substring(1, s.length()-1);
+        if(s.charAt(0) == '"'
+                || s.charAt(0) == '\'') {
+            // just assuming we have quotes at the end as well
+            return s.substring(1, s.length()-1);
+        }
+        return s;
     }
 
     private static Optional<String> extractReprType(final @NonNull Stream<String> stringStream) {
         return stringStream
+                .peek(System.out::println)
         .map(String::trim)
         .filter(_Strings::isNotEmpty)
         .filter(s->s.startsWith("repr-type"))
@@ -121,7 +127,7 @@ public enum RepresentationTypeSimplifiedV2 {
         .map(KeyValuePair::getValue)
         .filter(_Strings::isNotEmpty)
         .findAny()
-        .map(RepresentationTypeSimplifiedV2::trimFirstAndLastCharacter);
+        .map(RepresentationTypeSimplifiedV2::trimQuotesIfAny);
     }
 
 
