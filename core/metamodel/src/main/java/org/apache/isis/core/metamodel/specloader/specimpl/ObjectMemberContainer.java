@@ -134,17 +134,17 @@ implements
     }
 
     @Override
-    public Stream<ObjectAssociation> streamAssociations(MixedIn contributed) {
+    public Stream<ObjectAssociation> streamAssociations(MixedIn mixedIn) {
 
         if(isTypeHierarchyRoot()) {
-            return streamDeclaredAssociations(contributed); // stop going deeper
+            return streamDeclaredAssociations(mixedIn); // stop going deeper
         }
 
         val ids = _Sets.<String>newHashSet();
 
         return Stream.concat(
-                streamDeclaredAssociations(contributed),
-                superclass().streamAssociations(contributed)
+                streamDeclaredAssociations(mixedIn),
+                superclass().streamAssociations(mixedIn)
         )
         .filter(association->ids.add(association.getId())); // ensure we don't emit duplicates
     }

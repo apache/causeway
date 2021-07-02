@@ -53,10 +53,10 @@ import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.services.command.CommandDtoFactory;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 
@@ -66,25 +66,11 @@ implements
     HasMetaModelContext,
     HasFacetHolder {
 
-    protected ObjectSpecification specificationOf(final Class<?> type) {
-        return type != null
-                ? getMetaModelContext().getSpecificationLoader().loadSpecification(type)
-                : null;
-    }
+    @Getter(onMethod_ = {@Override}) private final @NonNull Identifier featureIdentifier;
+    @Getter(onMethod_ = {@Override}) private final @NonNull FeatureType featureType;
+    @Getter private final @NonNull FacetedMethod facetedMethod;
 
-    /**
-     * To be overridden (only) by mixed in members!
-     * @see MixedInMember
-     */
-    protected InteractionHead headFor(final ManagedObject ownerAdapter) {
-        return InteractionHead.regular(ownerAdapter);
-    }
-
-    // -- fields
-
-    private final Identifier featureIdentifier;
-    private final FacetedMethod facetedMethod;
-    private final FeatureType featureType;
+    // -- CONSTRUCTOR
 
     protected ObjectMemberAbstract(
             final Identifier featureIdentifier,
@@ -99,36 +85,27 @@ implements
         }
     }
 
-    // -- Identifiers
+    // -- IDENTIFIERS
 
     @Override
     public final String getId() {
         return getFeatureIdentifier().getMemberLogicalName();
     }
 
-    @Override
-    public final Identifier getFeatureIdentifier() {
-        return featureIdentifier;
-    }
-
-    @Override
-    public FeatureType getFeatureType() {
-        return featureType;
-    }
-
-    // -- Facets
+    // -- INTERACTION HEAD
 
     /**
-     * Not API.
+     * To be overridden (only) by mixed in members!
+     * @see MixedInMember
      */
-    public FacetedMethod getFacetedMethod() {
-        return facetedMethod;
+    protected InteractionHead headFor(final ManagedObject ownerAdapter) {
+        return InteractionHead.regular(ownerAdapter);
     }
 
     // -- Name, Description, Help (convenience for facets)
 
     @Override
-    public String getFriendlyName(final Supplier<ManagedObject> domainObjectProvider) {
+    public final String getFriendlyName(final Supplier<ManagedObject> domainObjectProvider) {
 
         val namedFacet = getFacet(MemberNamedFacet.class);
 
@@ -143,7 +120,7 @@ implements
     }
 
     @Override
-    public Optional<String> getStaticFriendlyName() {
+    public final Optional<String> getStaticFriendlyName() {
         return lookupFacet(MemberNamedFacet.class)
         .map(MemberNamedFacet::getSpecialization)
         .flatMap(specialization->specialization
@@ -154,7 +131,7 @@ implements
 
 
     @Override
-    public String getDescription(final Supplier<ManagedObject> domainObjectProvider) {
+    public final String getDescription(final Supplier<ManagedObject> domainObjectProvider) {
 
         return lookupFacet(MemberDescribedFacet.class)
         .map(MemberDescribedFacet::getSpecialization)
@@ -165,7 +142,7 @@ implements
     }
 
     @Override
-    public Optional<String> getStaticDescription() {
+    public final Optional<String> getStaticDescription() {
         return lookupFacet(MemberDescribedFacet.class)
                 .map(MemberDescribedFacet::getSpecialization)
                 .flatMap(specialization->specialization
@@ -176,7 +153,7 @@ implements
 
 
     @Override
-    public String getHelp() {
+    public final String getHelp() {
         final HelpFacet facet = getFacet(HelpFacet.class);
         return facet.value();
     }
@@ -253,22 +230,22 @@ implements
     // -- PREDICATES
 
     @Override
-    public boolean isAction() {
+    public final boolean isAction() {
         return featureType.isAction();
     }
 
     @Override
-    public boolean isPropertyOrCollection() {
+    public final boolean isPropertyOrCollection() {
         return featureType.isPropertyOrCollection();
     }
 
     @Override
-    public boolean isOneToManyAssociation() {
+    public final boolean isOneToManyAssociation() {
         return featureType.isCollection();
     }
 
     @Override
-    public boolean isOneToOneAssociation() {
+    public final boolean isOneToOneAssociation() {
         return featureType.isProperty();
     }
 

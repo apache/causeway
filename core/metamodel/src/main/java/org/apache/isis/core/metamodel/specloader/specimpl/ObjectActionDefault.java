@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
 
@@ -179,7 +180,8 @@ implements ObjectAction {
         for (int paramNum = 0; paramNum < parameterCount; paramNum++) {
             final FacetedMethodParameter paramPeer = paramPeers.get(paramNum);
 
-            super.specificationOf(paramPeer.getType()); // preload
+            Optional.ofNullable(paramPeer.getType())
+            .ifPresent(getSpecificationLoader()::loadSpecification); // preload
 
             // previously we threw an exception here if the specification represented a collection.  No longer!
             final ObjectActionParameter parameter =

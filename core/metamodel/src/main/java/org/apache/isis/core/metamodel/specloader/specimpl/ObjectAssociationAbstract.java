@@ -88,11 +88,6 @@ implements ObjectAssociation {
     @Override
     public abstract boolean isEmpty(final ManagedObject adapter, final InteractionInitiatedBy interactionInitiatedBy);
 
-    @Override
-    public boolean isOneToOneAssociation() {
-        return !isOneToManyAssociation();
-    }
-
     // -- CANONICAL NAMING
 
     @Override

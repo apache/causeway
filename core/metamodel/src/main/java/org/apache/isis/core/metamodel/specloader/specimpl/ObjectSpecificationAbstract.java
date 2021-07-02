@@ -218,37 +218,30 @@ implements ObjectSpecification {
 
     // -- Stuff immediately derivable from class
     @Override
-    public FeatureType getFeatureType() {
+    public final FeatureType getFeatureType() {
         return FeatureType.OBJECT;
     }
 
     @Override
-    public LogicalType getLogicalType() {
+    public final LogicalType getLogicalType() {
         return logicalTypeLazy.get();
     }
 
     private LogicalType lookupLogicalType() {
         val logicalTypeFacet = getFacet(LogicalTypeFacet.class);
         if(logicalTypeFacet == null) {
-            throw new IllegalStateException("could not find an ObjectTypeFacet for " + this.getFullIdentifier());
+            throw new IllegalStateException("could not find an LogicalTypeFacet for " + this.getFullIdentifier());
         }
         return logicalTypeFacet.getLogicalType();
     }
 
-    /**
-     * As provided explicitly within the constructor.
-     *
-     * <p>
-     * Not API, but <tt>public</tt> so that {@link FacetedMethodsBuilder} can
-     * call it.
-     */
     @Override
-    public Class<?> getCorrespondingClass() {
+    public final Class<?> getCorrespondingClass() {
         return correspondingClass;
     }
 
     @Override
-    public String getShortIdentifier() {
+    public final String getShortIdentifier() {
         return shortName;
     }
 
@@ -257,7 +250,7 @@ implements ObjectSpecification {
      * {@link #getCorrespondingClass() class}.
      */
     @Override
-    public String getFullIdentifier() {
+    public final String getFullIdentifier() {
         return fullName;
     }
 
