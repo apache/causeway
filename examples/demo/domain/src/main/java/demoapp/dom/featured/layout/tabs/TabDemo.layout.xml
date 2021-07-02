@@ -43,12 +43,26 @@
 				<bs3:tab name="Tab 2">
 					<bs3:row>
 						<bs3:col span="12">
-							<cpt:fieldSet id="fs2">
+							<cpt:fieldSet id="fs2"> <!-- unnamed fieldset -->
 								<cpt:property id="field2"/>
 							</cpt:fieldSet>
 						</bs3:col>
 					</bs3:row>
 				</bs3:tab>
+				
+				<bs3:tab name="Tab 3">
+					<bs3:row>
+						<bs3:col span="12">
+							<cpt:fieldSet id="fs3" name="Fieldset 3">
+								<cpt:property id="field3"/>
+							</cpt:fieldSet>
+							<cpt:fieldSet id="fs4" name="Fieldset 4">
+								<cpt:property id="field4"/>
+							</cpt:fieldSet>
+						</bs3:col>
+					</bs3:row>
+				</bs3:tab>
+				
 			</bs3:tabGroup>
         
 <!--         	<cpt:fieldSet name="Tabs" id="tabs"> -->

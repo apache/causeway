@@ -25,12 +25,13 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
-
-import lombok.Getter;
-import lombok.Setter;
+import org.apache.isis.applib.annotation.Property;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import lombok.Getter;
+import lombok.Setter;
 
 @XmlRootElement(name = "Demo")
 @XmlType
@@ -64,9 +65,15 @@ public class TabDemo implements HasAsciiDocDescription {
         return hidden;
     }
 
-    // -- DEMO FIELD 2
+    // -- DEMO FIELD 2-4
 
     @Getter @Setter private String field2 = "field 2";
+
+    @Property(editing = Editing.ENABLED)
+    @Getter @Setter private String field3 = "field 3";
+
+    @Property(editing = Editing.ENABLED)
+    @Getter @Setter private String field4 = "field 4";
 
     // ---
 
