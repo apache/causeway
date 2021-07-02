@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.wicket.ui.components.entity.icontitle;
 
+import java.util.Optional;
+
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -28,9 +30,11 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ResourceReference;
 
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
 import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
@@ -133,10 +137,11 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
             }
 
             final String title = determineTitle();
-            this.label = newLabel(ID_ENTITY_TITLE, titleAbbreviated(title));
+            this.label = newLabel(ID_ENTITY_TITLE, title);
             link.addOrReplace(this.label);
 
-            String entityTypeName = adapterIfAny.getSpecification().getSingularName();
+            String entityTypeName = determineFriendlyType() // from actual underlying model
+                    .orElseGet(adapterIfAny.getSpecification()::getSingularName); // not sure if this code path is ever reached
             Tooltips.addTooltip(link, entityTypeName, title);
         }
 
@@ -154,7 +159,9 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
             val projectionFacet = entityModel.getTypeOfSpecification().getFacet(ProjectionFacet.class);
 
             val redirectToAdapter =
-                    projectionFacet != null ? projectionFacet.projected(targetAdapter) : targetAdapter;
+                    projectionFacet != null
+                        ? projectionFacet.projected(targetAdapter)
+                        : targetAdapter;
 
                     redirectToModel = EntityModel.ofAdapter(super.getCommonContext(), redirectToAdapter);
 
@@ -190,10 +197,18 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
         return abbreviated(titleString, maxTitleLength);
     }
 
+    private Optional<String> determineFriendlyType() {
+        val domainObject = getModel().getObject();
+        return ManagedObjects.isSpecified(domainObject)
+                ? _Strings.nonEmpty(domainObject.getSpecification().getSingularName())
+                : Optional.empty();
+    }
+
     private String determineTitle() {
-        ObjectAdapterModel model = getModel();
-        val adapter = model.getObject();
-        return adapter != null ? adapter.titleString(this::isContextAdapter) : "(no object)";
+        val domainObject = getModel().getObject();
+        return domainObject != null
+                ? titleAbbreviated(domainObject.titleString(this::isContextAdapter))
+                : "(no object)";
     }
 
     private int abbreviateTo(ObjectAdapterModel model, String titleString) {
