@@ -27,7 +27,6 @@ import org.apache.isis.client.kroviz.to.bs3.Col
 import org.apache.isis.client.kroviz.ui.core.MenuFactory
 import org.apache.isis.client.kroviz.ui.core.RoDisplay
 import org.apache.isis.client.kroviz.ui.core.RoTable
-import org.apache.isis.client.kroviz.utils.Utils
 
 class ColBuilder : UiBuilder() {
 
@@ -47,8 +46,9 @@ class ColBuilder : UiBuilder() {
             val fsCpt = FieldSetBuilder().create(fs, tObject, dsp)!!
             var legend = fs.name
             if (legend.trim().length == 0) {
-                legend = Utils.enCamel(fs.id) //IMPROVE uppercase firstchar
+                legend = fs.id
             }
+            legend = legend.capitalize()
             val fsPanel = FieldsetPanel(legend = legend).add(fsCpt)
             val tto = TooltipOptions(title = fs.id)
             fsPanel.enableTooltip(tto)
@@ -67,7 +67,7 @@ class ColBuilder : UiBuilder() {
             console.log(collectionDM.grid)
             console.log(collectionDM.layout)
             val tblCpt = RoTable(collectionDM)
-            val fsPanel = FieldsetPanel(legend = key).add(tblCpt)
+            val fsPanel = FieldsetPanel(legend = key.capitalize()).add(tblCpt)
             panel.add(fsPanel)
             collectionDM.isRendered = true
         }
