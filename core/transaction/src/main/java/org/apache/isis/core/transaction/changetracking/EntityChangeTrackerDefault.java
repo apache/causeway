@@ -32,6 +32,7 @@ import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.EntityChangeKind;
@@ -174,7 +175,7 @@ implements
      * TRANSACTION END BOUNDARY
      * @apiNote intended to be called during before transaction completion by the framework internally
      */
-    @EventListener(value = TransactionBeforeCompletionEvent.class)
+    @EventListener(value = TransactionBeforeCompletionEvent.class) @Order(PriorityPrecedence.LATE)
     public void onTransactionCompleting(TransactionBeforeCompletionEvent event) {
         try {
             doPublish();

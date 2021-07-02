@@ -49,7 +49,7 @@ class InteractionScope implements Scope, InteractionScopeLifecycleHandler {
         Object instance;
         Runnable destructionCallback;
         void preDestroy() {
-            log.debug("destroy isis-session scoped {}", name);
+            log.debug("destroy isis-interaction scoped {}", name);
             if(destructionCallback!=null) {
                 destructionCallback.run();
             }
@@ -81,7 +81,7 @@ class InteractionScope implements Scope, InteractionScopeLifecycleHandler {
         val newScopedObject = ScopedObject.of(name);
         scopedObjects.get().put(name, newScopedObject); // just set a stub with a name only
 
-        log.debug("create new isis-session scoped {}", name);
+        log.debug("create new isis-interaction scoped {}", name);
         newScopedObject.setInstance(objectFactory.getObject()); // triggers call to registerDestructionCallback
 
         return newScopedObject.getInstance();
