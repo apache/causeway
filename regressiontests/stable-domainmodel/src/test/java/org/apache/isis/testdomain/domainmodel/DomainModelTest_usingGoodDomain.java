@@ -37,6 +37,7 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
@@ -47,6 +48,7 @@ import org.apache.isis.core.metamodel.postprocessors.collparam.ActionParameterDe
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.schema.metamodel.v2.DomainClassDto;
 import org.apache.isis.testdomain.conf.Configuration_headless;
@@ -61,12 +63,14 @@ import org.apache.isis.testdomain.model.good.ProperMemberInheritanceInterface;
 import org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingAbstract;
 import org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingInterface;
 import org.apache.isis.testdomain.model.good.ProperMemberSupport;
+import org.apache.isis.testdomain.model.good.ProperServiceWithMixin;
 import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.val;
 
@@ -395,6 +399,29 @@ class DomainModelTest_usingGoodDomain {
 
         assertEquals(named, member.getFriendlyName(()->sampleObject));
         assertEquals(described, member.getDescription(()->sampleObject));
+    }
+
+    @Test
+    void mixinsOnDomainServices_shouldBeAllowed() {
+
+        val objectSpec = specificationLoader.specForTypeElseFail(ProperServiceWithMixin.class);
+
+        val mixinSpec = specificationLoader.specForTypeElseFail(ProperServiceWithMixin.Now.class);
+
+        assertTrue(mixinSpec.isMixin());
+
+        assertEquals(
+                1L,
+                objectSpec.streamRuntimeActions(MixedIn.INCLUDED)
+                .filter(ObjectAction::isMixedIn)
+                .peek(act->{
+                    //System.out.println("act: " + act);
+                    val memberNamedFacet = act.getFacet(MemberNamedFacet.class);
+                    assertNotNull(memberNamedFacet);
+                    assertTrue(memberNamedFacet.getSpecialization().isLeft());
+                })
+                .count());
+
     }
 
     // -- HELPER

@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 
 /**
  * Top level object classification.
- * 
+ *
  * @since 2.0 {@index}
  */
 public enum BeanSort {
@@ -73,17 +73,21 @@ public enum BeanSort {
      */
     COLLECTION,
     /**
-     * A non concrete type, that is a placeholder for a its concrete implementer. 
+     * A non concrete type, that is a placeholder for a its concrete implementer.
      */
     ABSTRACT,
     /**
-     * Type must not be added to the meta-model, eg. by means of 
+     * Type must not be added to the meta-model, eg. by means of
      * {@link Vetoed}, {@link Profile} or {@link Programmatic}
      */
-    VETOED, 
+    VETOED,
     UNKNOWN;
 
     // -- SIMPLE PREDICATES
+
+    public boolean isManagedBeanContributing() {
+        return this == MANAGED_BEAN_CONTRIBUTING;
+    }
 
     public boolean isManagedBean() {
         return this == MANAGED_BEAN_CONTRIBUTING || this == MANAGED_BEAN_NOT_CONTRIBUTING;
@@ -108,15 +112,15 @@ public enum BeanSort {
     public boolean isEntity() {
         return this == ENTITY;
     }
-    
+
     public boolean isAbstract() {
         return this == ABSTRACT;
     }
-    
+
     public boolean isVetoed() {
         return this == VETOED;
     }
-    
+
     public boolean isUnknown() {
         return this == UNKNOWN;
     }

@@ -23,17 +23,16 @@ import java.util.function.Function;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
 /** package private utility */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-final class Factories {
+@UtilityClass
+class _MixedInMemberFactory {
 
     // -- MIXINS
 
-    static Function<ObjectActionDefault, ObjectActionMixedIn> mixedInAction(
+    Function<ObjectActionDefault, ObjectActionMixedIn> mixedInAction(
             final ObjectSpecification mixinTypeSpec,
             final Class<?> mixinType,
             final String mixinMethodName) {
@@ -42,8 +41,8 @@ final class Factories {
                 mixinType, mixinMethodName, mixinTypeAction, mixinTypeSpec);
     }
 
-    static Function<ObjectActionDefault, ObjectAssociation> mixedInAssociation(
-            final ObjectSpecification mixedInType,
+    Function<ObjectActionDefault, ObjectAssociation> mixedInAssociation(
+            final ObjectSpecification mixinTypeSpec,
             final Class<?> mixinType,
             final String mixinMethodName) {
 
@@ -51,10 +50,10 @@ final class Factories {
             val returnType = mixinAction.getReturnType();
             if (returnType.isNotCollection()) {
                 return new OneToOneAssociationMixedIn(
-                        mixinAction, mixedInType, mixinType, mixinMethodName);
+                        mixinAction, mixinTypeSpec, mixinType, mixinMethodName);
             }
             return new OneToManyAssociationMixedIn(
-                    mixinAction, mixedInType, mixinType, mixinMethodName);
+                    mixinAction, mixinTypeSpec, mixinType, mixinMethodName);
         };
     }
 

@@ -753,7 +753,7 @@ implements ObjectSpecification {
         specification.streamActions(ActionType.ANY, MixedIn.INCLUDED)
         .filter(_SpecPredicates::isMixedInAssociation)
         .map(ObjectActionDefault.class::cast)
-        .map(Factories.mixedInAssociation(this, mixinType, mixinMethodName))
+        .map(_MixedInMemberFactory.mixedInAssociation(this, mixinType, mixinMethodName))
         .peek(facetProcessor::processMemberOrder)
         .forEach(onNewMixedInAssociation);
 
@@ -762,15 +762,9 @@ implements ObjectSpecification {
 
     // -- mixin actions
     /**
-     * All mixed in actions for this spec.
-     * <p>
-     * If this specification represents a service ({@link #isManagedBean()} or a value or
-     * a mixin, then is a no-op.
+     * Creates all mixed in actions for this spec.
      */
     private void createMixedInActions(final Consumer<ObjectAction> onNewMixedInAction) {
-        if (isManagedBean() || isValue() || isMixin()) {
-            return;
-        }
         val mixinTypes = getIsisBeanTypeRegistry().getMixinTypes();
         if(_NullSafe.isEmpty(mixinTypes)) {
             return;
@@ -779,8 +773,6 @@ implements ObjectSpecification {
             forEachMixedInAction(mixinType, onNewMixedInAction);
         }
     }
-
-
 
     private void forEachMixedInAction(
             final Class<?> mixinType,
@@ -804,7 +796,7 @@ implements ObjectSpecification {
         mixinSpec.streamActions(ActionType.ANY, MixedIn.EXCLUDED)
         .filter(_SpecPredicates::isMixedInAction)
         .map(ObjectActionDefault.class::cast)
-        .map(Factories.mixedInAction(this, mixinType, mixinMethodName))
+        .map(_MixedInMemberFactory.mixedInAction(this, mixinType, mixinMethodName))
         .peek(facetProcessor::processMemberOrder)
         .forEach(onNewMixedInAction);
 
@@ -879,7 +871,8 @@ implements ObjectSpecification {
         synchronized (unmodifiableActions) {
             if(!mixedInActionsAdded) {
                 val actions = _Lists.newArrayList(this.objectActions);
-                if (isEntityOrViewModelOrAbstract()) {
+                if (isEntityOrViewModelOrAbstract()
+                        || getBeanSort().isManagedBeanContributing()) {
                     createMixedInActions(actions::add);
                 }
                 sortCacheAndUpdateActions(actions);
