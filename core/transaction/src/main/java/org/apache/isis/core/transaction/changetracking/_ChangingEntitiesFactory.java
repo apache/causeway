@@ -57,7 +57,9 @@ final class _ChangingEntitiesFactory {
                 userName,
                 entityChangeTracker.currentInteraction(),
                 entityChangeTracker.numberEntitiesLoaded(),
-                entityChangeTracker.propertyChangeRecordCount(),
+                // side-effect: it locks the result for this transaction,
+                // such that cannot enlist on top of it
+                entityChangeTracker.snapshotPropertyChangeRecords().size(),
                 changeKindByEnlistedAdapter);
 
         return Optional.of(changingEntities);

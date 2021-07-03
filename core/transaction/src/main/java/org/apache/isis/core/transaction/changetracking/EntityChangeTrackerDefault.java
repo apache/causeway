@@ -147,7 +147,7 @@ implements
         }
     }
 
-    private Set<_PropertyChangeRecord> snapshotPropertyChangeRecords() {
+    Set<_PropertyChangeRecord> snapshotPropertyChangeRecords() {
         // this code path has side-effects, it locks the result for this transaction,
         // such that cannot enlist on top of it
         return entityPropertyChangeRecordsForPublishing.get();
@@ -214,6 +214,20 @@ implements
             final String userName) {
         return _ChangingEntitiesFactory.createChangingEntities(timestamp, userName, this);
     }
+
+    @Override
+    public Can<EntityPropertyChange> getPropertyChanges(
+            final java.sql.Timestamp timestamp,
+            final String userName,
+            final TransactionId txId) {
+
+        return snapshotPropertyChangeRecords().stream()
+                .map(propertyChangeRecord->_EntityPropertyChangeFactory
+                        .createEntityPropertyChange(timestamp, userName, txId, propertyChangeRecord))
+                .collect(Can.toCan());
+    }
+
+    // -- DEPENDENCIES
 
     Interaction currentInteraction() {
         return interactionProviderProvider.get().currentInteractionElseFail();
@@ -284,7 +298,8 @@ implements
     private Set<_PropertyChangeRecord> capturePostValuesAndDrain() {
 
         val records = entityPropertyChangeRecords.stream()
-                .peek(managedProperty->managedProperty.updatePostValue()) // set post values, which have been left empty up to now
+                // set post values, which have been left empty up to now
+                .peek(managedProperty->managedProperty.updatePostValue())
                 .filter(managedProperty->managedProperty.getPreAndPostValue().shouldPublish())
                 .collect(_Sets.toUnmodifiable());
 
@@ -292,6 +307,11 @@ implements
 
         return records;
 
+    }
+
+    // side-effect free, used by XRay
+    long countPotentialPropertyChangeRecords() {
+        return entityPropertyChangeRecords.stream().count();
     }
 
     // -- METRICS SERVICE
@@ -304,10 +324,6 @@ implements
     @Override
     public int numberEntitiesDirtied() {
         return changeKindByEnlistedAdapter.size();
-    }
-
-    int propertyChangeRecordCount() {
-        return snapshotPropertyChangeRecords().size();
     }
 
     // -- ENTITY CHANGE TRACKING
@@ -398,16 +414,6 @@ implements
         }
     }
 
-    @Override
-    public Can<EntityPropertyChange> getPropertyChanges(
-            final java.sql.Timestamp timestamp,
-            final String userName,
-            final TransactionId txId) {
 
-        return snapshotPropertyChangeRecords().stream()
-                .map(propertyChangeRecord->_EntityPropertyChangeFactory
-                        .createEntityPropertyChange(timestamp, userName, txId, propertyChangeRecord))
-                .collect(Can.toCan());
-    }
 
 }

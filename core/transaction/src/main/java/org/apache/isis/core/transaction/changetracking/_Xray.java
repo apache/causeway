@@ -40,9 +40,9 @@ final class _Xray {
             return;
         }
 
-        final int propertyChangeRecordCount = entityChangeTrackerDefault.propertyChangeRecordCount();
+        final long propertyChangeRecordCount = entityChangeTrackerDefault.countPotentialPropertyChangeRecords();
 
-        val enteringLabel = String.format("do publish %d entity change records",
+        val enteringLabel = String.format("consider %d entity change records for publishing",
                 propertyChangeRecordCount);
 
         XrayUtil.createSequenceHandle(interactionProviderProvider.get(), "ec-tracker")
