@@ -22,9 +22,8 @@ import java.util.Map;
 
 import javax.xml.bind.Marshaller;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
@@ -46,27 +45,23 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class BS3GridTest {
+class BS3GridTest {
 
     private JaxbService jaxbService;
     private GridServiceDefault gridServiceDefault;
     private GridSystemServiceBootstrap gridSystemServiceBS3;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
         jaxbService = new JaxbService.Simple() {};
         gridServiceDefault = new GridServiceDefault();
         gridSystemServiceBS3 = new GridSystemServiceBootstrap();
         gridServiceDefault.gridSystemServicesForTest = _Lists.of(gridSystemServiceBS3);
     }
 
-    @After
-    public void tearDown() throws Exception {
-
-    }
 
     @Test
-    public void happy_case() throws Exception {
+    void happy_case() throws Exception {
 
         final BS3Grid bs3Grid = new BS3Grid();
 

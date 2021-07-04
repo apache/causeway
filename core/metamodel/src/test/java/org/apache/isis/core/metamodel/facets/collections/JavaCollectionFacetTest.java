@@ -48,7 +48,7 @@ class JavaCollectionFacetTest {
     }
 
     @Test
-    void firstElementForEmptyCollectionIsNull() {
+    void firstElementForEmptyCollectionIsEmptyOptional() {
 
         val mockFacetHolder = mock(FacetHolder.class);
         when(mockFacetHolder.getMetaModelContext()).thenReturn(metaModelContext);

@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.core.metamodel.services.grid.GridLoaderServiceDefault.DomainClassAndLayout;
 
-public class GridLoaderServiceDefault_resourceNameFor_Test {
+class GridLoaderServiceDefault_resourceNameTest {
 
     private GridLoaderServiceDefault gridLoaderServiceDefault;
 

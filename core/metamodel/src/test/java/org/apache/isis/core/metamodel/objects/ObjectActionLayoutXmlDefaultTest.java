@@ -18,83 +18,59 @@
  */
 package org.apache.isis.core.metamodel.objects;
 
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.core.metamodel.MetaModelTestAbstract;
+import org.apache.isis.core.metamodel._testing.TranslationService_forTesting;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacetWithStaticTextAbstract;
+import org.apache.isis.core.metamodel.id.TypeIdentifierTestFactory;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionDefault;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.services.iactn.InteractionProvider;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
-import org.apache.isis.core.metamodel._testing.TranslationService_forTesting;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
-import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacetWithStaticTextAbstract;
-import org.apache.isis.core.metamodel.id.TypeIdentifierTestFactory;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionDefault;
-
-public class ObjectActionLayoutXmlDefaultTest {
-
-    @Rule public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
-
+class ObjectActionLayoutXmlDefaultTest
+extends MetaModelTestAbstract {
 
     private ObjectActionDefault action;
 
-    @Mock private FacetedMethod mockFacetedMethod;
-    @Mock private InteractionProvider mockInteractionProvider;
-    @Mock private SpecificationLoader mockSpecificationLoader;
+    private FacetedMethod mockFacetedMethod;
 
-    protected MetaModelContext metaModelContext;
+    @Override
+    protected void afterSetUp() {
 
-    @Before
-    public void setUp() throws Exception {
+        mockFacetedMethod = mock(FacetedMethod.class);
 
-        metaModelContext = MetaModelContext_forTesting.builder()
-                .specificationLoader(mockSpecificationLoader)
-                .interactionProvider(mockInteractionProvider)
-                .build();
+        when(mockFacetedMethod.getFeatureIdentifier())
+        .thenReturn(Identifier.actionIdentifier(TypeIdentifierTestFactory.newCustomer(), "reduceheadcount"));
 
-        context.checking(new Expectations() {
-            {
-                allowing(mockFacetedMethod).getFeatureIdentifier();
-                will(returnValue(Identifier.actionIdentifier(TypeIdentifierTestFactory.newCustomer(), "reduceheadcount")));
-
-                allowing(mockFacetedMethod).getTranslationService();
-                will(returnValue(new TranslationService_forTesting()));
-            }
-        });
+        when(mockFacetedMethod.getTranslationService())
+        .thenReturn(new TranslationService_forTesting());
 
         action = ObjectActionDefault.forMethod(mockFacetedMethod);
     }
 
 
     @Test
-    public void testNameDefaultsToActionsMethodName() {
+    void testNameDefaultsToActionsMethodName() {
         final String name = "Reduceheadcount";
 
-        final MemberNamedFacet facet =
-                new MemberNamedFacetWithStaticTextAbstract(name, mockFacetedMethod) {};
-        context.checking(new Expectations() {
-            {
-                oneOf(mockFacetedMethod).getFacet(MemberNamedFacet.class);
-                will(returnValue(facet));
-            }
-        });
+        doReturn(new MemberNamedFacetWithStaticTextAbstract(name, mockFacetedMethod) {})
+        .when(mockFacetedMethod).getFacet(MemberNamedFacet.class);
+
         assertThat(action.getStaticFriendlyName().get(), is(equalTo(name)));
     }
 
     @Test
-    public void testId() {
+    void testId() {
         assertEquals("reduceheadcount", action.getId());
     }
 

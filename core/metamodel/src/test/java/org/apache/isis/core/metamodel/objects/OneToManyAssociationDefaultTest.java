@@ -19,34 +19,29 @@
 
 package org.apache.isis.core.metamodel.objects;
 
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.services.iactn.InteractionProvider;
-import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.commons.internal.base._Either;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
+import org.apache.isis.core.metamodel.MetaModelTestAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.id.TypeIdentifierTestFactory;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationDefault;
 
-public class OneToManyAssociationDefaultTest {
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import lombok.val;
+
+class OneToManyAssociationDefaultTest
+extends MetaModelTestAbstract {
 
     private static final String COLLECTION_ID = "orders";
 
@@ -55,93 +50,38 @@ public class OneToManyAssociationDefaultTest {
 
     private static final Class<?> COLLECTION_TYPE = Order.class;
 
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
-
-    @Mock ManagedObject mockOwnerAdapter;
-    @Mock ManagedObject mockAssociatedAdapter;
-    @Mock InteractionProvider mockInteractionProvider;
-    @Mock SpecificationLoader mockSpecificationLoader;
-    @Mock ObjectSpecification mockOwnerAdapterSpec;
-    @Mock MessageService mockMessageService;
-    @Mock FacetedMethod mockPeer;
-    @Mock MemberNamedFacet mockNamedFacet;
-    @Mock HasStaticText mockHasStaticText;
-
     private OneToManyAssociation association;
-    private MetaModelContext_forTesting metaModelContext;
 
-    @Before
-    public void setUp() {
+    @Override
+    protected void afterSetUp() {
 
-        metaModelContext = MetaModelContext_forTesting.builder()
-                .specificationLoader(mockSpecificationLoader)
-                .interactionProvider(mockInteractionProvider)
-                .singleton(mockMessageService)
-                .build();
+        val mockHasStaticText = mock(HasStaticText.class);
+        when(mockHasStaticText.translated()).thenReturn("My name");
 
-        allowingPeerToReturnCollectionType();
-        allowingPeerToReturnIdentifier();
-        allowingSpecLoaderToReturnSpecs();
+        val mockNamedFacet = mock(MemberNamedFacet.class);
+        when(mockNamedFacet.getSpecialization()).thenReturn(_Either.left(mockHasStaticText));
+
+        val mockPeer = mock(FacetedMethod.class);
+        doReturn(COLLECTION_TYPE).when(mockPeer).getType();
+        when(mockPeer.getMetaModelContext()).thenReturn(getMetaModelContext());
+        when(mockPeer.getFeatureIdentifier()).thenReturn(
+                Identifier
+                .propertyOrCollectionIdentifier(
+                        TypeIdentifierTestFactory.newCustomer(),
+                        COLLECTION_ID));
+        when(mockPeer.getFacet(MemberNamedFacet.class)).thenReturn(mockNamedFacet);
+
         association = OneToManyAssociationDefault.forMethod(mockPeer);
     }
 
-    private void allowingSpecLoaderToReturnSpecs() {
-        context.checking(new Expectations() {
-            {
-                allowing(mockSpecificationLoader).loadSpecification(Order.class);
-
-                allowing(mockPeer).getMetaModelContext();
-                will(returnValue(metaModelContext));
-
-            }
-        });
-    }
-
     @Test
-    public void id() {
+    void id() {
         assertThat(association.getId(), is(equalTo(COLLECTION_ID)));
     }
 
     @Test
-    public void name() {
-        expectPeerToReturnNamedFacet();
+    void name() {
         assertThat(association.getStaticFriendlyName().get(), is(equalTo("My name")));
-    }
-
-    private void allowingPeerToReturnCollectionType() {
-        context.checking(new Expectations() {
-            {
-                allowing(mockPeer).getType();
-                will(returnValue(COLLECTION_TYPE));
-            }
-        });
-    }
-
-    private void allowingPeerToReturnIdentifier() {
-        context.checking(new Expectations() {
-            {
-                oneOf(mockPeer).getFeatureIdentifier();
-                will(returnValue(Identifier.propertyOrCollectionIdentifier(
-                        TypeIdentifierTestFactory.newCustomer(), COLLECTION_ID)));
-            }
-        });
-    }
-
-    private void expectPeerToReturnNamedFacet() {
-        context.checking(new Expectations() {
-            {
-                oneOf(mockPeer).getFacet(MemberNamedFacet.class);
-                will(returnValue(mockNamedFacet));
-
-                allowing(mockNamedFacet).getSpecialization();
-                will(returnValue(_Either.left(mockHasStaticText)));
-
-                allowing(mockHasStaticText).translated();
-                will(returnValue("My name"));
-
-            }
-        });
     }
 
 }
