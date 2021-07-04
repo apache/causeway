@@ -19,73 +19,44 @@
 
 package org.apache.isis.core.metamodel.facets.collections;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Optional;
-import java.util.stream.Stream;
 
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.javautilcollection.JavaCollectionFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-public class JavaCollectionFacetTest {
+import lombok.val;
 
-    private JavaCollectionFacet facet;
+class JavaCollectionFacetTest {
 
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
+    private MetaModelContext metaModelContext;
 
-    @Mock private FacetHolder mockFacetHolder;
-    @Mock private ManagedObject mockCollection;
-    @Mock private Collection<ManagedObject> mockWrappedCollection;
-
-    private MetaModelContext_forTesting metaModelContext;
-
-    @Before
-    public void setUp() throws Exception {
-        facet = new JavaCollectionFacet(mockFacetHolder);
-        
-        metaModelContext = MetaModelContext_forTesting.builder()
-//                .objectAdapterProvider(mockOAProvider)
-                .build();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        facet = null;
+    @BeforeEach
+    void setUp() throws Exception {
+        metaModelContext = MetaModelContext_forTesting.buildDefault();
     }
 
     @Test
-    public void firstElementForEmptyCollectionIsNull() {
-        context.checking(new Expectations() {
-            {
-                                
-                allowing(mockCollection).getPojo();
-                will(returnValue(mockWrappedCollection));
+    void firstElementForEmptyCollectionIsNull() {
 
-                allowing(mockWrappedCollection).stream();
-                will(returnValue(Stream.empty()));
-                
-                allowing(mockWrappedCollection).size();
-                will(returnValue(0));
-                
-                allowing(mockFacetHolder).getMetaModelContext();
-                will(returnValue(metaModelContext));
+        val mockFacetHolder = mock(FacetHolder.class);
+        when(mockFacetHolder.getMetaModelContext()).thenReturn(metaModelContext);
 
-            }
-        });
+        val mockCollection = mock(ManagedObject.class);
+        when(mockCollection.getPojo()).thenReturn(new ArrayList<Object>());
+
+        val facet = new JavaCollectionFacet(mockFacetHolder);
         assertThat(facet.firstElement(mockCollection), is(Optional.empty()));
     }
 

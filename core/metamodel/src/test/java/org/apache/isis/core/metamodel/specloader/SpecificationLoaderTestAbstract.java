@@ -53,8 +53,7 @@ abstract class SpecificationLoaderTestAbstract {
 
         // PRODUCTION
 
-        metaModelContext = MetaModelContext_forTesting.builder()
-                .build();
+        metaModelContext = MetaModelContext_forTesting.buildDefault();
 
         val specificationLoader = metaModelContext.getSpecificationLoader();
 
