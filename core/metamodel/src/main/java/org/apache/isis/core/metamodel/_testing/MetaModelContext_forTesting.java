@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.springframework.core.env.AbstractEnvironment;
@@ -50,7 +49,6 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.ioc._ManagedBeanAdapter;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
@@ -87,7 +85,6 @@ import static java.util.Objects.requireNonNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Singular;
-import lombok.Value;
 import lombok.val;
 
 @Builder @Getter
@@ -182,25 +179,6 @@ implements MetaModelContext {
     @Override
     public <T> T getSingletonElseFail(final Class<T> type) {
         return getSystemEnvironment().ioc().getSingletonElseFail(type);
-    }
-
-    @Value @Builder
-    static class ManagedBeanProvider implements _ManagedBeanAdapter {
-
-        String id;
-        Supplier<?> instanceProvider;
-        public Class<?> beanClass;
-
-        @Override
-        public boolean isCandidateFor(Class<?> requiredType) {
-            throw _Exceptions.notImplemented();
-        }
-
-        @Override
-        public Can<?> getInstance() {
-            return Can.ofSingleton(instanceProvider.get());
-        }
-
     }
 
     private Stream<Object> streamSingletons() {
@@ -404,14 +382,23 @@ implements MetaModelContext {
     private final JaxbService jaxbService = new JaxbService.Simple();
 
     @Getter(lazy = true)
-    private final GridReaderUsingJaxb gridReader = new GridReaderUsingJaxb(getJaxbService(), null);
+    private final MenuBarsService menuBarsService = MenuBarsService.forTesting();
 
     @Getter(lazy = true)
-    private final GridLoaderService gridLoaderService =
-        new GridLoaderServiceDefault(getMessageService(), getGridReader(), getSystemEnvironment());
+    private final GridReaderUsingJaxb gridReader = new GridReaderUsingJaxb(getJaxbService(), /*circular depend.*/null);
 
     @Getter(lazy = true)
-    private final GridService gridService = new GridServiceDefault(
+    private final GridLoaderService gridLoaderService = createGridLoaderService();
+    //XXX lombok issue: won't compile if inlined
+    private final GridLoaderService createGridLoaderService() {
+        return new GridLoaderServiceDefault(getGridReader(), getMessageService(), getSystemEnvironment());
+    }
+
+    @Getter(lazy = true)
+    private final GridService gridService = createGridService();
+    //XXX lombok issue: won't compile if inlined
+    private final GridService createGridService() {
+        return new GridServiceDefault(
             getGridLoaderService(), _Lists.of(
                     new GridSystemServiceBootstrap(getGridReader(),
                             getSpecificationLoader(),
@@ -419,12 +406,18 @@ implements MetaModelContext {
                             getJaxbService(),
                             getMessageService(),
                             getSystemEnvironment())));
+    }
 
     @Getter(lazy = true)
-    private final MenuBarsService menuBarsService = MenuBarsService.forTesting();
+    private final LayoutService layoutService = createLayoutService();
+    //XXX lombok issue: won't compile if inlined
+    private final LayoutService createLayoutService() {
+        return new LayoutServiceDefault(
+                getSpecificationLoader(),
+                getJaxbService(),
+                getGridService(),
+                getMenuBarsService());
+    }
 
-    @Getter(lazy = true)
-    private final LayoutService layoutService = new LayoutServiceDefault(
-            getSpecificationLoader(), getJaxbService(), getGridService(), getMenuBarsService());
 
 }

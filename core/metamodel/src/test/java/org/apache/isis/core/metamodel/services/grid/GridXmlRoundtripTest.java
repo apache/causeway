@@ -49,25 +49,13 @@ class GridXmlRoundtripTest
 extends MetaModelTestAbstract {
 
     private JaxbService jaxbService;
-//    private GridLoaderServiceDefault gridLoaderService;
-//    private LayoutService layoutService;
     private GridServiceDefault gridServiceDefault;
-//    private GridSystemServiceBootstrap gridSystemServiceBS3;
 
     @Override
     protected void afterSetUp() {
         jaxbService = getServiceRegistry().lookupServiceElseFail(JaxbService.class);
         gridServiceDefault = (GridServiceDefault)getServiceRegistry().lookupServiceElseFail(GridService.class);
-        //gridLoaderService = (GridLoaderServiceDefault)getServiceRegistry().lookupServiceElseFail(GridLoaderService.class);
     }
-
-//    @BeforeEach
-//    void setUp() throws Exception {
-//
-//        gridSystemServiceBS3 = new GridSystemServiceBootstrap(null);
-//        gridServiceDefault.gridSystemServicesForTest = _Lists.of(gridSystemServiceBS3);
-//    }
-
 
     @Test
     void happy_case() throws Exception {
