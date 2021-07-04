@@ -18,8 +18,6 @@
  */
 package org.apache.isis.core.metamodel.services.grid;
 
-import java.util.List;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -34,7 +32,7 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.services.grid.GridSystemService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
-import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.collections._Arrays;
 
 import lombok.RequiredArgsConstructor;
@@ -48,20 +46,23 @@ import lombok.RequiredArgsConstructor;
 @Named("isis.metamodel.GridReaderUsingJaxb")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-@RequiredArgsConstructor(onConstructor_ = {@Inject, @org.springframework.context.annotation.Lazy})
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class GridReaderUsingJaxb {
 
     private final JaxbService jaxbService;
-    private final List<GridSystemService<?>> gridSystemServices; /* dependency circle */
+    private final ServiceRegistry serviceRegistry;
 
     private JAXBContext jaxbContext;
 
     @PostConstruct
     public void init(){
+
         final Class<?>[] pageImplementations =
-                _NullSafe.stream(gridSystemServices)
-                .map(GridSystemService::gridImplementation)
-                .collect(_Arrays.toArray(Class.class));
+            serviceRegistry.select(GridSystemService.class)
+            .stream()
+            .map(GridSystemService::gridImplementation)
+            .collect(_Arrays.toArray(Class.class));
+
         try {
             jaxbContext = JAXBContext.newInstance(pageImplementations);
         } catch (JAXBException e) {

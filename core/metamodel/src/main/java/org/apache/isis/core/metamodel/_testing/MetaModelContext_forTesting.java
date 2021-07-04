@@ -385,7 +385,7 @@ implements MetaModelContext {
     private final MenuBarsService menuBarsService = MenuBarsService.forTesting();
 
     @Getter(lazy = true)
-    private final GridReaderUsingJaxb gridReader = new GridReaderUsingJaxb(getJaxbService(), /*circular depend.*/null);
+    private final GridReaderUsingJaxb gridReader = new GridReaderUsingJaxb(getJaxbService(), getServiceRegistry());
 
     @Getter(lazy = true)
     private final GridLoaderService gridLoaderService = createGridLoaderService();
