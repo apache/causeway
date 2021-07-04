@@ -19,10 +19,12 @@
 package org.apache.isis.core.metamodel._testing;
 
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.core.env.AbstractEnvironment;
@@ -49,6 +51,7 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.ioc._ManagedBeanAdapter;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
@@ -152,26 +155,21 @@ implements MetaModelContext {
 
     private IsisBeanTypeRegistry isisBeanTypeRegistry;
 
-    private Map<String, ManagedObject> serviceAdaptersById;
+    //private Map<String, ManagedObject> serviceAdaptersById;
 
     @Singular
     private List<Object> singletons;
 
+    // -- SERVICE SUPPORT
+
     @Override
     public Stream<ManagedObject> streamServiceAdapters() {
-
-        if(serviceAdaptersById==null) {
-            return Stream.empty();
-        }
-        return serviceAdaptersById.values().stream();
+        return objectAdaptersForBeansOfKnownSort.get().values().stream();
     }
 
     @Override
     public ManagedObject lookupServiceAdapterById(final String serviceId) {
-        if(serviceAdaptersById==null) {
-            return null;
-        }
-        return serviceAdaptersById.get(serviceId);
+        return objectAdaptersForBeansOfKnownSort.get().get(serviceId);
     }
 
     // -- LOOKUP
@@ -423,5 +421,29 @@ implements MetaModelContext {
                 getMenuBarsService());
     }
 
+    // -- SERVICE REGISTRY HELPER
 
+    private final _Lazy<Map<String, ManagedObject>> objectAdaptersForBeansOfKnownSort =
+            _Lazy.threadSafe(this::collectBeansOfKnownSort);
+
+    private final Map<String, ManagedObject> collectBeansOfKnownSort() {
+
+        return getServiceRegistry()
+                .streamRegisteredBeans()
+                .map(this::toManagedObject)
+                .collect(Collectors.toMap(
+                        serviceAdapter->serviceAdapter.getSpecification().getFullIdentifier(),
+                        v->v, (o,n)->n, LinkedHashMap::new));
+    }
+
+    private final ManagedObject toManagedObject(final _ManagedBeanAdapter managedBeanAdapter) {
+
+        val servicePojo = managedBeanAdapter.getInstance().getFirst()
+                .orElseThrow(()->_Exceptions.unrecoverableFormatted(
+                        "Cannot get service instance of type '%s'",
+                        managedBeanAdapter.getBeanClass()));
+
+        return ManagedObject.lazy(getSpecificationLoader(), servicePojo);
+
+    }
 }

@@ -24,12 +24,15 @@ import org.junit.jupiter.api.Test;
 
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.Getter;
 import lombok.val;
@@ -46,36 +49,53 @@ implements HasMetaModelContext {
     void setUp() throws Exception {
         metaModelContext = MetaModelContext_forTesting
                 .builder()
+                .singleton(new Bar())
                 .build();
 
+        getSpecificationLoader().loadSpecification(Bar.class);
 
-        val messageService = metaModelContext.getServiceRegistry().lookupServiceElseFail(MessageService.class);
-        val jaxbService = metaModelContext.getServiceRegistry().lookupServiceElseFail(JaxbService.class);
+        assertTrue(getServiceRegistry().streamRegisteredBeans()
+                .anyMatch(bean->bean.getBeanClass().equals(Bar.class)));
+
+        assertTrue(metaModelContext.streamServiceAdapters()
+                .anyMatch(domainObject->domainObject.getSpecification().getCorrespondingClass().equals(Bar.class)));
+
+
+        val messageService = getServiceRegistry().lookupServiceElseFail(MessageService.class);
+        val jaxbService = getServiceRegistry().lookupServiceElseFail(JaxbService.class);
 
         val menuBarsLoaderService = new MenuBarsLoaderServiceDefault(
-                metaModelContext.getSystemEnvironment(),
+                getSystemEnvironment(),
                 jaxbService,
-                metaModelContext.getConfiguration());
+                getConfiguration());
 
         menuBarsService = new MenuBarsServiceBS3(
                 menuBarsLoaderService,
                 messageService,
                 jaxbService,
-                metaModelContext.getSystemEnvironment(),
+                getSystemEnvironment(),
                 metaModelContext);
 
     }
 
     @AfterEach
     void tearDown() throws Exception {
-        metaModelContext.getSpecificationLoader().disposeMetaModel();
+        getSpecificationLoader().disposeMetaModel();
     }
 
     @Test
     void test() {
         val menuBars = menuBarsService.menuBars();
         assertNotNull(menuBars);
-        //TODO[ISIS-2787] setup a sample Service that contributes a menu, then verify
+
+        val menuCounter = _Refs.intRef(0);
+        menuBars.visit(v->{
+            menuCounter.inc();
+        });
+
+        assertEquals(1, menuCounter.getValue());
+
+        //TODO[ISIS-2787] verify menu xml export (roundtrip?)
     }
 
 }
