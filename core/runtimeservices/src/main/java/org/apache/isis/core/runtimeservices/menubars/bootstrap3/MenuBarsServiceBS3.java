@@ -63,6 +63,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -70,8 +71,10 @@ import lombok.extern.log4j.Log4j2;
 @Named("isis.runtimeservices.MenuBarsServiceBS3")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("BS3")
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
-public class MenuBarsServiceBS3 implements MenuBarsService {
+public class MenuBarsServiceBS3
+implements MenuBarsService {
 
     public static final String MB3_TNS = "http://isis.apache.org/applib/layout/menubars/bootstrap3";
     public static final String MB3_SCHEMA_LOCATION = "http://isis.apache.org/applib/layout/menubars/bootstrap3/menubars.xsd";
@@ -82,11 +85,11 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
     public static final String LINKS_TNS = GridServiceDefault.LINKS_TNS;
     public static final String LINKS_SCHEMA_LOCATION = GridServiceDefault.LINKS_SCHEMA_LOCATION;
 
-    @Inject private MenuBarsLoaderService menuBarsLoaderService;
-    @Inject private MessageService messageService;
-    @Inject private JaxbService jaxbService;
-    @Inject private IsisSystemEnvironment isisSystemEnvironment;
-    @Inject private MetaModelContext metaModelContext;
+    private final MenuBarsLoaderService menuBarsLoaderService;
+    private final MessageService messageService;
+    private final JaxbService jaxbService;
+    private final IsisSystemEnvironment isisSystemEnvironment;
+    private final MetaModelContext metaModelContext;
 
     BS3MenuBars menuBars;
 

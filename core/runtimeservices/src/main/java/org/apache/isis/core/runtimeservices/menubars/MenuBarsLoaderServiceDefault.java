@@ -46,7 +46,8 @@ import lombok.extern.log4j.Log4j2;
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2
-public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {
+public class MenuBarsLoaderServiceDefault
+implements MenuBarsLoaderService {
 
     private final IsisSystemEnvironment isisSystemEnvironment;
     private final JaxbService jaxbService;

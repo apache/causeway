@@ -48,11 +48,10 @@ extends MetaModelTestAbstract {
 
         val xml = layoutService.toXml(Bar.class, Style.NORMALIZED);
 
-        System.out.println(xml);
+        //System.out.println(xml);
 
-
-        //TODO compare loaded with generated
-        //TODO inspect ObjectNamed and MemberNamed (canonical) facets
+        //TODO[ISIS-2787] compare loaded with generated
+        //TODO[ISIS-2787] verify ObjectNamed and MemberNamed (canonical) facets
     }
 
     // -- HELPER
