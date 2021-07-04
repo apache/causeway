@@ -1,5 +1,7 @@
 package org.apache.isis.viewer.wicket.ui.pages.accmngt.password_reset;
 
+import java.util.regex.Pattern;
+
 import org.apache.wicket.validation.validator.PatternValidator;
 
 /**
@@ -15,6 +17,12 @@ public class EmailAddressValidator extends PatternValidator {
 
     protected EmailAddressValidator() {
         super(
-        "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*((\\.[A-Za-z]{2,}){1}$)", 2);
+        "^[_A-Za-z0-9-]+" +
+                "(\\.[_A-Za-z0-9-]+)*" +
+                "@[A-Za-z0-9-]+" +
+                "(\\.[A-Za-z0-9-]+)*" +
+                "(" +
+                  "(\\.[A-Za-z]{2,}){1}" +
+                "$)", Pattern.CASE_INSENSITIVE);
     }
 }
