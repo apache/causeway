@@ -343,11 +343,4 @@ implements MetaModelContext {
 
     }
 
-    // -- WITHERS
-
-    public MetaModelContext updateTitleService(Function<MetaModelContext, TitleService> factory) {
-        titleService = factory.apply(this);
-        return this;
-    }
-
 }

@@ -34,10 +34,9 @@ class TitleServiceDefaultTest {
     @BeforeEach
     void setUp() throws Exception {
 
-        MetaModelContext_forTesting.builder()
-                .build()
-                .updateTitleService(mmc->titleService = new TitleServiceDefault(null, mmc.getObjectManager()))
-                ;
+        val mmc = MetaModelContext_forTesting.buildDefault();
+
+        titleService = new TitleServiceDefault(null, mmc.getObjectManager());
     }
 
     // -- FEATURED
