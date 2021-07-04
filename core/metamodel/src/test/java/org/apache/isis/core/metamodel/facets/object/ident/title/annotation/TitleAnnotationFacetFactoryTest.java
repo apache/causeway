@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.object.ident.title.annotation;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -31,12 +30,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.services.iactn.InteractionProvider;
-import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -45,7 +39,9 @@ import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.security.authentication.InteractionContextFactory;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class TitleAnnotationFacetFactoryTest
 extends AbstractFacetFactoryJUnit4TestCase {
@@ -53,26 +49,13 @@ extends AbstractFacetFactoryJUnit4TestCase {
     private TitleAnnotationFacetFactory facetFactory;
 
     @Mock private ManagedObject mockObjectAdapter;
-    protected final InteractionContext iaContext = InteractionContextFactory.testing();
 
     @Before
     public void setUp() throws Exception {
 
         // PRODUCTION
 
-        context.allowing(mockSpecificationLoader);
-
         facetFactory = new TitleAnnotationFacetFactory(metaModelContext);
-
-        context.checking(new Expectations() {
-            {
-                allowing(mockServiceRegistry).lookupService(InteractionProvider.class);
-                will(returnValue(Optional.of(mockInteractionProvider)));
-
-                allowing(mockInteractionProvider).currentInteractionContext();
-                will(returnValue(Optional.of(iaContext)));
-            }
-        });
 
     }
 

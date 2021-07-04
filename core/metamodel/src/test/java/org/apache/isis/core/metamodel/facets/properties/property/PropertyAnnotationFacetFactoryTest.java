@@ -28,10 +28,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertTrue;
-
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Snapshot;
@@ -75,6 +71,10 @@ import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySe
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -545,10 +545,6 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             // given
             final Class<?> cls = Customer.class;
             propertyMethod = findMethod(Customer.class, "getName");
-
-            // expecting
-            context.ignoring(mockServiceInjector);
-
 
             // when
             val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,

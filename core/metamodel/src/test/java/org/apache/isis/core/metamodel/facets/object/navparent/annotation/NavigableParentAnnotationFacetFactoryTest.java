@@ -19,17 +19,13 @@
 package org.apache.isis.core.metamodel.facets.object.navparent.annotation;
 
 import java.lang.reflect.Method;
-import java.util.Optional;
 
-import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.services.iactn.InteractionProvider;
-import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
@@ -38,7 +34,6 @@ import org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFac
 import org.apache.isis.core.metamodel.facets.object.navparent.annotation.NavigableParentTestSamples.DomainObjectA;
 import org.apache.isis.core.metamodel.facets.object.navparent.method.NavigableParentFacetMethod;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.security.authentication.InteractionContextFactory;
 
 public class NavigableParentAnnotationFacetFactoryTest
 extends AbstractFacetFactoryJUnit4TestCase {
@@ -47,33 +42,9 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
     @Mock private ManagedObject mockObjectAdapter;
 
-    private final InteractionContext iaContext = InteractionContextFactory.testing();
-
     @Before
     public void setUp() throws Exception {
-
-        // PRODUCTION
-
-        context.allowing(mockSpecificationLoader);
-
         facetFactory = new NavigableParentAnnotationFacetFactory(metaModelContext);
-
-        context.checking(new Expectations() {
-            {
-                allowing(mockServiceRegistry).lookupService(InteractionProvider.class);
-                will(returnValue(Optional.of(mockInteractionProvider)));
-
-                allowing(mockInteractionProvider).currentInteractionContext();
-                will(returnValue(Optional.of(iaContext)));
-
-                //                allowing(mockServicesInjector).getSpecificationLoader();
-                //                will(returnValue(mockSpecificationLoader));
-                //
-                //                allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
-                //                will(returnValue(mockPersistenceSessionServiceInternal));
-            }
-        });
-
     }
 
     @After
