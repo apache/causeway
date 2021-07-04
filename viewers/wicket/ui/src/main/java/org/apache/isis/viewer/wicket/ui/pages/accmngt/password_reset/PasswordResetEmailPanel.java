@@ -29,7 +29,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.cookies.CookieUtils;
-import org.apache.wicket.validation.validator.EmailAddressValidator;
 
 import org.apache.isis.applib.services.userreg.events.PasswordResetEvent;
 import org.apache.isis.viewer.wicket.model.models.PageType;
