@@ -73,6 +73,9 @@ implements RegExFacet {
         if (proposedArgument == null) {
             return null;
         }
+        if (proposedArgument.getPojo() == null) {
+            return null;
+        }
         final String titleString = proposedArgument.titleString();
         if (!doesNotMatch(titleString)) {
             return null;
