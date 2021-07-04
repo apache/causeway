@@ -34,12 +34,10 @@ import org.apache.isis.commons.internal.ioc._IocContainer;
 import org.apache.isis.commons.internal.ioc._ManagedBeanAdapter;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.Value;
 import lombok.val;
 
 @RequiredArgsConstructor
@@ -62,8 +60,9 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
 //            throw _Exceptions.notImplemented();
 //        }
 
-        Optional<T> match = streamSingletons()
-                .filter(singleton->type.isAssignableFrom(singleton.getClass()))
+        Optional<T> match = streamBeans()
+                .filter(beanAdapter->type.isAssignableFrom(beanAdapter.getBeanClass()))
+                .map(beanAdapter->beanAdapter.getInstance().getFirstOrFail())
                 .map(_Casts::<T>uncheckedCast)
                 .findFirst();
 
@@ -96,15 +95,13 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
         throw _Exceptions.notImplemented();
     }
 
-
     // -- HELPER
 
     private Set<_ManagedBeanAdapter> registeredBeans() {
         synchronized(registeredBeans) {
             if(registeredBeans.isEmpty()) {
 
-                streamSingletons()
-                .map(s->toBeanAdapter(s))
+                streamBeans()
                 .filter(_NullSafe::isPresent)
                 .forEach(registeredBeans::add);
             }
@@ -112,41 +109,15 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
         return registeredBeans;
     }
 
-    private Stream<Object> streamSingletons() {
+    private Stream<_ManagedBeanAdapter> streamBeans() {
         // lookup the MetaModelContextBean's list of singletons
         val mmc = metaModelContext;
         if(mmc instanceof MetaModelContext_forTesting) {
             val mmcb = (MetaModelContext_forTesting) mmc;
-            return mmcb.streamSingletons();
+            return mmcb.streamBeanAdapters();
         }
         return Stream.empty();
     }
-
-    @Value @Builder
-    private static class PojoBeanAdapter implements _ManagedBeanAdapter {
-
-        String id;
-        Can<?> instance;
-        public Class<?> beanClass;
-
-        @Override
-        public boolean isCandidateFor(Class<?> requiredType) {
-            throw _Exceptions.notImplemented();
-        }
-
-    }
-
-    private _ManagedBeanAdapter toBeanAdapter(Object singleton) {
-
-        return PojoBeanAdapter.builder()
-                .id(singleton.getClass().getName())
-                .instance(Can.ofSingleton(singleton))
-                .beanClass(singleton.getClass())
-                .build();
-
-
-    }
-
 
 
 }

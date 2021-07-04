@@ -50,12 +50,16 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
 import org.apache.isis.applib.layout.grid.bootstrap3.Size;
 import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
+import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.jaxb.JaxbService;
+import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.resources._Resources;
+import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.members.layout.group.GroupIdAndName;
 import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
@@ -69,6 +73,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
@@ -80,16 +85,41 @@ import lombok.extern.log4j.Log4j2;
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Bootstrap")
 @Log4j2
-public class GridSystemServiceBootstrap extends GridSystemServiceAbstract<BS3Grid> {
+public class GridSystemServiceBootstrap
+extends GridSystemServiceAbstract<BS3Grid> {
 
     public static final String TNS = "http://isis.apache.org/applib/layout/grid/bootstrap3";
     public static final String SCHEMA_LOCATION = "http://isis.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd";
 
-    @Inject private GridReaderUsingJaxb gridReader;
+    private final GridReaderUsingJaxb gridReader;
 
-    public GridSystemServiceBootstrap() {
-        super(BS3Grid.class, TNS, SCHEMA_LOCATION);
+    @Inject
+    public GridSystemServiceBootstrap(
+            final GridReaderUsingJaxb gridReader,
+            final SpecificationLoader specificationLoader,
+            final TranslationService translationService,
+            final JaxbService jaxbService,
+            final MessageService messageService,
+            final IsisSystemEnvironment isisSystemEnvironment) {
+        super(specificationLoader, translationService, jaxbService, messageService, isisSystemEnvironment);
+        this.gridReader = gridReader;
     }
+
+    @Override
+    public Class<BS3Grid> gridImplementation() {
+        return BS3Grid.class;
+    }
+
+    @Override
+    public String tns() {
+        return TNS;
+    }
+
+    @Override
+    public String schemaLocation() {
+        return SCHEMA_LOCATION;
+    }
+
 
     @Override
     public BS3Grid defaultGrid(final Class<?> domainClass) {

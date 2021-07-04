@@ -20,19 +20,23 @@ package org.apache.isis.core.metamodel.services.grid;
 
 import org.junit.jupiter.api.Test;
 
+import org.apache.isis.applib.services.grid.GridLoaderService;
+import org.apache.isis.applib.services.layout.LayoutService;
+import org.apache.isis.applib.services.layout.Style;
 import org.apache.isis.core.metamodel.MetaModelTestAbstract;
-import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting.MetaModelContext_forTestingBuilder;
 
 import lombok.val;
 
-class GridLoaderRoundtripTest
+class GridInferringRoundtripTest
 extends MetaModelTestAbstract {
 
     private GridLoaderServiceDefault gridLoaderService;
+    private LayoutService layoutService;
 
     @Override
-    protected void onSetUp(MetaModelContext_forTestingBuilder mmcBuilder) {
-        mmcBuilder.singleton(gridLoaderService = new GridLoaderServiceDefault());
+    protected void afterSetUp() {
+        layoutService = getServiceRegistry().lookupServiceElseFail(LayoutService.class);
+        gridLoaderService = (GridLoaderServiceDefault)getServiceRegistry().lookupServiceElseFail(GridLoaderService.class);
     }
 
     @Test
@@ -41,6 +45,11 @@ extends MetaModelTestAbstract {
         gridLoaderService.loadXml(domainClassAndLayout);
 
         getSpecificationLoader().specForType(Bar.class);
+
+        val xml = layoutService.toXml(Bar.class, Style.NORMALIZED);
+
+        System.out.println(xml);
+
 
         //TODO compare loaded with generated
         //TODO inspect ObjectNamed and MemberNamed (canonical) facets

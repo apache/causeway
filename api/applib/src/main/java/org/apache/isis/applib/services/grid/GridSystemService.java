@@ -21,7 +21,6 @@ package org.apache.isis.applib.services.grid;
 import org.apache.isis.applib.layout.grid.Grid;
 
 /**
- *
  * Encapsulates a single layout grid system which can be used to customize the layout
  * of domain objects.
  *
@@ -35,9 +34,6 @@ import org.apache.isis.applib.layout.grid.Grid;
  * @since 1.x {@index}
  */
 public interface GridSystemService<G extends Grid> {
-
-
-
 
     /**
      * The concrete subclass of {@link Grid} supported by this implementation.
@@ -135,8 +131,5 @@ public interface GridSystemService<G extends Grid> {
      * @param domainClass
      */
     void minimal(G grid, Class<?> domainClass);
-
-
-
 
 }

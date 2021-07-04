@@ -86,56 +86,27 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import static org.apache.isis.core.metamodel.facetapi.FacetUtil.addFacet;
 import static org.apache.isis.core.metamodel.facetapi.FacetUtil.addFacetIfPresent;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+@RequiredArgsConstructor(onConstructor_ = {@Inject}, access = AccessLevel.PROTECTED)
 @Log4j2
 public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib.layout.grid.Grid>
 implements GridSystemService<G> {
 
-    @Inject protected SpecificationLoader specificationLoader;
-    @Inject protected TranslationService translationService;
-    @Inject protected JaxbService jaxbService;
-    @Inject protected MessageService messageService;
-    @Inject IsisSystemEnvironment isisSystemEnvironment;
-
-    private final Class<G> gridImplementation;
-    private final String tns;
-    private final String schemaLocation;
-
-    protected GridSystemServiceAbstract(
-            final Class<G> gridImplementation,
-            final String tns,
-            final String schemaLocation) {
-
-        this.gridImplementation = gridImplementation;
-        this.tns = tns;
-        this.schemaLocation = schemaLocation;
-    }
-
-    // //////////////////////////////////////
-
-    @Override
-    public Class<G> gridImplementation() {
-        return gridImplementation;
-    }
-
-    @Override
-    public String tns() {
-        return tns;
-    }
-
-    @Override
-    public String schemaLocation() {
-        return schemaLocation;
-    }
-
+    protected final SpecificationLoader specificationLoader;
+    protected final TranslationService translationService;
+    protected final JaxbService jaxbService;
+    protected final MessageService messageService;
+    protected final IsisSystemEnvironment isisSystemEnvironment;
 
     @Override
     public void normalize(final G grid, final Class<?> domainClass) {
 
-        if(!gridImplementation.isAssignableFrom(grid.getClass())) {
+        if(!gridImplementation().isAssignableFrom(grid.getClass())) {
             // ignore any other grid implementations
             return;
         }

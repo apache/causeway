@@ -23,15 +23,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.springframework.core.env.AbstractEnvironment;
 
 import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.applib.services.grid.GridLoaderService;
+import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.applib.services.jaxb.JaxbService;
+import org.apache.isis.applib.services.layout.LayoutService;
+import org.apache.isis.applib.services.menu.MenuBarsService;
+import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
@@ -43,6 +50,8 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.ioc._ManagedBeanAdapter;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.isis.core.config.beans.IsisBeanTypeClassifier;
@@ -60,6 +69,12 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefaul
 import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
+import org.apache.isis.core.metamodel.services.grid.GridLoaderServiceDefault;
+import org.apache.isis.core.metamodel.services.grid.GridReaderUsingJaxb;
+import org.apache.isis.core.metamodel.services.grid.GridServiceDefault;
+import org.apache.isis.core.metamodel.services.grid.bootstrap3.GridSystemServiceBootstrap;
+import org.apache.isis.core.metamodel.services.layout.LayoutServiceDefault;
+import org.apache.isis.core.metamodel.services.message.MessageServiceNoop;
 import org.apache.isis.core.metamodel.services.title.TitleServiceDefault;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -72,6 +87,7 @@ import static java.util.Objects.requireNonNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Singular;
+import lombok.Value;
 import lombok.val;
 
 @Builder @Getter
@@ -168,9 +184,28 @@ implements MetaModelContext {
         return getSystemEnvironment().ioc().getSingletonElseFail(type);
     }
 
-    public Stream<Object> streamSingletons() {
+    @Value @Builder
+    static class ManagedBeanProvider implements _ManagedBeanAdapter {
 
-        val fields = _Lists.of(
+        String id;
+        Supplier<?> instanceProvider;
+        public Class<?> beanClass;
+
+        @Override
+        public boolean isCandidateFor(Class<?> requiredType) {
+            throw _Exceptions.notImplemented();
+        }
+
+        @Override
+        public Can<?> getInstance() {
+            return Can.ofSingleton(instanceProvider.get());
+        }
+
+    }
+
+    private Stream<Object> streamSingletons() {
+
+        val fields = Stream.of(
                 getConfiguration(),
                 getObjectManager(),
                 getWrapperFactory(),
@@ -181,6 +216,7 @@ implements MetaModelContext {
                 serviceInjector,
                 serviceRegistry,
                 metamodelEventService,
+                messageService,
                 specificationLoader,
                 interactionProvider,
                 getTranslationService(),
@@ -193,8 +229,23 @@ implements MetaModelContext {
                 transactionState,
                 this);
 
-        return Stream.concat(fields.stream(), getSingletons().stream())
+        return Stream.concat(
+                fields,
+                getSingletons().stream())
                 .filter(_NullSafe::isPresent);
+    }
+
+    Stream<_ManagedBeanAdapter> streamBeanAdapters() {
+        return Stream.concat(
+                streamSingletons().map(_ManagedBeanAdapter::forTesting),
+                Stream.of(
+                    // support for lazy bean providers,
+                    _ManagedBeanAdapter.forTestingLazy(GridLoaderService.class, this::getGridLoaderService),
+                    _ManagedBeanAdapter.forTestingLazy(GridService.class, this::getGridService),
+                    _ManagedBeanAdapter.forTestingLazy(JaxbService.class, this::getJaxbService),
+                    _ManagedBeanAdapter.forTestingLazy(MenuBarsService.class, this::getMenuBarsService),
+                    _ManagedBeanAdapter.forTestingLazy(LayoutService.class, this::getLayoutService)
+                ));
     }
 
     private static IsisSystemEnvironment newIsisSystemEnvironment() {
@@ -300,6 +351,9 @@ implements MetaModelContext {
         return specificationLoader;
     }
 
+    @Builder.Default
+    private final MessageService messageService = new MessageServiceNoop();
+
     @Override
     public ManagedObject getHomePageAdapter() {
         // not supported
@@ -322,6 +376,7 @@ implements MetaModelContext {
         return wrapperFactory;
     }
 
+
     public void runWithConfigProperties(final Consumer<Map<String, String>> setup, final Runnable runnable) {
         val properties = _Maps.<String, String>newHashMap();
         setup.accept(properties);
@@ -342,5 +397,34 @@ implements MetaModelContext {
         }
 
     }
+
+    // -- LAYOUT TESTING SUPPORT
+
+    @Getter(lazy = true)
+    private final JaxbService jaxbService = new JaxbService.Simple();
+
+    @Getter(lazy = true)
+    private final GridReaderUsingJaxb gridReader = new GridReaderUsingJaxb(getJaxbService(), null);
+
+    @Getter(lazy = true)
+    private final GridLoaderService gridLoaderService =
+        new GridLoaderServiceDefault(getMessageService(), getGridReader(), getSystemEnvironment());
+
+    @Getter(lazy = true)
+    private final GridService gridService = new GridServiceDefault(
+            getGridLoaderService(), _Lists.of(
+                    new GridSystemServiceBootstrap(getGridReader(),
+                            getSpecificationLoader(),
+                            getTranslationService(),
+                            getJaxbService(),
+                            getMessageService(),
+                            getSystemEnvironment())));
+
+    @Getter(lazy = true)
+    private final MenuBarsService menuBarsService = MenuBarsService.forTesting();
+
+    @Getter(lazy = true)
+    private final LayoutService layoutService = new LayoutServiceDefault(
+            getSpecificationLoader(), getJaxbService(), getGridService(), getMenuBarsService());
 
 }

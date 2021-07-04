@@ -21,6 +21,7 @@ package org.apache.isis.applib.services.menu;
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.layout.menubars.MenuBars;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 /**
  * Responsible for returning a {@link MenuBarsService} instance, a data
@@ -66,4 +67,17 @@ public interface MenuBarsService {
      * @param type - as requested
      */
     MenuBars menuBars(final Type type);
+
+    // -- JUNIT SUPPORT
+
+    static MenuBarsService forTesting() {
+        return new MenuBarsService() {
+
+            @Override
+            public MenuBars menuBars(Type type) {
+                throw _Exceptions.unsupportedOperation();
+            }
+
+        };
+    }
 }

@@ -22,26 +22,23 @@ import java.util.function.Supplier;
 
 import org.apache.isis.commons.collections.Can;
 
-/**
- * @since 2.0
- */
-public interface _ManagedBeanAdapter {
+import lombok.Value;
 
-    String getId();
-    Can<?> getInstance();
-    Class<?> getBeanClass();
+@Value(staticConstructor="of")
+final class _ManagedBeanAdapter_forTestingLazy implements _ManagedBeanAdapter {
 
-    boolean isCandidateFor(Class<?> requiredType);
+    private final String id;
+    private final Class<?> beanClass;
+    private final Supplier<?> beanProvider;
 
-    // -- TEST FACTORIES
-
-    public static <T> _ManagedBeanAdapter forTestingLazy(Class<T> beanClass, Supplier<T> beanProvider) {
-        return _ManagedBeanAdapter_forTestingLazy.of(beanClass.getName(), beanClass, beanProvider);
+    @Override
+    public boolean isCandidateFor(Class<?> requiredType) {
+        return requiredType.isAssignableFrom(beanClass);
     }
 
-    public static <T> _ManagedBeanAdapter forTesting(T bean) {
-        return _ManagedBeanAdapter_forTestingLazy.of(bean.getClass().getName(), bean.getClass(), ()->bean);
+    @Override
+    public Can<?> getInstance() {
+        return Can.ofSingleton(beanProvider.get());
     }
-
 
 }

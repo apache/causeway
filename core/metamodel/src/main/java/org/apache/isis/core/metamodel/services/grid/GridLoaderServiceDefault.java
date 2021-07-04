@@ -44,6 +44,7 @@ import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -52,12 +53,13 @@ import lombok.extern.log4j.Log4j2;
 @Named("isis.metamodel.GridLoaderServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
 public class GridLoaderServiceDefault implements GridLoaderService {
 
-    @Inject private MessageService messageService;
-    @Inject private GridReaderUsingJaxb gridReader;
-    @Inject private IsisSystemEnvironment isisSystemEnvironment;
+    private final MessageService messageService;
+    private final GridReaderUsingJaxb gridReader;
+    private final IsisSystemEnvironment isisSystemEnvironment;
 
     @Value
     static class DomainClassAndLayout {

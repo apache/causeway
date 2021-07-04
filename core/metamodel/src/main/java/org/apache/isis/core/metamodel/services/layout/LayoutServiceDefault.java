@@ -18,7 +18,16 @@
  */
 package org.apache.isis.core.metamodel.services.layout;
 
-import lombok.val;
+import java.io.File;
+
+import javax.annotation.Priority;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.xml.bind.Marshaller;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.layout.menubars.MenuBars;
@@ -32,25 +41,21 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.xml.bind.Marshaller;
-import java.io.File;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Service
 @Named("isis.metamodel.LayoutServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class LayoutServiceDefault implements LayoutService {
 
-    @Inject private SpecificationLoader specificationLoader;
-    @Inject private JaxbService jaxbService;
-    @Inject private GridService gridService;
-    @Inject private MenuBarsService menuBarsService;
+    private final SpecificationLoader specificationLoader;
+    private final JaxbService jaxbService;
+    private final GridService gridService;
+    private final MenuBarsService menuBarsService;
 
     @Override
     public String toXml(final Class<?> domainClass, final Style style) {

@@ -22,7 +22,6 @@ import java.util.Map;
 
 import javax.xml.bind.Marshaller;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.apache.isis.applib.layout.component.ActionLayoutData;
@@ -35,29 +34,39 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
+import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.jaxb.IsisSchemas;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.services.grid.bootstrap3.GridSystemServiceBootstrap;
+import org.apache.isis.core.metamodel.MetaModelTestAbstract;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-class BS3GridTest {
+class GridXmlRoundtripTest
+extends MetaModelTestAbstract {
 
     private JaxbService jaxbService;
+//    private GridLoaderServiceDefault gridLoaderService;
+//    private LayoutService layoutService;
     private GridServiceDefault gridServiceDefault;
-    private GridSystemServiceBootstrap gridSystemServiceBS3;
+//    private GridSystemServiceBootstrap gridSystemServiceBS3;
 
-    @BeforeEach
-    void setUp() throws Exception {
-        jaxbService = new JaxbService.Simple() {};
-        gridServiceDefault = new GridServiceDefault();
-        gridSystemServiceBS3 = new GridSystemServiceBootstrap();
-        gridServiceDefault.gridSystemServicesForTest = _Lists.of(gridSystemServiceBS3);
+    @Override
+    protected void afterSetUp() {
+        jaxbService = getServiceRegistry().lookupServiceElseFail(JaxbService.class);
+        gridServiceDefault = (GridServiceDefault)getServiceRegistry().lookupServiceElseFail(GridService.class);
+        //gridLoaderService = (GridLoaderServiceDefault)getServiceRegistry().lookupServiceElseFail(GridLoaderService.class);
     }
+
+//    @BeforeEach
+//    void setUp() throws Exception {
+//
+//        gridSystemServiceBS3 = new GridSystemServiceBootstrap(null);
+//        gridServiceDefault.gridSystemServicesForTest = _Lists.of(gridSystemServiceBS3);
+//    }
 
 
     @Test

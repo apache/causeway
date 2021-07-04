@@ -21,9 +21,9 @@ package org.apache.isis.core.metamodel.services.grid;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.apache.isis.core.metamodel.services.grid.GridLoaderServiceDefault.DomainClassAndLayout;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class GridLoaderServiceDefault_resourceNameTest {
 
@@ -31,7 +31,7 @@ class GridLoaderServiceDefault_resourceNameTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        gridLoaderServiceDefault = new GridLoaderServiceDefault();
+        gridLoaderServiceDefault = new GridLoaderServiceDefault(null, null, null);
     }
 
     @Test

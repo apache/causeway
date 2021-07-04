@@ -18,7 +18,17 @@
  */
 package org.apache.isis.core.metamodel.services.grid;
 
-import lombok.val;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.annotation.Priority;
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.services.grid.GridLoaderService;
@@ -27,20 +37,15 @@ import org.apache.isis.applib.services.grid.GridSystemService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Service
 @Named("isis.metamodel.GridServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class GridServiceDefault implements GridService {
 
     public static final String COMPONENT_TNS = "http://isis.apache.org/applib/layout/component";
@@ -49,8 +54,8 @@ public class GridServiceDefault implements GridService {
     public static final String LINKS_TNS = "http://isis.apache.org/applib/layout/links";
     public static final String LINKS_SCHEMA_LOCATION = "http://isis.apache.org/applib/layout/links/links.xsd";
 
-    @Inject private GridLoaderService gridLoaderService;
-    @Inject private List<GridSystemService<?>> gridSystemServices;
+    private final GridLoaderService gridLoaderService;
+    private final List<GridSystemService<? extends Grid>> gridSystemServices;
 
     // //////////////////////////////////////
 
@@ -85,7 +90,7 @@ public class GridServiceDefault implements GridService {
     public Grid defaultGridFor(Class<?> domainClass) {
 
         for (val gridSystemService : gridSystemServices()) {
-            val grid = (Grid) gridSystemService.defaultGrid(domainClass);
+            val grid = gridSystemService.defaultGrid(domainClass);
             if(grid != null) {
                 return grid;
             }
@@ -162,7 +167,7 @@ public class GridServiceDefault implements GridService {
 
     ////////////////////////////////////////////////////////
 
-    private List<GridSystemService<?>> filteredGridSystemServices;
+    private List<GridSystemService<? extends Grid>> filteredGridSystemServices;
 
     /**
      * For all of the {@link GridSystemService}s available, return only the first one for any that
@@ -173,7 +178,7 @@ public class GridServiceDefault implements GridService {
      *   general idea of multiple implementations.
      * </p>
      */
-    protected List<GridSystemService<?>> gridSystemServices() {
+    protected List<GridSystemService<? extends Grid>> gridSystemServices() {
 
         if (filteredGridSystemServices == null) {
 
@@ -191,11 +196,11 @@ public class GridServiceDefault implements GridService {
 
     // -- poor man's testing support
 
-    List<GridSystemService<?>> gridSystemServicesForTest;
-    Collection<GridSystemService<?>> getGridSystemServices() {
+    List<GridSystemService<? extends Grid>> gridSystemServicesForTest;
+    Collection<GridSystemService<? extends Grid>> getGridSystemServices() {
         return gridSystemServices!=null
                 ? gridSystemServices
-                        : gridSystemServicesForTest;
+                : gridSystemServicesForTest;
     }
 
 
