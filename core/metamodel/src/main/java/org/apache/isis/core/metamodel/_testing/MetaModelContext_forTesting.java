@@ -385,7 +385,11 @@ implements MetaModelContext {
     private final MenuBarsService menuBarsService = MenuBarsService.forTesting();
 
     @Getter(lazy = true)
-    private final GridReaderUsingJaxb gridReader = new GridReaderUsingJaxb(getJaxbService(), getServiceRegistry());
+    private final GridReaderUsingJaxb gridReader = createGridReader();
+    //XXX lombok issue: won't compile if inlined
+    private final GridReaderUsingJaxb createGridReader() {
+        return new GridReaderUsingJaxb(getJaxbService(), getServiceRegistry());
+    }
 
     @Getter(lazy = true)
     private final GridLoaderService gridLoaderService = createGridLoaderService();
