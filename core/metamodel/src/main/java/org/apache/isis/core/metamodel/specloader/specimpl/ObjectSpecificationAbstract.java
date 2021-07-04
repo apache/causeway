@@ -791,6 +791,10 @@ implements ObjectSpecification {
         if(!mixinFacet.isMixinFor(getCorrespondingClass())) {
             return;
         }
+        // don't mixin Object_ mixins to domain services
+        if(mixinFacet.isMixinFor(java.lang.Object.class) && getBeanSort().isManagedBeanContributing()) {
+            return;
+        }
         val mixinMethodName = mixinFacet.value();
 
         mixinSpec.streamActions(ActionType.ANY, MixedIn.EXCLUDED)
