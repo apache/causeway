@@ -50,12 +50,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
     @Before
     public void setUp() throws Exception {
 
-        //val mockServiceInjector = Mockito.mock(ServiceInjector.class);
-
         val metaModelContext = MetaModelContext_forTesting.builder()
-                .programmingModelFactory(ProgrammingModelFacetsJava8::new)
                 .build();
-
 
         super.setUpFacetedMethodAndParameter();
 

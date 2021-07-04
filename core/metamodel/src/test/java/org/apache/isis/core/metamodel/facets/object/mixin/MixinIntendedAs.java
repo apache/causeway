@@ -20,16 +20,8 @@ package org.apache.isis.core.metamodel.facets.object.mixin;
 
 import java.lang.reflect.Method;
 
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mockito;
-
-import static org.mockito.Mockito.when;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
-import org.apache.isis.applib.services.i18n.Mode;
-import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
@@ -38,8 +30,6 @@ import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
-import org.apache.isis.core.metamodel.services.title.TitleServiceDefault;
 
 import lombok.val;
 
@@ -50,28 +40,14 @@ abstract class MixinIntendedAs {
 
     protected void setUp() throws Exception {
 
-        val mockServiceInjector = Mockito.mock(ServiceInjector.class);
-        when(mockServiceInjector.injectServicesInto(ArgumentMatchers.any())).thenAnswer(i -> i.getArguments()[0]);
-
-        val mockTranslationService = Mockito.mock(TranslationService.class);
-        when(mockTranslationService.getMode()).thenReturn(Mode.DISABLED);
-
-        // PRODUCTION
-
         metaModelContext = MetaModelContext_forTesting.builder()
-                .programmingModelFactory(ProgrammingModelFacetsJava8::new)
-                .translationService(mockTranslationService)
-                .titleService(new TitleServiceDefault(null, null))
-                .serviceInjector(mockServiceInjector)
                 .build();
-
-        metaModelContext.getSpecificationLoader().createMetaModel();
 
         programmingModel = metaModelContext.getProgrammingModel();
     }
 
     protected void tearDown() {
-        programmingModel = null;
+        metaModelContext.getSpecificationLoader().disposeMetaModel();
     }
 
     protected void newContext(

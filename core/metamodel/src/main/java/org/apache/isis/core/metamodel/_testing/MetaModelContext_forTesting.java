@@ -25,8 +25,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static java.util.Objects.requireNonNull;
-
 import org.springframework.core.env.AbstractEnvironment;
 
 import org.apache.isis.applib.services.factory.FactoryService;
@@ -59,6 +57,7 @@ import org.apache.isis.core.metamodel.objectmanager.ObjectManagerDefault;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
+import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.core.metamodel.services.title.TitleServiceDefault;
@@ -68,13 +67,16 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
+import static java.util.Objects.requireNonNull;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Singular;
 import lombok.val;
 
 @Builder @Getter
-public final class MetaModelContext_forTesting implements MetaModelContext {
+public final class MetaModelContext_forTesting
+implements MetaModelContext {
 
     public static MetaModelContext buildDefault() {
         return MetaModelContext_forTesting.builder()
@@ -86,8 +88,9 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
 
     @Builder.Default
     private MetamodelEventService metamodelEventService =
-    MetamodelEventService.builder()
-    .build();
+        MetamodelEventService
+        .builder()
+        .build();
 
     @Builder.Default
     private IsisSystemEnvironment systemEnvironment = newIsisSystemEnvironment();
@@ -104,7 +107,8 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
 
     private SpecificationLoader specificationLoader;
 
-    private Function<MetaModelContext,  ProgrammingModel> programmingModelFactory;
+    @Builder.Default
+    private Function<MetaModelContext,  ProgrammingModel> programmingModelFactory = ProgrammingModelFacetsJava8::new;
 
     private InteractionProvider interactionProvider;
 
@@ -192,8 +196,6 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
         return Stream.concat(fields.stream(), getSingletons().stream())
                 .filter(_NullSafe::isPresent);
     }
-
-
 
     private static IsisSystemEnvironment newIsisSystemEnvironment() {
         val env = new IsisSystemEnvironment();
@@ -339,9 +341,13 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
             this.configuration = currentConfigBackup;
         }
 
-
-
     }
 
+    // -- WITHERS
+
+    public MetaModelContext updateTitleService(Function<MetaModelContext, TitleService> factory) {
+        titleService = factory.apply(this);
+        return this;
+    }
 
 }

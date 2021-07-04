@@ -22,7 +22,6 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import java.time.Duration;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -32,15 +31,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
-import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import javax.activation.DataSource;
 import javax.validation.Constraint;
@@ -51,7 +43,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.convert.DurationUnit;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.validation.annotation.Validated;
 
@@ -69,6 +60,7 @@ import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.applib.services.userui.UserMenu;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.core.config.IsisConfiguration.Viewer;
 import org.apache.isis.core.config.metamodel.facets.DefaultViewConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.ActionPublishingPolicy;
@@ -78,12 +70,15 @@ import org.apache.isis.core.config.metamodel.services.ApplicationFeaturesInitCon
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.core.config.viewer.wicket.DialogMode;
 
-import lombok.Builder;
+import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 import lombok.Data;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
-import lombok.Singular;
 import lombok.Value;
 import lombok.val;
 

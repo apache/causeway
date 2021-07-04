@@ -18,47 +18,26 @@
  */
 package org.apache.isis.core.metamodel.services.title;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mockito;
+
+import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
-
-import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 
 import lombok.val;
 
 class TitleServiceDefaultTest {
 
-    private MetaModelContext metaModelContext;
     private TitleServiceDefault titleService;
 
     @BeforeEach
     void setUp() throws Exception {
 
-        val mockServiceInjector = Mockito.mock(ServiceInjector.class);
-        when(mockServiceInjector.injectServicesInto(ArgumentMatchers.any())).thenAnswer(i -> i.getArguments()[0]);
-
-        metaModelContext = MetaModelContext_forTesting.builder()
-                .programmingModelFactory(ProgrammingModelFacetsJava8::new)
-                .titleService(new TitleServiceDefault(null, null)) // not used by this test, but required to init
-                .serviceInjector(mockServiceInjector)
-                .build();
-
-        metaModelContext.getSpecificationLoader().createMetaModel();
-
-        titleService = new TitleServiceDefault(null, metaModelContext.getObjectManager());
-
-    }
-
-    @AfterEach
-    void tearDown() throws Exception {
+        MetaModelContext_forTesting.builder()
+                .build()
+                .updateTitleService(mmc->titleService = new TitleServiceDefault(null, mmc.getObjectManager()))
+                ;
     }
 
     // -- FEATURED
