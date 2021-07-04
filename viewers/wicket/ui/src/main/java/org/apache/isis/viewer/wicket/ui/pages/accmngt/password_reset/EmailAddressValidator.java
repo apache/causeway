@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 import org.apache.wicket.validation.validator.PatternValidator;
 
 /**
- * Copy of {@link org.apache.wicket.validation.validator.EmailAddressValidator}.
+ * Copy of {@link org.apache.wicket.validation.validator.EmailAddressValidator}, generalized a little.
  */
 public class EmailAddressValidator extends PatternValidator {
     private static final long serialVersionUID = 1L;
@@ -17,7 +17,8 @@ public class EmailAddressValidator extends PatternValidator {
 
     protected EmailAddressValidator() {
         super(
-        "^[_A-Za-z0-9-]+" +
+        "^[_A-Za-z0-9-]" +
+               "[_A-Za-z0-9-+]+" +
                 "(\\.[_A-Za-z0-9-]+)*" +
                 "@[A-Za-z0-9-]+" +
                 "(\\.[A-Za-z0-9-]+)*" +
