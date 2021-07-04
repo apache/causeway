@@ -42,7 +42,7 @@ class RoTable(displayCollection: CollectionDM) : SimplePanel() {
     init {
         title = Utils.extractTitle(displayCollection.title)
         width = CssSize(100, UNIT.perc)
-        val model = displayCollection.data
+        val model = displayCollection.data as List<Exposer>
         val columns = ColumnFactory().buildColumns(
                 displayCollection,
                 true)

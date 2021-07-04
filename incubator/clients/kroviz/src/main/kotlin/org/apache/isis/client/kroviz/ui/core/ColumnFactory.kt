@@ -53,15 +53,20 @@ class ColumnFactory {
             displayCollection: CollectionDM,
             withCheckBox: Boolean = false): List<ColumnDefinition<dynamic>> {
 
+        val model = mutableListOf<dynamic>()
+        displayCollection.data.forEach {
+            model.add(it.asDynamic())
+        }
         console.log("[CF.buildColumns]")
-        console.log(displayCollection)
+        console.log(model::class.simpleName)
+        console.log(model)
         val columns = mutableListOf<ColumnDefinition<dynamic>>()
         if (withCheckBox) {
             val checkBox = buildCheckBox()
             columns.add(checkBox)
         }
 
-        if (hasIcon(displayCollection)) {
+        if (hasIcon(displayCollection.data)) {
             val menu = buildMenu()
             columns.add(menu)
 
@@ -71,12 +76,11 @@ class ColumnFactory {
 
         val propertyLabels = displayCollection.properties.list
         for (pl in propertyLabels) {
-            console.log("[CF.buildColumns]")
-            console.log(pl.hidden())
-            if (!pl.hidden()) {
+            if (!pl.hidden) {
                 val id = pl.key
+                console.log("id: $id")
                 val friendlyName = pl.friendlyName
-                var cd = ColumnDefinition<Exposer>(
+                var cd = ColumnDefinition<dynamic>(
                         title = friendlyName,
                         field = id,
                         headerFilter = Editor.INPUT)
@@ -89,8 +93,7 @@ class ColumnFactory {
         return columns
     }
 
-    private fun hasIcon(displayCollection: CollectionDM): Boolean {
-        val model = displayCollection.data as List<dynamic>
+    private fun hasIcon(model: List<dynamic>): Boolean {
         return (model[0].hasOwnProperty("iconName") as Boolean)
     }
 

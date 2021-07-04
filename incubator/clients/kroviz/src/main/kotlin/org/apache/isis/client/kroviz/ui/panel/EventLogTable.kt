@@ -27,10 +27,7 @@ import io.kvision.tabulator.*
 import io.kvision.utils.obj
 import io.kvision.utils.px
 import org.apache.isis.client.kroviz.core.event.LogEntry
-import org.apache.isis.client.kroviz.to.HasLinks
-import org.apache.isis.client.kroviz.to.Relation
 import org.apache.isis.client.kroviz.to.TObject
-import org.apache.isis.client.kroviz.to.TransferObject
 import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.ui.dialog.EventLogDetail
@@ -116,7 +113,7 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
         return b
     }
 
-    fun shorten(url: String): String {
+    private fun shorten(url: String): String {
         var result = url
         val signature = Constants.restInfix
         if (url.contains(signature)) {

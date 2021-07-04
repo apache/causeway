@@ -24,7 +24,7 @@ object Response2Handler {
 
     val map = mapOf(
             ACTIONS_STRINGS to ActionHandler(),
-            ACTIONS_STRINGS_INVOKE to TObjectHandler(),
+//            ACTIONS_STRINGS_INVOKE to TObjectHandler(),    // comented out due to issues with object-icon
             ACTIONS_WHEREINTHEWORLD_INVOKE to TObjectHandler(),
             ACTIONS_TEXT_INVOKE to TObjectHandler(),
             ASSOCIATED_ACTION_OBJECT_LAYOUT to LayoutHandler(),

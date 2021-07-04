@@ -11,7 +11,7 @@ abstract class AggregatorWithLayout : BaseAggregator() {
     protected fun handleLayout(layout: Layout, dm: DisplayModelWithLayout) {
         if (dm.layout == null) {
             dm.addLayout(layout)
-            dm.propertyLayoutList.forEach { p ->
+            dm.properties.propertyLayoutList.forEach { p ->
                 val l = p.link!!
                 val isDn = l.href.contains("datanucleus")
                 if (!isDn) {

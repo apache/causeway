@@ -19,7 +19,6 @@
 package org.apache.isis.client.kroviz.core.model
 
 import org.apache.isis.client.kroviz.layout.Layout
-import org.apache.isis.client.kroviz.layout.PropertyLt
 import org.apache.isis.client.kroviz.layout.RowLt
 import org.apache.isis.client.kroviz.to.Property
 import org.apache.isis.client.kroviz.to.bs3.Grid
@@ -28,17 +27,14 @@ abstract class DisplayModelWithLayout : DisplayModel() {
 
     var layout: Layout? = null
     var grid: Grid? = null
-    var propertyDescriptionList = mutableListOf<Property>()
-    var propertyLayoutList = mutableListOf<PropertyLt>()
-    val properties = Properties()
+    val properties = CollectionProperties()
 
     override fun canBeDisplayed(): Boolean {
         return when {
             isRendered -> false
             layout == null -> false
             grid == null -> false
-            propertyDescriptionList.isEmpty() -> false
-            else -> true
+            else -> properties.readyForDisplay()
         }
     }
 
@@ -57,9 +53,6 @@ abstract class DisplayModelWithLayout : DisplayModel() {
         r.cols.forEach { cs ->
             val c = cs.getCol()
             c.fieldSet.forEach { fs ->
-                console.log("[DMWL.initLayout4Row]")
-                console.log(fs.property)
-                propertyLayoutList.addAll(fs.property)
                 properties.addAllPropertyLayout(fs.property)
             }
             c.tabGroup.forEach { tg ->
@@ -73,7 +66,6 @@ abstract class DisplayModelWithLayout : DisplayModel() {
     }
 
     fun addPropertyDescription(p: Property) {
-        propertyDescriptionList.add(p)
         properties.addPropertyDescription(p)
     }
 

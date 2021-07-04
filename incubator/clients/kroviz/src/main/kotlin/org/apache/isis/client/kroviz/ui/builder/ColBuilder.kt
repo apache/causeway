@@ -59,13 +59,9 @@ class ColBuilder : UiBuilder() {
             panel.add(rowCpt)
         }
         for (c in col.collectionList) {
-            console.log("[CB.create]")
-            // analogous to UiManager.openCollectionView
             val key = c.id  // entities
             val objectDM = dsp.displayModel
             val collectionDM = objectDM.collections.get(key)!!
-            console.log(collectionDM.grid)
-            console.log(collectionDM.layout)
             val tblCpt = RoTable(collectionDM)
             val fsPanel = FieldsetPanel(legend = key.capitalize()).add(tblCpt)
             panel.add(fsPanel)

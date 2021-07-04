@@ -22,38 +22,56 @@ import org.apache.isis.client.kroviz.layout.PropertyLt
 import org.apache.isis.client.kroviz.to.Extensions
 import org.apache.isis.client.kroviz.to.Property
 
-class Properties() {
-    val list = mutableListOf<PropertyFacade>()
+class CollectionProperties() {
+    val list = mutableListOf<ColumnProperties>()
+    var propertyDescriptionList = mutableListOf<Property>()
+    var propertyLayoutList = mutableListOf<PropertyLt>()
+    var propertyList = mutableListOf<Property>()
+
+    fun readyForDisplay(): Boolean {
+        val ps = propertyList.size
+        val pls = propertyLayoutList.size
+        val pds = propertyDescriptionList.size
+        val descriptionsComplete = (pds >= pls) && (pds >= ps)
+        return descriptionsComplete
+    }
 
     fun addProperty(property: Property) {
+        propertyList.add(property)
         val id = property.id
-        val pf = findOrCreate(id)
-        pf.property = property
+        val cp = findOrCreate(id)
+        cp.property = property
     }
 
     fun addAllPropertyLayout(layoutList: List<PropertyLt>) {
+        propertyLayoutList.addAll(layoutList)
         fun addPropertyLayout(layout: PropertyLt) {
             val id = layout.id!!
-            val pf = findOrCreate(id)
-            pf.layout = layout
+            val cp = findOrCreate(id)
+            cp.initLayout(layout)
         }
         layoutList.forEach { addPropertyLayout(it) }
     }
 
     fun addPropertyDescription(description: Property) {
+        propertyDescriptionList.add(description)
         val id = description.id
-        val pf = findOrCreate(id)
+        val cp = findOrCreate(id)
         val e: Extensions = description.extensions!!
-        pf.friendlyName = e.friendlyName
+        cp.friendlyName = e.friendlyName
     }
 
-    private fun findOrCreate(id: String): PropertyFacade {
-        var pf = list.find { it.key == id }
-        if (pf == null) {
-            pf = PropertyFacade(id)
-            list.add(pf)
+    private fun findOrCreate(id: String): ColumnProperties {
+        var cp = find(id)
+        if (cp == null) {
+            cp = ColumnProperties(id)
+            list.add(cp)
         }
-        return pf
+        return cp
+    }
+
+    fun find(id: String): ColumnProperties? {
+        return list.find { it.key == id }
     }
 
 }
@@ -62,21 +80,20 @@ class Properties() {
  * Properties have three aspects:
  *
  * - Member of a DomainObject
- * - Description (labels, friendlyName)
- * - Layout
+ * - Description (friendlyName, etc.)
+ * - Layout (hidden, etc.)
  *
  * All three are required in order to display correctly in a table.
  */
-class PropertyFacade(val key: String) {
+class ColumnProperties(val key: String) {
     var property: Property? = null
     var friendlyName: String = ""
     var layout: PropertyLt? = null
+    var hidden: Boolean = true
 
-    fun hidden(): Boolean {
-        if (layout != null) {
-            return (layout!!.hidden != null)
-        }
-        return false
+    fun initLayout(layout: PropertyLt) {
+        this.layout = layout
+        hidden = (layout.hidden != null)
     }
 
 }

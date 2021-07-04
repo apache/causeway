@@ -23,6 +23,7 @@ import org.apache.isis.client.kroviz.snapshots.demo2_0_0.Response2Handler
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import kotlin.test.fail
 
 class LinkTest {
 
@@ -88,10 +89,13 @@ class LinkTest {
             if (ro is HasLinks) {
                 val links = ro.links
                 links.forEach { l ->
-                    console.log("[LT.testFindParsedLinkENums]")
-                    console.log(l)
-                    console.log(l.relation())
-                    console.log(l.representation())
+                    try {
+                        l.relation()
+                        l.representation()
+                    } catch (e: NullPointerException) {
+                        console.log(l.href)
+                        fail("${rh.key} Relation/Represention of $l fails")
+                    }
                 }
             }
         }
