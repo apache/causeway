@@ -48,11 +48,11 @@ import lombok.RequiredArgsConstructor;
 @Named("isis.metamodel.GridReaderUsingJaxb")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
+@RequiredArgsConstructor(onConstructor_ = {@Inject, @org.springframework.context.annotation.Lazy})
 public class GridReaderUsingJaxb {
 
     private final JaxbService jaxbService;
-    private final List<GridSystemService<?>> gridSystemServices;
+    private final List<GridSystemService<?>> gridSystemServices; /* dependency circle */
 
     private JAXBContext jaxbContext;
 
