@@ -45,7 +45,7 @@ extends MemberDescribedFacetWithStaticTextAbstract {
     private MemberDescribedFacetForCollectionXml(
             final String described,
             final FacetHolder holder) {
-        super(described, holder);
+        super(described, holder, Precedence.HIGH); // XML layout overrules layout from annotations
     }
 
 }

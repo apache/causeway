@@ -50,7 +50,7 @@ implements
             final Method method,
             final FacetHolder holder) {
         // imperative takes precedence over any other (except for events)
-        super(facetType, holder, Precedence.HIGH);
+        super(facetType, holder, Precedence.IMPERATIVE);
         this.method = method;
         this.translationContext = translationContext;
     }

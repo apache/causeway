@@ -29,4 +29,9 @@ extends
 
     _Either<HasStaticText, HasImperativeText> getSpecialization();
 
+    @Override
+    default boolean isPopulateAllFacetRanks() {
+        return true;
+    }
+
 }

@@ -49,8 +49,6 @@ import org.apache.isis.core.metamodel.facets.actions.layout.HiddenFacetForAction
 import org.apache.isis.core.metamodel.facets.actions.layout.MemberNamedFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.PromptStyleFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.RedirectFacetFromActionXml;
-import org.apache.isis.core.metamodel.facets.collections.layout.CanonicalDescribedFacetForCollectionXml;
-import org.apache.isis.core.metamodel.facets.collections.layout.CanonicalNamedFacetForCollectionXml;
 import org.apache.isis.core.metamodel.facets.collections.layout.CssClassFacetForCollectionXml;
 import org.apache.isis.core.metamodel.facets.collections.layout.DefaultViewFacetForCollectionXml;
 import org.apache.isis.core.metamodel.facets.collections.layout.HiddenFacetForCollectionXml;
@@ -66,8 +64,6 @@ import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.CssClassF
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.CssClassFacetForDomainObjectXml;
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.DescribedAsFacetForDomainObjectXml;
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.ObjectNamedFacetForDomainObjectXml;
-import org.apache.isis.core.metamodel.facets.properties.propertylayout.CanonicalDescribedFacetForPropertyXml;
-import org.apache.isis.core.metamodel.facets.properties.propertylayout.CanonicalNamedFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.CssClassFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.HiddenFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.LabelAtFacetForPropertyXml;
@@ -249,12 +245,10 @@ implements GridSystemService<G> {
 
                 addFacetIfPresent(CssClassFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 addFacetIfPresent(MemberDescribedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
-                addFacetIfPresent(CanonicalDescribedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 addFacetIfPresent(HiddenFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 addFacetIfPresent(LabelAtFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 addFacetIfPresent(MultiLineFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 addFacetIfPresent(MemberNamedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
-                addFacetIfPresent(CanonicalNamedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 addFacetIfPresent(PromptStyleFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 addFacetIfPresent(RenderedAdjustedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 addFacetIfPresent(UnchangingFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
@@ -279,10 +273,8 @@ implements GridSystemService<G> {
                 addFacetIfPresent(CssClassFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
                 addFacetIfPresent(DefaultViewFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
                 addFacetIfPresent(MemberDescribedFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
-                addFacetIfPresent(CanonicalDescribedFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
                 addFacetIfPresent(HiddenFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
                 addFacetIfPresent(MemberNamedFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
-                addFacetIfPresent(CanonicalNamedFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
                 addFacetIfPresent(PagedFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
                 addFacetIfPresent(SortedByFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
 

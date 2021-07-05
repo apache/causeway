@@ -60,10 +60,6 @@ extends FacetFactoryAbstract {
                 .create(collectionLayoutIfAny, facetHolder));
 
         addFacetIfPresent(
-                CanonicalDescribedFacetForCollectionLayoutAnnotation
-                .create(collectionLayoutIfAny, facetHolder));
-
-        addFacetIfPresent(
                 HiddenFacetForCollectionLayoutAnnotation
                 .create(collectionLayoutIfAny, facetHolder));
 
@@ -73,10 +69,6 @@ extends FacetFactoryAbstract {
 
         addFacetIfPresent(
                 MemberNamedFacetForCollectionLayoutAnnotation
-                .create(collectionLayoutIfAny, facetHolder));
-
-        addFacetIfPresent(
-                CanonicalNamedFacetForCollectionLayoutAnnotation
                 .create(collectionLayoutIfAny, facetHolder));
 
         addFacetIfPresent(

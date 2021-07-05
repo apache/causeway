@@ -43,7 +43,7 @@ extends MemberNamedFacetWithStaticTextAbstract {
     }
 
     private MemberNamedFacetForActionXml(final String named, final FacetHolder holder) {
-        super(named, holder);
+        super(named, holder, Precedence.HIGH); // XML layout overrules layout from annotations
     }
 
 }
