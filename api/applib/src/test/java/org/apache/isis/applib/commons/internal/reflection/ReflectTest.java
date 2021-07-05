@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.commons.internal.reflection;
+package org.apache.isis.applib.commons.internal.reflection;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -27,10 +27,6 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.reflection._Reflect.InterfacePolicy;
@@ -38,6 +34,9 @@ import org.apache.isis.commons.internal.reflection._Reflect.InterfacePolicy;
 import static org.apache.isis.commons.internal.reflection._Reflect.getAnnotation;
 import static org.apache.isis.commons.internal.reflection._Reflect.streamAllMethods;
 import static org.apache.isis.commons.internal.reflection._Reflect.streamTypeHierarchy;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import lombok.val;
 
@@ -53,11 +52,11 @@ class ReflectTest {
                 .collect(Collectors.toSet());
 
         assertSetContainsAll(_Sets.<String>of(
-                    "org.apache.isis.core.metamodel.commons.internal.reflection.ReflectSampleForTesting$Nested",
+                    "org.apache.isis.applib.commons.internal.reflection.ReflectSampleForTesting$Nested",
                     "java.lang.Object"),
                 typeSet);
     }
-    
+
 
     @Test
     void typeHierarchyAndInterfaces() {
@@ -67,11 +66,11 @@ class ReflectTest {
         val typeSet = streamTypeHierarchy(type, InterfacePolicy.INCLUDE)
                 .map(Class::getName)
                 .collect(Collectors.toSet());
-        
+
         assertSetContainsAll(_Sets.<String>of(
-                    "org.apache.isis.core.metamodel.commons.internal.reflection.ReflectSampleForTesting$NestedInterface",
-                    "org.apache.isis.core.metamodel.commons.internal.reflection.ReflectSampleForTesting$Nested",
-                    "java.lang.Object"), 
+                    "org.apache.isis.applib.commons.internal.reflection.ReflectSampleForTesting$NestedInterface",
+                    "org.apache.isis.applib.commons.internal.reflection.ReflectSampleForTesting$Nested",
+                    "java.lang.Object"),
                 typeSet);
 
     }
@@ -84,10 +83,10 @@ class ReflectTest {
         val typeSet = streamAllMethods(type, true)
                 .map(m->m.toString())
                 .collect(Collectors.toSet());
-        
+
         assertSetContainsAll(_Sets.<String>of(
-                "public abstract void org.apache.isis.core.metamodel.commons.internal.reflection.ReflectSampleForTesting$NestedInterface.sayHello()",
-                "public void org.apache.isis.core.metamodel.commons.internal.reflection.ReflectSampleForTesting$Nested.sayHello()"),
+                "public abstract void org.apache.isis.applib.commons.internal.reflection.ReflectSampleForTesting$NestedInterface.sayHello()",
+                "public void org.apache.isis.applib.commons.internal.reflection.ReflectSampleForTesting$Nested.sayHello()"),
             typeSet);
 
     }
@@ -111,8 +110,8 @@ class ReflectTest {
     static interface I {
         static class B implements I {}
     }
-    
-    
+
+
     @Test
     void typeHierarchyAndInterfaces2() {
 
@@ -132,7 +131,7 @@ class ReflectTest {
 
 
     // -- HELPER
-    
+
     private static void assertSetContainsAll(Set<String> shouldContain, Set<String> actuallyContains) {
         assertTrue(_Sets.minus(shouldContain, actuallyContains).isEmpty());
     }

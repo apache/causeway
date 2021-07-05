@@ -51,6 +51,7 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.collections._Streams;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.ioc._ManagedBeanAdapter;
 import org.apache.isis.core.config.IsisConfiguration;
@@ -160,6 +161,9 @@ implements MetaModelContext {
     @Singular
     private List<Object> singletons;
 
+    @Singular
+    private List<_ManagedBeanAdapter> singletonProviders;
+
     // -- SERVICE SUPPORT
 
     @Override
@@ -212,7 +216,7 @@ implements MetaModelContext {
     }
 
     Stream<_ManagedBeanAdapter> streamBeanAdapters() {
-        return Stream.concat(
+        return _Streams.concat(
                 streamSingletons().map(_ManagedBeanAdapter::forTesting),
                 Stream.of(
                     // support for lazy bean providers,
@@ -221,7 +225,8 @@ implements MetaModelContext {
                     _ManagedBeanAdapter.forTestingLazy(JaxbService.class, this::getJaxbService),
                     _ManagedBeanAdapter.forTestingLazy(MenuBarsService.class, this::getMenuBarsService),
                     _ManagedBeanAdapter.forTestingLazy(LayoutService.class, this::getLayoutService)
-                ));
+                ),
+                singletonProviders.stream());
     }
 
     private static IsisSystemEnvironment newIsisSystemEnvironment() {
@@ -380,7 +385,14 @@ implements MetaModelContext {
     private final JaxbService jaxbService = new JaxbService.Simple();
 
     @Getter(lazy = true)
-    private final MenuBarsService menuBarsService = MenuBarsService.forTesting();
+    private final MenuBarsService menuBarsService = createMenuBarsService();
+    private final MenuBarsService createMenuBarsService() {
+        return getSingletonProviders().stream()
+                .filter(provider->provider.isCandidateFor(MenuBarsService.class))
+                .findFirst()
+                .map(provider->(MenuBarsService)provider.getInstance().getFirstOrFail())
+                .orElseGet(MenuBarsService::forTesting);
+    }
 
     @Getter(lazy = true)
     private final GridReaderUsingJaxb gridReader = createGridReader();

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.commons.internal.reflection;
+package org.apache.isis.applib.commons.internal.reflection;
 
 public class ReflectSampleForTesting {
 
