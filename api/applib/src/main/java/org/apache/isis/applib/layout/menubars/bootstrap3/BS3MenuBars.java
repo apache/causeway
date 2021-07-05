@@ -27,7 +27,6 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
-import org.apache.isis.applib.layout.menubars.MenuBars;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 /**
@@ -101,7 +100,7 @@ public class BS3MenuBars extends org.apache.isis.applib.layout.menubars.MenuBars
         return null;
     }
 
-    public interface Visitor extends MenuBars.Visitor {
+    public interface Visitor extends Consumer<ServiceActionLayoutData> {
         void preVisit(final BS3MenuBar menuBar);
         void visit(final BS3MenuBar menuBar);
         void postVisit(final BS3MenuBar menuBar);
@@ -128,7 +127,7 @@ public class BS3MenuBars extends org.apache.isis.applib.layout.menubars.MenuBars
         @Override public void visit(final BS3MenuSection section) { }
         @Override public void postVisit(final BS3MenuSection menuSection) { }
 
-        @Override public void visit(final ServiceActionLayoutData serviceActionLayoutData) { }
+        @Override public void accept(final ServiceActionLayoutData serviceActionLayoutData) { }
 
         // -- PREDEFINED SHORTCUTS
 
@@ -151,13 +150,13 @@ public class BS3MenuBars extends org.apache.isis.applib.layout.menubars.MenuBars
     }
 
     @Override
-    public void visit(final MenuBars.Visitor visitor) {
+    public void visit(final Consumer<ServiceActionLayoutData> visitor) {
         traverseMenuBar(getPrimary(), visitor);
         traverseMenuBar(getSecondary(), visitor);
         traverseMenuBar(getTertiary(), visitor);
     }
 
-    private void traverseMenuBar(final BS3MenuBar menuBar, final MenuBars.Visitor visitor) {
+    private void traverseMenuBar(final BS3MenuBar menuBar, final Consumer<ServiceActionLayoutData> visitor) {
 
         final Visitor bs3Visitor = visitor instanceof Visitor ? (Visitor) visitor : null;
 
@@ -175,7 +174,7 @@ public class BS3MenuBars extends org.apache.isis.applib.layout.menubars.MenuBars
         }
     }
 
-    private void traverseMenu(final BS3Menu menu, final MenuBars.Visitor visitor) {
+    private void traverseMenu(final BS3Menu menu, final Consumer<ServiceActionLayoutData> visitor) {
 
         final Visitor bs3Visitor = visitor instanceof Visitor ? (Visitor) visitor : null;
 
@@ -194,7 +193,7 @@ public class BS3MenuBars extends org.apache.isis.applib.layout.menubars.MenuBars
         }
     }
 
-    private void traverseSection(final BS3MenuSection section, final MenuBars.Visitor visitor) {
+    private void traverseSection(final BS3MenuSection section, final Consumer<ServiceActionLayoutData> visitor) {
 
         final Visitor bs3Visitor = visitor instanceof Visitor ? (Visitor) visitor : null;
         if(bs3Visitor != null) {
@@ -204,7 +203,7 @@ public class BS3MenuBars extends org.apache.isis.applib.layout.menubars.MenuBars
 
         final List<ServiceActionLayoutData> actions = section.getServiceActions();
         for (ServiceActionLayoutData action : actions) {
-            visitor.visit(action);
+            visitor.accept(action);
         }
 
         if(bs3Visitor != null) {

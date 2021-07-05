@@ -19,19 +19,19 @@
 package org.apache.isis.applib.layout.menubars;
 
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
+import org.apache.isis.commons.internal.collections._Lists;
+
+import lombok.val;
 
 /**
  * @since 1.x {@index}
  */
 public interface MenuBars {
-
-    @FunctionalInterface
-    interface Visitor {
-        void visit(final ServiceActionLayoutData serviceActionLayoutData);
-    }
 
     String getTnsAndSchemaLocation();
 
@@ -39,8 +39,14 @@ public interface MenuBars {
 
     MenuBar menuBarFor(DomainServiceLayout.MenuBar menuBar);
 
-    void visit(Visitor visitor);
+    void visit(Consumer<ServiceActionLayoutData> visitor);
 
     Map<String, ServiceActionLayoutData> getAllServiceActionsByObjectTypeAndId();
+
+    default Stream<ServiceActionLayoutData> stream() {
+        val entries = _Lists.<ServiceActionLayoutData>newArrayList();
+        visit(entries::add);
+        return entries.stream();
+    }
 
 }

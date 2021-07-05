@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.restfulobjects.viewer.resources;
 
+import java.util.function.Consumer;
+
 import javax.inject.Inject;
 import javax.ws.rs.HttpMethod;
 import javax.ws.rs.Produces;
@@ -87,10 +89,9 @@ public class MenuBarsResourceServerside extends ResourceAbstract implements Menu
     }
 
     // public ... for testing
-    public static MenuBars.Visitor linksForServiceActionsAddingVisitor(final ResourceContext resourceContext) {
-        return new MenuBars.Visitor() {
-            @Override
-            public void visit(final ServiceActionLayoutData actionLayoutData) {
+    public static Consumer<ServiceActionLayoutData> linksForServiceActionsAddingVisitor(
+            final ResourceContext resourceContext) {
+        return (final ServiceActionLayoutData actionLayoutData) -> {
                 final String logicalTypeName = actionLayoutData.getLogicalTypeName();
                 final String relativeUrl = String.format(
                         "objects/%s/%s/actions/%s",
@@ -101,8 +102,7 @@ public class MenuBarsResourceServerside extends ResourceAbstract implements Menu
                         resourceContext.urlFor(relativeUrl),
                         RepresentationType.OBJECT_ACTION.getJsonMediaType().toString());
                 actionLayoutData.setLink(link);
-            }
-        };
+            };
     }
 
     @Override

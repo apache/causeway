@@ -29,6 +29,14 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import lombok.Getter;
 import lombok.val;
 
+/**
+ * Prototypical test base for the MM module.
+ *
+ * @apiNote Other modules should adapt their own version,
+ * taking this one as a blueprint.
+ *
+ * @since 2.0
+ */
 public abstract class MetaModelTestAbstract
 implements HasMetaModelContext {
 
@@ -47,6 +55,7 @@ implements HasMetaModelContext {
     void tearDown() throws Exception {
         onTearDown();
         metaModelContext.getSpecificationLoader().disposeMetaModel();
+        metaModelContext = null;
     }
 
     protected void onSetUp(MetaModelContext_forTestingBuilder mmcBuilder) {

@@ -51,8 +51,7 @@ implements MenuBarsLoaderService {
 
     private final IsisSystemEnvironment isisSystemEnvironment;
     private final JaxbService jaxbService;
-
-    private final ClassPathResource menubarsLayoutXmlResource;
+    private final AbstractResource menubarsLayoutXmlResource;
 
     @Inject
     public MenuBarsLoaderServiceDefault(
@@ -73,13 +72,11 @@ implements MenuBarsLoaderService {
 
     @Override
     public BS3MenuBars menuBars() {
+        return loadMenuBars(loadMenubarsLayoutResource());
+    }
 
-        val xmlString = loadMenubarsLayoutResource(menubarsLayoutXmlResource);
-        if(xmlString == null) {
-            warnNotFound(menubarsLayoutXmlResource);
-            return null;
-        }
-
+    // public, in support of JUnit testing
+    public BS3MenuBars loadMenuBars(String xmlString) {
         try {
             return jaxbService.fromXml(BS3MenuBars.class, xmlString);
         } catch (Exception e) {
@@ -88,7 +85,9 @@ implements MenuBarsLoaderService {
         }
     }
 
-    private String loadMenubarsLayoutResource(final AbstractResource menubarsLayoutXmlResource) {
+    // -- HELPER
+
+    private String loadMenubarsLayoutResource() {
         try {
 
             if(!menubarsLayoutXmlResource.exists()) {
@@ -98,6 +97,10 @@ implements MenuBarsLoaderService {
             val source = menubarsLayoutXmlResource.getInputStream(); // throws if not found
             final String xml =
                     _Strings.read(source, StandardCharsets.UTF_8);
+
+            if(xml == null) {
+                warnNotFound(menubarsLayoutXmlResource);
+            }
             return xml;
         } catch (Exception e) {
             severeCannotLoad(menubarsLayoutXmlResource, e);
@@ -105,8 +108,6 @@ implements MenuBarsLoaderService {
         }
 
     }
-
-    // -- HELPER
 
     private boolean warnedOnce = false;
 
