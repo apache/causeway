@@ -23,7 +23,8 @@ import org.apache.isis.applib.RecreatableDomainObject;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 
-public class RecreatableObjectFacetForRecreatableDomainObjectInterface extends RecreatableObjectFacetAbstract {
+public class RecreatableObjectFacetForRecreatableDomainObjectInterface
+extends RecreatableObjectFacetAbstract {
 
     public RecreatableObjectFacetForRecreatableDomainObjectInterface(
             final FacetHolder holder,

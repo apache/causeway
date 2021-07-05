@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facetapi;
 
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
@@ -105,8 +106,12 @@ public final class FacetRanking {
 
         val changesTopRank = facetPreference.ordinal() >= currentTopRankOrdinal;
 
-        // as an optimization (heap), don't store to lower ranks, as these have no effect any way when picking a winning facet
-        if(changesTopRank) {
+        // As an optimization (heap), don't store to lower ranks,
+        // as these are not considered when picking a winning facet.
+        // However, there are use-cases, where access to all facets of a given type are required,
+        // regardless of facet-precedence (eg. MemberNamedFacets).
+        if(changesTopRank
+            || facet.isPopulateAllFacetRanks()) {
             facetsByPrecedence.putElement(facetPreference, facet);
         }
 
@@ -157,6 +162,26 @@ public final class FacetRanking {
         return topRankedFacets!=null
                 ? Can.<F>ofCollection(_Casts.uncheckedCast(topRankedFacets.getValue()))
                 : Can.empty();
+    }
+
+    /**
+     * Returns a defensive copy of the selected rank of given precedence constraint.
+     * @param facetType - for convenience, so the caller does not need to cast the result
+     * @param precedenceUpper - upper bound
+     */
+    public <F extends Facet> Can<F> getRankLowerOrEqualTo(final @NonNull Class<F> facetType, Precedence precedenceUpper) {
+        _Assert.assertEquals(this.facetType, facetType);
+
+        val precedenceSelected = facetsByPrecedence
+        .keySet()
+        .stream()
+        .filter(precedence->precedence.ordinal()<=precedenceUpper.ordinal())
+        .max(Comparator.comparing(Precedence::ordinal));
+
+        return precedenceSelected
+        .map(facetsByPrecedence::get)
+        .map(facetsOfSameRank->Can.<F>ofCollection(_Casts.uncheckedCast(facetsOfSameRank)))
+        .orElseGet(Can::empty);
     }
 
     public Optional<Facet.Precedence> getTopPrecedence() {

@@ -20,12 +20,15 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.all.described.CanonicalDescribedFacet;
-import org.apache.isis.core.metamodel.facets.all.named.CanonicalNamedFacet;
+import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
+import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
@@ -92,8 +95,13 @@ implements ObjectAssociation {
 
     @Override
     public final String getCanonicalFriendlyName() {
-        return lookupFacet(CanonicalNamedFacet.class)
-        .map(CanonicalNamedFacet::translated)
+        return lookupFacet(MemberNamedFacet.class)
+        .flatMap(MemberNamedFacet::getSharedFacetRanking)
+        .map(facetRanking->facetRanking.getRankLowerOrEqualTo(MemberNamedFacet.class, Precedence.HIGH))
+        .flatMap(Can::getLast) // TODO ranking implementation detail
+        .map(MemberNamedFacet::getSpecialization)
+        .flatMap(specialization->specialization.left())
+        .map(HasStaticText::translated)
         //we have a facet-post-processor to ensure following code path is unreachable,
         // however, we keep it in support of JUnit testing
         .orElseGet(()->getFeatureIdentifier().getMemberNaturalName());
@@ -101,8 +109,13 @@ implements ObjectAssociation {
 
     @Override
     public final String getCanonicalDescription() {
-        return lookupFacet(CanonicalDescribedFacet.class)
-        .map(CanonicalDescribedFacet::translated)
+        return lookupFacet(MemberDescribedFacet.class)
+        .flatMap(MemberDescribedFacet::getSharedFacetRanking)
+        .map(facetRanking->facetRanking.getRankLowerOrEqualTo(MemberDescribedFacet.class, Precedence.HIGH))
+        .flatMap(Can::getLast) // TODO ranking implementation detail
+        .map(MemberDescribedFacet::getSpecialization)
+        .flatMap(specialization->specialization.left())
+        .map(HasStaticText::translated)
         .orElse(null);
     }
 

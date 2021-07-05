@@ -46,7 +46,7 @@ implements
 
     protected HasImperativeTextFacetAbstract(
             final Class<? extends Facet> facetType,
-            final TranslationContext translationContext, //TranslationContext.forTranslationContextHolder(holder.getFeatureIdentifier());
+            final TranslationContext translationContext,
             final Method method,
             final FacetHolder holder) {
         // imperative takes precedence over any other (except for events)

@@ -71,6 +71,11 @@ extends
 
         /**
          * Higher precedence than {@link #HIGH}. In other words, overrules {@link #HIGH}.
+         */
+        IMPERATIVE,
+
+        /**
+         * Higher precedence than {@link #IMPERATIVE}. In other words, overrules {@link #IMPERATIVE}.
          * <p>
          * Reserved for facet post-processing, when synthesizing a 'virtual' facet
          * from facets of lower rank. (eg. {@link ObjectNamedFacet} with its singular and plural noun-form support)
@@ -132,6 +137,16 @@ extends
     }
 
     /**
+     * Whether to collect all facets of this type into the facet ranks,
+     * or (when {@code false}) allow for (heap) optimization,
+     * such that only (current) top ranks are populated.
+     * @since 2.0
+     */
+    default boolean isPopulateAllFacetRanks() {
+        return false;
+    }
+
+    /**
      * Determines the type of this facet to be stored under.
      *
      * <p>
@@ -169,5 +184,8 @@ extends
      * @since 2.0
      */
     void forEachContributedFacet(Consumer<Facet> onContributedFacet);
+
+
+
 
 }

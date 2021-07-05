@@ -45,14 +45,17 @@ import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.menu.MenuBarsLoaderService;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
@@ -91,20 +94,22 @@ implements MenuBarsService {
     private final IsisSystemEnvironment isisSystemEnvironment;
     private final MetaModelContext metaModelContext;
 
+    private final _Lazy<BS3MenuBars> menuBarsFromAnnotationsOnly = _Lazy.threadSafe(this::menuBarsFromAnnotationsOnly);
+
     BS3MenuBars menuBars;
 
     @Override
     public BS3MenuBars menuBars(final Type type) {
 
-        val fallbackMenuBars = deriveMenuBarsFromMetaModelFacets();
+        val menuBarsFromAnnotationsOnly = this.menuBarsFromAnnotationsOnly.get();
 
-        if(type == Type.FALLBACK) {
-            return fallbackMenuBars;
+        if(type == Type.ANNOTATED) {
+            return menuBarsFromAnnotationsOnly;
         }
 
         // else load (and only fallback if nothing could be loaded)...
         if(menuBars == null || menuBarsLoaderService.supportsReloading()) {
-            this.menuBars = loadOrElse(fallbackMenuBars);
+            this.menuBars = loadOrElse(menuBarsFromAnnotationsOnly);
         }
 
         return menuBars;
@@ -112,22 +117,22 @@ implements MenuBarsService {
 
     // -- HELPER
 
-    private BS3MenuBars loadOrElse(final BS3MenuBars fallbackMenuBars) {
+    private BS3MenuBars loadOrElse(final BS3MenuBars menuBarsFromAnnotationsOnly) {
 
         val menuBars = Optional.ofNullable(menuBarsLoaderService.menuBars())
                 .map(this::addTnsAndSchemaLocation)
-                .orElse(fallbackMenuBars);
+                .orElse(menuBarsFromAnnotationsOnly);
 
         val unreferencedActionsMenu = validateAndGetUnreferencedActionMenu(menuBars);
         if (unreferencedActionsMenu == null) {
             // just use fallback
-            return fallbackMenuBars;
+            return menuBarsFromAnnotationsOnly;
         }
 
         // add in any missing actions from the fallback
         val referencedActionsByObjectTypeAndId = menuBars.getAllServiceActionsByObjectTypeAndId();
 
-        fallbackMenuBars.visit(BS3MenuBars.VisitorAdapter.visitingMenuSections(menuSection->{
+        menuBarsFromAnnotationsOnly.visit(BS3MenuBars.VisitorAdapter.visitingMenuSections(menuSection->{
 
             // created only if required to collect unreferenced actions
             // for this menuSection into a new section within the designated
@@ -202,16 +207,16 @@ implements MenuBarsService {
         return null;
     }
 
-    private BS3MenuBars deriveMenuBarsFromMetaModelFacets() {
+    private BS3MenuBars menuBarsFromAnnotationsOnly() {
         final BS3MenuBars menuBars = new BS3MenuBars();
 
-        final List<ManagedObject> visibleServiceAdapters = metaModelContext.streamServiceAdapters()
+        val visibleServiceAdapters = metaModelContext.streamServiceAdapters()
                 .filter(this::isVisibleAdapterForMenu)
-                .collect(Collectors.toList());
+                .collect(Can.toCan());
 
-        append(visibleServiceAdapters, menuBars.getPrimary(), DomainServiceLayout.MenuBar.PRIMARY);
-        append(visibleServiceAdapters, menuBars.getSecondary(), DomainServiceLayout.MenuBar.SECONDARY);
-        append(visibleServiceAdapters, menuBars.getTertiary(), DomainServiceLayout.MenuBar.TERTIARY);
+        appendFromAnnotationsOnly(visibleServiceAdapters, menuBars.getPrimary(), DomainServiceLayout.MenuBar.PRIMARY);
+        appendFromAnnotationsOnly(visibleServiceAdapters, menuBars.getSecondary(), DomainServiceLayout.MenuBar.SECONDARY);
+        appendFromAnnotationsOnly(visibleServiceAdapters, menuBars.getTertiary(), DomainServiceLayout.MenuBar.TERTIARY);
 
         menuBars.setTnsAndSchemaLocation(tnsAndSchemaLocation());
 
@@ -236,15 +241,15 @@ implements MenuBarsService {
     }
 
 
-    private void append(
-            final List<ManagedObject> serviceAdapters,
+    private void appendFromAnnotationsOnly(
+            final Can<ManagedObject> serviceAdapters,
             final BS3MenuBar menuBar,
             final DomainServiceLayout.MenuBar menuBarPos) {
 
         val serviceActions = _Lists.<ServiceAndAction>newArrayList();
 
         // cf ServiceActionsModel & ServiceActionUtil#buildMenu in Wicket viewer
-        _NullSafe.stream(serviceAdapters)
+        serviceAdapters.stream()
         .filter(with(menuBarPos))
         .forEach(serviceAdapter->{
 
@@ -259,11 +264,11 @@ implements MenuBarsService {
         // prune any service names that have no service actions
         serviceNamesInOrder.retainAll(serviceActionsByName.keySet());
 
-        List<BS3Menu> menus = buildMenuItems(serviceNamesInOrder, serviceActionsByName);
+        List<BS3Menu> menus = buildMenuItemsFromAnnotationsOnly(serviceNamesInOrder, serviceActionsByName);
         menuBar.getMenus().addAll(menus);
     }
 
-    private static List<BS3Menu> buildMenuItems(
+    private static List<BS3Menu> buildMenuItemsFromAnnotationsOnly(
             final Set<String> serviceNamesInOrder,
             final Map<String, List<ServiceAndAction>> serviceActionsByName) {
 
@@ -282,12 +287,19 @@ implements MenuBarsService {
                     menuSection = new BS3MenuSection();
                 }
 
-                ObjectAction objectAction = serviceAndAction.getObjectAction();
+                val objectAction = serviceAndAction.getObjectAction();
                 val service = serviceAndAction.getServiceAdapter();
-                final String logicalTypeName = serviceAndAction.getServiceAdapter().getSpecification().getLogicalTypeName();
-                ServiceActionLayoutData action = new ServiceActionLayoutData(logicalTypeName, objectAction.getId());
-                action.setNamed(objectAction.getFriendlyName(service.asProvider()));
-                menuSection.getServiceActions().add(action);
+                val logicalTypeName = serviceAndAction.getServiceAdapter().getSpecification().getLogicalTypeName();
+                val actionLayoutData = new ServiceActionLayoutData(logicalTypeName, objectAction.getId());
+
+                objectAction
+                .getFacetRanking(MemberNamedFacet.class)
+                .get()
+                .getRankLowerOrEqualTo(MemberNamedFacet.class, Precedence.DEFAULT)
+                .getLastOrFail();
+
+                actionLayoutData.setNamed(objectAction.getFriendlyName(service.asProvider()));
+                menuSection.getServiceActions().add(actionLayoutData);
             }
             if(!menuSection.getServiceActions().isEmpty()) {
                 menu.getSections().add(menuSection);
@@ -303,7 +315,7 @@ implements MenuBarsService {
      * straight copy from Wicket UI
      */
     private static Set<String> serviceNamesInOrder(
-            final List<ManagedObject> serviceAdapters,
+            final Can<ManagedObject> serviceAdapters,
             final List<ServiceAndAction> serviceActions) {
         final Set<String> serviceNameOrder = _Sets.newLinkedHashSet();
 

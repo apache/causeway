@@ -48,9 +48,9 @@ public interface MenuBarsService {
         DEFAULT,
 
         /**
-         * As derived from annotations.
+         * As derived from annotations only.
          */
-        FALLBACK
+        ANNOTATED
     }
 
 
