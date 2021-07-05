@@ -27,6 +27,7 @@ import java.util.function.BiConsumer;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.Facet.Precedence;
@@ -143,6 +144,22 @@ public final class FacetRanking {
         return topRank.getLast();
     }
 
+    /**
+     * Optionally returns the winning facet, considering only the rank with selected precedence constraints,
+     * based on whether there was any added that has given facetType.
+     * @param facetType - for convenience, so the caller does not need to cast the result
+     * @param precedenceUpper - upper bound
+     */
+    public <F extends Facet> Optional<F> getWinnerNonEventLowerOrEqualTo(
+            final @NonNull Class<F> facetType,
+            final @NonNull Precedence precedenceUpper) {
+        val selectedRank = getHighestPrecedenceLowerOrEqualTo(precedenceUpper);
+        return selectedRank
+                .map(facetsByPrecedence::get)
+                .map(_Lists::lastElementIfAny) // only historically the last one wins
+                .map(_Casts::uncheckedCast);
+    }
+
 
     /**
      * Optionally returns the top ranking event facet, based on whether there was one added.
@@ -169,7 +186,7 @@ public final class FacetRanking {
      * @param facetType - for convenience, so the caller does not need to cast the result
      * @param precedenceUpper - upper bound
      */
-    public <F extends Facet> Can<F> getRankLowerOrEqualTo(final @NonNull Class<F> facetType, Precedence precedenceUpper) {
+    public <F extends Facet> Can<F> getRankLowerOrEqualTo(final @NonNull Class<F> facetType, final @NonNull Precedence precedenceUpper) {
         _Assert.assertEquals(this.facetType, facetType);
 
         val precedenceSelected = facetsByPrecedence
@@ -182,6 +199,18 @@ public final class FacetRanking {
         .map(facetsByPrecedence::get)
         .map(facetsOfSameRank->Can.<F>ofCollection(_Casts.uncheckedCast(facetsOfSameRank)))
         .orElseGet(Can::empty);
+    }
+
+    /**
+     * Returns highest found precedence within ranks that conforms to given precedence constraint.
+     * @param precedenceUpper - upper bound
+     */
+    public Optional<Precedence> getHighestPrecedenceLowerOrEqualTo(final @NonNull Precedence precedenceUpper) {
+        return facetsByPrecedence
+        .keySet()
+        .stream()
+        .filter(precedence->precedence.ordinal()<=precedenceUpper.ordinal())
+        .max(Comparator.comparing(Precedence::ordinal));
     }
 
     public Optional<Facet.Precedence> getTopPrecedence() {

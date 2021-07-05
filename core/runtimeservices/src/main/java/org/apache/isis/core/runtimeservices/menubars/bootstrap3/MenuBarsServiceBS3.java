@@ -55,6 +55,7 @@ import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
+import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
@@ -288,17 +289,22 @@ implements MenuBarsService {
                 }
 
                 val objectAction = serviceAndAction.getObjectAction();
-                val service = serviceAndAction.getServiceAdapter();
+                //val service = serviceAndAction.getServiceAdapter();
                 val logicalTypeName = serviceAndAction.getServiceAdapter().getSpecification().getLogicalTypeName();
                 val actionLayoutData = new ServiceActionLayoutData(logicalTypeName, objectAction.getId());
 
-                objectAction
+                val named = objectAction
                 .getFacetRanking(MemberNamedFacet.class)
-                .get()
-                .getRankLowerOrEqualTo(MemberNamedFacet.class, Precedence.DEFAULT)
-                .getLastOrFail();
+                // assuming layout from annotations never installs higher than Precedence.DEFAULT
+                .flatMap(facetRanking->facetRanking.getWinnerNonEventLowerOrEqualTo(MemberNamedFacet.class, Precedence.DEFAULT))
+                .map(MemberNamedFacet::getSpecialization)
+                .flatMap(specialization->specialization.left())
+                .map(HasStaticText::translated)
+                //we have a facet-post-processor to ensure following code path is unreachable,
+                //however, we keep it in avoidance of fatal failure
+                .orElseGet(()->objectAction.getFeatureIdentifier().getMemberNaturalName());
 
-                actionLayoutData.setNamed(objectAction.getFriendlyName(service.asProvider()));
+                actionLayoutData.setNamed(named); //that's for imperative naming ... objectAction.getFriendlyName(service.asProvider()));
                 menuSection.getServiceActions().add(actionLayoutData);
             }
             if(!menuSection.getServiceActions().isEmpty()) {

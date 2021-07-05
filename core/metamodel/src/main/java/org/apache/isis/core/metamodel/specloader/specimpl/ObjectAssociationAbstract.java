@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -97,13 +96,12 @@ implements ObjectAssociation {
     public final String getCanonicalFriendlyName() {
         return lookupFacet(MemberNamedFacet.class)
         .flatMap(MemberNamedFacet::getSharedFacetRanking)
-        .map(facetRanking->facetRanking.getRankLowerOrEqualTo(MemberNamedFacet.class, Precedence.HIGH))
-        .flatMap(Can::getLast) // TODO ranking implementation detail
+        .flatMap(facetRanking->facetRanking.getWinnerNonEventLowerOrEqualTo(MemberNamedFacet.class, Precedence.HIGH))
         .map(MemberNamedFacet::getSpecialization)
         .flatMap(specialization->specialization.left())
         .map(HasStaticText::translated)
         //we have a facet-post-processor to ensure following code path is unreachable,
-        // however, we keep it in support of JUnit testing
+        //however, we keep it in support of JUnit testing
         .orElseGet(()->getFeatureIdentifier().getMemberNaturalName());
     }
 
@@ -111,8 +109,7 @@ implements ObjectAssociation {
     public final String getCanonicalDescription() {
         return lookupFacet(MemberDescribedFacet.class)
         .flatMap(MemberDescribedFacet::getSharedFacetRanking)
-        .map(facetRanking->facetRanking.getRankLowerOrEqualTo(MemberDescribedFacet.class, Precedence.HIGH))
-        .flatMap(Can::getLast) // TODO ranking implementation detail
+        .flatMap(facetRanking->facetRanking.getWinnerNonEventLowerOrEqualTo(MemberDescribedFacet.class, Precedence.HIGH))
         .map(MemberDescribedFacet::getSpecialization)
         .flatMap(specialization->specialization.left())
         .map(HasStaticText::translated)
