@@ -85,7 +85,7 @@
 
 
 		<!-- LIBRARY DEPENDENCIES -->
-		<archunit.version>0.19.0</archunit.version>
+		<archunit.version>0.20.0</archunit.version>
 		<approvaltests.version>11.7.0</approvaltests.version>
 
 		<assertj-guava.version>3.4.0</assertj-guava.version>
