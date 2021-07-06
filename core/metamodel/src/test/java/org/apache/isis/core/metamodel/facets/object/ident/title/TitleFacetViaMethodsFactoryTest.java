@@ -104,8 +104,7 @@ public class TitleFacetViaMethodsFactoryTest extends AbstractFacetFactoryTest {
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
         assertNull(facetedMethod.getFacet(TitleFacet.class));
-
-        assertNoMethodsRemoved();
+        assertFalse(methodRemover.getRemovedMethodMethodCalls().isEmpty());
     }
 
 }
