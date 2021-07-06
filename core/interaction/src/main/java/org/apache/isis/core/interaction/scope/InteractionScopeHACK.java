@@ -156,7 +156,7 @@ class InteractionScopeHACK implements Scope, InteractionScopeLifecycleHandler {
     }
 
     @Override
-    public void onTopLevelInteractionClosing() {
+    public void onTopLevelInteractionPreDestroy() {
         ensureInteractionLayerTrackerInjected();
         iInteractionLayerTracker.currentInteraction()
                 .ifPresent(interaction -> {
@@ -166,6 +166,19 @@ class InteractionScopeHACK implements Scope, InteractionScopeLifecycleHandler {
                     }
                     val scopedObjectValues = scopedObjects.values();
                     scopedObjectValues.forEach(ScopedObject::preDestroy);
+                    scopedObjects.clear();
+                });
+    }
+
+    @Override
+    public void onTopLevelInteractionClosed() {
+        ensureInteractionLayerTrackerInjected();
+        iInteractionLayerTracker.currentInteraction()
+                .ifPresent(interaction -> {
+                    final ScopedObjects scopedObjects = interaction.getAttribute(ScopedObjects.class);
+                    if (scopedObjects == null) {
+                        return;
+                    }
                     scopedObjects.clear();
                     interaction.removeAttribute(ScopedObjects.class);
                 });
