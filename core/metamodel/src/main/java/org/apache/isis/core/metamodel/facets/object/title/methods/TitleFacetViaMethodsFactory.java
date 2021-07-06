@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.title.methods;
 
 import java.lang.reflect.Method;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.services.i18n.TranslationContext;
@@ -28,7 +29,6 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.fallback.FallbackFacetFactory;
@@ -41,6 +41,10 @@ import static org.apache.isis.core.metamodel.methods.MethodLiteralConstants.TO_S
 
 import lombok.val;
 
+/**
+ * @implNote removes the {@link Object#toString()} method as action candidate,
+ * regardless of whether this method is used for the domain-object's title or not
+ */
 public class TitleFacetViaMethodsFactory
 extends MethodPrefixBasedFacetFactoryAbstract {
 
@@ -59,45 +63,56 @@ extends MethodPrefixBasedFacetFactoryAbstract {
      */
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
-        final FacetHolder facetHolder = processClassContext.getFacetHolder();
+        val cls = processClassContext.getCls();
+        val facetHolder = processClassContext.getFacetHolder();
 
-        Method method = MethodFinderUtils.findMethod_returningText(
+        val titleMethod = MethodFinderUtils.findMethod_returningText(
                 cls,
                 TITLE,
                 NO_ARG);
-        if (method != null) {
-            processClassContext.removeMethod(method);
+        if (titleMethod != null) {
+            processClassContext.removeMethod(titleMethod);
             // sadness: same as in TranslationFactory
-            val translationContext = TranslationContext.forMethod(method);
+            val translationContext = TranslationContext.forMethod(titleMethod);
 
             FacetUtil.addFacet(
                     new TitleFacetViaTitleMethod(
-                            method, translationContext, facetHolder));
+                            titleMethod, translationContext, facetHolder));
+
+            removeToString(processClassContext);
             return;
         }
 
         // may have a facet by virtue of @Title, say.
-        final TitleFacet existingTitleFacet = facetHolder.lookupNonFallbackFacet(TitleFacet.class)
-                .orElse(null);
-        if(existingTitleFacet != null) {
+        val existingTitleFacet = facetHolder.lookupNonFallbackFacet(TitleFacet.class);
+        if(existingTitleFacet.isPresent()) {
+            removeToString(processClassContext);
             return;
         }
 
         try {
-            method = MethodFinderUtils.findMethod(cls, TO_STRING, String.class, null);
-            if (method == null) {
-                return;
+            val toStringMethod = removeToString(processClassContext);
+            if (toStringMethod != null) {
+                if(!ClassExtensions.isJavaClass(toStringMethod.getDeclaringClass())) {
+                    FacetUtil.addFacet(new TitleFacetInferredFromToStringMethod(toStringMethod, facetHolder));
+                }
             }
-            if (ClassExtensions.isJavaClass(method.getDeclaringClass())) {
-                return;
-            }
-            processClassContext.removeMethod(method);
-            FacetUtil.addFacet(new TitleFacetInferredFromToStringMethod(method, facetHolder));
-
         } catch (final Exception e) {
-            return;
+            // ignore
         }
+
     }
+
+    // -- HELPER
+
+    private @Nullable Method removeToString(final ProcessClassContext processClassContext) {
+        val cls = processClassContext.getCls();
+        val toStringMethod = MethodFinderUtils.findMethod(cls, TO_STRING, String.class, null);
+        if (toStringMethod != null) {
+            processClassContext.removeMethod(toStringMethod);
+        }
+        return toStringMethod;
+    }
+
 
 }
