@@ -343,6 +343,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         logicalTypeResolver.clear();
         cache.clear();
         validationResult.clear();
+        serviceRegistry.clearRegisteredBeans();
         log.info("Metamodel disposed.");
     }
 

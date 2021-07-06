@@ -158,6 +158,12 @@ public interface ServiceRegistry {
         // ...
     }
 
-    // -- PRIORITY ANNOTATION HANDLING
+    /**
+     * Invalidates any cached service adapters that might hold a reference to
+     * the current {@link SpecificationLoader}. Particularly useful when discarding
+     * a meta-model instance, that is, purging the {@link ObjectSpecification} cache.
+     */
+    void clearRegisteredBeans();
+
 
 }

@@ -33,7 +33,6 @@ import javax.inject.Named;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
@@ -115,20 +114,6 @@ implements MenuBarsService {
         return menuBarsDefault();
     }
 
-
-
-    private Optional<ServiceActionLayoutData> lookupLayout(Identifier serviceActionIdentifier) {
-        val actionId = serviceActionIdentifier.getLogicalTypeName()
-                + "#" + serviceActionIdentifier.getMemberLogicalName();
-
-        if(menuBars == null) {
-            menuBarsDefault();
-        }
-
-        val layoutData = serviceActionLayoutDataByActionId.get(actionId);
-        return Optional.ofNullable(layoutData);
-    }
-
     // -- HELPER
 
     private BS3MenuBars menuBarsDefault() {
@@ -143,12 +128,10 @@ implements MenuBarsService {
         return menuBars;
     }
 
-    private final Map<String, ServiceActionLayoutData> serviceActionLayoutDataByActionId = _Maps.newHashMap();
-
     private BS3MenuBars loadOrElse(final BS3MenuBars menuBarsFromAnnotationsOnly) {
 
         val menuBars = Optional.ofNullable(menuBarsLoaderService.menuBars())
-                .map(this::updateActionLayoutLookupTable)
+                .map(this::updateFacetsFromActionLayoutXml)
                 .map(this::addTnsAndSchemaLocation)
                 .orElse(menuBarsFromAnnotationsOnly);
 
@@ -188,23 +171,28 @@ implements MenuBarsService {
         return menuBars;
     }
 
-    private BS3MenuBars updateActionLayoutLookupTable(final BS3MenuBars menuBarsFromXml) {
-        serviceActionLayoutDataByActionId.clear();
+    private BS3MenuBars updateFacetsFromActionLayoutXml(final BS3MenuBars menuBarsFromXml) {
+        final Map<String, ServiceActionLayoutData> serviceActionLayoutDataByActionId = _Maps.newHashMap();
         menuBarsFromXml.visit(serviceActionLayoutData->
             serviceActionLayoutDataByActionId.put(
                     serviceActionLayoutData.getLogicalTypeNameAndId(),
                     serviceActionLayoutData));
 
-        val visibleServiceAdapters = metaModelContext.streamServiceAdapters()
-                .filter(this::isVisibleAdapterForMenu)
-                .collect(Can.toCan());
+        metaModelContext.streamServiceAdapters()
+        .filter(this::isVisibleAdapterForMenu)
+        .forEach(serviceAdapter->{
 
-        visibleServiceAdapters.forEach(objectAdapter->{
+            val serviceSpec = serviceAdapter.getSpecification();
 
-            objectAdapter.getSpecification().streamAnyActions(MixedIn.INCLUDED)
+            serviceSpec.streamAnyActions(MixedIn.INCLUDED)
             .forEach(objectAction->{
 
-                val layoutData = lookupLayout(objectAction.getFeatureIdentifier()).orElse(null);
+                val serviceActionIdentifier = objectAction.getFeatureIdentifier();
+
+                val actionId = serviceActionIdentifier.getLogicalTypeName()
+                        + "#" + serviceActionIdentifier.getMemberLogicalName();
+
+                val layoutData = serviceActionLayoutDataByActionId.get(actionId);
 
                 FacetUtil.addFacetIfPresent(
                         MemberNamedFacetForMenuBarXml
@@ -213,7 +201,6 @@ implements MenuBarsService {
                 FacetUtil.addFacetIfPresent(
                         MemberDescribedFacetForMenuBarXml
                         .create(layoutData, objectAction));
-
             });
 
         });

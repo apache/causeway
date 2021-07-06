@@ -119,5 +119,14 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
         return Stream.empty();
     }
 
+    @Override
+    public void clearRegisteredBeans() {
+        val mmc = metaModelContext;
+        if(mmc instanceof MetaModelContext_forTesting) {
+            val mmcb = (MetaModelContext_forTesting) mmc;
+            mmcb.objectAdaptersForBeansOfKnownSort.clear();
+        }
+    }
+
 
 }

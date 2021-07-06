@@ -95,6 +95,11 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
         return managedBeanAdapterByName;
     }
 
+    @Override
+    public void clearRegisteredBeans() {
+        managedBeansById.clear();
+    }
+
 
 
 }

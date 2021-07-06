@@ -435,7 +435,7 @@ implements MetaModelContext {
 
     // -- SERVICE REGISTRY HELPER
 
-    private final _Lazy<Map<String, ManagedObject>> objectAdaptersForBeansOfKnownSort =
+    final _Lazy<Map<String, ManagedObject>> objectAdaptersForBeansOfKnownSort =
             _Lazy.threadSafe(this::collectBeansOfKnownSort);
 
     private final Map<String, ManagedObject> collectBeansOfKnownSort() {
