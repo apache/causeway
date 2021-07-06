@@ -152,6 +152,11 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-secman-applib</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
 				<artifactId>isis-extensions-secman-integration</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
