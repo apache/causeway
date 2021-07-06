@@ -18,12 +18,8 @@
  */
 package org.apache.isis.applib.services.menu;
 
-import java.util.Optional;
-
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Value;
-import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 import org.apache.isis.applib.layout.menubars.MenuBars;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
@@ -72,11 +68,6 @@ public interface MenuBarsService {
      */
     MenuBars menuBars(final Type type);
 
-    /**
-     * @since 2.0
-     */
-    Optional<ServiceActionLayoutData> lookupLayout(Identifier serviceActionIdentifier);
-
     // -- JUNIT SUPPORT
 
     static MenuBarsService forTesting() {
@@ -84,11 +75,6 @@ public interface MenuBarsService {
 
             @Override
             public MenuBars menuBars(Type type) {
-                throw _Exceptions.unsupportedOperation();
-            }
-
-            @Override
-            public Optional<ServiceActionLayoutData> lookupLayout(Identifier serviceActionIdentifier) {
                 throw _Exceptions.unsupportedOperation();
             }
 

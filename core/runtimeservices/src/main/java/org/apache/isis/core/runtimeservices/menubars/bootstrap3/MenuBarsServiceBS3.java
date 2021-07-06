@@ -55,6 +55,9 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet.Precedence;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.metamodel.facets.actions.layout.MemberDescribedFacetForMenuBarXml;
+import org.apache.isis.core.metamodel.facets.actions.layout.MemberNamedFacetForMenuBarXml;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
 import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
@@ -113,8 +116,8 @@ implements MenuBarsService {
     }
 
 
-    @Override
-    public Optional<ServiceActionLayoutData> lookupLayout(Identifier serviceActionIdentifier) {
+
+    private Optional<ServiceActionLayoutData> lookupLayout(Identifier serviceActionIdentifier) {
         val actionId = serviceActionIdentifier.getLogicalTypeName()
                 + "#" + serviceActionIdentifier.getMemberLogicalName();
 
@@ -191,6 +194,30 @@ implements MenuBarsService {
             serviceActionLayoutDataByActionId.put(
                     serviceActionLayoutData.getLogicalTypeNameAndId(),
                     serviceActionLayoutData));
+
+        val visibleServiceAdapters = metaModelContext.streamServiceAdapters()
+                .filter(this::isVisibleAdapterForMenu)
+                .collect(Can.toCan());
+
+        visibleServiceAdapters.forEach(objectAdapter->{
+
+            objectAdapter.getSpecification().streamAnyActions(MixedIn.INCLUDED)
+            .forEach(objectAction->{
+
+                val layoutData = lookupLayout(objectAction.getFeatureIdentifier()).orElse(null);
+
+                FacetUtil.addFacetIfPresent(
+                        MemberNamedFacetForMenuBarXml
+                        .create(layoutData, objectAction));
+
+                FacetUtil.addFacetIfPresent(
+                        MemberDescribedFacetForMenuBarXml
+                        .create(layoutData, objectAction));
+
+            });
+
+        });
+
         return menuBarsFromXml;
     }
 

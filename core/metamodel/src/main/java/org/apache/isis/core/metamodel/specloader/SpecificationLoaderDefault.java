@@ -43,6 +43,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
+import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.collections.Can;
@@ -302,6 +303,9 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         log.info(" - introspecting {} entities (JDO+JPA)",
                 isisBeanTypeRegistry.getEntityTypes().size());
         log.info(" - introspecting {} view models", isisBeanTypeRegistry.getViewModelTypes().size());
+
+        serviceRegistry.lookupServiceElseFail(MenuBarsService.class).menuBars();
+
         introspect(Can.ofCollection(domainObjectSpecs), IntrospectionState.FULLY_INTROSPECTED);
 
         SpecificationLoaderDefault_debug.logAfter(log, cache, knownSpecs);

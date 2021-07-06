@@ -20,6 +20,7 @@ package org.apache.isis.core.runtimeservices.menubars.bootstrap3;
 
 import java.nio.charset.StandardCharsets;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ByteArrayResource;
 
@@ -97,7 +98,7 @@ extends RuntimeServicesTestAbstract {
         assertEquals(null, layoutData2.getNamedEscaped()); // deprecated: always escape
     }
 
-    @Test
+    @Test @Disabled("TODO ISIS-2787")
     void customNamed() {
 
         val customNamed = "Hello";
