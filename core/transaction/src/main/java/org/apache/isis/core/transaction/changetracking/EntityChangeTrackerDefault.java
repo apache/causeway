@@ -103,7 +103,7 @@ implements
     /**
      * Contains initial change records having set the pre-values of every property of every object that was enlisted.
      */
-    private final Map<String,_PropertyChangeRecord> entityPropertyChangeRecords = _Maps.newLinkedHashMap();
+    private final Map<String,_PropertyChangeRecord> propertyChangeRecordsById = _Maps.newLinkedHashMap();
 
     /**
      * Contains pre- and post- values of every property of every object that actually changed. A lazy snapshot,
@@ -160,18 +160,19 @@ implements
             return;
         }
         enlistForChangeKindPublishing(adapter, EntityChangeKind.UPDATE);
-        enlistForPreAndPostValuePublishing(adapter, propertyChangeRecord -> {
-            if(propertyIdIfAny != null) {
+
+        if(propertyIdIfAny != null) {
+            enlistForPreAndPostValuePublishing(adapter, propertyChangeRecord -> {
                 // if we've been provided with the preValue, then just save it
                 // in the appropriate PropertyChangeRecord
                 if(Objects.equals(propertyChangeRecord.getPropertyId(), propertyIdIfAny)) {
                     propertyChangeRecord.setPreValue(preValue);
                 }
-            } else {
-                // read from the pojo using the Isis MM.
-                propertyChangeRecord.updatePreValue();
-            }
-        });
+            });
+        } else {
+            // read from the pojo using the Isis MM.
+            enlistForPreAndPostValuePublishing(adapter, _PropertyChangeRecord::updatePreValue);
+        }
     }
 
     private void enlistDeletingInternal(final @NonNull ManagedObject adapter) {
@@ -230,7 +231,7 @@ implements
 
     private void postPublishing() {
         log.debug("purging entity change records");
-        entityPropertyChangeRecords.clear();
+        propertyChangeRecordsById.clear();
         changeKindByEnlistedAdapter.clear();
         entityPropertyChangeRecordsForPublishing.clear();
         entityChangeEventCount.reset();
@@ -321,10 +322,10 @@ implements
         entity.getSpecification().streamProperties(MixedIn.EXCLUDED)
         .filter(property->!property.isNotPersisted())
         .map(property->_PropertyChangeRecord.of(entity, property))
-        .filter(record->!entityPropertyChangeRecords.containsKey(record.getPropertyId())) // already enlisted, so ignore
+        .filter(record->!propertyChangeRecordsById.containsKey(record.getPropertyId())) // already enlisted, so ignore
         .forEach(record->{
             fun.accept(record);
-            entityPropertyChangeRecords.put(record.getPropertyId(), record);
+            propertyChangeRecordsById.put(record.getPropertyId(), record);
         });
     }
 
@@ -334,13 +335,13 @@ implements
      */
     private Set<_PropertyChangeRecord> capturePostValuesAndDrain() {
 
-        val records = entityPropertyChangeRecords.values().stream()
+        val records = propertyChangeRecordsById.values().stream()
                 // set post values, which have been left empty up to now
                 .peek(_PropertyChangeRecord::updatePostValue)
                 .filter(managedProperty->managedProperty.getPreAndPostValue().shouldPublish())
                 .collect(_Sets.toUnmodifiable());
 
-        entityPropertyChangeRecords.clear();
+        propertyChangeRecordsById.clear();
 
         return records;
 
@@ -348,7 +349,7 @@ implements
 
     // side-effect free, used by XRay
     long countPotentialPropertyChangeRecords() {
-        return entityPropertyChangeRecords.size();
+        return propertyChangeRecordsById.size();
     }
 
     // -- METRICS SERVICE
