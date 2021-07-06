@@ -32,6 +32,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -55,14 +56,15 @@ import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstra
 import lombok.val;
 
 @SpringBootTest(
-        classes = { 
+        classes = {
                 Configuration_usingJpa.class,
         })
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @Transactional @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@DirtiesContext
 class JpaBootstrappingTest extends IsisIntegrationTestAbstract {
 
-    @Inject private Optional<PlatformTransactionManager> platformTransactionManager; 
+    @Inject private Optional<PlatformTransactionManager> platformTransactionManager;
     @Inject private SpecificationLoader specLoader;
 
     @BeforeAll
@@ -93,42 +95,42 @@ class JpaBootstrappingTest extends IsisIntegrationTestAbstract {
         repositoryService.persistAndFlush(inventory);
     }
 
-    @Test @Order(0) 
+    @Test @Order(0)
     void platformTransactionManager_shouldBeAvailable() {
         assertTrue(platformTransactionManager.isPresent());
         platformTransactionManager.ifPresent(ptm->{
             assertEquals("JpaTransactionManager", ptm.getClass().getSimpleName());
         });
     }
-    
-    @Test @Order(0) 
+
+    @Test @Order(0)
     void transactionalAnnotation_shouldBeSupported() {
         assertTrue(platformTransactionManager.isPresent());
         platformTransactionManager.ifPresent(ptm->{
-            
+
             val txDef = new DefaultTransactionDefinition();
             txDef.setPropagationBehavior(DefaultTransactionDefinition.PROPAGATION_MANDATORY);
-                    
+
             val txStatus = ptm.getTransaction(txDef);
-            
+
             assertNotNull(txStatus);
             assertFalse(txStatus.isCompleted());
 
         });
     }
 
-    @Test @Order(0) 
+    @Test @Order(0)
     void jpaEntities_shouldBeRecognisedAsSuch() {
         val productSpec = specLoader.loadSpecification(JpaProduct.class);
         assertTrue(productSpec.isEntity());
         assertNotNull(productSpec.getFacet(EntityFacet.class));
-        
+
         val inventorySpec = specLoader.loadSpecification(JpaInventory.class);
         assertTrue(inventorySpec.isEntity());
         assertNotNull(inventorySpec.getFacet(EntityFacet.class));
     }
-     
-    @Test @Order(1) @Rollback(false) 
+
+    @Test @Order(1) @Rollback(false)
     void sampleInventoryShouldBeSetUp() {
 
         // given - expected pre condition: no inventories
@@ -154,8 +156,8 @@ class JpaBootstrappingTest extends IsisIntegrationTestAbstract {
         assertEquals("Sample Book", product.getName());
 
     }
-     
-    @Test @Order(2) @Rollback(false) 
+
+    @Test @Order(2) @Rollback(false)
     void aSecondRunShouldWorkAsWell() {
         sampleInventoryShouldBeSetUp();
     }

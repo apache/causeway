@@ -26,6 +26,7 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.Rollback;
@@ -78,6 +79,9 @@ class SpringDataJpaBootstrappingTest extends IsisIntegrationTestAbstract {
     void setUp() {
         SpringDataJpaTestModule.setupEmployeeFixture(employeeRepository);
     }
+
+    @Inject
+    ConfigurableBeanFactory configurableBeanFactory;
 
     @Test @Order(0)
     void platformTransactionManager_shouldBeAvailable() {

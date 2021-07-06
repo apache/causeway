@@ -32,6 +32,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.TestPropertySources;
@@ -64,6 +65,7 @@ import lombok.val;
 })
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ExtendWith({IsisInteractionHandler.class})
+@DirtiesContext
 class JpaExceptionTranslationTest_usingTransactional
 {
 

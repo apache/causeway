@@ -18,19 +18,16 @@
  */
 package org.apache.isis.testdomain.persistence.jpa;
 
-import java.sql.SQLException;
-
 import javax.inject.Inject;
 
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,7 +36,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
-import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.persistence.jpa.applib.services.JpaSupportService;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
@@ -60,18 +56,20 @@ import lombok.val;
         )
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @Transactional @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@DirtiesContext
 class JpaQueryTest extends IsisIntegrationTestAbstract {
 
     @Inject private JpaSupportService jpaSupport;
     @Inject private InteractionService interactionService;
 
-    @BeforeAll
-    static void beforeAll() throws SQLException {
-        // launch H2Console for troubleshooting ...
-        // Util_H2Console.main(null);
-        _Context.clear();
-    }
+//    @BeforeAll
+//    static void beforeAll() throws SQLException {
+//        // launch H2Console for troubleshooting ...
+//        // Util_H2Console.main(null);
+//        _Context.clear();
+//    }
+
+    @Inject
+    ConfigurableBeanFactory configurableBeanFactory;
 
     @Test @Order(1)
     void sampleInventory_shouldBeSetUpWith3Books() {

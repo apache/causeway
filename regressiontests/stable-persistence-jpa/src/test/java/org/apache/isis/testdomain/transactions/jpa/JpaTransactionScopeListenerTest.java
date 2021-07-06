@@ -22,6 +22,7 @@ import javax.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
@@ -38,6 +39,7 @@ import org.apache.isis.testdomain.jpa.entities.JpaBook;
 import org.apache.isis.testdomain.util.interaction.InteractionBoundaryProbe;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
+import org.apache.isis.testing.integtestsupport.applib.IsisInteractionHandler;
 
 @SpringBootTest(
         classes = {
@@ -49,6 +51,7 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
  * With this test we manage IsisInteractions ourselves. (not sub-classing IsisIntegrationTestAbstract)
  */
 @DirtiesContext
+@ExtendWith(IsisInteractionHandler.class)
 class JpaTransactionScopeListenerTest {
 
     @Inject private FixtureScripts fixtureScripts;
