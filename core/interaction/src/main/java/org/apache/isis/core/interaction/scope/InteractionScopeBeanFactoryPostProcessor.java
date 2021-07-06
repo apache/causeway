@@ -37,7 +37,7 @@ public class InteractionScopeBeanFactoryPostProcessor implements BeanFactoryPost
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        val interactionScope = new InteractionScope();
+        val interactionScope = new InteractionScope(beanFactory);
         // scope name as defined in annotation @InteractionScope
         beanFactory.registerScope("interaction", interactionScope);
         _Context.put(InteractionScope.class, interactionScope, true);

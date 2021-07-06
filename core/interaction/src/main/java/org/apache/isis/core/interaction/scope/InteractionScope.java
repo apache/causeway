@@ -22,9 +22,9 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 
 import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.Scope;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
@@ -42,9 +42,11 @@ import lombok.val;
 @Log4j2
 public class InteractionScope implements Scope, InteractionScopeLifecycleHandler {
 
-    @Inject private Provider<InteractionLayerTracker> interactionLayerTrackerProvider;
+    private final ConfigurableListableBeanFactory beanFactory;
 
-    public InteractionScope() {
+    @Inject
+    public InteractionScope(ConfigurableListableBeanFactory beanFactory) {
+        this.beanFactory = beanFactory;
     }
 
     @Data(staticConstructor = "of")
@@ -62,15 +64,20 @@ public class InteractionScope implements Scope, InteractionScopeLifecycleHandler
 
     private ThreadLocal<Map<String, ScopedObject>> scopedObjects = ThreadLocal.withInitial(_Maps::newHashMap);
 
+    private InteractionLayerTracker interactionLayerTracker() {
+        val interactionLayerTracker = beanFactory.getBean(InteractionLayerTracker.class);
+        return interactionLayerTracker;
+    }
+
     @Override
     public Object get(String name, ObjectFactory<?> objectFactory) {
 
-        if(interactionLayerTrackerProvider == null || interactionLayerTrackerProvider.get() == null) {
+        if(interactionLayerTracker() == null) {
             throw _Exceptions.illegalState("Creation of bean %s with @InteractionScope requires the "
                     + "InteractionScopeBeanFactoryPostProcessor registered and initialized.", name);
         }
 
-        if(!interactionLayerTrackerProvider.get().isInInteraction()) {
+        if(!interactionLayerTracker().isInInteraction()) {
             throw _Exceptions.illegalState("Creation of bean %s with @InteractionScope requires the "
                     + "calling %s to have an open Interaction on the thread-local stack. Running into "
                     + "this issue might be caused by use of ... @Inject MyScopedBean bean ..., instead of "
@@ -114,7 +121,7 @@ public class InteractionScope implements Scope, InteractionScopeLifecycleHandler
     @Override
     public String getConversationId() {
         // null by convention if not supported
-        return interactionLayerTrackerProvider.get().getInteractionId()
+        return interactionLayerTracker().getInteractionId()
                 .map(UUID::toString)
                 .orElse(null);
     }
