@@ -19,6 +19,7 @@
 package org.apache.isis.persistence.jpa.applib.integration;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.persistence.PostLoad;
 import javax.persistence.PostPersist;
 import javax.persistence.PostRemove;
@@ -27,9 +28,13 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
 
+import org.eclipse.persistence.sessions.UnitOfWork;
+
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
+import org.apache.isis.core.transaction.changetracking.EntityChangeTrackerWithPreValue;
+import org.apache.isis.persistence.jpa.applib.services.JpaSupportService;
 
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
@@ -54,13 +59,8 @@ public class IsisEntityListener {
 
     // not managed by Spring (directly)
     @Inject private ServiceInjector serviceInjector;
-    private EntityChangeTracker entityChangeTracker;
-
-    @Inject
-    public void setEntityChangeTracker(EntityChangeTracker entityChangeTracker) {
-        this.entityChangeTracker = entityChangeTracker;
-    }
-
+    @Inject private Provider<EntityChangeTrackerWithPreValue> entityChangeTrackerProvider;
+    @Inject private Provider<JpaSupportService> jpaSupportServiceProvider;
     @Inject private ObjectManager objectManager;
 
 
@@ -69,6 +69,7 @@ public class IsisEntityListener {
         log.debug("onPrePersist: {}", entityPojo);
         serviceInjector.injectServicesInto(entityPojo);
         val entity = objectManager.adapt(entityPojo);
+        val entityChangeTracker = entityChangeTrackerProvider.get();
         entityChangeTracker.recognizePersisting(entity);
     }
 
@@ -77,7 +78,19 @@ public class IsisEntityListener {
         log.debug("onPreUpdate: {}", entityPojo);
         serviceInjector.injectServicesInto(entityPojo);
         val entity = objectManager.adapt(entityPojo);
-        entityChangeTracker.enlistUpdating(entity);
+        val entityChangeTracker = entityChangeTrackerProvider.get();
+        val entityManagerResult = jpaSupportServiceProvider.get().getEntityManager(entityPojo.getClass());
+        entityManagerResult.getValue().ifPresent(em -> {  // https://wiki.eclipse.org/EclipseLink/FAQ/JPA#How_to_access_what_changed_in_an_object_or_transaction.3F
+            val unwrap = em.unwrap(UnitOfWork.class);
+            val changes = unwrap.getCurrentChanges();
+            val objectChanges = changes.getObjectChangeSetForClone(entityPojo);
+            val changeRecords = objectChanges.getChanges();
+            changeRecords.forEach(changeRecord -> {
+                val propertyName = changeRecord.getAttribute();
+                val oldValue = changeRecord.getOldValue();
+                entityChangeTracker.enlistUpdating(entity, propertyName, oldValue);
+            });
+        });
     }
 
     @PreRemove
@@ -85,6 +98,7 @@ public class IsisEntityListener {
         log.debug("onAnyRemove: {}", entityPojo);
         serviceInjector.injectServicesInto(entityPojo);
         val entity = objectManager.adapt(entityPojo);
+        val entityChangeTracker = entityChangeTrackerProvider.get();
         entityChangeTracker.enlistDeleting(entity);
     }
 
@@ -92,6 +106,7 @@ public class IsisEntityListener {
     private void onPostPersist(Object entityPojo) {
         log.debug("onPostPersist: {}", entityPojo);
         val entity = objectManager.adapt(entityPojo);
+        val entityChangeTracker = entityChangeTrackerProvider.get();
         entityChangeTracker.enlistCreated(entity);
     }
 
@@ -99,6 +114,7 @@ public class IsisEntityListener {
     private void onPostUpdate(Object entityPojo) {
         log.debug("onPostUpdate: {}", entityPojo);
         val entity = objectManager.adapt(entityPojo);
+        val entityChangeTracker = entityChangeTrackerProvider.get();
         entityChangeTracker.recognizeUpdating(entity);
     }
 
@@ -112,6 +128,7 @@ public class IsisEntityListener {
         log.debug("onPostLoad: {}", entityPojo);
         serviceInjector.injectServicesInto(entityPojo);
         val entity = objectManager.adapt(entityPojo);
+        val entityChangeTracker = entityChangeTrackerProvider.get();
         entityChangeTracker.recognizeLoaded(entity);
     }
 
