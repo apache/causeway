@@ -28,7 +28,7 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.commons.internal.debug._Probe;
-import org.apache.isis.core.interaction.scope.InteractionScopeAware;
+import org.apache.isis.core.interaction.scope.TransactionBoundaryAware;
 import org.apache.isis.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
 import org.apache.isis.incubator.viewer.javafx.model.events.PrimaryStageReadyEvent;
 
@@ -44,7 +44,7 @@ import lombok.extern.log4j.Log4j2;
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
-public class UiBuilderFx implements InteractionScopeAware {
+public class UiBuilderFx implements TransactionBoundaryAware {
 
     private final ApplicationContext springContext;
     private final JavaFxViewerConfig viewerConfig;
@@ -70,14 +70,14 @@ public class UiBuilderFx implements InteractionScopeAware {
     public void beforeEnteringTransactionalBoundary(Interaction interaction) {
         //TODO this would be the place to indicate to the user, that a long running task has started
         //scene.getRoot().cursorProperty().set(Cursor.WAIT);
-        _Probe.errOut("Interaction HAS_STARTED conversationId=%s", interaction.getInteractionId());
+        _Probe.errOut("Transaction HAS_STARTED conversationId=%s", interaction.getInteractionId());
     }
 
     @Override
     public void afterLeavingTransactionalBoundary(Interaction interaction) {
         //TODO this would be the place to indicate to the user, that a long running task has ended
         //scene.getRoot().cursorProperty().set(Cursor.DEFAULT);
-        _Probe.errOut("Interaction IS_ENDING interactionId=%s", interaction.getInteractionId());
+        _Probe.errOut("Transaction IS_ENDING interactionId=%s", interaction.getInteractionId());
     }
 
     // -- HELPER
