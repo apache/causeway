@@ -20,13 +20,10 @@ package org.apache.isis.core.interaction.scope;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.commons.internal.context._Context;
-
-import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -35,19 +32,15 @@ import lombok.val;
 @Component
 public class InteractionScopeBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
 
+    public static final String SCOPE_NAME = "interaction";
+
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         val interactionScope = new InteractionScope(beanFactory);
-        // scope name as defined in annotation @InteractionScope
-        beanFactory.registerScope("interaction", interactionScope);
-        _Context.put(InteractionScope.class, interactionScope, true);
+        beanFactory.registerScope(SCOPE_NAME, interactionScope);
     }
 
-    public static InteractionScopeLifecycleHandler initIsisInteractionScopeSupport(
-            @NonNull final ServiceInjector serviceInjector) {
-        val interactionScope = _Context.getElseFail(InteractionScope.class);
-        serviceInjector.injectServicesInto(interactionScope);
-        _Context.remove(InteractionScope.class); // cleanup
-        return interactionScope;
+    public static InteractionScopeLifecycleHandler lookupScope(ConfigurableBeanFactory beanFactory) throws BeansException {
+        return (InteractionScopeLifecycleHandler) beanFactory.getRegisteredScope(SCOPE_NAME);
     }
 }

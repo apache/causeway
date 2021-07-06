@@ -34,6 +34,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
@@ -99,6 +100,7 @@ implements
     @Inject ClockService clockService;
     @Inject CommandPublisher commandPublisher;
     @Inject List<TransactionBoundaryAware> transactionBoundaryAwareBeans;
+    @Inject ConfigurableBeanFactory beanFactory;
 
     private InteractionScopeLifecycleHandler interactionScopeLifecycleHandler;
 
@@ -107,8 +109,7 @@ implements
 
     @PostConstruct
     public void initIsisInteractionScopeSupport() {
-        this.interactionScopeLifecycleHandler = InteractionScopeBeanFactoryPostProcessor
-                .initIsisInteractionScopeSupport(serviceInjector);
+        this.interactionScopeLifecycleHandler = InteractionScopeBeanFactoryPostProcessor.lookupScope(beanFactory);
     }
 
     //@PostConstruct .. too early, needs services to be provisioned first
@@ -186,7 +187,7 @@ implements
 
         interactionLayerStack.get().push(interactionLayer);
 
-        if(isInBaseLayer()) {
+        if(isAtTopLevel()) {
         	postInteractionOpened(isisInteraction);
         }
 
@@ -310,7 +311,7 @@ implements
 
     // -- HELPER
 
-    private boolean isInBaseLayer() {
+    private boolean isAtTopLevel() {
     	return interactionLayerStack.get().size()==1;
     }
 
@@ -344,7 +345,7 @@ implements
 
         val stack = interactionLayerStack.get();
         while(stack.size()>downToStackSize) {
-        	if(isInBaseLayer()) {
+        	if(isAtTopLevel()) {
         		// keep the stack unmodified yet, to allow for callbacks to properly operate
         		preInteractionClosed(_Casts.uncheckedCast(stack.peek().getInteraction()));
         	}

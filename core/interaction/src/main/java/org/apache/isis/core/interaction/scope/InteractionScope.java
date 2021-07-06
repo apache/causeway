@@ -21,13 +21,12 @@ package org.apache.isis.core.interaction.scope;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.inject.Inject;
-
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.ObjectFactory;
-import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.beans.factory.config.Scope;
 
-import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -40,12 +39,11 @@ import lombok.val;
  * @since 2.0
  */
 @Log4j2
-public class InteractionScope implements Scope, InteractionScopeLifecycleHandler {
+class InteractionScope implements Scope, InteractionScopeLifecycleHandler {
 
-    private final ConfigurableListableBeanFactory beanFactory;
+    private final BeanFactory beanFactory;
 
-    @Inject
-    public InteractionScope(ConfigurableListableBeanFactory beanFactory) {
+    public InteractionScope(BeanFactory beanFactory) {
         this.beanFactory = beanFactory;
     }
 
@@ -62,22 +60,31 @@ public class InteractionScope implements Scope, InteractionScopeLifecycleHandler
         }
     }
 
+    /**
+     * An alternative design would be to store the ScopedObjects in the top-level
+     * {@link org.apache.isis.applib.services.iactn.Interaction}'s
+     * {@link org.apache.isis.applib.services.iactn.Interaction#getAttribute(Class) attributes}.
+     *
+     * <p>
+     * Why the top-level?  because this class is only interested in that top-level interaction (see
+     * {@link InteractionScopeLifecycleHandler#onTopLevelInteractionPreDestroy()}), not any of the stacked.
+     * </p>>
+     */
     private ThreadLocal<Map<String, ScopedObject>> scopedObjects = ThreadLocal.withInitial(_Maps::newHashMap);
 
-    private InteractionLayerTracker interactionLayerTracker() {
-        val interactionLayerTracker = beanFactory.getBean(InteractionLayerTracker.class);
-        return interactionLayerTracker;
+    private InteractionService interactionService() {
+        return beanFactory.getBean(InteractionService.class);
     }
 
     @Override
     public Object get(String name, ObjectFactory<?> objectFactory) {
 
-        if(interactionLayerTracker() == null) {
+        if(interactionService() == null) {
             throw _Exceptions.illegalState("Creation of bean %s with @InteractionScope requires the "
                     + "InteractionScopeBeanFactoryPostProcessor registered and initialized.", name);
         }
 
-        if(!interactionLayerTracker().isInInteraction()) {
+        if(!interactionService().isInInteraction()) {
             throw _Exceptions.illegalState("Creation of bean %s with @InteractionScope requires the "
                     + "calling %s to have an open Interaction on the thread-local stack. Running into "
                     + "this issue might be caused by use of ... @Inject MyScopedBean bean ..., instead of "
@@ -121,7 +128,7 @@ public class InteractionScope implements Scope, InteractionScopeLifecycleHandler
     @Override
     public String getConversationId() {
         // null by convention if not supported
-        return interactionLayerTracker().getInteractionId()
+        return interactionService().getInteractionId()
                 .map(UUID::toString)
                 .orElse(null);
     }
