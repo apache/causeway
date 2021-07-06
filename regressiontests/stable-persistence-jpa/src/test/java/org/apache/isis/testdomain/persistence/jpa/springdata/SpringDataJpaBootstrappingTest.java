@@ -27,6 +27,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
@@ -60,6 +61,8 @@ import lombok.val;
 })
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@DirtiesContext
+// @Disabled // ISIS-2789 revert
 class SpringDataJpaBootstrappingTest extends IsisIntegrationTestAbstract {
 
     @Inject private Optional<PlatformTransactionManager> platformTransactionManager;

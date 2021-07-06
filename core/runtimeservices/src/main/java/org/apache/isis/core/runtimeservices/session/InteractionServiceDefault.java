@@ -58,9 +58,9 @@ import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.interaction.integration.InteractionAwareTransactionalBoundaryHandler;
-import org.apache.isis.core.interaction.scope.InteractionScopeAware;
 import org.apache.isis.core.interaction.scope.InteractionScopeBeanFactoryPostProcessor;
 import org.apache.isis.core.interaction.scope.InteractionScopeLifecycleHandler;
+import org.apache.isis.core.interaction.scope.TransactionBoundaryAware;
 import org.apache.isis.core.interaction.session.IsisInteraction;
 import org.apache.isis.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -72,8 +72,8 @@ import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 /**
  * Is the factory of {@link Interaction}s.
@@ -98,9 +98,12 @@ implements
     @Inject InteractionAwareTransactionalBoundaryHandler txBoundaryHandler;
     @Inject ClockService clockService;
     @Inject CommandPublisher commandPublisher;
-    @Inject List<InteractionScopeAware> interactionScopeAwareBeans;
+    @Inject List<TransactionBoundaryAware> transactionBoundaryAwareBeans;
 
     private InteractionScopeLifecycleHandler interactionScopeLifecycleHandler;
+
+    public InteractionServiceDefault() {
+    }
 
     @PostConstruct
     public void initIsisInteractionScopeSupport() {
@@ -313,19 +316,19 @@ implements
 
     private void postInteractionOpened(final IsisInteraction interaction) {
         interactionId.set(interaction.getInteractionId());
-        interactionScopeAwareBeans.forEach(bean->bean.beforeEnteringTransactionalBoundary(interaction));
+        transactionBoundaryAwareBeans.forEach(bean->bean.beforeEnteringTransactionalBoundary(interaction));
         txBoundaryHandler.onOpen(interaction);
         val isSynchronizationActive = TransactionSynchronizationManager.isSynchronizationActive();
-        interactionScopeAwareBeans.forEach(bean->bean.afterEnteringTransactionalBoundary(interaction, isSynchronizationActive));
+        transactionBoundaryAwareBeans.forEach(bean->bean.afterEnteringTransactionalBoundary(interaction, isSynchronizationActive));
         interactionScopeLifecycleHandler.onTopLevelInteractionOpened();
     }
 
     private void preInteractionClosed(final IsisInteraction interaction) {
         completeAndPublishCurrentCommand();
         val isSynchronizationActive = TransactionSynchronizationManager.isSynchronizationActive();
-        interactionScopeAwareBeans.forEach(bean->bean.beforeLeavingTransactionalBoundary(interaction, isSynchronizationActive));
+        transactionBoundaryAwareBeans.forEach(bean->bean.beforeLeavingTransactionalBoundary(interaction, isSynchronizationActive));
         txBoundaryHandler.onClose(interaction);
-        interactionScopeAwareBeans.forEach(bean->bean.afterLeavingTransactionalBoundary(interaction));
+        transactionBoundaryAwareBeans.forEach(bean->bean.afterLeavingTransactionalBoundary(interaction));
         interactionScopeLifecycleHandler.onTopLevelInteractionPreDestroy(); // cleanup the InteractionScope (Spring scope)
         interactionScopeLifecycleHandler.onTopLevelInteractionClosed(); // cleanup the InteractionScope (Spring scope)
         interaction.close(); // do this last

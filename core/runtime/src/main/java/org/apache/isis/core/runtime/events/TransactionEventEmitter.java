@@ -26,7 +26,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.core.interaction.scope.InteractionScopeAware;
+import org.apache.isis.core.interaction.scope.TransactionBoundaryAware;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.core.transaction.events.TransactionAfterCompletionEvent;
 import org.apache.isis.core.transaction.events.TransactionBeforeCompletionEvent;
@@ -37,7 +37,7 @@ import lombok.val;
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class TransactionEventEmitter
-implements TransactionSynchronization, InteractionScopeAware {
+implements TransactionSynchronization, TransactionBoundaryAware {
 
     private final EventBusService eventBusService;
     private final InteractionLayerTracker interactionLayerTracker;

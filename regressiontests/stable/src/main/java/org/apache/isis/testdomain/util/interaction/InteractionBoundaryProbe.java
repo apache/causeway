@@ -29,7 +29,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.core.interaction.scope.InteractionScopeAware;
+import org.apache.isis.core.interaction.scope.TransactionBoundaryAware;
 import org.apache.isis.core.transaction.events.TransactionAfterCompletionEvent;
 import org.apache.isis.core.transaction.events.TransactionBeforeCompletionEvent;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
@@ -39,7 +39,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Service
 @Log4j2
-public class InteractionBoundaryProbe implements InteractionScopeAware {
+public class InteractionBoundaryProbe implements TransactionBoundaryAware {
 
     @Inject private KVStoreForTesting kvStoreForTesting;
 

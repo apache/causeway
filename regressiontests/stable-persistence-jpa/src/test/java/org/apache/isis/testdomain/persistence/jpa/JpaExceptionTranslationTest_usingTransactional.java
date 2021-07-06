@@ -28,6 +28,7 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -49,6 +50,7 @@ import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.jpa.JpaInventoryDao;
 import org.apache.isis.testdomain.jpa.entities.JpaInventory;
+import org.apache.isis.testing.integtestsupport.applib.IsisInteractionHandler;
 
 import lombok.val;
 
@@ -61,6 +63,7 @@ import lombok.val;
     @TestPropertySource(IsisPresets.UseLog4j2Test)
 })
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@ExtendWith({IsisInteractionHandler.class})
 class JpaExceptionTranslationTest_usingTransactional
 {
 

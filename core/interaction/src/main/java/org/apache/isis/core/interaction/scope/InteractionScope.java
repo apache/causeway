@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.Scope;
@@ -32,16 +33,19 @@ import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.Data;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 /**
  * @since 2.0
  */
 @Log4j2
-class InteractionScope implements Scope, InteractionScopeLifecycleHandler {
+public class InteractionScope implements Scope, InteractionScopeLifecycleHandler {
 
-    @Inject private InteractionLayerTracker interactionLayerTracker;
+    @Inject private Provider<InteractionLayerTracker> interactionLayerTrackerProvider;
+
+    public InteractionScope() {
+    }
 
     @Data(staticConstructor = "of")
     private static class ScopedObject {
@@ -61,12 +65,12 @@ class InteractionScope implements Scope, InteractionScopeLifecycleHandler {
     @Override
     public Object get(String name, ObjectFactory<?> objectFactory) {
 
-        if(interactionLayerTracker ==null) {
+        if(interactionLayerTrackerProvider == null || interactionLayerTrackerProvider.get() == null) {
             throw _Exceptions.illegalState("Creation of bean %s with @InteractionScope requires the "
                     + "InteractionScopeBeanFactoryPostProcessor registered and initialized.", name);
         }
 
-        if(!interactionLayerTracker.isInInteraction()) {
+        if(!interactionLayerTrackerProvider.get().isInInteraction()) {
             throw _Exceptions.illegalState("Creation of bean %s with @InteractionScope requires the "
                     + "calling %s to have an open Interaction on the thread-local stack. Running into "
                     + "this issue might be caused by use of ... @Inject MyScopedBean bean ..., instead of "
@@ -110,7 +114,7 @@ class InteractionScope implements Scope, InteractionScopeLifecycleHandler {
     @Override
     public String getConversationId() {
         // null by convention if not supported
-        return interactionLayerTracker.getInteractionId()
+        return interactionLayerTrackerProvider.get().getInteractionId()
                 .map(UUID::toString)
                 .orElse(null);
     }
