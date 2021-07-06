@@ -25,6 +25,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Consumer;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -96,10 +98,6 @@ implements
     HasEnlistedEntityPropertyChanges,
     HasEnlistedEntityChanges {
 
-    @Inject private EntityPropertyChangePublisher entityPropertyChangePublisher;
-    @Inject private EntityChangesPublisher entityChangesPublisher;
-    @Inject private EventBusService eventBusService;
-    @Inject private Provider<InteractionProvider> interactionProviderProvider;
 
     /**
      * Contains initial change records having set the pre-values of every property of every object that was enlisted.
@@ -115,6 +113,29 @@ implements
 
     @Getter(AccessLevel.PACKAGE)
     private final Map<Bookmark, EntityChangeKind> changeKindByEnlistedAdapter = _Maps.newLinkedHashMap();
+
+    private final EntityPropertyChangePublisher entityPropertyChangePublisher;
+    private final EntityChangesPublisher entityChangesPublisher;
+    private final EventBusService eventBusService;
+    private final Provider<InteractionProvider> interactionProviderProvider;
+
+    @Inject
+    public EntityChangeTrackerDefault(EntityPropertyChangePublisher entityPropertyChangePublisher, EntityChangesPublisher entityChangesPublisher, EventBusService eventBusService, Provider<InteractionProvider> interactionProviderProvider) {
+        this.entityPropertyChangePublisher = entityPropertyChangePublisher;
+        this.entityChangesPublisher = entityChangesPublisher;
+        this.eventBusService = eventBusService;
+        this.interactionProviderProvider = interactionProviderProvider;
+    }
+
+    @PostConstruct
+    public void postConstruct() {
+
+    }
+
+    @PreDestroy
+    public void preDestroy() {
+
+    }
 
     private boolean isEnlisted(final @NonNull ManagedObject adapter) {
         return ManagedObjects.bookmark(adapter)

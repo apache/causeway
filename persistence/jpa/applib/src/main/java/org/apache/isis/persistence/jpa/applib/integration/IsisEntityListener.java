@@ -31,8 +31,8 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 /**
  * EntityListener class for listing with the {@link javax.persistence.EntityListeners} annotation, to
@@ -54,7 +54,13 @@ public class IsisEntityListener {
 
     // not managed by Spring (directly)
     @Inject private ServiceInjector serviceInjector;
-    @Inject private EntityChangeTracker entityChangeTracker;
+    private EntityChangeTracker entityChangeTracker;
+
+    @Inject
+    public void setEntityChangeTracker(EntityChangeTracker entityChangeTracker) {
+        this.entityChangeTracker = entityChangeTracker;
+    }
+
     @Inject private ObjectManager objectManager;
 
 
