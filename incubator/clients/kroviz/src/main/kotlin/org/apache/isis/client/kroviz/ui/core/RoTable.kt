@@ -42,7 +42,8 @@ class RoTable(displayCollection: CollectionDM) : SimplePanel() {
     init {
         title = Utils.extractTitle(displayCollection.title)
         width = CssSize(100, UNIT.perc)
-        val model = displayCollection.data as List<Exposer>
+        val model = displayCollection.data
+//        val model = buildModel(displayCollection)
         val columns = ColumnFactory().buildColumns(
                 displayCollection,
                 true)
@@ -63,6 +64,19 @@ class RoTable(displayCollection: CollectionDM) : SimplePanel() {
                 }
             }
         }
+    }
+
+    private fun buildModel(displayCollection: CollectionDM) : List<dynamic> {
+        console.log("[RT.buildModel]")
+        val model = mutableListOf<Exposer>()
+        displayCollection.data.forEach {
+            console.log(it)
+            val record = it.asDynamic()
+            console.log(record["readOnlyProperty"])
+            model.add(record)
+            console.log(record)
+        }
+        return model
     }
 
     fun <T : Any> Container.tabulator(

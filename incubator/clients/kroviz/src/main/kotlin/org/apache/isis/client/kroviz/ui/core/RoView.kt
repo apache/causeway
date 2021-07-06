@@ -67,7 +67,7 @@ object RoView {
         val index = tabPanel.activeIndex
         return if (index > 0) {
             val tabs = tabPanel.getTabs()
-            tabs.get(index) as SimplePanel
+            tabs.get(index)
         } else {
             null
         }

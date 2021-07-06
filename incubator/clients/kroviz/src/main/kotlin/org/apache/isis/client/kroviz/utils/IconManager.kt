@@ -75,7 +75,7 @@ object IconManager {
         "OK" to "check",
         "Open" to "book",
         "Other" to "asterisk",
-        "Pin" to "pin",
+        "Pin" to "map-pin",
         "Primitives" to "hashtag",
         "Prototyping" to "object-group",
         "Queen" to "chess-queen",
@@ -98,6 +98,7 @@ object IconManager {
         "Wikipedia" to "wikipedia-w"
     )
 
+    @OptIn(ExperimentalStdlibApi::class)
     fun find(query: String): String {
         if (query.startsWith("fa")) return query
         val actionTitle = Utils.deCamel(query)

@@ -21,10 +21,10 @@ package org.apache.isis.client.kroviz.utils
 import org.apache.isis.client.kroviz.to.Argument
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.TObject
-import kotlinx.serialization.json.Json
 
 object Utils {
 
+    @OptIn(ExperimentalStdlibApi::class)
     fun enCamel(input: String): String {
         var output = ""
         val words = input.split(" ")
@@ -34,15 +34,17 @@ object Utils {
         return decapitalize(output)
     }
 
+    @OptIn(ExperimentalStdlibApi::class)
     private fun decapitalize(input: String): String {
         val output = input.substring(1, input.length)
-        return input.first().toLowerCase() + output
+        return input.first().lowercaseChar() + output
     }
 
+    @OptIn(ExperimentalStdlibApi::class)
     fun deCamel(input: String): String {
         var output = ""
         for ((i, c) in input.withIndex()) {
-            val cuc = c.toUpperCase()
+            val cuc = c.uppercaseChar()
             if (i == 0) {
                 output += cuc
             } else {
@@ -105,10 +107,11 @@ object Utils {
     }
 
     internal fun argumentsAsString(
-            args: Map<String, Argument?>?,
-            start: String,
-            sep: String,
-            end: String): String {
+        args: Map<String, Argument?>?,
+        start: String,
+        sep: String,
+        end: String
+    ): String {
         return if (args.isNullOrEmpty()) "" else {
             var answer = start
             args.forEach { kv ->
@@ -122,10 +125,11 @@ object Utils {
     }
 
     internal fun argumentsAsList(
-            args: Map<String, Argument?>?,
-            start: String,
-            sep: String,
-            end: String): String {
+        args: Map<String, Argument?>?,
+        start: String,
+        sep: String,
+        end: String
+    ): String {
         return if (args.isNullOrEmpty()) "" else {
             var answer = start
             args.forEach { kv ->

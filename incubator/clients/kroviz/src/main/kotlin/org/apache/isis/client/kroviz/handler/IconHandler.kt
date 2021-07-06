@@ -29,7 +29,7 @@ class IconHandler : BaseHandler() {
     }
 
     override fun parse(response: String): TransferObject? {
-        return Icon(response as Blob)
+        return Icon(response as Blob) //TODO
     }
 
 }

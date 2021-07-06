@@ -70,7 +70,8 @@ class CollectionAggregatorTest : IntegrationTest() {
             val property = pdLe.getTransferObject() as Property
             assertTrue(propertyLabels.size > 0)  // 5
             val lbl = dl.properties.find(property.id)!!
-            assertEquals("ResultListResult class", lbl)  // 6
+            val expected = "ResultListResult class"
+            assertEquals(expected, lbl)  // 6
         }
     }
 

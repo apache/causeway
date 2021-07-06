@@ -48,13 +48,16 @@ kotlin {
                 outputFileName = "main.bundle.js"
                 sourceMaps = true
                 devServer = KotlinWebpackConfig.DevServer(
-                        open = false,
-                        port = 3000,
-                        proxy = mapOf(
-                                "/kv/*" to "http://localhost:8080",
-                                "/kvws/*" to mapOf("target" to "ws://localhost:8080", "ws" to true)
-                        ),
-                        contentBase = listOf("$buildDir/processedResources/js/main")
+                    open = false,
+                    port = 3000,
+                    proxy = mutableMapOf(
+                        "/kv/*" to "http://localhost:8080",
+                        "/kvws/*" to mapOf(
+                            "target" to "ws://localhost:8080",
+                            "ws" to true
+                        )
+                    ),
+                    static = mutableListOf("$buildDir/processedResources/js/main")
                 )
             }
             webpackTask {
@@ -127,9 +130,9 @@ afterEvaluate {
                     exec {
                         executable = getNodeJsBinaryExecutable()
                         args(
-                                "${rootProject.buildDir}/js/node_modules/gettext.js/bin/po2json",
-                                it.absolutePath,
-                                "${it.parent}/${it.nameWithoutExtension}.json"
+                            "${rootProject.buildDir}/js/node_modules/gettext.js/bin/po2json",
+                            it.absolutePath,
+                            "${it.parent}/${it.nameWithoutExtension}.json"
                         )
                         println("Converted ${it.name} to ${it.nameWithoutExtension}.json")
                     }
@@ -142,7 +145,7 @@ afterEvaluate {
             group = "package"
             destinationDirectory.set(file("$buildDir/libs"))
             val distribution =
-                    project.tasks.getByName("browserProductionWebpack", KotlinWebpack::class).destinationDirectory!!
+                project.tasks.getByName("browserProductionWebpack", KotlinWebpack::class).destinationDirectory!!
             from(distribution) {
                 include("*.*")
             }

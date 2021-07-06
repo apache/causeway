@@ -53,14 +53,7 @@ class ColumnFactory {
             displayCollection: CollectionDM,
             withCheckBox: Boolean = false): List<ColumnDefinition<dynamic>> {
 
-        val model = mutableListOf<dynamic>()
-        displayCollection.data.forEach {
-            model.add(it.asDynamic())
-        }
-        console.log("[CF.buildColumns]")
-        console.log(model::class.simpleName)
-        console.log(model)
-        val columns = mutableListOf<ColumnDefinition<dynamic>>()
+        val columns = mutableListOf<ColumnDefinition<Exposer>>()
         if (withCheckBox) {
             val checkBox = buildCheckBox()
             columns.add(checkBox)
@@ -71,7 +64,7 @@ class ColumnFactory {
             columns.add(menu)
 
             val icon = buildLinkIcon()
-            columns.add(icon)
+           columns.add(icon)
         }
 
         val propertyLabels = displayCollection.properties.list

@@ -49,6 +49,7 @@ class DomainTypesAggregator(val url: String) : BaseAggregator() {
     }
 
     private fun handleAction(obj: Action) {
+        console.log("[DTA.handleAction] $obj")
         throw Throwable("[DomainTypesAggregator.handleAction] not implemented yet")  //dsp.addData(obj)
     }
 
