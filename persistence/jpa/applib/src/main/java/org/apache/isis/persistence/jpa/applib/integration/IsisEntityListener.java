@@ -64,8 +64,7 @@ public class IsisEntityListener {
     @Inject private ObjectManager objectManager;
 
 
-    @PrePersist
-    private void onPrePersist(Object entityPojo) {
+    @PrePersist void onPrePersist(Object entityPojo) {
         log.debug("onPrePersist: {}", entityPojo);
         serviceInjector.injectServicesInto(entityPojo);
         val entity = objectManager.adapt(entityPojo);
@@ -73,8 +72,7 @@ public class IsisEntityListener {
         entityChangeTracker.recognizePersisting(entity);
     }
 
-    @PreUpdate
-    private void onPreUpdate(Object entityPojo) {
+    @PreUpdate void onPreUpdate(Object entityPojo) {
         log.debug("onPreUpdate: {}", entityPojo);
         serviceInjector.injectServicesInto(entityPojo);
         val entity = objectManager.adapt(entityPojo);
@@ -93,8 +91,7 @@ public class IsisEntityListener {
         });
     }
 
-    @PreRemove
-    private void onPreRemove(Object entityPojo) {
+    @PreRemove void onPreRemove(Object entityPojo) {
         log.debug("onAnyRemove: {}", entityPojo);
         serviceInjector.injectServicesInto(entityPojo);
         val entity = objectManager.adapt(entityPojo);
@@ -102,29 +99,25 @@ public class IsisEntityListener {
         entityChangeTracker.enlistDeleting(entity);
     }
 
-    @PostPersist
-    private void onPostPersist(Object entityPojo) {
+    @PostPersist void onPostPersist(Object entityPojo) {
         log.debug("onPostPersist: {}", entityPojo);
         val entity = objectManager.adapt(entityPojo);
         val entityChangeTracker = entityChangeTrackerProvider.get();
         entityChangeTracker.enlistCreated(entity);
     }
 
-    @PostUpdate
-    private void onPostUpdate(Object entityPojo) {
+    @PostUpdate void onPostUpdate(Object entityPojo) {
         log.debug("onPostUpdate: {}", entityPojo);
         val entity = objectManager.adapt(entityPojo);
         val entityChangeTracker = entityChangeTrackerProvider.get();
         entityChangeTracker.recognizeUpdating(entity);
     }
 
-    @PostRemove
-    private void onPostRemove(Object entityPojo) {
+    @PostRemove void onPostRemove(Object entityPojo) {
         log.debug("onPostRemove: {}", entityPojo);
     }
 
-    @PostLoad
-    private void onPostLoad(Object entityPojo) {
+    @PostLoad void onPostLoad(Object entityPojo) {
         log.debug("onPostLoad: {}", entityPojo);
         serviceInjector.injectServicesInto(entityPojo);
         val entity = objectManager.adapt(entityPojo);
