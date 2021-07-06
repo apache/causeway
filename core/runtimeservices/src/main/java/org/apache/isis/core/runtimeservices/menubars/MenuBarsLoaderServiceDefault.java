@@ -18,7 +18,10 @@
  */
 package org.apache.isis.core.runtimeservices.menubars;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -49,25 +52,42 @@ import lombok.extern.log4j.Log4j2;
 public class MenuBarsLoaderServiceDefault
 implements MenuBarsLoaderService {
 
-    private final IsisSystemEnvironment isisSystemEnvironment;
     private final JaxbService jaxbService;
-    private final AbstractResource menubarsLayoutXmlResource;
+    private final boolean supportsReloading;
+    private final AtomicReference<AbstractResource> menubarsLayoutXmlResourceRef;
 
     @Inject
     public MenuBarsLoaderServiceDefault(
             final IsisSystemEnvironment isisSystemEnvironment,
             final JaxbService jaxbService,
             final IsisConfiguration isisConfiguration) {
-        this.isisSystemEnvironment = isisSystemEnvironment;
         this.jaxbService = jaxbService;
+        this.supportsReloading = isisSystemEnvironment.isPrototyping();
 
-        this.menubarsLayoutXmlResource =
+        val menubarsLayoutXmlResource =
                 new ClassPathResource(isisConfiguration.getViewer().getWicket().getApplication().getMenubarsLayoutXml());
+        this.menubarsLayoutXmlResourceRef = new AtomicReference<>(menubarsLayoutXmlResource);
+    }
+
+    // JUnit support
+    public MenuBarsLoaderServiceDefault(
+            final JaxbService jaxbService,
+            final AtomicReference<AbstractResource> menubarsLayoutXmlResourceRef) {
+        this.jaxbService = jaxbService;
+        this.supportsReloading = true;
+
+        menubarsLayoutXmlResourceRef.getAndUpdate(r->r!=null
+                ? r
+                : new AbstractResource() {
+                    @Override public String getDescription() { return "Empty Resource"; }
+                    @Override public InputStream getInputStream() throws IOException { return null; }}
+                );
+        this.menubarsLayoutXmlResourceRef = menubarsLayoutXmlResourceRef;
     }
 
     @Override
     public boolean supportsReloading() {
-        return isisSystemEnvironment.isPrototyping();
+        return supportsReloading;
     }
 
     @Override
@@ -80,7 +100,7 @@ implements MenuBarsLoaderService {
         try {
             return jaxbService.fromXml(BS3MenuBars.class, xmlString);
         } catch (Exception e) {
-            severeCannotLoad(menubarsLayoutXmlResource, e);
+            severeCannotLoad(menubarsLayoutXmlResourceRef.get(), e);
             return null;
         }
     }
@@ -88,6 +108,8 @@ implements MenuBarsLoaderService {
     // -- HELPER
 
     private String loadMenubarsLayoutResource() {
+
+        val menubarsLayoutXmlResource = menubarsLayoutXmlResourceRef.get();
         try {
 
             if(!menubarsLayoutXmlResource.exists()) {

@@ -18,14 +18,15 @@
  */
 package org.apache.isis.core.runtimeservices.menubars.bootstrap3;
 
+import java.nio.charset.StandardCharsets;
+
 import org.junit.jupiter.api.Test;
+import org.springframework.core.io.ByteArrayResource;
 
 import org.apache.isis.applib.services.layout.LayoutService;
 import org.apache.isis.applib.services.menu.MenuBarsLoaderService;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting.MetaModelContext_forTestingBuilder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facets.actions.layout.MemberNamedFacetForMenuBarEntry;
 import org.apache.isis.core.runtimeservices.RuntimeServicesTestAbstract;
 import org.apache.isis.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault;
 
@@ -49,6 +50,9 @@ extends RuntimeServicesTestAbstract {
 
     @Override
     protected void afterSetUp() {
+
+        getConfiguration().getCore().getMetaModel().getIntrospector().setValidateIncrementally(false);
+
         layoutService = getServiceRegistry().lookupServiceElseFail(LayoutService.class);
         menuBarsService = (MenuBarsServiceBS3) getServiceRegistry().lookupServiceElseFail(MenuBarsService.class);
         menuBarsLoaderService = (MenuBarsLoaderServiceDefault) getServiceRegistry().lookupServiceElseFail(MenuBarsLoaderService.class);
@@ -99,7 +103,7 @@ extends RuntimeServicesTestAbstract {
         val customNamed = "Hello";
         val xml = sampleMenuBarsXmlWithCustomName(customNamed);
 
-        // after round-trip
+        // create menubars-xml from scratch (annotations and fallback naming only)
         val menuBars = menuBarsLoaderService.loadMenuBars(xml);
         assertNotNull(menuBars);
         assertEquals(1L, menuBars.stream().count());
@@ -108,17 +112,18 @@ extends RuntimeServicesTestAbstract {
         assertEquals(customNamed, layoutData.getNamed());
         assertEquals(null, layoutData.getNamedEscaped()); // deprecated: always escape
 
-        // verify action's member named facet is able to pick that up
         getSpecificationLoader().disposeMetaModel();
+
+        // load the modified menubars-xml with the MenuBarsLoaderService
+        super.menubarsLayoutXmlResourceRef.set(new ByteArrayResource(xml.getBytes(StandardCharsets.UTF_8)));
+
+        getSpecificationLoader().createMetaModel();
+
+        // verify service-action's member named facet was able to pick up the name from XML
 
         val serviceSpec = getSpecificationLoader().specForTypeElseFail(Bar.class);
         val objectAction = serviceSpec.getAction("createSimpleObject").orElse(null);
         assertNotNull(objectAction);
-
-        //TODO[ISIS-2787] we want this by the framework done internally, yet might require redesign of
-        // org.apache.isis.core.runtimeservices.menubars.bootstrap3.MenuBarsServiceBS3.menuBars(Type)
-        FacetUtil.addFacetIfPresent(MemberNamedFacetForMenuBarEntry
-                .create(layoutData, objectAction));
 
         assertEquals(customNamed, objectAction.getStaticFriendlyName().orElse(null));
     }

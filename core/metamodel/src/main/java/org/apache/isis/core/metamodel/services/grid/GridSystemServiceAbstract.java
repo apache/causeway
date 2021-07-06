@@ -44,7 +44,7 @@ import org.apache.isis.core.metamodel.facets.actions.layout.ActionPositionFacetF
 import org.apache.isis.core.metamodel.facets.actions.layout.BookmarkPolicyFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.CssClassFaFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.CssClassFacetForActionXml;
-import org.apache.isis.core.metamodel.facets.actions.layout.DescribedAsFacetForActionXml;
+import org.apache.isis.core.metamodel.facets.actions.layout.MemberDescribedFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.HiddenFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.MemberNamedFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.PromptStyleFacetForActionXml;
@@ -229,7 +229,7 @@ implements GridSystemService<G> {
                 addFacetIfPresent(BookmarkPolicyFacetForActionXml.create(actionLayoutData, objectAction));
                 addFacetIfPresent(CssClassFacetForActionXml.create(actionLayoutData, objectAction));
                 addFacetIfPresent(CssClassFaFacetForActionXml.create(actionLayoutData, objectAction));
-                addFacetIfPresent(DescribedAsFacetForActionXml.create(actionLayoutData, objectAction));
+                addFacetIfPresent(MemberDescribedFacetForActionXml.create(actionLayoutData, objectAction));
                 addFacetIfPresent(HiddenFacetForActionXml.create(actionLayoutData, objectAction));
                 addFacetIfPresent(MemberNamedFacetForActionXml.create(actionLayoutData, objectAction));
                 addFacetIfPresent(PromptStyleFacetForActionXml.create(actionLayoutData, objectAction));

@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
 import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacetWithStaticTextAbstract;
 
-public class DescribedAsFacetForActionXml
+public class MemberDescribedFacetForActionXml
 extends MemberDescribedFacetWithStaticTextAbstract {
 
     public static Optional<MemberDescribedFacet> create(
@@ -38,12 +38,12 @@ extends MemberDescribedFacetWithStaticTextAbstract {
         }
         final String describedAs = _Strings.emptyToNull(actionLayout.getDescribedAs());
         return describedAs != null
-                ? Optional.of(new DescribedAsFacetForActionXml(describedAs, holder))
+                ? Optional.of(new MemberDescribedFacetForActionXml(describedAs, holder))
                 : Optional.empty();
     }
 
-    private DescribedAsFacetForActionXml(final String described, final FacetHolder holder) {
-        super(described, holder);
+    private MemberDescribedFacetForActionXml(final String described, final FacetHolder holder) {
+        super(described, holder, Precedence.HIGH); // XML layout overrules layout from annotations
     }
 
 }

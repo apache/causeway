@@ -21,30 +21,31 @@ package org.apache.isis.core.metamodel.facets.actions.layout;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotation.ActionLayout;
+import javax.annotation.Nullable;
+
+import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
-import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacetWithStaticTextAbstract;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacetWithStaticTextAbstract;
 
-public class DescribedAsFacetForActionLayoutAnnotation
-extends MemberDescribedFacetWithStaticTextAbstract {
+public class MemberNamedFacetForMenuBarXml
+extends MemberNamedFacetWithStaticTextAbstract {
 
-    public static Optional<MemberDescribedFacet> create(
-            final Optional<ActionLayout> actionLayoutIfAny,
+    public static Optional<MemberNamedFacet> create(
+            final @Nullable ServiceActionLayoutData actionLayout,
             final FacetHolder holder) {
-
-        return actionLayoutIfAny
-                .map(ActionLayout::describedAs)
-                .filter(_Strings::isNotEmpty)
-                .map(describedAs ->
-                    new DescribedAsFacetForActionLayoutAnnotation(describedAs, holder));
+        if(actionLayout == null) {
+            return Optional.empty();
+        }
+        final String named = _Strings.emptyToNull(actionLayout.getNamed());
+        return named != null
+                ? Optional.of(new MemberNamedFacetForMenuBarXml(named, holder))
+                : Optional.empty();
     }
 
-    private DescribedAsFacetForActionLayoutAnnotation(
-            final String described,
-            final FacetHolder holder) {
-        super(described, holder);
+    private MemberNamedFacetForMenuBarXml(final String named, final FacetHolder holder) {
+        super(named, holder, Precedence.HIGH); // XML menu-bar entries overrule layout from annotations
     }
 
 }

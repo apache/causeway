@@ -18,8 +18,11 @@
  */
 package org.apache.isis.core.runtimeservices;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.springframework.core.io.AbstractResource;
 
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.menu.MenuBarsLoaderService;
@@ -49,11 +52,16 @@ implements HasMetaModelContext {
     @Getter(onMethod_ = {@Override})
     private MetaModelContext metaModelContext;
 
+    protected final AtomicReference<AbstractResource> menubarsLayoutXmlResourceRef =
+            new AtomicReference<>();
+
     @BeforeEach
     final void setUp() throws Exception {
         val mmcBuilder = MetaModelContext_forTesting.builder();
 
         // install runtime services into MMC (extend as needed)
+
+        onSetUp(mmcBuilder);
 
         mmcBuilder.singletonProvider(
                 _ManagedBeanAdapter
@@ -61,9 +69,8 @@ implements HasMetaModelContext {
 
                     val jaxbService = getServiceRegistry().lookupServiceElseFail(JaxbService.class);
                     return new MenuBarsLoaderServiceDefault(
-                            getSystemEnvironment(),
                             jaxbService,
-                            getConfiguration());
+                            menubarsLayoutXmlResourceRef);
                 }));
 
 
@@ -83,20 +90,11 @@ implements HasMetaModelContext {
 
                     }));
 
-        mmcBuilder.singletonProvider(
-                _ManagedBeanAdapter
-                .forTestingLazy(MenuBarsLoaderService.class, ()->{
 
-                    val jaxbService = getServiceRegistry().lookupServiceElseFail(JaxbService.class);
-                    return new MenuBarsLoaderServiceDefault(
-                            getSystemEnvironment(),
-                            jaxbService,
-                            getConfiguration());
-
-                    }));
-
-        onSetUp(mmcBuilder);
         metaModelContext = mmcBuilder.build();
+
+        getConfiguration().getCore().getMetaModel().getIntrospector().setLockAfterFullIntrospection(false);
+
         afterSetUp();
     }
 

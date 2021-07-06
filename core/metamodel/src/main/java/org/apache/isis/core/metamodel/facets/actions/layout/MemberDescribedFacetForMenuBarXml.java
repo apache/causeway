@@ -21,29 +21,31 @@ package org.apache.isis.core.metamodel.facets.actions.layout;
 
 import java.util.Optional;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
-import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacetWithStaticTextAbstract;
+import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
+import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacetWithStaticTextAbstract;
 
-public class MemberNamedFacetForMenuBarEntry
-extends MemberNamedFacetWithStaticTextAbstract {
+public class MemberDescribedFacetForMenuBarXml
+extends MemberDescribedFacetWithStaticTextAbstract {
 
-    public static Optional<MemberNamedFacet> create(
-            final ServiceActionLayoutData actionLayout,
+    public static Optional<MemberDescribedFacet> create(
+            final @Nullable ServiceActionLayoutData actionLayout,
             final FacetHolder holder) {
         if(actionLayout == null) {
             return Optional.empty();
         }
-        final String named = _Strings.emptyToNull(actionLayout.getNamed());
-        return named != null
-                ? Optional.of(new MemberNamedFacetForMenuBarEntry(named, holder))
+        final String describedAs = _Strings.emptyToNull(actionLayout.getDescribedAs());
+        return _Strings.isNotEmpty(describedAs)
+                ? Optional.of(new MemberDescribedFacetForMenuBarXml(describedAs, holder))
                 : Optional.empty();
     }
 
-    private MemberNamedFacetForMenuBarEntry(final String named, final FacetHolder holder) {
-        super(named, holder);
+    private MemberDescribedFacetForMenuBarXml(final String named, final FacetHolder holder) {
+        super(named, holder, Precedence.HIGH); // XML menu-bar entries overrule layout from annotations
     }
 
 }

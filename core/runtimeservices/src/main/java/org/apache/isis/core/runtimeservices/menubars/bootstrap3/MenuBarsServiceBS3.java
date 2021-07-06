@@ -33,6 +33,7 @@ import javax.inject.Named;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
@@ -108,7 +109,30 @@ implements MenuBarsService {
             return menuBarsFromAnnotationsOnly;
         }
 
-        // else load (and only fallback if nothing could be loaded)...
+        return menuBarsDefault();
+    }
+
+
+    @Override
+    public Optional<ServiceActionLayoutData> lookupLayout(Identifier serviceActionIdentifier) {
+        val actionId = serviceActionIdentifier.getLogicalTypeName()
+                + "#" + serviceActionIdentifier.getMemberLogicalName();
+
+        if(menuBars == null) {
+            menuBarsDefault();
+        }
+
+        val layoutData = serviceActionLayoutDataByActionId.get(actionId);
+        return Optional.ofNullable(layoutData);
+    }
+
+    // -- HELPER
+
+    private BS3MenuBars menuBarsDefault() {
+
+        val menuBarsFromAnnotationsOnly = this.menuBarsFromAnnotationsOnly.get();
+
+        // load (and only fallback if nothing could be loaded)...
         if(menuBars == null || menuBarsLoaderService.supportsReloading()) {
             this.menuBars = loadOrElse(menuBarsFromAnnotationsOnly);
         }
@@ -116,11 +140,12 @@ implements MenuBarsService {
         return menuBars;
     }
 
-    // -- HELPER
+    private final Map<String, ServiceActionLayoutData> serviceActionLayoutDataByActionId = _Maps.newHashMap();
 
     private BS3MenuBars loadOrElse(final BS3MenuBars menuBarsFromAnnotationsOnly) {
 
         val menuBars = Optional.ofNullable(menuBarsLoaderService.menuBars())
+                .map(this::updateActionLayoutLookupTable)
                 .map(this::addTnsAndSchemaLocation)
                 .orElse(menuBarsFromAnnotationsOnly);
 
@@ -158,6 +183,15 @@ implements MenuBarsService {
         }));
 
         return menuBars;
+    }
+
+    private BS3MenuBars updateActionLayoutLookupTable(final BS3MenuBars menuBarsFromXml) {
+        serviceActionLayoutDataByActionId.clear();
+        menuBarsFromXml.visit(serviceActionLayoutData->
+            serviceActionLayoutDataByActionId.put(
+                    serviceActionLayoutData.getLogicalTypeNameAndId(),
+                    serviceActionLayoutData));
+        return menuBarsFromXml;
     }
 
     private BS3MenuBars addTnsAndSchemaLocation(final BS3MenuBars menuBars) {
@@ -429,8 +463,6 @@ implements MenuBarsService {
                 LINKS_SCHEMA_LOCATION)
                 .collect(Collectors.joining(" "));
     }
-
-
 
 
 }

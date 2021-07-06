@@ -67,7 +67,7 @@ extends FacetFactoryAbstract {
 
         // describedAs
         addFacetIfPresent(
-                DescribedAsFacetForActionLayoutAnnotation
+                MemberDescribedFacetForActionLayoutAnnotation
                 .create(actionLayoutIfAny, facetHolder));
 
         // hidden

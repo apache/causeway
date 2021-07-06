@@ -18,16 +18,22 @@
  */
 package org.apache.isis.core.metamodel.postprocessors.all.i18n;
 
-
 import javax.inject.Inject;
 
+import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.metamodel.facets.actions.layout.MemberDescribedFacetForMenuBarXml;
+import org.apache.isis.core.metamodel.facets.actions.layout.MemberNamedFacetForMenuBarXml;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+
+import lombok.Getter;
+import lombok.val;
 
 public class ServiceActionNamingPostProcessor
 extends ObjectSpecificationPostProcessorAbstract {
@@ -39,17 +45,27 @@ extends ObjectSpecificationPostProcessorAbstract {
 
     @Override
     protected void doPostProcess(final ObjectSpecification objectSpecification) {
+    }
+
+    @Override
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction) {
 
         if(!(objectSpecification.getBeanSort().isManagedBeanContributing())) {
             return;
         }
 
-        //TODO[ISIS-2787] load menubar, then install MemberNamedFacets
+        // installs MemberNamedFacet(s) and MemberDescribedFacet(s) for MenuBar entries
 
-    }
+        val layoutData = getMenuBarsService().lookupLayout(objectAction.getFeatureIdentifier()).orElse(null);
 
-    @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction act) {
+        FacetUtil.addFacetIfPresent(
+                MemberNamedFacetForMenuBarXml
+                .create(layoutData, objectAction));
+
+        FacetUtil.addFacetIfPresent(
+                MemberDescribedFacetForMenuBarXml
+                .create(layoutData, objectAction));
+
     }
 
     @Override
@@ -66,5 +82,14 @@ extends ObjectSpecificationPostProcessorAbstract {
 
     // -- HELEPR
 
+    @Getter(lazy = true)
+    private final MenuBarsService menuBarsService = getMenuBarsServiceAndReloadXml();
+
+    private final MenuBarsService getMenuBarsServiceAndReloadXml() {
+        val menuBarsService = getServiceRegistry()
+                .lookupServiceElseFail(MenuBarsService.class);
+        menuBarsService.menuBars(); // as a side-effect reloads XML resource if supported
+        return menuBarsService;
+    }
 
 }
