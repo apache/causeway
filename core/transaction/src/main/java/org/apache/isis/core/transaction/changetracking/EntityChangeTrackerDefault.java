@@ -19,7 +19,6 @@
 package org.apache.isis.core.transaction.changetracking;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -74,14 +73,16 @@ import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityC
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.transaction.changetracking.events.IsisTransactionPlaceholder;
 import org.apache.isis.core.transaction.events.TransactionBeforeCompletionEvent;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 /**
  * @since 2.0 {@index}
@@ -162,13 +163,23 @@ implements
         enlistForChangeKindPublishing(adapter, EntityChangeKind.UPDATE);
 
         if(propertyIdIfAny != null) {
-            enlistForPreAndPostValuePublishing(adapter, propertyChangeRecord -> {
-                // if we've been provided with the preValue, then just save it
-                // in the appropriate PropertyChangeRecord
-                if(Objects.equals(propertyChangeRecord.getPropertyId(), propertyIdIfAny)) {
-                    propertyChangeRecord.setPreValue(preValue);
-                }
-            });
+            // if we've been provided with the preValue, then just save it
+            // in the appropriate PropertyChangeRecord
+
+            if(propertyChangeRecordsById.containsKey(propertyIdIfAny)) {
+                return;
+            }
+            adapter.getSpecification().getAssociation(propertyIdIfAny)
+                .filter(assoc -> !assoc.isMixedIn())
+                .filter(ObjectMember::isOneToOneAssociation)
+                .map(OneToOneAssociation.class::cast)
+                .filter(property->!property.isNotPersisted())
+                .map(property->_PropertyChangeRecord.of(adapter, property))
+                .ifPresent(record -> {
+                    record.setPreValue(preValue);
+                    propertyChangeRecordsById.put(propertyIdIfAny, record);
+                });
+
         } else {
             // read from the pojo using the Isis MM.
             enlistForPreAndPostValuePublishing(adapter, _PropertyChangeRecord::updatePreValue);
