@@ -20,7 +20,7 @@ package org.apache.isis.core.interaction.scope;
 
 import org.apache.isis.applib.services.iactn.Interaction;
 
-public interface InteractionScopeAware {
+public interface TransactionBoundaryAware {
 
     default void beforeEnteringTransactionalBoundary(Interaction interaction) {
 

@@ -27,11 +27,13 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
+import org.apache.isis.applib.util.schema.CommandDtoUtils;
 
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 /**
- * 
+ *
  * @since 2.0 {@index}
  */
 @Service
@@ -48,11 +50,15 @@ public class CommandLogger implements CommandSubscriber {
 
     @Override
     public void onCompleted(Command command) {
-        
-        log.debug("completed: {}, systemStateChanged {}",
+
+        val commandDto = command.getCommandDto();
+        val xml = CommandDtoUtils.toXml(commandDto);
+
+        log.debug("completed: {}, systemStateChanged {} \n{}",
                 command.getLogicalMemberIdentifier(),
-                command.isSystemStateChanged());
-        
+                command.isSystemStateChanged(),
+                xml);
+
         //log.debug("completed: {}", command);
     }
 

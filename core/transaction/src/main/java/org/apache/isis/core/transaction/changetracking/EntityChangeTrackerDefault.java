@@ -25,6 +25,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Consumer;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -32,6 +34,7 @@ import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.EntityChangeKind;
@@ -70,14 +73,16 @@ import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityC
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.transaction.changetracking.events.IsisTransactionPlaceholder;
 import org.apache.isis.core.transaction.events.TransactionBeforeCompletionEvent;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 /**
  * @since 2.0 {@index}
@@ -91,19 +96,15 @@ import lombok.extern.log4j.Log4j2;
 public class EntityChangeTrackerDefault
 implements
     MetricsService,
-    EntityChangeTracker,
+        EntityChangeTrackerWithPreValue,
     HasEnlistedEntityPropertyChanges,
     HasEnlistedEntityChanges {
 
-    @Inject private EntityPropertyChangePublisher entityPropertyChangePublisher;
-    @Inject private EntityChangesPublisher entityChangesPublisher;
-    @Inject private EventBusService eventBusService;
-    @Inject private Provider<InteractionProvider> interactionProviderProvider;
 
     /**
      * Contains initial change records having set the pre-values of every property of every object that was enlisted.
      */
-    private final Set<_PropertyChangeRecord> entityPropertyChangeRecords = _Sets.newLinkedHashSet();
+    private final Map<String,_PropertyChangeRecord> propertyChangeRecordsById = _Maps.newLinkedHashMap();
 
     /**
      * Contains pre- and post- values of every property of every object that actually changed. A lazy snapshot,
@@ -114,6 +115,29 @@ implements
 
     @Getter(AccessLevel.PACKAGE)
     private final Map<Bookmark, EntityChangeKind> changeKindByEnlistedAdapter = _Maps.newLinkedHashMap();
+
+    private final EntityPropertyChangePublisher entityPropertyChangePublisher;
+    private final EntityChangesPublisher entityChangesPublisher;
+    private final EventBusService eventBusService;
+    private final Provider<InteractionProvider> interactionProviderProvider;
+
+    @Inject
+    public EntityChangeTrackerDefault(EntityPropertyChangePublisher entityPropertyChangePublisher, EntityChangesPublisher entityChangesPublisher, EventBusService eventBusService, Provider<InteractionProvider> interactionProviderProvider) {
+        this.entityPropertyChangePublisher = entityPropertyChangePublisher;
+        this.entityChangesPublisher = entityChangesPublisher;
+        this.eventBusService = eventBusService;
+        this.interactionProviderProvider = interactionProviderProvider;
+    }
+
+    @PostConstruct
+    public void postConstruct() {
+
+    }
+
+    @PreDestroy
+    public void preDestroy() {
+
+    }
 
     private boolean isEnlisted(final @NonNull ManagedObject adapter) {
         return ManagedObjects.bookmark(adapter)
@@ -129,12 +153,37 @@ implements
         enlistForPreAndPostValuePublishing(adapter, record->record.setPreValue(IsisTransactionPlaceholder.NEW));
     }
 
-    private void enlistUpdatingInternal(final @NonNull ManagedObject adapter) {
+    private void enlistUpdatingInternal(
+            final @NonNull ManagedObject adapter,
+            String propertyIdIfAny,
+            Object preValue) {
         if(!isEntityEnabledForChangePublishing(adapter)) {
             return;
         }
         enlistForChangeKindPublishing(adapter, EntityChangeKind.UPDATE);
-        enlistForPreAndPostValuePublishing(adapter, _PropertyChangeRecord::updatePreValue);
+
+        if(propertyIdIfAny != null) {
+            // if we've been provided with the preValue, then just save it
+            // in the appropriate PropertyChangeRecord
+
+            if(propertyChangeRecordsById.containsKey(propertyIdIfAny)) {
+                return;
+            }
+            adapter.getSpecification().getAssociation(propertyIdIfAny)
+                .filter(assoc -> !assoc.isMixedIn())
+                .filter(ObjectMember::isOneToOneAssociation)
+                .map(OneToOneAssociation.class::cast)
+                .filter(property->!property.isNotPersisted())
+                .map(property->_PropertyChangeRecord.of(adapter, property))
+                .ifPresent(record -> {
+                    record.setPreValue(preValue);
+                    propertyChangeRecordsById.put(propertyIdIfAny, record);
+                });
+
+        } else {
+            // read from the pojo using the Isis MM.
+            enlistForPreAndPostValuePublishing(adapter, _PropertyChangeRecord::updatePreValue);
+        }
     }
 
     private void enlistDeletingInternal(final @NonNull ManagedObject adapter) {
@@ -174,7 +223,7 @@ implements
      * TRANSACTION END BOUNDARY
      * @apiNote intended to be called during before transaction completion by the framework internally
      */
-    @EventListener(value = TransactionBeforeCompletionEvent.class)
+    @EventListener(value = TransactionBeforeCompletionEvent.class) @Order(PriorityPrecedence.LATE)
     public void onTransactionCompleting(TransactionBeforeCompletionEvent event) {
         try {
             doPublish();
@@ -193,7 +242,7 @@ implements
 
     private void postPublishing() {
         log.debug("purging entity change records");
-        entityPropertyChangeRecords.clear();
+        propertyChangeRecordsById.clear();
         changeKindByEnlistedAdapter.clear();
         entityPropertyChangeRecordsForPublishing.clear();
         entityChangeEventCount.reset();
@@ -284,10 +333,10 @@ implements
         entity.getSpecification().streamProperties(MixedIn.EXCLUDED)
         .filter(property->!property.isNotPersisted())
         .map(property->_PropertyChangeRecord.of(entity, property))
-        .filter(record->!entityPropertyChangeRecords.contains(record)) // already enlisted, so ignore
+        .filter(record->!propertyChangeRecordsById.containsKey(record.getPropertyId())) // already enlisted, so ignore
         .forEach(record->{
             fun.accept(record);
-            entityPropertyChangeRecords.add(record);
+            propertyChangeRecordsById.put(record.getPropertyId(), record);
         });
     }
 
@@ -297,13 +346,13 @@ implements
      */
     private Set<_PropertyChangeRecord> capturePostValuesAndDrain() {
 
-        val records = entityPropertyChangeRecords.stream()
+        val records = propertyChangeRecordsById.values().stream()
                 // set post values, which have been left empty up to now
-                .peek(managedProperty->managedProperty.updatePostValue())
+                .peek(_PropertyChangeRecord::updatePostValue)
                 .filter(managedProperty->managedProperty.getPreAndPostValue().shouldPublish())
                 .collect(_Sets.toUnmodifiable());
 
-        entityPropertyChangeRecords.clear();
+        propertyChangeRecordsById.clear();
 
         return records;
 
@@ -311,7 +360,7 @@ implements
 
     // side-effect free, used by XRay
     long countPotentialPropertyChangeRecords() {
-        return entityPropertyChangeRecords.stream().count();
+        return propertyChangeRecordsById.size();
     }
 
     // -- METRICS SERVICE
@@ -350,11 +399,16 @@ implements
 
     @Override
     public void enlistUpdating(ManagedObject entity) {
+        enlistUpdating(entity, null, null);
+    }
+
+    @Override
+    public void enlistUpdating(ManagedObject entity, String propertyIdIfAny, Object preValue) {
         _Xray.enlistUpdating(entity, interactionProviderProvider);
         val hasAlreadyBeenEnlisted = isEnlisted(entity);
         // we call this come what may;
         // additional properties may now have been changed, and the changeKind for publishing might also be modified
-        enlistUpdatingInternal(entity);
+        enlistUpdatingInternal(entity, propertyIdIfAny, preValue);
 
         if(!hasAlreadyBeenEnlisted) {
             // prevent an infinite loop... don't call the 'updating()' callback on this object if we have already done so
@@ -413,7 +467,6 @@ implements
             eventBusService.post(event);
         }
     }
-
 
 
 }

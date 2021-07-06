@@ -18,15 +18,17 @@
  */
 package org.apache.isis.testdomain.transactions.jpa;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
@@ -35,11 +37,12 @@ import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.jpa.JpaTestDomainPersona;
 import org.apache.isis.testdomain.jpa.entities.JpaBook;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
+import org.apache.isis.testing.integtestsupport.applib.IsisInteractionHandler;
 
 import lombok.val;
 
 @SpringBootTest(
-        classes = { 
+        classes = {
                 Configuration_usingJpa.class,
         },
         properties = {
@@ -47,68 +50,70 @@ import lombok.val;
                 "logging.level.org.springframework.test.context.transaction.*=DEBUG"
         })
 @TestPropertySource(IsisPresets.UseLog4j2Test)
-class JpaTransactionRollbackTest_usingTransactionService 
-//extends IsisIntegrationTestAbstract 
+@ExtendWith({IsisInteractionHandler.class})
+@DirtiesContext
+class JpaTransactionRollbackTest_usingTransactionService
+//extends IsisIntegrationTestAbstract
 {
-    
+
     @Inject private FixtureScripts fixtureScripts;
     @Inject private TransactionService transactionService;
     @Inject private RepositoryService repository;
 
     @BeforeEach
     void setUp() {
-       
+
         // cleanup
         fixtureScripts.runPersona(JpaTestDomainPersona.PurgeAll);
     }
-    
+
     @Test
     void happyCaseTx_shouldCommit() {
-        
+
         transactionService.runWithinCurrentTransactionElseCreateNew(()->{
-        
+
             // expected pre condition
             assertEquals(0, repository.allInstances(JpaBook.class).size());
         });
-        
+
         transactionService.runWithinCurrentTransactionElseCreateNew(()->{
-            
+
             fixtureScripts.runPersona(JpaTestDomainPersona.InventoryWith1Book);
         });
-        
+
         transactionService.runWithinCurrentTransactionElseCreateNew(()->{
-        
+
             // expected post condition
             assertEquals(1, repository.allInstances(JpaBook.class).size());
         });
 
     }
-    
+
     @Test
     void whenExceptionWithinTx_shouldRollback() {
-        
+
         transactionService.runWithinCurrentTransactionElseCreateNew(()->{
-        
+
             // expected pre condition
             assertEquals(0, repository.allInstances(JpaBook.class).size());
         });
-        
+
         val result = transactionService.runWithinCurrentTransactionElseCreateNew(()->{
 
             fixtureScripts.runPersona(JpaTestDomainPersona.InventoryWith1Book);
 
-            throw new RuntimeException("Test: force current tx to rollback");            
-        });    
-        
+            throw new RuntimeException("Test: force current tx to rollback");
+        });
+
         assertTrue(result.isFailure());
-        
+
         transactionService.runWithinCurrentTransactionElseCreateNew(()->{
-        
+
             // expected post condition
             assertEquals(0, repository.allInstances(JpaBook.class).size());
         });
-        
+
     }
-    
+
 
 }

@@ -48,7 +48,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.interaction.scope.InteractionScopeAware;
+import org.apache.isis.core.interaction.scope.TransactionBoundaryAware;
 import org.apache.isis.core.transaction.events.TransactionAfterCompletionEvent;
 
 import lombok.val;
@@ -70,7 +70,7 @@ import lombok.extern.log4j.Log4j2;
 public class TransactionServiceSpring
 implements
     TransactionService,
-    InteractionScopeAware {
+        TransactionBoundaryAware {
 
     private final Can<PlatformTransactionManager> platformTransactionManagers;
     private final InteractionLayerTracker interactionLayerTracker;

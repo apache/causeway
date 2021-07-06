@@ -24,10 +24,12 @@ import javax.inject.Inject;
 
 import org.junit.jupiter.api.Assertions;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.core.interaction.scope.InteractionScopeAware;
+import org.apache.isis.core.interaction.scope.TransactionBoundaryAware;
 import org.apache.isis.core.transaction.events.TransactionAfterCompletionEvent;
 import org.apache.isis.core.transaction.events.TransactionBeforeCompletionEvent;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
@@ -37,7 +39,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Service
 @Log4j2
-public class InteractionBoundaryProbe implements InteractionScopeAware {
+public class InteractionBoundaryProbe implements TransactionBoundaryAware {
 
     @Inject private KVStoreForTesting kvStoreForTesting;
 
@@ -56,14 +58,14 @@ public class InteractionBoundaryProbe implements InteractionScopeAware {
     }
 
     /** TRANSACTION BEGIN BOUNDARY */
-    @EventListener(TransactionBeforeCompletionEvent.class)
+    @EventListener(TransactionBeforeCompletionEvent.class) @Order(PriorityPrecedence.FIRST + 100)
     public void onTransactionEnding(TransactionBeforeCompletionEvent event) {
         log.debug("txStarted");
         kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "txEnding");
     }
 
     /** TRANSACTION END BOUNDARY */
-    @EventListener(TransactionAfterCompletionEvent.class)
+    @EventListener(TransactionAfterCompletionEvent.class) @Order(PriorityPrecedence.LAST - 100)
     public void onTransactionEnded(TransactionAfterCompletionEvent event) {
         if(event.isRolledBack()) {
             kvStoreForTesting.incrementCounter(InteractionBoundaryProbe.class, "txRolledBack");

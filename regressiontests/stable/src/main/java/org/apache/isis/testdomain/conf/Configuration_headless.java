@@ -37,7 +37,7 @@ import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.interaction.scope.InteractionScopeAware;
+import org.apache.isis.core.interaction.scope.TransactionBoundaryAware;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
@@ -60,7 +60,7 @@ public class Configuration_headless {
     @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
     @RequiredArgsConstructor(onConstructor_ = {@Inject})
     public static class HeadlessCommandSupport
-    implements InteractionScopeAware {
+    implements TransactionBoundaryAware {
 
         @Override
         public void beforeEnteringTransactionalBoundary(Interaction interaction) {

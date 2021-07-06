@@ -21,19 +21,19 @@ package org.apache.isis.core.interaction.scope;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.inject.Inject;
-
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.beans.factory.config.Scope;
 
-import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.Data;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 /**
  * @since 2.0
@@ -41,7 +41,11 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 class InteractionScope implements Scope, InteractionScopeLifecycleHandler {
 
-    @Inject private InteractionLayerTracker interactionLayerTracker;
+    private final BeanFactory beanFactory;
+
+    public InteractionScope(BeanFactory beanFactory) {
+        this.beanFactory = beanFactory;
+    }
 
     @Data(staticConstructor = "of")
     private static class ScopedObject {
@@ -49,24 +53,38 @@ class InteractionScope implements Scope, InteractionScopeLifecycleHandler {
         Object instance;
         Runnable destructionCallback;
         void preDestroy() {
-            log.debug("destroy isis-session scoped {}", name);
+            log.debug("destroy isis-interaction scoped {}", name);
             if(destructionCallback!=null) {
                 destructionCallback.run();
             }
         }
     }
 
+    /**
+     * An alternative design would be to store the ScopedObjects in the top-level
+     * {@link org.apache.isis.applib.services.iactn.Interaction}'s
+     * {@link org.apache.isis.applib.services.iactn.Interaction#getAttribute(Class) attributes}.
+     *
+     * <p>
+     * Why the top-level?  because this class is only interested in that top-level interaction (see
+     * {@link InteractionScopeLifecycleHandler#onTopLevelInteractionPreDestroy()}), not any of the stacked.
+     * </p>>
+     */
     private ThreadLocal<Map<String, ScopedObject>> scopedObjects = ThreadLocal.withInitial(_Maps::newHashMap);
+
+    private InteractionService interactionService() {
+        return beanFactory.getBean(InteractionService.class);
+    }
 
     @Override
     public Object get(String name, ObjectFactory<?> objectFactory) {
 
-        if(interactionLayerTracker ==null) {
+        if(interactionService() == null) {
             throw _Exceptions.illegalState("Creation of bean %s with @InteractionScope requires the "
                     + "InteractionScopeBeanFactoryPostProcessor registered and initialized.", name);
         }
 
-        if(!interactionLayerTracker.isInInteraction()) {
+        if(!interactionService().isInInteraction()) {
             throw _Exceptions.illegalState("Creation of bean %s with @InteractionScope requires the "
                     + "calling %s to have an open Interaction on the thread-local stack. Running into "
                     + "this issue might be caused by use of ... @Inject MyScopedBean bean ..., instead of "
@@ -81,7 +99,7 @@ class InteractionScope implements Scope, InteractionScopeLifecycleHandler {
         val newScopedObject = ScopedObject.of(name);
         scopedObjects.get().put(name, newScopedObject); // just set a stub with a name only
 
-        log.debug("create new isis-session scoped {}", name);
+        log.debug("create new isis-interaction scoped {}", name);
         newScopedObject.setInstance(objectFactory.getObject()); // triggers call to registerDestructionCallback
 
         return newScopedObject.getInstance();
@@ -110,7 +128,7 @@ class InteractionScope implements Scope, InteractionScopeLifecycleHandler {
     @Override
     public String getConversationId() {
         // null by convention if not supported
-        return interactionLayerTracker.getInteractionId()
+        return interactionService().getInteractionId()
                 .map(UUID::toString)
                 .orElse(null);
     }

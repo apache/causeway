@@ -23,7 +23,6 @@ import java.util.function.Consumer;
 
 import javax.inject.Inject;
 
-import org.springframework.core.annotation.Order;
 import org.w3c.dom.events.EventTarget;
 import org.w3c.dom.html.HTMLAnchorElement;
 
@@ -33,8 +32,8 @@ import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerF
 import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 import javafx.application.HostServices;
 import javafx.application.Platform;

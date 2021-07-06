@@ -18,7 +18,6 @@
  */
 package org.apache.isis.persistence.jpa.applib.integration;
 
-import javax.inject.Inject;
 import javax.persistence.PostLoad;
 import javax.persistence.PostPersist;
 import javax.persistence.PostRemove;
@@ -27,46 +26,52 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
 
-import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.eclipse.persistence.sessions.UnitOfWork;
 
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 /**
- * EntityListener class for listing with the {@link javax.persistence.EntityListeners} annotation, to
- * support injection point resolving for entities.
- * <p>
- * Instances of this class are not managed by Spring, but by the persistence layer.
- * <p>
- * The particular persistence layer implementation in use needs to be configured,
- * with a BeanManager, that is able to resolve injection points for this EntityListener.
- *
- * @since 2.0 {@index}
+ * Use {@link IsisEntityListener} instead.
  */
+@Deprecated
 @Log4j2
-public class JpaEntityInjectionPointResolver {
-
-    @Inject // not managed by Spring (directly)
-    private ServiceInjector serviceInjector;
+public class JpaEntityInjectionPointResolver extends IsisEntityListener {
 
     @PrePersist
+    void onPrePersist(Object entityPojo) {
+        super.onPrePersist(entityPojo);
+    }
+
     @PreUpdate
+    void onPreUpdate(Object entityPojo) {
+        super.onPreUpdate(entityPojo);
+    }
+
     @PreRemove
-    private void beforeAnyUpdate(Object entityPojo) {
-        log.debug("beforeAnyUpdate: {}", entityPojo);
-        serviceInjector.injectServicesInto(entityPojo);
+    void onPreRemove(Object entityPojo) {
+        super.onPreRemove(entityPojo);
     }
 
     @PostPersist
+    void onPostPersist(Object entityPojo) {
+        super.onPostPersist(entityPojo);
+    }
+
     @PostUpdate
+    void onPostUpdate(Object entityPojo) {
+        super.onPostUpdate(entityPojo);
+    }
+
     @PostRemove
-    private void afterAnyUpdate(Object entityPojo) {
-        log.debug("afterAnyUpdate: {}", entityPojo);
+    void onPostRemove(Object entityPojo) {
+        super.onPostRemove(entityPojo);
     }
 
     @PostLoad
-    private void afterLoad(Object entityPojo) {
-        log.debug("afterLoad: {}", entityPojo);
-        serviceInjector.injectServicesInto(entityPojo);
+    void onPostLoad(Object entityPojo) {
+        super.onPostLoad(entityPojo);
     }
+
 
 }
