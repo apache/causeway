@@ -27,7 +27,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import static org.apache.isis.commons.internal.base._With.requires;
 
 /**
- * package private mixin for _Lazy
+ * package private implementation of _Lazy
  * @since 2.0
  */
 final class _Lazy_Simple<T> implements _Lazy<T> {
@@ -35,6 +35,7 @@ final class _Lazy_Simple<T> implements _Lazy<T> {
     private final Supplier<? extends T> supplier;
     private T value;
     private boolean memoized;
+    private boolean getting;
 
     _Lazy_Simple(Supplier<? extends T> supplier) {
         this.supplier = requires(supplier, "supplier");
@@ -42,11 +43,13 @@ final class _Lazy_Simple<T> implements _Lazy<T> {
 
     @Override
     public boolean isMemoized() {
+        guardAgainstRecursiveCall();
         return memoized;
     }
 
     @Override
     public void clear() {
+        guardAgainstRecursiveCall();
         this.memoized = false;
         this.value = null;
     }
@@ -56,12 +59,17 @@ final class _Lazy_Simple<T> implements _Lazy<T> {
         if(memoized) {
             return value;
         }
+        guardAgainstRecursiveCall();
+        getting = true; // prevent the supplier from doing a nested call
+        value = supplier.get();
+        getting = false;
         memoized = true;
-        return value = supplier.get();
+        return value;
     }
 
     @Override
     public Optional<T> getMemoized() {
+        guardAgainstRecursiveCall();
         return Optional.ofNullable(value);
     }
 
@@ -70,8 +78,17 @@ final class _Lazy_Simple<T> implements _Lazy<T> {
         if(memoized) {
             throw _Exceptions.illegalState("cannot set value '%s' on Lazy that has already memoized a value", ""+value);
         }
+        guardAgainstRecursiveCall();
         memoized = true;
         this.value = value;
+    }
+
+    // -- HELPER
+
+    private final void guardAgainstRecursiveCall() {
+        if(getting) {
+            throw _Exceptions.illegalState("recursive call of lazy getter detected");
+        }
     }
 
 }

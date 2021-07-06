@@ -26,8 +26,10 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
+import lombok.Synchronized;
+
 /**
- * package private mixin for _Lazy
+ * package private implementation of _Lazy
  * @since 2.0
  */
 final class _Lazy_ThreadSafe<T> implements _Lazy<T> {
@@ -35,52 +37,59 @@ final class _Lazy_ThreadSafe<T> implements _Lazy<T> {
     private final Supplier<? extends T> supplier;
     private T value;
     private boolean memoized;
+    private boolean getting;
 
     _Lazy_ThreadSafe(Supplier<? extends T> supplier) {
         this.supplier = requires(supplier, "supplier");
     }
 
-    @Override
+    @Override @Synchronized
     public boolean isMemoized() {
-        synchronized (this) {
-            return memoized;
-        }
+        guardAgainstRecursiveCall();
+        return memoized;
     }
 
-    @Override
+    @Override @Synchronized
     public void clear() {
-        synchronized (this) {
-            this.memoized = false;
-            this.value = null;
-        }
+        guardAgainstRecursiveCall();
+        this.memoized = false;
+        this.value = null;
     }
 
-    @Override
+    @Override @Synchronized
     public T get() {
-        synchronized (this) {
-            if(memoized) {
-                return value;
-            }
-            memoized = true;
-            return value = supplier.get();
+        if(memoized) {
+            return value;
         }
+        guardAgainstRecursiveCall();
+        getting = true; // prevent the supplier from doing a nested call
+        value = supplier.get();
+        getting = false;
+        memoized = true;
+        return value;
     }
 
-    @Override
+    @Override @Synchronized
     public Optional<T> getMemoized() {
-        synchronized (this) {
-            return Optional.ofNullable(value);
-        }
+        guardAgainstRecursiveCall();
+        return Optional.ofNullable(value);
     }
 
-    @Override
+    @Override @Synchronized
     public void set(T value) {
-        synchronized (this) {
-            if(memoized) {
-                throw _Exceptions.illegalState("cannot set value '%s' on Lazy that has already memoized a value", ""+value);
-            }
-            memoized = true;
-            this.value = value;
+        if(memoized) {
+            throw _Exceptions.illegalState("cannot set value '%s' on Lazy that has already memoized a value", ""+value);
+        }
+        guardAgainstRecursiveCall();
+        memoized = true;
+        this.value = value;
+    }
+
+    // -- HELPER
+
+    private final void guardAgainstRecursiveCall() {
+        if(getting) {
+            throw _Exceptions.illegalState("recursive call of lazy getter detected");
         }
     }
 
