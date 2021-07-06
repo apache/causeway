@@ -26,10 +26,10 @@ import javax.inject.Inject;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.Scope;
 
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 
 import lombok.Data;
 import lombok.val;
@@ -41,7 +41,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 class InteractionScope implements Scope, InteractionScopeLifecycleHandler {
 
-    @Inject private InteractionLayerTracker iInteractionLayerTracker;
+    @Inject private InteractionLayerTracker interactionLayerTracker;
 
     @Data(staticConstructor = "of")
     private static class ScopedObject {
@@ -61,12 +61,12 @@ class InteractionScope implements Scope, InteractionScopeLifecycleHandler {
     @Override
     public Object get(String name, ObjectFactory<?> objectFactory) {
 
-        if(iInteractionLayerTracker ==null) {
+        if(interactionLayerTracker ==null) {
             throw _Exceptions.illegalState("Creation of bean %s with @InteractionScope requires the "
                     + "InteractionScopeBeanFactoryPostProcessor registered and initialized.", name);
         }
 
-        if(!iInteractionLayerTracker.isInInteraction()) {
+        if(!interactionLayerTracker.isInInteraction()) {
             throw _Exceptions.illegalState("Creation of bean %s with @InteractionScope requires the "
                     + "calling %s to have an open Interaction on the thread-local stack. Running into "
                     + "this issue might be caused by use of ... @Inject MyScopedBean bean ..., instead of "
@@ -110,7 +110,7 @@ class InteractionScope implements Scope, InteractionScopeLifecycleHandler {
     @Override
     public String getConversationId() {
         // null by convention if not supported
-        return iInteractionLayerTracker.getInteractionId()
+        return interactionLayerTracker.getInteractionId()
                 .map(UUID::toString)
                 .orElse(null);
     }
@@ -121,12 +121,20 @@ class InteractionScope implements Scope, InteractionScopeLifecycleHandler {
     }
 
     @Override
-    public void onTopLevelInteractionClosing() {
-        try {
-            scopedObjects.get().values().forEach(ScopedObject::preDestroy);
-        } finally {
-            scopedObjects.remove();
-        }
+    public void onTopLevelInteractionPreDestroy() {
+        scopedObjects.get().values()
+        .forEach(scopedObject->{
+            try {
+                scopedObject.preDestroy();
+            } catch (Exception e) {
+                log.error(e);
+            }
+        });
+    }
+
+    @Override
+    public void onTopLevelInteractionClosed() {
+        scopedObjects.remove();
     }
 
 }

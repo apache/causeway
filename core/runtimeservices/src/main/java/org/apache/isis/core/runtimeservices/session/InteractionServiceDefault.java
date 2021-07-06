@@ -322,11 +322,12 @@ implements
 
     private void preInteractionClosed(final IsisInteraction interaction) {
         completeAndPublishCurrentCommand();
-        interactionScopeLifecycleHandler.onTopLevelInteractionClosing(); // cleanup the isis-session scope
         val isSynchronizationActive = TransactionSynchronizationManager.isSynchronizationActive();
         interactionScopeAwareBeans.forEach(bean->bean.beforeLeavingTransactionalBoundary(interaction, isSynchronizationActive));
         txBoundaryHandler.onClose(interaction);
         interactionScopeAwareBeans.forEach(bean->bean.afterLeavingTransactionalBoundary(interaction));
+        interactionScopeLifecycleHandler.onTopLevelInteractionPreDestroy(); // cleanup the InteractionScope (Spring scope)
+        interactionScopeLifecycleHandler.onTopLevelInteractionClosed(); // cleanup the InteractionScope (Spring scope)
         interaction.close(); // do this last
     }
 
