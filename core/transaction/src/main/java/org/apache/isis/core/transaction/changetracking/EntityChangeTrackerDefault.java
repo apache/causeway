@@ -103,7 +103,7 @@ implements
     /**
      * Contains initial change records having set the pre-values of every property of every object that was enlisted.
      */
-    private final Set<_PropertyChangeRecord> entityPropertyChangeRecords = _Sets.newLinkedHashSet();
+    private final Map<String,_PropertyChangeRecord> entityPropertyChangeRecords = _Maps.newLinkedHashMap();
 
     /**
      * Contains pre- and post- values of every property of every object that actually changed. A lazy snapshot,
@@ -321,10 +321,10 @@ implements
         entity.getSpecification().streamProperties(MixedIn.EXCLUDED)
         .filter(property->!property.isNotPersisted())
         .map(property->_PropertyChangeRecord.of(entity, property))
-        .filter(record->!entityPropertyChangeRecords.contains(record)) // already enlisted, so ignore
+        .filter(record->!entityPropertyChangeRecords.containsKey(record.getPropertyId())) // already enlisted, so ignore
         .forEach(record->{
             fun.accept(record);
-            entityPropertyChangeRecords.add(record);
+            entityPropertyChangeRecords.put(record.getPropertyId(), record);
         });
     }
 
@@ -334,9 +334,9 @@ implements
      */
     private Set<_PropertyChangeRecord> capturePostValuesAndDrain() {
 
-        val records = entityPropertyChangeRecords.stream()
+        val records = entityPropertyChangeRecords.values().stream()
                 // set post values, which have been left empty up to now
-                .peek(managedProperty->managedProperty.updatePostValue())
+                .peek(_PropertyChangeRecord::updatePostValue)
                 .filter(managedProperty->managedProperty.getPreAndPostValue().shouldPublish())
                 .collect(_Sets.toUnmodifiable());
 
@@ -348,7 +348,7 @@ implements
 
     // side-effect free, used by XRay
     long countPotentialPropertyChangeRecords() {
-        return entityPropertyChangeRecords.stream().count();
+        return entityPropertyChangeRecords.size();
     }
 
     // -- METRICS SERVICE
