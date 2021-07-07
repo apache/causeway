@@ -27,6 +27,7 @@ import org.apache.isis.client.kroviz.to.bs3.Col
 import org.apache.isis.client.kroviz.ui.core.MenuFactory
 import org.apache.isis.client.kroviz.ui.core.RoDisplay
 import org.apache.isis.client.kroviz.ui.core.RoTable
+import org.apache.isis.client.kroviz.utils.Utils
 
 class ColBuilder : UiBuilder() {
 
@@ -43,16 +44,18 @@ class ColBuilder : UiBuilder() {
             panel.add(tgCpt)
         }
         for (fs in col.fieldSetList) {
-            val fsCpt = FieldSetBuilder().create(fs, tObject, dsp)!!
-            var legend = fs.name
-            if (legend.trim().length == 0) {
-                legend = fs.id
+            if (fs.propertyList.size > 0) {
+                val fsCpt = FieldSetBuilder().create(fs, tObject, dsp)!!
+                var legend = fs.name
+                if (legend.trim().length == 0) {
+                    legend = fs.id
+                }
+                legend = Utils.capitalize(legend)
+                val fsPanel = FieldsetPanel(legend = legend).add(fsCpt)
+                val tto = TooltipOptions(title = fs.id)
+                fsPanel.enableTooltip(tto)
+                panel.add(fsPanel)
             }
-            legend = legend.capitalize()
-            val fsPanel = FieldsetPanel(legend = legend).add(fsCpt)
-            val tto = TooltipOptions(title = fs.id)
-            fsPanel.enableTooltip(tto)
-            panel.add(fsPanel)
         }
         for (row in col.rowList) {
             val rowCpt = RowBuilder().create(row, tObject, dsp)
@@ -63,7 +66,7 @@ class ColBuilder : UiBuilder() {
             val objectDM = dsp.displayModel
             val collectionDM = objectDM.collections.get(key)!!
             val tblCpt = RoTable(collectionDM)
-            val fsPanel = FieldsetPanel(legend = key.capitalize()).add(tblCpt)
+            val fsPanel = FieldsetPanel(legend = Utils.capitalize(key)).add(tblCpt)
             panel.add(fsPanel)
             collectionDM.isRendered = true
         }

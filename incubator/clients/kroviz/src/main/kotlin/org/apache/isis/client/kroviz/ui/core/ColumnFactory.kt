@@ -64,7 +64,7 @@ class ColumnFactory {
             columns.add(menu)
 
             val icon = buildLinkIcon()
-           columns.add(icon)
+            columns.add(icon)
         }
 
         val propertyLabels = displayCollection.properties.list
@@ -98,7 +98,8 @@ class ColumnFactory {
                 width = "40",
 /*                formatterComponentFunction = { _, _, data ->
                     buildButton(data, data["iconName"] as? String)
-                }*/)
+                }*/
+        )
     }
 
     private fun buildButton(data: Exposer, iconName: String?): Button {
@@ -121,7 +122,8 @@ class ColumnFactory {
                     Button(text = data["object"].title as String, icon = "fas fa-star-o", style = ButtonStyle.LINK).onClick {
                         console.log(data)
                     }
-                }*/)
+                }*/
+        )
     }
 
     private fun buildCheckBox(): ColumnDefinition<Exposer> {
@@ -147,7 +149,8 @@ class ColumnFactory {
     }
 
     private fun buildMenu(): ColumnDefinition<Exposer> {
-        return ColumnDefinition("",
+        return ColumnDefinition(
+                "",
                 field = "iconName", // any existing field can be used
                 formatter = Formatter.TICKCROSS,
                 formatterParams = menuFormatterParams,
@@ -159,7 +162,8 @@ class ColumnFactory {
                     MenuFactory.buildForObject(
                             tObject,
                             false)
-                }*/)
+                }*/
+        )
     }
 
     private fun getData(cell: Tabulator.CellComponent): Exposer {

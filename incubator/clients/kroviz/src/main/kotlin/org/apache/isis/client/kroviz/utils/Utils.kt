@@ -24,14 +24,19 @@ import org.apache.isis.client.kroviz.to.TObject
 
 object Utils {
 
-    @OptIn(ExperimentalStdlibApi::class)
     fun enCamel(input: String): String {
         var output = ""
         val words = input.split(" ")
         for (w in words) {
-            output += w.capitalize()
+            output += capitalize(w)
         }
         return decapitalize(output)
+    }
+
+    @OptIn(ExperimentalStdlibApi::class)
+    fun capitalize(input: String): String {
+        val output = input.substring(1, input.length)
+        return input.first().uppercaseChar() + output
     }
 
     @OptIn(ExperimentalStdlibApi::class)
