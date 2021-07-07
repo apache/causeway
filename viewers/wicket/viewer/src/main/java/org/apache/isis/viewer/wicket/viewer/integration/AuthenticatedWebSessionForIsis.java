@@ -20,6 +20,8 @@
 package org.apache.isis.viewer.wicket.viewer.integration;
 
 import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
@@ -70,11 +72,6 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
     private BreadcrumbModel breadcrumbModel;
     private BookmarkedPagesModel bookmarkedPagesModel;
 
-    /**
-     * As populated in {@link #signIn(String, String)}.
-     */
-    private InteractionContext authentication;
-
     public AuthenticatedWebSessionForIsis(Request request) {
         super(request);
     }
@@ -90,8 +87,8 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
     public synchronized boolean authenticate(final String username, final String password) {
         val authenticationRequest = new AuthenticationRequestPassword(username, password);
         authenticationRequest.addRole(USER_ROLE);
-        this.authentication = getAuthenticationManager().authenticate(authenticationRequest);
-        if (this.authentication != null) {
+        val authentication = getAuthenticationManager().authenticate(authenticationRequest);
+        if (authentication != null) {
             log(SessionLoggingService.Type.LOGIN, username, null);
             return true;
         } else {
@@ -117,8 +114,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
         //        org.apache.isis.security.shiro.ShiroAuthenticatorOrAuthorizor.logout(ShiroAuthenticatorOrAuthorizor.java:179)
         //        org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard.closeSession(AuthenticationManagerStandard.java:141)
 
-        getAuthenticationManager().closeSession(getAuthentication());
-        //getIsisInteractionFactory().closeSessionStack();
+        getAuthenticationManager().closeSession(getInteractionContext().orElse(null));
 
         super.invalidateNow();
 
@@ -132,67 +128,34 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
                 ? SessionLoggingService.CausedBy.USER
                 : SessionLoggingService.CausedBy.SESSION_EXPIRATION;
 
-        String userName = null;
-        if (getAuthentication() != null) {
-            userName = getAuthentication().getUser().getName();
-        }
-
+        val userName = getInteractionContext()
+                .map(InteractionContext::getUser)
+                .filter(Objects::nonNull)
+                .map(UserMemento::getName)
+                .orElse(null);
         log(SessionLoggingService.Type.LOGOUT, userName, causedBy);
     }
 
-    public synchronized InteractionContext getAuthentication() {
-
-        commonContext.getInteractionLayerTracker().currentInteractionContext()
-        .ifPresent(currentAuthentication->{
-
-            if (getAuthenticationManager().isSessionValid(currentAuthentication)) {
-                if (this.authentication != null) {
-                    if (Objects.equals(
-                            currentAuthentication.getUser().getName(),
-                            this.authentication.getUser().getName())) {
-                        // ok, same session so far as Wicket is concerned
-                        if (isSignedIn()) {
-                            // nothing to do...
-                        } else {
-                            // force as signed in (though not sure if this case can occur)
-                            signIn(true);
-                            this.authentication = currentAuthentication;
-                        }
-                    } else {
-                        // different user name
-                        if (isSignedIn()) {
-                            // invalidate previous session
-                            super.invalidate();
-                        }
-
-                        // either way, the current one is now signed in
-                        signIn(true);
-                        this.authentication = currentAuthentication;
-                    }
-                } else {
-                    signIn(true);
-                    this.authentication = currentAuthentication;
-                }
-            }
-
-        });
-
-        return this.authentication;
+    private Optional<InteractionContext> getInteractionContext() {
+        return commonContext.getInteractionLayerTracker().currentInteractionContext();
     }
 
     /**
-     * This is a no-op if the {@link #getAuthentication() authentication session}'s
+     * This is a no-op if the {@link #getInteractionContext()} authentication}'s
      * {@link UserMemento#getAuthenticationSource() source} is
      * {@link AuthenticationSource#EXTERNAL external}
      * (eg as managed by keycloak).
      */
     @Override
     public void invalidate() {
-        if(this.authentication.getUser().getAuthenticationSource().isExternal()) {
-            return;
-        }
-        // otherwise
-        super.invalidate();
+        getInteractionContext()
+                .map(InteractionContext::getUser)
+                .map(UserMemento::getAuthenticationSource)
+                .filter(authenticationSource -> !authenticationSource.isExternal())
+                .ifPresent(unused -> {
+                    super.invalidate();
+                });
+                ;
     }
 
     @Override
@@ -201,10 +164,17 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
             return null;
         }
 
-        final Roles roles = new Roles();
-        getAuthentication().getUser().streamRoleNames()
-        .forEach(roles::add);
+        val roles = new Roles();
+        stream(getInteractionContext())
+                .map(InteractionContext::getUser)
+                .flatMap(UserMemento::streamRoleNames)
+                .forEach(roles::add);
         return roles;
+    }
+
+    private static <T> Stream<T> stream(
+            @SuppressWarnings("OptionalUsedAsFieldOrParameterType") Optional<T> optional) {
+        return optional.map(Stream::of).orElseGet(Stream::empty);
     }
 
     @Override

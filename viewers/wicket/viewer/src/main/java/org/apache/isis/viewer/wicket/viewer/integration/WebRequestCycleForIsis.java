@@ -139,9 +139,9 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         }
 
         val commonContext = getCommonContext();
-        val authentication = AuthenticatedWebSessionForIsis.get().getAuthentication();
+        val interactionContext = commonContext.getInteractionLayerTracker().currentInteractionContext().orElse(null);
 
-        if (authentication == null) {
+        if (interactionContext == null) {
             log.debug("onBeginRequest out - session was not opened (because no authentication)");
             return;
         }
@@ -153,7 +153,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
 
         requestCycle.setMetaData(REQ_CYCLE_HANDLE_KEY, isisRequestCycle);
 
-        isisRequestCycle.onBeginRequest(authentication);
+        isisRequestCycle.onBeginRequest(interactionContext);
 
         log.debug("onBeginRequest out - session was opened");
     }

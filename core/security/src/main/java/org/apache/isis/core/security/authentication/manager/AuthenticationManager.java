@@ -153,6 +153,9 @@ public class AuthenticationManager {
 
 
     public void closeSession(InteractionContext context) {
+        if(context == null) {
+            return;
+        }
         for (val authenticator : authenticators) {
             authenticator.logout(context);
         }
