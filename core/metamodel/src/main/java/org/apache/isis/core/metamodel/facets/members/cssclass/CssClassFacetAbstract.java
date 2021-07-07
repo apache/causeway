@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.members.cssclass;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
@@ -27,7 +26,7 @@ public abstract class CssClassFacetAbstract
 extends FacetAbstract
 implements CssClassFacet {
 
-    private static final Class<? extends Facet> type() {
+    public static final Class<CssClassFacet> type() {
         return CssClassFacet.class;
     }
 

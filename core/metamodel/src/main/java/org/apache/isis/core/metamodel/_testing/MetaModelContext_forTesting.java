@@ -405,7 +405,7 @@ implements MetaModelContext {
     private final GridLoaderService gridLoaderService = createGridLoaderService();
     //XXX lombok issue: won't compile if inlined
     private final GridLoaderService createGridLoaderService() {
-        return new GridLoaderServiceDefault(getGridReader(), getMessageService(), getSystemEnvironment());
+        return new GridLoaderServiceDefault(getGridReader(), getMessageService(), /*support reloading*/true);
     }
 
     @Getter(lazy = true)
@@ -419,7 +419,7 @@ implements MetaModelContext {
                             getTranslationService(),
                             getJaxbService(),
                             getMessageService(),
-                            getSystemEnvironment())));
+                            getSystemEnvironment()))); // support reloading
     }
 
     @Getter(lazy = true)

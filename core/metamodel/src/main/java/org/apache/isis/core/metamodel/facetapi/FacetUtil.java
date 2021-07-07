@@ -98,12 +98,39 @@ public final class FacetUtil {
         .forEach(target::addFacet);
     }
 
+    // -- DYNAMIC UPDATE SUPPORT
+
     /**
-     * removes any facet of facet-type from facetHolder if it passes the given filter
+     * Removes any facet that matches the facet's java class from its FacetHolder,
+     * then adds the facet to the facetHolder.
+     */
+    public static <F extends Facet> void updateFacet(
+            final @NonNull F facet) {
+
+        purgeIf(facet.facetType(), facet.getClass()::isInstance, facet.getFacetHolder());
+        addFacet(facet);
+    }
+
+    /**
+     * Removes any facet of facet-type from facetHolder if it passes the given filter,
+     * then if present adds facetIfAny to the facetHolder.
+     */
+    public static <F extends Facet> void updateFacet(
+            final @NonNull Class<F> facetType,
+            final @NonNull Predicate<? super F> filter,
+            final @NonNull Optional<? extends F> facetIfAny,
+            final @NonNull FacetHolder facetHolder) {
+
+        purgeIf(facetType, filter, facetHolder);
+        addFacetIfPresent(facetIfAny);
+    }
+
+    /**
+     * Removes any facet of facet-type from facetHolder if it passes the given filter.
      */
     public static <F extends Facet> void purgeIf(
             final Class<F> facetType,
-            final Predicate<? extends F> filter,
+            final Predicate<? super F> filter,
             final FacetHolder facetHolder) {
 
         facetHolder.getFacetRanking(facetType)

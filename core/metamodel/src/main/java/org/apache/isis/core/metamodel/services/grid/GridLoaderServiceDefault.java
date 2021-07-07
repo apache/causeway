@@ -53,13 +53,23 @@ import lombok.extern.log4j.Log4j2;
 @Named("isis.metamodel.GridLoaderServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
+@RequiredArgsConstructor //JUnit Support
 @Log4j2
 public class GridLoaderServiceDefault implements GridLoaderService {
 
     private final GridReaderUsingJaxb gridReader;
     private final MessageService messageService;
-    private final IsisSystemEnvironment isisSystemEnvironment;
+    private final boolean supportsReloading;
+
+    @Inject
+    public GridLoaderServiceDefault(
+           final GridReaderUsingJaxb gridReader,
+           final MessageService messageService,
+           final IsisSystemEnvironment isisSystemEnvironment) {
+        this.gridReader = gridReader;
+        this.messageService = messageService;
+        this.supportsReloading = isisSystemEnvironment.isPrototyping();
+    }
 
     @Value
     static class DomainClassAndLayout {
@@ -88,7 +98,7 @@ public class GridLoaderServiceDefault implements GridLoaderService {
 
     @Override
     public boolean supportsReloading() {
-        return isisSystemEnvironment.isPrototyping();
+        return supportsReloading;//isisSystemEnvironment.isPrototyping();
     }
 
     @Override
@@ -121,11 +131,6 @@ public class GridLoaderServiceDefault implements GridLoaderService {
 
         final DomainClassAndLayoutAndXml dcalax = new DomainClassAndLayoutAndXml(dcal, xml);
         if(supportsReloading()) {
-            final Grid grid = gridByDomainClassAndLayoutAndXml.get(dcalax);
-            if(grid != null) {
-                return grid;
-            }
-
             final String badXml = badXmlByDomainClassAndLayout.get(dcal);
             if(badXml != null) {
                 if(Objects.equals(xml.getXmlContent(), badXml)) {
@@ -135,6 +140,12 @@ public class GridLoaderServiceDefault implements GridLoaderService {
                     // this different XML might be good
                     badXmlByDomainClassAndLayout.remove(dcal);
                 }
+            }
+        } else {
+            // if cached, serve from cache - otherwise fall through
+            final Grid grid = gridByDomainClassAndLayoutAndXml.get(dcalax);
+            if(grid != null) {
+                return grid;
             }
         }
 
@@ -215,6 +226,5 @@ public class GridLoaderServiceDefault implements GridLoaderService {
         }
         return Optional.empty();
     }
-
 
 }

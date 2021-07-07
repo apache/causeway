@@ -31,7 +31,7 @@ class GridLoaderServiceDefault_resourceNameTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        gridLoaderServiceDefault = new GridLoaderServiceDefault(null, null, null);
+        gridLoaderServiceDefault = new GridLoaderServiceDefault(null, null, false);
     }
 
     @Test

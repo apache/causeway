@@ -38,14 +38,13 @@ import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.actions.layout.ActionPositionFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.BookmarkPolicyFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.CssClassFaFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.CssClassFacetForActionXml;
-import org.apache.isis.core.metamodel.facets.actions.layout.MemberDescribedFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.HiddenFacetForActionXml;
+import org.apache.isis.core.metamodel.facets.actions.layout.MemberDescribedFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.MemberNamedFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.PromptStyleFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.RedirectFacetFromActionXml;
@@ -79,8 +78,7 @@ import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
-import static org.apache.isis.core.metamodel.facetapi.FacetUtil.addFacet;
-import static org.apache.isis.core.metamodel.facetapi.FacetUtil.addFacetIfPresent;
+import static org.apache.isis.core.metamodel.facetapi.FacetUtil.updateFacet;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -136,8 +134,8 @@ implements GridSystemService<G> {
     /**
      * Overwrites (replaces) any existing facets in the metamodel with info taken from the grid.
      *
-     * @implNote This code uses {@link FacetUtil#addOrReplaceFacet(Facet)}
-     * because the layout might be changed multiple times.
+     * @implNote This code uses {@link FacetUtil#updateFacet(Class, java.util.function.Predicate, java.util.Optional, org.apache.isis.core.metamodel.facetapi.FacetHolder)}
+     * because the layout might be reloaded from XML if reloading is supported.
      */
     private void overwriteFacets(
             final G fcGrid,
@@ -161,11 +159,31 @@ implements GridSystemService<G> {
             @Override
             public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
 
-                addFacetIfPresent(BookmarkPolicyFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
-                addFacetIfPresent(CssClassFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
-                addFacetIfPresent(CssClassFaFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
-                addFacetIfPresent(DescribedAsFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
-                addFacetIfPresent(ObjectNamedFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
+                updateFacet(
+                        BookmarkPolicyFacetForDomainObjectXml.type(),
+                        BookmarkPolicyFacetForDomainObjectXml.class::isInstance,
+                        BookmarkPolicyFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec),
+                        objectSpec);
+                updateFacet(
+                        CssClassFacetForDomainObjectXml.type(),
+                        CssClassFacetForDomainObjectXml.class::isInstance,
+                        CssClassFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec),
+                        objectSpec);
+                updateFacet(
+                        CssClassFaFacetForDomainObjectXml.type(),
+                        CssClassFaFacetForDomainObjectXml.class::isInstance,
+                        CssClassFaFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec),
+                        objectSpec);
+                updateFacet(
+                        DescribedAsFacetForDomainObjectXml.type(),
+                        DescribedAsFacetForDomainObjectXml.class::isInstance,
+                        DescribedAsFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec),
+                        objectSpec);
+                updateFacet(
+                        ObjectNamedFacetForDomainObjectXml.type(),
+                        ObjectNamedFacetForDomainObjectXml.class::isInstance,
+                        ObjectNamedFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec),
+                        objectSpec);
             }
 
             @Override
@@ -204,8 +222,13 @@ implements GridSystemService<G> {
                     groupIdAndName = null;
                     memberOrderSequence = actionDomainObjectSequence++;
                 }
-                addFacet(LayoutOrderFacetFromXml.create(memberOrderSequence, objectAction));
-                addFacetIfPresent(LayoutGroupFacetFromXml.create(groupIdAndName, objectAction));
+                updateFacet(LayoutOrderFacetFromXml.create(memberOrderSequence, objectAction));
+
+                updateFacet(
+                        LayoutGroupFacetFromXml.type(),
+                        LayoutGroupFacetFromXml.class::isInstance,
+                        LayoutGroupFacetFromXml.create(groupIdAndName, objectAction),
+                        objectAction);
 
                 // fix up the action position if required
                 if(actionLayoutDataOwner instanceof FieldSet) {
@@ -225,15 +248,60 @@ implements GridSystemService<G> {
                     actionLayoutData.setPosition(null);
                 }
 
-                addFacetIfPresent(ActionPositionFacetForActionXml.create(actionLayoutData, objectAction));
-                addFacetIfPresent(BookmarkPolicyFacetForActionXml.create(actionLayoutData, objectAction));
-                addFacetIfPresent(CssClassFacetForActionXml.create(actionLayoutData, objectAction));
-                addFacetIfPresent(CssClassFaFacetForActionXml.create(actionLayoutData, objectAction));
-                addFacetIfPresent(MemberDescribedFacetForActionXml.create(actionLayoutData, objectAction));
-                addFacetIfPresent(HiddenFacetForActionXml.create(actionLayoutData, objectAction));
-                addFacetIfPresent(MemberNamedFacetForActionXml.create(actionLayoutData, objectAction));
-                addFacetIfPresent(PromptStyleFacetForActionXml.create(actionLayoutData, objectAction));
-                addFacetIfPresent(RedirectFacetFromActionXml.create(actionLayoutData, objectAction));
+                updateFacet(
+                        ActionPositionFacetForActionXml.type(),
+                        ActionPositionFacetForActionXml.class::isInstance,
+                        ActionPositionFacetForActionXml.create(actionLayoutData, objectAction),
+                        objectAction);
+
+                updateFacet(
+                        BookmarkPolicyFacetForActionXml.type(),
+                        BookmarkPolicyFacetForActionXml.class::isInstance,
+                        BookmarkPolicyFacetForActionXml.create(actionLayoutData, objectAction),
+                        objectAction);
+
+                updateFacet(
+                        CssClassFacetForActionXml.type(),
+                        CssClassFacetForActionXml.class::isInstance,
+                        CssClassFacetForActionXml.create(actionLayoutData, objectAction),
+                        objectAction);
+
+                updateFacet(
+                        CssClassFaFacetForActionXml.type(),
+                        CssClassFaFacetForActionXml.class::isInstance,
+                        CssClassFaFacetForActionXml.create(actionLayoutData, objectAction),
+                        objectAction);
+
+                updateFacet(
+                        MemberDescribedFacetForActionXml.type(),
+                        MemberDescribedFacetForActionXml.class::isInstance,
+                        MemberDescribedFacetForActionXml.create(actionLayoutData, objectAction),
+                        objectAction);
+
+                updateFacet(
+                        HiddenFacetForActionXml.type(),
+                        HiddenFacetForActionXml.class::isInstance,
+                        HiddenFacetForActionXml.create(actionLayoutData, objectAction),
+                        objectAction);
+
+                updateFacet(
+                        MemberNamedFacetForActionXml.type(),
+                        MemberNamedFacetForActionXml.class::isInstance,
+                        MemberNamedFacetForActionXml.create(actionLayoutData, objectAction),
+                        objectAction);
+
+                updateFacet(
+                        PromptStyleFacetForActionXml.type(),
+                        PromptStyleFacetForActionXml.class::isInstance,
+                        PromptStyleFacetForActionXml.create(actionLayoutData, objectAction),
+                        objectAction);
+
+                updateFacet(
+                        RedirectFacetFromActionXml.type(),
+                        RedirectFacetFromActionXml.class::isInstance,
+                        RedirectFacetFromActionXml.create(actionLayoutData, objectAction),
+                        objectAction);
+
             }
 
             @Override
@@ -243,24 +311,78 @@ implements GridSystemService<G> {
                     return;
                 }
 
-                addFacetIfPresent(CssClassFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
-                addFacetIfPresent(MemberDescribedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
-                addFacetIfPresent(HiddenFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
-                addFacetIfPresent(LabelAtFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
-                addFacetIfPresent(MultiLineFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
-                addFacetIfPresent(MemberNamedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
-                addFacetIfPresent(PromptStyleFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
-                addFacetIfPresent(RenderedAdjustedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
-                addFacetIfPresent(UnchangingFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
-                addFacetIfPresent(TypicalLengthFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                updateFacet(
+                        CssClassFacetForPropertyXml.type(),
+                        CssClassFacetForPropertyXml.class::isInstance,
+                        CssClassFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation),
+                        oneToOneAssociation);
+
+                updateFacet(
+                        MemberDescribedFacetForPropertyXml.type(),
+                        MemberDescribedFacetForPropertyXml.class::isInstance,
+                        MemberDescribedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation),
+                        oneToOneAssociation);
+
+                updateFacet(
+                        HiddenFacetForPropertyXml.type(),
+                        HiddenFacetForPropertyXml.class::isInstance,
+                        HiddenFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation),
+                        oneToOneAssociation);
+
+                updateFacet(
+                        LabelAtFacetForPropertyXml.type(),
+                        LabelAtFacetForPropertyXml.class::isInstance,
+                        LabelAtFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation),
+                        oneToOneAssociation);
+
+                updateFacet(
+                        MultiLineFacetForPropertyXml.type(),
+                        MultiLineFacetForPropertyXml.class::isInstance,
+                        MultiLineFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation),
+                        oneToOneAssociation);
+
+                updateFacet(
+                        MemberNamedFacetForPropertyXml.type(),
+                        MemberNamedFacetForPropertyXml.class::isInstance,
+                        MemberNamedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation),
+                        oneToOneAssociation);
+
+                updateFacet(
+                        PromptStyleFacetForPropertyXml.type(),
+                        PromptStyleFacetForPropertyXml.class::isInstance,
+                        PromptStyleFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation),
+                        oneToOneAssociation);
+
+                updateFacet(
+                        RenderedAdjustedFacetForPropertyXml.type(),
+                        RenderedAdjustedFacetForPropertyXml.class::isInstance,
+                        RenderedAdjustedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation),
+                        oneToOneAssociation);
+
+                updateFacet(
+                        UnchangingFacetForPropertyXml.type(),
+                        UnchangingFacetForPropertyXml.class::isInstance,
+                        UnchangingFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation),
+                        oneToOneAssociation);
+
+                updateFacet(
+                        TypicalLengthFacetForPropertyXml.type(),
+                        TypicalLengthFacetForPropertyXml.class::isInstance,
+                        TypicalLengthFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation),
+                        oneToOneAssociation);
 
                 // Layout group-name based on owning property group, Layout sequence monotonically increasing
                 // nb for any given field set the sequence won't reset to zero; however this is what we want so that
                 // table columns are shown correctly (by fieldset, then property order within that fieldset).
                 final FieldSet fieldSet = propertyLayoutData.getOwner();
 
-                addFacet(LayoutOrderFacetFromXml.create(propertySequence.incrementAndGet(), oneToOneAssociation));
-                addFacetIfPresent(LayoutGroupFacetFromXml.create(fieldSet, oneToOneAssociation));
+                updateFacet(LayoutOrderFacetFromXml.create(propertySequence.incrementAndGet(), oneToOneAssociation));
+
+                updateFacet(
+                        LayoutGroupFacetFromXml.type(),
+                        LayoutGroupFacetFromXml.class::isInstance,
+                        LayoutGroupFacetFromXml.create(fieldSet, oneToOneAssociation),
+                        oneToOneAssociation);
             }
 
             @Override
@@ -270,15 +392,49 @@ implements GridSystemService<G> {
                     return;
                 }
 
-                addFacetIfPresent(CssClassFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
-                addFacetIfPresent(DefaultViewFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
-                addFacetIfPresent(MemberDescribedFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
-                addFacetIfPresent(HiddenFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
-                addFacetIfPresent(MemberNamedFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
-                addFacetIfPresent(PagedFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
-                addFacetIfPresent(SortedByFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
+                updateFacet(
+                        CssClassFacetForCollectionXml.type(),
+                        CssClassFacetForCollectionXml.class::isInstance,
+                        CssClassFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation),
+                        oneToManyAssociation);
 
-                addFacet(LayoutOrderFacetFromXml.create(collectionSequence++, oneToManyAssociation));
+                updateFacet(
+                        DefaultViewFacetForCollectionXml.type(),
+                        DefaultViewFacetForCollectionXml.class::isInstance,
+                        DefaultViewFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation),
+                        oneToManyAssociation);
+
+                updateFacet(
+                        MemberDescribedFacetForCollectionXml.type(),
+                        MemberDescribedFacetForCollectionXml.class::isInstance,
+                        MemberDescribedFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation),
+                        oneToManyAssociation);
+
+                updateFacet(
+                        HiddenFacetForCollectionXml.type(),
+                        HiddenFacetForCollectionXml.class::isInstance,
+                        HiddenFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation),
+                        oneToManyAssociation);
+
+                updateFacet(
+                        MemberNamedFacetForCollectionXml.type(),
+                        MemberNamedFacetForCollectionXml.class::isInstance,
+                        MemberNamedFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation),
+                        oneToManyAssociation);
+
+                updateFacet(
+                        PagedFacetForCollectionXml.type(),
+                        PagedFacetForCollectionXml.class::isInstance,
+                        PagedFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation),
+                        oneToManyAssociation);
+
+                updateFacet(
+                        SortedByFacetForCollectionXml.type(),
+                        SortedByFacetForCollectionXml.class::isInstance,
+                        SortedByFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation),
+                        oneToManyAssociation);
+
+                updateFacet(LayoutOrderFacetFromXml.create(collectionSequence++, oneToManyAssociation));
             }
         });
     }

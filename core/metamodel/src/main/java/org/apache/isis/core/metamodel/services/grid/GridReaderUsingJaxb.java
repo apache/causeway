@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.layout.grid.Grid;
+import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
 import org.apache.isis.applib.services.grid.GridSystemService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -71,8 +72,21 @@ public class GridReaderUsingJaxb {
     }
 
     public Grid loadGrid(String xml) {
+        initForTesting(); // a no-op if already initialized via @PostConstruct
         return (Grid) jaxbService.fromXml(jaxbContext, xml);
     }
 
+    // -- HELPER
+
+    // JUnit support
+    private void initForTesting() {
+        if(jaxbContext==null) {
+            try {
+                jaxbContext = JAXBContext.newInstance(BS3Grid.class);
+            } catch (JAXBException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 }

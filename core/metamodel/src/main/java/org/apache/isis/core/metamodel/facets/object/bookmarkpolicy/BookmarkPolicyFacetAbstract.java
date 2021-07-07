@@ -29,7 +29,7 @@ public abstract class BookmarkPolicyFacetAbstract
 extends FacetAbstract
 implements BookmarkPolicyFacet {
 
-    private static final Class<? extends Facet> type() {
+    public static final Class<BookmarkPolicyFacet> type() {
         return BookmarkPolicyFacet.class;
     }
 

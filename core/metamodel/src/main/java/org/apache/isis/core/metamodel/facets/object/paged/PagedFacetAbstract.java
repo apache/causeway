@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.object.paged;
 
 import java.util.function.BiConsumer;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
@@ -29,7 +28,7 @@ public abstract class PagedFacetAbstract
 extends FacetAbstract
 implements PagedFacet {
 
-    private static final Class<? extends Facet> type() {
+    public static final Class<PagedFacet> type() {
         return PagedFacet.class;
     }
 

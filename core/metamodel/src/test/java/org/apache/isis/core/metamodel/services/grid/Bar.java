@@ -19,12 +19,12 @@
 package org.apache.isis.core.metamodel.services.grid;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Nature;
 
-@DomainService(
-        nature = NatureOfService.VIEW,
-        logicalTypeName = "simple.SimpleMenu"
+@DomainObject(
+        nature = Nature.VIEW_MODEL,
+        logicalTypeName = "simple.Bar"
         )
 public class Bar {
 

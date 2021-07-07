@@ -30,7 +30,7 @@ public abstract class RedirectFacetAbstract
 extends FacetAbstract
 implements RedirectFacet {
 
-    private static final Class<? extends Facet> type() {
+    public static final Class<RedirectFacet> type() {
         return RedirectFacet.class;
     }
 

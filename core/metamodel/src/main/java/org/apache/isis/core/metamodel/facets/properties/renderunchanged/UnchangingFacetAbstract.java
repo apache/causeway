@@ -19,13 +19,12 @@
 
 package org.apache.isis.core.metamodel.facets.properties.renderunchanged;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 
 public abstract class UnchangingFacetAbstract extends SingleValueFacetAbstract<Boolean> implements UnchangingFacet {
 
-    private static final Class<? extends Facet> type() {
+    public static final Class<UnchangingFacet> type() {
         return UnchangingFacet.class;
     }
 

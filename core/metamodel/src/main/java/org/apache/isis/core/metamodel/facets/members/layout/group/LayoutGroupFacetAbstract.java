@@ -30,13 +30,17 @@ public abstract class LayoutGroupFacetAbstract
 extends FacetAbstract
 implements LayoutGroupFacet {
 
+    public static final Class<LayoutGroupFacet> type() {
+        return LayoutGroupFacet.class;
+    }
+
     @Getter(onMethod_ = {@Override})
     private final GroupIdAndName groupIdAndName;
 
     protected LayoutGroupFacetAbstract(
             final GroupIdAndName groupIdAndName,
             final FacetHolder holder) {
-        super(LayoutGroupFacet.class, holder);
+        super(type(), holder);
         this.groupIdAndName = groupIdAndName;
     }
 
@@ -44,7 +48,7 @@ implements LayoutGroupFacet {
             final GroupIdAndName groupIdAndName,
             final FacetHolder holder,
             final Facet.Precedence precedence) {
-        super(LayoutGroupFacet.class, holder, precedence);
+        super(type(), holder, precedence);
         this.groupIdAndName = groupIdAndName;
     }
 

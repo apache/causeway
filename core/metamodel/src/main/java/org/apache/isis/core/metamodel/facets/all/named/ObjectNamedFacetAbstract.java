@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.facets.all.named;
 
 import org.apache.isis.applib.services.i18n.TranslationContext;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.i8n.noun.HasNounFacetAbstract;
 import org.apache.isis.core.metamodel.facets.all.i8n.noun.NounForms;
@@ -32,7 +31,7 @@ public class ObjectNamedFacetAbstract
 extends HasNounFacetAbstract
 implements ObjectNamedFacet {
 
-    private static final Class<? extends Facet> type() {
+    public static final Class<ObjectNamedFacet> type() {
         return ObjectNamedFacet.class;
     }
 

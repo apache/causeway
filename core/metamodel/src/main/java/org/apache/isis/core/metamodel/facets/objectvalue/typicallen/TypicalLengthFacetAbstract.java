@@ -27,7 +27,7 @@ public abstract class TypicalLengthFacetAbstract
 extends SingleIntValueFacetAbstract
 implements TypicalLengthFacet {
 
-    private static final Class<? extends Facet> type() {
+    public static final Class<TypicalLengthFacet> type() {
         return TypicalLengthFacet.class;
     }
 

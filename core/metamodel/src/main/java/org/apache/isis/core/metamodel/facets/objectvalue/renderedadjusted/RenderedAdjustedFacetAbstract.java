@@ -31,7 +31,7 @@ public abstract class RenderedAdjustedFacetAbstract
 extends FacetAbstract
 implements RenderedAdjustedFacet {
 
-    private static final Class<? extends Facet> type() {
+    public static final Class<RenderedAdjustedFacet> type() {
         return RenderedAdjustedFacet.class;
     }
 

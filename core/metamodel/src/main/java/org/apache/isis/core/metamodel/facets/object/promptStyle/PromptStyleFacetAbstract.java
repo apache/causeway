@@ -27,7 +27,7 @@ public abstract class PromptStyleFacetAbstract extends FacetAbstract
 implements PromptStyleFacet {
 
 
-    private static final Class<? extends Facet> type() {
+    public static final Class<PromptStyleFacet> type() {
         return PromptStyleFacet.class;
     }
 

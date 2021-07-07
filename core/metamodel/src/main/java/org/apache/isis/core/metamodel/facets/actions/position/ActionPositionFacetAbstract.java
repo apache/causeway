@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.actions.position;
 import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
@@ -30,7 +29,7 @@ public abstract class ActionPositionFacetAbstract
 extends FacetAbstract
 implements ActionPositionFacet {
 
-    private static final Class<? extends Facet> type() {
+    public static final Class<ActionPositionFacet> type() {
         return ActionPositionFacet.class;
     }
 

@@ -31,7 +31,7 @@ public abstract class MultiLineFacetAbstract
 extends FacetAbstract
 implements MultiLineFacet {
 
-    private static final Class<? extends Facet> type() {
+    public static final Class<MultiLineFacet> type() {
         return MultiLineFacet.class;
     }
 

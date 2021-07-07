@@ -32,7 +32,7 @@ public abstract class LabelAtFacetAbstract
 extends FacetAbstract
 implements LabelAtFacet {
 
-    private static final Class<? extends Facet> type() {
+    public static final Class<LabelAtFacet> type() {
         return LabelAtFacet.class;
     }
 

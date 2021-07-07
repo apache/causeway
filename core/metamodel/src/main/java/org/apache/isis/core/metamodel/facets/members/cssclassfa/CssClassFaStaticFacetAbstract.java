@@ -30,7 +30,6 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.functions._Predicates;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
@@ -47,7 +46,7 @@ public abstract class CssClassFaStaticFacetAbstract
 extends FacetAbstract
 implements CssClassFaStaticFacet {
 
-    private static final Class<? extends Facet> type() {
+    public static final Class<CssClassFaFacet> type() {
         return CssClassFaFacet.class;
     }
 

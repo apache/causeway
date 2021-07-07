@@ -19,13 +19,12 @@
 
 package org.apache.isis.core.metamodel.facets.collections.collection.defaultview;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleStringValueFacetAbstract;
 
 public class DefaultViewFacetAbstract extends SingleStringValueFacetAbstract implements DefaultViewFacet {
 
-    private static final Class<? extends Facet> type() {
+    public static final Class<DefaultViewFacet> type() {
         return DefaultViewFacet.class;
     }
 

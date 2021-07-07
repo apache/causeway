@@ -226,7 +226,7 @@ public final class FacetRanking {
      */
     public <F extends Facet> void purgeIf(
             final @NonNull Class<F> facetType,
-            final @NonNull Predicate<? extends F> filter) {
+            final @NonNull Predicate<? super F> filter) {
 
         // reassess the top precedence
         final _Reduction<Facet.Precedence> top = _Reduction.of(null, (a, b)->a==null?b:a.ordinal()>b.ordinal()?a:b);

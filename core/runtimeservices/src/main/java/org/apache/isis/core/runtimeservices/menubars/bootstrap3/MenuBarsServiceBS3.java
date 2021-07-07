@@ -195,23 +195,17 @@ implements MenuBarsService {
 
                 val layoutData = serviceActionLayoutDataByActionId.get(actionId);
 
-                FacetUtil.purgeIf(
+                FacetUtil.updateFacet(
                         MemberNamedFacet.class,
                         facet->facet instanceof MemberNamedFacetForMenuBarXml,
+                        MemberNamedFacetForMenuBarXml.create(layoutData, objectAction),
                         objectAction);
 
-                FacetUtil.purgeIf(
+                FacetUtil.updateFacet(
                         MemberDescribedFacet.class,
                         facet->facet instanceof MemberDescribedFacetForMenuBarXml,
+                        MemberDescribedFacetForMenuBarXml.create(layoutData, objectAction),
                         objectAction);
-
-                FacetUtil.addFacetIfPresent(
-                        MemberNamedFacetForMenuBarXml
-                        .create(layoutData, objectAction));
-
-                FacetUtil.addFacetIfPresent(
-                        MemberDescribedFacetForMenuBarXml
-                        .create(layoutData, objectAction));
             });
 
         });

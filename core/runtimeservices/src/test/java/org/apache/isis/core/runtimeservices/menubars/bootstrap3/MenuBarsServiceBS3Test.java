@@ -117,12 +117,12 @@ extends RuntimeServicesTestAbstract {
 
         getSpecificationLoader().disposeMetaModel();
 
-        // load the modified menubars-xml with the MenuBarsLoaderService
+        // load the modified menubars.xml with the MenuBarsLoaderService
         super.menubarsLayoutXmlResourceRef.set(new ByteArrayResource(xml.getBytes(StandardCharsets.UTF_8)));
 
         getSpecificationLoader().createMetaModel();
 
-        // verify service-action's member named facet was able to pick up the name from XML
+        // verify service-action's member named facet was installed when loading menubars from XML
 
         val serviceSpec = getSpecificationLoader().specForTypeElseFail(Bar.class);
         val objectAction = serviceSpec.getAction("createSimpleObject").orElse(null);
