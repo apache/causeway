@@ -27,11 +27,14 @@ import org.apache.isis.applib.services.layout.LayoutService;
 import org.apache.isis.applib.services.menu.MenuBarsLoaderService;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting.MetaModelContext_forTestingBuilder;
+import org.apache.isis.core.metamodel.facetapi.Facet.Precedence;
+import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.runtimeservices.RuntimeServicesTestAbstract;
 import org.apache.isis.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.val;
@@ -126,6 +129,27 @@ extends RuntimeServicesTestAbstract {
         assertNotNull(objectAction);
 
         assertEquals(customNamed, objectAction.getStaticFriendlyName().orElse(null));
+
+        // trigger a menubars.xml reload, which installs more facets while purging old ones
+        // verify however, that the number of facets stays constant
+
+        menuBarsService.menuBars(); // trigger reload (MenuBarsService for testing is setup the support reloading)
+
+        assertEquals(customNamed, objectAction.getStaticFriendlyName().orElse(null));
+
+        val facetRanking = objectAction.getFacetRanking(MemberNamedFacet.class).orElse(null);
+        assertNotNull(facetRanking);
+
+        // XML layout facets are installed at precedence HIGH
+        val xmlFacetRank = facetRanking.getRankLowerOrEqualTo(MemberNamedFacet.class, Precedence.HIGH);
+
+        // verify rank did not grow with latest menubars.xml reload
+        assertEquals(1, xmlFacetRank.size());
+
+        // verify winning facet is the same object as the last one added from latest menubars.xml reload,
+        // to make sure we are not feed the winner from an outdated cache
+        assertSame(facetRanking.getWinnerNonEvent(MemberNamedFacet.class).get(), xmlFacetRank.getLastOrFail());
+
     }
 
     // -- HELPER

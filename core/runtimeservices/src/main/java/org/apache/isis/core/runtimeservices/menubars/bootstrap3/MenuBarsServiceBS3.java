@@ -58,6 +58,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.actions.layout.MemberDescribedFacetForMenuBarXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.MemberNamedFacetForMenuBarXml;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
+import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
 import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
@@ -193,6 +194,16 @@ implements MenuBarsService {
                         + "#" + serviceActionIdentifier.getMemberLogicalName();
 
                 val layoutData = serviceActionLayoutDataByActionId.get(actionId);
+
+                FacetUtil.purgeIf(
+                        MemberNamedFacet.class,
+                        facet->facet instanceof MemberNamedFacetForMenuBarXml,
+                        objectAction);
+
+                FacetUtil.purgeIf(
+                        MemberDescribedFacet.class,
+                        facet->facet instanceof MemberDescribedFacetForMenuBarXml,
+                        objectAction);
 
                 FacetUtil.addFacetIfPresent(
                         MemberNamedFacetForMenuBarXml

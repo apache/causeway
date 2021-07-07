@@ -23,10 +23,12 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
+import java.util.function.Predicate;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._Reduction;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -186,14 +188,12 @@ public final class FacetRanking {
      * @param facetType - for convenience, so the caller does not need to cast the result
      * @param precedenceUpper - upper bound
      */
-    public <F extends Facet> Can<F> getRankLowerOrEqualTo(final @NonNull Class<F> facetType, final @NonNull Precedence precedenceUpper) {
+    public <F extends Facet> Can<F> getRankLowerOrEqualTo(
+            final @NonNull Class<F> facetType,
+            final @NonNull Precedence precedenceUpper) {
         _Assert.assertEquals(this.facetType, facetType);
 
-        val precedenceSelected = facetsByPrecedence
-        .keySet()
-        .stream()
-        .filter(precedence->precedence.ordinal()<=precedenceUpper.ordinal())
-        .max(Comparator.comparing(Precedence::ordinal));
+        val precedenceSelected = getHighestPrecedenceLowerOrEqualTo(precedenceUpper);
 
         return precedenceSelected
         .map(facetsByPrecedence::get)
@@ -215,6 +215,36 @@ public final class FacetRanking {
 
     public Optional<Facet.Precedence> getTopPrecedence() {
         return Optional.ofNullable(topPrecedenceRef.get());
+    }
+
+    // -- DYNAMIC UPDATE SUPPORT
+
+    /**
+     * Removes any facet of {@code facetType} from facetHolder if it passes the given {@code filter}.
+     * @param facetType - to ensure the filter is properly generic-type-constraint
+     * @param filter
+     */
+    public <F extends Facet> void purgeIf(
+            final @NonNull Class<F> facetType,
+            final @NonNull Predicate<? extends F> filter) {
+
+        // reassess the top precedence
+        final _Reduction<Facet.Precedence> top = _Reduction.of(null, (a, b)->a==null?b:a.ordinal()>b.ordinal()?a:b);
+        val markedForRemoval = _Lists.newArrayList(facetsByPrecedence.size());
+
+        facetsByPrecedence.forEach((precedence, facets)->{
+            facets.removeIf(_Casts.uncheckedCast(filter));
+            if(!facets.isEmpty()) {
+                top.accept(precedence);
+            } else {
+                markedForRemoval.add(precedence);
+            }
+        });
+
+        topPrecedenceRef.set(top.getResult().orElse(null));
+
+        // remove keys that associate empty lists, so finding highest used precedence by key is simple
+        markedForRemoval.forEach(facetsByPrecedence::remove);
     }
 
     // -- VALIDATION SUPPORT

@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facetapi;
 
 import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
@@ -96,5 +97,18 @@ public final class FacetUtil {
         source.streamFacets()
         .forEach(target::addFacet);
     }
+
+    /**
+     * removes any facet of facet-type from facetHolder if it passes the given filter
+     */
+    public static <F extends Facet> void purgeIf(
+            final Class<F> facetType,
+            final Predicate<? extends F> filter,
+            final FacetHolder facetHolder) {
+
+        facetHolder.getFacetRanking(facetType)
+        .ifPresent(ranking->ranking.purgeIf(facetType, filter));
+    }
+
 
 }
