@@ -96,9 +96,9 @@ class ColumnFactory {
                 field = "iconName",
                 hozAlign = Align.CENTER,
                 width = "40",
-                formatterComponentFunction = { _, _, data ->
+/*                formatterComponentFunction = { _, _, data ->
                     buildButton(data, data["iconName"] as? String)
-                })
+                }*/)
     }
 
     private fun buildButton(data: Exposer, iconName: String?): Button {
@@ -117,11 +117,11 @@ class ColumnFactory {
                 title = "ResultListResult",
                 field = "result",
                 headerFilter = Editor.INPUT,
-                formatterComponentFunction = { _, _, data ->
+/*                formatterComponentFunction = { _, _, data ->
                     Button(text = data["object"].title as String, icon = "fas fa-star-o", style = ButtonStyle.LINK).onClick {
                         console.log(data)
                     }
-                })
+                }*/)
     }
 
     private fun buildCheckBox(): ColumnDefinition<Exposer> {
@@ -154,12 +154,12 @@ class ColumnFactory {
                 hozAlign = Align.CENTER,
                 width = "60",
                 headerSort = false,
-                formatterComponentFunction = { _, _, data ->
+/*                formatterComponentFunction = { _, _, data ->
                     val tObject = data.delegate
                     MenuFactory.buildForObject(
                             tObject,
                             false)
-                })
+                }*/)
     }
 
     private fun getData(cell: Tabulator.CellComponent): Exposer {

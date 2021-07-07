@@ -18,9 +18,6 @@
  */
 package org.apache.isis.client.kroviz.ui.core
 
-import org.apache.isis.client.kroviz.core.model.Exposer
-import org.apache.isis.client.kroviz.core.model.CollectionDM
-import org.apache.isis.client.kroviz.utils.Utils
 import io.kvision.core.Container
 import io.kvision.core.CssSize
 import io.kvision.core.UNIT
@@ -30,6 +27,9 @@ import io.kvision.tabulator.Layout
 import io.kvision.tabulator.Tabulator
 import io.kvision.tabulator.TabulatorOptions
 import io.kvision.utils.set
+import org.apache.isis.client.kroviz.core.model.CollectionDM
+import org.apache.isis.client.kroviz.core.model.Exposer
+import org.apache.isis.client.kroviz.utils.Utils
 
 /**
  * access attributes from dynamic (JS) objects with varying
@@ -43,7 +43,6 @@ class RoTable(displayCollection: CollectionDM) : SimplePanel() {
         title = Utils.extractTitle(displayCollection.title)
         width = CssSize(100, UNIT.perc)
         val model = displayCollection.data
-//        val model = buildModel(displayCollection)
         val columns = ColumnFactory().buildColumns(
                 displayCollection,
                 true)
@@ -52,7 +51,7 @@ class RoTable(displayCollection: CollectionDM) : SimplePanel() {
                 height = Constants.calcHeight,
                 layout = Layout.FITCOLUMNS,
                 columns = columns,
-                persistenceMode = false//,
+                persistenceMode = false,
                 //selectable = true
         )
 
@@ -61,22 +60,11 @@ class RoTable(displayCollection: CollectionDM) : SimplePanel() {
         tabulator(model, options = options, types = tableTypes) {
             setEventListener<Tabulator<Exposer>> {
                 tabulatorRowClick = {
+                    console.log("[RT.tabulatorRowClick]")
+                    console.log(it)
                 }
             }
         }
-    }
-
-    private fun buildModel(displayCollection: CollectionDM) : List<dynamic> {
-        console.log("[RT.buildModel]")
-        val model = mutableListOf<Exposer>()
-        displayCollection.data.forEach {
-            console.log(it)
-            val record = it.asDynamic()
-            console.log(record["readOnlyProperty"])
-            model.add(record)
-            console.log(record)
-        }
-        return model
     }
 
     fun <T : Any> Container.tabulator(

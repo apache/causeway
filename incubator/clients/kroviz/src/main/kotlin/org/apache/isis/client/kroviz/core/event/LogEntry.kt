@@ -30,8 +30,6 @@ import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Relation
 import org.apache.isis.client.kroviz.to.TransferObject
 import org.apache.isis.client.kroviz.ui.core.Constants
-import org.apache.isis.client.kroviz.ui.core.UiManager
-import org.apache.isis.client.kroviz.utils.Utils
 import kotlin.js.Date
 
 // use color codes from css instead?
@@ -51,9 +49,7 @@ enum class EventState(val id: String, val iconName: String, val style: ButtonSty
     // encapsulate access with managers?
 }
 
-@OptIn(ExperimentalJsExport::class)
 @Serializable
-@JsExport
 data class LogEntry(
         val url: String,
         val method: String? = "",
