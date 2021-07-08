@@ -29,7 +29,6 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.util.cookies.CookieUtils;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
@@ -38,8 +37,8 @@ import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.pages.EmailVerificationUrlService;
 import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
-import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.EmailAvailableValidator;
+import org.apache.isis.viewer.wicket.ui.pages.accmngt.SuccessFeedbackCookieManager;
 import org.apache.isis.viewer.wicket.ui.panels.PanelBase;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
@@ -99,9 +98,7 @@ public class RegistrationFormPanel extends PanelBase<Void> {
                     Map<String, String> map = new HashMap<>();
                     map.put("email", email);
                     String emailSentMessage = getString("emailSentMessage", Model.ofMap(map));
-
-                    CookieUtils cookieUtils = new CookieUtils();
-                    cookieUtils.save(AccountManagementPageAbstract.FEEDBACK_COOKIE_NAME, emailSentMessage);
+                    SuccessFeedbackCookieManager.storeSuccessFeedback(emailSentMessage);
                     pageNavigationService.navigateTo(PageType.SIGN_IN);
                 }
             }

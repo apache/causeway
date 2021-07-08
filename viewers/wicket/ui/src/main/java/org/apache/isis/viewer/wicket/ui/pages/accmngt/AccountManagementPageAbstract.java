@@ -42,10 +42,9 @@ import org.apache.isis.viewer.wicket.ui.errors.ExceptionStackTracePanel;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.WebPageBase;
 
-import lombok.val;
-
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapJavascriptBehavior;
 import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
+import lombok.val;
 
 /**
  * Boilerplate, pick up our HTML and CSS.
@@ -58,12 +57,6 @@ public class AccountManagementPageAbstract extends WebPageBase {
     private static final String ID_APPLICATION_NAME = "applicationName";
 
     private static final String ID_EXCEPTION_STACK_TRACE = "exceptionStackTrace";
-
-    /**
-     * The name of a special cookie that is used as a temporary container for
-     * stateless session scoped success feedback messages.
-     */
-    public static final String FEEDBACK_COOKIE_NAME = "isis.feedback.success";
 
     /**
      * If set by {@link org.apache.isis.viewer.wicket.ui.pages.PageAbstract}.

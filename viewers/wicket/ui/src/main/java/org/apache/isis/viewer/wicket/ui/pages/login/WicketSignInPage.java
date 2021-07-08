@@ -24,13 +24,12 @@ import javax.inject.Inject;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.panel.SignInPanel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.util.cookies.CookieUtils;
-import org.apache.wicket.util.string.Strings;
 
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
+import org.apache.isis.viewer.wicket.ui.pages.accmngt.SuccessFeedbackCookieManager;
 
 /**
  * Boilerplate, pick up our HTML and CSS.
@@ -57,22 +56,9 @@ public class WicketSignInPage extends AccountManagementPageAbstract {
 
         addSignInPanel();
 
-        checkForSuccessFeedback();
+        SuccessFeedbackCookieManager.drainSuccessFeedback(this::success);
     }
 
-    /**
-     * Checks for a cookie with name {@value #FEEDBACK_COOKIE_NAME} that is
-     * used as a temporary container for stateless session scoped success feedback
-     * messages.
-     */
-    private void checkForSuccessFeedback() {
-        CookieUtils cookieUtils = new CookieUtils();
-        String successFeedback = cookieUtils.load(FEEDBACK_COOKIE_NAME);
-        if (!Strings.isEmpty(successFeedback)) {
-            success(successFeedback);
-            cookieUtils.remove(FEEDBACK_COOKIE_NAME);
-        }
-    }
 
     protected SignInPanel addSignInPanel() {
 
