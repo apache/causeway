@@ -71,7 +71,6 @@ class ColumnFactory {
         for (pl in propertyLabels) {
             if (!pl.hidden) {
                 val id = pl.key
-                console.log("id: $id")
                 val friendlyName = pl.friendlyName
                 var cd = ColumnDefinition<dynamic>(
                         title = friendlyName,

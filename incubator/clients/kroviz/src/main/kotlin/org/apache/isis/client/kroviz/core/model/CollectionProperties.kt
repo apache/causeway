@@ -81,7 +81,7 @@ class CollectionProperties() {
  *
  * - Member of a DomainObject
  * - Description (friendlyName, etc.)
- * - Layout (hidden, etc.)
+ * - Layout (hidden, labelPosition, etc.)
  *
  * All three are required in order to display correctly in a table.
  */
@@ -94,6 +94,11 @@ class ColumnProperties(val key: String) {
     fun initLayout(layout: PropertyLt) {
         this.layout = layout
         hidden = (layout.hidden != null)
+        // properties without labelPosition will be hidden - is that correct?
+        // example: Demo -> Strings -> Description
+        if (!hidden && layout.labelPosition == null) {
+            hidden = true
+        }
     }
 
 }

@@ -49,7 +49,7 @@ class RoTable(displayCollection: CollectionDM) : SimplePanel() {
         val options = TabulatorOptions(
                 movableColumns = true,
                 height = Constants.calcHeight,
-                layout = Layout.FITCOLUMNS, //FITDATA seems to be right
+                layout = Layout.FITDATA,
                 columns = columns,
                 persistenceMode = false,
                 //selectable = true
