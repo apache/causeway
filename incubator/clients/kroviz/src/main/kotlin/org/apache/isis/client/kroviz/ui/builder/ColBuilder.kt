@@ -35,8 +35,10 @@ class ColBuilder : UiBuilder() {
         val panel = buildPanel()
 
         if (col.actionList.size > 0) {
-            val menu = createMenu(tObject, dsp)
-            panel.add(menu)
+            if (col.domainObject != null) {
+                val menu = createMenu(tObject, dsp)
+                panel.add(menu)
+            }
         }
 
         for (tg in col.tabGroupList) {
