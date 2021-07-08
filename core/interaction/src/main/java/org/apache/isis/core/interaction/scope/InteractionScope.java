@@ -95,6 +95,14 @@ implements
 
         val existingScopedObject = scopedObjects.get().get(name);
         if(existingScopedObject!=null) {
+
+            if(log.isDebugEnabled()) {
+                log.debug("INTERACTION_SCOPE [{}:{}] reuse existing {}",
+                        _Probe.currentThreadId(),
+                        getConversationId(),
+                        Integer.toHexString(existingScopedObject.hashCode()));
+            }
+
             return existingScopedObject.getInstance();
         }
 
@@ -103,6 +111,13 @@ implements
 
         log.debug("create new isis-interaction scoped {}", name);
         newScopedObject.setInstance(objectFactory.getObject()); // triggers call to registerDestructionCallback
+
+        if(log.isDebugEnabled()) {
+            log.debug("INTERACTION_SCOPE [{}:{}] create new {}",
+                _Probe.currentThreadId(),
+                getConversationId(),
+                Integer.toHexString(newScopedObject.hashCode()));
+        }
 
         return newScopedObject.getInstance();
     }
@@ -138,10 +153,12 @@ implements
     @Override
     public void onTopLevelInteractionOpened() {
         // nothing to do
+        log.debug("INTERACTION_SCOPE opened");
     }
 
     @Override
     public void onTopLevelInteractionPreDestroy() {
+        log.debug("INTERACTION_SCOPE pre-destroy");
         scopedObjects.get().values()
         .forEach(scopedObject->{
             try {
@@ -154,6 +171,7 @@ implements
 
     @Override
     public void onTopLevelInteractionClosed() {
+        log.debug("INTERACTION_SCOPE closed");
         scopedObjects.remove();
     }
 
