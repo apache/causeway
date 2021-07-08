@@ -40,7 +40,7 @@ final class _ChangingEntitiesFactory {
     public static Optional<EntityChanges> createChangingEntities(
             final java.sql.Timestamp completedAt,
             final String userName,
-            final EntityChangeTrackerDefault entityChangeTracker) {
+            final EntityChangeTrackerAbstract entityChangeTracker) {
 
         if(entityChangeTracker.getChangeKindByEnlistedAdapter().isEmpty()) {
             return Optional.empty();
@@ -59,7 +59,7 @@ final class _ChangingEntitiesFactory {
                 entityChangeTracker.numberEntitiesLoaded(),
                 // side-effect: it locks the result for this transaction,
                 // such that cannot enlist on top of it
-                entityChangeTracker.snapshotPropertyChangeRecords().size(),
+                entityChangeTracker.numberPropertyChangeRecordsThenLock(),
                 changeKindByEnlistedAdapter);
 
         return Optional.of(changingEntities);

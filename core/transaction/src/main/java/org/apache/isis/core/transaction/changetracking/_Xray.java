@@ -19,11 +19,14 @@
 package org.apache.isis.core.transaction.changetracking;
 
 import java.awt.Color;
+import java.util.Set;
+import java.util.function.LongSupplier;
 
 import javax.inject.Provider;
 
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
+import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.security.util.XrayUtil;
@@ -32,15 +35,42 @@ import lombok.val;
 
 final class _Xray {
 
-    public static void publish(
-            final EntityChangeTrackerDefault entityChangeTrackerDefault,
+    public static void capturePostValuesAndDrain(
+            final Set<_PropertyChangeRecord> entityPropertyChangeRecords,
             final Provider<InteractionProvider> interactionProviderProvider) {
 
         if(!XrayUi.isXrayEnabled()) {
             return;
         }
 
-        final long propertyChangeRecordCount = entityChangeTrackerDefault.countPotentialPropertyChangeRecords();
+        // records enlisted before post values have been set
+        final int propertyChangeRecordCount = entityPropertyChangeRecords.size();
+        val enteringLabel = String.format("capture %d post-values", propertyChangeRecordCount);
+
+        XrayUtil.createSequenceHandle(interactionProviderProvider.get(), "ec-tracker")
+        .ifPresent(handle->{
+
+            handle.submit(sequenceData->{
+
+                sequenceData.alias("ec-tracker", "EntityChange-\nTracker-\n(Default)");
+
+                val callee = handle.getCallees().getFirstOrFail();
+                sequenceData.enter(handle.getCaller(), callee, enteringLabel);
+                //sequenceData.activate(callee);
+            });
+
+        });
+    }
+
+    public static void publish(
+            final LongSupplier propertyChangeRecordCountProvider,
+            final Provider<InteractionProvider> interactionProviderProvider) {
+
+        if(!XrayUi.isXrayEnabled()) {
+            return;
+        }
+
+        final long propertyChangeRecordCount = propertyChangeRecordCountProvider.getAsLong();
 
         val enteringLabel = String.format("consider %d entity change records for publishing",
                 propertyChangeRecordCount);
@@ -112,6 +142,9 @@ final class _Xray {
             return;
         }
 
+        //XXX using the same logic as in EntityChangeTrackerDefault; keep that in sync!
+        val isPublishingEnabled = EntityChangePublishingFacet.isPublishingEnabled(entity.getSpecification());
+
         val enteringLabel = String.format("%s %s",
                 what,
                 ManagedObjects.isNullOrUnspecifiedOrEmpty(entity)
@@ -126,6 +159,11 @@ final class _Xray {
             handle.submit(sequenceData->{
 
                 sequenceData.alias("ec-tracker", "EntityChange-\nTracker-\n(Default)");
+
+                if(!isPublishingEnabled) {
+                    sequenceData.setConnectionArrowColor(Color.GRAY);
+                    sequenceData.setConnectionLabelColor(Color.GRAY);
+                }
 
                 val callee = handle.getCallees().getFirstOrFail();
                 sequenceData.enter(handle.getCaller(), callee, enteringLabel);
