@@ -29,9 +29,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.commons.internal.collections._Sets;
@@ -42,6 +39,9 @@ import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -66,9 +66,10 @@ class SpecloaderPerformanceTest {
 
     @Inject private IsisConfiguration config;
     @Inject private SpecificationLoader specificationLoader;
+    //@Inject private MetaModelServiceMenu metaModelServiceMenu; //XXX could use ascii diff utilizing metaModelServiceMenu
 
     private final _Lazy<Set<String>> referenceMetamodelSummary = _Lazy.threadSafe(()->
-        MetamodelUtil.featuresSummarized(specificationLoader.snapshotSpecifications()));
+        _MetamodelUtil.featuresSummarized(specificationLoader.snapshotSpecifications()));
 
     @BeforeEach
     void setup() {
@@ -88,7 +89,7 @@ class SpecloaderPerformanceTest {
         _Annotations.clearCache();
         specificationLoader.disposeMetaModel();
         specificationLoader.createMetaModel();
-        val mmSummary = MetamodelUtil.featuresSummarized(specificationLoader.snapshotSpecifications());
+        val mmSummary = _MetamodelUtil.featuresSummarized(specificationLoader.snapshotSpecifications());
 
         val missingFeatures = _Sets.minus(referenceMetamodelSummary.get(), mmSummary);
         if(!missingFeatures.isEmpty()) {

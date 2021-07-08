@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 
 import lombok.val;
 
-final class MetamodelUtil {
+final class _MetamodelUtil {
 
     static Set<String> featuresSummarized(Can<ObjectSpecification> allSpecs){
 

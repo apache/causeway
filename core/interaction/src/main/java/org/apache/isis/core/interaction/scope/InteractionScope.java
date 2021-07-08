@@ -23,7 +23,6 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.ObjectFactory;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.beans.factory.config.Scope;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
@@ -32,14 +31,17 @@ import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.Data;
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * @since 2.0
  */
 @Log4j2
-class InteractionScope implements Scope, InteractionScopeLifecycleHandler {
+class InteractionScope
+implements
+    Scope,
+    InteractionScopeLifecycleHandler {
 
     private final BeanFactory beanFactory;
 
@@ -66,9 +68,9 @@ class InteractionScope implements Scope, InteractionScopeLifecycleHandler {
      * {@link org.apache.isis.applib.services.iactn.Interaction#getAttribute(Class) attributes}.
      *
      * <p>
-     * Why the top-level?  because this class is only interested in that top-level interaction (see
+     * Why the top-level? Because this class is only interested in that top-level interaction (see
      * {@link InteractionScopeLifecycleHandler#onTopLevelInteractionPreDestroy()}), not any of the stacked.
-     * </p>>
+     * </p>
      */
     private ThreadLocal<Map<String, ScopedObject>> scopedObjects = ThreadLocal.withInitial(_Maps::newHashMap);
 
