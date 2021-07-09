@@ -74,7 +74,7 @@ public @interface DomainService {
      *
      * @see #logicalTypeName()
      */
-    @AliasFor(annotation = DomainService.class, value = "logicalTypeName")
+    @AliasFor(annotation = Named.class, attribute = "value")
     String objectType()
             default "";
 
