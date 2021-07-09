@@ -44,7 +44,7 @@
 		<spring-boot.version>2.5.2</spring-boot.version>
 		<approvaltests.version>11.7.0</approvaltests.version>
 		
-		<resteasy.version>4.6.1.Final</resteasy.version> <!-- keep in sync with property defined in resteasy4-spring-boot-starter -->
+		<resteasy.version>4.6.2.Final</resteasy.version> <!-- keep in sync with property defined in resteasy4-spring-boot-starter -->
 
 	</properties>
 
@@ -358,7 +358,7 @@
 				</property>
 			</activation>
 			<properties>
-				<jib-maven-plugin.version>3.1.1</jib-maven-plugin.version>
+				<jib-maven-plugin.version>3.1.2</jib-maven-plugin.version>
 			</properties>
 			<build>
 				<pluginManagement>
