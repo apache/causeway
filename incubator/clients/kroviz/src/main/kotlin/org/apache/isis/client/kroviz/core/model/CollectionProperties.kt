@@ -32,7 +32,7 @@ class CollectionProperties() {
         val ps = propertyList.size
         val pls = propertyLayoutList.size
         val pds = propertyDescriptionList.size
-        val descriptionsComplete = (pds >= pls) && (pds >= ps)
+        val descriptionsComplete = (pds >= pls) && (ps >= pls)
         return descriptionsComplete
     }
 
