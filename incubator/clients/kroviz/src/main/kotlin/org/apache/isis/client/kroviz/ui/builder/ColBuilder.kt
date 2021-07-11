@@ -22,21 +22,27 @@ import io.kvision.core.*
 import io.kvision.panel.FieldsetPanel
 import io.kvision.panel.FlexPanel
 import io.kvision.panel.HPanel
+import io.kvision.panel.SimplePanel
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.bs3.Col
 import org.apache.isis.client.kroviz.ui.core.MenuFactory
 import org.apache.isis.client.kroviz.ui.core.RoDisplay
 import org.apache.isis.client.kroviz.ui.core.RoTable
 import org.apache.isis.client.kroviz.utils.Utils
+import kotlin.math.round
 
 class ColBuilder : UiBuilder() {
 
     fun create(col: Col, tObject: TObject, dsp: RoDisplay): FlexPanel {
         val panel = buildPanel()
 
+        console.log("[CB.create]")
+        console.log(col)
+
         if (col.actionList.size > 0) {
             if (col.domainObject != null) {
                 val menu = createMenu(tObject, dsp)
+                assignWidth(menu, col)
                 panel.add(menu)
             }
         }
@@ -56,6 +62,7 @@ class ColBuilder : UiBuilder() {
                 val fsPanel = FieldsetPanel(legend = legend).add(fsCpt)
                 val tto = TooltipOptions(title = fs.id)
                 fsPanel.enableTooltip(tto)
+                assignWidth(fsPanel, col)
                 panel.add(fsPanel)
             }
         }
@@ -99,6 +106,17 @@ class ColBuilder : UiBuilder() {
         panel.add(dd)
 
         return panel
+    }
+
+    private fun assignWidth(panel: SimplePanel, col: Col) {
+        console.log("[CB.assignWidth] ${col.span}")
+        val proportion = col.span.toDouble().div(12)
+        val percent= proportion * 100
+        val rounded = round(percent)
+        val cssWidth = CssSize(rounded, UNIT.perc)
+        console.log(cssWidth.toString())
+        panel.flexBasis = cssWidth
+        panel.flexGrow = 1
     }
 
 }

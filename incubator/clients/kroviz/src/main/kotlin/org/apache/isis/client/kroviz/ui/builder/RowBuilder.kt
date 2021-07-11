@@ -29,6 +29,8 @@ class RowBuilder : UiBuilder() {
 
     fun create(row: Row, tObject: TObject, dsp: RoDisplay): SimplePanel {
         val panel = buildPanel()
+        panel.justifyContent = JustifyContent.SPACEBETWEEN
+
         for (c in row.colList) {
             val cpt = ColBuilder().create(c, tObject, dsp)
             panel.add(cpt)
