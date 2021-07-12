@@ -196,7 +196,7 @@
 		<popper-js.version>1.16.1-lts</popper-js.version> <!-- org.webjars:popper-js, dictated by bootstrap.version -->
 
 		<wicketstuff.version>8.12.0</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
-		<wicketstuff-gmap3.version>${wicket.version}</wicketstuff-gmap3.version>
+		<wicketstuff-gmap3.version>9.4.0</wicketstuff-gmap3.version>
 
 		<xdocreport.version>1.0.6</xdocreport.version>
 
