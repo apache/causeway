@@ -158,7 +158,7 @@ The Restful Objects API.
 
 Thanks to Kotlin, code is very compact and readable.
 And, since Kotlin is a typed language and IDE's can infer a lot about the code, there are only few surprises.
-Nevertheless Kotlin/JS allows to use JavaScript features along side the typed part, what effectively makes it a dynamic language.
+Nevertheless Kotlin/JS allows to use JavaScript features alongside the typed part, what effectively makes it a dynamic language.
 
 === Hot Spots
 
@@ -256,14 +256,12 @@ Linux:
 
 When you are accustomed to the well settled Java ecosystem with integrated development environments, prepare yourself for learning new tools and addressing new problems.
 
-Kotlin is straightforward and once you now it, you may not want to go back.
+Kotlin is straightforward and once you know it, you may not want to go back.
 
 include::partial$design/dev-mindmap.adoc[]
 
-
-=== Visualize JSON
-
-See https://github.com/meteorbites/json-to-plantuml[json-to-plantuml]
+* JSON structures can be visualized via kroki (cf. History -> Details)
+* Layout: for FLEX see https://css-tricks.com/snippets/css/a-guide-to-flexbox/
 
 [source,bash]
 ----
