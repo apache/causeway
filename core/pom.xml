@@ -94,7 +94,7 @@
 
 		<commons-email.version>1.5</commons-email.version>
 		<commons-httpclient.version>4.5.12</commons-httpclient.version>
-		<commons-io.version>2.10.0</commons-io.version>
+		<commons-io.version>2.11.0</commons-io.version>
 
 		<cucumber.version>6.9.1</cucumber.version>
 
