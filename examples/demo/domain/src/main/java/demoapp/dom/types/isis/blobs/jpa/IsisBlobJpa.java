@@ -18,13 +18,17 @@
  */
 package demoapp.dom.types.isis.blobs.jpa;
 
+import java.util.Optional;
+
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import org.springframework.context.annotation.Profile;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
@@ -33,12 +37,12 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.value.Blob;
-import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
+import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
+import org.apache.isis.persistence.jpa.integration.types.BlobJpaEmbeddable;
+import org.springframework.context.annotation.Profile;
 
 import demoapp.dom.types.isis.blobs.persistence.IsisBlobEntity;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Profile("demo-jpa")
 //tag::class[]
@@ -47,7 +51,7 @@ import lombok.Setter;
       schema = "demo",
       name = "IsisBlobJpa"
 )
-@EntityListeners(JpaEntityInjectionPointResolver.class)
+@EntityListeners(IsisEntityListener.class)
 @DomainObject(
       logicalTypeName = "demo.IsisBlobEntity"
 )
@@ -57,8 +61,8 @@ public class IsisBlobJpa
 
 //end::class[]
     public IsisBlobJpa(Blob initialValue) {
-        this.readOnlyProperty = initialValue;
-        this.readWriteProperty = initialValue;
+        setReadOnlyProperty(initialValue);
+        setReadWriteProperty(initialValue);
     }
 
 //tag::class[]
@@ -66,51 +70,76 @@ public class IsisBlobJpa
     @GeneratedValue
     private Long id;
 
+    @AttributeOverrides({
+        @AttributeOverride(name="name",    column=@Column(name="readOnlyProperty_name")),
+        @AttributeOverride(name="mimeType",column=@Column(name="readOnlyProperty_mimeType")),
+        @AttributeOverride(name="bytes",   column=@Column(name="readOnlyProperty_bytes"))
+    })
+    @Embedded
+    private BlobJpaEmbeddable readOnlyProperty;
+
     @Title(prepend = "Blob JPA entity: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
-//    @Persistent(defaultFetchGroup="false", columns = {              // <.>
-//            @Column(name = "readOnlyProperty_name"),
-//            @Column(name = "readOnlyProperty_mimetype"),
-//            @Column(name = "readOnlyProperty_bytes")
-//    })
-    @Getter @Setter
-    private Blob readOnlyProperty;
+    public Blob getReadOnlyProperty() {
+        return readOnlyProperty.toBlob();
+    }
+    public void setReadOnlyProperty(final Blob readOnlyProperty) {
+        this.readOnlyProperty = BlobJpaEmbeddable.from(readOnlyProperty);
+    }
+
+    @AttributeOverrides({
+            @AttributeOverride(name="name",    column=@Column(name="readWriteProperty_name")),
+            @AttributeOverride(name="mimeType",column=@Column(name="readWriteProperty_mimeType")),
+            @AttributeOverride(name="bytes",   column=@Column(name="readWriteProperty_bytes"))
+    })
+    @Embedded
+    private BlobJpaEmbeddable readWriteProperty;
 
     @Property(editing = Editing.ENABLED)                            // <.>
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
-//    @Persistent(defaultFetchGroup="false", columns = {
-//            @Column(name = "readWriteProperty_name"),
-//            @Column(name = "readWriteProperty_mimetype"),
-//            @Column(name = "readWriteProperty_bytes")
-//    })
-    @Getter @Setter
-    private Blob readWriteProperty;
+    public Blob getReadWriteProperty() {
+        return readWriteProperty.toBlob();
+    }
+
+    public void setReadWriteProperty(final Blob readWriteProperty) {
+        this.readWriteProperty = BlobJpaEmbeddable.from(readWriteProperty);
+    }
+
+    @AttributeOverrides({
+            @AttributeOverride(name="name",    column=@Column(name="readOnlyOptionalProperty_name")),
+            @AttributeOverride(name="mimeType",column=@Column(name="readOnlyOptionalProperty_mimeType")),
+            @AttributeOverride(name="bytes",   column=@Column(name="readOnlyOptionalProperty_bytes"))
+    })
+    @Embedded
+    private BlobJpaEmbeddable readOnlyOptionalProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                   // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
-//    @Persistent(defaultFetchGroup="false", columns = {
-//            @Column(name = "readOnlyOptionalProperty_name",
-//                    allowsNull = "true"),                           // <.>
-//            @Column(name = "readOnlyOptionalProperty_mimetype",
-//                    allowsNull = "true"),
-//            @Column(name = "readOnlyOptionalProperty_bytes",
-//                    allowsNull = "true")
-//    })
-    @Getter @Setter
-    private Blob readOnlyOptionalProperty;
+    public Blob getReadOnlyOptionalProperty() {
+        return Optional.ofNullable(readOnlyOptionalProperty).map(BlobJpaEmbeddable::toBlob).orElse(null);
+    }
+
+    public void setReadOnlyOptionalProperty(final Blob readOnlyOptionalProperty) {
+        this.readOnlyOptionalProperty = BlobJpaEmbeddable.from(readOnlyOptionalProperty);
+    }
+
+
+    @AttributeOverrides({
+            @AttributeOverride(name="name",    column=@Column(name="readWriteOptionalProperty_name")),
+            @AttributeOverride(name="mimeType",column=@Column(name="readWriteOptionalProperty_mimeType")),
+            @AttributeOverride(name="bytes",   column=@Column(name="readWriteOptionalProperty_bytes"))
+    })
+    @Embedded
+    private BlobJpaEmbeddable readWriteOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
-//    @Persistent(defaultFetchGroup="false", columns = {
-//            @Column(name = "readWriteOptionalProperty_name",
-//                    allowsNull = "true"),
-//            @Column(name = "readWriteOptionalProperty_mimetype",
-//                    allowsNull = "true"),
-//            @Column(name = "readWriteOptionalProperty_bytes",
-//                    allowsNull = "true")
-//    })
-    @Getter @Setter
-    private Blob readWriteOptionalProperty;
+    public Blob getReadWriteOptionalProperty() {
+        return Optional.ofNullable(readWriteOptionalProperty).map(BlobJpaEmbeddable::toBlob).orElse(null);
+    }
 
+    public void setReadWriteOptionalProperty(final Blob readWriteOptionalProperty) {
+        this.readWriteOptionalProperty = BlobJpaEmbeddable.from(readWriteOptionalProperty);
+    }
 }
 //end::class[]
