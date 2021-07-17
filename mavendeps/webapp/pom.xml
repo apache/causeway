@@ -100,10 +100,6 @@
 
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>isis-viewer-restfulobjects-viewer</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.viewer</groupId>
 			<artifactId>isis-viewer-restfulobjects-jaxrsresteasy4</artifactId>
 		</dependency>
 
@@ -115,10 +111,15 @@
 			<groupId>org.apache.isis.security</groupId>
 			<artifactId>isis-security-bypass</artifactId>
 		</dependency>
+
+		<!--
+		we no longer include isis-security-keycloak in order to reduce the
+		3rd party dependencies.
 		<dependency>
 			<groupId>org.apache.isis.security</groupId>
 			<artifactId>isis-security-keycloak</artifactId>
 		</dependency>
+		-->
 
 		<!--
 		we no longer include isis-security-shiro in order to reduce the
