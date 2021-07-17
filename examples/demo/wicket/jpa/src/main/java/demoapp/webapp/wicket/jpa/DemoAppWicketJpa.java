@@ -18,11 +18,7 @@
  */
 package demoapp.webapp.wicket.jpa;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-import org.springframework.context.annotation.Import;
-
+import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.ui.IsisModuleExtPdfjsUi;
 import org.apache.isis.valuetypes.asciidoc.metamodel.IsisModuleValAsciidocMetaModel;
 import org.apache.isis.valuetypes.asciidoc.persistence.jpa.IsisModuleValAsciidocPersistenceJpa;
@@ -31,6 +27,10 @@ import org.apache.isis.valuetypes.markdown.persistence.jpa.IsisModuleValMarkdown
 import org.apache.isis.valuetypes.markdown.ui.wkt.IsisModuleValMarkdownUiWkt;
 import org.apache.isis.valuetypes.sse.ui.wkt.IsisModuleValSseUiWkt;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.Import;
 
 import demoapp.web.DemoAppManifestJpa;
 import demoapp.webapp.wicket.common.ui.custom.WhereInTheWorldPanelFactory;
@@ -72,8 +72,7 @@ public class DemoAppWicketJpa extends SpringBootServletInitializer {
      * entry point by searching for classes having a {@code main(...)}
      */
     public static void main(String[] args) {
-    	//IsisPresets.prototyping();
-
+    	IsisPresets.prototyping();
         //IsisPresets.logging(WebRequestCycleForIsis.class, "debug");
 
         System.setProperty("spring.profiles.active", "demo-jpa");

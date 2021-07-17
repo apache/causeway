@@ -18,13 +18,15 @@
  */
 package demoapp.dom.types.isis.clobs.jpa;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import org.springframework.context.annotation.Profile;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
@@ -34,11 +36,11 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
+import org.apache.isis.persistence.jpa.applib.types.ClobJpaEmbeddable;
+import org.springframework.context.annotation.Profile;
 
 import demoapp.dom.types.isis.clobs.persistence.IsisClobEntity;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Profile("demo-jpa")
 //tag::class[]
@@ -57,8 +59,8 @@ public class IsisClobJpa
 
 //end::class[]
     public IsisClobJpa(Clob initialValue) {
-        this.readOnlyProperty = initialValue;
-        this.readWriteProperty = initialValue;
+        setReadOnlyProperty(initialValue);
+        setReadWriteProperty(initialValue);
     }
 
 //tag::class[]
@@ -66,57 +68,79 @@ public class IsisClobJpa
     @GeneratedValue
     private Long id;
 
+
+    @AttributeOverrides({
+            @AttributeOverride(name="name",    column=@Column(name="readOnlyProperty_name")),
+            @AttributeOverride(name="mimeType",column=@Column(name="readOnlyProperty_mimeType")),
+            @AttributeOverride(name="chars",   column=@Column(name="readOnlyProperty_chars"))
+    })
+    @Embedded
+    private ClobJpaEmbeddable readOnlyProperty;
+
     @Title(prepend = "Clob JPA entity: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
-//    @Persistent(defaultFetchGroup="false", columns = {              // <.>
-//            @Column(name = "readOnlyProperty_name"),
-//            @Column(name = "readOnlyProperty_mimetype"),
-//            @Column(name = "readOnlyProperty_chars"
-//                    , jdbcType = "CLOB"
-//            )
-//    })
-    @Getter @Setter
-    private Clob readOnlyProperty;
+    public Clob getReadOnlyProperty() {
+        return ClobJpaEmbeddable.toClob(readOnlyProperty);
+    }
+
+    public void setReadOnlyProperty(final Clob readOnlyProperty) {
+        this.readOnlyProperty = ClobJpaEmbeddable.fromClob(readOnlyProperty);
+    }
+
+
+    @AttributeOverrides({
+            @AttributeOverride(name="name",    column=@Column(name="readWriteProperty_name")),
+            @AttributeOverride(name="mimeType",column=@Column(name="readWriteProperty_mimeType")),
+            @AttributeOverride(name="chars",   column=@Column(name="readWriteProperty_chars"))
+    })
+    @Embedded
+    private ClobJpaEmbeddable readWriteProperty;
 
     @Property(editing = Editing.ENABLED)                            // <.>
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
-//    @Persistent(defaultFetchGroup="false", columns = {
-//            @Column(name = "readWriteProperty_name"),
-//            @Column(name = "readWriteProperty_mimetype"),
-//            @Column(name = "readWriteProperty_chars"
-//                    , jdbcType = "CLOB"
-//            )
-//    })
-    @Getter @Setter
-    private Clob readWriteProperty;
+    public Clob getReadWriteProperty() {
+        return ClobJpaEmbeddable.toClob(readWriteProperty);
+    }
+
+    public void setReadWriteProperty(final Clob readWriteProperty) {
+        this.readWriteProperty = ClobJpaEmbeddable.fromClob(readWriteProperty);
+    }
+
+
+    @AttributeOverrides({
+            @AttributeOverride(name="name",    column=@Column(name="readOnlyOptionalProperty_name")),
+            @AttributeOverride(name="mimeType",column=@Column(name="readOnlyOptionalProperty_mimeType")),
+            @AttributeOverride(name="chars",   column=@Column(name="readOnlyOptionalProperty_chars"))
+    })
+    @Embedded
+    private ClobJpaEmbeddable readOnlyOptionalProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                   // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
-//    @Persistent(defaultFetchGroup="false", columns = {
-//            @Column(name = "readOnlyOptionalProperty_name",
-//                    allowsNull = "true"),                           // <.>
-//            @Column(name = "readOnlyOptionalProperty_mimetype",
-//                    allowsNull = "true"),
-//            @Column(name = "readOnlyOptionalProperty_chars"
-//                    , jdbcType = "CLOB"
-//                    , allowsNull = "true")
-//    })
-    @Getter @Setter
-    private Clob readOnlyOptionalProperty;
+    public Clob getReadOnlyOptionalProperty() {
+        return ClobJpaEmbeddable.toClob(readOnlyOptionalProperty);
+    }
+
+    public void setReadOnlyOptionalProperty(final Clob readOnlyOptionalProperty) {
+        this.readOnlyOptionalProperty = ClobJpaEmbeddable.fromClob(readOnlyOptionalProperty);
+    }
+
+    @AttributeOverrides({
+            @AttributeOverride(name="name",    column=@Column(name="readWriteOptionalProperty_name")),
+            @AttributeOverride(name="mimeType",column=@Column(name="readWriteOptionalProperty_mimeType")),
+            @AttributeOverride(name="chars",   column=@Column(name="readWriteOptionalProperty_chars"))
+    })
+    @Embedded
+    private ClobJpaEmbeddable readWriteOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
-//    @Persistent(defaultFetchGroup="false", columns = {
-//            @Column(name = "readWriteOptionalProperty_name"
-//                    , allowsNull = "true"),                           // <.>
-//            @Column(name = "readWriteOptionalProperty_mimetype"
-//                    , allowsNull = "true"),
-//            @Column(name = "readWriteOptionalProperty_bytes"
-//                    , jdbcType = "CLOB"
-//                    , allowsNull = "true")
-//    })
-    @Getter @Setter
-    private Clob readWriteOptionalProperty;
+    public Clob getReadWriteOptionalProperty() {
+        return ClobJpaEmbeddable.toClob(readWriteOptionalProperty);
+    }
 
+    public void setReadWriteOptionalProperty(final Clob readWriteOptionalProperty) {
+        this.readWriteOptionalProperty = ClobJpaEmbeddable.fromClob(readWriteOptionalProperty);
+    }
 }
 //end::class[]

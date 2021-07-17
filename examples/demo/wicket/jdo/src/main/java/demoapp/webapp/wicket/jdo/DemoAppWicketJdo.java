@@ -18,11 +18,7 @@
  */
 package demoapp.webapp.wicket.jdo;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-import org.springframework.context.annotation.Import;
-
+import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.ui.IsisModuleExtPdfjsUi;
 import org.apache.isis.valuetypes.asciidoc.metamodel.IsisModuleValAsciidocMetaModel;
 import org.apache.isis.valuetypes.asciidoc.persistence.jdo.dn5.IsisModuleValAsciidocPersistenceJdoDn5;
@@ -31,6 +27,10 @@ import org.apache.isis.valuetypes.markdown.persistence.jdo.dn5.IsisModuleValMark
 import org.apache.isis.valuetypes.markdown.ui.wkt.IsisModuleValMarkdownUiWkt;
 import org.apache.isis.valuetypes.sse.ui.wkt.IsisModuleValSseUiWkt;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.Import;
 
 import demoapp.web.DemoAppManifestJdo;
 import demoapp.webapp.wicket.common.ui.custom.WhereInTheWorldPanelFactory;
@@ -72,8 +72,7 @@ public class DemoAppWicketJdo extends SpringBootServletInitializer {
      * entry point by searching for classes having a {@code main(...)}
      */
     public static void main(String[] args) {
-    	//IsisPresets.prototyping();
-
+    	IsisPresets.prototyping();
         //IsisPresets.logging(WebRequestCycleForIsis.class, "debug");
 
         System.setProperty("spring.profiles.active", "demo-jdo");
