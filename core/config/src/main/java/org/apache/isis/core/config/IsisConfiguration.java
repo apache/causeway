@@ -42,10 +42,6 @@ import javax.validation.Payload;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.validation.annotation.Validated;
-
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -60,7 +56,6 @@ import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.applib.services.userui.UserMenu;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.config.IsisConfiguration.Viewer;
 import org.apache.isis.core.config.metamodel.facets.DefaultViewConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.ActionPublishingPolicy;
@@ -69,13 +64,15 @@ import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.PropertyP
 import org.apache.isis.core.config.metamodel.services.ApplicationFeaturesInitConfiguration;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.core.config.viewer.wicket.DialogMode;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.validation.annotation.Validated;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -136,6 +133,42 @@ public class IsisConfiguration {
             private boolean allowCsrfFilters = false;
 
         }
+
+        private final Keycloak keycloak = new Keycloak();
+        @Data
+        public static class Keycloak {
+            /**
+             * The name of the realm for the Apache Isis application, as configured in
+             * Keycloak.
+             */
+            private String realm;
+
+            /**
+             * The base URL for the keycloak server.
+             *
+             * <p>
+             *     For example, if running a keycloak using Docker container, such as:
+             *     <pre>
+             *         docker run -p 9090:8080 \
+             *             -e KEYCLOAK_USER=admin \
+             *             -e KEYCLOAK_PASSWORD=admin \
+             *             quay.io/keycloak/keycloak:14.0.0
+             *     </pre>,
+             *
+             *     then the URL would be "http://localhost:9090/auth".
+             * </p>
+             */
+            private String baseUrl;
+
+            /**
+             * Specifies where users will be redirected after authenticating successfully if they
+             * have not visited a secured page prior to authenticating or {@code alwaysUse} is
+             * true.
+             */
+            private String loginSuccessUrl = "/wicket";
+        }
+        
+        
 
     }
 
