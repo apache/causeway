@@ -107,6 +107,7 @@ public final class BlobJpaEmbeddable {
     }
 
     @Column(nullable = false, length = 255)
+    @Basic
     private String mimeType;
 
     @Column(nullable = false)
@@ -115,6 +116,7 @@ public final class BlobJpaEmbeddable {
     private byte[] bytes;
 
     @Column(nullable = false, length = 255)
+    @Basic
     private String name;
 
     public Blob asBlob() {

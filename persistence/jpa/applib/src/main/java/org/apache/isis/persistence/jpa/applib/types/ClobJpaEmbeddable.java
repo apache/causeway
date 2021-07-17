@@ -106,6 +106,7 @@ public final class ClobJpaEmbeddable {
     }
 
     @Column(nullable = false, length = 255)
+    @Basic
     private String mimeType;
 
     @Column(nullable = false)
@@ -114,6 +115,7 @@ public final class ClobJpaEmbeddable {
     private String chars;
 
     @Column(nullable = false, length = 255)
+    @Basic
     private String name;
 
     public Clob asClob() {

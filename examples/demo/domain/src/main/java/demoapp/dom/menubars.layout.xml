@@ -378,13 +378,14 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
         <mb3:menu>
             <mb3:named/>
             <mb3:section>
-                <mb3:serviceAction objectType="isis.ext.secman.MeService" id="me"/>
-	        </mb3:section>
-            <mb3:section>
                 <mb3:named>Configuration</mb3:named>
                 <mb3:serviceAction objectType="isis.conf.ConfigurationMenu" id="configuration"/>
 	        </mb3:section>
             <mb3:section>
+                <mb3:named>Security</mb3:named>
+                <mb3:serviceAction objectType="isis.ext.secman.MeService" id="me">
+                    <cpt:named>Me (SecMan)</cpt:named>
+                </mb3:serviceAction>
 	            <mb3:serviceAction objectType="isis.security.LogoutMenu" id="logout"/>
 	        </mb3:section>
         </mb3:menu>
