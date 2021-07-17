@@ -42,7 +42,8 @@ There are two alternatives:
 
 * manually map the class to an link:https://www.eclipse.org/eclipselink/documentation/3.0/concepts/entities005.htm#BABGBFDG[@Embeddable] class.
 
-The framework provides a number of off-the-shelf `@Embeddable` classes for this purpose; we think it is less boilerplate overall.
+We think the second approach is less boilerplate overall, and is easier to understand what is going on.
+The framework provides an `@Embeddable` classes for each of `Blob` and `Clob`, explained in the sections below.
 
 ==== Blobs
 
@@ -56,14 +57,14 @@ public class MyEntity ... {
     @Embedded
     private BlobJpaEmbeddable pdf;              // <.>
 
-   @Property()
-   @PropertyLayout()
-   public Blob getPdf() {                       // <.>
-       return BlobJpaEmbeddable.to(pod);
-   }
-   public void setPdf(final Blob pdf) {
-       this.pdf = BlobJpaEmbeddable.from(pdf);
-   }
+    @Property()
+    @PropertyLayout()
+    public Blob getPdf() {                      // <.>
+        return BlobJpaEmbeddable.toBlob(pdf);
+    }
+    public void setPdf(final Blob pdf) {
+        this.pdf = BlobJpaEmbeddable.fromBlob(pdf);
+    }
 }
 ----
 
@@ -72,3 +73,32 @@ public class MyEntity ... {
 
 
 TIP: if you have multiple instancs of an `@Embedded` type, the `@javax.persistence.AttributeOverrides` and `@javax.persistence.AttributeOverride` provide a standardised way of fine-tuning the column definitions.
+
+==== Clobs
+
+To map a xref:refguide:applib:index/value/Clob.adoc[Clob], use the xref:refguide:persistence:index/jpa/applib/types/ClobJpaEmbedded.adoc[ClobJpaEmbedded] class:
+
+[source]
+.MyEntity.java
+----
+public class MyEntity ... {
+
+    @Embedded
+    private ClobJpaEmbeddable xml;              // <.>
+
+    @Property()
+    @PropertyLayout()
+    public Clob getXml() {                      // <.>
+        return ClobJpaEmbeddable.toClob(xml);
+    }
+    public void setXml(final Clob xml) {
+        this.xml = ClobJpaEmbeddable.fromClob(xml);
+    }
+}
+----
+
+<.> the field as it is persisted by the ORM
+<.> the property as it is understood by Apache Isis.
+
+
+TIP: if you have multiple instances of an `@Embedded` type, the `@javax.persistence.AttributeOverrides` and `@javax.persistence.AttributeOverride` provide a standardised way of fine-tuning the column definitions.

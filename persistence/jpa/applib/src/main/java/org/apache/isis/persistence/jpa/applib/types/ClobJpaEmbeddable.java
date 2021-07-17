@@ -19,7 +19,7 @@
 
 package org.apache.isis.persistence.jpa.applib.types;
 
-import java.util.Arrays;
+import java.util.Objects;
 import java.util.Optional;
 
 import javax.persistence.Basic;
@@ -27,18 +27,18 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Lob;
 
-import org.apache.isis.applib.value.Blob;
+import org.apache.isis.applib.value.Clob;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
 
 /**
- * A utility class to enable the persisting of {@link org.apache.isis.applib.value.Blob}s.
+ * A utility class to enable the persisting of {@link org.apache.isis.applib.value.Clob}s.
  *
  * <p>
- * Although JPA supports custom value types, these can only be for simple values; see
- * <a href="https://github.com/eclipse-ee4j/jpa-api/issues/105">eclipse-ee4j/jpa-api/issues/105</a>.
+ * Although JPA supports custom value types, these can only be for simple values;
+ * see <a href="https://github.com/eclipse-ee4j/jpa-api/issues/105">eclipse-ee4j/jpa-api/issues/105</a>.
  * </p>
  *
  * <p>
@@ -48,24 +48,23 @@ import lombok.val;
  * </p>
  *
  * <p>
- * This class provides support for an alternative approach, where the Isis {@link Blob} is marshalled in and out of
+ * This class provides support for an alternative approach, where the Isis {@link Clob} is marshalled in and out of
  * this class.
  * </p>
  *
  * <p>
  *    Example usage:
- *
  *     <pre>
  *     &#064;Embedded
- *     private BlobJpaEmbeddable pdf;
+ *     private ClobJpaEmbeddable xml;
  *
  *     &#064;Property()
  *     &#064;PropertyLayout()
- *     public Blob getPdf() {
- *         return BlobJpaEmbeddable.toBlob(pdf);
+ *     public Clob getXml() {
+ *         return ClobJpaEmbeddable.toClob(xml);
  *     }
- *     public void setPdf(final Blob pdf) {
- *         this.pdf = BlobJpaEmbeddable.fromBlob(pdf);
+ *     public void setPdf(final Clob xml) {
+ *         this.xml = ClobJpaEmbeddable.fromClob(xml);
  *     }
  *    </pre>
  * </p>
@@ -74,36 +73,36 @@ import lombok.val;
  *     Lastly; note that {@link javax.persistence.AttributeOverrides} and {@link javax.persistence.AttributeOverride}
  *     provide a standardised way of fine-tuning the column definitions.
  * </p>
- *
+ * 
  * @since 2.x {@index}
  */
 @Embeddable
 @Getter @Setter
-public final class BlobJpaEmbeddable {
+public final class ClobJpaEmbeddable {
 
     /**
-     * Factory method to marshall a {@link Blob} into a {@link BlobJpaEmbeddable}
+     * Factory method to marshall a {@link Clob} into a {@link ClobJpaEmbeddable}
      * 
-     * @see #toBlob(BlobJpaEmbeddable)
+     * @see #toClob(ClobJpaEmbeddable)
      */
-    public static BlobJpaEmbeddable fromBlob(Blob blob) {
-        if(blob == null) {
+    public static ClobJpaEmbeddable fromClob(Clob clob) {
+        if(clob == null) {
             return null;
         }
-        val blobJpaEmbeddable = new BlobJpaEmbeddable();
-        blobJpaEmbeddable.bytes = blob.getBytes();
-        blobJpaEmbeddable.mimeType = blob.getMimeType().toString();
-        blobJpaEmbeddable.name = blob.getName();
-        return blobJpaEmbeddable;
+        val clobJpaEmbeddable = new ClobJpaEmbeddable();
+        clobJpaEmbeddable.chars = clob.getChars().toString();
+        clobJpaEmbeddable.mimeType = clob.getMimeType().toString();
+        clobJpaEmbeddable.name = clob.getName();
+        return clobJpaEmbeddable;
     }
 
     /**
-     * Reciprocal method to marshall a {@link BlobJpaEmbeddable} into a {@link Blob}
-     * 
-     * @see #fromBlob(Blob)
+     * Reciprocal method to marshall a {@link ClobJpaEmbeddable} into a {@link Clob}
+     *
+     * @see #fromClob(Clob)
      */
-    public static Blob toBlob(final BlobJpaEmbeddable blobJpaEmbeddable) {
-        return Optional.ofNullable(blobJpaEmbeddable).map(BlobJpaEmbeddable::asBlob).orElse(null);
+    public static Clob toClob(final ClobJpaEmbeddable clobJpaEmbeddable) {
+        return Optional.ofNullable(clobJpaEmbeddable).map(ClobJpaEmbeddable::asClob).orElse(null);
     }
 
     @Column(nullable = false, length = 255)
@@ -112,19 +111,19 @@ public final class BlobJpaEmbeddable {
     @Column(nullable = false)
     @Lob
     @Basic
-    private byte[] bytes;
+    private String chars;
 
     @Column(nullable = false, length = 255)
     private String name;
 
-    public Blob asBlob() {
-        return new Blob(name, mimeType, bytes);
+    public Clob asClob() {
+        return new Clob(name, mimeType, chars);
     }
 
     
     @Override
     public String toString() {
-        return asBlob().toString();
+        return asClob().toString();
     }
 
     @Override
@@ -134,18 +133,18 @@ public final class BlobJpaEmbeddable {
         if (o == null || getClass() != o.getClass())
             return false;
 
-        final BlobJpaEmbeddable that = (BlobJpaEmbeddable) o;
+        final ClobJpaEmbeddable that = (ClobJpaEmbeddable) o;
 
         if (mimeType != null ? !mimeType.equals(that.mimeType) : that.mimeType != null)
             return false;
-        if (!Arrays.equals(bytes, that.bytes))
+        if (!Objects.equals(chars, that.chars))
             return false;
         return name != null ? name.equals(that.name) : that.name == null;
     }
 
     @Override public int hashCode() {
         int result = mimeType != null ? mimeType.hashCode() : 0;
-        result = 31 * result + Arrays.hashCode(bytes);
+        result = 31 * result + Objects.hashCode(chars);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
     }

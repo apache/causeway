@@ -18,8 +18,6 @@
  */
 package demoapp.dom.types.isis.blobs.jpa;
 
-import java.util.Optional;
-
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -38,7 +36,7 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
-import org.apache.isis.persistence.jpa.integration.types.BlobJpaEmbeddable;
+import org.apache.isis.persistence.jpa.applib.types.BlobJpaEmbeddable;
 import org.springframework.context.annotation.Profile;
 
 import demoapp.dom.types.isis.blobs.persistence.IsisBlobEntity;
@@ -81,10 +79,10 @@ public class IsisBlobJpa
     @Title(prepend = "Blob JPA entity: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     public Blob getReadOnlyProperty() {
-        return readOnlyProperty.toBlob();
+        return BlobJpaEmbeddable.toBlob(readOnlyProperty);
     }
     public void setReadOnlyProperty(final Blob readOnlyProperty) {
-        this.readOnlyProperty = BlobJpaEmbeddable.from(readOnlyProperty);
+        this.readOnlyProperty = BlobJpaEmbeddable.fromBlob(readOnlyProperty);
     }
 
     @AttributeOverrides({
@@ -98,11 +96,11 @@ public class IsisBlobJpa
     @Property(editing = Editing.ENABLED)                            // <.>
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     public Blob getReadWriteProperty() {
-        return readWriteProperty.toBlob();
+        return BlobJpaEmbeddable.toBlob(readWriteProperty);
     }
 
     public void setReadWriteProperty(final Blob readWriteProperty) {
-        this.readWriteProperty = BlobJpaEmbeddable.from(readWriteProperty);
+        this.readWriteProperty = BlobJpaEmbeddable.fromBlob(readWriteProperty);
     }
 
     @AttributeOverrides({
@@ -116,11 +114,11 @@ public class IsisBlobJpa
     @Property(optionality = Optionality.OPTIONAL)                   // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
     public Blob getReadOnlyOptionalProperty() {
-        return Optional.ofNullable(readOnlyOptionalProperty).map(BlobJpaEmbeddable::toBlob).orElse(null);
+        return BlobJpaEmbeddable.toBlob(readOnlyOptionalProperty);
     }
 
     public void setReadOnlyOptionalProperty(final Blob readOnlyOptionalProperty) {
-        this.readOnlyOptionalProperty = BlobJpaEmbeddable.from(readOnlyOptionalProperty);
+        this.readOnlyOptionalProperty = BlobJpaEmbeddable.fromBlob(readOnlyOptionalProperty);
     }
 
 
@@ -135,11 +133,11 @@ public class IsisBlobJpa
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
     public Blob getReadWriteOptionalProperty() {
-        return Optional.ofNullable(readWriteOptionalProperty).map(BlobJpaEmbeddable::toBlob).orElse(null);
+        return BlobJpaEmbeddable.toBlob(readWriteOptionalProperty);
     }
 
     public void setReadWriteOptionalProperty(final Blob readWriteOptionalProperty) {
-        this.readWriteOptionalProperty = BlobJpaEmbeddable.from(readWriteOptionalProperty);
+        this.readWriteOptionalProperty = BlobJpaEmbeddable.fromBlob(readWriteOptionalProperty);
     }
 }
 //end::class[]
