@@ -47,6 +47,7 @@ import lombok.val;
 public class SpringSecurityFilter implements Filter {
 
     @Autowired private InteractionService interactionService;
+    @Inject List<AuthenticationConverter> converters;
 
     @Override
     public void doFilter(
@@ -64,14 +65,13 @@ public class SpringSecurityFilter implements Filter {
         }
 
         UserMemento userMemento = null;
-        for (AuthenticationConverter converter : converters) {
+        for (final AuthenticationConverter converter : converters) {
             try {
                 userMemento = converter.convert(springAuthentication);
                 if(userMemento != null) {
                     break;
                 }
-            } catch(Exception ex) {
-                continue;
+            } catch(final Exception ignored) {
             }
         }
 
@@ -89,5 +89,4 @@ public class SpringSecurityFilter implements Filter {
                 ()->filterChain.doFilter(servletRequest, servletResponse));
     }
 
-    @Inject List<AuthenticationConverter> converters;
 }

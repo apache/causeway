@@ -140,6 +140,12 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
         log(SessionLoggingService.Type.LOGOUT, userName, causedBy);
     }
 
+    //
+    // TODO: this seems overly complicated; we appear to be caching the InteractionContext
+    //  in the this.authentication field, and updating it if we ever find it is out of sync.
+    //  A spike to just delegate down to InteractionService#currentInteractionContext() didn't work, so there's
+    //  some hidden subtlety here; but it feels as though it could be simplified...
+    //
     public synchronized InteractionContext getAuthentication() {
 
         commonContext.getInteractionLayerTracker().currentInteractionContext()
@@ -160,7 +166,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
                         }
                     } else {
                         // different user name
-                        if (isSignedIn()) {
+                        if (isSignedIn() && !currentAuthentication.getUser().isImpersonating() ){
                             // invalidate previous session
                             super.invalidate();
                         }

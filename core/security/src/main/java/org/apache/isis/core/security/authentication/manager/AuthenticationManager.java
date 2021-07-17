@@ -113,9 +113,7 @@ public class AuthenticationManager {
             }
 
             return null;
-
         });
-
     }
 
     private String getUnusedRandomCode() {
@@ -145,6 +143,9 @@ public class AuthenticationManager {
         }
         val userMemento = authentication.getUser();
         if(userMemento.getAuthenticationSource().isExternal()) {
+            return true;
+        }
+        if(userMemento.isImpersonating()) {
             return true;
         }
         final String userName = userByValidationCode.get(userMemento.getAuthenticationCode());

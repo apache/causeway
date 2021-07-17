@@ -19,15 +19,7 @@
 package org.apache.isis.core.security.authentication.logout;
 
 /**
- *
- * @since Apr 9, 2020
- * TODO we are at early stages of the design, a better idea occurred:
- * actually model the SignIn page as a true ViewModel similar to how we
- * render the home-page; this should allow for the LogoutHandler to be called
- * from the framework more directly and not from within the LogoutMenu's
- * logout action, which is more complicated because, this happens within
- * the context of an IsisInteraction, where we cannot simply purge the
- * current session, when in the middle of an interaction
+ * To allow viewers to close their session when a logout is requested.
  */
 public interface LogoutHandler {
 

@@ -78,7 +78,7 @@ public class ImpersonateMenu {
     public void impersonate(
             final String userName) {
 
-        this.userService.impersonateUser(userName, Collections.emptyList());
+        this.userService.impersonateUser(userName, Collections.singletonList("org.apache.isis.viewer.wicket.roles.USER"));
         this.messageService.informUser("Now impersonating " + userName);
     }
     public boolean hideImpersonate() {

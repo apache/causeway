@@ -24,21 +24,21 @@ import org.apache.isis.applib.SomeDomainClass;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.internaltestsupport.contract.ValueTypeContractTestAbstract;
 
-public class LogicalTypeTest_valueSemantics 
+public class LogicalTypeTest_valueSemantics
 extends ValueTypeContractTestAbstract<LogicalType> {
 
     @Override
     protected List<LogicalType> getObjectsWithSameValue() {
         return _Lists.of(
                 LogicalType.fqcn(SomeDomainClass.class),
-                LogicalType.lazy(SomeDomainClass.class, ()->SomeDomainClass.class.getName()));
+                LogicalType.lazy(SomeDomainClass.class, SomeDomainClass.class::getName));
     }
 
     @Override
     protected List<LogicalType> getObjectsWithDifferentValue() {
         return _Lists.of(
                 LogicalType.fqcn(Object.class),
-                LogicalType.lazy(List.class, ()->List.class.getName()));
+                LogicalType.lazy(List.class, List.class::getName));
     }
 
 

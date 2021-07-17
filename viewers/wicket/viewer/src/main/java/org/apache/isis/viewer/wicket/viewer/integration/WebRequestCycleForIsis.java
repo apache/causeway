@@ -30,7 +30,6 @@ import org.apache.wicket.Application;
 import org.apache.wicket.IPageFactory;
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.Page;
-import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.Session;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
@@ -52,12 +51,12 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.isis.applib.services.exceprecog.Recognition;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.user.ImpersonatedUserHolder;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.interaction.integration.IsisRequestCycle;
 import org.apache.isis.core.interaction.session.MessageBroker;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
@@ -71,8 +70,8 @@ import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
 import org.apache.isis.viewer.wicket.ui.pages.mmverror.MmvErrorPage;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 /**
  * Isis-specific implementation of the Wicket's {@link RequestCycle},
@@ -113,9 +112,6 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
 
     }
 
-    public static final MetaDataKey<IsisRequestCycle> REQ_CYCLE_HANDLE_KEY =
-            new MetaDataKey<IsisRequestCycle>() {private static final long serialVersionUID = 1L; };
-
     private static final MetaDataKey<SessionLifecyclePhase> SESSION_LIFECYCLE_PHASE_KEY =
             new MetaDataKey<SessionLifecyclePhase>() { private static final long serialVersionUID = 1L; };
 
@@ -139,21 +135,31 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         }
 
         val commonContext = getCommonContext();
-        val authentication = AuthenticatedWebSessionForIsis.get().getAuthentication();
+        val interactionService = commonContext.lookupServiceElseFail(InteractionService.class);
 
-        if (authentication == null) {
-            log.debug("onBeginRequest out - session was not opened (because no authentication)");
-            return;
+        // if there is an interactionContext already (as some authentication mechanisms setup in filters, eg
+        // SpringSecurityFilter), then just use it.
+        // otherwise, take the value cached on AuthenticatedWebSessionForIsis.
+        val interactionContextIfAny = interactionService.currentInteractionContext();
+        val impersonatedUserHolder = commonContext.lookupServiceElseFail(ImpersonatedUserHolder.class);
+        val userMementoImpersonatedIfAny = impersonatedUserHolder.getUserMemento();
+        if(userMementoImpersonatedIfAny.isPresent()) {
+            val userMementoImpersonated = userMementoImpersonatedIfAny.get();
+            interactionService.openInteraction(
+                    InteractionContext.ofUserWithSystemDefaults(userMementoImpersonated));
+
+            // as a side-effect, sync with Wicket viewer
+            AuthenticatedWebSessionForIsis.get().getAuthentication();
+
+        } else {
+            // fallback to using that cached by Wicket viewer
+            val interactionContext = AuthenticatedWebSessionForIsis.get().getAuthentication();
+            if (interactionContext == null) {
+                log.debug("onBeginRequest out - session was not opened (because no authentication)");
+                return;
+            }
+            interactionService.openInteraction(interactionContext);
         }
-
-        val isisRequestCycle = IsisRequestCycle.next(
-                commonContext.lookupServiceElseFail(InteractionService.class),
-                commonContext.lookupServiceElseFail(ImpersonatedUserHolder.class)
-                );
-
-        requestCycle.setMetaData(REQ_CYCLE_HANDLE_KEY, isisRequestCycle);
-
-        isisRequestCycle.onBeginRequest(authentication);
 
         log.debug("onBeginRequest out - session was opened");
     }
@@ -222,30 +228,6 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
     public void onRequestHandlerExecuted(RequestCycle requestCycle, IRequestHandler handler) {
         log.debug("onRequestHandlerExecuted: handler: {}", handler.getClass().getName());
 
-        try {
-
-            val isisRequestCycle = requestCycle.getMetaData(REQ_CYCLE_HANDLE_KEY);
-
-            if(isisRequestCycle!=null) {
-                isisRequestCycle.onRequestHandlerExecuted();
-            }
-
-        } catch(Exception ex) {
-
-            if(handler instanceof RenderPageRequestHandler) {
-                RenderPageRequestHandler requestHandler = (RenderPageRequestHandler) handler;
-                if(requestHandler.getPage() instanceof ErrorPage) {
-                    // do nothing
-                    return;
-                }
-            }
-
-            log.debug("onRequestHandlerExecuted: isisRequestCycle.onRequestHandlerExecuted threw {}",
-                    ex.getClass().getName());
-
-            // shouldn't return null given that we're in a session ...
-            throw new RestartResponseException(errorPageProviderFor(ex), RedirectPolicy.ALWAYS_REDIRECT);
-        }
     }
 
     /**
@@ -256,12 +238,9 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
 
         log.debug("onEndRequest");
 
-        val isisRequestCycle = requestCycle.getMetaData(REQ_CYCLE_HANDLE_KEY);
-        requestCycle.setMetaData(REQ_CYCLE_HANDLE_KEY, null);
-
-        if(isisRequestCycle!=null) {
-            isisRequestCycle.onEndRequest();
-        }
+        getCommonContext().lookupService(InteractionService.class).ifPresent(
+            InteractionService::closeInteractionLayers
+        );
 
     }
 
