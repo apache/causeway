@@ -51,9 +51,7 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.isis.applib.services.exceprecog.Recognition;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
-import org.apache.isis.applib.services.user.ImpersonatedUserHolder;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -134,32 +132,20 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
             return;
         }
 
+        val authenticatedWebSessionForIsis = AuthenticatedWebSessionForIsis.get();
+
+        authenticatedWebSessionForIsis.syncExternalAuthenticationIfAvailable();
+
+        val interactionContext = authenticatedWebSessionForIsis.getAuthentication();
+        if (interactionContext == null) {
+            log.warn("onBeginRequest out - session was not opened (because no authentication)");
+            return;
+        }
+
         val commonContext = getCommonContext();
         val interactionService = commonContext.lookupServiceElseFail(InteractionService.class);
-
-        // if there is an interactionContext already (as some authentication mechanisms setup in filters, eg
-        // SpringSecurityFilter), then just use it.
-        // otherwise, take the value cached on AuthenticatedWebSessionForIsis.
-        val interactionContextIfAny = interactionService.currentInteractionContext();
-        val impersonatedUserHolder = commonContext.lookupServiceElseFail(ImpersonatedUserHolder.class);
-        val userMementoImpersonatedIfAny = impersonatedUserHolder.getUserMemento();
-        if(userMementoImpersonatedIfAny.isPresent()) {
-            val userMementoImpersonated = userMementoImpersonatedIfAny.get();
-            interactionService.openInteraction(
-                    InteractionContext.ofUserWithSystemDefaults(userMementoImpersonated));
-
-            // as a side-effect, sync with Wicket viewer
-            AuthenticatedWebSessionForIsis.get().getAuthentication();
-
-        } else {
-            // fallback to using that cached by Wicket viewer
-            val interactionContext = AuthenticatedWebSessionForIsis.get().getAuthentication();
-            if (interactionContext == null) {
-                log.debug("onBeginRequest out - session was not opened (because no authentication)");
-                return;
-            }
-            interactionService.openInteraction(interactionContext);
-        }
+        // Note: this is a no-op if an interactionContext layer was already opened and is unchanged.
+        interactionService.openInteraction(interactionContext);
 
         log.debug("onBeginRequest out - session was opened");
     }

@@ -22,6 +22,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -531,7 +532,12 @@ public abstract class ApplicationUser
         if(cachedPermissionSet != null) {
             return cachedPermissionSet;
         }
-        val permissions = getApplicationPermissionRepository().findByUser(this);
+        List<ApplicationPermission> permissions;
+        if(userService.isImpersonating()) {
+            permissions = getApplicationPermissionRepository().findByUserMemento(userService.getUser());
+        } else {
+            permissions = getApplicationPermissionRepository().findByUser(this);
+        }
         return cachedPermissionSet =
                 new ApplicationPermissionValueSet(
                         _Lists.map(_Casts.uncheckedCast(permissions), ApplicationPermission.Functions.AS_VALUE),
