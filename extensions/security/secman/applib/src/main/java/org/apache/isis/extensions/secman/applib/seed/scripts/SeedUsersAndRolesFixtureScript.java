@@ -23,6 +23,8 @@ import javax.inject.Inject;
 import org.apache.isis.extensions.secman.applib.SecmanConfiguration;
 import org.apache.isis.extensions.secman.applib.role.seed.IsisAppFeatureRoleAndPermissions;
 import org.apache.isis.extensions.secman.applib.role.seed.IsisConfigurationRoleAndPermissions;
+import org.apache.isis.extensions.secman.applib.role.seed.IsisExtCommandReplayPrimaryRoleAndPermissions;
+import org.apache.isis.extensions.secman.applib.role.seed.IsisExtCommandReplaySecondaryRoleAndPermissions;
 import org.apache.isis.extensions.secman.applib.role.seed.IsisExtH2ConsoleRoleAndPermissions;
 import org.apache.isis.extensions.secman.applib.role.seed.IsisExtSecmanAdminRoleAndPermissions;
 import org.apache.isis.extensions.secman.applib.role.seed.IsisExtSecmanRegularUserRoleAndPermissions;
@@ -66,6 +68,8 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
         executionContext.executeChildren(this,
                 new IsisAppFeatureRoleAndPermissions(),
                 new IsisPersistenceJdoMetaModelRoleAndPermissions(),
+                new IsisExtCommandReplayPrimaryRoleAndPermissions(),
+                new IsisExtCommandReplaySecondaryRoleAndPermissions(),
                 new IsisExtH2ConsoleRoleAndPermissions(),
                 new IsisViewerRestfulObjectsSwaggerRoleAndPermissions(),
                 new IsisSudoImpersonateRoleAndPermissions(),

@@ -233,6 +233,14 @@ Browse the application features + permissions (from the "Prototyping" menu).
 +
 Download the JDO metamodel (from the "Prototyping" menu).
 
+** `IsisExtCommandReplayPrimaryRoleAndPermissions.ROLE_NAME`
++
+Access to the command replay primary menu
+
+** `IsisExtCommandReplaySecondaryRoleAndPermissions.ROLE_NAME`
++
+Access to the command replay secondary menu
+
 ** `IsisExtH2ConsoleRoleAndPermissions.ROLE_NAME`
 +
 Access the h2 console (from the "Prototyping" menu)
@@ -357,6 +365,8 @@ public class UserToRole__bob_allRoles extends AbstractUserAndRolesFixtureScript 
         , IsisConfiguration.Extensions.Secman.Seed.REGULAR_USER_ROLE_NAME_DEFAULT // <.>
         , IsisAppFeatureRoleAndPermissions.ROLE_NAME                   // <.>
         , IsisPersistenceJdoMetaModelRoleAndPermissions.ROLE_NAME      // <7>
+        , IsisExtCommandReplayPrimaryRoleAndPermissions.ROLE_NAME      // <7>
+        , IsisExtCommandReplaySecondaryRoleAndPermissions.ROLE_NAME    // <7>
         , IsisExtH2ConsoleRoleAndPermissions.ROLE_NAME                 // <7>
         , IsisViewerRestfulObjectsSwaggerRoleAndPermissions.ROLE_NAME  // <7>
         , IsisSudoImpersonateRoleAndPermissions.ROLE_NAME              // <7>
