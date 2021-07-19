@@ -47,18 +47,4 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
         })
 public class DemoModuleCommon {
 
-    @Bean
-    public SecmanConfiguration securityModuleConfigBean() {
-        return SecmanConfiguration.builder()
-                .adminUserName("sven")
-                .adminAdditionalNamespacePermission("demo")
-                .adminAdditionalNamespacePermission("isis")
-                .build();
-    }
-
-    @Bean
-    public PermissionsEvaluationService permissionsEvaluationService() {
-        return new PermissionsEvaluationServiceAllowBeatsVeto();
-    }
-
 }

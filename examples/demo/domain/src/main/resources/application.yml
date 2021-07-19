@@ -106,6 +106,20 @@ isis:
     schema:
        autoCreateSchemas: isisExtensionsSecman,demo
 
+  extensions:
+    secman:
+      seed:
+        admin:
+          user-name: "sven"
+          password: "pass"
+          role-name: "isis-ext-secman-admin"
+          namespace-permissions:
+            sticky: "isis"
+            additional: "demo"
+        regular-user:
+          role-name: "isis-ext-secman-user"
+      permissionsEvaluationPolicy: ALLOW_BEATS_VETO
+
   testing:
     fixtures:
       fixture-scripts-specification:
@@ -160,3 +174,4 @@ management:
   endpoint:
     health:
       enabled: true
+
