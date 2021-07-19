@@ -154,12 +154,12 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         } else {
             if(userMementoImpersonatedIfAny.isPresent()){
                 val userMementoImpersonated = userMementoImpersonatedIfAny.get();
-                InteractionContext.ofUserWithSystemDefaults(userMementoImpersonated);
+                interactionService.openInteraction(InteractionContext.ofUserWithSystemDefaults(userMementoImpersonated));
             } else {
                 // fallback to using that cached by Wicket viewer
                 val interactionContext = AuthenticatedWebSessionForIsis.get().getAuthentication();
                 if (interactionContext == null) {
-                    log.debug("onBeginRequest out - session was not opened (because no authentication)");
+                    log.warn("onBeginRequest out - session was not opened (because no authentication)");
                     return;
                 }
                 interactionService.openInteraction(interactionContext);
