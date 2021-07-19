@@ -30,6 +30,7 @@ import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.session.SessionLoggingService;
+import org.apache.isis.applib.services.user.ImpersonatedUserHolder;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.user.UserMemento.AuthenticationSource;
 import org.apache.isis.commons.collections.Can;
@@ -133,27 +134,44 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
         log(SessionLoggingService.Type.LOGOUT, userName, causedBy);
     }
 
+    /**
+     * If there is an {@link InteractionContext} already (as some authentication mechanisms setup in filters, eg
+     * SpringSecurityFilter), then just use it.
+     *
+     * <p>
+     *     This method is called early on by {@link WebRequestCycleForIsis}.
+     * </p>
+     */
+    public void syncExternalAuthenticationIfAvailable() {
+
+        val interactionService = commonContext.lookupServiceElseFail(InteractionService.class);
+        val interactionContextIfAny = interactionService.currentInteractionContext();
+        interactionContextIfAny.ifPresent(interactionContext -> this.authentication = interactionContext);
+    }
+
+    /**
+     * Returns an {@link InteractionContext} either as authenticated (and then cached on the session subsequently),
+     * or taking into account {@link ImpersonatedUserHolder impersonation}.
+     *
+     * <p>
+     *     The session must still {@link AuthenticationManager#isSessionValid(InteractionContext) be valid}, though
+     *     note that this will always be true for externally authenticated users.
+     * </p>
+     */
     public synchronized InteractionContext getAuthentication() {
 
-        commonContext.getInteractionLayerTracker().currentInteractionContext()
-        .ifPresent(currentAuthentication->{
+        if(this.authentication == null) {
+            return null;
+        }
+        if(!getAuthenticationManager().isSessionValid(this.authentication)) {
+            return null;
+        }
+        signIn(true);
 
-            if (getAuthenticationManager().isSessionValid(currentAuthentication)) {
-                //
-                signIn(true);
-                this.authentication = currentAuthentication;
-            } else {
-                // ???
-                // ??? we have never had an else, but should we invalidate the session, eg:
-                //
-                // super.invalidate();
-                //
-                // ???
-            }
-
-        });
-
-        return this.authentication;
+        val impersonatedUserHolder = commonContext.lookupServiceElseFail(ImpersonatedUserHolder.class);
+        return impersonatedUserHolder.getUserMemento()
+                .map(x -> this.authentication.withUser(x))
+                .orElse(this.authentication);
     }
 
     /**
