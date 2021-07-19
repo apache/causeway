@@ -20,6 +20,8 @@ package org.apache.isis.core.metamodel.interactions.managed;
 
 import java.util.Optional;
 
+import org.apache.logging.log4j.Logger;
+
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.Veto;
@@ -35,6 +37,7 @@ public interface ManagedParameter extends ManagedValue, ManagedFeature {
     @Override
     ObjectActionParameter getMetaModel();
     ParameterNegotiationModel getNegotiationModel();
+    Logger _getLogger();
 
     /**
      * @param params
@@ -55,9 +58,8 @@ public interface ManagedParameter extends ManagedValue, ManagedFeature {
 
         } catch (final Exception ex) {
 
-            return Optional.of(InteractionVeto
-                    .readonly(
-                            new Veto(ex.getLocalizedMessage())));
+            _getLogger().warn(ex.getLocalizedMessage(), ex);
+            return Optional.of(InteractionVeto.readonly(new Veto("failure during usability evaluation")));
 
         }
 
