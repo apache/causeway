@@ -4,15 +4,32 @@
 :page-partial:
 
 
-This guide describes the configuration of the Keycloak implementation of Apache Isis' `Authenticator and `Authorizor` APIs.
+This guide describes the configuration of the Keycloak implementation of Apache Isis' `Authenticator` API.
+
+It does _not_ however provide any implementation of xref:refguide:core:index/security/authorization/Authorizor.adoc[Authorizor] SPI.
+You will therefore need to configure an alternative implementation, eg the xref:bypass:about.adoc[Bypass] implementation (to disable authorisation checks completely), or use the xref:secman:about.adoc[SecMan] implementation.
 
 
-include::docs:mavendeps:partial$setup-and-configure-mavendeps-webapp.adoc[leveloffset=+1]
+== Dependency
+
+In the webapp module of your application, add the following dependency:
+
+[source,xml]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.isis.security</groupId>
+        <artifactId>isis-security-keycloak</artifactId>
+    </dependency>
+</dependencies>
+----
+
 
 
 == Update AppManifest
 
-In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the `IsisModuleSecurityKeycloak` module and remove any other `IsisModuleSecurityXxx` modules.
 
 [source,java]
 .AppManifest.java
@@ -27,24 +44,188 @@ public class AppManifest {
 }
 ----
 
-Make sure that no other `IsisModuleSecurityXxx` module is imported.
+Also, as this module provides no implementation of the xref:refguide:core:index/security/authorization/Authorizor.adoc[Authorizor] SPI, instead you will need some an alternative implementation, such as the xref:bypass:about.adoc[Bypass] implementation.
+(Note: this will in effect disable authorisation checks).
+
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        IsisModuleSecurityKeycloak.class,   // <.>
+        AuthorizorBypass.class,             // <.>
+        ...
+})
+public class AppManifest {
+}
+----
+<.> make sure that no other `IsisModuleSecurityXxx` module is imported.
+<.> or some other implementation of `Authorizor`.
 
 
-== Design
-
-The module configures a filter that expects Keycloak to set three `X-Auth-Xxx` headers:
-
-* `X-Auth-Userid` - is used as the username
-* `X-Auth-Roles` - is a comma-separated set of roles.
-+
-The `org.apache.isis.viewer.wicket.roles.USER` role -- as required by xref:vw::about.adoc[Web UI (Wicket viewer)]  -- is automatically added to this list of roles.
-
-* `X-Auth-Subject` - is unused
-
-The user and roles are accessible programmatically from the xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento] obtained from xref:refguide:applib:index/services/user/UserService.adoc[UserService] domain service.
 
 
+
+[#walk-through]
 == Walk-through
 
-WARNING: TODO - show how this fits together.
+For simplicity, we'll run Keycloak in Docker with an in-memory database.
+Obviously in production you would need a persistent database.
+
+NOTE: These notes were adapted from the tutorial provided on link:https://www.keycloak.org/getting-started/getting-started-docker[keycloak's website].
+
+
+=== Startup keycloak and login as keycloak admin
+
+* Start up keycloak; we'll run on port _9090_:
++
+[source,bash]
+----
+docker run -p 9090:8080 \
+    -e KEYCLOAK_USER=admin \
+    -e KEYCLOAK_PASSWORD=admin \
+    quay.io/keycloak/keycloak:14.0.0
+----
+
+* login to the Admin console:
++
+image::login-to-admin-console.png[width=300px]
++
+and
++
+image::login-to-admin-console-prompt.png[width=300px]
+
+
+=== Create a realm for simpleapp
+
+It's good practice to use a separate realm for each application:
+
+* create a realm:
++
+image::add-realm-prompt.png[width=250px]
++
+and:
++
+image::define-simpleapp-realm.png[width=400px]
+
+
+=== Create a Keycloak client for the application
+
+From the perspective of Keycloak, the Apache Isis domain application is a client: the domain app redirects its login page to Keycloak (and be redirected back on success).
+We therefore need to create the Keycloak client for our app:
+
+* create the client:
++
+image::create-simpleapp-client.png[width=400px]
+
+* specify _Access Type_ = confidential, and _Valid Redirect URI_ for the client:
++
+image::client-app-config.png[width=400px]
+
+* copy the secret from the "credentials" tab:
++
+image::client-secret.png[width=600px]
+
+
+=== Configure the application as a Keycloak client
+
+* the keycloak config:
++
+[source,properties]
+.config/application.properties
+----
+isis.security.keycloak.realm=simpleapp                                  #<.>
+isis.security.keycloak.base-url=http://localhost:9090/auth              #<.>
+
+kc.realm-url=${isis.security.keycloak.base-url}/realms/${isis.security.keycloak.realm} #<.>
+
+spring.security.oauth2.client.registration.simpleapp.client-id=simpleapp-client #<.>
+spring.security.oauth2.client.registration.simpleapp.client-name=Simple App
+spring.security.oauth2.client.registration.simpleapp.client-secret=a04b1b32-3e8a-4803-b7ec-70bfb7e8ec2b #<.>
+
+spring.security.oauth2.client.registration.simpleapp.provider=keycloak       #<.>
+spring.security.oauth2.client.registration.simpleapp.authorization-grant-type=authorization_code
+spring.security.oauth2.client.registration.simpleapp.scope=openid, profile
+spring.security.oauth2.client.registration.simpleapp.redirect-uri={baseUrl}/login/oauth2/code/{registrationId}
+spring.security.oauth2.client.provider.keycloak.authorization-uri=${kc.realm-url}/protocol/openid-connect/auth
+spring.security.oauth2.client.provider.keycloak.jwk-set-uri=${kc.realm-url}/protocol/openid-connect/certs
+spring.security.oauth2.client.provider.keycloak.token-uri=${kc.realm-url}/protocol/openid-connect/token
+spring.security.oauth2.client.provider.keycloak.user-name-attribute=preferred_username
+----
+
+<.> as defined in keycloak.
+The registration properties below must specify this property as the `registration` key.
+<.> URL where keycloak is running
+<.> application-defined property, just to reduce the boilerplate below
+<.> must match the client name entered in the admin console.
+<.> as taken from the credential tab of the realm
+<.> remaining property values are boilerplate and should not need to change.
+
+IMPORTANT: Make sure that with the key prefix `spring.security.oauth2.client.registration.xxx`, the "xxx" is the name of the realm being registered to Spring Security.
+
+
+=== Create sven user in the realm
+
+* add sven user:
++
+image::add-sven-user-prompt.png[width=400px]
+
+* add credentials (password):
++
+image::sven-credentials.png[width=400px]
+
+
+//=== Create 'regular-user' role in the realm
+//
+//This is optional, but illustrates that roles to users within keycloak:
+//
+//* create role:
+//+
+//image::create-regular-user-role.png[width=400px]
+//
+//* add our 'sven' user to the 'regular-user' role:
+//+
+//image::add-sven-to-regular-user-role.png[width=800px]
+
+
+=== Check the account
+
+* check that the account is setup by navigating to link:http://localhost:9090/auth/realms/simpleapp/account/[]:
++
+image::account-mgmt.png[width=800px]
++
+sign-in:
++
+image::test-sven-login.png[width=300px]
+
+* should be logged in ok:
++
+image::logged-in-as-sven.png[width=800px]
+
+
+=== Test
+
+Finally, start the Apache Isis application:
+
+* and confirm that navigating to http://localhost:8080 redirects to the keycloak login:
++
+image::keycloak-login-page.png[width=400px]
+
+* you should be able to log into the app:
++
+image::logged-into-app-as-sven.png[width=300px]
+
+* if running in prototype mode, you should still be able to impersonate other users:
++
+image::impersonate-as-fred.png[width=300px]
+
+* Logout should of course take you back to the login page.
+
+
+== Resources:
+
+* link:https://www.keycloak.org/docs/latest/securing_apps/index.html#_spring_boot_adapter[Keycloak documentation].
+* link:https://www.baeldung.com/spring-boot-keycloak[baeldung article].
+* link:https://dzone.com/articles/secure-spring-boot-application-with-keycloak[Dzone article]
 
