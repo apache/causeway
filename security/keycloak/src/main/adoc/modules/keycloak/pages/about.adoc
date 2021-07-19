@@ -99,7 +99,7 @@ image::login-to-admin-console-prompt.png[width=300px]
 
 === Create a realm for simpleapp
 
-WARNING: TODO: clean up these screenshots, make consistent with text.
+It's good practice to use a separate realm for each application:
 
 * create a realm:
 +
@@ -110,7 +110,10 @@ and:
 image::define-simpleapp-realm.png[width=400px]
 
 
-=== Create a client
+=== Create a Keycloak client for the application
+
+From the perspective of Keycloak, the Apache Isis domain application is a client: the domain app redirects its login page to Keycloak (and be redirected back on success).
+We therefore need to create the Keycloak client for our app:
 
 * create the client:
 +
@@ -124,12 +127,6 @@ image::client-app-config.png[width=400px]
 +
 image::client-secret.png[width=600px]
 
-=== Create 'regular-user' role in the realm
-
-* create role:
-+
-image::create-regular-user-role.png[width=400px]
-
 
 === Configure the application as a Keycloak client
 
@@ -138,20 +135,19 @@ image::create-regular-user-role.png[width=400px]
 [source,properties]
 .config/application.properties
 ----
-isis.security.keycloak.realm=demo                                       #<.>
+isis.security.keycloak.realm=simpleapp                                  #<.>
 isis.security.keycloak.base-url=http://localhost:9090/auth              #<.>
 
 kc.realm-url=${isis.security.keycloak.base-url}/realms/${isis.security.keycloak.realm} #<.>
 
-spring.security.oauth2.client.registration.demo.client-id=app-demo      #<.>
-spring.security.oauth2.client.registration.demo.client-name=Demo App
-spring.security.oauth2.client.registration.demo.client-secret=e3f519b4-0272-4261-9912-8b7453ac4ecd                    #<.>
+spring.security.oauth2.client.registration.simpleapp.client-id=simpleapp-client #<.>
+spring.security.oauth2.client.registration.simpleapp.client-name=Simple App
+spring.security.oauth2.client.registration.simpleapp.client-secret=a04b1b32-3e8a-4803-b7ec-70bfb7e8ec2b #<.>
 
-
-spring.security.oauth2.client.registration.demo.provider=keycloak       #<.>
-spring.security.oauth2.client.registration.demo.authorization-grant-type=authorization_code
-spring.security.oauth2.client.registration.demo.scope=openid, profile
-spring.security.oauth2.client.registration.demo.redirect-uri={baseUrl}/login/oauth2/code/{registrationId}
+spring.security.oauth2.client.registration.simpleapp.provider=keycloak       #<.>
+spring.security.oauth2.client.registration.simpleapp.authorization-grant-type=authorization_code
+spring.security.oauth2.client.registration.simpleapp.scope=openid, profile
+spring.security.oauth2.client.registration.simpleapp.redirect-uri={baseUrl}/login/oauth2/code/{registrationId}
 spring.security.oauth2.client.provider.keycloak.authorization-uri=${kc.realm-url}/protocol/openid-connect/auth
 spring.security.oauth2.client.provider.keycloak.jwk-set-uri=${kc.realm-url}/protocol/openid-connect/certs
 spring.security.oauth2.client.provider.keycloak.token-uri=${kc.realm-url}/protocol/openid-connect/token
@@ -162,12 +158,11 @@ spring.security.oauth2.client.provider.keycloak.user-name-attribute=preferred_us
 The registration properties below must specify this property as the `registration` key.
 <.> URL where keycloak is running
 <.> application-defined property, just to reduce the boilerplate below
-<.> must match the client name entered in the admin console
+<.> must match the client name entered in the admin console.
 <.> as taken from the credential tab of the realm
 <.> remaining property values are boilerplate and should not need to change.
-+
-IMPORTANT: Make sure though to change the key itself: `spring.security.oauth2.client.registration.xxx` where "xxx" is the name of the realm being registered to Spring Security.
 
+IMPORTANT: Make sure that with the key prefix `spring.security.oauth2.client.registration.xxx`, the "xxx" is the name of the realm being registered to Spring Security.
 
 
 === Create sven user in the realm
@@ -179,6 +174,22 @@ image::add-sven-user-prompt.png[width=400px]
 * add credentials (password):
 +
 image::sven-credentials.png[width=400px]
+
+
+//=== Create 'regular-user' role in the realm
+//
+//This is optional, but illustrates that roles to users within keycloak:
+//
+//* create role:
+//+
+//image::create-regular-user-role.png[width=400px]
+//
+//* add our 'sven' user to the 'regular-user' role:
+//+
+//image::add-sven-to-regular-user-role.png[width=800px]
+
+
+=== Check the account
 
 * check that the account is setup by navigating to link:http://localhost:9090/auth/realms/simpleapp/account/[]:
 +
@@ -192,10 +203,24 @@ image::test-sven-login.png[width=300px]
 +
 image::logged-in-as-sven.png[width=800px]
 
-* add to 'regular-user' role:
-+
-image::add-sven-to-regular-user-role.png[width=800px]
 
+=== Test
+
+Finally, start the Apache Isis application:
+
+* and confirm that navigating to http://localhost:8080 redirects to the keycloak login:
++
+image::keycloak-login-page.png[width=400px]
+
+* you should be able to log into the app:
++
+image::logged-into-app-as-sven.png[width=300px]
+
+* if running in prototype mode, you should still be able to impersonate other users:
++
+image::impersonate-as-fred.png[width=300px]
+
+* Logout should of course take you back to the login page.
 
 
 == Resources:
