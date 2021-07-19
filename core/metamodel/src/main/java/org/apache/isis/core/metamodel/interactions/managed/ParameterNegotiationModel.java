@@ -22,8 +22,6 @@ import java.util.stream.IntStream;
 
 import javax.annotation.Nullable;
 
-import org.apache.logging.log4j.Logger;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.binding.Bindable;
 import org.apache.isis.commons.binding.Observable;
@@ -43,7 +41,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 
 /**
@@ -214,8 +211,7 @@ public class ParameterNegotiationModel {
 
     // -- INTERNAL HOLDER OF PARAMETER BINDABLES
 
-    @Log4j2
-    private static class ParameterModel implements ManagedParameter {
+    private static class ParameterModel extends ManagedParameter {
 
         @Getter(onMethod_ = {@Override}) private final int paramNr;
         @Getter(onMethod_ = {@Override}) @NonNull private final ObjectActionParameter metaModel;
@@ -314,11 +310,6 @@ public class ParameterNegotiationModel {
         @Override
         public Observable<Can<ManagedObject>> getChoices() {
             return observableParamChoices;
-        }
-
-        @Override
-        public Logger _getLogger() {
-            return log;
         }
 
     }

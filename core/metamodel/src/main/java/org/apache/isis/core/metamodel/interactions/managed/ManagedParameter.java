@@ -20,8 +20,6 @@ package org.apache.isis.core.metamodel.interactions.managed;
 
 import java.util.Optional;
 
-import org.apache.logging.log4j.Logger;
-
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.Veto;
@@ -30,20 +28,23 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
 import lombok.NonNull;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
-public interface ManagedParameter extends ManagedValue, ManagedFeature {
+@Log4j2
+public abstract class ManagedParameter
+implements
+    ManagedValue,
+    ManagedFeature {
 
-    int getParamNr();
-    @Override
-    ObjectActionParameter getMetaModel();
-    ParameterNegotiationModel getNegotiationModel();
-    Logger _getLogger();
+    public abstract int getParamNr();
+    @Override public abstract ObjectActionParameter getMetaModel();
+    public abstract ParameterNegotiationModel getNegotiationModel();
 
     /**
      * @param params
      * @return non-empty if not usable/editable (meaning if read-only)
      */
-    default Optional<InteractionVeto> checkUsability(final @NonNull Can<ManagedObject> params) {
+    public final Optional<InteractionVeto> checkUsability(final @NonNull Can<ManagedObject> params) {
 
         try {
             val head = getNegotiationModel().getHead();
@@ -58,7 +59,7 @@ public interface ManagedParameter extends ManagedValue, ManagedFeature {
 
         } catch (final Exception ex) {
 
-            _getLogger().warn(ex.getLocalizedMessage(), ex);
+            log.warn(ex.getLocalizedMessage(), ex);
             return Optional.of(InteractionVeto.readonly(new Veto("failure during usability evaluation")));
 
         }
