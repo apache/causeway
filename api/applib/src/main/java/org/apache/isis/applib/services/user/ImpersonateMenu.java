@@ -1,5 +1,6 @@
 package org.apache.isis.applib.services.user;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.message.MessageService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 /**
  * Provides the UI to allow a current user to be impersonated.
@@ -78,6 +80,7 @@ public class ImpersonateMenu {
     public void impersonate(
             final String userName) {
 
+        // TODO: should use an SPI for each configured viewer to add in its own role if necessary.
         this.userService.impersonateUser(userName, Collections.singletonList("org.apache.isis.viewer.wicket.roles.USER"));
         this.messageService.informUser("Now impersonating " + userName);
     }
@@ -119,7 +122,12 @@ public class ImpersonateMenu {
             final String userName,
             final List<String> roleNames) {
 
-        this.userService.impersonateUser(userName, roleNames);
+        // TODO: should use an SPI for each configured viewer to add in its own role if necessary.
+        val roleNames2 = new ArrayList<>(roleNames);
+        if(!roleNames2.contains("org.apache.isis.viewer.wicket.roles.USER")) {
+            roleNames2.add("org.apache.isis.viewer.wicket.roles.USER");
+        }
+        this.userService.impersonateUser(userName, roleNames2);
         this.messageService.informUser("Now impersonating " + userName);
     }
     @MemberSupport public boolean hideImpersonateWithRoles() {
