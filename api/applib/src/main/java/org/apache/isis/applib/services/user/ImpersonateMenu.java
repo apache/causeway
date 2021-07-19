@@ -84,10 +84,10 @@ public class ImpersonateMenu {
         this.userService.impersonateUser(userName, Collections.singletonList("org.apache.isis.viewer.wicket.roles.USER"));
         this.messageService.informUser("Now impersonating " + userName);
     }
-    public boolean hideImpersonate() {
-        return ! this.userService.supportsImpersonation();
+    @MemberSupport public boolean hideImpersonate() {
+        return ! this.userService.supportsImpersonation() || !hideImpersonateWithRoles();
     }
-    public String disableImpersonate() {
+    @MemberSupport public String disableImpersonate() {
         return this.userService.isImpersonating() ? "currently impersonating" : null;
     }
 
