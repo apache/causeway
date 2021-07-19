@@ -39,7 +39,9 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 @RequiredArgsConstructor
 public abstract class ManagedMember implements ManagedFeature {
 
@@ -153,6 +155,7 @@ public abstract class ManagedMember implements ManagedFeature {
 
         } catch (final Exception ex) {
 
+            log.warn(ex.getLocalizedMessage(), ex);
             return Optional.of(InteractionVeto.hidden(new Veto("failure during visibility evaluation")));
 
         }
@@ -176,9 +179,8 @@ public abstract class ManagedMember implements ManagedFeature {
 
         } catch (final Exception ex) {
 
-            return Optional.of(InteractionVeto
-                    .readonly(
-                            new Veto(ex.getLocalizedMessage())));
+            log.warn(ex.getLocalizedMessage(), ex);
+            return Optional.of(InteractionVeto.readonly(new Veto("failure during usability evaluation")));
 
         }
 

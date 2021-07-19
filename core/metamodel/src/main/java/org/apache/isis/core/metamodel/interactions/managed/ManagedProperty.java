@@ -36,7 +36,9 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public final class ManagedProperty extends ManagedMember {
 
     // -- FACTORIES
@@ -98,9 +100,8 @@ public final class ManagedProperty extends ManagedMember {
 
         } catch (final Exception ex) {
 
-            return Optional.of(InteractionVeto
-                    .invalid(
-                            new Veto(ex.getLocalizedMessage())));
+            log.warn(ex.getLocalizedMessage(), ex);
+            return Optional.of(InteractionVeto.invalid(new Veto("failure during validity evaluation")));
 
         }
     }
