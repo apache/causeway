@@ -18,6 +18,7 @@
  */
 package org.apache.isis.extensions.secman.applib.permission.dom;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +34,8 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.applib.services.user.RoleMemento;
+import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -40,6 +43,7 @@ import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
+import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 
 import lombok.NonNull;
@@ -50,6 +54,7 @@ implements ApplicationPermissionRepository {
 
     @Inject private RepositoryService repository;
     @Inject private ApplicationFeatureRepository featureRepository;
+    @Inject private ApplicationRoleRepository roleRepository;
     @Inject private FactoryService factory;
     @Inject private MessageService messages;
 
@@ -89,6 +94,22 @@ implements ApplicationPermissionRepository {
 
     public List<ApplicationPermission> findByUser(@NonNull final ApplicationUser user) {
         return findByUser(user.getUsername());
+    }
+
+    public List<ApplicationPermission> findByUserMemento(@NonNull final UserMemento userMemento) {
+        val permissions = new ArrayList<ApplicationPermission>();
+
+        // TODO: this is naive in the extreme...
+        userMemento.getRoles().stream()
+                .map(RoleMemento::getName)
+                .map(roleRepository::findByName)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .forEach(role -> {
+                    final List<ApplicationPermission> byRole = findByRole(role);
+                    permissions.addAll(byRole);
+                });
+        return permissions;
     }
 
     private List<ApplicationPermission> findByUser(final String username) {
