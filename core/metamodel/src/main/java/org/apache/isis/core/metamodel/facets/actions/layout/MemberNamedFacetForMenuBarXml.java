@@ -38,7 +38,7 @@ extends MemberNamedFacetWithStaticTextAbstract {
 
         return actionLayout != null
                 ? _Strings.nonEmpty(actionLayout.getNamed())
-                        .map(named->new MemberNamedFacetForMenuBarXml(named,holder))
+                        .map(named->new MemberNamedFacetForMenuBarXml(named, holder))
                 : Optional.empty();
     }
 

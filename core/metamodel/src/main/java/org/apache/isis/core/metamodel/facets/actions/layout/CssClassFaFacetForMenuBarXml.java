@@ -38,10 +38,10 @@ extends CssClassFaStaticFacetAbstract {
             final FacetHolder holder) {
 
         return actionLayout != null
-                ? _Strings.nonEmpty(actionLayout.getCssClass())
+                ? _Strings.nonEmpty(actionLayout.getCssClassFa())
                         .map(cssClassFa->new CssClassFaFacetForMenuBarXml(
                                 cssClassFa,
-                                CssClassFaPosition.LEFT,
+                                CssClassFaPosition.LEFT, // defaults to left
                                 holder))
                 : Optional.empty();
     }
