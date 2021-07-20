@@ -67,7 +67,7 @@ extends CssClassFaImperativeFacetAbstract {
             final MemberNamedFacet memberNamedFacet,
             final FacetHolder holder) {
         super(holder);
-        this.faIconByPattern = getConfiguration().getApplib().getAnnotation().getActionLayout().getCssClassFa().getPatterns();
+        this.faIconByPattern = getConfiguration().getApplib().getAnnotation().getActionLayout().getCssClassFa().getPatternsAsMap();
         this.memberNamedFacet = memberNamedFacet;
 
         // an optimization, not strictly required

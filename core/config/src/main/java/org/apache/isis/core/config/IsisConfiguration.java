@@ -66,8 +66,6 @@ import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.applib.services.userui.UserMenu;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.config.IsisConfiguration.Core;
-import org.apache.isis.core.config.IsisConfiguration.Viewer;
 import org.apache.isis.core.config.metamodel.facets.DefaultViewConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.ActionPublishingPolicy;
@@ -786,11 +784,14 @@ public class IsisConfiguration {
                      *     {@link org.apache.isis.applib.annotation.ActionLayout#cssClass()}.
                      * </p>
                      */
-                    private Map<Pattern, String> patterns = asMap(
+                    private String[] patterns = {
                                     "delete.*:btn-danger",
                                     "discard.*:btn-warning",
-                                    "remove.*:btn-warning"
-                    );
+                                    "remove.*:btn-warning"};
+
+                    @Getter(lazy = true)
+                    private final Map<Pattern, String> patternsAsMap = asMap(getPatterns());
+
                 }
 
                 private final CssClassFa cssClassFa = new CssClassFa();
@@ -810,7 +811,7 @@ public class IsisConfiguration {
                      *     {@link org.apache.isis.applib.annotation.ActionLayout#cssClassFa()}.
                      * </p>
                      */
-                    private Map<Pattern, String> patterns = asMap(
+                    private String[] patterns = {
                             "add.*:fa-plus-square",
                             "all.*:fa-list",
                             "approve.*:fa-thumbs-o-up",
@@ -856,7 +857,11 @@ public class IsisConfiguration {
                             "update.*:fa-edit",
                             "upload.*:fa-upload",
                             "verify.*:fa-check-circle",
-                            "view.*:fa-search");
+                            "view.*:fa-search"};
+
+                    @Getter(lazy = true)
+                    private final Map<Pattern, String> patternsAsMap = asMap(getPatterns());
+
                 }
             }
 
