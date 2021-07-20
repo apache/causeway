@@ -63,19 +63,14 @@ implements HiddenTypeFacet {
             return null;
         }
 
-        //noinspection ConstantConditions
-        if (false) {
-            // not sure that we need to check that all actions
-            // are hidden before inferring that the type overall is hidden.
-            val hasVisibleAction = specification.streamRuntimeActions(MixedIn.INCLUDED)
-                    .anyMatch(act -> !AuthorizationFacet.hidesAction(act, vc));
+        val hasVisibleAction = specification.streamRuntimeActions(MixedIn.INCLUDED)
+                .anyMatch(act -> !AuthorizationFacet.hidesAction(act, vc));
 
-            if (hasVisibleAction) {
-                return null;
-            }
+        if (hasVisibleAction) {
+            return null;
         }
 
-        return "All properties and collections are hidden";
+        return "All members (actions, properties and collections) are hidden";
 
     }
 
