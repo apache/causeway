@@ -220,7 +220,7 @@ xref:testing:fixtures:about.adoc[Fixture Scripts]
 
 While Apache Isis v2 will run happily on Java 11, it is of course also possible to run it on later versions.
 
-Hsitorically, between Java 8 and Java 11 a number of packages related to JavaEE were removed from the JRE, but these packages are used by the framework, specifically
+Historically, between Java 8 and Java 11 a number of packages related to JavaEE were removed from the JRE, but these packages are used by the framework, specifically
 
 * JAX-WS packages (`javax.jws`, `javax.jws.soap`, `javax.xml.soap`, and `javax.xml.ws.*`)
 * JAXB packages (`javax.xml.bind.*`)
