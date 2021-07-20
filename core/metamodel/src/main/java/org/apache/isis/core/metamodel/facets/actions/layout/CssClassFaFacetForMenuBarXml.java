@@ -23,27 +23,34 @@ import java.util.Optional;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
-import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacetWithStaticTextAbstract;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaStaticFacetAbstract;
 
-public class MemberNamedFacetForMenuBarXml
-extends MemberNamedFacetWithStaticTextAbstract {
+public class CssClassFaFacetForMenuBarXml
+extends CssClassFaStaticFacetAbstract {
 
-    public static Optional<MemberNamedFacet> create(
+    public static Optional<CssClassFaFacet> create(
             final @Nullable ServiceActionLayoutData actionLayout,
             final FacetHolder holder) {
 
         return actionLayout != null
-                ? _Strings.nonEmpty(actionLayout.getNamed())
-                        .map(named->new MemberNamedFacetForMenuBarXml(named,holder))
+                ? _Strings.nonEmpty(actionLayout.getCssClass())
+                        .map(cssClassFa->new CssClassFaFacetForMenuBarXml(
+                                cssClassFa,
+                                CssClassFaPosition.LEFT,
+                                holder))
                 : Optional.empty();
     }
 
-    private MemberNamedFacetForMenuBarXml(final String named, final FacetHolder holder) {
-        super(named, holder, Precedence.HIGH); // XML menu-bar entries overrule layout from annotations
+    private CssClassFaFacetForMenuBarXml(
+            final String value,
+            final CssClassFaPosition position,
+            final FacetHolder holder) {
+        super(value, position, holder, Precedence.HIGH); // XML menu-bar entries overrule layout from annotations
     }
 
 }

@@ -26,24 +26,24 @@ import javax.annotation.Nullable;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
-import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacetWithStaticTextAbstract;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetSimple;
 
-public class MemberNamedFacetForMenuBarXml
-extends MemberNamedFacetWithStaticTextAbstract {
+public class CssClassFacetForMenuBarXml
+extends CssClassFacetSimple {
 
-    public static Optional<MemberNamedFacet> create(
+    public static Optional<CssClassFacet> create(
             final @Nullable ServiceActionLayoutData actionLayout,
             final FacetHolder holder) {
 
         return actionLayout != null
-                ? _Strings.nonEmpty(actionLayout.getNamed())
-                        .map(named->new MemberNamedFacetForMenuBarXml(named,holder))
+                ? _Strings.nonEmpty(actionLayout.getCssClass())
+                        .map(cssClass->new CssClassFacetForMenuBarXml(cssClass, holder))
                 : Optional.empty();
     }
 
-    private MemberNamedFacetForMenuBarXml(final String named, final FacetHolder holder) {
-        super(named, holder, Precedence.HIGH); // XML menu-bar entries overrule layout from annotations
+    private CssClassFacetForMenuBarXml(final String value, final FacetHolder holder) {
+        super(value, holder, Precedence.HIGH); // XML menu-bar entries overrule layout from annotations
     }
 
 }
