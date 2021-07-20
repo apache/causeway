@@ -39,7 +39,7 @@
 
 	<properties>
 
-		<maven.compiler.arg>-parameters</maven.compiler.arg>
+		<maven.compiler.release>11</maven.compiler.release>
 
 		<spring-boot.version>2.5.2</spring-boot.version>
 		<approvaltests.version>11.7.0</approvaltests.version>
@@ -59,12 +59,7 @@
 					<configuration>
 						<showDeprecation>false</showDeprecation>
 						<showWarnings>false</showWarnings>
-						<!-- defaults, to be overridden with option maven.compiler.release -->
-						<source>1.8</source>
-						<target>1.8</target>
-						<compilerArgs>
-							<arg>${maven.compiler.arg}</arg>
-						</compilerArgs>
+						<!-- Java compliance level, to be overridden with option maven.compiler.release -->
 					</configuration>
 					<!-- goal:compile binds to phase:compile -->
 					<!-- goal:testCompile binds to phase:test-compile -->
