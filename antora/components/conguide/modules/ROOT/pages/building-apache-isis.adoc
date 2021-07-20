@@ -130,22 +130,20 @@ For further reading, see:
 
 == Installing Java
 
-Apache Isis v2 is compatible with Java 8 and above, and releases are xref:comguide:ROOT:cutting-a-release.adoc[cut] using Java 8, leveraging the link:http://maven.apache.org/plugins/maven-toolchains-plugin/[Maven toolchains plugin]).
+Apache Isis v2 is compatible with Java 11 and above, and releases are xref:comguide:ROOT:cutting-a-release.adoc[cut] using Java 11, leveraging the link:http://maven.apache.org/plugins/maven-toolchains-plugin/[Maven toolchains plugin]).
 
-Some of the tooling used to generate documentation uses Java 11.
-
-Therefore install either/both of Java 8 JDK and Java 11 JDK.
+Therefore install Java 11 JDK or newer.
 Note that the JRE is _not_ sufficient.
 
 [TIP]
 ====
-If you intend to contribute back patches to Apache Isis, note that while you can develop using Java 11 or above within your IDE, be sure not to use any APIs more recent than Java 8.
+If you intend to contribute back patches to Apache Isis, note that while you can develop using Java 11 or above within your IDE, be sure not to use any APIs more recent than Java 11.
 ====
 
 === Configure Maven toolchains plugin
 
 If you are a committer that will be performing releases of Apache Isis, then you _must_ configure the
-link:http://maven.apache.org/plugins/maven-toolchains-plugin/[toolchains] plugin so that releases can be built using Java 8.
+link:http://maven.apache.org/plugins/maven-toolchains-plugin/[toolchains] plugin so that releases can be built using Java 11.
 
 This is done by placing the `toolchains.xml` file in `~/.m2` directory.
 Use the following file as a template, adjusting paths for your platform:

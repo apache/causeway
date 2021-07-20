@@ -26,7 +26,7 @@ Apache Isis is a Java based framework, so in terms of prerequisites, you'll need
 
 * Java 11 JDK (or later)
 +
-Apache Isis itself is compatible with Java 8, but the helloworld app itself is configured for Java 11.
+Apache Isis itself is compatible with Java 11, and the helloworld app itself is configured for Java 11.
 
 * link:http://maven.apache.org[Apache Maven] 3.5+
 
