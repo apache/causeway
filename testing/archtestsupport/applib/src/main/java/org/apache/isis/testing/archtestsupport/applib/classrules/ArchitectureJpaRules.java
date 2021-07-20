@@ -1,6 +1,10 @@
 package org.apache.isis.testing.archtestsupport.applib.classrules;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.Table;
 
 import com.tngtech.archunit.base.DescribedPredicate;
@@ -46,6 +50,40 @@ public class ArchitectureJpaRules {
     return classes()
             .that().areAnnotatedWith(Entity.class)
             .should().beAnnotatedWith(CommonDescribedPredicates.XmlJavaTypeAdapter_value_PersistentEntityAdapter());
+  }
+
+  /**
+   * This rule requires that classes annotated with the JPA {@link Entity} annotation must also be
+   * annotated with the {@link javax.persistence.EntityListeners} annotation that includes
+   * a value of <code>org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener.class</code>.
+   *
+   * <p>
+   *     Tnis is so that entities can be transparently referenced from XML-style view models.
+   * </p>
+   */
+  public static ArchRule classes_annotated_with_Entity_must_also_be_an_IsisEntityListener() {
+    return classes()
+            .that().areAnnotatedWith(Entity.class)
+            .should().beAnnotatedWith(EntityListeners_with_IsisEntityListener());
+  }
+
+  private static DescribedPredicate<JavaAnnotation<?>> EntityListeners_with_IsisEntityListener() {
+    return new DescribedPredicate<JavaAnnotation<?>>("@EntityListener({IsisEntityListener.class})") {
+      @Override public boolean apply(final JavaAnnotation<?> javaAnnotation) {
+        if (javaAnnotation.getRawType().isEquivalentTo(EntityListeners.class)) {
+          return false;
+        }
+        val properties = javaAnnotation.getProperties();
+        val listeners = properties.get("value");
+        return listeners instanceof Class[] && containsIsisEntityListener((Class<?>[]) listeners);
+      }
+
+      private boolean containsIsisEntityListener(final Class<?>[] classes) {
+        return Arrays.stream(classes)
+                .anyMatch(x -> Objects.equals(x.getCanonicalName(),
+                        "org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener"));
+      }
+    };
   }
 
   /**
