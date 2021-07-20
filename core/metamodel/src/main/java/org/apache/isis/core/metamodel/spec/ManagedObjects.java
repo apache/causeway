@@ -57,6 +57,7 @@ import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.facets.object.entity.PersistenceStandard;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
@@ -778,13 +779,13 @@ public final class ManagedObjects {
         }
 
         private static VisibilityContext createVisibleInteractionContext(
-                final ManagedObject adapter,
+                final ManagedObject objectAdapter,
                 final InteractionInitiatedBy interactionInitiatedBy,
                 final Where where) {
 
             return new ObjectVisibilityContext(
-                    adapter,
-                    adapter.getSpecification().getFeatureIdentifier(),
+                    InteractionHead.regular(objectAdapter),
+                    objectAdapter.getSpecification().getFeatureIdentifier(),
                     interactionInitiatedBy,
                     where);
         }
