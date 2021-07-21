@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.applayer.publishing.jdo;
+package org.apache.isis.testdomain.publishing.jdo;
 
 import java.util.List;
 
@@ -33,11 +33,11 @@ import org.springframework.test.context.TestPropertySource;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.debug.xray.XrayEnable;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory;
-import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory.VerificationStage;
-import org.apache.isis.testdomain.applayer.publishing.EntityPropertyChangeSubscriberForTesting;
-import org.apache.isis.testdomain.applayer.publishing.conf.Configuration_usingEntityPropertyChangePublishing;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
+import org.apache.isis.testdomain.publishing.ApplicationLayerTestFactoryJdo;
+import org.apache.isis.testdomain.publishing.ApplicationLayerTestFactoryAbstract.VerificationStage;
+import org.apache.isis.testdomain.publishing.conf.Configuration_usingEntityPropertyChangePublishing;
+import org.apache.isis.testdomain.publishing.subscriber.EntityPropertyChangeSubscriberForTesting;
 import org.apache.isis.testdomain.util.CollectionAssertions;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 
@@ -47,9 +47,9 @@ import lombok.val;
         classes = {
                 Configuration_usingJdo.class,
                 Configuration_usingEntityPropertyChangePublishing.class,
-                ApplicationLayerTestFactory.class,
+                ApplicationLayerTestFactoryJdo.class,
                 XrayEnable.class
-        }, 
+        },
         properties = {
                 "logging.level.org.apache.isis.applib.services.publishing.log.*=DEBUG",
                 "logging.level.org.apache.isis.testdomain.util.rest.KVStoreForTesting=DEBUG",
@@ -62,7 +62,7 @@ import lombok.val;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class JdoEntityPropertyChangePublishingTest {
 
-    @Inject private ApplicationLayerTestFactory testFactory;
+    @Inject private ApplicationLayerTestFactoryJdo testFactory;
     @Inject private KVStoreForTesting kvStore;
 
     @DisplayName("Application Layer")
@@ -75,7 +75,7 @@ class JdoEntityPropertyChangePublishingTest {
         EntityPropertyChangeSubscriberForTesting.clearPropertyChangeEntries(kvStore);
     }
 
-    private void verify(VerificationStage verificationStage) {
+    private void verify(final VerificationStage verificationStage) {
         switch(verificationStage) {
         case PRE_COMMIT:
         case FAILURE_CASE:
@@ -93,7 +93,7 @@ class JdoEntityPropertyChangePublishingTest {
 
     // -- HELPER
 
-    private void assertHasPropertyChangeEntries(Can<String> expectedAuditEntries) {
+    private void assertHasPropertyChangeEntries(final Can<String> expectedAuditEntries) {
         val actualAuditEntries = EntityPropertyChangeSubscriberForTesting.getPropertyChangeEntries(kvStore);
         CollectionAssertions.assertComponentWiseEquals(expectedAuditEntries, actualAuditEntries);
     }

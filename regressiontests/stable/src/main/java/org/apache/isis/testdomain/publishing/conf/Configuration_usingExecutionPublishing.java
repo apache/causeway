@@ -16,19 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.applayer.publishing.conf;
+package org.apache.isis.testdomain.publishing.conf;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.testdomain.applayer.publishing.CommandSubscriberForTesting;
+import org.apache.isis.testdomain.publishing.subscriber.ExecutionSubscriberForTesting;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 
 @Configuration
 @Import({
     KVStoreForTesting.class,
-    CommandSubscriberForTesting.class
+    ExecutionSubscriberForTesting.class
 })
-public class Configuration_usingCommandPublishing {
+public class Configuration_usingExecutionPublishing {
 
 }

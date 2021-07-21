@@ -70,7 +70,7 @@ public class EntityPropertyChangePublisherDefault implements EntityPropertyChang
             final HasEnlistedEntityPropertyChanges hasEnlistedEntityPropertyChanges) {
 
         val payload = getPayload(hasEnlistedEntityPropertyChanges);
-        val handle = _Xray.enterEntityPropertyChangePublishing(
+        val xrayHandle = _Xray.enterEntityPropertyChangePublishing(
                 iaTracker,
                 payload,
                 enabledSubscribers,
@@ -83,7 +83,7 @@ public class EntityPropertyChangePublisherDefault implements EntityPropertyChang
             }
         });
 
-        _Xray.exitPublishing(handle);
+        _Xray.exitPublishing(xrayHandle);
     }
 
     // -- HELPER

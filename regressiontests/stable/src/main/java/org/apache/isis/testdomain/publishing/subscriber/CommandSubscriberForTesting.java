@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.applayer.publishing;
+package org.apache.isis.testdomain.publishing.subscriber;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +26,8 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.iactn.Execution;
-import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
-import org.apache.isis.applib.util.schema.MemberExecutionDtoUtils;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 
@@ -37,8 +36,8 @@ import lombok.extern.log4j.Log4j2;
 
 @Service
 @Log4j2
-public class ExecutionSubscriberForTesting
-implements ExecutionSubscriber {
+public class CommandSubscriberForTesting
+implements CommandSubscriber {
 
     @Inject private KVStoreForTesting kvStore;
 
@@ -48,32 +47,30 @@ implements ExecutionSubscriber {
     }
 
     @Override
-    public void onExecution(Execution<?, ?> execution) {
+    public void onCompleted(Command command) {
 
         @SuppressWarnings("unchecked")
-        val publishedEntries =
-        (List<Execution<?, ?>>) kvStore.get(this, "publishedExecutions").orElseGet(ArrayList::new);
+        val publishedCommands =
+        (List<Command>) kvStore.get(this, "publishedCommands").orElseGet(ArrayList::new);
 
-        publishedEntries.add(execution);
+        publishedCommands.add(command);
 
-        kvStore.put(this, "publishedExecutions", publishedEntries);
-        log.debug("publish execution {}", ()->MemberExecutionDtoUtils.toXml(execution.getDto()));
-
-        System.err.println("exec: " + MemberExecutionDtoUtils.toXml(execution.getDto()));
-
+        kvStore.put(this, "publishedCommands", publishedCommands);
+        log.debug("publish command {}", ()->command.getCommandDto());
     }
 
     // -- UTILITIES
 
     @SuppressWarnings("unchecked")
-    public static Can<Execution<?, ?>> getPublishedExecutions(KVStoreForTesting kvStore) {
+    public static Can<Command> getPublishedCommands(KVStoreForTesting kvStore) {
         return Can.ofCollection(
-                (List<Execution<?, ?>>) kvStore.get(ExecutionSubscriberForTesting.class, "publishedExecutions")
+                (List<Command>) kvStore.get(CommandSubscriberForTesting.class, "publishedCommands")
                 .orElse(null));
     }
 
-    public static void clearPublishedEntries(KVStoreForTesting kvStore) {
-        kvStore.clear(ExecutionSubscriberForTesting.class);
+    public static void clearPublishedCommands(KVStoreForTesting kvStore) {
+        kvStore.clear(CommandSubscriberForTesting.class);
     }
+
 
 }

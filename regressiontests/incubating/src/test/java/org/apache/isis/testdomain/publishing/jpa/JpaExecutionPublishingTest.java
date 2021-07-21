@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.applayer.publishing.jdo;
+package org.apache.isis.testdomain.publishing.jpa;
 
 import java.util.List;
 import java.util.Objects;
@@ -39,12 +39,12 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.debug.xray.XrayEnable;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory;
-import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory.VerificationStage;
-import org.apache.isis.testdomain.applayer.publishing.ExecutionSubscriberForTesting;
-import org.apache.isis.testdomain.applayer.publishing.conf.Configuration_usingExecutionPublishing;
-import org.apache.isis.testdomain.conf.Configuration_usingJdo;
-import org.apache.isis.testdomain.jdo.entities.JdoBook;
+import org.apache.isis.testdomain.conf.Configuration_usingJpa;
+import org.apache.isis.testdomain.jpa.entities.JpaBook;
+import org.apache.isis.testdomain.publishing.ApplicationLayerTestFactoryAbstract.VerificationStage;
+import org.apache.isis.testdomain.publishing.ApplicationLayerTestFactoryJpa;
+import org.apache.isis.testdomain.publishing.conf.Configuration_usingExecutionPublishing;
+import org.apache.isis.testdomain.publishing.subscriber.ExecutionSubscriberForTesting;
 import org.apache.isis.testdomain.util.CollectionAssertions;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 
@@ -52,22 +52,20 @@ import lombok.val;
 
 @SpringBootTest(
         classes = {
-                Configuration_usingJdo.class,
+                Configuration_usingJpa.class,
                 Configuration_usingExecutionPublishing.class,
-                ApplicationLayerTestFactory.class,
+                ApplicationLayerTestFactoryJpa.class,
                 XrayEnable.class
         },
         properties = {
-                "logging.level.org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisTransactionJdo=DEBUG",
                 "logging.level.org.apache.isis.core.runtimeservices.session.IsisInteractionFactoryDefault=DEBUG",
-                "logging.level.org.apache.isis.persistence.jdo.datanucleus5.datanucleus.service.JdoPersistenceLifecycleService=DEBUG"
         })
 @TestPropertySource({
     IsisPresets.UseLog4j2Test
 })
-class JdoExecutionPublishingTest {
+class JpaExecutionPublishingTest {
 
-    @Inject private ApplicationLayerTestFactory testFactory;
+    @Inject private ApplicationLayerTestFactoryJpa testFactory;
     @Inject private KVStoreForTesting kvStore;
 
     @TestFactory @DisplayName("Application Layer")
@@ -79,7 +77,7 @@ class JdoExecutionPublishingTest {
         ExecutionSubscriberForTesting.clearPublishedEntries(kvStore);
     }
 
-    private void verify(VerificationStage verificationStage) {
+    private void verify(final VerificationStage verificationStage) {
         switch(verificationStage) {
 
         case FAILURE_CASE:
@@ -88,11 +86,11 @@ class JdoExecutionPublishingTest {
         case POST_COMMIT:
             Interaction interaction = null;
             Identifier propertyId = Identifier.propertyOrCollectionIdentifier(
-                    LogicalType.fqcn(JdoBook.class), "name");
+                    LogicalType.fqcn(JpaBook.class), "name");
             Object target = null;
             Object argValue = "Book #2";
             String targetMemberName = "name???";
-            String targetClass = "org.apache.isis.testdomain.jdo.entities.JdoBook";
+            String targetClass = "org.apache.isis.testdomain.jpa.entities.JpaBook";
             assertHasExecutionEntries(Can.of(
                     new PropertyEdit(interaction, propertyId, target, argValue, targetMemberName, targetClass)
                     ));
@@ -104,13 +102,13 @@ class JdoExecutionPublishingTest {
 
     // -- HELPER
 
-    private void assertHasExecutionEntries(Can<Execution<?, ?>> expectedExecutions) {
+    private void assertHasExecutionEntries(final Can<Execution<?, ?>> expectedExecutions) {
         val actualExecutions = ExecutionSubscriberForTesting.getPublishedExecutions(kvStore);
         CollectionAssertions.assertComponentWiseEquals(
                 expectedExecutions, actualExecutions, this::executionDifference);
     }
 
-    private String executionDifference(Execution<?, ?> a, Execution<?, ?> b) {
+    private String executionDifference(final Execution<?, ?> a, final Execution<?, ?> b) {
         if(!Objects.equals(a.getMemberIdentifier(), b.getMemberIdentifier())) {
             return String.format("differing member identifier %s != %s",
                     a.getMemberIdentifier(), b.getMemberIdentifier());
@@ -132,12 +130,12 @@ class JdoExecutionPublishingTest {
         }
     }
 
-    private String actionInvocationDifference(ActionInvocation a, ActionInvocation b) {
+    private String actionInvocationDifference(final ActionInvocation a, final ActionInvocation b) {
         return null; // no difference
     }
 
 
-    private String porpertyEditDifference(PropertyEdit a, PropertyEdit b) {
+    private String porpertyEditDifference(final PropertyEdit a, final PropertyEdit b) {
         if(!Objects.equals(a.getNewValue(), b.getNewValue())) {
             return String.format("differing new value %s != %s",
                     a.getNewValue(), b.getNewValue());

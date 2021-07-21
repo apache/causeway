@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.applayer.publishing.jdo;
+package org.apache.isis.testdomain.publishing.jpa;
 
 import java.util.List;
 
@@ -32,38 +32,36 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.commons.internal.debug.xray.XrayEnable;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory;
-import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory.VerificationStage;
-import org.apache.isis.testdomain.applayer.publishing.conf.Configuration_usingEntityChangesPublishing;
-import org.apache.isis.testdomain.conf.Configuration_usingJdo;
+import org.apache.isis.testdomain.conf.Configuration_usingJpa;
+import org.apache.isis.testdomain.publishing.ApplicationLayerTestFactoryAbstract.VerificationStage;
+import org.apache.isis.testdomain.publishing.ApplicationLayerTestFactoryJpa;
+import org.apache.isis.testdomain.publishing.conf.Configuration_usingEntityChangesPublishing;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 
-import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.clearPublishedEntries;
-import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.getCreated;
-import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.getDeleted;
-import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.getLoaded;
-import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.getModified;
-import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.getUpdated;
+import static org.apache.isis.testdomain.publishing.subscriber.EntityChangesSubscriberForTesting.clearPublishedEntries;
+import static org.apache.isis.testdomain.publishing.subscriber.EntityChangesSubscriberForTesting.getCreated;
+import static org.apache.isis.testdomain.publishing.subscriber.EntityChangesSubscriberForTesting.getDeleted;
+import static org.apache.isis.testdomain.publishing.subscriber.EntityChangesSubscriberForTesting.getLoaded;
+import static org.apache.isis.testdomain.publishing.subscriber.EntityChangesSubscriberForTesting.getModified;
+import static org.apache.isis.testdomain.publishing.subscriber.EntityChangesSubscriberForTesting.getUpdated;
 
 @SpringBootTest(
         classes = {
-                Configuration_usingJdo.class,
+                Configuration_usingJpa.class,
                 Configuration_usingEntityChangesPublishing.class,
-                ApplicationLayerTestFactory.class,
+                ApplicationLayerTestFactoryJpa.class,
                 XrayEnable.class
-        }, 
+        },
         properties = {
-                "logging.level.org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisTransactionJdo=DEBUG",
                 "logging.level.org.apache.isis.core.runtimeservices.session.IsisInteractionFactoryDefault=DEBUG",
-                "logging.level.org.apache.isis.persistence.jdo.integration.changetracking.JdoLifecycleListener=DEBUG",
                 "logging.level.org.apache.isis.testdomain.util.kv.KVStoreForTesting=DEBUG",
         })
 @TestPropertySource({
     IsisPresets.UseLog4j2Test
 })
-class JdoEntityChangesPublishingTest {
+class JpaEntityChangesPublishingTest {
 
-    @Inject private ApplicationLayerTestFactory testFactory;
+    @Inject private ApplicationLayerTestFactoryJpa testFactory;
     @Inject private KVStoreForTesting kvStore;
 
     @DisplayName("Application Layer")
@@ -75,8 +73,8 @@ class JdoEntityChangesPublishingTest {
     private void given() {
         clearPublishedEntries(kvStore);
     }
-    
-    private void verify(VerificationStage verificationStage) {
+
+    private void verify(final VerificationStage verificationStage) {
         switch(verificationStage) {
         case PRE_COMMIT:
         case FAILURE_CASE:

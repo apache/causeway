@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.applayer.publishing.jdo;
+package org.apache.isis.testdomain.publishing.jdo;
 
 import java.util.List;
 import java.util.Objects;
@@ -36,11 +36,11 @@ import org.apache.isis.commons.internal.debug.xray.XrayEnable;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.PropertyDto;
-import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory;
-import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory.VerificationStage;
-import org.apache.isis.testdomain.applayer.publishing.CommandSubscriberForTesting;
-import org.apache.isis.testdomain.applayer.publishing.conf.Configuration_usingCommandPublishing;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
+import org.apache.isis.testdomain.publishing.ApplicationLayerTestFactoryJdo;
+import org.apache.isis.testdomain.publishing.ApplicationLayerTestFactoryAbstract.VerificationStage;
+import org.apache.isis.testdomain.publishing.conf.Configuration_usingCommandPublishing;
+import org.apache.isis.testdomain.publishing.subscriber.CommandSubscriberForTesting;
 import org.apache.isis.testdomain.util.CollectionAssertions;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 
@@ -50,7 +50,7 @@ import lombok.val;
         classes = {
                 Configuration_usingJdo.class,
                 Configuration_usingCommandPublishing.class,
-                ApplicationLayerTestFactory.class,
+                ApplicationLayerTestFactoryJdo.class,
                 XrayEnable.class
         },
         properties = {
@@ -63,7 +63,7 @@ import lombok.val;
 })
 class JdoCommandPublishingTest {
 
-    @Inject private ApplicationLayerTestFactory testFactory;
+    @Inject private ApplicationLayerTestFactoryJdo testFactory;
     @Inject private KVStoreForTesting kvStore;
 
     @TestFactory @DisplayName("Application Layer")
@@ -75,7 +75,7 @@ class JdoCommandPublishingTest {
         CommandSubscriberForTesting.clearPublishedCommands(kvStore);
     }
 
-    private void verify(VerificationStage verificationStage) {
+    private void verify(final VerificationStage verificationStage) {
         switch(verificationStage) {
 
         case FAILURE_CASE:
@@ -110,13 +110,13 @@ class JdoCommandPublishingTest {
 
     // -- HELPER
 
-    private void assertHasCommandEntries(Can<Command> expectedCommands) {
+    private void assertHasCommandEntries(final Can<Command> expectedCommands) {
         val actualCommands = CommandSubscriberForTesting.getPublishedCommands(kvStore);
         CollectionAssertions.assertComponentWiseEquals(
                 expectedCommands, actualCommands, this::commandDifference);
     }
 
-    private String commandDifference(Command a, Command b) {
+    private String commandDifference(final Command a, final Command b) {
         if(!Objects.equals(a.getLogicalMemberIdentifier(), b.getLogicalMemberIdentifier())) {
             return String.format("differing member identifier %s != %s",
                     a.getLogicalMemberIdentifier(), b.getLogicalMemberIdentifier());
