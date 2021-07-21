@@ -29,17 +29,13 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
-
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.iactnlayer.ThrowingRunnable;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.session.SessionLoggingService;
+import org.apache.isis.applib.services.user.ImpersonatedUserHolder;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.security._testing.InteractionService_forTesting;
@@ -49,6 +45,11 @@ import org.apache.isis.core.security.authentication.Authenticator;
 import org.apache.isis.core.security.authentication.InteractionContextFactory;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authentication.standard.RandomCodeGeneratorDefault;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 
 public class AuthenticatedWebSessionForIsis_Authenticate {
 
@@ -63,6 +64,7 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
     @Mock protected Authenticator mockAuthenticator;
     @Mock protected IsisAppCommonContext mockCommonContext;
     @Mock protected InteractionService mockInteractionService;
+    @Mock protected ImpersonatedUserHolder mockImpersonatedUserHolder;
     @Mock protected InteractionLayerTracker mockInteractionLayerTracker;
     @Mock protected ServiceRegistry mockServiceRegistry;
 
@@ -85,6 +87,9 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
 
                 allowing(mockCommonContext).lookupServiceElseFail(InteractionService.class);
                 will(returnValue(mockInteractionService));
+
+                allowing(mockCommonContext).lookupServiceElseFail(ImpersonatedUserHolder.class);
+                will(returnValue(mockImpersonatedUserHolder));
 
                 allowing(mockCommonContext).getInteractionLayerTracker();
                 will(returnValue(mockInteractionLayerTracker));
@@ -133,6 +138,8 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
 
         context.checking(new Expectations() {
             {
+                oneOf(mockImpersonatedUserHolder).getUserMemento();
+                will(returnValue(Optional.empty()));
                 oneOf(mockAuthenticator).canAuthenticate(AuthenticationRequestPassword.class);
                 will(returnValue(true));
                 oneOf(mockAuthenticator).authenticate(with(any(AuthenticationRequest.class)), with(any(String.class)));
@@ -142,7 +149,10 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
 
         setupWebSession();
 
+        // when
         assertThat(webSession.authenticate("jsmith", "secret"), is(true));
+
+        // then
         assertThat(webSession.getAuthentication(), is(not(nullValue())));
     }
 

@@ -64,8 +64,16 @@ implements CssClassFaStaticFacet {
             final String value,
             final CssClassFaPosition position,
             final FacetHolder holder) {
+        this(value, position, holder, Precedence.DEFAULT);
+    }
 
-        super(type(), holder);
+    protected CssClassFaStaticFacetAbstract(
+            final String value,
+            final CssClassFaPosition position,
+            final FacetHolder holder,
+            final Precedence precedence) {
+
+        super(type(), holder, precedence);
         this.position = position;
         this.cssClasses = parse(value);
     }
@@ -95,7 +103,7 @@ implements CssClassFaStaticFacet {
      * @param parsedClasses
      * @return The original CSS classes plus <em>fa</em> and <em>fa-fw</em> if not already provided
      */
-    static List<String> parse(String value) {
+    static List<String> parse(final String value) {
         //XXX cannot use lombok val here
         final Set<String> cssClassesSet = _Sets.<String>newLinkedHashSet(); // preserved order
         _Strings.splitThenStreamTrimmed(value.trim(), WHITESPACE)

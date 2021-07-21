@@ -18,17 +18,21 @@
  */
 package org.apache.isis.core.metamodel.services;
 
-import lombok.RequiredArgsConstructor;
-import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
-import org.springframework.stereotype.Service;
-
 import javax.annotation.Nullable;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.stereotype.Service;
+
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 /**
  *
@@ -48,15 +52,26 @@ public class ServiceInjectorDefault implements ServiceInjector {
     public <T> T injectServicesInto(final @Nullable T domainObject) {
 
         if(domainObject!=null) {
-
-            autowireCapableBeanFactory.autowireBeanProperties(
-                    domainObject,
-                    AutowireCapableBeanFactory.AUTOWIRE_NO,
-                    /*dependencyCheck*/ false);
+            if(domainObject instanceof ManagedObject) {
+                // in case a ManagedObject was passed instead of the pojo.
+                val managedObject = (ManagedObject) domainObject;
+                val actualDomainObject = managedObject.getPojo();
+                if(actualDomainObject != null) {
+                    injectInto(actualDomainObject);
+                }
+            } else {
+                injectInto(domainObject);
+            }
         }
 
         return domainObject;
     }
 
+    private <T> void injectInto(final @NonNull T domainObject) {
+        autowireCapableBeanFactory.autowireBeanProperties(
+                domainObject,
+                AutowireCapableBeanFactory.AUTOWIRE_NO,
+                /*dependencyCheck*/ false);
+    }
 
 }

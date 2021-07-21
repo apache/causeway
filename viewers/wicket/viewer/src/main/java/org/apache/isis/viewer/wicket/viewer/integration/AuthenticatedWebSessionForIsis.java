@@ -19,8 +19,6 @@
 
 package org.apache.isis.viewer.wicket.viewer.integration;
 
-import java.util.Objects;
-
 import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
@@ -32,6 +30,7 @@ import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.session.SessionLoggingService;
+import org.apache.isis.applib.services.user.ImpersonatedUserHolder;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.user.UserMemento.AuthenticationSource;
 import org.apache.isis.commons.collections.Can;
@@ -102,23 +101,15 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
     @Override
     public synchronized void invalidateNow() {
 
-        // similar code in Restful Objects viewer (UserResourceServerside#logout)
-        // this needs to be done here because Wicket will expire the HTTP session
-        // while the Shiro authenticator uses the session to obtain the details of the principals for it to logout
         //
-        //        org.apache.catalina.session.StandardSession.getAttribute(StandardSession.java:1195)
-        //        org.apache.catalina.session.StandardSessionFacade.getAttribute(StandardSessionFacade.java:108)
-        //        org.apache.shiro.web.session.HttpServletSession.getAttribute(HttpServletSession.java:146)
-        //        org.apache.shiro.session.ProxiedSession.getAttribute(ProxiedSession.java:121)
-        //        org.apache.shiro.subject.support.DelegatingSubject.getRunAsPrincipalsStack(DelegatingSubject.java:469)
-        //        org.apache.shiro.subject.support.DelegatingSubject.getPrincipals(DelegatingSubject.java:153)
-        //        org.apache.shiro.mgt.DefaultSecurityManager.logout(DefaultSecurityManager.java:547)
-        //        org.apache.shiro.subject.support.DelegatingSubject.logout(DelegatingSubject.java:363)
-        //        org.apache.isis.security.shiro.ShiroAuthenticatorOrAuthorizor.logout(ShiroAuthenticatorOrAuthorizor.java:179)
-        //        org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard.closeSession(AuthenticationManagerStandard.java:141)
+        // similar code in Restful Objects viewer (UserResourceServerside#logout)
+        //
+        // this needs to be done here because Wicket will expire the HTTP session
+        // while the Shiro authenticator uses the session to obtain the details of the
+        // principals for it to logout
+        //
 
         getAuthenticationManager().closeSession(getAuthentication());
-        //getIsisInteractionFactory().closeSessionStack();
 
         super.invalidateNow();
 
@@ -126,58 +117,61 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
 
     @Override
     public synchronized void onInvalidate() {
+
+        String userName = null;
+        val authentication = getAuthentication();
+        if (authentication != null) {
+            userName = authentication.getUser().getName();
+        }
+
         super.onInvalidate();
 
         val causedBy = RequestCycle.get() != null
                 ? SessionLoggingService.CausedBy.USER
                 : SessionLoggingService.CausedBy.SESSION_EXPIRATION;
 
-        String userName = null;
-        if (getAuthentication() != null) {
-            userName = getAuthentication().getUser().getName();
-        }
 
         log(SessionLoggingService.Type.LOGOUT, userName, causedBy);
     }
 
+    /**
+     * If there is an {@link InteractionContext} already (as some authentication mechanisms setup in filters, eg
+     * SpringSecurityFilter), then just use it.
+     *
+     * <p>
+     *     This method is called early on by {@link WebRequestCycleForIsis}.
+     * </p>
+     */
+    public void syncExternalAuthenticationIfAvailable() {
+
+        val interactionService = commonContext.lookupServiceElseFail(InteractionService.class);
+        val interactionContextIfAny = interactionService.currentInteractionContext();
+        interactionContextIfAny.ifPresent(interactionContext -> this.authentication = interactionContext);
+    }
+
+    /**
+     * Returns an {@link InteractionContext} either as authenticated (and then cached on the session subsequently),
+     * or taking into account {@link ImpersonatedUserHolder impersonation}.
+     *
+     * <p>
+     *     The session must still {@link AuthenticationManager#isSessionValid(InteractionContext) be valid}, though
+     *     note that this will always be true for externally authenticated users.
+     * </p>
+     */
     public synchronized InteractionContext getAuthentication() {
 
-        commonContext.getInteractionLayerTracker().currentInteractionContext()
-        .ifPresent(currentAuthentication->{
+        if(this.authentication == null) {
+            return null;
+        }
+        if(!getAuthenticationManager().isSessionValid(this.authentication)) {
+            return null;
+        }
+        signIn(true);
 
-            if (getAuthenticationManager().isSessionValid(currentAuthentication)) {
-                if (this.authentication != null) {
-                    if (Objects.equals(
-                            currentAuthentication.getUser().getName(),
-                            this.authentication.getUser().getName())) {
-                        // ok, same session so far as Wicket is concerned
-                        if (isSignedIn()) {
-                            // nothing to do...
-                        } else {
-                            // force as signed in (though not sure if this case can occur)
-                            signIn(true);
-                            this.authentication = currentAuthentication;
-                        }
-                    } else {
-                        // different user name
-                        if (isSignedIn()) {
-                            // invalidate previous session
-                            super.invalidate();
-                        }
-
-                        // either way, the current one is now signed in
-                        signIn(true);
-                        this.authentication = currentAuthentication;
-                    }
-                } else {
-                    signIn(true);
-                    this.authentication = currentAuthentication;
-                }
-            }
-
-        });
-
-        return this.authentication;
+        val impersonatedUserHolder = commonContext.lookupServiceElseFail(ImpersonatedUserHolder.class);
+        return impersonatedUserHolder.getUserMemento()
+                .map(x -> this.authentication.withUser(x))
+                .orElse(this.authentication);
     }
 
     /**

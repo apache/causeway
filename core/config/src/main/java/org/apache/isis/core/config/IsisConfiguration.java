@@ -34,6 +34,12 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 import javax.activation.DataSource;
 import javax.validation.Constraint;
 import javax.validation.ConstraintValidator;
@@ -59,8 +65,8 @@ import org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscr
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.applib.services.userui.UserMenu;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.config.IsisConfiguration.Viewer;
 import org.apache.isis.core.config.metamodel.facets.DefaultViewConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.ActionPublishingPolicy;
@@ -69,12 +75,6 @@ import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.PropertyP
 import org.apache.isis.core.config.metamodel.services.ApplicationFeaturesInitConfiguration;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.core.config.viewer.wicket.DialogMode;
-
-import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import lombok.Data;
 import lombok.Getter;
@@ -136,6 +136,42 @@ public class IsisConfiguration {
             private boolean allowCsrfFilters = false;
 
         }
+
+        private final Keycloak keycloak = new Keycloak();
+        @Data
+        public static class Keycloak {
+            /**
+             * The name of the realm for the Apache Isis application, as configured in
+             * Keycloak.
+             */
+            private String realm;
+
+            /**
+             * The base URL for the keycloak server.
+             *
+             * <p>
+             *     For example, if running a keycloak using Docker container, such as:
+             *     <pre>
+             *         docker run -p 9090:8080 \
+             *             -e KEYCLOAK_USER=admin \
+             *             -e KEYCLOAK_PASSWORD=admin \
+             *             quay.io/keycloak/keycloak:14.0.0
+             *     </pre>,
+             *
+             *     then the URL would be "http://localhost:9090/auth".
+             * </p>
+             */
+            private String baseUrl;
+
+            /**
+             * Specifies where users will be redirected after authenticating successfully if they
+             * have not visited a secured page prior to authenticating or {@code alwaysUse} is
+             * true.
+             */
+            private String loginSuccessUrl = "/wicket";
+        }
+
+
 
     }
 
@@ -749,11 +785,14 @@ public class IsisConfiguration {
                      *     {@link org.apache.isis.applib.annotation.ActionLayout#cssClass()}.
                      * </p>
                      */
-                    private Map<Pattern, String> patterns = asMap(
+                    private String[] patterns = {
                                     "delete.*:btn-danger",
                                     "discard.*:btn-warning",
-                                    "remove.*:btn-warning"
-                    );
+                                    "remove.*:btn-warning"};
+
+                    @Getter(lazy = true)
+                    private final Map<Pattern, String> patternsAsMap = asMap(getPatterns());
+
                 }
 
                 private final CssClassFa cssClassFa = new CssClassFa();
@@ -773,7 +812,7 @@ public class IsisConfiguration {
                      *     {@link org.apache.isis.applib.annotation.ActionLayout#cssClassFa()}.
                      * </p>
                      */
-                    private Map<Pattern, String> patterns = asMap(
+                    private String[] patterns = {
                             "add.*:fa-plus-square",
                             "all.*:fa-list",
                             "approve.*:fa-thumbs-o-up",
@@ -819,7 +858,11 @@ public class IsisConfiguration {
                             "update.*:fa-edit",
                             "upload.*:fa-upload",
                             "verify.*:fa-check-circle",
-                            "view.*:fa-search");
+                            "view.*:fa-search"};
+
+                    @Getter(lazy = true)
+                    private final Map<Pattern, String> patternsAsMap = asMap(getPatterns());
+
                 }
             }
 
@@ -3378,14 +3421,14 @@ public class IsisConfiguration {
         private final Pattern pattern;
         private final String string;
     }
-    private static Map<Pattern, String> asMap(String... mappings) {
-        return new LinkedHashMap<>(Arrays.stream(mappings).map(mapping -> {
+    private static Map<Pattern, String> asMap(final String... mappings) {
+        return new LinkedHashMap<>(_NullSafe.stream(mappings).map(mapping -> {
             final String[] parts = mapping.split(":");
             if (parts.length != 2) {
                 return null;
             }
             try {
-                return new PatternToString(Pattern.compile(parts[0]), parts[1]);
+                return new PatternToString(Pattern.compile(parts[0], Pattern.CASE_INSENSITIVE), parts[1]);
             } catch(Exception ex) {
                 return null;
             }

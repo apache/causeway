@@ -35,12 +35,10 @@ extends MemberDescribedFacetWithStaticTextAbstract {
     public static Optional<MemberDescribedFacet> create(
             final @Nullable ServiceActionLayoutData actionLayout,
             final FacetHolder holder) {
-        if(actionLayout == null) {
-            return Optional.empty();
-        }
-        final String describedAs = _Strings.emptyToNull(actionLayout.getDescribedAs());
-        return _Strings.isNotEmpty(describedAs)
-                ? Optional.of(new MemberDescribedFacetForMenuBarXml(describedAs, holder))
+
+        return actionLayout != null
+                ? _Strings.nonEmpty(actionLayout.getDescribedAs())
+                        .map(describedAs->new MemberDescribedFacetForMenuBarXml(describedAs, holder))
                 : Optional.empty();
     }
 

@@ -18,10 +18,9 @@
  */
 package demoapp.web;
 
+import org.apache.isis.extensions.secman.jpa.IsisModuleExtSecmanPersistenceJpa;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-
-import org.apache.isis.extensions.secman.jpa.IsisModuleExtSecmanPersistenceJpa;
 
 import demoapp.dom.DemoModuleJpa;
 
@@ -37,6 +36,7 @@ import demoapp.dom.DemoModuleJpa;
     IsisModuleExtSecmanPersistenceJpa.class,
 
 })
+
 public class DemoAppManifestJpa {
 
 }

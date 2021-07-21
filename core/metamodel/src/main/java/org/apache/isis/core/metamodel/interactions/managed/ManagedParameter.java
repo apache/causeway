@@ -28,19 +28,23 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
 import lombok.NonNull;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
-public interface ManagedParameter extends ManagedValue, ManagedFeature {
+@Log4j2
+public abstract class ManagedParameter
+implements
+    ManagedValue,
+    ManagedFeature {
 
-    int getParamNr();
-    @Override
-    ObjectActionParameter getMetaModel();
-    ParameterNegotiationModel getNegotiationModel();
+    public abstract int getParamNr();
+    @Override public abstract ObjectActionParameter getMetaModel();
+    public abstract ParameterNegotiationModel getNegotiationModel();
 
     /**
      * @param params
      * @return non-empty if not usable/editable (meaning if read-only)
      */
-    default Optional<InteractionVeto> checkUsability(final @NonNull Can<ManagedObject> params) {
+    public final Optional<InteractionVeto> checkUsability(final @NonNull Can<ManagedObject> params) {
 
         try {
             val head = getNegotiationModel().getHead();
@@ -55,9 +59,8 @@ public interface ManagedParameter extends ManagedValue, ManagedFeature {
 
         } catch (final Exception ex) {
 
-            return Optional.of(InteractionVeto
-                    .readonly(
-                            new Veto(ex.getLocalizedMessage())));
+            log.warn(ex.getLocalizedMessage(), ex);
+            return Optional.of(InteractionVeto.readonly(new Veto("failure during usability evaluation")));
 
         }
 

@@ -35,12 +35,10 @@ extends MemberNamedFacetWithStaticTextAbstract {
     public static Optional<MemberNamedFacet> create(
             final @Nullable ServiceActionLayoutData actionLayout,
             final FacetHolder holder) {
-        if(actionLayout == null) {
-            return Optional.empty();
-        }
-        final String named = _Strings.emptyToNull(actionLayout.getNamed());
-        return named != null
-                ? Optional.of(new MemberNamedFacetForMenuBarXml(named, holder))
+
+        return actionLayout != null
+                ? _Strings.nonEmpty(actionLayout.getNamed())
+                        .map(named->new MemberNamedFacetForMenuBarXml(named, holder))
                 : Optional.empty();
     }
 

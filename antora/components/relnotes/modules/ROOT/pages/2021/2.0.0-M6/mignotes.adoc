@@ -6,6 +6,16 @@
 
 (This page will be added to as development progresses).
 
+== Java Source Compliance Level
+
+The minimum required JVM version was updated from Java 8 to Java 11.
+
+A number of packages related to JavaEE were removed from the JRE, but these packages are used by the framework, specifically
+
+* JAX-WS packages (`javax.jws`, `javax.jws.soap`, `javax.xml.soap`, and `javax.xml.ws.*`)
+* JAXB packages (`javax.xml.bind.*`)
+
+
 == Changes to the Programming Model
 
 === Removed (Programming Model)

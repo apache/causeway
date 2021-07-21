@@ -211,7 +211,7 @@ public class ParameterNegotiationModel {
 
     // -- INTERNAL HOLDER OF PARAMETER BINDABLES
 
-    private static class ParameterModel implements ManagedParameter {
+    private static class ParameterModel extends ManagedParameter {
 
         @Getter(onMethod_ = {@Override}) private final int paramNr;
         @Getter(onMethod_ = {@Override}) @NonNull private final ObjectActionParameter metaModel;

@@ -83,5 +83,4 @@ public interface ManagedFeature {
                                 facetType.getName()));
     }
 
-
 }

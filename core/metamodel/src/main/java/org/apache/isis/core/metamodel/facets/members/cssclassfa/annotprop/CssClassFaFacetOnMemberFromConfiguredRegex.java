@@ -25,6 +25,7 @@ import java.util.function.Supplier;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -66,7 +67,7 @@ extends CssClassFaImperativeFacetAbstract {
             final MemberNamedFacet memberNamedFacet,
             final FacetHolder holder) {
         super(holder);
-        this.faIconByPattern = getConfiguration().getApplib().getAnnotation().getActionLayout().getCssClassFa().getPatterns();
+        this.faIconByPattern = getConfiguration().getApplib().getAnnotation().getActionLayout().getCssClassFa().getPatternsAsMap();
         this.memberNamedFacet = memberNamedFacet;
 
         // an optimization, not strictly required

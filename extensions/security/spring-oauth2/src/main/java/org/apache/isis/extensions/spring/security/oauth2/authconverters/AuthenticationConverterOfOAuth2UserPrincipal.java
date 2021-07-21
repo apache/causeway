@@ -3,16 +3,15 @@ package org.apache.isis.extensions.spring.security.oauth2.authconverters;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.security.spring.authconverters.AuthenticationConverter;
 
 import lombok.val;
-import lombok.var;
 
 /**
  * Interpret {@link Authentication} as containing an OAuth2 principal.
@@ -39,7 +38,7 @@ import lombok.var;
 public class AuthenticationConverterOfOAuth2UserPrincipal implements AuthenticationConverter {
 
     @Override
-    public UserMemento convert(Authentication authentication) {
+    public UserMemento convert(final Authentication authentication) {
         val principal = authentication.getPrincipal();
         if (principal instanceof OAuth2User) {
             val oAuth2User = (OAuth2User) principal;
@@ -52,14 +51,14 @@ public class AuthenticationConverterOfOAuth2UserPrincipal implements Authenticat
         return null;
     }
 
-    protected static String usernameFrom(OAuth2User oAuth2User) {
+    protected static String usernameFrom(final OAuth2User oAuth2User) {
         val loginAttr = oAuth2User.getAttributes().get("login");
         return loginAttr instanceof CharSequence
                 ? ((CharSequence) loginAttr).toString()
                 : oAuth2User.getName();
     }
 
-    protected static URL avatarUrlFrom(OAuth2User oAuth2User) {
+    protected static URL avatarUrlFrom(final OAuth2User oAuth2User) {
         final Object avatarUrlObj = oAuth2User.getAttributes().get("avatar_url");
         if(avatarUrlObj instanceof String) {
             try {
@@ -71,7 +70,7 @@ public class AuthenticationConverterOfOAuth2UserPrincipal implements Authenticat
         return null;
     }
 
-    protected static String realNameFrom(OAuth2User oAuth2User) {
+    protected static String realNameFrom(final OAuth2User oAuth2User) {
         final Object nameAttr = oAuth2User.getAttributes().get("name");
         if(nameAttr instanceof String) {
             return (String)nameAttr;

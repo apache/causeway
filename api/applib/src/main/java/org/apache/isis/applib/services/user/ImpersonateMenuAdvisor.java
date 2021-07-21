@@ -3,13 +3,11 @@ package org.apache.isis.applib.services.user;
 import java.util.List;
 
 /**
- * Enables {@link ImpersonateMenu#impersonateWithRoles(String, List)},
- * which provides choices for user and roles.
+ * Enables {@link ImpersonateMenu#impersonateWithRoles(String, List)}, to provides choices for user and roles.
  *
  * <p>
- *     This is in addition to the simpler
- *     {@link ImpersonateMenu#impersonate(String)} (which simply allows a
- *     username to be specified, with no roles).
+ *     This will result in the simpler {@link ImpersonateMenu#impersonate(String)} (which simply allows a
+ *     username to be specified, with no roles) being hidden.
  * </p>
  *
  * @since 2.0 {@index}

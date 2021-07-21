@@ -24,6 +24,7 @@ import java.util.Optional;
 
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
+import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 
@@ -89,4 +90,11 @@ public interface ApplicationPermissionRepository {
     List<ApplicationPermission> findByUser(ApplicationUser applicationUser);
 
     List<ApplicationPermission> findByRole(ApplicationRole applicationRole);
+
+    /**
+     * To support impersonation by role
+     * @param user
+     * @return
+     */
+    List<ApplicationPermission> findByUserMemento(UserMemento user);
 }

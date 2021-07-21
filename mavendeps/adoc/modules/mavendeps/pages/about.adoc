@@ -218,19 +218,14 @@ xref:testing:fixtures:about.adoc[Fixture Scripts]
 
 == jdk11
 
-While Apache Isis v2 will run happily on Java 8, it is of course also possible to it on later versions.
+While Apache Isis v2 will run happily on Java 11, it is of course also possible to run it on later versions.
 
-However, between Java 8 and Java 11 a number of packages related to JavaEE were removed from the JRE, but these packages are used by the framework, specifically
+Historically, between Java 8 and Java 11 a number of packages related to JavaEE were removed from the JRE, but these packages are used by the framework, specifically
 
 * JAX-WS packages (`javax.jws`, `javax.jws.soap`, `javax.xml.soap`, and `javax.xml.ws.*`)
 * JAXB packages (`javax.xml.bind.*`)
 
-So, if you _do_ want to run your Apache Isis application on Java 11 or later, then these dependencies need to be added in.
-
-
-All you need to do is include this dependency in the webapp module:
-
-To use, add the following :
+These dependencies are added in automatically. For reference, these dependencies are bundled with:
 
 [source,xml]
 .pom.xml
@@ -244,8 +239,10 @@ To use, add the following :
 </dependencies>
 ----
 
-If you are running on JDK11, then this will activate a profile to bring in the missing packages.
-Otherwise it will be ignored.
+[NOTE] 
+====
+TODO v2 - once JDK 17 is released, we might consider upgrading this module to provide any dependencies that are in JDK 11 but not in JDK 17 (if any), and with that rename this module to _jdk17_.  
+====
 
 For more on this topic, see:
 

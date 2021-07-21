@@ -33,6 +33,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
@@ -58,7 +59,7 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
     }
 
     @Override
-    public IModel<ManagedObject> model(ManagedObject adapter) {
+    public IModel<ManagedObject> model(final ManagedObject adapter) {
         return EntityModel.ofAdapter(model.getCommonContext(), adapter);
     }
 
@@ -133,19 +134,21 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
     private Predicate<ManagedObject> ignoreHidden() {
         return new Predicate<ManagedObject>() {
             @Override
-            public boolean test(ManagedObject input) {
+            public boolean test(final ManagedObject objectAdapter) {
                 final InteractionResult visibleResult =
                         InteractionUtils.isVisibleResult(
-                                input.getSpecification(),
-                                createVisibleInteractionContext(input));
+                                objectAdapter.getSpecification(),
+                                createVisibleInteractionContext(objectAdapter));
                 return visibleResult.isNotVetoing();
             }
         };
     }
 
-    private VisibilityContext createVisibleInteractionContext(ManagedObject objectAdapter) {
+    private VisibilityContext createVisibleInteractionContext(final ManagedObject objectAdapter) {
         return new ObjectVisibilityContext(
-                objectAdapter, objectAdapter.getSpecification().getFeatureIdentifier(), InteractionInitiatedBy.USER,
+                InteractionHead.regular(objectAdapter),
+                objectAdapter.getSpecification().getFeatureIdentifier(),
+                InteractionInitiatedBy.USER,
                 Where.ALL_TABLES);
     }
 

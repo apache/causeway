@@ -36,8 +36,6 @@
 	<properties>
 
 		<maven.compiler.release>11</maven.compiler.release>
-		<maven.compiler.source>11</maven.compiler.source>
-		<maven.compiler.target>11</maven.compiler.target>
 
 		<jar-plugin.automaticModuleName>org.apache.isis.tooling</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/isis/tooling</git-plugin.propertiesDir>
@@ -46,7 +44,7 @@
 		<gradle-tooling.version>7.1.1</gradle-tooling.version>
 		<maven-model-builder.version>3.8.1</maven-model-builder.version>
 		<picocli.version>4.6.1</picocli.version>
-		<jsoup.version>1.13.1</jsoup.version>
+		<jsoup.version>1.14.1</jsoup.version>
 		<structurizr.version>1.6.2</structurizr.version>
 
 	</properties>

@@ -55,12 +55,16 @@ import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.metamodel.facets.actions.layout.CssClassFaFacetForMenuBarXml;
+import org.apache.isis.core.metamodel.facets.actions.layout.CssClassFacetForMenuBarXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.MemberDescribedFacetForMenuBarXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.MemberNamedFacetForMenuBarXml;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
 import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
 import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
@@ -206,6 +210,19 @@ implements MenuBarsService {
                         facet->facet instanceof MemberDescribedFacetForMenuBarXml,
                         MemberDescribedFacetForMenuBarXml.create(layoutData, objectAction),
                         objectAction);
+
+                FacetUtil.updateFacet(
+                        CssClassFacet.class,
+                        facet->facet instanceof CssClassFacetForMenuBarXml,
+                        CssClassFacetForMenuBarXml.create(layoutData, objectAction),
+                        objectAction);
+
+                FacetUtil.updateFacet(
+                        CssClassFaFacet.class,
+                        facet->facet instanceof CssClassFaFacetForMenuBarXml,
+                        CssClassFaFacetForMenuBarXml.create(layoutData, objectAction),
+                        objectAction);
+
             });
 
         });

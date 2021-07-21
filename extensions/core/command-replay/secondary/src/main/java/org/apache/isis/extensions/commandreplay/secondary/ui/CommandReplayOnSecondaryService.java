@@ -48,7 +48,7 @@ import lombok.val;
     named = "Activity",
     menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
-@Named("isis.ext.commandReplaySecondary.CommandReplayOnSecondaryService")
+@Named(CommandReplayOnSecondaryService.LOGICAL_TYPE_NAME)
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor
 //@Log4j2

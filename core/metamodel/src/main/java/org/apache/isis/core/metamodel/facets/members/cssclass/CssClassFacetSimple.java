@@ -34,8 +34,12 @@ implements CssClassFacet {
 
     private final String cssClass;
 
-    public CssClassFacetSimple(final String cssClass, final FacetHolder holder) {
-        super(holder);
+    protected CssClassFacetSimple(final String cssClass, final FacetHolder holder) {
+        this(cssClass, holder, Precedence.DEFAULT);
+    }
+
+    protected CssClassFacetSimple(final String cssClass, final FacetHolder holder, final Precedence precedence) {
+        super(holder, precedence);
         this.cssClass = cssClass;
     }
 

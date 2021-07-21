@@ -31,7 +31,10 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
-public class NavigationFacetDerivedFromHiddenType extends FacetAbstract implements NavigationFacet {
+public class NavigationFacetDerivedFromHiddenType
+extends FacetAbstract
+implements
+    NavigationFacet {
 
     private final ObjectSpecification navigatedType;
 
@@ -52,8 +55,12 @@ public class NavigationFacetDerivedFromHiddenType extends FacetAbstract implemen
             // that navigate to a class that has the HiddenTypeFacet
             return null;
         }
-        val ovc = new ObjectVisibilityContext(ic.getHead().getOwner(), Identifier.classIdentifier(navigatedType.getLogicalType()), ic.getInitiatedBy(), ic.getWhere());
-        final String hides = facet.hides(ovc);
+        val objVisibilityContext = new ObjectVisibilityContext(
+                ic.getHead(),
+                Identifier.classIdentifier(navigatedType.getLogicalType()),
+                ic.getInitiatedBy(),
+                ic.getWhere());
+        final String hides = facet.hides(objVisibilityContext);
         return hides;
     }
 

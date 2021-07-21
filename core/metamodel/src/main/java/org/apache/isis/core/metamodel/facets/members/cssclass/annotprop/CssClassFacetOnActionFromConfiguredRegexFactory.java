@@ -41,7 +41,7 @@ extends FacetFactoryAbstract {
     @Inject
     public CssClassFacetOnActionFromConfiguredRegexFactory(final MetaModelContext mmc) {
         super(mmc, FeatureType.ACTIONS_ONLY);
-        this.cssClassByPattern = getConfiguration().getApplib().getAnnotation().getActionLayout().getCssClass().getPatterns();
+        this.cssClassByPattern = getConfiguration().getApplib().getAnnotation().getActionLayout().getCssClass().getPatternsAsMap();
     }
 
     @Override

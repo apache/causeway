@@ -36,14 +36,14 @@ extends VisibilityContext
 implements ProposedHolder {
 
     public ObjectVisibilityContext(
-            final ManagedObject targetAdapter,
+            final InteractionHead head,
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
 
         super(
                 InteractionContextType.OBJECT_VISIBILITY,
-                InteractionHead.regular(targetAdapter), identifier, interactionInitiatedBy, where);
+                head, identifier, interactionInitiatedBy, where);
     }
 
     @Override

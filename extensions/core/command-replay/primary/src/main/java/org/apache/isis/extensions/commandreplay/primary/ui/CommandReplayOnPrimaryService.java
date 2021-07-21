@@ -53,7 +53,7 @@ import lombok.RequiredArgsConstructor;
     named = "Activity",
     menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
-@Named("isis.ext.commandReplayPrimary.CommandReplayOnPrimaryService")
+@Named(CommandReplayOnPrimaryService.LOGICAL_TYPE_NAME)
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor
 //@Log4j2
@@ -102,7 +102,7 @@ public class CommandReplayOnPrimaryService {
             throws NotFoundException {
         return commandRetrievalService.findCommandsOnPrimaryFrom(interactionId, batchSize);
     }
-    public Integer default1FindCommandsOnPrimaryFrom() {
+    @MemberSupport public Integer default1FindCommandsOnPrimaryFrom() {
         return commandRetrievalService.default1FindCommandsOnPrimaryFrom();
     }
 
@@ -139,10 +139,10 @@ public class CommandReplayOnPrimaryService {
         final String xml = jaxbService.toXml(commandsDto);
         return new Clob(fileName, "application/xml", xml);
     }
-    public Integer default1DownloadCommands() {
+    @MemberSupport public Integer default1DownloadCommands() {
         return 25;
     }
-    public String default2DownloadCommands() {
+    @MemberSupport public String default2DownloadCommands() {
         return "commands_from";
     }
 
@@ -178,7 +178,7 @@ public class CommandReplayOnPrimaryService {
                     return null;
                 });
     }
-    public String default1DownloadCommandById() {
+    @MemberSupport public String default1DownloadCommandById() {
         return "command";
     }
 

@@ -45,8 +45,6 @@
 		<git-plugin.propertiesDir>org/apache/isis/core</git-plugin.propertiesDir>
 		<git-plugin.gitDir>${coreBaseDir}/../.git</git-plugin.gitDir>
 
-		<maven.compiler.arg>-parameters</maven.compiler.arg>
-
 		<dependency.locations.enabled>false</dependency.locations.enabled>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -85,7 +83,7 @@
 
 
 		<!-- LIBRARY DEPENDENCIES -->
-		<archunit.version>0.20.0</archunit.version>
+		<archunit.version>0.20.1</archunit.version>
 		<approvaltests.version>11.7.0</approvaltests.version>
 
 		<assertj-guava.version>3.4.0</assertj-guava.version>
@@ -94,7 +92,7 @@
 
 		<commons-email.version>1.5</commons-email.version>
 		<commons-httpclient.version>4.5.12</commons-httpclient.version>
-		<commons-io.version>2.10.0</commons-io.version>
+		<commons-io.version>2.11.0</commons-io.version>
 
 		<cucumber.version>6.9.1</cucumber.version>
 
@@ -111,7 +109,7 @@
 		<datanucleus-maven-plugin.version>5.2.1</datanucleus-maven-plugin.version>
 		<datanucleus-rdbms.version>5.2.8</datanucleus-rdbms.version>
 
-		<docx4j.version>8.3.0</docx4j.version>
+		<docx4j.version>8.3.1</docx4j.version>
 
 		<easymock.version>4.3</easymock.version>
 		<error_prone_annotations.version>2.7.1</error_prone_annotations.version>
@@ -170,13 +168,13 @@
 
 		<quartz-scheduler.version>2.3.2</quartz-scheduler.version>
 
-		<resteasy-spring-boot-starter.version>4.8.2.Final</resteasy-spring-boot-starter.version>
+		<resteasy-spring-boot-starter.version>4.9.0.Final</resteasy-spring-boot-starter.version>
 		<resteasy.version>4.6.2.Final</resteasy.version> <!-- keep in sync with property defined in resteasy4-spring-boot-starter -->
 
 		<select2.version>4.0.13</select2.version>
 		<shiro.version>1.7.1</shiro.version>
 		<simpleslackapi.version>1.3.0</simpleslackapi.version>
-		<slf4j-api.version>1.7.31</slf4j-api.version> <!-- as provided by spring-boot, needed to solve convergence issues -->
+		<slf4j-api.version>1.7.32</slf4j-api.version> <!-- also provided by spring-boot-starter-logging, needed to solve convergence issues -->
 		<spring-boot.version>2.5.2</spring-boot.version> <!-- has no effect here, needs to be set in isis-parent/pom.xml -->
 		<summernote.version>0.8.11</summernote.version>
 		<swagger-core.version>1.6.2</swagger-core.version>
@@ -300,12 +298,7 @@
 					<configuration>
 						<showDeprecation>false</showDeprecation>
 						<showWarnings>false</showWarnings>
-						<!-- defaults, to be overridden with option maven.compiler.release -->
-						<source>1.8</source>
-						<target>1.8</target>
-						<compilerArgs>
-							<arg>${maven.compiler.arg}</arg>
-						</compilerArgs>
+						<!-- Java compliance level, to be overridden with option maven.compiler.release -->
 					</configuration>
 					<!-- goal:compile binds to phase:compile -->
 					<!-- goal:testCompile binds to phase:test-compile -->
@@ -539,7 +532,7 @@
 								<version>[3.5.0,)</version>
 							</requireMavenVersion>
 							<requireJavaVersion>
-								<version>[1.8.0,)</version>
+								<version>[11,)</version>
 							</requireJavaVersion>
 							<!-- seemingly not compatible with use of 2.0.0-SNAPSHOT placeholders
 								<requirePluginVersions> <message>All plugin versions must be defined!</message>
@@ -1583,7 +1576,7 @@
 						<configuration>
 							<toolchains>
 								<jdk>
-									<version>1.8</version>
+									<version>11</version>
 									<vendor>openjdk</vendor>
 								</jdk>
 							</toolchains>
@@ -1608,8 +1601,7 @@
 						<configuration>
 							<showDeprecation>true</showDeprecation>
 							<showWarnings>true</showWarnings>
-							<source>8</source>
-							<target>8</target>
+							<!-- Java compliance level, to be overridden with option maven.compiler.release -->
 						</configuration>
 					</plugin>
 
