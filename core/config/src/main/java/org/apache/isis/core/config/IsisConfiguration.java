@@ -65,7 +65,10 @@ import org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscr
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.applib.services.userui.UserMenu;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.core.config.IsisConfiguration.Core;
+import org.apache.isis.core.config.IsisConfiguration.Viewer;
 import org.apache.isis.core.config.metamodel.facets.DefaultViewConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.ActionPublishingPolicy;
@@ -3421,7 +3424,7 @@ public class IsisConfiguration {
         private final String string;
     }
     private static Map<Pattern, String> asMap(final String... mappings) {
-        return new LinkedHashMap<>(Arrays.stream(mappings).map(mapping -> {
+        return new LinkedHashMap<>(_NullSafe.stream(mappings).map(mapping -> {
             final String[] parts = mapping.split(":");
             if (parts.length != 2) {
                 return null;
