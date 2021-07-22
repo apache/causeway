@@ -25,6 +25,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.base._Casts;
 
 import lombok.SneakyThrows;
 import lombok.val;
@@ -37,33 +38,32 @@ import lombok.val;
 public class _SerializationTester {
 
     @SneakyThrows
-    public static byte[] marshall(Serializable object) {
+    public static byte[] marshall(final Serializable object) {
         val bos = new ByteArrayOutputStream(16*4096); // 16k initial buffer size
-        val oos = new ObjectOutputStream(bos);
-        oos.writeObject(object);
-        oos.flush();
-        oos.close();
+        try(val oos = new ObjectOutputStream(bos)) {
+            oos.writeObject(object);
+            oos.flush();
+        }
         return bos.toByteArray();
+
     }
 
     @SneakyThrows
-    public static <T> T unmarshall(byte[] input) {
+    public static <T> T unmarshall(final byte[] input) {
         val bis = new ByteArrayInputStream(input);
-        val ois = new ObjectInputStream(bis);
-        @SuppressWarnings("unchecked")
-        val t = (T) ois.readObject();
-        bis.close();
-        return t;
+        try(val ois = new ObjectInputStream(bis)){
+            return _Casts.uncheckedCast(ois.readObject());
+        }
     }
 
     @SneakyThrows
-    public static <T extends Serializable> T roundtrip(T object) {
+    public static <T extends Serializable> T roundtrip(final T object) {
         val bytes = marshall(object);
         return unmarshall(bytes);
     }
 
     @SneakyThrows
-    public static <T extends Serializable> void assertEqualsOnRoundtrip(T object) {
+    public static <T extends Serializable> void assertEqualsOnRoundtrip(final T object) {
         T afterRoundtrip = roundtrip(object);
         _Assert.assertEquals(object, afterRoundtrip);
     }
