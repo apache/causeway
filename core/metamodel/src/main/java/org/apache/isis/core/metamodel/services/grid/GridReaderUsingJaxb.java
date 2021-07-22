@@ -71,7 +71,7 @@ public class GridReaderUsingJaxb {
         }
     }
 
-    public Grid loadGrid(String xml) {
+    public Grid loadGrid(final String xml) {
         initForTesting(); // a no-op if already initialized via @PostConstruct
         return (Grid) jaxbService.fromXml(jaxbContext, xml);
     }
@@ -84,7 +84,7 @@ public class GridReaderUsingJaxb {
             try {
                 jaxbContext = JAXBContext.newInstance(BS3Grid.class);
             } catch (JAXBException e) {
-                e.printStackTrace();
+                // leave as null
             }
         }
     }
