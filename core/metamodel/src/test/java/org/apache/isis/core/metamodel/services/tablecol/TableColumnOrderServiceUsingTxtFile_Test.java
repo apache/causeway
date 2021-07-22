@@ -58,7 +58,7 @@ class TableColumnOrderServiceUsingTxtFile_Test {
         @Test
         void missing_file() {
             // when
-            val ordered = service.orderStandalone(Order.class,
+            val ordered = service.orderStandalone(Order2.class,
                     Arrays.asList("orderNum", "orderStatus", "orderDate", "orderAmount"));
 
             // then
@@ -68,6 +68,8 @@ class TableColumnOrderServiceUsingTxtFile_Test {
 
 }
 class Order {
+}
+class Order2 {
 }
 class Customer {
 }
