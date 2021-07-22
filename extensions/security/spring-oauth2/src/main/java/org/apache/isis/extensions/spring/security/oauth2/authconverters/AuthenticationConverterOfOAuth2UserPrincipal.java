@@ -3,13 +3,12 @@ package org.apache.isis.extensions.spring.security.oauth2.authconverters;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.stereotype.Component;
-
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.security.spring.authconverters.AuthenticationConverter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.stereotype.Component;
 
 import lombok.val;
 
@@ -42,11 +41,9 @@ public class AuthenticationConverterOfOAuth2UserPrincipal implements Authenticat
         val principal = authentication.getPrincipal();
         if (principal instanceof OAuth2User) {
             val oAuth2User = (OAuth2User) principal;
-            val username = usernameFrom(oAuth2User);
-            var userMemento = UserMemento.ofNameAndRoleNames(username);
-            userMemento = userMemento.withAvatarUrl(avatarUrlFrom(oAuth2User));
-            userMemento = userMemento.withRealName(realNameFrom(oAuth2User));
-            return userMemento;
+            return UserMemento.ofNameAndRoleNames(usernameFrom(oAuth2User))
+                    .withAvatarUrl(avatarUrlFrom(oAuth2User))
+                    .withRealName(realNameFrom(oAuth2User));
         }
         return null;
     }

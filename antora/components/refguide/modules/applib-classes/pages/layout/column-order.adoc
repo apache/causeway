@@ -1,0 +1,70 @@
+[#column-order]
+= Column Order
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+The xref:refguide:applib:index/services/tablecol/TableColumnOrderService.adoc[TableColumnOrderService] SPI allows applications to define the order in which property columns appear in tables, for both parented and standalone collections.
+
+Although this is an SPI, the framework also provides an out-of-the-box implementation that uses simple text files to specify the column order.
+These simple files can be reloaded dynamically during prototyping, so make it easy to change the order of columns (or hide columns completely).
+
+== Parented Collections
+
+For parented collections, the file should be called `ParentedClass#collectionId.columnOrder.txt`.
+
+For example, suppose that `Customer` has an `orders` collection consisting of ``Order``s, where the default ordering of properties (from the xref:refguide:applib:index/annotation/PropertyLayout.adoc#sequence[@PropertyLayout#sequence] annotation) is (say) "orderNum", "orderStatus", "orderDate", "orderAmount".
+
+This order can be changed using this file:
+
+[source,text]
+.Customer#orders.columnOrder.txt
+----
+orderNum
+orderDate
+orderStatus
+----
+
+=== Commented out and unknown properties
+
+Note also that the following would return the same result:
+
+[source,text]
+.Customer#orders.columnOrder.txt
+----
+orderNum
+#orderAmount
+orderDate
+orderStatus
+nonsense
+----
+
+Here the "orderAmount" is commented out and so is excluded because the line is not an exact match.
+The same is true for "nonsense"; it doesn't match any of the original properties of the `Order` class.
+
+
+== Standalone Collections
+
+For parented collections, the file should be called `Class.columnOrder.txt`.
+
+For example, suppose that the `Order` entity is returned from various repository queries as a standalone collection, where (as in the example above) the default ordering of properties (from the xref:refguide:applib:index/annotation/PropertyLayout.adoc#sequence[@PropertyLayout#sequence] annotation) is (say) "orderNum", "orderStatus", "orderDate", "orderAmount".
+
+This order can be changed using this file:
+
+[source,text]
+.Order.columnOrder.txt
+----
+orderNum
+orderDate
+orderStatus
+----
+
+== Customising the Implementation
+
+The above behaviour is provided by the xref:refguide:core:index/metamodel/services/tablecol/TableColumnOrderServiceUsingTxtFile.adoc[TableColumnOrderServiceUsingTxtFile] implementation of the xref:refguide:applib:index/services/tablecol/TableColumnOrderService.adoc[TableColumnOrderService] SPI.
+
+If necessary, the class can be subclassed to change the convention for searching for class files; just make sure that the subclass has an earlier `Precedence` than the framework so that it is picked up first.
+
+You could of course also use it as the inspiration of your own more sophisticated implementation.
+
