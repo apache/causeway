@@ -19,23 +19,23 @@
 package org.apache.isis.core.metamodel.services.tablecol;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.annotation.Priority;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.services.tablecol.TableColumnOrderService;
-import org.apache.isis.commons.internal.resources._Resources;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import lombok.extern.log4j.Log4j2;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.services.tablecol.TableColumnOrderService;
+import org.apache.isis.commons.internal.base._Text;
+import org.apache.isis.commons.internal.resources._Resources;
+
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Provides a simple mechanism to order the columns of both parented and standalone collections by reading a flat
@@ -69,8 +69,6 @@ import lombok.val;
 @Log4j2
 public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderService {
 
-    static final String LINE_SEPARATOR = System.getProperty("line.separator");
-
     /**
      * Reads propertyIds of the collection from a file named <i>ClassName#collectionId.columnOrder.txt</i>. relative
      * to the class itself.
@@ -93,12 +91,12 @@ public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderServ
             return null;
         }
         val s = contentsIfAny.get();
-        return Arrays.stream(s.split(LINE_SEPARATOR))
+        return _Text.getLines(s)
                 .filter(propertyIds::contains)
-                .collect(Collectors.toList());
+                .toList();
     }
 
-    private List<String> buildResourceNames(Class<?> domainClass, String collectionId) {
+    private List<String> buildResourceNames(final Class<?> domainClass, final String collectionId) {
         val resourceNames = new ArrayList<String>();
         addResourceNames(domainClass, collectionId, resourceNames);
         return resourceNames;
@@ -122,7 +120,7 @@ public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderServ
         addTo.add(String.format("%s#%s.columnOrder.txt", domainClass.getSimpleName(), collectionId));
     }
 
-    private static Optional<String> tryLoad(Class<?> domainClass, List<String> resourceNames) {
+    private static Optional<String> tryLoad(final Class<?> domainClass, final List<String> resourceNames) {
         for (String resourceName : resourceNames) {
             try {
                 final String contents = _Resources.loadAsStringUtf8(domainClass, resourceName);
@@ -158,12 +156,12 @@ public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderServ
             return null;
         }
         val s = contentsIfAny.get();
-        return Arrays.stream(s.split(LINE_SEPARATOR))
+        return _Text.getLines(s)
                 .filter(propertyIds::contains)
-                .collect(Collectors.toList());
+                .toList();
     }
 
-    private List<String> buildResourceNames(Class<?> domainClass) {
+    private List<String> buildResourceNames(final Class<?> domainClass) {
         val resourceNames = new ArrayList<String>();
         addResourceNames(domainClass, resourceNames);
         return resourceNames;
