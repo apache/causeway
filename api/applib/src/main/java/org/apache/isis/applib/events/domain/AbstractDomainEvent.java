@@ -20,6 +20,9 @@ package org.apache.isis.applib.events.domain;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
@@ -32,6 +35,7 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -179,7 +183,7 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
     /**
      * Not API, set by the framework.
      */
-    public void setEventPhase(Phase phase) {
+    public void setEventPhase(final Phase phase) {
         this.eventPhase = phase;
     }
 
@@ -196,6 +200,8 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
     public void setIdentifier(final Identifier identifier) {
         this.identifier = identifier;
     }
+
+    // -- HIDING
 
     /**
      * Used by the framework to determine if the member should be hidden (not
@@ -214,6 +220,28 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
     }
 
     /**
+     * Same as ... {@code if(condition) hide(); }
+     * @see #hide()
+     */
+    public void hideIf(final boolean condition) {
+        if(condition) {
+            hide();
+        }
+    }
+
+    /**
+     * Same as ... {@code if(shouldHide.getAsBoolean()) hide(); }
+     * @see #hide()
+     */
+    public void hideIf(final @NonNull BooleanSupplier shouldHide) {
+        if(shouldHide.getAsBoolean()) {
+            hide();
+        }
+    }
+
+    // -- DISABLING
+
+    /**
      * If {@link #isDisabled() disabled}, then either this method returns
      * non-null or {@link #getDisabledReasonTranslatable()} will.
      */
@@ -229,7 +257,6 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
     public boolean isDisabled() {
         return disabledReason != null || disabledReasonTranslatable != null;
     }
-
 
     /**
      * API for subscribers to disable the member, specifying the reason why.
@@ -252,6 +279,27 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
         this.disabledReasonTranslatable = reason;
     }
 
+    /**
+     * Same as ... {@code if(reasonSupplier.get()!=null) disable(reasonSupplier.get()); }
+     * @see #disable(String)
+     */
+    public void disableIfReason(final @NonNull Supplier<String> reasonSupplier) {
+        Optional
+            .ofNullable(reasonSupplier.get())
+            .ifPresent(this::disable);
+    }
+
+    /**
+     * Same as ... {@code if(reasonSupplier.get()!=null) disable(reasonSupplier.get()); }
+     * @see #disable(TranslatableString)
+     */
+    public void disableIfTranslatableReason(final @NonNull Supplier<TranslatableString> reasonSupplier) {
+        Optional
+            .ofNullable(reasonSupplier.get())
+            .ifPresent(this::disable);
+    }
+
+    // -- INVALIDATING
 
     /**
      * Used by the framework to determine whether the interaction is invalid
@@ -302,6 +350,28 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
     public void invalidate(final TranslatableString reason) {
         this.invalidityReasonTranslatable = reason;
     }
+
+    /**
+     * Same as ... {@code if(reasonSupplier.get()!=null) invalidate(reasonSupplier.get()); }
+     * @see #invalidate(String)
+     */
+    public void invalidateIfReason(final @NonNull Supplier<String> reasonSupplier) {
+        Optional
+            .ofNullable(reasonSupplier.get())
+            .ifPresent(this::invalidate);
+    }
+
+    /**
+     * Same as ... {@code if(reasonSupplier.get()!=null) invalidate(reasonSupplier.get()); }
+     * @see #disable(TranslatableString)
+     */
+    public void invalidateIfTranslatableReason(final @NonNull Supplier<TranslatableString> reasonSupplier) {
+        Optional
+            .ofNullable(reasonSupplier.get())
+            .ifPresent(this::invalidate);
+    }
+
+    // -- VETOING
 
     /**
      * Use instead of {@link #hide()}, {@link #disable(String)} and
@@ -376,6 +446,8 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
         }
     }
 
+    // -- USER DATA
+
     /**
      * Provides a mechanism to pass data to the next {@link #getEventPhase() phase}.
      */
@@ -384,7 +456,7 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
     /**
      * Obtain user-data, as set by a previous {@link #getEventPhase() phase}.
      */
-    public Object get(Object key) {
+    public Object get(final Object key) {
         return userData.get(key);
     }
 
@@ -395,7 +467,7 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
      *
      * Set user-data, for the use of a subsequent {@link #getEventPhase() phase}.
      */
-    public void put(Object key, Object value) {
+    public void put(final Object key, final Object value) {
         userData.put(key, value);
     }
 
