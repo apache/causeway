@@ -84,7 +84,7 @@ public class ArchitectureJpaRules {
             private boolean containsIsisEntityListener(final JavaClass[] classes) {
                 return Arrays.stream(classes)
                         .anyMatch(x -> Objects.equals(x.getFullName(), JpaEntityInjectionPointResolver.class.getName())
-                                || x.isAssignableTo(IsisEntityListener.class) || x.isAssignableTo(IsisEntityListener.class));
+                                || x.isAssignableTo(IsisEntityListener.class));
             }
         };
     }
