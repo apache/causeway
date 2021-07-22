@@ -18,9 +18,6 @@
  */
 package org.apache.isis.core.metamodel;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.core.config.IsisModuleCoreConfig;
 import org.apache.isis.core.metamodel.context.MetaModelContexts;
@@ -46,6 +43,7 @@ import org.apache.isis.core.metamodel.services.layout.LayoutServiceDefault;
 import org.apache.isis.core.metamodel.services.metamodel.MetaModelServiceDefault;
 import org.apache.isis.core.metamodel.services.registry.ServiceRegistryDefault;
 import org.apache.isis.core.metamodel.services.tablecol.TableColumnOrderServiceDefault;
+import org.apache.isis.core.metamodel.services.tablecol.TableColumnOrderServiceUsingTxtFile;
 import org.apache.isis.core.metamodel.services.title.TitleServiceDefault;
 import org.apache.isis.core.metamodel.specloader.ProgrammingModelServiceDefault;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault;
@@ -54,6 +52,8 @@ import org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderForBuiltin;
 import org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderForCollections;
 import org.apache.isis.core.metamodel.valuetypes.ValueTypeRegistry;
 import org.apache.isis.core.security.IsisModuleCoreSecurity;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({
@@ -91,6 +91,7 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
         ProgrammingModelServiceDefault.class,
         ServiceRegistryDefault.class,
         TableColumnOrderServiceDefault.class,
+        TableColumnOrderServiceUsingTxtFile.class,
         TitleServiceDefault.class,
         SpecificationLoaderDefault.class,
 

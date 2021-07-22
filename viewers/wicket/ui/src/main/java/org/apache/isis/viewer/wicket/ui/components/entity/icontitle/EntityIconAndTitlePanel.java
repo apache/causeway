@@ -137,7 +137,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
             }
 
             final String title = determineTitle();
-            this.label = newLabel(ID_ENTITY_TITLE, title);
+            this.label = newLabel(ID_ENTITY_TITLE, titleAbbreviated(title));
             link.addOrReplace(this.label);
 
             String entityTypeName = determineFriendlyType() // from actual underlying model
@@ -205,9 +205,9 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
     }
 
     private String determineTitle() {
-        val domainObject = getModel().getObject();
-        return domainObject != null
-                ? titleAbbreviated(domainObject.titleString(this::isContextAdapter))
+        val managedObject = getModel().getObject();
+        return managedObject != null
+                ? managedObject.titleString(this::isContextAdapter)
                 : "(no object)";
     }
 
