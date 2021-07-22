@@ -363,7 +363,7 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
 
     /**
      * Same as ... {@code if(reasonSupplier.get()!=null) invalidate(reasonSupplier.get()); }
-     * @see #disable(TranslatableString)
+     * @see #invalidate(TranslatableString)
      */
     public void invalidateIfTranslatableReason(final @NonNull Supplier<TranslatableString> reasonSupplier) {
         Optional
