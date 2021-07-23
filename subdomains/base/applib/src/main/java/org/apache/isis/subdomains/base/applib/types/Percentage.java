@@ -23,19 +23,60 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
+import org.springframework.core.annotation.AliasFor;
 
 /**
- * Meta-annotation for a numeric property or parameter representing a
- * the identity of a domain object (with respect to its logical type).
+ * Meta-annotation for an optional {@link java.math.BigDecimal} property or parameter
+ * representing a percentage amount.
  *
  * @since 2.0 {@index}
  */
+@Property(
+        optionality = Optionality.OPTIONAL
+)
+@PropertyLayout(
+        named = Percentage.NAMED
+)
+@Parameter(
+        optionality = Optionality.OPTIONAL
+)
+@ParameterLayout(
+        named = Percentage.NAMED
+)
+@javax.validation.constraints.Digits(
+        integer = Percentage.INTEGER,
+        fraction = Percentage.FRACTION
+)
+//@javax.jdo.annotations.Column(allowsNull = "true")
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Percentage {
 
-    int SCALE = 2;
+    @AliasFor( annotation = Property.class, attribute = "optionality")
+    Optionality propertyOptionality() default Optionality.OPTIONAL;
+    @AliasFor( annotation = Parameter.class, attribute = "optionality")
+    Optionality parameterOptionality() default Optionality.OPTIONAL;
+
+//    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "allowsNull")
+//    String columnAllowsNull() default "true";
+
+    String NAMED = "Percentage (%)";
+    @AliasFor( annotation =  PropertyLayout.class, attribute = "named")
+    String propertyLayoutNamed() default NAMED;
+    @AliasFor( annotation =  ParameterLayout.class, attribute = "named")
+    String parameterLayoutNamed() default NAMED;
+
+    int INTEGER = 3;
+    @AliasFor( annotation = javax.validation.constraints.Digits.class, attribute = "integer")
+    int digitsInteger() default Money.INTEGER;
+
+    int FRACTION = 2;
+    @AliasFor( annotation = javax.validation.constraints.Digits.class, attribute = "fraction")
+    int digitsFraction() default Money.FRACTION;
 
 }

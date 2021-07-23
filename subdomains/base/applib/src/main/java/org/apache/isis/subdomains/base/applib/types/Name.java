@@ -23,21 +23,58 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
+import org.springframework.core.annotation.AliasFor;
 
 /**
- * Meta-annotation for a {@link String} property or parameter representing a
+ * Meta-annotation for a mandatory {@link String} property or parameter representing a
  * name of some sort.
  *
  * @since 2.0 {@index}
  */
-@Property(maxLength = Name.MAX_LEN)
-@Parameter(maxLength = Name.MAX_LEN)
+@Property(
+        maxLength = Name.MAX_LENGTH,
+        optionality = Optionality.MANDATORY
+)
+@PropertyLayout(
+        named = Name.NAMED
+)
+@Parameter(
+        maxLength = Name.MAX_LENGTH,
+        optionality = Optionality.MANDATORY
+)
+@ParameterLayout(
+        named = Name.NAMED
+)
+//@javax.jdo.annotations.Column(length = Name.MAX_LENGTH, allowsNull = "false")
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Name {
 
-    int MAX_LEN = 50;
+    int MAX_LENGTH = 50;
+    @AliasFor( annotation =  Property.class, attribute = "maxLength")
+    int propertyMaxLength() default MAX_LENGTH;
+    @AliasFor( annotation =  Parameter.class, attribute = "maxLength")
+    int parameterMaxLength() default MAX_LENGTH;
+
+    @AliasFor( annotation = Property.class, attribute = "optionality")
+    Optionality propertyOptionality() default Optionality.MANDATORY;
+    @AliasFor( annotation = Parameter.class, attribute = "optionality")
+    Optionality parameterOptionality() default Optionality.MANDATORY;
+
+//    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "allowsNull")
+//    String columnAllowsNull() default "false";
+//    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
+//    String columnLength() default MAX_LENGTH;
+
+    String NAMED = "Name";
+    @AliasFor( annotation =  PropertyLayout.class, attribute = "named")
+    String propertyLayoutNamed() default NAMED;
+    @AliasFor( annotation =  ParameterLayout.class, attribute = "named")
+    String parameterLayoutNamed() default NAMED;
 
 }

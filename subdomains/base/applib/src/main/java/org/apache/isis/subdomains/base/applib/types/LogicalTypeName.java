@@ -23,6 +23,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -31,31 +33,34 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.springframework.core.annotation.AliasFor;
 
 /**
- * Meta-annotation for an optional {@link String} property or parameter representing a
- * description of some sort.
+ * Meta-annotation for a mandatory {@link String} property or parameter representing a
+ * logical type name of a domain object (as per @{@link DomainObject#logicalTypeName() DomainObject#logicalTypeName}
+ * or @{@link DomainService#logicalTypeName() DomainObject#logicalTypeName}).
+ *
+ * @see DomainObject
+ * @see DomainService
+ * @see ObjectIdentifier
  *
  * @since 2.0 {@index}
  */
 @Property(
-        maxLength = Description.MAX_LENGTH,
-        optionality = Optionality.OPTIONAL
+        maxLength = LogicalTypeName.MAX_LENGTH,
+        optionality = Optionality.MANDATORY
 )
 @PropertyLayout(
-        named = Description.NAMED,
-        multiLine = Description.MULTI_LINE
+        named = LogicalTypeName.NAMED
 )
 @Parameter(
-        maxLength = Description.MAX_LENGTH,
-        optionality = Optionality.OPTIONAL
+        maxLength = LogicalTypeName.MAX_LENGTH,
+        optionality = Optionality.MANDATORY
 )
 @ParameterLayout(
-        named = Description.NAMED,
-        multiLine = Description.MULTI_LINE
+        named = LogicalTypeName.NAMED
 )
-//@javax.jdo.annotations.Column(length = Description.MAX_LENGTH, allowsNull = "true")
+//@javax.jdo.annotations.Column(length = LogicalTypeName.MAX_LENGTH, allowsNull = "false")
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Description {
+public @interface LogicalTypeName {
 
     int MAX_LENGTH = 254;
     @AliasFor( annotation =  Property.class, attribute = "maxLength")
@@ -64,25 +69,19 @@ public @interface Description {
     int parameterMaxLength() default MAX_LENGTH;
 
     @AliasFor( annotation = Property.class, attribute = "optionality")
-    Optionality propertyOptionality() default Optionality.OPTIONAL;
+    Optionality propertyOptionality() default Optionality.MANDATORY;
     @AliasFor( annotation = Parameter.class, attribute = "optionality")
-    Optionality parameterOptionality() default Optionality.OPTIONAL;
+    Optionality parameterOptionality() default Optionality.MANDATORY;
 
 //    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "allowsNull")
-//    String columnAllowsNull() default "true";
+//    String columnAllowsNull() default "false";
 //    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
 //    String columnLength() default MAX_LENGTH;
 
-    String NAMED = "Description";
+    String NAMED = "Logical type name";
     @AliasFor( annotation =  PropertyLayout.class, attribute = "named")
     String propertyLayoutNamed() default NAMED;
     @AliasFor( annotation =  ParameterLayout.class, attribute = "named")
     String parameterLayoutNamed() default NAMED;
-
-    int MULTI_LINE = 1;
-    @AliasFor( annotation =  PropertyLayout.class, attribute = "multiLine")
-    int propertyLayoutMultiLine() default MULTI_LINE;
-    @AliasFor( annotation =  ParameterLayout.class, attribute = "multiLine")
-    int parameterLayoutMultiLine() default MULTI_LINE;
 
 }

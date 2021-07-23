@@ -32,32 +32,34 @@ import org.springframework.core.annotation.AliasFor;
 
 /**
  * Meta-annotation for an optional {@link String} property or parameter representing a
- * description of some sort.
+ * phone number.
  *
  * @since 2.0 {@index}
  */
 @Property(
-        maxLength = Description.MAX_LENGTH,
-        optionality = Optionality.OPTIONAL
+        maxLength = PhoneNumber.MAX_LENGTH,
+        optionality = Optionality.OPTIONAL,
+        regexPattern = PhoneNumber.REGEX_PATTERN,
+        regexPatternReplacement = PhoneNumber.REGEX_PATTERN_REPLACEMENT
 )
 @PropertyLayout(
-        named = Description.NAMED,
-        multiLine = Description.MULTI_LINE
+        named = PhoneNumber.NAMED
 )
 @Parameter(
-        maxLength = Description.MAX_LENGTH,
-        optionality = Optionality.OPTIONAL
+        maxLength = PhoneNumber.MAX_LENGTH,
+        optionality = Optionality.OPTIONAL,
+        regexPattern = PhoneNumber.REGEX_PATTERN,
+        regexPatternReplacement = PhoneNumber.REGEX_PATTERN_REPLACEMENT
 )
 @ParameterLayout(
-        named = Description.NAMED,
-        multiLine = Description.MULTI_LINE
+        named = PhoneNumber.NAMED
 )
-//@javax.jdo.annotations.Column(length = Description.MAX_LENGTH, allowsNull = "true")
+//@javax.jdo.annotations.Column(length = PhoneNumber.MAX_LENGTH, allowsNull = "true")
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Description {
+public @interface PhoneNumber {
 
-    int MAX_LENGTH = 254;
+    int MAX_LENGTH = 20;
     @AliasFor( annotation =  Property.class, attribute = "maxLength")
     int propertyMaxLength() default MAX_LENGTH;
     @AliasFor( annotation =  Parameter.class, attribute = "maxLength")
@@ -68,21 +70,27 @@ public @interface Description {
     @AliasFor( annotation = Parameter.class, attribute = "optionality")
     Optionality parameterOptionality() default Optionality.OPTIONAL;
 
+    String REGEX_PATTERN = "[+]?[0-9 -]*";
+    @AliasFor( annotation =  Property.class, attribute = "regexPattern")
+    String propertyRegexPattern() default REGEX_PATTERN;
+    @AliasFor( annotation =  Parameter.class, attribute = "regexPattern")
+    String parameterRegexPattern() default REGEX_PATTERN;
+
+    String REGEX_PATTERN_REPLACEMENT = "Only numbers and two symbols being \"-\" and \"+\" are allowed ";
+    @AliasFor( annotation =  Property.class, attribute = "regexPatternReplacement")
+    String propertyRegexPatternReplacement() default REGEX_PATTERN_REPLACEMENT;
+    @AliasFor( annotation =  Parameter.class, attribute = "regexPatternReplacement")
+    String parameterRegexPatternReplacement() default REGEX_PATTERN_REPLACEMENT;
+
 //    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "allowsNull")
 //    String columnAllowsNull() default "true";
 //    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
 //    String columnLength() default MAX_LENGTH;
 
-    String NAMED = "Description";
+    String NAMED = "Phone Number";
     @AliasFor( annotation =  PropertyLayout.class, attribute = "named")
     String propertyLayoutNamed() default NAMED;
     @AliasFor( annotation =  ParameterLayout.class, attribute = "named")
     String parameterLayoutNamed() default NAMED;
-
-    int MULTI_LINE = 1;
-    @AliasFor( annotation =  PropertyLayout.class, attribute = "multiLine")
-    int propertyLayoutMultiLine() default MULTI_LINE;
-    @AliasFor( annotation =  ParameterLayout.class, attribute = "multiLine")
-    int parameterLayoutMultiLine() default MULTI_LINE;
 
 }

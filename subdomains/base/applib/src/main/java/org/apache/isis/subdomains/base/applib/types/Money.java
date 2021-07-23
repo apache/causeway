@@ -23,21 +23,61 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
+import org.springframework.core.annotation.AliasFor;
 
 /**
- * Meta-annotation for a {@link java.math.BigDecimal} property or parameter
+ * Meta-annotation for an optional {@link java.math.BigDecimal} property or parameter
  * representing a monetary amount.
  *
  * @since 2.0 {@index}
  */
-@Property(maxLength = Fqcn.MAX_LEN)
-@Parameter(maxLength = Fqcn.MAX_LEN)
+@Property(
+        optionality = Optionality.OPTIONAL
+)
+@PropertyLayout(
+        named = Money.NAMED
+)
+@Parameter(
+        optionality = Optionality.OPTIONAL
+)
+@ParameterLayout(
+        named = Money.NAMED
+)
+@javax.validation.constraints.Digits(
+        integer = Money.INTEGER,
+        fraction = Money.FRACTION
+)
+//@javax.jdo.annotations.Column(allowsNull = "true")
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Money {
 
-    int SCALE = 2;
+    @AliasFor( annotation = Property.class, attribute = "optionality")
+    Optionality propertyOptionality() default Optionality.OPTIONAL;
+    @AliasFor( annotation = Parameter.class, attribute = "optionality")
+    Optionality parameterOptionality() default Optionality.OPTIONAL;
+
+//    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "allowsNull")
+//    String columnAllowsNull() default "true";
+
+    String NAMED = "Amount";
+    @AliasFor( annotation =  PropertyLayout.class, attribute = "named")
+    String propertyLayoutNamed() default NAMED;
+    @AliasFor( annotation =  ParameterLayout.class, attribute = "named")
+    String parameterLayoutNamed() default NAMED;
+
+    int INTEGER = 10;
+    @AliasFor( annotation = javax.validation.constraints.Digits.class, attribute = "integer")
+    int digitsInteger() default Money.INTEGER;
+
+    int FRACTION = 2;
+    @AliasFor( annotation = javax.validation.constraints.Digits.class, attribute = "fraction")
+    int digitsFraction() default Money.FRACTION;
+
 
 }
