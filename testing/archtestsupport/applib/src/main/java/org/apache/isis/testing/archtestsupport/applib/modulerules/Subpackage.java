@@ -16,6 +16,7 @@ public interface Subpackage {
      */
     String getName();
 
+
     /**
      * A list of the (names of the) subpackages where classes in the same module as this package have access.
      *
@@ -45,4 +46,8 @@ public interface Subpackage {
      * </p>
      */
     List<String> mayBeAccessedBySubpackagesInReferencingModules();
+
+    default String packageIdentifier() {
+        return "." + getName() + "..";
+    }
 }

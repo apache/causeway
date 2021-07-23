@@ -5,55 +5,271 @@
 Apache Isis provides a library of link:https://www.archunit.org/[ArchUnit] tests to verify the structure of your domain applications.
 
 
+include::docs:mavendeps:partial$setup-and-configure-dependencyManagement.adoc[leveloffset=+1]
 
-== Setup
+In addition, add a section for the BOM of all subdomains:
+
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+        	<groupId>org.apache.isis.testing</groupId>
+	        <artifactId>isis-testing</artifactId>
+            <scope>import</scope>
+            <type>pom</type>
+            <version>{page-isisrel}</version>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+----
+
+[#dependencies]
+== Dependencies
+
+In the webapp module(s) of your application, add the following dependency:
+
+[source,xml]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.isis.testing</groupId>
+        <artifactId>isis-testing-archtestsupport-applib</artifactId>
+        <scope>test</scope>     <!--.-->
+    </dependency>
+</dependencies>
+----
+
+<.> this assumes that the architecture tests reside in `src/test/java` (but see notes on excluding tests, in the <<architecture-test-support,next section>>).
 
 
-TODO: explain using similar format to elsewhere.
+== Architecture_Test Boilerplate
 
-=== Maven Configuration
-
-CAUTION: TODO
-
-=== Recommended Naming Convention
-
-Architecture tests run quickly, so it generally makes sense to name them as xref:testing:unittestsupport:about.adoc[unit tests] (with a `Test` suffix, to be picked up by surefire).
-
-== Module Tests
-
-CAUTION: TODO - to flesh out
+It's generally sufficient to have a single `Architecture_Test` class that runs all architecture tests against all classes.
+This should look something like:
 
 [source,java]
-.ModuleTests.java
+.ArchitectureTests.java
 ----
-@AnalyzeClasses(
-        packagesOf = {
-                CustomerModule.class                                                // <.>
-                , OrderModule.class
-                , ProductModule.class
-        },
-        importOptions = { ImportOption.DoNotIncludeTests.class }
-)
-public class ModuleTests {
+import com.tngtech.archunit.junit.ArchTest;
+import com.tngtech.archunit.lang.ArchRule;
 
-    @ArchTest
-    public static ArchRule code_dependencies_follow_module_Imports =
-        ArchitectureModuleRules.code_dependencies_follow_module_Imports(            // <.>
-            ArchitectureModuleRules.analyzeClasses_packagesOf(ModuleTests.class));  // <.>
+import static org.apache.isis.testing.archtestsupport.applib.domainrules.ArchitectureDomainRules.*;
+
+@AnalyzeClasses(
+    packagesOf = {
+        CustomerModule.class                                                // <.>
+        , OrderModule.class                                                 // <1>
+        , ProductModule.class                                               // <1>
+    },
+    importOptions = { ImportOption.DoNotIncludeTests.class }                // <.>
+)
+public class Architecture_Test {                                            // <.>
+
+  @ArchTest                                                                 // <.>
+  public static ArchRule every_DomainObject_must_specify_logicalTypeName =  // <.>
+      every_DomainObject_must_specify_logicalTypeName();                    // <.>
+
+  ...
 }
 ----
 
 <.> the modules of the application to be scanned
-<.> invoke the rule
-<.> just obtains the list of modules
+<.> excludes running against the tests themselves.
+But see caveat, below.
+<.> Recommended name.
+Architecture tests run quickly, so it generally makes sense to name them as xref:testing:unittestsupport:about.adoc[unit tests] (with a `Test` suffix, to be picked up by surefire).
+<.> indicates this is an architecture test.
+There can be many such tests in a single file; all are expressed as `static` fields.
+<.> the field name is unimportant (but must be unique, of course).
+<.> the architecture test itself, imported from `ArchitectureXxxRules`
+
+[WARNING]
+.Don't architecture check your tests
+====
+In theory tests can be skipped from checking using the `ImportOption.DoNotIncludeTests` annotation shown above.
+
+If this does not work for you, consider creating a separate Maven module as a peer of your webapp, and place the architecture tests in `src/main/java`.
+Also remember to change the `<scope>test</scope>` to `<scope>compile</scope>`.
+====
 
 
-== Module Package Tests
+== Domain rules
 
-CAUTION: TODO - to flesh out
+Checks for rules defined against domain classes reside in the `ArchitectureDomainRules` library.
 
-Defines the rules for which subpackages or a module to check and whether the classes in those subpackages can access the classes in other subpackages either for the same module, or for modules that are referenced (`Import`ed) directly or transitively.
+* logical type name:
 
+** `every_DomainObject_must_specify_logicalTypeName()`
+** `every_DomainService_must_specify_logicalTypeName()`
+
+* layout annotations:
+
+** `every_DomainObject_must_also_be_annotated_with_DomainObjectLayout()`
+** `every_DomainService_must_also_be_annotated_with_DomainServiceLayout()`
+
+* mixin naming and coding conventions
+
+** `every_Action_mixin_must_follow_naming_convention()`
+** `every_Property_mixin_must_follow_naming_convention()`
+** `every_Collection_mixin_must_follow_naming_convention()`
+
+* repository class naming/annotation conventions
+
+** `every_Repository_must_follow_naming_conventions()`
+** `every_class_named_Repository_must_be_annotated_correctly()`
+
+
+* controller class naming/annotation conventions
+** `every_Controller_must_be_follow_naming_conventions()`
+** `every_class_named_Controller_must_be_annotated_correctly()`
+
+* allow injected fields in view models:
+
+** `every_injected_field_of_jaxb_view_model_must_be_annotated_with_XmlTransient()`
+** `every_injected_field_of_serializable_view_model_must_be_transient()`
+
+* consistency with repository finders:
+
+** `every_finder_method_in_Repository_must_return_either_Collection_or_Optional()`
+
+
+None of these rules take any arguments, so simply include (as a static field) those that you wish to enforce.
+
+== Entity Checks
+
+Entity rule checks are provided for both xref:pjpa::about.adoc[] and xref:pjdo::about.adoc[], in `ArchitectureJpaRules` and `ArchitectureJdoRules` respectively:
+
+* ensure conformance of persistence vs Isis annotations:
+
+** `every_jpa_Entity_must_be_annotated_with_DomainObject_nature_of_ENTITY()`
+** `every_jdo_PersistenceCapable_must_be_annotated_with_DomainObject_nature_of_ENTITY`
+
+* ensure entities can be referenced in JAXB view models:
+** `every_jpa_Entity_must_be_annotated_with_XmlJavaAdapter_of_PersistentEntityAdapter()`
+** `every_jdo_PersistenceCapable_must_be_annotated_as_XmlJavaAdapter_PersistentEntityAdapter()`
+
+* ensure JPA entities can support auditing and dependency injection:
+
+** `every_jpa_Entity_must_be_annotated_as_an_IsisEntityListener()`
+
+* ensure JPA enum fields are persisted as strings:
+
+** `every_enum_field_of_jpa_Entity_must_be_annotated_with_Enumerable_STRING()`
+
+* ensure entities can be used in ``SortedSet`` parented collections (so render in a sensible manner):
+
+** `every_jpa_Entity_must_implement_Comparable()`
+** `every_jdo_PersistenceCapable_must_implement_Comparable()`
+
+* ensure entities have a unique business key:
+
+** `every_jpa_Entity_must_be_annotated_as_Table_with_uniqueConstraints()`
+** `every_jdo_PersistenceCapable_must_be_annotated_as_Uniques_or_Unique()`
+
+* ensure JPA entity defines a surrogate key:
+
+** `every_jpa_Entity_must_have_an_id_field()`
+
+* ensure if JDO entity has a surrogate key then its annotations are consistent:
+
+** `every_jdo_PersistenceCapable_with_DATASTORE_identityType_must_be_annotated_as_DataStoreIdentity()`
+
+* enable injected fields in entities:
+
+** `every_injected_field_of_jpa_Entity_must_be_annotated_with_Transient()`
+** `every_injected_field_of_jdo_PersistenceCapable_must_be_annotated_with_NotPersistent()`
+
+* encourage entities be organised into schemas:
+
+** `every_jpa_Entity_must_be_annotated_as_Table_with_schema()`
+** `every_jdo_PersistenceCapable_must_have_schema()`
+
+* encourage optimistic locking:
+
+** `every_jpa_Entity_must_have_a_version_field()`
+** `every_jdo_PersistenceCapable_must_be_annotated_with_Version()`
+
+* encourage static factory methods for entities:
+
+** `every_jpa_Entity_must_have_protected_no_arg_constructor()`
+** `every_jdo_PersistenceCapable_must_have_protected_no_arg_constructor()`
+
+
+None of these rules take any arguments, so simply include (as a static field) those that you wish to enforce.
+
+== Module Rules
+
+The module rules, residing in `ArchitectureModuleRules` class, are used to check the coarse-grained dependencies between modules footnote:[By "module" we mean a classes annotated with `@Configuration`], to ensure proper layering.
+A further check checks at a more fine-grained level for the placement of classes into subpackages of those modules.
+
+=== code_dependencies_follow_module_Imports
+
+The `@Import` statements between modules form an acyclic dependency graph.
+If there is a cycle between those modules, then Spring itself will fail to boot.
+
+This architecture check doesn't check the the modules' graph itself, but rather ensures that the dependencies between classes that live within each module honour the direction of the module graph.
+
+For example, if the `OrderModule` depends on (``@Import``s) the `CustomerModule`, then we allow for the `Order` entity to reference the `Customer` entity.
+However, we do not allow the opposite reference.
+
+To run the test, use:
+
+[source,java]
+----
+@ArchTest
+public static ArchRule code_dependencies_follow_module_Imports =
+    code_dependencies_follow_module_Imports(                        // <.>
+        analyzeClasses_packagesOf(Architecture_Test.class));        // <.>
+}
+----
+<.> architecture test itself, imported from `ArchitectureModuleRules`
+<.> utility that passes in for all analysis all of the module classes that are annotated on `Architecture_Test`.
+
+
+
+==== Aside
+
+You might well ask: if deleting a customer requires deleting its orders, then how is this done if a customer does not "know" abouts its related orders?
+
+There are two main options:
+
+. use a mixin.
+Provide a `Customer_delete` action, but place it in the `OrderModule`.
+That way the mixin code has access to delete the associated ``Order``s
++
+However, this trick won't work if there are multiple referencing modules to customer, all of which need to do their work but none of which know about the other.
+For example, if there is also an `AddressModule` that maintains the customer's address, and neither `OrderModule` nor `AddressModule` know about the other, then there is no one place to put the mixin that has knowledge of all of the related "stuff" of customer to be dealt with.
+
+. use a domain event.
++
+Here we keep the `Customer_delete` mixin in the `CustomerModule` (indeed, it could even be a regular action) and instead it emits a domain event:
++
+[source,java]
+.Customer_delete.java
+----
+@Action(domainEvent = Customer_delete.ActionEvent.class)
+@RequiredArgsConstructor
+public class Customer_delete {
+    public static class ActionEvent                     // <.>
+        extends ActionDomainEvent<Customer_delete>{}
+    private final Customer customer;
+    public void act() {
+        customerRepo.delete(customer);
+    }
+}
+----
+<.> event to be fired.
+
+
+=== Module Package Tests
+
+The module package tests builds upon the module layering tests and _also_ checks that that each class is in the appropriate subpackage within each module, and that those subpackages access only the allowed subpackages of its own module or of other modules.
+Different sets of subpackages can be defined for both the "local" (same) module and "foreign" (referencing) modules.
+
+Because different teams will undoubtedly have different standards, the exact rules for subpackages are pluggable, with the `Subpackage` interface defining the information that the architecture test requires:
 
 [source,java]
 .Subpackage
@@ -63,39 +279,96 @@ public interface Subpackage {
     String getName();                                               // <.>
     List<String> mayBeAccessedBySubpackagesInSameModule();          // <.>
     List<String> mayBeAccessedBySubpackagesInReferencingModules();  // <.>
+
+    default String packageIdentifier() {                            // <.>
+        return "." + getName() + "..";
+    }
 }
 ----
 
-<.> The name of the subpackage, for example &quot;dom&quot;, &quot;api&quot, &quot;spi&quot; or &quot;fixtures&quot;.
+<.> The name of the subpackage, for example "dom", "api", "spi" or "fixtures".
 
 <.> A list of the (names of the) subpackages where classes in the same module as this package have access.
 +
-For example, the &quot;dom&quot; subpackage can probably be referenced from the &quot;menu&quot; subpackage, but not vice versa.
+For example, the "dom" subpackage can probably be referenced from the "menu" subpackage, but not vice versa.
 +
-The special value of &quot;*&quot; is a wildcard meaning that all subpackages (in the same module) can access.
+The special value of "*" is a wildcard meaning that all subpackages (in the same module) can access.
 
 <.> A list of the (names of the) subpackages where classes in the packages of other referencing modules may have access.
 +
-For example, in some cases the the &quot;dom&quot; subpackage may <i>not</i> be accessible from other modules if the intention is to require all programmatic access through an &quot;api&quot; subpackage (where the classes in `dom` implement interfaces defined in `api`).
+For example, in some cases the the "dom" subpackage may <i>not</i> be accessible from other modules if the intention is to require all programmatic access through an "api" subpackage (where the classes in `dom` implement interfaces defined in `api`).
 +
-The special value of &quot;*&quot; is a wildcard meaning that all subpackages (in other modules) can access.
+The special value of "*" is a wildcard meaning that all subpackages (in other modules) can access.
+
+<.> allows a subpackage to more precisely control the classes that it includes.
+Useful if want to declare a subpackage representing that of the module's own package (where the `XxxModule` class resides).
 
 
-The `SubpackageEnum` provides an off the shelf implementation.
+The `SubpackageEnum` provides an off the shelf implementation; you will probably want to copy this and adjust as necessary.
 
+To run the test, use:
 
-== Entity Tests
+[source,java]
+----
+@ArchTest
+public static ArchRule code_deps_follow_module_Imports_and_subpackage_rules =
+      code_dependencies_follow_module_Imports_and_subpackage_rules(     // <.>
+          analyzeClasses_packagesOf(ModulesArchTests.class),            // <.>
+          asList(SimplifiedSubpackageEnum.values()));                   // <.>
+----
+<.> architecture test itself, imported from `ArchitectureModuleRules`
+<.> utility that passes in for all analysis all of the module classes that are annotated on `Architecture_Test`.
+<.> list of the ``Subpackage``s whose relationships are to be checked
 
-These are provided for both JPA and JDO.
+where for example `Subpackage` is implemented using with:
 
-CAUTION: TODO - to flesh out
+[source,java]
+.SimplifiedSubpackageEnum.java
+----
+@RequiredArgsConstructor
+public enum SimplifiedSubpackageEnum implements Subpackage {
 
+    dom(
+            singletonList("*"),         // <.>
+            emptyList()                 // <.>
+    ),
+    api(
+            singletonList("*"),         // <1>
+            singletonList("*")          // <.>
+    ),
+    spi(
+            singletonList("dom"),       // <.>
+            singletonList("spiimpl")    // <.>
+    ),
+    spiimpl(
+            emptyList(),                // <.>
+            emptyList()                 // <2>
+    ),
+    ;
 
-== DomainObjectTests
+    final List<String> local;
+    final List<String> referencing;
 
-CAUTION: TODO - to flesh out
+    @Override
+    public String getName() { return name(); }
 
-== DomainServiceTests
-
-CAUTION: TODO - to flesh out
+    @Override
+    public List<String> mayBeAccessedBySubpackagesInSameModule() {
+        return local;
+    }
+    @Override
+    public List<String> mayBeAccessedBySubpackagesInReferencingModules() {
+        return referencing;
+    }
+    private static String[] asArray(List<String> list) {
+        return list != null ? list.toArray(new String[] {}) : null;
+    }
+}
+----
+<.> wildcard means that all subpackages in this module can access this module
+<.> no direct access from other modules
+<.> wildcard means that all subpackages in other modules can access this module
+<.> callers of a module's own SPI
+<.> other modules should only implement the SPI
+<.> no direct access from _this_ module
 

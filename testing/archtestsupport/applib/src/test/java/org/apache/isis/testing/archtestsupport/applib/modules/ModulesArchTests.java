@@ -8,7 +8,6 @@ import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
 
-import org.apache.isis.testing.archtestsupport.applib.modulerules.ArchitectureModuleRules;
 import org.apache.isis.testing.archtestsupport.applib.modulerules.Subpackage;
 import org.apache.isis.testing.archtestsupport.applib.modules.base.BaseModule;
 import org.apache.isis.testing.archtestsupport.applib.modules.customer.CustomerModule;
@@ -17,6 +16,9 @@ import org.apache.isis.testing.archtestsupport.applib.modules.order.OrderModule;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import lombok.RequiredArgsConstructor;
+import static org.apache.isis.testing.archtestsupport.applib.modulerules.ArchitectureModuleRules.analyzeClasses_packagesOf;
+import static org.apache.isis.testing.archtestsupport.applib.modulerules.ArchitectureModuleRules.code_dependencies_follow_module_Imports;
+import static org.apache.isis.testing.archtestsupport.applib.modulerules.ArchitectureModuleRules.code_dependencies_follow_module_Imports_and_subpackage_rules;
 
 @AnalyzeClasses(
     packagesOf = {
@@ -29,13 +31,13 @@ public class ModulesArchTests {
 
   @ArchTest
   public static ArchRule code_dependencies_follow_module_Imports =
-      ArchitectureModuleRules.code_dependencies_follow_module_Imports(
-              ArchitectureModuleRules.analyzeClasses_packagesOf(ModulesArchTests.class));
+      code_dependencies_follow_module_Imports(
+              analyzeClasses_packagesOf(ModulesArchTests.class));
 
   @ArchTest
-  public static ArchRule classes_annotated_with_DomainObject_must_also_be_annotated_with_DomainObjectLayouxt =
-      ArchitectureModuleRules.code_dependencies_follow_module_Imports_and_subpackage_rules(
-              ArchitectureModuleRules.analyzeClasses_packagesOf(ModulesArchTests.class),
+  public static ArchRule code_dependencies_follow_module_Imports_and_subpackage_rules =
+      code_dependencies_follow_module_Imports_and_subpackage_rules(
+              analyzeClasses_packagesOf(ModulesArchTests.class),
               Arrays.asList(SimplifiedSubpackageEnum.values()));
 
 

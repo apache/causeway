@@ -324,6 +324,7 @@ under the License.
 		<arguments />
 		<!-- APACHE ISIS customisation 3.1/7: start -->
 		<lombok.version>1.18.20</lombok.version> <!-- overriding Spring -->
+
 		<maven.compiler.release>11</maven.compiler.release>
 		<surefire.version>2.22.2</surefire.version>
 		<!-- APACHE ISIS customisation 3.1/7: end -->

@@ -104,11 +104,11 @@ public class ArchitectureModuleRules {
             layeredArchitecture.layer(nameOf(moduleClass)).definedBy(packageIdentifierFor(moduleClass));
 
             subpackages
-                    .stream()
-                    .map(Subpackage::getName)
-                    .forEach(subpackageName ->
-                            layeredArchitecture.optionalLayer(nameOf(moduleClass, subpackageName))
-                                    .definedBy(packageIdentifierFor(moduleClass, subpackageName)));
+                    .forEach(subpackage -> {
+                        val subpackageName = subpackage.getName();
+                        layeredArchitecture.optionalLayer(nameOf(moduleClass, subpackageName))
+                                .definedBy(packageIdentifierFor(moduleClass, subpackage));
+                    });
         });
     }
 
@@ -245,9 +245,9 @@ public class ArchitectureModuleRules {
         return packageIdentifierFor(moduleClass, null);
     }
 
-    static String packageIdentifierFor(Class<?> moduleClass, @Nullable String subpackage) {
-        return moduleClass.getPackage().getName() + (subpackage != null ? ("." + subpackage) : "")
-                + "..";
+    static String packageIdentifierFor(Class<?> moduleClass, @Nullable Subpackage subpackage) {
+        return moduleClass.getPackage().getName() +
+                (subpackage != null ? subpackage.packageIdentifier(): "..");
     }
 
     static String[] both(String str, String[] arr) {

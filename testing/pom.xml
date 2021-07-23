@@ -32,6 +32,8 @@
 	<packaging>pom</packaging>
 
 	<properties>
+		<maven.compiler.release>11</maven.compiler.release>
+
 		<jar-plugin.automaticModuleName>org.apache.isis.testing</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/isis/testing</git-plugin.propertiesDir>
 	</properties>
