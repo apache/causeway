@@ -99,7 +99,6 @@ Also remember to change the `<scope>test</scope>` to `<scope>compile</scope>`.
 == Domain rules
 
 Checks for rules defined against domain classes reside in the `ArchitectureDomainRules` library.
-None of these rules take any arguments, so simply include (as a static field) those that you wish to enforce.
 
 * logical type name:
 
@@ -137,9 +136,11 @@ None of these rules take any arguments, so simply include (as a static field) th
 ** `every_finder_method_in_Repository_must_return_either_Collection_or_Optional()`
 
 
+None of these rules take any arguments, so simply include (as a static field) those that you wish to enforce.
+
 == Entity Checks
 
-Entity rule checks are provided for both xref:pjpa::about.adoc[] and xref:pjdo::about.adoc[], in `ArchitectureJpaRules` and `ArchitectureJdoRules` respectively.
+Entity rule checks are provided for both xref:pjpa::about.adoc[] and xref:pjdo::about.adoc[], in `ArchitectureJpaRules` and `ArchitectureJdoRules` respectively:
 
 * ensure conformance of persistence vs Isis annotations:
 
@@ -197,6 +198,8 @@ Entity rule checks are provided for both xref:pjpa::about.adoc[] and xref:pjdo::
 ** `every_jdo_PersistenceCapable_must_have_protected_no_arg_constructor()`
 
 
+None of these rules take any arguments, so simply include (as a static field) those that you wish to enforce.
+
 == Module Rules
 
 The module rules, residing in `ArchitectureModuleRules` class, are used to check the coarse-grained dependencies between modules footnote:[By "module" we mean a classes annotated with `@Configuration`], to ensure proper layering.
@@ -212,21 +215,14 @@ This architecture check doesn't check the the modules' graph itself, but rather 
 For example, if the `OrderModule` depends on (``@Import``s) the `CustomerModule`, then we allow for the `Order` entity to reference the `Customer` entity.
 However, we do not allow the opposite reference.
 
-To run the test:
+To run the test, use:
 
 [source,java]
 ----
-import static org.apache.isis.testing.archtestsupport.applib.modulerules.ArchitectureModuleRules.*;
-
-...
-
-public class Architecture_Test {                                // <.>
-
-    @ArchTest                                                           // <.>
-    public static ArchRule code_dependencies_follow_module_Imports =    // <.>
-        code_dependencies_follow_module_Imports(                        // <.>
-            analyzeClasses_packagesOf(Architecture_Test.class));        // <.>
-
+@ArchTest
+public static ArchRule code_dependencies_follow_module_Imports =
+    code_dependencies_follow_module_Imports(                        // <.>
+        analyzeClasses_packagesOf(Architecture_Test.class));        // <.>
 }
 ----
 <.> architecture test itself, imported from `ArchitectureModuleRules`
@@ -310,16 +306,19 @@ Useful if want to declare a subpackage representing that of the module's own pac
 
 The `SubpackageEnum` provides an off the shelf implementation; you will probably want to copy this and adjust as necessary.
 
-To run the test itself, use:
+To run the test, use:
 
 [source,java]
 ----
 @ArchTest
-public static ArchRule code_dependencies_follow_module_Imports_and_subpackage_rules =
-      code_dependencies_follow_module_Imports_and_subpackage_rules(
-          analyzeClasses_packagesOf(ModulesArchTests.class),
-            asList(SimplifiedSubpackageEnum.values()));
+public static ArchRule code_deps_follow_module_Imports_and_subpackage_rules =
+      code_dependencies_follow_module_Imports_and_subpackage_rules(     // <.>
+          analyzeClasses_packagesOf(ModulesArchTests.class),            // <.>
+          asList(SimplifiedSubpackageEnum.values()));                   // <.>
 ----
+<.> architecture test itself, imported from `ArchitectureModuleRules`
+<.> utility that passes in for all analysis all of the module classes that are annotated on `Architecture_Test`.
+<.> list of the ``Subpackage``s whose relationships are to be checked
 
 where for example `Subpackage` is implemented using with:
 
@@ -330,43 +329,39 @@ where for example `Subpackage` is implemented using with:
 public enum SimplifiedSubpackageEnum implements Subpackage {
 
     dom(
-            singletonList("*"), // <.>
-            emptyList()         // <.>
+            singletonList("*"),         // <.>
+            emptyList()                 // <.>
     ),
     api(
-            singletonList("*"), // <1>
-            singletonList("*")  // <.>
+            singletonList("*"),         // <1>
+            singletonList("*")          // <.>
     ),
     spi(
-            singletonList("dom"),    // <.>
-            singletonList("spiimpl") // <.>
+            singletonList("dom"),       // <.>
+            singletonList("spiimpl")    // <.>
     ),
     spiimpl(
-            emptyList(), // <.>
-            emptyList()  // <2>
+            emptyList(),                // <.>
+            emptyList()                 // <2>
     ),
     ;
 
     final List<String> local;
     final List<String> referencing;
 
-    public String getName() {
-        return name();
-    }
+    @Override
+    public String getName() { return name(); }
 
     @Override
     public List<String> mayBeAccessedBySubpackagesInSameModule() {
         return local;
     }
-
     @Override
     public List<String> mayBeAccessedBySubpackagesInReferencingModules() {
         return referencing;
     }
-
     private static String[] asArray(List<String> list) {
-        return list != null ?
-                list.toArray(new String[] {}) : null;
+        return list != null ? list.toArray(new String[] {}) : null;
     }
 }
 ----
