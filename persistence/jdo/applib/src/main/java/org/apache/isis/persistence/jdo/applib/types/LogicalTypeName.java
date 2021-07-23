@@ -16,13 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.subdomains.base.applib.types;
+package org.apache.isis.persistence.jdo.applib.types;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -32,26 +34,31 @@ import org.springframework.core.annotation.AliasFor;
 
 /**
  * Meta-annotation for a mandatory {@link String} property or parameter representing a
- * URL template, for example for an entity that holds configuration data to access external systems.
+ * logical type name of a domain object (as per @{@link DomainObject#logicalTypeName() DomainObject#logicalTypeName}
+ * or @{@link DomainService#logicalTypeName() DomainObject#logicalTypeName}).
+ *
+ * @see DomainObject
+ * @see DomainService
+ * @see ObjectIdentifier
  *
  * @since 2.0 {@index}
  */
 @Property(
-        maxLength = UrlTemplate.MAX_LENGTH,
+        maxLength = LogicalTypeName.MAX_LENGTH,
         optionality = Optionality.MANDATORY
 )
 @PropertyLayout(
 )
 @Parameter(
-        maxLength = UrlTemplate.MAX_LENGTH,
+        maxLength = LogicalTypeName.MAX_LENGTH,
         optionality = Optionality.MANDATORY
 )
 @ParameterLayout(
 )
-//@javax.jdo.annotations.Column(length = UrlTemplate.MAX_LENGTH, allowsNull = "false")
+@javax.jdo.annotations.Column(length = LogicalTypeName.MAX_LENGTH, allowsNull = "false")
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface UrlTemplate {
+public @interface LogicalTypeName {
 
     int MAX_LENGTH = 254;
     @AliasFor( annotation =  Property.class, attribute = "maxLength")
@@ -64,9 +71,9 @@ public @interface UrlTemplate {
     @AliasFor( annotation = Parameter.class, attribute = "optionality")
     Optionality parameterOptionality() default Optionality.MANDATORY;
 
-//    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "allowsNull")
-//    String columnAllowsNull() default "false";
-//    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
-//    int columnLength() default MAX_LENGTH;
+    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "allowsNull")
+    String columnAllowsNull() default "false";
+    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
+    int columnLength() default MAX_LENGTH;
 
 }

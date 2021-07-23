@@ -36,13 +36,12 @@ import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.PropertyEdit;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.debug.xray.XrayEnable;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.jpa.entities.JpaBook;
-import org.apache.isis.testdomain.publishing.ApplicationLayerTestFactoryAbstract.VerificationStage;
-import org.apache.isis.testdomain.publishing.ApplicationLayerTestFactoryJpa;
+import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.VerificationStage;
+import org.apache.isis.testdomain.publishing.PublishingTestFactoryJpa;
 import org.apache.isis.testdomain.publishing.conf.Configuration_usingExecutionPublishing;
 import org.apache.isis.testdomain.publishing.subscriber.ExecutionSubscriberForTesting;
 import org.apache.isis.testdomain.util.CollectionAssertions;
@@ -54,8 +53,8 @@ import lombok.val;
         classes = {
                 Configuration_usingJpa.class,
                 Configuration_usingExecutionPublishing.class,
-                ApplicationLayerTestFactoryJpa.class,
-                XrayEnable.class
+                PublishingTestFactoryJpa.class,
+                //XrayEnable.class
         },
         properties = {
                 "logging.level.org.apache.isis.core.runtimeservices.session.IsisInteractionFactoryDefault=DEBUG",
@@ -65,10 +64,10 @@ import lombok.val;
 })
 class JpaExecutionPublishingTest {
 
-    @Inject private ApplicationLayerTestFactoryJpa testFactory;
+    @Inject private PublishingTestFactoryJpa testFactory;
     @Inject private KVStoreForTesting kvStore;
 
-    @TestFactory @DisplayName("Application Layer")
+    @TestFactory @DisplayName("Publishing")
     List<DynamicTest> generateTests() {
         return testFactory.generateTests(this::given, this::verify);
     }

@@ -31,41 +31,57 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.springframework.core.annotation.AliasFor;
 
 /**
- * Meta-annotation for a mandatory {@link String} property or parameter representing a
- * URL template, for example for an entity that holds configuration data to access external systems.
+ * Meta-annotation for an optional {@link String} property or parameter representing a
+ * phone number.
  *
  * @since 2.0 {@index}
  */
 @Property(
-        maxLength = UrlTemplate.MAX_LENGTH,
-        optionality = Optionality.MANDATORY
+        maxLength = PhoneNumber.MAX_LENGTH,
+        optionality = Optionality.OPTIONAL,
+        regexPattern = PhoneNumber.REGEX_PATTERN,
+        regexPatternReplacement = PhoneNumber.REGEX_PATTERN_REPLACEMENT
 )
 @PropertyLayout(
 )
 @Parameter(
-        maxLength = UrlTemplate.MAX_LENGTH,
-        optionality = Optionality.MANDATORY
+        maxLength = PhoneNumber.MAX_LENGTH,
+        optionality = Optionality.OPTIONAL,
+        regexPattern = PhoneNumber.REGEX_PATTERN,
+        regexPatternReplacement = PhoneNumber.REGEX_PATTERN_REPLACEMENT
 )
 @ParameterLayout(
 )
-//@javax.jdo.annotations.Column(length = UrlTemplate.MAX_LENGTH, allowsNull = "false")
+//@javax.jdo.annotations.Column(length = PhoneNumber.MAX_LENGTH, allowsNull = "true")
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface UrlTemplate {
+public @interface PhoneNumber {
 
-    int MAX_LENGTH = 254;
+    int MAX_LENGTH = 20;
     @AliasFor( annotation =  Property.class, attribute = "maxLength")
     int propertyMaxLength() default MAX_LENGTH;
     @AliasFor( annotation =  Parameter.class, attribute = "maxLength")
     int parameterMaxLength() default MAX_LENGTH;
 
     @AliasFor( annotation = Property.class, attribute = "optionality")
-    Optionality propertyOptionality() default Optionality.MANDATORY;
+    Optionality propertyOptionality() default Optionality.OPTIONAL;
     @AliasFor( annotation = Parameter.class, attribute = "optionality")
-    Optionality parameterOptionality() default Optionality.MANDATORY;
+    Optionality parameterOptionality() default Optionality.OPTIONAL;
+
+    String REGEX_PATTERN = "[+]?[0-9 -]*";
+    @AliasFor( annotation =  Property.class, attribute = "regexPattern")
+    String propertyRegexPattern() default REGEX_PATTERN;
+    @AliasFor( annotation =  Parameter.class, attribute = "regexPattern")
+    String parameterRegexPattern() default REGEX_PATTERN;
+
+    String REGEX_PATTERN_REPLACEMENT = "Only numbers and two symbols being \"-\" and \"+\" are allowed ";
+    @AliasFor( annotation =  Property.class, attribute = "regexPatternReplacement")
+    String propertyRegexPatternReplacement() default REGEX_PATTERN_REPLACEMENT;
+    @AliasFor( annotation =  Parameter.class, attribute = "regexPatternReplacement")
+    String parameterRegexPatternReplacement() default REGEX_PATTERN_REPLACEMENT;
 
 //    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "allowsNull")
-//    String columnAllowsNull() default "false";
+//    String columnAllowsNull() default "true";
 //    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
 //    int columnLength() default MAX_LENGTH;
 

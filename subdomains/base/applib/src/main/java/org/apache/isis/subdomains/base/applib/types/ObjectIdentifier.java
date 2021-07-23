@@ -18,27 +18,60 @@
  */
 package org.apache.isis.subdomains.base.applib.types;
 
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
+import org.springframework.core.annotation.AliasFor;
 
 /**
- * Meta-annotation for a {@link String} property or parameter representing a
- * the identity of a domain object (with respect to its logical type).
+ * Meta-annotation for a mandatory {@link String} property or parameter representing a
+ * the identity of a domain object (with respect to its logical type, as per @{@link DomainObject#logicalTypeName() DomainObject#logicalTypeName}
+ * or @{@link DomainService#logicalTypeName() DomainObject#logicalTypeName}).
+ *
+ * @see LogicalTypeName
  *
  * @since 2.0 {@index}
  */
-@Property(maxLength = ObjectIdentifier.MAX_LEN)
-@Parameter(maxLength = ObjectIdentifier.MAX_LEN)
+@Property(
+        maxLength = ObjectIdentifier.MAX_LENGTH,
+        optionality = Optionality.MANDATORY
+)
+@PropertyLayout(
+)
+@Parameter(
+        maxLength = ObjectIdentifier.MAX_LENGTH,
+        optionality = Optionality.MANDATORY
+)
+@ParameterLayout(
+)
+//@javax.jdo.annotations.Column(length = ObjectIdentifier.MAX_LENGTH, allowsNull = "false")
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ObjectIdentifier {
 
-    int MAX_LEN = 50;
+    int MAX_LENGTH = 50;
+    @AliasFor( annotation =  Property.class, attribute = "maxLength")
+    int propertyMaxLength() default MAX_LENGTH;
+    @AliasFor( annotation =  Parameter.class, attribute = "maxLength")
+    int parameterMaxLength() default MAX_LENGTH;
+
+    @AliasFor( annotation = Property.class, attribute = "optionality")
+    Optionality propertyOptionality() default Optionality.MANDATORY;
+    @AliasFor( annotation = Parameter.class, attribute = "optionality")
+    Optionality parameterOptionality() default Optionality.MANDATORY;
+
+//    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "allowsNull")
+//    String columnAllowsNull() default "false";
+//    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
+//    int columnLength() default MAX_LENGTH;
 
 }

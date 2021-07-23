@@ -32,28 +32,28 @@ import org.springframework.core.annotation.AliasFor;
 
 /**
  * Meta-annotation for a mandatory {@link String} property or parameter representing a
- * URL template, for example for an entity that holds configuration data to access external systems.
+ * postal code or zip code.
  *
  * @since 2.0 {@index}
  */
 @Property(
-        maxLength = UrlTemplate.MAX_LENGTH,
+        maxLength = PostalCode.MAX_LENGTH,
         optionality = Optionality.MANDATORY
 )
 @PropertyLayout(
 )
 @Parameter(
-        maxLength = UrlTemplate.MAX_LENGTH,
+        maxLength = PostalCode.MAX_LENGTH,
         optionality = Optionality.MANDATORY
 )
 @ParameterLayout(
 )
-//@javax.jdo.annotations.Column(length = UrlTemplate.MAX_LENGTH, allowsNull = "false")
+//@javax.jdo.annotations.Column(length = PostalCode.MAX_LENGTH, allowsNull = "true")
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface UrlTemplate {
+public @interface PostalCode {
 
-    int MAX_LENGTH = 254;
+    int MAX_LENGTH = 12;
     @AliasFor( annotation =  Property.class, attribute = "maxLength")
     int propertyMaxLength() default MAX_LENGTH;
     @AliasFor( annotation =  Parameter.class, attribute = "maxLength")

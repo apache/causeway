@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.subdomains.base.applib.types;
+package org.apache.isis.persistence.jdo.applib.types;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -31,42 +31,48 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.springframework.core.annotation.AliasFor;
 
 /**
- * Meta-annotation for a mandatory {@link String} property or parameter representing a
- * URL template, for example for an entity that holds configuration data to access external systems.
+ * Meta-annotation for an optional {@link java.math.BigDecimal} property or parameter
+ * representing a percentage amount.
  *
  * @since 2.0 {@index}
  */
 @Property(
-        maxLength = UrlTemplate.MAX_LENGTH,
-        optionality = Optionality.MANDATORY
+        optionality = Optionality.OPTIONAL
 )
 @PropertyLayout(
 )
 @Parameter(
-        maxLength = UrlTemplate.MAX_LENGTH,
-        optionality = Optionality.MANDATORY
+        optionality = Optionality.OPTIONAL
 )
 @ParameterLayout(
 )
-//@javax.jdo.annotations.Column(length = UrlTemplate.MAX_LENGTH, allowsNull = "false")
+@javax.validation.constraints.Digits(
+        integer = Percentage.INTEGER,
+        fraction = Percentage.FRACTION
+)
+@javax.jdo.annotations.Column(allowsNull = "true", length = Percentage.INTEGER + Percentage.FRACTION, scale = Percentage.FRACTION)
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface UrlTemplate {
-
-    int MAX_LENGTH = 254;
-    @AliasFor( annotation =  Property.class, attribute = "maxLength")
-    int propertyMaxLength() default MAX_LENGTH;
-    @AliasFor( annotation =  Parameter.class, attribute = "maxLength")
-    int parameterMaxLength() default MAX_LENGTH;
+public @interface Percentage {
 
     @AliasFor( annotation = Property.class, attribute = "optionality")
-    Optionality propertyOptionality() default Optionality.MANDATORY;
+    Optionality propertyOptionality() default Optionality.OPTIONAL;
     @AliasFor( annotation = Parameter.class, attribute = "optionality")
-    Optionality parameterOptionality() default Optionality.MANDATORY;
+    Optionality parameterOptionality() default Optionality.OPTIONAL;
 
-//    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "allowsNull")
-//    String columnAllowsNull() default "false";
-//    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
-//    int columnLength() default MAX_LENGTH;
+    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "allowsNull")
+    String columnAllowsNull() default "true";
+    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
+    int columnLength() default Percentage.INTEGER + Percentage.FRACTION;
+    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "scale")
+    int columnScale() default Percentage.FRACTION;
+
+    int INTEGER = 3;
+    @AliasFor( annotation = javax.validation.constraints.Digits.class, attribute = "integer")
+    int digitsInteger() default Percentage.INTEGER;
+
+    int FRACTION = 2;
+    @AliasFor( annotation = javax.validation.constraints.Digits.class, attribute = "fraction")
+    int digitsFraction() default Percentage.FRACTION;
 
 }

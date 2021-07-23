@@ -19,27 +19,24 @@
 package org.apache.isis.testdomain.publishing.jpa;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
 
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.TestFactory;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.schema.cmd.v2.CommandDto;
-import org.apache.isis.schema.cmd.v2.PropertyDto;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.VerificationStage;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryJpa;
-import org.apache.isis.testdomain.publishing.conf.Configuration_usingCommandPublishing;
-import org.apache.isis.testdomain.publishing.subscriber.CommandSubscriberForTesting;
+import org.apache.isis.testdomain.publishing.conf.Configuration_usingEntityPropertyChangePublishing;
+import org.apache.isis.testdomain.publishing.subscriber.EntityPropertyChangeSubscriberForTesting;
 import org.apache.isis.testdomain.util.CollectionAssertions;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 
@@ -48,17 +45,20 @@ import lombok.val;
 @SpringBootTest(
         classes = {
                 Configuration_usingJpa.class,
-                Configuration_usingCommandPublishing.class,
+                Configuration_usingEntityPropertyChangePublishing.class,
                 PublishingTestFactoryJpa.class,
                 //XrayEnable.class
         },
         properties = {
-                "logging.level.org.apache.isis.core.runtimeservices.session.IsisInteractionFactoryDefault=DEBUG"
+                "logging.level.org.apache.isis.applib.services.publishing.log.*=DEBUG",
+                "logging.level.org.apache.isis.testdomain.util.rest.KVStoreForTesting=DEBUG",
+                "logging.level.org.apache.isis.core.transaction.changetracking.EntityChangeTrackerDefault=DEBUG",
         })
 @TestPropertySource({
     IsisPresets.UseLog4j2Test
 })
-class JpaCommandPublishingTest {
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+class JpaPropertyPublishingTest {
 
     @Inject private PublishingTestFactoryJpa testFactory;
     @Inject private KVStoreForTesting kvStore;
@@ -69,36 +69,19 @@ class JpaCommandPublishingTest {
     }
 
     private void given() {
-        CommandSubscriberForTesting.clearPublishedCommands(kvStore);
+        EntityPropertyChangeSubscriberForTesting.clearPropertyChangeEntries(kvStore);
     }
 
     private void verify(final VerificationStage verificationStage) {
         switch(verificationStage) {
-
+        case PRE_COMMIT:
         case FAILURE_CASE:
-            assertHasCommandEntries(Can.empty());
+            assertHasPropertyChangeEntries(Can.empty());
             break;
-        case POST_INTERACTION:
-
-
-//            Interaction interaction = null;
-//            String propertyId = "org.apache.isis.testdomain.jpa.entities.JpaBook#name";
-//            Object target = null;
-//            Object argValue = "Book #2";
-//            String targetMemberName = "name???";
-//            String targetClass = "org.apache.isis.testdomain.jpa.entities.JpaBook";
-
-            val propertyDto = new PropertyDto();
-            propertyDto.setLogicalMemberIdentifier("testdomain.jpa.Book#name");
-
-            val command = new Command(UUID.randomUUID());
-            val commandDto = new CommandDto();
-            commandDto.setInteractionId(command.getInteractionId().toString());
-            commandDto.setMember(propertyDto);
-
-            command.updater().setCommandDto(commandDto);
-
-            assertHasCommandEntries(Can.of(command));
+        case POST_COMMIT_WHEN_PROGRAMMATIC:
+        case POST_COMMIT:
+            assertHasPropertyChangeEntries(Can.of(
+                    "Jpa Book/name: 'Sample Book' -> 'Book #2'"));
             break;
         default:
             // ignore ... no checks
@@ -107,24 +90,10 @@ class JpaCommandPublishingTest {
 
     // -- HELPER
 
-    private void assertHasCommandEntries(final Can<Command> expectedCommands) {
-        val actualCommands = CommandSubscriberForTesting.getPublishedCommands(kvStore);
-        CollectionAssertions.assertComponentWiseEquals(
-                expectedCommands, actualCommands, this::commandDifference);
+    private void assertHasPropertyChangeEntries(final Can<String> expectedAuditEntries) {
+        val actualAuditEntries = EntityPropertyChangeSubscriberForTesting.getPropertyChangeEntries(kvStore);
+        CollectionAssertions.assertComponentWiseEquals(expectedAuditEntries, actualAuditEntries);
     }
-
-    private String commandDifference(final Command a, final Command b) {
-        if(!Objects.equals(a.getLogicalMemberIdentifier(), b.getLogicalMemberIdentifier())) {
-            return String.format("differing member identifier %s != %s",
-                    a.getLogicalMemberIdentifier(), b.getLogicalMemberIdentifier());
-        }
-        if(!Objects.equals(a.getResult(), b.getResult())) {
-            return String.format("differing results %s != %s",
-                    a.getResult(), b.getResult());
-        }
-        return null; // no difference
-    }
-
 
 
 }

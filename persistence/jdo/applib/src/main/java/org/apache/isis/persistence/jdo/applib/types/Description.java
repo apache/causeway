@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.subdomains.base.applib.types;
+package org.apache.isis.persistence.jdo.applib.types;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -31,27 +31,29 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.springframework.core.annotation.AliasFor;
 
 /**
- * Meta-annotation for a mandatory {@link String} property or parameter representing a
- * URL template, for example for an entity that holds configuration data to access external systems.
+ * Meta-annotation for an optional {@link String} property or parameter representing a
+ * description of some sort.
  *
  * @since 2.0 {@index}
  */
 @Property(
-        maxLength = UrlTemplate.MAX_LENGTH,
-        optionality = Optionality.MANDATORY
+        maxLength = Description.MAX_LENGTH,
+        optionality = Optionality.OPTIONAL
 )
 @PropertyLayout(
+        multiLine = Description.MULTI_LINE
 )
 @Parameter(
-        maxLength = UrlTemplate.MAX_LENGTH,
-        optionality = Optionality.MANDATORY
+        maxLength = Description.MAX_LENGTH,
+        optionality = Optionality.OPTIONAL
 )
 @ParameterLayout(
+        multiLine = Description.MULTI_LINE
 )
-//@javax.jdo.annotations.Column(length = UrlTemplate.MAX_LENGTH, allowsNull = "false")
+@javax.jdo.annotations.Column(length = Description.MAX_LENGTH, allowsNull = "true")
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface UrlTemplate {
+public @interface Description {
 
     int MAX_LENGTH = 254;
     @AliasFor( annotation =  Property.class, attribute = "maxLength")
@@ -60,13 +62,19 @@ public @interface UrlTemplate {
     int parameterMaxLength() default MAX_LENGTH;
 
     @AliasFor( annotation = Property.class, attribute = "optionality")
-    Optionality propertyOptionality() default Optionality.MANDATORY;
+    Optionality propertyOptionality() default Optionality.OPTIONAL;
     @AliasFor( annotation = Parameter.class, attribute = "optionality")
-    Optionality parameterOptionality() default Optionality.MANDATORY;
+    Optionality parameterOptionality() default Optionality.OPTIONAL;
 
-//    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "allowsNull")
-//    String columnAllowsNull() default "false";
-//    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
-//    int columnLength() default MAX_LENGTH;
+    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "allowsNull")
+    String columnAllowsNull() default "true";
+    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
+    int columnLength() default MAX_LENGTH;
+
+    int MULTI_LINE = 1;
+    @AliasFor( annotation =  PropertyLayout.class, attribute = "multiLine")
+    int propertyLayoutMultiLine() default MULTI_LINE;
+    @AliasFor( annotation =  ParameterLayout.class, attribute = "multiLine")
+    int parameterLayoutMultiLine() default MULTI_LINE;
 
 }

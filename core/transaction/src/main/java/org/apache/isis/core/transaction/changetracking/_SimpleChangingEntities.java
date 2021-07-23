@@ -41,6 +41,8 @@ final class _SimpleChangingEntities implements EntityChanges {
     private final Timestamp completedAt;
     private final int numberEntitiesLoaded;
     private final int numberEntityPropertiesModified;
+
+    @ToString.Exclude
     private final Supplier<ChangesDto> changesDtoSupplier;
 
     public _SimpleChangingEntities(

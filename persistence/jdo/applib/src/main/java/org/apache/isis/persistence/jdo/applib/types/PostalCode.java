@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.subdomains.base.applib.types;
+package org.apache.isis.persistence.jdo.applib.types;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -32,28 +32,28 @@ import org.springframework.core.annotation.AliasFor;
 
 /**
  * Meta-annotation for a mandatory {@link String} property or parameter representing a
- * URL template, for example for an entity that holds configuration data to access external systems.
+ * postal code or zip code.
  *
  * @since 2.0 {@index}
  */
 @Property(
-        maxLength = UrlTemplate.MAX_LENGTH,
+        maxLength = PostalCode.MAX_LENGTH,
         optionality = Optionality.MANDATORY
 )
 @PropertyLayout(
 )
 @Parameter(
-        maxLength = UrlTemplate.MAX_LENGTH,
+        maxLength = PostalCode.MAX_LENGTH,
         optionality = Optionality.MANDATORY
 )
 @ParameterLayout(
 )
-//@javax.jdo.annotations.Column(length = UrlTemplate.MAX_LENGTH, allowsNull = "false")
+@javax.jdo.annotations.Column(length = PostalCode.MAX_LENGTH, allowsNull = "false")
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface UrlTemplate {
+public @interface PostalCode {
 
-    int MAX_LENGTH = 254;
+    int MAX_LENGTH = 12;
     @AliasFor( annotation =  Property.class, attribute = "maxLength")
     int propertyMaxLength() default MAX_LENGTH;
     @AliasFor( annotation =  Parameter.class, attribute = "maxLength")
@@ -64,9 +64,9 @@ public @interface UrlTemplate {
     @AliasFor( annotation = Parameter.class, attribute = "optionality")
     Optionality parameterOptionality() default Optionality.MANDATORY;
 
-//    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "allowsNull")
-//    String columnAllowsNull() default "false";
-//    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
-//    int columnLength() default MAX_LENGTH;
+    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "allowsNull")
+    String columnAllowsNull() default "false";
+    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
+    int columnLength() default MAX_LENGTH;
 
 }
