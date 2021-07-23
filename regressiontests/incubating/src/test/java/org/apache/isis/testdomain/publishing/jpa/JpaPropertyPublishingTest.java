@@ -50,6 +50,7 @@ import lombok.val;
                 //XrayEnable.class
         },
         properties = {
+                "logging.level.org.springframework.orm.jpa.*=DEBUG",
                 "logging.level.org.apache.isis.applib.services.publishing.log.*=DEBUG",
                 "logging.level.org.apache.isis.testdomain.util.rest.KVStoreForTesting=DEBUG",
                 "logging.level.org.apache.isis.core.transaction.changetracking.EntityChangeTrackerDefault=DEBUG",

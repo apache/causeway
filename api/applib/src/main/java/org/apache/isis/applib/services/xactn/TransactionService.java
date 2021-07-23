@@ -62,9 +62,14 @@ public interface TransactionService extends TransactionalProcessor {
      */
     void flushTransaction();
 
-    /**
-     * Commits the current thread's transaction (if there is one), and in any case begins a new one.
-     */
-    void nextTransaction();
+
+    //XXX we removed the entire method, because of following subtlety with JpaTransactionManager's commit
+    // If the transaction wasn't a new one, omit the commit for proper participation in
+    // the surrounding transaction. If a previous transaction has been suspended to be
+    // able to create a new one, resume the previous transaction after committing the new one.
+//    /**
+//     * Commits the current thread's transaction (if there is one), and in any case begins a new one.
+//     */
+//    void nextTransaction();
 
 }

@@ -70,7 +70,7 @@ import lombok.extern.log4j.Log4j2;
 public class TransactionServiceSpring
 implements
     TransactionService,
-        TransactionBoundaryAware {
+    TransactionBoundaryAware {
 
     private final Can<PlatformTransactionManager> platformTransactionManagers;
     private final InteractionLayerTracker interactionLayerTracker;
@@ -95,7 +95,7 @@ implements
     // -- SPRING INTEGRATION
 
     @Override
-    public <T> Result<T> callTransactional(TransactionDefinition def, Callable<T> callable) {
+    public <T> Result<T> callTransactional(final TransactionDefinition def, final Callable<T> callable) {
 
         val txManager = transactionManagerForElseFail(def);
 
@@ -128,45 +128,49 @@ implements
         return result;
     }
 
-    @Override
-    public void nextTransaction() {
-
-        val txManager = singletonTransactionManagerElseFail();
-
-        try {
-
-            val txTemplate = new TransactionTemplate(txManager);
-            txTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-
-            // either reuse existing or create new
-            val txStatus = txManager.getTransaction(txTemplate);
-            if(txStatus.isNewTransaction()) {
-                // we have created a new transaction, so we are done
-                return;
-            }
-            // we are reusing an exiting transaction, so end it and create a new one afterwards
-            if(txStatus.isRollbackOnly()) {
-                txManager.rollback(txStatus);
-            } else {
-                txManager.commit(txStatus);
-            }
-
-            // begin a new transaction
-            txManager.getTransaction(txTemplate);
-
-        } catch (RuntimeException ex) {
-
-            val translatedEx = translateExceptionIfPossible(ex, txManager);
-
-            if(translatedEx instanceof RuntimeException) {
-                throw ex;
-            }
-
-            throw new RuntimeException(ex);
-
-        }
-
-    }
+//    @Override
+//    public void nextTransaction() {
+//
+//        val txManager = singletonTransactionManagerElseFail();
+//
+//        try {
+//
+//            val txTemplate = new TransactionTemplate(txManager);
+//            txTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+//
+//            // either reuse existing or create new
+//            val txStatus = txManager.getTransaction(txTemplate);
+//            if(txStatus.isNewTransaction()) {
+//                // we have created a new transaction, so we are done
+//                return;
+//            }
+//            // we are reusing an exiting transaction, so end it and create a new one afterwards
+//            if(txStatus.isRollbackOnly()) {
+//                txManager.rollback(txStatus);
+//            } else {
+//                //XXX we removed the entire method, because of following subtlety
+                  // If the transaction wasn't a new one, omit the commit for proper participation in
+//                // the surrounding transaction. If a previous transaction has been suspended to be
+//                // able to create a new one, resume the previous transaction after committing the new one.
+//                txManager.commit(txStatus);
+//           }
+//
+//            // begin a new transaction
+//            txManager.getTransaction(txTemplate);
+//
+//        } catch (RuntimeException ex) {
+//
+//            val translatedEx = translateExceptionIfPossible(ex, txManager);
+//
+//            if(translatedEx instanceof RuntimeException) {
+//                throw ex;
+//            }
+//
+//            throw new RuntimeException(ex);
+//
+//        }
+//
+//    }
 
     @Override
     public void flushTransaction() {
@@ -230,25 +234,25 @@ implements
 
     /** INTERACTION BEGIN BOUNDARY */
     @Override
-    public void beforeEnteringTransactionalBoundary(Interaction interaction) {
+    public void beforeEnteringTransactionalBoundary(final Interaction interaction) {
         txCounter.get().reset();
     }
 
     /** TRANSACTION END BOUNDARY */
     @EventListener(TransactionAfterCompletionEvent.class)
-    public void onTransactionEnded(TransactionAfterCompletionEvent event) {
+    public void onTransactionEnded(final TransactionAfterCompletionEvent event) {
         txCounter.get().increment();
     }
 
     /** INTERACTION END BOUNDARY */
     @Override
-    public void afterLeavingTransactionalBoundary(Interaction interaction) {
+    public void afterLeavingTransactionalBoundary(final Interaction interaction) {
         txCounter.remove(); //XXX not tested yet: can we be certain that no txCounter.get() is called afterwards?
     }
 
     // -- HELPER
 
-    private PlatformTransactionManager transactionManagerForElseFail(TransactionDefinition def) {
+    private PlatformTransactionManager transactionManagerForElseFail(final TransactionDefinition def) {
         if(def instanceof TransactionTemplate) {
             val txManager = ((TransactionTemplate)def).getTransactionManager();
             if(txManager!=null) {
@@ -291,7 +295,7 @@ implements
 
     }
 
-    private Throwable translateExceptionIfPossible(Throwable ex, PlatformTransactionManager txManager) {
+    private Throwable translateExceptionIfPossible(final Throwable ex, final PlatformTransactionManager txManager) {
 
         if(ex instanceof DataAccessException) {
             return ex; // nothing to do, already translated

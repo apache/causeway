@@ -27,7 +27,6 @@ import javax.inject.Inject;
 
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -50,7 +49,7 @@ import org.apache.isis.testdomain.jpa.JpaTestDomainPersona;
 import org.apache.isis.testdomain.jpa.entities.JpaBook;
 import org.apache.isis.testdomain.jpa.entities.JpaInventory;
 import org.apache.isis.testdomain.jpa.entities.JpaProduct;
-import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.PreCommitListener;
+import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.CommitListener;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import static org.apache.isis.applib.services.wrapper.control.AsyncControl.returningVoid;
@@ -58,11 +57,12 @@ import static org.apache.isis.applib.services.wrapper.control.AsyncControl.retur
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.val;
 
 @Component
 @Import({
-    PreCommitListener.class
+    CommitListener.class
 })
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class PublishingTestFactoryJpa
@@ -72,7 +72,7 @@ extends PublishingTestFactoryAbstract {
     private final WrapperFactory wrapper;
     private final ObjectManager objectManager;
     private final FixtureScripts fixtureScripts;
-    private final PreCommitListener preCommitListener;
+    private final CommitListener commitListener;
     private final JpaSupportService jpaSupport;
 
     @Getter(onMethod_ = {@Override}, value = AccessLevel.PROTECTED)
@@ -81,6 +81,13 @@ extends PublishingTestFactoryAbstract {
     @Getter(onMethod_ = {@Override}, value = AccessLevel.PROTECTED)
     private final TransactionService transactionService;
 
+    // -- TEST SETUP
+
+    @Override
+    protected void setupEntity(final PublishingTestContext context) {
+        // given
+        setupBookForJpa();
+    }
 
     // -- TESTS - PROGRAMMATIC
 
@@ -88,12 +95,12 @@ extends PublishingTestFactoryAbstract {
     protected boolean programmaticExecution(
             final PublishingTestContext context) {
 
-        // given
-        setupBookForJpa();
+        context.bind(commitListener);
 
-        context.bind(preCommitListener);
+        // This test does not trigger command or execution publishing, however it does trigger
+        // entity-change-publishing.
 
-        withBookDoTransactional(book->{
+        withBookDo(book->{
 
             context.runGiven();
 
@@ -104,13 +111,6 @@ extends PublishingTestFactoryAbstract {
 
         });
 
-        context.unbind(preCommitListener);
-
-        // This test does not trigger command or execution publishing, however it does trigger
-        // entity-change-publishing.
-
-        // then
-        context.runVerify(VerificationStage.POST_COMMIT_WHEN_PROGRAMMATIC);
 
         return true;
     }
@@ -121,15 +121,12 @@ extends PublishingTestFactoryAbstract {
     protected boolean interactionApiExecution(
             final PublishingTestContext context) {
 
-        // given
-        setupBookForJpa();
+        context.bind(commitListener);
 
         // when
-        withBookDoTransactional(book->{
+        withBookDo(book->{
 
             context.runGiven();
-
-            context.bind(preCommitListener);
 
             // when
             context.changeProperty(()->{
@@ -146,11 +143,6 @@ extends PublishingTestFactoryAbstract {
 
         });
 
-        context.unbind(preCommitListener);
-
-        // then
-        context.runVerify(VerificationStage.POST_COMMIT);
-
         return true;
     }
 
@@ -160,26 +152,18 @@ extends PublishingTestFactoryAbstract {
     protected boolean wrapperSyncExecutionNoRules(
             final PublishingTestContext context) {
 
-        // given
-        setupBookForJpa();
+        context.bind(commitListener);
 
         // when
-        withBookDoTransactional(book->{
+        withBookDo(book->{
 
             context.runGiven();
-
-            context.bind(preCommitListener);
 
             // when - running synchronous
             val syncControl = SyncControl.control().withSkipRules(); // don't enforce rules
             context.changeProperty(()->wrapper.wrap(book, syncControl).setName("Book #2"));
 
-            context.unbind(preCommitListener);
-
         });
-
-        // then
-        context.runVerify(VerificationStage.POST_COMMIT);
 
         return true;
     }
@@ -188,15 +172,12 @@ extends PublishingTestFactoryAbstract {
     protected boolean wrapperSyncExecutionWithFailure(
             final PublishingTestContext context) {
 
-        // given
-        setupBookForJpa();
+        context.bind(commitListener);
 
         // when
-        withBookDoTransactional(book->{
+        withBookDo(book->{
 
             context.runGiven();
-
-            context.bind(preCommitListener);
 
             // when - running synchronous
             val syncControl = SyncControl.control().withCheckRules(); // enforce rules
@@ -205,13 +186,7 @@ extends PublishingTestFactoryAbstract {
                 wrapper.wrap(book, syncControl).setName("Book #2"); // should fail with DisabledException
             });
 
-            context.unbind(preCommitListener);
-
         });
-
-
-        // then
-        context.runVerify(VerificationStage.FAILURE_CASE);
 
         return false;
     }
@@ -222,17 +197,16 @@ extends PublishingTestFactoryAbstract {
     protected boolean wrapperAsyncExecutionNoRules(
             final PublishingTestContext context) throws InterruptedException, ExecutionException, TimeoutException {
 
+        context.bind(commitListener);
+
         // given
-        setupBookForJpa();
         val asyncControl = returningVoid().withSkipRules(); // don't enforce rules
 
         // when
 
-        withBookDoTransactional(book->{
+        withBookDo(book->{
 
             context.runGiven();
-
-            context.bind(preCommitListener);
 
             // when - running asynchronous
             wrapper.asyncWrap(book, asyncControl)
@@ -242,11 +216,6 @@ extends PublishingTestFactoryAbstract {
 
         asyncControl.getFuture().get(10, TimeUnit.SECONDS);
 
-        context.unbind(preCommitListener);
-
-        // then
-        context.runVerify(VerificationStage.POST_COMMIT);
-
         return true;
     }
 
@@ -254,15 +223,12 @@ extends PublishingTestFactoryAbstract {
     protected boolean wrapperAsyncExecutionWithFailure(
             final PublishingTestContext context) {
 
-        // given
-        setupBookForJpa();
+        context.bind(commitListener);
 
         // when
-        withBookDoTransactional(book->{
+        withBookDo(book->{
 
-            context.runGiven();
 
-            context.bind(preCommitListener);
 
             // when - running synchronous
             val asyncControl = returningVoid().withCheckRules(); // enforce rules
@@ -274,12 +240,7 @@ extends PublishingTestFactoryAbstract {
                 fail("unexpected code reach");
             });
 
-            context.unbind(preCommitListener);
-
         });
-
-        // then
-        context.runVerify(VerificationStage.FAILURE_CASE);
 
         return false;
     }
@@ -288,50 +249,41 @@ extends PublishingTestFactoryAbstract {
 
     private void setupBookForJpa() {
 
-        transactionService.runTransactional(Propagation.REQUIRES_NEW, ()->{
+        val em = jpaSupport.getEntityManagerElseFail(JpaBook.class);
 
-            val em = jpaSupport.getEntityManagerElseFail(JpaBook.class);
+        // cleanup
+        fixtureScripts.runPersona(JpaTestDomainPersona.PurgeAll);
 
-            // cleanup
-            fixtureScripts.runPersona(JpaTestDomainPersona.PurgeAll);
+        // given Inventory with 1 Book
 
-            // given Inventory with 1 Book
+        val products = new HashSet<JpaProduct>();
 
-            val products = new HashSet<JpaProduct>();
+        products.add(JpaBook.of(
+                "Sample Book", "A sample book for testing.", 99.,
+                "Sample Author", "Sample ISBN", "Sample Publisher"));
 
-            products.add(JpaBook.of(
-                    "Sample Book", "A sample book for testing.", 99.,
-                    "Sample Author", "Sample ISBN", "Sample Publisher"));
+        val inventory = JpaInventory.of("Sample Inventory", products);
+        em.persist(inventory);
 
-            val inventory = JpaInventory.of("Sample Inventory", products);
-            em.persist(inventory);
+        inventory.getProducts().forEach(product->{
+            em.persist(product);
 
-            inventory.getProducts().forEach(product->{
-                em.persist(product);
-
-                _Probe.errOut("PROD ID: %s", product.getId());
-
-            });
-
-            //fixtureScripts.runPersona(JpaTestDomainPersona.InventoryWith1Book);
-
-            em.flush();
+            _Probe.errOut("PROD ID: %s", product.getId());
 
         });
+
+        //fixtureScripts.runPersona(JpaTestDomainPersona.InventoryWith1Book);
+
+        em.flush();
     }
 
-    private void withBookDoTransactional(final CheckedConsumer<JpaBook> transactionalBookConsumer) {
+    @SneakyThrows
+    private void withBookDo(final CheckedConsumer<JpaBook> bookConsumer) {
 
-        xrayEnterTansaction(Propagation.REQUIRES_NEW);
+        val book = repository.allInstances(JpaBook.class).listIterator().next();
+        bookConsumer.accept(book);
 
-        transactionService.runTransactional(Propagation.REQUIRES_NEW, ()->{
-            val book = repository.allInstances(JpaBook.class).listIterator().next();
-            transactionalBookConsumer.accept(book);
-
-        })
-        .optionalElseFail();
-
-        xrayExitTansaction();
     }
+
 
 }
