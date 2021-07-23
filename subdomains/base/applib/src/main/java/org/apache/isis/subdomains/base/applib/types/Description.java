@@ -71,7 +71,7 @@ public @interface Description {
 //    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "allowsNull")
 //    String columnAllowsNull() default "true";
 //    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
-//    String columnLength() default MAX_LENGTH;
+//    int columnLength() default MAX_LENGTH;
 
     String NAMED = "Description";
     @AliasFor( annotation =  PropertyLayout.class, attribute = "named")

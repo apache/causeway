@@ -69,7 +69,7 @@ public @interface UrlTemplate {
 //    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "allowsNull")
 //    String columnAllowsNull() default "false";
 //    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
-//    String columnLength() default MAX_LENGTH;
+//    int columnLength() default MAX_LENGTH;
 
     String NAMED = "URL Template";
     @AliasFor( annotation =  PropertyLayout.class, attribute = "named")

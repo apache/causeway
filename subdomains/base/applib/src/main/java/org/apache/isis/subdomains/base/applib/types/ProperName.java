@@ -69,7 +69,7 @@ public @interface ProperName {
 //    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "allowsNull")
 //    String columnAllowsNull() default "false";
 //    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
-//    String columnLength() default MAX_LENGTH;
+//    int columnLength() default MAX_LENGTH;
 
     String NAMED = "Proper (or formal) name";
     @AliasFor( annotation =  PropertyLayout.class, attribute = "named")
