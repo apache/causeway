@@ -51,7 +51,7 @@ final class _PropertyChangeRecord {
         return new _PropertyChangeRecord(entity, property);
     }
 
-    private _PropertyChangeRecord(ManagedObject entity, ObjectAssociation property) {
+    private _PropertyChangeRecord(final ManagedObject entity, final ObjectAssociation property) {
         this.entity = entity;
         this.property = property;
         this.propertyId = property.getId();
@@ -64,7 +64,7 @@ final class _PropertyChangeRecord {
         return property.getFeatureIdentifier().getFullIdentityString();
     }
 
-    void setPreValue(Object pre) {
+    void setPreValue(final Object pre) {
         preAndPostValue = _PreAndPostValue.pre(pre);
     }
 
@@ -72,8 +72,8 @@ final class _PropertyChangeRecord {
         setPreValue(getPropertyValue());
     }
 
-    void updatePostValue() {
-        preAndPostValue = EntityUtil.isDetachedOrRemoved(entity)
+    void updatePostValue(/*final boolean isEntityDeleted*/) {
+        preAndPostValue = EntityUtil.isDetachedOrRemoved(entity) //TODO[ISIS-2573] when detached, logic is wrong
                 ? preAndPostValue.withPost(IsisTransactionPlaceholder.DELETED)
                 : preAndPostValue.withPost(getPropertyValue());
     }

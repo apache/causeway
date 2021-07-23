@@ -52,7 +52,9 @@ public class _DocumentFactories {
     }
 
     public static DocumentBuilder documentBuilder() throws ParserConfigurationException {
+        /*sonar-ignore-on*/
         return documentBuilderFactory().newDocumentBuilder();
+        /*sonar-ignore-off*/
     }
 
     public static TransformerFactory transformerFactory() {

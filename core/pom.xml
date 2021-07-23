@@ -112,7 +112,7 @@
 		<docx4j.version>8.3.1</docx4j.version>
 
 		<easymock.version>4.3</easymock.version>
-		<error_prone_annotations.version>2.7.1</error_prone_annotations.version>
+		<error_prone_annotations.version>2.8.0</error_prone_annotations.version>
 
 		<findbugs-annotations.version>3.0.1u2</findbugs-annotations.version>
 
@@ -175,7 +175,7 @@
 		<shiro.version>1.7.1</shiro.version>
 		<simpleslackapi.version>1.3.0</simpleslackapi.version>
 		<slf4j-api.version>1.7.32</slf4j-api.version> <!-- also provided by spring-boot-starter-logging, needed to solve convergence issues -->
-		<spring-boot.version>2.5.2</spring-boot.version> <!-- has no effect here, needs to be set in isis-parent/pom.xml -->
+		<spring-boot.version>2.5.3</spring-boot.version> <!-- has no effect here, needs to be set in isis-parent/pom.xml -->
 		<summernote.version>0.8.11</summernote.version>
 		<swagger-core.version>1.6.2</swagger-core.version>
 

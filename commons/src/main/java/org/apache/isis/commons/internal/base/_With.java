@@ -58,7 +58,7 @@ public final class _With<T> {
      * @param orElse (nullable)
      * @return {@code obj!=null ? obj : orElse}
      */
-    public static <X> X ifPresentElse(@Nullable X obj, @Nullable X orElse) {
+    public static <X> X ifPresentElse(@Nullable final X obj, @Nullable final X orElse) {
         return obj!=null ? obj : orElse;
     }
 
@@ -68,7 +68,7 @@ public final class _With<T> {
      * @param elseGet
      * @return {@code obj!=null ? obj : elseGet.get()}
      */
-    public static <X> X ifPresentElseGet(@Nullable X obj, Supplier<X> elseGet) {
+    public static <X> X ifPresentElseGet(@Nullable final X obj, final Supplier<X> elseGet) {
         return obj!=null ? obj : requires(elseGet, "elseGet").get();
     }
 
@@ -80,8 +80,8 @@ public final class _With<T> {
      * @throws E
      */
     public static <X, E extends Exception> X ifPresentElseThrow(
-            @Nullable X obj,
-            Supplier<E> elseThrow)
+            @Nullable final X obj,
+            final Supplier<E> elseThrow)
                     throws E {
         if(obj!=null) {
             return obj;
@@ -97,7 +97,7 @@ public final class _With<T> {
      * @param consumer
      * @return {@code obj}
      */
-    public static <X> X accept(@Nullable X obj, Consumer<X> consumer) {
+    public static <X> X accept(@Nullable final X obj, final Consumer<X> consumer) {
         requires(consumer, "consumer").accept(obj);
         return obj;
     }
@@ -108,7 +108,7 @@ public final class _With<T> {
      * @param ifPresent
      * @return {@code obj}
      */
-    public static <X> X acceptIfPresent(@Nullable X obj, Consumer<X> ifPresent) {
+    public static <X> X acceptIfPresent(@Nullable final X obj, final Consumer<X> ifPresent) {
         if(obj!=null) {
             requires(ifPresent, "ifPresent").accept(obj);
         }
@@ -123,7 +123,7 @@ public final class _With<T> {
      * @param elseRun
      * @return {@code obj}
      */
-    public static <X> X acceptIfPresentElseRun(@Nullable X obj, Consumer<X> ifPresent, Runnable elseRun) {
+    public static <X> X acceptIfPresentElseRun(@Nullable final X obj, final Consumer<X> ifPresent, final Runnable elseRun) {
         if(obj!=null) {
             requires(ifPresent, "ifPresent").accept(obj);
         } else {
@@ -142,7 +142,7 @@ public final class _With<T> {
      * @throws E
      */
     public static <X, E extends Exception> X acceptIfPresentElseThrow(
-            @Nullable X obj, Consumer<X> ifPresent, Supplier<E> elseThrow)
+            @Nullable final X obj, final Consumer<X> ifPresent, final Supplier<E> elseThrow)
                     throws E {
 
         if(obj!=null) {
@@ -160,7 +160,7 @@ public final class _With<T> {
      * @param supplier
      * @return {@code obj!=null ? obj : supplier.get()}
      */
-    public static <X> X computeIfAbsent(@Nullable X obj, Supplier<X> supplier) {
+    public static <X> X computeIfAbsent(@Nullable final X obj, final Supplier<X> supplier) {
         return obj!=null ? obj : requires(supplier, "supplier").get();
     }
 
@@ -173,7 +173,7 @@ public final class _With<T> {
      * @param orElse (nullable)
      * @return {@code obj!=null ? mapper.apply(obj) : orElse}
      */
-    public static <X, R> R mapIfPresentElse(@Nullable X obj, Function<X, R> mapper, @Nullable R orElse) {
+    public static <X, R> R mapIfPresentElse(@Nullable final X obj, final Function<X, R> mapper, @Nullable final R orElse) {
         return obj!=null ? requires(mapper, "mapper").apply(obj) : orElse;
     }
 
@@ -184,7 +184,7 @@ public final class _With<T> {
      * @param elseGet
      * @return {@code obj!=null ? mapper.apply(obj) : elseGet.get()}
      */
-    public static <X, R> R mapIfPresentElseGet(@Nullable X obj, Function<X, R> mapper, Supplier<R> elseGet) {
+    public static <X, R> R mapIfPresentElseGet(@Nullable final X obj, final Function<X, R> mapper, final Supplier<R> elseGet) {
         return obj!=null ? requires(mapper, "mapper").apply(obj) : requires(elseGet, "elseGet").get();
     }
 
@@ -197,9 +197,9 @@ public final class _With<T> {
      * @throws E
      */
     public static <X, R, E extends Exception> R mapIfPresentElseThrow(
-            @Nullable X obj,
-            Function<X, R> mapper,
-            Supplier<E> elseThrow)
+            @Nullable final X obj,
+            final Function<X, R> mapper,
+            final Supplier<E> elseThrow)
                     throws E {
         if(obj!=null) {
             return requires(mapper, "mapper").apply(obj);
@@ -215,8 +215,10 @@ public final class _With<T> {
      * @param paramName to use for the exception message, when the non-null-check fails
      * @return {@code obj!=null ? obj : throw NullPointerException}
      * @throws NullPointerException if {@code obj} is {@code null}
+     * @deprecated use {@code @lombok.NonNull} on the parameter instead
      */
-    public static <T> T requires(@Nullable T obj, String paramName) {
+    @Deprecated
+    public static <T> T requires(@Nullable final T obj, final String paramName) {
         if (obj == null) {
             val msg = String.format("Parameter/Field '%s' is required to be present (not null).", paramName);
             throw new IllegalArgumentException(msg);
@@ -234,7 +236,7 @@ public final class _With<T> {
      * @throws NullPointerException if {@code obj} is {@code null}
      * @throws IllegalArgumentException if {@code obj} is 'empty'
      */
-    public static String requiresNotEmpty(@Nullable String obj, String paramName) {
+    public static String requiresNotEmpty(@Nullable final String obj, final String paramName) {
         if (obj == null) {
             throw new NullPointerException(String.format("Parameter/Field '%s' is required to be present (not null).", paramName));
         }
@@ -252,7 +254,7 @@ public final class _With<T> {
      * @param initializer
      * @return a new Object as provided by {@code factory} after calling the {@code initializer} on it
      */
-    public static <T> T create(Supplier<T> factory, Consumer<T> initializer) {
+    public static <T> T create(final Supplier<T> factory, final Consumer<T> initializer) {
         return accept(factory.get(), initializer);
     }
 
@@ -261,7 +263,7 @@ public final class _With<T> {
      * @param initializer
      * @return a new ArrayList after calling the {@code initializer} on it
      */
-    public static <X> ArrayList<X> arrayList(Consumer<ArrayList<X>> initializer) {
+    public static <X> ArrayList<X> arrayList(final Consumer<ArrayList<X>> initializer) {
         return create(ArrayList::new, initializer);
     }
 
@@ -270,7 +272,7 @@ public final class _With<T> {
      * @param initializer
      * @return a new HashSet after calling the {@code initializer} on it
      */
-    public static <X> HashSet<X> hashSet(Consumer<HashSet<X>> initializer) {
+    public static <X> HashSet<X> hashSet(final Consumer<HashSet<X>> initializer) {
         return create(HashSet::new, initializer);
     }
 
@@ -279,7 +281,7 @@ public final class _With<T> {
      * @param initializer
      * @return a new TreeSet after calling the {@code initializer} on it
      */
-    public static <X> TreeSet<X> treeSet(Consumer<TreeSet<X>> initializer) {
+    public static <X> TreeSet<X> treeSet(final Consumer<TreeSet<X>> initializer) {
         return create(TreeSet::new, initializer);
     }
 
@@ -288,7 +290,7 @@ public final class _With<T> {
      * @param initializer
      * @return a new HashMap after calling the {@code initializer} on it
      */
-    public static <K, V> HashMap<K, V> hashMap(Consumer<HashMap<K, V>> initializer) {
+    public static <K, V> HashMap<K, V> hashMap(final Consumer<HashMap<K, V>> initializer) {
         return accept(new HashMap<K, V>(), initializer);
     }
 
@@ -297,7 +299,7 @@ public final class _With<T> {
      * @param initializer
      * @return a new TreeMap after calling the {@code initializer} on it
      */
-    public static <K, V> TreeMap<K, V> treeMap(Consumer<TreeMap<K, V>> initializer) {
+    public static <K, V> TreeMap<K, V> treeMap(final Consumer<TreeMap<K, V>> initializer) {
         return accept(new TreeMap<K, V>(), initializer);
     }
 
@@ -306,7 +308,7 @@ public final class _With<T> {
      * @param initializer
      * @return a new StringBuilder after calling the {@code initializer} on it
      */
-    public static StringBuilder stringBuilder(Consumer<StringBuilder> initializer) {
+    public static StringBuilder stringBuilder(final Consumer<StringBuilder> initializer) {
         return create(StringBuilder::new, initializer);
     }
 
@@ -316,7 +318,7 @@ public final class _With<T> {
      * Returns Optional of the callable's result after invocation. Any exception during
      * invocation will result in an empty Optional.
      */
-    public static <T> Optional<T> tryCall(Callable<T> callable) {
+    public static <T> Optional<T> tryCall(final Callable<T> callable) {
         try {
             val result = callable.call();
             return Optional.ofNullable(result);
@@ -329,7 +331,7 @@ public final class _With<T> {
      * Returns the callable's result after invocation. Any exception during
      * invocation will result in the defaultValue being returned instead.
      */
-    public static <T> T tryOrDefault(Callable<T> callable, T defaultValue) {
+    public static <T> T tryOrDefault(final Callable<T> callable, final T defaultValue) {
         try {
             return callable.call();
         } catch (Exception e) {

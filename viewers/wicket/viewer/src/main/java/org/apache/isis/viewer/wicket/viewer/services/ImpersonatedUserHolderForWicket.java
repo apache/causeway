@@ -23,11 +23,14 @@ import java.util.Optional;
 import javax.inject.Named;
 
 import org.apache.wicket.Session;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.user.ImpersonatedUserHolder;
 import org.apache.isis.applib.services.user.UserMemento;
+
+import lombok.val;
 
 /**
  * Implementation that supports impersonation, using the Wicket {@link Session}
@@ -71,7 +74,12 @@ public class ImpersonatedUserHolderForWicket implements ImpersonatedUserHolder {
     }
 
     private static Optional<Session> session() {
-        return Optional.ofNullable(Session.get());
+        //XXX[ISIS-2816] guards against RequestCycle not available,
+        // when in the process of expiring the Session
+        val requestCycle = RequestCycle.get();
+        return requestCycle != null
+                ? Optional.of(Session.get())
+                : Optional.empty();
     }
 
 }

@@ -21,7 +21,10 @@ package org.apache.isis.core.interaction.scope;
 import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.springframework.beans.factory.NoUniqueBeanDefinitionException;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.Scope;
 
@@ -45,7 +48,7 @@ implements
 
     private final BeanFactory beanFactory;
 
-    public InteractionScope(BeanFactory beanFactory) {
+    public InteractionScope(final BeanFactory beanFactory) {
         this.beanFactory = beanFactory;
     }
 
@@ -74,19 +77,30 @@ implements
      */
     private ThreadLocal<Map<String, ScopedObject>> scopedObjects = ThreadLocal.withInitial(_Maps::newHashMap);
 
+    /**
+    * @return an instance of the single bean matching the required type (InteractionService)
+    * @throws NoSuchBeanDefinitionException if no bean of the given type was found
+    * @throws NoUniqueBeanDefinitionException if more than one bean of the given type was found
+    * @throws BeansException if the bean could not be created
+    */
     private InteractionService interactionService() {
         return beanFactory.getBean(InteractionService.class);
     }
 
     @Override
-    public Object get(String name, ObjectFactory<?> objectFactory) {
+    public Object get(final String name, final ObjectFactory<?> objectFactory) {
 
-        if(interactionService() == null) {
-            throw _Exceptions.illegalState("Creation of bean %s with @InteractionScope requires the "
+        final InteractionService interactionService;
+        try {
+            interactionService = interactionService();
+        } catch (Exception cause) {
+            throw _Exceptions.illegalState(
+                    cause,
+                    "Creation of bean %s with @InteractionScope requires the "
                     + "InteractionScopeBeanFactoryPostProcessor registered and initialized.", name);
         }
 
-        if(!interactionService().isInInteraction()) {
+        if(!interactionService.isInInteraction()) {
             throw _Exceptions.illegalState("Creation of bean %s with @InteractionScope requires the "
                     + "calling %s to have an open Interaction on the thread-local stack. Running into "
                     + "this issue might be caused by use of ... @Inject MyScopedBean bean ..., instead of "
@@ -123,12 +137,12 @@ implements
     }
 
     @Override
-    public Object remove(String name) {
+    public Object remove(final String name) {
         throw new UnsupportedOperationException("use IsisInteractionScope.removeAll instead");
     }
 
     @Override
-    public void registerDestructionCallback(String name, Runnable callback) {
+    public void registerDestructionCallback(final String name, final Runnable callback) {
         val scopedObject = scopedObjects.get().get(name);
         if(scopedObject!=null) {
             scopedObject.setDestructionCallback(callback);
@@ -137,7 +151,7 @@ implements
     }
 
     @Override
-    public Object resolveContextualObject(String key) {
+    public Object resolveContextualObject(final String key) {
         // null by convention if not supported
         return null;
     }

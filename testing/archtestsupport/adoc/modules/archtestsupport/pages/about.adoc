@@ -48,85 +48,54 @@ public class ModuleTests {
 <.> just obtains the list of modules
 
 
-== Package Tests
+== Module Package Tests
 
 CAUTION: TODO - to flesh out
+
+Defines the rules for which subpackages or a module to check and whether the classes in those subpackages can access the classes in other subpackages either for the same module, or for modules that are referenced (`Import`ed) directly or transitively.
+
 
 [source,java]
 .Subpackage
 ----
 public interface Subpackage {
-    String getName();
 
-    SubpackageType getSubpackageType();
-
-    String packageIdentifierWithin(Class<?> moduleClass);
-
-    default void defineLayer(Architectures.LayeredArchitecture layeredArchitecture, Class<?> moduleClass) {
-        val layerDefinition = getSubpackageType().defineLayer(this, moduleClass, layeredArchitecture);
-        layerDefinition.definedBy(packageIdentifierWithin(moduleClass));
-    }
-
-    boolean canReference(Subpackage referenced);
+    String getName();                                               // <.>
+    List<String> mayBeAccessedBySubpackagesInSameModule();          // <.>
+    List<String> mayBeAccessedBySubpackagesInReferencingModules();  // <.>
 }
 ----
+
+<.> The name of the subpackage, for example &quot;dom&quot;, &quot;api&quot, &quot;spi&quot; or &quot;fixtures&quot;.
+
+<.> A list of the (names of the) subpackages where classes in the same module as this package have access.
++
+For example, the &quot;dom&quot; subpackage can probably be referenced from the &quot;menu&quot; subpackage, but not vice versa.
++
+The special value of &quot;*&quot; is a wildcard meaning that all subpackages (in the same module) can access.
+
+<.> A list of the (names of the) subpackages where classes in the packages of other referencing modules may have access.
++
+For example, in some cases the the &quot;dom&quot; subpackage may <i>not</i> be accessible from other modules if the intention is to require all programmatic access through an &quot;api&quot; subpackage (where the classes in `dom` implement interfaces defined in `api`).
++
+The special value of &quot;*&quot; is a wildcard meaning that all subpackages (in other modules) can access.
+
 
 The `SubpackageEnum` provides an off the shelf implementation.
 
-[source,java]
-.PackageTestsForCustomerModule.java
-----
-@AnalyzeClasses(
-    packagesOf = {CustomerModule.class},                                            // <.>
-    importOptions = {ImportOption.DoNotIncludeTests.class}
-)
-public class PackageTestsForCustomerModule {
 
-    @ArchTest public static ArchRule code_dependencies_follow_module_subpackages =
-      ArchitecturePackageRules.code_dependencies_follow_module_subpackages(         // <.>
-        CustomerModule.class,                                                       // <1>
-        Arrays.asList(SubpackageEnum.values()));                                    // <.>
+== Entity Tests
 
-}
-----
-
-<.> the module to be analyzed.
-A similar test should be created for each and every module in the app.
-<.> xxx
-<.> xxx
-
-
-== Class Tests
+These are provided for both JPA and JDO.
 
 CAUTION: TODO - to flesh out
 
-[source,java]
-.ClassTests.java
-----
-@AnalyzeClasses(
-        packagesOf = {
-                CustomerModule.class                                                // <.>
-                , OrderModule.class
-                , ProductModule.class
-        },
-        importOptions = { ImportOption.DoNotIncludeTests.class }
-)
-public class ClassTests {
 
-    @ArchTest
-    static ArchRule classes_annotated_with_Entity_are_also_annotated_with_DomainObject =
-      ArchitectureClassRules.classes_annotated_with_Entity_must_also_be_annotated_with_DomainObject();  // <.>
+== DomainObjectTests
 
-    @ArchTest
-    static ArchRule classes_annotated_with_Entity_are_also_annotated_with_XmlJavaTypeAdapter =
-      ArchitectureClassRules.classes_annotated_with_Entity_must_also_be_annotated_with_XmlJavaAdapter(); // <.>
+CAUTION: TODO - to flesh out
 
-    @ArchTest
-    static ArchRule classes_annotated_with_DomainObject_are_also_annotated_with_DomainObjectLayout =
-      ArchitectureClassRules.classes_annotated_with_DomainObject_must_also_be_annotated_with_DomainObjectLayout(); // <.>
-----
+== DomainServiceTests
 
-<.> the modules of the application to be scanned
-<.> xxx
-<.> xxx
-<.> xxx
+CAUTION: TODO - to flesh out
+

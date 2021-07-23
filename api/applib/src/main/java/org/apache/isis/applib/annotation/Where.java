@@ -91,29 +91,32 @@ public enum Where {
     OBJECT_FORMS,
 
     /**
-     * The member should be disabled/hidden when displayed as a column of a table
-     * within parent object's collection, and references that parent.
-     *
-     * <p>
-     * For most (all?) viewers, this will have meaning only if applied to a property member.
+     * The (property) member should be hidden when displayed as a column of a table
+     * within parent object's collection, and when it references that parent.
      */
     REFERENCES_PARENT,
 
     /**
-     * The member should be disabled/hidden when displayed as a column of a table within
+     * The member should be hidden when displayed as a column of a table within
      * a parent object's collection.
      *
      * <p>
-     * For most (all?) viewers, this will have meaning only if applied to a property member.
+     * An alternative to using annotations is using to use file based layout, which can be reloaded dynamically.
+     * One implementation that supports this is <code>TableColumnOrderServiceUsingTxtFile</code> service, that reads
+     * from files named <i>ParentClass#collectionId.columnOrder.txt</i>.
+     * </p>
      */
     PARENTED_TABLES ,
 
     /**
-     * The member should be disabled/hidden when displayed as a column of a table showing a standalone list
+     * The member should be hidden when displayed as a column of a table showing a standalone list
      * of objects, for example as returned by a repository query.
      *
      * <p>
-     * For most (all?) viewers, this will have meaning only if applied to a property member.
+     * An alternative to using annotations is using to use file based layout, which can be reloaded dynamically.
+     * One implementation that supports this is <code>TableColumnOrderServiceUsingTxtFile</code> service, that reads
+     * from files named <i>ClassName.columnOrder.txt</i>.
+     * </p>
      */
     STANDALONE_TABLES,
 
@@ -123,6 +126,14 @@ public enum Where {
      *
      * <p>
      * This combines {@link #PARENTED_TABLES} and {@link #STANDALONE_TABLES}.
+     * </p>
+     *
+     * <p>
+     * An alternative to using annotations is using to use file based layout, which can be reloaded dynamically.
+     * One implementation that supports this is <code>TableColumnOrderServiceUsingTxtFile</code> service, that reads
+     * from files named <i>ParentClass#collectionId.columnOrder.txt</i> (parented collections) and
+     * <i>ClassName.columnOrder.txt</i> (standalone collections).
+     * </p>
      */
     ALL_TABLES {
 

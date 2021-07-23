@@ -39,6 +39,7 @@ import org.apache.isis.commons.internal.base._With;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.functions._Functions;
 
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -64,9 +65,11 @@ public final class _Exceptions {
      * @param _case the unmatched case to be reported
      * @return new IllegalArgumentException
      */
-    public static final IllegalArgumentException unmatchedCase(@Nullable Object _case) {
+    public static final IllegalArgumentException unmatchedCase(@Nullable final Object _case) {
         return new IllegalArgumentException("internal error: unmatched case in switch statement: "+_case);
     }
+
+    // -- ILLEGAL ARGUMENT
 
     /**
      * @param format like in {@link java.lang.String#format(String, Object...)}
@@ -74,18 +77,27 @@ public final class _Exceptions {
      * @return new IllegalArgumentException
      */
     public static final IllegalArgumentException illegalArgument(
-            final String format,
+            final @NonNull String format,
             final @Nullable Object ... args) {
-        _With.requires(format, "format");
         return new IllegalArgumentException(String.format(format, args));
     }
 
+    // -- ILLEGAL STATE
+
     public static IllegalStateException illegalState(
-            final String format,
+            final @NonNull String format,
             final @Nullable Object ... args) {
-        _With.requires(format, "format");
         return new IllegalStateException(String.format(format, args));
     }
+
+    public static IllegalStateException illegalState(
+            final @NonNull Throwable cause,
+            final @NonNull String format,
+            final @Nullable Object ... args) {
+        return new IllegalStateException(String.format(format, args), cause);
+    }
+
+    // -- ILLEGAL ACCESS
 
     public static IllegalAccessException illegalAccess(
             final String format,
@@ -94,22 +106,29 @@ public final class _Exceptions {
         return new IllegalAccessException(String.format(format, args));
     }
 
+    // -- NO SUCH ELEMENT
+
     public static final NoSuchElementException noSuchElement() {
         return new NoSuchElementException();
     }
 
-    public static final NoSuchElementException noSuchElement(String msg) {
+    public static final NoSuchElementException noSuchElement(final String msg) {
         return new NoSuchElementException(msg);
     }
 
-    public static final NoSuchElementException noSuchElement(String format, Object ...args) {
-        _With.requires(format, "format");
+    public static final NoSuchElementException noSuchElement(
+            @NonNull final String format,
+            @Nullable final Object ...args) {
         return noSuchElement(String.format(format, args));
     }
+
+    // -- UNEXPECTED CODE REACH
 
     public static final IllegalStateException unexpectedCodeReach() {
         return new IllegalStateException("internal error: code was reached, that is expected unreachable");
     }
+
+    // -- NOT IMPLEMENTED
 
     public static IllegalStateException notImplemented() {
         return new IllegalStateException("internal error: code was reached, that is not implemented yet");
@@ -117,19 +136,19 @@ public final class _Exceptions {
 
     // -- UNRECOVERABLE
 
-    public static RuntimeException unrecoverable(Throwable cause) {
+    public static RuntimeException unrecoverable(final Throwable cause) {
         return new RuntimeException("unrecoverable error: with cause ...", cause);
     }
 
-    public static RuntimeException unrecoverable(String msg) {
+    public static RuntimeException unrecoverable(final String msg) {
         return new RuntimeException(String.format("unrecoverable error: '%s'", msg));
     }
 
-    public static RuntimeException unrecoverable(String msg, Throwable cause) {
+    public static RuntimeException unrecoverable(final String msg, final Throwable cause) {
         return new RuntimeException(String.format("unrecoverable error: '%s' with cause ...", msg), cause);
     }
 
-    public static RuntimeException unrecoverableFormatted(String format, Object ...args) {
+    public static RuntimeException unrecoverableFormatted(final String format, final Object ...args) {
         return new RuntimeException(String.format("unrecoverable error: '%s'",
                 String.format(format, args)));
     }
@@ -140,23 +159,23 @@ public final class _Exceptions {
         return new UnsupportedOperationException("unrecoverable error: method call not allowed/supported");
     }
 
-    public static UnsupportedOperationException unsupportedOperation(String msg) {
+    public static UnsupportedOperationException unsupportedOperation(final String msg) {
         return new UnsupportedOperationException(msg);
     }
 
-    public static UnsupportedOperationException unsupportedOperation(String format, Object ...args) {
+    public static UnsupportedOperationException unsupportedOperation(final String format, final Object ...args) {
         return new UnsupportedOperationException(String.format(format, args));
     }
 
     // -- ASSERT
 
-    public static AssertionError assertionError(String msg) {
+    public static AssertionError assertionError(final String msg) {
         return new AssertionError(msg);
     }
 
     // -- MESSAGE
 
-    public static String getMessage(Exception ex) {
+    public static String getMessage(final Exception ex) {
         if(ex==null) {
             return "no exception present";
         }
@@ -254,7 +273,7 @@ public final class _Exceptions {
 
     // -- SELECTIVE THROW
 
-    public static <E extends Exception> void throwWhenTrue(E cause, Predicate<E> test) throws E {
+    public static <E extends Exception> void throwWhenTrue(final E cause, final Predicate<E> test) throws E {
         if(test.test(cause)) {
             throw cause;
         }
@@ -262,7 +281,7 @@ public final class _Exceptions {
 
     // -- STACKTRACE UTILITITIES
 
-    public static final Stream<String> streamStacktraceLines(@Nullable Throwable ex, int maxLines) {
+    public static final Stream<String> streamStacktraceLines(@Nullable final Throwable ex, final int maxLines) {
         if(ex==null) {
             return Stream.empty();
         }
@@ -271,16 +290,16 @@ public final class _Exceptions {
                 .limit(maxLines);
     }
 
-    public static final String asStacktrace(@Nullable Throwable ex, int maxLines, String delimiter) {
+    public static final String asStacktrace(@Nullable final Throwable ex, final int maxLines, final String delimiter) {
         return _Exceptions.streamStacktraceLines(ex, maxLines)
                 .collect(Collectors.joining(delimiter));
     }
 
-    public static final String asStacktrace(@Nullable Throwable ex, int maxLines) {
+    public static final String asStacktrace(@Nullable final Throwable ex, final int maxLines) {
         return asStacktrace(ex, maxLines, "\n");
     }
 
-    public static final String asStacktrace(@Nullable Throwable ex) {
+    public static final String asStacktrace(@Nullable final Throwable ex) {
         return asStacktrace(ex, 1000);
     }
 
@@ -290,7 +309,7 @@ public final class _Exceptions {
      * @param skipLines
      * @param maxLines
      */
-    public static void dumpStackTrace(PrintStream writer, int skipLines, int maxLines) {
+    public static void dumpStackTrace(final PrintStream writer, final int skipLines, final int maxLines) {
         _NullSafe.stream(Thread.currentThread().getStackTrace())
         .map(StackTraceElement::toString)
         .skip(skipLines)
@@ -304,7 +323,7 @@ public final class _Exceptions {
 
     // -- CAUSAL CHAIN
 
-    public static List<Throwable> getCausalChain(@Nullable Throwable ex) {
+    public static List<Throwable> getCausalChain(@Nullable final Throwable ex) {
         if(ex==null) {
             return Collections.emptyList();
         }
@@ -317,7 +336,7 @@ public final class _Exceptions {
         return chain;
     }
 
-    public static Stream<Throwable> streamCausalChain(@Nullable Throwable ex) {
+    public static Stream<Throwable> streamCausalChain(@Nullable final Throwable ex) {
         if(ex==null) {
             return Stream.empty();
         }
@@ -325,18 +344,18 @@ public final class _Exceptions {
         return chain.stream();
     }
 
-    public static Throwable getRootCause(@Nullable Throwable ex) {
+    public static Throwable getRootCause(@Nullable final Throwable ex) {
         return _Lists.lastElementIfAny(getCausalChain(ex));
     }
 
     // -- SWALLOW
 
-    public static void silence(Runnable runnable) {
+    public static void silence(final Runnable runnable) {
 
         val currentThread = Thread.currentThread();
         val silencedHandler = currentThread.getUncaughtExceptionHandler();
 
-        currentThread.setUncaughtExceptionHandler((Thread t, Throwable e)->{/*noop*/});
+        currentThread.setUncaughtExceptionHandler((final Thread t, final Throwable e)->{/*noop*/});
 
         try {
             runnable.run();
@@ -376,13 +395,13 @@ public final class _Exceptions {
      */
     public static class FluentException<E extends Exception> {
 
-        public static <E extends Exception> FluentException<E> of(E cause) {
+        public static <E extends Exception> FluentException<E> of(final E cause) {
             return new FluentException<>(cause);
         }
 
         private final E cause;
 
-        private FluentException(E cause) {
+        private FluentException(final E cause) {
             _With.requires(cause, "cause");
             this.cause = cause;
         }
@@ -401,21 +420,21 @@ public final class _Exceptions {
             throw cause;
         }
 
-        public void rethrowIf(Predicate<E> condition) throws E {
+        public void rethrowIf(final Predicate<E> condition) throws E {
             _With.requires(condition, "condition");
             if(condition.test(cause)) {
                 throw cause;
             }
         }
 
-        public void suppressIf(Predicate<E> condition) throws E {
+        public void suppressIf(final Predicate<E> condition) throws E {
             _With.requires(condition, "condition");
             if(!condition.test(cause)) {
                 throw cause;
             }
         }
 
-        public void rethrowIfMessageContains(String string) throws E {
+        public void rethrowIfMessageContains(final String string) throws E {
             _With.requires(string, "string");
             final boolean containsMessage = getMessage().map(msg->msg.contains(string)).orElse(false);
             if(containsMessage) {
@@ -423,7 +442,7 @@ public final class _Exceptions {
             }
         }
 
-        public void suppressIfMessageContains(String string) throws E {
+        public void suppressIfMessageContains(final String string) throws E {
             _With.requires(string, "string");
             final boolean containsMessage = getMessage().map(msg->msg.contains(string)).orElse(false);
             if(!containsMessage) {
@@ -442,37 +461,37 @@ public final class _Exceptions {
 
         private final Function<Exception, ? extends RuntimeException> toUnchecked;
 
-        public TryContext(Function<Exception, ? extends RuntimeException> toUnchecked) {
+        public TryContext(final Function<Exception, ? extends RuntimeException> toUnchecked) {
             this.toUnchecked = toUnchecked;
         }
 
         // -- SHORTCUTS (RUNNABLE)
 
-        public Runnable uncheckedRunnable(_Functions.CheckedRunnable checkedRunnable) {
+        public Runnable uncheckedRunnable(final _Functions.CheckedRunnable checkedRunnable) {
             return checkedRunnable.toUnchecked(toUnchecked);
         }
 
-        public void tryRun(_Functions.CheckedRunnable checkedRunnable) {
+        public void tryRun(final _Functions.CheckedRunnable checkedRunnable) {
             uncheckedRunnable(checkedRunnable).run();
         }
 
         // -- SHORTCUTS (FUNCTION)
 
-        public <T, R> Function<T, R> uncheckedFunction(_Functions.CheckedFunction<T, R> checkedFunction) {
+        public <T, R> Function<T, R> uncheckedFunction(final _Functions.CheckedFunction<T, R> checkedFunction) {
             return checkedFunction.toUnchecked(toUnchecked);
         }
 
-        public <T, R> R tryApply(T obj, _Functions.CheckedFunction<T, R> checkedFunction) {
+        public <T, R> R tryApply(final T obj, final _Functions.CheckedFunction<T, R> checkedFunction) {
             return uncheckedFunction(checkedFunction).apply(obj);
         }
 
         // -- SHORTCUTS (CONSUMER)
 
-        public <T> Consumer<T> uncheckedConsumer(_Functions.CheckedConsumer<T> checkedConsumer) {
+        public <T> Consumer<T> uncheckedConsumer(final _Functions.CheckedConsumer<T> checkedConsumer) {
             return checkedConsumer.toUnchecked(toUnchecked);
         }
 
-        public <T> void tryAccept(T obj, _Functions.CheckedConsumer<T> checkedConsumer) {
+        public <T> void tryAccept(final T obj, final _Functions.CheckedConsumer<T> checkedConsumer) {
             uncheckedConsumer(checkedConsumer).accept(obj);
         }
     }

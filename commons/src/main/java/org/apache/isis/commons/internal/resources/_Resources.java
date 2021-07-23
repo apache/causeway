@@ -30,10 +30,10 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.base._With;
 import org.apache.isis.commons.internal.context._Context;
 
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.val;
 
 /**
@@ -57,14 +57,13 @@ public final class _Resources {
      * @param resourceName
      * @return An input stream for reading the resource, or null if the resource could not be found.
      */
+    @SneakyThrows
     public static @Nullable InputStream load(
             final @NonNull Class<?> contextClass,
             final @NonNull String resourceName) {
 
         val absoluteResourceName = resolveName(resourceName, contextClass);
-
-        return _Context.getDefaultClassLoader()
-                .getResourceAsStream(absoluteResourceName);
+        return _Context.getDefaultClassLoader().getResourceAsStream(absoluteResourceName);
     }
 
     /**
@@ -76,7 +75,7 @@ public final class _Resources {
      * @return The resource as a String, or null if the resource could not be found.
      * @throws IOException
      */
-    public static String loadAsString(
+    public static @Nullable String loadAsString(
             final @NonNull Class<?> contextClass,
             final @NonNull String resourceName,
             final @NonNull Charset charset) throws IOException {
@@ -88,7 +87,7 @@ public final class _Resources {
     /**
      * Shortcut using Charset UTF-8, see {@link #loadAsString(Class, String, Charset)}
      */
-    public static String loadAsStringUtf8(
+    public static @Nullable String loadAsStringUtf8(
             final @NonNull Class<?> contextClass,
             final @NonNull String resourceName) throws IOException {
         return loadAsString(contextClass, resourceName, StandardCharsets.UTF_8);
@@ -98,12 +97,12 @@ public final class _Resources {
      * @param resourceName
      * @return The resource location as an URL, or null if the resource could not be found.
      */
-    public static URL getResourceUrl(
+    public static @Nullable URL getResourceUrl(
             final @NonNull Class<?> contextClass,
             final @NonNull String resourceName) {
 
-        _With.requires(resourceName, "resourceName");
         final String absoluteResourceName = resolveName(resourceName, contextClass);
+
         return _Context.getDefaultClassLoader().getResource(absoluteResourceName);
     }
 
@@ -118,8 +117,7 @@ public final class _Resources {
      * to the web-app's context root.
      * @param resourcePath
      */
-    public static boolean isLocalResource(String resourcePath) {
-        _With.requires(resourcePath, "resourcePath");
+    public static boolean isLocalResource(final @NonNull String resourcePath) {
         return !externalResourcePattern.test(resourcePath);
     }
 
@@ -130,7 +128,7 @@ public final class _Resources {
      * @param extendee
      * @param suffix
      */
-    public static String combinePath(@Nullable String extendee, @Nullable String suffix) {
+    public static String combinePath(@Nullable final String extendee, @Nullable final String suffix) {
         return _Strings.combineWithDelimiter(extendee, suffix, "/");
     }
 
@@ -140,7 +138,7 @@ public final class _Resources {
      *
      * Adapted copy of JDK 8 Class::resolveName
      */
-    private static String resolveName(String name, Class<?> contextClass) {
+    private static String resolveName(String name, final Class<?> contextClass) {
         if (name == null) {
             return name;
         }

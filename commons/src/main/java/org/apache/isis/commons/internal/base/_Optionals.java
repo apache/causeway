@@ -26,7 +26,10 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class _Optionals {
 
-    // can be replaced by Java 9 firstOptional.or(() -> secondOptional);
+    /**
+     * @deprecated since Java 9 can be replaced with {@code firstOptional.or(() -> secondOptional)};
+     */
+    @Deprecated
     public static <T> Optional<T> or(
             final Optional<? extends T> a,
             final Supplier<Optional<? extends T>> b) {

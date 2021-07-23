@@ -5,3 +5,4 @@
 
 include::layout/object-layout.adoc[leveloffset=+1]
 include::layout/menubars.adoc[leveloffset=+1]
+include::layout/column-order.adoc[leveloffset=+1]

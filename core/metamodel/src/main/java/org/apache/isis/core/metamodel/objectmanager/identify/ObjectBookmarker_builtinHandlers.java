@@ -44,12 +44,12 @@ class ObjectBookmarker_builtinHandlers {
     static class GuardAgainstOid implements Handler {
 
         @Override
-        public boolean isHandling(ManagedObject managedObject) {
+        public boolean isHandling(final ManagedObject managedObject) {
             return managedObject.getPojo() instanceof Oid;
         }
 
         @Override
-        public Bookmark handle(ManagedObject managedObject) {
+        public Bookmark handle(final ManagedObject managedObject) {
             throw new IllegalArgumentException("Cannot create a Bookmark for pojo, "
                     + "when pojo is instance of Bookmark. You might want to ask "
                     + "ObjectAdapterByIdProvider for an ObjectAdapter instead.");
@@ -60,12 +60,12 @@ class ObjectBookmarker_builtinHandlers {
     static class BookmarkForServices implements Handler {
 
         @Override
-        public boolean isHandling(ManagedObject managedObject) {
+        public boolean isHandling(final ManagedObject managedObject) {
             return managedObject.getSpecification().isManagedBean();
         }
 
         @Override
-        public Bookmark handle(ManagedObject managedObject) {
+        public Bookmark handle(final ManagedObject managedObject) {
             final String identifier = SERVICE_IDENTIFIER;
             return Bookmark.forLogicalTypeAndIdentifier(
                     managedObject.getSpecification().getLogicalType(),
@@ -77,12 +77,12 @@ class ObjectBookmarker_builtinHandlers {
     static class BookmarkForEntities implements Handler {
 
         @Override
-        public boolean isHandling(ManagedObject managedObject) {
+        public boolean isHandling(final ManagedObject managedObject) {
             return managedObject.getSpecification().isEntity();
         }
 
         @Override
-        public Bookmark handle(ManagedObject managedObject) {
+        public Bookmark handle(final ManagedObject managedObject) {
             val spec = managedObject.getSpecification();
             val pojo = managedObject.getPojo();
             if(pojo==null) {
@@ -103,12 +103,12 @@ class ObjectBookmarker_builtinHandlers {
     static class BookmarkForValues implements Handler {
 
         @Override
-        public boolean isHandling(ManagedObject managedObject) {
+        public boolean isHandling(final ManagedObject managedObject) {
             return managedObject.getSpecification().containsFacet(ValueFacet.class);
         }
 
         @Override
-        public Bookmark handle(ManagedObject managedObject) {
+        public Bookmark handle(final ManagedObject managedObject) {
             throw _Exceptions.illegalArgument("cannot 'identify' the value type %s, "
                     + "as values have no identifier",
                     managedObject.getSpecification().getCorrespondingClass().getName());
@@ -119,21 +119,23 @@ class ObjectBookmarker_builtinHandlers {
     static class BookmarkForSerializable implements Handler {
 
         @Override
-        public boolean isHandling(ManagedObject managedObject) {
+        public boolean isHandling(final ManagedObject managedObject) {
             val spec = managedObject.getSpecification();
             return spec.isViewModel() && java.io.Serializable.class.isAssignableFrom(spec.getCorrespondingClass());
         }
 
         @SneakyThrows
         @Override
-        public Bookmark handle(ManagedObject managedObject) {
+        public Bookmark handle(final ManagedObject managedObject) {
             val spec = managedObject.getSpecification();
             val baos = new ByteArrayOutputStream();
-            val oos = new ObjectOutputStream(baos);
-            oos.writeObject(managedObject.getPojo());
-            val identifier = _Strings.ofBytes(_Bytes.asUrlBase64.apply(baos.toByteArray()), StandardCharsets.UTF_8);
-            oos.close();
-            return Bookmark.forLogicalTypeAndIdentifier(spec.getLogicalType(), identifier);
+            try(val oos = new ObjectOutputStream(baos)) {
+                oos.writeObject(managedObject.getPojo());
+                val identifier = _Strings.ofBytes(
+                        _Bytes.asUrlBase64.apply(baos.toByteArray()),
+                        StandardCharsets.UTF_8);
+                return Bookmark.forLogicalTypeAndIdentifier(spec.getLogicalType(), identifier);
+            }
         }
 
     }
@@ -141,12 +143,12 @@ class ObjectBookmarker_builtinHandlers {
     static class BookmarkForViewModels implements Handler {
 
         @Override
-        public boolean isHandling(ManagedObject managedObject) {
+        public boolean isHandling(final ManagedObject managedObject) {
             return managedObject.getSpecification().containsFacet(ViewModelFacet.class);
         }
 
         @Override
-        public Bookmark handle(ManagedObject managedObject) {
+        public Bookmark handle(final ManagedObject managedObject) {
             val spec = managedObject.getSpecification();
             val recreatableObjectFacet = spec.getFacet(ViewModelFacet.class);
             val identifier = recreatableObjectFacet.memento(managedObject.getPojo());
@@ -158,12 +160,12 @@ class ObjectBookmarker_builtinHandlers {
     static class BookmarkForOthers implements Handler {
 
         @Override
-        public boolean isHandling(ManagedObject managedObject) {
+        public boolean isHandling(final ManagedObject managedObject) {
             return true; // try to handle anything
         }
 
         @Override
-        public Bookmark handle(ManagedObject managedObject) {
+        public Bookmark handle(final ManagedObject managedObject) {
             val spec = managedObject.getSpecification();
             val identifier = UUID.randomUUID().toString();
             return Bookmark.forLogicalTypeAndIdentifier(spec.getLogicalType(), identifier);
