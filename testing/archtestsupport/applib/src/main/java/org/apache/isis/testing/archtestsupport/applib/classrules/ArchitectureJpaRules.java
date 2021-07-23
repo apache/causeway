@@ -84,7 +84,7 @@ public class ArchitectureJpaRules {
                 .should().beAnnotatedWith(EntityListeners_with_IsisEntityListener());
     }
 
-    private static DescribedPredicate<JavaAnnotation<?>> EntityListeners_with_IsisEntityListener() {
+    static DescribedPredicate<JavaAnnotation<?>> EntityListeners_with_IsisEntityListener() {
         return new DescribedPredicate<JavaAnnotation<?>>("@EntityListener({IsisEntityListener.class})") {
             @Override public boolean apply(final JavaAnnotation<?> javaAnnotation) {
                 if (!javaAnnotation.getRawType().isAssignableTo(EntityListeners.class)) {
@@ -209,7 +209,7 @@ public class ArchitectureJpaRules {
         return everyJpa_Entity_must_have_a_field_named_and_annotated("version", Version.class);
     }
 
-    private static ClassesShouldConjunction everyJpa_Entity_must_have_a_field_named_and_annotated(
+    static ClassesShouldConjunction everyJpa_Entity_must_have_a_field_named_and_annotated(
             final String fieldName,
             final Class<? extends Annotation> annotationClass) {
         final String fieldAnnotation = annotationClass.getSimpleName();
@@ -236,7 +236,7 @@ public class ArchitectureJpaRules {
                 ;
     }
 
-    private static DescribedPredicate<JavaAnnotation<?>> Table_schema() {
+    static DescribedPredicate<JavaAnnotation<?>> Table_schema() {
         return new DescribedPredicate<JavaAnnotation<?>>("@Table(schema=...)") {
             @Override public boolean apply(final JavaAnnotation<?> javaAnnotation) {
                 if (!javaAnnotation.getRawType().isAssignableTo(Table.class)) {
@@ -250,7 +250,7 @@ public class ArchitectureJpaRules {
         };
     }
 
-    private static DescribedPredicate<JavaClass> areEntities() {
+    static DescribedPredicate<JavaClass> areEntities() {
         return new DescribedPredicate<JavaClass>("are entities") {
             @Override
             public boolean apply(JavaClass input) {
@@ -259,7 +259,7 @@ public class ArchitectureJpaRules {
         };
     }
 
-    private static DescribedPredicate<JavaAnnotation<?>> Table_uniqueConstraints() {
+    static DescribedPredicate<JavaAnnotation<?>> Table_uniqueConstraints() {
         return new DescribedPredicate<JavaAnnotation<?>>("@Table(uniqueConstraints=...)") {
             @Override public boolean apply(final JavaAnnotation<?> javaAnnotation) {
                 if (!javaAnnotation.getRawType().isAssignableTo(Table.class)) {

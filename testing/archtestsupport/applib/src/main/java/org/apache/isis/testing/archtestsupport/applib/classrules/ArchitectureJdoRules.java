@@ -128,7 +128,7 @@ public class ArchitectureJdoRules {
     }
 
 
-    private static DescribedPredicate<JavaAnnotation<?>> PersistenceCapable_schema() {
+    static DescribedPredicate<JavaAnnotation<?>> PersistenceCapable_schema() {
         return new DescribedPredicate<JavaAnnotation<?>>("@PersistenceCapable(schema=...)") {
             @Override public boolean apply(final JavaAnnotation<?> javaAnnotation) {
                 if (!javaAnnotation.getRawType().isAssignableTo(PersistenceCapable.class)) {
@@ -142,7 +142,7 @@ public class ArchitectureJdoRules {
         };
     }
 
-    private static DescribedPredicate<JavaAnnotation<?>> PersistenceCapable_with_DATASTORE_identityType() {
+    static DescribedPredicate<JavaAnnotation<?>> PersistenceCapable_with_DATASTORE_identityType() {
         return new DescribedPredicate<JavaAnnotation<?>>("@PersistenceCapable(identityType=DATASTORE)") {
             @Override public boolean apply(final JavaAnnotation<?> javaAnnotation) {
                 if (!javaAnnotation.getRawType().isAssignableTo(PersistenceCapable.class)) {
@@ -177,7 +177,7 @@ public class ArchitectureJdoRules {
                 ;
     }
 
-    private static DescribedPredicate<JavaClass> areEntities() {
+    static DescribedPredicate<JavaClass> areEntities() {
         return new DescribedPredicate<JavaClass>("are entities") {
             @Override
             public boolean apply(JavaClass input) {

@@ -56,16 +56,6 @@ public class ArchitectureDomainRules {
     }
 
     /**
-     * This rule requires that classes annotated with the {@link DomainObject} annotation must also be
-     * annotated with the {@link DomainObjectLayout} annotation.
-     */
-    public static ArchRule every_DomainObject_must_also_be_annotated_with_DomainObjectLayout() {
-        return classes()
-                .that().areAnnotatedWith(DomainObject.class)
-                .should().beAnnotatedWith(DomainObjectLayout.class);
-    }
-
-    /**
      * This rule requires that classes annotated with the {@link DomainService} annotation must specify their
      * {@link DomainService#logicalTypeName() logicalTypeName}.
      */
@@ -73,6 +63,16 @@ public class ArchitectureDomainRules {
         return classes()
                 .that().areAnnotatedWith(DomainService.class)
                 .should().beAnnotatedWith(DomainService_logicalTypeName());
+    }
+
+    /**
+     * This rule requires that classes annotated with the {@link DomainObject} annotation must also be
+     * annotated with the {@link DomainObjectLayout} annotation.
+     */
+    public static ArchRule every_DomainObject_must_also_be_annotated_with_DomainObjectLayout() {
+        return classes()
+                .that().areAnnotatedWith(DomainObject.class)
+                .should().beAnnotatedWith(DomainObjectLayout.class);
     }
 
     /**

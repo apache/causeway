@@ -8,7 +8,7 @@ Apache Isis provides a number of helpers to help unit test your domain objects.
 
 == Maven Configuration
 
-TODO: move this earlier, standard format.
+WARNING: TODO: move this description earlier, standard format.
 
 Apache Isis' unit test support is most easily configured through a dependency on the `isis-mavendeps-testing` module:
 
