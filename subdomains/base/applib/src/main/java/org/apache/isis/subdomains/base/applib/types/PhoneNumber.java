@@ -43,7 +43,6 @@ import org.springframework.core.annotation.AliasFor;
         regexPatternReplacement = PhoneNumber.REGEX_PATTERN_REPLACEMENT
 )
 @PropertyLayout(
-        named = PhoneNumber.NAMED
 )
 @Parameter(
         maxLength = PhoneNumber.MAX_LENGTH,
@@ -52,7 +51,6 @@ import org.springframework.core.annotation.AliasFor;
         regexPatternReplacement = PhoneNumber.REGEX_PATTERN_REPLACEMENT
 )
 @ParameterLayout(
-        named = PhoneNumber.NAMED
 )
 //@javax.jdo.annotations.Column(length = PhoneNumber.MAX_LENGTH, allowsNull = "true")
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
@@ -86,11 +84,5 @@ public @interface PhoneNumber {
 //    String columnAllowsNull() default "true";
 //    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
 //    int columnLength() default MAX_LENGTH;
-
-    String NAMED = "Phone Number";
-    @AliasFor( annotation =  PropertyLayout.class, attribute = "named")
-    String propertyLayoutNamed() default NAMED;
-    @AliasFor( annotation =  ParameterLayout.class, attribute = "named")
-    String parameterLayoutNamed() default NAMED;
 
 }

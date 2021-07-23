@@ -46,14 +46,12 @@ import org.springframework.core.annotation.AliasFor;
         optionality = Optionality.MANDATORY
 )
 @PropertyLayout(
-        named = ObjectIdentifier.NAMED
 )
 @Parameter(
         maxLength = ObjectIdentifier.MAX_LENGTH,
         optionality = Optionality.MANDATORY
 )
 @ParameterLayout(
-        named = ObjectIdentifier.NAMED
 )
 //@javax.jdo.annotations.Column(length = ObjectIdentifier.MAX_LENGTH, allowsNull = "false")
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
@@ -75,11 +73,5 @@ public @interface ObjectIdentifier {
 //    String columnAllowsNull() default "false";
 //    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
 //    int columnLength() default MAX_LENGTH;
-
-    String NAMED = "Object identifier";
-    @AliasFor( annotation =  PropertyLayout.class, attribute = "named")
-    String propertyLayoutNamed() default NAMED;
-    @AliasFor( annotation =  ParameterLayout.class, attribute = "named")
-    String parameterLayoutNamed() default NAMED;
 
 }

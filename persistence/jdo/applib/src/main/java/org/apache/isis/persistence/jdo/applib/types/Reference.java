@@ -43,7 +43,6 @@ import org.springframework.core.annotation.AliasFor;
         regexPatternReplacement = Reference.REGEX_PATTERN_REPLACEMENT
 )
 @PropertyLayout(
-        named = Reference.NAMED
 )
 @Parameter(
         maxLength = Reference.MAX_LENGTH,
@@ -52,7 +51,6 @@ import org.springframework.core.annotation.AliasFor;
         regexPatternReplacement = Reference.REGEX_PATTERN_REPLACEMENT
 )
 @ParameterLayout(
-        named = Reference.NAMED
 )
 @javax.jdo.annotations.Column(length = Reference.MAX_LENGTH, allowsNull = "false")
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
@@ -86,11 +84,5 @@ public @interface Reference {
     String columnAllowsNull() default "false";
     @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
     int columnLength() default MAX_LENGTH;
-
-    String NAMED = "Reference";
-    @AliasFor( annotation =  PropertyLayout.class, attribute = "named")
-    String propertyLayoutNamed() default NAMED;
-    @AliasFor( annotation =  ParameterLayout.class, attribute = "named")
-    String parameterLayoutNamed() default NAMED;
 
 }

@@ -41,14 +41,12 @@ import org.springframework.core.annotation.AliasFor;
         optionality = Optionality.MANDATORY
 )
 @PropertyLayout(
-        named = PostalCode.NAMED
 )
 @Parameter(
         maxLength = PostalCode.MAX_LENGTH,
         optionality = Optionality.MANDATORY
 )
 @ParameterLayout(
-        named = PostalCode.NAMED
 )
 //@javax.jdo.annotations.Column(length = PostalCode.MAX_LENGTH, allowsNull = "true")
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
@@ -71,9 +69,4 @@ public @interface PostalCode {
 //    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
 //    int columnLength() default MAX_LENGTH;
 
-    String NAMED = "Postal code";
-    @AliasFor( annotation =  PropertyLayout.class, attribute = "named")
-    String propertyLayoutNamed() default NAMED;
-    @AliasFor( annotation =  ParameterLayout.class, attribute = "named")
-    String parameterLayoutNamed() default NAMED;
 }

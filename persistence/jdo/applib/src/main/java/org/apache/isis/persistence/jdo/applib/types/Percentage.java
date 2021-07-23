@@ -40,13 +40,11 @@ import org.springframework.core.annotation.AliasFor;
         optionality = Optionality.OPTIONAL
 )
 @PropertyLayout(
-        named = Percentage.NAMED
 )
 @Parameter(
         optionality = Optionality.OPTIONAL
 )
 @ParameterLayout(
-        named = Percentage.NAMED
 )
 @javax.validation.constraints.Digits(
         integer = Percentage.INTEGER,
@@ -64,12 +62,6 @@ public @interface Percentage {
 
     @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "allowsNull")
     String columnAllowsNull() default "true";
-
-    String NAMED = "Percentage (%)";
-    @AliasFor( annotation =  PropertyLayout.class, attribute = "named")
-    String propertyLayoutNamed() default NAMED;
-    @AliasFor( annotation =  ParameterLayout.class, attribute = "named")
-    String parameterLayoutNamed() default NAMED;
 
     int INTEGER = 3;
     @AliasFor( annotation = javax.validation.constraints.Digits.class, attribute = "integer")

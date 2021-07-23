@@ -43,7 +43,6 @@ import org.springframework.core.annotation.AliasFor;
         regexPatternReplacement = Email.REGEX_PATTERN_REPLACEMENT
 )
 @PropertyLayout(
-        named = Email.NAMED
 )
 @Parameter(
         maxLength = Email.MAX_LENGTH,
@@ -52,7 +51,6 @@ import org.springframework.core.annotation.AliasFor;
         regexPatternReplacement = Email.REGEX_PATTERN_REPLACEMENT
 )
 @ParameterLayout(
-        named = Email.NAMED
 )
 @javax.jdo.annotations.Column(length = Email.MAX_LENGTH, allowsNull = "true")
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
@@ -92,12 +90,6 @@ public @interface Email {
     String columnAllowsNull() default "true";
     @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
     int columnLength() default MAX_LENGTH;
-
-    String NAMED = "Email";
-    @AliasFor( annotation =  PropertyLayout.class, attribute = "named")
-    String propertyLayoutNamed() default NAMED;
-    @AliasFor( annotation =  ParameterLayout.class, attribute = "named")
-    String parameterLayoutNamed() default NAMED;
 
 
 }
