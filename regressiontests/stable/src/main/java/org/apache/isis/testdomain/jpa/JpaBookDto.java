@@ -30,6 +30,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.testdomain.jpa.entities.JpaBook;
@@ -52,7 +53,7 @@ public class JpaBookDto {
     private String isbn;
     private String publisher;
 
-    public static JpaBookDto from(JpaBook book) {
+    public static JpaBookDto from(final JpaBook book) {
         return JpaBookDto.builder()
         .author(book.getAuthor())
         .description(book.getDescription())
@@ -63,11 +64,13 @@ public class JpaBookDto {
         .build();
     }
 
+    @Programmatic
     public JpaBook toBook() {
        return JpaBook.of(this.getName(), this.getDescription(), this.getPrice(),
                 this.getAuthor(), this.getIsbn(), this.getPublisher());
     }
 
+    @Programmatic
     public String encode() throws JAXBException {
         JAXBContext jaxbContext = JAXBContext.newInstance(JpaBookDto.class);
         Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
@@ -81,7 +84,7 @@ public class JpaBookDto {
         return encoded;
     }
 
-    public static JpaBookDto decode(String encoded) throws JAXBException {
+    public static JpaBookDto decode(final String encoded) throws JAXBException {
         String bookXml = _Strings.convert(encoded, _Bytes.ofCompressedUrlBase64, StandardCharsets.UTF_8);
 
         JAXBContext jaxbContext = JAXBContext.newInstance(JpaBookDto.class);

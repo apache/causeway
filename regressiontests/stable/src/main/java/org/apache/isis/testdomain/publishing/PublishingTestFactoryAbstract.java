@@ -38,14 +38,18 @@ import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.security.util.XrayUtil;
 import org.apache.isis.core.transaction.events.TransactionBeforeCompletionEvent;
+import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.PublishingTestContext.TraceLog;
 
-import lombok.Setter;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Value;
 import lombok.val;
 
-public abstract class ApplicationLayerTestFactoryAbstract {
+public abstract class PublishingTestFactoryAbstract {
 
     public static enum VerificationStage {
         PRE_COMMIT,
@@ -56,23 +60,94 @@ public abstract class ApplicationLayerTestFactoryAbstract {
         POST_INTERACTION_WHEN_PROGRAMMATIC,
     }
 
+    @Value(staticConstructor = "of")
+    public static class PublishingTestContext {
+
+        public static class TraceLog {
+            private final StringBuilder buffer = new StringBuilder();
+            @Getter private boolean debug = true;
+
+            public TraceLog log(final String format, final Object...args) {
+                val msg = String.format(format, args);
+                buffer.append(msg).append("\n");
+                if(debug) {
+                    System.err.println(msg);
+                }
+                return this;
+            }
+        }
+
+        private final @NonNull TraceLog traceLog;
+        private final @NonNull Runnable given;
+        private final @NonNull Consumer<VerificationStage> verifier;
+
+        public void runGiven() {
+            traceLog.log("2.1 about to run given");
+            given.run();
+            traceLog.log("2.2 given has run");
+        }
+
+        public void runVerify(final VerificationStage verificationStage) {
+            verifier.accept(verificationStage);
+        }
+
+        /**
+         * @param preCommitListener - shared instance
+         */
+        public void bind(final PreCommitListener preCommitListener) {
+            traceLog.log("1. bind to pre-commit events");
+            preCommitListener.bind(verifier);
+        }
+
+        /**
+         * @param preCommitListener - shared instance
+         */
+        public void unbind(final PreCommitListener preCommitListener) {
+            traceLog.log("3. unbind from pre-commit events");
+            preCommitListener.unbind(verifier);
+        }
+
+        public void changeProperty(final Runnable runnable) {
+            traceLog.log("2.3 about to change book's name");
+            runnable.run();
+            traceLog.log("2.4 book's name has changed");
+        }
+
+    }
+
     @FunctionalInterface
-    private static interface InteractionTestRunner {
-        boolean run(Runnable given, Consumer<VerificationStage> verifier) throws Exception;
+    private static interface PublishingTestRunner {
+        boolean run(PublishingTestContext context) throws Exception;
     }
 
     @Service
     public static class PreCommitListener {
 
-        @Setter private Consumer<VerificationStage> verifier;
+        private Consumer<VerificationStage> verifier;
+//        @Setter private TraceLog traceLog;
 
         /** TRANSACTION END BOUNDARY */
         @EventListener(TransactionBeforeCompletionEvent.class)
         public void onPreCommit(final TransactionBeforeCompletionEvent event) {
+//            if(traceLog!=null) {
+//                traceLog.log("=== TRANSACTION END BOUNDARY");
+//            }
             if(verifier!=null) {
                 verifier.accept(VerificationStage.PRE_COMMIT);
             }
         }
+
+        public void bind(final Consumer<VerificationStage> verifier) {
+            _Assert.assertNull(this.verifier, "PreCommitListener is already bound to a verifier.");
+            this.verifier = verifier;
+        }
+
+        public void unbind(final Consumer<VerificationStage> verifier) {
+            _Assert.assertEquals(this.verifier, verifier, "PreCommitListener is not bound to the verifier, "
+                    + "which it receives a request to unbind from.");
+            this.verifier = null;
+        }
+
     }
 
     // -- DEPENDENCIES
@@ -88,27 +163,27 @@ public abstract class ApplicationLayerTestFactoryAbstract {
 
         val dynamicTests = Can.<DynamicTest>of(
 
-                interactionTest("Programmatic Execution",
+                publishingTest("Programmatic Execution",
                         given, verifier,
                         VerificationStage.POST_INTERACTION_WHEN_PROGRAMMATIC,
                         this::programmaticExecution),
-                interactionTest("Interaction Api Execution",
+                publishingTest("Interaction Api Execution",
                         given, verifier,
                         VerificationStage.POST_INTERACTION,
                         this::interactionApiExecution),
-                interactionTest("Wrapper Sync Execution w/o Rules",
+                publishingTest("Wrapper Sync Execution w/o Rules",
                         given, verifier,
                         VerificationStage.POST_INTERACTION,
                         this::wrapperSyncExecutionNoRules),
-                interactionTest("Wrapper Sync Execution w/ Rules (expected to fail w/ DisabledException)",
+                publishingTest("Wrapper Sync Execution w/ Rules (expected to fail w/ DisabledException)",
                         given, verifier,
                         VerificationStage.POST_INTERACTION,
                         this::wrapperSyncExecutionWithFailure),
-                interactionTest("Wrapper Async Execution w/o Rules",
+                publishingTest("Wrapper Async Execution w/o Rules",
                         given, verifier,
                         VerificationStage.POST_INTERACTION,
                         this::wrapperAsyncExecutionNoRules),
-                interactionTest("Wrapper Async Execution w/ Rules (expected to fail w/ DisabledException)",
+                publishingTest("Wrapper Async Execution w/ Rules (expected to fail w/ DisabledException)",
                         given, verifier,
                         VerificationStage.POST_INTERACTION,
                         this::wrapperAsyncExecutionWithFailure)
@@ -123,39 +198,27 @@ public abstract class ApplicationLayerTestFactoryAbstract {
 
     }
 
-    protected abstract boolean programmaticExecution(
-            final Runnable given,
-            final Consumer<VerificationStage> verifier);
+    protected abstract boolean programmaticExecution(PublishingTestContext context);
 
-    protected abstract boolean interactionApiExecution(
-            final Runnable given,
-            final Consumer<VerificationStage> verifier);
+    protected abstract boolean interactionApiExecution(PublishingTestContext context);
 
-    protected abstract boolean wrapperSyncExecutionNoRules(
-            final Runnable given,
-            final Consumer<VerificationStage> verifier);
+    protected abstract boolean wrapperSyncExecutionNoRules(PublishingTestContext context);
 
-    protected abstract boolean wrapperSyncExecutionWithFailure(
-            final Runnable given,
-            final Consumer<VerificationStage> verifier);
+    protected abstract boolean wrapperSyncExecutionWithFailure(PublishingTestContext context);
 
-    protected abstract boolean wrapperAsyncExecutionNoRules(
-            final Runnable given,
-            final Consumer<VerificationStage> verifier) throws InterruptedException, ExecutionException, TimeoutException;
+    protected abstract boolean wrapperAsyncExecutionNoRules(PublishingTestContext context) throws InterruptedException, ExecutionException, TimeoutException;
 
-    protected abstract boolean wrapperAsyncExecutionWithFailure(
-            final Runnable given,
-            final Consumer<VerificationStage> verifier);
+    protected abstract boolean wrapperAsyncExecutionWithFailure(PublishingTestContext context);
 
 
     // -- HELPER
 
-    private final DynamicTest interactionTest(
+    private final DynamicTest publishingTest(
             final String displayName,
             final Runnable given,
             final Consumer<VerificationStage> verifier,
             final VerificationStage onSuccess,
-            final InteractionTestRunner interactionTestRunner) {
+            final PublishingTestRunner testRunner) {
 
         return dynamicTest(displayName, ()->{
 
@@ -164,10 +227,12 @@ public abstract class ApplicationLayerTestFactoryAbstract {
             assertFalse(getInteractionService().isInInteraction());
             assert_no_initial_tx_context();
 
+            val traceLog = new TraceLog();
+
             final boolean isSuccesfulRun = getInteractionService().callAnonymous(()->{
                 val currentInteraction = getInteractionService().currentInteraction();
                 xrayEnterInteraction(currentInteraction);
-                val result = interactionTestRunner.run(given, verifier);
+                val result = testRunner.run(PublishingTestContext.of(traceLog, given, verifier));
                 xrayExitInteraction();
                 return result;
             });
@@ -212,6 +277,5 @@ public abstract class ApplicationLayerTestFactoryAbstract {
 
     private void xrayExitInteraction() {
     }
-
 
 }

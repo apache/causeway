@@ -32,13 +32,12 @@ import org.springframework.test.context.TestPropertySource;
 
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.debug.xray.XrayEnable;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.PropertyDto;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
-import org.apache.isis.testdomain.publishing.ApplicationLayerTestFactoryJdo;
-import org.apache.isis.testdomain.publishing.ApplicationLayerTestFactoryAbstract.VerificationStage;
+import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.VerificationStage;
+import org.apache.isis.testdomain.publishing.PublishingTestFactoryJdo;
 import org.apache.isis.testdomain.publishing.conf.Configuration_usingCommandPublishing;
 import org.apache.isis.testdomain.publishing.subscriber.CommandSubscriberForTesting;
 import org.apache.isis.testdomain.util.CollectionAssertions;
@@ -50,8 +49,8 @@ import lombok.val;
         classes = {
                 Configuration_usingJdo.class,
                 Configuration_usingCommandPublishing.class,
-                ApplicationLayerTestFactoryJdo.class,
-                XrayEnable.class
+                PublishingTestFactoryJdo.class,
+                //XrayEnable.class
         },
         properties = {
                 "logging.level.org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisTransactionJdo=DEBUG",
@@ -63,10 +62,10 @@ import lombok.val;
 })
 class JdoCommandPublishingTest {
 
-    @Inject private ApplicationLayerTestFactoryJdo testFactory;
+    @Inject private PublishingTestFactoryJdo testFactory;
     @Inject private KVStoreForTesting kvStore;
 
-    @TestFactory @DisplayName("Application Layer")
+    @TestFactory @DisplayName("Publishing")
     List<DynamicTest> generateTests() {
         return testFactory.generateTests(this::given, this::verify);
     }

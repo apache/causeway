@@ -22,12 +22,8 @@ import java.util.HashSet;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import java.util.function.Consumer;
 
 import javax.inject.Inject;
-import javax.inject.Named;
-import javax.jdo.JDOHelper;
-import javax.jdo.PersistenceManagerFactory;
 
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
@@ -49,11 +45,12 @@ import org.apache.isis.commons.internal.functions._Functions.CheckedConsumer;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
-import org.apache.isis.testdomain.jdo.entities.JdoBook;
-import org.apache.isis.testdomain.jdo.entities.JdoInventory;
-import org.apache.isis.testdomain.jdo.entities.JdoProduct;
-import org.apache.isis.testdomain.publishing.ApplicationLayerTestFactoryAbstract.PreCommitListener;
+import org.apache.isis.persistence.jpa.applib.services.JpaSupportService;
+import org.apache.isis.testdomain.jpa.JpaTestDomainPersona;
+import org.apache.isis.testdomain.jpa.entities.JpaBook;
+import org.apache.isis.testdomain.jpa.entities.JpaInventory;
+import org.apache.isis.testdomain.jpa.entities.JpaProduct;
+import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.PreCommitListener;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import static org.apache.isis.applib.services.wrapper.control.AsyncControl.returningVoid;
@@ -68,14 +65,15 @@ import lombok.val;
     PreCommitListener.class
 })
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class ApplicationLayerTestFactoryJdo
-extends ApplicationLayerTestFactoryAbstract {
+public class PublishingTestFactoryJpa
+extends PublishingTestFactoryAbstract {
 
     private final RepositoryService repository;
     private final WrapperFactory wrapper;
     private final ObjectManager objectManager;
     private final FixtureScripts fixtureScripts;
     private final PreCommitListener preCommitListener;
+    private final JpaSupportService jpaSupport;
 
     @Getter(onMethod_ = {@Override}, value = AccessLevel.PROTECTED)
     private final InteractionService interactionService;
@@ -83,38 +81,36 @@ extends ApplicationLayerTestFactoryAbstract {
     @Getter(onMethod_ = {@Override}, value = AccessLevel.PROTECTED)
     private final TransactionService transactionService;
 
-    @Named("transaction-aware-pmf-proxy")
-    private final PersistenceManagerFactory pmf;
 
-    // -- TESTS - WRAPPER SYNC
+    // -- TESTS - PROGRAMMATIC
 
     @Override
     protected boolean programmaticExecution(
-            final Runnable given,
-            final Consumer<VerificationStage> verifier) {
+            final PublishingTestContext context) {
 
         // given
-        setupBookForJdo();
+        setupBookForJpa();
 
-        preCommitListener.setVerifier(verifier);
+        context.bind(preCommitListener);
 
         withBookDoTransactional(book->{
 
-            given.run();
+            context.runGiven();
 
             // when - direct change (circumventing the framework)
-            book.setName("Book #2");
-            repository.persist(book);
+            context.changeProperty(()->book.setName("Book #2"));
+
+            repository.persistAndFlush(book);
 
         });
 
-        preCommitListener.setVerifier(null);
+        context.unbind(preCommitListener);
 
         // This test does not trigger command or execution publishing, however it does trigger
         // entity-change-publishing.
 
         // then
-        verifier.accept(VerificationStage.POST_COMMIT_WHEN_PROGRAMMATIC);
+        context.runVerify(VerificationStage.POST_COMMIT_WHEN_PROGRAMMATIC);
 
         return true;
     }
@@ -123,34 +119,37 @@ extends ApplicationLayerTestFactoryAbstract {
 
     @Override
     protected boolean interactionApiExecution(
-            final Runnable given,
-            final Consumer<VerificationStage> verifier) {
+            final PublishingTestContext context) {
 
         // given
-        setupBookForJdo();
+        setupBookForJpa();
 
         // when
         withBookDoTransactional(book->{
 
-            given.run();
+            context.runGiven();
 
-            preCommitListener.setVerifier(verifier);
+            context.bind(preCommitListener);
 
             // when
-            val bookAdapter = objectManager.adapt(book);
-            val propertyInteraction = PropertyInteraction.start(bookAdapter, "name", Where.OBJECT_FORMS);
-            val managedProperty = propertyInteraction.getManagedPropertyElseThrow(__->_Exceptions.noSuchElement());
-            val propertyModel = managedProperty.startNegotiation();
-            val propertySpec = managedProperty.getSpecification();
-            propertyModel.getValue().setValue(ManagedObject.of(propertySpec, "Book #2"));
-            propertyModel.submit();
+            context.changeProperty(()->{
+
+                val bookAdapter = objectManager.adapt(book);
+                val propertyInteraction = PropertyInteraction.start(bookAdapter, "name", Where.OBJECT_FORMS);
+                val managedProperty = propertyInteraction.getManagedPropertyElseThrow(__->_Exceptions.noSuchElement());
+                val propertyModel = managedProperty.startNegotiation();
+                val propertySpec = managedProperty.getSpecification();
+                propertyModel.getValue().setValue(ManagedObject.of(propertySpec, "Book #2"));
+                propertyModel.submit();
+
+            });
 
         });
 
-        preCommitListener.setVerifier(null);
+        context.unbind(preCommitListener);
 
         // then
-        verifier.accept(VerificationStage.POST_COMMIT);
+        context.runVerify(VerificationStage.POST_COMMIT);
 
         return true;
     }
@@ -159,47 +158,45 @@ extends ApplicationLayerTestFactoryAbstract {
 
     @Override
     protected boolean wrapperSyncExecutionNoRules(
-            final Runnable given,
-            final Consumer<VerificationStage> verifier) {
+            final PublishingTestContext context) {
 
         // given
-        setupBookForJdo();
+        setupBookForJpa();
 
         // when
         withBookDoTransactional(book->{
 
-            given.run();
+            context.runGiven();
 
-            preCommitListener.setVerifier(verifier);
+            context.bind(preCommitListener);
 
             // when - running synchronous
             val syncControl = SyncControl.control().withSkipRules(); // don't enforce rules
-            wrapper.wrap(book, syncControl).setName("Book #2");
+            context.changeProperty(()->wrapper.wrap(book, syncControl).setName("Book #2"));
 
-            preCommitListener.setVerifier(null);
+            context.unbind(preCommitListener);
 
         });
 
         // then
-        verifier.accept(VerificationStage.POST_COMMIT);
+        context.runVerify(VerificationStage.POST_COMMIT);
 
         return true;
     }
 
     @Override
     protected boolean wrapperSyncExecutionWithFailure(
-            final Runnable given,
-            final Consumer<VerificationStage> verifier) {
+            final PublishingTestContext context) {
 
         // given
-        setupBookForJdo();
+        setupBookForJpa();
 
         // when
         withBookDoTransactional(book->{
 
-            given.run();
+            context.runGiven();
 
-            preCommitListener.setVerifier(verifier);
+            context.bind(preCommitListener);
 
             // when - running synchronous
             val syncControl = SyncControl.control().withCheckRules(); // enforce rules
@@ -208,13 +205,13 @@ extends ApplicationLayerTestFactoryAbstract {
                 wrapper.wrap(book, syncControl).setName("Book #2"); // should fail with DisabledException
             });
 
-            preCommitListener.setVerifier(null);
+            context.unbind(preCommitListener);
 
         });
 
 
         // then
-        verifier.accept(VerificationStage.FAILURE_CASE);
+        context.runVerify(VerificationStage.FAILURE_CASE);
 
         return false;
     }
@@ -223,20 +220,19 @@ extends ApplicationLayerTestFactoryAbstract {
 
     @Override
     protected boolean wrapperAsyncExecutionNoRules(
-            final Runnable given,
-            final Consumer<VerificationStage> verifier) throws InterruptedException, ExecutionException, TimeoutException {
+            final PublishingTestContext context) throws InterruptedException, ExecutionException, TimeoutException {
 
         // given
-        setupBookForJdo();
+        setupBookForJpa();
         val asyncControl = returningVoid().withSkipRules(); // don't enforce rules
 
         // when
 
         withBookDoTransactional(book->{
 
-            given.run();
+            context.runGiven();
 
-            preCommitListener.setVerifier(verifier);
+            context.bind(preCommitListener);
 
             // when - running asynchronous
             wrapper.asyncWrap(book, asyncControl)
@@ -246,28 +242,27 @@ extends ApplicationLayerTestFactoryAbstract {
 
         asyncControl.getFuture().get(10, TimeUnit.SECONDS);
 
-        preCommitListener.setVerifier(null);
+        context.unbind(preCommitListener);
 
         // then
-        verifier.accept(VerificationStage.POST_COMMIT);
+        context.runVerify(VerificationStage.POST_COMMIT);
 
         return true;
     }
 
     @Override
     protected boolean wrapperAsyncExecutionWithFailure(
-            final Runnable given,
-            final Consumer<VerificationStage> verifier) {
+            final PublishingTestContext context) {
 
         // given
-        setupBookForJdo();
+        setupBookForJpa();
 
         // when
         withBookDoTransactional(book->{
 
-            given.run();
+            context.runGiven();
 
-            preCommitListener.setVerifier(verifier);
+            context.bind(preCommitListener);
 
             // when - running synchronous
             val asyncControl = returningVoid().withCheckRules(); // enforce rules
@@ -279,57 +274,58 @@ extends ApplicationLayerTestFactoryAbstract {
                 fail("unexpected code reach");
             });
 
-            preCommitListener.setVerifier(null);
+            context.unbind(preCommitListener);
 
         });
 
         // then
-        verifier.accept(VerificationStage.FAILURE_CASE);
+        context.runVerify(VerificationStage.FAILURE_CASE);
 
         return false;
     }
 
     // -- TEST SETUP
 
-    private void setupBookForJdo() {
+    private void setupBookForJpa() {
 
         transactionService.runTransactional(Propagation.REQUIRES_NEW, ()->{
-            val pm = pmf.getPersistenceManager();
+
+            val em = jpaSupport.getEntityManagerElseFail(JpaBook.class);
 
             // cleanup
-            fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
+            fixtureScripts.runPersona(JpaTestDomainPersona.PurgeAll);
 
             // given Inventory with 1 Book
 
-            val products = new HashSet<JdoProduct>();
+            val products = new HashSet<JpaProduct>();
 
-            products.add(JdoBook.of(
+            products.add(JpaBook.of(
                     "Sample Book", "A sample book for testing.", 99.,
                     "Sample Author", "Sample ISBN", "Sample Publisher"));
 
-            val inventory = JdoInventory.of("Sample Inventory", products);
-            pm.makePersistent(inventory);
+            val inventory = JpaInventory.of("Sample Inventory", products);
+            em.persist(inventory);
 
             inventory.getProducts().forEach(product->{
-                val prod = pm.makePersistent(product);
+                em.persist(product);
 
-                _Probe.errOut("PROD ID: %s", JDOHelper.getObjectId(prod));
+                _Probe.errOut("PROD ID: %s", product.getId());
 
             });
 
-            //fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
+            //fixtureScripts.runPersona(JpaTestDomainPersona.InventoryWith1Book);
 
-            pm.flush();
+            em.flush();
 
         });
     }
 
-    private void withBookDoTransactional(final CheckedConsumer<JdoBook> transactionalBookConsumer) {
+    private void withBookDoTransactional(final CheckedConsumer<JpaBook> transactionalBookConsumer) {
 
         xrayEnterTansaction(Propagation.REQUIRES_NEW);
 
         transactionService.runTransactional(Propagation.REQUIRES_NEW, ()->{
-            val book = repository.allInstances(JdoBook.class).listIterator().next();
+            val book = repository.allInstances(JpaBook.class).listIterator().next();
             transactionalBookConsumer.accept(book);
 
         })
@@ -337,6 +333,5 @@ extends ApplicationLayerTestFactoryAbstract {
 
         xrayExitTansaction();
     }
-
 
 }

@@ -32,10 +32,10 @@ import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.jdo.entities.JdoInventory;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
 import org.apache.isis.testdomain.ldap.LdapConstants;
-import org.apache.isis.testing.fixtures.applib.personas.PersonaWithBuilderScript;
 import org.apache.isis.testing.fixtures.applib.personas.BuilderScriptAbstract;
 import org.apache.isis.testing.fixtures.applib.personas.BuilderScriptWithResult;
 import org.apache.isis.testing.fixtures.applib.personas.BuilderScriptWithoutResult;
+import org.apache.isis.testing.fixtures.applib.personas.PersonaWithBuilderScript;
 
 import lombok.val;
 
@@ -48,7 +48,7 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<?>>  {
             return new BuilderScriptWithoutResult() {
 
                 @Override
-                protected void execute(ExecutionContext ec) {
+                protected void execute(final ExecutionContext ec) {
 
                     repository.allInstances(JdoInventory.class)
                     .forEach(repository::remove);
@@ -73,7 +73,7 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<?>>  {
             return new BuilderScriptWithResult<JdoInventory>() {
 
                 @Override
-                protected JdoInventory buildResult(ExecutionContext ec) {
+                protected JdoInventory buildResult(final ExecutionContext ec) {
 
                     val products = new HashSet<JdoProduct>();
 
@@ -100,7 +100,7 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<?>>  {
             return new BuilderScriptWithoutResult() {
 
                 @Override
-                protected void execute(ExecutionContext ec) {
+                protected void execute(final ExecutionContext ec) {
 
                     val regularUserRoleName = securityConfig.getRegularUserRoleName();
                     val regularUserRole = applicationRoleRepository.findByName(regularUserRoleName).orElse(null);

@@ -24,79 +24,77 @@ import javax.inject.Inject;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.TestFactory;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.debug.xray.XrayEnable;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
-import org.apache.isis.testdomain.publishing.ApplicationLayerTestFactoryJdo;
-import org.apache.isis.testdomain.publishing.ApplicationLayerTestFactoryAbstract.VerificationStage;
-import org.apache.isis.testdomain.publishing.conf.Configuration_usingEntityPropertyChangePublishing;
-import org.apache.isis.testdomain.publishing.subscriber.EntityPropertyChangeSubscriberForTesting;
-import org.apache.isis.testdomain.util.CollectionAssertions;
+import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.VerificationStage;
+import org.apache.isis.testdomain.publishing.PublishingTestFactoryJdo;
+import org.apache.isis.testdomain.publishing.conf.Configuration_usingEntityChangesPublishing;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 
-import lombok.val;
+import static org.apache.isis.testdomain.publishing.subscriber.EntityChangesSubscriberForTesting.clearPublishedEntries;
+import static org.apache.isis.testdomain.publishing.subscriber.EntityChangesSubscriberForTesting.getCreated;
+import static org.apache.isis.testdomain.publishing.subscriber.EntityChangesSubscriberForTesting.getDeleted;
+import static org.apache.isis.testdomain.publishing.subscriber.EntityChangesSubscriberForTesting.getLoaded;
+import static org.apache.isis.testdomain.publishing.subscriber.EntityChangesSubscriberForTesting.getModified;
+import static org.apache.isis.testdomain.publishing.subscriber.EntityChangesSubscriberForTesting.getUpdated;
 
 @SpringBootTest(
         classes = {
                 Configuration_usingJdo.class,
-                Configuration_usingEntityPropertyChangePublishing.class,
-                ApplicationLayerTestFactoryJdo.class,
-                XrayEnable.class
+                Configuration_usingEntityChangesPublishing.class,
+                PublishingTestFactoryJdo.class,
+                //XrayEnable.class
         },
         properties = {
-                "logging.level.org.apache.isis.applib.services.publishing.log.*=DEBUG",
-                "logging.level.org.apache.isis.testdomain.util.rest.KVStoreForTesting=DEBUG",
+                "logging.level.org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisTransactionJdo=DEBUG",
+                "logging.level.org.apache.isis.core.runtimeservices.session.IsisInteractionFactoryDefault=DEBUG",
                 "logging.level.org.apache.isis.persistence.jdo.integration.changetracking.JdoLifecycleListener=DEBUG",
-                "logging.level.org.apache.isis.core.transaction.changetracking.EntityChangeTrackerDefault=DEBUG",
+                "logging.level.org.apache.isis.testdomain.util.kv.KVStoreForTesting=DEBUG",
         })
 @TestPropertySource({
     IsisPresets.UseLog4j2Test
 })
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class JdoEntityPropertyChangePublishingTest {
+class JdoEntityPublishingTest {
 
-    @Inject private ApplicationLayerTestFactoryJdo testFactory;
+    @Inject private PublishingTestFactoryJdo testFactory;
     @Inject private KVStoreForTesting kvStore;
 
-    @DisplayName("Application Layer")
-    @TestFactory
+    @TestFactory @DisplayName("Publishing")
     List<DynamicTest> generateTests() {
         return testFactory.generateTests(this::given, this::verify);
     }
 
     private void given() {
-        EntityPropertyChangeSubscriberForTesting.clearPropertyChangeEntries(kvStore);
+        clearPublishedEntries(kvStore);
     }
 
     private void verify(final VerificationStage verificationStage) {
         switch(verificationStage) {
         case PRE_COMMIT:
         case FAILURE_CASE:
-            assertHasPropertyChangeEntries(Can.empty());
+            assertEquals(0, getCreated(kvStore));
+            assertEquals(0, getDeleted(kvStore));
+            assertEquals(0, getLoaded(kvStore));
+            assertEquals(0, getUpdated(kvStore));
+            assertEquals(0, getModified(kvStore));
             break;
         case POST_COMMIT_WHEN_PROGRAMMATIC:
         case POST_COMMIT:
-            assertHasPropertyChangeEntries(Can.of(
-                    "Jdo Book/name: 'Sample Book' -> 'Book #2'"));
+            assertEquals(0, getCreated(kvStore));
+            assertEquals(0, getDeleted(kvStore));
+            //assertEquals(1, getLoaded()); // not reproducible
+            assertEquals(1, getUpdated(kvStore));
+            assertEquals(1, getModified(kvStore));
             break;
         default:
             // ignore ... no checks
         }
     }
-
-    // -- HELPER
-
-    private void assertHasPropertyChangeEntries(final Can<String> expectedAuditEntries) {
-        val actualAuditEntries = EntityPropertyChangeSubscriberForTesting.getPropertyChangeEntries(kvStore);
-        CollectionAssertions.assertComponentWiseEquals(expectedAuditEntries, actualAuditEntries);
-    }
-
 
 }
