@@ -41,14 +41,12 @@ import org.springframework.core.annotation.AliasFor;
         optionality = Optionality.MANDATORY
 )
 @PropertyLayout(
-        named = Name.NAMED
 )
 @Parameter(
         maxLength = Name.MAX_LENGTH,
         optionality = Optionality.MANDATORY
 )
 @ParameterLayout(
-        named = Name.NAMED
 )
 @javax.jdo.annotations.Column(length = Name.MAX_LENGTH, allowsNull = "false")
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
@@ -70,11 +68,5 @@ public @interface Name {
     String columnAllowsNull() default "false";
     @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
     int columnLength() default MAX_LENGTH;
-
-    String NAMED = "Name";
-    @AliasFor( annotation =  PropertyLayout.class, attribute = "named")
-    String propertyLayoutNamed() default NAMED;
-    @AliasFor( annotation =  ParameterLayout.class, attribute = "named")
-    String parameterLayoutNamed() default NAMED;
 
 }

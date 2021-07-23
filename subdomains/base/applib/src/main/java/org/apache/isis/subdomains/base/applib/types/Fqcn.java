@@ -41,14 +41,12 @@ import org.springframework.core.annotation.AliasFor;
         optionality = Optionality.MANDATORY
 )
 @PropertyLayout(
-        named = Fqcn.NAMED
 )
 @Parameter(
         maxLength = Fqcn.MAX_LENGTH,
         optionality = Optionality.MANDATORY
 )
 @ParameterLayout(
-        named = Fqcn.NAMED
 )
 //@javax.jdo.annotations.Column(length = Fqcn.MAX_LENGTH, allowsNull = "false")
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
@@ -70,11 +68,5 @@ public @interface Fqcn {
 //    String columnAllowsNull() default "false";
 //    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
 //    int columnLength() default MAX_LENGTH;
-
-    String NAMED = "Fully qualified class name";
-    @AliasFor( annotation =  PropertyLayout.class, attribute = "named")
-    String propertyLayoutNamed() default NAMED;
-    @AliasFor( annotation =  ParameterLayout.class, attribute = "named")
-    String parameterLayoutNamed() default NAMED;
 
 }

@@ -41,14 +41,12 @@ import org.springframework.core.annotation.AliasFor;
         optionality = Optionality.MANDATORY
 )
 @PropertyLayout(
-        named = UrlTemplate.NAMED
 )
 @Parameter(
         maxLength = UrlTemplate.MAX_LENGTH,
         optionality = Optionality.MANDATORY
 )
 @ParameterLayout(
-        named = UrlTemplate.NAMED
 )
 @javax.jdo.annotations.Column(length = UrlTemplate.MAX_LENGTH, allowsNull = "false")
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
@@ -70,11 +68,5 @@ public @interface UrlTemplate {
     String columnAllowsNull() default "false";
     @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
     int columnLength() default MAX_LENGTH;
-
-    String NAMED = "URL Template";
-    @AliasFor( annotation =  PropertyLayout.class, attribute = "named")
-    String propertyLayoutNamed() default NAMED;
-    @AliasFor( annotation =  ParameterLayout.class, attribute = "named")
-    String parameterLayoutNamed() default NAMED;
 
 }

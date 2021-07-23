@@ -41,7 +41,6 @@ import org.springframework.core.annotation.AliasFor;
         optionality = Optionality.OPTIONAL
 )
 @PropertyLayout(
-        named = Description.NAMED,
         multiLine = Description.MULTI_LINE
 )
 @Parameter(
@@ -49,7 +48,6 @@ import org.springframework.core.annotation.AliasFor;
         optionality = Optionality.OPTIONAL
 )
 @ParameterLayout(
-        named = Description.NAMED,
         multiLine = Description.MULTI_LINE
 )
 //@javax.jdo.annotations.Column(length = Description.MAX_LENGTH, allowsNull = "true")
@@ -72,12 +70,6 @@ public @interface Description {
 //    String columnAllowsNull() default "true";
 //    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
 //    int columnLength() default MAX_LENGTH;
-
-    String NAMED = "Description";
-    @AliasFor( annotation =  PropertyLayout.class, attribute = "named")
-    String propertyLayoutNamed() default NAMED;
-    @AliasFor( annotation =  ParameterLayout.class, attribute = "named")
-    String parameterLayoutNamed() default NAMED;
 
     int MULTI_LINE = 1;
     @AliasFor( annotation =  PropertyLayout.class, attribute = "multiLine")

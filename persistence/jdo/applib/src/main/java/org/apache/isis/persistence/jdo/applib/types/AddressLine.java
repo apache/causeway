@@ -40,14 +40,12 @@ import org.springframework.core.annotation.AliasFor;
         optionality = Optionality.MANDATORY
 )
 @PropertyLayout(
-        named = AddressLine.NAMED
 )
 @Parameter(
         maxLength = AddressLine.MAX_LENGTH,
         optionality = Optionality.MANDATORY
 )
 @ParameterLayout(
-        named = AddressLine.NAMED
 )
 @javax.jdo.annotations.Column(length = AddressLine.MAX_LENGTH, allowsNull = "false")
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
@@ -69,11 +67,5 @@ public @interface AddressLine {
     String columnAllowsNull() default "false";
     @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
     int columnLength() default MAX_LENGTH;
-
-    String NAMED = "Address Line";
-    @AliasFor( annotation =  PropertyLayout.class, attribute = "named")
-    String propertyLayoutNamed() default "";
-    @AliasFor( annotation =  ParameterLayout.class, attribute = "named")
-    String parameterLayoutNamed() default "";
 
 }
