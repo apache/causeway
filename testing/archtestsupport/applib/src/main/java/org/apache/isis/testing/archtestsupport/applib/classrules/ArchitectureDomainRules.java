@@ -10,14 +10,22 @@ import javax.xml.bind.annotation.XmlTransient;
 import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaAnnotation;
 import com.tngtech.archunit.core.domain.JavaClass;
+import com.tngtech.archunit.core.domain.JavaCodeUnit;
 import com.tngtech.archunit.core.domain.JavaModifier;
+import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ArchRule;
+import com.tngtech.archunit.lang.ConditionEvents;
+import com.tngtech.archunit.lang.SimpleConditionEvent;
+import com.tngtech.archunit.lang.syntax.elements.ClassesShouldConjunction;
 
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.Property;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 
@@ -100,38 +108,92 @@ public class ArchitectureDomainRules {
         };
     }
 
-//    /**
-//     * This rule requires that mixin classes should follow the naming convention <code>ClassName_memberName</code>.
-//     *
-//     * <p>
-//     *     The rationale is so that the pattern is easy to spot and to search for,
-//     * </p>
-//     */
-//    public static ArchRule every_Mixin_must_follow_naming_convention() {
-//        return classes()
-//                .that().areAnnotatedWith(Action.class)
-//                .or().areAnnotatedWith(Property.class)
-//                .or().areAnnotatedWith(Collection.class)
-//                .should(new ArchCondition<JavaClass>("follow mixin naming conventions") {
-//                    @Override
-//                    public void check(final JavaClass item, final ConditionEvents events) {
-//                        if(!item.isTopLevelClass()) {
-//                            return;
-//                        }
-//                        val oneArgConstructorIfAny = item.getConstructors().stream()
-//                                .filter(x -> x.getRawParameterTypes().size() == 1)
-//                                .map(JavaCodeUnit::getRawParameterTypes)
-//                                .map(x -> x.get(0))
-//                                .findFirst()
-//                                ;
-////                        if(!oneArgConstructorIfAny.isPresent()) {
-////                            events.add(new SimpleConditionEvent());
-////                        }
-//
-//
-//                    }
-//                });
-//    }
+    /**
+     * This rule requires that action mixin classes should follow the naming convention
+     * <code>ClassName_actionId</code>, where the <code>ClassName</code> is the parameter type of a 1-arg constructor.
+     * In addition, there should be a method to be invoked for the method (typically &quot;act&quot;, but checked
+     * against {@link DomainObject#mixinMethod() @DomainObject#mixinMethod} if overridden.
+     *
+     * <p>
+     *     The rationale is so that the pattern is easy to spot and to search for, with common programming model
+     *     errors detected during unit testing rather tha relying on integration testing.
+     * </p>
+     */
+    public static ArchRule every_Action_mixin_must_follow_naming_convention() {
+        return mixin_must_follow_naming_conventions(Action.class, "act");
+    }
+
+    /**
+     * This rule requires that action mixin classes should follow the naming convention
+     * <code>ClassName_propertyId</code>, where the <code>ClassName</code> is the parameter type of a 1-arg constructor.
+     * In addition, there should be a method to be invoked for the method (typically &quot;prop&quot;, but checked
+     * against {@link DomainObject#mixinMethod() @DomainObject#mixinMethod} if overridden.
+     *
+     * <p>
+     *     The rationale is so that the pattern is easy to spot and to search for, with common programming model
+     *     errors detected during unit testing rather tha relying on integration testing.
+     * </p>
+     */
+    public static ArchRule every_Property_mixin_must_follow_naming_convention() {
+        return mixin_must_follow_naming_conventions(Property.class, "prop");
+    }
+
+    /**
+     * This rule requires that action mixin classes should follow the naming convention
+     * <code>ClassName_collectionId</code>, where the <code>ClassName</code> is the parameter type of a 1-arg constructor.
+     * In addition, there should be a method to be invoked for the method (typically &quot;coll&quot;, but checked
+     * against {@link DomainObject#mixinMethod() @DomainObject#mixinMethod} if overridden.
+     *
+     * <p>
+     *     The rationale is so that the pattern is easy to spot and to search for, with common programming model
+     *     errors detected during unit testing rather tha relying on integration testing.
+     * </p>
+     */
+    public static ArchRule every_Collection_mixin_must_follow_naming_convention() {
+        return mixin_must_follow_naming_conventions(Collection.class, "coll");
+    }
+
+    private static ClassesShouldConjunction mixin_must_follow_naming_conventions(
+            final Class<? extends Annotation> type,
+            final String mixinMethodNameDefault) {
+        return classes()
+                .that().areAnnotatedWith(type)
+                .should(new ArchCondition<JavaClass>("follow mixin naming conventions") {
+                    @Override
+                    public void check(final JavaClass item, final ConditionEvents events) {
+                        if(!item.isTopLevelClass()) {
+                            return;
+                        }
+                        val oneArgConstructorParameterTypeIfAny = item.getConstructors().stream()
+                                .filter(x -> x.getRawParameterTypes().size() == 1)
+                                .map(JavaCodeUnit::getRawParameterTypes)
+                                .map(x -> x.get(0))
+                                .findFirst()
+                                ;
+                        if(!oneArgConstructorParameterTypeIfAny.isPresent()) {
+                            events.add(new SimpleConditionEvent(item, false, item.getSimpleName() + " does not have a 1-arg constructor"));
+                            return;
+                        }
+                        final JavaClass parameterType = oneArgConstructorParameterTypeIfAny.get();
+                        val constructorClassName = parameterType.getSimpleName();
+                        val requiredPrefix = constructorClassName + "_";
+                        if(! item.getSimpleName().startsWith(requiredPrefix)) {
+                            events.add(new SimpleConditionEvent(item, false, item.getSimpleName() + " should have a prefix of '" + requiredPrefix
+                                    + "'" ));
+                            return;
+                        }
+                        val mixinMethodName = item
+                                .tryGetAnnotationOfType(DomainObject.class)
+                                .transform(DomainObject::mixinMethod)
+                                .or(mixinMethodNameDefault);
+                        if(!item.tryGetMethod(mixinMethodName).isPresent()) {
+                            events.add(new SimpleConditionEvent(item, false,
+                                    String.format("%s does not have a mixin method named '%s'",
+                                            item.getSimpleName(), mixinMethodName)));
+                        }
+                    }
+                });
+    }
 
     /**
      * This rule requires that classes annotated with the {@link Repository} annotation should follow the naming

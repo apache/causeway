@@ -59,4 +59,16 @@ public class DomainArchTests {
   public static ArchRule every_finder_method_in_Repository_must_return_either_Collection_or_Optional =
       ArchitectureDomainRules.every_finder_method_in_Repository_must_return_either_Collection_or_Optional();
 
+  @ArchTest
+  public static ArchRule every_Action_mixin_must_follow_naming_convention =
+      ArchitectureDomainRules.every_Action_mixin_must_follow_naming_convention();
+
+  @ArchTest
+  public static ArchRule every_Property_mixin_must_follow_naming_convention =
+      ArchitectureDomainRules.every_Property_mixin_must_follow_naming_convention();
+
+  @ArchTest
+  public static ArchRule every_Collection_mixin_must_follow_naming_convention =
+      ArchitectureDomainRules.every_Collection_mixin_must_follow_naming_convention();
+
 }
