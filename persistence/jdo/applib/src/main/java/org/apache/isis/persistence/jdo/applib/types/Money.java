@@ -50,7 +50,7 @@ import org.springframework.core.annotation.AliasFor;
         integer = Money.INTEGER,
         fraction = Money.FRACTION
 )
-@javax.jdo.annotations.Column(allowsNull = "true")
+@javax.jdo.annotations.Column(allowsNull = "true", length = Money.INTEGER + Money.FRACTION, scale = Money.FRACTION)
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Money {
@@ -62,6 +62,10 @@ public @interface Money {
 
     @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "allowsNull")
     String columnAllowsNull() default "true";
+    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
+    int columnLength() default Money.INTEGER + Money.FRACTION;
+    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "scale")
+    int columnScale() default Money.FRACTION;
 
     int INTEGER = 10;
     @AliasFor( annotation = javax.validation.constraints.Digits.class, attribute = "integer")
@@ -70,6 +74,5 @@ public @interface Money {
     int FRACTION = 2;
     @AliasFor( annotation = javax.validation.constraints.Digits.class, attribute = "fraction")
     int digitsFraction() default Money.FRACTION;
-
 
 }
