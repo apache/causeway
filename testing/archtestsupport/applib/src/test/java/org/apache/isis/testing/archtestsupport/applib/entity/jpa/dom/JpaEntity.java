@@ -18,6 +18,9 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+
 @Entity
 @Table(
         schema = "jpa",
@@ -25,6 +28,7 @@ import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 )
 @DomainObject(nature = Nature.ENTITY)
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners({ IsisEntityListener.class})
 public class JpaEntity implements Comparable<JpaEntity> {
 

@@ -51,4 +51,8 @@ public class JpaEntityArchTests {
   public static ArchRule every_injected_field_of_jpa_Entity_must_be_annotated_with_Transient =
       ArchitectureJpaRules.every_injected_field_of_jpa_Entity_must_be_annotated_with_Transient();
 
+  @ArchTest
+  public static ArchRule every_jpa_Entity_must_have_protected_no_arg_constructor =
+          ArchitectureJpaRules.every_jpa_Entity_must_have_protected_no_arg_constructor();
+
 }

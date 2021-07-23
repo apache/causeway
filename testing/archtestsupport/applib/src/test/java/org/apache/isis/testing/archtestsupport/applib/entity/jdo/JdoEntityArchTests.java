@@ -47,4 +47,8 @@ public class JdoEntityArchTests {
   public static ArchRule every_injected_field_of_jdo_PersistenceCapable_must_be_annotated_with_NotPersistent =
       ArchitectureJdoRules.every_injected_field_of_jdo_PersistenceCapable_must_be_annotated_with_NotPersistent();
 
+  @ArchTest
+  public static ArchRule every_jdo_PersistenceCapable_must_have_protected_no_arg_constructor =
+      ArchitectureJdoRules.every_jdo_PersistenceCapable_must_have_protected_no_arg_constructor();
+
 }

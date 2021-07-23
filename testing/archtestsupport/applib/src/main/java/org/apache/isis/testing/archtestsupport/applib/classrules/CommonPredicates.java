@@ -9,6 +9,10 @@ import com.tngtech.archunit.base.Optional;
 import com.tngtech.archunit.core.domain.JavaAnnotation;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaEnumConstant;
+import com.tngtech.archunit.core.domain.JavaModifier;
+import com.tngtech.archunit.lang.ArchCondition;
+import com.tngtech.archunit.lang.ConditionEvents;
+import com.tngtech.archunit.lang.SimpleConditionEvent;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
@@ -73,6 +77,29 @@ class CommonPredicates {
                 final Optional<Object> enumeratedValue = input.get(attribute);
                 return enumeratedValue.isPresent() && enumeratedValue.get().toString()
                         .equals(attributeValue);
+            }
+        };
+    }
+
+    static ArchCondition<JavaClass> haveNoArgProtectedConstructor() {
+        return new ArchCondition<JavaClass>("have protected no-arg constructor") {
+            @Override public void check(final JavaClass javaClass, final ConditionEvents conditionEvents) {
+                val noArgConstructorIfAny = javaClass.tryGetConstructor();
+                if (!noArgConstructorIfAny.isPresent()) {
+                    conditionEvents.add(new SimpleConditionEvent(javaClass, false,
+                            String.format("%s does not have a no-arg constructor", javaClass.getSimpleName())));
+                    return;
+                }
+                val noArgConstructor = noArgConstructorIfAny.get();
+                val protectedModifierIfAny = noArgConstructor.getModifiers().stream()
+                        .filter(x -> x == JavaModifier.PROTECTED).findAny();
+                if (!protectedModifierIfAny.isPresent()) {
+
+                    conditionEvents.add(new SimpleConditionEvent(javaClass, false, String.format(
+                            "%s has a no-arg constructor but it does not have protected visibility",
+                            javaClass.getSimpleName())));
+                    return;
+                }
             }
         };
     }

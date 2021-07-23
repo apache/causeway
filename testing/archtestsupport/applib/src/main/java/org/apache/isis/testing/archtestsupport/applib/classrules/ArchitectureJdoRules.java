@@ -16,6 +16,7 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 import lombok.experimental.UtilityClass;
 import lombok.val;
+import static org.apache.isis.testing.archtestsupport.applib.classrules.CommonPredicates.haveNoArgProtectedConstructor;
 
 /**
  * A library of architecture tests to ensure coding conventions are followed for classes annotated with
@@ -183,6 +184,19 @@ public class ArchitectureJdoRules {
                 return input.isAnnotatedWith(PersistenceCapable.class);
             }
         };
+    }
+
+    /**
+     * This rule requires that classes annotated with the JDO {@link PersistenceCapable} annotation have a
+     * no-arg constructor with <code>protected</code> visibility.
+     *
+     * <p>
+     * The rationale is to encourage the use of static factory methods.
+     * </p>
+     */
+    public static ArchRule every_jdo_PersistenceCapable_must_have_protected_no_arg_constructor() {
+        return classes().that().areAnnotatedWith(PersistenceCapable.class)
+                .should(haveNoArgProtectedConstructor());
     }
 
 

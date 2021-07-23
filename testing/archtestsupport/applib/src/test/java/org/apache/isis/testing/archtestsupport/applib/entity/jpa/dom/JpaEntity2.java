@@ -16,6 +16,9 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+
 @Entity
 @Table(
         schema = "jpa",
@@ -23,6 +26,7 @@ import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPoin
 )
 @DomainObject(nature = Nature.ENTITY)
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners({ JpaEntityInjectionPointResolver.class})
 public class JpaEntity2 implements Comparable<JpaEntity2> {
 

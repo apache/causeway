@@ -100,6 +100,39 @@ public class ArchitectureDomainRules {
         };
     }
 
+//    /**
+//     * This rule requires that mixin classes should follow the naming convention <code>ClassName_memberName</code>.
+//     *
+//     * <p>
+//     *     The rationale is so that the pattern is easy to spot and to search for,
+//     * </p>
+//     */
+//    public static ArchRule every_Mixin_must_follow_naming_convention() {
+//        return classes()
+//                .that().areAnnotatedWith(Action.class)
+//                .or().areAnnotatedWith(Property.class)
+//                .or().areAnnotatedWith(Collection.class)
+//                .should(new ArchCondition<JavaClass>("follow mixin naming conventions") {
+//                    @Override
+//                    public void check(final JavaClass item, final ConditionEvents events) {
+//                        if(!item.isTopLevelClass()) {
+//                            return;
+//                        }
+//                        val oneArgConstructorIfAny = item.getConstructors().stream()
+//                                .filter(x -> x.getRawParameterTypes().size() == 1)
+//                                .map(JavaCodeUnit::getRawParameterTypes)
+//                                .map(x -> x.get(0))
+//                                .findFirst()
+//                                ;
+////                        if(!oneArgConstructorIfAny.isPresent()) {
+////                            events.add(new SimpleConditionEvent());
+////                        }
+//
+//
+//                    }
+//                });
+//    }
+
     /**
      * This rule requires that classes annotated with the {@link Repository} annotation should follow the naming
      * convention <code>XxxRepository</code>.
@@ -110,7 +143,7 @@ public class ArchitectureDomainRules {
      *
      * @see #every_class_named_Repository_must_be_annotated_correctly()
      */
-    public static ArchRule every_Repository_must_be_follow_naming_conventions() {
+    public static ArchRule every_Repository_must_follow_naming_conventions() {
         return classes()
                 .that().areAnnotatedWith(Repository.class)
                 .should().haveNameMatching(".*Repository");
@@ -140,7 +173,7 @@ public class ArchitectureDomainRules {
      *     The rationale is so that the pattern is easy to spot and to search for,
      * </p>
      *
-     * @see #every_Repository_must_be_follow_naming_conventions()
+     * @see #every_Repository_must_follow_naming_conventions()
      */
     public static ArchRule every_class_named_Repository_must_be_annotated_correctly() {
         return classes()

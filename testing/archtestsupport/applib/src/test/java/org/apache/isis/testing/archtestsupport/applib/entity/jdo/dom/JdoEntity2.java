@@ -11,10 +11,14 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+
 @PersistenceCapable(schema = "jdo")
 @Unique(name = "name", members = {"name"})
 @Version
 @DomainObject(nature = Nature.ENTITY)
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 public class JdoEntity2 implements Comparable<JdoEntity2> {
 

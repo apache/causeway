@@ -17,11 +17,15 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+
 @PersistenceCapable(schema = "jdo", identityType = IdentityType.DATASTORE)
 @DatastoreIdentity(strategy = IdGeneratorStrategy.NATIVE)
 @Version
 @Uniques(@Unique(name = "name", members = {"name"}))
 @DomainObject(nature = Nature.ENTITY)
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 public class JdoEntity implements Comparable<JdoEntity> {
 

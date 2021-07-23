@@ -31,6 +31,7 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 import lombok.experimental.UtilityClass;
 import lombok.val;
 import static org.apache.isis.testing.archtestsupport.applib.classrules.CommonPredicates.annotationOf;
+import static org.apache.isis.testing.archtestsupport.applib.classrules.CommonPredicates.haveNoArgProtectedConstructor;
 import static org.apache.isis.testing.archtestsupport.applib.classrules.CommonPredicates.ofAnEnum;
 
 /**
@@ -271,5 +272,19 @@ public class ArchitectureJpaRules {
             }
         };
     }
+
+    /**
+     * This rule requires that classes annotated with the JPA {@link Entity} annotation have a no-arg constructor
+     * with <code>protected</code> visibility.
+     *
+     * <p>
+     * The rationale is to encourage the use of static factory methods.
+     * </p>
+     */
+    public static ArchRule every_jpa_Entity_must_have_protected_no_arg_constructor() {
+        return classes().that().areAnnotatedWith(Entity.class)
+                .should(haveNoArgProtectedConstructor());
+    }
+
 
 }

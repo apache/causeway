@@ -33,7 +33,7 @@ public class DomainArchTests {
 
   @ArchTest
   public static ArchRule every_Repository_must_be_follow_naming_conventions =
-      ArchitectureDomainRules.every_Repository_must_be_follow_naming_conventions();
+      ArchitectureDomainRules.every_Repository_must_follow_naming_conventions();
 
   @ArchTest
   public static ArchRule every_Controller_must_be_follow_naming_conventions =
