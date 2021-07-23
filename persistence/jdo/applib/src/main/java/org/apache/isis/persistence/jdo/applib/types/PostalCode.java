@@ -16,15 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.subdomains.base.applib.types;
+package org.apache.isis.persistence.jdo.applib.types;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -34,33 +32,30 @@ import org.springframework.core.annotation.AliasFor;
 
 /**
  * Meta-annotation for a mandatory {@link String} property or parameter representing a
- * the identity of a domain object (with respect to its logical type, as per @{@link DomainObject#logicalTypeName() DomainObject#logicalTypeName}
- * or @{@link DomainService#logicalTypeName() DomainObject#logicalTypeName}).
- *
- * @see LogicalTypeName
+ * postal code or zip code.
  *
  * @since 2.0 {@index}
  */
 @Property(
-        maxLength = ObjectIdentifier.MAX_LENGTH,
+        maxLength = PostalCode.MAX_LENGTH,
         optionality = Optionality.MANDATORY
 )
 @PropertyLayout(
-        named = ObjectIdentifier.NAMED
+        named = PostalCode.NAMED
 )
 @Parameter(
-        maxLength = ObjectIdentifier.MAX_LENGTH,
+        maxLength = PostalCode.MAX_LENGTH,
         optionality = Optionality.MANDATORY
 )
 @ParameterLayout(
-        named = ObjectIdentifier.NAMED
+        named = PostalCode.NAMED
 )
-//@javax.jdo.annotations.Column(length = ObjectIdentifier.MAX_LENGTH, allowsNull = "false")
+@javax.jdo.annotations.Column(length = PostalCode.MAX_LENGTH, allowsNull = "false")
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ObjectIdentifier {
+public @interface PostalCode {
 
-    int MAX_LENGTH = 50;
+    int MAX_LENGTH = 12;
     @AliasFor( annotation =  Property.class, attribute = "maxLength")
     int propertyMaxLength() default MAX_LENGTH;
     @AliasFor( annotation =  Parameter.class, attribute = "maxLength")
@@ -71,15 +66,14 @@ public @interface ObjectIdentifier {
     @AliasFor( annotation = Parameter.class, attribute = "optionality")
     Optionality parameterOptionality() default Optionality.MANDATORY;
 
-//    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "allowsNull")
-//    String columnAllowsNull() default "false";
-//    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
-//    int columnLength() default MAX_LENGTH;
+    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "allowsNull")
+    String columnAllowsNull() default "false";
+    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
+    int columnLength() default MAX_LENGTH;
 
-    String NAMED = "Object identifier";
+    String NAMED = "Postal code";
     @AliasFor( annotation =  PropertyLayout.class, attribute = "named")
     String propertyLayoutNamed() default NAMED;
     @AliasFor( annotation =  ParameterLayout.class, attribute = "named")
     String parameterLayoutNamed() default NAMED;
-
 }

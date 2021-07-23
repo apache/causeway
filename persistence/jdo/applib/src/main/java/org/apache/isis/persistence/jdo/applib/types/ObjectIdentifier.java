@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.subdomains.base.applib.types;
+package org.apache.isis.persistence.jdo.applib.types;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -55,7 +55,7 @@ import org.springframework.core.annotation.AliasFor;
 @ParameterLayout(
         named = ObjectIdentifier.NAMED
 )
-//@javax.jdo.annotations.Column(length = ObjectIdentifier.MAX_LENGTH, allowsNull = "false")
+@javax.jdo.annotations.Column(length = ObjectIdentifier.MAX_LENGTH, allowsNull = "false")
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ObjectIdentifier {
@@ -71,10 +71,10 @@ public @interface ObjectIdentifier {
     @AliasFor( annotation = Parameter.class, attribute = "optionality")
     Optionality parameterOptionality() default Optionality.MANDATORY;
 
-//    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "allowsNull")
-//    String columnAllowsNull() default "false";
-//    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
-//    int columnLength() default MAX_LENGTH;
+    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "allowsNull")
+    String columnAllowsNull() default "false";
+    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
+    int columnLength() default MAX_LENGTH;
 
     String NAMED = "Object identifier";
     @AliasFor( annotation =  PropertyLayout.class, attribute = "named")

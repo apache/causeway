@@ -23,8 +23,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -33,34 +31,30 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.springframework.core.annotation.AliasFor;
 
 /**
- * Meta-annotation for a mandatory {@link String} property or parameter representing a
- * the identity of a domain object (with respect to its logical type, as per @{@link DomainObject#logicalTypeName() DomainObject#logicalTypeName}
- * or @{@link DomainService#logicalTypeName() DomainObject#logicalTypeName}).
- *
- * @see LogicalTypeName
+ * Meta-annotation for a mandatory {@link String} property or parameter representing a line of an address.
  *
  * @since 2.0 {@index}
  */
 @Property(
-        maxLength = ObjectIdentifier.MAX_LENGTH,
+        maxLength = AddressLine.MAX_LENGTH,
         optionality = Optionality.MANDATORY
 )
 @PropertyLayout(
-        named = ObjectIdentifier.NAMED
+        named = AddressLine.NAMED
 )
 @Parameter(
-        maxLength = ObjectIdentifier.MAX_LENGTH,
+        maxLength = AddressLine.MAX_LENGTH,
         optionality = Optionality.MANDATORY
 )
 @ParameterLayout(
-        named = ObjectIdentifier.NAMED
+        named = AddressLine.NAMED
 )
-//@javax.jdo.annotations.Column(length = ObjectIdentifier.MAX_LENGTH, allowsNull = "false")
+//@javax.jdo.annotations.Column(length = AddressLine.MAX_LENGTH, allowsNull = "false")
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ObjectIdentifier {
+public @interface AddressLine {
 
-    int MAX_LENGTH = 50;
+    int MAX_LENGTH = 100;
     @AliasFor( annotation =  Property.class, attribute = "maxLength")
     int propertyMaxLength() default MAX_LENGTH;
     @AliasFor( annotation =  Parameter.class, attribute = "maxLength")
@@ -76,10 +70,10 @@ public @interface ObjectIdentifier {
 //    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
 //    int columnLength() default MAX_LENGTH;
 
-    String NAMED = "Object identifier";
+    String NAMED = "Address Line";
     @AliasFor( annotation =  PropertyLayout.class, attribute = "named")
-    String propertyLayoutNamed() default NAMED;
+    String propertyLayoutNamed() default "";
     @AliasFor( annotation =  ParameterLayout.class, attribute = "named")
-    String parameterLayoutNamed() default NAMED;
+    String parameterLayoutNamed() default "";
 
 }

@@ -23,8 +23,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -33,53 +31,75 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.springframework.core.annotation.AliasFor;
 
 /**
- * Meta-annotation for a mandatory {@link String} property or parameter representing a
- * the identity of a domain object (with respect to its logical type, as per @{@link DomainObject#logicalTypeName() DomainObject#logicalTypeName}
- * or @{@link DomainService#logicalTypeName() DomainObject#logicalTypeName}).
- *
- * @see LogicalTypeName
+ * Meta-annotation for an optional {@link String} property or parameter representing an
+ * email address.
  *
  * @since 2.0 {@index}
  */
 @Property(
-        maxLength = ObjectIdentifier.MAX_LENGTH,
-        optionality = Optionality.MANDATORY
+        maxLength = Email.MAX_LENGTH,
+        optionality = Optionality.OPTIONAL,
+        regexPattern = Email.REGEX_PATTERN,
+        regexPatternReplacement = Email.REGEX_PATTERN_REPLACEMENT
 )
 @PropertyLayout(
-        named = ObjectIdentifier.NAMED
+        named = Email.NAMED
 )
 @Parameter(
-        maxLength = ObjectIdentifier.MAX_LENGTH,
-        optionality = Optionality.MANDATORY
+        maxLength = Email.MAX_LENGTH,
+        optionality = Optionality.OPTIONAL,
+        regexPattern = Email.REGEX_PATTERN,
+        regexPatternReplacement = Email.REGEX_PATTERN_REPLACEMENT
 )
 @ParameterLayout(
-        named = ObjectIdentifier.NAMED
+        named = Email.NAMED
 )
-//@javax.jdo.annotations.Column(length = ObjectIdentifier.MAX_LENGTH, allowsNull = "false")
+//@javax.jdo.annotations.Column(length = Email.MAX_LENGTH, allowsNull = "true")
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ObjectIdentifier {
+public @interface Email {
 
-    int MAX_LENGTH = 50;
+    /**
+     * See <a href="http://stackoverflow.com/questions/386294/what-is-the-maximum-length-of-a-valid-email-address">maximum length of an email address</a>.
+     */
+    int MAX_LENGTH = 254;
     @AliasFor( annotation =  Property.class, attribute = "maxLength")
     int propertyMaxLength() default MAX_LENGTH;
     @AliasFor( annotation =  Parameter.class, attribute = "maxLength")
     int parameterMaxLength() default MAX_LENGTH;
 
     @AliasFor( annotation = Property.class, attribute = "optionality")
-    Optionality propertyOptionality() default Optionality.MANDATORY;
+    Optionality propertyOptionality() default Optionality.OPTIONAL;
     @AliasFor( annotation = Parameter.class, attribute = "optionality")
-    Optionality parameterOptionality() default Optionality.MANDATORY;
+    Optionality parameterOptionality() default Optionality.OPTIONAL;
+
+    /**
+     * as per http://emailregex.com/
+     */
+    String REGEX_PATTERN = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
+    @AliasFor( annotation =  Property.class, attribute = "regexPattern")
+    String propertyRegexPattern() default REGEX_PATTERN;
+    @AliasFor( annotation =  Parameter.class, attribute = "regexPattern")
+    String parameterRegexPattern() default REGEX_PATTERN;
+
+    String REGEX_PATTERN_REPLACEMENT = "Email address is badly formed";
+    @AliasFor( annotation =  Property.class, attribute = "regexPatternReplacement")
+    String propertyRegexPatternReplacement() default REGEX_PATTERN_REPLACEMENT;
+    @AliasFor( annotation =  Parameter.class, attribute = "regexPatternReplacement")
+    String parameterRegexPatternReplacement() default REGEX_PATTERN_REPLACEMENT;
 
 //    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "allowsNull")
-//    String columnAllowsNull() default "false";
+//    String columnAllowsNull() default "true";
 //    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
 //    int columnLength() default MAX_LENGTH;
 
-    String NAMED = "Object identifier";
+    String NAMED = "Email";
     @AliasFor( annotation =  PropertyLayout.class, attribute = "named")
     String propertyLayoutNamed() default NAMED;
     @AliasFor( annotation =  ParameterLayout.class, attribute = "named")
     String parameterLayoutNamed() default NAMED;
+
+
+
 
 }

@@ -16,15 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.subdomains.base.applib.types;
+package org.apache.isis.persistence.jdo.applib.types;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -33,53 +31,58 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.springframework.core.annotation.AliasFor;
 
 /**
- * Meta-annotation for a mandatory {@link String} property or parameter representing a
- * the identity of a domain object (with respect to its logical type, as per @{@link DomainObject#logicalTypeName() DomainObject#logicalTypeName}
- * or @{@link DomainService#logicalTypeName() DomainObject#logicalTypeName}).
- *
- * @see LogicalTypeName
+ * Meta-annotation for an optional {@link String} property or parameter representing a
+ * description of some sort.
  *
  * @since 2.0 {@index}
  */
 @Property(
-        maxLength = ObjectIdentifier.MAX_LENGTH,
-        optionality = Optionality.MANDATORY
+        maxLength = Description.MAX_LENGTH,
+        optionality = Optionality.OPTIONAL
 )
 @PropertyLayout(
-        named = ObjectIdentifier.NAMED
+        named = Description.NAMED,
+        multiLine = Description.MULTI_LINE
 )
 @Parameter(
-        maxLength = ObjectIdentifier.MAX_LENGTH,
-        optionality = Optionality.MANDATORY
+        maxLength = Description.MAX_LENGTH,
+        optionality = Optionality.OPTIONAL
 )
 @ParameterLayout(
-        named = ObjectIdentifier.NAMED
+        named = Description.NAMED,
+        multiLine = Description.MULTI_LINE
 )
-//@javax.jdo.annotations.Column(length = ObjectIdentifier.MAX_LENGTH, allowsNull = "false")
+@javax.jdo.annotations.Column(length = Description.MAX_LENGTH, allowsNull = "true")
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ObjectIdentifier {
+public @interface Description {
 
-    int MAX_LENGTH = 50;
+    int MAX_LENGTH = 254;
     @AliasFor( annotation =  Property.class, attribute = "maxLength")
     int propertyMaxLength() default MAX_LENGTH;
     @AliasFor( annotation =  Parameter.class, attribute = "maxLength")
     int parameterMaxLength() default MAX_LENGTH;
 
     @AliasFor( annotation = Property.class, attribute = "optionality")
-    Optionality propertyOptionality() default Optionality.MANDATORY;
+    Optionality propertyOptionality() default Optionality.OPTIONAL;
     @AliasFor( annotation = Parameter.class, attribute = "optionality")
-    Optionality parameterOptionality() default Optionality.MANDATORY;
+    Optionality parameterOptionality() default Optionality.OPTIONAL;
 
-//    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "allowsNull")
-//    String columnAllowsNull() default "false";
-//    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
-//    int columnLength() default MAX_LENGTH;
+    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "allowsNull")
+    String columnAllowsNull() default "true";
+    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
+    int columnLength() default MAX_LENGTH;
 
-    String NAMED = "Object identifier";
+    String NAMED = "Description";
     @AliasFor( annotation =  PropertyLayout.class, attribute = "named")
     String propertyLayoutNamed() default NAMED;
     @AliasFor( annotation =  ParameterLayout.class, attribute = "named")
     String parameterLayoutNamed() default NAMED;
+
+    int MULTI_LINE = 1;
+    @AliasFor( annotation =  PropertyLayout.class, attribute = "multiLine")
+    int propertyLayoutMultiLine() default MULTI_LINE;
+    @AliasFor( annotation =  ParameterLayout.class, attribute = "multiLine")
+    int parameterLayoutMultiLine() default MULTI_LINE;
 
 }

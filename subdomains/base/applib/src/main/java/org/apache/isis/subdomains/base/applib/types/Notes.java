@@ -18,32 +18,71 @@
  */
 package org.apache.isis.subdomains.base.applib.types;
 
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.springframework.core.annotation.AliasFor;
 
 /**
- * Meta-annotation for a {@link String} property or parameter representing a
+ * Meta-annotation for an optional {@link String} property or parameter representing a
  * notes or comments about some object.
  *
  * @since 2.0 {@index}
  */
-@Property(maxLength = Notes.MAX_LEN)
-@PropertyLayout(multiLine = Notes.MULTI_LINE)
-@Parameter(maxLength = Notes.MAX_LEN)
-@ParameterLayout(multiLine = Notes.MULTI_LINE)
+@Property(
+        maxLength = Notes.MAX_LENGTH,
+        optionality = Optionality.OPTIONAL
+)
+@PropertyLayout(
+        named = Notes.NAMED,
+        multiLine = Notes.MULTI_LINE
+)
+@Parameter(
+        maxLength = Notes.MAX_LENGTH,
+        optionality = Optionality.OPTIONAL
+)
+@ParameterLayout(
+        named = Notes.NAMED,
+        multiLine = Notes.MULTI_LINE
+)
+//@javax.jdo.annotations.Column(length = Notes.MAX_LENGTH, allowsNull = "true")
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Notes {
 
-    int MAX_LEN = 4000;
+    int MAX_LENGTH = 4000;
+    @AliasFor( annotation =  Property.class, attribute = "maxLength")
+    int propertyMaxLength() default MAX_LENGTH;
+    @AliasFor( annotation =  Parameter.class, attribute = "maxLength")
+    int parameterMaxLength() default MAX_LENGTH;
+
+    @AliasFor( annotation = Property.class, attribute = "optionality")
+    Optionality propertyOptionality() default Optionality.OPTIONAL;
+    @AliasFor( annotation = Parameter.class, attribute = "optionality")
+    Optionality parameterOptionality() default Optionality.OPTIONAL;
+
+//    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "allowsNull")
+//    String columnAllowsNull() default "true";
+//    @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
+//    int columnLength() default MAX_LENGTH;
+
+    String NAMED = "Notes";
+    @AliasFor( annotation =  PropertyLayout.class, attribute = "named")
+    String propertyLayoutNamed() default NAMED;
+    @AliasFor( annotation =  ParameterLayout.class, attribute = "named")
+    String parameterLayoutNamed() default NAMED;
+
     int MULTI_LINE = 10;
+    @AliasFor( annotation =  PropertyLayout.class, attribute = "multiLine")
+    int propertyLayoutMultiLine() default MULTI_LINE;
+    @AliasFor( annotation =  ParameterLayout.class, attribute = "multiLine")
+    int parameterLayoutMultiLine() default MULTI_LINE;
 
 }
