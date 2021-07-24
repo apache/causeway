@@ -212,8 +212,6 @@ extends PublishingTestFactoryAbstract {
 
             context.runGiven();
 
-
-
             // when - running asynchronous
             wrapper.asyncWrap(book, asyncControl)
             .setName("Book #2");

@@ -55,7 +55,7 @@ implements HasPersistenceStandardJpa {
 
     @Inject private PublishingTestFactoryJpa testFactory;
 
-    @TestFactory @DisplayName("Publishing")
+    @TestFactory @DisplayName("Execution Scenario")
     List<DynamicTest> generateTests() {
         return testFactory.generateTestsIncludeProgrammatic(this::given, this::verify);
     }

@@ -31,6 +31,7 @@ import org.springframework.transaction.annotation.Propagation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 import org.apache.isis.applib.services.iactn.Interaction;
@@ -39,6 +40,7 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.security.util.XrayUtil;
@@ -64,13 +66,6 @@ public abstract class PublishingTestFactoryAbstract {
     @Value(staticConstructor = "of")
     public static class PublishingTestContext {
 
-        public static PublishingTestContext of(
-                final Runnable given,
-                final Consumer<VerificationStage> verifier,
-                final VerificationStage completionStage) {
-            return PublishingTestContext.of(new TraceLog(), given, verifier, completionStage);
-        }
-
         public static class TraceLog {
             private final StringBuilder buffer = new StringBuilder();
             @Getter private boolean debug = true;
@@ -85,10 +80,12 @@ public abstract class PublishingTestFactoryAbstract {
             }
         }
 
-        private final @NonNull TraceLog traceLog;
         private final @NonNull Runnable given;
         private final @NonNull Consumer<VerificationStage> verifier;
         private final @NonNull VerificationStage transactionCompletionStage;
+
+        private final TraceLog traceLog = new TraceLog();
+        private final List<Throwable> verificationErrors = _Lists.newConcurrentList();
 
         public void runGiven() {
             traceLog.log("2.1 about to run given");
@@ -97,7 +94,12 @@ public abstract class PublishingTestFactoryAbstract {
         }
 
         public void runVerify(final VerificationStage verificationStage) {
-            verifier.accept(verificationStage);
+            traceLog.log("4.? verify %s", verificationStage);
+            try {
+                verifier.accept(verificationStage);
+            } catch (Throwable e) {
+                verificationErrors.add(e);
+            }
         }
 
         /**
@@ -115,7 +117,6 @@ public abstract class PublishingTestFactoryAbstract {
         }
 
         public void runPostCommitVerify() {
-            traceLog.log("4. post commit verify %s", transactionCompletionStage);
             runVerify(transactionCompletionStage);
         }
 
@@ -167,7 +168,7 @@ public abstract class PublishingTestFactoryAbstract {
         public void unbind(final PublishingTestContext testContext) {
             _Assert.assertEquals(this.testContext, testContext, "PreCommitListener is not bound to the testContext, "
                     + "which it receives a request to unbind from.");
-            this.testContext.getTraceLog().log("5. unbind from commit events");
+            this.testContext.getTraceLog().log("4.? unbind from commit events");
             this.testContext = null;
         }
 
@@ -199,23 +200,23 @@ public abstract class PublishingTestFactoryAbstract {
 
         var dynamicTests = Can.<DynamicTest>of(
 
-                publishingTest("Interaction Api Execution",
+                publishingTest("Interaction Api",
                         PublishingTestContext.of(given, verifier, VerificationStage.POST_COMMIT),
                         VerificationStage.POST_INTERACTION,
                         this::interactionApiExecution),
-                publishingTest("Wrapper Sync Execution w/o Rules",
+                publishingTest("Wrapper Sync w/o Rules",
                         PublishingTestContext.of(given, verifier, VerificationStage.POST_COMMIT),
                         VerificationStage.POST_INTERACTION,
                         this::wrapperSyncExecutionNoRules),
-                publishingTest("Wrapper Async Execution w/o Rules",
-                        PublishingTestContext.of(given, verifier, VerificationStage.POST_COMMIT),
-                        VerificationStage.POST_INTERACTION,
-                        this::wrapperAsyncExecutionNoRules),
-                publishingTest("Wrapper Sync Execution w/ Rules (expected to fail w/ DisabledException)",
+//                publishingTest("Wrapper Async w/o Rules",
+//                        PublishingTestContext.of(given, verifier, VerificationStage.POST_COMMIT),
+//                        VerificationStage.POST_INTERACTION,
+//                        this::wrapperAsyncExecutionNoRules),
+                publishingTest("Wrapper Sync w/ Rules (expected to fail w/ DisabledException)",
                         PublishingTestContext.of(given, verifier, VerificationStage.FAILURE_CASE),
                         VerificationStage.POST_INTERACTION,
                         this::wrapperSyncExecutionWithFailure),
-                publishingTest("Wrapper Async Execution w/ Rules (expected to fail w/ DisabledException)",
+                publishingTest("Wrapper Async w/ Rules (expected to fail w/ DisabledException)",
                         PublishingTestContext.of(given, verifier, VerificationStage.FAILURE_CASE),
                         VerificationStage.POST_INTERACTION,
                         this::wrapperAsyncExecutionWithFailure)
@@ -224,7 +225,7 @@ public abstract class PublishingTestFactoryAbstract {
         if(includeProgrammatic) {
             // prepend
             dynamicTests = dynamicTests.add(0,
-                publishingTest("Programmatic Execution",
+                publishingTest("Programmatic",
                         PublishingTestContext.of(given, verifier, VerificationStage.POST_COMMIT_WHEN_PROGRAMMATIC),
                         VerificationStage.POST_INTERACTION_WHEN_PROGRAMMATIC,
                         this::programmaticExecution));
@@ -252,10 +253,14 @@ public abstract class PublishingTestFactoryAbstract {
     protected abstract boolean wrapperSyncExecutionNoRules(PublishingTestContext context);
 
     /** a test - method is embedded in its own interaction and transaction */
-    protected abstract boolean wrapperSyncExecutionWithFailure(PublishingTestContext context);
+    @Deprecated // not deprecated - but we don't know yet how to test
+    //XXX requires the AsyncExecution to run in its own interaction and transaction,
+    // ideally to be enforced by running on a different thread, yet we are using the fork-join pool
+    // which provides no such guarantee
+    protected abstract boolean wrapperAsyncExecutionNoRules(PublishingTestContext context) throws InterruptedException, ExecutionException, TimeoutException;
 
     /** a test - method is embedded in its own interaction and transaction */
-    protected abstract boolean wrapperAsyncExecutionNoRules(PublishingTestContext context) throws InterruptedException, ExecutionException, TimeoutException;
+    protected abstract boolean wrapperSyncExecutionWithFailure(PublishingTestContext context);
 
     /** a test - method is embedded in its own interaction and transaction */
     protected abstract boolean wrapperAsyncExecutionWithFailure(PublishingTestContext context);
@@ -286,7 +291,7 @@ public abstract class PublishingTestFactoryAbstract {
             assertFalse(getInteractionService().isInInteraction());
             assert_no_initial_tx_context();
 
-            final boolean isSuccesfulRun = getInteractionService().callAnonymous(()->{
+            final boolean isExpectedToRunSuccesful = getInteractionService().callAnonymous(()->{
                 val currentInteraction = getInteractionService().currentInteraction();
                 xrayEnterInteraction(currentInteraction);
                 val result = testRunner.run(testContext);
@@ -296,8 +301,14 @@ public abstract class PublishingTestFactoryAbstract {
 
             getInteractionService().closeInteractionLayers();
 
-            if(isSuccesfulRun) {
+            assertFalse(getInteractionService().isInInteraction());
+            assert_no_initial_tx_context();
+
+            failWhenContextHasErrors(testContext);
+
+            if(isExpectedToRunSuccesful) {
                 testContext.runVerify(onSuccess);
+                failWhenContextHasErrors(testContext);
             }
 
         });
@@ -307,6 +318,13 @@ public abstract class PublishingTestFactoryAbstract {
         val txState = getTransactionService().currentTransactionState();
         assertEquals(TransactionState.NONE, txState);
     }
+
+    private final void failWhenContextHasErrors(final PublishingTestContext testContext) {
+        if(!testContext.getVerificationErrors().isEmpty()) {
+            fail(testContext.getVerificationErrors().get(0));
+        }
+    }
+
 
     // -- XRAY
 

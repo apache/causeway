@@ -40,13 +40,14 @@ implements HasPersistenceStandard {
     protected void verify(final VerificationStage verificationStage) {
         switch(verificationStage) {
         case PRE_COMMIT:
+            break;
         case FAILURE_CASE:
             assertHasPropertyChangeEntries(Can.empty());
             break;
         case POST_COMMIT_WHEN_PROGRAMMATIC:
         case POST_COMMIT:
             assertHasPropertyChangeEntries(Can.of(
-                    formatPersistenceStandardSpecificCapitalize("%s Book/name: 'Sample Book' -> 'Book #2'")));
+                    formatPersistenceStandardSpecificCapitalize("%s Product/name: 'Sample Book' -> 'Book #2'")));
             break;
         default:
             // ignore ... no checks

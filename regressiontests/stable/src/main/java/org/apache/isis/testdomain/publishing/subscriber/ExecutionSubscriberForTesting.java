@@ -48,7 +48,7 @@ implements ExecutionSubscriber {
     }
 
     @Override
-    public void onExecution(Execution<?, ?> execution) {
+    public void onExecution(final Execution<?, ?> execution) {
 
         @SuppressWarnings("unchecked")
         val publishedEntries =
@@ -58,21 +58,18 @@ implements ExecutionSubscriber {
 
         kvStore.put(this, "publishedExecutions", publishedEntries);
         log.debug("publish execution {}", ()->MemberExecutionDtoUtils.toXml(execution.getDto()));
-
-        System.err.println("exec: " + MemberExecutionDtoUtils.toXml(execution.getDto()));
-
     }
 
     // -- UTILITIES
 
     @SuppressWarnings("unchecked")
-    public static Can<Execution<?, ?>> getPublishedExecutions(KVStoreForTesting kvStore) {
+    public static Can<Execution<?, ?>> getPublishedExecutions(final KVStoreForTesting kvStore) {
         return Can.ofCollection(
                 (List<Execution<?, ?>>) kvStore.get(ExecutionSubscriberForTesting.class, "publishedExecutions")
                 .orElse(null));
     }
 
-    public static void clearPublishedEntries(KVStoreForTesting kvStore) {
+    public static void clearPublishedEntries(final KVStoreForTesting kvStore) {
         kvStore.clear(ExecutionSubscriberForTesting.class);
     }
 

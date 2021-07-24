@@ -44,8 +44,6 @@ import javax.enterprise.inject.Instance;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import lombok.NonNull;
 import lombok.val;
 
@@ -198,8 +196,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @return non-null
      * @throws NullPointerException if {@code element} is {@code null}
      */
-    public static <T> Can<T> ofSingleton(final T element) {
-        requires(element, "element");
+    public static <T> Can<T> ofSingleton(final @NonNull T element) {
         return Can_Singleton.of(element);
     }
 
@@ -423,13 +420,11 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @param mapper - if absent throws if this {@code Can} is non-empty
      * @return non-null
      */
-    default <R> Can<R> map(final Function<? super T, R> mapper) {
+    default <R> Can<R> map(final @NonNull Function<? super T, R> mapper) {
 
         if(isEmpty()) {
             return empty();
         }
-
-        requires(mapper, "mapper");
 
         val mappedElements =
                 stream()
