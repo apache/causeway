@@ -11,18 +11,19 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-
 @PersistenceCapable(schema = "jdo")
 @Unique(name = "name", members = {"name"})
 @Version
 @DomainObject(nature = Nature.ENTITY)
-@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
-public class JdoEntity2 implements Comparable<JdoEntity2> {
+public abstract class JdoEntity2 implements Comparable<JdoEntity2> {
 
-    private String name;
+    private final String name;
+
+    // abstract classes do not need to have no-arg constructor
+    public JdoEntity2(final String name) {
+        this.name = name;
+    }
 
     @Override public int compareTo(final JdoEntity2 o) {
         return Comparator.<JdoEntity2,String>comparing(x -> x.name).compare(this,o);

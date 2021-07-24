@@ -162,8 +162,4 @@ public enum SubpackageEnum implements Subpackage {
         return referencing;
     }
 
-    private static String[] asArray(List<String> list) {
-        return list != null ?
-                list.toArray(new String[] {}) : null;
-    }
 }

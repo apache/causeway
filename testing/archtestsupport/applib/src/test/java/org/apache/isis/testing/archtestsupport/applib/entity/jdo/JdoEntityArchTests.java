@@ -12,7 +12,6 @@ import static org.apache.isis.testing.archtestsupport.applib.classrules.Architec
 import static org.apache.isis.testing.archtestsupport.applib.classrules.ArchitectureJdoRules.every_jdo_PersistenceCapable_must_be_annotated_as_XmlJavaAdapter_PersistentEntityAdapter;
 import static org.apache.isis.testing.archtestsupport.applib.classrules.ArchitectureJdoRules.every_jdo_PersistenceCapable_must_be_annotated_with_DomainObject_nature_of_ENTITY;
 import static org.apache.isis.testing.archtestsupport.applib.classrules.ArchitectureJdoRules.every_jdo_PersistenceCapable_must_be_annotated_with_Version;
-import static org.apache.isis.testing.archtestsupport.applib.classrules.ArchitectureJdoRules.every_jdo_PersistenceCapable_must_have_protected_no_arg_constructor;
 import static org.apache.isis.testing.archtestsupport.applib.classrules.ArchitectureJdoRules.every_jdo_PersistenceCapable_must_have_schema;
 import static org.apache.isis.testing.archtestsupport.applib.classrules.ArchitectureJdoRules.every_jdo_PersistenceCapable_must_implement_Comparable;
 import static org.apache.isis.testing.archtestsupport.applib.classrules.ArchitectureJdoRules.every_jdo_PersistenceCapable_with_DATASTORE_identityType_must_be_annotated_as_DataStoreIdentity;
@@ -56,8 +55,5 @@ public class JdoEntityArchTests {
   public static ArchRule every_injected_field_of_jdo_PersistenceCapable_must_be_annotated_with_NotPersistent =
       every_injected_field_of_jdo_PersistenceCapable_must_be_annotated_with_NotPersistent();
 
-  @ArchTest
-  public static ArchRule every_jdo_PersistenceCapable_must_have_protected_no_arg_constructor =
-      every_jdo_PersistenceCapable_must_have_protected_no_arg_constructor();
 
 }

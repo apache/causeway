@@ -13,4 +13,7 @@ public interface SomeDomainRepository {
     List<SomeDomainObject> findAll();
 
     Map<String,SomeDomainObject> notFinder();
+
+    // we allow these as an exception to the "finder" rule.
+    SomeDomainObject findOrCreate();
 }

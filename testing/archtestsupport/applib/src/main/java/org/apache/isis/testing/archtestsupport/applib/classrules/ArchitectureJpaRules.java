@@ -16,6 +16,7 @@ import javax.persistence.Version;
 import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaAnnotation;
 import com.tngtech.archunit.core.domain.JavaClass;
+import com.tngtech.archunit.core.domain.JavaModifier;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ArchRule;
 import com.tngtech.archunit.lang.ConditionEvents;
@@ -274,15 +275,17 @@ public class ArchitectureJpaRules {
     }
 
     /**
-     * This rule requires that classes annotated with the JPA {@link Entity} annotation have a no-arg constructor
-     * with <code>protected</code> visibility.
+     * This rule requires that concrete classes annotated with the JPA {@link Entity} annotation have a no-arg
+     * constructor with <code>protected</code> visibility.
      *
      * <p>
      * The rationale is to encourage the use of static factory methods.
      * </p>
      */
     public static ArchRule every_jpa_Entity_must_have_protected_no_arg_constructor() {
-        return classes().that().areAnnotatedWith(Entity.class)
+        return classes()
+                .that().areAnnotatedWith(Entity.class)
+                .and().doNotHaveModifier(JavaModifier.ABSTRACT)
                 .should(haveNoArgProtectedConstructor());
     }
 

@@ -92,7 +92,6 @@ public class ArchitectureModuleRules {
                 transitiveDependenciesByImporting.keySet());
         importingClassesNotImported.removeAll(transitiveDependenciesByImported.keySet());
 
-        checkNoAccessToTopmostLayers(layeredArchitecture, importingClassesNotImported);
         return layeredArchitecture;
     }
 
@@ -100,16 +99,12 @@ public class ArchitectureModuleRules {
             List<Class<?>> moduleClasses,
             Architectures.LayeredArchitecture layeredArchitecture,
             List<Subpackage> subpackages) {
-        moduleClasses.forEach(moduleClass -> {
-            layeredArchitecture.layer(nameOf(moduleClass)).definedBy(packageIdentifierFor(moduleClass));
-
-            subpackages
-                    .forEach(subpackage -> {
-                        val subpackageName = subpackage.getName();
-                        layeredArchitecture.optionalLayer(nameOf(moduleClass, subpackageName))
-                                .definedBy(packageIdentifierFor(moduleClass, subpackage));
-                    });
-        });
+        moduleClasses.forEach(moduleClass ->
+                subpackages.forEach(subpackage -> {
+                    val subpackageName = subpackage.getName();
+                    layeredArchitecture.optionalLayer(nameOf(moduleClass, subpackageName))
+                            .definedBy(packageIdentifierFor(moduleClass, subpackage));
+                }));
     }
 
     private static void computeDirectDependencies(
@@ -153,28 +148,25 @@ public class ArchitectureModuleRules {
             List<Subpackage> subpackages) {
         transitiveDependenciesByImported.forEach((importedModule, importingModules) -> {
 
-            layeredArchitecture
-                    // layering at the module level
-                    .whereLayer(
-                            nameOf(importedModule))
-                    .mayOnlyBeAccessedByLayers(
-                            namesOf(importingModules)
-                    );
-
-            // in particular, access to subpackages
             subpackages.forEach(subpackage -> {
 
                 val localModule = asArray(subpackage.mayBeAccessedBySubpackagesInSameModule(), subpackages);
                 val otherModules = asArray(subpackage.mayBeAccessedBySubpackagesInReferencingModules(), subpackages);
 
                 final String moduleName = nameOf(importedModule, subpackage.getName());
-                final String[] accessingModules = both(
-                        namesOf(importedModule, localModule),
-                        namesOf(importingModules, otherModules)
-                );
-                layeredArchitecture
-                        .whereLayer(moduleName)
-                        .mayOnlyBeAccessedByLayers(accessingModules);
+                val localModulePackageNames = namesOf(importedModule, localModule);
+                val importingModulePackageNames = namesOf(importingModules, otherModules);
+                val accessingModules = both(localModulePackageNames, importingModulePackageNames);
+                if(accessingModules.length > 0) {
+                    layeredArchitecture
+                            .whereLayer(moduleName)
+                            .mayOnlyBeAccessedByLayers(accessingModules);
+
+                } else {
+                    layeredArchitecture
+                            .whereLayer(moduleName)
+                            .mayNotBeAccessedByAnyLayer();
+                }
             });
 
         });
@@ -192,20 +184,6 @@ public class ArchitectureModuleRules {
         return otherModules;
     }
 
-    private static void checkNoAccessToTopmostLayers(
-            Architectures.LayeredArchitecture layeredArchitecture,
-            Set<Class<?>> importingClassesNotImported) {
-        importingClassesNotImported.forEach(importingClass -> {
-            final String importingModuleName = nameOf(importingClass);
-            layeredArchitecture
-                    .whereLayer(importingModuleName)
-                    .mayNotBeAccessedByAnyLayer();
-        });
-    }
-
-    static String nameOf(Class<?> moduleClass) {
-        return nameOf(moduleClass, null);
-    }
 
     static String nameOf(Class<?> moduleClass, @Nullable final String subpackageName) {
         val simpleName = moduleClass.getSimpleName();
@@ -214,29 +192,17 @@ public class ArchitectureModuleRules {
     }
 
     static String[] namesOf(Class<?> moduleClass, String... subpackageNames) {
-        val names = new ArrayList<String>();
-        if (subpackageNames == null) {
-            return null;
-        }
-        if (subpackageNames.length == 0 ||
-                subpackageNames.length == 1 && subpackageNames[0].equals("*")) {
-            names.add(nameOf(moduleClass));
-        } else {
-            Arrays.stream(subpackageNames).forEach(subpackageName ->
-                    names.add(nameOf(moduleClass, subpackageName)));
-        }
+        val names = Arrays.stream(subpackageNames)
+                .map(subpackageName -> nameOf(moduleClass, subpackageName))
+                .collect(Collectors.toList());
         return names.toArray(new String[] {});
     }
 
-    static String[] namesOf(Set<Class<?>> importingClasses, @Nullable String... subpackageNames) {
+    static String[] namesOf(Set<Class<?>> importingClasses, String... subpackageNames) {
         val names = new ArrayList<String>();
         importingClasses.forEach(importingClass -> {
-            if (subpackageNames == null || subpackageNames.length == 0) {
-                names.add(nameOf(importingClass));
-            } else {
-                Stream.of(subpackageNames).forEach(subpackageName ->
-                        names.add(nameOf(importingClass, subpackageName)));
-            }
+            Stream.of(subpackageNames).forEach(subpackageName ->
+                    names.add(nameOf(importingClass, subpackageName)));
         });
         return names.toArray(new String[] {});
     }
@@ -285,5 +251,4 @@ public class ArchitectureModuleRules {
                 accumulateTransitiveDependencies(directDependency, directDependenciesByReferringClass,
                         transitiveDependenciesOfReferringClass));
     }
-
 }

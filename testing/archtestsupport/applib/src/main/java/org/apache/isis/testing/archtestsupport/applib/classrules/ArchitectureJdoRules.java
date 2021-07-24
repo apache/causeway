@@ -8,6 +8,7 @@ import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaAnnotation;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaEnumConstant;
+import com.tngtech.archunit.core.domain.JavaModifier;
 import com.tngtech.archunit.lang.ArchRule;
 
 import org.apache.isis.applib.annotation.DomainObject;
@@ -186,18 +187,6 @@ public class ArchitectureJdoRules {
         };
     }
 
-    /**
-     * This rule requires that classes annotated with the JDO {@link PersistenceCapable} annotation have a
-     * no-arg constructor with <code>protected</code> visibility.
-     *
-     * <p>
-     * The rationale is to encourage the use of static factory methods.
-     * </p>
-     */
-    public static ArchRule every_jdo_PersistenceCapable_must_have_protected_no_arg_constructor() {
-        return classes().that().areAnnotatedWith(PersistenceCapable.class)
-                .should(haveNoArgProtectedConstructor());
-    }
 
 
 }
