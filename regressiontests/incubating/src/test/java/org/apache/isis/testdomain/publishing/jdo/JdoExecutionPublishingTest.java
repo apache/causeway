@@ -42,6 +42,7 @@ import org.apache.isis.testdomain.publishing.conf.Configuration_usingExecutionPu
                 //XrayEnable.class
         },
         properties = {
+                "logging.level.org.apache.isis.applib.services.publishing.log.ExecutionLogger=DEBUG",
                 "logging.level.org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisTransactionJdo=DEBUG",
                 "logging.level.org.apache.isis.core.runtimeservices.session.IsisInteractionFactoryDefault=DEBUG",
                 "logging.level.org.apache.isis.persistence.jdo.datanucleus5.datanucleus.service.JdoPersistenceLifecycleService=DEBUG"

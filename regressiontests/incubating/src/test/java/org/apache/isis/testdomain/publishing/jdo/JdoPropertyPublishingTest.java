@@ -44,7 +44,7 @@ import org.apache.isis.testdomain.publishing.conf.Configuration_usingEntityPrope
                 //XrayEnable.class
         },
         properties = {
-                "logging.level.org.apache.isis.applib.services.publishing.log.*=DEBUG",
+                "logging.level.org.apache.isis.applib.services.publishing.log.EntityPropertyChangeLogger=DEBUG",
                 "logging.level.org.apache.isis.testdomain.util.rest.KVStoreForTesting=DEBUG",
                 "logging.level.org.apache.isis.persistence.jdo.integration.changetracking.JdoLifecycleListener=DEBUG",
                 "logging.level.org.apache.isis.core.transaction.changetracking.EntityChangeTrackerDefault=DEBUG",
@@ -61,7 +61,7 @@ implements HasPersistenceStandardJdo {
 
     @TestFactory @DisplayName("Publishing")
     List<DynamicTest> generateTests() {
-        return testFactory.generateTests(this::given, this::verify);
+        return testFactory.generateTestsIncludeProgrammatic(this::given, this::verify);
     }
 
 }

@@ -43,6 +43,8 @@ import org.apache.isis.testdomain.publishing.conf.Configuration_usingCommandPubl
         },
         properties = {
                 "logging.level.org.springframework.orm.jpa.*=DEBUG",
+                "logging.level.org.apache.isis.applib.services.publishing.log.CommandLogger=DEBUG",
+                "logging.level.org.apache.isis.testdomain.util.rest.KVStoreForTesting=DEBUG",
                 "logging.level.org.apache.isis.core.runtimeservices.session.IsisInteractionFactoryDefault=DEBUG"
         })
 @TestPropertySource({

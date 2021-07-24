@@ -42,6 +42,7 @@ import org.apache.isis.testdomain.publishing.conf.Configuration_usingEntityChang
                 //XrayEnable.class
         },
         properties = {
+                "logging.level.org.apache.isis.applib.services.publishing.log.EntityChangesLogger=DEBUG",
                 "logging.level.org.apache.isis.core.runtimeservices.session.IsisInteractionFactoryDefault=DEBUG",
                 "logging.level.org.apache.isis.testdomain.util.kv.KVStoreForTesting=DEBUG",
         })
@@ -56,7 +57,7 @@ implements HasPersistenceStandardJpa {
 
     @TestFactory @DisplayName("Publishing")
     List<DynamicTest> generateTests() {
-        return testFactory.generateTests(this::given, this::verify);
+        return testFactory.generateTestsIncludeProgrammatic(this::given, this::verify);
     }
 
 }

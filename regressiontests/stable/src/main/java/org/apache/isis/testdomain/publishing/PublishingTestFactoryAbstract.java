@@ -180,18 +180,25 @@ public abstract class PublishingTestFactoryAbstract {
 
     // -- CREATE DYNAMIC TESTS
 
+    public final List<DynamicTest> generateTestsIncludeProgrammatic(
+            final Runnable given,
+            final Consumer<VerificationStage> verifier) {
+        return generateTests(true, given, verifier);
+    }
+
     public final List<DynamicTest> generateTests(
             final Runnable given,
             final Consumer<VerificationStage> verifier) {
+        return generateTests(false, given, verifier);
+    }
 
-        _Probe.errOut("GENERATE TESTS");
+    private final List<DynamicTest> generateTests(
+            final boolean includeProgrammatic,
+            final Runnable given,
+            final Consumer<VerificationStage> verifier) {
 
-        val dynamicTests = Can.<DynamicTest>of(
+        var dynamicTests = Can.<DynamicTest>of(
 
-                publishingTest("Programmatic Execution",
-                        PublishingTestContext.of(given, verifier, VerificationStage.POST_COMMIT_WHEN_PROGRAMMATIC),
-                        VerificationStage.POST_INTERACTION_WHEN_PROGRAMMATIC,
-                        this::programmaticExecution),
                 publishingTest("Interaction Api Execution",
                         PublishingTestContext.of(given, verifier, VerificationStage.POST_COMMIT),
                         VerificationStage.POST_INTERACTION,
@@ -200,19 +207,28 @@ public abstract class PublishingTestFactoryAbstract {
                         PublishingTestContext.of(given, verifier, VerificationStage.POST_COMMIT),
                         VerificationStage.POST_INTERACTION,
                         this::wrapperSyncExecutionNoRules),
-                publishingTest("Wrapper Sync Execution w/ Rules (expected to fail w/ DisabledException)",
-                        PublishingTestContext.of(given, verifier, VerificationStage.FAILURE_CASE),
-                        VerificationStage.POST_INTERACTION,
-                        this::wrapperSyncExecutionWithFailure),
                 publishingTest("Wrapper Async Execution w/o Rules",
                         PublishingTestContext.of(given, verifier, VerificationStage.POST_COMMIT),
                         VerificationStage.POST_INTERACTION,
                         this::wrapperAsyncExecutionNoRules),
+                publishingTest("Wrapper Sync Execution w/ Rules (expected to fail w/ DisabledException)",
+                        PublishingTestContext.of(given, verifier, VerificationStage.FAILURE_CASE),
+                        VerificationStage.POST_INTERACTION,
+                        this::wrapperSyncExecutionWithFailure),
                 publishingTest("Wrapper Async Execution w/ Rules (expected to fail w/ DisabledException)",
                         PublishingTestContext.of(given, verifier, VerificationStage.FAILURE_CASE),
                         VerificationStage.POST_INTERACTION,
                         this::wrapperAsyncExecutionWithFailure)
                 );
+
+        if(includeProgrammatic) {
+            // prepend
+            dynamicTests = dynamicTests.add(0,
+                publishingTest("Programmatic Execution",
+                        PublishingTestContext.of(given, verifier, VerificationStage.POST_COMMIT_WHEN_PROGRAMMATIC),
+                        VerificationStage.POST_INTERACTION_WHEN_PROGRAMMATIC,
+                        this::programmaticExecution));
+        }
 
         return XrayUi.isXrayEnabled()
                 ? dynamicTests
