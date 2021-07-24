@@ -2,6 +2,8 @@ package org.apache.isis.testing.archtestsupport.applib.classrules;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -11,6 +13,7 @@ import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaAnnotation;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaCodeUnit;
+import com.tngtech.archunit.core.domain.JavaMethod;
 import com.tngtech.archunit.core.domain.JavaModifier;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ArchRule;
@@ -120,7 +123,9 @@ public class ArchitectureDomainRules {
      * </p>
      */
     public static ArchRule every_Action_mixin_must_follow_naming_convention() {
-        return mixin_must_follow_naming_conventions(Action.class, "act");
+        return mixin_must_follow_naming_conventions(Action.class, "act",
+                mixinMethodNameToFind ->
+                        javaMethodCandidate -> javaMethodCandidate.getName().equals(mixinMethodNameToFind));
     }
 
     /**
@@ -135,7 +140,10 @@ public class ArchitectureDomainRules {
      * </p>
      */
     public static ArchRule every_Property_mixin_must_follow_naming_convention() {
-        return mixin_must_follow_naming_conventions(Property.class, "prop");
+        return mixin_must_follow_naming_conventions(Property.class, "prop",
+                mixinMethodNameToFind ->
+                        javaMethodCandidate -> javaMethodCandidate.getName().equals(mixinMethodNameToFind) &&
+                                javaMethodCandidate.getRawParameterTypes().size() == 0);
     }
 
     /**
@@ -150,50 +158,58 @@ public class ArchitectureDomainRules {
      * </p>
      */
     public static ArchRule every_Collection_mixin_must_follow_naming_convention() {
-        return mixin_must_follow_naming_conventions(Collection.class, "coll");
+        return mixin_must_follow_naming_conventions(Collection.class, "coll",
+                mixinMethodNameToFind ->
+                        javaMethodCandidate -> javaMethodCandidate.getName().equals(mixinMethodNameToFind) &&
+                                javaMethodCandidate.getRawParameterTypes().size() == 0);
     }
 
     private static ClassesShouldConjunction mixin_must_follow_naming_conventions(
             final Class<? extends Annotation> type,
-            final String mixinMethodNameDefault) {
+            final String mixinMethodNameDefault, final Function<String, Predicate<JavaMethod>> function) {
         return classes()
                 .that().areAnnotatedWith(type)
                 .should(new ArchCondition<JavaClass>("follow mixin naming conventions") {
                     @Override
                     public void check(final JavaClass item, final ConditionEvents events) {
-                        if(!item.isTopLevelClass()) {
+                        if (!item.isTopLevelClass() || item.isAnnotation()) {
                             return;
                         }
                         val oneArgConstructorParameterTypeIfAny = item.getConstructors().stream()
-                                .filter(x -> x.getRawParameterTypes().size() == 1)
                                 .map(JavaCodeUnit::getRawParameterTypes)
+                                .filter(rawParameterTypes -> rawParameterTypes.size() == 1)
                                 .map(x -> x.get(0))
-                                .findFirst()
-                                ;
-                        if(!oneArgConstructorParameterTypeIfAny.isPresent()) {
-                            events.add(new SimpleConditionEvent(item, false, item.getSimpleName() + " does not have a 1-arg constructor"));
+                                .findFirst();
+                        if (!oneArgConstructorParameterTypeIfAny.isPresent()) {
+                            events.add(new SimpleConditionEvent(item, false,
+                                    item.getSimpleName() + " does not have a 1-arg constructor"));
                             return;
                         }
                         final JavaClass parameterType = oneArgConstructorParameterTypeIfAny.get();
                         val constructorClassName = parameterType.getSimpleName();
                         val requiredPrefix = constructorClassName + "_";
-                        if(! item.getSimpleName().startsWith(requiredPrefix)) {
-                            events.add(new SimpleConditionEvent(item, false, item.getSimpleName() + " should have a prefix of '" + requiredPrefix
-                                    + "'" ));
+                        if (!item.getSimpleName().startsWith(requiredPrefix)) {
+                            events.add(new SimpleConditionEvent(item, false,
+                                    item.getSimpleName() + " should have a prefix of '" + requiredPrefix
+                                            + "'"));
                             return;
                         }
                         val mixinMethodName = item
                                 .tryGetAnnotationOfType(DomainObject.class)
                                 .transform(DomainObject::mixinMethod)
                                 .or(mixinMethodNameDefault);
-                        if(!item.tryGetMethod(mixinMethodName).isPresent()) {
+                        val mixinMethodIfAny = item.getAllMethods().stream()
+                                .filter(function.apply(mixinMethodName)).findAny();
+                        if (!mixinMethodIfAny.isPresent()) {
                             events.add(new SimpleConditionEvent(item, false,
                                     String.format("%s does not have a mixin method named '%s'",
                                             item.getSimpleName(), mixinMethodName)));
                         }
                     }
+
                 });
     }
+
 
     /**
      * This rule requires that classes annotated with the {@link Repository} annotation should follow the naming
@@ -332,16 +348,21 @@ public class ArchitectureDomainRules {
      *     they must return an <code>Optional&lt;Customer&gt;</code> instead.  This forces the caller to
      *     handle the fact that the result might be empty (ie no result).
      * </p>
-     * @return
+     *
+     * <p>
+     *     One exception is that methods named &quot;findOrCreate&quot;, which are allowed to return an instance
+     *     rather than an optional.
+     * </p>
      */
     public static ArchRule every_finder_method_in_Repository_must_return_either_Collection_or_Optional() {
         return methods()
                 .that().haveNameMatching("find.*")
+                .and().haveNameNotMatching("findOrCreate.*")
                 .and().areDeclaredInClassesThat().areAnnotatedWith(Repository.class)
                 .should().haveRawReturnType(eitherOptionalOrCollection());
     }
 
-    private static DescribedPredicate<JavaClass> eitherOptionalOrCollection() {
+    static DescribedPredicate<JavaClass> eitherOptionalOrCollection() {
         return new DescribedPredicate<JavaClass>("either Optional or Collection") {
             @Override
             public boolean apply(JavaClass input) {
@@ -350,6 +371,10 @@ public class ArchitectureDomainRules {
             }
         };
     }
+
+
+
+
 
 
 

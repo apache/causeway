@@ -11,6 +11,6 @@ public class SomeDomainObject_actionMixin {
 
     final SomeDomainObject someDomainObject;
 
-    public void act() {}
+    public void act(final String x) {}
 
 }

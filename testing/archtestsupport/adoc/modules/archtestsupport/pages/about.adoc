@@ -195,10 +195,10 @@ Entity rule checks are provided for both xref:pjpa::about.adoc[] and xref:pjdo::
 * encourage static factory methods for entities:
 
 ** `every_jpa_Entity_must_have_protected_no_arg_constructor()`
-** `every_jdo_PersistenceCapable_must_have_protected_no_arg_constructor()`
 
 
-None of these rules take any arguments, so simply include (as a static field) those that you wish to enforce.
+None of these rules takes any arguments, so simply call those (from a static field) those that you wish to enforce.
+
 
 == Module Rules
 

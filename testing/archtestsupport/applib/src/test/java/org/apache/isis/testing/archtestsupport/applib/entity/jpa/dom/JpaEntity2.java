@@ -16,9 +16,6 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-
 @Entity
 @Table(
         schema = "jpa",
@@ -26,9 +23,8 @@ import lombok.RequiredArgsConstructor;
 )
 @DomainObject(nature = Nature.ENTITY)
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
-@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners({ JpaEntityInjectionPointResolver.class})
-public class JpaEntity2 implements Comparable<JpaEntity2> {
+public abstract class JpaEntity2 implements Comparable<JpaEntity2> {
 
     @Id @Column(name = "id", nullable = false)
     private Long id;
@@ -36,7 +32,12 @@ public class JpaEntity2 implements Comparable<JpaEntity2> {
     @Version
     private Long version;
 
-    private String name;
+    private final String name;
+
+    // abstract classes do not need to have no-arg constructor
+    public JpaEntity2(final String name) {
+        this.name = name;
+    }
 
     @Override public int compareTo(final JpaEntity2 o) {
         return Comparator.<JpaEntity2,Long>comparing(x -> x.id).compare(this,o);
