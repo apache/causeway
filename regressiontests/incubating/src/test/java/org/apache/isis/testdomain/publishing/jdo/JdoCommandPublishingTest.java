@@ -19,8 +19,6 @@
 package org.apache.isis.testdomain.publishing.jdo;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -30,20 +28,11 @@ import org.junit.jupiter.api.TestFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.schema.cmd.v2.CommandDto;
-import org.apache.isis.schema.cmd.v2.PropertyDto;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
-import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.VerificationStage;
+import org.apache.isis.testdomain.publishing.CommandPublishingTestAbstract;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryJdo;
 import org.apache.isis.testdomain.publishing.conf.Configuration_usingCommandPublishing;
-import org.apache.isis.testdomain.publishing.subscriber.CommandSubscriberForTesting;
-import org.apache.isis.testdomain.util.CollectionAssertions;
-import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
-
-import lombok.val;
 
 @SpringBootTest(
         classes = {
@@ -60,73 +49,15 @@ import lombok.val;
 @TestPropertySource({
     IsisPresets.UseLog4j2Test
 })
-class JdoCommandPublishingTest {
+class JdoCommandPublishingTest
+extends CommandPublishingTestAbstract
+implements HasPersistenceStandardJdo {
 
     @Inject private PublishingTestFactoryJdo testFactory;
-    @Inject private KVStoreForTesting kvStore;
 
     @TestFactory @DisplayName("Publishing")
     List<DynamicTest> generateTests() {
         return testFactory.generateTests(this::given, this::verify);
     }
-
-    private void given() {
-        CommandSubscriberForTesting.clearPublishedCommands(kvStore);
-    }
-
-    private void verify(final VerificationStage verificationStage) {
-        switch(verificationStage) {
-
-        case FAILURE_CASE:
-            assertHasCommandEntries(Can.empty());
-            break;
-        case POST_INTERACTION:
-
-
-//            Interaction interaction = null;
-//            String propertyId = "org.apache.isis.testdomain.jdo.entities.JdoBook#name";
-//            Object target = null;
-//            Object argValue = "Book #2";
-//            String targetMemberName = "name???";
-//            String targetClass = "org.apache.isis.testdomain.jdo.entities.JdoBook";
-
-            val propertyDto = new PropertyDto();
-            propertyDto.setLogicalMemberIdentifier("testdomain.jdo.Book#name");
-
-            val command = new Command(UUID.randomUUID());
-            val commandDto = new CommandDto();
-            commandDto.setInteractionId(command.getInteractionId().toString());
-            commandDto.setMember(propertyDto);
-
-            command.updater().setCommandDto(commandDto);
-
-            assertHasCommandEntries(Can.of(command));
-            break;
-        default:
-            // ignore ... no checks
-        }
-    }
-
-    // -- HELPER
-
-    private void assertHasCommandEntries(final Can<Command> expectedCommands) {
-        val actualCommands = CommandSubscriberForTesting.getPublishedCommands(kvStore);
-        CollectionAssertions.assertComponentWiseEquals(
-                expectedCommands, actualCommands, this::commandDifference);
-    }
-
-    private String commandDifference(final Command a, final Command b) {
-        if(!Objects.equals(a.getLogicalMemberIdentifier(), b.getLogicalMemberIdentifier())) {
-            return String.format("differing member identifier %s != %s",
-                    a.getLogicalMemberIdentifier(), b.getLogicalMemberIdentifier());
-        }
-        if(!Objects.equals(a.getResult(), b.getResult())) {
-            return String.format("differing results %s != %s",
-                    a.getResult(), b.getResult());
-        }
-        return null; // no difference
-    }
-
-
 
 }

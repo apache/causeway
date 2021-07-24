@@ -28,21 +28,11 @@ import org.junit.jupiter.api.TestFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
-import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.VerificationStage;
+import org.apache.isis.testdomain.publishing.EntityPublishingTestAbstract;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryJpa;
 import org.apache.isis.testdomain.publishing.conf.Configuration_usingEntityChangesPublishing;
-import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
-
-import static org.apache.isis.testdomain.publishing.subscriber.EntityChangesSubscriberForTesting.clearPublishedEntries;
-import static org.apache.isis.testdomain.publishing.subscriber.EntityChangesSubscriberForTesting.getCreated;
-import static org.apache.isis.testdomain.publishing.subscriber.EntityChangesSubscriberForTesting.getDeleted;
-import static org.apache.isis.testdomain.publishing.subscriber.EntityChangesSubscriberForTesting.getLoaded;
-import static org.apache.isis.testdomain.publishing.subscriber.EntityChangesSubscriberForTesting.getModified;
-import static org.apache.isis.testdomain.publishing.subscriber.EntityChangesSubscriberForTesting.getUpdated;
 
 @SpringBootTest(
         classes = {
@@ -58,41 +48,15 @@ import static org.apache.isis.testdomain.publishing.subscriber.EntityChangesSubs
 @TestPropertySource({
     IsisPresets.UseLog4j2Test
 })
-class JpaEntityPublishingTest {
+class JpaEntityPublishingTest
+extends EntityPublishingTestAbstract
+implements HasPersistenceStandardJpa {
 
     @Inject private PublishingTestFactoryJpa testFactory;
-    @Inject private KVStoreForTesting kvStore;
 
     @TestFactory @DisplayName("Publishing")
     List<DynamicTest> generateTests() {
         return testFactory.generateTests(this::given, this::verify);
-    }
-
-    private void given() {
-        clearPublishedEntries(kvStore);
-    }
-
-    private void verify(final VerificationStage verificationStage) {
-        switch(verificationStage) {
-        case PRE_COMMIT:
-        case FAILURE_CASE:
-            assertEquals(0, getCreated(kvStore));
-            assertEquals(0, getDeleted(kvStore));
-            assertEquals(0, getLoaded(kvStore));
-            assertEquals(0, getUpdated(kvStore));
-            assertEquals(0, getModified(kvStore));
-            break;
-        case POST_COMMIT_WHEN_PROGRAMMATIC:
-        case POST_COMMIT:
-            assertEquals(0, getCreated(kvStore));
-            assertEquals(0, getDeleted(kvStore));
-            //assertEquals(1, getLoaded()); // not reproducible
-            assertEquals(1, getUpdated(kvStore));
-            assertEquals(1, getModified(kvStore));
-            break;
-        default:
-            // ignore ... no checks
-        }
     }
 
 }

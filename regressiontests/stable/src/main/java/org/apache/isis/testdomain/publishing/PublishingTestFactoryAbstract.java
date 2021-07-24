@@ -126,12 +126,17 @@ public abstract class PublishingTestFactoryAbstract {
         boolean run(PublishingTestContext context) throws Exception;
     }
 
+    /**
+     * For each test we setup a {@link PublishingTestContext test-context},
+     * which this singleton CommitListener instance will be temporarily bound
+     * to, until the end of the test's exclusive transaction.
+     */
     @Service
     public static class CommitListener {
 
         private PublishingTestContext testContext;
 
-        /** TRANSACTION END BOUNDARY (PRE) */
+        /** transaction end boundary (pre) */
         @EventListener(TransactionBeforeCompletionEvent.class)
         public void onPreCommit(final TransactionBeforeCompletionEvent event) {
             _Probe.errOut("=== TRANSACTION before completion");
@@ -141,7 +146,7 @@ public abstract class PublishingTestFactoryAbstract {
             }
         }
 
-        /** TRANSACTION END BOUNDARY (POST)*/
+        /** transaction end boundary (post) */
         @EventListener(TransactionAfterCompletionEvent.class)
         public void onPreCommit(final TransactionAfterCompletionEvent event) {
             _Probe.errOut("=== TRANSACTION after completion");
@@ -218,18 +223,25 @@ public abstract class PublishingTestFactoryAbstract {
 
     }
 
+    /** to setup the test - method is embedded in its own interaction and transaction */
     protected abstract void setupEntity(PublishingTestContext context);
 
+    /** a test - method is embedded in its own interaction and transaction */
     protected abstract boolean programmaticExecution(PublishingTestContext context);
 
+    /** a test - method is embedded in its own interaction and transaction */
     protected abstract boolean interactionApiExecution(PublishingTestContext context);
 
+    /** a test - method is embedded in its own interaction and transaction */
     protected abstract boolean wrapperSyncExecutionNoRules(PublishingTestContext context);
 
+    /** a test - method is embedded in its own interaction and transaction */
     protected abstract boolean wrapperSyncExecutionWithFailure(PublishingTestContext context);
 
+    /** a test - method is embedded in its own interaction and transaction */
     protected abstract boolean wrapperAsyncExecutionNoRules(PublishingTestContext context) throws InterruptedException, ExecutionException, TimeoutException;
 
+    /** a test - method is embedded in its own interaction and transaction */
     protected abstract boolean wrapperAsyncExecutionWithFailure(PublishingTestContext context);
 
 

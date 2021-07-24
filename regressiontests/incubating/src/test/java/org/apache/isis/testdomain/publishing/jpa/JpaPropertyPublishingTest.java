@@ -30,17 +30,11 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
-import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.VerificationStage;
+import org.apache.isis.testdomain.publishing.PropertyPublishingTestAbstract;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryJpa;
 import org.apache.isis.testdomain.publishing.conf.Configuration_usingEntityPropertyChangePublishing;
-import org.apache.isis.testdomain.publishing.subscriber.EntityPropertyChangeSubscriberForTesting;
-import org.apache.isis.testdomain.util.CollectionAssertions;
-import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
-
-import lombok.val;
 
 @SpringBootTest(
         classes = {
@@ -59,42 +53,15 @@ import lombok.val;
     IsisPresets.UseLog4j2Test
 })
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class JpaPropertyPublishingTest {
+class JpaPropertyPublishingTest
+extends PropertyPublishingTestAbstract
+implements HasPersistenceStandardJpa {
 
     @Inject private PublishingTestFactoryJpa testFactory;
-    @Inject private KVStoreForTesting kvStore;
 
     @TestFactory @DisplayName("Publishing")
     List<DynamicTest> generateTests() {
         return testFactory.generateTests(this::given, this::verify);
     }
-
-    private void given() {
-        EntityPropertyChangeSubscriberForTesting.clearPropertyChangeEntries(kvStore);
-    }
-
-    private void verify(final VerificationStage verificationStage) {
-        switch(verificationStage) {
-        case PRE_COMMIT:
-        case FAILURE_CASE:
-            assertHasPropertyChangeEntries(Can.empty());
-            break;
-        case POST_COMMIT_WHEN_PROGRAMMATIC:
-        case POST_COMMIT:
-            assertHasPropertyChangeEntries(Can.of(
-                    "Jpa Book/name: 'Sample Book' -> 'Book #2'"));
-            break;
-        default:
-            // ignore ... no checks
-        }
-    }
-
-    // -- HELPER
-
-    private void assertHasPropertyChangeEntries(final Can<String> expectedAuditEntries) {
-        val actualAuditEntries = EntityPropertyChangeSubscriberForTesting.getPropertyChangeEntries(kvStore);
-        CollectionAssertions.assertComponentWiseEquals(expectedAuditEntries, actualAuditEntries);
-    }
-
 
 }
