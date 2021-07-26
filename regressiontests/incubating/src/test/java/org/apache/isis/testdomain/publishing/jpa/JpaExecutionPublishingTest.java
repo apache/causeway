@@ -43,6 +43,8 @@ import org.apache.isis.testdomain.publishing.conf.Configuration_usingExecutionPu
         },
         properties = {
                 "logging.level.org.apache.isis.applib.services.publishing.log.ExecutionLogger=DEBUG",
+                "logging.level.org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener=DEBUG",
+                "logging.level.org.apache.isis.core.transaction.changetracking.EntityChangeTrackerDefault=DEBUG",
                 "logging.level.org.apache.isis.core.runtimeservices.session.IsisInteractionFactoryDefault=DEBUG",
         })
 @TestPropertySource({

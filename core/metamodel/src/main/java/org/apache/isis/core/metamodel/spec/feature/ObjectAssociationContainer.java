@@ -38,22 +38,30 @@ public interface ObjectAssociationContainer {
      */
     Optional<ObjectAssociation> getAssociation(String id);
 
-    default ObjectAssociation getAssociationElseFail(String id) {
+    default ObjectAssociation getAssociationElseFail(final String id) {
         return getAssociation(id)
                 .orElseThrow(()->_Exceptions.noSuchElement("id=%s", id));
     }
 
-    default OneToOneAssociation getPropertyElseFail(String id) {
+    default Optional<OneToOneAssociation> getProperty(final String id) {
         return getAssociation(id)
                 .filter(ObjectAssociation.Predicates.PROPERTIES)
-                .map(OneToOneAssociation.class::cast)
+                .map(OneToOneAssociation.class::cast);
+    }
+
+    default OneToOneAssociation getPropertyElseFail(final String id) {
+        return getProperty(id)
                 .orElseThrow(()->_Exceptions.noSuchElement("id=%s", id));
     }
 
-    default OneToManyAssociation getCollectionElseFail(String id) {
+    default Optional<OneToManyAssociation> getCollection(final String id) {
         return getAssociation(id)
                 .filter(ObjectAssociation.Predicates.COLLECTIONS)
-                .map(OneToManyAssociation.class::cast)
+                .map(OneToManyAssociation.class::cast);
+    }
+
+    default OneToManyAssociation getCollectionElseFail(final String id) {
+        return getCollection(id)
                 .orElseThrow(()->_Exceptions.noSuchElement("id=%s", id));
     }
 
@@ -85,7 +93,7 @@ public interface ObjectAssociationContainer {
      * All {@link ObjectAssociation association}s that represent
      * {@link OneToOneAssociation properties}.
      */
-    default Stream<OneToOneAssociation> streamProperties(MixedIn contributed) {
+    default Stream<OneToOneAssociation> streamProperties(final MixedIn contributed) {
         return streamAssociations(contributed)
                 .filter(ObjectAssociation.Predicates.PROPERTIES)
                 .map(OneToOneAssociation.class::cast);
@@ -95,7 +103,7 @@ public interface ObjectAssociationContainer {
      * All {@link ObjectAssociation association}s that represents
      * {@link OneToManyAssociation collections}.
      */
-    default Stream<OneToManyAssociation> streamCollections(MixedIn contributed){
+    default Stream<OneToManyAssociation> streamCollections(final MixedIn contributed){
         return streamAssociations(contributed)
                 .filter(ObjectAssociation.Predicates.COLLECTIONS)
                 .map(OneToManyAssociation.class::cast);

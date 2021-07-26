@@ -49,7 +49,7 @@ implements TransactionSynchronization, TransactionBoundaryAware {
     }
 
     @Override
-    public void afterCompletion(int status) {
+    public void afterCompletion(final int status) {
         val event = TransactionAfterCompletionEvent.forStatus(status);
         eventBusService.post(event);
         _Xray.txAfterCompletion(interactionLayerTracker, String.format("tx: afterCompletion (%s)", event.name()));

@@ -49,7 +49,7 @@ implements HasPersistenceStandard {
             break;
         case POST_COMMIT:
             assertHasPropertyChangeEntries(Can.of(
-                    formatPersistenceStandardSpecificCapitalize("%s Product/name: 'Sample Book' -> 'Book #2'")));
+                    formatPersistenceStandardSpecificCapitalize("%s Book/name: 'Sample Book' -> 'Book #2'")));
             break;
         default:
             // if hitting this, the caller is requesting a verification stage, we are providing no case for

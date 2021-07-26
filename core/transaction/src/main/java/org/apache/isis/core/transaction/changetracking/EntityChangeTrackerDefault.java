@@ -73,16 +73,14 @@ import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityC
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.transaction.changetracking.events.IsisTransactionPlaceholder;
 import org.apache.isis.core.transaction.events.TransactionBeforeCompletionEvent;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * @since 2.0 {@index}
@@ -122,7 +120,7 @@ implements
     private final Provider<InteractionProvider> interactionProviderProvider;
 
     @Inject
-    public EntityChangeTrackerDefault(EntityPropertyChangePublisher entityPropertyChangePublisher, EntityChangesPublisher entityChangesPublisher, EventBusService eventBusService, Provider<InteractionProvider> interactionProviderProvider) {
+    public EntityChangeTrackerDefault(final EntityPropertyChangePublisher entityPropertyChangePublisher, final EntityChangesPublisher entityChangesPublisher, final EventBusService eventBusService, final Provider<InteractionProvider> interactionProviderProvider) {
         this.entityPropertyChangePublisher = entityPropertyChangePublisher;
         this.entityChangesPublisher = entityChangesPublisher;
         this.eventBusService = eventBusService;
@@ -154,35 +152,21 @@ implements
     }
 
     private void enlistUpdatingInternal(
-            final @NonNull ManagedObject adapter,
-            String propertyIdIfAny,
-            Object preValue) {
-        if(!isEntityEnabledForChangePublishing(adapter)) {
+            final @NonNull ManagedObject entity,
+            final String propertyIdIfAny,
+            final Object preValue) {
+        if(!isEntityEnabledForChangePublishing(entity)) {
             return;
         }
-        enlistForChangeKindPublishing(adapter, EntityChangeKind.UPDATE);
+        enlistForChangeKindPublishing(entity, EntityChangeKind.UPDATE);
 
         if(propertyIdIfAny != null) {
-            // if we've been provided with the preValue, then just save it
-            // in the appropriate PropertyChangeRecord
-
-            if(propertyChangeRecordsById.containsKey(propertyIdIfAny)) {
-                return;
-            }
-            adapter.getSpecification().getAssociation(propertyIdIfAny)
-                .filter(assoc -> !assoc.isMixedIn())
-                .filter(ObjectMember::isOneToOneAssociation)
-                .map(OneToOneAssociation.class::cast)
-                .filter(property->!property.isNotPersisted())
-                .map(property->_PropertyChangeRecord.of(adapter, property))
-                .ifPresent(record -> {
-                    record.setPreValue(preValue);
-                    propertyChangeRecordsById.put(propertyIdIfAny, record);
-                });
-
+            // if we've been provided with the property that changed and its pre-value,
+            // then just save it in the appropriate PropertyChangeRecord
+            enlistForPreAndPostValuePublishing(entity, propertyIdIfAny, preValue);
         } else {
-            // read from the pojo using the Isis MM.
-            enlistForPreAndPostValuePublishing(adapter, _PropertyChangeRecord::updatePreValue);
+            // read all persistent property pre-values from the pojo using the Isis MM.
+            enlistForPreAndPostValuePublishing(entity, _PropertyChangeRecord::updatePreValue);
         }
     }
 
@@ -224,7 +208,7 @@ implements
      * @apiNote intended to be called during before transaction completion by the framework internally
      */
     @EventListener(value = TransactionBeforeCompletionEvent.class) @Order(PriorityPrecedence.LATE)
-    public void onTransactionCompleting(TransactionBeforeCompletionEvent event) {
+    public void onTransactionCompleting(final TransactionBeforeCompletionEvent event) {
         try {
             doPublish();
         } finally {
@@ -324,9 +308,36 @@ implements
         return previousChangeKind == null;
     }
 
+
+    /**
+     * Variant of {@link #enlistForPreAndPostValuePublishing(ManagedObject, Consumer)},
+     * where we know the changed property and its pre-value in advance (JPA)
+     */
     private void enlistForPreAndPostValuePublishing(
             final ManagedObject entity,
-            final Consumer<_PropertyChangeRecord> fun) {
+            final String propertyId,
+            final Object preValue) {
+
+        if(propertyChangeRecordsById.containsKey(propertyId)) {
+            return;
+        }
+
+        log.debug("enlist entity's single property change ({}) for publishing {}", propertyId, entity);
+
+        entity.getSpecification().getProperty(propertyId)
+        .filter(property->!property.isMixedIn())
+        .filter(property->!property.isNotPersisted())
+        .map(property->_PropertyChangeRecord.of(entity, property))
+        .ifPresent(record -> {
+            record.setPreValue(preValue);
+            propertyChangeRecordsById.put(record.getPropertyId(), record);
+        });
+
+    }
+
+    private void enlistForPreAndPostValuePublishing(
+            final ManagedObject entity,
+            final Consumer<_PropertyChangeRecord> onNewChangeRecord) {
 
         log.debug("enlist entity's property changes for publishing {}", entity);
 
@@ -335,7 +346,7 @@ implements
         .map(property->_PropertyChangeRecord.of(entity, property))
         .filter(record->!propertyChangeRecordsById.containsKey(record.getPropertyId())) // already enlisted, so ignore
         .forEach(record->{
-            fun.accept(record);
+            onNewChangeRecord.accept(record);
             propertyChangeRecordsById.put(record.getPropertyId(), record);
         });
     }
@@ -378,7 +389,7 @@ implements
     // -- ENTITY CHANGE TRACKING
 
     @Override
-    public void enlistCreated(ManagedObject entity) {
+    public void enlistCreated(final ManagedObject entity) {
         _Xray.enlistCreated(entity, interactionProviderProvider);
         val hasAlreadyBeenEnlisted = isEnlisted(entity);
         enlistCreatedInternal(entity);
@@ -390,7 +401,7 @@ implements
     }
 
     @Override
-    public void enlistDeleting(ManagedObject entity) {
+    public void enlistDeleting(final ManagedObject entity) {
         _Xray.enlistDeleting(entity, interactionProviderProvider);
         enlistDeletingInternal(entity);
         CallbackFacet.callCallback(entity, RemovingCallbackFacet.class);
@@ -398,12 +409,12 @@ implements
     }
 
     @Override
-    public void enlistUpdating(ManagedObject entity) {
+    public void enlistUpdating(final ManagedObject entity) {
         enlistUpdating(entity, null, null);
     }
 
     @Override
-    public void enlistUpdating(ManagedObject entity, String propertyIdIfAny, Object preValue) {
+    public void enlistUpdating(final ManagedObject entity, final String propertyIdIfAny, final Object preValue) {
         _Xray.enlistUpdating(entity, interactionProviderProvider);
         val hasAlreadyBeenEnlisted = isEnlisted(entity);
         // we call this come what may;
@@ -418,7 +429,7 @@ implements
     }
 
     @Override
-    public void recognizeLoaded(ManagedObject entity) {
+    public void recognizeLoaded(final ManagedObject entity) {
         _Xray.recognizeLoaded(entity, interactionProviderProvider);
         CallbackFacet.callCallback(entity, LoadedCallbackFacet.class);
         postLifecycleEventIfRequired(entity, LoadedLifecycleEventFacet.class);
@@ -426,14 +437,14 @@ implements
     }
 
     @Override
-    public void recognizePersisting(ManagedObject entity) {
+    public void recognizePersisting(final ManagedObject entity) {
         _Xray.recognizePersisting(entity, interactionProviderProvider);
         CallbackFacet.callCallback(entity, PersistingCallbackFacet.class);
         postLifecycleEventIfRequired(entity, PersistingLifecycleEventFacet.class);
     }
 
     @Override
-    public void recognizeUpdating(ManagedObject entity) {
+    public void recognizeUpdating(final ManagedObject entity) {
         _Xray.recognizeUpdating(entity, interactionProviderProvider);
         CallbackFacet.callCallback(entity, UpdatedCallbackFacet.class);
         postLifecycleEventIfRequired(entity, UpdatedLifecycleEventFacet.class);
@@ -447,8 +458,8 @@ implements
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private void postLifecycleEventIfRequired(
-            ManagedObject adapter,
-            Class<? extends LifecycleEventFacet> lifecycleEventFacetClass) {
+            final ManagedObject adapter,
+            final Class<? extends LifecycleEventFacet> lifecycleEventFacetClass) {
 
         val lifecycleEventFacet = adapter.getSpecification().getFacet(lifecycleEventFacetClass);
         if(lifecycleEventFacet == null) {
