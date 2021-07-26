@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.transaction.changetracking;
+package org.apache.isis.persistence.jdo.integration.changetracking;
 
 import java.sql.Timestamp;
 import java.util.UUID;

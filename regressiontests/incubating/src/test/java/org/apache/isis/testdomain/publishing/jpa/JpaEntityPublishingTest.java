@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -55,6 +56,7 @@ implements HasPersistenceStandardJpa {
 
     @Inject private PublishingTestFactoryJpa testFactory;
 
+    @Disabled("'Entity Changes Tracking' currently not supported for JPA")
     @TestFactory @DisplayName("Execution Scenario")
     List<DynamicTest> generateTests() {
         return testFactory.generateTestsIncludeProgrammatic(this::given, this::verify);

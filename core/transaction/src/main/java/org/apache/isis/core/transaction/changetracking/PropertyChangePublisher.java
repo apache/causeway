@@ -18,26 +18,38 @@
  */
 package org.apache.isis.core.transaction.changetracking;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
- * @since 2 {@index}
+ * Responsible for collecting then immediately publishing changes to domain objects
+ * within a transaction, that is, notify publishing subscribers and call the various
+ * persistence call-back facets.
+ *
+ * @since 2.0 {index}
+ * @apiNote Introduced for JPA (EclipseLink implementation). More lightweight than
+ * {@link EntityChangeTracker}
  */
-public interface EntityChangeTrackerWithPreValue extends EntityChangeTracker {
+public interface PropertyChangePublisher {
 
     /**
-     * An override of {@link EntityChangeTracker#enlistUpdating(ManagedObject)}
+     * TODO update ... An override of {@link EntityChangeTracker#enlistUpdating(ManagedObject)}
      * where the caller already knows the old value (and so the
      * {@link EntityChangeTracker} does not need to capture the old value itself.
      *
-     * <p>
-     *     Introduced for JPA (EclipseLink implementation).
-     * </p>
-     *
      * @param entity - being enlisted
-     * @param propertyIdIfAny - the entity property id (its simple name); if non-null, indicates that the pre value is known
-     * @param preValue - the pre-value (could be null); only relevant if propertyNameIfAny is provided (non-null).
+     * @param preValue - the pre-value (could be null)
      */
-    void enlistUpdating(ManagedObject entity, String propertyIdIfAny, Object preValue);
-}
+    void onPreUpdate(ManagedObject entity, Can<PropertyChangeRecord> changeRecords);
 
+    void onPrePersist(ManagedObject entity);
+
+    void onPreRemove(ManagedObject entity);
+
+    void onPostPersist(ManagedObject entity);
+
+    void onPostUpdate(ManagedObject entity);
+
+    void onPostRemove(ManagedObject entity);
+
+}

@@ -23,6 +23,7 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 import org.apache.isis.persistence.jdo.applib.IsisModulePersistenceJdoApplib;
+import org.apache.isis.persistence.jdo.integration.changetracking.EntityChangeTrackerJdo;
 import org.apache.isis.persistence.jdo.metamodel.IsisModuleJdoMetamodel;
 
 @Configuration
@@ -32,9 +33,9 @@ import org.apache.isis.persistence.jdo.metamodel.IsisModuleJdoMetamodel;
         IsisModulePersistenceJdoApplib.class,
         IsisModuleJdoMetamodel.class,
 
+        // services
+        EntityChangeTrackerJdo.class,
 })
 public class IsisModuleJdoIntegration {
-
-
 
 }

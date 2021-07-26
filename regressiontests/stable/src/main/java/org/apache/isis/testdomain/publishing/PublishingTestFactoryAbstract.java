@@ -218,12 +218,12 @@ public abstract class PublishingTestFactoryAbstract {
                         PublishingTestContext.of("Wrapper Sync w/ Rules (expected to fail w/ DisabledException)",
                                 given, verifier, VerificationStage.FAILURE_CASE),
                         VerificationStage.POST_INTERACTION,
-                        this::wrapperSyncExecutionWithFailure),
-                publishingTest(
-                        PublishingTestContext.of("Wrapper Async w/ Rules (expected to fail w/ DisabledException)",
-                                given, verifier, VerificationStage.FAILURE_CASE),
-                        VerificationStage.POST_INTERACTION,
-                        this::wrapperAsyncExecutionWithFailure)
+                        this::wrapperSyncExecutionWithFailure)
+//                publishingTest(
+//                        PublishingTestContext.of("Wrapper Async w/ Rules (expected to fail w/ DisabledException)",
+//                                given, verifier, VerificationStage.FAILURE_CASE),
+//                        VerificationStage.POST_INTERACTION,
+//                        this::wrapperAsyncExecutionWithFailure)
                 );
 
         if(includeProgrammatic) {

@@ -32,47 +32,59 @@ import lombok.NonNull;
 import lombok.ToString;
 import lombok.val;
 
-
 @EqualsAndHashCode(of = {"bookmarkStr", "propertyId"})
 @ToString(of = {"bookmarkStr", "propertyId"})
-final class _PropertyChangeRecord {
+public final class PropertyChangeRecord {
 
     @Getter private final ManagedObject entity;
     @Getter private final ObjectAssociation property;
     @Getter private final Bookmark bookmark;
     @Getter private final String propertyId;
-    @Getter private _PreAndPostValue preAndPostValue;
+    @Getter private PreAndPostValue preAndPostValue;
 
     private final String bookmarkStr;
 
-    public static _PropertyChangeRecord of(
+    public static PropertyChangeRecord of(
             final @NonNull ManagedObject entity,
             final @NonNull ObjectAssociation property) {
-        return new _PropertyChangeRecord(entity, property);
+        return new PropertyChangeRecord(entity, property, null);
     }
 
-    private _PropertyChangeRecord(final ManagedObject entity, final ObjectAssociation property) {
+    public static PropertyChangeRecord of(
+            final @NonNull ManagedObject entity,
+            final @NonNull ObjectAssociation property,
+            final @NonNull PreAndPostValue preAndPostValue) {
+        return new PropertyChangeRecord(entity, property, preAndPostValue);
+    }
+
+    private PropertyChangeRecord(
+            final ManagedObject entity,
+            final ObjectAssociation property,
+            final PreAndPostValue preAndPostValue) {
         this.entity = entity;
         this.property = property;
         this.propertyId = property.getId();
 
         this.bookmark = ManagedObjects.bookmarkElseFail(entity);
         this.bookmarkStr = bookmark.toString();
+
+        this.preAndPostValue = preAndPostValue;
     }
 
     public String getMemberId() {
         return property.getFeatureIdentifier().getFullIdentityString();
     }
 
-    void setPreValue(final Object pre) {
-        preAndPostValue = _PreAndPostValue.pre(pre);
+    public void setPreValue(final Object pre) {
+        preAndPostValue = PreAndPostValue.pre(pre);
     }
 
-    void updatePreValue() {
+    public void updatePreValue() {
         setPreValue(getPropertyValue());
     }
 
-    void updatePostValue(/*final boolean isEntityDeleted*/) {
+    @Deprecated // unreliable logic, instead the caller should know if this originates from a delete event
+    public void updatePostValue() {
         preAndPostValue = EntityUtil.isDetachedOrRemoved(entity) //TODO[ISIS-2573] when detached, logic is wrong
                 ? preAndPostValue.withPost(IsisTransactionPlaceholder.DELETED)
                 : preAndPostValue.withPost(getPropertyValue());

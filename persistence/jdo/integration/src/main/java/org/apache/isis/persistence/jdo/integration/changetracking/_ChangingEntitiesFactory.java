@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.transaction.changetracking;
+package org.apache.isis.persistence.jdo.integration.changetracking;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,7 +40,7 @@ final class _ChangingEntitiesFactory {
     public static Optional<EntityChanges> createChangingEntities(
             final java.sql.Timestamp completedAt,
             final String userName,
-            final EntityChangeTrackerDefault entityChangeTracker) {
+            final EntityChangeTrackerJdo entityChangeTracker) {
 
         if(entityChangeTracker.getChangeKindByEnlistedAdapter().isEmpty()) {
             return Optional.empty();

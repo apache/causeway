@@ -32,35 +32,35 @@ public class PreAndPostValues_shouldAudit_Test {
 
     @Test
     public void just_created() {
-        val preAndPostValue = _PreAndPostValue.pre(IsisTransactionPlaceholder.NEW)
+        val preAndPostValue = PreAndPostValue.pre(IsisTransactionPlaceholder.NEW)
                 .withPost("Foo");
 
         assertTrue(preAndPostValue.shouldPublish());
     }
     @Test
     public void just_deleted() {
-        val preAndPostValue = _PreAndPostValue.pre("Foo")
+        val preAndPostValue = PreAndPostValue.pre("Foo")
                 .withPost(IsisTransactionPlaceholder.DELETED);
 
         assertTrue(preAndPostValue.shouldPublish());
     }
     @Test
     public void changed() {
-        val preAndPostValue = _PreAndPostValue.pre("Foo")
+        val preAndPostValue = PreAndPostValue.pre("Foo")
                 .withPost("Bar");
 
         assertTrue(preAndPostValue.shouldPublish());
     }
     @Test
     public void unchanged() {
-        val preAndPostValue = _PreAndPostValue.pre("Foo")
+        val preAndPostValue = PreAndPostValue.pre("Foo")
                 .withPost("Foo");
 
         assertFalse(preAndPostValue.shouldPublish());
     }
     @Test
     public void created_and_then_deleted() {
-        val preAndPostValue = _PreAndPostValue.pre(IsisTransactionPlaceholder.NEW)
+        val preAndPostValue = PreAndPostValue.pre(IsisTransactionPlaceholder.NEW)
                 .withPost(IsisTransactionPlaceholder.DELETED);
 
         assertFalse(preAndPostValue.shouldPublish());
