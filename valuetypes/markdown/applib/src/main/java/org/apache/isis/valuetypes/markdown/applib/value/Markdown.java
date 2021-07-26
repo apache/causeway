@@ -26,6 +26,8 @@ import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.value.HasHtml;
 import org.apache.isis.valuetypes.markdown.applib.jaxb.MarkdownJaxbAdapter;
 
+import lombok.Getter;
+
 /**
  * Immutable value type holding pre-rendered HTML.
  *
@@ -38,35 +40,32 @@ public class Markdown implements HasHtml, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public static Markdown valueOfMarkdown(String asciiDoc) {
-        return valueOfHtml(Converter.mdToHtml(asciiDoc));
+    public static Markdown valueOfMarkdown(String markdown) {
+        return new Markdown(markdown);
     }
 
-    public static Markdown valueOfHtml(String html) {
-        return new Markdown(html);
-    }
-
-    private final String html;
+    @Getter
+    private final String markdown;
 
     public Markdown() {
         this(null);
     }
 
-    public Markdown(String html) {
-        this.html = html!=null ? html : "";
+    public Markdown(String markdown) {
+        this.markdown = markdown !=null ? markdown : "";
     }
 
     public String title() {
-        return "Markdown[length="+html.length()+"]";
+        return "Markdown[length="+ markdown.length()+"]";
     }
 
     @Override
     public String asHtml() {
-        return html;
+        return Converter.mdToHtml(markdown);
     }
 
     public boolean isEqualTo(final Markdown other) {
-        return other != null && this.html.equals(other.html);
+        return other != null && this.markdown.equals(other.markdown);
     }
 
     @Override
@@ -82,12 +81,12 @@ public class Markdown implements HasHtml, Serializable {
 
     @Override
     public int hashCode() {
-        return html.hashCode();
+        return markdown.hashCode();
     }
 
     @Override
     public String toString() {
-        return "Markdown[length="+html.length()+", html="+html+"]";
+        return "Markdown[length="+ markdown.length()+", html="+ markdown +"]";
     }
 
 }
