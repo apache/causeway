@@ -8,23 +8,99 @@
 
 The optional xref:refguide:applib:index/services/tablecol/TableColumnOrderService.adoc[TableColumnOrderService] SPI service can be used to reorder columns in a table, either for a parented collection (owned by parent domain object) or a standalone collection (returned from an action invocation).
 
+== Parented Collections
+
 For example, suppose there is a `Customer` and an `Order`:
 
 [plantuml]
 ....
+hide empty members
+
 Customer "1" *-r-> "0..*" Order : "    orders"
 
 class Order {
-    int num
-    Date placedOn
-    Date shippedOn
-    State state
+    num: int
+    placedOn: Date
+    shippedOn: Date
+    state: State
+    amount: BigDecimal
 }
 ....
 
-The order of these properties of `Order`, when rendered in the context of its owning `Customer`, can be controlled using this implementation of `TableColumnOrderService`:
+The order of these properties of `Order`, when rendered in the context of its owning `Customer`, can be controlled using this implementation of `TableColumnOrderService`.
+
+
+
+Although xref:refguide:applib:index/services/tablecol/TableColumnOrderService.adoc[TableColumnOrderService] is an SPI, the framework also provides an out-of-the-box implementation that uses simple text files to specify the column order.
+These simple files can be reloaded dynamically during prototyping, so make it easy to change the order of columns (or hide columns completely).
+
+In the parented collections this file's name follows the format  "<ParentedClass>#<collectionId>.columnOrder.txt".
+In the example above it would therefore be called `Customer#orders.columnOrder.txt`, and would look something like:
+
+[source,text]
+.Customer#orders.columnOrder.txt
+----
+num
+placedOn
+state
+shippedOn
+----
+
+=== Commented out and unknown properties
+
+Note also that the following would return the same result:
+
+[source,text]
+.Customer#orders.columnOrder.txt
+----
+num
+placedOn
+#amount
+state
+shippedOn
+nonsense
+----
+
+Here the "amount" is commented out and so is excluded because the line is not an exact match.
+The same is true for "nonsense"; it doesn't match any of the original properties of the `Order` class.
+
+
+== Standalone Collections
+
+For parented collections, the file name should be called `<Class>.columnOrder.txt`.
+
+For example, suppose that the `Order` entity is returned from various repository queries as a standalone collection, with a default ordering of properties inferred from the xref:refguide:applib:index/annotation/PropertyLayout.adoc#sequence[@PropertyLayout#sequence] annotation or by reading from `Order.layout.xml`.
+
+This column order can be changed using this file:
+
+[source,text]
+.Order.columnOrder.txt
+----
+num
+placedOn
+state
+----
+
+
+== Customising the Default Implementation
+
+The above behaviour is provided by the xref:refguide:core:index/metamodel/services/tablecol/TableColumnOrderServiceUsingTxtFile.adoc[TableColumnOrderServiceUsingTxtFile] implementation of the xref:refguide:applib:index/services/tablecol/TableColumnOrderService.adoc[TableColumnOrderService] SPI.
+
+If necessary, the class can be subclassed to change the convention for searching for class files; just make sure that the subclass has an earlier `Precedence` than the framework so that it is picked up first.
+
+You could of course also use it as the inspiration of your own more sophisticated implementation.
+
+
+
+
+== Fully Custom Implementation
+
+If the out-of-the-box implementation provided by provided by the xref:refguide:core:index/metamodel/services/tablecol/TableColumnOrderServiceUsingTxtFile.adoc[TableColumnOrderServiceUsingTxtFile] is too inflexible, then it can be overridden with a fully custom implementation.
+
+For example:
 
 [source,java]
+.TableColumnOrderServiceForCustomerOrders.java
 ----
 @Service
 @Priority(PriorityPrecedence.EARLY)                     // <.>
@@ -51,4 +127,4 @@ public class TableColumnOrderServiceForCustomerOrders
 <.> represents the collection that this service can advise upon
 <.> provides no advice
 
-
+(Of course, this particular implementation does nothing that is not also provided by the default implementation).
