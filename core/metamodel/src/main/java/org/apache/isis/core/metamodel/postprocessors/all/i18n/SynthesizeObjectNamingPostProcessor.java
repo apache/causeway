@@ -25,7 +25,6 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.all.i8n.noun.NounForm;
 import org.apache.isis.core.metamodel.facets.all.i8n.noun.NounForms;
@@ -57,11 +56,11 @@ extends ObjectSpecificationPostProcessorAbstract {
         }
 
         val topRank = objectSpecification
-        .lookupFacet(ObjectNamedFacet.class)
-        .flatMap(Facet::getSharedFacetRanking)
-        .map(facetRanking->facetRanking.getTopRank(ObjectNamedFacet.class))
-        .orElse(Can.empty())
-        .reverse(); // historically last have higher precedence, so when reverted we can use findFirst logic
+                .getFacetRanking(ObjectNamedFacet.class) // don't use lookupFacet, as that would search up the
+                                                         // inheritance hierarchy (which we don't want here)
+                .map(facetRanking->facetRanking.getTopRank(ObjectNamedFacet.class))
+                .orElse(Can.empty())
+                .reverse(); // historically last have higher precedence, so when reverted we can use findFirst logic
 
         val singular = topRank
                 .stream()
