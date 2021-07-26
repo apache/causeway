@@ -21,6 +21,7 @@ package org.apache.isis.testdomain.publishing;
 import javax.inject.Inject;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.VerificationStage;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
@@ -43,8 +44,6 @@ implements HasPersistenceStandard {
 
     protected void verify(final VerificationStage verificationStage) {
         switch(verificationStage) {
-        case PRE_COMMIT:
-            break;
         case FAILURE_CASE:
             assertEquals(0, getCreated(kvStore));
             assertEquals(0, getDeleted(kvStore));
@@ -52,7 +51,9 @@ implements HasPersistenceStandard {
             assertEquals(0, getUpdated(kvStore));
             assertEquals(0, getModified(kvStore));
             break;
-        case POST_COMMIT_WHEN_PROGRAMMATIC:
+        case PRE_COMMIT:
+        case POST_INTERACTION:
+            break;
         case POST_COMMIT:
             assertEquals(0, getCreated(kvStore));
             assertEquals(0, getDeleted(kvStore));
@@ -61,7 +62,8 @@ implements HasPersistenceStandard {
             //assertEquals(1, getModified(kvStore)); // not reproducible
             break;
         default:
-            // ignore ... no checks
+            // if hitting this, the caller is requesting a verification stage, we are providing no case for
+            fail(String.format("internal error, stage not verified: %s", verificationStage));
         }
     }
 

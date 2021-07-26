@@ -22,6 +22,8 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.iactn.ActionInvocation;
@@ -54,6 +56,9 @@ implements HasPersistenceStandard {
         case FAILURE_CASE:
             assertHasExecutionEntries(Can.empty());
             break;
+        case PRE_COMMIT:
+        case POST_INTERACTION:
+            break;
         case POST_COMMIT:
             val bookClass = bookClass();
             Interaction interaction = null;
@@ -69,7 +74,8 @@ implements HasPersistenceStandard {
                     ));
             break;
         default:
-            // ignore ... no checks
+            // if hitting this, the caller is requesting a verification stage, we are providing no case for
+            fail(String.format("internal error, stage not verified: %s", verificationStage));
         }
     }
 

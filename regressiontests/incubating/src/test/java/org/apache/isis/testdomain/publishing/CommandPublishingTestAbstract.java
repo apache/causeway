@@ -23,6 +23,8 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.schema.cmd.v2.CommandDto;
@@ -49,7 +51,10 @@ implements HasPersistenceStandard {
         case FAILURE_CASE:
             assertHasCommandEntries(Can.empty());
             break;
+        case PRE_COMMIT:
         case POST_INTERACTION:
+            break;
+        case POST_COMMIT:
 
 
 //            Interaction interaction = null;
@@ -73,7 +78,8 @@ implements HasPersistenceStandard {
             assertHasCommandEntries(Can.of(command));
             break;
         default:
-            // ignore ... no checks
+            // if hitting this, the caller is requesting a verification stage, we are providing no case for
+            fail(String.format("internal error, stage not verified: %s", verificationStage));
         }
     }
 

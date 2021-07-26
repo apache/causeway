@@ -20,6 +20,8 @@ package org.apache.isis.testdomain.publishing;
 
 import javax.inject.Inject;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.VerificationStage;
 import org.apache.isis.testdomain.publishing.subscriber.EntityPropertyChangeSubscriberForTesting;
@@ -39,18 +41,19 @@ implements HasPersistenceStandard {
 
     protected void verify(final VerificationStage verificationStage) {
         switch(verificationStage) {
-        case PRE_COMMIT:
-            break;
         case FAILURE_CASE:
             assertHasPropertyChangeEntries(Can.empty());
             break;
-        case POST_COMMIT_WHEN_PROGRAMMATIC:
+        case PRE_COMMIT:
+        case POST_INTERACTION:
+            break;
         case POST_COMMIT:
             assertHasPropertyChangeEntries(Can.of(
                     formatPersistenceStandardSpecificCapitalize("%s Product/name: 'Sample Book' -> 'Book #2'")));
             break;
         default:
-            // ignore ... no checks
+            // if hitting this, the caller is requesting a verification stage, we are providing no case for
+            fail(String.format("internal error, stage not verified: %s", verificationStage));
         }
     }
 
