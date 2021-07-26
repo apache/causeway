@@ -100,40 +100,55 @@ Also remember to change the `<scope>test</scope>` to `<scope>compile</scope>`.
 
 Checks for rules defined against domain classes reside in the `ArchitectureDomainRules` library.
 
-* logical type name:
+* logical type name (strongly recommended)
++
+This ensures that persisted/serialized bookmarks of domain objects are stable even if the domain class' physical canonical name changes over time due to refactoring etc.:
 
 ** `every_DomainObject_must_specify_logicalTypeName()`
 ** `every_DomainService_must_specify_logicalTypeName()`
 
-* layout annotations:
+* allow injected fields in view models (strongly recommended)
++
+Ensures that view models safely ignore injected services.
 
-** `every_DomainObject_must_also_be_annotated_with_DomainObjectLayout()`
-** `every_DomainService_must_also_be_annotated_with_DomainServiceLayout()`
+** `every_injected_field_of_jaxb_view_model_must_be_annotated_with_XmlTransient()`
+** `every_injected_field_of_serializable_view_model_must_be_transient()`
 
-* mixin naming and coding conventions
+* consistency with repository finders (recommended)
++
+Requires that the caller of a repository finder handle the case that there may be no such object in the database:
+
+** `every_finder_method_in_Repository_must_return_either_Collection_or_Optional()`
+
+* mixin naming and coding conventions (recommended)
++
+For teams that rely on the `Mixee_memberName` convention to find mixins of domain objects:
 
 ** `every_Action_mixin_must_follow_naming_convention()`
 ** `every_Property_mixin_must_follow_naming_convention()`
 ** `every_Collection_mixin_must_follow_naming_convention()`
 
-* repository class naming/annotation conventions
+* layout annotations (optional)
++
+For teams that prefer to use annotations instead of layout files:
+
+** `every_DomainObject_must_also_be_annotated_with_DomainObjectLayout()`
+** `every_DomainService_must_also_be_annotated_with_DomainServiceLayout()`
+
+
+* repository class naming/annotation conventions (optional)
++
+For teams that prefer that repositories are easily identifiable by their name `XxxRepository`, (and are annotated accordingly):
 
 ** `every_Repository_must_follow_naming_conventions()`
 ** `every_class_named_Repository_must_be_annotated_correctly()`
 
+* controller class naming/annotation conventions (optional)
++
+For teams that prefer that custom controllers are easily identifiable by their name `XxxController`, (and are annotated accordingly):
 
-* controller class naming/annotation conventions
 ** `every_Controller_must_be_follow_naming_conventions()`
 ** `every_class_named_Controller_must_be_annotated_correctly()`
-
-* allow injected fields in view models:
-
-** `every_injected_field_of_jaxb_view_model_must_be_annotated_with_XmlTransient()`
-** `every_injected_field_of_serializable_view_model_must_be_transient()`
-
-* consistency with repository finders:
-
-** `every_finder_method_in_Repository_must_return_either_Collection_or_Optional()`
 
 
 None of these rules take any arguments, so simply include (as a static field) those that you wish to enforce.
@@ -142,57 +157,85 @@ None of these rules take any arguments, so simply include (as a static field) th
 
 Entity rule checks are provided for both xref:pjpa::about.adoc[] and xref:pjdo::about.adoc[], in `ArchitectureJpaRules` and `ArchitectureJdoRules` respectively:
 
-* ensure conformance of persistence vs Isis annotations:
-
-** `every_jpa_Entity_must_be_annotated_with_DomainObject_nature_of_ENTITY()`
-** `every_jdo_PersistenceCapable_must_be_annotated_with_DomainObject_nature_of_ENTITY`
-
-* ensure entities can be referenced in JAXB view models:
-** `every_jpa_Entity_must_be_annotated_with_XmlJavaAdapter_of_PersistentEntityAdapter()`
-** `every_jdo_PersistenceCapable_must_be_annotated_as_XmlJavaAdapter_PersistentEntityAdapter()`
-
-* ensure JPA entities can support auditing and dependency injection:
+* ensure JPA entities can support auditing and dependency injection (strongly recommended):
++
+Required in almost all cases:
 
 ** `every_jpa_Entity_must_be_annotated_as_an_IsisEntityListener()`
 
-* ensure JPA enum fields are persisted as strings:
+* ensure entities can be referenced in JAXB view models (strongly recommended)
++
+Required to allow JAXB view models to transparently reference entities:
 
-** `every_enum_field_of_jpa_Entity_must_be_annotated_with_Enumerable_STRING()`
+** `every_jpa_Entity_must_be_annotated_with_XmlJavaAdapter_of_PersistentEntityAdapter()`
+** `every_jdo_PersistenceCapable_must_be_annotated_as_XmlJavaAdapter_PersistentEntityAdapter()`
 
-* ensure entities can be used in ``SortedSet`` parented collections (so render in a sensible manner):
-
-** `every_jpa_Entity_must_implement_Comparable()`
-** `every_jdo_PersistenceCapable_must_implement_Comparable()`
-
-* ensure entities have a unique business key:
-
-** `every_jpa_Entity_must_be_annotated_as_Table_with_uniqueConstraints()`
-** `every_jdo_PersistenceCapable_must_be_annotated_as_Uniques_or_Unique()`
-
-* ensure JPA entity defines a surrogate key:
+* ensure JPA entity defines a surrogate key (strongly recommended):
++
+Enforces a very common convention for JPA entities:
 
 ** `every_jpa_Entity_must_have_an_id_field()`
 
-* ensure if JDO entity has a surrogate key then its annotations are consistent:
 
-** `every_jdo_PersistenceCapable_with_DATASTORE_identityType_must_be_annotated_as_DataStoreIdentity()`
-
-* enable injected fields in entities:
-
-** `every_injected_field_of_jpa_Entity_must_be_annotated_with_Transient()`
-** `every_injected_field_of_jdo_PersistenceCapable_must_be_annotated_with_NotPersistent()`
-
-* encourage entities be organised into schemas:
+* encourage entities be organised into schemas (recommended):
++
+for teams adopting a "(micro) service-oriented" mindset:
 
 ** `every_jpa_Entity_must_be_annotated_as_Table_with_schema()`
 ** `every_jdo_PersistenceCapable_must_have_schema()`
 
-* encourage optimistic locking:
+
+* ensure JPA enum fields are persisted as strings (recommended):
++
+For teams that prefer to query the database with enum values persisted as strings rather than as ordinal numbers:
+
+** `every_enum_field_of_jpa_Entity_must_be_annotated_with_Enumerable_STRING()`
+
+
+* ensure entities can be used in ``SortedSet`` parented collections (recommended):
++
+For teams that like to use `SortedSet` for parented collections, and rely on the entity to render itself in a "sensible" order:
+
+** `every_jpa_Entity_must_implement_Comparable()`
+** `every_jdo_PersistenceCapable_must_implement_Comparable()`
+
+* ensure entities have a unique business key (recommended):
++
+For teams that insist on business keys in addition to surrogate keys
+
+** `every_jpa_Entity_must_be_annotated_as_Table_with_uniqueConstraints()`
+** `every_jdo_PersistenceCapable_must_be_annotated_as_Uniques_or_Unique()`
+
+* ensure conformance of persistence vs Isis annotations (optional)
++
+For teams that like to emphasise entities vs view models:
+
+** `every_jpa_Entity_must_be_annotated_with_DomainObject_nature_of_ENTITY()`
+** `every_jdo_PersistenceCapable_must_be_annotated_with_DomainObject_nature_of_ENTITY`
+
+* ensure if JDO entity has a surrogate key then its annotations are consistent (optional):
++
+For teams that like to be explicit about the use of surrogate keys:
+
+** `every_jdo_PersistenceCapable_with_DATASTORE_identityType_must_be_annotated_as_DataStoreIdentity()`
+
+* enable injected fields in entities (optional):
++
+For teams that use type-safe queries (and want to ensure that services do not appear superfluously as fields in the "QXxx" classes):
+
+** `every_injected_field_of_jpa_Entity_must_be_annotated_with_Transient()`
+** `every_injected_field_of_jdo_PersistenceCapable_must_be_annotated_with_NotPersistent()`
+
+* encourage optimistic locking (optional):
++
+For teams that prefer optimistic locking as a standard everywhere:
 
 ** `every_jpa_Entity_must_have_a_version_field()`
 ** `every_jdo_PersistenceCapable_must_be_annotated_with_Version()`
 
-* encourage static factory methods for entities:
+* encourage static factory methods for entities (optional):
++
+For teams that prefer the use of factory methods to vanilla constructors:
 
 ** `every_jpa_Entity_must_have_protected_no_arg_constructor()`
 
