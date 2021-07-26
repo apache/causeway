@@ -173,7 +173,9 @@ public class DomainEventHelper {
 
         val constructors = _Reflect.getPublicConstructors(type);
 
-        val noArgConstructor = constructors.filter(paramCount(0)).getFirst().orElse(null);
+        val noArgConstructor = constructors
+                .filter(paramCount(0))
+                .getFirst().orElse(null);
         if(noArgConstructor!=null) {
 
             final Object event = invokeConstructor(noArgConstructor);
@@ -185,10 +187,21 @@ public class DomainEventHelper {
             return ade;
         }
 
+        val oneArgConstructor = constructors
+                .filter(paramCount(1)
+                        .and(paramAssignableFrom(0, source.getClass())))
+                .getFirst().orElse(null);
+        if(oneArgConstructor!=null) {
 
-        // else
+            final Object event = invokeConstructor(oneArgConstructor, source);
+            final ActionDomainEvent<S> ade = uncheckedCast(event);
 
-        val updateEventConstructor = constructors
+            ade.setIdentifier(identifier);
+            ade.setArguments(asList(arguments));
+            return ade;
+        }
+
+        val threeArgConstructor = constructors
                 .filter(paramCount(3)
                         .and(paramAssignableFrom(0, source.getClass()))
                         .and(paramAssignableFrom(1, Identifier.class))
@@ -197,12 +210,12 @@ public class DomainEventHelper {
                 .getFirst()
                 .orElse(null);
 
-        if(updateEventConstructor!=null) {
-            val event = invokeConstructor(updateEventConstructor, source, identifier, arguments);
+        if(threeArgConstructor!=null) {
+            val event = invokeConstructor(threeArgConstructor, source, identifier, arguments);
             return uncheckedCast(event);
         }
 
-        throw new NoSuchMethodException(type.getName()+".<init>(? super " + source.getClass().getName() + ", " + Identifier.class.getName() + ", [Ljava.lang.Object;)");
+        throw new NoSuchMethodException(type.getName()+".<init>(...)");
     }
 
     // same as in ActionDomainEvent's constructor.
@@ -267,14 +280,15 @@ public class DomainEventHelper {
             final @NonNull Identifier identifier,
             final S source,
             final T oldValue,
-            final T newValue) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException  {
+            final T newValue) throws NoSuchMethodException, SecurityException, IllegalArgumentException {
 
         val constructors = _Reflect.getPublicConstructors(type);
 
-        val noArgConstructors = constructors.filter(paramCount(0));
-
-        for (val constructor : noArgConstructors) {
-            final Object event = invokeConstructor(constructor);
+        val noArgonstructor = constructors
+                .filter(paramCount(0))
+                .getFirst().orElse(null);
+        if(noArgonstructor != null) {
+            final Object event = invokeConstructor(noArgonstructor);
             final PropertyDomainEvent<S, T> pde = uncheckedCast(event);
             if(source!=null) {
                 pde.initSource(source);
@@ -285,22 +299,34 @@ public class DomainEventHelper {
             return pde;
         }
 
+        val oneArgConstructor = constructors
+                .filter(paramCount(1)
+                        .and(paramAssignableFrom(0, source.getClass())))
+                .getFirst().orElse(null);
+        if(oneArgConstructor != null) {
+            final Object event = invokeConstructor(oneArgConstructor, source);
+            final PropertyDomainEvent<S, T> pde = uncheckedCast(event);
+            pde.setIdentifier(identifier);
+            pde.setOldValue(oldValue);
+            pde.setNewValue(newValue);
+            return pde;
+        }
+
         // else
-        val updateEventConstructors = constructors
+        val fourArgConstructor = constructors
                 .filter(paramCount(4)
                         .and(paramAssignableFrom(0, source.getClass()))
                         .and(paramAssignableFrom(1, Identifier.class))
                         .and(paramAssignableFromValue(2, oldValue))
                         .and(paramAssignableFromValue(3, newValue))
-                        );
-
-        for (val constructor : updateEventConstructors) {
-            val event = invokeConstructor(constructor, source, identifier, oldValue, newValue);
+                ).getFirst().orElse(null);
+        if(fourArgConstructor != null) {
+            val event = invokeConstructor(fourArgConstructor, source, identifier, oldValue, newValue);
             return uncheckedCast(event);
         }
 
         // else
-        throw new NoSuchMethodException(type.getName()+".<init>(? super " + source.getClass().getName() + ", " + Identifier.class.getName() + ", java.lang.Object, java.lang.Object)");
+        throw new NoSuchMethodException(type.getName()+".<init>(...)");
     }
 
 
@@ -345,10 +371,11 @@ public class DomainEventHelper {
 
         val constructors = _Reflect.getPublicConstructors(type);
 
-        val noArgConstructors = constructors.filter(paramCount(0));
-
-        for (val constructor : noArgConstructors) {
-            final Object event = invokeConstructor(constructor);
+        val noArgConstructor = constructors
+                .filter(paramCount(0))
+                .getFirst().orElse(null);
+        if(noArgConstructor != null) {
+            final Object event = invokeConstructor(noArgConstructor);
             final CollectionDomainEvent<S, T> cde = uncheckedCast(event);
 
             cde.initSource(source);
@@ -356,21 +383,33 @@ public class DomainEventHelper {
             return cde;
         }
 
+        val oneArgConstructor = constructors
+                .filter(paramCount(1)
+                        .and(paramAssignableFrom(0, source.getClass())))
+                .getFirst().orElse(null);
+        if(oneArgConstructor != null) {
+            final Object event = invokeConstructor(oneArgConstructor, source);
+            final CollectionDomainEvent<S, T> cde = uncheckedCast(event);
+
+            cde.setIdentifier(identifier);
+            return cde;
+        }
+
         // else
         // search for constructor accepting source, identifier
-        val updateEventConstructors = constructors
-                .filter(paramCount(4)
+        val twoArgConstructor = constructors
+                .filter(paramCount(2)
                         .and(paramAssignableFrom(0, source.getClass()))
                         .and(paramAssignableFrom(1, Identifier.class))
-                        );
-
-        for (val constructor : updateEventConstructors) {
-            val event = invokeConstructor(constructor, source, identifier);
+                        )
+                .getFirst().orElse(null);
+        if(twoArgConstructor != null) {
+            val event = invokeConstructor(twoArgConstructor, source, identifier);
             return uncheckedCast(event);
         }
 
         // else
-        throw new NoSuchMethodException(type.getName()+".<init>(? super " + source.getClass().getName() + ", " + Identifier.class.getName() + ", java.lang.Object)");
+        throw new NoSuchMethodException(type.getName()+".<init>(...)");
     }
 
     private static <T> T invokeConstructor(
