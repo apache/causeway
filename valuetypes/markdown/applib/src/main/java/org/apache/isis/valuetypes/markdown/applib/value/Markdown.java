@@ -56,7 +56,7 @@ public class Markdown implements HasHtml, Serializable {
     }
 
     public String title() {
-        return asHtml();
+        return getMarkdown();
     }
 
     @Override

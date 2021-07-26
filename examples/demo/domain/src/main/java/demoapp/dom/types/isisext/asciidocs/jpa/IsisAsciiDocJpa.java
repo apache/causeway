@@ -30,8 +30,6 @@ import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.springframework.context.annotation.Profile;
-
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Optionality;
@@ -41,6 +39,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
+import org.springframework.context.annotation.Profile;
 
 import demoapp.dom.types.isisext.asciidocs.persistence.IsisAsciiDocEntity;
 import lombok.Getter;
@@ -84,7 +83,7 @@ public class IsisAsciiDocJpa
     private AsciiDoc readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                            // <.>
-    @PropertyLayout(hidden = Where.ALL_TABLES, fieldSetId = "editable-properties", sequence = "1")
+    @PropertyLayout(hidden = Where.ALL_TABLES, fieldSetId = "editable-properties", sequence = "1", multiLine = 5)
     @Column(nullable = false) @Lob @Basic(fetch=FetchType.LAZY)
     @Getter @Setter
     private AsciiDoc readWriteProperty;
@@ -96,7 +95,7 @@ public class IsisAsciiDocJpa
     private AsciiDoc readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
-    @PropertyLayout(hidden = Where.ALL_TABLES, fieldSetId = "optional-properties", sequence = "2")
+    @PropertyLayout(hidden = Where.ALL_TABLES, fieldSetId = "optional-properties", sequence = "2", multiLine = 5)
     @Column(nullable = true) @Lob @Basic(fetch=FetchType.LAZY)
     @Getter @Setter
     private AsciiDoc readWriteOptionalProperty;

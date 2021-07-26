@@ -25,13 +25,13 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.string.MultiLineStringPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 
 /**
  * Panel for rendering scalars of type {@link org.apache.isis.applib.value.Markup}.
  */
-public class ParentedMarkupPanel extends ScalarPanelTextFieldParseableAbstract {
+public class ParentedMarkupPanel extends MultiLineStringPanel {
 
     private static final long serialVersionUID = 1L;
     private final transient MarkupComponentFactory markupComponentFactory;
@@ -82,6 +82,5 @@ public class ParentedMarkupPanel extends ScalarPanelTextFieldParseableAbstract {
     protected MarkupComponent createMarkupComponent(final String id) {
         return markupComponentFactory.newMarkupComponent(id, getModel());
     }
-
 
 }
