@@ -58,6 +58,7 @@ extends ObjectSpecificationPostProcessorAbstract {
 
         val topRank = objectSpecification
         .lookupFacet(ObjectNamedFacet.class)
+        .filter(x -> x.getFacetHolder() == objectSpecification) // insist is for this objectSpec (not a superclass')
         .flatMap(Facet::getSharedFacetRanking)
         .map(facetRanking->facetRanking.getTopRank(ObjectNamedFacet.class))
         .orElse(Can.empty())
