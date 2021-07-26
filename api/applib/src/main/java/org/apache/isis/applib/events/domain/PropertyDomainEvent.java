@@ -87,6 +87,14 @@ public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
     }
 
     /**
+     * Subtypes can define a one-arg constructor (for nested non-static classes of nested non-static mixins);
+     * the framework sets state via (non-API) setters.
+     */
+    public PropertyDomainEvent(final S source) {
+        super(source);
+    }
+
+    /**
      * The current (pre-modification) value of the property.
      *
      * <p>

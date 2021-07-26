@@ -21,8 +21,6 @@ package org.apache.isis.applib.events.domain;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
 
-import lombok.Getter;
-
 /**
  * Fired whenever the framework interacts with a domain object's collection.
  *
@@ -73,6 +71,14 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> 
      * via (non-API) setters.
      */
     public CollectionDomainEvent() {
+    }
+
+    /**
+     * Subtypes can define a one-arg constructor (for nested non-static classes of nested non-static mixins);
+     * the framework sets state via (non-API) setters.
+     */
+    public CollectionDomainEvent(final S source) {
+        super(source);
     }
 
 

@@ -73,6 +73,17 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
         this(null, null);
     }
 
+    /**
+     * If used then the framework will set the remaining state via (non-API) setters.
+     *
+     * <p>
+     *     Provided to allow nested non-static implementations, for use in nested non-static mixins.
+     * </p>
+     */
+    public AbstractDomainEvent(final S source) {
+        this(source, null);
+    }
+
     public AbstractDomainEvent(
             final S source,
             final Identifier identifier) {
