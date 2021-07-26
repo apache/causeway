@@ -1,5 +1,6 @@
 * xref:pjpa:ROOT:setup-and-configuration.adoc[Setup and Configuration]
 * xref:pjpa:ROOT:weaving.adoc[Weaving]
+* xref:pjpa:ROOT:caching.adoc[Caching]
 * xref:pjpa:ROOT:db-schemas.adoc[DB Schemas]
 * xref:pjpa:ROOT:mapping-guide.adoc[Mapping Guide]
 * xref:pjpa:ROOT:dependency-injection.adoc[Dependency Injection]

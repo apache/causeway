@@ -120,6 +120,17 @@
       ]
     },
     {
+      "name": "eclipselink.cache.shared.default",
+      "values": [
+        {
+          "value": "true"
+        },
+        {
+          "value": "false"
+        }
+      ]
+    },
+    {
       "name": "eclipselink.jdbc.batch-writing",
       "values": [
         {

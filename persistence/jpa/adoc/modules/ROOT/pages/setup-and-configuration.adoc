@@ -63,7 +63,7 @@ It is also possible to programmatically define a `DataSource`; see the link:http
 
 == EclipseLink Configuration Properties
 
-The following configuration properties are fixed and cannot (as of this release) be overridden:
+The following configuration properties are set by default:
 
 * link:https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#weaving[eclipselink.weaving]
 +
@@ -77,7 +77,9 @@ is set to `create-or-extend-tables`
 +
 is set to an Apache Isis implementation, to assist with dependency injection into entities.
 
-To set other EclipseLink configuration properties is possible though not convenient: use a subclass of xref:refguide:persistence:index/jpa/eclipselink/IsisModuleJpaEclipselink.adoc[] and override `getVendorProperties()`.
+Generally these should not be changed, though if there is a requirement, then provide a subclasse alternate implementation of `org.apache.isis.persistence.jpa.eclipselink.config.ElSettings` with an earlier `@Priority` precedence.
+
+To set other EclipseLink configuration properties, use a subclass of xref:refguide:persistence:index/jpa/eclipselink/IsisModuleJpaEclipselink.adoc[] and override `getVendorProperties()`.
 
 
 == Other Configuration Properties
