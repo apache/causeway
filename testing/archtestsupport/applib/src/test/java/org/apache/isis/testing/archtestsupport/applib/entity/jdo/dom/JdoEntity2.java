@@ -16,9 +16,9 @@ import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 @Version
 @DomainObject(nature = Nature.ENTITY)
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
-public abstract class JdoEntity2 implements Comparable<JdoEntity2> {
+public abstract class JdoEntity2<X extends JdoEntity2<X>> implements Comparable<X> {
 
-    private final String name;
+    protected final String name;
 
     // abstract classes do not need to have no-arg constructor
     public JdoEntity2(final String name) {

@@ -25,7 +25,6 @@ import lombok.RequiredArgsConstructor;
 @Version
 @Uniques(@Unique(name = "name", members = {"name"}))
 @DomainObject(nature = Nature.ENTITY)
-@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 public class JdoEntity implements Comparable<JdoEntity> {
 

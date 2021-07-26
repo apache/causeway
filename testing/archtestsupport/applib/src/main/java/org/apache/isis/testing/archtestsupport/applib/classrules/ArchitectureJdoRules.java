@@ -8,16 +8,15 @@ import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaAnnotation;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaEnumConstant;
-import com.tngtech.archunit.core.domain.JavaModifier;
 import com.tngtech.archunit.lang.ArchRule;
 
 import org.apache.isis.applib.annotation.DomainObject;
 
+import static com.tngtech.archunit.base.DescribedPredicate.not;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 import lombok.experimental.UtilityClass;
 import lombok.val;
-import static org.apache.isis.testing.archtestsupport.applib.classrules.CommonPredicates.haveNoArgProtectedConstructor;
 
 /**
  * A library of architecture tests to ensure coding conventions are followed for classes annotated with
@@ -43,10 +42,16 @@ public class ArchitectureJdoRules {
      * This rule requires that classes annotated with the JDO {@link javax.jdo.annotations.PersistenceCapable} annotation
      * must also be annotated with the JDO {@link javax.jdo.annotations.Version} annotation (in support of optimistic
      * locking checks).
+     *
+     * <p>
+     *     The rule does <i>not</i> apply to any entities that are subtype entities where there
+     *     is a supertype entity.
+     * </p>
      */
     public static ArchRule every_jdo_PersistenceCapable_must_be_annotated_with_Version() {
         return classes()
                 .that().areAnnotatedWith(javax.jdo.annotations.PersistenceCapable.class)
+                .and(not(areSubtypeEntities()))
                 .should().beAnnotatedWith(javax.jdo.annotations.Version.class);
     }
 
@@ -82,8 +87,8 @@ public class ArchitectureJdoRules {
 
     /**
      * This rule requires that classes annotated with the JDO {@link javax.jdo.annotations.PersistenceCapable} annotation
-     * must also be annotated with the JDO {@link javax.jdo.annotations.Uniques} or {@link javax.jdo.annotations.Unique}
-     * constraints.
+     * and is not a subtype entity, must also be annotated with the JDO {@link javax.jdo.annotations.Uniques} or
+     * {@link javax.jdo.annotations.Unique} constraints.
      *
      * <p>
      * This is so that entities will have an alternative business key in addition to the system-defined surrogate
@@ -93,6 +98,7 @@ public class ArchitectureJdoRules {
     public static ArchRule every_jdo_PersistenceCapable_must_be_annotated_as_Uniques_or_Unique() {
         return classes()
                 .that().areAnnotatedWith(javax.jdo.annotations.PersistenceCapable.class)
+                .and(not(areSubtypeEntities()))
                 .should().beAnnotatedWith(javax.jdo.annotations.Uniques.class)
                 .orShould().beAnnotatedWith(javax.jdo.annotations.Unique.class);
     }
@@ -187,6 +193,21 @@ public class ArchitectureJdoRules {
         };
     }
 
+    static DescribedPredicate<? super JavaClass> areSubtypeEntities() {
+        return new DescribedPredicate<JavaClass>("are subtype entities ") {
+            @Override public boolean apply(final JavaClass input) {
+                val superclassIfAny = input.getSuperclass();
+                if(!superclassIfAny.isPresent()) {
+                    return false;
+                }
+                val superType = superclassIfAny.get();
+                val superClass = superType.toErasure();
+                val persistenceCapableIfAny = superClass
+                        .tryGetAnnotationOfType(PersistenceCapable.class);
+                return persistenceCapableIfAny.isPresent();
+            }
+        };
+    }
 
 
 }
