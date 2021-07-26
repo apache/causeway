@@ -27,6 +27,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
 
+import static com.tngtech.archunit.base.DescribedPredicate.not;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 import lombok.experimental.UtilityClass;
@@ -132,6 +133,7 @@ public class ArchitectureJpaRules {
     public static ArchRule every_jpa_Entity_must_be_annotated_as_Table_with_uniqueConstraints() {
         return classes()
                 .that().areAnnotatedWith(Entity.class)
+                .and(not(areSubtypeEntities()))
                 .should().beAnnotatedWith(Table_uniqueConstraints());
     }
 
@@ -289,5 +291,21 @@ public class ArchitectureJpaRules {
                 .should(haveNoArgProtectedConstructor());
     }
 
+
+    static DescribedPredicate<? super JavaClass> areSubtypeEntities() {
+        return new DescribedPredicate<JavaClass>("are subtype entities ") {
+            @Override public boolean apply(final JavaClass input) {
+                val superclassIfAny = input.getSuperclass();
+                if(!superclassIfAny.isPresent()) {
+                    return false;
+                }
+                val superType = superclassIfAny.get();
+                val superClass = superType.toErasure();
+                val entityIfAny = superClass
+                        .tryGetAnnotationOfType(Entity.class);
+                return entityIfAny.isPresent();
+            }
+        };
+    }
 
 }
