@@ -26,14 +26,13 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -138,7 +137,6 @@ public class UserService {
      * @see #currentUser()
      * @see #supportsImpersonation()
      * @see #impersonateUser(String, List)
-     * @see #impersonatedUserIfAny()
      * @see #stopImpersonating()
      */
     public boolean isImpersonating() {
@@ -158,7 +156,6 @@ public class UserService {
      * </p>
      *
      * @see #impersonateUser(String, List)
-     * @see #impersonatedUserIfAny()
      * @see #isImpersonating()
      * @see #stopImpersonating()
      *
@@ -170,9 +167,16 @@ public class UserService {
     }
 
     private Optional<ImpersonatedUserHolder> impersonatingHolder() {
-        return impersonatedUserHolders.stream()
-                .filter(ImpersonatedUserHolder::supportsImpersonation)
-                .findFirst();
+        for (ImpersonatedUserHolder impersonatedUserHolder : impersonatedUserHolders) {
+            try {
+                if (impersonatedUserHolder.supportsImpersonation()) {
+                    return Optional.of(impersonatedUserHolder);
+                }
+            } catch (Exception ignore) {
+                // ignore
+            }
+        }
+        return Optional.empty();
     }
 
     /**
@@ -191,7 +195,6 @@ public class UserService {
      * </p>
      *
      * @see #supportsImpersonation()
-     * @see #impersonatedUserIfAny()
      * @see #isImpersonating()
      * @see #stopImpersonating()
      *
