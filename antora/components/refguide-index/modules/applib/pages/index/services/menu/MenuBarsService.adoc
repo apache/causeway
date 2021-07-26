@@ -13,6 +13,7 @@ This is used by the Wicket viewer to build up the menu. It is also served as the
 interface MenuBarsService {
   MenuBars menuBars()     // <.>
   MenuBars menuBars(final Type type)     // <.>
+  MenuBarsService forTesting()
 }
 ----
 

@@ -1,0 +1,163 @@
+= ArchitectureJpaRules
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+A library of architecture tests to ensure coding conventions are followed for classes annotated with the JPA _Entity_ annotation.
+
+== API
+
+[source,java]
+.ArchitectureJpaRules.java
+----
+class ArchitectureJpaRules {
+  ArchRule every_jpa_Entity_must_be_annotated_with_DomainObject_nature_of_ENTITY()     // <.>
+  ArchRule every_jpa_Entity_must_be_annotated_with_XmlJavaAdapter_of_PersistentEntityAdapter()     // <.>
+  ArchRule every_jpa_Entity_must_be_annotated_as_an_IsisEntityListener()     // <.>
+  DescribedPredicate<JavaAnnotation<?>> EntityListeners_with_IsisEntityListener()
+  ArchRule every_jpa_Entity_must_implement_Comparable()     // <.>
+  ArchRule every_jpa_Entity_must_be_annotated_as_Table_with_uniqueConstraints()     // <.>
+  ArchRule every_jpa_Entity_must_be_annotated_as_Table_with_schema()     // <.>
+  ArchRule every_enum_field_of_jpa_Entity_must_be_annotated_with_Enumerable_STRING()     // <.>
+  ArchRule every_injected_field_of_jpa_Entity_must_be_annotated_with_Transient()     // <.>
+  ArchRule every_jpa_Entity_must_have_an_id_field()     // <.>
+  ArchRule every_jpa_Entity_must_have_a_version_field()     // <.>
+  ClassesShouldConjunction everyJpa_Entity_must_have_a_field_named_and_annotated(final String fieldName, final Class<? extends Annotation> annotationClass)
+  DescribedPredicate<JavaAnnotation<?>> Table_schema()
+  DescribedPredicate<JavaClass> areEntities()
+  DescribedPredicate<JavaAnnotation<?>> Table_uniqueConstraints()
+  ArchRule every_jpa_Entity_must_have_protected_no_arg_constructor()     // <.>
+  DescribedPredicate<? super JavaClass> areSubtypeEntities()
+}
+----
+
+<.> xref:#every_jpa_Entity_must_be_annotated_with_DomainObject_nature_of_ENTITY__[every_jpa_Entity_must_be_annotated_with_DomainObject_nature_of_ENTITY()]
++
+--
+This rule requires that classes annotated with the JPA _Entity_ annotation must also be annotated with the Apache Isis xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation specifying that its _DomainObject#nature() nature_ is an _org.apache.isis.applib.annotation.Nature#ENTITY entity_ .
+--
+<.> xref:#every_jpa_Entity_must_be_annotated_with_XmlJavaAdapter_of_PersistentEntityAdapter__[every_jpa_Entity_must_be_annotated_with_XmlJavaAdapter_of_PersistentEntityAdapter()]
++
+--
+This rule requires that classes annotated with the JPA _Entity_ annotation must also be annotated with the Apache Isis _javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter_ annotation with a value of _org.apache.isis.applib.jaxb.PersistentEntityAdapter_ `.class` .
+--
+<.> xref:#every_jpa_Entity_must_be_annotated_as_an_IsisEntityListener__[every_jpa_Entity_must_be_annotated_as_an_IsisEntityListener()]
++
+--
+This rule requires that classes annotated with the JPA _Entity_ annotation must also be annotated with the _javax.persistence.EntityListeners_ annotation that includes a value of `org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener.class` .
+--
+<.> xref:#every_jpa_Entity_must_implement_Comparable__[every_jpa_Entity_must_implement_Comparable()]
++
+--
+This rule requires that classes annotated with the JPA _Entity_ annotation must also be implement _Comparable_ .
+--
+<.> xref:#every_jpa_Entity_must_be_annotated_as_Table_with_uniqueConstraints__[every_jpa_Entity_must_be_annotated_as_Table_with_uniqueConstraints()]
++
+--
+This rule requires that classes annotated with the JPA _Entity_ annotation must also be annotated with the JPA _Table_ annotation which includes _Table#uniqueConstraints() uniqueConstraints_ .
+--
+<.> xref:#every_jpa_Entity_must_be_annotated_as_Table_with_schema__[every_jpa_Entity_must_be_annotated_as_Table_with_schema()]
++
+--
+This rule requires that classes annotated with the JPA _Entity_ annotation must also be annotated with the JPA _Table_ annotation which includes _Table#schema()_ schema}.
+--
+<.> xref:#every_enum_field_of_jpa_Entity_must_be_annotated_with_Enumerable_STRING__[every_enum_field_of_jpa_Entity_must_be_annotated_with_Enumerable_STRING()]
++
+--
+This rule requires that enum fields in classes annotated with the JPA _Entity_ annotation must also be annotated with the JPA _Enumerated_ annotation indicating that they should be persisted as _javax.persistence.EnumType#STRING string_ s (rather than ordinal numbers).
+--
+<.> xref:#every_injected_field_of_jpa_Entity_must_be_annotated_with_Transient__[every_injected_field_of_jpa_Entity_must_be_annotated_with_Transient()]
++
+--
+This rule requires that injected fields in classes annotated with the JPA _Entity_ annotation must also be annotated with JPA _Transient_ annotation.
+--
+<.> xref:#every_jpa_Entity_must_have_an_id_field__[every_jpa_Entity_must_have_an_id_field()]
++
+--
+This rule requires that classes annotated with the JPA _Entity_ annotation must contain an `id` field that is itself annotated with _Id_ .
+--
+<.> xref:#every_jpa_Entity_must_have_a_version_field__[every_jpa_Entity_must_have_a_version_field()]
++
+--
+This rule requires that classes annotated with the JPA _Entity_ annotation must contain a `version` field that is itself annotated with _javax.persistence.Version_ .
+--
+<.> xref:#every_jpa_Entity_must_have_protected_no_arg_constructor__[every_jpa_Entity_must_have_protected_no_arg_constructor()]
++
+--
+This rule requires that concrete classes annotated with the JPA _Entity_ annotation have a no-arg constructor with `protected` visibility.
+--
+
+== Members
+
+[#every_jpa_Entity_must_be_annotated_with_DomainObject_nature_of_ENTITY__]
+=== every_jpa_Entity_must_be_annotated_with_DomainObject_nature_of_ENTITY()
+
+This rule requires that classes annotated with the JPA _Entity_ annotation must also be annotated with the Apache Isis xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation specifying that its _DomainObject#nature() nature_ is an _org.apache.isis.applib.annotation.Nature#ENTITY entity_ .
+
+[#every_jpa_Entity_must_be_annotated_with_XmlJavaAdapter_of_PersistentEntityAdapter__]
+=== every_jpa_Entity_must_be_annotated_with_XmlJavaAdapter_of_PersistentEntityAdapter()
+
+This rule requires that classes annotated with the JPA _Entity_ annotation must also be annotated with the Apache Isis _javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter_ annotation with a value of _org.apache.isis.applib.jaxb.PersistentEntityAdapter_ `.class` .
+
+Tnis is so that entities can be transparently referenced from XML-style view models.
+
+[#every_jpa_Entity_must_be_annotated_as_an_IsisEntityListener__]
+=== every_jpa_Entity_must_be_annotated_as_an_IsisEntityListener()
+
+This rule requires that classes annotated with the JPA _Entity_ annotation must also be annotated with the _javax.persistence.EntityListeners_ annotation that includes a value of `org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener.class` .
+
+Tnis is so that entities can be transparently referenced from XML-style view models.
+
+[#every_jpa_Entity_must_implement_Comparable__]
+=== every_jpa_Entity_must_implement_Comparable()
+
+This rule requires that classes annotated with the JPA _Entity_ annotation must also be implement _Comparable_ .
+
+This is so that entities have a natural ordering and can safely be added to parented collections of type _java.util.SortedSet_ .
+
+[#every_jpa_Entity_must_be_annotated_as_Table_with_uniqueConstraints__]
+=== every_jpa_Entity_must_be_annotated_as_Table_with_uniqueConstraints()
+
+This rule requires that classes annotated with the JPA _Entity_ annotation must also be annotated with the JPA _Table_ annotation which includes _Table#uniqueConstraints() uniqueConstraints_ .
+
+This is so that entities will have an alternative business key in addition to the system-defined surrogate key.
+
+[#every_jpa_Entity_must_be_annotated_as_Table_with_schema__]
+=== every_jpa_Entity_must_be_annotated_as_Table_with_schema()
+
+This rule requires that classes annotated with the JPA _Entity_ annotation must also be annotated with the JPA _Table_ annotation which includes _Table#schema()_ schema}.
+
+This is so that entity tables are organised into an appropriate structure (ideally mirroring that of the entities).
+
+[#every_enum_field_of_jpa_Entity_must_be_annotated_with_Enumerable_STRING__]
+=== every_enum_field_of_jpa_Entity_must_be_annotated_with_Enumerable_STRING()
+
+This rule requires that enum fields in classes annotated with the JPA _Entity_ annotation must also be annotated with the JPA _Enumerated_ annotation indicating that they should be persisted as _javax.persistence.EnumType#STRING string_ s (rather than ordinal numbers).
+
+The rationale here is that a string is (arguably) more stable than an ordinal number, and is certainly easier to work with when querying the database. The downside is slightly more space to persist the data, and slightly less performant (not that it would be noticeable).
+
+[#every_injected_field_of_jpa_Entity_must_be_annotated_with_Transient__]
+=== every_injected_field_of_jpa_Entity_must_be_annotated_with_Transient()
+
+This rule requires that injected fields in classes annotated with the JPA _Entity_ annotation must also be annotated with JPA _Transient_ annotation.
+
+The rationale here is that injected services are managed by the runtime and are not/cannot be persisted.
+
+[#every_jpa_Entity_must_have_an_id_field__]
+=== every_jpa_Entity_must_have_an_id_field()
+
+This rule requires that classes annotated with the JPA _Entity_ annotation must contain an `id` field that is itself annotated with _Id_ .
+
+This is part of the standard contract for JPA entities.
+
+[#every_jpa_Entity_must_have_a_version_field__]
+=== every_jpa_Entity_must_have_a_version_field()
+
+This rule requires that classes annotated with the JPA _Entity_ annotation must contain a `version` field that is itself annotated with _javax.persistence.Version_ .
+
+This is good practice for JPA entities to implement optimistic locking
+
+[#every_jpa_Entity_must_have_protected_no_arg_constructor__]
+=== every_jpa_Entity_must_have_protected_no_arg_constructor()
+
+This rule requires that concrete classes annotated with the JPA _Entity_ annotation have a no-arg constructor with `protected` visibility.
+
+The rationale is to encourage the use of static factory methods.

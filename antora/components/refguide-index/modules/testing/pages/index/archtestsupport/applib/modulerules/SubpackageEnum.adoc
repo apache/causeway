@@ -1,0 +1,161 @@
+= SubpackageEnum _(enum)_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+A default implementation of xref:refguide:testing:index/archtestsupport/applib/modulerules/Subpackage.adoc[Subpackage] that constrains how (the classes in) subpackages across and within modules can reference either.
+
+== API
+
+[source,java]
+.SubpackageEnum.java
+----
+enum SubpackageEnum {
+  dom     // <.>
+  api     // <.>
+  app     // <.>
+  menu     // <.>
+  contributions     // <.>
+  subscribers     // <.>
+  restapi     // <.>
+  spi     // <.>
+  spiimpl     // <.>
+  fixtures     // <.>
+  seed     // <.>
+  integtests
+  final List<String> local;
+  final List<String> referencing;
+  String getName()
+  List<String> mayBeAccessedBySubpackagesInSameModule()
+  List<String> mayBeAccessedBySubpackagesInReferencingModules()
+}
+----
+
+<.> xref:#dom[dom]
++
+--
+The _domain object model_ module, containing the main business logic of the module.
+--
+<.> xref:#api[api]
++
+--
+Optional, constitutes a formal API to the module.
+--
+<.> xref:#app[app]
++
+--
+Optional, but if used then will hold view model that implement some sort of assisted business process, for example dashboards, or filtering.
+--
+<.> xref:#menu[menu]
++
+--
+Holds the menus that are visible in the UI.
+--
+<.> xref:#contributions[contributions]
++
+--
+Holds mixins that contribute functionality to OTHER modules.
+--
+<.> xref:#subscribers[subscribers]
++
+--
+Holds domain services that subscribe to events fired from OTHER modules.
+--
+<.> xref:#restapi[restapi]
++
+--
+Holds the menus that are visible as the REST endpoints.
+--
+<.> xref:#spi[spi]
++
+--
+Define an interface for OTHER modules to implement; this is therefore an alternative and more structured way to decoupled modules.
+--
+<.> xref:#spiimpl[spiimpl]
++
+--
+These are this module's implementations of OTHER modules' SPI services.
+--
+<.> xref:#fixtures[fixtures]
++
+--
+Fixture scripts used to setup the systen when prototyping and for integ tests.
+--
+<.> xref:#seed[seed]
++
+--
+Seed scripts used to setup the systen, for example reference data).
+--
+
+== Members
+
+[#dom]
+=== dom
+
+The _domain object model_ module, containing the main business logic of the module.
+
+Typically consists of entities and view models and associated repositories and stateless services used by those entities and view models.
+
+[#api]
+=== api
+
+Optional, constitutes a formal API to the module.
+
+If used, then access to the _dom_ module is likely to be restricted to only the subpackages of its own "local" module with no access granted to subpackages of other "external" referencing modules.
+
+[#app]
+=== app
+
+Optional, but if used then will hold view model that implement some sort of assisted business process, for example dashboards, or filtering.
+
+[#menu]
+=== menu
+
+Holds the menus that are visible in the UI.
+
+These should only be called by the framework, not programmatically (except for tests).
+
+[#contributions]
+=== contributions
+
+Holds mixins that contribute functionality to OTHER modules.
+
+Mixins are one of the main techniques for decoupling dependencies between modules.
+
+Note that mixins to THIS module normally would just live in the _dom_ subpackage, eg _dom.mixins_ .
+
+[#subscribers]
+=== subscribers
+
+Holds domain services that subscribe to events fired from OTHER modules.
+
+Subscriptions is the other main technique for decoupling dependencies between modules.
+
+[#restapi]
+=== restapi
+
+Holds the menus that are visible as the REST endpoints.
+
+These should only be called by the framework, not programmatically (except for tests).
+
+[#spi]
+=== spi
+
+Define an interface for OTHER modules to implement; this is therefore an alternative and more structured way to decoupled modules.
+
+With events, the module that emits the event doesn't know much about what the action to be performed in the other module might be. But if we use an SPI, then this module will call all implementations of the SPI at certain well-defined points; so it kind of is like a lifecycle sort of thing.
+
+Also, the SPI's interface could be more exotic, ie "fatter" than the simple event.
+
+[#spiimpl]
+=== spiimpl
+
+These are this module's implementations of OTHER modules' SPI services.
+
+[#fixtures]
+=== fixtures
+
+Fixture scripts used to setup the systen when prototyping and for integ tests.
+
+[#seed]
+=== seed
+
+Seed scripts used to setup the systen, for example reference data).

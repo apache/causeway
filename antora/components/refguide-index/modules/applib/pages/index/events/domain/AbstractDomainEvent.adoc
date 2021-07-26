@@ -18,19 +18,25 @@ class AbstractDomainEvent<S> {
   S getSource()     // <.>
   void setMixedIn(final Object mixedIn)     // <.>
   T getSubject()     // <.>
-  void setEventPhase(Phase phase)     // <.>
+  void setEventPhase(final Phase phase)     // <.>
   void setIdentifier(final Identifier identifier)     // <.>
   void hide()     // <.>
+  void hideIf(final boolean condition)     // <.>
+  void hideIf(final BooleanSupplier shouldHide)     // <.>
   boolean isDisabled()
   void disable(final String reason)     // <.>
   void disable(final TranslatableString reason)     // <.>
+  void disableIfReason(final Supplier<String> reasonSupplier)     // <.>
+  void disableIfTranslatableReason(final Supplier<TranslatableString> reasonSupplier)     // <.>
   boolean isInvalid()
   void invalidate(final String reason)     // <.>
   void invalidate(final TranslatableString reason)     // <.>
+  void invalidateIfReason(final Supplier<String> reasonSupplier)     // <.>
+  void invalidateIfTranslatableReason(final Supplier<TranslatableString> reasonSupplier)     // <.>
   void veto(final String reason, final Object... args)     // <.>
   void veto(final TranslatableString translatableReason)     // <.>
-  Object get(Object key)     // <.>
-  void put(Object key, Object value)     // <.>
+  Object get(final Object key)     // <.>
+  void put(final Object key, final Object value)     // <.>
   String toString()
 }
 ----
@@ -70,6 +76,16 @@ Not API, set by the framework if the no-arg constructor is used.
 --
 API for subscribers to hide the member.
 --
+<.> xref:#hideIf__boolean[hideIf(boolean)]
++
+--
+Same as ... _if(condition) hide();_
+--
+<.> xref:#hideIf__BooleanSupplier[hideIf(BooleanSupplier)]
++
+--
+Same as ... _if(shouldHide.getAsBoolean()) hide();_
+--
 <.> xref:#disable__String[disable(String)]
 +
 --
@@ -80,6 +96,16 @@ API for subscribers to disable the member, specifying the reason why.
 --
 API for subscribers to disable the member, specifying the reason why as a xref:refguide:applib:index/services/i18n/TranslatableString.adoc[TranslatableString] .
 --
+<.> xref:#disableIfReason__Supplier[disableIfReason(Supplier)]
++
+--
+Same as ... _if(reasonSupplier.get()!=null) disable(reasonSupplier.get());_
+--
+<.> xref:#disableIfTranslatableReason__Supplier[disableIfTranslatableReason(Supplier)]
++
+--
+Same as ... _if(reasonSupplier.get()!=null) disable(reasonSupplier.get());_
+--
 <.> xref:#invalidate__String[invalidate(String)]
 +
 --
@@ -89,6 +115,16 @@ API for subscribers to invalidate an interaction, eg invalid arguments to an act
 +
 --
 API for subscribers to invalidate an interaction, specifying the reason as a xref:refguide:applib:index/services/i18n/TranslatableString.adoc[TranslatableString] .
+--
+<.> xref:#invalidateIfReason__Supplier[invalidateIfReason(Supplier)]
++
+--
+Same as ... _if(reasonSupplier.get()!=null) invalidate(reasonSupplier.get());_
+--
+<.> xref:#invalidateIfTranslatableReason__Supplier[invalidateIfTranslatableReason(Supplier)]
++
+--
+Same as ... _if(reasonSupplier.get()!=null) invalidate(reasonSupplier.get());_
 --
 <.> xref:#veto__String_Object[veto(String, Object)]
 +
@@ -154,6 +190,16 @@ Not API, set by the framework if the no-arg constructor is used.
 
 API for subscribers to hide the member.
 
+[#hideIf__boolean]
+=== hideIf(boolean)
+
+Same as ... _if(condition) hide();_
+
+[#hideIf__BooleanSupplier]
+=== hideIf(BooleanSupplier)
+
+Same as ... _if(shouldHide.getAsBoolean()) hide();_
+
 [#disable__String]
 === disable(String)
 
@@ -164,6 +210,16 @@ API for subscribers to disable the member, specifying the reason why.
 
 API for subscribers to disable the member, specifying the reason why as a xref:refguide:applib:index/services/i18n/TranslatableString.adoc[TranslatableString] .
 
+[#disableIfReason__Supplier]
+=== disableIfReason(Supplier)
+
+Same as ... _if(reasonSupplier.get()!=null) disable(reasonSupplier.get());_
+
+[#disableIfTranslatableReason__Supplier]
+=== disableIfTranslatableReason(Supplier)
+
+Same as ... _if(reasonSupplier.get()!=null) disable(reasonSupplier.get());_
+
 [#invalidate__String]
 === invalidate(String)
 
@@ -173,6 +229,16 @@ API for subscribers to invalidate an interaction, eg invalid arguments to an act
 === invalidate(TranslatableString)
 
 API for subscribers to invalidate an interaction, specifying the reason as a xref:refguide:applib:index/services/i18n/TranslatableString.adoc[TranslatableString] .
+
+[#invalidateIfReason__Supplier]
+=== invalidateIfReason(Supplier)
+
+Same as ... _if(reasonSupplier.get()!=null) invalidate(reasonSupplier.get());_
+
+[#invalidateIfTranslatableReason__Supplier]
+=== invalidateIfTranslatableReason(Supplier)
+
+Same as ... _if(reasonSupplier.get()!=null) invalidate(reasonSupplier.get());_
 
 [#veto__String_Object]
 === veto(String, Object)

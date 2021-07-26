@@ -14,7 +14,6 @@ interface TransactionService {
   Optional<TransactionId> currentTransactionId()     // <.>
   TransactionState currentTransactionState()     // <.>
   void flushTransaction()     // <.>
-  void nextTransaction()     // <.>
 }
 ----
 
@@ -32,11 +31,6 @@ Returns the state of the current thread's transaction., or returns _TransactionS
 +
 --
 Flushes all changes to the object store.
---
-<.> xref:#nextTransaction__[nextTransaction()]
-+
---
-Commits the current thread's transaction (if there is one), and in any case begins a new one.
 --
 
 == Members
@@ -59,11 +53,6 @@ Flushes all changes to the object store.
 Occasionally useful to ensure that newly persisted domain objects are flushed to the database prior to a subsequent repository query.
 
 If there is no active transaction associated with the current thread, then does nothing.
-
-[#nextTransaction__]
-=== nextTransaction()
-
-Commits the current thread's transaction (if there is one), and in any case begins a new one.
 
 include::hooks/TransactionService_010-implementation.adoc[]
 

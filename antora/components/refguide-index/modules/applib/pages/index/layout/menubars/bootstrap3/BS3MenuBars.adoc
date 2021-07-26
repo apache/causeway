@@ -17,7 +17,7 @@ class BS3MenuBars {
   BS3MenuBar getTertiary()
   void setTertiary(final BS3MenuBar tertiary)
   BS3MenuBar menuBarFor(final DomainServiceLayout.MenuBar menuBar)
-  void visit(final MenuBars.Visitor visitor)
+  void visit(final Consumer<ServiceActionLayoutData> visitor)
   String getMetadataError()     // <.>
   void setMetadataError(final String metadataError)
 }

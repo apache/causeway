@@ -8,14 +8,13 @@
 ----
 class TransactionServiceSpring {
   TransactionServiceSpring(final List<PlatformTransactionManager> platformTransactionManagers, final List<PersistenceExceptionTranslator> persistenceExceptionTranslators, final InteractionLayerTracker interactionLayerTracker)
-  Result<T> callTransactional(TransactionDefinition def, Callable<T> callable)
-  void nextTransaction()
+  Result<T> callTransactional(final TransactionDefinition def, final Callable<T> callable)
   void flushTransaction()
   Optional<TransactionId> currentTransactionId()
   TransactionState currentTransactionState()
-  void beforeEnteringTransactionalBoundary(Interaction interaction)     // <.>
-  void onTransactionEnded(TransactionAfterCompletionEvent event)     // <.>
-  void afterLeavingTransactionalBoundary(Interaction interaction)     // <.>
+  void beforeEnteringTransactionalBoundary(final Interaction interaction)     // <.>
+  void onTransactionEnded(final TransactionAfterCompletionEvent event)     // <.>
+  void afterLeavingTransactionalBoundary(final Interaction interaction)     // <.>
 }
 ----
 

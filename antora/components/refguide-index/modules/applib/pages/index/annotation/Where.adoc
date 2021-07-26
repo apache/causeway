@@ -49,17 +49,17 @@ The member should be disabled/hidden when displayed within an object form.
 <.> xref:#REFERENCES_PARENT[REFERENCES_PARENT]
 +
 --
-The member should be disabled/hidden when displayed as a column of a table within parent object's collection, and references that parent.
+The (property) member should be hidden when displayed as a column of a table within parent object's collection, and when it references that parent.
 --
 <.> xref:#PARENTED_TABLES[PARENTED_TABLES]
 +
 --
-The member should be disabled/hidden when displayed as a column of a table within a parent object's collection.
+The member should be hidden when displayed as a column of a table within a parent object's collection.
 --
 <.> xref:#STANDALONE_TABLES[STANDALONE_TABLES]
 +
 --
-The member should be disabled/hidden when displayed as a column of a table showing a standalone list of objects, for example as returned by a repository query.
+The member should be hidden when displayed as a column of a table showing a standalone list of objects, for example as returned by a repository query.
 --
 <.> xref:#ALL_TABLES[ALL_TABLES]
 +
@@ -113,23 +113,21 @@ For most viewers, this applies to property and collection members, not actions.
 [#REFERENCES_PARENT]
 === REFERENCES_PARENT
 
-The member should be disabled/hidden when displayed as a column of a table within parent object's collection, and references that parent.
-
-For most (all?) viewers, this will have meaning only if applied to a property member.
+The (property) member should be hidden when displayed as a column of a table within parent object's collection, and when it references that parent.
 
 [#PARENTED_TABLES]
 === PARENTED_TABLES
 
-The member should be disabled/hidden when displayed as a column of a table within a parent object's collection.
+The member should be hidden when displayed as a column of a table within a parent object's collection.
 
-For most (all?) viewers, this will have meaning only if applied to a property member.
+An alternative to using annotations is using to use file based layout, which can be reloaded dynamically. One implementation that supports this is `TableColumnOrderServiceUsingTxtFile` service, that reads from files named _ParentClass#collectionId.columnOrder.txt_ .
 
 [#STANDALONE_TABLES]
 === STANDALONE_TABLES
 
-The member should be disabled/hidden when displayed as a column of a table showing a standalone list of objects, for example as returned by a repository query.
+The member should be hidden when displayed as a column of a table showing a standalone list of objects, for example as returned by a repository query.
 
-For most (all?) viewers, this will have meaning only if applied to a property member.
+An alternative to using annotations is using to use file based layout, which can be reloaded dynamically. One implementation that supports this is `TableColumnOrderServiceUsingTxtFile` service, that reads from files named _ClassName.columnOrder.txt_ .
 
 [#ALL_TABLES]
 === ALL_TABLES
@@ -137,6 +135,8 @@ For most (all?) viewers, this will have meaning only if applied to a property me
 The member should be disabled/hidden when displayed as a column of a table, either an object's collection or a standalone list.
 
 This combines _#PARENTED_TABLES_ and _#STANDALONE_TABLES_ .
+
+An alternative to using annotations is using to use file based layout, which can be reloaded dynamically. One implementation that supports this is `TableColumnOrderServiceUsingTxtFile` service, that reads from files named _ParentClass#collectionId.columnOrder.txt_ (parented collections) and _ClassName.columnOrder.txt_ (standalone collections).
 
 [#ALL_EXCEPT_STANDALONE_TABLES]
 === ALL_EXCEPT_STANDALONE_TABLES

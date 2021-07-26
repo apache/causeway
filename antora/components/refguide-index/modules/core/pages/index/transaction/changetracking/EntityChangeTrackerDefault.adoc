@@ -7,19 +7,24 @@
 .EntityChangeTrackerDefault.java
 ----
 class EntityChangeTrackerDefault {
+  EntityChangeTrackerDefault(EntityPropertyChangePublisher entityPropertyChangePublisher, EntityChangesPublisher entityChangesPublisher, EventBusService eventBusService, Provider<InteractionProvider> interactionProviderProvider)
+  void postConstruct()
+  void preDestroy()
+  Set<_PropertyChangeRecord> snapshotPropertyChangeRecords()
   void onTransactionCompleting(TransactionBeforeCompletionEvent event)     // <.>
   Optional<EntityChanges> getEntityChanges(final java.sql.Timestamp timestamp, final String userName)
+  Can<EntityPropertyChange> getPropertyChanges(final java.sql.Timestamp timestamp, final String userName, final TransactionId txId)
   Interaction currentInteraction()
+  long countPotentialPropertyChangeRecords()
   int numberEntitiesLoaded()
   int numberEntitiesDirtied()
-  int propertyChangeRecordCount()
   void enlistCreated(ManagedObject entity)
   void enlistDeleting(ManagedObject entity)
   void enlistUpdating(ManagedObject entity)
+  void enlistUpdating(ManagedObject entity, String propertyIdIfAny, Object preValue)
   void recognizeLoaded(ManagedObject entity)
   void recognizePersisting(ManagedObject entity)
   void recognizeUpdating(ManagedObject entity)
-  Can<EntityPropertyChange> getPropertyChanges(final java.sql.Timestamp timestamp, final String userName, final TransactionId txId)
 }
 ----
 

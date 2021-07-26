@@ -19,6 +19,7 @@ interface ServiceRegistry {
   Optional<T> lookupService(final Class<T> serviceClass)     // <.>
   Optional<T> lookupService(Class<T> serviceClass, Comparator<Object> comparator)     // <.>
   T lookupServiceElseFail(final Class<T> serviceClass)     // <.>
+  void clearRegisteredBeans()     // <.>
 }
 ----
 
@@ -66,6 +67,11 @@ Returns a domain service implementing the requested type.
 +
 --
 Looks up a domain service of the requested type (same as _#lookupService(Class)_ ) but throws a _NoSuchElementException_ if there are no such instances.
+--
+<.> xref:#clearRegisteredBeans__[clearRegisteredBeans()]
++
+--
+Invalidates any cached service adapters that might hold a reference to the current _SpecificationLoader_ . Particularly useful when discarding a meta-model instance, that is, purging the _ObjectSpecification_ cache.
 --
 
 == Members
@@ -118,6 +124,11 @@ If this lookup is ambiguous, then the provided comparator is used.
 === lookupServiceElseFail(Class)
 
 Looks up a domain service of the requested type (same as _#lookupService(Class)_ ) but throws a _NoSuchElementException_ if there are no such instances.
+
+[#clearRegisteredBeans__]
+=== clearRegisteredBeans()
+
+Invalidates any cached service adapters that might hold a reference to the current _SpecificationLoader_ . Particularly useful when discarding a meta-model instance, that is, purging the _ObjectSpecification_ cache.
 
 include::hooks/ServiceRegistry_010-implementation.adoc[]
 

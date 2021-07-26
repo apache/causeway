@@ -9,7 +9,15 @@ Meta-annotation for a _String_ property or parameter representing a fully qualif
 .Fqcn.java
 ----
 @interface Fqcn {
-  int MAX_LEN;
+  int MAX_LENGTH;
+  @AliasFor(annotation = Property.class, attribute = "maxLength")
+int propertyMaxLength() default MAX_LENGTH;
+  @AliasFor(annotation = Parameter.class, attribute = "maxLength")
+int parameterMaxLength() default MAX_LENGTH;
+  @AliasFor(annotation = Property.class, attribute = "optionality")
+Optionality propertyOptionality() default Optionality.MANDATORY;
+  @AliasFor(annotation = Parameter.class, attribute = "optionality")
+Optionality parameterOptionality() default Optionality.MANDATORY;
 }
 ----
 

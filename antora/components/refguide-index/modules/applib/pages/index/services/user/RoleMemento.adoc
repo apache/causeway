@@ -12,7 +12,6 @@ class RoleMemento {
   public static final String LOGICAL_TYPE_NAME;
   RoleMemento(final String name)     // <.>
   RoleMemento(final String name, final String description)     // <.>
-  String title()
 }
 ----
 

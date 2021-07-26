@@ -1,0 +1,48 @@
+= TableColumnOrderServiceUsingTxtFile
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Provides a simple mechanism to order the columns of both parented and standalone collections by reading a flat file containing the list of the properties in the desired order, one propertyId per line.
+
+The files are located relative to the class itself. For parented collections, the file is named _ParentClassName#collectionId.columnOrder.txt_ , while for standalone collections, the file is named _ClassName.columnOrder.txt_ .
+
+Any properties omitted from the file will not be shown as columns of the table. The propertyId must also be an exact match, so can be ignored by commenting out, eg with "#".
+
+Also note that properties that have been explicitly hidden from tables using _PropertyLayout#hidden() @PropertyLayout#hidden_ are never shown, irrespective of whether they are listed in the files. You may therefore prefer to _not_ hide properties with annotations, and then rely solely on these external _columnOrder.txt_ files. This has the further benefit that files can be modified at runtime and will be automatically picked up without requiring a restart of the application.
+
+== API
+
+[source,java]
+.TableColumnOrderServiceUsingTxtFile.java
+----
+class TableColumnOrderServiceUsingTxtFile {
+  List<String> orderParented(final Object domainObject, final String collectionId, final Class<?> collectionType, final List<String> propertyIds)     // <.>
+  List<String> orderStandalone(final Class<?> domainClass, final List<String> propertyIds)     // <.>
+}
+----
+
+<.> xref:#orderParented__Object_String_Class_List[orderParented(Object, String, Class, List)]
++
+--
+Reads propertyIds of the collection from a file named _ClassName#collectionId.columnOrder.txt_ . relative to the class itself.
+--
+<.> xref:#orderStandalone__Class_List[orderStandalone(Class, List)]
++
+--
+Reads propertyIds of the standalone collection from a file named _ClassName.columnOrder.txt_ , relative to the class itself.
+--
+
+== Members
+
+[#orderParented__Object_String_Class_List]
+=== orderParented(Object, String, Class, List)
+
+Reads propertyIds of the collection from a file named _ClassName#collectionId.columnOrder.txt_ . relative to the class itself.
+
+Additional files can be provided by overriding _#addResourceNames(Class, String, List)_ .
+
+[#orderStandalone__Class_List]
+=== orderStandalone(Class, List)
+
+Reads propertyIds of the standalone collection from a file named _ClassName.columnOrder.txt_ , relative to the class itself.
+
+Additional files can be provided by overriding _#addResourceNames(Class, List)_ .

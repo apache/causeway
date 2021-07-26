@@ -19,6 +19,7 @@ enum BeanSort {
   ABSTRACT     // <.>
   VETOED     // <.>
   UNKNOWN
+  boolean isManagedBeanContributing()
   boolean isManagedBean()
   boolean isMixin()
   boolean isViewModel()

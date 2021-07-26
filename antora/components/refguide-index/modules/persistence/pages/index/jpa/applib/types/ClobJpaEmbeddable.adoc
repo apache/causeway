@@ -1,0 +1,46 @@
+= ClobJpaEmbeddable
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+A utility class to enable the persisting of xref:refguide:applib:index/value/Clob.adoc[Clob] s.
+
+Although JPA supports custom value types, these can only be for simple values; seeeclipse-ee4j/jpa-api/issues/105.
+
+EclipseLink _does_ provide its own extension,
+
+== API
+
+[source,java]
+.ClobJpaEmbeddable.java
+----
+class ClobJpaEmbeddable {
+  ClobJpaEmbeddable fromClob(Clob clob)     // <.>
+  Clob toClob(final ClobJpaEmbeddable clobJpaEmbeddable)     // <.>
+  Clob asClob()
+  String toString()
+  boolean equals(final Object o)
+  int hashCode()
+}
+----
+
+<.> xref:#fromClob__Clob[fromClob(Clob)]
++
+--
+Factory method to marshall a xref:refguide:applib:index/value/Clob.adoc[Clob] into a xref:refguide:persistence:index/jpa/applib/types/ClobJpaEmbeddable.adoc[ClobJpaEmbeddable]
+--
+<.> xref:#toClob__ClobJpaEmbeddable[toClob(ClobJpaEmbeddable)]
++
+--
+Reciprocal method to marshall a xref:refguide:persistence:index/jpa/applib/types/ClobJpaEmbeddable.adoc[ClobJpaEmbeddable] into a xref:refguide:applib:index/value/Clob.adoc[Clob]
+--
+
+== Members
+
+[#fromClob__Clob]
+=== fromClob(Clob)
+
+Factory method to marshall a xref:refguide:applib:index/value/Clob.adoc[Clob] into a xref:refguide:persistence:index/jpa/applib/types/ClobJpaEmbeddable.adoc[ClobJpaEmbeddable]
+
+[#toClob__ClobJpaEmbeddable]
+=== toClob(ClobJpaEmbeddable)
+
+Reciprocal method to marshall a xref:refguide:persistence:index/jpa/applib/types/ClobJpaEmbeddable.adoc[ClobJpaEmbeddable] into a xref:refguide:applib:index/value/Clob.adoc[Clob]

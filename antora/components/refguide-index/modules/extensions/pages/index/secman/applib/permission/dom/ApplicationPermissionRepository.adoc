@@ -20,6 +20,7 @@ interface ApplicationPermissionRepository {
   ApplicationPermission newPermissionNoCheck(ApplicationRole role, ApplicationPermissionRule rule, ApplicationPermissionMode mode, ApplicationFeatureSort sort, String featureFqn)     // <.>
   List<ApplicationPermission> findByUser(ApplicationUser applicationUser)
   List<ApplicationPermission> findByRole(ApplicationRole applicationRole)
+  List<ApplicationPermission> findByUserMemento(UserMemento user)     // <.>
 }
 ----
 
@@ -28,6 +29,11 @@ interface ApplicationPermissionRepository {
 +
 --
 Intended for use by fixture scripts.
+--
+<.> xref:#findByUserMemento__UserMemento[findByUserMemento(UserMemento)]
++
+--
+To support impersonation by role
 --
 
 == Members
@@ -39,3 +45,8 @@ Intended for use by fixture scripts.
 === newPermissionNoCheck(ApplicationRole, ApplicationPermissionRule, ApplicationPermissionMode, ApplicationFeatureSort, String)
 
 Intended for use by fixture scripts.
+
+[#findByUserMemento__UserMemento]
+=== findByUserMemento(UserMemento)
+
+To support impersonation by role

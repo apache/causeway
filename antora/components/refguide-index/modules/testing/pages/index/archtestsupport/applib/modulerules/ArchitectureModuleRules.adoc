@@ -1,0 +1,60 @@
+= ArchitectureModuleRules
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+A library of architecture tests to ensure correct layering and usage of packages.
+
+== API
+
+[source,java]
+.ArchitectureModuleRules.java
+----
+class ArchitectureModuleRules {
+  List<Class<?>> analyzeClasses_packagesOf(Class<?> clazz)     // <.>
+  Architectures.LayeredArchitecture code_dependencies_follow_module_Imports(List<Class<?>> moduleClasses)     // <.>
+  Architectures.LayeredArchitecture code_dependencies_follow_module_Imports_and_subpackage_rules(List<Class<?>> moduleClasses, List<Subpackage> subpackages)     // <.>
+  String nameOf(Class<?> moduleClass, final String subpackageName)
+  String[] namesOf(Class<?> moduleClass, String... subpackageNames)
+  String[] namesOf(Set<Class<?>> importingClasses, String... subpackageNames)
+  String packageIdentifierFor(Class<?> moduleClass)
+  String packageIdentifierFor(Class<?> moduleClass, Subpackage subpackage)
+  String[] both(String str, String[] arr)
+  String[] both(String[] arr1, String[] arr2)
+  Map<T, Set<T>> invert(Map<T, Set<T>> valueSetByKey)
+  void accumulateTransitiveDependencies(final Class<?> referringClass, final Map<Class<?>, Set<Class<?>>> directDependenciesByReferringClass, final Set<Class<?>> transitiveDependenciesOfReferringClass)
+}
+----
+
+<.> xref:#analyzeClasses_packagesOf__Class[analyzeClasses_packagesOf(Class)]
++
+--
+Utility method to aggregate the module classes (named "XxxModule") that are extracted from the _AnalyzeClasses_ annotation on the provided class.
+--
+<.> xref:#code_dependencies_follow_module_Imports__List[code_dependencies_follow_module_Imports(List)]
++
+--
+Ensures that the actual dependencies between classes within modules honour the module dependency graph inferred from the _Import_ statements of each module.
+--
+<.> xref:#code_dependencies_follow_module_Imports_and_subpackage_rules__List_List[code_dependencies_follow_module_Imports_and_subpackage_rules(List, List)]
++
+--
+Ensures that the actual dependencies between classes within modules honour the module dependency graph inferred from the _Import_ statements of each module AND also ensures that the subpackages within those rules only access the allowed subpackages of both their own &local;local&local; and the subpackages of other modules that they might reference.
+--
+
+== Members
+
+[#analyzeClasses_packagesOf__Class]
+=== analyzeClasses_packagesOf(Class)
+
+Utility method to aggregate the module classes (named "XxxModule") that are extracted from the _AnalyzeClasses_ annotation on the provided class.
+
+The result is intended to be passed into _#code_dependencies_follow_module_Imports(List)_ and _#code_dependencies_follow_module_Imports_and_subpackage_rules(List, List)_ .
+
+[#code_dependencies_follow_module_Imports__List]
+=== code_dependencies_follow_module_Imports(List)
+
+Ensures that the actual dependencies between classes within modules honour the module dependency graph inferred from the _Import_ statements of each module.
+
+[#code_dependencies_follow_module_Imports_and_subpackage_rules__List_List]
+=== code_dependencies_follow_module_Imports_and_subpackage_rules(List, List)
+
+Ensures that the actual dependencies between classes within modules honour the module dependency graph inferred from the _Import_ statements of each module AND also ensures that the subpackages within those rules only access the allowed subpackages of both their own &local;local&local; and the subpackages of other modules that they might reference.
