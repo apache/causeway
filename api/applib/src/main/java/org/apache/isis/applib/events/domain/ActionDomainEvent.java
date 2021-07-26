@@ -94,6 +94,14 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     }
 
     /**
+     * Subtypes can define a one-arg constructor (for nested non-static classes of nested non-static mixins);
+     * the framework sets state via (non-API) setters.
+     */
+    public ActionDomainEvent(final S source) {
+        super(source);
+    }
+
+    /**
      * The semantics of the action being invoked.
      *
      * <p>
