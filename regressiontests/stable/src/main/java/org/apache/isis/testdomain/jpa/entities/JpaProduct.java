@@ -69,7 +69,10 @@ public class JpaProduct implements Comparable<JpaProduct> {
     @Column(name = "id")
     private @Getter @Setter Long id;
 
-    @Property(editing = Editing.DISABLED, commandPublishing = Publishing.ENABLED) // used for an async rule check test
+    @Property(
+            editing = Editing.DISABLED, // used for an async rule check test
+            commandPublishing = Publishing.ENABLED,
+            executionPublishing = Publishing.ENABLED)
     @Column(nullable = true)
     private @Getter @Setter String name;
 //    public void setName(String name) {
