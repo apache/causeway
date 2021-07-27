@@ -34,6 +34,8 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldStringModel;
 
+import lombok.val;
+
 /**
  * Panel for rendering MultiLine scalars of type String
  */
@@ -47,17 +49,19 @@ public class MultiLineStringPanel extends ScalarPanelTextFieldParseableAbstract 
 
     @Override
     protected AbstractTextComponent<String> createTextFieldForRegular(final String id) {
-        TextFieldStringModel model = new TextFieldStringModel(this);
-        final TextArea<String> textArea = new TextArea<String>(id, model);
+        val model = new TextFieldStringModel(this);
+        val textArea = new TextArea<String>(id, model);
         setRowsAndMaxLengthAttributesOn(textArea);
         return textArea;
     }
 
     private void setRowsAndMaxLengthAttributesOn(final TextArea<String> textField) {
-        final MultiLineFacet multiLineFacet = getModel().getFacet(MultiLineFacet.class);
-        setAttribute(textField, "rows", multiLineFacet.numberOfLines());
+        val multiLineFacet = getModel().getFacet(MultiLineFacet.class);
+        if(multiLineFacet != null) {
+            setAttribute(textField, "rows", multiLineFacet.numberOfLines());
+        }
 
-        final Integer maxLength = getValueOf(getModel(), MaxLengthFacet.class);
+        val maxLength = getValueOf(getModel(), MaxLengthFacet.class);
         if(maxLength != null) {
             // in conjunction with javascript in jquery.isis.wicket.viewer.js
             // see http://stackoverflow.com/questions/4459610/set-maxlength-in-html-textarea
@@ -74,8 +78,8 @@ public class MultiLineStringPanel extends ScalarPanelTextFieldParseableAbstract 
     protected Component createInlinePromptComponent(
             final String id,
             final IModel<String> inlinePromptModel) {
-        final Fragment fragment = new Fragment(id, "textareaInlinePrompt", this);
-        final TextArea<String> inlinePromptTextArea = new TextArea<String>("scalarValue", inlinePromptModel) {
+        val fragment = new Fragment(id, "textareaInlinePrompt", this);
+        val inlinePromptTextArea = new TextArea<String>("scalarValue", inlinePromptModel) {
 
             private static final long serialVersionUID = 1L;
 

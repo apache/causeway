@@ -32,14 +32,14 @@ public class IsisMarkdownConverter implements AttributeConverter<Markdown, Strin
     @Override
     public String convertToDatabaseColumn(final Markdown memberValue) {
         return memberValue != null
-                ? memberValue.asHtml()
+                ? memberValue.getMarkdown()
                 : null;
     }
 
     @Override
     public Markdown convertToEntityAttribute(final String datastoreValue) {
         return datastoreValue != null
-                ? Markdown.valueOfHtml(datastoreValue)
+                ? Markdown.valueOfMarkdown(datastoreValue)
                 : null;
     }
 

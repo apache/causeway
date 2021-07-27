@@ -32,14 +32,14 @@ public class IsisMarkdownConverter implements TypeConverter<Markdown, String>{
     @Override
     public String toDatastoreType(final Markdown memberValue) {
         return memberValue != null
-                ? memberValue.asHtml()
+                ? memberValue.getMarkdown()
                 : null;
     }
 
     @Override
     public Markdown toMemberType(final String datastoreValue) {
         return datastoreValue != null
-                ? Markdown.valueOfHtml(datastoreValue)
+                ? Markdown.valueOfMarkdown(datastoreValue)
                 : null;
     }
 

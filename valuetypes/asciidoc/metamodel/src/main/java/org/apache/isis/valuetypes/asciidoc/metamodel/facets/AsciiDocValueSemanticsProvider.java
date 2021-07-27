@@ -69,12 +69,12 @@ implements AsciiDocValueFacet {
 
     @Override
     protected String doEncode(final AsciiDoc asciiDoc) {
-        return asciiDoc.asHtml();
+        return asciiDoc.getAdoc();
     }
 
     @Override
-    protected AsciiDoc doRestore(final String html) {
-        return new AsciiDoc(html);
+    protected AsciiDoc doRestore(final String adoc) {
+        return AsciiDoc.valueOfAdoc(adoc);
     }
 
 
@@ -91,12 +91,12 @@ implements AsciiDocValueFacet {
             return "";
         }
         final AsciiDoc asciiDoc = (AsciiDoc) object.getPojo();
-        return asciiDoc.asHtml();
+        return asciiDoc.getAdoc();
     }
 
     @Override
-    public ManagedObject createValue(final ManagedObject object, final String html) {
-        final AsciiDoc asciiDoc = new AsciiDoc(html);
+    public ManagedObject createValue(final ManagedObject object, final String adoc) {
+        final AsciiDoc asciiDoc = AsciiDoc.valueOfAdoc(adoc);
         return getObjectManager().adapt(asciiDoc);
     }
 

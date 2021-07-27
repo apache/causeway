@@ -69,12 +69,12 @@ implements MarkdownValueFacet {
 
     @Override
     protected String doEncode(final Markdown markdown) {
-        return markdown.asHtml();
+        return markdown.getMarkdown();
     }
 
     @Override
-    protected Markdown doRestore(final String html) {
-        return new Markdown(html);
+    protected Markdown doRestore(final String markdown) {
+        return new Markdown(markdown);
     }
 
 
@@ -91,12 +91,12 @@ implements MarkdownValueFacet {
             return "";
         }
         final Markdown markdown = (Markdown) object.getPojo();
-        return markdown.asHtml();
+        return markdown.getMarkdown();
     }
 
     @Override
-    public ManagedObject createValue(final ManagedObject object, final String html) {
-        final Markdown markdown = new Markdown(html);
+    public ManagedObject createValue(final ManagedObject object, final String md) {
+        final Markdown markdown = Markdown.valueOfMarkdown(md);
         return getObjectManager().adapt(markdown);
     }
 

@@ -45,8 +45,8 @@ public final class AsciiDocJaxbAdapter extends XmlAdapter<String, AsciiDoc> {
         if(v==null) {
             return null;
         }
-        final String html = _Strings.ofBytes(decoder.decode(v), StandardCharsets.UTF_8);
-        return new AsciiDoc(html);
+        final String adoc = _Strings.ofBytes(decoder.decode(v), StandardCharsets.UTF_8);
+        return new AsciiDoc(adoc);
     }
 
     @Override
@@ -54,7 +54,7 @@ public final class AsciiDocJaxbAdapter extends XmlAdapter<String, AsciiDoc> {
         if(v==null) {
             return null;
         }
-        final String html = v.asHtml();
+        final String html = v.getAdoc();
         return encoder.encodeToString(_Strings.toBytes(html, StandardCharsets.UTF_8));
     }
 }

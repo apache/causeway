@@ -21,10 +21,8 @@ package demoapp.dom._infra.resources;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.stereotype.Service;
-
-import org.apache.isis.valuetypes.markdown.applib.value.Converter;
 import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
+import org.springframework.stereotype.Service;
 
 import lombok.val;
 
@@ -44,13 +42,13 @@ public class MarkdownReaderService {
     public Markdown readFor(Class<?> aClass) {
         val markdownResourceName = String.format("%s.md", aClass.getSimpleName());
         val markdown = resourceReaderService.readResource(aClass, markdownResourceName);
-        return Markdown.valueOfHtml(Converter.mdToHtml(markdown));
+        return Markdown.valueOfMarkdown(markdown);
     }
 
     public Markdown readFor(Class<?> aClass, final String member) {
         val markdownResourceName = String.format("%s-%s.md", aClass.getSimpleName(), member);
         val markdown = resourceReaderService.readResource(aClass, markdownResourceName);
-        return Markdown.valueOfHtml(Converter.mdToHtml(markdown));
+        return Markdown.valueOfMarkdown(markdown);
     }
 
 

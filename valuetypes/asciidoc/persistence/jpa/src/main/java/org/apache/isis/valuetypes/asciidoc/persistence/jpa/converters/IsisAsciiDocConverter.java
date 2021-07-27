@@ -32,14 +32,14 @@ public class IsisAsciiDocConverter implements AttributeConverter<AsciiDoc, Strin
     @Override
     public String convertToDatabaseColumn(final AsciiDoc memberValue) {
         return memberValue != null
-                ? memberValue.asHtml()
+                ? memberValue.getAdoc()
                 : null;
     }
 
     @Override
     public AsciiDoc convertToEntityAttribute(final String datastoreValue) {
         return datastoreValue != null
-                ? AsciiDoc.valueOfHtml(datastoreValue)
+                ? AsciiDoc.valueOfAdoc(datastoreValue)
                 : null;
     }
 
