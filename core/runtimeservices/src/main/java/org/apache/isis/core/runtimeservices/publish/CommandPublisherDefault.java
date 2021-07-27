@@ -18,26 +18,30 @@
  */
 package org.apache.isis.core.runtimeservices.publish;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
-import lombok.val;
-import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
-import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.having.HasEnabling;
-import org.apache.isis.core.metamodel.services.publishing.CommandPublisher;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
+import java.util.List;
 
 import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.List;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.Command.CommandPublishingPhase;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
+import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.having.HasEnabling;
+import org.apache.isis.core.metamodel.services.publishing.CommandPublisher;
+
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isis.runtimeservices.CommandPublisherDefault")
@@ -70,6 +74,7 @@ public class CommandPublisherDefault implements CommandPublisher {
         if(canPublish(command)) {
             log.debug("about to PUBLISH command: {} to {}", command, enabledSubscribers);
             enabledSubscribers.forEach(subscriber -> subscriber.onCompleted(command));
+            command.updater().setPublishingPhase(CommandPublishingPhase.COMPLETED); // one shot
         }
 
         _Xray.exitPublishing(handle);
@@ -79,7 +84,7 @@ public class CommandPublisherDefault implements CommandPublisher {
 
     private boolean canPublish(final Command command) {
         return enabledSubscribers.isNotEmpty()
-                && command.isPublishingEnabled()
+                && command.getPublishingPhase().isReady()
                 && command.getLogicalMemberIdentifier() != null; // eg null when seed fixtures
     }
 
@@ -87,7 +92,7 @@ public class CommandPublisherDefault implements CommandPublisher {
     private @Nullable String getCannotPublishReason(final @NonNull Command command) {
         return enabledSubscribers.isEmpty()
                 ? "no subscribers"
-                : !command.isPublishingEnabled()
+                : !command.getPublishingPhase().isReady()
                         ? String.format(
                                 "publishing not enabled for given command\n%s",
                                 _Xray.toText(command))

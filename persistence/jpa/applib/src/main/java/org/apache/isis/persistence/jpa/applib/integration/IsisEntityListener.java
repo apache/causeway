@@ -36,8 +36,8 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.core.transaction.changetracking.PreAndPostValue;
-import org.apache.isis.core.transaction.changetracking.PropertyChangePublisher;
 import org.apache.isis.core.transaction.changetracking.PropertyChangeRecord;
+import org.apache.isis.core.transaction.changetracking.PropertyChangeTracker;
 import org.apache.isis.persistence.jpa.applib.services.JpaSupportService;
 
 import lombok.val;
@@ -63,7 +63,7 @@ public class IsisEntityListener {
 
     // not managed by Spring (directly)
     @Inject private ServiceInjector serviceInjector;
-    @Inject private PropertyChangePublisher propertyChangePublisher;
+    @Inject private PropertyChangeTracker propertyChangePublisher;
     @Inject private Provider<JpaSupportService> jpaSupportServiceProvider;
     @Inject private ObjectManager objectManager;
 
@@ -83,6 +83,9 @@ public class IsisEntityListener {
             val unwrap = em.unwrap(UnitOfWork.class);
             val changes = unwrap.getCurrentChanges();
             val objectChanges = changes.getObjectChangeSetForClone(entityPojo);
+            if(objectChanges==null) {
+                return;
+            }
 
             final Can<PropertyChangeRecord> propertyChangeRecords =
             objectChanges
@@ -139,6 +142,5 @@ public class IsisEntityListener {
         log.debug("onPostLoad: {}", entityPojo);
         serviceInjector.injectServicesInto(entityPojo);
     }
-
 
 }

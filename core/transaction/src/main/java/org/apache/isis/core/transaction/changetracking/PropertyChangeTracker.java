@@ -38,7 +38,7 @@ import lombok.NonNull;
  * @apiNote Introduced for JPA (EclipseLink implementation). More lightweight than
  * {@link EntityChangeTracker}
  */
-public interface PropertyChangePublisher {
+public interface PropertyChangeTracker {
 
     void onPreUpdate(ManagedObject entity, Can<PropertyChangeRecord> changeRecords);
 

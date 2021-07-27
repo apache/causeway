@@ -28,7 +28,7 @@ import javax.persistence.Transient;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
-import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
+import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 import org.apache.isis.testdomain.model.stereotypes.MyService;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 
@@ -41,7 +41,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Entity
-@EntityListeners(JpaEntityInjectionPointResolver.class)
+@EntityListeners(IsisEntityListener.class)
 @DiscriminatorValue("Book")
 @DomainObject(
         logicalTypeName = "testdomain.jpa.Book",
@@ -56,7 +56,7 @@ public class JpaBook extends JpaProduct {
     // -- ENTITY SERVICE INJECTION TEST
     @Transient private MyService myService;
     @Inject
-    public void setMyService(MyService myService) {
+    public void setMyService(final MyService myService) {
         val count = kvStore.incrementCounter(JpaBook.class, "injection-count");
         log.debug("INJECTION " + count);
         this.myService = myService;
@@ -73,12 +73,12 @@ public class JpaBook extends JpaProduct {
     }
 
     public static JpaBook of(
-            String name,
-            String description,
-            double price,
-            String author,
-            String isbn,
-            String publisher) {
+            final String name,
+            final String description,
+            final double price,
+            final String author,
+            final String isbn,
+            final String publisher) {
 
         return new JpaBook(name, description, price, author, isbn, publisher);
     }
@@ -98,12 +98,12 @@ public class JpaBook extends JpaProduct {
     // -- CONSTRUCTOR
 
     private JpaBook(
-            String name,
-            String description,
-            double price,
-            String author,
-            String isbn,
-            String publisher) {
+            final String name,
+            final String description,
+            final double price,
+            final String author,
+            final String isbn,
+            final String publisher) {
 
         super(/*id*/ null, name, description, price, /*comments*/null);
         this.author = author;

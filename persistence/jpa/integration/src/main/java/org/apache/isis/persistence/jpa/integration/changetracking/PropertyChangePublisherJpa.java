@@ -1,8 +1,5 @@
 package org.apache.isis.persistence.jpa.integration.changetracking;
 
-import java.sql.Timestamp;
-import java.util.UUID;
-
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -11,13 +8,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.metrics.MetricsService;
-import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
-import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedLifecycleEventFacet;
@@ -30,18 +23,10 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedLifecycleEv
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.transaction.changetracking.EntityPropertyChangePublisher;
-import org.apache.isis.core.transaction.changetracking.HasEnlistedEntityPropertyChanges;
 import org.apache.isis.core.transaction.changetracking.PersistenceCallbackHandlerAbstract;
-import org.apache.isis.core.transaction.changetracking.PreAndPostValue;
-import org.apache.isis.core.transaction.changetracking.PropertyChangePublisher;
 import org.apache.isis.core.transaction.changetracking.PropertyChangeRecord;
-import org.apache.isis.core.transaction.changetracking.events.IsisTransactionPlaceholder;
-
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import org.apache.isis.core.transaction.changetracking.PropertyChangeTracker;
 
 /**
  * @since 2.0 {@index}
@@ -50,12 +35,12 @@ import lombok.extern.log4j.Log4j2;
 @Named("isis.transaction.PropertyChangePublisherJpa")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("jpa")
-@Log4j2
+//@Log4j2
 public class PropertyChangePublisherJpa
 extends PersistenceCallbackHandlerAbstract
 implements
     MetricsService,
-    PropertyChangePublisher {
+    PropertyChangeTracker {
 
     private final EntityPropertyChangePublisher entityPropertyChangePublisher;
 
@@ -86,7 +71,7 @@ implements
         postLifecycleEventIfRequired(entity, UpdatingLifecycleEventFacet.class);
 
         entityPropertyChangePublisher.publishChangedProperties(
-                PropertyChangePublisher
+                PropertyChangeTracker
                 .publishingPayloadForUpdate(entity, changeRecords));
 
     }
@@ -97,7 +82,7 @@ implements
         postLifecycleEventIfRequired(entity, RemovingLifecycleEventFacet.class);
 
         entityPropertyChangePublisher.publishChangedProperties(
-                PropertyChangePublisher
+                PropertyChangeTracker
                 .publishingPayloadForDeletion(entity));
     }
 
@@ -107,7 +92,7 @@ implements
         postLifecycleEventIfRequired(entity, PersistedLifecycleEventFacet.class);
 
         entityPropertyChangePublisher.publishChangedProperties(
-                PropertyChangePublisher
+                PropertyChangeTracker
                 .publishingPayloadForCreation(entity));
     }
 
