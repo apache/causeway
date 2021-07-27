@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.ChangeScenario;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.VerificationStage;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 
@@ -42,7 +43,9 @@ implements HasPersistenceStandard {
         clearPublishedEntries(kvStore);
     }
 
-    protected void verify(final VerificationStage verificationStage) {
+    protected void verify(
+            final ChangeScenario changeScenario,
+            final VerificationStage verificationStage) {
         switch(verificationStage) {
         case FAILURE_CASE:
             assertEquals(0, getCreated(kvStore));

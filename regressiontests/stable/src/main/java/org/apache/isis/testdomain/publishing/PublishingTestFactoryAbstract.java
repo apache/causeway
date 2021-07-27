@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 import org.junit.jupiter.api.DynamicTest;
 import org.springframework.context.event.EventListener;
@@ -61,6 +61,13 @@ public abstract class PublishingTestFactoryAbstract {
         POST_INTERACTION,
     }
 
+    /** what kind of entity change is under test */
+    public static enum ChangeScenario {
+        ENTITY_CREATION,
+        ENTITY_UPDATE,
+        ENTITY_REMOVAL
+    }
+
     @Value(staticConstructor = "of")
     public static class PublishingTestContext {
 
@@ -79,8 +86,9 @@ public abstract class PublishingTestFactoryAbstract {
         }
 
         private final @NonNull String displayName;
+        private final @NonNull ChangeScenario scenario;
         private final @NonNull Runnable given;
-        private final @NonNull Consumer<VerificationStage> verifier;
+        private final @NonNull BiConsumer<ChangeScenario, VerificationStage> verifier;
         private final @NonNull VerificationStage transactionCompletionStage;
 
         private final TraceLog traceLog = new TraceLog();
@@ -95,7 +103,7 @@ public abstract class PublishingTestFactoryAbstract {
         public void runVerify(final VerificationStage verificationStage) {
             traceLog.log("4.? verify %s", verificationStage);
             try {
-                verifier.accept(verificationStage);
+                verifier.accept(scenario, verificationStage);
             } catch (Throwable e) {
                 verificationErrors.add(e);
             }
@@ -182,59 +190,70 @@ public abstract class PublishingTestFactoryAbstract {
 
     public final List<DynamicTest> generateTestsIncludeProgrammatic(
             final Runnable given,
-            final Consumer<VerificationStage> verifier) {
+            final BiConsumer<ChangeScenario, VerificationStage> verifier) {
         return generateTests(true, given, verifier);
     }
 
     public final List<DynamicTest> generateTests(
             final Runnable given,
-            final Consumer<VerificationStage> verifier) {
+            final BiConsumer<ChangeScenario, VerificationStage> verifier) {
         return generateTests(false, given, verifier);
     }
 
     private final List<DynamicTest> generateTests(
             final boolean includeProgrammatic,
             final Runnable given,
-            final Consumer<VerificationStage> verifier) {
+            final BiConsumer<ChangeScenario, VerificationStage> verifier) {
 
-        var dynamicTests = Can.<DynamicTest>of(
+        var dynamicTests = Can.<DynamicTest>empty();
 
-                publishingTest(
+        for(val changeScenario : ChangeScenario.values()) {
+
+            if(includeProgrammatic) {
+                dynamicTests = dynamicTests
+                    .add(publishingTest(
+                            PublishingTestContext.of("Programmatic",
+                                    changeScenario,
+                                    given, verifier, VerificationStage.POST_COMMIT),
+                            VerificationStage.POST_INTERACTION,
+                            this::programmaticExecution));
+            }
+        }
+
+        val changeScenario = ChangeScenario.ENTITY_UPDATE;
+
+        dynamicTests = dynamicTests
+                .add(publishingTest(
                         PublishingTestContext.of("Interaction Api",
+                                changeScenario,
                                 given, verifier, VerificationStage.POST_COMMIT),
                         VerificationStage.POST_INTERACTION,
-                        this::interactionApiExecution),
-                publishingTest(
+                        this::interactionApiExecution))
+                .add(publishingTest(
                         PublishingTestContext.of("Wrapper Sync w/o Rules",
+                                changeScenario,
                                 given, verifier, VerificationStage.POST_COMMIT),
                         VerificationStage.POST_INTERACTION,
-                        this::wrapperSyncExecutionNoRules),
-//                publishingTest(
-//                        PublishingTestContext.of("Wrapper Async w/o Rules",
-//                              given, verifier, VerificationStage.POST_COMMIT),
-//                        VerificationStage.POST_INTERACTION,
-//                        this::wrapperAsyncExecutionNoRules),
-                publishingTest(
+                        this::wrapperSyncExecutionNoRules))
+//                    .add(publishingTest(
+//                            PublishingTestContext.of("Wrapper Async w/o Rules",
+//                                  changeScenario,
+//                                  given, verifier, VerificationStage.POST_COMMIT),
+//                            VerificationStage.POST_INTERACTION,
+//                            this::wrapperAsyncExecutionNoRules))
+                .add(publishingTest(
                         PublishingTestContext.of("Wrapper Sync w/ Rules (expected to fail w/ DisabledException)",
+                                changeScenario,
                                 given, verifier, VerificationStage.FAILURE_CASE),
                         VerificationStage.POST_INTERACTION,
-                        this::wrapperSyncExecutionWithFailure)
-//                publishingTest(
-//                        PublishingTestContext.of("Wrapper Async w/ Rules (expected to fail w/ DisabledException)",
-//                                given, verifier, VerificationStage.FAILURE_CASE),
-//                        VerificationStage.POST_INTERACTION,
-//                        this::wrapperAsyncExecutionWithFailure)
-                );
-
-        if(includeProgrammatic) {
-            // prepend
-            dynamicTests = dynamicTests.add(0,
-                publishingTest(
-                        PublishingTestContext.of("Programmatic",
-                                given, verifier, VerificationStage.POST_COMMIT),
-                        VerificationStage.POST_INTERACTION,
-                        this::programmaticExecution));
-        }
+                        this::wrapperSyncExecutionWithFailure))
+//                    .add(publishingTest(
+//                            PublishingTestContext.of("Wrapper Async w/ Rules (expected to fail w/ DisabledException)",
+//                                    changeScenario,
+//                                    given, verifier, VerificationStage.FAILURE_CASE),
+//                            VerificationStage.POST_INTERACTION,
+//                            this::wrapperAsyncExecutionWithFailure))
+                    ;
 
         return XrayUi.isXrayEnabled()
                 ? dynamicTests
@@ -278,10 +297,11 @@ public abstract class PublishingTestFactoryAbstract {
             final VerificationStage onSuccess,
             final PublishingTestRunner testRunner) {
 
-        return dynamicTest(testContext.getDisplayName(), ()->{
+        val displayName = testContext.getScenario().name() + ": " + testContext.getDisplayName();
+
+        return dynamicTest(displayName, ()->{
 
             val traceLog = testContext.getTraceLog();
-            val displayName = testContext.getDisplayName();
 
             xrayAddTest(displayName);
 

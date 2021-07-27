@@ -34,6 +34,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.jpa.entities.JpaBook;
+import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.ChangeScenario;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.VerificationStage;
 import org.apache.isis.testdomain.publishing.subscriber.ExecutionSubscriberForTesting;
 import org.apache.isis.testdomain.util.CollectionAssertions;
@@ -50,7 +51,9 @@ implements HasPersistenceStandard {
         ExecutionSubscriberForTesting.clearPublishedEntries(kvStore);
     }
 
-    protected void verify(final VerificationStage verificationStage) {
+    protected void verify(
+            final ChangeScenario changeScenario,
+            final VerificationStage verificationStage) {
         switch(verificationStage) {
 
         case FAILURE_CASE:

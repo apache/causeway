@@ -29,6 +29,7 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.PropertyDto;
+import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.ChangeScenario;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.VerificationStage;
 import org.apache.isis.testdomain.publishing.subscriber.CommandSubscriberForTesting;
 import org.apache.isis.testdomain.util.CollectionAssertions;
@@ -45,7 +46,9 @@ implements HasPersistenceStandard {
         CommandSubscriberForTesting.clearPublishedCommands(kvStore);
     }
 
-    protected void verify(final VerificationStage verificationStage) {
+    protected void verify(
+            final ChangeScenario changeScenario,
+            final VerificationStage verificationStage) {
         switch(verificationStage) {
 
         case FAILURE_CASE:

@@ -77,7 +77,7 @@ public interface PropertyChangeTracker {
                             property,
                             PreAndPostValue
                                 .pre(IsisTransactionPlaceholder.NEW)
-                                .withPost(property.get(entity)))
+                                .withPost(property.get(entity).getPojo()))
                     .toEntityPropertyChange(
                             timestamp,
                             user,
@@ -113,7 +113,7 @@ public interface PropertyChangeTracker {
                             entity,
                             property,
                             PreAndPostValue
-                                .pre(property.get(entity))
+                                .pre(property.get(entity).getPojo())
                                 .withPost(IsisTransactionPlaceholder.DELETED))
                     .toEntityPropertyChange(
                             timestamp,
