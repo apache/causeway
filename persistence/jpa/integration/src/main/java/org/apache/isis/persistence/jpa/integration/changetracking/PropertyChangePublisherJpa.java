@@ -82,37 +82,13 @@ implements
             return;
         }
 
-        val payload = new HasEnlistedEntityPropertyChanges() {
-
-            @Override
-            public Can<EntityPropertyChange> getPropertyChanges(
-                    final Timestamp timestamp,
-                    final String user,
-                    final TransactionId txId) {
-
-                return changeRecords
-                .map(changeRecord->{
-
-                    log.debug("publish property change {} value '{}' -> '{}'",
-                            entity.getSpecification().getLogicalTypeName(),
-                            changeRecord.getPropertyId(),
-                            changeRecord.getPreAndPostValue().getPre(),
-                            changeRecord.getPreAndPostValue().getPost());
-
-                    return toPropertyChange(changeRecord,
-                            timestamp,
-                            user,
-                            txId);
-                });
-
-            }
-
-        };
-
         CallbackFacet.callCallback(entity, UpdatingCallbackFacet.class);
         postLifecycleEventIfRequired(entity, UpdatingLifecycleEventFacet.class);
 
-        entityPropertyChangePublisher.publishChangedProperties(payload);
+        entityPropertyChangePublisher.publishChangedProperties(
+                PropertyChangePublisher
+                .publishingPayloadForUpdate(entity, changeRecords));
+
     }
 
     @Override
@@ -120,47 +96,9 @@ implements
         CallbackFacet.callCallback(entity, RemovingCallbackFacet.class);
         postLifecycleEventIfRequired(entity, RemovingLifecycleEventFacet.class);
 
-
-        val payload = new HasEnlistedEntityPropertyChanges() {
-
-            @Override
-            public Can<EntityPropertyChange> getPropertyChanges(
-                    final Timestamp timestamp,
-                    final String user,
-                    final TransactionId txId) {
-
-                return entity
-                .getSpecification()
-                .streamProperties(MixedIn.EXCLUDED)
-                .filter(property->!property.isMixedIn())
-                .filter(property->!property.isNotPersisted())
-                .map(property->PropertyChangeRecord.of(
-                            entity,
-                            property,
-                            PreAndPostValue
-                                .pre(property.get(entity))
-                                .withPost(IsisTransactionPlaceholder.DELETED))
-                )
-                .map(changeRecord->{
-
-                    log.debug("publish property change {} value '{}' -> '{}'",
-                            entity.getSpecification().getLogicalTypeName(),
-                            changeRecord.getPropertyId(),
-                            changeRecord.getPreAndPostValue().getPre(),
-                            changeRecord.getPreAndPostValue().getPost());
-
-                    return toPropertyChange(changeRecord,
-                            timestamp,
-                            user,
-                            txId);
-                })
-                .collect(Can.toCan());
-
-            }
-
-        };
-
-        entityPropertyChangePublisher.publishChangedProperties(payload);
+        entityPropertyChangePublisher.publishChangedProperties(
+                PropertyChangePublisher
+                .publishingPayloadForDeletion(entity));
     }
 
     @Override
@@ -168,46 +106,9 @@ implements
         CallbackFacet.callCallback(entity, PersistedCallbackFacet.class);
         postLifecycleEventIfRequired(entity, PersistedLifecycleEventFacet.class);
 
-        val payload = new HasEnlistedEntityPropertyChanges() {
-
-            @Override
-            public Can<EntityPropertyChange> getPropertyChanges(
-                    final Timestamp timestamp,
-                    final String user,
-                    final TransactionId txId) {
-
-                return entity
-                .getSpecification()
-                .streamProperties(MixedIn.EXCLUDED)
-                .filter(property->!property.isMixedIn())
-                .filter(property->!property.isNotPersisted())
-                .map(property->PropertyChangeRecord.of(
-                            entity,
-                            property,
-                            PreAndPostValue
-                                .pre(IsisTransactionPlaceholder.NEW)
-                                .withPost(property.get(entity)))
-                )
-                .map(changeRecord->{
-
-                    log.debug("publish property change {} value '{}' -> '{}'",
-                            entity.getSpecification().getLogicalTypeName(),
-                            changeRecord.getPropertyId(),
-                            changeRecord.getPreAndPostValue().getPre(),
-                            changeRecord.getPreAndPostValue().getPost());
-
-                    return toPropertyChange(changeRecord,
-                            timestamp,
-                            user,
-                            txId);
-                })
-                .collect(Can.toCan());
-
-            }
-
-        };
-
-        entityPropertyChangePublisher.publishChangedProperties(payload);
+        entityPropertyChangePublisher.publishChangedProperties(
+                PropertyChangePublisher
+                .publishingPayloadForCreation(entity));
     }
 
     @Override
@@ -216,10 +117,7 @@ implements
         postLifecycleEventIfRequired(entity, UpdatedLifecycleEventFacet.class);
     }
 
-    @Override
-    public void onPostRemove(final ManagedObject entity) {
-        // not used
-    }
+    // -- METRICS
 
     @Override
     public int numberEntitiesLoaded() {
@@ -229,34 +127,6 @@ implements
     @Override
     public int numberEntitiesDirtied() {
         return -1; // n/a
-    }
-
-    // -- HELPER
-
-    private EntityPropertyChange toPropertyChange(
-            final PropertyChangeRecord record,
-            final Timestamp timestamp,
-            final String user,
-            final TransactionId txId) {
-
-        val entity = record.getEntity();
-        val spec = entity.getSpecification();
-        val property = record.getProperty();
-
-        final Bookmark target = ManagedObjects.bookmarkElseFail(entity);
-        final String propertyId = property.getId();
-        final String memberId = property.getFeatureIdentifier().getFullIdentityString();
-        final String preValueStr = record.getPreAndPostValue().getPreString();
-        final String postValueStr = record.getPreAndPostValue().getPostString();
-        final String targetClass = CommandUtil.targetClassNameFor(spec);
-
-        final UUID transactionId = txId.getInteractionId();
-        final int sequence = txId.getSequence();
-
-
-        return EntityPropertyChange.of(
-                transactionId, sequence, targetClass, target,
-                memberId, propertyId, preValueStr, postValueStr, user, timestamp);
     }
 
 }

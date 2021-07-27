@@ -84,7 +84,8 @@ public class IsisEntityListener {
             val changes = unwrap.getCurrentChanges();
             val objectChanges = changes.getObjectChangeSetForClone(entityPojo);
 
-            final Can<PropertyChangeRecord> payload = objectChanges
+            final Can<PropertyChangeRecord> propertyChangeRecords =
+            objectChanges
             .getChanges()
             .stream()
             .filter(DirectToFieldChangeRecord.class::isInstance)
@@ -106,7 +107,7 @@ public class IsisEntityListener {
             })
             .collect(Can.toCan()); // a Can<T> only collects non-null elements
 
-            propertyChangePublisher.onPreUpdate(entity, payload);
+            propertyChangePublisher.onPreUpdate(entity, propertyChangeRecords);
 
         });
     }
@@ -137,8 +138,6 @@ public class IsisEntityListener {
     @PostLoad void onPostLoad(final Object entityPojo) {
         log.debug("onPostLoad: {}", entityPojo);
         serviceInjector.injectServicesInto(entityPojo);
-        val entity = objectManager.adapt(entityPojo);
-        propertyChangePublisher.onPostRemove(entity);
     }
 
 

@@ -18,13 +18,21 @@
  */
 package org.apache.isis.core.transaction.changetracking;
 
+import java.sql.Timestamp;
+
+import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
+import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
+import org.apache.isis.core.transaction.changetracking.events.IsisTransactionPlaceholder;
+
+import lombok.NonNull;
 
 /**
- * Responsible for collecting then immediately publishing changes to domain objects
- * within a transaction, that is, notify publishing subscribers and call the various
- * persistence call-back facets.
+ * Responsible for collecting, then immediately publishing changes to domain objects,
+ * that occur within a transaction, that is,
+ * notify publishing subscribers and call the various persistence call-back facets.
  *
  * @since 2.0 {index}
  * @apiNote Introduced for JPA (EclipseLink implementation). More lightweight than
@@ -32,14 +40,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
  */
 public interface PropertyChangePublisher {
 
-    /**
-     * TODO update ... An override of {@link EntityChangeTracker#enlistUpdating(ManagedObject)}
-     * where the caller already knows the old value (and so the
-     * {@link EntityChangeTracker} does not need to capture the old value itself.
-     *
-     * @param entity - being enlisted
-     * @param preValue - the pre-value (could be null)
-     */
     void onPreUpdate(ManagedObject entity, Can<PropertyChangeRecord> changeRecords);
 
     void onPrePersist(ManagedObject entity);
@@ -50,6 +50,108 @@ public interface PropertyChangePublisher {
 
     void onPostUpdate(ManagedObject entity);
 
-    void onPostRemove(ManagedObject entity);
+    //void onPostRemove(ManagedObject entity);
+
+    // -- PUBLISHING PAYLOAD FACTORIES
+
+    static HasEnlistedEntityPropertyChanges publishingPayloadForCreation(
+            final @NonNull ManagedObject entity) {
+
+        return new HasEnlistedEntityPropertyChanges() {
+
+            @Override
+            public Can<EntityPropertyChange> getPropertyChanges(
+                    final Timestamp timestamp,
+                    final String user,
+                    final TransactionId txId) {
+
+                return entity
+                .getSpecification()
+                .streamProperties(MixedIn.EXCLUDED)
+                .filter(property->!property.isMixedIn())
+                .filter(property->!property.isNotPersisted())
+                .map(property->
+                    PropertyChangeRecord
+                    .of(
+                            entity,
+                            property,
+                            PreAndPostValue
+                                .pre(IsisTransactionPlaceholder.NEW)
+                                .withPost(property.get(entity)))
+                    .toEntityPropertyChange(
+                            timestamp,
+                            user,
+                            txId)
+                )
+                .collect(Can.toCan());
+
+            }
+
+        };
+
+    }
+
+    static HasEnlistedEntityPropertyChanges publishingPayloadForDeletion(
+            final @NonNull ManagedObject entity) {
+
+        return new HasEnlistedEntityPropertyChanges() {
+
+            @Override
+            public Can<EntityPropertyChange> getPropertyChanges(
+                    final Timestamp timestamp,
+                    final String user,
+                    final TransactionId txId) {
+
+                return entity
+                .getSpecification()
+                .streamProperties(MixedIn.EXCLUDED)
+                .filter(property->!property.isMixedIn())
+                .filter(property->!property.isNotPersisted())
+                .map(property->
+                    PropertyChangeRecord
+                    .of(
+                            entity,
+                            property,
+                            PreAndPostValue
+                                .pre(property.get(entity))
+                                .withPost(IsisTransactionPlaceholder.DELETED))
+                    .toEntityPropertyChange(
+                            timestamp,
+                            user,
+                            txId)
+                )
+                .collect(Can.toCan());
+
+            }
+
+        };
+
+    }
+
+    static HasEnlistedEntityPropertyChanges publishingPayloadForUpdate(
+            final ManagedObject entity,
+            final Can<PropertyChangeRecord> changeRecords) {
+
+        return new HasEnlistedEntityPropertyChanges() {
+
+            @Override
+            public Can<EntityPropertyChange> getPropertyChanges(
+                    final Timestamp timestamp,
+                    final String user,
+                    final TransactionId txId) {
+
+                return changeRecords
+                .map(changeRecord->
+                    changeRecord
+                    .toEntityPropertyChange(
+                            timestamp,
+                            user,
+                            txId));
+            }
+
+        };
+
+    }
+
 
 }

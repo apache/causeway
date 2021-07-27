@@ -18,8 +18,14 @@
  */
 package org.apache.isis.core.transaction.changetracking;
 
+import java.sql.Timestamp;
+import java.util.UUID;
+
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
+import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
@@ -90,13 +96,38 @@ public final class PropertyChangeRecord {
                 : preAndPostValue.withPost(getPropertyValue());
     }
 
+    // -- UTILITY
+
+    public EntityPropertyChange toEntityPropertyChange(
+            final Timestamp timestamp,
+            final String user,
+            final TransactionId txId) {
+
+        val spec = getEntity().getSpecification();
+        val property = this.getProperty();
+
+        final Bookmark target = ManagedObjects.bookmarkElseFail(getEntity());
+        final String propertyId = property.getId();
+        final String memberId = property.getFeatureIdentifier().getFullIdentityString();
+        final String preValueStr = getPreAndPostValue().getPreString();
+        final String postValueStr = getPreAndPostValue().getPostString();
+        final String targetClass = CommandUtil.targetClassNameFor(spec);
+
+        final UUID transactionId = txId.getInteractionId();
+        final int sequence = txId.getSequence();
+
+
+        return EntityPropertyChange.of(
+                transactionId, sequence, targetClass, target,
+                memberId, propertyId, preValueStr, postValueStr, user, timestamp);
+    }
+
     // -- HELPER
 
     private Object getPropertyValue() {
         val referencedAdapter = property.get(entity, InteractionInitiatedBy.FRAMEWORK);
         return ManagedObjects.UnwrapUtil.single(referencedAdapter);
     }
-
 
 
 }
