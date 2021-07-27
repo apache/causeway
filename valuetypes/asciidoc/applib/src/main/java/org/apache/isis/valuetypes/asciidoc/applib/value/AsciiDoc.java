@@ -26,6 +26,8 @@ import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.value.HasHtml;
 import org.apache.isis.valuetypes.asciidoc.applib.jaxb.AsciiDocJaxbAdapter;
 
+import lombok.Getter;
+
 /**
  * Immutable value type holding pre-rendered HTML.
  *
@@ -39,35 +41,32 @@ public class AsciiDoc implements HasHtml, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public static AsciiDoc valueOfAdoc(String asciiDoc) {
-        return valueOfHtml(Converter.adocToHtml(asciiDoc));
+    public static AsciiDoc valueOfAdoc(String adoc) {
+        return new AsciiDoc(adoc);
     }
 
-    public static AsciiDoc valueOfHtml(String html) {
-        return new AsciiDoc(html);
-    }
-
-    private final String html;
+    @Getter
+    private final String adoc;
 
     public AsciiDoc() {
         this(null);
     }
 
-    public AsciiDoc(String html) {
-        this.html = html!=null ? html : "";
+    public AsciiDoc(String adoc) {
+        this.adoc = adoc !=null ? adoc : "";
     }
 
     public String title() {
-        return "AsciiDoc[length="+html.length()+"]";
+        return getAdoc();
     }
 
     @Override
     public String asHtml() {
-        return html;
+        return Converter.adocToHtml(this.adoc);
     }
 
     public boolean isEqualTo(final AsciiDoc other) {
-        return other != null && this.html.equals(other.html);
+        return other != null && this.adoc.equals(other.adoc);
     }
 
     @Override
@@ -83,12 +82,12 @@ public class AsciiDoc implements HasHtml, Serializable {
 
     @Override
     public int hashCode() {
-        return html.hashCode();
+        return adoc.hashCode();
     }
 
     @Override
     public String toString() {
-        return "AsciiDoc[length="+html.length()+", html="+html+"]";
+        return "AsciiDoc[length="+ adoc.length()+", html="+ adoc +"]";
     }
 
 }

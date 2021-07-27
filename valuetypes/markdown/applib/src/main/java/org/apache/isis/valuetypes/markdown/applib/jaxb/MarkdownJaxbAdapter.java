@@ -45,8 +45,8 @@ public final class MarkdownJaxbAdapter extends XmlAdapter<String, Markdown> {
         if(v==null) {
             return null;
         }
-        final String html = _Strings.ofBytes(decoder.decode(v), StandardCharsets.UTF_8);
-        return new Markdown(html);
+        final String markdown = _Strings.ofBytes(decoder.decode(v), StandardCharsets.UTF_8);
+        return Markdown.valueOfMarkdown(markdown);
     }
 
     @Override
@@ -54,7 +54,7 @@ public final class MarkdownJaxbAdapter extends XmlAdapter<String, Markdown> {
         if(v==null) {
             return null;
         }
-        final String html = v.asHtml();
-        return encoder.encodeToString(_Strings.toBytes(html, StandardCharsets.UTF_8));
+        final String markdown = v.getMarkdown();
+        return encoder.encodeToString(_Strings.toBytes(markdown, StandardCharsets.UTF_8));
     }
 }
