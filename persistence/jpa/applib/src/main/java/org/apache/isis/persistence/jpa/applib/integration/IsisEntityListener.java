@@ -91,21 +91,18 @@ public class IsisEntityListener {
             .map(DirectToFieldChangeRecord.class::cast)
             .map(changeRecord -> {
                 val propertyName = changeRecord.getAttribute();
-                val property = entity.getSpecification().getProperty(propertyName)
+                return entity
+                        .getSpecification()
+                        .getProperty(propertyName)
                         .filter(property->!property.isMixedIn())
                         .filter(property->!property.isNotPersisted())
-                        .orElse(null);
-
-                if(property==null) {
-                    return null; // ignore
-                }
-
-                return PropertyChangeRecord.of(
-                        entity,
-                        property,
-                        PreAndPostValue
-                            .pre(changeRecord.getOldValue())
-                            .withPost(changeRecord.getNewValue()));
+                        .map(property->PropertyChangeRecord.of(
+                                entity,
+                                property,
+                                PreAndPostValue
+                                    .pre(changeRecord.getOldValue())
+                                    .withPost(changeRecord.getNewValue())))
+                        .orElse(null); // ignore
             })
             .collect(Can.toCan()); // a Can<T> only collects non-null elements
 
