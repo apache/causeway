@@ -56,6 +56,7 @@ extends ScalarPanelAbstract {
     private static final String ID_SCALAR_IF_REGULAR = "scalarIfRegular";
     private static final String ID_SCALAR_IF_REGULAR_DOWNLOAD = "scalarIfRegularDownload";
     private static final String ID_FILE_NAME = "fileName";
+    //private static final String ID_FILE_NAME_IF_COMPACT = "fileNameIfCompact";
     private static final String ID_SCALAR_IF_REGULAR_CLEAR = "scalarIfRegularClear";
     private static final String ID_SCALAR_NAME = "scalarName";
     private static final String ID_SCALAR_VALUE = "scalarValue";
@@ -120,10 +121,11 @@ extends ScalarPanelAbstract {
     @Override
     protected Component createComponentForCompact() {
         final MarkupContainer scalarIfCompact = new WebMarkupContainer(ID_SCALAR_IF_COMPACT);
-        MarkupContainer downloadLink = updateDownloadLink(ID_SCALAR_IF_COMPACT_DOWNLOAD, scalarIfCompact);
-        if(downloadLink != null) {
-            updateFileNameLabel("fileNameIfCompact", downloadLink);
-        }
+        updateDownloadLink(ID_SCALAR_IF_COMPACT_DOWNLOAD, scalarIfCompact);
+//        if(downloadLink != null) {
+//            updateFileNameLabel(ID_FILE_NAME_IF_COMPACT, downloadLink);
+//            Components.permanentlyHide(downloadLink, ID_FILE_NAME_IF_COMPACT);
+//        }
 
         return scalarIfCompact;
     }

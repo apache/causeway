@@ -589,7 +589,9 @@ implements ScalarModelSubscriber {
 
             @Override
             public void buildGui(final ScalarPanelAbstract panel) {
-                panel.getComponentForRegular().setVisible(false);
+                panel.scalarIfCompact.setVisible(true);
+                panel.scalarIfRegular.setVisible(false);
+                Components.permanentlyHide(panel.scalarIfRegular, ID_SCALAR_NAME);
             }
 
         },
@@ -604,6 +606,7 @@ implements ScalarModelSubscriber {
 
             @Override
             public void buildGui(final ScalarPanelAbstract panel) {
+                panel.scalarIfRegular.setVisible(true);
                 panel.scalarIfCompact.setVisible(false);
             }
 
@@ -624,7 +627,7 @@ implements ScalarModelSubscriber {
 
     // ///////////////////////////////////////////////////////////////////
 
-    protected Component getComponentForRegular() {
+    protected final Component getComponentForRegular() {
         return scalarIfRegular;
     }
 
