@@ -33,7 +33,6 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.Command.CommandPublishingPhase;
 import org.apache.isis.applib.services.iactn.ActionInvocation;
 import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.iactn.PropertyEdit;
@@ -113,8 +112,7 @@ implements MemberExecutorService {
         val interaction = getInteractionElseFail();
         val command = interaction.getCommand();
 
-        CommandPublishingFacet.ifPublishingEnabledForCommand(
-                command, owningAction, facetHolder, ()->command.updater().setPublishingPhase(CommandPublishingPhase.READY));
+        CommandPublishingFacet.prepareCommandForPublishing(command, owningAction, facetHolder);
 
         val xrayHandle = _Xray.enterActionInvocation(interactionLayerTracker, interaction, owningAction, head, argumentAdapters);
 
@@ -191,8 +189,7 @@ implements MemberExecutorService {
             return head.getTarget();
         }
 
-        CommandPublishingFacet.ifPublishingEnabledForCommand(
-                command, owningProperty, facetHolder, ()->command.updater().setPublishingPhase(CommandPublishingPhase.READY));
+        CommandPublishingFacet.prepareCommandForPublishing(command, owningProperty, facetHolder);
 
         val xrayHandle = _Xray.enterPropertyEdit(interactionLayerTracker, interaction, owningProperty, head, newValueAdapter);
 

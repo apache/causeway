@@ -31,7 +31,6 @@ import javax.jdo.PersistenceManagerFactory;
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -42,9 +41,11 @@ import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.control.SyncControl;
 import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.functions._Functions.CheckedConsumer;
+import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -75,7 +76,7 @@ extends PublishingTestFactoryAbstract {
     private final WrapperFactory wrapper;
     private final ObjectManager objectManager;
     private final FixtureScripts fixtureScripts;
-    private final CommitListener preCommitListener;
+    private final CommitListener commitListener;
 
     @Getter(onMethod_ = {@Override}, value = AccessLevel.PROTECTED)
     private final InteractionService interactionService;
@@ -97,7 +98,8 @@ extends PublishingTestFactoryAbstract {
             fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
             break;
 
-        case ENTITY_UPDATE:
+        case PROPERTY_UPDATE:
+        case ACTION_EXECUTION:
         case ENTITY_REMOVAL:
 
             // given
@@ -112,7 +114,7 @@ extends PublishingTestFactoryAbstract {
     protected boolean programmaticExecution(
             final PublishingTestContext context) {
 
-        context.bind(preCommitListener);
+        context.bind(commitListener);
 
         // This test does not trigger command or execution publishing, however it does trigger
         // entity-change-publishing.
@@ -125,7 +127,7 @@ extends PublishingTestFactoryAbstract {
             setupBookForJdo();
             break;
 
-        case ENTITY_UPDATE:
+        case PROPERTY_UPDATE:
 
             withBookDo(book->{
 
@@ -133,6 +135,20 @@ extends PublishingTestFactoryAbstract {
 
                 // when - direct change (circumventing the framework)
                 context.changeProperty(()->book.setName("Book #2"));
+
+                repository.persistAndFlush(book);
+
+            });
+
+            break;
+        case ACTION_EXECUTION:
+
+            withBookDo(book->{
+
+                context.runGiven();
+
+                // when - direct action method invocation (circumventing the framework)
+                context.executeAction(()->book.doubleThePrice());
 
                 repository.persistAndFlush(book);
 
@@ -149,6 +165,8 @@ extends PublishingTestFactoryAbstract {
             });
 
             break;
+        default:
+            throw _Exceptions.unmatchedCase(context.getScenario());
         }
 
         return true;
@@ -160,30 +178,57 @@ extends PublishingTestFactoryAbstract {
     protected boolean interactionApiExecution(
             final PublishingTestContext context) {
 
-        assertEquals(ChangeScenario.ENTITY_UPDATE, context.getScenario(),
-                "interactionApiExecution does only support 'update' scenario");
+        context.bind(commitListener);
 
-        context.bind(preCommitListener);
+        switch(context.getScenario()) {
 
-        // when
-        withBookDo(book->{
-
-            context.runGiven();
+        case PROPERTY_UPDATE:
 
             // when
-            context.changeProperty(()->{
+            withBookDo(book->{
 
-                val bookAdapter = objectManager.adapt(book);
-                val propertyInteraction = PropertyInteraction.start(bookAdapter, "name", Where.OBJECT_FORMS);
-                val managedProperty = propertyInteraction.getManagedPropertyElseThrow(__->_Exceptions.noSuchElement());
-                val propertyModel = managedProperty.startNegotiation();
-                val propertySpec = managedProperty.getSpecification();
-                propertyModel.getValue().setValue(ManagedObject.of(propertySpec, "Book #2"));
-                propertyModel.submit();
+                context.runGiven();
+
+                // when
+                context.changeProperty(()->{
+
+                    val bookAdapter = objectManager.adapt(book);
+                    val propertyInteraction = PropertyInteraction.start(bookAdapter, "name", Where.OBJECT_FORMS);
+                    val managedProperty = propertyInteraction.getManagedPropertyElseThrow(__->_Exceptions.noSuchElement());
+                    val propertyModel = managedProperty.startNegotiation();
+                    val propertySpec = managedProperty.getSpecification();
+                    propertyModel.getValue().setValue(ManagedObject.of(propertySpec, "Book #2"));
+                    propertyModel.submit();
+
+                });
 
             });
 
-        });
+            break;
+        case ACTION_EXECUTION:
+
+            // when
+            withBookDo(book->{
+
+                context.runGiven();
+
+                // when
+                context.executeAction(()->{
+
+                    val bookAdapter = objectManager.adapt(book);
+
+                    val actionInteraction = ActionInteraction.start(bookAdapter, "doubleThePrice", Where.OBJECT_FORMS);
+                    val managedAction = actionInteraction.getManagedActionElseThrow(__->_Exceptions.noSuchElement());
+                    // this test action is always disabled, so don't enforce rules here, just invoke
+                    managedAction.invoke(Can.empty()); // no-arg action
+                });
+
+            });
+
+            break;
+        default:
+            throw _Exceptions.unmatchedCase(context.getScenario());
+        }
 
         return true;
     }
@@ -194,21 +239,41 @@ extends PublishingTestFactoryAbstract {
     protected boolean wrapperSyncExecutionNoRules(
             final PublishingTestContext context) {
 
-        assertEquals(ChangeScenario.ENTITY_UPDATE, context.getScenario(),
-                "wrapperSyncExecutionNoRules does only support 'update' scenario");
+        context.bind(commitListener);
 
-        context.bind(preCommitListener);
+        switch(context.getScenario()) {
 
-        // when
-        withBookDo(book->{
+        case PROPERTY_UPDATE:
 
-            context.runGiven();
+            // when
+            withBookDo(book->{
 
-            // when - running synchronous
-            val syncControl = SyncControl.control().withSkipRules(); // don't enforce rules
-            context.changeProperty(()->wrapper.wrap(book, syncControl).setName("Book #2"));
+                context.runGiven();
 
-        });
+                // when - running synchronous
+                val syncControl = SyncControl.control().withSkipRules(); // don't enforce rules
+                context.changeProperty(()->wrapper.wrap(book, syncControl).setName("Book #2"));
+
+            });
+
+            break;
+        case ACTION_EXECUTION:
+
+            // when
+            withBookDo(book->{
+
+                context.runGiven();
+
+                // when - running synchronous
+                val syncControl = SyncControl.control().withSkipRules(); // don't enforce rules
+                context.executeAction(()->wrapper.wrap(book, syncControl).doubleThePrice());
+
+            });
+
+            break;
+        default:
+            throw _Exceptions.unmatchedCase(context.getScenario());
+        }
 
         return true;
     }
@@ -217,24 +282,47 @@ extends PublishingTestFactoryAbstract {
     protected boolean wrapperSyncExecutionWithFailure(
             final PublishingTestContext context) {
 
-        assertEquals(ChangeScenario.ENTITY_UPDATE, context.getScenario(),
-                "wrapperSyncExecutionWithFailure does only support 'update' scenario");
+        context.bind(commitListener);
 
-        context.bind(preCommitListener);
+        switch(context.getScenario()) {
 
-        // when
-        withBookDo(book->{
+        case PROPERTY_UPDATE:
 
-            context.runGiven();
+            // when
+            withBookDo(book->{
 
-            // when - running synchronous
-            val syncControl = SyncControl.control().withCheckRules(); // enforce rules
+                context.runGiven();
 
-            assertThrows(DisabledException.class, ()->{
-                wrapper.wrap(book, syncControl).setName("Book #2"); // should fail with DisabledException
+                // when - running synchronous
+                val syncControl = SyncControl.control().withCheckRules(); // enforce rules
+
+                assertThrows(DisabledException.class, ()->{
+                    wrapper.wrap(book, syncControl).setName("Book #2"); // should fail with DisabledException
+                });
+
             });
 
-        });
+            break;
+        case ACTION_EXECUTION:
+
+            // when
+            withBookDo(book->{
+
+                context.runGiven();
+
+                // when - running synchronous
+                val syncControl = SyncControl.control().withCheckRules(); // enforce rules
+
+                assertThrows(DisabledException.class, ()->{
+                    wrapper.wrap(book, syncControl).doubleThePrice(); // should fail with DisabledException
+                });
+
+            });
+
+            break;
+        default:
+            throw _Exceptions.unmatchedCase(context.getScenario());
+        }
 
         return false;
     }
@@ -245,7 +333,7 @@ extends PublishingTestFactoryAbstract {
     protected boolean wrapperAsyncExecutionNoRules(
             final PublishingTestContext context) throws InterruptedException, ExecutionException, TimeoutException {
 
-        context.bind(preCommitListener);
+        context.bind(commitListener);
 
         // given
         val asyncControl = returningVoid().withSkipRules(); // don't enforce rules
@@ -271,7 +359,7 @@ extends PublishingTestFactoryAbstract {
     protected boolean wrapperAsyncExecutionWithFailure(
             final PublishingTestContext context) {
 
-        context.bind(preCommitListener);
+        context.bind(commitListener);
 
         // when
         withBookDo(book->{

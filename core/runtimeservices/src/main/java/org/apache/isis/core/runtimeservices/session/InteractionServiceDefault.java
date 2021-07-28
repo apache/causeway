@@ -28,6 +28,8 @@ import java.util.Stack;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 
+import static java.util.Objects.requireNonNull;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -69,12 +71,10 @@ import org.apache.isis.core.runtime.events.MetamodelEventService;
 import org.apache.isis.core.security.authentication.InteractionContextFactory;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Is the factory of {@link Interaction}s.
@@ -116,7 +116,7 @@ implements
     @EventListener
     public void init(final ContextRefreshedEvent event) {
 
-        requires(authenticationManager, "authenticationManager");
+        requireNonNull(authenticationManager, "authenticationManager");
 
         log.info("Initialising Isis System");
         log.info("working directory: {}", new File(".").getAbsolutePath());

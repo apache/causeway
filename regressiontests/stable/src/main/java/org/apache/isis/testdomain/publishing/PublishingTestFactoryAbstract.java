@@ -66,7 +66,8 @@ public abstract class PublishingTestFactoryAbstract {
     @RequiredArgsConstructor @Getter
     public static enum ChangeScenario {
         ENTITY_CREATION("creation"),
-        ENTITY_UPDATE("update"),
+        PROPERTY_UPDATE("property update"),
+        ACTION_EXECUTION("action execution"),
         ENTITY_REMOVAL("removal");
         final String displayName;
     }
@@ -124,6 +125,12 @@ public abstract class PublishingTestFactoryAbstract {
             traceLog.log("2.3 about to change book's name");
             runnable.run();
             traceLog.log("2.4 book's name has changed");
+        }
+
+        public void executeAction(final Runnable runnable) {
+            traceLog.log("2.3 about to double book's price");
+            runnable.run();
+            traceLog.log("2.4 book's price has been doubled");
         }
 
         public void runPostCommitVerify() {
@@ -224,7 +231,8 @@ public abstract class PublishingTestFactoryAbstract {
         }
 
 
-        if(changeScenario == ChangeScenario.ENTITY_UPDATE) {
+        if(changeScenario == ChangeScenario.PROPERTY_UPDATE
+                || changeScenario == ChangeScenario.ACTION_EXECUTION) {
 
             dynamicTests = dynamicTests
                 .add(publishingTest(

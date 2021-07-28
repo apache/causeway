@@ -30,9 +30,11 @@ import javax.jdo.annotations.InheritanceStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.commons.internal.base._Strings;
@@ -87,8 +89,20 @@ public class JdoProduct implements Comparable<JdoProduct> {
     @Getter @Setter
     private List<JdoProductComment> comments;
 
+    @Action(
+            commandPublishing = Publishing.ENABLED,
+            executionPublishing = Publishing.ENABLED)
+    public void doubleThePrice() {
+        this.setPrice(2.*getPrice());
+    }
+
+    @MemberSupport
+    public String disableDoubleThePrice() {
+        return "always disabled for testing purposes";
+    }
+
     @Override
-    public int compareTo(JdoProduct other) {
+    public int compareTo(final JdoProduct other) {
         return _Strings.compareNullsFirst(this.getName(), other==null ? null : other.getName());
     }
 

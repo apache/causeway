@@ -58,9 +58,13 @@ implements HasPersistenceStandard {
                 assertContainsPropertyChangeEntries(Can.of(
                         formatPersistenceStandardSpecificCapitalize("%s Book/name: '[NEW]' -> 'Sample Book'")));
                 break;
-            case ENTITY_UPDATE:
+            case PROPERTY_UPDATE:
                 assertHasPropertyChangeEntries(Can.of(
                         formatPersistenceStandardSpecificCapitalize("%s Book/name: 'Sample Book' -> 'Book #2'")));
+                break;
+            case ACTION_EXECUTION:
+                assertHasPropertyChangeEntries(Can.of(
+                        formatPersistenceStandardSpecificCapitalize("%s Book/price: '99.0' -> '198.0'")));
                 break;
             case ENTITY_REMOVAL:
                 assertContainsPropertyChangeEntries(Can.of(

@@ -70,10 +70,16 @@ implements HasPersistenceStandardJdo {
                 ChangeScenario.ENTITY_REMOVAL, this::given, this::verify);
     }
 
-    @TestFactory @DisplayName("Entity Update")
+    @TestFactory @DisplayName("Property Update")
     List<DynamicTest> generateTestsForUpdate() {
         return testFactory.generateTestsIncludeProgrammatic(
-                ChangeScenario.ENTITY_UPDATE, this::given, this::verify);
+                ChangeScenario.PROPERTY_UPDATE, this::given, this::verify);
+    }
+
+    @TestFactory @DisplayName("Action Execution")
+    List<DynamicTest> generateTestsForAction() {
+        return testFactory.generateTestsIncludeProgrammatic(
+                ChangeScenario.ACTION_EXECUTION, this::given, this::verify);
     }
 
 }

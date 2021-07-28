@@ -215,7 +215,8 @@ public final class _With<T> {
      * @param paramName to use for the exception message, when the non-null-check fails
      * @return {@code obj!=null ? obj : throw NullPointerException}
      * @throws NullPointerException if {@code obj} is {@code null}
-     * @deprecated use {@code @lombok.NonNull} on the parameter instead
+     * @deprecated instead use {@code @lombok.NonNull} on parameters
+     * or {@link java.util.Objects#requireNonNull(Object, String)} on fields
      */
     @Deprecated
     public static <T> T requires(@Nullable final T obj, final String paramName) {

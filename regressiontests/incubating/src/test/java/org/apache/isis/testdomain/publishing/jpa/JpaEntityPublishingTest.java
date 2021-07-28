@@ -58,24 +58,31 @@ implements HasPersistenceStandardJpa {
     @Inject private PublishingTestFactoryJpa testFactory;
 
     @Disabled("'Entity Changes Tracking' currently not supported for JPA")
-    @TestFactory @DisplayName("Entity Creation")
+    @TestFactory @DisplayName("Entity Creation - n/a")
     List<DynamicTest> generateTestsForCreation() {
         return testFactory.generateTestsIncludeProgrammatic(
                 ChangeScenario.ENTITY_CREATION, this::given, this::verify);
     }
 
     @Disabled("'Entity Changes Tracking' currently not supported for JPA")
-    @TestFactory @DisplayName("Entity Removal")
+    @TestFactory @DisplayName("Entity Removal - n/a")
     List<DynamicTest> generateTestsForRemoval() {
         return testFactory.generateTestsIncludeProgrammatic(
                 ChangeScenario.ENTITY_REMOVAL, this::given, this::verify);
     }
 
     @Disabled("'Entity Changes Tracking' currently not supported for JPA")
-    @TestFactory @DisplayName("Entity Update")
+    @TestFactory @DisplayName("Property Update - n/a")
     List<DynamicTest> generateTestsForUpdate() {
         return testFactory.generateTestsIncludeProgrammatic(
-                ChangeScenario.ENTITY_UPDATE, this::given, this::verify);
+                ChangeScenario.PROPERTY_UPDATE, this::given, this::verify);
+    }
+
+    @Disabled("'Entity Changes Tracking' currently not supported for JPA")
+    @TestFactory @DisplayName("Action Execution - n/a")
+    List<DynamicTest> generateTestsForAction() {
+        return testFactory.generateTestsIncludeProgrammatic(
+                ChangeScenario.ACTION_EXECUTION, this::given, this::verify);
     }
 
 }
