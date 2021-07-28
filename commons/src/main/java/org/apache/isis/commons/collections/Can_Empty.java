@@ -86,7 +86,7 @@ final class Can_Empty<T> implements Can<T> {
     }
 
     @Override
-    public boolean contains(final T element) {
+    public boolean contains(final @Nullable T element) {
         return false;
     }
 
@@ -120,7 +120,7 @@ final class Can_Empty<T> implements Can<T> {
     }
 
     @Override
-    public Can<T> filter(@Nullable final Predicate<? super T> predicate) {
+    public Can<T> filter(final @Nullable Predicate<? super T> predicate) {
         return this; // identity
     }
 
@@ -135,31 +135,35 @@ final class Can_Empty<T> implements Can<T> {
     }
 
     @Override
-    public Can<T> add(@NonNull final T element) {
-        return Can.ofSingleton(element);
+    public Can<T> add(final @Nullable T element) {
+        return element != null
+                ? Can.ofSingleton(element)
+                : this;
     }
 
     @Override
-    public Can<T> addUnique(@NonNull final T element) {
-        return Can.ofSingleton(element);
+    public Can<T> addUnique(final @Nullable T element) {
+        return add(element);
     }
 
     @Override
-    public Can<T> addAll(@NonNull final Can<T> other) {
-        return other;
+    public Can<T> addAll(final @Nullable Can<T> other) {
+        return other != null
+                ? other
+                : this;
     }
 
     @Override
-    public Can<T> add(final int index, @NonNull final T element) {
+    public Can<T> add(final int index, final @Nullable T element) {
         if(index!=0) {
             throw new IndexOutOfBoundsException(
                     "cannot add to empty can with index other than 0; got " + index);
         }
-        return Can.ofSingleton(element);
+        return add(element);
     }
 
     @Override
-    public Can<T> replace(final int index, final T element) {
+    public Can<T> replace(final int index, final @Nullable T element) {
         throw _Exceptions.unsupportedOperation("cannot replace an element in an empty Can");
     }
 
@@ -169,7 +173,7 @@ final class Can_Empty<T> implements Can<T> {
     }
 
     @Override
-    public Can<T> remove(final T element) {
+    public Can<T> remove(final @Nullable T element) {
         return this; // on an empty can this is a no-op
     }
 
@@ -179,7 +183,7 @@ final class Can_Empty<T> implements Can<T> {
     }
 
     @Override
-    public int indexOf(final T element) {
+    public int indexOf(final @Nullable T element) {
         return -1;
     }
 

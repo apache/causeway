@@ -34,6 +34,7 @@ import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.publishing.PropertyPublishingTestAbstract;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryJdo;
+import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.ChangeScenario;
 import org.apache.isis.testdomain.publishing.conf.Configuration_usingEntityPropertyChangePublishing;
 
 @SpringBootTest(
@@ -59,9 +60,28 @@ implements HasPersistenceStandardJdo {
 
     @Inject private PublishingTestFactoryJdo testFactory;
 
-    @TestFactory @DisplayName("Execution Scenario")
-    List<DynamicTest> generateTests() {
-        return testFactory.generateTestsIncludeProgrammatic(this::given, this::verify);
+    @TestFactory @DisplayName("Entity Creation")
+    List<DynamicTest> generateTestsForCreation() {
+        return testFactory.generateTestsIncludeProgrammatic(
+                ChangeScenario.ENTITY_CREATION, this::given, this::verify);
+    }
+
+    @TestFactory @DisplayName("Entity Removal")
+    List<DynamicTest> generateTestsForRemoval() {
+        return testFactory.generateTestsIncludeProgrammatic(
+                ChangeScenario.ENTITY_REMOVAL, this::given, this::verify);
+    }
+
+    @TestFactory @DisplayName("Property Update")
+    List<DynamicTest> generateTestsForUpdate() {
+        return testFactory.generateTestsIncludeProgrammatic(
+                ChangeScenario.PROPERTY_UPDATE, this::given, this::verify);
+    }
+
+    @TestFactory @DisplayName("Action Execution")
+    List<DynamicTest> generateTestsForAction() {
+        return testFactory.generateTestsIncludeProgrammatic(
+                ChangeScenario.ACTION_EXECUTION, this::given, this::verify);
     }
 
 }

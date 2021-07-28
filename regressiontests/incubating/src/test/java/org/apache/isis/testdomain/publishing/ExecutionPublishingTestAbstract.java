@@ -18,6 +18,7 @@
  */
 package org.apache.isis.testdomain.publishing;
 
+import java.util.Collections;
 import java.util.Objects;
 
 import javax.inject.Inject;
@@ -34,6 +35,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.jpa.entities.JpaBook;
+import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.ChangeScenario;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.VerificationStage;
 import org.apache.isis.testdomain.publishing.subscriber.ExecutionSubscriberForTesting;
 import org.apache.isis.testdomain.util.CollectionAssertions;
@@ -50,7 +52,9 @@ implements HasPersistenceStandard {
         ExecutionSubscriberForTesting.clearPublishedEntries(kvStore);
     }
 
-    protected void verify(final VerificationStage verificationStage) {
+    protected void verify(
+            final ChangeScenario changeScenario,
+            final VerificationStage verificationStage) {
         switch(verificationStage) {
 
         case FAILURE_CASE:
@@ -60,18 +64,39 @@ implements HasPersistenceStandard {
         case POST_INTERACTION:
             break;
         case POST_COMMIT:
-            val bookClass = bookClass();
-            Interaction interaction = null;
-            Identifier propertyId = Identifier.propertyOrCollectionIdentifier(
-                    LogicalType.fqcn(bookClass), "name");
-            Object target = null;
-            Object argValue = "Book #2";
-            String targetMemberName = "name???";
-            String targetClass = bookClass.getName();
 
-            assertHasExecutionEntries(Can.of(
-                    new PropertyEdit(interaction, propertyId, target, argValue, targetMemberName, targetClass)
-                    ));
+            val bookClass = bookClass();
+            final Interaction interaction = null;
+            val targetMemberName = "name???";
+            final Object target = null;
+            val targetClass = bookClass.getName();
+
+            switch(changeScenario) {
+            case PROPERTY_UPDATE: {
+                Identifier propertyId = Identifier.propertyOrCollectionIdentifier(
+                        LogicalType.fqcn(bookClass), "name");
+                Object argValue = "Book #2";
+
+                assertHasExecutionEntries(Can.of(
+                        new PropertyEdit(interaction, propertyId, target, argValue, targetMemberName, targetClass)
+                        ));
+            }
+                break;
+            case ACTION_EXECUTION: {
+                Identifier actionId = Identifier.actionIdentifier(
+                        LogicalType.fqcn(bookClass), "doubleThePrice");
+                val args = Collections.<Object>emptyList();
+
+                assertHasExecutionEntries(Can.of(
+                        new ActionInvocation(interaction, actionId, target, args, targetMemberName, targetClass)
+                        ));
+            }
+
+                break;
+            default:
+                throw _Exceptions.unmatchedCase(changeScenario);
+            }
+
             break;
         default:
             // if hitting this, the caller is requesting a verification stage, we are providing no case for

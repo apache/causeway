@@ -24,7 +24,7 @@ import org.apache.isis.core.transaction.changetracking.events.IsisTransactionPla
 
 import lombok.Getter;
 
-final class _PreAndPostValue {
+public final class PreAndPostValue {
 
     /**
      * The object that was referenced before this object was changed.
@@ -44,26 +44,26 @@ final class _PreAndPostValue {
     @Getter private final Object post;
     @Getter private final String postString;
 
-    public static _PreAndPostValue pre(final Object preValue) {
-        return new _PreAndPostValue(preValue);
+    public static PreAndPostValue pre(final Object preValue) {
+        return new PreAndPostValue(preValue);
     }
 
-    private _PreAndPostValue(final Object pre) {
+    private PreAndPostValue(final Object pre) {
         this.pre = pre;
         this.preString = asString(pre);
         this.post = null;
         this.postString = null;
     }
 
-    private _PreAndPostValue(final _PreAndPostValue pre, final Object post) {
+    private PreAndPostValue(final PreAndPostValue pre, final Object post) {
         this.pre = pre.getPre();
         this.preString = pre.getPreString();
         this.post = post;
         this.postString = asString(post);
     }
 
-    public _PreAndPostValue withPost(final Object post) {
-        return new _PreAndPostValue(this, post);
+    public PreAndPostValue withPost(final Object post) {
+        return new PreAndPostValue(this, post);
     }
 
     @Override
@@ -88,7 +88,7 @@ final class _PreAndPostValue {
 
     // -- HELPER
 
-    private static String asString(Object object) {
+    private static String asString(final Object object) {
         return object != null
                 ? object.toString()
                 : null;

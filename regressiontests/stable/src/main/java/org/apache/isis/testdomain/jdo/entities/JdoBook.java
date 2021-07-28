@@ -69,7 +69,7 @@ public class JdoBook extends JdoProduct {
     // -- ENTITY SERVICE INJECTION TEST
     private MyService myService;
     @Inject
-    public void setMyService(MyService myService) {
+    public void setMyService(final MyService myService) {
         val count = kvStore.incrementCounter(JdoBook.class, "injection-count");
         log.debug("INJECTION " + count);
         this.myService = myService;
@@ -86,12 +86,12 @@ public class JdoBook extends JdoProduct {
     }
 
     public static JdoBook of(
-            String name,
-            String description,
-            double price,
-            String author,
-            String isbn,
-            String publisher) {
+            final String name,
+            final String description,
+            final double price,
+            final String author,
+            final String isbn,
+            final String publisher) {
 
         return new JdoBook(name, description, price, author, isbn, publisher);
     }
@@ -111,16 +111,17 @@ public class JdoBook extends JdoProduct {
     // -- CONSTRUCTOR
 
     private JdoBook(
-            String name,
-            String description,
-            double price,
-            String author,
-            String isbn,
-            String publisher) {
+            final String name,
+            final String description,
+            final double price,
+            final String author,
+            final String isbn,
+            final String publisher) {
 
         super(name, description, price, /*comments*/null);
         this.author = author;
         this.isbn = isbn;
         this.publisher = publisher;
     }
+
 }

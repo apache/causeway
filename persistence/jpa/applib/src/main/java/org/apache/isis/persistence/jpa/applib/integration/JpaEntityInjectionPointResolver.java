@@ -26,50 +26,52 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
 
-import org.eclipse.persistence.sessions.UnitOfWork;
-
-import lombok.extern.log4j.Log4j2;
-import lombok.val;
-
 /**
  * Use {@link IsisEntityListener} instead.
  */
 @Deprecated
-@Log4j2
+//@Log4j2
 public class JpaEntityInjectionPointResolver extends IsisEntityListener {
 
+    @Override
     @PrePersist
-    void onPrePersist(Object entityPojo) {
+    void onPrePersist(final Object entityPojo) {
         super.onPrePersist(entityPojo);
     }
 
+    @Override
     @PreUpdate
-    void onPreUpdate(Object entityPojo) {
+    void onPreUpdate(final Object entityPojo) {
         super.onPreUpdate(entityPojo);
     }
 
+    @Override
     @PreRemove
-    void onPreRemove(Object entityPojo) {
+    void onPreRemove(final Object entityPojo) {
         super.onPreRemove(entityPojo);
     }
 
+    @Override
     @PostPersist
-    void onPostPersist(Object entityPojo) {
+    void onPostPersist(final Object entityPojo) {
         super.onPostPersist(entityPojo);
     }
 
+    @Override
     @PostUpdate
-    void onPostUpdate(Object entityPojo) {
+    void onPostUpdate(final Object entityPojo) {
         super.onPostUpdate(entityPojo);
     }
 
+    @Override
     @PostRemove
-    void onPostRemove(Object entityPojo) {
+    void onPostRemove(final Object entityPojo) {
         super.onPostRemove(entityPojo);
     }
 
+    @Override
     @PostLoad
-    void onPostLoad(Object entityPojo) {
+    void onPostLoad(final Object entityPojo) {
         super.onPostLoad(entityPojo);
     }
 

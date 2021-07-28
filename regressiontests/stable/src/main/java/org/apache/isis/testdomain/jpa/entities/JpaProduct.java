@@ -33,10 +33,13 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.AccessLevel;
@@ -68,13 +71,12 @@ public class JpaProduct implements Comparable<JpaProduct> {
     @Column(name = "id")
     private @Getter @Setter Long id;
 
-    @Property(editing = Editing.DISABLED) // used for an async rule check test
+    @Property(
+            editing = Editing.DISABLED, // used for an wrapper rule check test
+            commandPublishing = Publishing.ENABLED,
+            executionPublishing = Publishing.ENABLED)
     @Column(nullable = true)
     private @Getter @Setter String name;
-//    public void setName(String name) {
-//        System.err.println("!!! setting name " + name);
-//        this.name = name;
-//    }
 
     @Property
     @Column(nullable = true)
@@ -89,8 +91,20 @@ public class JpaProduct implements Comparable<JpaProduct> {
     @OneToMany(mappedBy = "product") @JoinColumn(nullable = true)
     private @Getter @Setter List<JpaProductComment> comments;
 
+    @Action(
+            commandPublishing = Publishing.ENABLED,
+            executionPublishing = Publishing.ENABLED)
+    public void doubleThePrice() {
+        this.setPrice(2.*getPrice());
+    }
+
+    @MemberSupport
+    public String disableDoubleThePrice() {
+        return "always disabled for testing purposes";
+    }
+
     @Override
-    public int compareTo(JpaProduct other) {
+    public int compareTo(final JpaProduct other) {
         return _Strings.compareNullsFirst(this.getName(), other==null ? null : other.getName());
     }
 

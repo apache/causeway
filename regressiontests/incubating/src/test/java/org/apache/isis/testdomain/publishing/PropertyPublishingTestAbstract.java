@@ -20,9 +20,11 @@ package org.apache.isis.testdomain.publishing;
 
 import javax.inject.Inject;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.ChangeScenario;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.VerificationStage;
 import org.apache.isis.testdomain.publishing.subscriber.EntityPropertyChangeSubscriberForTesting;
 import org.apache.isis.testdomain.util.CollectionAssertions;
@@ -39,7 +41,9 @@ implements HasPersistenceStandard {
         EntityPropertyChangeSubscriberForTesting.clearPropertyChangeEntries(kvStore);
     }
 
-    protected void verify(final VerificationStage verificationStage) {
+    protected void verify(
+            final ChangeScenario changeScenario,
+            final VerificationStage verificationStage) {
         switch(verificationStage) {
         case FAILURE_CASE:
             assertHasPropertyChangeEntries(Can.empty());
@@ -48,8 +52,26 @@ implements HasPersistenceStandard {
         case POST_INTERACTION:
             break;
         case POST_COMMIT:
-            assertHasPropertyChangeEntries(Can.of(
-                    formatPersistenceStandardSpecificCapitalize("%s Book/name: 'Sample Book' -> 'Book #2'")));
+
+            switch(changeScenario) {
+            case ENTITY_CREATION:
+                assertContainsPropertyChangeEntries(Can.of(
+                        formatPersistenceStandardSpecificCapitalize("%s Book/name: '[NEW]' -> 'Sample Book'")));
+                break;
+            case PROPERTY_UPDATE:
+                assertHasPropertyChangeEntries(Can.of(
+                        formatPersistenceStandardSpecificCapitalize("%s Book/name: 'Sample Book' -> 'Book #2'")));
+                break;
+            case ACTION_EXECUTION:
+                assertHasPropertyChangeEntries(Can.of(
+                        formatPersistenceStandardSpecificCapitalize("%s Book/price: '99.0' -> '198.0'")));
+                break;
+            case ENTITY_REMOVAL:
+                assertContainsPropertyChangeEntries(Can.of(
+                        formatPersistenceStandardSpecificCapitalize("%s Book/name: 'Sample Book' -> '[DELETED]'")));
+                break;
+            }
+
             break;
         default:
             // if hitting this, the caller is requesting a verification stage, we are providing no case for
@@ -58,6 +80,15 @@ implements HasPersistenceStandard {
     }
 
     // -- HELPER
+
+    private void assertContainsPropertyChangeEntries(final Can<String> expectedAuditEntries) {
+        val actualAuditEntries = EntityPropertyChangeSubscriberForTesting.getPropertyChangeEntries(kvStore);
+        expectedAuditEntries.forEach(expectedAuditEntry->{
+            assertTrue(actualAuditEntries.contains(expectedAuditEntry),
+                    ()->String.format("expectedAuditEntry (%s) not found in %s", expectedAuditEntry, actualAuditEntries));
+        });
+
+    }
 
     private void assertHasPropertyChangeEntries(final Can<String> expectedAuditEntries) {
         val actualAuditEntries = EntityPropertyChangeSubscriberForTesting.getPropertyChangeEntries(kvStore);

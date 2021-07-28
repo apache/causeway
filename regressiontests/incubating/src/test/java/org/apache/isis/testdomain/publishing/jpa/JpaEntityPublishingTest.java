@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -32,6 +33,7 @@ import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.publishing.EntityPublishingTestAbstract;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryJpa;
+import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.ChangeScenario;
 import org.apache.isis.testdomain.publishing.conf.Configuration_usingEntityChangesPublishing;
 
 @SpringBootTest(
@@ -55,9 +57,32 @@ implements HasPersistenceStandardJpa {
 
     @Inject private PublishingTestFactoryJpa testFactory;
 
-    @TestFactory @DisplayName("Execution Scenario")
-    List<DynamicTest> generateTests() {
-        return testFactory.generateTestsIncludeProgrammatic(this::given, this::verify);
+    @Disabled("'Entity Changes Tracking' currently not supported for JPA")
+    @TestFactory @DisplayName("Entity Creation - n/a")
+    List<DynamicTest> generateTestsForCreation() {
+        return testFactory.generateTestsIncludeProgrammatic(
+                ChangeScenario.ENTITY_CREATION, this::given, this::verify);
+    }
+
+    @Disabled("'Entity Changes Tracking' currently not supported for JPA")
+    @TestFactory @DisplayName("Entity Removal - n/a")
+    List<DynamicTest> generateTestsForRemoval() {
+        return testFactory.generateTestsIncludeProgrammatic(
+                ChangeScenario.ENTITY_REMOVAL, this::given, this::verify);
+    }
+
+    @Disabled("'Entity Changes Tracking' currently not supported for JPA")
+    @TestFactory @DisplayName("Property Update - n/a")
+    List<DynamicTest> generateTestsForUpdate() {
+        return testFactory.generateTestsIncludeProgrammatic(
+                ChangeScenario.PROPERTY_UPDATE, this::given, this::verify);
+    }
+
+    @Disabled("'Entity Changes Tracking' currently not supported for JPA")
+    @TestFactory @DisplayName("Action Execution - n/a")
+    List<DynamicTest> generateTestsForAction() {
+        return testFactory.generateTestsIncludeProgrammatic(
+                ChangeScenario.ACTION_EXECUTION, this::given, this::verify);
     }
 
 }

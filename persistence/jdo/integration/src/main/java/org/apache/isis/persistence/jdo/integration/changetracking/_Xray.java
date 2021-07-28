@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.transaction.changetracking;
+package org.apache.isis.persistence.jdo.integration.changetracking;
 
 import java.awt.Color;
 
@@ -33,7 +33,7 @@ import lombok.val;
 final class _Xray {
 
     public static void publish(
-            final EntityChangeTrackerDefault entityChangeTrackerDefault,
+            final EntityChangeTrackerJdo entityChangeTrackerDefault,
             final Provider<InteractionProvider> interactionProviderProvider) {
 
         if(!XrayUi.isXrayEnabled()) {

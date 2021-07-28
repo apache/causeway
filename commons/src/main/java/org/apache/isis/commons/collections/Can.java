@@ -161,7 +161,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @return whether this Can contains given {@code element}, that is, at least one contained element
      * passes the {@link Objects#equals(Object, Object)} test with respect to the given element.
      */
-    boolean contains(T element);
+    boolean contains(@Nullable T element);
 
     // -- FACTORIES
 
@@ -490,21 +490,21 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
 
     // -- MANIPULATION
 
-    Can<T> add(T element);
+    Can<T> add(@Nullable T element);
 
     /**
      * Adds the specified element to the list if it is not already present.
      * @param element
      * @return same or new instance
      */
-    default Can<T> addUnique(@NonNull final T element) {
+    default Can<T> addUnique(final @Nullable T element) {
         if(contains(element)) {
             return this;
         }
         return add(element);
     }
 
-    Can<T> addAll(Can<T> other);
+    Can<T> addAll(@Nullable Can<T> other);
 
     /**
      * Inserts the specified element at the specified position in this list
@@ -523,9 +523,9 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @throws IndexOutOfBoundsException if the index is out of range
      *         (<tt>index &lt; 0 || index &gt; size()</tt>)
      */
-    Can<T> add(int index, T element);
+    Can<T> add(int index, @Nullable T element);
 
-    Can<T> replace(int index, T element);
+    Can<T> replace(int index, @Nullable T element);
 
     /**
      * Removes the element at the specified position in this list (optional
@@ -540,7 +540,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      */
     Can<T> remove(int index);
 
-    Can<T> remove(T element);
+    Can<T> remove(@Nullable T element);
 
     /**
      * Given <i>n</i> indices, returns an equivalent of
@@ -572,11 +572,8 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @throws ClassCastException if the type of the specified element
      *         is incompatible with this list
      *         (<a href="Collection.html#optional-restrictions">optional</a>)
-     * @throws NullPointerException if the specified element is null and this
-     *         list does not permit null elements
-     *         (<a href="Collection.html#optional-restrictions">optional</a>)
      */
-    int indexOf(T element);
+    int indexOf(@Nullable T element);
 
     // -- EQUALITY
 

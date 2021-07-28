@@ -19,9 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.members.publish.command;
 
-import java.util.Objects;
-
 import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.Command.CommandPublishingPhase;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -30,7 +29,6 @@ import org.apache.isis.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * Indicates that details of the action invocation or property edit,
@@ -48,30 +46,22 @@ public interface CommandPublishingFacet extends Facet {
     public CommandDtoProcessor getProcessor();
 
     public static boolean isPublishingEnabled(final @NonNull FacetHolder facetHolder) {
-
-        val commandFacet = facetHolder.getFacet(CommandPublishingFacet.class);
-        if(commandFacet!=null) {
-            return true;
-        }
-        return false;
+        return facetHolder.containsFacet(CommandPublishingFacet.class);
     }
 
     /**
-     * Will only run the runnable, if command and objectMember have a matching member-id
-     * and if the facetHoler has a CommandPublishingFacet.
+     * Will set the command's CommandPublishingPhase to READY,
+     * if command and objectMember have a matching member-id
+     * and if the facetHoler has a CommandPublishingFacet (has commandPublishing=ENABLED).
      */
-    public static void ifPublishingEnabledForCommand(
+    public static void prepareCommandForPublishing(
             final @NonNull Command command,
             final @NonNull ObjectMember objectMember,
-            final @NonNull FacetHolder facetHolder,
-            final @NonNull Runnable runnable) {
+            final @NonNull FacetHolder facetHolder) {
 
-        val memberId1 = objectMember.getFeatureIdentifier().getLogicalIdentityString("#");
-        val memberId2 = command.getLogicalMemberIdentifier();
-
-        if(Objects.equals(memberId1, memberId2)
+        if(objectMember.getFeatureIdentifier().matchesCommand(command)
                 && isPublishingEnabled(facetHolder)) {
-            runnable.run();
+            command.updater().setPublishingPhase(CommandPublishingPhase.READY);
         }
     }
 }

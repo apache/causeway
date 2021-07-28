@@ -27,8 +27,11 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.schema.cmd.v2.ActionDto;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.PropertyDto;
+import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.ChangeScenario;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.VerificationStage;
 import org.apache.isis.testdomain.publishing.subscriber.CommandSubscriberForTesting;
 import org.apache.isis.testdomain.util.CollectionAssertions;
@@ -45,7 +48,9 @@ implements HasPersistenceStandard {
         CommandSubscriberForTesting.clearPublishedCommands(kvStore);
     }
 
-    protected void verify(final VerificationStage verificationStage) {
+    protected void verify(
+            final ChangeScenario changeScenario,
+            final VerificationStage verificationStage) {
         switch(verificationStage) {
 
         case FAILURE_CASE:
@@ -56,26 +61,37 @@ implements HasPersistenceStandard {
             break;
         case POST_COMMIT:
 
-
-//            Interaction interaction = null;
-//            String propertyId = "org.apache.isis.testdomain.jdo.entities.JdoBook#name";
-//            Object target = null;
-//            Object argValue = "Book #2";
-//            String targetMemberName = "name???";
-//            String targetClass = "org.apache.isis.testdomain.jdo.entities.JdoBook";
-
-            val propertyDto = new PropertyDto();
-            propertyDto.setLogicalMemberIdentifier(
-                    formatPersistenceStandardSpecificLowerCase("testdomain.%s.Book#name"));
-
             val command = new Command(UUID.randomUUID());
             val commandDto = new CommandDto();
             commandDto.setInteractionId(command.getInteractionId().toString());
-            commandDto.setMember(propertyDto);
 
-            command.updater().setCommandDto(commandDto);
+            switch(changeScenario) {
+            case PROPERTY_UPDATE:
 
-            assertHasCommandEntries(Can.of(command));
+                val propertyDto = new PropertyDto();
+                propertyDto.setLogicalMemberIdentifier(
+                        formatPersistenceStandardSpecificLowerCase("testdomain.%s.Book#name"));
+
+                commandDto.setMember(propertyDto);
+                command.updater().setCommandDto(commandDto);
+
+                assertHasCommandEntries(Can.of(command));
+                break;
+            case ACTION_EXECUTION:
+
+                val actionDto = new ActionDto();
+                actionDto.setLogicalMemberIdentifier(
+                        formatPersistenceStandardSpecificLowerCase("testdomain.%s.Book#doubleThePrice"));
+
+                commandDto.setMember(actionDto);
+                command.updater().setCommandDto(commandDto);
+
+                assertHasCommandEntries(Can.of(command));
+                break;
+            default:
+                throw _Exceptions.unmatchedCase(changeScenario);
+            }
+
             break;
         default:
             // if hitting this, the caller is requesting a verification stage, we are providing no case for

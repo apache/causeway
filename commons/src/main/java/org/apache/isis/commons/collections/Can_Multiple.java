@@ -89,9 +89,9 @@ final class Can_Multiple<T> implements Can<T> {
     }
 
     @Override
-    public boolean contains(final T element) {
+    public boolean contains(final @Nullable T element) {
         if(element==null) {
-            return false; // an optimization: Can's dont't contain null
+            return false; // Can's dont't contain null
         }
         return elements.contains(element);
     }
@@ -183,14 +183,16 @@ final class Can_Multiple<T> implements Can<T> {
     }
 
     @Override
-    public Can<T> add(@NonNull final T element) {
-        val elementStream = Stream.concat(elements.stream(), Stream.of(element)); // append
-        return Can.ofStream(elementStream);
+    public Can<T> add(final @Nullable T element) {
+        return element!=null
+                ? Can.ofStream(Stream.concat(elements.stream(), Stream.of(element))) // append
+                : this;
     }
 
     @Override
-    public Can<T> addAll(@NonNull final Can<T> other) {
-        if(other.isEmpty()) {
+    public Can<T> addAll(final @Nullable Can<T> other) {
+        if(other==null
+                || other.isEmpty()) {
             return this;
         }
         val newElements = new ArrayList<T>(this.size() + other.size());
@@ -200,14 +202,20 @@ final class Can_Multiple<T> implements Can<T> {
     }
 
     @Override
-    public Can<T> add(final int index, @NonNull final T element) {
+    public Can<T> add(final int index, final @Nullable T element) {
+        if(element==null) {
+            return this; // identity
+        }
         val newElements = new ArrayList<T>(elements);
         newElements.add(index, element);
         return Can.ofCollection(newElements);
     }
 
     @Override
-    public Can<T> replace(final int index, final T element) {
+    public Can<T> replace(final int index, final @Nullable T element) {
+        if(element==null) {
+            return remove(index);
+        }
         val newElements = new ArrayList<T>(elements);
         newElements.set(index, element);
         return Can.ofCollection(newElements);
@@ -221,7 +229,10 @@ final class Can_Multiple<T> implements Can<T> {
     }
 
     @Override
-    public Can<T> remove(final T element) {
+    public Can<T> remove(final @Nullable T element) {
+        if(element==null) {
+            return this; // identity
+        }
         val newElements = new ArrayList<T>(elements);
         newElements.remove(element);
         return Can.ofCollection(newElements);
@@ -245,7 +256,7 @@ final class Can_Multiple<T> implements Can<T> {
     }
 
     @Override
-    public int indexOf(@NonNull final T element) {
+    public int indexOf(final @Nullable T element) {
         return this.elements.indexOf(element);
     }
 

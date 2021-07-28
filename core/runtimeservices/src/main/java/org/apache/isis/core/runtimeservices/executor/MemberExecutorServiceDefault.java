@@ -112,8 +112,7 @@ implements MemberExecutorService {
         val interaction = getInteractionElseFail();
         val command = interaction.getCommand();
 
-        CommandPublishingFacet.ifPublishingEnabledForCommand(
-                command, owningAction, facetHolder, ()->command.updater().setPublishingEnabled(true));
+        CommandPublishingFacet.prepareCommandForPublishing(command, owningAction, facetHolder);
 
         val xrayHandle = _Xray.enterActionInvocation(interactionLayerTracker, interaction, owningAction, head, argumentAdapters);
 
@@ -190,8 +189,7 @@ implements MemberExecutorService {
             return head.getTarget();
         }
 
-        CommandPublishingFacet.ifPublishingEnabledForCommand(
-                command, owningProperty, facetHolder, ()->command.updater().setPublishingEnabled(true));
+        CommandPublishingFacet.prepareCommandForPublishing(command, owningProperty, facetHolder);
 
         val xrayHandle = _Xray.enterPropertyEdit(interactionLayerTracker, interaction, owningProperty, head, newValueAdapter);
 

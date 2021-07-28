@@ -38,9 +38,11 @@ import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.control.SyncControl;
 import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.functions._Functions.CheckedConsumer;
+import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -85,8 +87,21 @@ extends PublishingTestFactoryAbstract {
 
     @Override
     protected void setupEntity(final PublishingTestContext context) {
-        // given
-        setupBookForJpa();
+        switch(context.getScenario()) {
+        case ENTITY_CREATION:
+
+            // given
+            fixtureScripts.runPersona(JpaTestDomainPersona.PurgeAll);
+            break;
+
+        case PROPERTY_UPDATE:
+        case ACTION_EXECUTION:
+        case ENTITY_REMOVAL:
+
+            // given
+            setupBookForJpa();
+            break;
+        }
     }
 
     // -- TESTS - PROGRAMMATIC
@@ -100,17 +115,52 @@ extends PublishingTestFactoryAbstract {
         // This test does not trigger command or execution publishing, however it does trigger
         // entity-change-publishing.
 
-        withBookDo(book->{
+        switch(context.getScenario()) {
+        case ENTITY_CREATION:
 
             context.runGiven();
+            setupBookForJpa();
+            break;
 
-            // when - direct change (circumventing the framework)
-            context.changeProperty(()->book.setName("Book #2"));
+        case PROPERTY_UPDATE:
 
-            repository.persistAndFlush(book);
+            withBookDo(book->{
 
-        });
+                context.runGiven();
 
+                // when - direct change (circumventing the framework)
+                context.changeProperty(()->book.setName("Book #2"));
+
+                repository.persistAndFlush(book);
+
+            });
+
+            break;
+        case ACTION_EXECUTION:
+
+            withBookDo(book->{
+
+                context.runGiven();
+
+                // when - direct action method invocation (circumventing the framework)
+                context.executeAction(()->book.doubleThePrice());
+
+                repository.persistAndFlush(book);
+
+            });
+
+            break;
+        case ENTITY_REMOVAL:
+
+            withBookDo(book->{
+
+                context.runGiven();
+                repository.removeAndFlush(book);
+
+            });
+
+            break;
+        }
 
         return true;
     }
@@ -123,25 +173,55 @@ extends PublishingTestFactoryAbstract {
 
         context.bind(commitListener);
 
-        // when
-        withBookDo(book->{
+        switch(context.getScenario()) {
 
-            context.runGiven();
+        case PROPERTY_UPDATE:
 
             // when
-            context.changeProperty(()->{
+            withBookDo(book->{
 
-                val bookAdapter = objectManager.adapt(book);
-                val propertyInteraction = PropertyInteraction.start(bookAdapter, "name", Where.OBJECT_FORMS);
-                val managedProperty = propertyInteraction.getManagedPropertyElseThrow(__->_Exceptions.noSuchElement());
-                val propertyModel = managedProperty.startNegotiation();
-                val propertySpec = managedProperty.getSpecification();
-                propertyModel.getValue().setValue(ManagedObject.of(propertySpec, "Book #2"));
-                propertyModel.submit();
+                context.runGiven();
+
+                // when
+                context.changeProperty(()->{
+
+                    val bookAdapter = objectManager.adapt(book);
+                    val propertyInteraction = PropertyInteraction.start(bookAdapter, "name", Where.OBJECT_FORMS);
+                    val managedProperty = propertyInteraction.getManagedPropertyElseThrow(__->_Exceptions.noSuchElement());
+                    val propertyModel = managedProperty.startNegotiation();
+                    val propertySpec = managedProperty.getSpecification();
+                    propertyModel.getValue().setValue(ManagedObject.of(propertySpec, "Book #2"));
+                    propertyModel.submit();
+
+                });
 
             });
 
-        });
+            break;
+        case ACTION_EXECUTION:
+
+            // when
+            withBookDo(book->{
+
+                context.runGiven();
+
+                // when
+                context.executeAction(()->{
+
+                    val bookAdapter = objectManager.adapt(book);
+
+                    val actionInteraction = ActionInteraction.start(bookAdapter, "doubleThePrice", Where.OBJECT_FORMS);
+                    val managedAction = actionInteraction.getManagedActionElseThrow(__->_Exceptions.noSuchElement());
+                    // this test action is always disabled, so don't enforce rules here, just invoke
+                    managedAction.invoke(Can.empty()); // no-arg action
+                });
+
+            });
+
+            break;
+        default:
+            throw _Exceptions.unmatchedCase(context.getScenario());
+        }
 
         return true;
     }
@@ -154,16 +234,39 @@ extends PublishingTestFactoryAbstract {
 
         context.bind(commitListener);
 
-        // when
-        withBookDo(book->{
+        switch(context.getScenario()) {
 
-            context.runGiven();
+        case PROPERTY_UPDATE:
 
-            // when - running synchronous
-            val syncControl = SyncControl.control().withSkipRules(); // don't enforce rules
-            context.changeProperty(()->wrapper.wrap(book, syncControl).setName("Book #2"));
+            // when
+            withBookDo(book->{
 
-        });
+                context.runGiven();
+
+                // when - running synchronous
+                val syncControl = SyncControl.control().withSkipRules(); // don't enforce rules
+                context.changeProperty(()->wrapper.wrap(book, syncControl).setName("Book #2"));
+
+            });
+
+            break;
+        case ACTION_EXECUTION:
+
+            // when
+            withBookDo(book->{
+
+                context.runGiven();
+
+                // when - running synchronous
+                val syncControl = SyncControl.control().withSkipRules(); // don't enforce rules
+                context.executeAction(()->wrapper.wrap(book, syncControl).doubleThePrice());
+
+            });
+
+            break;
+        default:
+            throw _Exceptions.unmatchedCase(context.getScenario());
+        }
 
         return true;
     }
@@ -174,19 +277,45 @@ extends PublishingTestFactoryAbstract {
 
         context.bind(commitListener);
 
-        // when
-        withBookDo(book->{
+        switch(context.getScenario()) {
 
-            context.runGiven();
+        case PROPERTY_UPDATE:
 
-            // when - running synchronous
-            val syncControl = SyncControl.control().withCheckRules(); // enforce rules
+            // when
+            withBookDo(book->{
 
-            assertThrows(DisabledException.class, ()->{
-                wrapper.wrap(book, syncControl).setName("Book #2"); // should fail with DisabledException
+                context.runGiven();
+
+                // when - running synchronous
+                val syncControl = SyncControl.control().withCheckRules(); // enforce rules
+
+                assertThrows(DisabledException.class, ()->{
+                    wrapper.wrap(book, syncControl).setName("Book #2"); // should fail with DisabledException
+                });
+
             });
 
-        });
+            break;
+        case ACTION_EXECUTION:
+
+            // when
+            withBookDo(book->{
+
+                context.runGiven();
+
+                // when - running synchronous
+                val syncControl = SyncControl.control().withCheckRules(); // enforce rules
+
+                assertThrows(DisabledException.class, ()->{
+                    wrapper.wrap(book, syncControl).doubleThePrice(); // should fail with DisabledException
+                });
+
+            });
+
+            break;
+        default:
+            throw _Exceptions.unmatchedCase(context.getScenario());
+        }
 
         return false;
     }

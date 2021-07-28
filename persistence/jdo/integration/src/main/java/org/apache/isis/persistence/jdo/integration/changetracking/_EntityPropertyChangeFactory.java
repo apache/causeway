@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.transaction.changetracking;
+package org.apache.isis.persistence.jdo.integration.changetracking;
 
 import java.util.UUID;
 
@@ -24,6 +24,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
+import org.apache.isis.core.transaction.changetracking.PropertyChangeRecord;
 
 import lombok.val;
 
@@ -33,7 +34,7 @@ final class _EntityPropertyChangeFactory {
             final java.sql.Timestamp timestamp,
             final String user,
             final TransactionId txId,
-            final _PropertyChangeRecord propertyChangeRecord) {
+            final PropertyChangeRecord propertyChangeRecord) {
 
         val spec = propertyChangeRecord.getEntity().getSpecification();
 

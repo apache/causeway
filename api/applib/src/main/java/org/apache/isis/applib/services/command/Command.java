@@ -36,6 +36,7 @@ import org.apache.isis.commons.functional.Result;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.val;
@@ -246,14 +247,24 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
     @Getter
     private boolean systemStateChanged;
 
+    public static enum CommandPublishingPhase {
+        /** initial state: do not publish (yet) */
+        ONHOLD,
+        /** publishing is enabled */
+        READY,
+        /** publishing has completed */
+        COMPLETED;
+        public boolean isOnhold() {return this==ONHOLD;}
+        public boolean isReady() {return this==READY;}
+        public boolean isCompleted() {return this==COMPLETED;}
+    }
 
     /**
-     * Whether this command has been enabled for dispatching,
+     * Whether this command has been enabled for publishing,
      * that is {@link CommandSubscriber}s will be notified when this Command completes.
      */
-    @Getter
-    private boolean publishingEnabled;
-    
+    @Getter private CommandPublishingPhase publishingPhase = CommandPublishingPhase.ONHOLD;
+
     @ToString.Exclude
     private final Updater UPDATER = new Updater();
 
@@ -288,7 +299,7 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
          *     {@link WrapperFactory}.
          * </p>
          */
-        public void setParent(Command parent) {
+        public void setParent(final Command parent) {
             Command.this.parent = parent;
         }
         /**
@@ -302,7 +313,7 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
          * <b>NOT API</b>: intended to be called only by the framework.
          */
         @Override
-        public void setStartedAt(Timestamp startedAt) {
+        public void setStartedAt(final Timestamp startedAt) {
             Command.this.startedAt = startedAt;
         }
         /**
@@ -329,15 +340,18 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
          * Implementations can use this to persist the command, for example.
          * </p>
          */
-        public void setSystemStateChanged(boolean systemStateChanged) {
+        public void setSystemStateChanged(final boolean systemStateChanged) {
             Command.this.systemStateChanged = systemStateChanged;
         }
 
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          */
-        public void setPublishingEnabled(boolean publishingEnabled) {
-            Command.this.publishingEnabled = publishingEnabled;
+        public void setPublishingPhase(final @NonNull CommandPublishingPhase publishingPhase) {
+            if(Command.this.publishingPhase.isCompleted()) {
+                return; // don't ever change when phase is completed
+            }
+            Command.this.publishingPhase = publishingPhase;
         }
 
     };
