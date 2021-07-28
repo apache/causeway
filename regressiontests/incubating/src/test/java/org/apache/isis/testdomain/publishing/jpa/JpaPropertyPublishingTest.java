@@ -33,6 +33,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.publishing.PropertyPublishingTestAbstract;
+import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.ChangeScenario;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryJpa;
 import org.apache.isis.testdomain.publishing.conf.Configuration_usingEntityPropertyChangePublishing;
 
@@ -59,9 +60,22 @@ implements HasPersistenceStandardJpa {
 
     @Inject private PublishingTestFactoryJpa testFactory;
 
-    @TestFactory @DisplayName("Execution Scenario")
-    List<DynamicTest> generateTests() {
-        return testFactory.generateTestsIncludeProgrammatic(this::given, this::verify);
+    @TestFactory @DisplayName("Entity Creation")
+    List<DynamicTest> generateTestsForCreation() {
+        return testFactory.generateTestsIncludeProgrammatic(
+                ChangeScenario.ENTITY_CREATION, this::given, this::verify);
+    }
+
+    @TestFactory @DisplayName("Entity Removal")
+    List<DynamicTest> generateTestsForRemoval() {
+        return testFactory.generateTestsIncludeProgrammatic(
+                ChangeScenario.ENTITY_REMOVAL, this::given, this::verify);
+    }
+
+    @TestFactory @DisplayName("Entity Update")
+    List<DynamicTest> generateTestsForUpdate() {
+        return testFactory.generateTestsIncludeProgrammatic(
+                ChangeScenario.ENTITY_UPDATE, this::given, this::verify);
     }
 
 }

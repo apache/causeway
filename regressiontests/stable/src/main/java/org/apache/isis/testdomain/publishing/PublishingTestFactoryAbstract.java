@@ -49,6 +49,7 @@ import org.apache.isis.core.transaction.events.TransactionBeforeCompletionEvent;
 
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.val;
 
@@ -62,10 +63,12 @@ public abstract class PublishingTestFactoryAbstract {
     }
 
     /** what kind of entity change is under test */
+    @RequiredArgsConstructor @Getter
     public static enum ChangeScenario {
-        ENTITY_CREATION,
-        ENTITY_UPDATE,
-        ENTITY_REMOVAL
+        ENTITY_CREATION("creation"),
+        ENTITY_UPDATE("update"),
+        ENTITY_REMOVAL("removal");
+        final String displayName;
     }
 
     @Value(staticConstructor = "of")
@@ -189,40 +192,41 @@ public abstract class PublishingTestFactoryAbstract {
     // -- CREATE DYNAMIC TESTS
 
     public final List<DynamicTest> generateTestsIncludeProgrammatic(
+            final ChangeScenario changeScenario,
             final Runnable given,
             final BiConsumer<ChangeScenario, VerificationStage> verifier) {
-        return generateTests(true, given, verifier);
+        return generateTests(changeScenario, true, given, verifier);
     }
 
     public final List<DynamicTest> generateTests(
+            final ChangeScenario changeScenario,
             final Runnable given,
             final BiConsumer<ChangeScenario, VerificationStage> verifier) {
-        return generateTests(false, given, verifier);
+        return generateTests(changeScenario, false, given, verifier);
     }
 
     private final List<DynamicTest> generateTests(
+            final ChangeScenario changeScenario,
             final boolean includeProgrammatic,
             final Runnable given,
             final BiConsumer<ChangeScenario, VerificationStage> verifier) {
 
         var dynamicTests = Can.<DynamicTest>empty();
 
-        for(val changeScenario : ChangeScenario.values()) {
-
-            if(includeProgrammatic) {
-                dynamicTests = dynamicTests
-                    .add(publishingTest(
-                            PublishingTestContext.of("Programmatic",
-                                    changeScenario,
-                                    given, verifier, VerificationStage.POST_COMMIT),
-                            VerificationStage.POST_INTERACTION,
-                            this::programmaticExecution));
-            }
+        if(includeProgrammatic) {
+            dynamicTests = dynamicTests
+                .add(publishingTest(
+                        PublishingTestContext.of("Programmatic",
+                                changeScenario,
+                                given, verifier, VerificationStage.POST_COMMIT),
+                        VerificationStage.POST_INTERACTION,
+                        this::programmaticExecution));
         }
 
-        val changeScenario = ChangeScenario.ENTITY_UPDATE;
 
-        dynamicTests = dynamicTests
+        if(changeScenario == ChangeScenario.ENTITY_UPDATE) {
+
+            dynamicTests = dynamicTests
                 .add(publishingTest(
                         PublishingTestContext.of("Interaction Api",
                                 changeScenario,
@@ -253,7 +257,9 @@ public abstract class PublishingTestFactoryAbstract {
 //                                    given, verifier, VerificationStage.FAILURE_CASE),
 //                            VerificationStage.POST_INTERACTION,
 //                            this::wrapperAsyncExecutionWithFailure))
-                    ;
+                ;
+
+        };
 
         return XrayUi.isXrayEnabled()
                 ? dynamicTests
@@ -297,7 +303,9 @@ public abstract class PublishingTestFactoryAbstract {
             final VerificationStage onSuccess,
             final PublishingTestRunner testRunner) {
 
-        val displayName = testContext.getScenario().name() + ": " + testContext.getDisplayName();
+        val displayName = String.format("%s (%s)",
+                testContext.getDisplayName(),
+                testContext.getScenario().getDisplayName());
 
         return dynamicTest(displayName, ()->{
 

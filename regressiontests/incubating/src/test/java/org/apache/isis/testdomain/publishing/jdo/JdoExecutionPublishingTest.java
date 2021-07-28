@@ -32,6 +32,7 @@ import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.publishing.ExecutionPublishingTestAbstract;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryJdo;
+import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.ChangeScenario;
 import org.apache.isis.testdomain.publishing.conf.Configuration_usingExecutionPublishing;
 
 @SpringBootTest(
@@ -56,9 +57,22 @@ implements HasPersistenceStandardJdo {
 
     @Inject private PublishingTestFactoryJdo testFactory;
 
-    @TestFactory @DisplayName("Execution Scenario")
-    List<DynamicTest> generateTests() {
-        return testFactory.generateTests(this::given, this::verify);
+    @TestFactory @DisplayName("Entity Creation")
+    List<DynamicTest> generateTestsForCreation() {
+        return testFactory.generateTests(
+                ChangeScenario.ENTITY_CREATION, this::given, this::verify);
+    }
+
+    @TestFactory @DisplayName("Entity Removal")
+    List<DynamicTest> generateTestsForRemoval() {
+        return testFactory.generateTests(
+                ChangeScenario.ENTITY_REMOVAL, this::given, this::verify);
+    }
+
+    @TestFactory @DisplayName("Entity Update")
+    List<DynamicTest> generateTestsForUpdate() {
+        return testFactory.generateTests(
+                ChangeScenario.ENTITY_UPDATE, this::given, this::verify);
     }
 
 }

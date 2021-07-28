@@ -31,6 +31,7 @@ import javax.jdo.PersistenceManagerFactory;
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -89,8 +90,20 @@ extends PublishingTestFactoryAbstract {
 
     @Override
     protected void setupEntity(final PublishingTestContext context) {
-        // given
-        setupBookForJdo();
+        switch(context.getScenario()) {
+        case ENTITY_CREATION:
+
+            // given
+            fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
+            break;
+
+        case ENTITY_UPDATE:
+        case ENTITY_REMOVAL:
+
+            // given
+            setupBookForJdo();
+            break;
+        }
     }
 
     // -- TESTS - PROGRAMMATIC
@@ -105,16 +118,38 @@ extends PublishingTestFactoryAbstract {
         // entity-change-publishing.
 
 
-        withBookDo(book->{
+        switch(context.getScenario()) {
+        case ENTITY_CREATION:
 
             context.runGiven();
+            setupBookForJdo();
+            break;
 
-            // when - direct change (circumventing the framework)
-            context.changeProperty(()->book.setName("Book #2"));
+        case ENTITY_UPDATE:
 
-            repository.persistAndFlush(book);
+            withBookDo(book->{
 
-        });
+                context.runGiven();
+
+                // when - direct change (circumventing the framework)
+                context.changeProperty(()->book.setName("Book #2"));
+
+                repository.persistAndFlush(book);
+
+            });
+
+            break;
+        case ENTITY_REMOVAL:
+
+            withBookDo(book->{
+
+                context.runGiven();
+                repository.removeAndFlush(book);
+
+            });
+
+            break;
+        }
 
         return true;
     }
@@ -124,6 +159,9 @@ extends PublishingTestFactoryAbstract {
     @Override
     protected boolean interactionApiExecution(
             final PublishingTestContext context) {
+
+        assertEquals(ChangeScenario.ENTITY_UPDATE, context.getScenario(),
+                "interactionApiExecution does only support 'update' scenario");
 
         context.bind(preCommitListener);
 
@@ -156,6 +194,9 @@ extends PublishingTestFactoryAbstract {
     protected boolean wrapperSyncExecutionNoRules(
             final PublishingTestContext context) {
 
+        assertEquals(ChangeScenario.ENTITY_UPDATE, context.getScenario(),
+                "wrapperSyncExecutionNoRules does only support 'update' scenario");
+
         context.bind(preCommitListener);
 
         // when
@@ -175,6 +216,9 @@ extends PublishingTestFactoryAbstract {
     @Override
     protected boolean wrapperSyncExecutionWithFailure(
             final PublishingTestContext context) {
+
+        assertEquals(ChangeScenario.ENTITY_UPDATE, context.getScenario(),
+                "wrapperSyncExecutionWithFailure does only support 'update' scenario");
 
         context.bind(preCommitListener);
 

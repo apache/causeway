@@ -86,7 +86,6 @@ extends PublishingTestFactoryAbstract {
 
     @Override
     protected void setupEntity(final PublishingTestContext context) {
-
         switch(context.getScenario()) {
         case ENTITY_CREATION:
 
@@ -101,7 +100,6 @@ extends PublishingTestFactoryAbstract {
             setupBookForJpa();
             break;
         }
-
     }
 
     // -- TESTS - PROGRAMMATIC
