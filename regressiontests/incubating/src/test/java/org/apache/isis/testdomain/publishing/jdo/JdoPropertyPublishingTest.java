@@ -81,7 +81,7 @@ implements HasPersistenceStandardJdo {
     @TestFactory @DisplayName("Action Execution")
     List<DynamicTest> generateTestsForAction() {
         return testFactory.generateTestsIncludeProgrammatic(
-                ChangeScenario.ACTION_EXECUTION, this::given, this::verify);
+                ChangeScenario.ACTION_INVOCATION, this::given, this::verify);
     }
 
 }

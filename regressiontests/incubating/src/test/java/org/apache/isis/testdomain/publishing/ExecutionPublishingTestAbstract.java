@@ -82,7 +82,7 @@ implements HasPersistenceStandard {
                         ));
             }
                 break;
-            case ACTION_EXECUTION: {
+            case ACTION_INVOCATION: {
                 Identifier actionId = Identifier.actionIdentifier(
                         LogicalType.fqcn(bookClass), "doubleThePrice");
                 val args = Collections.<Object>emptyList();

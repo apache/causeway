@@ -82,7 +82,7 @@ implements HasPersistenceStandardJpa {
     @TestFactory @DisplayName("Action Execution - n/a")
     List<DynamicTest> generateTestsForAction() {
         return testFactory.generateTestsIncludeProgrammatic(
-                ChangeScenario.ACTION_EXECUTION, this::given, this::verify);
+                ChangeScenario.ACTION_INVOCATION, this::given, this::verify);
     }
 
 }

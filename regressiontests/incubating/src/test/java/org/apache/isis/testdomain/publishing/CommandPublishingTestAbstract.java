@@ -77,7 +77,7 @@ implements HasPersistenceStandard {
 
                 assertHasCommandEntries(Can.of(command));
                 break;
-            case ACTION_EXECUTION:
+            case ACTION_INVOCATION:
 
                 val actionDto = new ActionDto();
                 actionDto.setLogicalMemberIdentifier(

@@ -95,7 +95,7 @@ extends PublishingTestFactoryAbstract {
             break;
 
         case PROPERTY_UPDATE:
-        case ACTION_EXECUTION:
+        case ACTION_INVOCATION:
         case ENTITY_REMOVAL:
 
             // given
@@ -136,7 +136,7 @@ extends PublishingTestFactoryAbstract {
             });
 
             break;
-        case ACTION_EXECUTION:
+        case ACTION_INVOCATION:
 
             withBookDo(book->{
 
@@ -198,7 +198,7 @@ extends PublishingTestFactoryAbstract {
             });
 
             break;
-        case ACTION_EXECUTION:
+        case ACTION_INVOCATION:
 
             // when
             withBookDo(book->{
@@ -250,7 +250,7 @@ extends PublishingTestFactoryAbstract {
             });
 
             break;
-        case ACTION_EXECUTION:
+        case ACTION_INVOCATION:
 
             // when
             withBookDo(book->{
@@ -296,7 +296,7 @@ extends PublishingTestFactoryAbstract {
             });
 
             break;
-        case ACTION_EXECUTION:
+        case ACTION_INVOCATION:
 
             // when
             withBookDo(book->{

@@ -67,7 +67,7 @@ public abstract class PublishingTestFactoryAbstract {
     public static enum ChangeScenario {
         ENTITY_CREATION("creation"),
         PROPERTY_UPDATE("property update"),
-        ACTION_EXECUTION("action execution"),
+        ACTION_INVOCATION("action invocation"),
         ENTITY_REMOVAL("removal");
         final String displayName;
     }
@@ -232,7 +232,7 @@ public abstract class PublishingTestFactoryAbstract {
 
 
         if(changeScenario == ChangeScenario.PROPERTY_UPDATE
-                || changeScenario == ChangeScenario.ACTION_EXECUTION) {
+                || changeScenario == ChangeScenario.ACTION_INVOCATION) {
 
             dynamicTests = dynamicTests
                 .add(publishingTest(
