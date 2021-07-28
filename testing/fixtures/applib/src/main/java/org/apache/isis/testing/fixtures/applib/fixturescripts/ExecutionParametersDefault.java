@@ -32,6 +32,7 @@ import org.joda.time.format.ISODateTimeFormat;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.base._Text;
 import org.apache.isis.commons.internal.collections._Maps;
 
 /**
@@ -60,7 +61,7 @@ public class ExecutionParametersDefault implements ExecutionParameters {
         final Map<String, String> keyValues = _Maps.newLinkedHashMap();
         if (parameters != null) {
             try {
-                _Strings.splitThenStream(parameters, "\n")
+                _Text.streamLines(parameters)
                 .forEach(line->{
                     final Matcher matcher = keyEqualsValuePattern.matcher(line);
                     if (matcher.matches()) {
@@ -74,14 +75,17 @@ public class ExecutionParametersDefault implements ExecutionParameters {
         return keyValues;
     }
 
+    @Override
     public String getParameters() {
         return parameters;
     }
 
+    @Override
     public String getParameter(final String parameterName) {
         return parameterMap.get(parameterName);
     }
 
+    @Override
     public <T> T getParameterAsT(final String parameterName, final Class<T> cls) {
         return _Casts.uncheckedCast(getParameterAsObject(parameterName, cls));
     }
@@ -123,6 +127,7 @@ public class ExecutionParametersDefault implements ExecutionParameters {
         return value;
     }
 
+    @Override
     public Boolean getParameterAsBoolean(final String parameterName) {
         final String value = getParameter(parameterName);
         if (_Strings.isNullOrEmpty(value)) {
@@ -131,6 +136,7 @@ public class ExecutionParametersDefault implements ExecutionParameters {
         return Boolean.valueOf(value);
     }
 
+    @Override
     public Byte getParameterAsByte(final String parameterName) {
         final String value = getParameter(parameterName);
         if (_Strings.isNullOrEmpty(value)) {
@@ -139,6 +145,7 @@ public class ExecutionParametersDefault implements ExecutionParameters {
         return Byte.valueOf(value);
     }
 
+    @Override
     public Short getParameterAsShort(final String parameterName) {
         final String value = getParameter(parameterName);
         if (_Strings.isNullOrEmpty(value)) {
@@ -147,6 +154,7 @@ public class ExecutionParametersDefault implements ExecutionParameters {
         return Short.valueOf(value);
     }
 
+    @Override
     public Integer getParameterAsInteger(final String parameterName) {
         final String value = getParameter(parameterName);
         if (_Strings.isNullOrEmpty(value)) {
@@ -155,6 +163,7 @@ public class ExecutionParametersDefault implements ExecutionParameters {
         return Integer.valueOf(value);
     }
 
+    @Override
     public Long getParameterAsLong(final String parameterName) {
         final String value = getParameter(parameterName);
         if (_Strings.isNullOrEmpty(value)) {
@@ -163,6 +172,7 @@ public class ExecutionParametersDefault implements ExecutionParameters {
         return Long.valueOf(value);
     }
 
+    @Override
     public Float getParameterAsFloat(final String parameterName) {
         final String value = getParameter(parameterName);
         if (_Strings.isNullOrEmpty(value)) {
@@ -171,6 +181,7 @@ public class ExecutionParametersDefault implements ExecutionParameters {
         return Float.valueOf(value);
     }
 
+    @Override
     public Double getParameterAsDouble(final String parameterName) {
         final String value = getParameter(parameterName);
         if (_Strings.isNullOrEmpty(value)) {
@@ -179,6 +190,7 @@ public class ExecutionParametersDefault implements ExecutionParameters {
         return Double.valueOf(value);
     }
 
+    @Override
     public Character getParameterAsCharacter(final String parameterName) {
         final String value = getParameter(parameterName);
         if (_Strings.isNullOrEmpty(value)) {
@@ -187,6 +199,7 @@ public class ExecutionParametersDefault implements ExecutionParameters {
         return Character.valueOf(value.charAt(0));
     }
 
+    @Override
     public BigInteger getParameterAsBigInteger(final String parameterName) {
         final String value = getParameter(parameterName);
         if (_Strings.isNullOrEmpty(value)) {
@@ -195,6 +208,7 @@ public class ExecutionParametersDefault implements ExecutionParameters {
         return new BigInteger(value);
     }
 
+    @Override
     public BigDecimal getParameterAsBigDecimal(final String parameterName) {
         final String value = getParameter(parameterName);
         if (_Strings.isNullOrEmpty(value)) {
@@ -203,6 +217,7 @@ public class ExecutionParametersDefault implements ExecutionParameters {
         return new BigDecimal(value);
     }
 
+    @Override
     public LocalDate getParameterAsLocalDate(final String parameterName) {
         final String value = getParameter(parameterName);
         if (value == null) {
@@ -211,6 +226,7 @@ public class ExecutionParametersDefault implements ExecutionParameters {
         return LocalDate.parse(value);
     }
 
+    @Override
     public LocalDateTime getParameterAsLocalDateTime(final String parameterName) {
         final String value = getParameter(parameterName);
         if (value == null) {
@@ -219,6 +235,7 @@ public class ExecutionParametersDefault implements ExecutionParameters {
         return LocalDateTime.parse(value);
     }
 
+    @Override
     public <T extends Enum<T>> T getParameterAsEnum(final String parameterName, final Class<T> enumClass) {
         final String value = getParameter(parameterName);
         return valueOfElseNull(enumClass, value);
@@ -238,10 +255,12 @@ public class ExecutionParametersDefault implements ExecutionParameters {
     }
 
 
+    @Override
     public Map<String, String> getParameterMap() {
         return Collections.unmodifiableMap(parameterMap);
     }
 
+    @Override
     public void setParameterIfNotPresent(final String parameterName, final String parameterValue) {
         if (parameterName == null) {
             throw new IllegalArgumentException("parameterName required");
@@ -257,72 +276,89 @@ public class ExecutionParametersDefault implements ExecutionParameters {
         parameterMap.put(parameterName, parameterValue);
     }
 
+    @Override
     public void setParameter(final String parameterName, final Boolean parameterValue) {
         setParameter(parameterName, parameterValue != null ? parameterValue.toString() : null);
     }
 
+    @Override
     public void setParameter(final String parameterName, final Byte parameterValue) {
         setParameter(parameterName, parameterValue != null ? parameterValue.toString() : null);
     }
 
+    @Override
     public void setParameter(final String parameterName, final Short parameterValue) {
         setParameter(parameterName, parameterValue != null ? parameterValue.toString() : null);
     }
 
+    @Override
     public void setParameter(final String parameterName, final Integer parameterValue) {
         setParameter(parameterName, parameterValue != null ? parameterValue.toString() : null);
     }
 
+    @Override
     public void setParameter(final String parameterName, final Long parameterValue) {
         setParameter(parameterName, parameterValue != null ? parameterValue.toString() : null);
     }
 
+    @Override
     public void setParameter(final String parameterName, final Float parameterValue) {
         setParameter(parameterName, parameterValue != null ? parameterValue.toString() : null);
     }
 
+    @Override
     public void setParameter(final String parameterName, final Double parameterValue) {
         setParameter(parameterName, parameterValue != null ? parameterValue.toString() : null);
     }
 
+    @Override
     public void setParameter(final String parameterName, final Character parameterValue) {
         setParameter(parameterName, parameterValue != null ? parameterValue.toString() : null);
     }
 
+    @Override
     public void setParameter(final String parameterName, final BigInteger parameterValue) {
         setParameter(parameterName, parameterValue != null ? parameterValue.toString() : null);
     }
 
+    @Override
     public void setParameter(final String parameterName, final java.util.Date parameterValue) {
         setParameter(parameterName, parameterValue != null ? parameterValue.toString() : null);
     }
 
+    @Override
     public void setParameter(final String parameterName, final java.sql.Date parameterValue) {
         setParameter(parameterName, parameterValue != null ? parameterValue.toString() : null);
     }
 
+    @Override
     public void setParameter(final String parameterName, final LocalDate parameterValue) {
         setParameter(parameterName, parameterValue != null ? parameterValue.toString() : null);
     }
 
+    @Override
     public void setParameter(final String parameterName, final LocalDateTime parameterValue) {
         setParameter(parameterName, parameterValue != null ? parameterValue.toString() : null);
     }
 
+    @Override
     public void setParameter(final String parameterName, final DateTime parameterValue) {
         final StringBuffer buf = new StringBuffer();
         ISODateTimeFormat.dateTimeParser().printTo(buf, parameterValue);
         setParameter(parameterName, parameterValue != null ? buf.toString() : null);
     }
 
+    @Override
     public void setParameter(final String parameterName, final BigDecimal parameterValue) {
         setParameter(parameterName, parameterValue != null ? parameterValue.toString() : null);
     }
 
+    @Override
     public void setParameter(final String parameterName, final Enum<?> parameterValue) {
         setParameter(parameterName, parameterValue != null ? parameterValue.name() : null);
     }
 
+    @Override
     public void setParameter(final String parameterName, final String parameterValue) {
         if (parameterName == null) {
             throw new IllegalArgumentException("parameterName required");
