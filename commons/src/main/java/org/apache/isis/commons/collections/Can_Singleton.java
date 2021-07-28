@@ -92,7 +92,7 @@ final class Can_Singleton<T> implements Can<T> {
     }
 
     @Override
-    public boolean contains(final T element) {
+    public boolean contains(final @Nullable T element) {
         return Objects.equals(this.element, element);
     }
 
@@ -142,13 +142,16 @@ final class Can_Singleton<T> implements Can<T> {
     }
 
     @Override
-    public Can<T> add(@NonNull final T element) {
-        return Can.ofStream(Stream.of(this.element, element)); // append
+    public Can<T> add(final @Nullable T element) {
+        return element!=null
+                ? Can.ofStream(Stream.of(this.element, element)) // append
+                : this;
     }
 
     @Override
-    public Can<T> addAll(@NonNull final Can<T> other) {
-        if(other.isEmpty()) {
+    public Can<T> addAll(final @Nullable Can<T> other) {
+        if(other==null
+                || other.isEmpty()) {
             return this;
         }
         if(other.isCardinalityOne()) {
@@ -161,7 +164,10 @@ final class Can_Singleton<T> implements Can<T> {
     }
 
     @Override
-    public Can<T> add(final int index, @NonNull final T element) {
+    public Can<T> add(final int index, final @Nullable T element) {
+        if(element==null) {
+            return this; // no-op
+        }
         if(index==0) {
             return Can.ofStream(Stream.of(element, this.element)); // insert before
         }
@@ -173,12 +179,14 @@ final class Can_Singleton<T> implements Can<T> {
     }
 
     @Override
-    public Can<T> replace(final int index, final T element) {
-        if(index==0) {
-            return Can.ofSingleton(element);
-        }
-        throw new IndexOutOfBoundsException(
+    public Can<T> replace(final int index, final @Nullable T element) {
+        if(index!=0) {
+            throw new IndexOutOfBoundsException(
                 "cannot replace on singleton with index other than 0; got " + index);
+        }
+        return element!=null
+                ? Can.ofSingleton(element)
+                : Can.empty();
     }
 
     @Override
@@ -191,7 +199,7 @@ final class Can_Singleton<T> implements Can<T> {
     }
 
     @Override
-    public Can<T> remove(final T element) {
+    public Can<T> remove(final @Nullable T element) {
         if(this.element.equals(element)) {
             return Can.empty();
         }
@@ -224,7 +232,7 @@ final class Can_Singleton<T> implements Can<T> {
     }
 
     @Override
-    public int indexOf(@NonNull final T element) {
+    public int indexOf(final @Nullable T element) {
         return this.element.equals(element) ? 0 : -1;
     }
 
