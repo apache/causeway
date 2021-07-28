@@ -33,6 +33,7 @@ import org.eclipse.persistence.sessions.changesets.DirectToFieldChangeRecord;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.facets.properties.property.entitychangepublishing.EntityPropertyChangePublishingPolicyFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.core.transaction.changetracking.PreAndPostValue;
@@ -99,7 +100,7 @@ public class IsisEntityListener {
                         .getSpecification()
                         .getProperty(propertyName)
                         .filter(property->!property.isMixedIn())
-                        .filter(property->!property.isNotPersisted())
+                        .filter(property->!EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property))
                         .map(property->PropertyChangeRecord.of(
                                 entity,
                                 property,

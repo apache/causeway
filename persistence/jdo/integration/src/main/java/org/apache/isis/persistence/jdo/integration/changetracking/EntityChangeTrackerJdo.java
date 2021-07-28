@@ -65,6 +65,7 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedLifecycleEv
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacet;
 import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
+import org.apache.isis.core.metamodel.facets.properties.property.entitychangepublishing.EntityPropertyChangePublishingPolicyFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
@@ -296,7 +297,7 @@ implements
         log.debug("enlist entity's property changes for publishing {}", entity);
 
         entity.getSpecification().streamProperties(MixedIn.EXCLUDED)
-        .filter(property->!property.isNotPersisted())
+        .filter(property->!EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property))
         .map(property->PropertyChangeRecord.of(entity, property))
         .filter(record->!propertyChangeRecordsById.containsKey(record.getPropertyId())) // already enlisted, so ignore
         .forEach(record->{

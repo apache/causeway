@@ -27,11 +27,11 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet;
-import org.apache.isis.core.metamodel.facets.properties.property.notpersisted.SnapshotExcludeFacetForPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.snapshot.SnapshotExcludeFacetForPropertyAnnotation;
 
 import lombok.val;
 
-public class NotPersistedAnnotationOnPropertyFacetFactoryTest
+public class PropertyAnnotationWithSnapshotOnPropertyFacetFactoryTest
 extends AbstractFacetFactoryTest {
 
     private PropertyAnnotationFacetFactory facetFactory;
@@ -45,13 +45,12 @@ extends AbstractFacetFactoryTest {
     private void processNotPersisted(
             final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
         val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
-        facetFactory.processNotPersisted(processMethodContext, propertyIfAny);
+        facetFactory.processSnapshot(processMethodContext, propertyIfAny);
     }
 
     public void testAnnotationPickedUpOnProperty() {
 
         class Customer {
-            @SuppressWarnings("unused")
             @Property(snapshot = Snapshot.EXCLUDED)
             public String getFirstName() {
                 return null;

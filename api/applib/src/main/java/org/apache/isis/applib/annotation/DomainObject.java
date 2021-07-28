@@ -129,10 +129,10 @@ public @interface DomainObject {
             default "Disabled";
 
     /**
-     * Whether entity changes should be published to
+     * Whether entity changes (persistent property updates) should be published to
      * {@link org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber}s
      * and whether entity changes, captured as {@link org.apache.isis.applib.services.publishing.spi.EntityChanges},
-     * should be dispatched to {@link org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber}s.
+     * should be published to {@link org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber}s.
      * @apiNote does only apply to entity objects
      */
     Publishing entityChangePublishing()

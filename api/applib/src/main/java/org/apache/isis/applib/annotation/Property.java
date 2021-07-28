@@ -138,6 +138,20 @@ public @interface Property {
             default "";
 
     /**
+     * When set to {@link Publishing#DISABLED},
+     * vetoes publishing of updates for this property.
+     * Otherwise has no effect, except when using {@link Publishing#ENABLED} to override
+     * an inherited property annotation, which is a supported use-case.
+     * <p>
+     * Relates to {@link DomainObject#entityChangePublishing()}, which controls
+     * whether entity-change-publishing is enabled for the corresponding entity type.
+     * @see DomainObject#entityChangePublishing()
+     * @apiNote does only apply to persistent properties of entity objects
+     */
+    Publishing entityChangePublishing()
+            default Publishing.NOT_SPECIFIED;
+
+    /**
      * Whether
      * {@link Execution}s
      * (triggered property edits), should be dispatched to

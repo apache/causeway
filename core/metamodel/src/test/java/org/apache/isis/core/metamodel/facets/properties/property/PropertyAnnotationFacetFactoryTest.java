@@ -28,8 +28,16 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.Snapshot;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
@@ -51,6 +59,7 @@ import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacetAbstract;
 import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet;
 import org.apache.isis.core.metamodel.facets.properties.property.disabled.DisabledFacetForPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.entitychangepublishing.EntityPropertyChangePublishingPolicyFacet;
 import org.apache.isis.core.metamodel.facets.properties.property.hidden.HiddenFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForPropertyAnnotation;
@@ -62,8 +71,8 @@ import org.apache.isis.core.metamodel.facets.properties.property.modify.Property
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromDefault;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.mustsatisfy.MustSatisfySpecificationFacetForPropertyAnnotation;
-import org.apache.isis.core.metamodel.facets.properties.property.notpersisted.SnapshotExcludeFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetForPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.snapshot.SnapshotExcludeFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacetAbstract;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
@@ -71,10 +80,6 @@ import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySe
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -150,12 +155,17 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
         facetFactory.processMustSatisfy(processMethodContext, propertyIfAny);
     }
 
-    private static void processNotPersisted(
+    private static void processSnapshot(
             final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
         val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
-        facetFactory.processNotPersisted(processMethodContext, propertyIfAny);
+        facetFactory.processSnapshot(processMethodContext, propertyIfAny);
     }
 
+    private static void processEntityPropertyChangePublishing(
+            final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
+        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
+        facetFactory.processEntityPropertyChangePublishing(processMethodContext, propertyIfAny);
+    }
 
 
     @Before
@@ -565,7 +575,57 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
 
     }
 
-    public static class NotPersisted extends PropertyAnnotationFacetFactoryTest {
+    public static class EntityPropertyChangePublishingPolicy extends PropertyAnnotationFacetFactoryTest {
+
+        @Test
+        public void exclusion() {
+
+            class Customer {
+                @Property(entityChangePublishing = Publishing.DISABLED)
+                @Getter @Setter private String name;
+            }
+
+            // given
+            val cls = Customer.class;
+            propertyMethod = findMethod(Customer.class, "getName");
+
+            // when
+            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
+            processEntityPropertyChangePublishing(facetFactory, processMethodContext);
+
+            // then
+            val changePolicyFacet = facetedMethod.getFacet(EntityPropertyChangePublishingPolicyFacet.class);
+            assertNotNull(changePolicyFacet);
+            assertTrue(changePolicyFacet.isPublishingVetoed());
+            assertFalse(changePolicyFacet.isPublishingAllowed());
+        }
+
+        @Test
+        public void whenDefault() {
+
+            class Customer {
+                @Property
+                @Getter @Setter private String name;
+            }
+
+            // given
+            val cls = Customer.class;
+            propertyMethod = findMethod(Customer.class, "getName");
+
+            // when
+            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
+            processEntityPropertyChangePublishing(facetFactory, processMethodContext);
+
+            // then
+            val changePolicyFacet = facetedMethod.getFacet(EntityPropertyChangePublishingPolicyFacet.class);
+            assertNull(changePolicyFacet);
+        }
+
+    }
+
+    public static class SnapshotExcluded extends PropertyAnnotationFacetFactoryTest {
 
         @Test
         public void withAnnotation() {
@@ -582,7 +642,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             // when
             val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
-            processNotPersisted(facetFactory, processMethodContext);
+            processSnapshot(facetFactory, processMethodContext);
 
             // then
             final SnapshotExcludeFacet snapshotExcludeFacet = facetedMethod.getFacet(SnapshotExcludeFacet.class);

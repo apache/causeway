@@ -41,6 +41,7 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.Pr
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.properties.projection.ProjectingFacetFromPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.disabled.DisabledFacetForPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.entitychangepublishing.EntityPropertyChangePublishingPolicyFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.fileaccept.FileAcceptFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.hidden.HiddenFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
@@ -54,9 +55,9 @@ import org.apache.isis.core.metamodel.facets.properties.property.modify.Property
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromDefault;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.mustsatisfy.MustSatisfySpecificationFacetForPropertyAnnotation;
-import org.apache.isis.core.metamodel.facets.properties.property.notpersisted.SnapshotExcludeFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetForPatternAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetForPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.snapshot.SnapshotExcludeFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -93,7 +94,8 @@ extends FacetFactoryAbstract {
         processExecutionPublishing(processMethodContext, propertyIfAny);
         processMaxLength(processMethodContext, propertyIfAny);
         processMustSatisfy(processMethodContext, propertyIfAny);
-        processNotPersisted(processMethodContext, propertyIfAny);
+        processEntityPropertyChangePublishing(processMethodContext, propertyIfAny);
+        processSnapshot(processMethodContext, propertyIfAny);
         processOptional(processMethodContext, propertyIfAny);
         processRegEx(processMethodContext, propertyIfAny);
         processFileAccept(processMethodContext, propertyIfAny);
@@ -299,7 +301,16 @@ extends FacetFactoryAbstract {
                 .create(propertyIfAny, holder, getFactoryService()));
     }
 
-    void processNotPersisted(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
+    void processEntityPropertyChangePublishing(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
+        val holder = processMethodContext.getFacetHolder();
+
+        // search for @Property(entityPropertyChangePublishing=...)
+        addFacetIfPresent(
+                EntityPropertyChangePublishingPolicyFacetForPropertyAnnotation
+                .create(propertyIfAny, holder));
+    }
+
+    void processSnapshot(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
         val holder = processMethodContext.getFacetHolder();
 
         // search for @Property(notPersisted=...)

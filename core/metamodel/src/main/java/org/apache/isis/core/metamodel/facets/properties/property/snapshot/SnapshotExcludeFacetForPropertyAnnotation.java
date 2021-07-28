@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.properties.property.notpersisted;
+package org.apache.isis.core.metamodel.facets.properties.property.snapshot;
 
 import java.util.Optional;
 
@@ -27,11 +27,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacetAbstract;
 
-public class SnapshotExcludeFacetForPropertyAnnotation extends SnapshotExcludeFacetAbstract {
-
-    public SnapshotExcludeFacetForPropertyAnnotation(final FacetHolder holder) {
-        super(holder);
-    }
+public class SnapshotExcludeFacetForPropertyAnnotation
+extends SnapshotExcludeFacetAbstract {
 
     public static Optional<SnapshotExcludeFacet> create(
             final Optional<Property> propertyIfAny,
@@ -42,4 +39,9 @@ public class SnapshotExcludeFacetForPropertyAnnotation extends SnapshotExcludeFa
                 .filter(snapshot -> snapshot == Snapshot.EXCLUDED)
                 .map(snapshot -> new SnapshotExcludeFacetForPropertyAnnotation(holder));
     }
+
+    private SnapshotExcludeFacetForPropertyAnnotation(final FacetHolder holder) {
+        super(holder);
+    }
+
 }

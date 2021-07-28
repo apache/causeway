@@ -29,7 +29,7 @@ public abstract class SnapshotExcludeFacetAbstract extends FacetAbstract impleme
         return SnapshotExcludeFacet.class;
     }
 
-    public SnapshotExcludeFacetAbstract(final FacetHolder holder) {
+    protected SnapshotExcludeFacetAbstract(final FacetHolder holder) {
         super(type(), holder);
     }
 

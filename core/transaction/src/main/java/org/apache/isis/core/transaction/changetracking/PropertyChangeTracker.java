@@ -23,6 +23,7 @@ import java.sql.Timestamp;
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.facets.properties.property.entitychangepublishing.EntityPropertyChangePublishingPolicyFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.transaction.changetracking.events.IsisTransactionPlaceholder;
@@ -68,8 +69,7 @@ public interface PropertyChangeTracker {
                 return entity
                 .getSpecification()
                 .streamProperties(MixedIn.EXCLUDED)
-                .filter(property->!property.isMixedIn())
-                .filter(property->!property.isNotPersisted())
+                .filter(property->!EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property))
                 .map(property->
                     PropertyChangeRecord
                     .of(
@@ -105,8 +105,7 @@ public interface PropertyChangeTracker {
                 return entity
                 .getSpecification()
                 .streamProperties(MixedIn.EXCLUDED)
-                .filter(property->!property.isMixedIn())
-                .filter(property->!property.isNotPersisted())
+                .filter(property->!EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property))
                 .map(property->
                     PropertyChangeRecord
                     .of(
