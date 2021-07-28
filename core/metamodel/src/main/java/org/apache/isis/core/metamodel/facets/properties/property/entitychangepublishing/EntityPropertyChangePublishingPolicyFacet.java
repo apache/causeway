@@ -20,10 +20,13 @@
 package org.apache.isis.core.metamodel.facets.properties.property.entitychangepublishing;
 
 import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.applib.value.Blob;
+import org.apache.isis.applib.value.Clob;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.NonNull;
+import lombok.val;
 
 /**
  * Indicates whether a property should be excluded from entity change publishing (auditing).
@@ -45,10 +48,18 @@ public interface EntityPropertyChangePublishingPolicyFacet extends Facet {
     }
 
     static boolean isExcludedFromPublishing(final @NonNull OneToOneAssociation property) {
+
+        val typeOf = property.getSpecification().getCorrespondingClass();
+        if(Blob.class.equals(typeOf)
+                || Clob.class.equals(typeOf)) {
+            return true; //XXX ISIS-1488, always exclude Bob/Clob from property change publishing
+        }
+
         return property
                 .lookupFacet(EntityPropertyChangePublishingPolicyFacet.class)
                 .map(EntityPropertyChangePublishingPolicyFacet::isPublishingVetoed)
                 .orElse(false);
     }
+
 
 }
