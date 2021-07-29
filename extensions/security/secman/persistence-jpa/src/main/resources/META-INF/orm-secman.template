@@ -23,22 +23,30 @@
       http://xmlns.jcp.org/xml/ns/persistence/orm_2_1.xsd"
     version="2.1">
 
-	<package>org.apache.isis.extensions.secman.jpa.dom</package>
-	
-	<entity class="permission.ApplicationPermission">
-		<table schema="secman"/>
+	<!-- rename file to .xml then customize-->
+
+	<entity class="org.apache.isis.extensions.secman.jpa.permission.dom.ApplicationPermission">
+		<table schema="isisExtensionsSecman" name="ApplicationPermission"/>
 	</entity>
 	
-	<entity class="role.ApplicationRole">
-		<table schema="secman"/>
+	<entity class="org.apache.isis.extensions.secman.jpa.role.dom.ApplicationRole">
+		<table schema="isisExtensionsSecman" name="ApplicationRole"/>
 	</entity>
 	
-	<entity class="tenancy.ApplicationTenancy">
-		<table schema="secman"/>
+	<entity class="org.apache.isis.extensions.secman.jpa.tenancy.dom.ApplicationTenancy">
+		<table schema="isisExtensionsSecman" name="ApplicationTenancy"/>
 	</entity>
 	
-	<entity class="user.ApplicationUser">
-		<table schema="secman"/>
+	<entity class="org.apache.isis.extensions.secman.jpa.user.dom.ApplicationUser">
+		<table schema="isisExtensionsSecman" name="ApplicationUser"/>
+		<attributes>
+			<many-to-many name="roles">
+				<join-table schema="isisExtensionsSecman" name="ApplicationUserRoles">
+					<join-column name="userId" />
+					<inverse-join-column name="roleId" />
+				</join-table>
+			</many-to-many>
+		</attributes>
 	</entity>
 
 </entity-mappings>

@@ -42,7 +42,7 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
-import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
+import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
 @Entity
 @Table(
@@ -89,7 +89,7 @@ import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPoin
                   + "   AND p.rule = :rule "
                   + "   AND p.featureSort = :featureSort "),
 })
-@EntityListeners(JpaEntityInjectionPointResolver.class)
+@EntityListeners(IsisEntityListener.class)
 @DomainObject(
         logicalTypeName = ApplicationPermission.LOGICAL_TYPE_NAME
 )
@@ -120,7 +120,7 @@ public class ApplicationPermission
         return role;
     }
     @Override
-    public void setRole(ApplicationRole applicationRole) {
+    public void setRole(final ApplicationRole applicationRole) {
         role = _Casts.uncheckedCast(applicationRole);
     }
 
@@ -137,7 +137,7 @@ public class ApplicationPermission
         return rule;
     }
     @Override
-    public void setRule(ApplicationPermissionRule rule) {
+    public void setRule(final ApplicationPermissionRule rule) {
         this.rule = rule;
     }
 
@@ -154,7 +154,7 @@ public class ApplicationPermission
         return mode;
     }
     @Override
-    public void setMode(ApplicationPermissionMode mode) {
+    public void setMode(final ApplicationPermissionMode mode) {
         this.mode = mode;
     }
 
@@ -171,7 +171,7 @@ public class ApplicationPermission
         return featureSort;
     }
     @Override
-    public void setFeatureSort(ApplicationFeatureSort featureSort) {
+    public void setFeatureSort(final ApplicationFeatureSort featureSort) {
         this.featureSort = featureSort;
     }
 
@@ -187,7 +187,7 @@ public class ApplicationPermission
         return featureFqn;
     }
     @Override
-    public void setFeatureFqn(String featureFqn) {
+    public void setFeatureFqn(final String featureFqn) {
         this.featureFqn = featureFqn;
     }
 

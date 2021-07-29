@@ -27,8 +27,6 @@ import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -42,7 +40,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
-import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
+import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
 @Entity
 @Table(
@@ -65,7 +63,7 @@ import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPoin
                   + "FROM ApplicationRole r "
                   + "WHERE r.name LIKE :regex"),
 })
-@EntityListeners(JpaEntityInjectionPointResolver.class)
+@EntityListeners(IsisEntityListener.class)
 @DomainObject(
         bounding = Bounding.BOUNDED,
         logicalTypeName = ApplicationRole.LOGICAL_TYPE_NAME,
@@ -97,7 +95,7 @@ public class ApplicationRole
         return name;
     }
     @Override
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -113,7 +111,7 @@ public class ApplicationRole
         return description;
     }
     @Override
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
