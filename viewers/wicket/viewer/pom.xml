@@ -93,7 +93,7 @@
         
         <!-- Cglib patch START 
         	as of 2021 Cglib seems inactive - while yet Wicket 8. and 9. rely on it
-        	Cglib is fails to initilize net.sf.cglib.core.ReflectUtils when running on JVM 16+
+        	Cglib fails to initialize net.sf.cglib.core.ReflectUtils when running on JVM 16+
         	we utilize a jitpack.io build that is based on this patch 
         	https://github.com/rototor/cglib/commit/cc8632ed0930879b929b0d07e4ede5ac15103e9f 
         	-->
