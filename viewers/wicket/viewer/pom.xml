@@ -69,19 +69,44 @@
             		<groupId>org.ow2.asm</groupId>
             		<artifactId>asm</artifactId>
             	</exclusion>
-                <!-- TODO[2112] exclusions might no longer be relevant -->
                 <exclusion>
                     <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-api</artifactId>
                 </exclusion>
                 <exclusion>
-                    <!-- for Java7 compatibility (we don't use the proxying capability
-                        of this component) -->
                     <groupId>cglib</groupId>
                     <artifactId>cglib</artifactId>
                 </exclusion>
+                <exclusion>
+                	<groupId>cglib</groupId>
+                	<artifactId>cglib-nodep</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
+        
+        <!-- Cglib patch START 
+        	as of 2021 Cglib seems inactive - while yet Wicket 8. and 9. rely on it
+        	we provide a monkey-patch for net.sf.cglib.core.ReflectUtils so we can run on JVM 16+
+        	no guarantees, that this works for all class-loaders and scenarios
+        	provided as is - not worth any more effort - should be rather fixed by the Apache Wicket project 
+        	-->
+        <dependency>
+        	<groupId>cglib</groupId>
+        	<artifactId>cglib</artifactId>
+        	<version>3.3.0</version>
+        	<exclusions>
+	        	<exclusion>
+	            		<groupId>org.ow2.asm</groupId>
+	            		<artifactId>asm</artifactId>
+	           	</exclusion>
+           	</exclusions>
+        </dependency>
+        <dependency>
+		    <groupId>org.ow2.asm</groupId>
+		    <artifactId>asm</artifactId>
+		    <version>9.2</version>
+		</dependency>
+		<!-- Cglib patch END -->        
 
         <dependency>
             <groupId>org.apache.wicket</groupId>
@@ -184,7 +209,11 @@
                     <groupId>junit</groupId>
                     <artifactId>junit-dep</artifactId>
                 </exclusion>
-            </exclusions>
+                <exclusion>
+                	<groupId>cglib</groupId>
+                	<artifactId>cglib</artifactId>
+                </exclusion>
+        	</exclusions>
         </dependency>
     </dependencies>
 
