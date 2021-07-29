@@ -54,6 +54,13 @@
             </resource>
         </resources>
     </build>
+    
+   	<repositories>
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+	</repositories>
 
     <dependencies>
         <dependency>
@@ -86,18 +93,18 @@
         
         <!-- Cglib patch START 
         	as of 2021 Cglib seems inactive - while yet Wicket 8. and 9. rely on it
-        	we provide a monkey-patch for net.sf.cglib.core.ReflectUtils so we can run on JVM 16+
-        	no guarantees, that this works for all class-loaders and scenarios
-        	provided as is - not worth any more effort - should be rather fixed by the Apache Wicket project 
+        	Cglib is fails to initilize net.sf.cglib.core.ReflectUtils when running on JVM 16+
+        	we utilize a jitpack.io build that is based on this patch 
+        	https://github.com/rototor/cglib/commit/cc8632ed0930879b929b0d07e4ede5ac15103e9f 
         	-->
         <dependency>
-        	<groupId>cglib</groupId>
-        	<artifactId>cglib</artifactId>
-        	<version>3.3.0</version>
+	    	<groupId>com.github.rototor</groupId>
+	    	<artifactId>cglib</artifactId>
+	    	<version>4516ac7b61</version>
         	<exclusions>
 	        	<exclusion>
-	            		<groupId>org.ow2.asm</groupId>
-	            		<artifactId>asm</artifactId>
+            		<groupId>org.ow2.asm</groupId>
+            		<artifactId>asm</artifactId>
 	           	</exclusion>
            	</exclusions>
         </dependency>
