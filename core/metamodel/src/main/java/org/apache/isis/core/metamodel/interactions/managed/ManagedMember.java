@@ -92,6 +92,8 @@ public abstract class ManagedMember implements ManagedFeature {
 
     @NonNull private ManagedObject owner;
     public ManagedObject getOwner() {
+        //XXX this is a hack,
+        // see also org.apache.isis.core.metamodel.interactions.managed.ManagedProperty.ManagedProperty(ManagedObject, OneToOneAssociation, Where)
         return owner = EntityUtil.reattach(owner);
     }
 

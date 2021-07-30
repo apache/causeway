@@ -63,6 +63,11 @@ public final class ManagedProperty extends ManagedMember {
 
     @Getter private final OneToOneAssociation property;
 
+    //XXX suggestion: instead of holding the 'owner' object, let it hold a supplier of the 'owner' object,
+    //such that the supplier always returns the actual owner evaluated lazily without memoization.
+    //Such a change would better support eg.
+    //org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel.getManagedProperty()
+    //Or as an alternative use a memento instead of the ManagedObject.
     private ManagedProperty(
             final @NonNull ManagedObject owner,
             final @NonNull OneToOneAssociation property,
@@ -88,7 +93,7 @@ public final class ManagedProperty extends ManagedMember {
 
     // -- INTERACTION
 
-    public Optional<InteractionVeto> checkValidity(ManagedObject proposedNewValue) {
+    public Optional<InteractionVeto> checkValidity(final ManagedObject proposedNewValue) {
         try {
 
             val validityConsent =
@@ -111,7 +116,7 @@ public final class ManagedProperty extends ManagedMember {
      * @param proposedNewValue
      * @return non-empty if the interaction is not valid for given {@code proposedNewValue}
      */
-    public Optional<InteractionVeto> modifyProperty(@Nullable ManagedObject proposedNewValue) {
+    public Optional<InteractionVeto> modifyProperty(@Nullable final ManagedObject proposedNewValue) {
 
         val interactionVeto = checkValidity(proposedNewValue);
         if(interactionVeto.isPresent()) {
