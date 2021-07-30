@@ -35,14 +35,21 @@ import static org.apache.isis.testdomain.publishing.subscriber.EntityChangesSubs
 import static org.apache.isis.testdomain.publishing.subscriber.EntityChangesSubscriberForTesting.getUpdated;
 
 public abstract class EntityPublishingTestAbstract
-implements HasPersistenceStandard {
+extends PublishingTestAbstract {
 
     @Inject private KVStoreForTesting kvStore;
 
+    @Override
+    protected final boolean supportsProgrammaticTesting(final ChangeScenario changeScenario) {
+        return changeScenario.isSupportsProgrammatic();
+    }
+
+    @Override
     protected void given() {
         clearPublishedEntries(kvStore);
     }
 
+    @Override
     protected void verify(
             final ChangeScenario changeScenario,
             final VerificationStage verificationStage) {

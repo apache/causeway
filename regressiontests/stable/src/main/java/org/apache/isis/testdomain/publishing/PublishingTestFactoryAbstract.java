@@ -65,11 +65,12 @@ public abstract class PublishingTestFactoryAbstract {
     /** what kind of entity change is under test */
     @RequiredArgsConstructor @Getter
     public static enum ChangeScenario {
-        ENTITY_CREATION("creation"),
-        PROPERTY_UPDATE("property update"),
-        ACTION_INVOCATION("action invocation"),
-        ENTITY_REMOVAL("removal");
+        ENTITY_CREATION("creation", true),
+        PROPERTY_UPDATE("property update", false),
+        ACTION_INVOCATION("action invocation", false),
+        ENTITY_REMOVAL("removal", true);
         final String displayName;
+        final boolean supportsProgrammatic;
     }
 
     @Value(staticConstructor = "of")
@@ -198,21 +199,7 @@ public abstract class PublishingTestFactoryAbstract {
 
     // -- CREATE DYNAMIC TESTS
 
-    public final List<DynamicTest> generateTestsIncludeProgrammatic(
-            final ChangeScenario changeScenario,
-            final Runnable given,
-            final BiConsumer<ChangeScenario, VerificationStage> verifier) {
-        return generateTests(changeScenario, true, given, verifier);
-    }
-
     public final List<DynamicTest> generateTests(
-            final ChangeScenario changeScenario,
-            final Runnable given,
-            final BiConsumer<ChangeScenario, VerificationStage> verifier) {
-        return generateTests(changeScenario, false, given, verifier);
-    }
-
-    private final List<DynamicTest> generateTests(
             final ChangeScenario changeScenario,
             final boolean includeProgrammatic,
             final Runnable given,

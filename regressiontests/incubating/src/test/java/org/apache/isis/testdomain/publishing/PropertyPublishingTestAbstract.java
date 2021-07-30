@@ -33,14 +33,21 @@ import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import lombok.val;
 
 public abstract class PropertyPublishingTestAbstract
-implements HasPersistenceStandard {
+extends PublishingTestAbstract {
 
     @Inject private KVStoreForTesting kvStore;
 
+    @Override
+    protected final boolean supportsProgrammaticTesting(final ChangeScenario changeScenario) {
+        return changeScenario.isSupportsProgrammatic();
+    }
+
+    @Override
     protected void given() {
         EntityPropertyChangeSubscriberForTesting.clearPropertyChangeEntries(kvStore);
     }
 
+    @Override
     protected void verify(
             final ChangeScenario changeScenario,
             final VerificationStage verificationStage) {
