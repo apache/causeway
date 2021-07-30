@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.spec.feature.memento.PropertyMemento;
 import org.apache.isis.viewer.common.model.feature.PropertyUiModel;
 
+import lombok.NonNull;
 import lombok.val;
 
 public class ScalarPropertyModel
@@ -71,15 +72,23 @@ implements PropertyUiModel {
         return propertyMemento.getProperty(this::getSpecificationLoader);
     }
 
+    // not strictly required, used for caching
     private transient ManagedProperty managedProperty;
 
     public ManagedProperty getManagedProperty() {
+        val owner = getParentUiModel().getObject();
         if(managedProperty==null) {
-            val owner = getParentUiModel().getObject();
-            val where = this.getRenderingHint().asWhere();
-            managedProperty = ManagedProperty.of(owner, getMetaModel(), where);
+            return managedProperty = createManagedProperty(owner);
         }
-        return managedProperty;
+        return managedProperty.getOwner()!=owner
+            //XXX ISIS-2830 recreate if owner had changed
+            ? managedProperty = createManagedProperty(owner)
+            : managedProperty;
+    }
+
+    private ManagedProperty createManagedProperty(final @NonNull ManagedObject owner) {
+        val where = this.getRenderingHint().asWhere();
+        return ManagedProperty.of(owner, getMetaModel(), where);
     }
 
     @Override
