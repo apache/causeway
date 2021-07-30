@@ -25,9 +25,17 @@ import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.Transient;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.applib.events.lifecycle.ObjectCreatedEvent;
+import org.apache.isis.applib.events.lifecycle.ObjectLoadedEvent;
+import org.apache.isis.applib.events.lifecycle.ObjectPersistedEvent;
+import org.apache.isis.applib.events.lifecycle.ObjectPersistingEvent;
+import org.apache.isis.applib.events.lifecycle.ObjectRemovingEvent;
+import org.apache.isis.applib.events.lifecycle.ObjectUpdatedEvent;
+import org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent;
 import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 import org.apache.isis.testdomain.model.stereotypes.MyService;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
@@ -44,12 +52,38 @@ import lombok.extern.log4j.Log4j2;
 @EntityListeners(IsisEntityListener.class)
 @DiscriminatorValue("Book")
 @DomainObject(
-        logicalTypeName = "testdomain.jpa.Book",
-        entityChangePublishing = Publishing.ENABLED)
+        logicalTypeName = "testdomain.jpa.Book"
+        , entityChangePublishing = Publishing.ENABLED
+
+        , actionDomainEvent = JpaBook.ActionDomainEvent.class
+        , propertyDomainEvent = JpaBook.PropertyDomainEvent.class
+        , collectionDomainEvent = JpaBook.CollectionDomainEvent.class
+
+        , createdLifecycleEvent = JpaBook.CreatedLifecycleEvent.class
+        , persistingLifecycleEvent = JpaBook.PersistingLifecycleEvent.class
+        , persistedLifecycleEvent = JpaBook.PersistedLifecycleEvent.class
+        , loadedLifecycleEvent = JpaBook.LoadedLifecycleEvent.class
+        , updatingLifecycleEvent = JpaBook.UpdatingLifecycleEvent.class
+        , updatedLifecycleEvent = JpaBook.UpdatedLifecycleEvent.class
+        , removingLifecycleEvent = JpaBook.RemovingLifecycleEvent.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(callSuper = true)
 @Log4j2
 public class JpaBook extends JpaProduct {
+
+    // -- DOMAIN EVENTS
+    public static class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<JpaBook> {};
+    public static class PropertyDomainEvent extends IsisModuleApplib.PropertyDomainEvent<JpaBook, Object> {};
+    public static class CollectionDomainEvent extends IsisModuleApplib.CollectionDomainEvent<JpaBook, Object> {};
+
+    // -- LIFE CYCLE EVENTS
+    public static class CreatedLifecycleEvent extends ObjectCreatedEvent<JpaBook> {};
+    public static class LoadedLifecycleEvent extends ObjectLoadedEvent<JpaBook> {};
+    public static class PersistingLifecycleEvent extends ObjectPersistingEvent<JpaBook> {};
+    public static class PersistedLifecycleEvent extends ObjectPersistedEvent<JpaBook> {};
+    public static class UpdatingLifecycleEvent extends ObjectUpdatingEvent<JpaBook> {};
+    public static class UpdatedLifecycleEvent extends ObjectUpdatedEvent<JpaBook> {};
+    public static class RemovingLifecycleEvent extends ObjectRemovingEvent<JpaBook> {};
 
     @Inject @Transient private KVStoreForTesting kvStore;
 

@@ -24,9 +24,17 @@ import javax.jdo.annotations.Discriminator;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Query;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.applib.events.lifecycle.ObjectCreatedEvent;
+import org.apache.isis.applib.events.lifecycle.ObjectLoadedEvent;
+import org.apache.isis.applib.events.lifecycle.ObjectPersistedEvent;
+import org.apache.isis.applib.events.lifecycle.ObjectPersistingEvent;
+import org.apache.isis.applib.events.lifecycle.ObjectRemovingEvent;
+import org.apache.isis.applib.events.lifecycle.ObjectUpdatedEvent;
+import org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent;
 import org.apache.isis.testdomain.model.stereotypes.MyService;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 
@@ -42,8 +50,20 @@ import lombok.extern.log4j.Log4j2;
 //@Inheritance(strategy=InheritanceStrategy.SUPERCLASS_TABLE)
 @Discriminator(value="Book")
 @DomainObject(
-        logicalTypeName = "testdomain.jdo.Book",
-        entityChangePublishing = Publishing.ENABLED)
+        logicalTypeName = "testdomain.jdo.Book"
+        , entityChangePublishing = Publishing.ENABLED
+
+        , actionDomainEvent = JdoBook.ActionDomainEvent.class
+        , propertyDomainEvent = JdoBook.PropertyDomainEvent.class
+        , collectionDomainEvent = JdoBook.CollectionDomainEvent.class
+
+        , createdLifecycleEvent = JdoBook.CreatedLifecycleEvent.class
+        , persistingLifecycleEvent = JdoBook.PersistingLifecycleEvent.class
+        , persistedLifecycleEvent = JdoBook.PersistedLifecycleEvent.class
+        , loadedLifecycleEvent = JdoBook.LoadedLifecycleEvent.class
+        , updatingLifecycleEvent = JdoBook.UpdatingLifecycleEvent.class
+        , updatedLifecycleEvent = JdoBook.UpdatedLifecycleEvent.class
+        , removingLifecycleEvent = JdoBook.RemovingLifecycleEvent.class)
 @javax.jdo.annotations.Uniques({
     @javax.jdo.annotations.Unique(
             name = "JdoBook_isbn_UNQ", members = { "isbn" })
@@ -63,6 +83,20 @@ import lombok.extern.log4j.Log4j2;
 @ToString(callSuper = true)
 @Log4j2
 public class JdoBook extends JdoProduct {
+
+    // -- DOMAIN EVENTS
+    public static class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<JdoBook> {};
+    public static class PropertyDomainEvent extends IsisModuleApplib.PropertyDomainEvent<JdoBook, Object> {};
+    public static class CollectionDomainEvent extends IsisModuleApplib.CollectionDomainEvent<JdoBook, Object> {};
+
+    // -- LIFE CYCLE EVENTS
+    public static class CreatedLifecycleEvent extends ObjectCreatedEvent<JdoBook> {};
+    public static class LoadedLifecycleEvent extends ObjectLoadedEvent<JdoBook> {};
+    public static class PersistingLifecycleEvent extends ObjectPersistingEvent<JdoBook> {};
+    public static class PersistedLifecycleEvent extends ObjectPersistedEvent<JdoBook> {};
+    public static class UpdatingLifecycleEvent extends ObjectUpdatingEvent<JdoBook> {};
+    public static class UpdatedLifecycleEvent extends ObjectUpdatedEvent<JdoBook> {};
+    public static class RemovingLifecycleEvent extends ObjectRemovingEvent<JdoBook> {};
 
     @Inject private KVStoreForTesting kvStore;
 
