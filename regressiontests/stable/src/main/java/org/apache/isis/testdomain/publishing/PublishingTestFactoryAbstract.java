@@ -200,6 +200,7 @@ public abstract class PublishingTestFactoryAbstract {
 
     // -- CREATE DYNAMIC TESTS
 
+    @Deprecated //FIXME not deprecated - simplify and trigger the verification stages automatically, not declaratively
     public final List<DynamicTest> generateTests(
             final ChangeScenario changeScenario,
             final boolean includeProgrammatic,
