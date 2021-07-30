@@ -36,6 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.DisabledException;
@@ -79,6 +80,7 @@ extends PublishingTestFactoryAbstract {
     private final ObjectManager objectManager;
     private final FixtureScripts fixtureScripts;
     private final CommitListener commitListener;
+    private final FactoryService factoryService;
 
     @Getter(onMethod_ = {@Override}, value = AccessLevel.PROTECTED)
     private final InteractionService interactionService;
@@ -406,7 +408,10 @@ extends PublishingTestFactoryAbstract {
 
         val products = new HashSet<JdoProduct>();
 
-        products.add(BookDto.sample().toJdoBook());
+        // should trigger an ObjectCreatedEvent
+        val detachedNewBook = factoryService.detachedEntity(BookDto.sample().toJdoBook());
+
+        products.add(detachedNewBook);
 
         val inventory = JdoInventory.of("Sample Inventory", products);
         pm.makePersistent(inventory);

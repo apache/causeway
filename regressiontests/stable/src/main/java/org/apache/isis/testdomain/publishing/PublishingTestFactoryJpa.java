@@ -33,6 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.DisabledException;
@@ -78,6 +79,7 @@ extends PublishingTestFactoryAbstract {
     private final FixtureScripts fixtureScripts;
     private final CommitListener commitListener;
     private final JpaSupportService jpaSupport;
+    private final FactoryService factoryService;
 
     @Getter(onMethod_ = {@Override}, value = AccessLevel.PROTECTED)
     private final InteractionService interactionService;
@@ -368,8 +370,6 @@ extends PublishingTestFactoryAbstract {
         // when
         withBookDo(book->{
 
-
-
             // when - running synchronous
             val asyncControl = returningVoid().withCheckRules(); // enforce rules
 
@@ -398,7 +398,10 @@ extends PublishingTestFactoryAbstract {
 
         val products = new HashSet<JpaProduct>();
 
-        products.add(BookDto.sample().toJpaBook());
+        // should trigger an ObjectCreatedEvent
+        val detachedNewBook = factoryService.detachedEntity(BookDto.sample().toJpaBook());
+
+        products.add(detachedNewBook);
 
         val inventory = JpaInventory.of("Sample Inventory", products);
         em.persist(inventory);

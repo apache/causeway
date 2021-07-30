@@ -77,6 +77,7 @@ extends PublishingTestAbstract {
 
         case FAILURE_CASE:
 
+            assertHasCreatedLifecycleEvents(Can.empty());
             assertHasLoadedLifecycleEvents(Can.empty());
             assertHasPersistingLifecycleEvents(Can.empty());
             assertHasPersistedLifecycleEvents(Can.empty());
@@ -125,6 +126,7 @@ extends PublishingTestAbstract {
             switch(changeScenario) {
             case ENTITY_CREATION:
 
+                //assertHasCreatedLifecycleEvents(bookSample1); //FIXME creation events not triggered
                 assertHasLoadedLifecycleEvents(Can.empty());
                 assertHasPersistingLifecycleEvents(bookSample1);
                 assertHasPersistedLifecycleEvents(bookSample1);
@@ -134,6 +136,8 @@ extends PublishingTestAbstract {
                 return;
 
             case ENTITY_LOADING:
+
+                assertHasCreatedLifecycleEvents(Can.empty());
                 assertHasLoadedLifecycleEvents(bookSample1);
                 assertHasPersistingLifecycleEvents(Can.empty());
                 assertHasPersistedLifecycleEvents(Can.empty());
@@ -145,6 +149,7 @@ extends PublishingTestAbstract {
 
             case PROPERTY_UPDATE: // update the book's name -> "Book #2"
 
+                assertHasCreatedLifecycleEvents(Can.empty());
                 assertHasLoadedLifecycleEvents(Can.empty());
                 assertHasPersistingLifecycleEvents(Can.empty());
                 assertHasPersistedLifecycleEvents(Can.empty());
@@ -155,6 +160,7 @@ extends PublishingTestAbstract {
 
             case ACTION_INVOCATION: // double the book's price action -> 198.0
 
+                assertHasCreatedLifecycleEvents(Can.empty());
                 assertHasLoadedLifecycleEvents(Can.empty());
                 assertHasPersistingLifecycleEvents(Can.empty());
                 assertHasPersistedLifecycleEvents(Can.empty());
@@ -165,6 +171,7 @@ extends PublishingTestAbstract {
 
             case ENTITY_REMOVAL:
 
+                assertHasCreatedLifecycleEvents(Can.empty());
                 assertHasLoadedLifecycleEvents(Can.empty());
                 assertHasPersistingLifecycleEvents(Can.empty());
                 assertHasPersistedLifecycleEvents(Can.empty());
@@ -186,7 +193,7 @@ extends PublishingTestAbstract {
 
     // -- HELPER
 
-    //TODO also verify these
+    // these events are emitted by the FactoryService only!
     private void assertHasCreatedLifecycleEvents(final Can<BookDto> expectedBooks) {
         assertHasLifecycleEvents(
                 JdoBook.CreatedLifecycleEvent.class,
@@ -194,7 +201,6 @@ extends PublishingTestAbstract {
                 expectedBooks);
     }
 
-    //TODO also verify these
     private void assertHasLoadedLifecycleEvents(final Can<BookDto> expectedBooks) {
         assertHasLifecycleEvents(
                 JdoBook.LoadedLifecycleEvent.class,
