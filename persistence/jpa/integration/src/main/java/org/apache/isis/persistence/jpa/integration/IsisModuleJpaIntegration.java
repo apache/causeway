@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
-import org.apache.isis.persistence.jpa.integration.changetracking.PropertyChangePublisherJpa;
+import org.apache.isis.persistence.jpa.integration.changetracking.PersistenceLifecycleEventPublisherJpa;
 import org.apache.isis.persistence.jpa.integration.metamodel.JpaProgrammingModel;
 import org.apache.isis.persistence.jpa.integration.services.JpaSupportServiceUsingSpring;
 import org.apache.isis.persistence.jpa.integration.typeconverters.JavaAwtBufferedImageByteArrayConverter;
@@ -39,7 +39,7 @@ import org.apache.isis.persistence.jpa.integration.typeconverters.JavaAwtBuffere
 
         // @Service's
         JpaSupportServiceUsingSpring.class,
-        PropertyChangePublisherJpa.class,
+        PersistenceLifecycleEventPublisherJpa.class,
 
 //        DataNucleusSettings.class,
 //        ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException.class,

@@ -12,6 +12,8 @@ import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedCallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedLifecycleEventFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedLifecycleEventFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallbackFacet;
@@ -26,26 +28,26 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.transaction.changetracking.EntityPropertyChangePublisher;
 import org.apache.isis.core.transaction.changetracking.PersistenceCallbackHandlerAbstract;
 import org.apache.isis.core.transaction.changetracking.PropertyChangeRecord;
-import org.apache.isis.core.transaction.changetracking.PropertyChangeTracker;
+import org.apache.isis.core.transaction.changetracking.PersistenceLifecycleTracker;
 
 /**
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.transaction.PropertyChangePublisherJpa")
+@Named("isis.transaction.PersistenceLifecycleEventPublisherJpa")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("jpa")
 //@Log4j2
-public class PropertyChangePublisherJpa
+public class PersistenceLifecycleEventPublisherJpa
 extends PersistenceCallbackHandlerAbstract
 implements
     MetricsService,
-    PropertyChangeTracker {
+    PersistenceLifecycleTracker {
 
     private final EntityPropertyChangePublisher entityPropertyChangePublisher;
 
     @Inject
-    public PropertyChangePublisherJpa(
+    public PersistenceLifecycleEventPublisherJpa(
             final EventBusService eventBusService,
             final EntityPropertyChangePublisher entityPropertyChangePublisher) {
         super(eventBusService);
@@ -71,7 +73,7 @@ implements
         postLifecycleEventIfRequired(entity, UpdatingLifecycleEventFacet.class);
 
         entityPropertyChangePublisher.publishChangedProperties(
-                PropertyChangeTracker
+                PersistenceLifecycleTracker
                 .publishingPayloadForUpdate(entity, changeRecords));
 
     }
@@ -82,7 +84,7 @@ implements
         postLifecycleEventIfRequired(entity, RemovingLifecycleEventFacet.class);
 
         entityPropertyChangePublisher.publishChangedProperties(
-                PropertyChangeTracker
+                PersistenceLifecycleTracker
                 .publishingPayloadForDeletion(entity));
     }
 
@@ -92,7 +94,7 @@ implements
         postLifecycleEventIfRequired(entity, PersistedLifecycleEventFacet.class);
 
         entityPropertyChangePublisher.publishChangedProperties(
-                PropertyChangeTracker
+                PersistenceLifecycleTracker
                 .publishingPayloadForCreation(entity));
     }
 
@@ -100,6 +102,12 @@ implements
     public void onPostUpdate(final ManagedObject entity) {
         CallbackFacet.callCallback(entity, UpdatedCallbackFacet.class);
         postLifecycleEventIfRequired(entity, UpdatedLifecycleEventFacet.class);
+    }
+
+    @Override
+    public void onPostLoad(final ManagedObject entity) {
+        CallbackFacet.callCallback(entity, LoadedCallbackFacet.class);
+        postLifecycleEventIfRequired(entity, LoadedLifecycleEventFacet.class);
     }
 
     // -- METRICS

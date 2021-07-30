@@ -16,24 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.events.lifecycle;
+package org.apache.isis.testdomain.publishing.conf;
 
-import org.apache.isis.applib.events.EventObjectBase;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-/**
- * Superclass for all lifecycle events that are raised by the framework when
- * loading, saving, updating or deleting objects from the database.
- *
- * @since 1.x {@index}
- */
-public abstract class AbstractLifecycleEvent<S> extends EventObjectBase<S> {
+import org.apache.isis.testdomain.util.event.LifecycleEventSubscriberForTesting;
 
-    public AbstractLifecycleEvent() {
-        this(null);
-    }
-
-    public AbstractLifecycleEvent(final S source) {
-        super(source);
-    }
+@Configuration
+@Import({
+    LifecycleEventSubscriberForTesting.class
+})
+public class Configuration_usingLifecycleEventPublishing {
 
 }

@@ -28,18 +28,19 @@ import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.publishing.LifecycleEventPublishingTestAbstract;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryJpa;
-import org.apache.isis.testdomain.publishing.conf.Configuration_usingEntityPropertyChangePublishing;
+import org.apache.isis.testdomain.publishing.conf.Configuration_usingLifecycleEventPublishing;
 
 @SpringBootTest(
         classes = {
                 Configuration_usingJpa.class,
-                Configuration_usingEntityPropertyChangePublishing.class,
+                Configuration_usingLifecycleEventPublishing.class,
                 PublishingTestFactoryJpa.class,
                 //XrayEnable.class
         },
         properties = {
-                "logging.level.org.springframework.orm.jpa.*=DEBUG",
-                "logging.level.org.apache.isis.testdomain.util.rest.KVStoreForTesting=DEBUG",
+                "logging.level.org.apache.isis.testdomain.util.event.LifecycleEventSubscriberForTesting=DEBUG",
+                //"logging.level.org.springframework.orm.jpa.*=DEBUG",
+                "logging.level.org.apache.isis.testdomain.util.kv.KVStoreForTesting=DEBUG",
         })
 @TestPropertySource({
     IsisPresets.UseLog4j2Test

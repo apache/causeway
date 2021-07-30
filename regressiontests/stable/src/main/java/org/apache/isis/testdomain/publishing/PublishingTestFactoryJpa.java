@@ -28,6 +28,7 @@ import javax.inject.Inject;
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -52,6 +53,7 @@ import org.apache.isis.testdomain.jpa.entities.JpaBook;
 import org.apache.isis.testdomain.jpa.entities.JpaInventory;
 import org.apache.isis.testdomain.jpa.entities.JpaProduct;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.CommitListener;
+import org.apache.isis.testdomain.util.dto.BookDto;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import static org.apache.isis.applib.services.wrapper.control.AsyncControl.returningVoid;
@@ -94,6 +96,7 @@ extends PublishingTestFactoryAbstract {
             fixtureScripts.runPersona(JpaTestDomainPersona.PurgeAll);
             break;
 
+        case ENTITY_LOADING:
         case PROPERTY_UPDATE:
         case ACTION_INVOCATION:
         case ENTITY_REMOVAL:
@@ -120,6 +123,14 @@ extends PublishingTestFactoryAbstract {
 
             context.runGiven();
             setupBookForJpa();
+            break;
+
+        case ENTITY_LOADING:
+
+            context.runGiven();
+            withBookDo(book->{
+                assertNotNull(book);
+            });
             break;
 
         case PROPERTY_UPDATE:
@@ -387,9 +398,7 @@ extends PublishingTestFactoryAbstract {
 
         val products = new HashSet<JpaProduct>();
 
-        products.add(JpaBook.of(
-                "Sample Book", "A sample book for testing.", 99.,
-                "Sample Author", "Sample ISBN", "Sample Publisher"));
+        products.add(BookDto.sample().toJpaBook());
 
         val inventory = JpaInventory.of("Sample Inventory", products);
         em.persist(inventory);

@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
-import static org.apache.isis.commons.internal.base._With.requires;
+import lombok.NonNull;
 
 /**
  * @since 2.0 {@index}
@@ -39,7 +39,7 @@ public abstract class EventObjectBase<T> {
      *
      * @param    source    The object on which the Event initially occurred.
      */
-    protected EventObjectBase(@Nullable T source) {
+    protected EventObjectBase(@Nullable final T source) {
         this.source = source;
     }
 
@@ -59,11 +59,10 @@ public abstract class EventObjectBase<T> {
      *
      * @param source non-null
      */
-    public void initSource(T source) {
+    public void initSource(final @NonNull T source) {
         if(this.source!=null) {
-            throw _Exceptions.unrecoverable(getClass().getName() + " cannot init when source is already set");
+            throw _Exceptions.illegalState(getClass().getName() + " cannot init when source is already set");
         }
-        requires(source, "source");
         this.source = source;
     }
 
@@ -72,6 +71,7 @@ public abstract class EventObjectBase<T> {
      *
      * @return  a String representation of this EventObject
      */
+    @Override
     public String toString() {
         return getClass().getName() + "[source=" + source + "]";
     }

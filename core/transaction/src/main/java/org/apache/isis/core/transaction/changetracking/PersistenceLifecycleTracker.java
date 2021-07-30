@@ -39,17 +39,19 @@ import lombok.NonNull;
  * @apiNote Introduced for JPA (EclipseLink implementation). More lightweight than
  * {@link EntityChangeTracker}
  */
-public interface PropertyChangeTracker {
+public interface PersistenceLifecycleTracker {
 
-    void onPreUpdate(ManagedObject entity, Can<PropertyChangeRecord> changeRecords);
+    void onPostLoad(ManagedObject entity);
 
     void onPrePersist(ManagedObject entity);
 
-    void onPreRemove(ManagedObject entity);
-
     void onPostPersist(ManagedObject entity);
 
+    void onPreUpdate(ManagedObject entity, Can<PropertyChangeRecord> changeRecords);
+
     void onPostUpdate(ManagedObject entity);
+
+    void onPreRemove(ManagedObject entity);
 
     //void onPostRemove(ManagedObject entity);
 

@@ -38,7 +38,7 @@ import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.core.transaction.changetracking.PreAndPostValue;
 import org.apache.isis.core.transaction.changetracking.PropertyChangeRecord;
-import org.apache.isis.core.transaction.changetracking.PropertyChangeTracker;
+import org.apache.isis.core.transaction.changetracking.PersistenceLifecycleTracker;
 import org.apache.isis.persistence.jpa.applib.services.JpaSupportService;
 
 import lombok.val;
@@ -64,7 +64,7 @@ public class IsisEntityListener {
 
     // not managed by Spring (directly)
     @Inject private ServiceInjector serviceInjector;
-    @Inject private PropertyChangeTracker propertyChangePublisher;
+    @Inject private PersistenceLifecycleTracker persistenceLifecycleTracker;
     @Inject private Provider<JpaSupportService> jpaSupportServiceProvider;
     @Inject private ObjectManager objectManager;
 
@@ -72,7 +72,7 @@ public class IsisEntityListener {
         log.debug("onPrePersist: {}", entityPojo);
         serviceInjector.injectServicesInto(entityPojo);
         val entity = objectManager.adapt(entityPojo);
-        propertyChangePublisher.onPrePersist(entity);
+        persistenceLifecycleTracker.onPrePersist(entity);
     }
 
     @PreUpdate void onPreUpdate(final Object entityPojo) {
@@ -111,7 +111,7 @@ public class IsisEntityListener {
             })
             .collect(Can.toCan()); // a Can<T> only collects non-null elements
 
-            propertyChangePublisher.onPreUpdate(entity, propertyChangeRecords);
+            persistenceLifecycleTracker.onPreUpdate(entity, propertyChangeRecords);
 
         });
     }
@@ -120,19 +120,19 @@ public class IsisEntityListener {
         log.debug("onAnyRemove: {}", entityPojo);
         serviceInjector.injectServicesInto(entityPojo);
         val entity = objectManager.adapt(entityPojo);
-        propertyChangePublisher.onPreRemove(entity);
+        persistenceLifecycleTracker.onPreRemove(entity);
     }
 
     @PostPersist void onPostPersist(final Object entityPojo) {
         log.debug("onPostPersist: {}", entityPojo);
         val entity = objectManager.adapt(entityPojo);
-        propertyChangePublisher.onPostPersist(entity);
+        persistenceLifecycleTracker.onPostPersist(entity);
     }
 
     @PostUpdate void onPostUpdate(final Object entityPojo) {
         log.debug("onPostUpdate: {}", entityPojo);
         val entity = objectManager.adapt(entityPojo);
-        propertyChangePublisher.onPostUpdate(entity);
+        persistenceLifecycleTracker.onPostUpdate(entity);
     }
 
     @PostRemove void onPostRemove(final Object entityPojo) {
@@ -142,6 +142,8 @@ public class IsisEntityListener {
     @PostLoad void onPostLoad(final Object entityPojo) {
         log.debug("onPostLoad: {}", entityPojo);
         serviceInjector.injectServicesInto(entityPojo);
+        val entity = objectManager.adapt(entityPojo);
+        persistenceLifecycleTracker.onPostLoad(entity);
     }
 
 }

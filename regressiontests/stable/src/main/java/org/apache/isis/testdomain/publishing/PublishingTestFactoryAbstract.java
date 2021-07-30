@@ -66,6 +66,7 @@ public abstract class PublishingTestFactoryAbstract {
     @RequiredArgsConstructor @Getter
     public static enum ChangeScenario {
         ENTITY_CREATION("creation", true),
+        ENTITY_LOADING("loading", true),
         PROPERTY_UPDATE("property update", false),
         ACTION_INVOCATION("action invocation", false),
         ENTITY_REMOVAL("removal", true);

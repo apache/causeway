@@ -76,6 +76,21 @@ public class BookDto {
         .build();
     }
 
+    public static BookDto sample() {
+        return BookDto.sampleBuilder()
+                .build();
+    }
+
+    public static BookDtoBuilder sampleBuilder() {
+        return BookDto.builder()
+                .author("Sample Author")
+                .description("A sample book for testing.")
+                .isbn("Sample ISBN")
+                .name("Sample Book")
+                .price(99.)
+                .publisher("Sample Publisher");
+    }
+
     @Programmatic
     public JdoBook toJdoBook() {
        return JdoBook.of(this.getName(), this.getDescription(), this.getPrice(),
@@ -112,5 +127,7 @@ public class BookDto {
 
         return bookDto;
     }
+
+
 
 }

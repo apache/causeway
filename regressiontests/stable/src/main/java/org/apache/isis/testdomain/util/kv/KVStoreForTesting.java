@@ -82,11 +82,13 @@ public class KVStoreForTesting {
         if(canRef.isEmpty()) {
             put(caller, keyStr, Can.ofSingleton(value));
         } else {
+            @SuppressWarnings("unchecked")
             val newCan = ((Can<Object>)canRef.get()).add(value);
             put(caller, keyStr, newCan);
         }
     }
 
+    @SuppressWarnings("unchecked")
     public Can<Object> getAll(final Class<?> callerType, final String keyStr) {
         val canRef = get(callerType, keyStr);
         return canRef.isEmpty()

@@ -140,21 +140,19 @@ public class LifecycleEventSubscriberForTesting {
     private void storeJdoEvent(final AbstractLifecycleEvent<JdoBook> ev) {
         val eventType = ev.getClass().getName();
 
-        log.info("on {}", eventType);
+        log.debug("on {}", eventType);
 
         val bookDto = BookDto.from(ev.getSource());
-        kvStore.append(LifecycleEventSubscriberForTesting.class, eventType, bookDto);
-        kvStore.incrementCounter(LifecycleEventSubscriberForTesting.class, eventType);
+        kvStore.append(this, eventType, bookDto);
     }
 
     private void storeJpaEvent(final AbstractLifecycleEvent<JpaBook> ev) {
         val eventType = ev.getClass().getName();
 
-        log.info("on {}", eventType);
+        log.debug("on {}", eventType);
 
         val bookDto = BookDto.from(ev.getSource());
-        kvStore.append(LifecycleEventSubscriberForTesting.class, eventType, bookDto);
-        kvStore.incrementCounter(LifecycleEventSubscriberForTesting.class, eventType);
+        kvStore.append(this, eventType, bookDto);
     }
 
 
