@@ -37,6 +37,7 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
+import org.apache.isis.testdomain.util.dto.BookDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -71,7 +72,7 @@ public class JdoInventoryResource {
     @Action
     public List<JdoBook> multipleBooks(
 
-            @ParameterLayout(named = "")
+            @ParameterLayout(named = "") final
             int nrOfBooks
 
             ) {
@@ -87,8 +88,8 @@ public class JdoInventoryResource {
     }
 
     @Action //TODO improve the REST client such that the param can be of type Book
-    public JdoBook storeBook(String newBook) throws JAXBException {
-        JdoBook book = JdoBookDto.decode(newBook).toBook();
+    public JdoBook storeBook(final String newBook) throws JAXBException {
+        JdoBook book = BookDto.decode(newBook).toJdoBook();
         return repository.persist(book);
     }
 
@@ -112,26 +113,26 @@ public class JdoInventoryResource {
     }
 
     @Action
-    public JdoBookDto recommendedBookOfTheWeekAsDto() {
+    public BookDto recommendedBookOfTheWeekAsDto() {
         // for this test we do not care if we generate duplicates
         val book = JdoBook.of("Book of the week", "An awesome Book", 12, "Author", "ISBN", "Publisher");
-        return JdoBookDto.from(book);
+        return BookDto.from(book);
     }
 
     @Action
-    public List<JdoBookDto> multipleBooksAsDto(
+    public List<BookDto> multipleBooksAsDto(
 
-            @ParameterLayout(named = "")
+            @ParameterLayout(named = "") final
             int nrOfBooks
 
             ) {
 
-        val books = _Lists.<JdoBookDto>newArrayList();
+        val books = _Lists.<BookDto>newArrayList();
 
         // for this test we do not care if we generate duplicates
         for(int i=0; i<nrOfBooks; ++i) {
             val book = JdoBook.of("MultipleBooksTest", "An awesome Book["+i+"]", 12, "Author", "ISBN", "Publisher");
-            books.add(JdoBookDto.from(book));
+            books.add(BookDto.from(book));
         }
         return books;
     }

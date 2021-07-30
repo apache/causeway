@@ -37,6 +37,7 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.testdomain.jpa.entities.JpaBook;
 import org.apache.isis.testdomain.jpa.entities.JpaProduct;
+import org.apache.isis.testdomain.util.dto.BookDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -71,7 +72,7 @@ public class JpaInventoryResource {
     @Action
     public List<JpaBook> multipleBooks(
 
-            @ParameterLayout(named = "")
+            @ParameterLayout(named = "") final
             int nrOfBooks
 
             ) {
@@ -87,8 +88,8 @@ public class JpaInventoryResource {
     }
 
     @Action //TODO improve the REST client such that the param can be of type Book
-    public JpaBook storeBook(String newBook) throws JAXBException {
-        JpaBook book = JpaBookDto.decode(newBook).toBook();
+    public JpaBook storeBook(final String newBook) throws JAXBException {
+        JpaBook book = BookDto.decode(newBook).toJpaBook();
         return repository.persist(book);
     }
 
@@ -114,26 +115,26 @@ public class JpaInventoryResource {
     }
 
     @Action
-    public JpaBookDto recommendedBookOfTheWeekAsDto() {
+    public BookDto recommendedBookOfTheWeekAsDto() {
         // for this test we do not care if we generate duplicates
         val book = JpaBook.of("Book of the week", "An awesome Book", 12, "Author", "ISBN", "Publisher");
-        return JpaBookDto.from(book);
+        return BookDto.from(book);
     }
 
     @Action
-    public List<JpaBookDto> multipleBooksAsDto(
+    public List<BookDto> multipleBooksAsDto(
 
-            @ParameterLayout(named = "")
+            @ParameterLayout(named = "") final
             int nrOfBooks
 
             ) {
 
-        val books = _Lists.<JpaBookDto>newArrayList();
+        val books = _Lists.<BookDto>newArrayList();
 
         // for this test we do not care if we generate duplicates
         for(int i=0; i<nrOfBooks; ++i) {
             val book = JpaBook.of("MultipleBooksTest", "An awesome Book["+i+"]", 12, "Author", "ISBN", "Publisher");
-            books.add(JpaBookDto.from(book));
+            books.add(BookDto.from(book));
         }
         return books;
     }

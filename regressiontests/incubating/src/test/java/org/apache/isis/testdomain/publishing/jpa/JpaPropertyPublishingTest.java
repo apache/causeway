@@ -20,8 +20,6 @@ package org.apache.isis.testdomain.publishing.jpa;
 
 import javax.inject.Inject;
 
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
@@ -43,12 +41,10 @@ import org.apache.isis.testdomain.publishing.conf.Configuration_usingEntityPrope
                 "logging.level.org.apache.isis.applib.services.publishing.log.EntityPropertyChangeLogger=DEBUG",
                 "logging.level.org.springframework.orm.jpa.*=DEBUG",
                 "logging.level.org.apache.isis.testdomain.util.rest.KVStoreForTesting=DEBUG",
-                "logging.level.org.apache.isis.core.transaction.changetracking.EntityChangeTrackerDefault=DEBUG",
         })
 @TestPropertySource({
     IsisPresets.UseLog4j2Test
 })
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class JpaPropertyPublishingTest
 extends PropertyPublishingTestAbstract
 implements HasPersistenceStandardJpa {

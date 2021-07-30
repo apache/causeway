@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.jdo;
+package org.apache.isis.testdomain.util.dto;
 
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -34,6 +34,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
+import org.apache.isis.testdomain.jpa.entities.JpaBook;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -43,7 +44,7 @@ import lombok.NoArgsConstructor;
 @XmlRootElement(name = "book")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
-public class JdoBookDto {
+public class BookDto {
 
     private String name;
     private String description;
@@ -53,8 +54,19 @@ public class JdoBookDto {
     private String isbn;
     private String publisher;
 
-    public static JdoBookDto from(final JdoBook book) {
-        return JdoBookDto.builder()
+    public static BookDto from(final JdoBook book) {
+        return BookDto.builder()
+        .author(book.getAuthor())
+        .description(book.getDescription())
+        .isbn(book.getIsbn())
+        .name(book.getName())
+        .price(book.getPrice())
+        .publisher(book.getPublisher())
+        .build();
+    }
+
+    public static BookDto from(final JpaBook book) {
+        return BookDto.builder()
         .author(book.getAuthor())
         .description(book.getDescription())
         .isbn(book.getIsbn())
@@ -65,14 +77,21 @@ public class JdoBookDto {
     }
 
     @Programmatic
-    public JdoBook toBook() {
+    public JdoBook toJdoBook() {
        return JdoBook.of(this.getName(), this.getDescription(), this.getPrice(),
+                this.getAuthor(), this.getIsbn(), this.getPublisher());
+    }
+
+
+    @Programmatic
+    public JpaBook toJpaBook() {
+       return JpaBook.of(this.getName(), this.getDescription(), this.getPrice(),
                 this.getAuthor(), this.getIsbn(), this.getPublisher());
     }
 
     @Programmatic
     public String encode() throws JAXBException {
-        JAXBContext jaxbContext = JAXBContext.newInstance(JdoBookDto.class);
+        JAXBContext jaxbContext = JAXBContext.newInstance(BookDto.class);
         Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 
         StringWriter sw = new StringWriter();
@@ -84,12 +103,12 @@ public class JdoBookDto {
         return encoded;
     }
 
-    public static JdoBookDto decode(final String encoded) throws JAXBException {
+    public static BookDto decode(final String encoded) throws JAXBException {
         String bookXml = _Strings.convert(encoded, _Bytes.ofCompressedUrlBase64, StandardCharsets.UTF_8);
 
-        JAXBContext jaxbContext = JAXBContext.newInstance(JdoBookDto.class);
+        JAXBContext jaxbContext = JAXBContext.newInstance(BookDto.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-        JdoBookDto bookDto = (JdoBookDto) jaxbUnmarshaller.unmarshal(new StringReader(bookXml));
+        BookDto bookDto = (BookDto) jaxbUnmarshaller.unmarshal(new StringReader(bookXml));
 
         return bookDto;
     }

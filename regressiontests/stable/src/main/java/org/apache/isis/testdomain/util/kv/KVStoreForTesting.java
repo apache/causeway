@@ -28,6 +28,7 @@ import javax.inject.Singleton;
 
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.concurrent.AwaitableLatch;
 import org.apache.isis.commons.internal.collections._Maps;
 
@@ -56,7 +57,7 @@ public class KVStoreForTesting {
         keyValueMap.clear();
     }
 
-    public void put(Object caller, String keyStr, Object value) {
+    public void put(final Object caller, final String keyStr, final Object value) {
         val key = Key.of(caller.getClass(), keyStr);
         log.debug("writing {} -> {}", key, value);
         keyValueMap.put(key, value);
@@ -66,22 +67,46 @@ public class KVStoreForTesting {
         }
     }
 
-    public Optional<Object> get(Class<?> callerType, String keyStr) {
+    public Optional<Object> get(final Class<?> callerType, final String keyStr) {
         return Optional.ofNullable(keyValueMap.get(Key.of(callerType, keyStr)));
     }
 
-    public Optional<Object> get(Object caller, String keyStr) {
+    public Optional<Object> get(final Object caller, final String keyStr) {
         return get(caller.getClass(), keyStr);
     }
 
+    // -- NON-SCALAR SUPPORT
+
+    public void append(final Object caller, final String keyStr, final Object value) {
+        val canRef = get(caller, keyStr);
+        if(canRef.isEmpty()) {
+            put(caller, keyStr, Can.ofSingleton(value));
+        } else {
+            val newCan = ((Can<Object>)canRef.get()).add(value);
+            put(caller, keyStr, newCan);
+        }
+    }
+
+    public Can<Object> getAll(final Class<?> callerType, final String keyStr) {
+        val canRef = get(callerType, keyStr);
+        return canRef.isEmpty()
+            ? Can.empty()
+            : ((Can<Object>)canRef.get());
+    }
+
+    public Can<Object> getAll(final Object caller, final String keyStr) {
+        return getAll(caller.getClass(), keyStr);
+    }
+
+
     // -- COUNTING
 
-    public long incrementCounter(Class<?> callerType, String keyStr) {
+    public long incrementCounter(final Class<?> callerType, final String keyStr) {
         val key = Key.of(callerType, keyStr);
         return (long) keyValueMap.compute(key, (k, v) -> (v == null) ? 1L : 1L + (long)v);
     }
 
-    public long getCounter(Class<?> callerType, String keyStr) {
+    public long getCounter(final Class<?> callerType, final String keyStr) {
         val key = Key.of(callerType, keyStr);
         return (long) keyValueMap.getOrDefault(key, 0L);
     }
@@ -89,17 +114,17 @@ public class KVStoreForTesting {
     // --
 
 
-    public void clear(Class<?> callerType) {
+    public void clear(final Class<?> callerType) {
         log.debug("clearing {}", callerType);
         keyValueMap.entrySet()
         .removeIf(entry->entry.getKey().getCaller().equals(callerType));
     }
 
-    public void clear(Object caller) {
+    public void clear(final Object caller) {
         clear(caller.getClass());
     }
 
-    public long countEntries(Class<?> callerType) {
+    public long countEntries(final Class<?> callerType) {
         return keyValueMap.entrySet()
         .stream()
         .filter(entry->entry.getKey().getCaller().equals(callerType))
@@ -112,7 +137,7 @@ public class KVStoreForTesting {
         @NonNull String keyStr;
     }
 
-    public AwaitableLatch latch(Class<?> callerType) {
+    public AwaitableLatch latch(final Class<?> callerType) {
         val latch = new CountDownLatch(1);
         latchMap.put(callerType, latch);
         return AwaitableLatch.of(latch);

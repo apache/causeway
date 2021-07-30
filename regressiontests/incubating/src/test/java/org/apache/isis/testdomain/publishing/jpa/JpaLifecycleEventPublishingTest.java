@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.publishing.jdo;
+package org.apache.isis.testdomain.publishing.jpa;
 
 import javax.inject.Inject;
 
@@ -24,33 +24,31 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.testdomain.conf.Configuration_usingJdo;
-import org.apache.isis.testdomain.publishing.PropertyPublishingTestAbstract;
+import org.apache.isis.testdomain.conf.Configuration_usingJpa;
+import org.apache.isis.testdomain.publishing.LifecycleEventPublishingTestAbstract;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract;
-import org.apache.isis.testdomain.publishing.PublishingTestFactoryJdo;
+import org.apache.isis.testdomain.publishing.PublishingTestFactoryJpa;
 import org.apache.isis.testdomain.publishing.conf.Configuration_usingEntityPropertyChangePublishing;
 
 @SpringBootTest(
         classes = {
-                Configuration_usingJdo.class,
+                Configuration_usingJpa.class,
                 Configuration_usingEntityPropertyChangePublishing.class,
-                PublishingTestFactoryJdo.class,
+                PublishingTestFactoryJpa.class,
                 //XrayEnable.class
         },
         properties = {
-                "logging.level.org.apache.isis.applib.services.publishing.log.EntityPropertyChangeLogger=DEBUG",
+                "logging.level.org.springframework.orm.jpa.*=DEBUG",
                 "logging.level.org.apache.isis.testdomain.util.rest.KVStoreForTesting=DEBUG",
-                "logging.level.org.apache.isis.persistence.jdo.integration.changetracking.JdoLifecycleListener=DEBUG",
-                "logging.level.org.apache.isis.core.transaction.changetracking.EntityChangeTrackerDefault=DEBUG",
         })
 @TestPropertySource({
     IsisPresets.UseLog4j2Test
 })
-class JdoPropertyPublishingTest
-extends PropertyPublishingTestAbstract
-implements HasPersistenceStandardJdo {
+class JpaLifecycleEventPublishingTest
+extends LifecycleEventPublishingTestAbstract
+implements HasPersistenceStandardJpa {
 
-    @Inject private PublishingTestFactoryJdo testFactory;
+    @Inject private PublishingTestFactoryJpa testFactory;
 
     @Override
     protected PublishingTestFactoryAbstract getTestFactory() {

@@ -25,7 +25,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
-import org.apache.isis.testdomain.publishing.PropertyPublishingTestAbstract;
+import org.apache.isis.testdomain.publishing.LifecycleEventPublishingTestAbstract;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryJdo;
 import org.apache.isis.testdomain.publishing.conf.Configuration_usingEntityPropertyChangePublishing;
@@ -38,16 +38,14 @@ import org.apache.isis.testdomain.publishing.conf.Configuration_usingEntityPrope
                 //XrayEnable.class
         },
         properties = {
-                "logging.level.org.apache.isis.applib.services.publishing.log.EntityPropertyChangeLogger=DEBUG",
+                "logging.level.org.springframework.orm.jpa.*=DEBUG",
                 "logging.level.org.apache.isis.testdomain.util.rest.KVStoreForTesting=DEBUG",
-                "logging.level.org.apache.isis.persistence.jdo.integration.changetracking.JdoLifecycleListener=DEBUG",
-                "logging.level.org.apache.isis.core.transaction.changetracking.EntityChangeTrackerDefault=DEBUG",
         })
 @TestPropertySource({
     IsisPresets.UseLog4j2Test
 })
-class JdoPropertyPublishingTest
-extends PropertyPublishingTestAbstract
+class JdoLifecycleEventPublishingTest
+extends LifecycleEventPublishingTestAbstract
 implements HasPersistenceStandardJdo {
 
     @Inject private PublishingTestFactoryJdo testFactory;
