@@ -49,17 +49,24 @@ public interface EntityPropertyChangePublishingPolicyFacet extends Facet {
 
     static boolean isExcludedFromPublishing(final @NonNull OneToOneAssociation property) {
 
+        val policyFacetIfAny = property
+                .lookupFacet(EntityPropertyChangePublishingPolicyFacet.class);
+
         val typeOf = property.getSpecification().getCorrespondingClass();
         if(Blob.class.equals(typeOf)
                 || Clob.class.equals(typeOf)) {
-            return true; //XXX ISIS-1488, always exclude Bob/Clob from property change publishing
+
+            val isExplicetlyAllowed = policyFacetIfAny
+                    .map(EntityPropertyChangePublishingPolicyFacet::isPublishingAllowed)
+                    .orElse(false);
+
+            //XXX ISIS-1488, exclude Bob/Clob from property change publishing unless explicitly allowed
+            return !isExplicetlyAllowed;
         }
 
-        return property
-                .lookupFacet(EntityPropertyChangePublishingPolicyFacet.class)
+        return policyFacetIfAny
                 .map(EntityPropertyChangePublishingPolicyFacet::isPublishingVetoed)
                 .orElse(false);
     }
-
 
 }
