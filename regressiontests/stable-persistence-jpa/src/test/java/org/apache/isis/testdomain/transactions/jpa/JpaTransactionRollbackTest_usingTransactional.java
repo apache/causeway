@@ -74,17 +74,12 @@ extends IsisIntegrationTestAbstract
     }
 
     @Test @Order(2)
-    void happyCaseTx_shouldCommit() {
-
+    void happyCaseTx_shouldPersistButThenRollback() {
 
         // expected pre condition
         assertEquals(0, repository.allInstances(JpaBook.class).size());
 
-        _Probe.errOut("before fixture");
-
         fixtureScripts.runPersona(JpaTestDomainPersona.InventoryWith1Book);
-
-        _Probe.errOut("after fixture");
 
         // expected post condition
         assertEquals(1, repository.allInstances(JpaBook.class).size());

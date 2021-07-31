@@ -113,7 +113,7 @@ public final class _Refs {
             return value = operator.applyAsInt(value);
         }
 
-        public boolean isSet(int other) {
+        public boolean isSet(final int other) {
             return value==other;
         }
 
@@ -139,7 +139,7 @@ public final class _Refs {
             return value = operator.applyAsLong(value);
         }
 
-        public boolean isSet(long other) {
+        public boolean isSet(final long other) {
             return value==other;
         }
 
@@ -160,6 +160,10 @@ public final class _Refs {
     public static final class ObjectReference<T> {
         private @Nullable T value;
 
+        public T set(final @Nullable T value) {
+            return this.value = value;
+        }
+
         public T update(final @NonNull UnaryOperator<T> operator) {
             return value = operator.apply(value);
         }
@@ -172,11 +176,11 @@ public final class _Refs {
             return Optional.ofNullable(value);
         }
 
-        public T getValueElseGet(Supplier<? extends T> other) {
+        public T getValueElseGet(final Supplier<? extends T> other) {
             return getValue().orElseGet(other);
         }
 
-        public T getValueElseDefault(T defaultValue) {
+        public T getValueElseDefault(final T defaultValue) {
             return getValue().orElse(defaultValue);
         }
 
@@ -198,7 +202,7 @@ public final class _Refs {
             return value = Objects.requireNonNull(operator.apply(value));
         }
 
-        public boolean isSet(String other) {
+        public boolean isSet(final String other) {
             return value.equals(other);
         }
 
@@ -213,7 +217,7 @@ public final class _Refs {
          * @param s the sequence to search for
          * @return true if this string contains {@code s}, false otherwise
          */
-        public boolean contains(CharSequence s) {
+        public boolean contains(final CharSequence s) {
             return value.contains(s);
         }
 
@@ -228,7 +232,7 @@ public final class _Refs {
          * @param index - zero based cutting point
          * @return left - cut off - part of held value (non-null)
          */
-        public String cutAtIndex(int index) {
+        public String cutAtIndex(final int index) {
             if(index<=0) {
                 return "";
             }
@@ -258,7 +262,7 @@ public final class _Refs {
          * @see #cutAtIndex(int)
          * @see String#indexOf(String)
          */
-        public String cutAtIndexOf(String s) {
+        public String cutAtIndexOf(final String s) {
             return cutAtIndex(value.indexOf(s));
         }
 
@@ -278,7 +282,7 @@ public final class _Refs {
          * @see #cutAtIndex(int)
          * @see String#lastIndexOf(String)
          */
-        public String cutAtLastIndexOf(String s) {
+        public String cutAtLastIndexOf(final String s) {
             return cutAtIndex(value.lastIndexOf(s));
         }
 
@@ -299,7 +303,7 @@ public final class _Refs {
          * @see #cutAtIndex(int)
          * @see String#indexOf(String)
          */
-        public String cutAtIndexOfAndDrop(String s) {
+        public String cutAtIndexOfAndDrop(final String s) {
             if(!value.contains(s)) {
                 return "";
             }
@@ -325,7 +329,7 @@ public final class _Refs {
          * @see #cutAtIndex(int)
          * @see String#lastIndexOf(String)
          */
-        public String cutAtLastIndexOfAndDrop(String s) {
+        public String cutAtLastIndexOfAndDrop(final String s) {
             if(!value.contains(s)) {
                 return "";
             }

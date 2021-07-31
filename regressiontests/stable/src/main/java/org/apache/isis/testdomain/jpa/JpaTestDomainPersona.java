@@ -32,6 +32,7 @@ import org.apache.isis.testdomain.jpa.entities.JpaBook;
 import org.apache.isis.testdomain.jpa.entities.JpaInventory;
 import org.apache.isis.testdomain.jpa.entities.JpaProduct;
 import org.apache.isis.testdomain.ldap.LdapConstants;
+import org.apache.isis.testdomain.util.dto.BookDto;
 import org.apache.isis.testing.fixtures.applib.personas.BuilderScriptAbstract;
 import org.apache.isis.testing.fixtures.applib.personas.BuilderScriptWithResult;
 import org.apache.isis.testing.fixtures.applib.personas.BuilderScriptWithoutResult;
@@ -77,9 +78,7 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<?>>  {
 
                     val products = new TreeSet<JpaProduct>();
 
-                    products.add(JpaBook.of(
-                            "Sample Book", "A sample book for testing.", 99.,
-                            "Sample Author", "Sample ISBN", "Sample Publisher"));
+                    products.add(BookDto.sample().toJpaBook());
 
                     val inventory = new JpaInventory("Sample Inventory", products);
                     repository.persist(inventory);

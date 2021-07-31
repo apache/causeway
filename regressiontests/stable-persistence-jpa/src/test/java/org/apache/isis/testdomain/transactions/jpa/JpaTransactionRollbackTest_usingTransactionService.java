@@ -18,12 +18,17 @@
  */
 package org.apache.isis.testdomain.transactions.jpa;
 
+import java.util.Optional;
+import java.util.function.Consumer;
+
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 
@@ -32,22 +37,29 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.commons.internal.base._Refs;
+import org.apache.isis.commons.internal.base._Refs.ObjectReference;
+import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.core.transaction.events.TransactionAfterCompletionEvent;
+import org.apache.isis.core.transaction.events.TransactionBeforeCompletionEvent;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.jpa.JpaTestDomainPersona;
 import org.apache.isis.testdomain.jpa.entities.JpaBook;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.testing.integtestsupport.applib.IsisInteractionHandler;
 
+import lombok.NonNull;
 import lombok.val;
 
 @SpringBootTest(
         classes = {
                 Configuration_usingJpa.class,
+                JpaTransactionRollbackTest_usingTransactionService.CommitListener.class
         },
         properties = {
-                "logging.level.org.apache.isis.persistence.jdo.spring.*=DEBUG",
-                "logging.level.org.springframework.test.context.transaction.*=DEBUG"
+//                "logging.level.org.springframework.test.context.transaction.*=DEBUG",
+//                "logging.level.org.springframework.orm.jpa.*=DEBUG",
         })
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @ExtendWith({IsisInteractionHandler.class})
@@ -59,12 +71,18 @@ class JpaTransactionRollbackTest_usingTransactionService
     @Inject private FixtureScripts fixtureScripts;
     @Inject private TransactionService transactionService;
     @Inject private RepositoryService repository;
+    @Inject private CommitListener commitListener;
+
+    private ObjectReference<TransactionAfterCompletionEvent> transactionAfterCompletionEvent;
 
     @BeforeEach
     void setUp() {
 
         // cleanup
         fixtureScripts.runPersona(JpaTestDomainPersona.PurgeAll);
+
+        transactionAfterCompletionEvent =
+                _Refs.<TransactionAfterCompletionEvent>objectRef(null);
     }
 
     @Test
@@ -76,10 +94,16 @@ class JpaTransactionRollbackTest_usingTransactionService
             assertEquals(0, repository.allInstances(JpaBook.class).size());
         });
 
+        commitListener.bind(transactionAfterCompletionEvent::set);
+
         transactionService.runWithinCurrentTransactionElseCreateNew(()->{
 
             fixtureScripts.runPersona(JpaTestDomainPersona.InventoryWith1Book);
         });
+
+        assertEquals(
+                TransactionAfterCompletionEvent.COMMITTED,
+                transactionAfterCompletionEvent.getValueElseDefault(null));
 
         transactionService.runWithinCurrentTransactionElseCreateNew(()->{
 
@@ -90,13 +114,17 @@ class JpaTransactionRollbackTest_usingTransactionService
     }
 
     @Test
-    void whenExceptionWithinTx_shouldRollback() {
+    void whenExceptionWithinTx_whileNotParticipating_shouldRollback() {
 
         transactionService.runWithinCurrentTransactionElseCreateNew(()->{
 
             // expected pre condition
             assertEquals(0, repository.allInstances(JpaBook.class).size());
         });
+
+        //_Probe.errOut("before tx that should trigger a rollback");
+
+        commitListener.bind(transactionAfterCompletionEvent::set);
 
         val result = transactionService.runWithinCurrentTransactionElseCreateNew(()->{
 
@@ -105,13 +133,97 @@ class JpaTransactionRollbackTest_usingTransactionService
             throw new RuntimeException("Test: force current tx to rollback");
         });
 
+        //_Probe.errOut("after tx that should have triggered a rollback");
+
         assertTrue(result.isFailure());
+        assertEquals(
+                TransactionAfterCompletionEvent.ROLLED_BACK,
+                transactionAfterCompletionEvent.getValueElseDefault(null));
 
         transactionService.runWithinCurrentTransactionElseCreateNew(()->{
 
             // expected post condition
             assertEquals(0, repository.allInstances(JpaBook.class).size());
         });
+
+    }
+
+    @Test
+    void whenExceptionWithinTx_whileParticipating_shouldRollback() {
+
+        transactionService.runWithinCurrentTransactionElseCreateNew(()->{
+
+            // expected pre condition
+            assertEquals(0, repository.allInstances(JpaBook.class).size());
+        });
+
+        _Probe.errOut("before outer tx");
+
+        commitListener.bind(transactionAfterCompletionEvent::set);
+
+        val result = transactionService.runWithinCurrentTransactionElseCreateNew(()->{
+
+            //_Probe.errOut("before tx that should trigger a rollback");
+
+            transactionService.runWithinCurrentTransactionElseCreateNew(()->{
+
+                fixtureScripts.runPersona(JpaTestDomainPersona.InventoryWith1Book);
+
+                throw new RuntimeException("Test: force current tx to rollback");
+            });
+
+            //_Probe.errOut("after tx that should have triggered a rollback");
+
+        });
+
+        _Probe.errOut("after outer tx");
+
+        assertTrue(result.isFailure());
+
+        val actualEvent = transactionAfterCompletionEvent.getValueElseDefault(null);
+        assertTrue(
+                actualEvent == TransactionAfterCompletionEvent.ROLLED_BACK
+                    || actualEvent == TransactionAfterCompletionEvent.UNKNOWN);
+
+        transactionService.runWithinCurrentTransactionElseCreateNew(()->{
+
+            // expected post condition
+            assertEquals(0, repository.allInstances(JpaBook.class).size());
+        });
+
+    }
+
+    // -- HELPER
+
+    @Service
+    public static class CommitListener {
+
+        /** transaction end boundary (pre) */
+        @EventListener(TransactionBeforeCompletionEvent.class)
+        public void onPreCompletion(final TransactionBeforeCompletionEvent event) {
+            //_Probe.errOut("=== TRANSACTION before completion");
+        }
+
+        /** transaction end boundary (post) */
+        @EventListener(TransactionAfterCompletionEvent.class)
+        public void onPostCompletion(final TransactionAfterCompletionEvent event) {
+            //_Probe.errOut("=== TRANSACTION after completion (%s)", event.name());
+            Optional.ofNullable(listener)
+            .ifPresent(li->{
+                li.accept(event);
+                unbind();
+            });
+        }
+
+        private Consumer<TransactionAfterCompletionEvent> listener;
+
+        void bind(final @NonNull Consumer<TransactionAfterCompletionEvent> listener) {
+            this.listener = listener;
+        }
+
+        void unbind() {
+            this.listener = null;
+        }
 
     }
 
