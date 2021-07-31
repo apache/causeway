@@ -24,6 +24,11 @@ implements HasPersistenceStandard {
         return generateTests(ChangeScenario.ENTITY_CREATION);
     }
 
+    @TestFactory @DisplayName("Entity Persisting")
+    final List<DynamicTest> generateTestsForPersisting() {
+        return generateTests(ChangeScenario.ENTITY_PERSISTING);
+    }
+
     @TestFactory @DisplayName("Entity Loading")
     final List<DynamicTest> generateTestsForLoading() {
         return generateTests(ChangeScenario.ENTITY_LOADING);

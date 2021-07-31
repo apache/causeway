@@ -33,7 +33,6 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.jpa.JpaTestDomainPersona;
@@ -51,9 +50,9 @@ import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstra
                 Configuration_usingJpa.class,
         },
         properties = {
-                "logging.level.org.apache.isis.core.runtimeservices.session.InteractionFactoryDefault=DEBUG",
-                "logging.level.org.apache.isis.persistence.*=DEBUG",
-                "logging.level.org.springframework.test.context.transaction.*=DEBUG"
+//                "logging.level.org.apache.isis.core.runtimeservices.session.InteractionFactoryDefault=DEBUG",
+//                "logging.level.org.apache.isis.persistence.*=DEBUG",
+//                "logging.level.org.springframework.test.context.transaction.*=DEBUG"
         })
 @Transactional
 @TestPropertySource(IsisPresets.UseLog4j2Test)

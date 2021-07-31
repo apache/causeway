@@ -358,13 +358,12 @@ public abstract class PublishingTestFactoryAbstract {
 //                    return result;
 //                });
 
-                val result = getInteractionService().callAnonymous(()->{
+                val result = getInteractionService().runAnonymousAndCatch(()->{
                     val currentInteraction = getInteractionService().currentInteraction();
                     xrayEnterInteraction(currentInteraction);
 
                     try {
                         testRunner.run(testContext); // is allowed to throw
-                        return Result.success(true);
                     } finally {
                         xrayExitInteraction();
                     }

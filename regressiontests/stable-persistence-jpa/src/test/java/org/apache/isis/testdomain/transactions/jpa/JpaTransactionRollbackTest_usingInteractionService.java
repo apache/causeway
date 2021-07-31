@@ -35,6 +35,7 @@ import org.springframework.test.context.TestPropertySource;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.base._Refs;
@@ -54,7 +55,7 @@ import lombok.val;
 @SpringBootTest(
         classes = {
                 Configuration_usingJpa.class,
-                JpaTransactionRollbackTest_usingTransactionService.CommitListener.class
+                JpaTransactionRollbackTest_usingInteractionService.CommitListener.class
         },
         properties = {
 //                "logging.level.org.springframework.test.context.transaction.*=DEBUG",
@@ -63,12 +64,13 @@ import lombok.val;
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @ExtendWith({IsisInteractionHandler.class})
 @DirtiesContext
-class JpaTransactionRollbackTest_usingTransactionService
+class JpaTransactionRollbackTest_usingInteractionService
 //extends IsisIntegrationTestAbstract
 {
 
     @Inject private FixtureScripts fixtureScripts;
     @Inject private TransactionService transactionService;
+    @Inject private InteractionService interactionService;
     @Inject private RepositoryService repository;
     @Inject private CommitListener commitListener;
 
@@ -95,7 +97,7 @@ class JpaTransactionRollbackTest_usingTransactionService
 
         commitListener.bind(transactionAfterCompletionEvent::set);
 
-        transactionService.runWithinCurrentTransactionElseCreateNew(()->{
+        interactionService.runAnonymous(()->{
 
             fixtureScripts.runPersona(JpaTestDomainPersona.InventoryWith1Book);
         });
@@ -125,7 +127,7 @@ class JpaTransactionRollbackTest_usingTransactionService
 
         commitListener.bind(transactionAfterCompletionEvent::set);
 
-        val result = transactionService.runWithinCurrentTransactionElseCreateNew(()->{
+        val result = interactionService.runAnonymousAndCatch(()->{
 
             fixtureScripts.runPersona(JpaTestDomainPersona.InventoryWith1Book);
 
@@ -160,7 +162,7 @@ class JpaTransactionRollbackTest_usingTransactionService
 
         commitListener.bind(transactionAfterCompletionEvent::set);
 
-        val result = transactionService.runWithinCurrentTransactionElseCreateNew(()->{
+        val result = interactionService.runAnonymousAndCatch(()->{
 
             //_Probe.errOut("before tx that should trigger a rollback");
 
@@ -171,20 +173,20 @@ class JpaTransactionRollbackTest_usingTransactionService
                 throw new RuntimeException("Test: force current tx to rollback");
             });
 
-            //_Probe.errOut("after tx that should have triggered a rollback");
-
             assertTrue(innerResult.isFailure());
+
+            //_Probe.errOut("after tx that should have triggered a rollback");
 
         });
 
         //_Probe.errOut("after outer tx");
 
-        assertTrue(result.isFailure());
+        // interactionService detects whether a rollback was requested and does not throw in such a case
+        assertTrue(result.isSuccess());
 
         val actualEvent = transactionAfterCompletionEvent.getValueElseDefault(null);
         assertTrue(
-                actualEvent == TransactionAfterCompletionEvent.ROLLED_BACK
-                    || actualEvent == TransactionAfterCompletionEvent.UNKNOWN);
+                actualEvent == TransactionAfterCompletionEvent.ROLLED_BACK);
 
         transactionService.runWithinCurrentTransactionElseCreateNew(()->{
 

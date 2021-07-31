@@ -97,14 +97,16 @@ implements
     @Override
     public <T> Result<T> callTransactional(final TransactionDefinition def, final Callable<T> callable) {
 
-        val txManager = transactionManagerForElseFail(def);
+        val txManager = transactionManagerForElseFail(def); // always throws if configuration is wrong
 
-        val tx = txManager.getTransaction(def);
-
-        val result = Result.of(callable)
-                .mapFailure(ex->translateExceptionIfPossible(ex, txManager));
+        Result<T> result = null;
 
         try {
+
+            val tx = txManager.getTransaction(def);
+
+            result = Result.of(callable)
+                    .mapFailure(ex->translateExceptionIfPossible(ex, txManager));
 
             if(result.isFailure()) {
                 txManager.rollback(tx);
@@ -114,7 +116,8 @@ implements
 
         } catch (Exception ex) {
 
-            return result.isFailure()
+            return result!=null
+                    && result.isFailure()
 
                     // return the original failure cause (originating from calling the callable)
                     // (so we don't shadow the original failure)

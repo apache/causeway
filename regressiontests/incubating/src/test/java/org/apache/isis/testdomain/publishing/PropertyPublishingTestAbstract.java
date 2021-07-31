@@ -64,6 +64,8 @@ extends PublishingTestAbstract {
             switch(changeScenario) {
             case ENTITY_CREATION:
                 return; // factory-service does not trigger property publishing
+            case ENTITY_LOADING:
+                return; // not subject of change tests
             case ENTITY_PERSISTING:
                 assertContainsPropertyChangeEntries(Can.of(
                         formatPersistenceStandardSpecificCapitalize("%s Book/name: '[NEW]' -> 'Sample Book'")));

@@ -246,10 +246,8 @@ implements
 
         final int stackSizeWhenEntering = interactionLayerStack.get().size();
         openInteraction(interactionContext);
-
         try {
-            serviceInjector.injectServicesInto(callable);
-            return callable.call();
+            return callInternal(callable);
         } finally {
             closeInteractionLayerStackDownToStackSize(stackSizeWhenEntering);
         }
@@ -263,14 +261,11 @@ implements
 
         final int stackSizeWhenEntering = interactionLayerStack.get().size();
         openInteraction(interactionContext);
-
         try {
-            serviceInjector.injectServicesInto(runnable);
-            runnable.run();
+            runInternal(runnable);
         } finally {
             closeInteractionLayerStackDownToStackSize(stackSizeWhenEntering);
         }
-
     }
 
     // -- ANONYMOUS EXECUTION
@@ -279,8 +274,7 @@ implements
     @SneakyThrows
     public <R> R callAnonymous(@NonNull final Callable<R> callable) {
         if(isInInteraction()) {
-            serviceInjector.injectServicesInto(callable);
-            return callable.call(); // reuse existing session
+            return callInternal(callable); // participate in existing session
         }
         return call(InteractionContextFactory.anonymous(), callable);
     }
@@ -291,10 +285,9 @@ implements
      */
     @Override
     @SneakyThrows
-    public void runAnonymous(@NonNull final ThrowingRunnable runnable) {
+    public void runAnonymous(final @NonNull ThrowingRunnable runnable) {
         if(isInInteraction()) {
-            serviceInjector.injectServicesInto(runnable);
-            runnable.run(); // reuse existing session
+            runInternal(runnable); // participate in existing session
             return;
         }
         run(InteractionContextFactory.anonymous(), runnable);
@@ -310,6 +303,34 @@ implements
     }
 
     // -- HELPER
+
+    @SneakyThrows
+    private <R> R callInternal(final @NonNull Callable<R> callable) {
+        serviceInjector.injectServicesInto(callable);
+        try {
+            return callable.call();
+        } catch (Exception e) {
+            requestRollback();
+            throw e;
+        }
+    }
+
+    @SneakyThrows
+    private void runInternal(final @NonNull ThrowingRunnable runnable) {
+        serviceInjector.injectServicesInto(runnable);
+        try {
+            runnable.run();
+        } catch (Exception e) {
+            requestRollback();
+            throw e;
+        }
+    }
+
+    private void requestRollback() {
+        val stack = interactionLayerStack.get();
+        val interaction = _Casts.<IsisInteraction>uncheckedCast(stack.get(0).getInteraction());
+        txBoundaryHandler.requestRollback(interaction);
+    }
 
     private boolean isAtTopLevel() {
     	return interactionLayerStack.get().size()==1;

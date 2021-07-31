@@ -31,7 +31,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.TestPropertySource;
@@ -74,7 +73,7 @@ class JpaExceptionTranslationTest_usingTransactional
     @Inject private RepositoryService repositoryService;
     @Inject private InteractionService interactionService;
     @Inject private Provider<JpaInventoryDao> inventoryDao;
-    @Inject private JpaTransactionManager txManager;
+    //@Inject private JpaTransactionManager txManager;
 
     @BeforeAll
     static void beforeAll() throws SQLException {

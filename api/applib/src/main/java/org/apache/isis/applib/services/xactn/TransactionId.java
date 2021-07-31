@@ -20,7 +20,6 @@ package org.apache.isis.applib.services.xactn;
 
 import java.util.UUID;
 
-import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.applib.mixins.system.HasTransactionId;
 
 import lombok.Value;

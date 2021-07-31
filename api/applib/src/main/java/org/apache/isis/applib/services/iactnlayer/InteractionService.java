@@ -134,8 +134,9 @@ public interface InteractionService extends InteractionLayerTracker {
     }
 
     /**
-     * Variant of {@link #run(InteractionContext, ThrowingRunnable)} that wraps the return value
-     * with a {@link Result}, also catching any exception, that might have occurred.
+     * Variant of {@link #run(InteractionContext, ThrowingRunnable)} that returns
+     * a {@link Result} of {@code Result<Void>},
+     * also catching any exception, that might have occurred.
      */
     default Result<Void> runAndCatch(
             final @NonNull InteractionContext interactionContext,
@@ -153,8 +154,9 @@ public interface InteractionService extends InteractionLayerTracker {
     }
 
     /**
-     * Variant of {@link #runAnonymous(ThrowingRunnable)} that wraps the return value
-     * with a {@link Result}, also catching any exception, that might have occurred.
+     * Variant of {@link #runAnonymous(ThrowingRunnable)} that returns
+     * a {@link Result} of {@code Result<Void>},
+     * also catching any exception, that might have occurred.
      */
     default Result<Void> runAnonymousAndCatch(
             final @NonNull ThrowingRunnable runnable) {
