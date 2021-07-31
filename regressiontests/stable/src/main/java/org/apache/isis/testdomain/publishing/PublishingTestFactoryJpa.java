@@ -29,14 +29,11 @@ import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.control.SyncControl;
 import org.apache.isis.applib.services.xactn.TransactionService;
@@ -94,6 +91,12 @@ extends PublishingTestFactoryAbstract {
         switch(context.getScenario()) {
         case ENTITY_CREATION:
 
+            // given - nothing to do
+            break;
+
+        case ENTITY_PERSISTING:
+
+
             // given
             fixtureScripts.runPersona(JpaTestDomainPersona.PurgeAll);
             break;
@@ -106,13 +109,15 @@ extends PublishingTestFactoryAbstract {
             // given
             setupBookForJpa();
             break;
+        default:
+            throw _Exceptions.unmatchedCase(context.getScenario());
         }
     }
 
     // -- TESTS - PROGRAMMATIC
 
     @Override
-    protected boolean programmaticExecution(
+    protected void programmaticExecution(
             final PublishingTestContext context) {
 
         context.bind(commitListener);
@@ -124,16 +129,26 @@ extends PublishingTestFactoryAbstract {
         case ENTITY_CREATION:
 
             context.runGiven();
+            //when
+            factoryService.detachedEntity(BookDto.sample().toJdoBook()); // should trigger an ObjectCreatedEvent
+            break;
+
+        case ENTITY_PERSISTING:
+
+            context.runGiven();
+            //when
             setupBookForJpa();
             break;
 
         case ENTITY_LOADING:
 
             context.runGiven();
+            //when
             withBookDo(book->{
                 assertNotNull(book);
             });
             break;
+
 
         case PROPERTY_UPDATE:
 
@@ -168,20 +183,22 @@ extends PublishingTestFactoryAbstract {
             withBookDo(book->{
 
                 context.runGiven();
+                //when
                 repository.removeAndFlush(book);
 
             });
 
             break;
+        default:
+            throw _Exceptions.unmatchedCase(context.getScenario());
         }
 
-        return true;
     }
 
     // -- TESTS - INTERACTION API
 
     @Override
-    protected boolean interactionApiExecution(
+    protected void interactionApiExecution(
             final PublishingTestContext context) {
 
         context.bind(commitListener);
@@ -190,7 +207,6 @@ extends PublishingTestFactoryAbstract {
 
         case PROPERTY_UPDATE:
 
-            // when
             withBookDo(book->{
 
                 context.runGiven();
@@ -213,7 +229,6 @@ extends PublishingTestFactoryAbstract {
             break;
         case ACTION_INVOCATION:
 
-            // when
             withBookDo(book->{
 
                 context.runGiven();
@@ -236,13 +251,12 @@ extends PublishingTestFactoryAbstract {
             throw _Exceptions.unmatchedCase(context.getScenario());
         }
 
-        return true;
     }
 
     // -- TESTS - WRAPPER SYNC
 
     @Override
-    protected boolean wrapperSyncExecutionNoRules(
+    protected void wrapperSyncExecutionNoRules(
             final PublishingTestContext context) {
 
         context.bind(commitListener);
@@ -251,7 +265,6 @@ extends PublishingTestFactoryAbstract {
 
         case PROPERTY_UPDATE:
 
-            // when
             withBookDo(book->{
 
                 context.runGiven();
@@ -265,7 +278,6 @@ extends PublishingTestFactoryAbstract {
             break;
         case ACTION_INVOCATION:
 
-            // when
             withBookDo(book->{
 
                 context.runGiven();
@@ -281,11 +293,10 @@ extends PublishingTestFactoryAbstract {
             throw _Exceptions.unmatchedCase(context.getScenario());
         }
 
-        return true;
     }
 
     @Override
-    protected boolean wrapperSyncExecutionWithFailure(
+    protected void wrapperSyncExecutionWithRules(
             final PublishingTestContext context) {
 
         context.bind(commitListener);
@@ -294,7 +305,6 @@ extends PublishingTestFactoryAbstract {
 
         case PROPERTY_UPDATE:
 
-            // when
             withBookDo(book->{
 
                 context.runGiven();
@@ -302,16 +312,15 @@ extends PublishingTestFactoryAbstract {
                 // when - running synchronous
                 val syncControl = SyncControl.control().withCheckRules(); // enforce rules
 
-                assertThrows(DisabledException.class, ()->{
-                    wrapper.wrap(book, syncControl).setName("Book #2"); // should fail with DisabledException
-                });
+                //assertThrows(DisabledException.class, ()->{
+                    wrapper.wrap(book, syncControl).setName("Book #2"); // should throw DisabledException
+                //});
 
             });
 
             break;
         case ACTION_INVOCATION:
 
-            // when
             withBookDo(book->{
 
                 context.runGiven();
@@ -319,9 +328,9 @@ extends PublishingTestFactoryAbstract {
                 // when - running synchronous
                 val syncControl = SyncControl.control().withCheckRules(); // enforce rules
 
-                assertThrows(DisabledException.class, ()->{
-                    wrapper.wrap(book, syncControl).doubleThePrice(); // should fail with DisabledException
-                });
+                //assertThrows(DisabledException.class, ()->{
+                    wrapper.wrap(book, syncControl).doubleThePrice(); // should throw DisabledException
+                //});
 
             });
 
@@ -330,13 +339,12 @@ extends PublishingTestFactoryAbstract {
             throw _Exceptions.unmatchedCase(context.getScenario());
         }
 
-        return false;
     }
 
     // -- TESTS - WRAPPER ASYNC
 
     @Override
-    protected boolean wrapperAsyncExecutionNoRules(
+    protected void wrapperAsyncExecutionNoRules(
             final PublishingTestContext context) throws InterruptedException, ExecutionException, TimeoutException {
 
         context.bind(commitListener);
@@ -358,11 +366,10 @@ extends PublishingTestFactoryAbstract {
 
         asyncControl.getFuture().get(10, TimeUnit.SECONDS);
 
-        return true;
     }
 
     @Override
-    protected boolean wrapperAsyncExecutionWithFailure(
+    protected void wrapperAsyncExecutionWithRules(
             final PublishingTestContext context) {
 
         context.bind(commitListener);
@@ -373,16 +380,14 @@ extends PublishingTestFactoryAbstract {
             // when - running synchronous
             val asyncControl = returningVoid().withCheckRules(); // enforce rules
 
-            assertThrows(DisabledException.class, ()->{
+            //assertThrows(DisabledException.class, ()->{
                 // should fail with DisabledException (synchronous) within the calling Thread
                 wrapper.asyncWrap(book, asyncControl).setName("Book #2");
 
-                fail("unexpected code reach");
-            });
+            //});
 
         });
 
-        return false;
     }
 
     // -- TEST SETUP
@@ -398,8 +403,7 @@ extends PublishingTestFactoryAbstract {
 
         val products = new HashSet<JpaProduct>();
 
-        // should trigger an ObjectCreatedEvent
-        val detachedNewBook = factoryService.detachedEntity(BookDto.sample().toJpaBook());
+        val detachedNewBook = BookDto.sample().toJpaBook();
 
         products.add(detachedNewBook);
 

@@ -90,6 +90,9 @@ extends PublishingTestAbstract {
 
             switch(changeScenario) {
             case ENTITY_CREATION:
+                //TODO what is there to verify?
+                return;
+            case ENTITY_PERSISTING:
 
                 assertHasPersistingLifecycleEvents(bookSample1);
                 //assertHasPersistedLifecycleEvents(Can.empty()); //TODO what is expected empty or not?
@@ -127,6 +130,17 @@ extends PublishingTestAbstract {
             case ENTITY_CREATION:
 
                 //assertHasCreatedLifecycleEvents(bookSample1); //FIXME creation events not triggered
+                assertHasLoadedLifecycleEvents(Can.empty());
+                assertHasPersistingLifecycleEvents(Can.empty());
+                assertHasPersistedLifecycleEvents(Can.empty());
+                assertHasUpdatingLifecycleEvents(Can.empty());
+                assertHasUpdatedLifecycleEvents(Can.empty());
+                assertHasRemovingLifecycleEvents(Can.empty());
+                return;
+
+            case ENTITY_PERSISTING:
+
+                assertHasCreatedLifecycleEvents(Can.empty()); // creation events are deliberately not triggered for this test
                 assertHasLoadedLifecycleEvents(Can.empty());
                 assertHasPersistingLifecycleEvents(bookSample1);
                 assertHasPersistedLifecycleEvents(bookSample1);

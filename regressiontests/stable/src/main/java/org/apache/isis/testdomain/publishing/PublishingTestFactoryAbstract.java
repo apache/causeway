@@ -36,9 +36,11 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
+import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.debug._Probe;
@@ -65,7 +67,8 @@ public abstract class PublishingTestFactoryAbstract {
     /** what kind of entity change is under test */
     @RequiredArgsConstructor @Getter
     public static enum ChangeScenario {
-        ENTITY_CREATION("creation", true),
+        ENTITY_CREATION("creation via factory-service", true),
+        ENTITY_PERSISTING("persisting", true),
         ENTITY_LOADING("loading", true),
         PROPERTY_UPDATE("property update", false),
         ACTION_INVOCATION("action invocation", false),
@@ -89,13 +92,21 @@ public abstract class PublishingTestFactoryAbstract {
                 }
                 return this;
             }
+
+            public void header() {
+                log("---------------------------------------------------------");
+            }
+
+            public void footer() {
+                log("---------------------------------------------------------");
+            }
         }
 
         private final @NonNull String displayName;
         private final @NonNull ChangeScenario scenario;
+        private final @NonNull Optional<Class<? extends Throwable>> expectedException;
         private final @NonNull Runnable given;
         private final @NonNull BiConsumer<ChangeScenario, VerificationStage> verifier;
-        private final @NonNull VerificationStage transactionCompletionStage;
 
         private final TraceLog traceLog = new TraceLog();
         private final List<Throwable> verificationErrors = _Lists.newConcurrentList();
@@ -107,11 +118,12 @@ public abstract class PublishingTestFactoryAbstract {
         }
 
         public void runVerify(final VerificationStage verificationStage) {
-            traceLog.log("4.? verify %s", verificationStage);
             try {
                 verifier.accept(scenario, verificationStage);
+                traceLog.log("v. verify %s -> %s", verificationStage, "success");
             } catch (Throwable e) {
                 verificationErrors.add(e);
+                traceLog.log("v. verify %s -> %s", verificationStage, "failure");
             }
         }
 
@@ -135,15 +147,11 @@ public abstract class PublishingTestFactoryAbstract {
             traceLog.log("2.4 book's price has been doubled");
         }
 
-        public void runPostCommitVerify() {
-            runVerify(transactionCompletionStage);
-        }
-
     }
 
     @FunctionalInterface
     private static interface PublishingTestRunner {
-        boolean run(PublishingTestContext context) throws Exception;
+        void run(PublishingTestContext context) throws Exception;
     }
 
     /**
@@ -158,21 +166,28 @@ public abstract class PublishingTestFactoryAbstract {
 
         /** transaction end boundary (pre) */
         @EventListener(TransactionBeforeCompletionEvent.class)
-        public void onPreCommit(final TransactionBeforeCompletionEvent event) {
+        public void onPreCompletion(final TransactionBeforeCompletionEvent event) {
             _Probe.errOut("=== TRANSACTION before completion");
             if(testContext!=null) {
-                testContext.getTraceLog().log("3. pre-commit event is occurring");
+                testContext.getTraceLog().log("3.1 pre-commit event is occurring");
                 testContext.runVerify(VerificationStage.PRE_COMMIT);
             }
         }
 
         /** transaction end boundary (post) */
         @EventListener(TransactionAfterCompletionEvent.class)
-        public void onPreCommit(final TransactionAfterCompletionEvent event) {
+        public void onPostCompletion(final TransactionAfterCompletionEvent event) {
             _Probe.errOut("=== TRANSACTION after completion");
             if(testContext!=null) {
                 try {
-                    testContext.runPostCommitVerify();
+                    if(event.isCommitted()) {
+                        testContext.getTraceLog().log("3.2 post-commit event is occurring");
+                        testContext.runVerify(VerificationStage.POST_COMMIT);
+                    } else {
+                        testContext.getTraceLog().log("3.2 rollback event is occurring");
+                        testContext.runVerify(VerificationStage.FAILURE_CASE);
+                    }
+
                 } finally {
                     unbind(testContext);
                 }
@@ -200,7 +215,6 @@ public abstract class PublishingTestFactoryAbstract {
 
     // -- CREATE DYNAMIC TESTS
 
-    @Deprecated //FIXME not deprecated - simplify and trigger the verification stages automatically, not declaratively
     public final List<DynamicTest> generateTests(
             final ChangeScenario changeScenario,
             final boolean includeProgrammatic,
@@ -214,11 +228,10 @@ public abstract class PublishingTestFactoryAbstract {
                 .add(publishingTest(
                         PublishingTestContext.of("Programmatic",
                                 changeScenario,
-                                given, verifier, VerificationStage.POST_COMMIT),
-                        VerificationStage.POST_INTERACTION,
+                                Optional.empty(),
+                                given, verifier),
                         this::programmaticExecution));
         }
-
 
         if(changeScenario == ChangeScenario.PROPERTY_UPDATE
                 || changeScenario == ChangeScenario.ACTION_INVOCATION) {
@@ -227,33 +240,32 @@ public abstract class PublishingTestFactoryAbstract {
                 .add(publishingTest(
                         PublishingTestContext.of("Interaction Api",
                                 changeScenario,
-                                given, verifier, VerificationStage.POST_COMMIT),
-                        VerificationStage.POST_INTERACTION,
+                                Optional.empty(),
+                                given, verifier),
                         this::interactionApiExecution))
                 .add(publishingTest(
                         PublishingTestContext.of("Wrapper Sync w/o Rules",
                                 changeScenario,
-                                given, verifier, VerificationStage.POST_COMMIT),
-                        VerificationStage.POST_INTERACTION,
+                                Optional.empty(),
+                                given, verifier),
                         this::wrapperSyncExecutionNoRules))
 //                    .add(publishingTest(
 //                            PublishingTestContext.of("Wrapper Async w/o Rules",
 //                                  changeScenario,
-//                                  given, verifier, VerificationStage.POST_COMMIT),
-//                            VerificationStage.POST_INTERACTION,
+//                                  given, verifier),
 //                            this::wrapperAsyncExecutionNoRules))
                 .add(publishingTest(
                         PublishingTestContext.of("Wrapper Sync w/ Rules (expected to fail w/ DisabledException)",
                                 changeScenario,
-                                given, verifier, VerificationStage.FAILURE_CASE),
-                        VerificationStage.POST_INTERACTION,
-                        this::wrapperSyncExecutionWithFailure))
+                                Optional.of(DisabledException.class),
+                                given, verifier),
+                        this::wrapperSyncExecutionWithRules))
 //                    .add(publishingTest(
 //                            PublishingTestContext.of("Wrapper Async w/ Rules (expected to fail w/ DisabledException)",
 //                                    changeScenario,
-//                                    given, verifier, VerificationStage.FAILURE_CASE),
-//                            VerificationStage.POST_INTERACTION,
-//                            this::wrapperAsyncExecutionWithFailure))
+//                                    Optional.of(DisabledException.class),
+//                                    given, verifier),
+//                            this::wrapperAsyncExecutionWithRules))
                 ;
 
         };
@@ -271,38 +283,40 @@ public abstract class PublishingTestFactoryAbstract {
     protected abstract void setupEntity(PublishingTestContext context);
 
     /** a test - method is embedded in its own interaction and transaction */
-    protected abstract boolean programmaticExecution(PublishingTestContext context);
+    protected abstract void programmaticExecution(PublishingTestContext context);
 
     /** a test - method is embedded in its own interaction and transaction */
-    protected abstract boolean interactionApiExecution(PublishingTestContext context);
+    protected abstract void interactionApiExecution(PublishingTestContext context);
 
     /** a test - method is embedded in its own interaction and transaction */
-    protected abstract boolean wrapperSyncExecutionNoRules(PublishingTestContext context);
+    protected abstract void wrapperSyncExecutionNoRules(PublishingTestContext context);
 
     /** a test - method is embedded in its own interaction and transaction */
     @Deprecated // not deprecated - but we don't know yet how to test
     //XXX requires the AsyncExecution to run in its own interaction and transaction,
     // ideally to be enforced by running on a different thread, yet we are using the fork-join pool
     // which provides no such guarantee
-    protected abstract boolean wrapperAsyncExecutionNoRules(PublishingTestContext context) throws InterruptedException, ExecutionException, TimeoutException;
+    protected abstract void wrapperAsyncExecutionNoRules(PublishingTestContext context) throws InterruptedException, ExecutionException, TimeoutException;
 
     /** a test - method is embedded in its own interaction and transaction */
-    protected abstract boolean wrapperSyncExecutionWithFailure(PublishingTestContext context);
+    protected abstract void wrapperSyncExecutionWithRules(PublishingTestContext context);
 
     /** a test - method is embedded in its own interaction and transaction */
-    protected abstract boolean wrapperAsyncExecutionWithFailure(PublishingTestContext context);
+    protected abstract void wrapperAsyncExecutionWithRules(PublishingTestContext context);
 
 
     // -- HELPER
 
     private final DynamicTest publishingTest(
             final PublishingTestContext testContext,
-            final VerificationStage onSuccess,
             final PublishingTestRunner testRunner) {
 
         val displayName = String.format("%s (%s)",
                 testContext.getDisplayName(),
                 testContext.getScenario().getDisplayName());
+
+        val onSuccess = VerificationStage.POST_INTERACTION;
+        val onFailure = VerificationStage.FAILURE_CASE;
 
         return dynamicTest(displayName, ()->{
 
@@ -310,6 +324,7 @@ public abstract class PublishingTestFactoryAbstract {
 
             xrayAddTest(displayName);
 
+            traceLog.header();
             traceLog.log("0. enter test %s", displayName);
 
             try {
@@ -327,28 +342,62 @@ public abstract class PublishingTestFactoryAbstract {
                 assertFalse(getInteractionService().isInInteraction());
                 assert_no_initial_tx_context();
 
-                final boolean isExpectedToRunSuccesful = getInteractionService().callAnonymous(()->{
+//                val result = getInteractionService().callAnonymous(()->{
+//                    val currentInteraction = getInteractionService().currentInteraction();
+//                    xrayEnterInteraction(currentInteraction);
+//
+//                    Result<Boolean> result;
+//                    try {
+//                        testRunner.run(testContext);
+//                        result = Result.success(true);
+//                    } catch (Exception e) {
+//                        result = Result.failure(e);
+//                    }
+//
+//                    xrayExitInteraction();
+//                    return result;
+//                });
+
+                val result = getInteractionService().callAnonymous(()->{
                     val currentInteraction = getInteractionService().currentInteraction();
                     xrayEnterInteraction(currentInteraction);
-                    val result = testRunner.run(testContext);
-                    xrayExitInteraction();
-                    return result;
+
+                    try {
+                        testRunner.run(testContext); // is allowed to throw
+                        return Result.success(true);
+                    } finally {
+                        xrayExitInteraction();
+                    }
+
                 });
 
-                getInteractionService().closeInteractionLayers();
+                traceLog.log("entering post test-runner phase");
 
                 assertFalse(getInteractionService().isInInteraction());
                 assert_no_initial_tx_context();
 
+                if(testContext.getExpectedException().isPresent()) {
+                    val expectedException = testContext.getExpectedException().get();
+                    val actualException = result.getFailure().map(Throwable::getClass).orElse(null);
+                    assertEquals(expectedException, actualException);
+                    testContext.runVerify(onFailure);
+                    failWhenContextHasErrors(testContext);
+                    return;
+                }
+
+                if(result.isFailure()) {
+                    // unexpected failure
+                    fail("unexpeted exception during test: " + result.getFailure().get());
+                }
+
+                failWhenContextHasErrors(testContext);
+                testContext.runVerify(onSuccess);
                 failWhenContextHasErrors(testContext);
 
-                if(isExpectedToRunSuccesful) {
-                    testContext.runVerify(onSuccess);
-                    failWhenContextHasErrors(testContext);
-                }
 
             } finally {
                 traceLog.log("5. exit test %s", displayName);
+                traceLog.footer();
             }
 
         });

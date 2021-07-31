@@ -19,7 +19,7 @@ implements HasPersistenceStandard {
 
     protected abstract boolean supportsProgrammaticTesting(ChangeScenario changeScenario);
 
-    @TestFactory @DisplayName("Entity Creation")
+    @TestFactory @DisplayName("Entity Creation (FactoryService)")
     final List<DynamicTest> generateTestsForCreation() {
         return generateTests(ChangeScenario.ENTITY_CREATION);
     }

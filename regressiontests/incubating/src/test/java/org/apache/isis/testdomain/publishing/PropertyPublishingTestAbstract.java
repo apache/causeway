@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.ChangeScenario;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.VerificationStage;
 import org.apache.isis.testdomain.publishing.subscriber.EntityPropertyChangeSubscriberForTesting;
@@ -62,24 +63,27 @@ extends PublishingTestAbstract {
 
             switch(changeScenario) {
             case ENTITY_CREATION:
+                return; // factory-service does not trigger property publishing
+            case ENTITY_PERSISTING:
                 assertContainsPropertyChangeEntries(Can.of(
                         formatPersistenceStandardSpecificCapitalize("%s Book/name: '[NEW]' -> 'Sample Book'")));
-                break;
+                return;
             case PROPERTY_UPDATE:
                 assertHasPropertyChangeEntries(Can.of(
                         formatPersistenceStandardSpecificCapitalize("%s Book/name: 'Sample Book' -> 'Book #2'")));
-                break;
+                return;
             case ACTION_INVOCATION:
                 assertHasPropertyChangeEntries(Can.of(
                         formatPersistenceStandardSpecificCapitalize("%s Book/price: '99.0' -> '198.0'")));
-                break;
+                return;
             case ENTITY_REMOVAL:
                 assertContainsPropertyChangeEntries(Can.of(
                         formatPersistenceStandardSpecificCapitalize("%s Book/name: 'Sample Book' -> '[DELETED]'")));
-                break;
+                return;
+            default:
+                throw _Exceptions.unmatchedCase(changeScenario);
             }
 
-            break;
         default:
             // if hitting this, the caller is requesting a verification stage, we are providing no case for
             fail(String.format("internal error, stage not verified: %s", verificationStage));
