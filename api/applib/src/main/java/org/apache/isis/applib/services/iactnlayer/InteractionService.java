@@ -2,6 +2,8 @@ package org.apache.isis.applib.services.iactnlayer;
 
 import java.util.concurrent.Callable;
 
+import org.apache.isis.commons.functional.Result;
+
 import lombok.NonNull;
 
 /**
@@ -74,6 +76,7 @@ public interface InteractionService extends InteractionLayerTracker {
     /**
      * @return whether the calling thread is within the context of an open {@link InteractionLayer}
      */
+    @Override
     boolean isInInteraction();
 
     /**
@@ -117,6 +120,46 @@ public interface InteractionService extends InteractionLayerTracker {
      * @param runnable (non-null)
      */
     void runAnonymous(@NonNull ThrowingRunnable runnable);
+
+    // -- RESULT SUPPORT
+
+    /**
+     * Variant of {@link #call(InteractionContext, Callable)} that wraps the return value
+     * with a {@link Result}, also catching any exception, that might have occurred.
+     */
+    default <R> Result<R> callAndCatch(
+            final @NonNull InteractionContext interactionContext,
+            final @NonNull Callable<R> callable) {
+        return Result.of(()->call(interactionContext, callable));
+    }
+
+    /**
+     * Variant of {@link #run(InteractionContext, ThrowingRunnable)} that wraps the return value
+     * with a {@link Result}, also catching any exception, that might have occurred.
+     */
+    default Result<Void> runAndCatch(
+            final @NonNull InteractionContext interactionContext,
+            final @NonNull ThrowingRunnable runnable){
+        return callAndCatch(interactionContext, ThrowingRunnable.toCallable(runnable));
+    }
+
+    /**
+     * Variant of {@link #callAnonymous(Callable)} that wraps the return value
+     * with a {@link Result}, also catching any exception, that might have occurred.
+     */
+    default <R> Result<R> callAnonymousAndCatch(
+            final @NonNull Callable<R> callable) {
+        return Result.of(()->callAnonymous(callable));
+    }
+
+    /**
+     * Variant of {@link #runAnonymous(ThrowingRunnable)} that wraps the return value
+     * with a {@link Result}, also catching any exception, that might have occurred.
+     */
+    default Result<Void> runAnonymousAndCatch(
+            final @NonNull ThrowingRunnable runnable) {
+        return callAnonymousAndCatch(ThrowingRunnable.toCallable(runnable));
+    }
 
 
 }
