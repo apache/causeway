@@ -107,14 +107,18 @@ extends PublishingTestAbstract {
 
             case PROPERTY_UPDATE: // update the book's name -> "Book #2"
 
-                //assertHasUpdatingLifecycleEvents(bookSample2); //FIXME PRE_COMMIT triggered too early?
-                //assertHasUpdatedLifecycleEvents(Can.empty()); //TODO what is expected empty or not?
+                //XXX if we want to trigger callback events before PRE_COMMIT then changes need to be flushed .eg
+                //val em = jpaSupport.getEntityManagerElseFail(JpaBook.class);
+                //em.flush(); // in effect makes changes visible during PRE_COMMIT
+                //assertHasUpdatingLifecycleEvents(bookSample2);
+
+                //assertHasUpdatedLifecycleEvents(Can.empty()); //XXX only empty if not flushed
                 return;
 
             case ACTION_INVOCATION: // double the book's price action -> 198.0
 
-                //assertHasUpdatingLifecycleEvents(bookSample3);//FIXME PRE_COMMIT triggered too early?
-                //assertHasUpdatedLifecycleEvents(Can.empty()); //TODO what is expected empty or not?
+                //assertHasUpdatingLifecycleEvents(bookSample3); //XXX only populated if flushed
+                //assertHasUpdatedLifecycleEvents(Can.empty()); //XXX only empty if not flushed
                 return;
 
             case ENTITY_REMOVAL:

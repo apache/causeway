@@ -426,8 +426,12 @@ extends PublishingTestFactoryAbstract {
     @SneakyThrows
     private void withBookDo(final CheckedConsumer<JpaBook> bookConsumer) {
 
+        //val em = jpaSupport.getEntityManagerElseFail(JpaBook.class);
+
         val book = repository.allInstances(JpaBook.class).listIterator().next();
         bookConsumer.accept(book);
+
+        //em.flush(); // in effect makes changes visible during PRE_COMMIT
 
     }
 
