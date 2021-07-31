@@ -60,7 +60,7 @@ public class FactoryServiceDefault implements FactoryService {
     @Inject private SpecificationLoader specificationLoader;
     @Inject private ServiceInjector serviceInjector;
     @Inject private IsisSystemEnvironment isisSystemEnvironment;
-    @Inject private ObjectLifecyclePublisher persistenceLifecyclePublisher;
+    @Inject private ObjectLifecyclePublisher objectLifecyclePublisher;
 
     @Override
     public <T> T getOrCreate(final @NonNull Class<T> requiredType) {
@@ -96,7 +96,7 @@ public class FactoryServiceDefault implements FactoryService {
                     entityClass);
         }
         serviceInjector.injectServicesInto(entityPojo);
-        persistenceLifecyclePublisher.onPostCreate(ManagedObject.of(spec, entityPojo));
+        objectLifecyclePublisher.onPostCreate(ManagedObject.of(spec, entityPojo));
         return entityPojo;
     }
 
@@ -141,7 +141,7 @@ public class FactoryServiceDefault implements FactoryService {
                     viewModelClass);
         }
         serviceInjector.injectServicesInto(viewModelPojo);
-        persistenceLifecyclePublisher.onPostCreate(ManagedObject.of(spec, viewModelPojo));
+        objectLifecyclePublisher.onPostCreate(ManagedObject.of(spec, viewModelPojo));
         return viewModelPojo;
     }
 
@@ -182,10 +182,9 @@ public class FactoryServiceDefault implements FactoryService {
     }
 
     private Object createObject(final ObjectSpecification spec) {
+        // already handles injection and publishing
         val domainObject = spec.createObject();
-        persistenceLifecyclePublisher.onPostCreate(domainObject);
         return domainObject.getPojo();
     }
-
 
 }

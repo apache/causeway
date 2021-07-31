@@ -40,7 +40,6 @@ import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.debug._Probe;
@@ -342,22 +341,6 @@ public abstract class PublishingTestFactoryAbstract {
                 assertFalse(getInteractionService().isInInteraction());
                 assert_no_initial_tx_context();
 
-//                val result = getInteractionService().callAnonymous(()->{
-//                    val currentInteraction = getInteractionService().currentInteraction();
-//                    xrayEnterInteraction(currentInteraction);
-//
-//                    Result<Boolean> result;
-//                    try {
-//                        testRunner.run(testContext);
-//                        result = Result.success(true);
-//                    } catch (Exception e) {
-//                        result = Result.failure(e);
-//                    }
-//
-//                    xrayExitInteraction();
-//                    return result;
-//                });
-
                 val result = getInteractionService().runAnonymousAndCatch(()->{
                     val currentInteraction = getInteractionService().currentInteraction();
                     xrayEnterInteraction(currentInteraction);
@@ -386,7 +369,7 @@ public abstract class PublishingTestFactoryAbstract {
 
                 if(result.isFailure()) {
                     // unexpected failure
-                    fail("unexpeted exception during test: " + result.getFailure().get());
+                    fail("unexpeted exception during test: ", result.getFailure().get());
                 }
 
                 failWhenContextHasErrors(testContext);

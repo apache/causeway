@@ -22,7 +22,9 @@ import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 
+import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.factory._InstanceUtil;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -97,11 +99,10 @@ final class ObjectCreator_builtinHandlers {
 
             try {
 
-                val newInstance = type.getDeclaredConstructor().newInstance();
+                val newInstance = _InstanceUtil.createInstance(type, _Constants.emptyObjects);
                 return newInstance;
 
-            } catch (IllegalAccessException | InstantiationException | IllegalArgumentException
-                    | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+            } catch (Exception  e) {
                 throw _Exceptions.unrecoverable(
                         "Failed to create instance of type " + spec.getFullIdentifier(), e);
             }

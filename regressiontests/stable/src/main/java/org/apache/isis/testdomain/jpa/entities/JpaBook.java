@@ -66,7 +66,7 @@ import lombok.extern.log4j.Log4j2;
         , updatingLifecycleEvent = JpaBook.UpdatingLifecycleEvent.class
         , updatedLifecycleEvent = JpaBook.UpdatedLifecycleEvent.class
         , removingLifecycleEvent = JpaBook.RemovingLifecycleEvent.class)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 @ToString(callSuper = true)
 @Log4j2
 public class JpaBook extends JpaProduct {

@@ -59,6 +59,9 @@ extends PublishingTestAbstract {
             final ChangeScenario changeScenario,
             final VerificationStage verificationStage) {
 
+        val bookSamplesForCreate = Can.of(
+                BookDto.sample(),
+                BookDto.builder().build()); // empty-defaults
         val bookSample1 = Can.of( // initial
                 BookDto
                 .sample());
@@ -129,7 +132,7 @@ extends PublishingTestAbstract {
             switch(changeScenario) {
             case ENTITY_CREATION:
 
-                assertHasCreatedLifecycleEvents(bookSample1);
+                assertHasCreatedLifecycleEvents(bookSamplesForCreate);
                 assertHasLoadedLifecycleEvents(Can.empty());
                 assertHasPersistingLifecycleEvents(Can.empty());
                 assertHasPersistedLifecycleEvents(Can.empty());

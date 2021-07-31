@@ -134,6 +134,7 @@ extends PublishingTestFactoryAbstract {
             context.runGiven();
             //when
             factoryService.detachedEntity(BookDto.sample().toJdoBook()); // should trigger an ObjectCreatedEvent
+            factoryService.detachedEntity(JdoBook.class); // should trigger a second ObjectCreatedEvent
             break;
 
         case ENTITY_PERSISTING:
