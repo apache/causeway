@@ -39,6 +39,8 @@ import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
@@ -58,6 +60,7 @@ public class FactoryServiceDefault implements FactoryService {
     @Inject private SpecificationLoader specificationLoader;
     @Inject private ServiceInjector serviceInjector;
     @Inject private IsisSystemEnvironment isisSystemEnvironment;
+    @Inject private ObjectLifecyclePublisher persistenceLifecyclePublisher;
 
     @Override
     public <T> T getOrCreate(final @NonNull Class<T> requiredType) {
@@ -85,16 +88,16 @@ public class FactoryServiceDefault implements FactoryService {
     }
 
     @Override
-    public <T> T detachedEntity(final @NonNull T entity) {
-        val entityClass = entity.getClass();
+    public <T> T detachedEntity(final @NonNull T entityPojo) {
+        val entityClass = entityPojo.getClass();
         val spec = loadSpec(entityClass);
         if(!spec.isEntity()) {
             throw _Exceptions.illegalArgument("Type '%s' is not recogniced as an entity type by the framework.",
                     entityClass);
         }
-
-        serviceInjector.injectServicesInto(entity);
-        return entity;
+        serviceInjector.injectServicesInto(entityPojo);
+        persistenceLifecyclePublisher.onPostCreate(ManagedObject.of(spec, entityPojo));
+        return entityPojo;
     }
 
     @Override
@@ -130,16 +133,16 @@ public class FactoryServiceDefault implements FactoryService {
     }
 
     @Override
-    public <T> T viewModel(final @NonNull T viewModel) {
-        val viewModelClass = viewModel.getClass();
+    public <T> T viewModel(final @NonNull T viewModelPojo) {
+        val viewModelClass = viewModelPojo.getClass();
         val spec = loadSpec(viewModelClass);
         if(!spec.isViewModel()) {
             throw _Exceptions.illegalArgument("Type '%s' is not recogniced as a ViewModel by the framework.",
                     viewModelClass);
         }
-
-        serviceInjector.injectServicesInto(viewModel);
-        return viewModel;
+        serviceInjector.injectServicesInto(viewModelPojo);
+        persistenceLifecyclePublisher.onPostCreate(ManagedObject.of(spec, viewModelPojo));
+        return viewModelPojo;
     }
 
     @Override
@@ -178,8 +181,10 @@ public class FactoryServiceDefault implements FactoryService {
         return viewModelFacet;
     }
 
-    private Object createObject(ObjectSpecification spec) {
-        return spec.createObject().getPojo();
+    private Object createObject(final ObjectSpecification spec) {
+        val domainObject = spec.createObject();
+        persistenceLifecyclePublisher.onPostCreate(domainObject);
+        return domainObject.getPojo();
     }
 
 

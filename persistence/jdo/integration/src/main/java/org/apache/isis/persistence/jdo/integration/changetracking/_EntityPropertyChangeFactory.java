@@ -24,7 +24,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
-import org.apache.isis.core.transaction.changetracking.PropertyChangeRecord;
+import org.apache.isis.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
 
 import lombok.val;
 

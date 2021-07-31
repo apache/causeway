@@ -18,10 +18,6 @@
  */
 package org.apache.isis.testdomain.util.interaction;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.TreeSet;
@@ -32,17 +28,20 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.CollectionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.testdomain.publishing.subscriber.EntityPropertyChangeSubscriberForTesting;
 import org.apache.isis.testdomain.util.CollectionAssertions;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
@@ -56,27 +55,22 @@ public abstract class InteractionTestAbstract extends IsisIntegrationTestAbstrac
     @Inject protected InteractionService interactionService;
     @Inject protected WrapperFactory wrapper;
     @Inject protected KVStoreForTesting kvStoreForTesting;
-    @Inject private javax.inject.Provider<EntityChangeTracker> entityChangeTrackerProvider;
-
-    protected EntityChangeTracker getEntityChangeTracker() {
-        return entityChangeTrackerProvider.get();
-    }
 
     // -- INTERACTION STARTERS
 
-    protected ActionInteraction startActionInteractionOn(Class<?> type, String actionId, Where where) {
+    protected ActionInteraction startActionInteractionOn(final Class<?> type, final String actionId, final Where where) {
         val viewModel = factoryService.viewModel(type);
         val managedObject = objectManager.adapt(viewModel);
         return ActionInteraction.start(managedObject, actionId, where);
     }
 
-    protected PropertyInteraction startPropertyInteractionOn(Class<?> type, String propertyId, Where where) {
+    protected PropertyInteraction startPropertyInteractionOn(final Class<?> type, final String propertyId, final Where where) {
         val viewModel = factoryService.viewModel(type);
         val managedObject = objectManager.adapt(viewModel);
         return PropertyInteraction.start(managedObject, propertyId, where);
     }
 
-    protected CollectionInteraction startCollectionInteractionOn(Class<?> type, String collectionId, Where where) {
+    protected CollectionInteraction startCollectionInteractionOn(final Class<?> type, final String collectionId, final Where where) {
         val viewModel = factoryService.viewModel(type);
         val managedObject = objectManager.adapt(viewModel);
         return CollectionInteraction.start(managedObject, collectionId, where);
@@ -84,7 +78,7 @@ public abstract class InteractionTestAbstract extends IsisIntegrationTestAbstrac
 
     // -- SHORTCUTS
 
-    protected Object invokeAction(Class<?> type, String actionId, @Nullable List<Object> pojoArgList) {
+    protected Object invokeAction(final Class<?> type, final String actionId, @Nullable final List<Object> pojoArgList) {
         val managedAction = startActionInteractionOn(type, actionId, Where.OBJECT_FORMS)
                 .getManagedAction().get(); // should not throw
 
@@ -111,15 +105,15 @@ public abstract class InteractionTestAbstract extends IsisIntegrationTestAbstrac
         assertEquals(Collections.<String>emptyList(), specLoader.getOrAssessValidationResult().getMessages());
     }
 
-    protected void assertComponentWiseEquals(Object a, Object b) {
+    protected void assertComponentWiseEquals(final Object a, final Object b) {
         CollectionAssertions.assertComponentWiseEquals(a, b);
     }
 
-    protected void assertComponentWiseUnwrappedEquals(Object a, Object b) {
+    protected void assertComponentWiseUnwrappedEquals(final Object a, final Object b) {
         CollectionAssertions.assertComponentWiseUnwrappedEquals(a, b);
     }
 
-    protected void assertEmpty(Object x) {
+    protected void assertEmpty(final Object x) {
         if(x instanceof CharSequence) {
             assertTrue(_Strings.isEmpty((CharSequence)x));
             return;
@@ -127,14 +121,14 @@ public abstract class InteractionTestAbstract extends IsisIntegrationTestAbstrac
         assertEquals(0L, _NullSafe.streamAutodetect(x).count());
     }
 
-    protected void assertDoesIncrement(Supplier<LongAdder> adder, Runnable runnable) {
+    protected void assertDoesIncrement(final Supplier<LongAdder> adder, final Runnable runnable) {
         final int eventCount0 = adder.get().intValue();
         runnable.run();
         final int eventCount1 = adder.get().intValue();
         assertEquals(eventCount0 + 1, eventCount1);
     }
 
-    protected void assertDoesNotIncrement(Supplier<LongAdder> adder, Runnable runnable) {
+    protected void assertDoesNotIncrement(final Supplier<LongAdder> adder, final Runnable runnable) {
         final int eventCount0 = adder.get().intValue();
         runnable.run();
         final int eventCount1 = adder.get().intValue();
@@ -143,21 +137,21 @@ public abstract class InteractionTestAbstract extends IsisIntegrationTestAbstrac
 
     // -- ASSERTIONS (INTERACTIONAL)
 
-    protected void assertInteractional(Runnable runnable) {
+    protected void assertInteractional(final Runnable runnable) {
         InteractionBoundaryProbe.assertInteractional(kvStoreForTesting, runnable);
     }
 
-    protected <T> T assertInteractional(Supplier<T> supplier) {
+    protected <T> T assertInteractional(final Supplier<T> supplier) {
         return InteractionBoundaryProbe.assertInteractional(kvStoreForTesting, supplier);
     }
 
     // -- ASSERTIONS (TRANSACTIONAL)
 
-    protected void assertTransactional(Runnable runnable) {
+    protected void assertTransactional(final Runnable runnable) {
         InteractionBoundaryProbe.assertTransactional(kvStoreForTesting, runnable);
     }
 
-    protected <T> T assertTransactional(Supplier<T> supplier) {
+    protected <T> T assertTransactional(final Supplier<T> supplier) {
         return InteractionBoundaryProbe.assertTransactional(kvStoreForTesting, supplier);
     }
 

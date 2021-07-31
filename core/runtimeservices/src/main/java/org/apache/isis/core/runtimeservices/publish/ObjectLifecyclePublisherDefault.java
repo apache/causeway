@@ -1,4 +1,4 @@
-package org.apache.isis.persistence.jpa.integration.changetracking;
+package org.apache.isis.core.runtimeservices.publish;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -9,9 +9,10 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedLifecycleEventFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
@@ -24,34 +25,40 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFac
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedLifecycleEventFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacet;
+import org.apache.isis.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
+import org.apache.isis.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.transaction.changetracking.EntityPropertyChangePublisher;
 import org.apache.isis.core.transaction.changetracking.PersistenceCallbackHandlerAbstract;
-import org.apache.isis.core.transaction.changetracking.PropertyChangeRecord;
-import org.apache.isis.core.transaction.changetracking.PersistenceLifecycleTracker;
 
 /**
+ * @see ObjectLifecyclePublisher
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.transaction.PersistenceLifecycleEventPublisherJpa")
+@Named("isis.runtimeservices.ObjectLifecyclePublisherDefault")
 @Priority(PriorityPrecedence.EARLY)
-@Qualifier("jpa")
+@Qualifier("Default")
 //@Log4j2
-public class PersistenceLifecycleEventPublisherJpa
+public class ObjectLifecyclePublisherDefault
 extends PersistenceCallbackHandlerAbstract
 implements
-    MetricsService,
-    PersistenceLifecycleTracker {
+    ObjectLifecyclePublisher {
 
     private final EntityPropertyChangePublisher entityPropertyChangePublisher;
 
     @Inject
-    public PersistenceLifecycleEventPublisherJpa(
+    public ObjectLifecyclePublisherDefault(
             final EventBusService eventBusService,
             final EntityPropertyChangePublisher entityPropertyChangePublisher) {
         super(eventBusService);
         this.entityPropertyChangePublisher = entityPropertyChangePublisher;
+    }
+
+    @Override
+    public void onPostCreate(final ManagedObject domainObject) {
+        CallbackFacet.callCallback(domainObject, CreatedCallbackFacet.class);
+        postLifecycleEventIfRequired(domainObject, CreatedLifecycleEventFacet.class);
     }
 
     @Override
@@ -73,7 +80,7 @@ implements
         postLifecycleEventIfRequired(entity, UpdatingLifecycleEventFacet.class);
 
         entityPropertyChangePublisher.publishChangedProperties(
-                PersistenceLifecycleTracker
+                ObjectLifecyclePublisher
                 .publishingPayloadForUpdate(entity, changeRecords));
 
     }
@@ -84,7 +91,7 @@ implements
         postLifecycleEventIfRequired(entity, RemovingLifecycleEventFacet.class);
 
         entityPropertyChangePublisher.publishChangedProperties(
-                PersistenceLifecycleTracker
+                ObjectLifecyclePublisher
                 .publishingPayloadForDeletion(entity));
     }
 
@@ -94,7 +101,7 @@ implements
         postLifecycleEventIfRequired(entity, PersistedLifecycleEventFacet.class);
 
         entityPropertyChangePublisher.publishChangedProperties(
-                PersistenceLifecycleTracker
+                ObjectLifecyclePublisher
                 .publishingPayloadForCreation(entity));
     }
 
@@ -108,18 +115,6 @@ implements
     public void onPostLoad(final ManagedObject entity) {
         CallbackFacet.callCallback(entity, LoadedCallbackFacet.class);
         postLifecycleEventIfRequired(entity, LoadedLifecycleEventFacet.class);
-    }
-
-    // -- METRICS
-
-    @Override
-    public int numberEntitiesLoaded() {
-        return -1; // n/a
-    }
-
-    @Override
-    public int numberEntitiesDirtied() {
-        return -1; // n/a
     }
 
 }

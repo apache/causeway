@@ -58,7 +58,7 @@ public interface ObjectCreator {
     public static ObjectCreator createDefault(final MetaModelContext mmc) {
 
         val chainOfHandlers = _Lists.of(
-                new ObjectCreator_builtinHandlers.LegacyCreationHandler(mmc)
+                new ObjectCreator_builtinHandlers.DefaultCreationHandler(mmc)
 
 //                new ObjectCreator_builtinHandlers.GuardAgainstNull(),
 //                new ObjectCreator_builtinHandlers.LoadService(),

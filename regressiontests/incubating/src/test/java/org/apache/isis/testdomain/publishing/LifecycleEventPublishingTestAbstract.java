@@ -129,7 +129,7 @@ extends PublishingTestAbstract {
             switch(changeScenario) {
             case ENTITY_CREATION:
 
-                //assertHasCreatedLifecycleEvents(bookSample1); //FIXME creation events not triggered
+                assertHasCreatedLifecycleEvents(bookSample1);
                 assertHasLoadedLifecycleEvents(Can.empty());
                 assertHasPersistingLifecycleEvents(Can.empty());
                 assertHasPersistedLifecycleEvents(Can.empty());

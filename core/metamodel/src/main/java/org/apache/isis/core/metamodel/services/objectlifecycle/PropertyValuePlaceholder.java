@@ -16,16 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.transaction.changetracking;
+package org.apache.isis.core.metamodel.services.objectlifecycle;
 
-import java.sql.Timestamp;
+/**
+ *
+ * @since 2.0
+ *
+ */
+public enum PropertyValuePlaceholder {
 
-import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
-import org.apache.isis.applib.services.xactn.TransactionId;
-import org.apache.isis.commons.collections.Can;
+    NEW,
+    DELETED
+    ;
 
-public interface HasEnlistedEntityPropertyChanges {
-
-    Can<EntityPropertyChange> getPropertyChanges(Timestamp timestamp, String user, TransactionId txId);
+    @Override
+    public String toString() {
+        return "[" + name() + "]";
+    }
 
 }

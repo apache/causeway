@@ -16,11 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.transaction.changetracking;
+package org.apache.isis.core.metamodel.services.objectlifecycle;
 
 import java.util.Objects;
-
-import org.apache.isis.core.transaction.changetracking.events.IsisTransactionPlaceholder;
 
 import lombok.Getter;
 
@@ -73,13 +71,13 @@ public final class PreAndPostValue {
 
     public boolean shouldPublish() {
         // don't audit objects that were created and then immediately deleted within the same xactn
-        if (getPre() == IsisTransactionPlaceholder.NEW
-                && getPost() == IsisTransactionPlaceholder.DELETED) {
+        if (getPre() == PropertyValuePlaceholder.NEW
+                && getPost() == PropertyValuePlaceholder.DELETED) {
             return false;
         }
         // but do always audit objects that have just been created or deleted
-        if (getPre() == IsisTransactionPlaceholder.NEW
-                || getPost() == IsisTransactionPlaceholder.DELETED) {
+        if (getPre() == PropertyValuePlaceholder.NEW
+                || getPost() == PropertyValuePlaceholder.DELETED) {
             return true;
         }
         // else - for updated objects - audit only if the property value has changed

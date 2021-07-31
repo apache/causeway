@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
-import org.apache.isis.persistence.jpa.integration.changetracking.PersistenceLifecycleEventPublisherJpa;
+import org.apache.isis.persistence.jpa.integration.changetracking.PersistenceMetricsServiceJpa;
 import org.apache.isis.persistence.jpa.integration.metamodel.JpaProgrammingModel;
 import org.apache.isis.persistence.jpa.integration.services.JpaSupportServiceUsingSpring;
 import org.apache.isis.persistence.jpa.integration.typeconverters.JavaAwtBufferedImageByteArrayConverter;
@@ -39,24 +39,8 @@ import org.apache.isis.persistence.jpa.integration.typeconverters.JavaAwtBuffere
 
         // @Service's
         JpaSupportServiceUsingSpring.class,
-        PersistenceLifecycleEventPublisherJpa.class,
+        PersistenceMetricsServiceJpa.class,
 
-//        DataNucleusSettings.class,
-//        ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException.class,
-//        ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException.class,
-//        ExceptionRecognizerForJDOObjectNotFoundException.class,
-//        ExceptionRecognizerForJDODataStoreException.class,
-//
-//        IsisJdoSupportDN5.class,
-//        IsisPlatformTransactionManagerForJdo.class,
-//        JdoPersistenceLifecycleService.class,
-//        PersistenceSessionFactory5.class,
-//        JdoMetamodelMenu.class,
-//
-//        // @Mixin's
-//        Persistable_datanucleusVersionLong.class,
-//        Persistable_datanucleusVersionTimestamp.class,
-//        Persistable_downloadJdoMetadata.class,
 })
 @EntityScan(basePackageClasses = {
 

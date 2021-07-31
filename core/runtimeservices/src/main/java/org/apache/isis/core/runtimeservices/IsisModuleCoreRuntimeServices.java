@@ -48,6 +48,7 @@ import org.apache.isis.core.runtimeservices.publish.CommandPublisherDefault;
 import org.apache.isis.core.runtimeservices.publish.EntityChangesPublisherDefault;
 import org.apache.isis.core.runtimeservices.publish.EntityPropertyChangePublisherDefault;
 import org.apache.isis.core.runtimeservices.publish.ExecutionPublisherDefault;
+import org.apache.isis.core.runtimeservices.publish.ObjectLifecyclePublisherDefault;
 import org.apache.isis.core.runtimeservices.recognizer.ExceptionRecognizerServiceDefault;
 import org.apache.isis.core.runtimeservices.recognizer.dae.ExceptionRecognizerForDataAccessException;
 import org.apache.isis.core.runtimeservices.repository.RepositoryServiceDefault;
@@ -100,6 +101,7 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         WrapperFactoryDefault.class,
         XmlServiceDefault.class,
         XmlSnapshotServiceDefault.class,
+        ObjectLifecyclePublisherDefault.class,
 
         // @Controller
         RoutingServiceDefault.class,

@@ -19,6 +19,7 @@
 package org.apache.isis.core.transaction.changetracking;
 
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
+import org.apache.isis.core.metamodel.services.objectlifecycle.HasEnlistedEntityPropertyChanges;
 
 /**
  * Notifies {@link org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber}s.

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.transaction.changetracking;
+package org.apache.isis.core.metamodel.services.objectlifecycle;
 
 import java.sql.Timestamp;
 import java.util.UUID;
@@ -30,7 +30,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.transaction.changetracking.events.IsisTransactionPlaceholder;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -92,7 +91,7 @@ public final class PropertyChangeRecord {
     @Deprecated // unreliable logic, instead the caller should know if this originates from a delete event
     public void updatePostValue() {
         preAndPostValue = EntityUtil.isDetachedOrRemoved(entity) //TODO[ISIS-2573] when detached, logic is wrong
-                ? preAndPostValue.withPost(IsisTransactionPlaceholder.DELETED)
+                ? preAndPostValue.withPost(PropertyValuePlaceholder.DELETED)
                 : preAndPostValue.withPost(getPropertyValue());
     }
 

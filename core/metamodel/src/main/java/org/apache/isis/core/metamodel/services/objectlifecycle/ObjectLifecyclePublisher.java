@@ -16,30 +16,36 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.transaction.changetracking;
+package org.apache.isis.core.metamodel.services.objectlifecycle;
 
 import java.sql.Timestamp;
 
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facets.properties.property.entitychangepublishing.EntityPropertyChangePublishingPolicyFacet;
+import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
-import org.apache.isis.core.transaction.changetracking.events.IsisTransactionPlaceholder;
 
 import lombok.NonNull;
 
 /**
  * Responsible for collecting, then immediately publishing changes to domain objects,
- * that occur within a transaction, that is,
+ * that is,
  * notify publishing subscribers and call the various persistence call-back facets.
  *
  * @since 2.0 {index}
- * @apiNote Introduced for JPA (EclipseLink implementation). More lightweight than
- * {@link EntityChangeTracker}
  */
-public interface PersistenceLifecycleTracker {
+public interface ObjectLifecyclePublisher {
+
+    /**
+     * Independent of the persistence stack, only triggered by {@link FactoryService}
+     * and internal {@link ObjectManager}.
+     * @param domainObject - an entity or view-model
+     */
+    void onPostCreate(ManagedObject domainObject);
 
     void onPostLoad(ManagedObject entity);
 
@@ -78,7 +84,7 @@ public interface PersistenceLifecycleTracker {
                             entity,
                             property,
                             PreAndPostValue
-                                .pre(IsisTransactionPlaceholder.NEW)
+                                .pre(PropertyValuePlaceholder.NEW)
                                 .withPost(property.get(entity).getPojo()))
                     .toEntityPropertyChange(
                             timestamp,
@@ -115,7 +121,7 @@ public interface PersistenceLifecycleTracker {
                             property,
                             PreAndPostValue
                                 .pre(property.get(entity).getPojo())
-                                .withPost(IsisTransactionPlaceholder.DELETED))
+                                .withPost(PropertyValuePlaceholder.DELETED))
                     .toEntityPropertyChange(
                             timestamp,
                             user,

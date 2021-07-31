@@ -66,6 +66,9 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFa
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacet;
 import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.isis.core.metamodel.facets.properties.property.entitychangepublishing.EntityPropertyChangePublishingPolicyFacet;
+import org.apache.isis.core.metamodel.services.objectlifecycle.HasEnlistedEntityPropertyChanges;
+import org.apache.isis.core.metamodel.services.objectlifecycle.PropertyValuePlaceholder;
+import org.apache.isis.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
@@ -73,10 +76,7 @@ import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.core.transaction.changetracking.EntityChangesPublisher;
 import org.apache.isis.core.transaction.changetracking.EntityPropertyChangePublisher;
 import org.apache.isis.core.transaction.changetracking.HasEnlistedEntityChanges;
-import org.apache.isis.core.transaction.changetracking.HasEnlistedEntityPropertyChanges;
 import org.apache.isis.core.transaction.changetracking.PersistenceCallbackHandlerAbstract;
-import org.apache.isis.core.transaction.changetracking.PropertyChangeRecord;
-import org.apache.isis.core.transaction.changetracking.events.IsisTransactionPlaceholder;
 import org.apache.isis.core.transaction.events.TransactionBeforeCompletionEvent;
 
 import lombok.AccessLevel;
@@ -140,7 +140,7 @@ implements
             return;
         }
         enlistForChangeKindPublishing(adapter, EntityChangeKind.CREATE);
-        enlistForPreAndPostValuePublishing(adapter, record->record.setPreValue(IsisTransactionPlaceholder.NEW));
+        enlistForPreAndPostValuePublishing(adapter, record->record.setPreValue(PropertyValuePlaceholder.NEW));
     }
 
     private void enlistUpdatingInternal(

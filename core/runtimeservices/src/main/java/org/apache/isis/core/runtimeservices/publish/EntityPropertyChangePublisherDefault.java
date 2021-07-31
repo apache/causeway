@@ -31,8 +31,9 @@ import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.having.HasEnabling;
+import org.apache.isis.core.metamodel.services.objectlifecycle.HasEnlistedEntityPropertyChanges;
 import org.apache.isis.core.transaction.changetracking.EntityPropertyChangePublisher;
-import org.apache.isis.core.transaction.changetracking.HasEnlistedEntityPropertyChanges;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 

@@ -21,9 +21,10 @@ package org.apache.isis.core.transaction.changetracking;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.Test;
+import org.apache.isis.core.metamodel.services.objectlifecycle.PropertyValuePlaceholder;
+import org.apache.isis.core.metamodel.services.objectlifecycle.PreAndPostValue;
 
-import org.apache.isis.core.transaction.changetracking.events.IsisTransactionPlaceholder;
+import org.junit.jupiter.api.Test;
 
 import lombok.val;
 
@@ -32,7 +33,7 @@ public class PreAndPostValues_shouldAudit_Test {
 
     @Test
     public void just_created() {
-        val preAndPostValue = PreAndPostValue.pre(IsisTransactionPlaceholder.NEW)
+        val preAndPostValue = PreAndPostValue.pre(PropertyValuePlaceholder.NEW)
                 .withPost("Foo");
 
         assertTrue(preAndPostValue.shouldPublish());
@@ -40,7 +41,7 @@ public class PreAndPostValues_shouldAudit_Test {
     @Test
     public void just_deleted() {
         val preAndPostValue = PreAndPostValue.pre("Foo")
-                .withPost(IsisTransactionPlaceholder.DELETED);
+                .withPost(PropertyValuePlaceholder.DELETED);
 
         assertTrue(preAndPostValue.shouldPublish());
     }
@@ -60,8 +61,8 @@ public class PreAndPostValues_shouldAudit_Test {
     }
     @Test
     public void created_and_then_deleted() {
-        val preAndPostValue = PreAndPostValue.pre(IsisTransactionPlaceholder.NEW)
-                .withPost(IsisTransactionPlaceholder.DELETED);
+        val preAndPostValue = PreAndPostValue.pre(PropertyValuePlaceholder.NEW)
+                .withPost(PropertyValuePlaceholder.DELETED);
 
         assertFalse(preAndPostValue.shouldPublish());
     }
