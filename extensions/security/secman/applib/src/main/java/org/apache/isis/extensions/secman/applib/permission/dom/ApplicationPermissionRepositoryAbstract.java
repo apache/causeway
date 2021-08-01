@@ -18,10 +18,10 @@
  */
 package org.apache.isis.extensions.secman.applib.permission.dom;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -97,19 +97,18 @@ implements ApplicationPermissionRepository {
     }
 
     public List<ApplicationPermission> findByUserMemento(@NonNull final UserMemento userMemento) {
-        val permissions = new ArrayList<ApplicationPermission>();
-
-        // TODO: this is naive in the extreme...
-        userMemento.getRoles().stream()
+        val roleNames = userMemento.getRoles().stream()
                 .map(RoleMemento::getName)
-                .map(roleRepository::findByName)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .forEach(role -> {
-                    final List<ApplicationPermission> byRole = findByRole(role);
-                    permissions.addAll(byRole);
-                });
-        return permissions;
+                .collect(Collectors.toList());
+        return findByRoleNames(roleNames);
+    }
+
+    public List<ApplicationPermission> findByRoleNames(@NonNull final List<String> roleNames) {
+        return _Casts.uncheckedCast(
+                repository.allMatches(
+                        Query.named(this.applicationPermissionClass, ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE_NAMES)
+                                .withParameter("roleNames", roleNames))
+        );
     }
 
     private List<ApplicationPermission> findByUser(final String username) {

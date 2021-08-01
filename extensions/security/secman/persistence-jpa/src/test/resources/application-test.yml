@@ -1,0 +1,24 @@
+isis:
+  extensions:
+    secman:
+      seed:
+        admin:
+          user-name: "sven"
+          password: "pass"
+          role-name: "isis-ext-secman-admin"
+          namespace-permissions:
+            sticky: "isis"
+            additional: "mmm"
+        regular-user:
+          role-name: "isis-ext-secman-user"
+      permissionsEvaluationPolicy: "ALLOW_BEATS_VETO"
+
+
+  persistence:
+    schema:
+      auto-create-schemas: "ISISEXTENSIONSSECMAN"
+
+
+spring:
+  jpa:
+    show-sql: true

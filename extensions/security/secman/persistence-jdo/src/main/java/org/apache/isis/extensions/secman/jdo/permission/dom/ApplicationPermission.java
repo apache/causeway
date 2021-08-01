@@ -66,6 +66,11 @@ import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
                     + " WHERE (u.roles.contains(role) && u.username == :username) "
                     + "VARIABLES org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser u"),
     @Query(
+            name = org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE_NAMES,
+            value = "SELECT "
+                    + "FROM " + ApplicationPermission.FQCN
+                    + " WHERE :roleNames.contains(role.name) "),
+    @Query(
             name = org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_FEATURE,
             value = "SELECT "
                     + "FROM " + ApplicationPermission.FQCN

@@ -178,4 +178,5 @@ implements ApplicationRoleRepository {
         return user.getRoles();
     }
 
+
 }

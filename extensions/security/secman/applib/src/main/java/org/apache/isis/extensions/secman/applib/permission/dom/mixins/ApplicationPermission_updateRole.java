@@ -50,7 +50,7 @@ public class ApplicationPermission_updateRole {
     public static class DomainEvent
             extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationPermission_updateRole> {}
 
-    @Inject private ApplicationRoleRepository applicationRoleRepository;
+    @Inject ApplicationRoleRepository applicationRoleRepository;
 
     private final ApplicationPermission target;
 

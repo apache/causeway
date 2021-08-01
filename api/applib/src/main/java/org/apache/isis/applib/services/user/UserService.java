@@ -25,14 +25,16 @@ import javax.annotation.Nullable;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -75,7 +77,7 @@ public class UserService {
      */
     public static final String NOBODY = "__isis_nobody";
 
-    private final InteractionLayerTracker iInteractionLayerTracker;
+    private final Provider<InteractionLayerTracker> iInteractionLayerTrackerProvider;
     private final List<ImpersonatedUserHolder> impersonatedUserHolders;
 
 
@@ -88,7 +90,7 @@ public class UserService {
         val impersonatedUserIfAny = impersonatedUserIfAny();
         return impersonatedUserIfAny.isPresent()
                 ? impersonatedUserIfAny
-                : iInteractionLayerTracker.currentInteractionContext().map(InteractionContext::getUser);
+                : iInteractionLayerTrackerProvider.get().currentInteractionContext().map(InteractionContext::getUser);
     }
 
     /**

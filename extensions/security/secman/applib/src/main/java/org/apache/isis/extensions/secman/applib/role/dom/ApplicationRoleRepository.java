@@ -62,6 +62,4 @@ public interface ApplicationRoleRepository {
 
     void deleteRole(ApplicationRole holder);
 
-
-
 }

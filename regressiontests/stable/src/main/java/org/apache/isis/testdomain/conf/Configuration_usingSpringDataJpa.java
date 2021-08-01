@@ -26,7 +26,7 @@ import org.springframework.context.annotation.PropertySources;
 
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.isis.persistence.jpa.eclipselink.IsisModuleJpaEclipselink;
+import org.apache.isis.persistence.jpa.eclipselink.IsisModulePersistenceJpaEclipselink;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 import org.apache.isis.testdomain.jpa.springdata.SpringDataJpaTestModule;
 import org.apache.isis.testdomain.model.stereotypes.MyService;
@@ -43,7 +43,7 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 
     IsisModuleCoreRuntimeServices.class
     ,IsisModuleSecurityBypass.class
-    ,IsisModuleJpaEclipselink.class
+    ,IsisModulePersistenceJpaEclipselink.class
     //,IsisModuleTestingFixturesApplib.class
     ,KVStoreForTesting.class, // Helper for JUnit Tests
 })

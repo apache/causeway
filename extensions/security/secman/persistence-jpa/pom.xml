@@ -37,8 +37,14 @@
 
     </properties>
 
-
     <dependencies>
+
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-secman-applib</artifactId>
+			<scope>test</scope>
+			<type>test-jar</type>
+		</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
@@ -47,8 +53,7 @@
 
 		<dependency>
 			<groupId>org.apache.isis.persistence</groupId>
-			<artifactId>isis-persistence-jpa-applib</artifactId>
-			<scope>provided</scope>
+			<artifactId>isis-persistence-jpa-eclipselink</artifactId>
 		</dependency>
 
 		<dependency>
@@ -67,6 +72,13 @@
 					<artifactId>isis-persistence-jdo-applib</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.mavendeps</groupId>
+			<artifactId>isis-mavendeps-integtests</artifactId>
+			<type>pom</type>
+			<scope>test</scope>
 		</dependency>
 
     </dependencies>

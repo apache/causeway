@@ -43,23 +43,4 @@ extends ApplicationPermissionRepositoryAbstract<ApplicationPermission> {
         super(ApplicationPermission.class);
     }
 
-    // TODO NAMED_QUERY_FIND_BY_USER not working yet, using workaround  ...
-    @Override
-    public List<org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission>
-    findByUser(final @NonNull ApplicationUser user) {
-        final String username = user.getUsername();
-
-        return userRepository.findByUsername(username)
-                .map(ApplicationUser::getRoles)
-                .map(_NullSafe::stream)
-                .map(roleStream -> roleStream
-                        .map(this::findByRole)
-                        .flatMap(List::stream)
-                        .map(org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission.class::cast)
-                        .collect(Collectors.toList()))
-                .orElse(Collections.emptyList());
-    }
-
-    @Inject private ApplicationUserRepository userRepository;
-
 }

@@ -37,19 +37,23 @@
 
     </properties>
 
-
     <dependencies>
 
 		<dependency>
-			<groupId>org.apache.isis.persistence</groupId>
-			<artifactId>isis-persistence-jdo-applib</artifactId>
-			<scope>provided</scope>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-secman-applib</artifactId>
+			<scope>test</scope>
+			<type>test-jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-secman-integration</artifactId>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.persistence</groupId>
 			<artifactId>isis-persistence-jdo-datanucleus</artifactId>
-			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -59,14 +63,15 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-secman-integration</artifactId>
-			<scope>provided</scope>
+			<groupId>org.apache.isis.testing</groupId>
+			<artifactId>isis-testing-fixtures-applib</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.testing</groupId>
-			<artifactId>isis-testing-fixtures-applib</artifactId>
+			<groupId>org.apache.isis.mavendeps</groupId>
+			<artifactId>isis-mavendeps-integtests</artifactId>
+			<type>pom</type>
+			<scope>test</scope>
 		</dependency>
 
     </dependencies>

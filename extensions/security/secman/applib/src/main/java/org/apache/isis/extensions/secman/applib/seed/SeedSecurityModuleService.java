@@ -27,10 +27,12 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.core.metamodel.events.MetamodelEvent;
 import org.apache.isis.extensions.secman.applib.seed.scripts.SeedUsersAndRolesFixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -49,15 +51,12 @@ import lombok.extern.log4j.Log4j2;
 @Service
 @Named("isis.ext.secman.SeedSecurityModuleService")
 @Qualifier("Default")
+@RequiredArgsConstructor(onConstructor_ = {@Inject })
 @Log4j2
 public class SeedSecurityModuleService {
 
     private final FixtureScripts fixtureScripts;
-
-    @Inject
-    public SeedSecurityModuleService(final FixtureScripts fixtureScripts) {
-        this.fixtureScripts = fixtureScripts;
-    }
+    private final InteractionService interactionService;
 
     @EventListener(MetamodelEvent.class)
     @Order(PriorityPrecedence.MIDPOINT - 100)
@@ -68,7 +67,7 @@ public class SeedSecurityModuleService {
         if (event.isPostMetamodel()) {
         	log.info("SEED security fixtures (Users and Roles)");
 
-            fixtureScripts.run(new SeedUsersAndRolesFixtureScript());
+        	interactionService.runAnonymous(() -> fixtureScripts.run(new SeedUsersAndRolesFixtureScript()));
         }
     }
 }
