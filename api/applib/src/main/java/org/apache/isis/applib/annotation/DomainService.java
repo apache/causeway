@@ -25,8 +25,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.springframework.core.annotation.AliasFor;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -47,6 +49,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
  *
  * @since 1.x {@index}
  */
+@Named()
 @Inherited
 @Target({
         ElementType.TYPE,
@@ -71,6 +74,7 @@ public @interface DomainService {
      *
      * @see #logicalTypeName()
      */
+    @AliasFor(annotation = Named.class, attribute = "value")
     String objectType()
             default "";
 
@@ -87,6 +91,7 @@ public @interface DomainService {
      *
      * @see DomainObject#logicalTypeName()
      */
+    @AliasFor(annotation = Named.class, attribute = "value")
     String logicalTypeName()
             default "";
 
