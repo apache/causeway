@@ -87,14 +87,30 @@ public interface ApplicationPermissionRepository {
             ApplicationFeatureSort sort,
             String featureFqn);
 
+    /**
+     * Uses the {@link ApplicationRole}s associated with the {@link ApplicationUser}.
+     */
     List<ApplicationPermission> findByUser(ApplicationUser applicationUser);
 
     List<ApplicationPermission> findByRole(ApplicationRole applicationRole);
 
     /**
-     * To support impersonation by role
-     * @param user
-     * @return
+     * Uses the {@link UserMemento#getRoles() roles} held within the provided {@link UserMemento}.
+     *
+     * <p>
+     * Added to support {@link org.apache.isis.applib.services.user.ImpersonateMenu#impersonateWithRoles(String, List) impersonation by role}.
+     * </p>
+     *
+     * @see #findByRoleNames(List)
      */
     List<ApplicationPermission> findByUserMemento(UserMemento user);
+
+    /**
+     * Returns the set of permissions associated with the provided list of roles (identified by
+     * their role name).
+     *
+     * @see #findByUserMemento(UserMemento).
+     */
+    List<ApplicationPermission> findByRoleNames(List<String> roleNames);
+
 }

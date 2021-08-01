@@ -91,6 +91,7 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
     public static final String NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE = "ApplicationPermission.findByRoleAndRuleAndFeature";
     public static final String NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE_FQN = "ApplicationPermission.findByRoleAndRuleAndFeatureAndFqn";
     public static final String NAMED_QUERY_FIND_BY_USER = "ApplicationPermission.findByUser";
+    public static final String NAMED_QUERY_FIND_BY_ROLE_NAMES = "ApplicationPermission.findByRoleNames";
 
 
     @Inject transient ApplicationFeatureRepository featureRepository;
