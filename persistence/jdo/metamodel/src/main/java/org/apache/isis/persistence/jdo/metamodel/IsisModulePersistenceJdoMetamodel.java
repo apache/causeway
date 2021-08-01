@@ -16,37 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jpa.integration;
+package org.apache.isis.persistence.jdo.metamodel;
 
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
-import org.apache.isis.persistence.jpa.integration.changetracking.PersistenceMetricsServiceJpa;
-import org.apache.isis.persistence.jpa.integration.metamodel.JpaProgrammingModel;
-import org.apache.isis.persistence.jpa.integration.services.JpaSupportServiceUsingSpring;
-import org.apache.isis.persistence.jpa.integration.typeconverters.JavaAwtBufferedImageByteArrayConverter;
+import org.apache.isis.persistence.jdo.applib.IsisModulePersistenceJdoApplib;
+import org.apache.isis.persistence.jdo.metamodel.menu.JdoMetamodelMenu;
 
 @Configuration
 @Import({
-        // modules
-        IsisModuleCoreRuntime.class,
-//        IsisModulePersistenceJpaApplib.class,
+    // modules
+    IsisModuleCoreRuntime.class,
+    IsisModulePersistenceJdoApplib.class,
 
-        // @Component's
-        JpaProgrammingModel.class,
+    // @Component's
+    JdoProgrammingModel.class,
+    JdoMetamodelMenu.class,
 
-        // @Service's
-        JpaSupportServiceUsingSpring.class,
-        PersistenceMetricsServiceJpa.class,
+    // @Service's
 
 })
-@EntityScan(basePackageClasses = {
+public class IsisModulePersistenceJdoMetamodel {
 
-        // @Converter's
-        JavaAwtBufferedImageByteArrayConverter.class
-})
-public class IsisModuleJpaIntegration {
+    public static final String NAMESPACE = "isis.persistence.jdo";
 
 }

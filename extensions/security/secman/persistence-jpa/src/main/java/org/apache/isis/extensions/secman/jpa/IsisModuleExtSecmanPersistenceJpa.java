@@ -22,6 +22,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.extensions.secman.integration.IsisModuleExtSecmanIntegration;
 import org.apache.isis.extensions.secman.jpa.permission.dom.ApplicationPermission;
 import org.apache.isis.extensions.secman.jpa.permission.dom.ApplicationPermissionRepository;
 import org.apache.isis.extensions.secman.jpa.role.dom.ApplicationRole;
@@ -31,7 +32,7 @@ import org.apache.isis.extensions.secman.jpa.tenancy.dom.ApplicationTenancyRepos
 import org.apache.isis.extensions.secman.jpa.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.jpa.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.jpa.util.RegexReplacer;
-import org.apache.isis.extensions.secman.integration.IsisModuleExtSecmanIntegration;
+import org.apache.isis.persistence.jpa.eclipselink.IsisModulePersistenceJpaEclipselink;
 
 /**
  * @since 2.0 {@index}
@@ -40,6 +41,7 @@ import org.apache.isis.extensions.secman.integration.IsisModuleExtSecmanIntegrat
 @Import({
         // modules
         IsisModuleExtSecmanIntegration.class,
+        IsisModulePersistenceJpaEclipselink.class,
 
         // services
         ApplicationPermissionRepository.class,

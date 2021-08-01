@@ -18,7 +18,6 @@
  */
 package org.apache.isis.extensions.secman.applib.permission.dom;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -107,7 +106,7 @@ implements ApplicationPermissionRepository {
     public List<ApplicationPermission> findByRoleNames(@NonNull final List<String> roleNames) {
         return _Casts.uncheckedCast(
                 repository.allMatches(
-                        Query.named(this.applicationPermissionClass, ApplicationPermission.NAMED_QUERY_FIND_BY_USER)
+                        Query.named(this.applicationPermissionClass, ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE_NAMES)
                                 .withParameter("roleNames", roleNames))
         );
     }

@@ -35,7 +35,7 @@ import org.apache.isis.applib.util.ZipWriter;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.isis.persistence.jdo.applib.services.JdoSupportService;
-import org.apache.isis.persistence.jdo.metamodel.IsisModuleJdoMetamodel;
+import org.apache.isis.persistence.jdo.metamodel.IsisModulePersistenceJdoMetamodel;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
 import lombok.RequiredArgsConstructor;
@@ -53,7 +53,7 @@ import lombok.val;
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class JdoMetamodelMenu {
 
-    public final static String LOGICAL_TYPE_NAME = IsisModuleJdoMetamodel.NAMESPACE + ".JdoMetamodelMenu";
+    public final static String LOGICAL_TYPE_NAME = IsisModulePersistenceJdoMetamodel.NAMESPACE + ".JdoMetamodelMenu";
 
     final JdoSupportService jdoSupport;
     final JdoFacetContext jdoFacetContext;

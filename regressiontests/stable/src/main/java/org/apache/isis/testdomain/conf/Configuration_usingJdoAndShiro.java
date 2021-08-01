@@ -32,7 +32,7 @@ import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.extensions.secman.applib.SecmanConfiguration;
 import org.apache.isis.extensions.secman.applib.permission.spi.PermissionsEvaluationService;
 import org.apache.isis.extensions.secman.applib.permission.spi.PermissionsEvaluationServiceAllowBeatsVeto;
-import org.apache.isis.persistence.jdo.datanucleus.IsisModuleJdoDatanucleus;
+import org.apache.isis.persistence.jdo.datanucleus.IsisModulePersistenceJdoDatanucleus;
 import org.apache.isis.security.shiro.IsisModuleSecurityShiro;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
@@ -42,7 +42,7 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 @Import({
     IsisModuleCoreRuntimeServices.class,
     IsisModuleSecurityShiro.class,
-    IsisModuleJdoDatanucleus.class,
+    IsisModulePersistenceJdoDatanucleus.class,
     IsisModuleTestingFixturesApplib.class,
     KVStoreForTesting.class, // Helper for JUnit Tests
 })

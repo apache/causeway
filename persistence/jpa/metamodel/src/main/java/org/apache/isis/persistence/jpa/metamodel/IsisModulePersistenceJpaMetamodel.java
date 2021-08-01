@@ -16,11 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.spring;
+package org.apache.isis.persistence.jpa.metamodel;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
+import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
+import org.apache.isis.persistence.jpa.applib.IsisModulePersistenceJpaApplib;
 
 @Configuration
-public class IsisModuleJdoSpring {
+@Import({
+    // modules
+    IsisModuleCoreRuntime.class,
+    IsisModulePersistenceJpaApplib.class,
+
+        // TODO: to rationalise with the jpa integration module; JpaProgrammingModel defined in both.
+    // @Component's
+    // JpaProgrammingModel.class,
+    //JpaMetamodelMenu.class,
+
+    // @Service's
+
+})
+public class IsisModulePersistenceJpaMetamodel {
 
 }

@@ -61,17 +61,17 @@ import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
                   + " WHERE p.role = :role"),
     @NamedQuery(
             name = org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_USER,
-            query = "SELECT p "
-                  + "FROM ApplicationPermission p "
-                  + "INNER JOIN ApplicationRole r "
-                  + "INNER JOIN ApplicationUser u "
-                  + "WHERE u.username = :username"),
+            query = "SELECT perm "
+                  + "FROM ApplicationPermission perm "
+                  + "JOIN perm.role role "
+                  + "JOIN role.users user "
+                  + "WHERE user.username = :username"),
     @NamedQuery(
             name = org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE_NAMES,
-            query = "SELECT p "
-                  + "FROM ApplicationPermission p "
-                  + "INNER JOIN ApplicationRole r "
-                  + "WHERE r.name IN :roleNames"),
+            query = "SELECT perm "
+                  + "FROM ApplicationPermission perm "
+                  + "JOIN perm.role role "
+                  + "WHERE role.name IN :roleNames"),
     @NamedQuery(
             name = org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_FEATURE,
             query = "SELECT p "

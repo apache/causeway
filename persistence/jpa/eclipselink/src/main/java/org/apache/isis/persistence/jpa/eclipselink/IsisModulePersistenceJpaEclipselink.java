@@ -43,7 +43,7 @@ import org.springframework.transaction.jta.JtaTransactionManager;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.persistence.jpa.eclipselink.config.ElSettings;
-import org.apache.isis.persistence.jpa.integration.IsisModuleJpaIntegration;
+import org.apache.isis.persistence.jpa.integration.IsisModulePersistenceJpaIntegration;
 
 import lombok.SneakyThrows;
 import lombok.val;
@@ -61,15 +61,15 @@ import lombok.extern.log4j.Log4j2;
  */
 @Configuration
 @Import({
-    IsisModuleJpaIntegration.class
+    IsisModulePersistenceJpaIntegration.class
 })
 @EnableConfigurationProperties(ElSettings.class)
 @Log4j2
-public class IsisModuleJpaEclipselink extends JpaBaseConfiguration {
+public class IsisModulePersistenceJpaEclipselink extends JpaBaseConfiguration {
 
     @Inject private ElSettings elSettings;
 
-    protected IsisModuleJpaEclipselink(
+    protected IsisModulePersistenceJpaEclipselink(
             IsisConfiguration isisConfiguration,
             DataSource dataSource,
             JpaProperties properties,

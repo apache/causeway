@@ -26,13 +26,13 @@ import org.springframework.context.annotation.PropertySources;
 
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogJdo;
-import org.apache.isis.persistence.jdo.datanucleus.IsisModuleJdoDatanucleus;
+import org.apache.isis.persistence.jdo.datanucleus.IsisModulePersistenceJdoDatanucleus;
 
 @Configuration
 @Profile("demo-jdo")
 @Import({
     DemoModuleCommon.class,
-    IsisModuleJdoDatanucleus.class,
+    IsisModulePersistenceJdoDatanucleus.class,
     IsisModuleExtCommandLogJdo.class,
 })
 @PropertySources({

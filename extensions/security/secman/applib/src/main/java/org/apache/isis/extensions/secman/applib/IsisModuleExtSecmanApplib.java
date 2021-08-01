@@ -75,12 +75,16 @@ import org.apache.isis.extensions.secman.applib.user.dom.mixins.perms.Applicatio
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.perms.UserPermissionViewModel;
 import org.apache.isis.extensions.secman.applib.user.menu.ApplicationUserMenu;
 import org.apache.isis.extensions.secman.applib.user.menu.MeService;
+import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 
 /**
  * @since 2.0 {@index}
  */
 @Configuration
 @Import({
+        // modules
+        IsisModuleTestingFixturesApplib.class,
+
         ApplicationFeatureChoices.class,
 
         // @DomainService

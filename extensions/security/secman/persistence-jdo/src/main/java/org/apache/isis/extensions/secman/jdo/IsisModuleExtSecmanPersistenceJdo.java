@@ -21,6 +21,7 @@ package org.apache.isis.extensions.secman.jdo;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.extensions.secman.integration.IsisModuleExtSecmanIntegration;
 import org.apache.isis.extensions.secman.jdo.permission.dom.ApplicationPermission;
 import org.apache.isis.extensions.secman.jdo.permission.dom.ApplicationPermissionRepository;
 import org.apache.isis.extensions.secman.jdo.role.dom.ApplicationRole;
@@ -30,7 +31,7 @@ import org.apache.isis.extensions.secman.jdo.tenancy.dom.ApplicationTenancyRepos
 import org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.jdo.util.RegexReplacer;
-import org.apache.isis.extensions.secman.integration.IsisModuleExtSecmanIntegration;
+import org.apache.isis.persistence.jdo.datanucleus.IsisModulePersistenceJdoDatanucleus;
 
 /**
  * @since 2.0 {@index}
@@ -39,6 +40,7 @@ import org.apache.isis.extensions.secman.integration.IsisModuleExtSecmanIntegrat
 @Import({
         // modules
         IsisModuleExtSecmanIntegration.class,
+        IsisModulePersistenceJdoDatanucleus.class,
 
         // services
         ApplicationPermissionRepository.class,

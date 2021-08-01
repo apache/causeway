@@ -47,6 +47,10 @@ public class Password implements Serializable {
 
     private final String password;
 
+    public static Password of(final String password) {
+        return new Password(password);
+    }
+
     // in support of XML un-marshaling
     @SuppressWarnings("unused")
     private Password() {
