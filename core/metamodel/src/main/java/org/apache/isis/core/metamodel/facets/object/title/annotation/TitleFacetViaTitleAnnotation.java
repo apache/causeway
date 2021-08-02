@@ -27,6 +27,7 @@ import java.util.function.Predicate;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
@@ -101,7 +102,7 @@ extends TitleFacetAbstract {
 
     @Override
     public String title(final ManagedObject targetAdapter) {
-        return title(__->false, targetAdapter);
+        return title(_Predicates.alwaysFalse(), targetAdapter);
     }
 
     private String titleOf(final ManagedObject adapter) {
@@ -120,7 +121,9 @@ extends TitleFacetAbstract {
     }
 
     @Override
-    public String title(final Predicate<ManagedObject> isContextAdapter, final ManagedObject targetAdapter) {
+    public String title(
+            final Predicate<ManagedObject> skipTitlePartEvaluator,
+            final ManagedObject targetAdapter) {
         val pojo = targetAdapter.getPojo();
         if(pojo==null) {
             return "";
@@ -136,7 +139,7 @@ extends TitleFacetAbstract {
                 }
                 // ignore context, if provided
                 val titlePartAdapter = objectManager.adapt(titlePart);
-                if(isContextAdapter.test(titlePartAdapter)) {
+                if(skipTitlePartEvaluator != null && skipTitlePartEvaluator.test(titlePartAdapter)) {
                     continue;
                 }
                 String title = titleOf(titlePartAdapter);

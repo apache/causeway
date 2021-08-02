@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
@@ -64,7 +65,7 @@ public class TitleServiceDefault implements TitleService {
         if(EntityUtil.isDetachedOrRemoved(objectAdapter)) {
             return "[DETACHED]";
         } else {
-            return objectAdapter.getSpecification().getTitle(null, objectAdapter);
+            return objectAdapter.getSpecification().getTitle(_Predicates.alwaysFalse(), objectAdapter);
         }
     }
 

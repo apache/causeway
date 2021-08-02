@@ -43,15 +43,17 @@ public interface TitleFacet extends Facet {
     String title(ManagedObject targetAdapter);
 
     /**
-     * Provide a title for the target object, in the context of the context object.
+     * Provide a title for the target object, possibly abbreviated (according to supplied predicate)
      *
      * <p>
-     * For example, if the title is of an object within a parented collection, then the
-     * context object would be the parent.  Thus, the title might be shortened so that it does not
-     * needlessly incorporate the title of the parent (context) object.
+     * One reason why the title might be abbreviated is if it is being evaluated in the context of another object,
+     * for example as a child object of a parented collection of some parent object. In such a context, the
+     * title might be shortened so that it does not needlessly incorporate the title of the parent (context)
+     * object.
+     * </p>
      */
     default String title(
-            final Predicate<ManagedObject> isContextAdapter,
+            final Predicate<ManagedObject> skipTitlePartEvaluator,
             final ManagedObject targetAdapter) {
         //Default implementation that simply delegates to {@link TitleFacet#title(ManagedObject)}.
         return title(targetAdapter);
