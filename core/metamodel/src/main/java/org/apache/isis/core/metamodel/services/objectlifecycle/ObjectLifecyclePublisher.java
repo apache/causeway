@@ -79,17 +79,17 @@ public interface ObjectLifecyclePublisher {
                 .streamProperties(MixedIn.EXCLUDED)
                 .filter(property->!EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property))
                 .map(property->
-                    PropertyChangeRecord
-                    .of(
-                            entity,
-                            property,
-                            PreAndPostValue
-                                .pre(PropertyValuePlaceholder.NEW)
-                                .withPost(property.get(entity).getPojo()))
-                    .toEntityPropertyChange(
-                            timestamp,
-                            user,
-                            txId)
+                        PropertyChangeRecord
+                        .of(
+                                entity,
+                                property,
+                                PreAndPostValue
+                                    .pre(PropertyValuePlaceholder.NEW)
+                                    .withPost(ManagedObject.pojoOf(property.get(entity))))
+                        .toEntityPropertyChange(
+                                timestamp,
+                                user,
+                                txId)
                 )
                 .collect(Can.toCan());
 
@@ -115,17 +115,17 @@ public interface ObjectLifecyclePublisher {
                 .streamProperties(MixedIn.EXCLUDED)
                 .filter(property->!EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property))
                 .map(property->
-                    PropertyChangeRecord
-                    .of(
-                            entity,
-                            property,
-                            PreAndPostValue
-                                .pre(property.get(entity).getPojo())
-                                .withPost(PropertyValuePlaceholder.DELETED))
-                    .toEntityPropertyChange(
-                            timestamp,
-                            user,
-                            txId)
+                        PropertyChangeRecord
+                        .of(
+                                entity,
+                                property,
+                                PreAndPostValue
+                                    .pre(ManagedObject.pojoOf(property.get(entity)))
+                                    .withPost(PropertyValuePlaceholder.DELETED))
+                        .toEntityPropertyChange(
+                                timestamp,
+                                user,
+                                txId)
                 )
                 .collect(Can.toCan());
 

@@ -153,6 +153,8 @@ implements OneToOneAssociation {
                 propertyOrCollectionAccessorFacet.getProperty(ownerAdapter, interactionInitiatedBy);
 
         if (referencedPojo == null) {
+            // TODO: perhaps this should instead return ManagedObject.empty(getSpecification()) ?
+            //  however, that's a far-reaching change to make.
             return null;
         }
 
@@ -161,7 +163,10 @@ implements OneToOneAssociation {
 
     @Override
     public boolean isEmpty(final ManagedObject ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
-        return get(ownerAdapter, interactionInitiatedBy) == null;
+        final ManagedObject referencedObject = get(ownerAdapter, interactionInitiatedBy);
+        // TODO: perhaps this should instead check if it returns an empty ManagedObject.
+        //  however, that's a far-reaching change to make.
+        return referencedObject == null;
     }
 
     // -- ACCESS (set)
