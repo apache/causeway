@@ -77,10 +77,9 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import lombok.NonNull;
 import lombok.val;
-
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 
 public abstract class ScalarPanelAbstract
@@ -560,6 +559,8 @@ implements ScalarModelSubscriber {
     public void onUpdate(
             final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
 
+        _Probe.errOut("onUpdate");
+
         if(getModel().isParameter()) {
             target.appendJavaScript(
                     String.format("Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PARAMETER, '%s')", getMarkupId()));
@@ -570,6 +571,8 @@ implements ScalarModelSubscriber {
     @Override
     public void onError(
             final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
+
+        _Probe.errOut("onError");
 
     }
 

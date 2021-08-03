@@ -20,6 +20,8 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.datepicker;
 
 import java.util.Locale;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -34,9 +36,9 @@ import org.apache.wicket.util.convert.IConverter;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.ui.components.scalars.DateConverter;
 
-import de.agilecoders.wicket.core.util.Attributes;
-
 import static de.agilecoders.wicket.jquery.JQuery.$;
+
+import de.agilecoders.wicket.core.util.Attributes;
 
 /**
  * A text input field that is used as a date or date/time picker.
@@ -94,6 +96,18 @@ public class TextFieldWithDateTimePicker<T> extends TextField<T> implements ICon
         config.readonly(!this.isEnabled());
 
         this.config = config;
+
+        //XXX ISIS-2834 as a side-effect ...
+        add(new OnChangeAjaxBehavior() {
+            private static final long serialVersionUID = 1L;
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                // ... org.apache.isis.viewer.wicket.ui.components.scalars.datepicker.TextFieldWithDateTimePicker
+                // which extends org.apache.wicket.markup.html.form.FormComponent
+                // triggers FormComponent#updateModel(), which otherwise would not be called
+                // (which is totally strange behavior)
+            }
+        });
     }
 
     private String convertToMomentJsFormat(String javaDateTimeFormat) {
@@ -154,6 +168,7 @@ public class TextFieldWithDateTimePicker<T> extends TextField<T> implements ICon
 
         response.render(OnDomReadyHeaderItem.forScript(createScript(config)));
     }
+
 
     /**
      * creates the initializer script.
