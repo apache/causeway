@@ -27,6 +27,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facets.properties.property.entitychangepublishing.EntityPropertyChangePublishingPolicyFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 
 import lombok.NonNull;
@@ -85,7 +86,7 @@ public interface ObjectLifecyclePublisher {
                                 property,
                                 PreAndPostValue
                                     .pre(PropertyValuePlaceholder.NEW)
-                                    .withPost(ManagedObject.pojoOf(property.get(entity))))
+                                    .withPost(ManagedObjects.UnwrapUtil.single(property.get(entity))))
                         .toEntityPropertyChange(
                                 timestamp,
                                 user,
@@ -120,7 +121,7 @@ public interface ObjectLifecyclePublisher {
                                 entity,
                                 property,
                                 PreAndPostValue
-                                    .pre(ManagedObject.pojoOf(property.get(entity)))
+                                    .pre(ManagedObjects.UnwrapUtil.single(property.get(entity)))
                                     .withPost(PropertyValuePlaceholder.DELETED))
                         .toEntityPropertyChange(
                                 timestamp,

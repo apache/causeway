@@ -51,13 +51,6 @@ import lombok.val;
  */
 public interface ManagedObject {
 
-    @Nullable
-    static Object pojoOf(ManagedObject managedObject) {
-        return managedObject != null
-                ? managedObject.getPojo()
-                : null;
-    }
-
     /**
      * Returns the specification that details the structure (meta-model) of this object.
      */
