@@ -559,8 +559,6 @@ implements ScalarModelSubscriber {
     public void onUpdate(
             final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
 
-        _Probe.errOut("onUpdate");
-
         if(getModel().isParameter()) {
             target.appendJavaScript(
                     String.format("Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PARAMETER, '%s')", getMarkupId()));
@@ -571,9 +569,6 @@ implements ScalarModelSubscriber {
     @Override
     public void onError(
             final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
-
-        _Probe.errOut("onError");
-
     }
 
 
