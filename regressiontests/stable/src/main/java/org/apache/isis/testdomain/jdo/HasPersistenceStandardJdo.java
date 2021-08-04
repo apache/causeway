@@ -16,17 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.publishing.jpa;
+package org.apache.isis.testdomain.jdo;
 
 import org.apache.isis.core.metamodel.facets.object.entity.PersistenceStandard;
-import org.apache.isis.testdomain.publishing.HasPersistenceStandard;
+import org.apache.isis.testdomain.HasPersistenceStandard;
 
-public interface HasPersistenceStandardJpa
+public interface HasPersistenceStandardJdo
 extends HasPersistenceStandard {
 
     @Override
     default PersistenceStandard getPersistenceStandard() {
-        return PersistenceStandard.JPA;
+        return PersistenceStandard.JDO;
     }
 
 }

@@ -16,12 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.publishing;
+package org.apache.isis.testdomain.publishing.stubs;
 
 import javax.inject.Inject;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.ChangeScenario;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.VerificationStage;
@@ -33,6 +30,8 @@ import static org.apache.isis.testdomain.publishing.subscriber.EntityChangesSubs
 import static org.apache.isis.testdomain.publishing.subscriber.EntityChangesSubscriberForTesting.getLoaded;
 import static org.apache.isis.testdomain.publishing.subscriber.EntityChangesSubscriberForTesting.getModified;
 import static org.apache.isis.testdomain.publishing.subscriber.EntityChangesSubscriberForTesting.getUpdated;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class EntityPublishingTestAbstract
 extends PublishingTestAbstract {

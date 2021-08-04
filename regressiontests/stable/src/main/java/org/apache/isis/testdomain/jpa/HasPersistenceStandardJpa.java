@@ -16,27 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.publishing;
+package org.apache.isis.testdomain.jpa;
 
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facets.object.entity.PersistenceStandard;
+import org.apache.isis.testdomain.HasPersistenceStandard;
 
-public interface HasPersistenceStandard {
+public interface HasPersistenceStandardJpa
+extends HasPersistenceStandard {
 
-    PersistenceStandard getPersistenceStandard();
-
-    default String formatPersistenceStandardSpecificLowerCase(final String format) {
-        return String.format(
-                format,
-                getPersistenceStandard().name().toLowerCase());
+    @Override
+    default PersistenceStandard getPersistenceStandard() {
+        return PersistenceStandard.JPA;
     }
-
-    default String formatPersistenceStandardSpecificCapitalize(final String format) {
-        return String.format(
-                format,
-                _Strings.capitalize(getPersistenceStandard().name().toLowerCase()));
-    }
-
-
 
 }

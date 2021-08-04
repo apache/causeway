@@ -25,10 +25,11 @@ import org.springframework.test.context.TestPropertySource;
 
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
-import org.apache.isis.testdomain.publishing.PropertyPublishingTestAbstract;
+import org.apache.isis.testdomain.jpa.HasPersistenceStandardJpa;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryJpa;
 import org.apache.isis.testdomain.publishing.conf.Configuration_usingEntityPropertyChangePublishing;
+import org.apache.isis.testdomain.publishing.stubs.PropertyPublishingTestAbstract;
 
 @SpringBootTest(
         classes = {

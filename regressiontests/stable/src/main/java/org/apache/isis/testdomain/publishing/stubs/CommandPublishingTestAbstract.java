@@ -16,14 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.publishing;
+package org.apache.isis.testdomain.publishing.stubs;
 
 import java.util.Objects;
 import java.util.UUID;
 
 import javax.inject.Inject;
-
-import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.commons.collections.Can;
@@ -36,6 +34,8 @@ import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.Verif
 import org.apache.isis.testdomain.publishing.subscriber.CommandSubscriberForTesting;
 import org.apache.isis.testdomain.util.CollectionAssertions;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
+
+import static org.junit.jupiter.api.Assertions.fail;
 
 import lombok.val;
 

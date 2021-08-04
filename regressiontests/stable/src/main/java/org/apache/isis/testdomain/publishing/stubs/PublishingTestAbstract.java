@@ -1,4 +1,4 @@
-package org.apache.isis.testdomain.publishing;
+package org.apache.isis.testdomain.publishing.stubs;
 
 import java.util.Collections;
 import java.util.List;
@@ -7,6 +7,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
+import org.apache.isis.testdomain.HasPersistenceStandard;
+import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.ChangeScenario;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.VerificationStage;
 
