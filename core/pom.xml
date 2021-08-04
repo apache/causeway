@@ -112,7 +112,7 @@
 		<docx4j.version>8.3.1</docx4j.version>
 
 		<easymock.version>4.3</easymock.version>
-		<error_prone_annotations.version>2.8.0</error_prone_annotations.version>
+		<error_prone_annotations.version>2.8.1</error_prone_annotations.version>
 
 		<findbugs-annotations.version>3.0.1u2</findbugs-annotations.version>
 
