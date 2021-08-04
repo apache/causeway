@@ -21,6 +21,7 @@ package org.apache.isis.testdomain.publishing.jpa;
 import javax.inject.Inject;
 
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 
 import org.apache.isis.core.config.presets.IsisPresets;
@@ -28,34 +29,34 @@ import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.jpa.HasPersistenceStandardJpa;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryJpa;
-import org.apache.isis.testdomain.publishing.conf.Configuration_usingCommandPublishing;
-import org.apache.isis.testdomain.publishing.stubs.CommandPublishingTestAbstract;
+import org.apache.isis.testdomain.publishing.conf.Configuration_usingEntityChangesPublishing;
+import org.apache.isis.testdomain.publishing.stubs.EntityPublishingTestAbstract;
 
 @SpringBootTest(
         classes = {
                 Configuration_usingJpa.class,
-                Configuration_usingCommandPublishing.class,
+                Configuration_usingEntityChangesPublishing.class,
                 PublishingTestFactoryJpa.class,
                 //XrayEnable.class
         },
         properties = {
-                "logging.level.org.apache.isis.applib.services.publishing.log.CommandLogger=DEBUG",
-                "logging.level.org.springframework.orm.jpa.*=DEBUG",
-                "logging.level.org.apache.isis.testdomain.util.rest.KVStoreForTesting=DEBUG",
-                "logging.level.org.apache.isis.core.runtimeservices.session.IsisInteractionFactoryDefault=DEBUG"
+                "logging.level.org.apache.isis.applib.services.publishing.log.EntityChangesLogger=DEBUG",
+                "logging.level.org.apache.isis.core.runtimeservices.session.IsisInteractionFactoryDefault=DEBUG",
+                "logging.level.org.apache.isis.testdomain.util.kv.KVStoreForTesting=DEBUG",
         })
 @TestPropertySource({
     IsisPresets.UseLog4j2Test
 })
-class JpaCommandPublishingTest
-extends CommandPublishingTestAbstract
+@DirtiesContext
+class JpaEntityPublishingTest
+extends EntityPublishingTestAbstract
 implements HasPersistenceStandardJpa {
 
     @Inject private PublishingTestFactoryJpa testFactory;
 
     @Override
     protected PublishingTestFactoryAbstract getTestFactory() {
-        return testFactory;
+        return null; // Entity Changes Tracking' currently not supported for JPA
     }
 
 }

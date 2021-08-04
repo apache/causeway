@@ -294,6 +294,8 @@
 		<module>stable-logging</module>
 		<module>stable-persistence-jdo</module>
 		<module>stable-persistence-jpa</module>
+<!-- 		<module>stable-publishing-jdo</module> code is still incubating -->
+		<module>stable-publishing-jpa</module>
 		<module>stable-rest</module>
 <!-- 		<module>incubating</module> -->
 	</modules>

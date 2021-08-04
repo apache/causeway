@@ -21,6 +21,7 @@ package org.apache.isis.testdomain.publishing.jpa;
 import javax.inject.Inject;
 
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 
 import org.apache.isis.core.config.presets.IsisPresets;
@@ -46,6 +47,7 @@ import org.apache.isis.testdomain.publishing.stubs.LifecycleEventPublishingTestA
 @TestPropertySource({
     IsisPresets.UseLog4j2Test
 })
+@DirtiesContext
 class JpaLifecycleEventPublishingTest
 extends LifecycleEventPublishingTestAbstract
 implements HasPersistenceStandardJpa {

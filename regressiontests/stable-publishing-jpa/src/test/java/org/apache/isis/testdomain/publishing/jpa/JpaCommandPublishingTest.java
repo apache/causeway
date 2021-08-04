@@ -21,6 +21,7 @@ package org.apache.isis.testdomain.publishing.jpa;
 import javax.inject.Inject;
 
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 
 import org.apache.isis.core.config.presets.IsisPresets;
@@ -28,26 +29,28 @@ import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.jpa.HasPersistenceStandardJpa;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryJpa;
-import org.apache.isis.testdomain.publishing.conf.Configuration_usingEntityPropertyChangePublishing;
-import org.apache.isis.testdomain.publishing.stubs.PropertyPublishingTestAbstract;
+import org.apache.isis.testdomain.publishing.conf.Configuration_usingCommandPublishing;
+import org.apache.isis.testdomain.publishing.stubs.CommandPublishingTestAbstract;
 
 @SpringBootTest(
         classes = {
                 Configuration_usingJpa.class,
-                Configuration_usingEntityPropertyChangePublishing.class,
+                Configuration_usingCommandPublishing.class,
                 PublishingTestFactoryJpa.class,
                 //XrayEnable.class
         },
         properties = {
-                "logging.level.org.apache.isis.applib.services.publishing.log.EntityPropertyChangeLogger=DEBUG",
+                "logging.level.org.apache.isis.applib.services.publishing.log.CommandLogger=DEBUG",
                 "logging.level.org.springframework.orm.jpa.*=DEBUG",
                 "logging.level.org.apache.isis.testdomain.util.rest.KVStoreForTesting=DEBUG",
+                "logging.level.org.apache.isis.core.runtimeservices.session.IsisInteractionFactoryDefault=DEBUG"
         })
 @TestPropertySource({
     IsisPresets.UseLog4j2Test
 })
-class JpaPropertyPublishingTest
-extends PropertyPublishingTestAbstract
+@DirtiesContext
+class JpaCommandPublishingTest
+extends CommandPublishingTestAbstract
 implements HasPersistenceStandardJpa {
 
     @Inject private PublishingTestFactoryJpa testFactory;
