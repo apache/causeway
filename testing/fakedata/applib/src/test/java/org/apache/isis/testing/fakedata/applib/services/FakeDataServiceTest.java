@@ -64,9 +64,7 @@ public class FakeDataServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        fakeDataService = new FakeDataService();
-        fakeDataService.repositoryService = mockRepositoryService;
-        fakeDataService.clockService = mockClockService;
+        fakeDataService = new FakeDataService(mockClockService, mockRepositoryService);
         fakeDataService.init();
 
         final VirtualClock virtualClock = VirtualClock.frozenAt(Instant.now()); 

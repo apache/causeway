@@ -79,7 +79,7 @@ public class KVStoreForTesting {
 
     public void append(final Object caller, final String keyStr, final Object value) {
         val canRef = get(caller, keyStr);
-        if(canRef.isEmpty()) {
+        if(! canRef.isPresent()) {
             put(caller, keyStr, Can.ofSingleton(value));
         } else {
             @SuppressWarnings("unchecked")
@@ -91,7 +91,7 @@ public class KVStoreForTesting {
     @SuppressWarnings("unchecked")
     public Can<Object> getAll(final Class<?> callerType, final String keyStr) {
         val canRef = get(callerType, keyStr);
-        return canRef.isEmpty()
+        return ! canRef.isPresent()
             ? Can.empty()
             : ((Can<Object>)canRef.get());
     }

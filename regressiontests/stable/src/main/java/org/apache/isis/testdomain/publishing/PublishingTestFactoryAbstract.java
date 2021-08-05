@@ -220,7 +220,7 @@ public abstract class PublishingTestFactoryAbstract {
             final Runnable given,
             final BiConsumer<ChangeScenario, VerificationStage> verifier) {
 
-        var dynamicTests = Can.<DynamicTest>empty();
+        Can<DynamicTest> dynamicTests = Can.<DynamicTest>empty();
 
         if(includeProgrammatic) {
             dynamicTests = dynamicTests
