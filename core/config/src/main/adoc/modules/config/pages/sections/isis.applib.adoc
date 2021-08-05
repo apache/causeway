@@ -17,7 +17,48 @@ isis.applib.annotation. +
 action-layout.css-class-fa. +
 patterns
 
-| 
+|  [add.*:fa-plus-square, all. +
+*:fa-list, approve. +
+*:fa-thumbs-o-up, assign. +
+*:fa-hand-o-right, calculate. +
+*:fa-calculator, cancel. +
+*:fa-stop, categorise. +
+*:fa-folder-open-o, change. +
+*:fa-edit, clear.*:fa-remove, copy. +
+*:fa-copy, create. +
+*:fa-plus, decline. +
+*:fa-thumbs-o-down, delete. +
+*:fa-trash, discard. +
+*:fa-trash-o, download. +
+*:fa-download, edit. +
+*:fa-edit, execute. +
+*:fa-bolt, export. +
+*:fa-download, first. +
+*:fa-star, find. +
+*:fa-search, install. +
+*:fa-wrench, list. +
+*:fa-list, import. +
+*:fa-upload, lookup. +
+*:fa-search, maintain. +
+*:fa-edit, move.*:fa-exchange, new. +
+*:fa-plus, next. +
+*:fa-step-forward, pause. +
+*:fa-pause, previous. +
+*:fa-step-backward, refresh. +
+*:fa-sync, remove. +
+*:fa-minus-square, renew. +
+*:fa-redo, reset.*:fa-redo, resume. +
+*:fa-play, run.*:fa-bolt, save. +
+*:fa-floppy-o, search. +
+*:fa-search, stop. +
+*:fa-stop, suspend. +
+*:fa-pause, switch. +
+*:fa-exchange, terminate. +
+*:fa-stop, update. +
+*:fa-edit, upload. +
+*:fa-upload, verify. +
+*:fa-check-circle, view. +
+*:fa-search]
 | Provides a mapping of patterns to font-awesome CSS classes, where the pattern is used to match against the name of the action method in order to determine a CSS class to use, for example on the action's menu icon if rendered by the Wicket viewer.
 
 Providing a default set of patterns encourages a common set of verbs to be used.
@@ -26,16 +67,38 @@ The font awesome class for individual actions can be overridden using ``ActionLa
 
 
 |
+[[isis.applib.annotation.action-layout.css-class-fa.patterns-as-map]]
+isis.applib.annotation. +
+action-layout.css-class-fa. +
+patterns-as-map
+
+| 
+| null
+
+
+|
 [[isis.applib.annotation.action-layout.css-class.patterns]]
 isis.applib.annotation. +
 action-layout.css-class.patterns
 
-| 
+|  [delete.*:btn-danger, discard. +
+*:btn-warning, remove. +
+*:btn-warning]
 | Provides a mapping of patterns to CSS classes, where the pattern is used to match against the name of the action method in order to determine a CSS class to use, for example on the action's button if rendered by the Wicket viewer.
 
 Providing a default set of patterns encourages a common set of verbs to be used.
 
 The CSS class for individual actions can be overridden using ``ActionLayout#cssClass()``.
+
+
+|
+[[isis.applib.annotation.action-layout.css-class.patterns-as-map]]
+isis.applib.annotation. +
+action-layout.css-class. +
+patterns-as-map
+
+| 
+| null
 
 
 |

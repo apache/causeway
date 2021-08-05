@@ -106,20 +106,20 @@ For example, the xref:docs:starters:simpleapp.adoc[simpleapp starter app] projec
 ----
 @SpringBootApplication
 @Import({
-    AppManifest.class,                                          // <1>
+    AppManifest.class,                                          // <.>
 })
 public class SimpleApp
             extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
-        IsisPresets.prototyping();                              // <2>
+        IsisPresets.prototyping();                              // <.>
         SpringApplication.run(
                 new Class[] { SimpleApp.class }, args);
     }
 }
 ----
-<1> references the `AppManifest`, discussed below.
-<2> specifies prototyping mode.
+<.> references the `AppManifest`, discussed below.
+<.> specifies prototyping mode.
 This enables actions marked for prototyping to become available, useful during the early stages of development.
 
 In turn, the "app manifest" (the name has been retained from Apache Isis v1.x) is the top-level Spring `@Configuration`.

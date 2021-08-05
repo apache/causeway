@@ -1,18 +1,26 @@
 ** xref:refguide:config:sections/isis.applib.adoc[Applib]
-** xref:refguide:config:sections/isis.core.config.adoc[Core Configuration]
-** xref:refguide:config:sections/isis.core.meta-model.adoc[Core MetaModel]
-** xref:refguide:config:sections/isis.core.meta-model.introspector.adoc[Core MetaModel Introspection]
-** xref:refguide:config:sections/isis.core.meta-model.validator.adoc[MetaModel Validator]
-** xref:refguide:config:sections/isis.core.runtime.adoc[Core Runtime]
-** xref:refguide:config:sections/isis.core.runtime-services.adoc[Core Runtime Services]
-** xref:refguide:config:sections/isis.persistence.schema.adoc[Core Persistence Schema]
+** Core
+*** xref:refguide:config:sections/isis.core.config.adoc[Core Configuration]
+*** xref:refguide:config:sections/isis.core.meta-model.adoc[Core MetaModel]
+*** xref:refguide:config:sections/isis.core.meta-model.introspector.adoc[Core MetaModel Introspection]
+*** xref:refguide:config:sections/isis.core.meta-model.validator.adoc[MetaModel Validator]
+*** xref:refguide:config:sections/isis.core.runtime.adoc[Core Runtime]
+*** xref:refguide:config:sections/isis.core.runtime-services.adoc[Core Runtime Services]
+** Persistence
+*** xref:refguide:config:sections/isis.persistence.schema.adoc[Core Persistence Schema]
+*** xref:refguide:config:sections/datanucleus.adoc[DataNucleus Configuration]
+*** xref:refguide:config:sections/eclipselink.adoc[Eclipselink Configuration]
+
+** Viewers
+*** xref:refguide:config:sections/isis.viewer.restfulobjects.adoc[Restful Objects Viewer]
+**** xref:refguide:config:sections/resteasy.adoc[RestEasy Configuration]
+*** xref:refguide:config:sections/isis.viewer.wicket.adoc[Wicket Viewer]
+
+** Security
 ** xref:refguide:config:sections/isis.security.shiro.adoc[Shiro Security Implementation]
+** xref:refguide:config:sections/isis.security.keycloak.adoc[Keycloak Security Implementation]
 ** xref:refguide:config:sections/isis.security.spring.adoc[Spring Security Implementation]
-** xref:refguide:config:sections/isis.viewer.restfulobjects.adoc[Restful Objects Viewer]
-** xref:refguide:config:sections/isis.viewer.wicket.adoc[Wicket Viewer]
-** xref:refguide:config:sections/datanucleus.adoc[DataNucleus Configuration]
-** xref:refguide:config:sections/eclipselink.adoc[Eclipselink Configuration]
-** xref:refguide:config:sections/resteasy.adoc[RestEasy Configuration]
+
 ** xref:refguide:config:sections/isis.extensions.adoc[Extensions]
 ** xref:refguide:config:sections/isis.value-types.adoc[Value types]
 ** xref:refguide:config:sections/isis.testing.adoc[Testing]

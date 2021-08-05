@@ -1,0 +1,50 @@
+= Keycloak Security Implementation
+:page-role: -toc -narrow
+
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+include::../section-hooks/isis.security.keycloak~pre.adoc[]
+
+[cols="3a,2a,5a", options="header"]
+|===
+|Property
+|Default
+|Description
+|
+[[isis.security.keycloak.base-url]]
+isis.security.keycloak.base-url
+
+| 
+| The base URL for the keycloak server.
+
+For example, if running a keycloak using Docker container, such as:
+
+....
+         docker run -p 9090:8080 \             -e KEYCLOAK_USER=admin \             -e KEYCLOAK_PASSWORD=admin \             quay.io/keycloak/keycloak:14.0.0     
+....
+
+, then the URL would be "http://localhost:9090/auth".
+
+
+|
+[[isis.security.keycloak.login-success-url]]
+isis.security.keycloak. +
+login-success-url
+
+|  /wicket
+| Specifies where users will be redirected after authenticating successfully if they have not visited a secured page prior to authenticating or \{@code alwaysUse} is true.
+
+
+|
+[[isis.security.keycloak.realm]]
+isis.security.keycloak.realm
+
+| 
+| The name of the realm for the Apache Isis application, as configured in Keycloak.
+
+
+
+|===
+
+include::../section-hooks/isis.security.keycloak~post.adoc[]
