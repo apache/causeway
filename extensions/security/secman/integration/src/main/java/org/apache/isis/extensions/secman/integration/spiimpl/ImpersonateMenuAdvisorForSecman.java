@@ -7,10 +7,10 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.user.ImpersonateMenuAdvisor;
 import org.apache.isis.applib.services.user.UserService;
@@ -66,6 +66,17 @@ public class ImpersonateMenuAdvisorForSecman implements ImpersonateMenuAdvisor {
         return applicationRoles
                 .stream().map(ApplicationRole::getName)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public String multiTenancyTokenFor(String username) {
+        if(username == null) {
+            return null;
+        }
+        val applicationUser =
+                applicationUserRepository.findByUsername(username)
+                        .orElseThrow(RuntimeException::new);
+        return applicationUser.getAtPath();
     }
 
 }

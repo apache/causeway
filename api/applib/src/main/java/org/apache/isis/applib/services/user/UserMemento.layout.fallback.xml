@@ -53,7 +53,7 @@ under the License.
                 </bs3:tab>
             </bs3:tabGroup>
             <cpt:fieldSet name="Details" id="details"/>
-            <cpt:fieldSet name="Authentication" id="authentication"/>
+            <cpt:fieldSet name="Security" id="security"/>
         </bs3:col>
         <bs3:col span="6">
             <cpt:collection id="roles"/>

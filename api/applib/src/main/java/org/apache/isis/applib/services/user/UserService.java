@@ -83,7 +83,7 @@ public class UserService {
 
     /**
      * Returns the details about the current user, either the &quot;effective&quot; user (if being
-     * {@link #impersonateUser(String, List) impersonated}) otherwise the &quot;real&quot; user (as obtained from
+     * {@link #impersonateUser(String, List, String) impersonated}) otherwise the &quot;real&quot; user (as obtained from
      * the {@link InteractionContext} of the current thread).
      */
     public Optional<UserMemento> currentUser() {
@@ -138,7 +138,7 @@ public class UserService {
      *
      * @see #currentUser()
      * @see #supportsImpersonation()
-     * @see #impersonateUser(String, List)
+     * @see #impersonateUser(String, List, String)
      * @see #stopImpersonating()
      */
     public boolean isImpersonating() {
@@ -157,7 +157,7 @@ public class UserService {
      *     This means that the result of this call varies on a request-by-request basis.
      * </p>
      *
-     * @see #impersonateUser(String, List)
+     * @see #impersonateUser(String, List, String)
      * @see #isImpersonating()
      * @see #stopImpersonating()
      *
@@ -199,17 +199,20 @@ public class UserService {
      * @see #supportsImpersonation()
      * @see #isImpersonating()
      * @see #stopImpersonating()
-     *
      * @param userName - the name of the user to be impersonated
      * @param roles - the collection of roles for the impersonated user to have.
+     * @param multiTenancyToken
      */
-    public void impersonateUser(final String userName, final List<String> roles) {
+    public void impersonateUser(
+            final String userName,
+            final List<String> roles,
+            final String multiTenancyToken) {
         impersonatingHolder().ifPresent(x ->
-                {
-                    val userMemento = UserMemento.ofNameAndRoleNames(userName, roles)
-                            .withImpersonating(true);
-                    x.setUserMemento(userMemento);
-                }
+                x.setUserMemento(
+                    UserMemento.ofNameAndRoleNames(userName, roles)
+                        .withImpersonating(true)
+                        .withMultiTenancyToken(multiTenancyToken)
+                )
         );
     }
 
@@ -225,11 +228,11 @@ public class UserService {
      *
      * <p>
      *     Intended to be called at some point after
-     *     {@link #impersonateUser(String, List)} would have been called.
+     *     {@link #impersonateUser(String, List, String)} would have been called.
      * </p>
      *
      * @see #supportsImpersonation()
-     * @see #impersonateUser(String, List)
+     * @see #impersonateUser(String, List, String)
      * @see #isImpersonating()
      */
     public void stopImpersonating() {

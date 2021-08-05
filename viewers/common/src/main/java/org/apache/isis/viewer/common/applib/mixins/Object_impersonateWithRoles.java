@@ -37,7 +37,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
- * Same as {@link ImpersonateMenu#impersonateWithRoles(String, List)},
+ * Same as {@link ImpersonateMenu#impersonateWithRoles(String, List, String)},
  * but implemented as a mixin so that can be invoked while accessing an object.
  *
  * @since 2.0 {@index}
@@ -67,8 +67,9 @@ public class Object_impersonateWithRoles {
 
     public Object act(
             final String userName,
-            final List<String> roleNames) {
-        impersonateMenu.impersonateWithRoles(userName, roleNames);
+            final List<String> roleNames,
+            final String multiTenancyToken) {
+        impersonateMenu.impersonateWithRoles(userName, roleNames, multiTenancyToken);
         return holder;
     }
 
@@ -94,14 +95,16 @@ public class Object_impersonateWithRoles {
         return null;
     }
 
-    @MemberSupport public List<String> choices1Act(
-            final String userName) {
+    @MemberSupport public List<String> choices1Act(final String userName) {
         return impersonateMenu.choices1ImpersonateWithRoles(userName);
     }
 
-    @MemberSupport public List<String> default1Act(
-            final String userName) {
+    @MemberSupport public List<String> default1Act(final String userName) {
         return impersonateMenu.default1ImpersonateWithRoles(userName);
+    }
+
+    @MemberSupport public String default2Act(final String userName, final List<String> roleNames) {
+        return impersonateMenu.default2ImpersonateWithRoles(userName, roleNames);
     }
 
     @Inject ImpersonateMenu impersonateMenu;

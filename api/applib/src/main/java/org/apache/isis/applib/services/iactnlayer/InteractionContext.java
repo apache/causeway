@@ -28,10 +28,14 @@ import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.user.UserMemento;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import lombok.With;
 
 /**
@@ -39,7 +43,12 @@ import lombok.With;
  *
  * @since 2.0 {@index}
  */
-@lombok.Value @Builder
+@Getter
+@lombok.experimental.FieldDefaults(makeFinal=false, level= AccessLevel.PRIVATE)
+@AllArgsConstructor
+@ToString
+@EqualsAndHashCode
+@Builder
 @RequiredArgsConstructor
 public class InteractionContext implements Serializable {
 
@@ -66,11 +75,12 @@ public class InteractionContext implements Serializable {
     /**
      * The (programmatically) simulated (or actual) user.
      *
-     * @apiNote immutable, allows an {@link Interaction} to (logically) run with its
+     * @apiNote practically immutable, allows an {@link Interaction} to (logically) run with its
      * own simulated (or actual) user
+     *
      */
     @With @Getter @Builder.Default
-    @NonNull UserMemento user = UserMemento.system();
+    @NonNull /*final*/ UserMemento user = UserMemento.system();
 
     /**
      * The (programmatically) simulated (or actual) clock.
@@ -79,13 +89,13 @@ public class InteractionContext implements Serializable {
      * own simulated (or actual) clock
      */
     @With @Getter @Builder.Default
-    @NonNull VirtualClock clock = VirtualClock.system();
+    @NonNull final VirtualClock clock = VirtualClock.system();
 
     @With @Getter @Builder.Default
-    @NonNull Locale locale = Locale.getDefault();
+    @NonNull final Locale locale = Locale.getDefault();
 
     @With @Getter @Builder.Default
-    @NonNull TimeZone timeZone = TimeZone.getDefault();
+    @NonNull final TimeZone timeZone = TimeZone.getDefault();
 
 
     /**
@@ -146,5 +156,16 @@ public class InteractionContext implements Serializable {
         return mappers.reduce(t -> t, (a,b) -> a.andThen(b)::apply);
     }
 
-
+    /**
+     * For internal usage, not API.
+     *
+     * <p>
+     *     Instead, use {@link #withUser(UserMemento)}, which honours the value semantics of this class.
+     * </p>
+     *
+     * @param user
+     */
+    void replaceUser(UserMemento user) {
+        this.user = user;
+    }
 }

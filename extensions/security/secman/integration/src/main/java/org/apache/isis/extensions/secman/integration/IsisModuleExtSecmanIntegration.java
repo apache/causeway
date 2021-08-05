@@ -26,6 +26,7 @@ import org.apache.isis.extensions.secman.integration.authorizor.AuthorizorSecman
 import org.apache.isis.extensions.secman.integration.facets.TenantedAuthorizationPostProcessor;
 import org.apache.isis.extensions.secman.integration.spiimpl.ImpersonateMenuAdvisorForSecman;
 import org.apache.isis.extensions.secman.integration.spiimpl.TableColumnVisibilityServiceForSecman;
+import org.apache.isis.extensions.secman.integration.usermementorefiner.UserMementoRefinerFromApplicationUser;
 import org.apache.isis.extensions.secman.integration.userreg.UserRegistrationServiceForSecman;
 
 /**
@@ -42,6 +43,8 @@ import org.apache.isis.extensions.secman.integration.userreg.UserRegistrationSer
         TableColumnVisibilityServiceForSecman.class,
         ImpersonateMenuAdvisorForSecman.class, //not activated by default yet
         UserRegistrationServiceForSecman.class,
+
+        UserMementoRefinerFromApplicationUser.class,
 
 })
 public class IsisModuleExtSecmanIntegration {

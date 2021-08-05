@@ -183,7 +183,7 @@ public class UserMemento implements Serializable {
      * where the validity of the session is defined by headers in the request.
      */
     @Property
-    @PropertyLayout(fieldSetId = "authentication", sequence = "1")
+    @PropertyLayout(fieldSetId = "security", sequence = "1")
     @Getter @Builder.Default @With(onMethod_ = {@Programmatic})
     @NonNull
     AuthenticationSource authenticationSource = AuthenticationSource.DEFAULT;
@@ -205,9 +205,23 @@ public class UserMemento implements Serializable {
 
 
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(fieldSetId = "authentication", sequence = "2")
+    @PropertyLayout(fieldSetId = "security", sequence = "2")
     @Getter @Builder.Default @With(onMethod_ = {@Programmatic})
     boolean impersonating = false;
+
+
+    /**
+     * Indicates which tenancy (or tenancies) this user has access to.
+     *
+     * <p>
+     * The interpretation of this token is implementation-specific.
+     * </p>
+     */
+    @Property(optionality = Optionality.OPTIONAL)
+    @PropertyLayout(fieldSetId = "security", sequence = "3")
+    @Getter @With(onMethod_ = {@Programmatic})
+    @Nullable
+    String multiTenancyToken;
 
 
     private static final String DEFAULT_AUTH_VALID_CODE = "";
@@ -282,6 +296,7 @@ public class UserMemento implements Serializable {
                 .avatarUrl(avatarUrl)
                 .impersonating(impersonating)
                 .realName(realName)
+                .multiTenancyToken(multiTenancyToken)
                 .roles(roles);
     }
 
