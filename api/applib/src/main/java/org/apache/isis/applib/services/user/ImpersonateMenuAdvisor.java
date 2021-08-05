@@ -3,7 +3,7 @@ package org.apache.isis.applib.services.user;
 import java.util.List;
 
 /**
- * Enables {@link ImpersonateMenu#impersonateWithRoles(String, List)}, to provides choices for user and roles.
+ * Enables {@link ImpersonateMenu#impersonateWithRoles(String, List, String)}, to provides choices for user and roles.
  *
  * <p>
  *     This will result in the simpler {@link ImpersonateMenu#impersonate(String)} (which simply allows a
@@ -20,7 +20,7 @@ public interface ImpersonateMenuAdvisor {
      * <p>
      *     The {@link ImpersonateMenu} uses this to provide a choices
      *     (drop-down) for the username (string) argument of
-     *     {@link ImpersonateMenu#impersonateWithRoles(String, List)}.
+     *     {@link ImpersonateMenu#impersonateWithRoles(String, List, String)}.
      * </p>
      */
     List<String> allUserNames();
@@ -31,7 +31,7 @@ public interface ImpersonateMenuAdvisor {
      * <p>
      *     The {@link ImpersonateMenu} uses this to provide a choices
      *     (drop-down) for the rolenames (list) argument of
-     *     {@link ImpersonateMenu#impersonateWithRoles(String, List)}.
+     *     {@link ImpersonateMenu#impersonateWithRoles(String, List, String)}.
      * </p>
      */
     List<String> allRoleNames();
@@ -42,9 +42,20 @@ public interface ImpersonateMenuAdvisor {
      * <p>
      *     The {@link ImpersonateMenu} uses this to select the defaults
      *     for the rolenames (list) argument of
-     *     {@link ImpersonateMenu#impersonateWithRoles(String, List)}.
+     *     {@link ImpersonateMenu#impersonateWithRoles(String, List, String)}.
      * </p>
      */
     List<String> roleNamesFor(final String username);
+
+    /**
+     * Returns the multi-tenancy token of the specified username.
+     *
+     * <p>
+     *     The {@link ImpersonateMenu} uses this to select the defaults
+     *     for the rolenames (list) argument of
+     *     {@link ImpersonateMenu#impersonateWithRoles(String, List, String)}.
+     * </p>
+     */
+    String multiTenancyTokenFor(final String username);
 
 }

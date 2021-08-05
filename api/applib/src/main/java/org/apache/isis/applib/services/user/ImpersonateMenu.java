@@ -81,7 +81,7 @@ public class ImpersonateMenu {
             final String userName) {
 
         // TODO: should use an SPI for each configured viewer to add in its own role if necessary.
-        this.userService.impersonateUser(userName, Collections.singletonList("org.apache.isis.viewer.wicket.roles.USER"));
+        this.userService.impersonateUser(userName, Collections.singletonList("org.apache.isis.viewer.wicket.roles.USER"), null);
         this.messageService.informUser("Now impersonating " + userName);
     }
     @MemberSupport public boolean hideImpersonate() {
@@ -106,9 +106,9 @@ public class ImpersonateMenu {
      * an {@link ImpersonateMenuAdvisor} implementation to provide the
      * choices.
      * </p>
-     *
-     * @param userName
+     *  @param userName
      * @param roleNames
+     * @param multiTenancyToken
      */
     @Action(
             domainEvent = ImpersonateWithRolesDomainEvent.class,
@@ -120,14 +120,15 @@ public class ImpersonateMenu {
     @ActionLayout(sequence = "100.2", cssClassFa = "fa-mask")
     public void impersonateWithRoles(
             final String userName,
-            final List<String> roleNames) {
+            final List<String> roleNames,
+            final String multiTenancyToken) {
 
         // TODO: should use an SPI for each configured viewer to add in its own role if necessary.
-        val roleNames2 = new ArrayList<>(roleNames);
-        if(!roleNames2.contains("org.apache.isis.viewer.wicket.roles.USER")) {
-            roleNames2.add("org.apache.isis.viewer.wicket.roles.USER");
+        val roleNamesCopy = new ArrayList<>(roleNames);
+        if(!roleNamesCopy.contains("org.apache.isis.viewer.wicket.roles.USER")) {
+            roleNamesCopy.add("org.apache.isis.viewer.wicket.roles.USER");
         }
-        this.userService.impersonateUser(userName, roleNames2);
+        this.userService.impersonateUser(userName, roleNamesCopy, multiTenancyToken);
         this.messageService.informUser("Now impersonating " + userName);
     }
     @MemberSupport public boolean hideImpersonateWithRoles() {
@@ -144,6 +145,9 @@ public class ImpersonateMenu {
     }
     @MemberSupport public List<String> default1ImpersonateWithRoles(final String userName) {
         return impersonateMenuAdvisor().roleNamesFor(userName);
+    }
+    @MemberSupport public String default2ImpersonateWithRoles(final String userName, final List<String> roleNames) {
+        return impersonateMenuAdvisor().multiTenancyTokenFor(userName);
     }
 
     private ImpersonateMenuAdvisor impersonateMenuAdvisor() {

@@ -98,7 +98,7 @@ public interface ApplicationPermissionRepository {
      * Uses the {@link UserMemento#getRoles() roles} held within the provided {@link UserMemento}.
      *
      * <p>
-     * Added to support {@link org.apache.isis.applib.services.user.ImpersonateMenu#impersonateWithRoles(String, List) impersonation by role}.
+     * Added to support {@link org.apache.isis.applib.services.user.ImpersonateMenu#impersonateWithRoles(String, List, String) impersonation by role}.
      * </p>
      *
      * @see #findByRoleNames(List)
