@@ -83,57 +83,36 @@ public interface VirtualClock extends Serializable {
     }
 
     /**
-     * Returns a ticking clock set to virtual time {@link java.time.LocalDate} {@code virtualNow}
+     * Returns a ticking clock set to virtual time.
      */
     static VirtualClock nowAt(@NonNull java.time.LocalDate virtualNow) {
         return nowAt(Instant.from(virtualNow));
     }
 
-    /**
-     * Returns a ticking clock set to virtual time {@link java.time.LocalDateTime} {@code virtualNow}
-     */
     static VirtualClock nowAt(@NonNull java.time.LocalDateTime virtualNow) {
         return nowAt(Instant.from(virtualNow));
     }
 
-    /**
-     * Returns a ticking clock set to virtual time {@link java.time.OffsetDateTime} {@code virtualNow}
-     */
     static VirtualClock nowAt(@NonNull java.time.OffsetDateTime virtualNow) {
         return nowAt(Instant.from(virtualNow));
     }
 
-    /**
-     * Returns a ticking clock set to virtual time {@link java.time.ZonedDateTime} {@code virtualNow}
-     */
     static VirtualClock nowAt(@NonNull java.time.ZonedDateTime virtualNow) {
         return nowAt(Instant.from(virtualNow));
     }
 
-    /**
-     * Returns a ticking clock set to virtual time {@link java.util.Date} {@code virtualNow}
-     */
     static VirtualClock nowAt(@NonNull java.util.Date virtualNow) {
         return nowAt(virtualNow.toInstant());
     }
 
-    /**
-     * Returns a ticking clock set to virtual time {@link org.joda.time.LocalDate} {@code virtualNow}
-     */
     static VirtualClock nowAt(@NonNull org.joda.time.LocalDate virtualNow) {
         return nowAt(virtualNow.toDate());
     }
 
-    /**
-     * Returns a ticking clock set to virtual time {@link org.joda.time.LocalDateTime} {@code virtualNow}
-     */
     static VirtualClock nowAt(@NonNull org.joda.time.LocalDateTime virtualNow) {
         return nowAt(virtualNow.toDate());
     }
 
-    /**
-     * Returns a ticking clock set to virtual time {@link org.joda.time.DateTime} {@code virtualNow}
-     */
     static VirtualClock nowAt(@NonNull org.joda.time.DateTime virtualNow) {
         return nowAt(virtualNow.toDate());
     }
@@ -146,58 +125,34 @@ public interface VirtualClock extends Serializable {
         return new VirtualClock_frozen(frozenAt);
     }
 
-    /**
-     * Always returns the time {@link java.time.LocalDate} as given by {@code frozenAt}
-     */
     static VirtualClock frozenAt(@NonNull java.time.LocalDate frozenAt) {
         return frozenAt(Instant.from(frozenAt));
     }
 
-    /**
-     * Always returns the time {@link java.time.LocalDateTime} as given by {@code frozenAt}
-     */
     static VirtualClock frozenAt(@NonNull java.time.LocalDateTime frozenAt) {
         return frozenAt(Instant.from(frozenAt));
     }
 
-    /**
-     * Always returns the time {@link java.time.OffsetDateTime} as given by {@code frozenAt}
-     */
     static VirtualClock frozenAt(@NonNull java.time.OffsetDateTime frozenAt) {
         return frozenAt(Instant.from(frozenAt));
     }
 
-    /**
-     * Always returns the time {@link java.time.ZonedDateTime} as given by {@code frozenAt}
-     */
     static VirtualClock frozenAt(@NonNull java.time.ZonedDateTime frozenAt) {
         return frozenAt(Instant.from(frozenAt));
     }
 
-    /**
-     * Always returns the time {@link java.util.Date} as given by {@code frozenAt}
-     */
     static VirtualClock frozenAt(@NonNull java.util.Date frozenAt) {
         return frozenAt(frozenAt.toInstant());
     }
 
-    /**
-     * Always returns the time {@link org.joda.time.LocalDate} as given by {@code frozenAt}
-     */
     static VirtualClock frozenAt(@NonNull org.joda.time.LocalDate frozenAt) {
         return frozenAt(frozenAt.toDate());
     }
 
-    /**
-     * Always returns the time {@link org.joda.time.LocalDateTime} as given by {@code frozenAt}
-     */
     static VirtualClock frozenAt(@NonNull org.joda.time.LocalDateTime frozenAt) {
         return frozenAt(frozenAt.toDate());
     }
 
-    /**
-     * Always returns the time {@link org.joda.time.DateTime} as given by {@code frozenAt}
-     */
     static VirtualClock frozenAt(@NonNull org.joda.time.DateTime frozenAt) {
         return frozenAt(frozenAt.toDate());
     }

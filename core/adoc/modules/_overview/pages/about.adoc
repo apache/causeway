@@ -524,7 +524,7 @@ org.projectlombok:lombok:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:testing:index/fakedata/applib/IsisModuleTestingFakeDataApplib.adoc[IsisModuleTestingFakeDataApplib], xref:refguide:testing:index/fakedata/applib/services/AbstractRandomValueGenerator.adoc[AbstractRandomValueGenerator], xref:refguide:testing:index/fakedata/applib/services/Addresses.adoc[Addresses], xref:refguide:testing:index/fakedata/applib/services/BigDecimals.adoc[BigDecimals], xref:refguide:testing:index/fakedata/applib/services/BigIntegers.adoc[BigIntegers], xref:refguide:testing:index/fakedata/applib/services/Books.adoc[Books], xref:refguide:testing:index/fakedata/applib/services/Booleans.adoc[Booleans], xref:refguide:testing:index/fakedata/applib/services/Bytes.adoc[Bytes], xref:refguide:testing:index/fakedata/applib/services/Chars.adoc[Chars], xref:refguide:testing:index/fakedata/applib/services/Collections.adoc[Collections], xref:refguide:testing:index/fakedata/applib/services/Comms.adoc[Comms], xref:refguide:testing:index/fakedata/applib/services/CreditCards.adoc[CreditCards], xref:refguide:testing:index/fakedata/applib/services/Doubles.adoc[Doubles], xref:refguide:testing:index/fakedata/applib/services/Enums.adoc[Enums], xref:refguide:testing:index/fakedata/applib/services/FakeDataService.adoc[FakeDataService], xref:refguide:testing:index/fakedata/applib/services/Floats.adoc[Floats], xref:refguide:testing:index/fakedata/applib/services/Integers.adoc[Integers], xref:refguide:testing:index/fakedata/applib/services/IsisBlobs.adoc[IsisBlobs], xref:refguide:testing:index/fakedata/applib/services/IsisClobs.adoc[IsisClobs], xref:refguide:testing:index/fakedata/applib/services/IsisPasswords.adoc[IsisPasswords], xref:refguide:testing:index/fakedata/applib/services/J8DateTimes.adoc[J8DateTimes], xref:refguide:testing:index/fakedata/applib/services/J8LocalDates.adoc[J8LocalDates], xref:refguide:testing:index/fakedata/applib/services/J8Periods.adoc[J8Periods], xref:refguide:testing:index/fakedata/applib/services/JavaSqlDates.adoc[JavaSqlDates], xref:refguide:testing:index/fakedata/applib/services/JavaSqlTimestamps.adoc[JavaSqlTimestamps], xref:refguide:testing:index/fakedata/applib/services/JavaUtilDates.adoc[JavaUtilDates], xref:refguide:testing:index/fakedata/applib/services/JodaDateTimes.adoc[JodaDateTimes], xref:refguide:testing:index/fakedata/applib/services/JodaLocalDates.adoc[JodaLocalDates], xref:refguide:testing:index/fakedata/applib/services/JodaPeriods.adoc[JodaPeriods], xref:refguide:testing:index/fakedata/applib/services/Longs.adoc[Longs], xref:refguide:testing:index/fakedata/applib/services/Lorem.adoc[Lorem], xref:refguide:testing:index/fakedata/applib/services/Names.adoc[Names], xref:refguide:testing:index/fakedata/applib/services/Shorts.adoc[Shorts], xref:refguide:testing:index/fakedata/applib/services/Strings.adoc[Strings], xref:refguide:testing:index/fakedata/applib/services/Urls.adoc[Urls], xref:refguide:testing:index/fakedata/applib/services/Uuids.adoc[Uuids]
+xref:refguide:testing:index/fakedata/applib/IsisModuleTestingFakeDataApplib.adoc[IsisModuleTestingFakeDataApplib], xref:refguide:testing:index/fakedata/applib/services/AbstractRandomValueGenerator.adoc[AbstractRandomValueGenerator], xref:refguide:testing:index/fakedata/applib/services/Addresses.adoc[Addresses], xref:refguide:testing:index/fakedata/applib/services/BigDecimals.adoc[BigDecimals], xref:refguide:testing:index/fakedata/applib/services/BigIntegers.adoc[BigIntegers], xref:refguide:testing:index/fakedata/applib/services/Books.adoc[Books], xref:refguide:testing:index/fakedata/applib/services/Booleans.adoc[Booleans], xref:refguide:testing:index/fakedata/applib/services/Bytes.adoc[Bytes], xref:refguide:testing:index/fakedata/applib/services/Chars.adoc[Chars], xref:refguide:testing:index/fakedata/applib/services/Collections.adoc[Collections], xref:refguide:testing:index/fakedata/applib/services/Comms.adoc[Comms], xref:refguide:testing:index/fakedata/applib/services/CreditCards.adoc[CreditCards], xref:refguide:testing:index/fakedata/applib/services/Doubles.adoc[Doubles], xref:refguide:testing:index/fakedata/applib/services/Enums.adoc[Enums], xref:refguide:testing:index/fakedata/applib/services/FakeDataService.adoc[FakeDataService], xref:refguide:testing:index/fakedata/applib/services/Floats.adoc[Floats], xref:refguide:testing:index/fakedata/applib/services/Integers.adoc[Integers], xref:refguide:testing:index/fakedata/applib/services/IsisBlobs.adoc[IsisBlobs], xref:refguide:testing:index/fakedata/applib/services/IsisClobs.adoc[IsisClobs], xref:refguide:testing:index/fakedata/applib/services/IsisPasswords.adoc[IsisPasswords], xref:refguide:testing:index/fakedata/applib/services/JavaSqlDates.adoc[JavaSqlDates], xref:refguide:testing:index/fakedata/applib/services/JavaSqlTimestamps.adoc[JavaSqlTimestamps], xref:refguide:testing:index/fakedata/applib/services/JavaTimeDateTimes.adoc[JavaTimeDateTimes], xref:refguide:testing:index/fakedata/applib/services/JavaTimeLocalDates.adoc[JavaTimeLocalDates], xref:refguide:testing:index/fakedata/applib/services/JavaTimePeriods.adoc[JavaTimePeriods], xref:refguide:testing:index/fakedata/applib/services/JavaUtilDates.adoc[JavaUtilDates], xref:refguide:testing:index/fakedata/applib/services/JodaDateTimes.adoc[JodaDateTimes], xref:refguide:testing:index/fakedata/applib/services/JodaLocalDates.adoc[JodaLocalDates], xref:refguide:testing:index/fakedata/applib/services/JodaPeriods.adoc[JodaPeriods], xref:refguide:testing:index/fakedata/applib/services/Longs.adoc[Longs], xref:refguide:testing:index/fakedata/applib/services/Lorem.adoc[Lorem], xref:refguide:testing:index/fakedata/applib/services/Names.adoc[Names], xref:refguide:testing:index/fakedata/applib/services/Shorts.adoc[Shorts], xref:refguide:testing:index/fakedata/applib/services/Strings.adoc[Strings], xref:refguide:testing:index/fakedata/applib/services/Urls.adoc[Urls], xref:refguide:testing:index/fakedata/applib/services/Uuids.adoc[Uuids]
 ****
 
 |Apache Isis Tst - FakeData (fixtures)
@@ -597,7 +597,7 @@ org.apache.isis.testing:isis-testing-integtestsupport-applib:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:testing:index/fixtures/applib/IsisIntegrationTestAbstractWithFixtures.adoc[IsisIntegrationTestAbstractWithFixtures], xref:refguide:testing:index/fixtures/applib/events/FixturesInstalledEvent.adoc[FixturesInstalledEvent], xref:refguide:testing:index/fixtures/applib/events/FixturesInstallingEvent.adoc[FixturesInstallingEvent], xref:refguide:testing:index/fixtures/applib/fixturescripts/ExecutionParameters.adoc[ExecutionParameters], xref:refguide:testing:index/fixtures/applib/fixturescripts/ExecutionParametersDefault.adoc[ExecutionParametersDefault], xref:refguide:testing:index/fixtures/applib/fixturescripts/ExecutionParametersService.adoc[ExecutionParametersService], xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureResult.adoc[FixtureResult], xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureResultList.adoc[FixtureResultList], xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript], xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScriptWithExecutionStrategy.adoc[FixtureScriptWithExecutionStrategy], xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScripts.adoc[FixtureScripts], xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScriptsSpecification.adoc[FixtureScriptsSpecification], xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScriptsSpecificationProviderAutoConfiguration.adoc[FixtureScriptsSpecificationProviderAutoConfiguration], xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScripts~MultipleExecutionStrategy.adoc[FixtureScripts.MultipleExecutionStrategy], xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScripts~NonPersistedObjectsStrategy.adoc[FixtureScripts.NonPersistedObjectsStrategy], xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript~ExecutionContext.adoc[FixtureScript.ExecutionContext], xref:refguide:testing:index/fixtures/applib/modules/ModuleWithFixtures.adoc[ModuleWithFixtures], xref:refguide:testing:index/fixtures/applib/modules/ModuleWithFixturesService.adoc[ModuleWithFixturesService], xref:refguide:testing:index/fixtures/applib/personas/BuilderScriptAbstract.adoc[BuilderScriptAbstract], xref:refguide:testing:index/fixtures/applib/personas/BuilderScriptWithResult.adoc[BuilderScriptWithResult], xref:refguide:testing:index/fixtures/applib/personas/BuilderScriptWithoutResult.adoc[BuilderScriptWithoutResult], xref:refguide:testing:index/fixtures/applib/personas/PersonaWithBuilderScript.adoc[PersonaWithBuilderScript], xref:refguide:testing:index/fixtures/applib/personas/PersonaWithFinder.adoc[PersonaWithFinder], xref:refguide:testing:index/fixtures/applib/services/InitialFixtureScriptsInstaller.adoc[InitialFixtureScriptsInstaller], xref:refguide:testing:index/fixtures/applib/setup/PersonaEnumPersistAll.adoc[PersonaEnumPersistAll], xref:refguide:testing:index/fixtures/applib/teardown/jdo/TeardownFixtureJdoAbstract.adoc[TeardownFixtureJdoAbstract]
+xref:refguide:testing:index/fixtures/applib/IsisIntegrationTestAbstractWithFixtures.adoc[IsisIntegrationTestAbstractWithFixtures], xref:refguide:testing:index/fixtures/applib/IsisModuleTestingFixturesApplib.adoc[IsisModuleTestingFixturesApplib], xref:refguide:testing:index/fixtures/applib/events/FixturesInstalledEvent.adoc[FixturesInstalledEvent], xref:refguide:testing:index/fixtures/applib/events/FixturesInstallingEvent.adoc[FixturesInstallingEvent], xref:refguide:testing:index/fixtures/applib/fixturescripts/ExecutionParameters.adoc[ExecutionParameters], xref:refguide:testing:index/fixtures/applib/fixturescripts/ExecutionParametersDefault.adoc[ExecutionParametersDefault], xref:refguide:testing:index/fixtures/applib/fixturescripts/ExecutionParametersService.adoc[ExecutionParametersService], xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureResult.adoc[FixtureResult], xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureResultList.adoc[FixtureResultList], xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript], xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScriptWithExecutionStrategy.adoc[FixtureScriptWithExecutionStrategy], xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScripts.adoc[FixtureScripts], xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScriptsSpecification.adoc[FixtureScriptsSpecification], xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScriptsSpecificationProviderAutoConfiguration.adoc[FixtureScriptsSpecificationProviderAutoConfiguration], xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScripts~MultipleExecutionStrategy.adoc[FixtureScripts.MultipleExecutionStrategy], xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScripts~NonPersistedObjectsStrategy.adoc[FixtureScripts.NonPersistedObjectsStrategy], xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript~ExecutionContext.adoc[FixtureScript.ExecutionContext], xref:refguide:testing:index/fixtures/applib/modules/ModuleWithFixtures.adoc[ModuleWithFixtures], xref:refguide:testing:index/fixtures/applib/modules/ModuleWithFixturesService.adoc[ModuleWithFixturesService], xref:refguide:testing:index/fixtures/applib/personas/BuilderScriptAbstract.adoc[BuilderScriptAbstract], xref:refguide:testing:index/fixtures/applib/personas/BuilderScriptWithResult.adoc[BuilderScriptWithResult], xref:refguide:testing:index/fixtures/applib/personas/BuilderScriptWithoutResult.adoc[BuilderScriptWithoutResult], xref:refguide:testing:index/fixtures/applib/personas/PersonaWithBuilderScript.adoc[PersonaWithBuilderScript], xref:refguide:testing:index/fixtures/applib/personas/PersonaWithFinder.adoc[PersonaWithFinder], xref:refguide:testing:index/fixtures/applib/services/InitialFixtureScriptsInstaller.adoc[InitialFixtureScriptsInstaller], xref:refguide:testing:index/fixtures/applib/setup/PersonaEnumPersistAll.adoc[PersonaEnumPersistAll], xref:refguide:testing:index/fixtures/applib/teardown/jdo/TeardownFixtureJdoAbstract.adoc[TeardownFixtureJdoAbstract]
 ****
 
 |Apache Isis Tst - H2 Console (parent)
@@ -693,6 +693,7 @@ com.h2database:h2:jar:<managed> +
 org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
 org.apache.isis.core:isis-core-runtimeservices:jar:<managed> +
 org.apache.isis.security:isis-security-bypass:jar:<managed> +
+org.apache.isis.testing:isis-testing-fakedata-applib:jar:<managed> +
 org.hamcrest:hamcrest-library:jar:<managed> +
 org.hsqldb:hsqldb:jar:<managed> +
 org.slf4j:slf4j-api:jar:<managed> +
@@ -702,7 +703,7 @@ org.springframework.boot:spring-boot-starter-test:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:testing:index/integtestsupport/applib/ExceptionRecognizerTranslate.adoc[ExceptionRecognizerTranslate], xref:refguide:testing:index/integtestsupport/applib/IsisIntegrationTestAbstract.adoc[IsisIntegrationTestAbstract], xref:refguide:testing:index/integtestsupport/applib/IsisInteractionHandler.adoc[IsisInteractionHandler], xref:refguide:testing:index/integtestsupport/applib/ThrowableMatchers.adoc[ThrowableMatchers], xref:refguide:testing:index/integtestsupport/applib/swagger/SwaggerExporter.adoc[SwaggerExporter], xref:refguide:testing:index/integtestsupport/applib/validate/DomainModelValidator.adoc[DomainModelValidator]
+xref:refguide:testing:index/integtestsupport/applib/ExceptionRecognizerTranslate.adoc[ExceptionRecognizerTranslate], xref:refguide:testing:index/integtestsupport/applib/IsisIntegrationTestAbstract.adoc[IsisIntegrationTestAbstract], xref:refguide:testing:index/integtestsupport/applib/IsisInteractionHandler.adoc[IsisInteractionHandler], xref:refguide:testing:index/integtestsupport/applib/IsisModuleTestingIntegTestSupportApplib.adoc[IsisModuleTestingIntegTestSupportApplib], xref:refguide:testing:index/integtestsupport/applib/swagger/SwaggerExporter.adoc[SwaggerExporter], xref:refguide:testing:index/integtestsupport/applib/validate/DomainModelValidator.adoc[DomainModelValidator]
 ****
 
 |Apache Isis Tst - Spec/Cucumber (parent)
@@ -728,6 +729,8 @@ Directory: /testing/specsupport/applib
 io.cucumber:cucumber-java:jar:<managed> +
 io.cucumber:cucumber-junit-platform-engine:jar:<managed> +
 io.cucumber:cucumber-spring:jar:<managed> +
+org.apache.isis.testing:isis-testing-fakedata-applib:jar:<managed> +
+org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed> +
 org.apache.isis.testing:isis-testing-integtestsupport-applib:jar:<managed> +
 org.junit.jupiter:junit-jupiter-api:jar:<managed> +
 ****
@@ -771,7 +774,7 @@ org.springframework.boot:spring-boot-starter-test:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:testing:index/unittestsupport/applib/IsisModuleTestingUnitTestSupportApplib.adoc[IsisModuleTestingUnitTestSupportApplib], xref:refguide:testing:index/unittestsupport/applib/assertions/Asserting.adoc[Asserting], xref:refguide:testing:index/unittestsupport/applib/dom/AbstractApplyToAllContractTest.adoc[AbstractApplyToAllContractTest], xref:refguide:testing:index/unittestsupport/applib/dom/bidir/BidirectionalRelationshipContractTestAbstract.adoc[BidirectionalRelationshipContractTestAbstract], xref:refguide:testing:index/unittestsupport/applib/dom/bidir/Instantiator.adoc[Instantiator], xref:refguide:testing:index/unittestsupport/applib/dom/bidir/InstantiatorSimple.adoc[InstantiatorSimple], xref:refguide:testing:index/unittestsupport/applib/dom/bidir/Instantiators.adoc[Instantiators], xref:refguide:testing:index/unittestsupport/applib/dom/comparable/ComparableContractTest_compareTo.adoc[ComparableContractTest_compareTo], xref:refguide:testing:index/unittestsupport/applib/dom/comparable/ComparableContractTester.adoc[ComparableContractTester], xref:refguide:testing:index/unittestsupport/applib/dom/pojo/DataForApplib.adoc[DataForApplib], xref:refguide:testing:index/unittestsupport/applib/dom/pojo/DataForBean.adoc[DataForBean], xref:refguide:testing:index/unittestsupport/applib/dom/pojo/DataForJavaTime.adoc[DataForJavaTime], xref:refguide:testing:index/unittestsupport/applib/dom/pojo/DataForJodaTime.adoc[DataForJodaTime], xref:refguide:testing:index/unittestsupport/applib/dom/pojo/PojoTester.adoc[PojoTester], xref:refguide:testing:index/unittestsupport/applib/dom/privatecons/PrivateConstructorTester.adoc[PrivateConstructorTester], xref:refguide:testing:index/unittestsupport/applib/dom/repo/FinderInteraction.adoc[FinderInteraction], xref:refguide:testing:index/unittestsupport/applib/dom/sortedsets/SortedSetsContractTestAbstract.adoc[SortedSetsContractTestAbstract], xref:refguide:testing:index/unittestsupport/applib/dom/value/ValueTypeContractTestAbstract.adoc[ValueTypeContractTestAbstract], xref:refguide:testing:index/unittestsupport/applib/io/IndentPrinter.adoc[IndentPrinter], xref:refguide:testing:index/unittestsupport/applib/io/NullPrintStream.adoc[NullPrintStream], xref:refguide:testing:index/unittestsupport/applib/jmocking/Imposterisers.adoc[Imposterisers], xref:refguide:testing:index/unittestsupport/applib/jmocking/InjectIntoJMockAction.adoc[InjectIntoJMockAction], xref:refguide:testing:index/unittestsupport/applib/jmocking/IsisActions.adoc[IsisActions], xref:refguide:testing:index/unittestsupport/applib/jmocking/JMockActions.adoc[JMockActions], xref:refguide:testing:index/unittestsupport/applib/jmocking/JUnitRuleMockery2.adoc[JUnitRuleMockery2], xref:refguide:testing:index/unittestsupport/applib/jmocking/PostponedAction.adoc[PostponedAction], xref:refguide:testing:index/unittestsupport/applib/matchers/IsisMatchers.adoc[IsisMatchers], xref:refguide:testing:index/unittestsupport/applib/matchers/JaxbMatchers.adoc[JaxbMatchers], xref:refguide:testing:index/unittestsupport/applib/soap/SoapEndpointPublishingRule.adoc[SoapEndpointPublishingRule], xref:refguide:testing:index/unittestsupport/applib/soap/SoapEndpointSpec.adoc[SoapEndpointSpec], xref:refguide:testing:index/unittestsupport/applib/util/CollectUtils.adoc[CollectUtils], xref:refguide:testing:index/unittestsupport/applib/util/FileUtils.adoc[FileUtils], xref:refguide:testing:index/unittestsupport/applib/util/InjectUtils.adoc[InjectUtils], xref:refguide:testing:index/unittestsupport/applib/util/ReflectUtils.adoc[ReflectUtils], xref:refguide:testing:index/unittestsupport/applib/util/StringUtils.adoc[StringUtils]
+xref:refguide:testing:index/unittestsupport/applib/IsisModuleTestingUnitTestSupportApplib.adoc[IsisModuleTestingUnitTestSupportApplib], xref:refguide:testing:index/unittestsupport/applib/assertions/Asserting.adoc[Asserting], xref:refguide:testing:index/unittestsupport/applib/dom/AbstractApplyToAllContractTest.adoc[AbstractApplyToAllContractTest], xref:refguide:testing:index/unittestsupport/applib/dom/comparable/ComparableContractTest_compareTo.adoc[ComparableContractTest_compareTo], xref:refguide:testing:index/unittestsupport/applib/dom/comparable/ComparableContractTester.adoc[ComparableContractTester], xref:refguide:testing:index/unittestsupport/applib/dom/pojo/PojoTester.adoc[PojoTester], xref:refguide:testing:index/unittestsupport/applib/dom/sortedsets/SortedSetsContractTestAbstract.adoc[SortedSetsContractTestAbstract], xref:refguide:testing:index/unittestsupport/applib/dom/value/ValueTypeContractTestAbstract.adoc[ValueTypeContractTestAbstract], xref:refguide:testing:index/unittestsupport/applib/io/IndentPrinter.adoc[IndentPrinter], xref:refguide:testing:index/unittestsupport/applib/io/NullPrintStream.adoc[NullPrintStream], xref:refguide:testing:index/unittestsupport/applib/jmocking/Imposterisers.adoc[Imposterisers], xref:refguide:testing:index/unittestsupport/applib/jmocking/InjectIntoJMockAction.adoc[InjectIntoJMockAction], xref:refguide:testing:index/unittestsupport/applib/jmocking/IsisActions.adoc[IsisActions], xref:refguide:testing:index/unittestsupport/applib/jmocking/JMockActions.adoc[JMockActions], xref:refguide:testing:index/unittestsupport/applib/jmocking/JUnitRuleMockery2.adoc[JUnitRuleMockery2], xref:refguide:testing:index/unittestsupport/applib/jmocking/PostponedAction.adoc[PostponedAction], xref:refguide:testing:index/unittestsupport/applib/matchers/ClassMatchers.adoc[ClassMatchers], xref:refguide:testing:index/unittestsupport/applib/matchers/ComparableMatchers.adoc[ComparableMatchers], xref:refguide:testing:index/unittestsupport/applib/matchers/FileMatchers.adoc[FileMatchers], xref:refguide:testing:index/unittestsupport/applib/matchers/JaxbMatchers.adoc[JaxbMatchers], xref:refguide:testing:index/unittestsupport/applib/matchers/ListMatchers.adoc[ListMatchers], xref:refguide:testing:index/unittestsupport/applib/matchers/StringMatchers.adoc[StringMatchers], xref:refguide:testing:index/unittestsupport/applib/matchers/ThrowableMatchers.adoc[ThrowableMatchers], xref:refguide:testing:index/unittestsupport/applib/util/CollectUtils.adoc[CollectUtils], xref:refguide:testing:index/unittestsupport/applib/util/FileUtils.adoc[FileUtils], xref:refguide:testing:index/unittestsupport/applib/util/InjectUtils.adoc[InjectUtils], xref:refguide:testing:index/unittestsupport/applib/util/ReflectUtils.adoc[ReflectUtils], xref:refguide:testing:index/unittestsupport/applib/util/StringUtils.adoc[StringUtils]
 ****
 |===
 
@@ -1832,6 +1835,7 @@ o.a.i.core.runtimeservices.publish.CommandPublisherDefault +
 o.a.i.core.runtimeservices.publish.EntityChangesPublisherDefault +
 o.a.i.core.runtimeservices.publish.EntityPropertyChangePublisherDefault +
 o.a.i.core.runtimeservices.publish.ExecutionPublisherDefault +
+o.a.i.core.runtimeservices.publish.ObjectLifecyclePublisherDefault +
 o.a.i.core.runtimeservices.recognizer.ExceptionRecognizerServiceDefault +
 o.a.i.core.runtimeservices.recognizer.dae.ExceptionRecognizerForDataAccessException +
 o.a.i.core.runtimeservices.repository.RepositoryServiceDefault +
@@ -1858,7 +1862,7 @@ org.hsqldb:hsqldb:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:core:index/runtimeservices/transaction/TransactionServiceSpring.adoc[TransactionServiceSpring], xref:refguide:core:index/runtimeservices/xml/XmlServiceDefault.adoc[XmlServiceDefault]
+xref:refguide:core:index/runtimeservices/publish/ObjectLifecyclePublisherDefault.adoc[ObjectLifecyclePublisherDefault], xref:refguide:core:index/runtimeservices/transaction/TransactionServiceSpring.adoc[TransactionServiceSpring], xref:refguide:core:index/runtimeservices/xml/XmlServiceDefault.adoc[XmlServiceDefault]
 ****
 
 |Apache Isis Core - Security
@@ -1904,7 +1908,6 @@ entity change tracking, with associated publishing and pre/post value events.
 
 .Components
 ****
-o.a.i.core.transaction.changetracking.EntityChangeTrackerDefault +
 o.a.i.core.transaction.changetracking.events.TimestampService +
 ****
 
@@ -1916,7 +1919,7 @@ org.apache.isis.core:isis-core-metamodel:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:core:index/transaction/changetracking/EntityChangeTracker.adoc[EntityChangeTracker], xref:refguide:core:index/transaction/changetracking/EntityChangeTrackerDefault.adoc[EntityChangeTrackerDefault], xref:refguide:core:index/transaction/changetracking/EntityChangeTrackerWithPreValue.adoc[EntityChangeTrackerWithPreValue], xref:refguide:core:index/transaction/changetracking/EntityChangesPublisher.adoc[EntityChangesPublisher], xref:refguide:core:index/transaction/changetracking/EntityPropertyChangePublisher.adoc[EntityPropertyChangePublisher], xref:refguide:core:index/transaction/events/TransactionAfterCompletionEvent.adoc[TransactionAfterCompletionEvent]
+xref:refguide:core:index/transaction/changetracking/EntityChangeTracker.adoc[EntityChangeTracker], xref:refguide:core:index/transaction/changetracking/EntityChangesPublisher.adoc[EntityChangesPublisher], xref:refguide:core:index/transaction/changetracking/EntityPropertyChangePublisher.adoc[EntityPropertyChangePublisher], xref:refguide:core:index/transaction/events/TransactionAfterCompletionEvent.adoc[TransactionAfterCompletionEvent]
 ****
 
 |Apache Isis Core - WebApp
@@ -2137,7 +2140,6 @@ o.a.i.persistence.jdo.datanucleus.jdosupport.JdoSupportServiceDefault +
 com.h2database:h2:jar:<managed> +
 org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
 org.apache.isis.core:isis-core-runtime:jar:<managed> +
-org.apache.isis.persistence:isis-persistence-jdo-applib:jar:<managed> +
 org.apache.isis.persistence:isis-persistence-jdo-integration:jar:<managed> +
 org.apache.isis.persistence:isis-persistence-jdo-provider:jar:<managed> +
 org.datanucleus:datanucleus-api-jdo:jar:<managed> +
@@ -2150,7 +2152,7 @@ org.springframework.boot:spring-boot-starter-jdbc:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:persistence:index/jdo/datanucleus/IsisModuleJdoDatanucleus.adoc[IsisModuleJdoDatanucleus], xref:refguide:persistence:index/jdo/datanucleus/changetracking/JdoLifecycleListener.adoc[JdoLifecycleListener], xref:refguide:persistence:index/jdo/datanucleus/dialect/DnJdoDialect.adoc[DnJdoDialect], xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_datanucleusVersionLong.adoc[Persistable_datanucleusVersionLong], xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_datanucleusVersionTimestamp.adoc[Persistable_datanucleusVersionTimestamp], xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_downloadJdoMetadata.adoc[Persistable_downloadJdoMetadata], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/applib/IsisBookmarkConverter.adoc[IsisBookmarkConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/applib/IsisLocalResourcePathConverter.adoc[IsisLocalResourcePathConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/applib/IsisMarkupConverter.adoc[IsisMarkupConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/applib/IsisPasswordConverter.adoc[IsisPasswordConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/image/JavaAwtBufferedImageByteArrayConverter.adoc[JavaAwtBufferedImageByteArrayConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/schema/v2/IsisChangesDtoConverter.adoc[IsisChangesDtoConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/schema/v2/IsisCommandDtoConverter.adoc[IsisCommandDtoConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/schema/v2/IsisInteractionDtoConverter.adoc[IsisInteractionDtoConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/schema/v2/IsisOidDtoConverter.adoc[IsisOidDtoConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/time/IsoOffsetTimeConverter.adoc[IsoOffsetTimeConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/time/IsoZonedDateTimeConverter.adoc[IsoZonedDateTimeConverter], xref:refguide:persistence:index/jdo/datanucleus/valuemappings/applib/ByteArrayBlobRdbmsMapping.adoc[ByteArrayBlobRdbmsMapping], xref:refguide:persistence:index/jdo/datanucleus/valuetypes/applib/IsisBlobMapping.adoc[IsisBlobMapping], xref:refguide:persistence:index/jdo/datanucleus/valuetypes/applib/IsisClobMapping.adoc[IsisClobMapping]
+xref:refguide:persistence:index/jdo/datanucleus/IsisModulePersistenceJdoDatanucleus.adoc[IsisModulePersistenceJdoDatanucleus], xref:refguide:persistence:index/jdo/datanucleus/changetracking/JdoLifecycleListener.adoc[JdoLifecycleListener], xref:refguide:persistence:index/jdo/datanucleus/dialect/DnJdoDialect.adoc[DnJdoDialect], xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_datanucleusVersionLong.adoc[Persistable_datanucleusVersionLong], xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_datanucleusVersionTimestamp.adoc[Persistable_datanucleusVersionTimestamp], xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_downloadJdoMetadata.adoc[Persistable_downloadJdoMetadata], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/applib/IsisBookmarkConverter.adoc[IsisBookmarkConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/applib/IsisLocalResourcePathConverter.adoc[IsisLocalResourcePathConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/applib/IsisMarkupConverter.adoc[IsisMarkupConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/applib/IsisPasswordConverter.adoc[IsisPasswordConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/image/JavaAwtBufferedImageByteArrayConverter.adoc[JavaAwtBufferedImageByteArrayConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/schema/v2/IsisChangesDtoConverter.adoc[IsisChangesDtoConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/schema/v2/IsisCommandDtoConverter.adoc[IsisCommandDtoConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/schema/v2/IsisInteractionDtoConverter.adoc[IsisInteractionDtoConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/schema/v2/IsisOidDtoConverter.adoc[IsisOidDtoConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/time/IsoOffsetTimeConverter.adoc[IsoOffsetTimeConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/time/IsoZonedDateTimeConverter.adoc[IsoZonedDateTimeConverter], xref:refguide:persistence:index/jdo/datanucleus/valuemappings/applib/ByteArrayBlobRdbmsMapping.adoc[ByteArrayBlobRdbmsMapping], xref:refguide:persistence:index/jdo/datanucleus/valuetypes/applib/IsisBlobMapping.adoc[IsisBlobMapping], xref:refguide:persistence:index/jdo/datanucleus/valuetypes/applib/IsisClobMapping.adoc[IsisClobMapping]
 ****
 
 |Apache Isis Persistence - JDO (integration)
@@ -2163,6 +2165,11 @@ Directory: /persistence/jdo/integration
 ----
 |JDO Integration (powered by DataNucleus)
 
+.Components
+****
+o.a.i.persistence.jdo.integration.changetracking.EntityChangeTrackerJdo +
+****
+
 .Dependencies
 ****
 org.apache.isis.commons:isis-commons:jar:<managed> +
@@ -2172,6 +2179,11 @@ org.apache.isis.core:isis-core-runtime:jar:<managed> +
 org.apache.isis.persistence:isis-persistence-jdo-applib:jar:<managed> +
 org.apache.isis.persistence:isis-persistence-jdo-metamodel:jar:<managed> +
 org.apache.isis.persistence:isis-persistence-jdo-spring:jar:<managed> +
+****
+
+.Document Index Entries
+****
+xref:refguide:persistence:index/jdo/integration/changetracking/EntityChangeTrackerJdo.adoc[EntityChangeTrackerJdo]
 ****
 
 |Apache Isis Persistence - JDO (metamodel)
@@ -2357,7 +2369,7 @@ org.springframework.boot:spring-boot-starter-data-jpa:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:persistence:index/jpa/eclipselink/IsisModuleJpaEclipselink.adoc[IsisModuleJpaEclipselink]
+xref:refguide:persistence:index/jpa/eclipselink/IsisModulePersistenceJpaEclipselink.adoc[IsisModulePersistenceJpaEclipselink]
 ****
 
 |Apache Isis Persistence - JPA (integration)
@@ -2372,6 +2384,7 @@ Directory: /persistence/jpa/integration
 
 .Components
 ****
+o.a.i.persistence.jpa.integration.changetracking.PersistenceMetricsServiceJpa +
 o.a.i.persistence.jpa.integration.metamodel.JpaProgrammingModel +
 ****
 
@@ -2379,14 +2392,13 @@ o.a.i.persistence.jpa.integration.metamodel.JpaProgrammingModel +
 ****
 org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
 org.apache.isis.core:isis-core-runtime:jar:<managed> +
-org.apache.isis.persistence:isis-persistence-jpa-applib:jar:<managed> +
 org.apache.isis.persistence:isis-persistence-jpa-metamodel:jar:<managed> +
 org.springframework.data:spring-data-jpa:jar:<managed> +
 ****
 
 .Document Index Entries
 ****
-xref:refguide:persistence:index/jpa/integration/typeconverters/JavaAwtBufferedImageByteArrayConverter.adoc[JavaAwtBufferedImageByteArrayConverter]
+xref:refguide:persistence:index/jpa/integration/changetracking/PersistenceMetricsServiceJpa.adoc[PersistenceMetricsServiceJpa], xref:refguide:persistence:index/jpa/integration/typeconverters/JavaAwtBufferedImageByteArrayConverter.adoc[JavaAwtBufferedImageByteArrayConverter]
 ****
 
 |Apache Isis Persistence - JPA (metamodel)
@@ -3098,7 +3110,6 @@ o.a.i.viewer.wicket.viewer.services.BookmarkUiServiceWicket +
 o.a.i.viewer.wicket.viewer.services.DeepLinkServiceWicket +
 o.a.i.viewer.wicket.viewer.services.HintStoreUsingWicketSession +
 o.a.i.viewer.wicket.viewer.services.ImageResourceCacheClassPath +
-o.a.i.viewer.wicket.viewer.services.ImpersonatedUserHolderForWicket +
 o.a.i.viewer.wicket.viewer.services.LocaleProviderWicket +
 o.a.i.viewer.wicket.viewer.services.TranslationsResolverWicket +
 o.a.i.viewer.wicket.viewer.services.WicketViewerSettingsDefault +
@@ -3108,6 +3119,7 @@ o.a.i.viewer.wicket.viewer.webmodule.WebModuleWicket +
 
 .Dependencies
 ****
+com.github.rototor:cglib:jar:4516ac7b61 +
 commons-io:commons-io:jar:<managed> +
 de.agilecoders.wicket:wicket-bootstrap-core:jar:<managed> +
 net.ftlines.wicket-source:wicket-source:jar:<managed> +
@@ -3116,13 +3128,14 @@ org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed> +
 org.apache.wicket:wicket-auth-roles:jar:<managed> +
 org.apache.wicket:wicket-spring:jar:<managed> +
 org.jmock:jmock-junit4:jar:<managed> +
+org.ow2.asm:asm:jar:9.0 +
 org.springframework:spring-web:jar:<managed> +
 org.webjars:popper.js:jar:<managed> +
 ****
 
 .Document Index Entries
 ****
-xref:refguide:viewer:index/wicket/viewer/IsisModuleViewerWicketViewer.adoc[IsisModuleViewerWicketViewer], xref:refguide:viewer:index/wicket/viewer/mixins/Object_clearHints.adoc[Object_clearHints], xref:refguide:viewer:index/wicket/viewer/services/ImpersonatedUserHolderForWicket.adoc[ImpersonatedUserHolderForWicket]
+xref:refguide:viewer:index/wicket/viewer/IsisModuleViewerWicketViewer.adoc[IsisModuleViewerWicketViewer], xref:refguide:viewer:index/wicket/viewer/mixins/Object_clearHints.adoc[Object_clearHints]
 ****
 |===
 
@@ -3387,7 +3400,12 @@ Artifact: isis-valuetypes-asciidoc-ui-vaa
 Type: jar
 Directory: /valuetypes/asciidoc/ui/vaadin
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.valuetypes.asciidoc.ui.vaa.components.AsciiDocFieldFactoryVaa +
+****
+
+.Dependencies
 ****
 org.apache.isis.incubator.viewer:isis-viewer-vaadin-ui:jar:${project.version} +
 ****
@@ -4461,6 +4479,7 @@ o.a.i.extensions.secman.applib.user.menu.MeService$UserMenuMeActionAdvisor +
 
 .Dependencies
 ****
+org.apache.isis.mavendeps:isis-mavendeps-integtests:pom:<managed> +
 org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed> +
 ****
 
@@ -4542,8 +4561,9 @@ o.a.i.extensions.secman.jdo.util.RegexReplacer +
 .Dependencies
 ****
 org.apache.isis.core:isis-core-runtime:jar:<managed> +
+org.apache.isis.extensions:isis-extensions-secman-applib:test-jar:<managed> +
 org.apache.isis.extensions:isis-extensions-secman-integration:jar:<managed> +
-org.apache.isis.persistence:isis-persistence-jdo-applib:jar:<managed> +
+org.apache.isis.mavendeps:isis-mavendeps-integtests:pom:<managed> +
 org.apache.isis.persistence:isis-persistence-jdo-datanucleus:jar:<managed> +
 org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed> +
 ****
@@ -4573,8 +4593,10 @@ o.a.i.extensions.secman.jpa.util.RegexReplacer +
 .Dependencies
 ****
 org.apache.isis.core:isis-core-runtime:jar:<managed> +
+org.apache.isis.extensions:isis-extensions-secman-applib:test-jar:<managed> +
 org.apache.isis.extensions:isis-extensions-secman-integration:jar:<managed> +
-org.apache.isis.persistence:isis-persistence-jpa-applib:jar:<managed> +
+org.apache.isis.mavendeps:isis-mavendeps-integtests:pom:<managed> +
+org.apache.isis.persistence:isis-persistence-jpa-eclipselink:jar:<managed> +
 org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed> +
 ****
 
@@ -5910,6 +5932,11 @@ skinparam rectangle<<15>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
+skinparam rectangle<<16>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
@@ -5969,7 +5996,8 @@ package "Regression Tests\n[Software System]" {
   rectangle "==Apache Isis - Regression Tests (stable) - Logging\n<size:10>[Container: packaging: jar]</size>" <<12>> as 12
   rectangle "==Apache Isis - Regression Tests (stable) - Persistence (JDO)\n<size:10>[Container: packaging: jar]</size>" <<13>> as 13
   rectangle "==Apache Isis - Regression Tests (stable) - Persistence (JPA)\n<size:10>[Container: packaging: jar]</size>" <<14>> as 14
-  rectangle "==Apache Isis - Regression Tests (stable) - Rest\n<size:10>[Container: packaging: jar]</size>" <<15>> as 15
+  rectangle "==Apache Isis - Regression Tests (stable) - Publishing (JPA)\n<size:10>[Container: packaging: jar]</size>" <<15>> as 15
+  rectangle "==Apache Isis - Regression Tests (stable) - Rest\n<size:10>[Container: packaging: jar]</size>" <<16>> as 16
 }
 2 .[#707070].> 3 : ""
 2 .[#707070].> 4 : ""
@@ -5984,6 +6012,7 @@ package "Regression Tests\n[Software System]" {
 2 .[#707070].> 13 : ""
 2 .[#707070].> 14 : ""
 2 .[#707070].> 15 : ""
+2 .[#707070].> 16 : ""
 @enduml
 ----
 .Projects/Modules (Regression Tests)
@@ -6036,7 +6065,26 @@ Artifact: isis-regressiontests-stable
 Type: jar
 Directory: /regressiontests/stable
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.testdomain.conf.Configuration_headless$HeadlessCommandSupport +
+o.a.i.testdomain.jdo.JdoInventoryDao +
+o.a.i.testdomain.jpa.JpaInventoryDao +
+o.a.i.testdomain.jpa.springdata.EmployeeRepository +
+o.a.i.testdomain.publishing.PublishingTestFactoryAbstract$CommitListener +
+o.a.i.testdomain.publishing.PublishingTestFactoryJdo +
+o.a.i.testdomain.publishing.PublishingTestFactoryJpa +
+o.a.i.testdomain.publishing.subscriber.CommandSubscriberForTesting +
+o.a.i.testdomain.publishing.subscriber.EntityChangesSubscriberForTesting +
+o.a.i.testdomain.publishing.subscriber.EntityPropertyChangeSubscriberForTesting +
+o.a.i.testdomain.publishing.subscriber.ExecutionSubscriberForTesting +
+o.a.i.testdomain.util.event.LifecycleEventSubscriberForTesting +
+o.a.i.testdomain.util.interaction.InteractionBoundaryProbe +
+o.a.i.testdomain.util.kv.KVStoreForTesting +
+o.a.i.testdomain.util.rest.RestEndpointService +
+****
+
+.Dependencies
 ****
 org.apache.isis.extensions:isis-extensions-cors-impl:jar:<managed> +
 org.glassfish.jersey.ext:jersey-spring5:jar:<managed> +
@@ -6179,6 +6227,19 @@ Group: org.apache.isis.regressiontests
 Artifact: isis-regressiontests-stable-persistence-jpa
 Type: jar
 Directory: /regressiontests/stable-persistence-jpa
+----
+|.Dependencies
+****
+org.apache.isis.regressiontests:isis-regressiontests-stable:jar:<managed> +
+****
+
+|Apache Isis - Regression Tests (stable) - Publishing (JPA)
+[source,yaml]
+----
+Group: org.apache.isis.regressiontests
+Artifact: isis-regressiontests-stable-publishing-jpa
+Type: jar
+Directory: /regressiontests/stable-publishing-jpa
 ----
 |.Dependencies
 ****
@@ -6382,7 +6443,30 @@ Artifact: isis-viewer-javafx-ui
 Type: jar
 Directory: /incubator/viewers/javafx/ui
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.incubator.viewer.javafx.ui.components.UiComponentFactoryFx +
+o.a.i.incubator.viewer.javafx.ui.components.markup.MarkupFieldFactory +
+o.a.i.incubator.viewer.javafx.ui.components.number.NumberFieldFactory +
+o.a.i.incubator.viewer.javafx.ui.components.objectref.ObjectReferenceFieldFactory +
+o.a.i.incubator.viewer.javafx.ui.components.other.FallbackFieldFactory +
+o.a.i.incubator.viewer.javafx.ui.components.temporal.TemporalFieldFactory +
+o.a.i.incubator.viewer.javafx.ui.components.text.TextFieldFactory +
+o.a.i.incubator.viewer.javafx.ui.decorator.disabling.DisablingDecoratorForButton +
+o.a.i.incubator.viewer.javafx.ui.decorator.disabling.DisablingDecoratorForFormField +
+o.a.i.incubator.viewer.javafx.ui.decorator.icon.IconDecoratorForLabeled +
+o.a.i.incubator.viewer.javafx.ui.decorator.icon.IconDecoratorForMenuItem +
+o.a.i.incubator.viewer.javafx.ui.decorator.icon.IconServiceDefault +
+o.a.i.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingDecoratorForButton +
+o.a.i.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingDecoratorForFormField +
+o.a.i.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingInfoPopupProvider +
+o.a.i.incubator.viewer.javafx.ui.main.MainViewFx +
+o.a.i.incubator.viewer.javafx.ui.main.UiActionHandlerFx +
+o.a.i.incubator.viewer.javafx.ui.main.UiBuilderFx +
+o.a.i.incubator.viewer.javafx.ui.main.UiContextFxDefault +
+****
+
+.Dependencies
 ****
 org.apache.isis.core:isis-core-runtimeservices:jar:<managed> +
 org.apache.isis.incubator.viewer:isis-viewer-javafx-model:jar:<managed> +

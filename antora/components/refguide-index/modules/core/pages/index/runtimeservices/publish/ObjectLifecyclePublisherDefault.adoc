@@ -1,17 +1,20 @@
-= J8LocalDates
+= ObjectLifecyclePublisherDefault
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 == API
 
 [source,java]
-.J8LocalDates.java
+.ObjectLifecyclePublisherDefault.java
 ----
-class J8LocalDates {
-  J8LocalDates(final FakeDataService fakeDataService)
-  LocalDate around(final Period period)
-  LocalDate before(final Period period)
-  LocalDate after(final Period period)
-  LocalDate any()
+class ObjectLifecyclePublisherDefault {
+  ObjectLifecyclePublisherDefault(final EventBusService eventBusService, final EntityPropertyChangePublisher entityPropertyChangePublisher)
+  void onPostCreate(final ManagedObject domainObject)
+  void onPrePersist(final ManagedObject entity)
+  void onPreUpdate(final ManagedObject entity, final Can<PropertyChangeRecord> changeRecords)
+  void onPreRemove(final ManagedObject entity)
+  void onPostPersist(final ManagedObject entity)
+  void onPostUpdate(final ManagedObject entity)
+  void onPostLoad(final ManagedObject entity)
 }
 ----
 

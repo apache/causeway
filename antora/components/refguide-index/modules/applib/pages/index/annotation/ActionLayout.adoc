@@ -108,6 +108,8 @@ To specify the layout order use _ActionLayout#sequence()_ .
 
 For example `@ActionLayout(associateWith="items") @ActionLayout(sequence="2.1")` 
 
+Note that it is also possible to associate an action with a collection using _Action#choicesFrom()_ (which has the additional semantic of the rows of the element being used as choices for that action's collection parameter of the same type as the elements of the collection).
+
 [#bookmarking]
 === bookmarking
 

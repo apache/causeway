@@ -1,6 +1,8 @@
 = Chars
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
+Returns random `char` values, optionally constrained within a range,
+
 == API
 
 [source,java]
@@ -8,10 +10,63 @@
 ----
 class Chars {
   Chars(final FakeDataService fakeDataService)
-  char upper()
-  char lower()
-  char any()
-  char digit()
+  char upper()     // <.>
+  char lower()     // <.>
+  char digit()     // <.>
+  char anyOf(final String s)     // <.>
+  char any()     // <.>
 }
 ----
 
+<.> xref:#upper__[upper()]
++
+--
+Returns a random upper case characters, between 'A' and 'Z'.
+--
+<.> xref:#lower__[lower()]
++
+--
+Returns a random lower case characters, between 'a' and 'z'.
+--
+<.> xref:#digit__[digit()]
++
+--
+Returns a digit character, between '0' and '9'.
+--
+<.> xref:#anyOf__String[anyOf(String)]
++
+--
+Returns any single character within the provided string.
+--
+<.> xref:#any__[any()]
++
+--
+Returns any character at random.
+--
+
+== Members
+
+[#upper__]
+=== upper()
+
+Returns a random upper case characters, between 'A' and 'Z'.
+
+[#lower__]
+=== lower()
+
+Returns a random lower case characters, between 'a' and 'z'.
+
+[#digit__]
+=== digit()
+
+Returns a digit character, between '0' and '9'.
+
+[#anyOf__String]
+=== anyOf(String)
+
+Returns any single character within the provided string.
+
+[#any__]
+=== any()
+
+Returns any character at random.

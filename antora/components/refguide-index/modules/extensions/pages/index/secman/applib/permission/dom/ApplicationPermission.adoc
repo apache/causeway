@@ -22,6 +22,7 @@ class ApplicationPermission {
   public static final String NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE;
   public static final String NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE_FQN;
   public static final String NAMED_QUERY_FIND_BY_USER;
+  public static final String NAMED_QUERY_FIND_BY_ROLE_NAMES;
   String title()
   String getSort()
   ApplicationFeature findFeature(ApplicationFeatureId featureId)

@@ -38,7 +38,7 @@ Associates this action with a property or collection, specifying its id.
 <.> xref:#choicesFrom[choicesFrom]
 +
 --
-Associates this action with a property or collection, specifying its id.
+References a collection of a certain element type, for an action with a collection parameter of that element type; the action's choices will be automatically populated from checkboxes rendered in the collection.
 --
 <.> xref:#commandDtoProcessor[commandDtoProcessor]
 +
@@ -109,13 +109,11 @@ If an action is associated with a collection, then any matching parameters will 
 [#choicesFrom]
 === choicesFrom
 
-Associates this action with a property or collection, specifying its id.
+References a collection of a certain element type, for an action with a collection parameter of that element type; the action's choices will be automatically populated from checkboxes rendered in the collection.
 
-To specify the layout order use _ActionLayout#sequence()_ .
+This will also result in the action being rendered near to the collection, similar to the way in which _ActionLayout#associateWith()_ does.
 
-For example `@Action(associateWith="items") @ActionLayout(sequence="2.1")` 
-
-If an action is associated with a collection, then any matching parameters will have their choices automatically inferred from the collection (if not otherwise specified) and any collection parameter defaults can be specified using checkboxes (in the Wicket UI, at least).
+If there are multiple actions associated with a collection, either by way of _Action#choicesFrom()_ or using _ActionLayout#associateWith()_ , then their order in the UI can be influenced using _ActionLayout#sequence()_ .
 
 [#commandDtoProcessor]
 === commandDtoProcessor

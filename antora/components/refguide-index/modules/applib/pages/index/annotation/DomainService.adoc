@@ -12,8 +12,10 @@ Also indicates whether the domain service acts as a repository for an entity, an
 ----
 @interface DomainService {
   NatureOfService nature() default NatureOfService.VIEW;     // <.>
-  String objectType() default "";     // <.>
-  String logicalTypeName() default "";     // <.>
+  @AliasFor(annotation = Named.class, attribute = "value")
+String objectType() default "";     // <.>
+  @AliasFor(annotation = Named.class, attribute = "value")
+String logicalTypeName() default "";     // <.>
 }
 ----
 

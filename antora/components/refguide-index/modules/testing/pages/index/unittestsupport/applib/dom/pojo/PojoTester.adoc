@@ -1,18 +1,92 @@
 = PojoTester
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
+Exercises the getters and setters of the provided pojo, ensuring that there are no side-effects.
+
+As getters and setters are so simple, the intention of automating their testing is not to discover defects (though if there are unintentional side-effects, then these will be found). Instead, the rationale of testing getters and setters is to increase code coverage. Any substantial gap away from 100% would therefore due to significant functionality not having tests (as opposed to merely getters and setters not being tested).
+
 == API
 
 [source,java]
 .PojoTester.java
 ----
 class PojoTester {
-  PojoTester create()
-  AtomicInteger getCounter()
-  PojoTester usingData(Class<T> c, final T... data)
-  PojoTester usingData(DatumFactory<T> factory)
-  void exercise(Object bean)
-  void exercise(Object bean, FilterSet filterSet)
+  PojoTester create()     // <.>
+  PojoTester usingData(DatumFactory<T> factory)     // <.>
+  PojoTester usingData(final Class<?> type, DatumFactory<T> factory)
+  PojoTester usingData(Class<T> c, final T... data)     // <.>
+  PojoTester usingData(Class<T> c, final List<T> data)
+  PojoTester usingData(Class<T> compileTimeType, Class<? extends T> runtimeType)     // <.>
+  void exercise(Object bean)     // <.>
+  void exercise(Object bean, FilterSet filterSet)     // <.>
 }
 ----
 
+<.> xref:#create__[create()]
++
+--
+Factory method for the tester itself.
+--
+<.> xref:#usingData__DatumFactory[usingData(DatumFactory)]
++
+--
+Provides a _DatumFactory_ to the xref:refguide:testing:index/unittestsupport/applib/dom/pojo/PojoTester.adoc[PojoTester] in order to exercise any getter/setters of this type.
+--
+<.> xref:#usingData__Class_T[usingData(Class, T)]
++
+--
+Convenience overload to provide a _DatumFactory_ to the xref:refguide:testing:index/unittestsupport/applib/dom/pojo/PojoTester.adoc[PojoTester] , specifying both the type and a number of instances of that type.
+--
+<.> xref:#usingData__Class_Class[usingData(Class, Class)]
++
+--
+Convenience overload to provide a _DatumFactory_ to the xref:refguide:testing:index/unittestsupport/applib/dom/pojo/PojoTester.adoc[PojoTester] for the specified compile time type, with the runtime type providing a no-arg constructor so that instances can be generated as required.
+--
+<.> xref:#exercise__Object[exercise(Object)]
++
+--
+Exercises all of the getters and setters of the provided bean, using the built-in _DatumFactory_ and any additional configured through previous calls to _#usingData(Class, Object[])_ (or its overloads).
+--
+<.> xref:#exercise__Object_FilterSet[exercise(Object, FilterSet)]
++
+--
+As for _#exercise(Object)_ , however only exercising the properties as defined by the provided _FilterSet_ , and omitting any others.
+--
+
+== Members
+
+[#create__]
+=== create()
+
+Factory method for the tester itself.
+
+This method is usually followed by several calls to _#usingData(DatumFactory)_ or _#usingData(Class, Object[])_ (for all data types that are not built-in), and finally by _#exercise(Object)_ (or one of its overloads) which actually exercises the provided pojo.
+
+[#usingData__DatumFactory]
+=== usingData(DatumFactory)
+
+Provides a _DatumFactory_ to the xref:refguide:testing:index/unittestsupport/applib/dom/pojo/PojoTester.adoc[PojoTester] in order to exercise any getter/setters of this type.
+
+The xref:refguide:testing:index/unittestsupport/applib/dom/pojo/PojoTester.adoc[PojoTester] already knows how to exercise primitives, strings, enums and a number of other built-ins, so this is typically only necessary for custom value types.
+
+[#usingData__Class_T]
+=== usingData(Class, T)
+
+Convenience overload to provide a _DatumFactory_ to the xref:refguide:testing:index/unittestsupport/applib/dom/pojo/PojoTester.adoc[PojoTester] , specifying both the type and a number of instances of that type.
+
+There should be at least two and ideally three different data instances.
+
+[#usingData__Class_Class]
+=== usingData(Class, Class)
+
+Convenience overload to provide a _DatumFactory_ to the xref:refguide:testing:index/unittestsupport/applib/dom/pojo/PojoTester.adoc[PojoTester] for the specified compile time type, with the runtime type providing a no-arg constructor so that instances can be generated as required.
+
+[#exercise__Object]
+=== exercise(Object)
+
+Exercises all of the getters and setters of the provided bean, using the built-in _DatumFactory_ and any additional configured through previous calls to _#usingData(Class, Object[])_ (or its overloads).
+
+[#exercise__Object_FilterSet]
+=== exercise(Object, FilterSet)
+
+As for _#exercise(Object)_ , however only exercising the properties as defined by the provided _FilterSet_ , and omitting any others.

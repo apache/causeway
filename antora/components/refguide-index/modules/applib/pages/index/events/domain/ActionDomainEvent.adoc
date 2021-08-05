@@ -19,6 +19,7 @@ The class itself is instantiated automatically by the framework using a no-arg c
 ----
 class ActionDomainEvent<S> {
   ActionDomainEvent()     // <.>
+  ActionDomainEvent(final S source)     // <.>
   void setReturnValue(final Object returnValue)     // <.>
   void setSemantics(SemanticsOf semantics)     // <.>
   void setParameterNames(final List<String> parameterNames)     // <.>
@@ -32,6 +33,11 @@ class ActionDomainEvent<S> {
 +
 --
 Subtypes can define a no-arg constructor; the framework sets state via (non-API) setters.
+--
+<.> xref:#ActionDomainEvent__S[ActionDomainEvent(S)]
++
+--
+Subtypes can define a one-arg constructor (for nested non-static classes of nested non-static mixins); the framework sets state via (non-API) setters.
 --
 <.> xref:#setReturnValue__Object[setReturnValue(Object)]
 +
@@ -49,6 +55,11 @@ Set by the framework.
 === ActionDomainEvent()
 
 Subtypes can define a no-arg constructor; the framework sets state via (non-API) setters.
+
+[#ActionDomainEvent__S]
+=== ActionDomainEvent(S)
+
+Subtypes can define a one-arg constructor (for nested non-static classes of nested non-static mixins); the framework sets state via (non-API) setters.
 
 [#setReturnValue__Object]
 === setReturnValue(Object)

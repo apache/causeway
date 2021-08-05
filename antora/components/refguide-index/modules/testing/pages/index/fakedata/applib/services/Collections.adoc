@@ -1,6 +1,8 @@
 = Collections
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
+Returns random instance of a provided collection, with overloads allowing instances to be excluded according to a _Predicate_ .
+
 == API
 
 [source,java]
@@ -8,10 +10,8 @@
 ----
 class Collections {
   Collections(final FakeDataService fakeDataService)
-  E randomEnum(final Class<E> enumType)     // <.>
   E anyEnum(final Class<E> enumType)
   E anyEnumExcept(final Class<E> enumType, final Predicate<E> except)
-  T randomBounded(final Class<T> cls)     // <.>
   T anyBounded(final Class<T> cls)
   T anyBoundedExcept(final Class<T> cls, final Predicate<T> except)
   T anyOf(final List<T> list)
@@ -40,45 +40,3 @@ class Collections {
 }
 ----
 
-<.> xref:#randomEnum__Class[randomEnum(Class)]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-- renamed to _#anyEnum(Class)_ .
-====
---
-<.> xref:#randomBounded__Class[randomBounded(Class)]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-- renamed to _#anyBounded(Class)_ .
-====
---
-
-== Members
-
-[#randomEnum__Class]
-=== randomEnum(Class)
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-- renamed to _#anyEnum(Class)_ .
-====
-
-[#randomBounded__Class]
-=== randomBounded(Class)
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-- renamed to _#anyBounded(Class)_ .
-====
