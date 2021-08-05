@@ -1,7 +1,8 @@
 
 
-
 * xref:testing:fixtures:about.adoc[Fixture Scripts]
-
-
+** xref:testing:fixtures:fixture-scripts/maven-configuration.adoc[Maven Configuration]
+** xref:testing:fixtures:fixture-scripts/api-and-usage.adoc[API and Usage]
+** xref:testing:fixtures:fixture-scripts/mocking-the-clock-or-user.adoc[Mocking the Clock or User]
+** xref:testing:fixtures:fixture-scripts/using-with-secman.adoc[Using with Secman]
 

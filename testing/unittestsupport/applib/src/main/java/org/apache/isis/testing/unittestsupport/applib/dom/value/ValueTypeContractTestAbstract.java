@@ -123,8 +123,24 @@ public abstract class ValueTypeContractTestAbstract<T> {
         }
     }
 
+    /**
+     * Returns a list of different instances that are expected to have the same value (according to equals and hashCode).
+     *
+     * <p>
+     *     At least two different instances must be provided.
+     * </p>
+     */
     protected abstract List<T> getObjectsWithSameValue();
 
+    /**
+     * Returns a list of instances that are different from each other and also from the instance(s) provided in the
+     * {@link #getObjectsWithSameValue()} method.
+     *
+     * <p>
+     *     It is often sufficient to provide a single instance (as it is compared against the instances provided by
+     *     {@link #getObjectsWithSameValue()}).
+     * </p>
+     */
     protected abstract List<T> getObjectsWithDifferentValue();
 
 }

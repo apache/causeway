@@ -22,37 +22,56 @@ import java.time.OffsetDateTime;
 import java.time.Period;
 import java.time.ZoneId;
 
-import org.apache.isis.applib.annotation.Programmatic;
+import lombok.val;
 
 /**
+ * Returns a random {@link OffsetDateTime}, optionally based on the current time but constrained by a {@link Period}.
+ *
+ * <p>
+ *     The current time ('now') is obtained from the {@link org.apache.isis.applib.services.clock.ClockService}.
+ * </p>
+ *
  * @since 2.0 {@index}
  */
-public class J8DateTimes extends AbstractRandomValueGenerator {
+public class JavaTimeDateTimes extends AbstractRandomValueGenerator {
 
-    public J8DateTimes(final FakeDataService fakeDataService) {
+    public JavaTimeDateTimes(final FakeDataService fakeDataService) {
         super(fakeDataService);
     }
 
-    @Programmatic
+    /**
+     * Returns a random date either before or after 'now', within the specified {@link Period}.
+     */
     public OffsetDateTime around(final Period period) {
         return fake.booleans().coinFlip() ? before(period) : after(period);
     }
 
-    @Programmatic
+    /**
+     * Returns a random date some time before 'now', within the specified {@link Period}.
+     */
     public OffsetDateTime before(final Period period) {
-        final OffsetDateTime now = fake.clockService.getClock().nowAsOffsetDateTime(ZoneId.systemDefault());
-        return now.minus(period);
+        val periodWithin = fake.javaTimePeriods().within(period);
+        return now().minus(periodWithin);
     }
 
-    @Programmatic
+    /**
+     * Returns a random date/time some time after 'now', within the specified {@link Period}.
+     */
     public OffsetDateTime after(final Period period) {
-        final OffsetDateTime now = fake.clockService.getClock().nowAsOffsetDateTime(ZoneId.systemDefault());
-        return now.plus(period);
+        val periodWithin = fake.javaTimePeriods().within(period);
+        return now().plus(periodWithin);
     }
 
-    @Programmatic
+    /**
+     * Returns a random date/time 5 years around 'now'.
+     */
     public OffsetDateTime any() {
-        final Period upTo5Years = fake.j8Periods().yearsUpTo(5);
+        final Period upTo5Years = fake.javaTimePeriods().yearsUpTo(5);
         return around(upTo5Years);
     }
+
+    private OffsetDateTime now() {
+        return fake.clockService.getClock().nowAsOffsetDateTime(ZoneId.systemDefault());
+    }
+
 }

@@ -24,6 +24,8 @@ import java.net.URL;
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
+ * Returns random but well-formed {@link URL}s.
+ *
  * @since 2.0 {@index}
  */
 public class Urls extends AbstractRandomValueGenerator {
@@ -32,7 +34,6 @@ public class Urls extends AbstractRandomValueGenerator {
         super(fakeDataService);
     }
 
-    @Programmatic
     public URL any() {
         try {
             final String protocol = fake.booleans().coinFlip() ? "http" : "https:";

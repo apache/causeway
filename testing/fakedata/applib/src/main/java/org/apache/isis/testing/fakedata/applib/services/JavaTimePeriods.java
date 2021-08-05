@@ -20,45 +20,47 @@ package org.apache.isis.testing.fakedata.applib.services;
 
 import java.time.Period;
 
-import org.apache.isis.applib.annotation.Programmatic;
+import lombok.val;
 
 /**
+ * Returns random {@link Period}s constrained to last a certain number number of days, months and/or years.
+ *
  * @since 2.0 {@index}
  */
-public class J8Periods extends AbstractRandomValueGenerator {
+public class JavaTimePeriods extends AbstractRandomValueGenerator {
 
-    public J8Periods(final FakeDataService fakeDataService) {
+    public JavaTimePeriods(final FakeDataService fakeDataService) {
         super(fakeDataService);
     }
 
-    @Programmatic
     public Period daysBetween(final int minDays, final int maxDays) {
         return Period.ofDays(fake.ints().between(minDays, maxDays));
     }
 
-    @Programmatic
     public Period daysUpTo(final int maxDays) {
         return daysBetween(0, maxDays);
     }
 
-    @Programmatic
     public Period monthsBetween(final int minMonths, final int maxMonths) {
         return Period.ofMonths(fake.ints().between(minMonths, maxMonths));
     }
 
-    @Programmatic
     public Period monthsUpTo(final int months) {
         return monthsBetween(0, months);
     }
 
-    @Programmatic
     public Period yearsBetween(final int minYears, final int maxYears) {
         return Period.ofYears(fake.ints().between(minYears, maxYears));
     }
 
-    @Programmatic
     public Period yearsUpTo(final int years) {
         return yearsBetween(0, years);
     }
 
+    public Period within(Period period) {
+        val newDays = fake.ints().between(0, period.getDays());
+        val newMonths = fake.ints().between(0, period.getMonths());
+        val newYears = fake.ints().between(0, period.getYears());
+        return Period.of(newYears, newMonths, newDays);
+    }
 }

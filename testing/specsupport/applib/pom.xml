@@ -55,6 +55,19 @@
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
 		</dependency>
+
+		<!-- convenience -->
+		<dependency>
+			<groupId>org.apache.isis.testing</groupId>
+			<artifactId>isis-testing-fakedata-applib</artifactId>
+		</dependency>
+
+		<!-- convenience -->
+		<dependency>
+			<groupId>org.apache.isis.testing</groupId>
+			<artifactId>isis-testing-fixtures-applib</artifactId>
+		</dependency>
+
 	</dependencies>
 
 </project>

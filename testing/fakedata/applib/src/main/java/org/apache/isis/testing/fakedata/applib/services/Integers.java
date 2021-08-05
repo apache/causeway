@@ -20,9 +20,9 @@ package org.apache.isis.testing.fakedata.applib.services;
 
 import org.apache.commons.lang3.RandomUtils;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
 /**
+ * Returns random <code>int</code>eger values, optionally constrained within a range,
+ *
  * @since 2.0 {@index}
  */
 public class Integers extends AbstractRandomValueGenerator {
@@ -31,18 +31,19 @@ public class Integers extends AbstractRandomValueGenerator {
         super(fakeDataService);
     }
 
-    @Programmatic
+    public int any() {
+        return fake.booleans().coinFlip()
+                ?   RandomUtils.nextInt()
+                : - RandomUtils.nextInt();
+
+    }
+
     public int upTo(final int upTo) {
         return fake.randomService.nextInt(upTo);
     }
 
-    @Programmatic
     public int between(final int min, final int max) {
         return min + fake.randomService.nextInt(max - min);
     }
 
-    @Programmatic
-    public int any() {
-        return RandomUtils.nextInt();
-    }
 }

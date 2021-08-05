@@ -22,37 +22,57 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
 
-import org.apache.isis.applib.annotation.Programmatic;
+import lombok.val;
 
 /**
+ * Returns a random {@link LocalDate}, optionally based on the current time but constrained by a {@link Period}.
+ *
+ * <p>
+ *     The current time ('now') is obtained from the {@link org.apache.isis.applib.services.clock.ClockService}.
+ * </p>
+ *
  * @since 2.0 {@index}
  */
-public class J8LocalDates extends AbstractRandomValueGenerator {
+public class JavaTimeLocalDates extends AbstractRandomValueGenerator {
 
-    public J8LocalDates(final FakeDataService fakeDataService) {
+    public JavaTimeLocalDates(final FakeDataService fakeDataService) {
         super(fakeDataService);
     }
 
-    @Programmatic
+    /**
+     * Returns a random date either before or after 'now', within the specified {@link Period}.
+     */
     public LocalDate around(final Period period) {
         return fake.booleans().coinFlip() ? before(period) : after(period);
     }
 
-    @Programmatic
+    /**
+     * Returns a random date some time before 'now', within the specified {@link Period}.
+     */
     public LocalDate before(final Period period) {
-        final LocalDate now = fake.clockService.getClock().nowAsLocalDate(ZoneId.systemDefault());
-        return now.minus(period);
+        val periodWithin = fake.javaTimePeriods().within(period);
+        return now().minus(periodWithin);
     }
 
-    @Programmatic
+    /**
+     * Returns a random date some time after 'now', within the specified {@link Period}.
+     */
     public LocalDate after(final Period period) {
-        final LocalDate now = fake.clockService.getClock().nowAsLocalDate(ZoneId.systemDefault());
-        return now.plus(period);
+        val periodWithin = fake.javaTimePeriods().within(period);
+        return now().plus(periodWithin);
     }
 
-    @Programmatic
+    /**
+     * Returns a random date 5 years around 'now'.
+     */
     public LocalDate any() {
-        final Period upTo5Years = fake.j8Periods().yearsUpTo(5);
-        return around(upTo5Years);
+        val periodUpTo5Years = fake.javaTimePeriods().yearsUpTo(5);
+        return around(periodUpTo5Years);
     }
+
+    private LocalDate now() {
+        return fake.clockService.getClock().nowAsLocalDate(ZoneId.systemDefault());
+    }
+
+
 }

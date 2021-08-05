@@ -19,6 +19,8 @@
 package org.apache.isis.testing.fakedata.applib.services;
 
 /**
+ * Returns random ISBN codes, either 10 or 13 character forms.
+ *
  * @since 2.0 {@index}
  */
 public class Books extends AbstractRandomValueGenerator {

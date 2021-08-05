@@ -20,9 +20,9 @@ package org.apache.isis.testing.fakedata.applib.services;
 
 import org.apache.commons.lang3.RandomUtils;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
 /**
+ * Returns random <code>long</code> values, optionally constrained within a range,
+ *
  * @since 2.0 {@index}
  */
 public class Longs extends AbstractRandomValueGenerator {
@@ -31,8 +31,18 @@ public class Longs extends AbstractRandomValueGenerator {
         super(fakeDataService);
     }
 
-    @Programmatic
     public long any() {
-        return RandomUtils.nextLong();
+        return fake.booleans().coinFlip()
+                ?   RandomUtils.nextLong()
+                : - RandomUtils.nextLong();
     }
+
+    public long upTo(final long upTo) {
+        return fake.randomService.nextLong(upTo);
+    }
+
+    public long between(final long min, final long max) {
+        return min + fake.randomService.nextLong(max - min);
+    }
+
 }

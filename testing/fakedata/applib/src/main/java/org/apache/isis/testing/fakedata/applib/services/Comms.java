@@ -19,6 +19,8 @@
 package org.apache.isis.testing.fakedata.applib.services;
 
 /**
+ * Returns a random string representing for communications channel of some sort (email address, phone number, url).
+ *
  * @since 2.0 {@index}
  */
 public class Comms extends AbstractRandomValueGenerator {

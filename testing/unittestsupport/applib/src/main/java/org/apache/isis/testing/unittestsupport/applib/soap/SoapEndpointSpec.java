@@ -20,9 +20,6 @@ package org.apache.isis.testing.unittestsupport.applib.soap;
 
 import java.util.function.Supplier;
 
-/**
- * @since 2.0 {@index}
- */
 public class SoapEndpointSpec {
 
     static SoapEndpointSpec asSoapEndpointSpec(final Class<?> input) {

@@ -4,11 +4,14 @@
 
 [CAUTION]
 ====
-The xref:docs:parent-pom:about.adoc[Parent POM] configures the Maven surefire plugin in two separate executions for unit test and fo integ tests.
+The xref:docs:parent-pom:about.adoc[Parent POM] configures the Maven surefire plugin in three separate executions for unit tests, integ tests and for BDD specs.
 This relies on a naming convention:
 
-* unit tests, which must have a suffix `Test`, but excluding ...
-* integ tests, which must have the suffix `IntegTest`
+* unit tests, which must have the name `\*Test*`, but excluding ...
+* integ tests, which must have the name `\*IntegTest*`
+* BDD integ specs, which must have the name `\*Spec*`
 
-Not following this convention is likely to cause integ tests to fail.
+Classes named `\*Abstract*` are always ignored.
+
+Not following this convention (intermixing unit tests with integ tests) may cause the latter to fail.
 ====

@@ -18,9 +18,9 @@
  */
 package org.apache.isis.testing.fakedata.applib.services;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
 /**
+ * Returns random <code>short</code> values, optionally constrained within a range,
+ *
  * @since 2.0 {@index}
  */
 public class Shorts extends AbstractRandomValueGenerator {
@@ -29,18 +29,16 @@ public class Shorts extends AbstractRandomValueGenerator {
         super(fakeDataService);
     }
 
-    @Programmatic
+    public short any() {
+        return (short) fake.ints().any();
+    }
+
     public short upTo(final short upTo) {
         return (short) fake.ints().upTo(upTo);
     }
 
-    @Programmatic
     public short between(final short min, final short max) {
         return (short) fake.ints().between(min, max);
     }
 
-    @Programmatic
-    public short any() {
-        return (short) fake.ints().any();
-    }
 }

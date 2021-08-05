@@ -18,10 +18,10 @@
  */
 package org.apache.isis.testing.fakedata.applib.services;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.value.Password;
 
 /**
+ * Returns random {@link Password} values, of fixed length.
  * @since 2.0 {@index}
  */
 public class IsisPasswords extends AbstractRandomValueGenerator {
@@ -30,8 +30,14 @@ public class IsisPasswords extends AbstractRandomValueGenerator {
         super(fakeDataService);
     }
 
-    @Programmatic
+    /**
+     * Returns a {@link Password} of 12 characters length.
+     */
     public Password any() {
-        return new Password(fake.strings().fixed(12));
+        return any(12);
+    }
+
+    public Password any(final int numCharacters) {
+        return new Password(fake.strings().fixed(numCharacters));
     }
 }

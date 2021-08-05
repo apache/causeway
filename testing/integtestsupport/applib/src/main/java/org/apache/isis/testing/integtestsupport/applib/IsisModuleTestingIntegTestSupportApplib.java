@@ -16,28 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.subdomains.base.applib.with;
+package org.apache.isis.testing.integtestsupport.applib;
 
-import org.apache.isis.testing.unittestsupport.applib.dom.bidir.Instantiator;
+import org.springframework.context.annotation.Configuration;
 
-public class InstantiatorForComparableByReference implements Instantiator {
-    public final Class<? extends WithReferenceComparable<?>> cls;
-    private int i;
-
-    public InstantiatorForComparableByReference(
-            Class<? extends WithReferenceComparable<?>> cls) {
-        this.cls = cls;
-    }
-
-    @Override
-    public Object instantiate() {
-        WithReferenceComparable<?> newInstance;
-        try {
-            newInstance = cls.newInstance();
-            newInstance.setReference(""+(++i));
-            return newInstance;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+/**
+ * @since 2.0 {@index}
+ */
+@Configuration
+public class IsisModuleTestingIntegTestSupportApplib {
 }

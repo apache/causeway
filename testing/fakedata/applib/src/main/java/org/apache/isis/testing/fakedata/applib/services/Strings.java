@@ -21,6 +21,8 @@ package org.apache.isis.testing.fakedata.applib.services;
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
+ * Returns random strings, specifying the number of characters.
+ *
  * @since 2.0 {@index}
  */
 public class Strings extends AbstractRandomValueGenerator {
@@ -29,7 +31,6 @@ public class Strings extends AbstractRandomValueGenerator {
         super(fakeDataService);
     }
 
-    @Programmatic
     public String upper(final int numChars) {
         final StringBuilder buf = new StringBuilder();
         for (int i = 0; i < numChars; i++) {
@@ -38,12 +39,10 @@ public class Strings extends AbstractRandomValueGenerator {
         return buf.toString();
     }
 
-    @Programmatic
     public String fixed(final int numChars) {
         return fake.lorem().javaFakerLorem.fixedString(numChars);
     }
 
-    @Programmatic
     public String digits(final int numDigits) {
         final StringBuilder buf = new StringBuilder();
         for (int i = 0; i < numDigits; i++) {

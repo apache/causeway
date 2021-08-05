@@ -13,6 +13,69 @@ On top of that, we usually:
 To explain further, let's walk through of the xref:docs:starters:simpleapp.adoc[SimpleApp] starter app.
 
 
+== Maven Configuration
+
+include::docs:mavendeps:partial$setup-and-configure-dependencyManagement.adoc[leveloffset=+2]
+
+In addition, add a section for the BOM of all the testing support libraries:
+
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+        	<groupId>org.apache.isis.testing</groupId>
+	        <artifactId>isis-testing</artifactId>
+            <scope>import</scope>
+            <type>pom</type>
+            <version>{page-isisrel}</version>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+----
+
+[#dependencies]
+=== Dependencies
+
+In the domain module(s) of your application, add the following dependency:
+
+[source,xml]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.isis.testing</groupId>
+        <artifactId>isis-testing-integtestsupport-applib</artifactId>
+        <scope>test</scope>
+    </dependency>
+</dependencies>
+----
+
+As a convenience, this dependency also brings in the xref:fixtures:about.adoc[Fixture Scripts] and xref:fakedata:about.adoc[Fakedata] libraries.
+If not required these can always be explicitly link:https://maven.apache.org/guides/introduction/introduction-to-optional-and-excludes-dependencies.html#dependency-exclusions[excluded].
+
+include::testing:ROOT:partial$surefire-configuration-caution.adoc[]
+
+
+=== Update AppManifest
+
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the `IsisModuleTestingIntegTestSupportApplib` module:
+
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        IsisModuleTestingIntegTestApplib.class,
+        ...
+})
+public class AppManifest {
+}
+----
+
+
 == Bootstrapping
 
 We typically put the bootstrapping of Apache Isis into a superclass, one for each Maven module.
@@ -158,41 +221,39 @@ By convention, we group tests into nested static classes, so the corresponding i
 ----
 public class SimpleObject_IntegTest extends SimpleModuleIntegTestAbstract {
     ...
-    public static class name extends SimpleObject_IntegTest {   //<1>
+    @Nested
+    public class Name {
 
         @Test
-        public void accessible() {
+        void accessible() {
             // when
-            final String name = wrap(simpleObject).getName();   //<2>
+            final String name = wrap(simpleObject).getName();   //<.>
 
             // then
-            assertThat(name).isEqualTo(simpleObject.getName()); //<3>
+            assertThat(name).isEqualTo(simpleObject.getName()); //<.>
         }
 
         @Test
-        public void not_editable() {
+        void not_editable() {
 
             // expect
-            assertThrows(DisabledException.class, ()->{         //<4>
+            assertThatThrownBy(()->{                            //<.>
 
                 // when
                 wrap(simpleObject).setName("new name");
-            });
+            }).isInstanceOf(DisabledException.class);
         }
     }
 }
 ----
-<1> inherit from `SimpleObject_IntegTest`
-+
-CAUTION: JUnit 5's `@Nested` annotation doesn't work here.
 
-<2> we use the xref:about.adoc#wrapper-factory[WrapperFactory] to access the domain object.
+<.> we use the xref:about.adoc#wrapper-factory[WrapperFactory] to access the domain object.
 +
 This will check that property (for access) is visible to the current user.
 
-<3> we use link:http://joel-costigliola.github.io/assertj[AssertJ] for assertions.
-<4> attempting to set the name on the property (through the wrapper) is disallowed.
-We detect this by catching a `DisabledException` (using JUnit 5's `assertThrows()`).
+<.> we use link:http://joel-costigliola.github.io/assertj[AssertJ] for assertions.
+<.> attempting to set the name on the property (through the wrapper) is disallowed.
+We detect this by catching a `DisabledException` (using link:http://joel-costigliola.github.io/assertj[AssertJ]'s `assertThatThrownBy(...)`).
 
 === Testing an action
 
@@ -600,39 +661,6 @@ class SwaggerExport_IntegTest extends ApplicationIntegTestAbstract {
                 .export(SwaggerService.Visibility.PRIVATE, SwaggerService.Format.JSON);
     }
 }
-
-== Maven Configuration
-
-Apache Isis' integ test support is most easily configured through a dependency on the `isis-mavendeps-integtests` module:
-
-[source,xml]
-----
-<dependency>
-    <groupId>org.apache.isis.mavendeps</groupId>
-    <artifactId>isis-mavendeps-integtests</artifactId>
-    <scope>test</scope>                             <!--1-->
-    <type>pom</type>
-</dependency>
-----
-<1> Normally `test`; usual Maven scoping rules apply.
-
-This will set up integration testing support .
-There is no need to specify the version if you inherit from from the xref:docs:parent-pom:about.adoc[Parent POM].
-
-
-include::testing:ROOT:partial$surefire-configuration-caution.adoc[]
-
-If you just want to set up integration testing support, then use:
-
-
-[source,xml]
-----
-<dependency>
-    <groupId>org.apache.isis.core</groupId>
-    <artifactId>isis-core-integtestsupport</artifactId>
-    <scope>test</scope>
-</dependency>
-----
 
 
 == Hints-n-Tips

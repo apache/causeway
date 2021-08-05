@@ -23,6 +23,8 @@ import java.math.BigInteger;
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
+ * Returns random {@link BigInteger}s.
+ *
  * @since 2.0 {@index}
  */
 public class BigIntegers extends AbstractRandomValueGenerator {
@@ -31,7 +33,6 @@ public class BigIntegers extends AbstractRandomValueGenerator {
         super(fakeDataService);
     }
 
-    @Programmatic
     public BigInteger any() {
         final long x = fake.longs().any();
         return new BigInteger(""+x);

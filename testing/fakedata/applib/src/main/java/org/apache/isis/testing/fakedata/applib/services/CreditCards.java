@@ -20,9 +20,9 @@ package org.apache.isis.testing.fakedata.applib.services;
 
 import com.github.javafaker.service.FakeValuesService;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
 /**
+ * Returns strings representing either credit card numbers or types (visa, amex and so on).
+ *
  * @since 2.0 {@index}
  */
 public class CreditCards extends AbstractRandomValueGenerator {
@@ -34,12 +34,10 @@ public class CreditCards extends AbstractRandomValueGenerator {
         javaFakerBusiness = fakeDataService.javaFaker().business();
     }
 
-    @Programmatic
     public String number() {
         return fake.fakeValuesService.fetchString("business.credit_card_numbers");
     }
 
-    @Programmatic
     public String type() {
         return fake.fakeValuesService.fetchString("business.credit_card_types");
     }

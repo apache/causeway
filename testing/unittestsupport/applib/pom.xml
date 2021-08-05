@@ -132,6 +132,12 @@
             <artifactId>slf4j-api</artifactId>
         </dependency>
 
+        <!-- convenience -->
+        <dependency>
+            <groupId>org.apache.isis.testing</groupId>
+            <artifactId>isis-testing-fakedata-applib</artifactId>
+        </dependency>
+
     </dependencies>
 
     <profiles>

@@ -20,13 +20,12 @@ package org.apache.isis.testing.unittestsupport.applib.dom.pojo;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.opentest4j.AssertionFailedError;
 
 import org.apache.isis.testing.unittestsupport.applib.dom.pojo.holders.ExampleBean;
 import org.apache.isis.testing.unittestsupport.applib.dom.pojo.holders.ExampleBeanHolder;
 
 import lombok.val;
-
-import org.opentest4j.AssertionFailedError;
 
 public class PojoTester_datatypes_bean_Test {
 
@@ -39,7 +38,7 @@ public class PojoTester_datatypes_bean_Test {
 
         // when
         PojoTester.create()
-                .usingData(DataForBean.beans(ExampleBean.class))
+                .usingData(ExampleBean.class, ExampleBean.class)
                 .exercise(holder);
 
         // then

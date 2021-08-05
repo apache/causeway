@@ -41,8 +41,7 @@ public abstract class AbstractApplyToAllContractTest {
 
     protected IndentPrinter out;
 
-    protected AbstractApplyToAllContractTest(
-            final String packagePrefix) {
+    protected AbstractApplyToAllContractTest() {
         out = new IndentPrinter(_Constants.nopWriter);
     }
 
@@ -57,15 +56,10 @@ public abstract class AbstractApplyToAllContractTest {
     }
 
     @Test
-    public void searchAndTest() throws Exception {
+    public void searchAndTest() {
 
         Set<Class<?>> entityTypes =
-                new TreeSet<>(new Comparator<Class<?>>() {
-                    @Override
-                    public int compare(Class<?> o1, Class<?> o2) {
-                        return o1.getName().compareTo(o2.getName());
-                    }
-                });
+                new TreeSet<>(Comparator.comparing(Class::getName));
         entityTypes.addAll(findTypes());
 
         for (Class<?> entityType : entityTypes) {
@@ -90,6 +84,9 @@ public abstract class AbstractApplyToAllContractTest {
         return Collections.emptySet();
     }
 
+    /**
+     * Mandatory hook method for contract test (subtypes) to implement.
+     */
     protected abstract void applyContractTest(Class<?> entityType);
 
 

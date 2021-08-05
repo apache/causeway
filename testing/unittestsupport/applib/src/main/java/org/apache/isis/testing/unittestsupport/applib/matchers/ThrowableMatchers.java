@@ -16,9 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testing.integtestsupport.applib;
+package org.apache.isis.testing.unittestsupport.applib.matchers;
 
 import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -49,6 +50,26 @@ public class ThrowableMatchers {
                 description.appendText("Caused by " + type.getName());
             }
 
+        };
+    }
+
+    public Matcher<Throwable> causalChainHasMessageWith(final String messageFragment) {
+        return new TypeSafeMatcher<>() {
+
+            @Override
+            public void describeTo(Description arg0) {
+                arg0.appendText("causal chain has message with " + messageFragment);
+            }
+
+            @Override
+            protected boolean matchesSafely(Throwable e) {
+                for (Throwable ex : _Exceptions.getCausalChain(e)) {
+                    if (ex.getMessage().contains(messageFragment)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
         };
     }
 

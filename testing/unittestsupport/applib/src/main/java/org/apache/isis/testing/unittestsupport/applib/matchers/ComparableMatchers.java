@@ -16,27 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.subdomains.base.applib.with;
+package org.apache.isis.testing.unittestsupport.applib.matchers;
 
-import org.apache.isis.testing.unittestsupport.applib.dom.bidir.Instantiator;
+import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 
-public class InstantiatorForComparableByName implements Instantiator {
-    public final Class<? extends WithNameComparable<?>> cls;
-    private int i;
+/**
+ * Hamcrest {@link Matcher} implementations for {@link Comparable}s.
+ *
+ * @since 2.0 {@index}
+ */
+public final class ComparableMatchers {
 
-    public InstantiatorForComparableByName(Class<? extends WithNameComparable<?>> cls) {
-        this.cls = cls;
+    private ComparableMatchers() { }
+
+    public static <T extends Comparable<T>> Matcher<T> greaterThan(final T c) {
+        return Matchers.greaterThan(c);
     }
 
-    @Override
-    public Object instantiate() {
-        WithNameComparable<?> newInstance;
-        try {
-            newInstance = cls.newInstance();
-            newInstance.setName(""+(++i));
-            return newInstance;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 }

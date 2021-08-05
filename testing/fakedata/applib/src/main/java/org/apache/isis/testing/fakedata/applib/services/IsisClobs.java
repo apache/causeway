@@ -31,6 +31,8 @@ import org.apache.isis.commons.internal.resources._Resources;
 import lombok.val;
 
 /**
+ * Returns random {@link Clob} values, optionally constrained to either XMLs or RTFs.
+ *
  * @since 2.0 {@index}
  */
 public class IsisClobs extends AbstractRandomValueGenerator {
@@ -95,16 +97,16 @@ public class IsisClobs extends AbstractRandomValueGenerator {
         return asClob(fileNamesEndingWith(".rtf"));
     }
 
-    private static List<String> fileNamesEndingWith(final String suffix) {
-        return IsisClobs.fileNames.stream()
-                .filter(input -> input.endsWith(suffix))
-                .collect(Collectors.toList());
-    }
-
     private Clob asClob(final List<String> fileNames) {
         final int randomIdx = fake.ints().upTo(fileNames.size());
         final String randomFileName = fileNames.get(randomIdx);
         return asClob(randomFileName);
+    }
+
+    private static List<String> fileNamesEndingWith(final String suffix) {
+        return IsisClobs.fileNames.stream()
+                .filter(input -> input.endsWith(suffix))
+                .collect(Collectors.toList());
     }
 
     private static Clob asClob(final String fileName) {

@@ -20,13 +20,12 @@ package org.apache.isis.testing.unittestsupport.applib.dom.pojo;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.opentest4j.AssertionFailedError;
 
 import org.apache.isis.testing.unittestsupport.applib.dom.pojo.holders.ApplibBlobHolder;
 import org.apache.isis.testing.unittestsupport.applib.dom.pojo.holders.ApplibClobHolder;
 
 import lombok.val;
-
-import org.opentest4j.AssertionFailedError;
 
 public class PojoTester_datatypes_applib_Test {
 
@@ -39,7 +38,6 @@ public class PojoTester_datatypes_applib_Test {
 
         // when
         PojoTester.create()
-                .usingData(DataForApplib.blobs())
                 .exercise(holder);
 
         // then
@@ -56,7 +54,6 @@ public class PojoTester_datatypes_applib_Test {
         // when
         Assertions.assertThatThrownBy(() -> {
             PojoTester.create()
-                        .usingData(DataForApplib.blobs())
                         .exercise(holder);
         }).isInstanceOf(AssertionFailedError.class);
     }
@@ -70,7 +67,6 @@ public class PojoTester_datatypes_applib_Test {
 
         // when
         PojoTester.create()
-                .usingData(DataForApplib.clobs())
                 .exercise(holder);
 
         // then
@@ -87,7 +83,6 @@ public class PojoTester_datatypes_applib_Test {
         // when
         Assertions.assertThatThrownBy(() -> {
             PojoTester.create()
-                        .usingData(DataForApplib.clobs())
                         .exercise(holder);
         }).isInstanceOf(AssertionFailedError.class);
     }
