@@ -1,3 +1,22 @@
 
-* xref:about.adoc[]
+* Core:
+
+
+include::userguide:ROOT:partial$extensions.adoc[]
+
+* Security:
+
+include::security:ROOT:partial$extensions.adoc[]
+
+
+
+* Restful Objects:
+
+include::vro:ROOT:partial$extensions.adoc[]
+
+
+* Wicket viewer:
+
+include::vw:ROOT:partial$extensions.adoc[]
+
 

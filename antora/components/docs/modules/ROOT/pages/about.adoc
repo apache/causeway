@@ -63,22 +63,6 @@ _Core_
 * *xref:refguide:ROOT:about.adoc[Reference Guide]*
 * *xref:testing:ROOT:about.adoc[Testing Guide]*
 
-|
-[discrete]
-== Libraries
-
-_For Use in Apps_
-
-*  xref:subdomains:ROOT:about.adoc[Subdomain Libraries]
-*  xref:valuetypes:ROOT:about.adoc[Value Type Catalog]
-
-_Integrate between Apps_
-
-*  xref:mappings:ROOT:about.adoc[Bounded Context Mapping Libraries]
-
-_Other_
-
-*  xref:incubator:ROOT:about.adoc[Incubator]
 
 
 |
@@ -99,9 +83,28 @@ _Security_
 
 * xref:security:ROOT:about.adoc[Security Guide]
 
-_Extensions_
+
+_Other_
+
+*  xref:incubator:ROOT:about.adoc[Incubator]
+
+|
+[discrete]
+== Libraries
+
+_For Use in Apps_
+
+*  xref:subdomains:ROOT:about.adoc[Subdomain Libraries]
+*  xref:valuetypes:ROOT:about.adoc[Value Type Catalog]
+
+_Integrate between Apps_
+
+*  xref:mappings:ROOT:about.adoc[Bounded Context Mapping Libraries]
+
+_Extending the framework itself_
 
 *  xref:extensions:ROOT:about.adoc[Extensions Catalog]
+
 
 |
 [discrete]

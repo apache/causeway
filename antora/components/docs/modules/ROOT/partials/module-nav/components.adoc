@@ -12,15 +12,12 @@
 *** xref:vw:ROOT:about.adoc[Web UI (Wicket)]
 *** xref:vro:ROOT:about.adoc[REST API (Restful Objects)]
 
-** Security
-
-*** xref:security:ROOT:about.adoc[Security Guide]
-
 ** Persistence
 
 *** xref:pjpa:ROOT:about.adoc[JPA (EclipseLink)]
 *** xref:pjdo:ROOT:about.adoc[JDO (DataNucleus)]
 
-** Extensions
+** Security
 
-***  xref:extensions:ROOT:about.adoc[Extensions Catalog]
+*** xref:security:ROOT:about.adoc[Security Guide]
+
