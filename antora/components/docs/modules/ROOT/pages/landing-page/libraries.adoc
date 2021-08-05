@@ -31,7 +31,11 @@ In other words, tools to help integrating system together.
 
 == Extending the Framework itself
 
-The xref:extensions:ROOT:about.adoc[Extensions Catalog] describes a number of extensions that extend the capabilities of the framework itself.
+These libraries extend the capabilities of the framework itself:
+
+* xref:extensions:ROOT:about.adoc[Extensions Catalog]
++
+Describes a number of extensions to the various components that make up the framework.
 
 For example, the "Excel Download" extension allows collections to be downloaded as an Excel `.xlsx` spreadsheet in the Wicket viewer.
 

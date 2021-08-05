@@ -23,8 +23,15 @@ Consists of two sections: fundamentals, and "beyond the basics".
 +
 Reference for the annotations, domain services and naming conventions.
 
-* *xref:testing:ROOT:about.adoc[Testing]*
+* *xref:testing:ROOT:about.adoc[Testing Guide]*
 +
 How to write unit tests, integration tests and BDD (Cucumber) tests, and how to use fixtures within integration tests and for rapid prototyping.
 
 
+== Security
+
+In addition:
+
+* *xref:security:ROOT:about.adoc[Security Guide]*
++
+Describes how to configure each of the various security implementations that integrate with Apache Isis.
