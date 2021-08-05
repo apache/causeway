@@ -236,8 +236,7 @@ By convention, we group tests into nested static classes, so the corresponding i
 ----
 public class SimpleObject_IntegTest extends SimpleModuleIntegTestAbstract {
     ...
-    @Nested
-    public class Name {
+    public static class name extends SimpleObject_IntegTest {
 
         @Test
         void accessible() {

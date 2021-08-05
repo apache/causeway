@@ -326,8 +326,7 @@ public class SimpleObject_IntegTest extends SimpleModuleIntegTestAbstract {
         simpleObject = fixtureScripts.runPersona(SimpleObject_persona.FOO); // <.>
     }
 
-    @Nested
-    public class updateName{
+    public static class updateName extends SimpleObject_IntegTest {
 
         @Test
         void can_be_updated_directly() {
