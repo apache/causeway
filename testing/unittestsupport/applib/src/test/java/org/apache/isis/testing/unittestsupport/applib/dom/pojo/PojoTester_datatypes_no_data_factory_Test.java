@@ -20,28 +20,37 @@ package org.apache.isis.testing.unittestsupport.applib.dom.pojo;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.opentest4j.AssertionFailedError;
 
 import org.apache.isis.testing.unittestsupport.applib.dom.pojo.holders.JodaLocalDateHolder;
 
 import lombok.val;
 
-import org.opentest4j.AssertionFailedError;
-
 public class PojoTester_datatypes_no_data_factory_Test {
+
+    public static class Customer {
+        private Address address;
+        public Address getAddress() {
+            return address;
+        }
+        public void setAddress(Address address) {
+            this.address = address;
+        }
+    }
+    public static class Address {}
 
     @Test
     public void exercise_data_not_provided() {
 
         // given
-        val holder = new JodaLocalDateHolder();
+        val holder = new Customer();
 
         // when
         Assertions.assertThatThrownBy(() -> {
             PojoTester.create()
-                    // .usingData(DataForJodaTime.localDates()) // not provided
                     .exercise(holder);
         }).isInstanceOf(AssertionFailedError.class)
-                .hasMessageContaining("No test data is available for setSomeLocalDate");
+                .hasMessageContaining("No test data is available for setAddress");
     }
 
 

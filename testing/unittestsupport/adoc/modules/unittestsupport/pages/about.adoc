@@ -5,43 +5,132 @@
 Apache Isis provides a number of helpers to help unit test your domain objects.
 
 
-
 == Maven Configuration
 
-WARNING: TODO: move this description earlier, standard format.
+include::docs:mavendeps:partial$setup-and-configure-dependencyManagement.adoc[leveloffset=+2]
 
-Apache Isis' unit test support is most easily configured through a dependency on the `isis-mavendeps-testing` module:
+In addition, add a section for the BOM of all the testing support libraries:
+
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+        	<groupId>org.apache.isis.testing</groupId>
+	        <artifactId>isis-testing</artifactId>
+            <scope>import</scope>
+            <type>pom</type>
+            <version>{page-isisrel}</version>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+----
+
+[#dependencies]
+=== Dependencies
+
+In the domain module(s) of your application, add the following dependency:
 
 [source,xml]
+.pom.xml
 ----
-<dependency>
-    <groupId>org.apache.isis.mavendeps</groupId>
-    <artifactId>isis-mavendeps-unittests</artifactId>
-    <scope>test</scope>                             <!--1-->
-    <type>pom</type>
-</dependency>
+<dependencies>
+    <dependency>
+        <groupId>org.apache.isis.testing</groupId>
+        <artifactId>isis-testing-unittestsupport-applib</artifactId>
+        <scope>test</scope>
+    </dependency>
+</dependencies>
 ----
-<1> Normally `test`; usual Maven scoping rules apply.
 
-This will set up unit testing support.
-There is no need to specify the version if you inherit from from the xref:docs:parent-pom:about.adoc[Parent POM].
 
+We also highly recommend using the xref:fakedata:about.adoc[Fakedata] library for random values in your tests:
+
+[source,xml]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.isis.testing</groupId>
+        <artifactId>isis-testing-fakedata-applib</artifactId>
+        <scope>test</scope>
+    </dependency>
+</dependencies>
+----
 
 
 include::testing:ROOT:partial$surefire-configuration-caution.adoc[]
 
-If you just want to set up unit testing support, then use:
 
-[source,xml]
+=== Update AppManifest
+
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the `IsisModuleTestingUnitTestSupportApplib` module:
+
+[source,java]
+.AppManifest.java
 ----
-<dependency>
-    <groupId>org.apache.isis.core</groupId>
-    <artifactId>isis-core-unittestsupport</artifactId>
-    <scope>test</scope>
-</dependency>
+@Configuration
+@Import({
+        ...
+        IsisModuleTestingUnitTestSupportApplib.class,
+        ...
+})
+public class AppManifest {
+}
 ----
 
+(In fact, this is optional; the classes in the unit test support library can be used outside of a running application).
 
+== PojoTester
+
+The xref:refguide:testing:index/unittestsupport/applib/dom/pojo/PojoTester.adoc[PojoTester] utility automates the testing of getters and setters.
+
+As getters and setters are so simple, the intention of automating their testing is not to discover defects (though if there are unintentional side-effects, then these will be found).
+Instead, the rationale of testing getters and setters is to increase code coverage.
+Any substantial gap away from 100% would therefore due to significant functionality not having tests (as opposed to merely getters and setters not being tested).
+
+The class has built-in support for primitives and most of the other value types already recognised by the framework, and provides a mechanism to allow example instances for any application-specific types.
+
+For example, given a class:
+
+[source,java]
+.Customer.java
+----
+@Getter @Setter
+public class Customer {
+    private int custNum;
+    private String name;
+    private Date registeredOn;
+    private Address address;
+    private List<Order> orders;
+}
+----
+
+then all of the getters and setters can be exercised using:
+
+[source,java]
+.Customer.java
+----
+public class Customer_Test {
+
+    @Test
+    void exercise_getters_and_setters() {
+        PojoTester.create()
+            .usingData(Address.class, Address.class)    // <.>
+            .usingData(Order.class, Order.class)        // <1>
+            .exercise();
+    }
+}
+----
+
+<.> provides the compile-time and run-time types of the referenced objects.
+The runtime-type must provide a no-arg constructor.
++
+In many cases (as here) the same type can be used for both parameters.
+
+There are several overloads of the `usingData(...)` method, one of which accepts a `PojoTester.DatumFactory` instance.
+This interface provides a more flexible way to provide arbitrary datum instances for a specified type.
 
 
 == Contract Tests
@@ -75,16 +164,6 @@ public class SomeDomainObject {
 }
 ----
 
-If using an RDBMS for persistence then we strongly recommend that you implement this test, for several reasons:
-
-* first, ``Set``s align more closely to the relational model than do ``List``s. A ``List`` must have an additional index to specify order.
-
-* second, `SortedSet` is preferable to `Set` because then the order is well-defined and predictable (to an end user, to the programmer).
-+
-The xref:refguide:applib:index/util/ObjectContracts.adoc[ObjectContracts]  utility class substantially simplifies the task of implementing `Comparable` in your domain classes.
-
-* third, if the relationship is bidirectional then the ORM (JDO/DataNucleus) will automatically maintain the relationship.
-
 To use the contract test, subclass `SortedSetsContractTestAbstract`, specifying the root package to search for domain classes.
 
 For example:
@@ -94,57 +173,25 @@ For example:
 public class SortedSetsContractTestAll extends SortedSetsContractTestAbstract {
 
     public SortedSetsContractTestAll() {
-        super("domainapp.modules");
+        super("com.mycompany.myapp.modules");
         withLoggingTo(System.out);
     }
 }
 ----
 
 
+If using an RDBMS for persistence then we strongly recommend that you implement this test, for several reasons:
 
-=== Bidirectional
+* first, ``Set``s align more closely to the relational model than do ``List``s.
+A ``List`` must have an additional index to specify order.
 
-This contract test automatically checks that bidirectional 1:m or 1:1 associations are being maintained correctly (assuming that they follow the xref:userguide:fun:how-tos/entity-relationships/managed-1-to-m-bidirectional-relationships.adoc[mutual registration pattern]
+* second, `SortedSet` is preferable to `Set` because then the order is well-defined and predictable (to an end user, to the programmer).
++
+The xref:refguide:applib:index/util/ObjectContracts.adoc[ObjectContracts]  utility class substantially simplifies the task of implementing `Comparable` in your domain classes.
 
-[TIP]
-====
-(If using JDO/DataNucleus, then) there is generally no need to programmatically maintain 1:m relationships (indeed it may introduce subtle errors).
-For more details, see xref:userguide:fun:how-tos/entity-relationships/managed-1-to-m-bidirectional-relationships.adoc[here].
-// Also check out the templates in the setup guide (xref:setupguide:intellij:about.adoc#live-templates[live templates (for IntelliJ)] / xref:setupguide:eclipse:about.adoc#editor-templates[editor templates (for Eclipse)]) for further guidance.
-====
+* third, if the relationship is bidirectional then the ORM (JDO/DataNucleus) will automatically maintain the relationship.
 
-For example, suppose that `ParentDomainObject` and `ChildDomainObject` have a 1:m relationship (`ParentDomainObject#children` / `ChildDomainObject#parent`), and also `PeerDomainObject` has a 1:1 relationship with itself (`PeerDomainObject#next` / `PeerDomainObject#previous`).
 
-The following will exercise these relationships:
-
-[source,java]
-----
-public class BidirectionalRelationshipContractTestAll
-        extends BidirectionalRelationshipContractTestAbstract {
-
-    public BidirectionalRelationshipContractTestAll() {
-        super("org.apache.isis.core.unittestsupport.bidir",
-                ImmutableMap.<Class<?>,Instantiator>of(
-                    ChildDomainObject.class, new InstantiatorForChildDomainObject(),
-                    PeerDomainObject.class, new InstantiatorSimple(PeerDomainObjectForTesting.class)
-                ));
-        withLoggingTo(System.out);
-    }
-}
-----
-
-The first argument to the constructor scopes the search for domain objects; usually this would be something like `&quot;com.mycompany.dom&quot;`.
-
-The second argument provides a map of `Instantiator` for certain of the domain object types.
-This has two main purposes.
-First, for abstract classes, it nominates an alternative concrete class to be instantiated.
-Second, for classes (such as `ChildDomainObject`) that are `Comparable` and are held in a `SortedSet`), it provides the ability to ensure that different instances are unique when compared against each other.
-If no `Instantiator` is provided, then the contract test simply attempts to instantiates the class.
-
-If any of the supporting methods (`addToXxx()`, `removeFromXxx()`, `modifyXxx()` or `clearXxx()`) are missing, the relationship is skipped.
-
-To see what's going on (and to identify any skipped relationships), use the `withLoggingTo()` method call.
-If any assertion fails then the error should be descriptive enough to figure out the problem (without enabling logging).
 
 
 === Comparable
@@ -155,7 +202,7 @@ ComparableContractTest_compareTo
 
 === Value Objects
 
-The `ValueTypeContractTestAbstract` automatically tests that a custom value type implements `equals()` and `hashCode()` correctly.
+The xref:refguide:testing:index/unittestsupport/applib/dom/value/ValueTypeContractTestAbstract.adoc[ValueTypeContractTestAbstract] tests that a custom value type implements `equals()` and `hashCode()` correctly.
 
 For example, testing JDK's own `java.math.BigInteger` can be done as follows:
 
@@ -164,22 +211,39 @@ For example, testing JDK's own `java.math.BigInteger` can be done as follows:
 public class ValueTypeContractTestAbstract_BigIntegerTest extends ValueTypeContractTestAbstract<BigInteger> {
 
     @Override
-    protected List<BigInteger> getObjectsWithSameValue() {
+    protected List<BigInteger> getObjectsWithSameValue() {      // <.>
         return Arrays.asList(new BigInteger("1"), new BigInteger("1"));
     }
 
     @Override
-    protected List<BigInteger> getObjectsWithDifferentValue() {
+    protected List<BigInteger> getObjectsWithDifferentValue() { // <.>
         return Arrays.asList(new BigInteger("2"));
     }
 }
 ----
 
+<.> Returns a list of different instances that are expected to have the same value (according to equals and hashCode).
+<.> Returns a list of instances that are different from each other and also from the instance(s) provided in the `getObjectsWithSameValue()` method.
+As here, it is often sufficient to provide a single instance (as it is compared against the instances provided by `getObjectsWithSameValue()`.
+
+
+
+
+=== XML Marshalling Support
+
+Apache Isis' unit testing support provides the xref:refguide:testing:index/unittestsupport/applib/matchers[JaxbMatchers] while the core applib also provides the useful xref:refguide:applib:index/util/JaxbUtil.adoc[JaxbUtil] class.
+
+These can be useful for example if you have example XML-serialized representations of the SOAP requests and response payloads and want to use these within your tests.
+
+
 
 
 == JMock Extensions
 
-WARNING: the JMock extensions are deprecrated, we suggest you use Mockito instead.
+[WARNING]
+====
+The JMock extensions are deprecated; we suggest you use Mockito instead.
+====
 
 If you use mocking, then  usual given/when/then format gets an extra step:
 
@@ -191,18 +255,6 @@ If you use mocking, then  usual given/when/then format gets an extra step:
 If using JMock then the interactions (in the "then") are checked automatically by a JUnit rule.
 However, you probably will still have some state changes to assert upon.
 
-[TIP]
-.Distinguish between queries vs mutators
-====
-For mock interactions that simply retrieve some data, your test should not need to verify that it occurred.
-If the system were to be refactored and starts caching some data, you don't really want your tests to start breaking because they are no longer performing a query that once they did.
-If using JMock API this means using the `allowing(..)` method to set up the expectation.
-
-On the other hand mocks that mutate the state of the system you probably should assert have occurred.
-If using JMock this typically means using the `oneOf(...)` method.
-
-For more tips on using JMock and mocking in general, check out the link:http://www.growing-object-oriented-software.com/[GOOS] book, written by JMock's authors, Steve Freeman and Nat Pryce and also link:http://natpryce.com/articles.html[Nat's blog].
-====
 
 Apache Isis' unit test support provides `JUnitRuleMockery2` which is an extension to the link:http://www.jmock.org/[JMock]'s `JunitRuleMockery`.
 It provides a simpler API and also providing support for autowiring.
@@ -230,135 +282,28 @@ public class JUnitRuleMockery2Test_autoWiring_setterInjection_happyCase {
 }
 ----
 
-[NOTE]
+[TIP]
+.Distinguish between queries vs mutators
 ====
-Isis also includes (and automatically uses) a link:http://www.javassist.org[Javassist]-based implementation of JMock's link:http://www.jmock.org/mocking-classes.html[ClassImposteriser] interface, so that you can mock out concrete classes as well as interfaces.  We've provided this rather than JMock's own cglib-based implementation (which is problematic for us given its own dependencies on link:http://asm.ow2.org/[asm]).
+For mock interactions that simply retrieve some data, your test should not need to verify that it occurred.
+If the system were to be refactored and starts caching some data, you don't really want your tests to start breaking because they are no longer performing a query that once they did.
+If using JMock API this means using the `allowing(..)` method to set up the expectation.
+
+On the other hand mocks that mutate the state of the system you probably should assert have occurred.
+If using JMock this typically means using the `oneOf(...)` method.
+
+For more tips on using JMock and mocking in general, check out the link:http://www.growing-object-oriented-software.com/[GOOS] book, written by JMock's authors, Steve Freeman and Nat Pryce and also link:http://natpryce.com/articles.html[Nat's blog].
 ====
 
 
-The example tests can be found https://github.com/apache/isis/tree/master/core/unittestsupport/src/test/java/org/apache/isis/core/unittestsupport/jmocking[here]
+== Utilities classes
 
+The unittestsupport library also includes a number of miscellaneous utilities classes:
 
+* xref:refguide:testing:index/unittestsupport/applib/util/CollectUtils.adoc[CollectUtils]
+* xref:refguide:testing:index/unittestsupport/applib/util/FileUtils.adoc[FileUtils]
+* xref:refguide:testing:index/unittestsupport/applib/util/InjectUtils.adoc[InjectUtils]
+* xref:refguide:testing:index/unittestsupport/applib/util/ReflectUtils.adoc[ReflectUtils]
+* xref:refguide:testing:index/unittestsupport/applib/util/StringUtils.adoc[StringUtils]
 
-== SOAP Fake Endpoints
-
-Chances are that at some point you may need to integrate your Apache Isis application to other external systems, possibly using old-style SOAP web services.
-The SOAP client in this case could be a domain service within your app, or it might be externalized, eg invoked through a scheduler or using link:http://camel.apache.org[Apache Camel].
-
-While you will want to (of course) perform manual system testing/UAT with a test instance of that external system, it's also useful to be able to perform unit testing of your SOAP client component.
-
-The `SoapEndpointPublishingRule` is a simple JUnit rule that allows you to run a fake SOAP endpoint within an unit test.
-
-NOTE: although originally intended for use with JUnit4, it can also used in JUnit5 tests; details below.
-
-
-=== `SoapEndpointPublishingRule`
-
-The idea behind this rule is that you write a fake server endpoint that implements the same WSDL contract as the "real" external system does, but which also exposes additional API to specify responses (or throw exceptions) from SOAP calls.
-It also typically records the requests and allows these to be queried.
-
-In its setup your unit test and gets the rule to instantiate and publish that fake server endpoint, and then obtains a reference to that server endpoint.
-It also instantiates the SOAP client, pointing it at the address (that is, a URL) that the fake server endpoint is running on.
-This way the unit test has control of both the SOAP client and server: the software under test and its collaborator.
-
-In the test methods your unit test sets up expectations on your fake server, and then exercises the SOAP client.
-The SOAP client calls the fake server, which then responds accordingly.
-The test can then assert that all expected interactions have occurred.
-
-So that tests don't take too long to run, the rule puts the fake server endpoints onto a thread-local.
-Therefore the unit tests should clear up any state on the fake server endpoints.
-
-Your unit test uses the rule by specifying the endpoint class (must have a no-arg constructor):
-
-[source,java]
-----
-public class FakeExternalSystemEndpointRuleTest {
-    @Rule
-    public SoapEndpointPublishingRule serverRule =
-        new SoapEndpointPublishingRule(FakeExternalSystemEndpoint.class);         // <.>
-    private FakeExternalSystemEndpoint fakeServerEndpoint;
-    private DemoObject externalSystemContract;                                    // <.>
-    @Before
-    public void setUp() throws Exception {
-        fakeServerEndpoint =
-            serverRule.getEndpointImplementor(FakeExternalSystemEndpoint.class);  // <.>
-        final String endpointAddress =
-            serverRule.getEndpointAddress(FakeExternalSystemEndpoint.class);      // <.>
-        final DemoObjectService externalSystemService =                           // <.>
-                new DemoObjectService(ExternalSystemWsdl.getWsdl());              // <.>
-        externalSystemContract = externalSystemService.getDemoObjectOverSOAP();
-        BindingProvider provider = (BindingProvider) externalSystemContract;
-        provider.getRequestContext().put(
-                BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-                endpointAddress)
-        );
-    }
-    @Test
-    public void happy_case() throws Exception {
-        // given
-        final Update update = new Update();                              // <.>
-        ...
-
-        // expect
-        final UpdateResponse response = new UpdateResponse();            // <.>
-        ...
-        fakeServerEndpoint.control().setResponse(updateResponse);
-
-        // when
-        PostResponse response = externalSystemContract.post(update);     // <.>
-
-        // then
-        final List<Update> updates =                                     // <.>
-            fakeServerEndpoint.control().getUpdates();
-        ...
-    }
-}
-----
-
-<.> specify the class that implements the endpoint (must have a no-arg constructor)
-<.> the SOAP contract as defined in WSDL and generated by wsdl2java
-<.> get hold of the fake server-side endpoint from the rule...
-<.> \... and its endpoint address
-<.> use factory (also generated by wsdl2java) to create client-side endpoint
-<.> `getWsdl()` is a utility method to return a URL for the WSDL (eg from the classpath)
-<.> create a request object in order to invoke the SOAP web service
-<.> instruct the fake server endpoint how to respond
-<.> invoke the web service
-<.> check the fake server endpoint was correctly invoked etc.
-
-
-The rule can also host multiple endpoints; just provide multiple classes in the constructor:
-
-[source,java]
-----
-@Rule
-public SoapEndpointPublishingRule serverRule =
-                new SoapEndpointPublishingRule(
-                    FakeCustomersEndpoint.class,
-                    FakeOrdersEndpoint.class,
-                    FakeProductsEndpoint.class);
-----
-
-To lookup a particular endpoint, specify its type:
-
-[source,java]
-----
-FakeProductsEndpoint fakeProductsServerEndpoint =
-            serverRule.getPublishedEndpoint(FakeProductsEndpoint.class);
-----
-
-The endpoint addresses that the server endpoints run on are determined automatically.
-If you want more control, then you can call one of ``SoapEndpointPublishingRule``'s overloaded constructors, passing in one or more `SoapEndpointSpec` instances.
-
-
-
-
-=== XML Marshalling Support
-
-Apache Isis' unit testing support also provides helper `JaxbUtil` and `JaxbMatchers` classes.
-These are useful if you have exampler XML-serialized representations of the SOAP requests and response payloads and want to use these within your tests.
-
-
-
-== Files
 

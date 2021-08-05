@@ -7,6 +7,7 @@
 ** xref:refguide:config:sections/isis.core.runtime-services.adoc[Core Runtime Services]
 ** xref:refguide:config:sections/isis.persistence.schema.adoc[Core Persistence Schema]
 ** xref:refguide:config:sections/isis.security.shiro.adoc[Shiro Security Implementation]
+** xref:refguide:config:sections/isis.security.keycloak.adoc[Keycloak Security Implementation]
 ** xref:refguide:config:sections/isis.security.spring.adoc[Spring Security Implementation]
 ** xref:refguide:config:sections/isis.viewer.restfulobjects.adoc[Restful Objects Viewer]
 ** xref:refguide:config:sections/isis.viewer.wicket.adoc[Wicket Viewer]

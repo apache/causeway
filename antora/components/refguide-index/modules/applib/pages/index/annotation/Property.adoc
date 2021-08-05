@@ -14,6 +14,7 @@ Collects together all the domain semantics for the property of a domain object.
   Class<? extends PropertyDomainEvent<?, ?>> domainEvent() default PropertyDomainEvent.Default.class;     // <.>
   Editing editing() default Editing.NOT_SPECIFIED;     // <.>
   String editingDisabledReason() default "";     // <.>
+  Publishing entityChangePublishing() default Publishing.NOT_SPECIFIED;     // <.>
   Publishing executionPublishing() default Publishing.NOT_SPECIFIED;     // <.>
   String fileAccept() default "";     // <.>
   Where hidden() default Where.NOT_SPECIFIED;     // <.>
@@ -52,6 +53,11 @@ Whether the properties of this domain object can be edited, or collections of th
 +
 --
 If _#editing()_ is set to _Editing#DISABLED_ , then the reason to provide to the user as to why this property cannot be edited.
+--
+<.> xref:#entityChangePublishing[entityChangePublishing]
++
+--
+When set to _Publishing#DISABLED_ , vetoes publishing of updates for this property. Otherwise has no effect, except when using _Publishing#ENABLED_ to override an inherited property annotation, which is a supported use-case.
 --
 <.> xref:#executionPublishing[executionPublishing]
 +
@@ -153,6 +159,13 @@ Note that non-editable objects can nevertheless have actions invoked upon them.
 === editingDisabledReason
 
 If _#editing()_ is set to _Editing#DISABLED_ , then the reason to provide to the user as to why this property cannot be edited.
+
+[#entityChangePublishing]
+=== entityChangePublishing
+
+When set to _Publishing#DISABLED_ , vetoes publishing of updates for this property. Otherwise has no effect, except when using _Publishing#ENABLED_ to override an inherited property annotation, which is a supported use-case.
+
+Relates to _DomainObject#entityChangePublishing()_ , which controls whether entity-change-publishing is enabled for the corresponding entity type.
 
 [#executionPublishing]
 === executionPublishing

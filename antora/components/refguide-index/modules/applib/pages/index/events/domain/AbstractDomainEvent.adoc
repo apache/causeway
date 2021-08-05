@@ -14,6 +14,7 @@ The class also provides a simple mechanism to allow adhoc sharing of user data b
 ----
 class AbstractDomainEvent<S> {
   AbstractDomainEvent()     // <.>
+  AbstractDomainEvent(final S source)     // <.>
   AbstractDomainEvent(final S source, final Identifier identifier)
   S getSource()     // <.>
   void setMixedIn(final Object mixedIn)     // <.>
@@ -45,6 +46,11 @@ class AbstractDomainEvent<S> {
 +
 --
 If used then the framework will set state via (non-API) setters.
+--
+<.> xref:#AbstractDomainEvent__S[AbstractDomainEvent(S)]
++
+--
+If used then the framework will set the remaining state via (non-API) setters.
 --
 <.> xref:#getSource__[getSource()]
 +
@@ -155,6 +161,13 @@ Mechanism to allow subscribers to share arbitrary information between phases. On
 If used then the framework will set state via (non-API) setters.
 
 Because the xref:refguide:applib:index/events/EventObjectBase.adoc[EventObjectBase] superclass prohibits a null source, a dummy value is temporarily used.
+
+[#AbstractDomainEvent__S]
+=== AbstractDomainEvent(S)
+
+If used then the framework will set the remaining state via (non-API) setters.
+
+Provided to allow nested non-static implementations, for use in nested non-static mixins.
 
 [#getSource__]
 === getSource()

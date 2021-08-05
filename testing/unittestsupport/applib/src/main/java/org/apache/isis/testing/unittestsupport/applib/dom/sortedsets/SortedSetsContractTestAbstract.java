@@ -39,7 +39,7 @@ public abstract class SortedSetsContractTestAbstract extends AbstractApplyToAllC
 
     protected SortedSetsContractTestAbstract(
             final String packagePrefix) {
-        super(packagePrefix);
+        super();
     }
 
     @Override

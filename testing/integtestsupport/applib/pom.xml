@@ -108,6 +108,12 @@
 			<artifactId>h2</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.apache.isis.testing</groupId>
+			<artifactId>isis-testing-fakedata-applib</artifactId>
+		</dependency>
+
+
 		<!-- TESTING -->
 
         <dependency>

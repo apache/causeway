@@ -1,0 +1,61 @@
+= Maven Configuration
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+include::docs:mavendeps:partial$setup-and-configure-dependencyManagement.adoc[leveloffset=+1]
+
+In addition, add a section for the BOM of all the testing support libraries:
+
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+        	<groupId>org.apache.isis.testing</groupId>
+	        <artifactId>isis-testing</artifactId>
+            <scope>import</scope>
+            <type>pom</type>
+            <version>{page-isisrel}</version>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+----
+
+[#dependencies]
+== Dependencies
+
+In the domain module(s) of your application, add the following dependency:
+
+[source,xml]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.isis.testing</groupId>
+        <artifactId>isis-testing-fixtures-applib</artifactId>
+        <scope>test</scope>
+    </dependency>
+</dependencies>
+----
+
+
+
+
+== Update AppManifest
+
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the `IsisModuleTestingFixturesApplib` module:
+
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        IsisModuleTestingFixturesApplib.class,
+        ...
+})
+public class AppManifest {
+}
+----
+

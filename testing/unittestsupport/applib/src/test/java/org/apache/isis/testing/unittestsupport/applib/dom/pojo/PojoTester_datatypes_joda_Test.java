@@ -40,7 +40,6 @@ public class PojoTester_datatypes_joda_Test {
 
         // when
         PojoTester.create()
-                .usingData(DataForJodaTime.localDates())
                 .exercise(holder);
 
         // then
@@ -57,7 +56,6 @@ public class PojoTester_datatypes_joda_Test {
         // when
         Assertions.assertThatThrownBy(() -> {
             PojoTester.create()
-                        .usingData(DataForJodaTime.localDates())
                         .exercise(holder);
         }).isInstanceOf(AssertionFailedError.class);
     }
@@ -71,7 +69,6 @@ public class PojoTester_datatypes_joda_Test {
 
         // when
         PojoTester.create()
-                .usingData(DataForJodaTime.localDateTimes())
                 .exercise(holder);
 
         // then
@@ -88,7 +85,6 @@ public class PojoTester_datatypes_joda_Test {
         // when
         Assertions.assertThatThrownBy(() -> {
             PojoTester.create()
-                        .usingData(DataForJodaTime.localDateTimes())
                         .exercise(holder);
         }).isInstanceOf(AssertionFailedError.class);
     }
@@ -102,7 +98,6 @@ public class PojoTester_datatypes_joda_Test {
 
         // when
         PojoTester.create()
-                .usingData(DataForJodaTime.localTimes())
                 .exercise(holder);
 
         // then
@@ -119,7 +114,6 @@ public class PojoTester_datatypes_joda_Test {
         // when
         Assertions.assertThatThrownBy(() -> {
             PojoTester.create()
-                        .usingData(DataForJodaTime.localTimes())
                         .exercise(holder);
         }).isInstanceOf(AssertionFailedError.class);
     }

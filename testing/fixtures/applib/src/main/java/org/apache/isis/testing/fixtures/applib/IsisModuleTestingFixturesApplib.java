@@ -27,6 +27,9 @@ import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixturesService
 import org.apache.isis.subdomains.spring.applib.IsisModuleSubdomainsSpringApplib;
 import org.apache.isis.testing.fixtures.applib.services.InitialFixtureScriptsInstaller;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Configuration
 @Import({
         // modules

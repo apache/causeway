@@ -36,11 +36,13 @@
 			<artifactId>isis-testing-specsupport-applib</artifactId>
 		</dependency>
 
+		<!-- convenience -->
 		<dependency>
 			<groupId>org.apache.isis.testing</groupId>
 			<artifactId>isis-testing-fakedata-applib</artifactId>
 		</dependency>
 
+		<!-- convenience -->
 		<dependency>
 			<groupId>org.apache.isis.testing</groupId>
 			<artifactId>isis-testing-fixtures-applib</artifactId>

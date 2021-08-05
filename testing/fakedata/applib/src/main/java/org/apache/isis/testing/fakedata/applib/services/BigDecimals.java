@@ -20,9 +20,9 @@ package org.apache.isis.testing.fakedata.applib.services;
 
 import java.math.BigDecimal;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
 /**
+ * Returns random {@link BigDecimal}s, optionally constrained by precision and scale.
+ *
  * @since 2.0 {@index}
  */
 public class BigDecimals extends AbstractRandomValueGenerator {
@@ -31,14 +31,12 @@ public class BigDecimals extends AbstractRandomValueGenerator {
         super(fakeDataService);
     }
 
-    @Programmatic
     public BigDecimal any() {
         final long x = fake.longs().any();
         final long y = fake.ints().upTo(4);
         return new BigDecimal(String.format("%d.%d", x, y));
     }
 
-    @Programmatic
     public BigDecimal any(final int precision, final int scale) {
         final String sign = fake.booleans().coinFlip()? "": "-";
         final String x = fake.strings().digits(precision-scale);

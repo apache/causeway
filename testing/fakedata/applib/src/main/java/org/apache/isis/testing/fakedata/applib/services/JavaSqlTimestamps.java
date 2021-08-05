@@ -19,11 +19,16 @@
 package org.apache.isis.testing.fakedata.applib.services;
 
 import java.sql.Timestamp;
+import java.time.Period;
 import java.util.Date;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
 /**
+ * Returns a random {@link java.sql.Timestamp}, optionally based on the current time but constrained by a {@link Period}.
+ *
+ * <p>
+ *     The current time ('now') is obtained from the {@link org.apache.isis.applib.services.clock.ClockService}.
+ * </p>
+ *
  * @since 2.0 {@index}
  */
 public class JavaSqlTimestamps extends AbstractRandomValueGenerator {
@@ -32,9 +37,35 @@ public class JavaSqlTimestamps extends AbstractRandomValueGenerator {
         super(fakeDataService);
     }
 
-    @Programmatic
+    /**
+     * Returns a random timestamp either before or after 'now', within the specified {@link Period}.
+     */
+    public java.sql.Timestamp around(final Period period) {
+        return asTimestamp(fake.javaSqlDates().around(period));
+    }
+
+    /**
+     * Returns a random timestamp some time before 'now', within the specified {@link Period}.
+     */
+    public java.sql.Timestamp before(final Period period) {
+        return asTimestamp(fake.javaSqlDates().before(period));
+    }
+
+    /**
+     * Returns a random timestamp some time after 'now', within the specified {@link Period}.
+     */
+    public java.sql.Timestamp after(final Period period) {
+        return asTimestamp(fake.javaSqlDates().after(period));
+    }
+
+    /**
+     * Returns a random timestamp 5 years around 'now'.
+     */
     public java.sql.Timestamp any() {
-        final Date date = fake.javaUtilDates().any();
+        return asTimestamp(fake.javaUtilDates().any());
+    }
+
+    private static Timestamp asTimestamp(Date date) {
         return new Timestamp(date.getTime());
     }
 }

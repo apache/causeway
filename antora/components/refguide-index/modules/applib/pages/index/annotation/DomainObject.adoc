@@ -17,7 +17,8 @@ Domain semantics for domain objects (entities and view models; for services see 
   Publishing entityChangePublishing() default Publishing.NOT_SPECIFIED;     // <.>
   String mixinMethod() default "$$";     // <.>
   Nature nature() default Nature.NOT_SPECIFIED;     // <.>
-  String objectType() default "";     // <.>
+  @AliasFor(annotation = DomainObject.class, value = "logicalTypeName")
+String objectType() default "";     // <.>
   String logicalTypeName() default "";     // <.>
   Class<? extends ObjectCreatedEvent<?>> createdLifecycleEvent() default ObjectCreatedEvent.Default.class;     // <.>
   Class<? extends ObjectPersistingEvent<?>> persistingLifecycleEvent() default ObjectPersistingEvent.Default.class;     // <.>
@@ -60,7 +61,7 @@ If _#editing()_ is set to _Editing#DISABLED_ , then the reason to provide to the
 <.> xref:#entityChangePublishing[entityChangePublishing]
 +
 --
-Whether entity changes should be published to _org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber_ s and whether entity changes, captured as _org.apache.isis.applib.services.publishing.spi.EntityChanges_ , should be dispatched to _org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber_ s.
+Whether entity changes (persistent property updates) should be published to _org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber_ s and whether entity changes, captured as _org.apache.isis.applib.services.publishing.spi.EntityChanges_ , should be published to _org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber_ s.
 --
 <.> xref:#mixinMethod[mixinMethod]
 +
@@ -180,7 +181,7 @@ If _#editing()_ is set to _Editing#DISABLED_ , then the reason to provide to the
 [#entityChangePublishing]
 === entityChangePublishing
 
-Whether entity changes should be published to _org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber_ s and whether entity changes, captured as _org.apache.isis.applib.services.publishing.spi.EntityChanges_ , should be dispatched to _org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber_ s.
+Whether entity changes (persistent property updates) should be published to _org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber_ s and whether entity changes, captured as _org.apache.isis.applib.services.publishing.spi.EntityChanges_ , should be published to _org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber_ s.
 
 [#mixinMethod]
 === mixinMethod

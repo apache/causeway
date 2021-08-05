@@ -10,9 +10,8 @@ Immutable value type holding pre-rendered HTML.
 ----
 class AsciiDoc {
   AsciiDoc()
-  AsciiDoc(String html)
-  AsciiDoc valueOfAdoc(String asciiDoc)
-  AsciiDoc valueOfHtml(String html)
+  AsciiDoc(String adoc)
+  AsciiDoc valueOfAdoc(String adoc)
   String title()
   String asHtml()
   boolean isEqualTo(final AsciiDoc other)

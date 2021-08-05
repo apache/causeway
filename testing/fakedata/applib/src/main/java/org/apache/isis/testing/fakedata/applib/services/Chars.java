@@ -18,9 +18,9 @@
  */
 package org.apache.isis.testing.fakedata.applib.services;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
 /**
+ * Returns random <code>char</code> values, optionally constrained within a range,
+ *
  * @since 2.0 {@index}
  */
 public class Chars extends AbstractRandomValueGenerator {
@@ -29,32 +29,43 @@ public class Chars extends AbstractRandomValueGenerator {
         super(fakeDataService);
     }
 
-    @Programmatic
+    /**
+     * Returns a random upper case characters, between 'A' and 'Z'.
+     */
     public char upper() {
         return anyOf("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
     }
 
-    @Programmatic
+    /**
+     * Returns a random lower case characters, between 'a' and 'z'.
+     */
     public char lower() {
         return anyOf("abcdefghijklmonpqrstuvwxyz");
     }
 
-    @Programmatic
+    /**
+     * Returns a digit character, between '0' and '9'.
+     */
+    public char digit() {
+        return anyOf("0123456789");
+    }
+
+    /**
+     * Returns any single character within the provided string.
+     */
+    public char anyOf(final String s) {
+        final char[] chars = s.toCharArray();
+        return fake.collections().anyOf(chars);
+    }
+
+    /**
+     * Returns any character at random.
+     */
     public char any() {
         final int any = fake.shorts().any();
         final int i = any - Short.MIN_VALUE;
         return (char) i;
     }
 
-    @Programmatic
-    public char digit() {
-        return anyOf("0123456789");
-    }
-
-
-    private char anyOf(final String s) {
-        final char[] chars = s.toCharArray();
-        return fake.collections().anyOf(chars);
-    }
 
 }

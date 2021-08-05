@@ -19,6 +19,8 @@
 package org.apache.isis.testing.fakedata.applib.services;
 
 /**
+ * Returns random <code>boolean</code> values with different probabilities.
+ *
  * @since 2.0 {@index}
  */
 public class Booleans extends AbstractRandomValueGenerator {
@@ -28,23 +30,29 @@ public class Booleans extends AbstractRandomValueGenerator {
     }
 
     /**
-     * Same as {@link #any()}.
+     * Same as {@link #any()}, 50:50 chance of true or false.
      */
     public boolean coinFlip() {
         return any();
     }
 
     /**
-     * Same as {@link #any()}.
+     * Same as {@link #any()}, 50:50 chance of true or false.
      */
     public boolean either() {
         return any();
     }
 
+    /**
+     * A 1 in 6 chance of returning true.
+     */
     public boolean diceRollOf6() {
         return fake.ints().upTo(6) == 5;
     }
 
+    /**
+     * 50:50 chance of true or false.
+     */
     public boolean any() {
         return fake.randomService.nextDouble() < 0.5;
     }

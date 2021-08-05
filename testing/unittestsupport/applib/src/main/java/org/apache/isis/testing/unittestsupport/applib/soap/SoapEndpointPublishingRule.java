@@ -29,9 +29,6 @@ import org.junit.runners.model.Statement;
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 
-/**
- * @since 2.0 {@index}
- */
 public class SoapEndpointPublishingRule implements TestRule {
 
     public SoapEndpointPublishingRule(final Class<?> endpointClass, final String endpointAddress) {

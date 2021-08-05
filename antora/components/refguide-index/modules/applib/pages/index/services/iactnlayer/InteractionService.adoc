@@ -23,6 +23,10 @@ interface InteractionService {
   void run(InteractionContext interactionContext, ThrowingRunnable runnable)     // <.>
   R callAnonymous(Callable<R> callable)     // <.>
   void runAnonymous(ThrowingRunnable runnable)     // <.>
+  Result<R> callAndCatch(final InteractionContext interactionContext, final Callable<R> callable)     // <.>
+  Result<Void> runAndCatch(final InteractionContext interactionContext, final ThrowingRunnable runnable)     // <.>
+  Result<R> callAnonymousAndCatch(final Callable<R> callable)     // <.>
+  Result<Void> runAnonymousAndCatch(final ThrowingRunnable runnable)     // <.>
 }
 ----
 
@@ -61,6 +65,26 @@ As per _#call(InteractionContext, Callable)_ , but using an anonymous xref:refgu
 +
 --
 As per _#callAnonymous(Callable)_ , but for a runnable.
+--
+<.> xref:#callAndCatch__InteractionContext_Callable[callAndCatch(InteractionContext, Callable)]
++
+--
+Variant of _#call(InteractionContext, Callable)_ that wraps the return value with a xref:refguide:commons:index/functional/Result.adoc[Result] , also catching any exception, that might have occurred.
+--
+<.> xref:#runAndCatch__InteractionContext_ThrowingRunnable[runAndCatch(InteractionContext, ThrowingRunnable)]
++
+--
+Variant of _#run(InteractionContext, ThrowingRunnable)_ that returns a xref:refguide:commons:index/functional/Result.adoc[Result] of _Result_ , also catching any exception, that might have occurred.
+--
+<.> xref:#callAnonymousAndCatch__Callable[callAnonymousAndCatch(Callable)]
++
+--
+Variant of _#callAnonymous(Callable)_ that wraps the return value with a xref:refguide:commons:index/functional/Result.adoc[Result] , also catching any exception, that might have occurred.
+--
+<.> xref:#runAnonymousAndCatch__ThrowingRunnable[runAnonymousAndCatch(ThrowingRunnable)]
++
+--
+Variant of _#runAnonymous(ThrowingRunnable)_ that returns a xref:refguide:commons:index/functional/Result.adoc[Result] of _Result_ , also catching any exception, that might have occurred.
 --
 
 == Members
@@ -110,3 +134,23 @@ As per _#call(InteractionContext, Callable)_ , but using an anonymous xref:refgu
 === runAnonymous(ThrowingRunnable)
 
 As per _#callAnonymous(Callable)_ , but for a runnable.
+
+[#callAndCatch__InteractionContext_Callable]
+=== callAndCatch(InteractionContext, Callable)
+
+Variant of _#call(InteractionContext, Callable)_ that wraps the return value with a xref:refguide:commons:index/functional/Result.adoc[Result] , also catching any exception, that might have occurred.
+
+[#runAndCatch__InteractionContext_ThrowingRunnable]
+=== runAndCatch(InteractionContext, ThrowingRunnable)
+
+Variant of _#run(InteractionContext, ThrowingRunnable)_ that returns a xref:refguide:commons:index/functional/Result.adoc[Result] of _Result_ , also catching any exception, that might have occurred.
+
+[#callAnonymousAndCatch__Callable]
+=== callAnonymousAndCatch(Callable)
+
+Variant of _#callAnonymous(Callable)_ that wraps the return value with a xref:refguide:commons:index/functional/Result.adoc[Result] , also catching any exception, that might have occurred.
+
+[#runAnonymousAndCatch__ThrowingRunnable]
+=== runAnonymousAndCatch(ThrowingRunnable)
+
+Variant of _#runAnonymous(ThrowingRunnable)_ that returns a xref:refguide:commons:index/functional/Result.adoc[Result] of _Result_ , also catching any exception, that might have occurred.

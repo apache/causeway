@@ -64,9 +64,7 @@ public class FakeDataServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        fakeDataService = new FakeDataService();
-        fakeDataService.repositoryService = mockRepositoryService;
-        fakeDataService.clockService = mockClockService;
+        fakeDataService = new FakeDataService(mockClockService, mockRepositoryService);
         fakeDataService.init();
 
         final VirtualClock virtualClock = VirtualClock.frozenAt(Instant.now()); 
@@ -223,13 +221,13 @@ public class FakeDataServiceTest {
 
     @Test
     public void jodaDateTimes_any() throws Exception {
-        final OffsetDateTime any = fakeDataService.j8DateTimes().any();
+        final OffsetDateTime any = fakeDataService.javaTimeDateTimes().any();
         assertThat(any).isNotNull();
     }
 
     @Test
     public void jodaLocalDates_any() throws Exception {
-        final LocalDate any = fakeDataService.j8LocalDates().any();
+        final LocalDate any = fakeDataService.javaTimeLocalDates().any();
         assertThat(any).isNotNull();
     }
 

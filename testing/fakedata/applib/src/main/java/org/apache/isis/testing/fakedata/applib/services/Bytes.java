@@ -18,9 +18,9 @@
  */
 package org.apache.isis.testing.fakedata.applib.services;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
 /**
+ * Returns random <code>byte</code> values, optionally constrained within a range,
+ *
  * @since 2.0 {@index}
  */
 public class Bytes extends AbstractRandomValueGenerator {
@@ -29,17 +29,14 @@ public class Bytes extends AbstractRandomValueGenerator {
         super(fakeDataService);
     }
 
-    @Programmatic
     public byte upTo(final byte upTo) {
         return (byte) fake.ints().upTo(upTo);
     }
 
-    @Programmatic
     public byte between(final byte min, final byte max) {
         return (byte) fake.ints().between(min, max);
     }
 
-    @Programmatic
     public byte any() {
         return (byte) fake.ints().any();
     }

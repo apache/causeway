@@ -23,7 +23,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.resources._Resources;
@@ -31,6 +30,8 @@ import org.apache.isis.commons.internal.resources._Resources;
 import lombok.val;
 
 /**
+ * Returns random {@link Blob} values, optionally constrained to either PDFs or JPGs.
+ *
  * @since 2.0 {@index}
  */
 public class IsisBlobs extends AbstractRandomValueGenerator {
@@ -53,32 +54,29 @@ public class IsisBlobs extends AbstractRandomValueGenerator {
             "Pawson-Naked-Objects-thesis.pdf",
             "rick-mugridge-paper.pdf");
 
-    @Programmatic
     public Blob any() {
         final List<String> fileNames = IsisBlobs.fileNames;
         return asBlob(fileNames);
     }
 
-    @Programmatic
     public Blob anyJpg() {
         return asBlob(fileNamesEndingWith(".jpg"));
     }
 
-    @Programmatic
     public Blob anyPdf() {
         return asBlob(fileNamesEndingWith(".pdf"));
-    }
-
-    private static List<String> fileNamesEndingWith(final String suffix) {
-        return IsisBlobs.fileNames.stream()
-                .filter(input -> input.endsWith(suffix))
-                .collect(Collectors.toList());
     }
 
     private Blob asBlob(final List<String> fileNames) {
         final int randomIdx = fake.ints().upTo(fileNames.size());
         final String randomFileName = fileNames.get(randomIdx);
         return asBlob(randomFileName);
+    }
+
+    private static List<String> fileNamesEndingWith(final String suffix) {
+        return IsisBlobs.fileNames.stream()
+                .filter(input -> input.endsWith(suffix))
+                .collect(Collectors.toList());
     }
 
     private static Blob asBlob(final String fileName) {

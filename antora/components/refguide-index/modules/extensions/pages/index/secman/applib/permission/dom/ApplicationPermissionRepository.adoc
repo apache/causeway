@@ -18,9 +18,10 @@ interface ApplicationPermissionRepository {
   ApplicationPermission newPermission(ApplicationRole role, ApplicationPermissionRule rule, ApplicationPermissionMode mode, ApplicationFeatureSort featureSort, String featureFqn)
   ApplicationPermission newPermission(ApplicationRole role, ApplicationPermissionRule rule, ApplicationPermissionMode mode, ApplicationFeatureId featureId)
   ApplicationPermission newPermissionNoCheck(ApplicationRole role, ApplicationPermissionRule rule, ApplicationPermissionMode mode, ApplicationFeatureSort sort, String featureFqn)     // <.>
-  List<ApplicationPermission> findByUser(ApplicationUser applicationUser)
+  List<ApplicationPermission> findByUser(ApplicationUser applicationUser)     // <.>
   List<ApplicationPermission> findByRole(ApplicationRole applicationRole)
   List<ApplicationPermission> findByUserMemento(UserMemento user)     // <.>
+  List<ApplicationPermission> findByRoleNames(List<String> roleNames)     // <.>
 }
 ----
 
@@ -30,10 +31,20 @@ interface ApplicationPermissionRepository {
 --
 Intended for use by fixture scripts.
 --
+<.> xref:#findByUser__ApplicationUser[findByUser(ApplicationUser)]
++
+--
+Uses the xref:refguide:extensions:index/secman/applib/role/dom/ApplicationRole.adoc[ApplicationRole] s associated with the xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUser.adoc[ApplicationUser] .
+--
 <.> xref:#findByUserMemento__UserMemento[findByUserMemento(UserMemento)]
 +
 --
-To support impersonation by role
+Uses the _UserMemento#getRoles() roles_ held within the provided xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento] .
+--
+<.> xref:#findByRoleNames__List[findByRoleNames(List)]
++
+--
+Returns the set of permissions associated with the provided list of roles (identified by their role name).
 --
 
 == Members
@@ -46,7 +57,19 @@ To support impersonation by role
 
 Intended for use by fixture scripts.
 
+[#findByUser__ApplicationUser]
+=== findByUser(ApplicationUser)
+
+Uses the xref:refguide:extensions:index/secman/applib/role/dom/ApplicationRole.adoc[ApplicationRole] s associated with the xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUser.adoc[ApplicationUser] .
+
 [#findByUserMemento__UserMemento]
 === findByUserMemento(UserMemento)
 
-To support impersonation by role
+Uses the _UserMemento#getRoles() roles_ held within the provided xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento] .
+
+Added to support _org.apache.isis.applib.services.user.ImpersonateMenu#impersonateWithRoles(String, List) impersonation by role_ .
+
+[#findByRoleNames__List]
+=== findByRoleNames(List)
+
+Returns the set of permissions associated with the provided list of roles (identified by their role name).

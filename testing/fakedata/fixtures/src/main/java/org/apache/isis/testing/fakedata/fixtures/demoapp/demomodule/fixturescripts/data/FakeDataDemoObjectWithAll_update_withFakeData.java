@@ -145,8 +145,8 @@ public class FakeDataDemoObjectWithAll_update_withFakeData extends FixtureScript
 
         this.defaultParam("someJavaUtilDate", executionContext, fakeDataService.javaUtilDates().any());
         this.defaultParam("someJavaSqlDate", executionContext, fakeDataService.javaSqlDates().any());
-        this.defaultParam("someJodaLocalDate", executionContext, fakeDataService.j8LocalDates().any());
-        this.defaultParam("someJodaDateTime", executionContext, fakeDataService.j8DateTimes().any());
+        this.defaultParam("someJodaLocalDate", executionContext, fakeDataService.javaTimeLocalDates().any());
+        this.defaultParam("someJodaDateTime", executionContext, fakeDataService.javaTimeDateTimes().any());
         this.defaultParam("someJavaSqlTimestamp", executionContext, fakeDataService.javaSqlTimestamps().any());
 
         this.defaultParam("someBigDecimal", executionContext, fakeDataService.bigDecimals().any(14,4));

@@ -9,7 +9,7 @@ Domain model validation checks for various semantic errors that might exist with
 Running up the application will flag any validation issues, as will running an integration test.
 However, depending upon configuration, the metamodel may only be built lazily, meaning that issues would only be detected while the application is running, rather than at bootstrap.
 
-The `DomainModelValidator` is a simple utility class that will fully rebuild the metamodel if required, and can then be used to verify that there are no issues.
+The xref:refguide:testing:index/integtestsupport/applib/validate/DomainModelValidator.adoc[DomainModelValidator] is a simple utility class that will fully rebuild the metamodel if required, and can then be used to verify that there are no issues.
 
 The example below is taken from the xref:docs:starters:simpleapp.adoc[simpleapp] starter app:
 

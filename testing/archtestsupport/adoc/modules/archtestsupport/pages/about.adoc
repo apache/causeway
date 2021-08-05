@@ -1,3 +1,4 @@
+[#architecture-test-support]
 = Architecture Test Support
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
@@ -5,9 +6,11 @@
 Apache Isis provides a library of link:https://www.archunit.org/[ArchUnit] tests to verify the structure of your domain applications.
 
 
-include::docs:mavendeps:partial$setup-and-configure-dependencyManagement.adoc[leveloffset=+1]
+== Maven Configuration
 
-In addition, add a section for the BOM of all subdomains:
+include::docs:mavendeps:partial$setup-and-configure-dependencyManagement.adoc[leveloffset=+2]
+
+In addition, add a section for the BOM of all the testing support libraries:
 
 [source,xml,subs="attributes+"]
 .pom.xml
@@ -26,7 +29,7 @@ In addition, add a section for the BOM of all subdomains:
 ----
 
 [#dependencies]
-== Dependencies
+=== Dependencies
 
 In the webapp module(s) of your application, add the following dependency:
 
@@ -42,9 +45,10 @@ In the webapp module(s) of your application, add the following dependency:
 </dependencies>
 ----
 
-<.> this assumes that the architecture tests reside in `src/test/java` (but see notes on excluding tests, in the <<architecture-test-support,next section>>).
+<.> this assumes that the architecture tests reside in `src/test/java` (but see notes on excluding tests, in the <<architecture_test-boilerplate,next section>>).
 
 
+[#architecture_test-boilerplate]
 == Architecture_Test Boilerplate
 
 It's generally sufficient to have a single `Architecture_Test` class that runs all architecture tests against all classes.

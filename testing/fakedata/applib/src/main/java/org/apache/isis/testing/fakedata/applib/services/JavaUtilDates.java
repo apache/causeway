@@ -19,12 +19,18 @@
 package org.apache.isis.testing.fakedata.applib.services;
 
 import java.time.OffsetDateTime;
-
-import org.apache.isis.applib.annotation.Programmatic;
+import java.time.Period;
+import java.util.Date;
 
 import lombok.val;
 
 /**
+ * Returns a random {@link java.util.Date}, optionally based on the current time but constrained by a {@link Period}.
+ *
+ * <p>
+ *     The current time ('now') is obtained from the {@link org.apache.isis.applib.services.clock.ClockService}.
+ * </p>
+ *
  * @since 2.0 {@index}
  */
 public class JavaUtilDates extends AbstractRandomValueGenerator {
@@ -33,10 +39,36 @@ public class JavaUtilDates extends AbstractRandomValueGenerator {
         super(fakeDataService);
     }
 
-    @Programmatic
+    /**
+     * Returns a random date either before or after 'now', within the specified {@link Period}.
+     */
+    public Date around(final Period period) {
+        return toJavaUtilDate(fake.javaTimeDateTimes().around(period));
+    }
+
+    /**
+     * Returns a random date some time before 'now', within the specified {@link Period}.
+     */
+    public Date before(final Period period) {
+        return toJavaUtilDate(fake.javaTimeDateTimes().before(period));
+    }
+
+    /**
+     * Returns a random date some time after 'now', within the specified {@link Period}.
+     */
+    public Date after(final Period period) {
+        return toJavaUtilDate(fake.javaTimeDateTimes().after(period));
+    }
+
+    /**
+     * Returns a random date 5 years around 'now'.
+     */
     public java.util.Date any() {
-        final OffsetDateTime dateTime = fake.j8DateTimes().any();
+        return toJavaUtilDate(fake.javaTimeDateTimes().any());
+    }
+
+    private static Date toJavaUtilDate(OffsetDateTime dateTime) {
         val epochMillis = dateTime.toInstant().toEpochMilli();
-        return new java.util.Date(epochMillis);
+        return new Date(epochMillis);
     }
 }

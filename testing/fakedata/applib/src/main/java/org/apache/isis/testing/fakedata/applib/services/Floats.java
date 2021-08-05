@@ -20,9 +20,9 @@ package org.apache.isis.testing.fakedata.applib.services;
 
 import org.apache.commons.lang3.RandomUtils;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
 /**
+ * Returns random <code>float</code> values, optionally constrained within a range,
+ *
  * @since 2.0 {@index}
  */
 public class Floats extends AbstractRandomValueGenerator {
@@ -31,8 +31,13 @@ public class Floats extends AbstractRandomValueGenerator {
         super(fakeDataService);
     }
 
-    @Programmatic
     public float any() {
-        return RandomUtils.nextFloat();
+        return fake.booleans().coinFlip()
+                ?  RandomUtils.nextFloat() * Float.MAX_VALUE
+                : -RandomUtils.nextFloat() * Float.MAX_VALUE;
+    }
+
+    public float upTo(final float max) {
+        return RandomUtils.nextFloat() * max;
     }
 }

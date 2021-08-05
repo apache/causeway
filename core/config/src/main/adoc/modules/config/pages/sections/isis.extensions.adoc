@@ -279,6 +279,17 @@ The exact set of permissions is hard-wired in the ``IsisExtSecmanRegularUserRole
 
 
 |
+[[isis.extensions.secman.user-menu-me-action-policy]]
+isis.extensions.secman. +
+user-menu-me-action-policy
+
+| 
+| Whether the presence of SecMan should result in the automatic suppression of the ``UserMenu``'s me action.
+
+This is normally what is required as SecMan's ``ApplicationUser`` is a more comprehensive representation of the current user. If the default me action is not suppressed, then the end-user will see two actions with the name "me" in the tertiary menu.
+
+
+|
 [[isis.extensions.secman.user-registration.initial-role-names]]
 isis.extensions.secman. +
 user-registration. +

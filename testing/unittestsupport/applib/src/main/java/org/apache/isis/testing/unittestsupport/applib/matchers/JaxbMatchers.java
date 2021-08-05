@@ -19,11 +19,7 @@
 package org.apache.isis.testing.unittestsupport.applib.matchers;
 
 import java.io.CharArrayWriter;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
 import java.io.Writer;
-import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -31,15 +27,15 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.resources._Resources;
+import lombok.val;
 
 /**
+ * Hamcrest {@link Matcher} implementations for JAXB XML elements.
+ *
  * @since 2.0 {@index}
  */
 public class JaxbMatchers {
@@ -72,38 +68,16 @@ class JaxbUtil2 {
 
     private JaxbUtil2(){}
 
-    public static <T> T fromXml(
-            final Reader reader,
-            final Class<T> dtoClass) {
-        Unmarshaller un = null;
-        try {
-            un = jaxbContextFor(dtoClass).createUnmarshaller();
-            return _Casts.uncheckedCast( un.unmarshal(reader) );
-        } catch (JAXBException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static <T> T fromXml(
-            final Class<?> contextClass,
-            final String resourceName,
-            final Charset charset,
-            final Class<T> dtoClass) throws IOException {
-        final String s = _Resources.loadAsString(contextClass, resourceName, charset);
-        return fromXml(new StringReader(s), dtoClass);
-    }
-
-    public static <T> String toXml(final T dto) {
+    static <T> String toXml(final T dto) {
         final CharArrayWriter caw = new CharArrayWriter();
         toXml(dto, caw);
         return caw.toString();
     }
 
-    public static <T> void toXml(final T dto, final Writer writer) {
-        Marshaller m = null;
+    static <T> void toXml(final T dto, final Writer writer) {
         try {
             final Class<?> aClass = dto.getClass();
-            m = jaxbContextFor(aClass).createMarshaller();
+            val m = jaxbContextFor(aClass).createMarshaller();
             m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             m.marshal(dto, writer);
         } catch (JAXBException e) {
@@ -113,7 +87,7 @@ class JaxbUtil2 {
 
     private static Map<Class<?>, JAXBContext> jaxbContextByClass = new ConcurrentHashMap<>();
 
-    public static <T> JAXBContext jaxbContextFor(final Class<T> dtoClass)  {
+    static <T> JAXBContext jaxbContextFor(final Class<T> dtoClass)  {
         JAXBContext jaxbContext = jaxbContextByClass.get(dtoClass);
         if(jaxbContext == null) {
             try {

@@ -18,9 +18,9 @@
  */
 package org.apache.isis.testing.fakedata.applib.services;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
 /**
+ * Returns random strings representing names.
+ *
  * @since 2.0 {@index}
  */
 public class Names extends AbstractRandomValueGenerator {
@@ -31,27 +31,22 @@ public class Names extends AbstractRandomValueGenerator {
         javaFakerName = fakeDataService.javaFaker().name();
     }
 
-    @Programmatic
     public String fullName() {
         return javaFakerName.name();
     }
 
-    @Programmatic
     public String firstName() {
         return javaFakerName.firstName();
     }
 
-    @Programmatic
     public String lastName() {
         return javaFakerName.lastName();
     }
 
-    @Programmatic
     public String prefix() {
         return javaFakerName.prefix();
     }
 
-    @Programmatic
     public String suffix() {
         return javaFakerName.suffix();
     }

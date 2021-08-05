@@ -12,7 +12,23 @@ interface VirtualClock {
   Instant nowAsInstant()     // <.>
   VirtualClock system()     // <.>
   VirtualClock nowAt(Instant virtualNow)     // <.>
+  VirtualClock nowAt(java.time.LocalDate virtualNow)     // <.>
+  VirtualClock nowAt(java.time.LocalDateTime virtualNow)
+  VirtualClock nowAt(java.time.OffsetDateTime virtualNow)
+  VirtualClock nowAt(java.time.ZonedDateTime virtualNow)
+  VirtualClock nowAt(java.util.Date virtualNow)
+  VirtualClock nowAt(org.joda.time.LocalDate virtualNow)
+  VirtualClock nowAt(org.joda.time.LocalDateTime virtualNow)
+  VirtualClock nowAt(org.joda.time.DateTime virtualNow)
   VirtualClock frozenAt(Instant frozenAt)     // <.>
+  VirtualClock frozenAt(java.time.LocalDate frozenAt)
+  VirtualClock frozenAt(java.time.LocalDateTime frozenAt)
+  VirtualClock frozenAt(java.time.OffsetDateTime frozenAt)
+  VirtualClock frozenAt(java.time.ZonedDateTime frozenAt)
+  VirtualClock frozenAt(java.util.Date frozenAt)
+  VirtualClock frozenAt(org.joda.time.LocalDate frozenAt)
+  VirtualClock frozenAt(org.joda.time.LocalDateTime frozenAt)
+  VirtualClock frozenAt(org.joda.time.DateTime frozenAt)
   VirtualClock frozenTestClock()     // <.>
   long nowAsEpochMilli()     // <.>
   LocalDate nowAsLocalDate(final ZoneId zoneId)     // <.>
@@ -45,6 +61,11 @@ Returns the system's default ticking clock.
 +
 --
 Returns a ticking clock set to virtual time _Instant_ _virtualNow_
+--
+<.> xref:#nowAt__java.time.LocalDate[nowAt(java.time.LocalDate)]
++
+--
+Returns a ticking clock set to virtual time.
 --
 <.> xref:#frozenAt__Instant[frozenAt(Instant)]
 +
@@ -143,6 +164,11 @@ Returns the system's default ticking clock.
 === nowAt(Instant)
 
 Returns a ticking clock set to virtual time _Instant_ _virtualNow_
+
+[#nowAt__java.time.LocalDate]
+=== nowAt(java.time.LocalDate)
+
+Returns a ticking clock set to virtual time.
 
 [#frozenAt__Instant]
 === frozenAt(Instant)

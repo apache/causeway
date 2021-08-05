@@ -40,7 +40,6 @@ public class PojoTester_datatypes_java_time_Test {
 
         // when
         PojoTester.create()
-                .usingData(DataForJavaTime.offsetDateTimes())
                 .exercise(holder);
 
         // then
@@ -57,7 +56,6 @@ public class PojoTester_datatypes_java_time_Test {
         // when
         Assertions.assertThatThrownBy(() -> {
             PojoTester.create()
-                        .usingData(DataForJavaTime.offsetDateTimes())
                         .exercise(holder);
         }).isInstanceOf(AssertionFailedError.class);
     }
@@ -71,7 +69,6 @@ public class PojoTester_datatypes_java_time_Test {
 
         // when
         PojoTester.create()
-                .usingData(DataForJavaTime.localDates())
                 .exercise(holder);
 
         // then
@@ -88,7 +85,6 @@ public class PojoTester_datatypes_java_time_Test {
         // when
         Assertions.assertThatThrownBy(() -> {
             PojoTester.create()
-                        .usingData(DataForJavaTime.localDates())
                         .exercise(holder);
         }).isInstanceOf(AssertionFailedError.class);
     }
@@ -102,7 +98,6 @@ public class PojoTester_datatypes_java_time_Test {
 
         // when
         PojoTester.create()
-                .usingData(DataForJavaTime.localDateTimes())
                 .exercise(holder);
 
         // then
@@ -119,7 +114,6 @@ public class PojoTester_datatypes_java_time_Test {
         // when
         Assertions.assertThatThrownBy(() -> {
             PojoTester.create()
-                        .usingData(DataForJavaTime.localDateTimes())
                         .exercise(holder);
         }).isInstanceOf(AssertionFailedError.class);
     }
@@ -133,7 +127,6 @@ public class PojoTester_datatypes_java_time_Test {
 
         // when
         PojoTester.create()
-                .usingData(DataForJavaTime.localTimes())
                 .exercise(holder);
 
         // then
@@ -150,7 +143,6 @@ public class PojoTester_datatypes_java_time_Test {
         // when
         Assertions.assertThatThrownBy(() -> {
             PojoTester.create()
-                        .usingData(DataForJavaTime.localTimes())
                         .exercise(holder);
         }).isInstanceOf(AssertionFailedError.class);
     }

@@ -38,6 +38,15 @@ import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 
 /**
+ * The main entry point for the fake data library, a domain service that provides the ability to obtain
+ * a random value for multiple different types.
+ *
+ * <p>
+ *     Also provides {@link #javaFaker() access} to the {@link Faker} class which provides many more random
+ *     instances, some relating to movies and tv shows.
+ * </p>
+ *
+ *
  * @since 2.0 {@index}
  */
 @Service
@@ -46,41 +55,29 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 @Qualifier("Default")
 public class FakeDataService {
 
-    private final Faker javaFaker;
+    final ClockService clockService;
+    final RepositoryService repositoryService;
 
+    final Faker javaFaker;
     final RandomService randomService;
     final FakeValuesService fakeValuesService;
 
-    public FakeDataService() {
-        this(new Random());
+    @Inject
+    public FakeDataService(
+            final ClockService clockService,
+            final RepositoryService repositoryService) {
+        this(clockService, repositoryService, new Random());
     }
 
-    FakeDataService(
+    protected FakeDataService(
+            final ClockService clockService,
+            final RepositoryService repositoryService,
             final Random random) {
-        this(random, new Faker(random));
-    }
-
-    FakeDataService(
-            final Random random,
-            final Faker javaFaker) {
-        this(random, javaFaker, new RandomService(random));
-    }
-
-    FakeDataService(
-            final Random random,
-            final Faker javaFaker,
-            final RandomService randomService) {
-        this(random, javaFaker, randomService, new FakeValuesService(Locale.ENGLISH, randomService));
-    }
-
-    FakeDataService(
-            final Random random,
-            final Faker javaFaker,
-            final RandomService randomService,
-            final FakeValuesService fakeValuesService) {
-        this.javaFaker = javaFaker;
-        this.randomService = randomService;
-        this.fakeValuesService = fakeValuesService;
+        this.clockService = clockService;
+        this.repositoryService = repositoryService;
+        this.javaFaker = new Faker(random);
+        this.randomService = new RandomService(random);
+        this.fakeValuesService = new FakeValuesService(Locale.ENGLISH, randomService);
     }
 
     @PostConstruct
@@ -111,9 +108,9 @@ public class FakeDataService {
         this.javaSqlDates = new JavaSqlDates(this);
         this.javaSqlTimestamps = new JavaSqlTimestamps(this);
 
-        this.j8DateTimes = new J8DateTimes(this);
-        this.j8LocalDates = new J8LocalDates(this);
-        this.j8Periods = new J8Periods(this);
+        this.javaTimeDateTimes = new JavaTimeDateTimes(this);
+        this.javaTimeLocalDates = new JavaTimeLocalDates(this);
+        this.javaTimePeriods = new JavaTimePeriods(this);
 
         this.jodaDateTimes = new JodaDateTimes(this);
         this.jodaLocalDates = new JodaLocalDates(this);
@@ -154,9 +151,9 @@ public class FakeDataService {
     private JavaSqlDates javaSqlDates;
     private JavaSqlTimestamps javaSqlTimestamps;
 
-    private J8DateTimes j8DateTimes;
-    private J8LocalDates j8LocalDates;
-    private J8Periods j8Periods;
+    private JavaTimeDateTimes javaTimeDateTimes;
+    private JavaTimeLocalDates javaTimeLocalDates;
+    private JavaTimePeriods javaTimePeriods;
 
     private JodaDateTimes jodaDateTimes;
     private JodaLocalDates jodaLocalDates;
@@ -259,16 +256,16 @@ public class FakeDataService {
         return javaSqlTimestamps;
     }
 
-    public J8LocalDates j8LocalDates() {
-        return j8LocalDates;
+    public JavaTimeLocalDates javaTimeLocalDates() {
+        return javaTimeLocalDates;
     }
 
-    public J8DateTimes j8DateTimes() {
-        return j8DateTimes;
+    public JavaTimeDateTimes javaTimeDateTimes() {
+        return javaTimeDateTimes;
     }
 
-    public J8Periods j8Periods() {
-        return j8Periods;
+    public JavaTimePeriods javaTimePeriods() {
+        return javaTimePeriods;
     }
 
     public JodaLocalDates jodaLocalDates() {
@@ -303,11 +300,6 @@ public class FakeDataService {
         return isisPasswords;
     }
 
-  //TODO[2249] deprecated
-//    public IsisMoneys isisMoneys() {
-//        return isisMoneys;
-//    }
-
     public IsisBlobs isisBlobs() {
         return isisBlobs;
     }
@@ -316,8 +308,5 @@ public class FakeDataService {
         return isisClobs;
     }
 
-    @Inject ClockService clockService;
-
-    @Inject RepositoryService repositoryService;
 
 }

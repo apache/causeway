@@ -19,6 +19,8 @@
 package org.apache.isis.testing.fakedata.applib.services;
 
 /**
+ * Returns random components of an address.
+ *
  * @since 2.0 {@index}
  */
 public class Addresses extends AbstractRandomValueGenerator {

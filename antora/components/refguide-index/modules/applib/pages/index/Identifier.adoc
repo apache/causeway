@@ -16,6 +16,7 @@ class Identifier {
   Identifier actionIdentifier(final LogicalType typeIdentifier, final String actionName, final Class<?>... parameterClasses)
   Identifier actionIdentifier(final LogicalType typeIdentifier, final String actionName, final Can<String> parameterClassNames)
   String getLogicalIdentityString(final String delimiter)
+  boolean matchesCommand(final Command command)
   String getClassNaturalName()
   String getMemberNaturalName()
   Can<String> getMemberParameterClassNaturalNames()

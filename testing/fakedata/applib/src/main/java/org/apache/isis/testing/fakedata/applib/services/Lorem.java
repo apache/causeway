@@ -21,6 +21,8 @@ package org.apache.isis.testing.fakedata.applib.services;
 import java.util.List;
 
 /**
+ * Returns random text, either words or sentences or paragraphs.
+ *
  * @since 2.0 {@index}
  */
 public class Lorem extends AbstractRandomValueGenerator {

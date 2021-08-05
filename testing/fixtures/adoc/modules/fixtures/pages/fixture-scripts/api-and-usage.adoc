@@ -321,15 +321,16 @@ public class SimpleObject_IntegTest extends SimpleModuleIntegTestAbstract {
     SimpleObject simpleObject;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         // given
         simpleObject = fixtureScripts.runPersona(SimpleObject_persona.FOO); // <.>
     }
 
-    public static class updateName extends SimpleObject_IntegTest {
+    @Nested
+    public class updateName{
 
         @Test
-        public void can_be_updated_directly() {
+        void can_be_updated_directly() {
 
             // when
             wrap(simpleObject).updateName("new name");

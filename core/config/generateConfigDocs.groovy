@@ -112,6 +112,13 @@ groups+= new PropertyGroup() {{
 }}
 
 groups+= new PropertyGroup() {{
+    prefix = "isis.security.keycloak"
+    name = "Keycloak Security Implementation"
+    properties: []
+    searchOrder = 501
+}}
+
+groups+= new PropertyGroup() {{
     prefix = "isis.security.spring"
     name = "Spring Security Implementation"
     properties: []

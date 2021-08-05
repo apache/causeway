@@ -2,8 +2,10 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-link:http://en.wikipedia.org/wiki/Behavior-driven_development[Behaviour-driven design] (BDD) redefines testing not as an after-the-fact "let's check the system works", but instead as a means to specify the required behaviour in conjunction with the domain expert.
-Once the feature has been implemented, it also provide a means by which the domain expert can verify the feature has been implemented to spec.
+link:http://en.wikipedia.org/wiki/Behavior-driven_development[Behaviour-driven design] (BDD) is not after-the-fact "let's check the system works" testing, but instead is intended as a means to specify the required behaviour in conjunction with the domain expert.
+Once the feature has been implemented, it also provide a means by which the domain expert can check the feature has been implemented to spec.
+A BDD spec strictly comes before implementation, and is to guide the conversation and explore the domain problem.
+The fact that it also gives us an automated regression test is bonus.
 
 Since domain experts are usually non-technical (at least, they are unlikely to be able to read or want to learn how to read JUnit/Java code), then applying BDD typically requires writing specifications in using structured English text and (ASCII) tables.
 The BDD tooling parses this text and uses it to actually interact with the system under test.
@@ -29,6 +31,156 @@ The code that goes in step definitions is broadly the same as the code that goes
 However one benefit of using step definitions (rather than integration tests) is that the step definitions are reusable across scenarios, so there may be less code overall to maintain.
 
 For example, if you have a step definition that maps to "given an uncompleted todo item", then this can be used for all the scenarios that start with that as their precondition.
+
+
+== Maven Configuration
+
+include::docs:mavendeps:partial$setup-and-configure-dependencyManagement.adoc[leveloffset=+2]
+
+In addition, add a section for the BOM of all the testing support libraries:
+
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+        	<groupId>org.apache.isis.testing</groupId>
+	        <artifactId>isis-testing</artifactId>
+            <scope>import</scope>
+            <type>pom</type>
+            <version>{page-isisrel}</version>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+----
+
+[#dependencies]
+=== Dependencies
+
+In either the domain module(s) or webapp modules of your application, add the following dependency:
+
+[source,xml]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.isis.testing</groupId>
+        <artifactId>isis-testing-specsupport-applib</artifactId>
+        <scope>test</scope>
+    </dependency>
+</dependencies>
+----
+
+
+As a convenience, this dependency also brings in the xref:fixtures:about.adoc[Fixture Scripts] and xref:fakedata:about.adoc[Fakedata] libraries.
+If not required these can always be explicitly link:https://maven.apache.org/guides/introduction/introduction-to-optional-and-excludes-dependencies.html#dependency-exclusions[excluded].
+
+
+include::testing:ROOT:partial$surefire-configuration-caution.adoc[]
+
+=== Update AppManifest
+
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the `IsisModuleTestingSpecSupportApplib` module:
+
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        IsisModuleTestingSpecSupportApplib.class,
+        ...
+})
+public class AppManifest {
+}
+----
+
+
+=== Cucumber CLI
+
+At the time of writing, the Maven Surefire does not support custom JUnit platform test engines.
+As a workaround, we use the Antrun plugin to execute the Cucumber CLI.
+
+[source,xml]
+.webapp/pom.xml
+----
+<plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-antrun-plugin</artifactId>
+  <executions>
+    <execution>
+      <id>cucumber-cli</id>
+      <phase>integration-test</phase>
+      <goals>
+        <goal>run</goal>
+      </goals>
+      <configuration>
+        <target>
+          <echo message="Running Cucumber CLI" />
+          <java classname="io.cucumber.core.cli.Main"
+                fork="true"
+                failonerror="true"
+                newenvironment="true"
+                maxmemory="1024m"
+                classpathref="maven.test.classpath">
+            <arg value="--plugin" />
+            <arg value="json:${project.build.directory}/cucumber-no-clobber.json" />
+          </java>
+        </target>
+      </configuration>
+    </execution>
+  </executions>
+</plugin>
+----
+This uses all of the step definitions found in the `stepdefs` package, and writes the results to the `cucumber-no-clobber.json` file.
+
+TIP: see link:https://github.com/cucumber/cucumber-jvm/blob/master/core/src/main/resources/io/cucumber/core/options/USAGE.txt[Cucumber-JVM] documentat for the full set of arguments.
+
+=== Generated Report
+
+BDD is all about creating a conversation with the domain expert, and that includes providing meaningful feedback as to whether the spec is passing or failing.
+
+The xref:docs:starters:simpleapp.adoc[SimpleApp]'s `webapp` module uses a Maven plugin to generate a snazzy HTML website based on the contents of the `.json` file emitted by the xref:about.adoc#cucumber-cli[Cucumber CLI].
+
+The plugin's configuration is:
+
+[source,xml]
+.webapp/pom.xml
+----
+<plugin>
+  <groupId>net.masterthought</groupId>
+  <artifactId>maven-cucumber-reporting</artifactId>
+  <version>${maven-cucumber-reporting.version}</version>
+  <executions>
+    <execution>
+      <id>default</id>
+      <phase>post-integration-test</phase>
+      <goals>
+        <goal>generate</goal>
+      </goals>
+      <configuration>
+        <projectName>SimpleApp</projectName>
+        <outputDirectory>${project.build.directory}</outputDirectory>
+        <inputDirectory>${project.build.directory}</inputDirectory>
+        <jsonFiles>
+          <param>**/cucumber-no-clobber.json</param>
+        </jsonFiles>
+        <skip>${skipBDD}</skip>
+      </configuration>
+    </execution>
+  </executions>
+</plugin>
+----
+
+Note how this reads the same file that was generated by Cucumber CLI.
+
+The report generated by xref:docs:starters:simpleapp.adoc[SimpleApp] looks like this:
+
+image::bdd-report.png[width="600px"]
+
+The idea is that this could then be published to a webserver to create an information radiator.
+
 
 == Writing a BDD spec
 
@@ -266,118 +418,4 @@ Note: at the time of writing this doesn't seem to be in the drop-down, so just t
 * in the "Before launch", make sure that the domain entities are enhanced.
 
 
-== Maven Configuration
-
-=== Dependencies
-
-Apache Isis' BDD spec support is most easily configured through a dependency on the `isis-mavendeps-integspecs` module:
-
-[source,xml]
-----
-<dependency>
-    <groupId>org.apache.isis.mavendeps</groupId>
-    <artifactId>isis-mavendeps-integspecs</artifactId>
-    <scope>test</scope>                                <!--.-->
-    <type>pom</type>
-</dependency>
-----
-<.> Normally `test`; usual Maven scoping rules apply.
-
-This will set up dependencies for BDD specs support libraries, along with a number of libraries.
-There is no need to specify the version if you inherit from from the xref:docs:parent-pom:about.adoc[Parent POM].
-
-If you just want to set up BDD spec support, then use:
-
-[source,xml]
-----
-<dependency>
-    <groupId>org.apache.isis.core</groupId>
-    <artifactId>isis-core-specsupport</artifactId>
-    <scope>test</scope>
-</dependency>
-----
-
-=== Cucumber CLI
-
-At the time of writing, the Maven Surefire does not support custom JUnit platform test engines.
-As a workaround, we use the Antrun plugin to execute the Cucumber CLI.
-
-[source,xml]
-.webapp/pom.xml
-----
-<plugin>
-  <groupId>org.apache.maven.plugins</groupId>
-  <artifactId>maven-antrun-plugin</artifactId>
-  <executions>
-    <execution>
-      <id>cucumber-cli</id>
-      <phase>integration-test</phase>
-      <goals>
-        <goal>run</goal>
-      </goals>
-      <configuration>
-        <target>
-          <echo message="Running Cucumber CLI" />
-          <java classname="io.cucumber.core.cli.Main"
-                fork="true"
-                failonerror="true"
-                newenvironment="true"
-                maxmemory="1024m"
-                classpathref="maven.test.classpath">
-            <arg value="--plugin" />
-            <arg value="json:${project.build.directory}/cucumber-no-clobber.json" />
-          </java>
-        </target>
-      </configuration>
-    </execution>
-  </executions>
-</plugin>
-----
-This uses all of the step definitions found in the `stepdefs` package, and writes the results to the `cucumber-no-clobber.json` file.
-
-TIP: see link:https://github.com/cucumber/cucumber-jvm/blob/master/core/src/main/resources/io/cucumber/core/options/USAGE.txt[Cucumber-JVM] documentat for the full set of arguments.
-
-=== Generated Report
-
-BDD is all about creating a conversation with the domain expert, and that includes providing meaningful feedback as to whether the spec is passing or failing.
-
-The xref:docs:starters:simpleapp.adoc[SimpleApp]'s `webapp` module uses a Maven plugin to generate a snazzy HTML website based on the contents of the `.json` file emitted by the xref:about.adoc#cucumber-cli[Cucumber CLI].
-
-The plugin's configuration is:
-
-[source,xml]
-.webapp/pom.xml
-----
-<plugin>
-  <groupId>net.masterthought</groupId>
-  <artifactId>maven-cucumber-reporting</artifactId>
-  <version>${maven-cucumber-reporting.version}</version>
-  <executions>
-    <execution>
-      <id>default</id>
-      <phase>post-integration-test</phase>
-      <goals>
-        <goal>generate</goal>
-      </goals>
-      <configuration>
-        <projectName>SimpleApp</projectName>
-        <outputDirectory>${project.build.directory}</outputDirectory>
-        <inputDirectory>${project.build.directory}</inputDirectory>
-        <jsonFiles>
-          <param>**/cucumber-no-clobber.json</param>
-        </jsonFiles>
-        <skip>${skipBDD}</skip>
-      </configuration>
-    </execution>
-  </executions>
-</plugin>
-----
-
-Note how this reads the same file that was generated by Cucumber CLI.
-
-The report generated by xref:docs:starters:simpleapp.adoc[SimpleApp] looks like this:
-
-image::bdd-report.png[width="600px"]
-
-The idea is that this could then be published to a webserver to create an information radiator.
 

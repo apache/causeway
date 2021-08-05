@@ -2,8 +2,151 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-include::partial$intro.adoc[]
+In any given test there are often quite a few variables involved, to initialize the state of the objects, or to act as arguments for invoking a method, or when asserting on post-conditions.
+Sometimes those values are important (eg verifying that an ``Order``'s state went from PENDING to SHIPPED, say), but often they aren't (a customer's name, for example).
+Nevertheless all this data may need to be set up, especially in integration tests.
 
-== Setup
+We want our tests to be easily understood, and we want the reader's eye to be drawn to the values that are significant and ignore those that are not.
 
-WARNING: TODO - to document
+One way to do this is to use random (or fake) values for any insignificant data.
+This in effect tells the reader that "any value will do".
+Moreover, if it turns out that any data won't do, and that there's some behaviour that is sensitive to the value, then the test will start to flicker, passing and then failing depending on inputs.
+This is A Good Thing&#8482;.
+
+
+To enable this the fakedata library provides the xref:refguide:testing:index/fakedata/applib/services/FakeDataService.adoc[FakeDataService] whose purpose is to act as a supplier of these random values, for numerous different data types, as well as names and "lorem" text.
+
+* If using within an integration test, the xref:refguide:testing:index/fakedata/applib/services/FakeDataService.adoc[FakeDataService] can simply be injected.
+
+* If using within a unit test, then be aware that to be instantiated the service requires a xref:refguide:applib:index/services/clock/ClockService.adoc[ClockService] and a xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService].
+The former is used obtain the current time (to return random date/times before, around or after that time), while the latter is used to look up random instances of entities (through the `collections()` method).
+
+We recommend using fake data in both unit and integration tests as a best practice.
+
+
+== Maven Configuration
+
+include::docs:mavendeps:partial$setup-and-configure-dependencyManagement.adoc[leveloffset=+2]
+
+In addition, add a section for the BOM of all the testing support libraries:
+
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+        	<groupId>org.apache.isis.testing</groupId>
+	        <artifactId>isis-testing</artifactId>
+            <scope>import</scope>
+            <type>pom</type>
+            <version>{page-isisrel}</version>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+----
+
+[#dependencies]
+=== Dependencies
+
+In the domain module(s) of your application, add the following dependency:
+
+[source,xml]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.isis.testing</groupId>
+        <artifactId>isis-testing-fakedata-applib</artifactId>
+        <scope>test</scope>
+    </dependency>
+</dependencies>
+----
+
+=== Update AppManifest
+
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the `IsisModuleTestingFakeDataApplib` module:
+
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        IsisModuleTestingFakeDataApplib.class,
+        ...
+})
+public class AppManifest {
+}
+----
+
+
+== API
+
+The library provides a single service, xref:refguide:testing:index/fakedata/applib/services/FakeDataService.adoc[FakeDataService].
+This provides numerous methods, each for a specific data type, providing an object that is able to provide random instances of that data type.
+
+[.nogrid]
+[cols="1a,1a",frame="none", grid="none", stripes="none"]
+|===
+
+
+|
+*Primitives*
+
+* xref:refguide:testing:index/fakedata/applib/services/Booleans.adoc[Booleans]
+* xref:refguide:testing:index/fakedata/applib/services/Bytes.adoc[Bytes]
+* xref:refguide:testing:index/fakedata/applib/services/Chars.adoc[Chars]
+* xref:refguide:testing:index/fakedata/applib/services/Doubles.adoc[Doubles]
+* xref:refguide:testing:index/fakedata/applib/services/Floats.adoc[Floats]
+* xref:refguide:testing:index/fakedata/applib/services/Integers.adoc[Integers]
+* xref:refguide:testing:index/fakedata/applib/services/Longs.adoc[Longs]
+* xref:refguide:testing:index/fakedata/applib/services/Shorts.adoc[Shorts]
+
+*Simple value types*
+
+* xref:refguide:testing:index/fakedata/applib/services/BigDecimals.adoc[BigDecimals]
+* xref:refguide:testing:index/fakedata/applib/services/BigIntegers.adoc[BigIntegers]
+* xref:refguide:testing:index/fakedata/applib/services/Strings.adoc[Strings]
+* xref:refguide:testing:index/fakedata/applib/services/Urls.adoc[Urls]
+* xref:refguide:testing:index/fakedata/applib/services/Uuids.adoc[Uuids]
+
+*More specialized value types*
+
+* xref:refguide:testing:index/fakedata/applib/services/IsisBlobs.adoc[IsisBlobs]
+* xref:refguide:testing:index/fakedata/applib/services/IsisClobs.adoc[IsisClobs]
+* xref:refguide:testing:index/fakedata/applib/services/IsisPasswords.adoc[IsisPasswords]
+
+|
+*Dates and times*
+
+* xref:refguide:testing:index/fakedata/applib/services/JavaSqlDates.adoc[JavaSqlDates]
+* xref:refguide:testing:index/fakedata/applib/services/JavaSqlTimestamps.adoc[JavaSqlTimestamps]
+* xref:refguide:testing:index/fakedata/applib/services/JavaTimeDateTimes.adoc[JavaTimeDateTimes]
+* xref:refguide:testing:index/fakedata/applib/services/JavaTimeLocalDates.adoc[JavaTimeLocalDates]
+* xref:refguide:testing:index/fakedata/applib/services/JavaTimePeriods.adoc[JavaTimePeriods]
+* xref:refguide:testing:index/fakedata/applib/services/JavaUtilDates.adoc[JavaUtilDates]
+* xref:refguide:testing:index/fakedata/applib/services/JodaDateTimes.adoc[JodaDateTimes]
+* xref:refguide:testing:index/fakedata/applib/services/JodaLocalDates.adoc[JodaLocalDates]
+* xref:refguide:testing:index/fakedata/applib/services/JodaPeriods.adoc[JodaPeriods]
+
+
+Note: these require the xref:refguide:applib:index/services/clock/ClockService.adoc[ClockService] to be injected through the constructor):
+
+*Domain-specific*
+
+* xref:refguide:testing:index/fakedata/applib/services/Addresses.adoc[Addresses]
+* xref:refguide:testing:index/fakedata/applib/services/Books.adoc[Books]
+* xref:refguide:testing:index/fakedata/applib/services/Collections.adoc[Collections]
++
+This requires the xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService] to be injected through the constructor).
+
+* xref:refguide:testing:index/fakedata/applib/services/Comms.adoc[Comms]
+* xref:refguide:testing:index/fakedata/applib/services/CreditCards.adoc[CreditCards]
+* xref:refguide:testing:index/fakedata/applib/services/Lorem.adoc[Lorem]
+* xref:refguide:testing:index/fakedata/applib/services/Names.adoc[Names]
+
+
+|===
+
+In addition, the full API of link:https://dius.github.io/java-faker/apidocs/index.html[Java Faker] is also accessible.

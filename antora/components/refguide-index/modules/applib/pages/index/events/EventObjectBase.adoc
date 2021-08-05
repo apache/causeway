@@ -8,7 +8,7 @@
 ----
 class EventObjectBase<T> {
   T getSource()     // <.>
-  void initSource(T source)     // <.>
+  void initSource(final T source)     // <.>
   String toString()     // <.>
 }
 ----

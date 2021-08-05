@@ -20,9 +20,9 @@ package org.apache.isis.testing.fakedata.applib.services;
 
 import org.apache.commons.lang3.RandomUtils;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
 /**
+ * Returns random <code>double</code> values, optionally constrained within a range,
+ *
  * @since 2.0 {@index}
  */
 public class Doubles extends AbstractRandomValueGenerator {
@@ -31,7 +31,6 @@ public class Doubles extends AbstractRandomValueGenerator {
         super(fakeDataService);
     }
 
-    @Programmatic
     public double any() {
         return fake.booleans().coinFlip()
                 ?  RandomUtils.nextDouble() * Double.MAX_VALUE

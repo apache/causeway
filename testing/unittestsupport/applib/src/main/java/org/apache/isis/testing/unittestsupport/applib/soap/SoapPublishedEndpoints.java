@@ -123,7 +123,7 @@ public class SoapPublishedEndpoints {
     public SoapPublishedEndpoints publishIfRequired(final Iterable<SoapEndpointSpec> soapEndpointSpecs) {
         val soapEndpointSpecs2 = stream(soapEndpointSpecs)
                 .collect(Collectors.toCollection(ArrayList::new));
-        return instance.publishIfRequired(soapEndpointSpecs2);
+        return instance.publishEndpointIfRequired(soapEndpointSpecs2);
     }
 
     public SoapPublishedEndpoints publishEndpointIfRequired(final List<SoapEndpointSpec> soapEndpointSpecs) {
