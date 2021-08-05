@@ -45,8 +45,19 @@ In the domain module(s) of your application, add the following dependency:
 ----
 
 
-As a convenience, this dependency also brings in the xref:fakedata:about.adoc[Fakedata] library.
-If not required this can always be explicitly link:https://maven.apache.org/guides/introduction/introduction-to-optional-and-excludes-dependencies.html#dependency-exclusions[excluded].
+We also highly recommend using the xref:fakedata:about.adoc[Fakedata] library for random values in your tests:
+
+[source,xml]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.isis.testing</groupId>
+        <artifactId>isis-testing-fakedata-applib</artifactId>
+        <scope>test</scope>
+    </dependency>
+</dependencies>
+----
 
 
 include::testing:ROOT:partial$surefire-configuration-caution.adoc[]
