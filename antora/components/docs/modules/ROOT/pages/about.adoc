@@ -26,7 +26,7 @@ _Starter Apps_
 * xref:docs:starters:helloworld.adoc[HelloWorld]
 (link:https://helloworld.jdo.isis.incode.work[jdo],
 link:https://helloworld.jpa.isis.incode.work[jpa])
-* xref:docs:starters:simpleapp.adoc[SimpleApp]
+* *xref:docs:starters:simpleapp.adoc[SimpleApp]*
 (link:https://simpleapp.jdo.isis.incode.work[jdo],
 link:https://simpleapp.jpa.isis.incode.work[jpa])
 
@@ -46,7 +46,7 @@ _POMs_
 [discrete]
 == Resources
 
-* xref:docs:resources:cheatsheet.adoc[Cheat Sheet]
+* *xref:docs:resources:cheatsheet.adoc[Cheat Sheet]*
 * xref:docs:resources:icons.adoc[Icons]
 
 |
@@ -81,7 +81,7 @@ _Persistence_
 
 _Security_
 
-* xref:security:ROOT:about.adoc[Security Guide]
+* *xref:security:ROOT:about.adoc[Security Guide]*
 
 
 _Other_
@@ -137,7 +137,7 @@ _Nightly Builds (not ASF)_
 _Process_
 
 * xref:conguide:ROOT:about.adoc[Contributors' Guide]
-* xref:comguide:ROOT:about.adoc[Committers' Guide]
+* *xref:comguide:ROOT:about.adoc[Committers' Guide]*
 ** xref:tooling:ROOT:about.adoc[Tooling]
 
 _Design_

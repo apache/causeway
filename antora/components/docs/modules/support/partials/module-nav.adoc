@@ -4,8 +4,23 @@
 
 * Support
 
-** xref:docs:support:slack-channel.adoc[Slack]
-** xref:docs:support:mailing-list.adoc[Mailing Lists]
-** link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[ASF JIRA]
-** link:http://stackoverflow.com/questions/tagged/isis[Stack Overflow]
+** Contact
+
+*** xref:docs:support:slack-channel.adoc[Slack]
+*** xref:docs:support:mailing-list.adoc[Mailing Lists]
+*** link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[ASF JIRA]
+*** link:http://stackoverflow.com/questions/tagged/isis[Stack Overflow]
+
+** Releases
+
+*** xref:docs:ROOT:downloads/how-to.adoc[Downloads]
+*** xref:relnotes:ROOT:about.adoc[Release Notes]
+
+
+** Nightly Builds (not ASF)
+
+*** link:https://github.com/apache-isis-committers/isis-nightly[CI]
+*** link:https://nexus.incode.work/[Maven repo] (current)
+*** link:https://repo.incode.cloud/[Maven repo] (v1 only)
+*** link:https://apache-isis-committers.github.io/isis-nightly[Website preview]
 
