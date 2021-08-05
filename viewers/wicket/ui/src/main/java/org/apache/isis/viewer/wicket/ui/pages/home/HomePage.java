@@ -61,7 +61,14 @@ public class HomePage extends PageAbstract {
 
         if(ManagedObjects.isSpecified(homePageAdapter)) {
             val requestCycle = RequestCycle.get();
-            requestCycle.setResponsePage(new EntityPage(getCommonContext(), homePageAdapter));
+            try {
+                val page = new EntityPage(getCommonContext(), homePageAdapter);
+                requestCycle.setResponsePage(page);
+            } catch (Exception ignore) {
+                // fallback (eg if permissions problem)
+                Components.permanentlyHide(themeDiv, ComponentType.ACTION_PROMPT);
+                getComponentFactoryRegistry().addOrReplaceComponent(themeDiv, ComponentType.WELCOME, null);
+            }
 
         } else {
             Components.permanentlyHide(themeDiv, ComponentType.ACTION_PROMPT);
