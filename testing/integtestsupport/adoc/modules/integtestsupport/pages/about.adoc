@@ -52,8 +52,23 @@ In the domain module(s) of your application, add the following dependency:
 </dependencies>
 ----
 
-As a convenience, this dependency also brings in the xref:fixtures:about.adoc[Fixture Scripts] and xref:fakedata:about.adoc[Fakedata] libraries.
-If not required these can always be explicitly link:https://maven.apache.org/guides/introduction/introduction-to-optional-and-excludes-dependencies.html#dependency-exclusions[excluded].
+As a convenience, this dependency also brings in the xref:fakedata:about.adoc[Fakedata] libraries.
+If not required this can always be explicitly link:https://maven.apache.org/guides/introduction/introduction-to-optional-and-excludes-dependencies.html#dependency-exclusions[excluded].
+
+We also highly recommend using xref:fixtures:about.adoc[Fixture Scripts] to manage the setup of the "given" state:
+
+[source,xml]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.isis.testing</groupId>
+        <artifactId>isis-testing-fixtures-applib</artifactId>
+        <scope>test</scope>
+    </dependency>
+</dependencies>
+----
+
 
 include::testing:ROOT:partial$surefire-configuration-caution.adoc[]
 

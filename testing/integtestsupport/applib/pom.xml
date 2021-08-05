@@ -113,10 +113,6 @@
 			<artifactId>isis-testing-fakedata-applib</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.apache.isis.testing</groupId>
-			<artifactId>isis-testing-fixtures-applib</artifactId>
-		</dependency>
 
 		<!-- TESTING -->
 
