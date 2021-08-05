@@ -43,12 +43,3 @@ Alternatively, you can "roll your own" (by implementing the xref:refguide:applib
 The xref:security:ROOT:about.adoc[Security Guide] describes how to configure each of the various security implementations that integrate with Apache Isis.
 
 
-== Extensions
-
-The xref:extensions:ROOT:about.adoc[Extensions Catalog] describes a number of extensions for the various components of the framework itself.
-
-For example, the "Excel Download" extension allows collections to be downloaded as an Excel `.xlsx` spreadsheet in the Wicket viewer.
-
-As well as the current extensions,  the xref:incubator:ROOT:about.adoc[Incubator] has additional components and extensions that may end up graduating.
-
-

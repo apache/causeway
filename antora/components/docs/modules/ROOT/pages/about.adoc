@@ -84,10 +84,6 @@ _Security_
 * *xref:security:ROOT:about.adoc[Security Guide]*
 
 
-_Other_
-
-*  xref:incubator:ROOT:about.adoc[Incubator]
-
 |
 [discrete]
 == Libraries
@@ -144,6 +140,10 @@ _Design_
 
 * xref:core:ROOT:about.adoc[Core Framework]
 ** xref:core:_overview:about.adoc[System Overview]
+
+_In Development_
+
+*  xref:incubator:ROOT:about.adoc[Incubator]
 
 _Analysis_
 
