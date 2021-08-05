@@ -19,8 +19,10 @@
 
 package org.apache.isis.viewer.wicket.viewer.integration;
 
-import java.util.Collections;
 import java.util.Locale;
+
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 
 import org.apache.wicket.request.Request;
 import org.jmock.Expectations;
@@ -66,9 +68,10 @@ public class AuthenticatedWebSessionForIsis_SignIn {
     @Before
     public void setUp() throws Exception {
         authMgr = new AuthenticationManager(
-                Collections.singletonList(mockAuthenticator),
+                singletonList(mockAuthenticator),
                 new InteractionService_forTesting(),
-                new RandomCodeGeneratorDefault());
+                new RandomCodeGeneratorDefault(),
+                emptyList());
     }
 
     @Test

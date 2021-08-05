@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="SimpleApp" type="Application" factoryName="Application" nameIsGenerated="true">
+  <configuration default="false" name="SimpleApp (JPA)" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="domainapp.webapp.SimpleApp" />
     <module name="simpleapp-jpa-webapp" />
     <shortenClasspath name="ARGS_FILE" />

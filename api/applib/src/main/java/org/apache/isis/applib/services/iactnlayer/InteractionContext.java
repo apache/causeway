@@ -29,12 +29,10 @@ import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.user.UserMemento;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.With;
 
@@ -45,11 +43,9 @@ import lombok.With;
  */
 @Getter
 @lombok.experimental.FieldDefaults(makeFinal=false, level= AccessLevel.PRIVATE)
-@AllArgsConstructor
 @ToString
 @EqualsAndHashCode
 @Builder
-@RequiredArgsConstructor
 public class InteractionContext implements Serializable {
 
     private static final long serialVersionUID = -220896735209733865L;

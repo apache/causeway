@@ -29,6 +29,11 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
+
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.iactnlayer.ThrowingRunnable;
@@ -45,11 +50,6 @@ import org.apache.isis.core.security.authentication.Authenticator;
 import org.apache.isis.core.security.authentication.InteractionContextFactory;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authentication.standard.RandomCodeGeneratorDefault;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
 
 public class AuthenticatedWebSessionForIsis_Authenticate {
 
@@ -75,7 +75,8 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
         authMgr = new AuthenticationManager(
                 Collections.singletonList(mockAuthenticator),
                 new InteractionService_forTesting(),
-                new RandomCodeGeneratorDefault());
+                new RandomCodeGeneratorDefault(),
+                Collections.emptyList());
 
         context.checking(new Expectations() {
             {

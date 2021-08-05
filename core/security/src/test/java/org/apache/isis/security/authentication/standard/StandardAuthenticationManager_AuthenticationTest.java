@@ -44,7 +44,8 @@ public class StandardAuthenticationManager_AuthenticationTest {
         authenticationManager = new AuthenticationManager(
                 Collections.singletonList(AuthenticatorsForTesting.authenticatorValidForFoo()),
                 new InteractionService_forTesting(),
-                new RandomCodeGeneratorDefault());
+                new RandomCodeGeneratorDefault(),
+                Collections.emptyList());
     }
 
     @Test

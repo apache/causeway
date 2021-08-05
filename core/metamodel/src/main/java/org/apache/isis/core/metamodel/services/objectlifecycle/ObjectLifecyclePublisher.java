@@ -24,6 +24,7 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.properties.property.entitychangepublishing.EntityPropertyChangePublishingPolicyFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -86,7 +87,7 @@ public interface ObjectLifecyclePublisher {
                                 property,
                                 PreAndPostValue
                                     .pre(PropertyValuePlaceholder.NEW)
-                                    .withPost(ManagedObjects.UnwrapUtil.single(property.get(entity))))
+                                    .withPost(ManagedObjects.UnwrapUtil.single(property.get(entity, InteractionInitiatedBy.FRAMEWORK))))
                         .toEntityPropertyChange(
                                 timestamp,
                                 user,
@@ -121,7 +122,7 @@ public interface ObjectLifecyclePublisher {
                                 entity,
                                 property,
                                 PreAndPostValue
-                                    .pre(ManagedObjects.UnwrapUtil.single(property.get(entity)))
+                                    .pre(ManagedObjects.UnwrapUtil.single(property.get(entity, InteractionInitiatedBy.FRAMEWORK)))
                                     .withPost(PropertyValuePlaceholder.DELETED))
                         .toEntityPropertyChange(
                                 timestamp,

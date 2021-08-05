@@ -46,7 +46,8 @@ public class AuthenticationManager_authenticators_Test {
         authenticationManager = new AuthenticationManager(
                 Collections.emptyList(),
                 new InteractionService_forTesting(),
-                new RandomCodeGeneratorDefault());
+                new RandomCodeGeneratorDefault(),
+                Collections.emptyList());
         authenticationManager.authenticate(new AuthenticationRequestPassword("foo", "bar"));
     }
 
@@ -58,7 +59,8 @@ public class AuthenticationManager_authenticators_Test {
         authenticationManager = new AuthenticationManager(
                 Collections.singletonList(auth),
                 new InteractionService_forTesting(),
-                new RandomCodeGeneratorDefault());
+                new RandomCodeGeneratorDefault(),
+                Collections.emptyList());
         assertThat(authenticationManager.getAuthenticators().size(), is(1));
         assertThat(authenticationManager.getAuthenticators().getElseFail(0), is(sameInstance(auth)));
     }

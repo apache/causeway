@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 import javax.annotation.Priority;
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -55,20 +54,22 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service
 @Named("isis.runtimeservices.RepositoryServiceDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
+@RequiredArgsConstructor
 //@Log4j2
 public class RepositoryServiceDefault implements RepositoryService {
 
-    @Inject private FactoryService factoryService;
-    @Inject private WrapperFactory wrapperFactory;
-    @Inject private TransactionService transactionService;
-    @Inject private IsisConfiguration isisConfiguration;
-    @Inject private ObjectManager objectManager;
+    final FactoryService factoryService;
+    final WrapperFactory wrapperFactory;
+    final TransactionService transactionService;
+    final IsisConfiguration isisConfiguration;
+    final ObjectManager objectManager;
 
     private boolean autoFlush;
 

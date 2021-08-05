@@ -1623,13 +1623,8 @@ public class IsisConfiguration {
                  * This key allows this behaviour to be disabled.
                  *
                  * <p>
-                 *     Originally introduced as part of ISIS-1134 (fixing memory leaks in the objectstore)
-                 *     where it was found that the autoflush behaviour was causing a (now unrepeatable)
-                 *     data integrity error (see <a href="https://issues.apache.org/jira/browse/ISIS-1134?focusedCommentId=14500638&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-14500638">ISIS-1134 comment</a>, in the isis-module-security.
-                 *     However, that this could be circumvented by removing the call to flush().
-                 *     We don't want to break existing apps that might rely on this behaviour, on the
-                 *     other hand we want to fix the memory leak.  Adding this configuration property
-                 *     seems the most prudent way forward.
+                 *     NOTE: this key is redundant for JPA/EclipseLink, which supports its own auto-flush using
+                 *     <a href="https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#BABDHEEB">eclipselink.persistence-context.flush-mode</a>
                  * </p>
                  */
                 private boolean disableAutoFlush = false;
