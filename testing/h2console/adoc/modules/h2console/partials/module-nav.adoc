@@ -1,6 +1,2 @@
 
 * xref:testing:h2console:about.adoc[H2 Console]
-
-** Domain Services
-*** xref:testing:h2console:services/H2ManagerMenu.adoc[H2ManagerMenu]
-

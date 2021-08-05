@@ -38,61 +38,8 @@ And if you can't write a fixture script for the story, it probably means that th
 The following sections explain how to setup Maven, the API and how to go about using the API.
 
 
-== Maven Configuration
 
-include::docs:mavendeps:partial$setup-and-configure-dependencyManagement.adoc[leveloffset=+2]
-
-In addition, add a section for the BOM of all the testing support libraries:
-
-[source,xml,subs="attributes+"]
-.pom.xml
-----
-<dependencyManagement>
-    <dependencies>
-        <dependency>
-        	<groupId>org.apache.isis.testing</groupId>
-	        <artifactId>isis-testing</artifactId>
-            <scope>import</scope>
-            <type>pom</type>
-            <version>{page-isisrel}</version>
-        </dependency>
-    </dependencies>
-</dependencyManagement>
-----
-
-[#dependencies]
-=== Dependencies
-
-In the domain module(s) of your application, add the following dependency:
-
-[source,xml]
-.pom.xml
-----
-<dependencies>
-    <dependency>
-        <groupId>org.apache.isis.testing</groupId>
-        <artifactId>isis-testing-fixtures-applib</artifactId>
-        <scope>test</scope>
-    </dependency>
-</dependencies>
-----
-
-
-
-
-=== Update AppManifest
-
-In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the `IsisModuleTestingFixturesApplib` module:
-
-[source,java]
-.AppManifest.java
-----
-@Configuration
-@Import({
-        ...
-        IsisModuleTestingFixturesApplib.class,
-        ...
-})
-public class AppManifest {
-}
-----
+include::testing:fixtures:page$fixture-scripts/maven-configuration.adoc[leveloffset=+1]
+include::testing:fixtures:page$fixture-scripts/api-and-usage.adoc[leveloffset=+1]
+include::testing:fixtures:page$fixture-scripts/mocking-the-clock-or-user.adoc[leveloffset=+1]
+include::testing:fixtures:page$fixture-scripts/using-with-secman.adoc[leveloffset=+1]

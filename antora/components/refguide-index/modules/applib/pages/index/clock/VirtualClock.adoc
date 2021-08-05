@@ -13,22 +13,22 @@ interface VirtualClock {
   VirtualClock system()     // <.>
   VirtualClock nowAt(Instant virtualNow)     // <.>
   VirtualClock nowAt(java.time.LocalDate virtualNow)     // <.>
-  VirtualClock nowAt(java.time.LocalDateTime virtualNow)     // <.>
-  VirtualClock nowAt(java.time.OffsetDateTime virtualNow)     // <.>
-  VirtualClock nowAt(java.time.ZonedDateTime virtualNow)     // <.>
-  VirtualClock nowAt(java.util.Date virtualNow)     // <.>
-  VirtualClock nowAt(org.joda.time.LocalDate virtualNow)     // <.>
-  VirtualClock nowAt(org.joda.time.LocalDateTime virtualNow)     // <.>
-  VirtualClock nowAt(org.joda.time.DateTime virtualNow)     // <.>
+  VirtualClock nowAt(java.time.LocalDateTime virtualNow)
+  VirtualClock nowAt(java.time.OffsetDateTime virtualNow)
+  VirtualClock nowAt(java.time.ZonedDateTime virtualNow)
+  VirtualClock nowAt(java.util.Date virtualNow)
+  VirtualClock nowAt(org.joda.time.LocalDate virtualNow)
+  VirtualClock nowAt(org.joda.time.LocalDateTime virtualNow)
+  VirtualClock nowAt(org.joda.time.DateTime virtualNow)
   VirtualClock frozenAt(Instant frozenAt)     // <.>
-  VirtualClock frozenAt(java.time.LocalDate frozenAt)     // <.>
-  VirtualClock frozenAt(java.time.LocalDateTime frozenAt)     // <.>
-  VirtualClock frozenAt(java.time.OffsetDateTime frozenAt)     // <.>
-  VirtualClock frozenAt(java.time.ZonedDateTime frozenAt)     // <.>
-  VirtualClock frozenAt(java.util.Date frozenAt)     // <.>
-  VirtualClock frozenAt(org.joda.time.LocalDate frozenAt)     // <.>
-  VirtualClock frozenAt(org.joda.time.LocalDateTime frozenAt)     // <.>
-  VirtualClock frozenAt(org.joda.time.DateTime frozenAt)     // <.>
+  VirtualClock frozenAt(java.time.LocalDate frozenAt)
+  VirtualClock frozenAt(java.time.LocalDateTime frozenAt)
+  VirtualClock frozenAt(java.time.OffsetDateTime frozenAt)
+  VirtualClock frozenAt(java.time.ZonedDateTime frozenAt)
+  VirtualClock frozenAt(java.util.Date frozenAt)
+  VirtualClock frozenAt(org.joda.time.LocalDate frozenAt)
+  VirtualClock frozenAt(org.joda.time.LocalDateTime frozenAt)
+  VirtualClock frozenAt(org.joda.time.DateTime frozenAt)
   VirtualClock frozenTestClock()     // <.>
   long nowAsEpochMilli()     // <.>
   LocalDate nowAsLocalDate(final ZoneId zoneId)     // <.>
@@ -65,87 +65,12 @@ Returns a ticking clock set to virtual time _Instant_ _virtualNow_
 <.> xref:#nowAt__java.time.LocalDate[nowAt(java.time.LocalDate)]
 +
 --
-Returns a ticking clock set to virtual time _java.time.LocalDate_ _virtualNow_
---
-<.> xref:#nowAt__java.time.LocalDateTime[nowAt(java.time.LocalDateTime)]
-+
---
-Returns a ticking clock set to virtual time _java.time.LocalDateTime_ _virtualNow_
---
-<.> xref:#nowAt__java.time.OffsetDateTime[nowAt(java.time.OffsetDateTime)]
-+
---
-Returns a ticking clock set to virtual time _java.time.OffsetDateTime_ _virtualNow_
---
-<.> xref:#nowAt__java.time.ZonedDateTime[nowAt(java.time.ZonedDateTime)]
-+
---
-Returns a ticking clock set to virtual time _java.time.ZonedDateTime_ _virtualNow_
---
-<.> xref:#nowAt__java.util.Date[nowAt(java.util.Date)]
-+
---
-Returns a ticking clock set to virtual time _java.util.Date_ _virtualNow_
---
-<.> xref:#nowAt__org.joda.time.LocalDate[nowAt(org.joda.time.LocalDate)]
-+
---
-Returns a ticking clock set to virtual time _org.joda.time.LocalDate_ _virtualNow_
---
-<.> xref:#nowAt__org.joda.time.LocalDateTime[nowAt(org.joda.time.LocalDateTime)]
-+
---
-Returns a ticking clock set to virtual time _org.joda.time.LocalDateTime_ _virtualNow_
---
-<.> xref:#nowAt__org.joda.time.DateTime[nowAt(org.joda.time.DateTime)]
-+
---
-Returns a ticking clock set to virtual time _org.joda.time.DateTime_ _virtualNow_
+Returns a ticking clock set to virtual time.
 --
 <.> xref:#frozenAt__Instant[frozenAt(Instant)]
 +
 --
 Always returns the time _Instant_ as given by _frozenAt_
---
-<.> xref:#frozenAt__java.time.LocalDate[frozenAt(java.time.LocalDate)]
-+
---
-Always returns the time _java.time.LocalDate_ as given by _frozenAt_
---
-<.> xref:#frozenAt__java.time.LocalDateTime[frozenAt(java.time.LocalDateTime)]
-+
---
-Always returns the time _java.time.LocalDateTime_ as given by _frozenAt_
---
-<.> xref:#frozenAt__java.time.OffsetDateTime[frozenAt(java.time.OffsetDateTime)]
-+
---
-Always returns the time _java.time.OffsetDateTime_ as given by _frozenAt_
---
-<.> xref:#frozenAt__java.time.ZonedDateTime[frozenAt(java.time.ZonedDateTime)]
-+
---
-Always returns the time _java.time.ZonedDateTime_ as given by _frozenAt_
---
-<.> xref:#frozenAt__java.util.Date[frozenAt(java.util.Date)]
-+
---
-Always returns the time _java.util.Date_ as given by _frozenAt_
---
-<.> xref:#frozenAt__org.joda.time.LocalDate[frozenAt(org.joda.time.LocalDate)]
-+
---
-Always returns the time _org.joda.time.LocalDate_ as given by _frozenAt_
---
-<.> xref:#frozenAt__org.joda.time.LocalDateTime[frozenAt(org.joda.time.LocalDateTime)]
-+
---
-Always returns the time _org.joda.time.LocalDateTime_ as given by _frozenAt_
---
-<.> xref:#frozenAt__org.joda.time.DateTime[frozenAt(org.joda.time.DateTime)]
-+
---
-Always returns the time _org.joda.time.DateTime_ as given by _frozenAt_
 --
 <.> xref:#frozenTestClock__[frozenTestClock()]
 +
@@ -243,87 +168,12 @@ Returns a ticking clock set to virtual time _Instant_ _virtualNow_
 [#nowAt__java.time.LocalDate]
 === nowAt(java.time.LocalDate)
 
-Returns a ticking clock set to virtual time _java.time.LocalDate_ _virtualNow_
-
-[#nowAt__java.time.LocalDateTime]
-=== nowAt(java.time.LocalDateTime)
-
-Returns a ticking clock set to virtual time _java.time.LocalDateTime_ _virtualNow_
-
-[#nowAt__java.time.OffsetDateTime]
-=== nowAt(java.time.OffsetDateTime)
-
-Returns a ticking clock set to virtual time _java.time.OffsetDateTime_ _virtualNow_
-
-[#nowAt__java.time.ZonedDateTime]
-=== nowAt(java.time.ZonedDateTime)
-
-Returns a ticking clock set to virtual time _java.time.ZonedDateTime_ _virtualNow_
-
-[#nowAt__java.util.Date]
-=== nowAt(java.util.Date)
-
-Returns a ticking clock set to virtual time _java.util.Date_ _virtualNow_
-
-[#nowAt__org.joda.time.LocalDate]
-=== nowAt(org.joda.time.LocalDate)
-
-Returns a ticking clock set to virtual time _org.joda.time.LocalDate_ _virtualNow_
-
-[#nowAt__org.joda.time.LocalDateTime]
-=== nowAt(org.joda.time.LocalDateTime)
-
-Returns a ticking clock set to virtual time _org.joda.time.LocalDateTime_ _virtualNow_
-
-[#nowAt__org.joda.time.DateTime]
-=== nowAt(org.joda.time.DateTime)
-
-Returns a ticking clock set to virtual time _org.joda.time.DateTime_ _virtualNow_
+Returns a ticking clock set to virtual time.
 
 [#frozenAt__Instant]
 === frozenAt(Instant)
 
 Always returns the time _Instant_ as given by _frozenAt_
-
-[#frozenAt__java.time.LocalDate]
-=== frozenAt(java.time.LocalDate)
-
-Always returns the time _java.time.LocalDate_ as given by _frozenAt_
-
-[#frozenAt__java.time.LocalDateTime]
-=== frozenAt(java.time.LocalDateTime)
-
-Always returns the time _java.time.LocalDateTime_ as given by _frozenAt_
-
-[#frozenAt__java.time.OffsetDateTime]
-=== frozenAt(java.time.OffsetDateTime)
-
-Always returns the time _java.time.OffsetDateTime_ as given by _frozenAt_
-
-[#frozenAt__java.time.ZonedDateTime]
-=== frozenAt(java.time.ZonedDateTime)
-
-Always returns the time _java.time.ZonedDateTime_ as given by _frozenAt_
-
-[#frozenAt__java.util.Date]
-=== frozenAt(java.util.Date)
-
-Always returns the time _java.util.Date_ as given by _frozenAt_
-
-[#frozenAt__org.joda.time.LocalDate]
-=== frozenAt(org.joda.time.LocalDate)
-
-Always returns the time _org.joda.time.LocalDate_ as given by _frozenAt_
-
-[#frozenAt__org.joda.time.LocalDateTime]
-=== frozenAt(org.joda.time.LocalDateTime)
-
-Always returns the time _org.joda.time.LocalDateTime_ as given by _frozenAt_
-
-[#frozenAt__org.joda.time.DateTime]
-=== frozenAt(org.joda.time.DateTime)
-
-Always returns the time _org.joda.time.DateTime_ as given by _frozenAt_
 
 [#frozenTestClock__]
 === frozenTestClock()

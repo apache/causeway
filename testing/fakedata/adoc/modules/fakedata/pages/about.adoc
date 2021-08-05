@@ -86,7 +86,13 @@ public class AppManifest {
 The library provides a single service, xref:refguide:testing:index/fakedata/applib/services/FakeDataService.adoc[FakeDataService].
 This provides numerous methods, each for a specific data type, providing an object that is able to provide random instances of that data type.
 
-Primitives:
+[.nogrid]
+[cols="1a,1a",frame="none", grid="none", stripes="none"]
+|===
+
+
+|
+*Primitives*
 
 * xref:refguide:testing:index/fakedata/applib/services/Booleans.adoc[Booleans]
 * xref:refguide:testing:index/fakedata/applib/services/Bytes.adoc[Bytes]
@@ -97,7 +103,7 @@ Primitives:
 * xref:refguide:testing:index/fakedata/applib/services/Longs.adoc[Longs]
 * xref:refguide:testing:index/fakedata/applib/services/Shorts.adoc[Shorts]
 
-Simple value types:
+*Simple value types*
 
 * xref:refguide:testing:index/fakedata/applib/services/BigDecimals.adoc[BigDecimals]
 * xref:refguide:testing:index/fakedata/applib/services/BigIntegers.adoc[BigIntegers]
@@ -105,14 +111,14 @@ Simple value types:
 * xref:refguide:testing:index/fakedata/applib/services/Urls.adoc[Urls]
 * xref:refguide:testing:index/fakedata/applib/services/Uuids.adoc[Uuids]
 
-More specialized value types:
+*More specialized value types*
 
 * xref:refguide:testing:index/fakedata/applib/services/IsisBlobs.adoc[IsisBlobs]
 * xref:refguide:testing:index/fakedata/applib/services/IsisClobs.adoc[IsisClobs]
-* xref:refguide:testing:index/fakedata/applib/services/IsisPasswords
-.adoc[IsisPasswords]
+* xref:refguide:testing:index/fakedata/applib/services/IsisPasswords.adoc[IsisPasswords]
 
-Dates and times:
+|
+*Dates and times*
 
 * xref:refguide:testing:index/fakedata/applib/services/JavaSqlDates.adoc[JavaSqlDates]
 * xref:refguide:testing:index/fakedata/applib/services/JavaSqlTimestamps.adoc[JavaSqlTimestamps]
@@ -124,10 +130,10 @@ Dates and times:
 * xref:refguide:testing:index/fakedata/applib/services/JodaLocalDates.adoc[JodaLocalDates]
 * xref:refguide:testing:index/fakedata/applib/services/JodaPeriods.adoc[JodaPeriods]
 
-+
+
 Note: these require the xref:refguide:applib:index/services/clock/ClockService.adoc[ClockService] to be injected through the constructor):
 
-Domain-specific:
+*Domain-specific*
 
 * xref:refguide:testing:index/fakedata/applib/services/Addresses.adoc[Addresses]
 * xref:refguide:testing:index/fakedata/applib/services/Books.adoc[Books]
@@ -140,5 +146,7 @@ This requires the xref:refguide:applib:index/services/repository/RepositoryServi
 * xref:refguide:testing:index/fakedata/applib/services/Lorem.adoc[Lorem]
 * xref:refguide:testing:index/fakedata/applib/services/Names.adoc[Names]
 
-In addition, the full API of link:https://dius.github.io/java-faker/apidocs/index.html[Java Faker] is also accessible.
 
+|===
+
+In addition, the full API of link:https://dius.github.io/java-faker/apidocs/index.html[Java Faker] is also accessible.
