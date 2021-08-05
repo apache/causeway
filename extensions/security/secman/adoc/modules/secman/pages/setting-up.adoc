@@ -121,9 +121,11 @@ isis:
             additional: ...                             <.>
         regular-user:
           role-name: "isis-ext-secman-user"             <.>
-      permissionsEvaluationPolicy: ALLOW_BEATS_VETO     <.>
+      permissions-evaluation-policy: ALLOW_BEATS_VETO   <.>
+      user-menu-me-action-policy: HIDE                  <.>
       user-registration:
         initial-role-names: ...                         <.>
+
 ----
 
 <.> indicates the security super-user and password
@@ -135,6 +137,8 @@ These cannot be removed (through the UI).
 These can be removed (through the UI).
 <.> indicates the name of the role that should be granted to regular users of the application.
 <.> if there are conflicted (allow vs veto) permissions at the same scope, then whether the allow wins or the veto wins
+<.> whether to HIDE, DISABLE or ENABLE the default "me" action provided by the core framework.
+Normally this should be hidden, because secman's `ApplicationUser` broadly replaces the core framework's `UserMemento`.
 <.> if self-user registration is enabled in the viewer, this defines the set of roles to be granted to said user.
 +
 This is discussed in more detail <<user-registration-aka-sign-up,below>>.
