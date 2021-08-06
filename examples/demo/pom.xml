@@ -224,14 +224,40 @@
 
 	</dependencies>
 
-	<modules>
-		<module>domain</module>
-		<module>javafx</module>
-		<module>web</module>
-		<module>wicket/common</module>
-		<module>wicket/jdo</module>
-		<module>wicket/jpa</module>
-		<module>vaadin</module>
-	</modules>
+	<profiles>
+		<profile>
+			<id>module-all</id>
+			<activation>
+				<property>
+					<name>!module-all-except-incubator</name>
+				</property>
+			</activation>
+			<modules>
+				<module>domain</module>
+				<module>javafx</module>
+				<module>web</module>
+				<module>wicket/common</module>
+				<module>wicket/jdo</module>
+				<module>wicket/jpa</module>
+				<module>vaadin</module>
+			</modules>
+		</profile>
+
+		<profile>
+			<id>module-all-except-incubator</id>
+			<activation>
+				<property>
+					<name>module-all-except-incubator</name>
+				</property>
+			</activation>
+			<modules>
+				<module>domain</module>
+				<module>web</module>
+				<module>wicket/common</module>
+				<module>wicket/jdo</module>
+				<module>wicket/jpa</module>
+			</modules>
+		</profile>
+	</profiles>
 
 </project>
