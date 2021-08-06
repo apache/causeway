@@ -44,7 +44,7 @@ jobs:
       env:
         # change the cache-name if we want to rebuild the cache
         # currently there is no concept of cache clearing 
-        cache-name: maven-2021-03
+        cache-name: maven-2021-08
       with:
         path: ~/.m2/repository
         key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/pom.xml') }}
