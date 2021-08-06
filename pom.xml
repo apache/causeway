@@ -92,6 +92,21 @@
 			</modules>
 		</profile>
 
+		<profile>
+			<id>module-all-except-incubator</id>
+			<activation>
+				<property>
+					<name>module-all-except-incubator</name>
+				</property>
+			</activation>
+			<modules>
+				<module>antora</module>
+				<module>examples/demo</module>
+				<module>regressiontests</module>
+				<module>tooling</module>
+			</modules>
+		</profile>
+
 		<!-- NON-ESSENTIAL MODULES -->
 
 		<profile>
