@@ -81,7 +81,7 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
     private fun handleObject(obj: TObject) {
         dpm.addData(obj)
         invokeLayoutLink(obj, this)
-//        invokeIconLink(obj, this)
+        invokeIconLink(obj, this)
     }
 
     private fun handleIcon(obj: TransferObject?) {

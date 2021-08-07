@@ -36,15 +36,10 @@ class ColBuilder : UiBuilder() {
     fun create(col: Col, tObject: TObject, dsp: RoDisplay): FlexPanel {
         val panel = buildPanel()
 
-        console.log("[CB.create]")
-        console.log(col)
-
-        if (col.actionList.size > 0) {
-            if (col.domainObject != null) {
-                val menu = createMenu(tObject, dsp)
-                assignWidth(menu, col)
-                panel.add(menu)
-            }
+        if ((col.actionList.size > 0) && (col.domainObject != null)) {
+            val menu = createMenu(tObject, dsp)
+            assignWidth(menu, col)
+            panel.add(menu)
         }
 
         for (tg in col.tabGroupList) {
@@ -109,12 +104,10 @@ class ColBuilder : UiBuilder() {
     }
 
     private fun assignWidth(panel: SimplePanel, col: Col) {
-        console.log("[CB.assignWidth] ${col.span}")
         val proportion = col.span.toDouble().div(12)
-        val percent= proportion * 100
+        val percent = proportion * 100
         val rounded = round(percent)
         val cssWidth = CssSize(rounded, UNIT.perc)
-        console.log(cssWidth.toString())
         panel.flexBasis = cssWidth
         panel.flexGrow = 1
     }

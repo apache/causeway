@@ -34,12 +34,6 @@ class CollectionDM(override val title: String) : DisplayModelWithLayout() {
         }
     }
 
-    fun addIcon(obj: TransferObject?) {
-        console.log("[CDM.addIcon]")
-        console.log(obj)
-        TODO("Not yet implemented")
-    }
-
     override fun reset() {
         isRendered = false
         data = observableListOf()

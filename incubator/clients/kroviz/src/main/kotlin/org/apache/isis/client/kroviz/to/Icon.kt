@@ -5,4 +5,4 @@ import kotlinx.serialization.Serializable
 import org.w3c.files.Blob
 
 @Serializable
-data class Icon(@Contextual val image: Blob) : TransferObject
+data class Icon(@Contextual val resource: Blob) : TransferObject

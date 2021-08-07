@@ -27,6 +27,7 @@ import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.utils.UUID
+import org.w3c.files.Blob
 
 /**
  * Keeps a log of remote invocations and the responses.
@@ -92,10 +93,15 @@ object EventStore {
         return entry
     }
 
-    fun end(reSpec: ResourceSpecification, pumlCode: String, response: String): LogEntry? {
+    fun end(reSpec: ResourceSpecification, pumlCode: String, response: Any?): LogEntry? {
         val entry: LogEntry? = findBy(reSpec, pumlCode)
         if (entry != null) {
-            entry.response = response
+            when (response) {
+                is String -> entry.response = response
+                is Blob -> entry.blob = response
+                else -> {
+                }
+            }
             entry.setSuccess()
             updateStatus(entry)
         }

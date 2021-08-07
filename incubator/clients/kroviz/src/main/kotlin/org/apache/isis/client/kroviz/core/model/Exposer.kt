@@ -22,6 +22,7 @@ import kotlinx.serialization.Serializable
 import org.apache.isis.client.kroviz.to.MemberType
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.utils.IconManager
+import org.w3c.dom.Image
 
 /**
  * Makes properties of delegate available for display in Lists.
@@ -36,7 +37,6 @@ import org.apache.isis.client.kroviz.utils.IconManager
 class Exposer(val delegate: TObject) {
 
     var iconName = ""
-    var selected = false //TODO add attribute dynamically???
 
     fun dynamise(): dynamic {
         val thys = this.asDynamic()
@@ -59,6 +59,11 @@ class Exposer(val delegate: TObject) {
     // eg. for dataNucleusId
     fun get(propertyName: String): Any? {
         return this.delegate.getProperty(propertyName)?.value
+    }
+
+    fun setIcon(value: Image) {
+        val thys = this.asDynamic()
+        thys["icon"] = value.src
     }
 
 }

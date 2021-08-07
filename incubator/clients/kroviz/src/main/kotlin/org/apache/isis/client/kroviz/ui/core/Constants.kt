@@ -35,4 +35,8 @@ object Constants {
     //host:port depend on how docker is started
     // docker run -d --name kroki -p 8080:8000 yuzutech/kroki
 
+    const val demoUrl = "http://localhost:8080/"
+    const val demoUser = "sven"
+    const val demoPass = "pass"
+    //const val demoUrl = "https://demo-wicket.jdo.isis.incode.work/"
 }

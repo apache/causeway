@@ -27,7 +27,10 @@ import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.utils.Utils
+import org.w3c.xhr.BLOB
+import org.w3c.xhr.TEXT
 import org.w3c.xhr.XMLHttpRequest
+import org.w3c.xhr.XMLHttpRequestResponseType
 
 /**
  * The name is somewhat misleading, see: https://en.wikipedia.org/wiki/XMLHttpRequest
@@ -70,6 +73,10 @@ class RoXmlHttpRequest {
         xhr.setRequestHeader("Authorization", "Basic $credentials")
         xhr.setRequestHeader(CONTENT_TYPE, "application/$subType;charset=UTF-8")
         xhr.setRequestHeader(ACCEPT, "application/$subType, ${Constants.pngMimeType}")
+        if (url.endsWith("object-icon")) {
+//            xhr.overrideMimeType("text/plain; charset=x-user-defined")
+            xhr.responseType = XMLHttpRequestResponseType.BLOB
+        }
 
         val body = buildBody(link, aggregator)
         val rs = buildResourceSpecificationAndSetupHandler(url, subType, body, xhr)
@@ -147,8 +154,8 @@ class RoXmlHttpRequest {
     }
 
     private fun handleResult(rs: ResourceSpecification, body: String, xhr: XMLHttpRequest) {
-        val responseText = xhr.responseText
-        val logEntry: LogEntry? = EventStore.end(rs, body, responseText)
+        val response:Any? = xhr.response
+        val logEntry: LogEntry? = EventStore.end(rs, body, response)
         if (logEntry != null) getHandlerChain().handle(logEntry)
     }
 

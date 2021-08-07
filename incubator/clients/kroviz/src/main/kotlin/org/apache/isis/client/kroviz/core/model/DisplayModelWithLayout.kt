@@ -20,7 +20,9 @@ package org.apache.isis.client.kroviz.core.model
 
 import org.apache.isis.client.kroviz.layout.Layout
 import org.apache.isis.client.kroviz.layout.RowLt
+import org.apache.isis.client.kroviz.to.Icon
 import org.apache.isis.client.kroviz.to.Property
+import org.apache.isis.client.kroviz.to.TransferObject
 import org.apache.isis.client.kroviz.to.bs3.Grid
 
 abstract class DisplayModelWithLayout : DisplayModel() {
@@ -28,6 +30,7 @@ abstract class DisplayModelWithLayout : DisplayModel() {
     var layout: Layout? = null
     var grid: Grid? = null
     val properties = CollectionProperties()
+    var icon: Icon? = null
 
     override fun canBeDisplayed(): Boolean {
         return when {
@@ -41,6 +44,10 @@ abstract class DisplayModelWithLayout : DisplayModel() {
     fun addLayout(layout: Layout) {
         this.layout = layout
         initPropertyLayoutList(layout)
+    }
+
+    fun addIcon(obj: TransferObject?) {
+        icon = obj as Icon
     }
 
     private fun initPropertyLayoutList(layout: Layout) {

@@ -80,7 +80,7 @@ class LogEntryDecorator(val logEntry: LogEntry) {
         console.log("[LED.findChildrenByLinks] $href")
         val children = mutableSetOf<LogEntry>()
         links.forEach {
-            console.log(it)
+            console.log(it.toString())
             val rel = it.relation()
             when {
                 (rel == Relation.UP) -> {
@@ -94,7 +94,7 @@ class LogEntryDecorator(val logEntry: LogEntry) {
                         val rsx = ResourceSpecification(it.href, Constants.subTypeXml)
                         le = EventStore.findBy(rsx)
                     }
-                    console.log(le)
+                    console.log(le.toString())
                     if (le != null) children.add(le)
                 }
             }

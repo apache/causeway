@@ -30,6 +30,7 @@ import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Relation
 import org.apache.isis.client.kroviz.to.TransferObject
 import org.apache.isis.client.kroviz.ui.core.Constants
+import org.w3c.files.Blob
 import kotlin.js.Date
 
 // use color codes from css instead?
@@ -60,6 +61,7 @@ data class LogEntry(
     var title: String = ""
     var requestLength: Int = 0 // must be accessible (public) for LogEntryTable
     var response = ""
+    @Contextual var blob: Blob? = null
     var responseLength: Int = 0 // must be accessible (public) for LogEntryTable
     var type: String = ""
 

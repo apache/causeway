@@ -46,7 +46,7 @@ class LayoutXmlTest {
         assertEquals(2, secondaryRow.colList.size, message = "secondaryRow.colList.size") //4
 
         val secondaryCol = secondaryRow.colList[0]
-        assertEquals("12", secondaryCol.span, message = "secondaryCol.span") //5
+        assertEquals("12", secondaryCol.span.toString(), message = "secondaryCol.span") //5
 
         val collectionList = secondaryCol.collectionList
         assertEquals(1, collectionList.size, message = "collectionList.size") //6
@@ -62,8 +62,7 @@ class LayoutXmlTest {
         //when
         val grid = LayoutXmlHandler().parse(xmlStr) as Grid
         // then
-        console.log("[LXT.testDemoTabGrid]")
-        console.log(grid)
+        console.log("[LXT.testDemoTabGrid] ${grid.toString()}")
         console.log("rows: ", grid.rows.size)
 //        assertEquals(2, grid.rows.size)    //1
     }

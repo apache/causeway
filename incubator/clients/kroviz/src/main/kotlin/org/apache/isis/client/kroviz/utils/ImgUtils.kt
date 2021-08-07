@@ -16,28 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.client.kroviz.handler
+package org.apache.isis.client.kroviz.utils
 
-import org.apache.isis.client.kroviz.to.Icon
-import org.apache.isis.client.kroviz.to.TransferObject
-import org.apache.isis.client.kroviz.ui.core.Constants
+import kotlinx.browser.window
+import org.w3c.dom.Image
+import org.w3c.dom.url.URL
+import org.w3c.files.Blob
 
-class IconHandler : BaseHandler() {
+object ImgUtils {
 
-    override fun canHandle(response: String): Boolean {
-        val isObjectIcon = logEntry.url.endsWith("object-icon")
-        if (isObjectIcon) {
-            return super.canHandle(response)
-        }
-        return false
-    }
+    fun toImage(blob: Blob): Image {
+        val url = URL.createObjectURL(blob)
+        console.log(url)
+        window.open(url)
 
-    override fun parse(response: String): TransferObject {
-        return Icon(logEntry.blob!!)
-    }
+        val image = Image()
+        image.src = url
+        console.log(image)
 
-    override fun update() {
-        logEntry.getAggregator()!!.update(logEntry, Constants.pngMimeType)
+        return image
     }
 
 }

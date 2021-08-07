@@ -18,24 +18,24 @@
  */
 package org.apache.isis.client.kroviz.ui.dialog
 
-import org.apache.isis.client.kroviz.to.Link
-import org.apache.isis.client.kroviz.to.ValueType
-import org.apache.isis.client.kroviz.ui.core.FormItem
-import org.apache.isis.client.kroviz.utils.Point
 import io.kvision.form.text.Password
 import io.kvision.form.text.Text
+import org.apache.isis.client.kroviz.to.Link
+import org.apache.isis.client.kroviz.to.ValueType
+import org.apache.isis.client.kroviz.ui.core.Constants
+import org.apache.isis.client.kroviz.ui.core.FormItem
 import org.apache.isis.client.kroviz.ui.core.RoDialog
 import org.apache.isis.client.kroviz.ui.core.UiManager
+import org.apache.isis.client.kroviz.utils.Point
 
 class LoginPrompt : Command() {
 
     private lateinit var form: RoDialog
 
     //Default values
-   private var url = "http://localhost:8080/"
-//    private var url = "https://demo-wicket.isis.incode.work/"
-    private var username = "sven"
-    private var password = "pass"
+    private var url = Constants.demoUrl
+    private var username = Constants.demoUser
+    private var password = Constants.demoPass
 
     fun open(at: Point) {
         val formItems = mutableListOf<FormItem>()
@@ -46,10 +46,10 @@ class LoginPrompt : Command() {
         form.open(at)
     }
 
-    override fun execute(action:String?) {
+    override fun execute(action: String?) {
         extractUserInput()
         UiManager.login(url, username, password)
-        val link = Link(href = url + "restful/")
+        val link = Link(href = url + Constants.restInfix)
         invoke(link)
         UiManager.closeDialog(form)
     }

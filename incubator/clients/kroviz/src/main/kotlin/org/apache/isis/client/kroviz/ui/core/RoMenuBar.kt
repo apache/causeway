@@ -31,15 +31,11 @@ import io.kvision.panel.vPanel
 import kotlinx.browser.window
 import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.to.mb.Menubars
-import org.apache.isis.client.kroviz.ui.panel.DropdownSearch
+import org.apache.isis.client.kroviz.ui.chart.SampleChartModel
 import org.apache.isis.client.kroviz.ui.dialog.About
 import org.apache.isis.client.kroviz.ui.dialog.LoginPrompt
-import org.apache.isis.client.kroviz.ui.panel.GeoMap
-import org.apache.isis.client.kroviz.ui.chart.SampleChartModel
 import org.apache.isis.client.kroviz.ui.dialog.SvgInline
-import org.apache.isis.client.kroviz.ui.panel.EventChart
-import org.apache.isis.client.kroviz.ui.panel.EventLogTable
-import org.apache.isis.client.kroviz.ui.panel.SvgMap
+import org.apache.isis.client.kroviz.ui.panel.*
 import org.apache.isis.client.kroviz.utils.IconManager
 import org.apache.isis.client.kroviz.utils.Point
 
@@ -117,6 +113,14 @@ object RoMenuBar : SimplePanel() {
                     icon = IconManager.find("Diagram")
             ).onClick {
                 SvgInline().open()
+            }
+
+            val imageTitle = "Sample Image"
+            ddLink(imageTitle,
+                    icon = IconManager.find("Image")
+            ).onClick {
+                val panel = ImageSample()
+                RoView.addTab(imageTitle, panel)
             }
 
             val searchTitle = "Dropdown search example"

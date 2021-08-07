@@ -51,13 +51,11 @@ class EventStoreTest : IntegrationTest() {
 
         val le1 = EventStore.findBy(rs1, body1)
         assertNotNull(le1)  //2
-        console.log("le1: ")
-        console.log(le1)
+        console.log("le1: ${le1.toString()}")
 
         val le2 = EventStore.findBy(rs2, body2)
         assertNotNull(le2)  //3
-        console.log("le2: ")
-        console.log(le2)
+        console.log("le2: ${le2.toString()}")
 
         assertFalse(le1 === le2)  //4
     }

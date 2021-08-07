@@ -26,7 +26,9 @@ import org.apache.isis.client.kroviz.snapshots.Response
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.*
 import org.apache.isis.client.kroviz.to.Method
 import org.apache.isis.client.kroviz.ui.diagram.LinkTreeDiagram
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 class LinkTreeDiagramTest {
 
@@ -48,8 +50,7 @@ class LinkTreeDiagramTest {
         // when
         val code = LinkTreeDiagram.build().trim()
         // then
-        console.log("[LTDT.testLinkTreeDiagram]")
-        console.log(code)
+//        console.log("[LTDT.testLinkTreeDiagram] ${code}")
         assertTrue(code.startsWith("@startsalt"))
         assertTrue(code.endsWith("@endsalt"))
         assertTrue(code.contains("+ /http://localhost:8080/restful/"))

@@ -44,15 +44,13 @@ class RoTable(displayCollection: CollectionDM) : SimplePanel() {
         width = CssSize(100, UNIT.perc)
         val model = displayCollection.data
         val columns = ColumnFactory().buildColumns(
-                displayCollection,
-                true)
+                displayCollection)
         val options = TabulatorOptions(
                 movableColumns = true,
                 height = Constants.calcHeight,
                 layout = Layout.FITDATA,
                 columns = columns,
-                persistenceMode = false,
-                //selectable = true
+                persistenceMode = false
         )
 
         val tableTypes = setOf(TableType.STRIPED, TableType.HOVER)
