@@ -19,7 +19,7 @@
 package org.apache.isis.client.kroviz.to
 
 import kotlinx.serialization.Serializable
-import org.apache.isis.client.kroviz.utils.Utils
+import org.apache.isis.client.kroviz.utils.StringUtils
 
 @Serializable
 data class Link(val rel: String = "",
@@ -46,7 +46,7 @@ data class Link(val rel: String = "",
     }
 
     fun setArgument(key: String, value: String?) {
-        val k = Utils.enCamel(key)
+        val k = StringUtils.enCamel(key)
         val arg = argMap()!!.get(k)
         arg!!.key = k
         arg.value = value

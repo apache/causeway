@@ -30,7 +30,7 @@ import org.apache.isis.client.kroviz.ui.core.FormItem
 import org.apache.isis.client.kroviz.ui.core.RoDialog
 import org.apache.isis.client.kroviz.ui.diagram.JsonDiagram
 import org.apache.isis.client.kroviz.ui.diagram.LayoutDiagram
-import org.apache.isis.client.kroviz.utils.Utils
+import org.apache.isis.client.kroviz.utils.StringUtils
 import org.apache.isis.client.kroviz.utils.XmlHelper
 
 class EventLogDetail(val logEntryFromTabulator: LogEntry) : Command() {
@@ -49,7 +49,7 @@ class EventLogDetail(val logEntryFromTabulator: LogEntry) : Command() {
 
     fun open() {
         val responseStr = if (logEntry.subType == Constants.subTypeJson) {
-            Utils.format(logEntry.response)
+            StringUtils.format(logEntry.response)
         } else {
             XmlHelper.format(logEntry.response)
         }

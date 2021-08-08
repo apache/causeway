@@ -19,6 +19,7 @@
 package org.apache.isis.client.kroviz.core
 
 import org.apache.isis.client.kroviz.ui.core.UiManager
+import org.apache.isis.client.kroviz.utils.StringUtils
 
 /**
  * Keep track of connected server.
@@ -37,38 +38,7 @@ class Session {
     }
 
     fun getCredentials(): String {
-        return "$user:$pw".base64encoded
+        return StringUtils.base64encoded("$user:$pw")
     }
-
-    /**
-     * https://discuss.kotlinlang.org/t/kotlin-native-base64-en-decoder-code/10043
-     */
-    private val BASE64_SET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
-
-    /**
-     * Base64 encode a string.
-     */
-    val String.base64encoded: String
-        get() {
-            val pad = when (this.length % 3) {
-                1 -> "=="
-                2 -> "="
-                else -> ""
-            }
-            var raw = this
-            (1..pad.length).forEach { raw += 0.toChar() }
-            return StringBuilder().apply {
-                (0 until raw.length step 3).forEach {
-                    val n: Int = (0xFF.and(raw[it].toInt()) shl 16) +
-                            (0xFF.and(raw[it + 1].toInt()) shl 8) +
-                            0xFF.and(raw[it + 2].toInt())
-                    listOf<Int>((n shr 18) and 0x3F,
-                            (n shr 12) and 0x3F,
-                            (n shr 6) and 0x3F,
-                            n and 0x3F).forEach { append(BASE64_SET[it]) }
-                }
-            }.dropLast(pad.length)
-                    .toString() + pad
-        }
 
 }

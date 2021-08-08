@@ -29,7 +29,7 @@ import io.kvision.tabulator.TabulatorOptions
 import io.kvision.utils.set
 import org.apache.isis.client.kroviz.core.model.CollectionDM
 import org.apache.isis.client.kroviz.core.model.Exposer
-import org.apache.isis.client.kroviz.utils.Utils
+import org.apache.isis.client.kroviz.utils.StringUtils
 
 /**
  * access attributes from dynamic (JS) objects with varying
@@ -40,7 +40,7 @@ import org.apache.isis.client.kroviz.utils.Utils
 class RoTable(displayCollection: CollectionDM) : SimplePanel() {
 
     init {
-        title = Utils.extractTitle(displayCollection.title)
+        title = StringUtils.extractTitle(displayCollection.title)
         width = CssSize(100, UNIT.perc)
         val model = displayCollection.data
         val columns = ColumnFactory().buildColumns(

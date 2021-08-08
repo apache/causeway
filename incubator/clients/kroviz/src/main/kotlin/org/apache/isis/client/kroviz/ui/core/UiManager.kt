@@ -40,7 +40,7 @@ import org.apache.isis.client.kroviz.ui.kv.override.RoTab
 import org.apache.isis.client.kroviz.utils.DomUtil
 import org.apache.isis.client.kroviz.utils.ScalableVectorGraphic
 import org.apache.isis.client.kroviz.utils.UUID
-import org.apache.isis.client.kroviz.utils.Utils
+import org.apache.isis.client.kroviz.utils.StringUtils
 import org.w3c.dom.events.KeyboardEvent
 
 /**
@@ -133,7 +133,7 @@ object UiManager {
 
     fun openCollectionView(aggregator: BaseAggregator) {
         val displayable = aggregator.dpm
-        val title: String = Utils.extractTitle(displayable.title)
+        val title: String = StringUtils.extractTitle(displayable.title)
         val panel = RoTable(displayable as CollectionDM)
         add(title, panel, aggregator)
         displayable.isRendered = true
@@ -141,7 +141,7 @@ object UiManager {
 
     fun openObjectView(aggregator: ObjectAggregator) {
         val dm = aggregator.dpm as ObjectDM
-        var title: String = Utils.extractTitle(dm.title)
+        var title: String = StringUtils.extractTitle(dm.title)
         if (title.isEmpty()) {
             title = aggregator.actionTitle
         }

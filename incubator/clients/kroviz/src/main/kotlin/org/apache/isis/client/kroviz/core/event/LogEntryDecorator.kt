@@ -21,7 +21,7 @@ package org.apache.isis.client.kroviz.core.event
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Relation
 import org.apache.isis.client.kroviz.ui.core.Constants
-import org.apache.isis.client.kroviz.utils.Utils
+import org.apache.isis.client.kroviz.utils.StringUtils
 
 class LogEntryDecorator(val logEntry: LogEntry) {
 
@@ -153,7 +153,7 @@ class LogEntryDecorator(val logEntry: LogEntry) {
             // strip off protocol, host, port
             //           val protocolHostPort = UiManager.getUrl()
 //            result = result.replace(protocolHostPort + signature, "")
-            result = Utils.removeHexCode(result)
+            result = StringUtils.removeHexCode(result)
         }
         return result
     }

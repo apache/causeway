@@ -21,6 +21,7 @@ package org.apache.isis.client.kroviz.handler
 import org.apache.isis.client.kroviz.to.Icon
 import org.apache.isis.client.kroviz.to.TransferObject
 import org.apache.isis.client.kroviz.ui.core.Constants
+import org.apache.isis.client.kroviz.utils.ImgUtils
 
 class IconHandler : BaseHandler() {
 
@@ -33,7 +34,9 @@ class IconHandler : BaseHandler() {
     }
 
     override fun parse(response: String): TransferObject {
-        return Icon(logEntry.blob!!)
+        val blob = logEntry.blob!!
+        val image = ImgUtils.toImage(blob)
+        return Icon(image)
     }
 
     override fun update() {

@@ -24,7 +24,7 @@ import org.apache.isis.client.kroviz.to.Parameter
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.core.FormItem
 import org.apache.isis.client.kroviz.utils.Point
-import org.apache.isis.client.kroviz.utils.Utils
+import org.apache.isis.client.kroviz.utils.StringUtils
 import io.kvision.core.StringPair
 import io.kvision.form.select.SimpleSelect
 import io.kvision.form.text.TextArea
@@ -49,7 +49,7 @@ class ActionPrompt(val action: Action) : Command() {
     }
 
     private fun buildLabel(): String {
-        val label = Utils.deCamel(action.id)
+        val label = StringUtils.deCamel(action.id)
         return "Execute: $label"
     }
 

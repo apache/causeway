@@ -18,7 +18,6 @@
  */
 package org.apache.isis.client.kroviz.utils
 
-import kotlinx.browser.window
 import org.w3c.dom.Image
 import org.w3c.dom.url.URL
 import org.w3c.files.Blob
@@ -27,13 +26,8 @@ object ImgUtils {
 
     fun toImage(blob: Blob): Image {
         val url = URL.createObjectURL(blob)
-        console.log(url)
-        window.open(url)
-
         val image = Image()
         image.src = url
-        console.log(image)
-
         return image
     }
 

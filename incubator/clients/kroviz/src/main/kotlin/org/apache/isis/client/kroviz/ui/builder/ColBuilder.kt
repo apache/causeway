@@ -28,7 +28,7 @@ import org.apache.isis.client.kroviz.to.bs3.Col
 import org.apache.isis.client.kroviz.ui.core.MenuFactory
 import org.apache.isis.client.kroviz.ui.core.RoDisplay
 import org.apache.isis.client.kroviz.ui.core.RoTable
-import org.apache.isis.client.kroviz.utils.Utils
+import org.apache.isis.client.kroviz.utils.StringUtils
 import kotlin.math.round
 
 class ColBuilder : UiBuilder() {
@@ -53,7 +53,7 @@ class ColBuilder : UiBuilder() {
                 if (legend.trim().length == 0) {
                     legend = fs.id
                 }
-                legend = Utils.capitalize(legend)
+                legend = StringUtils.capitalize(legend)
                 val fsPanel = FieldsetPanel(legend = legend).add(fsCpt)
                 val tto = TooltipOptions(title = fs.id)
                 fsPanel.enableTooltip(tto)
@@ -70,7 +70,7 @@ class ColBuilder : UiBuilder() {
             val objectDM = dsp.displayModel
             val collectionDM = objectDM.collections.get(key)!!
             val tblCpt = RoTable(collectionDM)
-            val fsPanel = FieldsetPanel(legend = Utils.capitalize(key)).add(tblCpt)
+            val fsPanel = FieldsetPanel(legend = StringUtils.capitalize(key)).add(tblCpt)
             panel.add(fsPanel)
             collectionDM.isRendered = true
         }

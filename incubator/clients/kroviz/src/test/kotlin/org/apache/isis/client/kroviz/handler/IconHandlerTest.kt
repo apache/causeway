@@ -19,22 +19,69 @@
 
 package org.apache.isis.client.kroviz.handler
 
-import io.kvision.html.Button
+import io.kvision.html.Image
+import kotlinx.browser.window
+import org.apache.isis.client.kroviz.IntegrationTest
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.OBJECT_ICON
+import org.apache.isis.client.kroviz.to.Icon
+import org.w3c.dom.url.URL
+import org.w3c.files.Blob
+import org.w3c.files.BlobPropertyBag
 import kotlin.test.Test
+import kotlin.test.assertNotEquals
+import kotlin.test.assertTrue
 
-class IconHandlerTest {
+class IconHandlerTest : IntegrationTest() {
 
     @Test
-    fun testParse() {
-        val payload = OBJECT_ICON.str
-        val icon = IconHandler().parse(payload)
-        val dynIcon = icon.asDynamic()
-        val b = Button("Button")
-        b.image = dynIcon
-        console.log("[IHT.testParse]")
-        console.log(dynIcon.toString())
-//        assertTrue(b.image is Icon)
+    fun handleTest() {
+        if (isAppAvailable()) {
+            //given
+            val logEntry = mockResponse(OBJECT_ICON, null)
+
+            //when
+            val handler = IconHandler()
+            handler.handle(logEntry)
+            val icon = handler.parse("") as Icon
+            val image = icon.image
+
+            //then
+            assertTrue(image.sizes != "")
+            console.log("[IHT.handleTest]")
+            console.log(image.sizes)
+        }
     }
+
+    //@Test
+    fun testInline() {
+        val VMT = "\$vmT"
+        val str = """
+"�PNG
+
+
+IHDR�w=�sBIT|d�	pHYs��~�tEXtSoftwareAdobe Fireworks CS5q��6_IDATH���i�0�?��7${'$'}��TP�
+�N���
+���l�����C�Z�bZ�P�c,_�s�����	���@+9"`���/ �${'$'}+�ߴ0ƴ�����ɽ'�w
+,���a�{G v${VMT}�6��N ��C_�Mwbұ�J+P�[��Իf��P����B+�
+�'��h20IVo��+{��{`�IV�ZI=�Ⱥ\k��߹u�G���${'$'}+�ǡ+_���6�Y�ӡ}>���7���?8;hZ�N'sL�kA+����w+`���h\���]�����iȂ�!�����ֆ���Q�6�.�̨�U�����0b&bs�:���o�맺y��IEND�B`�"
+"""
+        val ba = ByteArray(str.length)
+        str.forEachIndexed { index, char ->
+            ba.set(index, char.toByte())
+        }
+        console.log(ba.toString())
+        val options = BlobPropertyBag()
+        options.type = "image/png"
+        val blob = Blob(ba.asDynamic(), options)
+        console.log(ba.size.toString())
+        console.log(blob.size.toString())
+        assertNotEquals(blob.size, ba.size)
+
+        val url = URL.createObjectURL(blob)
+        val image = Image(url)
+        console.log(url)
+        window.open(url)
+    }
+
 
 }

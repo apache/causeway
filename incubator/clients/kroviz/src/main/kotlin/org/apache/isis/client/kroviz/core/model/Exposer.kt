@@ -19,10 +19,10 @@
 package org.apache.isis.client.kroviz.core.model
 
 import kotlinx.serialization.Serializable
+import org.apache.isis.client.kroviz.to.Icon
 import org.apache.isis.client.kroviz.to.MemberType
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.utils.IconManager
-import org.w3c.dom.Image
 
 /**
  * Makes properties of delegate available for display in Lists.
@@ -61,9 +61,8 @@ class Exposer(val delegate: TObject) {
         return this.delegate.getProperty(propertyName)?.value
     }
 
-    fun setIcon(value: Image) {
-        val thys = this.asDynamic()
-        thys["icon"] = value.src
+    fun setIcon(icon: Icon) {
+        this.asDynamic()["icon"] = icon.image.src
     }
 
 }

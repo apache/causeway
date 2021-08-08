@@ -102,7 +102,7 @@ object IconManager {
     @OptIn(ExperimentalStdlibApi::class)
     fun find(query: String): String {
         if (query.startsWith("fa")) return query
-        val actionTitle = Utils.deCamel(query)
+        val actionTitle = StringUtils.deCamel(query)
         val mixedCaseList = actionTitle.split(" ")
         for (w in mixedCaseList) {
             val hit = word2Icon[w]

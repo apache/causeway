@@ -31,7 +31,7 @@ import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.ui.dialog.EventLogDetail
-import org.apache.isis.client.kroviz.utils.Utils
+import org.apache.isis.client.kroviz.utils.StringUtils
 
 class EventLogTable(val model: List<LogEntry>) : VPanel() {
     val tabulator: Tabulator<LogEntry>
@@ -120,7 +120,7 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
             // strip off protocol, host, port
             val protocolHostPort = UiManager.getUrl()
             result = result.replace(protocolHostPort + signature, "")
-            result = Utils.removeHexCode(result)
+            result = StringUtils.removeHexCode(result)
         }
         return result
     }

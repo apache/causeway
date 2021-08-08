@@ -22,7 +22,7 @@ import org.apache.isis.client.kroviz.to.Argument
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.TObject
 
-object Utils {
+object StringUtils {
 
     fun enCamel(input: String): String {
         var output = ""
@@ -112,10 +112,10 @@ object Utils {
     }
 
     internal fun argumentsAsString(
-        args: Map<String, Argument?>?,
-        start: String,
-        sep: String,
-        end: String
+            args: Map<String, Argument?>?,
+            start: String,
+            sep: String,
+            end: String
     ): String {
         return if (args.isNullOrEmpty()) "" else {
             var answer = start
@@ -130,10 +130,10 @@ object Utils {
     }
 
     internal fun argumentsAsList(
-        args: Map<String, Argument?>?,
-        start: String,
-        sep: String,
-        end: String
+            args: Map<String, Argument?>?,
+            start: String,
+            sep: String,
+            end: String
     ): String {
         return if (args.isNullOrEmpty()) "" else {
             var answer = start
@@ -177,6 +177,36 @@ object Utils {
         val strList = title.split("/")
         val len = strList.size
         return if (len > 2) strList[len - 2] else ""
+    }
+
+    /**
+     * https://discuss.kotlinlang.org/t/kotlin-native-base64-en-decoder-code/10043
+     */
+    private val BASE64_SET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+
+    /**
+     * Base64 encode a string.
+     */
+    fun base64encoded(s: String): String {
+        val pad = when (s.length % 3) {
+            1 -> "=="
+            2 -> "="
+            else -> ""
+        }
+        var raw = s
+        (1..pad.length).forEach { raw += 0.toChar() }
+        return StringBuilder().apply {
+            (0 until raw.length step 3).forEach {
+                val n: Int = (0xFF.and(raw[it].toInt()) shl 16) +
+                        (0xFF.and(raw[it + 1].toInt()) shl 8) +
+                        0xFF.and(raw[it + 2].toInt())
+                listOf<Int>((n shr 18) and 0x3F,
+                        (n shr 12) and 0x3F,
+                        (n shr 6) and 0x3F,
+                        n and 0x3F).forEach { append(BASE64_SET[it]) }
+            }
+        }.dropLast(pad.length)
+                .toString() + pad
     }
 
 }

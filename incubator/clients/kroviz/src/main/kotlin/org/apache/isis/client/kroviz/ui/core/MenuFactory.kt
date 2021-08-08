@@ -27,7 +27,7 @@ import org.apache.isis.client.kroviz.to.mb.Menu
 import org.apache.isis.client.kroviz.to.mb.MenuEntry
 import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.apache.isis.client.kroviz.utils.IconManager
-import org.apache.isis.client.kroviz.utils.Utils
+import org.apache.isis.client.kroviz.utils.StringUtils
 import io.kvision.core.Component
 import io.kvision.dropdown.DropDown
 import io.kvision.dropdown.separator
@@ -116,7 +116,7 @@ object MenuFactory {
         val menu = findMenuByTitle(menuTitle)!!
         menu.section.forEachIndexed { _, section ->
             section.serviceAction.forEach { sa ->
-                val saTitle = Utils.deCamel(sa.id!!)
+                val saTitle = StringUtils.deCamel(sa.id!!)
                 if (saTitle == actionTitle) {
                     val action = buildActionLink(sa.id, menuTitle)
                     action.label = ""
@@ -133,7 +133,7 @@ object MenuFactory {
      fun buildActionLink(
             label: String,
             menuTitle: String): KvisionHtmlLink {
-        val actionTitle = Utils.deCamel(label)
+        val actionTitle = StringUtils.deCamel(label)
         val actionLink: KvisionHtmlLink = ddLink(
                 label = actionTitle,
                 icon = IconManager.find(label),

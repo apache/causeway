@@ -23,7 +23,7 @@ import org.apache.isis.client.kroviz.snapshots.demo2_0_0.ACTIONS_STRINGS_INVOKE
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.ACTIONS_TEXT_INVOKE
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.ISIS_SECURITY_ME_SERVICE
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.SO_0
-import org.apache.isis.client.kroviz.utils.Utils
+import org.apache.isis.client.kroviz.utils.StringUtils
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -56,7 +56,7 @@ class TObjectTest {
         //when
         mutable.first().value!!.content = "l on the hill"
         //then
-        val putBody = Utils.propertiesAsBody(tObject)
+        val putBody = StringUtils.propertiesAsBody(tObject)
         assertTrue(putBody.contains("notes"))
         assertTrue(putBody.contains("value"))
         assertTrue(putBody.contains("l on the hill"))

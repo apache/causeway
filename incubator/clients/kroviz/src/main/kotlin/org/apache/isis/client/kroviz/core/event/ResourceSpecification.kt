@@ -19,7 +19,7 @@
 package org.apache.isis.client.kroviz.core.event
 
 import org.apache.isis.client.kroviz.ui.core.Constants
-import org.apache.isis.client.kroviz.utils.Utils
+import org.apache.isis.client.kroviz.utils.StringUtils
 
 class ResourceSpecification(
         val url: String,
@@ -39,8 +39,8 @@ class ResourceSpecification(
     }
 
     private fun areEquivalent(searchUrl: String, compareUrl: String, allowedDiff: Int = 1): Boolean {
-        val sl = Utils.removeHexCode(searchUrl)
-        val cl = Utils.removeHexCode(compareUrl)
+        val sl = StringUtils.removeHexCode(searchUrl)
+        val cl = StringUtils.removeHexCode(compareUrl)
         val searchList: List<String> = sl.split("/")
         val compareList: List<String> = cl.split("/")
         if (compareList.size != searchList.size) {

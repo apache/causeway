@@ -24,7 +24,6 @@ import io.kvision.tabulator.Editor
 import io.kvision.tabulator.Formatter
 import org.apache.isis.client.kroviz.core.model.CollectionDM
 import org.apache.isis.client.kroviz.core.model.Exposer
-import org.apache.isis.client.kroviz.utils.ImgUtils
 
 /**
  * Create ColumnDefinitions for Tabulator tables
@@ -62,8 +61,7 @@ class ColumnFactory {
         val icon = displayCollection.icon
         model.forEach { exposer ->
             if (icon != null) {
-                val image = ImgUtils.toImage(icon.resource)
-                exposer.setIcon(image)
+                exposer.setIcon(icon)
             }
         }
 
