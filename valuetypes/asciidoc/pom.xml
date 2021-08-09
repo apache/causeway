@@ -29,7 +29,7 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<asciidoctorj.version>2.5.1</asciidoctorj.version>
+		<asciidoctorj.version>2.5.2</asciidoctorj.version>
 	</properties>
 
 	<modules>
