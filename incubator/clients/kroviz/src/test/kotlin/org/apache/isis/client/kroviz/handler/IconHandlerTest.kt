@@ -22,8 +22,11 @@ package org.apache.isis.client.kroviz.handler
 import io.kvision.html.Image
 import kotlinx.browser.window
 import org.apache.isis.client.kroviz.IntegrationTest
+import org.apache.isis.client.kroviz.core.aggregator.DispatchInterceptor
+import org.apache.isis.client.kroviz.core.event.RoXmlHttpRequest
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.OBJECT_ICON
 import org.apache.isis.client.kroviz.to.Icon
+import org.apache.isis.client.kroviz.to.Link
 import org.w3c.dom.url.URL
 import org.w3c.files.Blob
 import org.w3c.files.BlobPropertyBag
@@ -37,7 +40,11 @@ class IconHandlerTest : IntegrationTest() {
     fun handleTest() {
         if (isAppAvailable()) {
             //given
-            val logEntry = mockResponse(OBJECT_ICON, null)
+            val link = Link(href = OBJECT_ICON.url)
+            val di = DispatchInterceptor()
+            RoXmlHttpRequest().invoke(link, di)
+            wait(1000)
+            val logEntry = di.logEntry!!
 
             //when
             val handler = IconHandler()

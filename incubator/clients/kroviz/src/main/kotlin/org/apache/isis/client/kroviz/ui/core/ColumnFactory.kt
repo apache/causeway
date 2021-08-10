@@ -22,6 +22,7 @@ import io.kvision.tabulator.Align
 import io.kvision.tabulator.ColumnDefinition
 import io.kvision.tabulator.Editor
 import io.kvision.tabulator.Formatter
+import io.kvision.utils.obj
 import org.apache.isis.client.kroviz.core.model.CollectionDM
 import org.apache.isis.client.kroviz.core.model.Exposer
 
@@ -35,7 +36,7 @@ class ColumnFactory {
 
         val columns = mutableListOf<ColumnDefinition<Exposer>>()
         addIcons(displayCollection)
-        val icon = buildLinkIcon()
+        val icon = buildIcon()
         columns.add(icon)
 
         val propertyLabels = displayCollection.properties.list
@@ -67,11 +68,12 @@ class ColumnFactory {
 
     }
 
-    private fun buildLinkIcon(): ColumnDefinition<Exposer> {
+    private fun buildIcon(): ColumnDefinition<Exposer> {
         return ColumnDefinition<dynamic>(
                 "",
                 field = "icon",
                 formatter = Formatter.IMAGE,
+                formatterParams = obj { width = "16px"; height = "16px" },
                 hozAlign = Align.CENTER,
                 width = "40"
         )

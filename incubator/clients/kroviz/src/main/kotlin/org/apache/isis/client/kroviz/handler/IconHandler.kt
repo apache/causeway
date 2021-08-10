@@ -18,10 +18,14 @@
  */
 package org.apache.isis.client.kroviz.handler
 
+import io.kvision.core.CssSize
+import io.kvision.core.UNIT
 import org.apache.isis.client.kroviz.to.Icon
 import org.apache.isis.client.kroviz.to.TransferObject
 import org.apache.isis.client.kroviz.ui.core.Constants
-import org.apache.isis.client.kroviz.utils.ImgUtils
+import org.w3c.dom.Image
+import org.w3c.dom.url.URL
+import org.w3c.files.Blob
 
 class IconHandler : BaseHandler() {
 
@@ -35,12 +39,19 @@ class IconHandler : BaseHandler() {
 
     override fun parse(response: String): TransferObject {
         val blob = logEntry.blob!!
-        val image = ImgUtils.toImage(blob)
+        val image = blob.toImage()
         return Icon(image)
     }
 
     override fun update() {
         logEntry.getAggregator()!!.update(logEntry, Constants.pngMimeType)
+    }
+
+    fun Blob.toImage() : Image {
+        val url = URL.createObjectURL(this)
+        val image = Image()
+        image.src = url
+        return image
     }
 
 }
