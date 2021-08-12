@@ -516,7 +516,7 @@ under the License.
 						<dependency>
 							<groupId>org.apache.maven.scm</groupId>
 							<artifactId>maven-scm-provider-svnexe</artifactId>
-							<version>1.11.2</version>
+							<version>1.11.3</version>
 						</dependency>
 					</dependencies>
 				</plugin>
