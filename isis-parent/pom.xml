@@ -501,7 +501,7 @@ under the License.
 						<dependency>
 							<groupId>org.apache.maven.scm</groupId>
 							<artifactId>maven-scm-api</artifactId>
-							<version>1.11.2</version>
+							<version>1.11.3</version>
 						</dependency>
 						<dependency>
 							<groupId>org.apache.maven.scm</groupId>
