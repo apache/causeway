@@ -63,12 +63,13 @@ class RoTable(displayCollection: CollectionDM) : SimplePanel() {
         tabulator(model, options = options, types = tableTypes) {
             setEventListener<Tabulator<Exposer>> {
                 tabulatorCellClick = {
-                    console.log("[RT.tabulatorCellClick]")
-                    console.log(it)
+                    // can not check cast to external
                     val cc = it.detail as CellComponent
-                    val exposer = cc.getData() as Exposer
-                    console.log(exposer)
-                    UiManager.displayModel(exposer.delegate)
+                    val column = cc.getColumn().getField()
+                    if (column == "icon") {
+                        val exposer = cc.getData() as Exposer
+                        UiManager.displayModel(exposer.delegate)
+                    }
                 }
             }
         }
