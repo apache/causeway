@@ -60,4 +60,15 @@ data class TObject(override val links: List<Link> = emptyList(),
         return null
     }
 
+    fun getLayoutLink() : Link {
+        return this.links.first {
+            it.relation() == Relation.OBJECT_LAYOUT
+        }
+    }
+
+    fun getSelfLink() : Link {
+        return this.links.first {
+            it.relation() == Relation.SELF
+        }
+    }
 }

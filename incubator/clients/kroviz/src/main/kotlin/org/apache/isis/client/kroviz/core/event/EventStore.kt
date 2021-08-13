@@ -78,7 +78,7 @@ object EventStore {
         val logEntry = findView(title)
         if (null != logEntry) {
             logEntry.setClose()
-            logEntry.getAggregator()!!.reset()
+            logEntry.getAggregator().reset()
             updateStatus(logEntry)
         }
     }
@@ -151,14 +151,21 @@ object EventStore {
         }
     }
 
+    fun findAllBy(tObject: TObject): List<LogEntry> {
+        return log.filter {
+            it.obj is TObject && (it.obj as TObject).instanceId == tObject.instanceId
+        }
+    }
+
     fun findBy(aggregator: BaseAggregator): LogEntry? {
         return log.firstOrNull { it.getAggregator() == aggregator }
     }
 
     fun findByDispatcher(uuid: UUID): LogEntry {
         return log.first {
-            it.getAggregator() is SvgDispatcher
-                    && (it.getAggregator() as SvgDispatcher).callBack == uuid
+            val aggt = it.getAggregator()
+            aggt is SvgDispatcher
+                    && aggt.callBack == uuid
         }
     }
 

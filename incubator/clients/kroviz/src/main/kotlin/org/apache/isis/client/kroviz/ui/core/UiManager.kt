@@ -32,15 +32,14 @@ import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.core.model.CollectionDM
 import org.apache.isis.client.kroviz.core.model.ObjectDM
-import org.apache.isis.client.kroviz.to.Relation
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.apache.isis.client.kroviz.ui.kv.override.RoTab
 import org.apache.isis.client.kroviz.utils.DomUtil
 import org.apache.isis.client.kroviz.utils.ScalableVectorGraphic
-import org.apache.isis.client.kroviz.utils.UUID
 import org.apache.isis.client.kroviz.utils.StringUtils
+import org.apache.isis.client.kroviz.utils.UUID
 import org.w3c.dom.events.KeyboardEvent
 
 /**
@@ -151,21 +150,32 @@ object UiManager {
     }
 
     fun displayModel(tObject: TObject) {
+        console.log("[UM.displayModel]")
         val aggregator = ObjectAggregator(tObject.title)
-        linkLayout(tObject, aggregator)
-        val logEntry = EventStore.findBy(tObject)!!
-        logEntry.addAggregator(aggregator)
-        aggregator.update(logEntry, Constants.subTypeJson)
-        aggregator.handleObject(tObject)
+        console.log(aggregator)
+        val logEntries = EventStore.findAllBy(tObject)
+        logEntries.forEach {
+            if (tObject == it.obj) {
+                //there may be more than one aggt - which may break this code
+                loadObject(it, tObject, aggregator)
+            } else {
+                //  addMissingLayout(tObject, aggregator)
+            }
+        }
     }
 
-    private fun linkLayout(tObject: TObject, aggregator: ObjectAggregator) {
-        val layoutLink = tObject.links.firstOrNull {
-            it.relation() == Relation.OBJECT_LAYOUT
+    private fun loadObject(logEntry: LogEntry, tObject: TObject, objAggt: ObjectAggregator) {
+        console.log("[UM.loadObject]")
+        logEntry.addAggregator(objAggt)
+        objAggt.update(logEntry, Constants.subTypeJson)
+        val layoutLink = tObject.getLayoutLink()
+        console.log(layoutLink)
+        val reSpec = ResourceSpecification(layoutLink.href)
+        val layoutEntry: LogEntry? = EventStore.findBy(reSpec)
+        if (layoutEntry != null) {
+            layoutEntry.addAggregator(objAggt)
+            objAggt.update(layoutEntry, Constants.subTypeJson)
         }
-        val reSpec = ResourceSpecification(layoutLink!!.href)
-        val logEntry = EventStore.findBy(reSpec)!!
-        logEntry.addAggregator(aggregator)
     }
 
     fun openDialog(panel: RoDialog) {

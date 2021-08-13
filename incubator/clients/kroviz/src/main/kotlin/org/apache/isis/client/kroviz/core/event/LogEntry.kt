@@ -22,9 +22,9 @@ import io.kvision.html.ButtonStyle
 import io.kvision.panel.SimplePanel
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import org.apache.isis.client.kroviz.core.aggregator.ActionDispatcher
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.isis.client.kroviz.core.aggregator.CollectionAggregator
+import org.apache.isis.client.kroviz.core.aggregator.ObjectAggregator
 import org.apache.isis.client.kroviz.to.HasLinks
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Relation
@@ -207,15 +207,18 @@ data class LogEntry(
         return fault != null
     }
 
-    fun getAggregator(): BaseAggregator? {
+    fun getAggregator(): BaseAggregator {
         //TODO is the last agg always the right one?
         return aggregators.last()
     }
 
     fun addAggregator(aggregator: BaseAggregator) {
+        console.log("[LE.addAggregator]")
+//        console.log(aggregator)
         aggregators.add(aggregator)
-        if ((aggregators.size > 1) && ((aggregator is ActionDispatcher) || (aggregator is CollectionAggregator))) {
-            throw Throwable("[LogEntry.addAggregator] not implemented yet")
+        if ((aggregators.size > 1) && ((aggregator is ObjectAggregator) || (aggregator is CollectionAggregator))) {
+            console.log(aggregators)
+  //          throw Throwable("[LE.addAggregator] not implemented yet")
         }
         nOfAggregators = aggregators.size
     }

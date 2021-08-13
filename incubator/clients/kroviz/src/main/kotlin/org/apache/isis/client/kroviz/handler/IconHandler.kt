@@ -18,8 +18,6 @@
  */
 package org.apache.isis.client.kroviz.handler
 
-import io.kvision.core.CssSize
-import io.kvision.core.UNIT
 import org.apache.isis.client.kroviz.to.Icon
 import org.apache.isis.client.kroviz.to.TransferObject
 import org.apache.isis.client.kroviz.ui.core.Constants
@@ -44,7 +42,7 @@ class IconHandler : BaseHandler() {
     }
 
     override fun update() {
-        logEntry.getAggregator()!!.update(logEntry, Constants.pngMimeType)
+        logEntry.getAggregator().update(logEntry, Constants.pngMimeType)
     }
 
     fun Blob.toImage() : Image {

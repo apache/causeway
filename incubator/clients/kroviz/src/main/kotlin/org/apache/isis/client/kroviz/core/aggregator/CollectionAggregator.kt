@@ -44,6 +44,7 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
 
         if (logEntry.state == EventState.DUPLICATE) {
             console.log("[CollectionAggregator.update] TODO duplicates should not be propagated to handlers")
+            //TODO this may not hold true for changed and deleted objects - object version required to deal with it?
         } else {
             when (val obj = logEntry.getTransferObject()) {
                 null -> log(logEntry)

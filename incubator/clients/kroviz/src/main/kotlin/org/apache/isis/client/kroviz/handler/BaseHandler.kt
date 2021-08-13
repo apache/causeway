@@ -76,7 +76,10 @@ abstract class BaseHandler {
     }
 
     open fun update() {
-        logEntry.getAggregator()!!.update(logEntry, Constants.subTypeJson)
+        logEntry.getAggregator().update(logEntry, Constants.subTypeJson)
+        logEntry.aggregators.forEach {
+//            console.log(it)
+        }
     }
 
 }

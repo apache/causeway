@@ -76,6 +76,7 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
             val putLink = Link(method = Method.PUT.operation, href = href)
             val logEntry = findBy(reSpec)
             val aggregator = logEntry?.getAggregator()!!
+            // there may be more than one aggt - which may break this code
 
             RoXmlHttpRequest().invoke(putLink, aggregator)
             // now data should be reloaded
