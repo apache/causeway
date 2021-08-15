@@ -16,12 +16,13 @@ public static final String LOGICAL_TYPE_NAME;
   void impersonate(final String userName)     // <.>
   boolean hideImpersonate()
   String disableImpersonate()
-  void impersonateWithRoles(final String userName, final List<String> roleNames)     // <.>
+  void impersonateWithRoles(final String userName, final List<String> roleNames, final String multiTenancyToken)     // <.>
   boolean hideImpersonateWithRoles()
   String disableImpersonateWithRoles()
   List<String> choices0ImpersonateWithRoles()
   List<String> choices1ImpersonateWithRoles(final String userName)
   List<String> default1ImpersonateWithRoles(final String userName)
+  String default2ImpersonateWithRoles(final String userName, final List<String> roleNames)
 }
 ----
 
@@ -30,7 +31,7 @@ public static final String LOGICAL_TYPE_NAME;
 --
 Simple implementation that is surfaced if there is no advisor.
 --
-<.> xref:#impersonateWithRoles__String_List[impersonateWithRoles(String, List)]
+<.> xref:#impersonateWithRoles__String_List_String[impersonateWithRoles(String, List, String)]
 +
 --
 Impersonate a selected user, either using their current roles or with a specific set of roles.
@@ -43,8 +44,8 @@ Impersonate a selected user, either using their current roles or with a specific
 
 Simple implementation that is surfaced if there is no advisor.
 
-[#impersonateWithRoles__String_List]
-=== impersonateWithRoles(String, List)
+[#impersonateWithRoles__String_List_String]
+=== impersonateWithRoles(String, List, String)
 
 Impersonate a selected user, either using their current roles or with a specific set of roles.
 

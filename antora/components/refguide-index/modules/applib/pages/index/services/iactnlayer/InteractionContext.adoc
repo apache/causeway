@@ -16,6 +16,7 @@ class InteractionContext {
   UnaryOperator<InteractionContext> switchTimeZone(final TimeZone timeZone)     // <.>
   UnaryOperator<T> combine(UnaryOperator<T>... mappers)     // <.>
   UnaryOperator<T> combine(Stream<UnaryOperator<T>> mappers)     // <.>
+  void replaceUser(UserMemento user)     // <.>
 }
 ----
 
@@ -53,6 +54,11 @@ Convenience method to combine _UnaryOperator_ s, for example as per _#switchUser
 +
 --
 Convenience method to combine _UnaryOperator_ s, for example as per _#switchUser(UserMemento)_ and _#switchTimeZone(TimeZone)_ . credit: https://stackoverflow.com/a/51065029/56880
+--
+<.> xref:#replaceUser__UserMemento[replaceUser(UserMemento)]
++
+--
+For internal usage, not API.
 --
 
 == Members
@@ -93,3 +99,10 @@ NOTE: this implementation can result in heap pollution; better to use the _#comb
 === combine(Stream)
 
 Convenience method to combine _UnaryOperator_ s, for example as per _#switchUser(UserMemento)_ and _#switchTimeZone(TimeZone)_ . credit: https://stackoverflow.com/a/51065029/56880
+
+[#replaceUser__UserMemento]
+=== replaceUser(UserMemento)
+
+For internal usage, not API.
+
+Instead, use _#withUser(UserMemento)_ , which honours the value semantics of this class.

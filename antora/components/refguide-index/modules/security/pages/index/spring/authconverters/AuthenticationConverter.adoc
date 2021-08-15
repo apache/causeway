@@ -7,7 +7,7 @@ The _Authentication_ will have already been verified as having been _Authenticat
 
 Implementations should be defined as Spring _Component_ s and added to the _Configuration application context_ either by being _Import imported_ explicitly or implicitly through _ComponentScan_ .
 
-All known converters are checked one by one, but checking stops once one converter has successively converted the _Authentication_ into a xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento] (in other words, chain-of-responsibility pattern). Use the _org.springframework.core.Ordered_ to influence the order in which converter implementations are checked.
+All known converters are checked one by one, but checking stops once one converter has successively converted the _Authentication_ into a xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento] (in other words, chain-of-responsibility pattern). Use the _javax.annotation.Priority_ annotation to influence the order in which converter implementations are checked.
 
 == API
 
