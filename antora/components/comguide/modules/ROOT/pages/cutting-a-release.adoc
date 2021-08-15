@@ -138,7 +138,20 @@ If any missing entries are listed or are spurious, then update `supplemental-mod
 
 === Update and preview website
 
-Generate the website, ensuring that the config, examples, projdoc (system overview and global index) are all updated:
+The next step is to generate the website, ensuring that the config, examples, projdoc (system overview and global index) are all updated.
+
+Be careful that sometimes the configuration property pages (that are generated from the `core/config/target/classes/META-INF/spring-configuration-metadata.json` file) may be malformed; in particular for default values going missing.
+
+This seems to occur if the IDE (IntelliJ) has compiled the codebase.
+
+The workaround is to rebuild the `core/config` Maven module using `mvn` command line first.
+
+[source,bash,subs="attributes+"]
+----
+mvn clean install -pl core/config
+----
+
+Then, generate the website:
 
 [source,bash,subs="attributes+"]
 ----
@@ -146,20 +159,8 @@ sh preview.sh
 ----
 
 Check for any Asciidoc errors, and fix.
+Also double-check that the config property files are correctly formatted.
 
-[CAUTION]
-====
-Be aware of any changes to the configuration property pages, in particular for default values going missing.
-
-It seems that building from the command line using `mvn` does not preserve all the information in the `core/config/target/classes/META-INF/spring-configuration-metadata.json` file that is parsed in order to create these pages.
-
-If you observe this, then rebuild the project using an IDE (IntelliJ) and re-run the steps to create the config properties:
-
-[source,bash,subs="attributes+"]
-----
-sh preview.sh -C
-----
-====
 
 === Commit changes
 
