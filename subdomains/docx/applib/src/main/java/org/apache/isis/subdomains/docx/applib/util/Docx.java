@@ -1,3 +1,21 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
 package org.apache.isis.subdomains.docx.applib.util;
 
 import java.io.ByteArrayInputStream;
@@ -13,7 +31,6 @@ import org.docx4j.convert.in.FlatOpcXmlImporter;
 import org.docx4j.convert.out.flatOpcXml.FlatOpcXmlCreator;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
-import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
 import org.docx4j.wml.Body;
 import org.docx4j.wml.R;
 import org.docx4j.wml.SdtElement;
@@ -21,42 +38,35 @@ import org.docx4j.wml.Tag;
 
 import org.apache.isis.subdomains.docx.applib.exceptions.MergeException;
 
-public final class Docx {
-    private Docx() {
-    }
+import lombok.val;
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
+public class Docx {
 
     public static Function<SdtElement, String> tagToValue() {
-        return  new Function<SdtElement, String>(){
-            public String apply(SdtElement input) {
-                return input.getSdtPr().getTag().getVal();
-            }
-        };
+        return input -> input.getSdtPr().getTag().getVal();
     }
 
     public static Predicate<Object> withAnyTag() {
-        return new Predicate<Object>(){
-            public boolean test(Object object) {
-                if(!(object instanceof SdtElement)) {
-                    return false;
-                }
-                SdtElement sdtBlock = (SdtElement) object;
-                Tag tag = sdtBlock.getSdtPr().getTag();
-                return tag != null;
+        return object -> {
+            if(!(object instanceof SdtElement)) {
+                return false;
             }
+            SdtElement sdtBlock = (SdtElement) object;
+            Tag tag = sdtBlock.getSdtPr().getTag();
+            return tag != null;
         };
     }
 
     public static Predicate<Object> withTagVal(final String tagVal) {
-        return new Predicate<Object>(){
-            public boolean test(Object object) {
-                if(!(object instanceof SdtElement)) {
-                    return false;
-                }
-                SdtElement sdtBlock = (SdtElement) object;
-                Tag tag = sdtBlock.getSdtPr().getTag();
-                return tag != null && Objects.equal(tagVal, tag.getVal());
+        return object -> {
+            if(!(object instanceof SdtElement)) {
+                return false;
             }
-
+            val sdtBlock = (SdtElement) object;
+            val tag = sdtBlock.getSdtPr().getTag();
+            return tag != null && Objects.equal(tagVal, tag.getVal());
         };
     }
 
@@ -67,31 +77,30 @@ public final class Docx {
         if(runContent.isEmpty()) {
             return false;
         }
-        Object jaxbElObj = runContent.get(0);
+        val jaxbElObj = runContent.get(0);
 
         if(!(jaxbElObj instanceof javax.xml.bind.JAXBElement)) {
             return false;
         }
-        javax.xml.bind.JAXBElement jaxbElement = (javax.xml.bind.JAXBElement) jaxbElObj;
-        Object textObj = jaxbElement.getValue();
+        val jaxbElement = (javax.xml.bind.JAXBElement) jaxbElObj;
+        val textObj = jaxbElement.getValue();
         if(!(textObj instanceof org.docx4j.wml.Text)) {
             return false;
         }
-        org.docx4j.wml.Text text = (org.docx4j.wml.Text) textObj;
+        val text = (org.docx4j.wml.Text) textObj;
         text.setValue(value);
         return true;
     }
 
     public static Body docxBodyFor(WordprocessingMLPackage docxPkg) {
-        MainDocumentPart docxMdp = docxPkg.getMainDocumentPart();
-
-        org.docx4j.wml.Document docxDoc = (org.docx4j.wml.Document) docxMdp.getJaxbElement();
+        val docxMdp = docxPkg.getMainDocumentPart();
+        val docxDoc = docxMdp.getJaxbElement();
         return docxDoc.getBody();
     }
 
     public static WordprocessingMLPackage clone(WordprocessingMLPackage docxTemplate) throws MergeException {
-        FlatOpcXmlCreator foxc = new FlatOpcXmlCreator(docxTemplate);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        val foxc = new FlatOpcXmlCreator(docxTemplate);
+        val baos = new ByteArrayOutputStream();
         try {
             foxc.marshal(baos);
             ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());

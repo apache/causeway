@@ -571,18 +571,9 @@ under the License.
 							<exclude>**/.classpath</exclude>
 							<exclude>**/.settings/**</exclude>
 							<exclude>**/*.launch</exclude>
-
-							<exclude>**/demo/CREDITS.TXT</exclude>
-							<exclude>**/demo/domain/src/main/java/demoapp/dom/types/isis/clobs/samples/**</exclude>
-							<exclude>**/demo/domain/src/main/java/demoapp/dom/types/isis/markups/samples/**</exclude>
-							<exclude>**/demo/domain/src/main/java/demoapp/dom/types/isisext/asciidocs/samples/**</exclude>
-							<exclude>**/demo/domain/src/main/java/demoapp/dom/types/isisext/markdowns/samples/**</exclude>
-							<exclude>**/demo/domain/src/main/resources/banner.txt</exclude>
-							<exclude>**/demo/domain/src/main/resources/static/**</exclude>
-							<exclude>**/demo/domain/src/test/resources/demoapp/dom/_infra/resources/</exclude>
-							<exclude>**/demo/wicket/src/test/e2e/cypress-scaffolding/integration/examples/*.spec.js</exclude>
-							<exclude>**/demo/wicket/src/test/e2e/cypress-scaffolding/integration/typescript/basic.ts</exclude>
-							<exclude>**/demo/vaadin/node_modules/**</exclude>
+							<exclude>**/*.columnOrder.txt</exclude>
+							<exclude>**/*.drawio.svg</exclude>
+							<exclude>**/META-INF/spring.factories</exclude>
 
 							<exclude>**/incubator/clients/kroviz/package.json.d/project.info</exclude>
 
@@ -615,9 +606,14 @@ under the License.
 							<exclude>**/xml/objects/**</exclude>
 							<exclude>**/test.data</exclude>
 							<exclude>**/fixture-data/**</exclude>
-							<exclude>**/module-nav.adoc</exclude>
-							<exclude>**/component-nav.adoc</exclude>
+							<exclude>**/partials/module-nav.adoc</exclude>
+							<exclude>**/partials/extensions.adoc</exclude>
+							<exclude>**/partials/component-nav.adoc</exclude>
 							<exclude>**/_nav.adoc</exclude>
+							<exclude>**/_overview/nav.adoc</exclude>
+
+							<exclude>**/src/test/resources/org/apache/isis/subdomains/docx/applib/*.html</exclude>
+							<exclude>**/adoc/modules/docx/examples/*.html</exclude>
 
 							<exclude>**/application.js</exclude>
 
@@ -629,6 +625,8 @@ under the License.
 							<exclude>**/prism*.css</exclude>
 							<exclude>**/kroviz/webpack.config.d/**</exclude>
 
+							<exclude>**/viewer/wicket/ui/components/**/*.css</exclude>
+							<exclude>**/viewer/wicket/ui/components/**/*.js</exclude>
 							<exclude>**/bootstrap-datetimepicker.min.css</exclude>
 							<exclude>**/bootstrap-datetimepicker.css</exclude>
 							<exclude>**/select2-bootstrap.css</exclude>

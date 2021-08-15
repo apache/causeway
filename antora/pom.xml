@@ -34,7 +34,6 @@
 				<artifactId>apache-rat-plugin</artifactId>
 				<version>0.13</version>
 
-				<!-- APACHE ISIS customisation 4/7: start -->
 				<configuration>
 					<addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
 					<excludeSubProjects>true</excludeSubProjects>
