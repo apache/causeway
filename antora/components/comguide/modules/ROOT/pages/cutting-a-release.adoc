@@ -237,7 +237,8 @@ git push origin $ISISBRANCH -u
 
 Search through the `.java` files for `{page-isisprev}`, and change to `{page-isisrel}`.
 
-At the time of writing there are just a couple of files that have the release hard-coded.
+At the time of writing there was just one `.java` file that had the release hard-coded (`IsisConfigurationLegacy`).
+
 
 === Switch to the `isis-parent` directory
 
