@@ -17,11 +17,11 @@ For example, here's a JDOQL query:
 @Query(
 		name = "findCompletedOrLaterWithItemsByReportedDate", language = "JDOQL",
 		value = "SELECT "
-				+ "FROM org.estatio.capex.dom.invoice.IncomingInvoice "
+				+ "FROM com.mycompany.invoice.IncomingInvoice "
 				+ "WHERE items.contains(ii) "
 				+ "   && (ii.reportedDate == :reportedDate) "
 				+ "   && (approvalState != 'NEW' && approvalState != 'DISCARDED') "
-				+ "VARIABLES org.estatio.capex.dom.invoice.IncomingInvoiceItem ii "
+				+ "VARIABLES com.mycompany.invoice.IncomingInvoiceItem ii "
 ),
 public class IncomingInvoice ... { /* ... */ }
 ----
