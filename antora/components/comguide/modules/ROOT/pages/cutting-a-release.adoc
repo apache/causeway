@@ -274,7 +274,7 @@ mvn install -o -DskipTests -Dreleased
 ====
 The `released` system property is set to only sanity check the modules actually to be released (ignores the incubator modules).
 
-Partly that's because there's no need to check the incubator modules, it's also because the incubator modules might require new than Java 11 (Java 11 is used for everything else)
+Partly that's because there's no need to check the incubator modules, it's also because the incubator modules might require more recent versions of Java than that formally supported by the framework (Java 11 currently).
 ====
 
 * next we also update the starters (as used by applications built using the framework):
