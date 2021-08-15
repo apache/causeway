@@ -147,6 +147,19 @@ sh preview.sh
 
 Check for any Asciidoc errors, and fix.
 
+[CAUTION]
+====
+Be aware of any changes to the configuration property pages, in particular for default values going missing.
+
+It seems that building from the command line using `mvn` does not preserve all the information in the `core/config/target/classes/META-INF/spring-configuration-metadata.json` file that is parsed in order to create these pages.
+
+If you observe this, then rebuild the project using an IDE (IntelliJ) and re-run the steps to create the config properties:
+
+[source,bash,subs="attributes+"]
+----
+sh preview.sh -C
+----
+====
 
 === Commit changes
 
