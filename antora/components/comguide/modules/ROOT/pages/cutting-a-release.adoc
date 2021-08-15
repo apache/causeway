@@ -24,6 +24,13 @@ They should work on Linux and MacOS; for Windows, use mSysGit.
 
 == Preparation
 
+[WARNING]
+====
+The release process should be performed on Java 11.
+
+This updated dependency changed as of 2.0.0-M6.
+====
+
 === Obtain Consensus
 
 Before releasing the framework, ensure there is consensus on the xref:docs:support:mailing-list.adoc[dev mailing list] that this is the right time for a release.
@@ -137,8 +144,6 @@ Generate the website, ensuring that the config, examples, projdoc (system overvi
 ----
 sh preview.sh
 ----
-
-NOTE: this now needs to be run using Java 11 (because of the "projdoc" tooling).
 
 Check for any Asciidoc errors, and fix.
 
@@ -612,8 +617,6 @@ popd
 ----
 
 * Back in the `isis` repo's `release` worktree, generate the Antora site (from the top-level directory).
-+
-NOTE: this now needs to be run using Java 11 (because of the "projdoc" tooling).
 +
 [source,bash,subs="attributes+"]
 ----
