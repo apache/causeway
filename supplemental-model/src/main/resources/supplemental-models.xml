@@ -27,23 +27,5 @@
         </project>
     </supplement>
 
-    <supplement>
-        <project>
-            <groupId>javax.transaction</groupId>
-            <artifactId>transaction-api</artifactId>
-            <version>1.1</version>
-            <name>Java Transaction API (JTA)</name>
-            <organization>
-                <name>Oracle Corp</name>
-                <url>http://www.oracle.com/</url>
-            </organization>
-            <licenses>
-                <license>
-                    <name>Common Development and Distribution License (CDDL) v1.0</name>
-                    <url>https://glassfish.java.net/public/CDDLv1.0.html</url>
-                </license>
-            </licenses>
-        </project>
-    </supplement>
 
 </supplementalDataModels>
