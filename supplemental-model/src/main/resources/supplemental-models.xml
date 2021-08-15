@@ -27,5 +27,117 @@
         </project>
     </supplement>
 
+    <supplement>
+        <project>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.2</version>
+            <name>Java Servlet API (JTA)</name>
+            <organization>
+                <name>Oracle Corp</name>
+                <url>http://www.oracle.com/</url>
+            </organization>
+            <licenses>
+                <license>
+                    <name>The Apache Software License, Version 1.1</name>
+                    <url>http://www.apache.org/licenses/LICENSE-1.1.txt</url>
+                </license>
+            </licenses>
+        </project>
+    </supplement>
+
+    <supplement>
+        <project>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.2</version>
+            <name>Java Servlet API (JTA)</name>
+            <organization>
+                <name>Oracle Corp</name>
+                <url>http://www.oracle.com/</url>
+            </organization>
+            <licenses>
+                <license>
+                    <name>The Apache Software License, Version 1.1</name>
+                    <url>http://www.apache.org/licenses/LICENSE-1.1.txt</url>
+                </license>
+            </licenses>
+        </project>
+    </supplement>
+
+    <supplement>
+        <project>
+            <groupId>com.github.rototor</groupId>
+            <artifactId>cglib</artifactId>
+            <version>4516ac7b61</version>
+            <name>Code Generation Library</name>
+            <licenses>
+                <license>
+                    <name>The Apache Software License, Version 2.0</name>
+                    <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+                </license>
+            </licenses>
+        </project>
+    </supplement>
+
+    <supplement>
+        <project>
+            <groupId>com.github.rototor.cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>4516ac7b61</version>
+            <name>Code Generation Library</name>
+            <licenses>
+                <license>
+                    <name>The Apache Software License, Version 2.0</name>
+                    <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+                </license>
+            </licenses>
+        </project>
+    </supplement>
+
+    <supplement>
+        <project>
+            <groupId>com.github.rototor.cglib</groupId>
+            <artifactId>cglib-jmh</artifactId>
+            <version>4516ac7b61</version>
+            <name>Code Generation Library</name>
+            <licenses>
+                <license>
+                    <name>The Apache Software License, Version 2.0</name>
+                    <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+                </license>
+            </licenses>
+        </project>
+    </supplement>
+
+    <supplement>
+        <project>
+            <groupId>com.github.rototor.cglib</groupId>
+            <artifactId>cglib-nodep</artifactId>
+            <version>4516ac7b61</version>
+            <name>Code Generation Library</name>
+            <licenses>
+                <license>
+                    <name>The Apache Software License, Version 2.0</name>
+                    <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+                </license>
+            </licenses>
+        </project>
+    </supplement>
+
+    <supplement>
+        <project>
+            <groupId>com.github.rototor.cglib</groupId>
+            <artifactId>cglib-integration-test</artifactId>
+            <version>4516ac7b61</version>
+            <name>Code Generation Library</name>
+            <licenses>
+                <license>
+                    <name>The Apache Software License, Version 2.0</name>
+                    <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+                </license>
+            </licenses>
+        </project>
+    </supplement>
 
 </supplementalDataModels>
