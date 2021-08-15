@@ -335,8 +335,8 @@ under the License.
 		<surefire.version>2.22.2</surefire.version>
 		<assembly.tarLongFileMode>posix</assembly.tarLongFileMode>
 		<!-- set this property for all derived projects:
-        <project.build.outputTimestamp>2020-01-22T15:10:38Z</project.build.outputTimestamp>
         -->
+        <project.build.outputTimestamp>2021-08-15T15:58:00Z</project.build.outputTimestamp>
     </properties>
 
 	<repositories>
