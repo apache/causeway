@@ -20,7 +20,7 @@ package org.apache.isis.client.kroviz.core.aggregator
 
 import org.apache.isis.client.kroviz.core.event.EventState
 import org.apache.isis.client.kroviz.core.event.LogEntry
-import org.apache.isis.client.kroviz.core.event.RoXmlHttpRequest
+import org.apache.isis.client.kroviz.core.event.RequestProxy
 import org.apache.isis.client.kroviz.core.model.CollectionDM
 import org.apache.isis.client.kroviz.layout.Layout
 import org.apache.isis.client.kroviz.to.*
@@ -123,11 +123,11 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
     private fun handleCollection(collection: Collection) {
         collection.links.forEach {
             if (it.relation() == Relation.DESCRIBED_BY) {
-                RoXmlHttpRequest().invoke(it, this)
+                RequestProxy().invoke(it, this)
             }
         }
         collection.value.forEach {
-            RoXmlHttpRequest().invoke(it, this)
+            RequestProxy().invoke(it, this)
         }
     }
 

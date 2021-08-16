@@ -21,7 +21,7 @@ package org.apache.isis.client.kroviz.ui.panel
 
 import io.kvision.utils.obj
 import org.apache.isis.client.kroviz.core.event.EventStore
-import org.apache.isis.client.kroviz.core.event.RoXmlHttpRequest
+import org.apache.isis.client.kroviz.core.event.RequestProxy
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.chart.ChartFactory
 import org.apache.isis.client.kroviz.ui.core.UiManager
@@ -43,7 +43,7 @@ class DynamicMenuBuilder {
             val title = StringUtils.deCamel(it.id)
             val icon = IconManager.find(title)
             val invokeLink = it.getInvokeLink()!!
-            val command =  { RoXmlHttpRequest().invoke(invokeLink) }
+            val command =  { RequestProxy().invoke(invokeLink) }
             val me = buildMenuEntry(icon, title, command)
             menu.add(me)
         }

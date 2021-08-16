@@ -23,7 +23,7 @@ import io.kvision.html.Image
 import kotlinx.browser.window
 import org.apache.isis.client.kroviz.IntegrationTest
 import org.apache.isis.client.kroviz.core.aggregator.DispatchInterceptor
-import org.apache.isis.client.kroviz.core.event.RoXmlHttpRequest
+import org.apache.isis.client.kroviz.core.event.RequestProxy
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.OBJECT_ICON
 import org.apache.isis.client.kroviz.to.Icon
 import org.apache.isis.client.kroviz.to.Link
@@ -42,7 +42,7 @@ class IconHandlerTest : IntegrationTest() {
             //given
             val link = Link(href = OBJECT_ICON.url)
             val di = DispatchInterceptor()
-            RoXmlHttpRequest().invoke(link, di)
+            RequestProxy().invoke(link, di)
             wait(1000)
             val logEntry = di.logEntry!!
 

@@ -19,7 +19,7 @@
 package org.apache.isis.client.kroviz.core.aggregator
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
-import org.apache.isis.client.kroviz.core.event.RoXmlHttpRequest
+import org.apache.isis.client.kroviz.core.event.RequestProxy
 import org.apache.isis.client.kroviz.core.model.CollectionDM
 import org.apache.isis.client.kroviz.core.model.ObjectDM
 import org.apache.isis.client.kroviz.layout.Layout
@@ -106,7 +106,7 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
             val aggregator = CollectionAggregator(key, this)
             collectionMap.put(key, aggregator)
             val link = it.links.first()
-            RoXmlHttpRequest().invoke(link, aggregator)
+            RequestProxy().invoke(link, aggregator)
         }
     }
 

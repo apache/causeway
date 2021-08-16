@@ -24,7 +24,7 @@ import io.kvision.dropdown.separator
 import io.kvision.html.ButtonStyle
 import io.kvision.utils.set
 import org.apache.isis.client.kroviz.core.event.EventStore
-import org.apache.isis.client.kroviz.core.event.RoXmlHttpRequest
+import org.apache.isis.client.kroviz.core.event.RequestProxy
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.mb.Menu
@@ -52,7 +52,7 @@ object MenuFactory {
             val link = buildActionLink(it.id, text)
             val invokeLink = it.getInvokeLink()!!
             link.onClick {
-                RoXmlHttpRequest().invoke(invokeLink)
+                RequestProxy().invoke(invokeLink)
             }
             dd.add(link)
         }
@@ -77,7 +77,7 @@ object MenuFactory {
             section.serviceAction.forEach { sa ->
                 val action = buildActionLink(sa.id!!, menuTitle)
                 action.onClick {
-                    RoXmlHttpRequest().invoke(sa.link!!)
+                    RequestProxy().invoke(sa.link!!)
                 }
                 action.setDragDropData(Constants.stdMimeType, action.id!!)
                 dd.add(action)
@@ -120,7 +120,7 @@ object MenuFactory {
                     val action = buildActionLink(sa.id, menuTitle)
                     action.label = ""
                     action.onClick {
-                        RoXmlHttpRequest().invoke(sa.link!!)
+                        RequestProxy().invoke(sa.link!!)
                     }
                     return action
                 }
@@ -172,7 +172,7 @@ object MenuFactory {
                 label = "save",
                 menuTitle = tObject.domainType)
         saveAction.onClick {
-            RoXmlHttpRequest().invoke(saveLink)
+            RequestProxy().invoke(saveLink)
         }
         dd.add(saveAction)
 
@@ -181,7 +181,7 @@ object MenuFactory {
                 label = "undo",
                 menuTitle = tObject.domainType)
         undoAction.onClick {
-            RoXmlHttpRequest().invoke(undoLink)
+            RequestProxy().invoke(undoLink)
         }
         dd.add(undoAction)
     }

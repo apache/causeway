@@ -39,27 +39,7 @@ class RoXmlHttpRequest {
     private val CONTENT_TYPE = "Content-Type"
     private val ACCEPT = "Accept"
 
-    fun invoke(link: Link, aggregator: BaseAggregator? = null, subType: String = Constants.subTypeJson) {
-        val rs = ResourceSpecification(link.href)
-        when {
-            EventStore.isCached(rs, link.method) -> processCached(rs)
-            else -> process(link, aggregator, subType)
-        }
-    }
-
-    private fun processCached(rs: ResourceSpecification) {
-        val le = EventStore.findBy(rs)!!
-        le.retrieveResponse()
-        getHandlerChain().handle(le)
-        EventStore.cached(rs)
-    }
-
-    // encapsulate implementation (Singleton vs. Object vs. Pool)
-    private fun getHandlerChain(): ResponseHandler {
-        return ResponseHandler
-    }
-
-    private fun process(link: Link, aggregator: BaseAggregator?, subType: String) {
+    internal fun process(link: Link, aggregator: BaseAggregator?, subType: String) {
         val method = link.method
         var url = link.href
         if (method != Method.POST.operation) {
@@ -100,15 +80,7 @@ class RoXmlHttpRequest {
         }
     }
 
-    fun invokeNonREST(link: Link, aggregator: BaseAggregator?, subType: String = Constants.subTypeXml) {
-        val rs = ResourceSpecification(link.href)
-        when {
-            EventStore.isCached(rs, link.method) -> processCached(rs)
-            else -> processNonREST(link, aggregator, subType)
-        }
-    }
-
-    private fun processNonREST(link: Link, aggregator: BaseAggregator?, subType: String) {
+    internal fun processNonREST(link: Link, aggregator: BaseAggregator?, subType: String) {
         val method = link.method
         val url = link.href
 
@@ -154,7 +126,7 @@ class RoXmlHttpRequest {
     private fun handleResult(rs: ResourceSpecification, body: String, xhr: XMLHttpRequest) {
         val response:Any? = xhr.response
         val logEntry: LogEntry? = EventStore.end(rs, body, response)
-        if (logEntry != null) getHandlerChain().handle(logEntry)
+        if (logEntry != null) ResponseHandler.handle(logEntry)
     }
 
     private fun handleError(rs: ResourceSpecification, xhr: XMLHttpRequest) {

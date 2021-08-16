@@ -19,7 +19,7 @@
 package org.apache.isis.client.kroviz.core.aggregator
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
-import org.apache.isis.client.kroviz.core.event.RoXmlHttpRequest
+import org.apache.isis.client.kroviz.core.event.RequestProxy
 import org.apache.isis.client.kroviz.core.model.DisplayModel
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.TObject
@@ -83,7 +83,7 @@ abstract class BaseAggregator {
     }
 
     protected fun invoke(link: Link, aggregator: BaseAggregator, subType: String = Constants.subTypeJson) {
-        RoXmlHttpRequest().invoke(link, aggregator, subType)
+        RequestProxy().invoke(link, aggregator, subType)
     }
 
 }

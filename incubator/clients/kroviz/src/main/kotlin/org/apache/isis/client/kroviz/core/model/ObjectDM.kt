@@ -19,8 +19,8 @@
 package org.apache.isis.client.kroviz.core.model
 
 import org.apache.isis.client.kroviz.core.event.EventStore.findBy
+import org.apache.isis.client.kroviz.core.event.RequestProxy
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
-import org.apache.isis.client.kroviz.core.event.RoXmlHttpRequest
 import org.apache.isis.client.kroviz.to.*
 
 class ObjectDM(override val title: String) : DisplayModelWithLayout() {
@@ -78,9 +78,9 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
             val aggregator = logEntry?.getAggregator()!!
             // there may be more than one aggt - which may break this code
 
-            RoXmlHttpRequest().invoke(putLink, aggregator)
+            RequestProxy().invoke(putLink, aggregator)
             // now data should be reloaded
-            RoXmlHttpRequest().invoke(getLink, aggregator)
+            RequestProxy().invoke(getLink, aggregator)
         }
     }
 
