@@ -161,12 +161,6 @@
 			<type>pom</type>
 		</dependency>
 
-		<dependency>
-			<groupId>org.apache.isis.mavendeps</groupId>
-			<artifactId>isis-mavendeps-jdk11</artifactId>
-			<type>pom</type>
-		</dependency>
-
        <dependency>
 	    	<groupId>org.apache.isis.testing</groupId>
         	<artifactId>isis-testing-unittestsupport-applib</artifactId>

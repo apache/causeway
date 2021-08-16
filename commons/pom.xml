@@ -53,24 +53,15 @@
 		</resources>
 	</build>
 
-	<profiles>
-		<profile>
-			<id>jdk11-supplemental</id>
-			<activation>
-				<jdk>[11,)</jdk>
-			</activation>
-			<!-- These dependencies are required in order to build on JDK11+ -->
-			<dependencies>
-				<dependency>
-					<groupId>org.apache.isis.core</groupId>
-					<artifactId>isis-jdk-supplemental</artifactId>
-					<type>pom</type>
-				</dependency>
-			</dependencies>
-		</profile>
-	</profiles>
-
 	<dependencies>
+	
+		<!-- JDK11+ SUPPORT -->
+
+		<dependency>
+			<groupId>org.apache.isis.mavendeps</groupId>
+			<artifactId>isis-mavendeps-jdk11</artifactId>
+			<type>pom</type>
+		</dependency>
 
 		<!-- JEE API -->
 		<dependency>

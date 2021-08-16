@@ -101,14 +101,6 @@
 			<version>${project.version}</version>
 		</dependency>
 
-		<!-- JDK11+ SUPPORT -->
-
-		<dependency>
-			<groupId>org.apache.isis.mavendeps</groupId>
-			<artifactId>isis-mavendeps-jdk11</artifactId>
-			<type>pom</type>
-		</dependency>
-
 		<!-- INCUBATOR: VAADIN VIEWER -->
 
 		<dependency>
