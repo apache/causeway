@@ -97,15 +97,16 @@ public class TextFieldWithDateTimePicker<T> extends TextField<T> implements ICon
 
         this.config = config;
 
-        //XXX ISIS-2834 as a side-effect ...
+        //XXX ISIS-2834 
+        //Adding OnChangeAjaxBehavior registers a JavaScript event listener on change event. 
+        //Since OnChangeAjaxBehavior extends AjaxFormComponentUpdatingBehavior the Ajax request 
+        // also updates the Wicket model for this form component on the server side.  
+        // onUpdate() is a callback method that you could use to do something more or don't do anything 
         add(new OnChangeAjaxBehavior() {
             private static final long serialVersionUID = 1L;
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
-                // ... org.apache.isis.viewer.wicket.ui.components.scalars.datepicker.TextFieldWithDateTimePicker
-                // which extends org.apache.wicket.markup.html.form.FormComponent
-                // triggers FormComponent#updateModel(), which otherwise would not be called
-                // (which is totally strange behavior)
+                // nothing to do
             }
         });
     }
