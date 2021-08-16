@@ -70,6 +70,13 @@
 
     <dependencies>
 
+		<!-- JDK11+ SUPPORT AND JEE API -->
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-jdk-supplemental</artifactId>
+			<type>pom</type>
+		</dependency>
+
         <dependency>
             <groupId>org.apache.isis.commons</groupId>
 			<artifactId>isis-commons</artifactId>
@@ -79,11 +86,6 @@
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-schema</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
         </dependency>
 
         <dependency>

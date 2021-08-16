@@ -28,7 +28,7 @@
 	<name>Apache Isis - JDK Supplemental</name>
 	<description>
         Defines a module to bring in dependencies that were part of JDK 8 but
-        had been removed with later JDK versions. 
+        had been removed with later JDK versions. Also brings in Jakarta EE API.
     </description>
 
 	<build>
@@ -144,10 +144,6 @@
 
 
 		<dependency>
-			<groupId>javax.xml.bind</groupId>
-			<artifactId>jaxb-api</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>com.sun.xml.bind</groupId>
 			<artifactId>jaxb-core</artifactId>
 		</dependency>
@@ -155,6 +151,12 @@
 			<groupId>com.sun.xml.bind</groupId>
 			<artifactId>jaxb-impl</artifactId>
 		</dependency>
+		
+        <dependency>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-api</artifactId>
+        </dependency>
+		
 	</dependencies>
 
 </project>
