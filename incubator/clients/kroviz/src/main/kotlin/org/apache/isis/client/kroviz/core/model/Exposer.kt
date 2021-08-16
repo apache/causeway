@@ -36,7 +36,7 @@ import org.apache.isis.client.kroviz.utils.IconManager
 @Serializable
 class Exposer(val delegate: TObject) {
 
-    var iconName = ""
+    var iconName = ""  //required by ColumnFactory
 
     fun dynamise(): dynamic {
         val thys = this.asDynamic()

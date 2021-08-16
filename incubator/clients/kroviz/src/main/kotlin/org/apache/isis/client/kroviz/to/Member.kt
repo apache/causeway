@@ -61,4 +61,10 @@ data class Member(val id: String,
         return (memberType == MemberType.PROPERTY.type && disabledReason == "")
     }
 
+    fun getInvokeLink(): Link? {
+        return links.firstOrNull { it.rel.indexOf(id) > 0 }
+    }
+
+
+
 }

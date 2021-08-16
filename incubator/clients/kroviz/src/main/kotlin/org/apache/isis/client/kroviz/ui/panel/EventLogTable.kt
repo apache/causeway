@@ -42,7 +42,7 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
                     title = "",
                     field = "state",
                     width = "50",
-                    headerMenu = EventLogTableMgr().buildTableMenu(this),
+                    headerMenu = DynamicMenuBuilder().buildTableMenu(this),
                     hozAlign = Align.CENTER,
                     formatterComponentFunction = { _, _, data -> buildActionButton(data) }
             ),

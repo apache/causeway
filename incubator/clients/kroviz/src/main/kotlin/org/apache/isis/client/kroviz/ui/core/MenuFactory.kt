@@ -18,21 +18,20 @@
  */
 package org.apache.isis.client.kroviz.ui.core
 
+import io.kvision.core.Component
+import io.kvision.dropdown.DropDown
+import io.kvision.dropdown.separator
+import io.kvision.html.ButtonStyle
+import io.kvision.utils.set
 import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.event.RoXmlHttpRequest
 import org.apache.isis.client.kroviz.to.Link
-import org.apache.isis.client.kroviz.to.Member
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.mb.Menu
 import org.apache.isis.client.kroviz.to.mb.MenuEntry
 import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.apache.isis.client.kroviz.utils.IconManager
 import org.apache.isis.client.kroviz.utils.StringUtils
-import io.kvision.core.Component
-import io.kvision.dropdown.DropDown
-import io.kvision.dropdown.separator
-import io.kvision.html.ButtonStyle
-import io.kvision.utils.set
 import io.kvision.html.Link as KvisionHtmlLink
 
 object MenuFactory {
@@ -212,10 +211,6 @@ object MenuFactory {
     private fun switchCssClass(menuItem: Component, from: String, to: String) {
         menuItem.removeCssClass(from)
         menuItem.addCssClass(to)
-    }
-
-    private fun Member.getInvokeLink(): Link? {
-        return links.firstOrNull { it.rel.indexOf(id) > 0 }
     }
 
 }

@@ -27,7 +27,6 @@ import io.kvision.tabulator.Layout
 import io.kvision.tabulator.Tabulator
 import io.kvision.tabulator.TabulatorOptions
 import io.kvision.tabulator.js.Tabulator.CellComponent
-import io.kvision.utils.obj
 import io.kvision.utils.set
 import org.apache.isis.client.kroviz.core.model.CollectionDM
 import org.apache.isis.client.kroviz.core.model.Exposer
@@ -53,9 +52,6 @@ class RoTable(displayCollection: CollectionDM) : SimplePanel() {
                 layout = Layout.FITDATA,
                 columns = columns,
                 persistenceMode = false,
-                rowContextMenu = obj {}//TODO, see
-                // http://tabulator.info/docs/4.6/menu,
-                // https://github.com/rjaros/kvision-examples/blob/master/showcase/src/main/kotlin/com/example/DropDownTab.kt
         )
 
         val tableTypes = setOf(TableType.STRIPED, TableType.HOVER)

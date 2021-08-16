@@ -21,14 +21,34 @@ package org.apache.isis.client.kroviz.ui.panel
 
 import io.kvision.utils.obj
 import org.apache.isis.client.kroviz.core.event.EventStore
+import org.apache.isis.client.kroviz.core.event.RoXmlHttpRequest
+import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.chart.ChartFactory
 import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.ui.diagram.LinkTreeDiagram
 import org.apache.isis.client.kroviz.ui.dialog.DiagramDialog
 import org.apache.isis.client.kroviz.ui.dialog.EventExportDialog
 import org.apache.isis.client.kroviz.utils.IconManager
+import org.apache.isis.client.kroviz.utils.StringUtils
 
-class EventLogTableMgr {
+class DynamicMenuBuilder {
+
+    fun buildObjectMenu(tObject: TObject): dynamic {
+        console.log("[DBM.buildObjectMenu]")
+        console.log(tObject)
+        val menu = mutableListOf<dynamic>()
+        val actions = tObject.getActions()
+        actions.forEach {
+            console.log(it)
+            val title = StringUtils.deCamel(it.id)
+            val icon = IconManager.find(title)
+            val invokeLink = it.getInvokeLink()!!
+            val command =  { RoXmlHttpRequest().invoke(invokeLink) }
+            val me = buildMenuEntry(icon, title, command)
+            menu.add(me)
+        }
+        return menu.toTypedArray().asDynamic()
+    }
 
     fun buildTableMenu(table: EventLogTable): dynamic {
         val menu = mutableListOf<dynamic>()
@@ -67,7 +87,7 @@ class EventLogTableMgr {
 
     private fun linkTreeDiagram() {
         val code = LinkTreeDiagram.build()
-        console.log("[ETM.eventDiagrm]")
+        console.log("[DMB.linkTreeDiagram]")
         console.log(code)
         DiagramDialog("Link Tree Diagram", code).open()
     }
