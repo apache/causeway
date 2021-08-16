@@ -135,7 +135,6 @@
 		<module>integtests</module>
 		<module>integspecs</module>
 		<module>webapp</module>
-		<module>jdo</module>
 	</modules>
 
 </project>
