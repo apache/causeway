@@ -56,10 +56,10 @@
 	<dependencies>
 	
 		<!-- JDK11+ SUPPORT -->
-
+		
 		<dependency>
-			<groupId>org.apache.isis.mavendeps</groupId>
-			<artifactId>isis-mavendeps-jdk11</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-jdk-supplemental</artifactId>
 			<type>pom</type>
 		</dependency>
 

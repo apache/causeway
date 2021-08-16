@@ -29,9 +29,6 @@
 	<description>
         Defines a module to bring in dependencies that were part of JDK 8 but
         had been removed with later JDK versions. 
-        
-        Will be removed once the framework migrates to Java 11 as the required 
-        minimum version.
     </description>
 
 	<build>

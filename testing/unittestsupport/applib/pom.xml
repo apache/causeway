@@ -28,6 +28,12 @@
 
     <dependencies>
 
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-jdk-supplemental</artifactId>
+			<type>pom</type>
+		</dependency>
+
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-applib</artifactId>
@@ -133,23 +139,5 @@
         </dependency>
 
     </dependencies>
-
-    <profiles>
-
-        <profile>
-            <id>jdk11-supplemental</id>
-            <activation>
-                <jdk>[11,)</jdk>
-            </activation>
-			<!-- These dependencies are required in order to build on JDK11+ -->
-			<dependencies>
-				<dependency>
-					<groupId>org.apache.isis.core</groupId>
-					<artifactId>isis-jdk-supplemental</artifactId>
-					<type>pom</type>
-				</dependency>
-			</dependencies>
-        </profile>
-    </profiles>
 
 </project>
