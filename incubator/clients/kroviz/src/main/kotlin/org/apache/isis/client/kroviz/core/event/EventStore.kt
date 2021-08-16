@@ -108,21 +108,13 @@ object EventStore {
         return entry
     }
 
-
     fun fault(reSpec: ResourceSpecification, fault: String) {
         val entry: LogEntry? = findBy(reSpec)
         entry!!.setError(fault)
         updateStatus(entry)
     }
 
-    fun cached(reSpec: ResourceSpecification): LogEntry {
-        val entry: LogEntry = findBy(reSpec)!!
-        entry.setCached()
-        updateStatus(entry)
-        return entry
-    }
-
-    private fun updateStatus(entry: LogEntry) {
+    internal fun updateStatus(entry: LogEntry) {
         UiManager.updateStatus(entry)
     }
 
@@ -196,23 +188,9 @@ object EventStore {
         }
     }
 
-    fun isCached(reSpec: ResourceSpecification, method: String): Boolean {
-        val le = findBy(reSpec)
-        return when {
-            le == null -> false
-            le.hasResponse() && le.method == method && le.subType == reSpec.subType -> {
-                le.setCached()
-                true
-            }
-            le.isView() -> true
-            else -> false
-        }
-    }
-
     fun reset() {
         log.removeAll(log)
     }
-
 
     fun getLinked(): List<LogEntry> {
         // we use all LE's - eventually to be refined to a single LE (chain up and down)
@@ -222,6 +200,5 @@ object EventStore {
         }
         return linked
     }
-
 
 }

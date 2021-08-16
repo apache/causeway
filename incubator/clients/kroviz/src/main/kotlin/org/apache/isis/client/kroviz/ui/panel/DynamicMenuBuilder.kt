@@ -34,12 +34,9 @@ import org.apache.isis.client.kroviz.utils.StringUtils
 class DynamicMenuBuilder {
 
     fun buildObjectMenu(tObject: TObject): dynamic {
-        console.log("[DBM.buildObjectMenu]")
-        console.log(tObject)
         val menu = mutableListOf<dynamic>()
         val actions = tObject.getActions()
         actions.forEach {
-            console.log(it)
             val title = StringUtils.deCamel(it.id)
             val icon = IconManager.find(title)
             val invokeLink = it.getInvokeLink()!!

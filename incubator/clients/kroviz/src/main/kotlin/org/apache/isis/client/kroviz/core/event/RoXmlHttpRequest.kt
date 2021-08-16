@@ -96,7 +96,7 @@ class RoXmlHttpRequest {
         EventStore.start(rs, method, body, aggregator)
     }
 
-    fun invokeKroki(pumlCode: String, agr: SvgDispatcher) {
+    internal fun invokeKroki(pumlCode: String, agr: SvgDispatcher) {
         val method = Method.POST.operation
         val url = Constants.krokiUrl + "plantuml"
 

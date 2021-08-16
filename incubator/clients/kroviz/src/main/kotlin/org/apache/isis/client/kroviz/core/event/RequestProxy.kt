@@ -19,6 +19,7 @@
 package org.apache.isis.client.kroviz.core.event
 
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
+import org.apache.isis.client.kroviz.core.aggregator.SvgDispatcher
 import org.apache.isis.client.kroviz.handler.ResponseHandler
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.ui.core.Constants
@@ -36,7 +37,7 @@ class RequestProxy {
     fun invoke(link: Link, aggregator: BaseAggregator? = null, subType: String = Constants.subTypeJson) {
         val rs = ResourceSpecification(link.href)
         when {
-            EventStore.isCached(rs, link.method) -> processCached(rs)
+            isCached(rs, link.method) -> processCached(rs)
             else -> RoXmlHttpRequest().process(link, aggregator, subType)
         }
     }
@@ -45,16 +46,39 @@ class RequestProxy {
         val le = EventStore.findBy(rs)!!
         le.retrieveResponse()
         ResponseHandler.handle(le)
-        EventStore.cached(rs)
+        cached(rs)
+    }
+
+    fun cached(reSpec: ResourceSpecification): LogEntry {
+        val entry: LogEntry = EventStore.findBy(reSpec)!!
+        entry.setCached()
+        EventStore.updateStatus(entry)
+        return entry
     }
 
     fun invokeNonREST(link: Link, aggregator: BaseAggregator?, subType: String = Constants.subTypeXml) {
         val rs = ResourceSpecification(link.href)
         when {
-            EventStore.isCached(rs, link.method) -> processCached(rs)
+            isCached(rs, link.method) -> processCached(rs)
             else -> RoXmlHttpRequest().processNonREST(link, aggregator, subType)
         }
     }
 
+    private fun isCached(reSpec: ResourceSpecification, method: String): Boolean {
+        val le = EventStore.findBy(reSpec)
+        return when {
+            le == null -> false
+            le.hasResponse() && le.method == method && le.subType == reSpec.subType -> {
+                le.setCached()
+                true
+            }
+            le.isView() -> true
+            else -> false
+        }
+    }
+
+    fun invokeKroki(pumlCode: String, agr: SvgDispatcher) {
+        RoXmlHttpRequest().invokeKroki(pumlCode, agr)
+    }
 
 }
