@@ -182,9 +182,8 @@
 		</dependency>
 
         <dependency>
-            <groupId>org.apache.isis.mavendeps</groupId>
-            <artifactId>isis-mavendeps-jpa</artifactId>
-            <type>pom</type>
+            <groupId>org.apache.isis.persistence</groupId>
+			<artifactId>isis-persistence-jpa-eclipselink</artifactId>
         </dependency>
 
         <dependency>

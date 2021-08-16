@@ -54,10 +54,9 @@
         <!-- PERSISTENCE -->
 
 		<dependency>
-            <groupId>org.apache.isis.mavendeps</groupId>
-			<artifactId>isis-mavendeps-jpa</artifactId>
-			<type>pom</type>
-        </dependency>
+			<groupId>org.apache.isis.persistence</groupId>
+			<artifactId>isis-persistence-jpa-eclipselink</artifactId>
+		</dependency>
 
         <!-- Testing -->
 

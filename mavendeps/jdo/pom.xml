@@ -39,38 +39,6 @@
 			<artifactId>isis-persistence-jdo-datanucleus</artifactId>
 		</dependency>
 
-		<!-- ISIS API -->
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-applib</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-schema</artifactId>
-			<!--
-            excluded to make consistent with JDK11 where these have been removed from the JDK and must be explicitly included.
-            -->
-			<exclusions>
-				<exclusion>
-					<groupId>com.sun.xml.ws</groupId>
-					<artifactId>jaxws-ri</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>javax.xml.bind</groupId>
-					<artifactId>jaxb-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.sun.xml.bind</groupId>
-					<artifactId>jaxb-core</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.sun.xml.bind</groupId>
-					<artifactId>jaxb-impl</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
 	</dependencies>
 
 </project>
