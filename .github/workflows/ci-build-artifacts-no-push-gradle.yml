@@ -37,7 +37,7 @@ jobs:
         java-version: 16
     
     - name: Set up Gradle and print Version
-      uses: eskatos/gradle-command-action@v1.3.3
+      uses: eskatos/gradle-command-action@v1.4.0
       with:
         gradle-version: 6.5.1
         wrapper-cache-enabled: true
