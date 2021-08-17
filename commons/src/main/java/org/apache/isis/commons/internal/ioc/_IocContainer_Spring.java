@@ -25,7 +25,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 import javax.inject.Qualifier;
 
 import org.springframework.context.ApplicationContext;

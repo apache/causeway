@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.core.Response;

@@ -21,7 +21,7 @@ package org.apache.isis.viewer.common.model.decorator.tooltip;
 import java.io.Serializable;
 import java.util.Optional;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 
 import lombok.NonNull;
 import lombok.Value;

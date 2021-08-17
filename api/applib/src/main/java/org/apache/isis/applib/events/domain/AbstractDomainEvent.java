@@ -24,7 +24,7 @@ import java.util.Optional;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.EventObjectBase;

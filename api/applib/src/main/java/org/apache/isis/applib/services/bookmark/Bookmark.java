@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.StringTokenizer;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.id.LogicalType;

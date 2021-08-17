@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryRange;

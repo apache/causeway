@@ -20,7 +20,7 @@ package org.apache.isis.tooling.c4;
 
 import java.util.Optional;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 
 import com.structurizr.Workspace;
 import com.structurizr.io.plantuml.PlantUMLWriter;

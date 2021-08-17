@@ -20,7 +20,7 @@ package org.apache.isis.applib.query;
 
 import java.util.Map;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 
 import lombok.NonNull;
 

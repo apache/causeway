@@ -28,7 +28,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 import javax.jdo.PersistenceManager;
 import javax.jdo.identity.ByteIdentity;
 import javax.jdo.identity.IntIdentity;

@@ -20,7 +20,7 @@ package org.apache.isis.core.runtimeservices.publish;
 
 import java.util.List;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 import javax.annotation.PostConstruct;
 import javax.annotation.Priority;
 import javax.inject.Inject;

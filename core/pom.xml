@@ -893,20 +893,6 @@
 				<version>${error_prone_annotations.version}</version>
 			</dependency>
 
-			<!-- provides @Nullable that does not collide with jakarta.jakartaee-api:8.0.0 
-				on the Java module path (split-package issue) -->
-			<dependency>
-			    <groupId>org.checkerframework</groupId>
-			    <artifactId>checker-qual</artifactId>
-			    <version>${checkerframework.version}</version>
-			</dependency>
-			
-<!-- 			<dependency> -->
-<!-- 				<groupId>com.google.code.findbugs</groupId> -->
-<!-- 				<artifactId>annotations</artifactId> -->
-<!-- 				<version>${findbugs-annotations.version}</version> -->
-<!-- 			</dependency> -->
-
 			<!-- provides @Nullable that's required by Spring -->
 			<dependency>
 				<groupId>com.google.code.findbugs</groupId>

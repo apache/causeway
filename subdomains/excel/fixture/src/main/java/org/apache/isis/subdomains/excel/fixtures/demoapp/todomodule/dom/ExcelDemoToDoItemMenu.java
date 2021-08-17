@@ -24,7 +24,7 @@ import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;

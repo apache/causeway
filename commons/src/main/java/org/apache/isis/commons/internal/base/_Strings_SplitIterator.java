@@ -22,7 +22,7 @@ package org.apache.isis.commons.internal.base;
 import java.util.Collections;
 import java.util.Iterator;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 

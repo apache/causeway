@@ -21,7 +21,7 @@ package org.apache.isis.extensions.commandreplay.primary.restapi;
 import java.util.List;
 import java.util.UUID;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 

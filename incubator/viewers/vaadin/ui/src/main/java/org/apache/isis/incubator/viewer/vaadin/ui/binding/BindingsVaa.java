@@ -20,7 +20,7 @@ package org.apache.isis.incubator.viewer.vaadin.ui.binding;
 
 import java.util.function.UnaryOperator;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 
 import com.vaadin.flow.component.HasValidation;
 import com.vaadin.flow.component.HasValue;

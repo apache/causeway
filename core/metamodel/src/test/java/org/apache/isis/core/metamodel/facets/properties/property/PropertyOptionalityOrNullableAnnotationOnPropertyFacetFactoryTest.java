@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.properties.property;
 
 import java.lang.reflect.Method;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
@@ -103,7 +103,6 @@ extends AbstractFacetFactoryTest {
     public void testNullableAnnotationIgnoredForPrimitiveOnProperty() {
 
         class Customer {
-            @SuppressWarnings("unused")
             @Nullable
             public int getNumberOfOrders() {
                 return 0;

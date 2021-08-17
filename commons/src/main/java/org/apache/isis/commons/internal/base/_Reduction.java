@@ -23,7 +23,7 @@ import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 

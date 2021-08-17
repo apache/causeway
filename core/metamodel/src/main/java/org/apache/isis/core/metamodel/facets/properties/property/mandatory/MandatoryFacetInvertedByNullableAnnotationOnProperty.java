@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets.properties.property.mandatory;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
@@ -41,12 +41,12 @@ public class MandatoryFacetInvertedByNullableAnnotationOnProperty
 extends MandatoryFacetAbstract {
 
     public static Optional<MandatoryFacet> create(
-            final Optional<Nullable> annotation,
+            final boolean hasNullable,
             final Method method,
             final FacetHolder holder) {
 
-        if(!annotation.isPresent()) {
-            return null;
+        if(!hasNullable) {
+            return Optional.empty();
         }
 
         val returnType = method.getReturnType();

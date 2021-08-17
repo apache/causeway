@@ -22,7 +22,7 @@ package org.apache.isis.commons.internal.base;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 

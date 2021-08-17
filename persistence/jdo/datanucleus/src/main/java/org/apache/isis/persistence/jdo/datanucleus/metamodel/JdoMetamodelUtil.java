@@ -21,7 +21,7 @@ package org.apache.isis.persistence.jdo.datanucleus.metamodel;
 import java.lang.reflect.Method;
 import java.util.Set;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Sets;

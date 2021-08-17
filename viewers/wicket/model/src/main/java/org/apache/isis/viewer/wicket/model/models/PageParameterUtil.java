@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 

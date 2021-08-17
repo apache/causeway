@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.spec.feature;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 import javax.enterprise.inject.Vetoed;
 
 import org.apache.isis.commons.collections.Can;

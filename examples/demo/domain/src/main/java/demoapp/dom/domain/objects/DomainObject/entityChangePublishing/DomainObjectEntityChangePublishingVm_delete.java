@@ -18,7 +18,7 @@
  */
 package demoapp.dom.domain.objects.DomainObject.entityChangePublishing;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;

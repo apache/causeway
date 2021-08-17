@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.model.models;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.id.LogicalType;

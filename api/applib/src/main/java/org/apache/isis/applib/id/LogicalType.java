@@ -24,7 +24,7 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.commons.internal.base._Strings;

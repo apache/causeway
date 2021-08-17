@@ -21,7 +21,7 @@ package org.apache.isis.commons.internal.compare;
 
 import java.util.Comparator;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 
 /**
  * <h1>- internal use only -</h1>

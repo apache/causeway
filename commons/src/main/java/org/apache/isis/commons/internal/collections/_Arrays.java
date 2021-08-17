@@ -27,7 +27,7 @@ import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.stream.Collector;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Casts;

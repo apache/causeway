@@ -21,7 +21,7 @@ package org.apache.isis.core.config.beans;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.springframework.context.ApplicationContext;
 

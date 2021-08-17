@@ -20,7 +20,7 @@ package org.apache.isis.applib.graph.tree;
 
 import java.io.Serializable;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 
 /**
  * Provides an unambiguous way to address nodes by position within a tree-structure. Examples:

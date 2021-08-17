@@ -23,7 +23,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 

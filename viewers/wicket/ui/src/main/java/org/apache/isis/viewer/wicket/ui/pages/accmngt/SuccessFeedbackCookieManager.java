@@ -20,7 +20,7 @@ package org.apache.isis.viewer.wicket.ui.pages.accmngt;
 
 import java.util.function.Consumer;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.wicket.util.cookies.CookieUtils;
 

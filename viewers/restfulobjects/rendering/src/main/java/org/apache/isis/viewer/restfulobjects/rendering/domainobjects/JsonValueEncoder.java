@@ -21,7 +21,7 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 import java.util.Map;
 import java.util.function.Function;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 import javax.annotation.PostConstruct;
 import javax.annotation.Priority;
 import javax.inject.Inject;

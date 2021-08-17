@@ -22,7 +22,7 @@ package org.apache.isis.core.security.authentication.manager;
 import java.util.List;
 import java.util.Map;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;

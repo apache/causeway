@@ -19,11 +19,13 @@
 
 package org.apache.isis.core.metamodel.facets.param.parameter;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
 import javax.inject.Inject;
 import javax.validation.constraints.Pattern;
 
+import org.springframework.core.MethodParameter;
+
 import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -94,13 +96,20 @@ extends FacetFactoryAbstract {
     void processParamsOptional(final ProcessParameterContext processParameterContext) {
 
         val holder = processParameterContext.getFacetHolder();
+        val parameterAnnotations = MethodParameter
+                .forExecutable(processParameterContext.getMethod(), processParameterContext.getParamNum())
+                .getParameterAnnotations();
         val parameterType = processParameterContext.getParameterType();
-        val nullableIfAny = processParameterContext.synthesizeOnParameter(Nullable.class);
         val parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
+        
+        val hasNullable = 
+                _NullSafe.stream(parameterAnnotations)
+                    .map(annot->annot.annotationType().getSimpleName())
+                    .anyMatch(name->name.equals("Nullable"));
 
         addFacetIfPresent(
                 MandatoryFacetInvertedByNullableAnnotationOnParameter
-                .create(nullableIfAny, parameterType, holder))
+                .create(hasNullable, parameterType, holder))
         .ifPresent(mandatoryFacet->
             MetaModelValidatorForConflictingOptionality.flagIfConflict(
                     mandatoryFacet, "Conflicting @Nullable with other optionality annotation"));

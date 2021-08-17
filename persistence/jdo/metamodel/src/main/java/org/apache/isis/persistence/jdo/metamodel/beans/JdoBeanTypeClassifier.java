@@ -20,7 +20,7 @@ package org.apache.isis.persistence.jdo.metamodel.beans;
 
 import java.util.Locale;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 import javax.jdo.annotations.EmbeddedOnly;
 
 import org.apache.isis.applib.annotation.DomainObject;

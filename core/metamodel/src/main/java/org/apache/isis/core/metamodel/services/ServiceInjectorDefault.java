@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.services;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;

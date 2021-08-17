@@ -30,7 +30,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.library.Architectures;

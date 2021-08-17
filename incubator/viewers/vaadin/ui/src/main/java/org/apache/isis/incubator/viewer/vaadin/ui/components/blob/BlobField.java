@@ -20,7 +20,7 @@ package org.apache.isis.incubator.viewer.vaadin.ui.components.blob;
 
 import java.io.ByteArrayInputStream;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 
 import com.vaadin.flow.component.customfield.CustomField;
 import com.vaadin.flow.component.html.Image;

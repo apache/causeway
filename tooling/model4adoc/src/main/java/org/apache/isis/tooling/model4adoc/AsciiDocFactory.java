@@ -21,7 +21,7 @@ package org.apache.isis.tooling.model4adoc;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Cell;

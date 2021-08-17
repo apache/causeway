@@ -18,7 +18,7 @@
  */
 package org.apache.isis.applib.events;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 

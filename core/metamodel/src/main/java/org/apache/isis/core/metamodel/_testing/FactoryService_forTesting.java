@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel._testing;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.core.metamodel.context.MetaModelContext;

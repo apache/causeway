@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.object.domainservice;
 
 import java.util.Optional;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.commons.internal.base._NullSafe;

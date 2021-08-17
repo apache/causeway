@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;

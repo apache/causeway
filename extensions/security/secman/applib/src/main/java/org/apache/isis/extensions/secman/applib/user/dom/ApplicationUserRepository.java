@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;

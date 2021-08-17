@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 import javax.inject.Inject;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.util.Enums;
 import org.apache.isis.commons.internal.base._Strings;

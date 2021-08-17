@@ -22,7 +22,7 @@ package org.apache.isis.applib.value;
 import java.io.Serializable;
 import java.net.URISyntaxException;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 

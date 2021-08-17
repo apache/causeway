@@ -18,7 +18,7 @@
  */
 package org.apache.isis.testing.fixtures.applib.fixturescripts;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.Programmatic;
 

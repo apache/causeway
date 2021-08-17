@@ -18,7 +18,7 @@
  */
 package org.apache.isis.extensions.secman.applib.user.dom.mixins;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;

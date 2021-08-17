@@ -21,7 +21,7 @@ package org.apache.isis.persistence.jdo.datanucleus.entities;
 import java.lang.reflect.Method;
 import java.util.Set;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.datanucleus.enhancement.Persistable;
 import org.springframework.stereotype.Component;

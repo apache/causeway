@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 import javax.enterprise.inject.Vetoed;
 
 import org.apache.isis.applib.annotation.Where;

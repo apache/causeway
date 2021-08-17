@@ -29,7 +29,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Set;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;

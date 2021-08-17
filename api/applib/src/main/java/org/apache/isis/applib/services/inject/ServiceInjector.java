@@ -18,7 +18,7 @@
  */
 package org.apache.isis.applib.services.inject;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 
 /**
  * Resolves injection points using the

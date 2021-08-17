@@ -19,7 +19,7 @@
 
 package org.apache.isis.commons.internal.base;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.lang.Nullable;
 
 /**
  *
