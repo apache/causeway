@@ -95,19 +95,20 @@ _build(){
 
 _download_app(){
     APP=$1
-    BRANCH=$2
+    VARIANT=$2
+    BRANCH="release-$VERSION-$RC-$VARIANT"
 
     REPO=isis-app-$APP
-    DIR=$REPO-$BRANCH
+    DIR=$REPO-$VARIANT
 
     rm -rf $DIR
     curl "https://codeload.github.com/apache/$REPO/zip/$BRANCH" | jar xv
+    mv $REPO-$BRANCH $DIR
 
     pushd $DIR
     _execmustpass mvn clean install
     popd
 }
-
 
 # check the environment
 # Check for curl or wget
