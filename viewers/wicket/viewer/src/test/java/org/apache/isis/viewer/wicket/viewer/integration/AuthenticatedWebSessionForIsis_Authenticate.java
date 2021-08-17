@@ -36,11 +36,11 @@ import static org.hamcrest.Matchers.nullValue;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
-import org.apache.isis.applib.services.iactnlayer.ThrowingRunnable;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.session.SessionLoggingService;
 import org.apache.isis.applib.services.user.ImpersonatedUserHolder;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.functional.ThrowingRunnable;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.security._testing.InteractionService_forTesting;

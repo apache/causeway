@@ -33,9 +33,9 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
-import org.apache.isis.applib.services.iactnlayer.ThrowingRunnable;
 import org.apache.isis.applib.services.user.RoleMemento;
 import org.apache.isis.applib.services.user.UserService;
+import org.apache.isis.commons.functional.ThrowingRunnable;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

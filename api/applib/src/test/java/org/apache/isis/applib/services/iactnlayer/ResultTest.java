@@ -30,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.functional.ThrowingRunnable;
 
 import lombok.val;
 

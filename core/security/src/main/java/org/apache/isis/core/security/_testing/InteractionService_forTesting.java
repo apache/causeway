@@ -29,8 +29,8 @@ import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayer;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
-import org.apache.isis.applib.services.iactnlayer.ThrowingRunnable;
 import org.apache.isis.applib.services.user.UserMemento;
+import org.apache.isis.commons.functional.ThrowingRunnable;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
