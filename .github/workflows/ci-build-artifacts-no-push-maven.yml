@@ -75,6 +75,7 @@ jobs:
         # -T 1C ... 1 build thread per core
         MVN_ADDITIONAL_OPTS: >-
           -Dmodule-all
+          -Dproject.build.outputTimestamp=1
           -Dmaven.source.skip=true
           -Denforcer.failFast=true
           -Djacoco.skip=true 
