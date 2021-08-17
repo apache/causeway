@@ -664,8 +664,16 @@ popd
 ----
 cd ../isis-release
 
-sh preview.sh
+sh preview.sh -A
 ----
++
+[WARNING]
+====
+This procedure doesn't yet work; Antora does not yet support worktrees.
+
+So instead it's currently necessary to perform the preview in the main `../isis` directory (switch branches first, of course).
+====
+
 
 * Copy the generated Antora site to `isis-site` repo's `contents` directory:
 +
