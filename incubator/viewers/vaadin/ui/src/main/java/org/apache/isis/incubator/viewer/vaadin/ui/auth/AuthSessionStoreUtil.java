@@ -20,7 +20,7 @@ package org.apache.isis.incubator.viewer.vaadin.ui.auth;
 
 import java.util.Optional;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import javax.servlet.http.HttpSession;
 
 import com.vaadin.flow.server.VaadinSession;

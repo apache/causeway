@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.viewer.resources;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;

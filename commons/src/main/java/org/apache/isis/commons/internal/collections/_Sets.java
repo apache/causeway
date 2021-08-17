@@ -36,7 +36,7 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._With;

@@ -18,7 +18,7 @@
  */
 package org.apache.isis.applib.services.grid;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.mixins.metamodel.Object_rebuildMetamodel;

@@ -26,7 +26,7 @@ import static java.util.Comparator.comparing;
 import static java.util.Comparator.naturalOrder;
 import static java.util.Comparator.nullsFirst;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Programmatic;

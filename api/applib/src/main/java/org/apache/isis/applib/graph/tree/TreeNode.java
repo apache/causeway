@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.LongAdder;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Programmatic;

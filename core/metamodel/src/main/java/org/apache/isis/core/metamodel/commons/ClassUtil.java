@@ -29,9 +29,9 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
-import static org.apache.isis.commons.internal.base._With.requires;
 import static org.apache.isis.commons.internal.base._With.requiresNotEmpty;
 
+import lombok.NonNull;
 import lombok.val;
 
 public final class ClassUtil {
@@ -183,9 +183,7 @@ public final class ClassUtil {
      * @param cls
      * @return non-null
      */
-    public static String getCanonicalName_friendlyToInnerClasses(Class<?> cls) {
-        requires(cls, "cls");
-
+    public static String getCanonicalName_friendlyToInnerClasses(final @NonNull Class<?> cls) {
         val name = cls.getCanonicalName();
         if(name==null) {
             return cls.getName().replace("$", ".$").replace("..", ".");

@@ -26,7 +26,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import javax.annotation.PostConstruct;
 import javax.annotation.Priority;
 import javax.inject.Named;

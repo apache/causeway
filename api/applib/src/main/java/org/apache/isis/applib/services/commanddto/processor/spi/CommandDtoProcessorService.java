@@ -18,7 +18,7 @@
  */
 package org.apache.isis.applib.services.commanddto.processor.spi;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Property;

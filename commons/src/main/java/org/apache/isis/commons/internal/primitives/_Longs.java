@@ -21,7 +21,7 @@ package org.apache.isis.commons.internal.primitives;
 import java.util.OptionalLong;
 import java.util.function.Consumer;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 

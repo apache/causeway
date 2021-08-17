@@ -26,7 +26,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;

@@ -20,7 +20,7 @@ package org.apache.isis.core.runtimeservices.executor;
 
 import java.util.stream.Collectors;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.commons.collections.Can;

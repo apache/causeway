@@ -20,7 +20,7 @@ package org.apache.isis.commons.internal.compare;
 
 import java.util.StringTokenizer;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.primitives._Ints;

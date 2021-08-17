@@ -21,7 +21,7 @@ package org.apache.isis.applib.services.user;
 import java.util.List;
 import java.util.Optional;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;

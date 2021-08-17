@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.param.parameter;
 
 import java.lang.reflect.Method;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;

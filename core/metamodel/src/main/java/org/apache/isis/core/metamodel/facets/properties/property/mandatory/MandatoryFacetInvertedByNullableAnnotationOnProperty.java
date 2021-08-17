@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets.properties.property.mandatory;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;

@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.services.classsubstitutor;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 

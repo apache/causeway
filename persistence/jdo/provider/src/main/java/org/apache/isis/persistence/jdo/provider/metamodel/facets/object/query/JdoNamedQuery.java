@@ -18,7 +18,7 @@
  */
 package org.apache.isis.persistence.jdo.provider.metamodel.facets.object.query;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import javax.jdo.annotations.Query;
 
 import org.apache.isis.core.metamodel.services.metamodel.MetaModelExportSupport;

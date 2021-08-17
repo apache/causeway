@@ -28,7 +28,7 @@ import java.util.function.BiPredicate;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;

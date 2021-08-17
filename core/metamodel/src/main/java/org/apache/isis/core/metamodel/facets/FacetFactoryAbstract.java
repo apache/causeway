@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets;
 
 import java.util.Optional;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;

@@ -20,7 +20,7 @@ package org.apache.isis.tooling.projectmodel;
 
 import java.io.File;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.gradle.tooling.GradleConnector;
 import org.gradle.tooling.model.GradleProject;

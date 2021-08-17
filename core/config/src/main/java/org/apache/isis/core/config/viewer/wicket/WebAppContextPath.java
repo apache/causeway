@@ -22,7 +22,7 @@ import java.io.Serializable;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import javax.annotation.Priority;
 import javax.inject.Named;
 import javax.inject.Singleton;

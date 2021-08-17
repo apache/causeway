@@ -25,7 +25,7 @@ import java.io.InputStream;
 import java.util.Base64;
 import java.util.function.UnaryOperator;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 

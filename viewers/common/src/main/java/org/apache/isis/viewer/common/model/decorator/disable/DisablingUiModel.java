@@ -21,7 +21,7 @@ package org.apache.isis.viewer.common.model.decorator.disable;
 import java.io.Serializable;
 import java.util.Optional;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.interactions.managed.MemberInteraction;

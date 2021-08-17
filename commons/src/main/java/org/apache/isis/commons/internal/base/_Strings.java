@@ -39,7 +39,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Bytes.BytesOperator;

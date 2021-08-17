@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.actions.layout;
 
 import java.util.Optional;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 import org.apache.isis.commons.internal.base._Strings;

@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.image;
 import java.awt.image.BufferedImage;
 import java.util.Optional;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.wicket.extensions.markup.html.image.resource.ThumbnailImageResource;
 import org.apache.wicket.markup.html.image.Image;

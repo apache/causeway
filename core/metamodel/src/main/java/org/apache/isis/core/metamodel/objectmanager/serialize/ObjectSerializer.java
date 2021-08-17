@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.objectmanager.serialize;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.commons.handler.ChainOfResponsibility;
 import org.apache.isis.commons.internal.collections._Lists;

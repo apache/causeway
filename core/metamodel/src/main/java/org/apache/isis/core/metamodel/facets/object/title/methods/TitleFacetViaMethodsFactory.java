@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.title.methods;
 
 import java.lang.reflect.Method;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.services.i18n.TranslationContext;

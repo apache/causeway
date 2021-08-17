@@ -156,6 +156,16 @@
             <groupId>jakarta.platform</groupId>
             <artifactId>jakarta.jakartaee-api</artifactId>
         </dependency>
+        
+         <dependency>
+		    <groupId>org.checkerframework</groupId>
+		    <artifactId>checker-qual</artifactId>
+		</dependency>
+
+<!--         <dependency> -->
+<!--             <groupId>com.google.code.findbugs</groupId> -->
+<!--             <artifactId>annotations</artifactId> -->
+<!--         </dependency> -->
 		
 	</dependencies>
 

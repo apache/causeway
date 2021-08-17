@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets.collections.javautilcollection;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

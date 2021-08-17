@@ -24,7 +24,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.base._Lazy;

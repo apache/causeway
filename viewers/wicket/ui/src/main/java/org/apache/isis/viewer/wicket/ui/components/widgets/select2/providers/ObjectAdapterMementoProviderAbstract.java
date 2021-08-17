@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.wicket.Session;
 import org.apache.wicket.util.convert.IConverter;

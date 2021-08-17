@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.properties.property;
 
 import java.util.Optional;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import javax.inject.Inject;
 import javax.validation.constraints.Pattern;
 

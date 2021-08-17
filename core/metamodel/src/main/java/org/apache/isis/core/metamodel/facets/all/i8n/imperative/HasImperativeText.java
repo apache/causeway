@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.all.i8n.imperative;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.commons.functional.Result;

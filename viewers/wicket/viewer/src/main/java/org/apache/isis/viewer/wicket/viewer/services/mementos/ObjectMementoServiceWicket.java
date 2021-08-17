@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.viewer.services.mementos;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;

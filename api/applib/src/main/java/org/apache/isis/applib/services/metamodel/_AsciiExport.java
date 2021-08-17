@@ -20,7 +20,7 @@ package org.apache.isis.applib.services.metamodel;
 
 import java.util.Optional;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.schema.metamodel.v2.Collection;

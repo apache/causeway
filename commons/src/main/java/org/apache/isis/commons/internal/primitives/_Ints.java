@@ -25,7 +25,7 @@ import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.stream.IntStream;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Strings;

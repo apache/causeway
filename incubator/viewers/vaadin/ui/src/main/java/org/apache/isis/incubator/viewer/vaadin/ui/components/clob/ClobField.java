@@ -18,7 +18,7 @@
  */
 package org.apache.isis.incubator.viewer.vaadin.ui.components.clob;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.vaadin.flow.component.customfield.CustomField;
 

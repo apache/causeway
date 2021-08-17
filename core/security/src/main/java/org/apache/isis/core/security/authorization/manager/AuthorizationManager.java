@@ -27,7 +27,7 @@ import org.apache.isis.core.security.authorization.Authorizor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;

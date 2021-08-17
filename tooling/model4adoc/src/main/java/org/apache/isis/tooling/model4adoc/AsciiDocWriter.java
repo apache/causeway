@@ -27,7 +27,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.ast.Document;

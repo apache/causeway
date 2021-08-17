@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.core.Response;

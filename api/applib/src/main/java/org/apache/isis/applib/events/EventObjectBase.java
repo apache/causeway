@@ -18,7 +18,7 @@
  */
 package org.apache.isis.applib.events;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 

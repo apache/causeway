@@ -18,7 +18,7 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus.changetracking;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import javax.jdo.JDOHelper;
 import javax.jdo.ObjectState;
 import javax.jdo.listener.InstanceLifecycleEvent;

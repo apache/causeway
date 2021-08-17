@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.param.parameter;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import javax.inject.Inject;
 import javax.validation.constraints.Pattern;
 

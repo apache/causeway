@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.members.layout.group;
 
 import java.util.Optional;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.applib.layout.component.FieldSet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

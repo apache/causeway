@@ -36,7 +36,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.isis.applib.jaxb.JavaTimeXMLGregorianCalendarMarshalling;

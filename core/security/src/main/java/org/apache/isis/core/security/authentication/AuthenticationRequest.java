@@ -21,7 +21,7 @@ package org.apache.isis.core.security.authentication;
 
 import java.util.stream.Stream;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.user.UserMemento;

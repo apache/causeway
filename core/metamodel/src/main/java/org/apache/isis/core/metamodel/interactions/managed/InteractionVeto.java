@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.interactions.managed;
 
 import java.io.Serializable;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.Veto;

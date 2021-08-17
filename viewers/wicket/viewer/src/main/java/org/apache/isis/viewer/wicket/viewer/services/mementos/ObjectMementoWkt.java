@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.applib.id.HasLogicalType;
 import org.apache.isis.applib.id.LogicalType;

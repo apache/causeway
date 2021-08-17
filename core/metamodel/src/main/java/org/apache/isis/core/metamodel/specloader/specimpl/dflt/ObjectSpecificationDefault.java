@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.Can;

@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.services.classsubstitutor;
 import java.io.Serializable;
 import java.util.function.UnaryOperator;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import lombok.NonNull;
 import lombok.Value;

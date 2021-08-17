@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.param.parameter.mandatory;
 
 import java.util.Optional;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;

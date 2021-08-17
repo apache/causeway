@@ -20,7 +20,7 @@ package org.apache.isis.incubator.viewer.javafx.ui.components.collections;
 
 import java.util.Optional;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.grid.Grid;

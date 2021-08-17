@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.all.i8n.noun;
 import java.util.EnumSet;
 import java.util.Optional;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;

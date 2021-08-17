@@ -19,7 +19,7 @@
 
 package org.apache.isis.commons.internal.base;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  *

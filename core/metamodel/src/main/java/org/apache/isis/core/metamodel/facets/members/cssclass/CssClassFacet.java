@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.members.cssclass;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;

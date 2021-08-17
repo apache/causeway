@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.interactions.managed;
 
 import java.util.stream.IntStream;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.binding.Bindable;

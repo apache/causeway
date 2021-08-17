@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.members.cssclassfa;
 
 import java.util.function.Supplier;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 

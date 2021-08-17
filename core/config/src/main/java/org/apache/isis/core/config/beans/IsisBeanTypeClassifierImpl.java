@@ -23,7 +23,7 @@ import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.Locale;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import javax.enterprise.inject.Vetoed;
 import javax.persistence.Entity;
 import javax.persistence.Table;

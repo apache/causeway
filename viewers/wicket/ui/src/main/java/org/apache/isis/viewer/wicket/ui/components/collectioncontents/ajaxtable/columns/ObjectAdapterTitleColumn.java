@@ -19,7 +19,7 @@
 
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;

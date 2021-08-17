@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.query.Query;

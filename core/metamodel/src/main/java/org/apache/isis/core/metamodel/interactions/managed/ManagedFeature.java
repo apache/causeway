@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.interactions.managed;
 
 import java.util.Optional;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.internal.exceptions._Exceptions;

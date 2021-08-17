@@ -37,7 +37,7 @@ import org.apache.isis.core.transaction.changetracking.EntityPropertyChangePubli
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import javax.annotation.PostConstruct;
 import javax.annotation.Priority;
 import javax.inject.Inject;

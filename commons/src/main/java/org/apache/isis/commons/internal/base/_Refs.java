@@ -25,7 +25,7 @@ import java.util.function.LongUnaryOperator;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 

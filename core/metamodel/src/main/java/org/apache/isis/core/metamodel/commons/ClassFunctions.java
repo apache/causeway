@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.commons;
 
 import java.util.function.Function;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 public final class ClassFunctions {
 

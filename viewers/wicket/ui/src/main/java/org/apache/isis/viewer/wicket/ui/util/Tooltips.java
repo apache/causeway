@@ -17,7 +17,7 @@
 
 package org.apache.isis.viewer.wicket.ui.util;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.head.CssHeaderItem;

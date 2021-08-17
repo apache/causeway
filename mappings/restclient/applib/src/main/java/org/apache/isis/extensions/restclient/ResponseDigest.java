@@ -28,7 +28,7 @@ import java.util.Optional;
 import java.util.concurrent.Future;
 import java.util.function.Function;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;

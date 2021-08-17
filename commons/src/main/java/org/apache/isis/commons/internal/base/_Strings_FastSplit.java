@@ -21,7 +21,7 @@ package org.apache.isis.commons.internal.base;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 class _Strings_FastSplit {
 

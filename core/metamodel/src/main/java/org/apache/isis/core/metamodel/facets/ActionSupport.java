@@ -25,7 +25,7 @@ import java.util.EnumSet;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Arrays;

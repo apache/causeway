@@ -18,7 +18,7 @@
  */
 package org.apache.isis.commons.internal.proxy;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * Replaces the former ProxyFactoryPlugin

@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;

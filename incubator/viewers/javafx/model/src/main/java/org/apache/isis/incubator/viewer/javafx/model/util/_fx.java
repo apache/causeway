@@ -20,7 +20,7 @@ package org.apache.isis.incubator.viewer.javafx.model.util;
 
 import java.util.function.Predicate;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
