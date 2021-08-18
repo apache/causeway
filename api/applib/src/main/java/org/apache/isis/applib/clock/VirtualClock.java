@@ -286,6 +286,28 @@ public interface VirtualClock extends Serializable {
     }
 
     /**
+     * Returns the time as a Joda {@link org.joda.time.LocalDateTime}, using the specified {@link ZoneId} timezone.
+     *
+     * @apiNote - we recommend migrating to java.time.*, however this API is not (for the moment) deprecated.
+     *
+     * @see #nowAsJodaDateTime()
+     */
+    default org.joda.time.LocalDateTime nowAsJodaLocalDateTime(final @NonNull ZoneId zoneId) {
+        return nowAsJodaDateTime(zoneId).toLocalDateTime();
+    }
+
+    /**
+     * Returns the time as a Joda {@link org.joda.time.LocalDateTime}, using the {@link ZoneId#systemDefault() system default} timezone.
+     *
+     * @apiNote - we recommend migrating to java.time.*, however this API is not (for the moment) deprecated.
+     *
+     * @see #nowAsJodaDateTime(ZoneId)
+     */
+    default org.joda.time.LocalDateTime nowAsJodaLocalDateTime() {
+        return nowAsJodaDateTime().toLocalDateTime();
+    }
+
+    /**
      * Returns the time as a Joda {@link DateTime}, using the specified {@link ZoneId} timezone.
      *
      * @apiNote - we recommend migrating to java.time.*, however this API is not (for the moment) deprecated.
