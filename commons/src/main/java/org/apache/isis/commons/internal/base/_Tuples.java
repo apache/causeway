@@ -19,17 +19,7 @@
 
 package org.apache.isis.commons.internal.base;
 
-import java.io.Serializable;
-import java.util.List;
-
-import javax.persistence.Tuple;
-import javax.persistence.TupleElement;
-
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
-
 import lombok.Value;
-import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
@@ -53,7 +43,7 @@ public final class _Tuples {
         private final T1 _1;
         private final T2 _2;
 
-        private Tuple2(T1 _1, T2 _2) {
+        private Tuple2(final T1 _1, final T2 _2) {
             this._1 = _1;
             this._2 = _2;
         }
@@ -68,7 +58,7 @@ public final class _Tuples {
         public T2 get_2() { return _2; }
     }
 
-    public static <T1, T2> Tuple2<T1, T2> pair(T1 _1, T2 _2) {
+    public static <T1, T2> Tuple2<T1, T2> pair(final T1 _1, final T2 _2) {
         return new Tuple2<T1, T2>(_1, _2);
     }
 
@@ -80,60 +70,8 @@ public final class _Tuples {
         T value;
     }
 
-    public static <T> Indexed<T> indexed(int index, T value) {
+    public static <T> Indexed<T> indexed(final int index, final T value) {
         return Indexed.of(index, value);
     }
-
-    // -- JAVAX - PERSISTENCE
-
-    //TODO just a sketch yet
-    @Value(staticConstructor = "of")
-    private static final class TypedTuple implements Tuple {
-
-        final Can<Class<? extends Serializable>> types;
-        final List<Serializable> values;
-
-        @Override
-        public <X> X get(TupleElement<X> tupleElement) {
-            throw _Exceptions.notImplemented();
-        }
-
-        @Override
-        public <X> X get(String alias, Class<X> type) {
-            throw _Exceptions.notImplemented();
-        }
-
-        @Override
-        public Object get(String alias) {
-            throw _Exceptions.notImplemented();
-        }
-
-        @Override
-        public <X> X get(int i, Class<X> requiredType) {
-            val value = values.get(i);
-            return _Casts.uncheckedCast(value);
-        }
-
-        @Override
-        public Object get(int i) {
-            return values.get(i);
-        }
-
-        @Override
-        public Object[] toArray() {
-            throw _Exceptions.notImplemented();
-        }
-
-        @Override
-        public List<TupleElement<?>> getElements() {
-            throw _Exceptions.notImplemented();
-        }
-
-    }
-
-    public static Tuple of(Can<Class<? extends Serializable>> types, List<Serializable> values) {
-        return of(types, values);
-    }
-
 
 }

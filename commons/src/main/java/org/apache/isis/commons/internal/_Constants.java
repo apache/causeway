@@ -77,7 +77,7 @@ public final class _Constants {
      * Writer that does nothing
      */
     public static final Writer nopWriter = new Writer() {
-        @Override public void write(char[] cbuf, int off, int len) throws IOException { }
+        @Override public void write(final char[] cbuf, final int off, final int len) throws IOException { }
         @Override public void flush() throws IOException { }
         @Override public void close() throws IOException { }
     };
@@ -86,7 +86,7 @@ public final class _Constants {
      * OutputStream that does nothing
      */
     public static final OutputStream nopOutputStream = new OutputStream() {
-        @Override public void write(int b) throws IOException { }
+        @Override public void write(final int b) throws IOException { }
     };
 
     /**
@@ -96,8 +96,5 @@ public final class _Constants {
 
     @Primary private static final class PrimaryAnnotated {}
     public static final Primary ANNOTATION_PRIMARY = PrimaryAnnotated.class.getAnnotation(Primary.class);
-
-
-
 
 }
