@@ -28,7 +28,6 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 
 import lombok.RequiredArgsConstructor;
@@ -74,7 +73,7 @@ public class Object_logicalTypeName {
     )
     public String prop() {
         val bookmark = bookmarkService.bookmarkForElseFail(this.holder);
-        return bookmark.getObjectType();
+        return bookmark.getLogicalTypeName();
     }
 
     @MemberSupport public boolean hideProp() {

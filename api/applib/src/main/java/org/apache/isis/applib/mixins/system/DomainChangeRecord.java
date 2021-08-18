@@ -59,7 +59,7 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername {
     @Property
     @PropertyLayout(
             hidden = Where.ALL_EXCEPT_STANDALONE_TABLES,
-            fieldSetId="Identifiers", 
+            fieldSetId="Identifiers",
             sequence = "1")
     ChangeType getType();
 
@@ -69,6 +69,7 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername {
      * {@link org.apache.isis.applib.services.iactn.Interaction} within which
      * this change occurred.
      */
+    @Override
     @Property
     @PropertyLayout(fieldSetId="Identifiers",sequence = "50")
     UUID getInteractionId();
@@ -77,6 +78,7 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername {
     /**
      * The user that caused the change.
      */
+    @Override
     @Property
     @PropertyLayout(fieldSetId="Identifiers", sequence = "10")
     String getUsername();
@@ -96,10 +98,10 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername {
     @Property
     @PropertyLayout(
             named="Object Type",
-            fieldSetId="Target", 
+            fieldSetId="Target",
             sequence = "10")
     default String getTargetObjectType() {
-        return getTarget().getObjectType();
+        return getTarget().getLogicalTypeName();
     }
 
 
@@ -110,7 +112,7 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername {
     @Property
     @PropertyLayout(
             named="Object",
-            fieldSetId="Target", 
+            fieldSetId="Target",
             sequence="30")
     Bookmark getTarget();
 
@@ -147,7 +149,7 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername {
      * </p>
      */
     @Property(optionality = Optionality.MANDATORY)
-    @PropertyLayout(hidden = Where.ALL_EXCEPT_STANDALONE_TABLES, fieldSetId="Detail", 
+    @PropertyLayout(hidden = Where.ALL_EXCEPT_STANDALONE_TABLES, fieldSetId="Detail",
     sequence = "7")
     String getPostValue();
 

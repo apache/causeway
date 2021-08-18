@@ -19,7 +19,6 @@
 package org.apache.isis.applib.services.swagger;
 
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Value;
 
 /**

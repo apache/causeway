@@ -85,7 +85,6 @@ public class ImpersonateMenu {
      * Simple implementation that is surfaced if there is no advisor.
      *
      * @param userName
-     * @return
      */
     @Action(
             domainEvent = ImpersonateDomainEvent.class,

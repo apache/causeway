@@ -23,7 +23,7 @@ import org.apache.isis.applib.services.command.Command;
 import lombok.experimental.UtilityClass;
 
 /**
- * A user-friendly name of an action, as per {@link Command#getTargetAction()}, 
+ * A user-friendly name of an action, as per {@link Command#getLogicalMemberIdentifier()},
  * {@link org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber#onChanging(org.apache.isis.applib.services.publishing.spi.EntityPropertyChange)}.
  *
  * @since 2.0 {@index}

@@ -81,7 +81,7 @@ public interface CommandExecutorService {
         }),
         ;
 
-        private static Instant timestampOf(CommandDto commandDto) {
+        private static Instant timestampOf(final CommandDto commandDto) {
             val timestampGc = commandDto.getTimestamp();
             val javaSqlTimestamp = JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(timestampGc);
             return javaSqlTimestamp.toInstant();
@@ -89,7 +89,7 @@ public interface CommandExecutorService {
 
         public final BiFunction<InteractionContext, CommandDto, InteractionContext> mapper;
 
-        private InteractionContextPolicy(BiFunction<InteractionContext, CommandDto, InteractionContext> mapper) {
+        private InteractionContextPolicy(final BiFunction<InteractionContext, CommandDto, InteractionContext> mapper) {
             this.mapper = mapper;
         }
     }
@@ -157,7 +157,6 @@ public interface CommandExecutorService {
      *
      * @param commandDto
      * @param outcomeHandler
-     * @return
      */
     Bookmark executeCommand(
             CommandDto commandDto,

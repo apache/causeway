@@ -21,8 +21,6 @@ package org.apache.isis.applib.services.error;
 import java.io.Serializable;
 import java.util.function.UnaryOperator;
 
-import org.apache.isis.applib.services.error.ErrorReportingService;
-import org.apache.isis.applib.services.error.Ticket;
 import org.apache.isis.commons.internal.base._Strings;
 
 import static org.apache.isis.commons.internal.base._NullSafe.isEmpty;
@@ -126,11 +124,11 @@ public class SimpleTicket implements Ticket {
                 ;
     }
 
-    protected static String ifPresentMap(String x, UnaryOperator<String> operator) {
+    protected static String ifPresentMap(final String x, final UnaryOperator<String> operator) {
         return isEmpty(x) ? "" : operator.apply(x);
     }
 
-    protected static String htmlEscape(String source) {
+    protected static String htmlEscape(final String source) {
         return _Strings.htmlEscape(source);
     }
 

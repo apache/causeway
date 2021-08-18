@@ -139,7 +139,8 @@ public class InteractionContext implements Serializable {
      *
      * @see #combine(Stream)
      */
-    public static <T> UnaryOperator<T> combine(UnaryOperator<T>... mappers) {
+    @SafeVarargs
+    public static <T> UnaryOperator<T> combine(final UnaryOperator<T>... mappers) {
         return combine(Stream.of(mappers));
     }
 
@@ -148,7 +149,7 @@ public class InteractionContext implements Serializable {
      *
      * credit: https://stackoverflow.com/a/51065029/56880
      */
-    public static <T> UnaryOperator<T> combine(Stream<UnaryOperator<T>> mappers) {
+    public static <T> UnaryOperator<T> combine(final Stream<UnaryOperator<T>> mappers) {
         return mappers.reduce(t -> t, (a,b) -> a.andThen(b)::apply);
     }
 
@@ -161,7 +162,7 @@ public class InteractionContext implements Serializable {
      *
      * @param user
      */
-    void replaceUser(UserMemento user) {
+    void replaceUser(final UserMemento user) {
         this.user = user;
     }
 }
