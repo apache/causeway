@@ -60,8 +60,8 @@ implements ExceptionRecognizerService {
 
     @Override
     public Optional<Recognition> recognizeFromSelected(
-            @NonNull final Can<ExceptionRecognizer> recognizers,
-            @NonNull final Throwable ex) {
+            final @NonNull Can<ExceptionRecognizer> recognizers,
+            final @NonNull Throwable ex) {
 
         return _Exceptions.streamCausalChain(ex)
         .map(nextEx->recognize(recognizers, nextEx))

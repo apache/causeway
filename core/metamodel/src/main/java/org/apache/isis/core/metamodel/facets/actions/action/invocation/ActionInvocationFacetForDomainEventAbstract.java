@@ -285,8 +285,8 @@ implements ImperativeFacet {
     }
 
     private static Can<ManagedObject> updateArguments(
-            @NonNull final Can<ManagedObject> argumentAdapters,
-            @NonNull final List<Object> newArgumentPojos) {
+            final @NonNull Can<ManagedObject> argumentAdapters,
+            final @NonNull List<Object> newArgumentPojos) {
 
         // zip in the newArgumentPojos from right
         // element wise: update adapter if new-argument pojo differs from original adapter pojo

@@ -50,9 +50,9 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
     }
 
     public static final ActionInteraction start(
-            @NonNull final ManagedObject owner,
-            @NonNull final String memberId,
-            @NonNull final Where where) {
+            final @NonNull ManagedObject owner,
+            final @NonNull String memberId,
+            final @NonNull Where where) {
 
         val managedAction = ManagedAction.lookupAction(owner, memberId, where);
 
@@ -66,8 +66,8 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
     }
 
     ActionInteraction(
-            @NonNull final Optional<ObjectAction> metamodel,
-            @NonNull final _Either<ManagedAction, InteractionVeto> chain) {
+            final @NonNull Optional<ObjectAction> metamodel,
+            final @NonNull _Either<ManagedAction, InteractionVeto> chain) {
         super(chain);
         this.metamodel = metamodel;
     }

@@ -251,7 +251,7 @@ implements
     @Override
     @NonNull
     public ManagedObject getDefault(
-            @NonNull final ParameterNegotiationModel pendingArgs) {
+            final @NonNull ParameterNegotiationModel pendingArgs) {
 
         val paramSpec = getSpecification();
         val defaultsFacet = getFacet(ActionParameterDefaultsFacet.class);

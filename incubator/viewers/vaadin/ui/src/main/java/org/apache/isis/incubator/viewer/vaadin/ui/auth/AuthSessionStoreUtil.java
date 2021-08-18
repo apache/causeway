@@ -41,13 +41,13 @@ import lombok.experimental.UtilityClass;
 public class AuthSessionStoreUtil {
 
     public static void put(
-            @NonNull final HttpSession httpSession,
+            final @NonNull HttpSession httpSession,
             @Nullable final InteractionContext auth) {
         httpSession.setAttribute(InteractionContext.class.getName(), auth);
     }
 
     public static Optional<InteractionContext> get(
-            @NonNull final HttpSession httpSession) {
+            final @NonNull HttpSession httpSession) {
         return Optional.ofNullable(
                 (InteractionContext)httpSession
                 .getAttribute(InteractionContext.class.getName()));

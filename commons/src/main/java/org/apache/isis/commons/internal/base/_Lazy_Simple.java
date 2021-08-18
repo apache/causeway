@@ -24,7 +24,7 @@ import java.util.function.Supplier;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
-import static org.apache.isis.commons.internal.base._With.requires;
+import lombok.NonNull;
 
 /**
  * package private implementation of _Lazy
@@ -37,8 +37,8 @@ final class _Lazy_Simple<T> implements _Lazy<T> {
     private boolean memoized;
     private boolean getting;
 
-    _Lazy_Simple(Supplier<? extends T> supplier) {
-        this.supplier = requires(supplier, "supplier");
+    _Lazy_Simple(final @NonNull Supplier<? extends T> supplier) {
+        this.supplier = supplier;
     }
 
     @Override
@@ -74,7 +74,7 @@ final class _Lazy_Simple<T> implements _Lazy<T> {
     }
 
     @Override
-    public void set(T value) {
+    public void set(final T value) {
         if(memoized) {
             throw _Exceptions.illegalState("cannot set value '%s' on Lazy that has already memoized a value", ""+value);
         }

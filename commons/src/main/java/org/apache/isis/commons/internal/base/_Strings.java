@@ -48,7 +48,6 @@ import org.apache.isis.commons.internal.functions._Predicates;
 import static org.apache.isis.commons.internal.base._NullSafe.size;
 import static org.apache.isis.commons.internal.base._Strings_SplitIterator.splitIterator;
 import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
-import static org.apache.isis.commons.internal.base._With.requires;
 import static org.apache.isis.commons.internal.base._With.requiresNotEmpty;
 import static org.apache.isis.commons.internal.functions._Predicates.not;
 
@@ -305,11 +304,10 @@ public final class _Strings {
      * @param prefix
      * @return null if {@code input} is null
      */
-    public static String prefix(@Nullable final String input, final String prefix) {
+    public static String prefix(@Nullable final String input, final @NonNull String prefix) {
         if(input==null) {
             return null;
         }
-        requires(prefix, "prefix");
         if(input.startsWith(prefix)) {
             return input;
         }
@@ -322,11 +320,10 @@ public final class _Strings {
      * @param suffix
      * @return null if {@code input} is null
      */
-    public static String suffix(@Nullable final String input, final String suffix) {
+    public static String suffix(@Nullable final String input, final @NonNull String suffix) {
         if(input==null) {
             return null;
         }
-        requires(suffix, "suffix");
         if(input.endsWith(suffix)) {
             return input;
         }
@@ -449,11 +446,10 @@ public final class _Strings {
      * @param input
      * @param delimiterPattern
      */
-    public static Stream<String> splitThenStream(@Nullable final CharSequence input, final Pattern delimiterPattern) {
+    public static Stream<String> splitThenStream(@Nullable final CharSequence input, final @NonNull Pattern delimiterPattern) {
         if(isEmpty(input)) {
             return Stream.of();
         }
-        requires(delimiterPattern, "delimiterPattern");
         return delimiterPattern.splitAsStream(input);
     }
 
@@ -532,8 +528,7 @@ public final class _Strings {
      * @param replacement
      * @return null if {@code input} is null
      */
-    public static String condenseWhitespaces(@Nullable final String input, final String replacement) {
-        requires(replacement, "replacement");
+    public static String condenseWhitespaces(@Nullable final String input, final @NonNull String replacement) {
         return mapIfPresentElse(input, __->input.replaceAll("\\s+", replacement), null);
     }
 
@@ -547,7 +542,7 @@ public final class _Strings {
     public static String ellipsifyAtStart(
             @Nullable final CharSequence input,
             final int maxLength,
-            @NonNull final CharSequence ellipsis) {
+            final @NonNull CharSequence ellipsis) {
 
         if(input==null) {
             return "";
@@ -571,7 +566,7 @@ public final class _Strings {
     public static String ellipsifyAtEnd(
             @Nullable final CharSequence input,
             final int maxLength,
-            @NonNull final CharSequence ellipsis) {
+            final @NonNull CharSequence ellipsis) {
 
         if(input==null) {
             return "";
@@ -585,8 +580,7 @@ public final class _Strings {
 
     // -- READ FROM INPUT STREAM
 
-    public static String read(@Nullable final InputStream input, final Charset charset) {
-        requires(charset, "charset");
+    public static String read(@Nullable final InputStream input, final @NonNull Charset charset) {
         if(input==null) {
             return "";
         }
@@ -615,8 +609,7 @@ public final class _Strings {
      * @param charset
      * @return null if {@code str} is null
      */
-    public static final byte[] toBytes(@Nullable final String str, final Charset charset) {
-        requires(charset, "charset");
+    public static final byte[] toBytes(@Nullable final String str, final @NonNull Charset charset) {
         return mapIfPresentElse(str, __->str.getBytes(charset), null);
     }
 
@@ -626,8 +619,7 @@ public final class _Strings {
      * @param charset
      * @return null if {@code bytes} is null
      */
-    public static final String ofBytes(@Nullable final byte[] bytes, final Charset charset) {
-        requires(charset, "charset");
+    public static final String ofBytes(@Nullable final byte[] bytes, final @NonNull Charset charset) {
         return mapIfPresentElse(bytes, __->new String(bytes, charset), null);
     }
 
@@ -640,9 +632,7 @@ public final class _Strings {
      * @param charset
      * @return null if {@code input} is null
      */
-    public static final String convert(@Nullable final String input, final BytesOperator converter, final Charset charset) {
-        requires(converter, "converter");
-        requires(charset, "charset");
+    public static final String convert(@Nullable final String input, final @NonNull BytesOperator converter, final @NonNull Charset charset) {
         return mapIfPresentElse(input, __->ofBytes(converter.apply(toBytes(input, charset)), charset), null);
     }
 
@@ -655,8 +645,8 @@ public final class _Strings {
 
         private final UnaryOperator<String> operator;
 
-        private StringOperator(final UnaryOperator<String> operator) {
-            this.operator = requires(operator, "operator");
+        private StringOperator(final @NonNull UnaryOperator<String> operator) {
+            this.operator = operator;
         }
 
         public String apply(final String input) {
@@ -691,9 +681,7 @@ public final class _Strings {
             .andThen(s->_Strings_NaturalNames.naturalName2(s, true));
 
 
-    public static final String asFileNameWithExtension(final String fileName, final String fileExtension) {
-        requires(fileName, "fileName");
-        requires(fileExtension, "fileExtension");
+    public static final String asFileNameWithExtension(final @NonNull String fileName, final @NonNull String fileExtension) {
         return suffix(fileName, prefix(fileExtension, "."));
     }
 

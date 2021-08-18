@@ -39,7 +39,6 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.base._With;
 import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
@@ -93,20 +92,20 @@ public final class _Maps {
 
     // -- UNMODIFIABLE MAP
 
-    public static <K, V> Map<K, V> unmodifiable(K k1, V v1) {
+    public static <K, V> Map<K, V> unmodifiable(final K k1, final V v1) {
         final LinkedHashMap<K, V> mapPreservingOrder = newLinkedHashMap();
         mapPreservingOrder.put(k1, v1);
         return Collections.unmodifiableMap(mapPreservingOrder);
     }
 
-    public static <K, V> Map<K, V> unmodifiable(K k1, V v1, K k2, V v2) {
+    public static <K, V> Map<K, V> unmodifiable(final K k1, final V v1, final K k2, final V v2) {
         final LinkedHashMap<K, V> mapPreservingOrder = newLinkedHashMap();
         mapPreservingOrder.put(k1, v1);
         mapPreservingOrder.put(k2, v2);
         return Collections.unmodifiableMap(mapPreservingOrder);
     }
 
-    public static <K, V> Map<K, V> unmodifiable(K k1, V v1, K k2, V v2, K k3, V v3) {
+    public static <K, V> Map<K, V> unmodifiable(final K k1, final V v1, final K k2, final V v2, final K k3, final V v3) {
         final LinkedHashMap<K, V> mapPreservingOrder = newLinkedHashMap();
         mapPreservingOrder.put(k1, v1);
         mapPreservingOrder.put(k2, v2);
@@ -114,7 +113,7 @@ public final class _Maps {
         return Collections.unmodifiableMap(mapPreservingOrder);
     }
 
-    public static <K, V> Map<K, V> unmodifiable(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
+    public static <K, V> Map<K, V> unmodifiable(final K k1, final V v1, final K k2, final V v2, final K k3, final V v3, final K k4, final V v4) {
         final LinkedHashMap<K, V> mapPreservingOrder = newLinkedHashMap();
         mapPreservingOrder.put(k1, v1);
         mapPreservingOrder.put(k2, v2);
@@ -124,8 +123,7 @@ public final class _Maps {
     }
 
     @SafeVarargs
-    public static <K, V> Map<K, V> unmodifiableEntries(Map.Entry<? extends K,? extends V>... entries) {
-        _With.requires(entries, "entries"); // don't accept null elements
+    public static <K, V> Map<K, V> unmodifiableEntries(final @NonNull Map.Entry<? extends K,? extends V>... entries) {
         if(entries.length==0) {
             return Collections.emptyMap();
         }
@@ -138,7 +136,7 @@ public final class _Maps {
         return Collections.unmodifiableMap(mapPreservingOrder);
     }
 
-    public static <K, V> Map.Entry<K, V> entry(K k, V v){
+    public static <K, V> Map.Entry<K, V> entry(final K k, final V v){
         return new AbstractMap.SimpleEntry<K, V>(k, v);
     }
 
@@ -170,9 +168,9 @@ public final class _Maps {
      * @return whether given map contains the {@code key} after the operation
      */
     public static <K, V> boolean toggleElement(
-            @NonNull Map<K, V> map,
-            @NonNull K key,
-            @NonNull V value) {
+            final @NonNull Map<K, V> map,
+            final @NonNull K key,
+            final @NonNull V value) {
 
         val newValue = map.compute(key, (k, v) -> (v==null) ? value : null);
         return newValue!=null;
@@ -181,9 +179,9 @@ public final class _Maps {
     // -- TRANSFORMATIONS
 
     public static <K, V0, V1> Map<K, V1> mapValues(
-            @Nullable Map<K, V0> input,
-            @NonNull Supplier<Map<K, V1>> mapFactory,
-            @NonNull Function<V0, V1> valueMapper) {
+            @Nullable final Map<K, V0> input,
+            final @NonNull Supplier<Map<K, V1>> mapFactory,
+            final @NonNull Function<V0, V1> valueMapper) {
 
         val resultMap = mapFactory.get();
 
@@ -198,18 +196,15 @@ public final class _Maps {
 
 
     public static <K, V> Map<K, V> filterKeys(
-            @Nullable Map<K, V> input,
-            Predicate<K> keyFilter,
-            Supplier<Map<K, V>> factory) {
+            @Nullable final Map<K, V> input,
+            final @NonNull Predicate<K> keyFilter,
+            final @NonNull Supplier<Map<K, V>> factory) {
 
-        _With.requires(factory, "factory");
         final Map<K, V> result = factory.get();
 
         if(input==null) {
             return result;
         }
-
-        _With.requires(keyFilter, "keyFilter");
 
         input.forEach((k, v)->{
             if(keyFilter.test(k)) {
@@ -220,7 +215,7 @@ public final class _Maps {
         return result;
     }
 
-    public static <K, V> ListMultimap<V, K> invertToListMultimap(Map<K, V> input) {
+    public static <K, V> ListMultimap<V, K> invertToListMultimap(final Map<K, V> input) {
         final ListMultimap<V, K> result = _Multimaps.newListMultimap();
         if(input==null) {
             return result;
@@ -255,7 +250,7 @@ public final class _Maps {
         return new TreeMap<K, V>();
     }
 
-    public static <K, V> TreeMap<K, V> newTreeMap(Comparator<? super K> comparator) {
+    public static <K, V> TreeMap<K, V> newTreeMap(final Comparator<? super K> comparator) {
         return new TreeMap<K, V>(comparator);
     }
 
@@ -268,9 +263,7 @@ public final class _Maps {
     }
 
     public static <K, V> AliasMap<K, V> newAliasMap(
-            final Supplier<Map<K, V>> mapFactory){
-
-        _With.requires(mapFactory, "mapFactory");
+            final @NonNull Supplier<Map<K, V>> mapFactory){
 
         return new AliasMap<K, V>() {
 
@@ -278,44 +271,44 @@ public final class _Maps {
 
             @Override public int size() { return delegate.size(); }
             @Override public boolean isEmpty() { return delegate.isEmpty(); }
-            @Override public boolean containsValue(Object value) { return delegate.containsValue(value); }
+            @Override public boolean containsValue(final Object value) { return delegate.containsValue(value); }
             @Override public Set<K> keySet() { return delegate.keySet(); }
             @Override public Collection<V> values() { return delegate.values();   }
             @Override public Set<Entry<K, V>> entrySet() { return delegate.entrySet(); }
 
             @Override
-            public V put(K key, V value) {
+            public V put(final K key, final V value) {
                 return this.put(key, Can.empty(), value);
             }
 
             @Override
-            public void putAll(Map<? extends K, ? extends V> other) {
+            public void putAll(final Map<? extends K, ? extends V> other) {
                 if(!_NullSafe.isEmpty(other)) {
                     other.forEach((k, v)->this.put(k, v));
                 }
             }
 
             @Override
-            public V put(K key, Can<K> aliases, V value) {
+            public V put(final K key, final Can<K> aliases, final V value) {
                 putAliasKeys(key, aliases, /*re-map*/ false);
                 return delegate.put(key, value);
             }
 
             @Override
-            public V remap(K key, Can<K> aliases, V value) {
+            public V remap(final K key, final Can<K> aliases, final V value) {
                 putAliasKeys(key, aliases, /*re-map*/ true);
                 return delegate.put(key, value);
             }
 
             @Override
-            public boolean containsKey(Object keyOrAliasKey) {
+            public boolean containsKey(final Object keyOrAliasKey) {
                 return delegate.containsKey(keyOrAliasKey) ||
                     containsAliasKey(keyOrAliasKey);
             }
 
 
             @Override
-            public V get(Object keyOrAliasKey) {
+            public V get(final Object keyOrAliasKey) {
                 val v = delegate.get(keyOrAliasKey);
                 if(v!=null) {
                     return v;
@@ -324,7 +317,7 @@ public final class _Maps {
             }
 
             @Override
-            public V remove(Object key) {
+            public V remove(final Object key) {
                 removeAliasKeysOf(key);
                 return delegate.remove(key);
             }
@@ -339,7 +332,7 @@ public final class _Maps {
 
             private final Map<K, KeyPair<K>> pairByAliasKey = _Maps.newHashMap();
 
-            private void putAliasKeys(K key, Can<K> aliasKeys, boolean remap) {
+            private void putAliasKeys(final K key, final Can<K> aliasKeys, final boolean remap) {
                 if(aliasKeys.isNotEmpty()) {
                     val keyPair = KeyPair.of(key, aliasKeys);
                     for(val aliasKey : aliasKeys) {
@@ -355,7 +348,7 @@ public final class _Maps {
                 }
             }
 
-            private V getByAliasKey(Object aliasKey) {
+            private V getByAliasKey(final Object aliasKey) {
                 val keyPair = pairByAliasKey.get(aliasKey);
                 if(keyPair!=null) {
                     return delegate.get(keyPair.getKey());
@@ -363,7 +356,7 @@ public final class _Maps {
                 return null;
             }
 
-            private boolean containsAliasKey(Object aliasKey) {
+            private boolean containsAliasKey(final Object aliasKey) {
                 return pairByAliasKey.containsKey(aliasKey);
             }
 

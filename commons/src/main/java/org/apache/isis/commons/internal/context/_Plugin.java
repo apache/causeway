@@ -33,8 +33,9 @@ import org.apache.logging.log4j.Logger;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.base._With;
 import org.apache.isis.commons.internal.collections._Sets;
+
+import lombok.NonNull;
 
 /**
  * <h1>- internal use only -</h1>
@@ -67,8 +68,7 @@ public final class _Plugin {
      * @param service
      * @return non null
      */
-    public static <S> Set<S> loadAll(Class<S> service){
-        _With.requires(service, "service");
+    public static <S> Set<S> loadAll(final @NonNull Class<S> service){
 
         ServiceLoader<S> loader = ServiceLoader.load(service, _Context.getDefaultClassLoader());
 
@@ -83,7 +83,7 @@ public final class _Plugin {
      * @param onAmbiguity what to do if more than one matching plugin is found
      * @param onNotFound what to do if no matching plugin is found
      */
-    public static <S> S getOrElse(Class<S> pluginClass, Function<Set<S>, S> onAmbiguity, Supplier<S> onNotFound){
+    public static <S> S getOrElse(final Class<S> pluginClass, final Function<Set<S>, S> onAmbiguity, final Supplier<S> onNotFound){
 
         // lookup cache first
         return _Context.computeIfAbsent(pluginClass, ()->{
@@ -106,7 +106,7 @@ public final class _Plugin {
 
     // -- CONVENIENT PICK ANY
 
-    public static <T> T pickAnyAndWarn(Class<T> pluginInterfaceClass, Set<T> ambiguousPlugins) {
+    public static <T> T pickAnyAndWarn(final Class<T> pluginInterfaceClass, final Set<T> ambiguousPlugins) {
         final Logger log = LogManager.getLogger(pluginInterfaceClass);
         final T any = ambiguousPlugins.iterator().next();
 
@@ -123,8 +123,8 @@ public final class _Plugin {
     // -- CONVENIENT EXCEPTION FACTORIES
 
     public static <T> _PluginResolveException ambiguityNonRecoverable(
-            Class<T> pluginInterfaceClass,
-            Set<? extends T> ambiguousPlugins) {
+            final Class<T> pluginInterfaceClass,
+            final Set<? extends T> ambiguousPlugins) {
 
         return new _PluginResolveException(
                 String.format("Ambiguous plugins implementing %s found on class path.\n{%s}",
@@ -138,7 +138,7 @@ public final class _Plugin {
                         ));
     }
 
-    public static _PluginResolveException absenceNonRecoverable(Class<?> pluginInterfaceClass) {
+    public static _PluginResolveException absenceNonRecoverable(final Class<?> pluginInterfaceClass) {
 
         return new _PluginResolveException(
                 String.format("No plugin implementing %s found on class path.",
@@ -154,9 +154,9 @@ public final class _Plugin {
      * @param pluginFullyQualifiedClassName
      */
     public static <S> S load(
-            Class<S> pluginInterfaceClass,
-            File classPath,
-            String pluginFullyQualifiedClassName) {
+            final Class<S> pluginInterfaceClass,
+            final File classPath,
+            final String pluginFullyQualifiedClassName) {
 
         try {
 
@@ -166,7 +166,7 @@ public final class _Plugin {
             try(URLClassLoader cl = URLClassLoader.newInstance(urls, parentCL)) {
                 Class<S> pluginClass = _Casts.uncheckedCast(
                         cl.loadClass(pluginFullyQualifiedClassName));
-                S plugin = pluginClass.newInstance();
+                S plugin = pluginClass.getDeclaredConstructor().newInstance();
 
                 _Context.putSingleton(pluginInterfaceClass, plugin);
 

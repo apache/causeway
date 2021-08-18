@@ -117,7 +117,7 @@ final class Can_Singleton<T> implements Can<T> {
     }
 
     @Override
-    public void forEach(@NonNull final Consumer<? super T> action) {
+    public void forEach(final @NonNull Consumer<? super T> action) {
         action.accept(this.element);
     }
 
@@ -285,19 +285,19 @@ final class Can_Singleton<T> implements Can<T> {
     }
 
     @Override
-    public Set<T> toSet(@NonNull final Consumer<T> onDuplicated) {
+    public Set<T> toSet(final @NonNull Consumer<T> onDuplicated) {
         return Collections.singleton(element); // serializable and immutable
     }
 
     @Override
-    public <C extends Collection<T>> C toCollection(@NonNull final Supplier<C> collectionFactory) {
+    public <C extends Collection<T>> C toCollection(final @NonNull Supplier<C> collectionFactory) {
         val collection = collectionFactory.get();
         collection.add(element);
         return collection;
     }
 
     @Override
-    public T[] toArray(@NonNull final Class<T> elementType) {
+    public T[] toArray(final @NonNull Class<T> elementType) {
         val array = _Casts.<T[]>uncheckedCast(Array.newInstance(elementType, 1));
         array[0] = element;
         return array;

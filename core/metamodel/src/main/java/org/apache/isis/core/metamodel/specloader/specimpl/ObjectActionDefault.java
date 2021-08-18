@@ -155,7 +155,7 @@ implements ObjectAction {
     }
 
     @Override
-    public ActionInteractionHead interactionHead(@NonNull final ManagedObject actionOwner) {
+    public ActionInteractionHead interactionHead(final @NonNull ManagedObject actionOwner) {
         return ActionInteractionHead.of(this, actionOwner, actionOwner);
     }
 

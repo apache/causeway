@@ -25,8 +25,6 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import lombok.NonNull;
 import lombok.Value;
 import lombok.val;
@@ -53,15 +51,15 @@ public class _Longs {
     public static class Bound {
         long value;
         boolean inclusive;
-        public static @NonNull Bound inclusive(long value) { return of(value, true); }
-        public static @NonNull Bound exclusive(long value) { return of(value, true); }
+        public static @NonNull Bound inclusive(final long value) { return of(value, true); }
+        public static @NonNull Bound exclusive(final long value) { return of(value, true); }
     }
 
     @Value(staticConstructor = "of")
     public static class Range {
         @NonNull Bound lowerBound;
         @NonNull Bound upperBound;
-        public boolean contains(long value) {
+        public boolean contains(final long value) {
             val isBelowLower = lowerBound.isInclusive()
                     ? value < lowerBound.getValue()
                     : value <= lowerBound.getValue();
@@ -80,7 +78,7 @@ public class _Longs {
          * @param value
          * @return the value or if not within range, the nearest integer to the value, that is within range
          */
-        public long bounded(long value) {
+        public long bounded(final long value) {
             //if(empty) return value; // noop
             if(contains(value)) {
                 return value;
@@ -114,7 +112,7 @@ public class _Longs {
     /**
      * Range includes a and b.
      */
-    public static Range rangeClosed(long a, long b) {
+    public static Range rangeClosed(final long a, final long b) {
         if(a>b) {
             throw _Exceptions.illegalArgument("bounds must be ordered in [%d, %d]", a, b);
         }
@@ -124,7 +122,7 @@ public class _Longs {
     /**
      * Range includes a but not b.
      */
-    public static Range rangeOpenEnded(long a, long b) {
+    public static Range rangeOpenEnded(final long a, final long b) {
         if(a==b) {
             throw _Exceptions.unsupportedOperation("empty range not implemented");
             //return Range.empty();
@@ -171,8 +169,7 @@ public class _Longs {
      * @implNote Copied over from JDK's {@link Integer#parseInt(String)} to provide a variant
      * with minimum potential heap pollution (does not produce stack-traces on parsing failures)
      */
-    public OptionalLong parseLong(@Nullable final String s, final int radix, final Consumer<String> onFailure) {
-       requires(onFailure, "onFailure");
+    public OptionalLong parseLong(@Nullable final String s, final int radix, final @NonNull Consumer<String> onFailure) {
 
         if (s == null) {
             onFailure.accept("null");

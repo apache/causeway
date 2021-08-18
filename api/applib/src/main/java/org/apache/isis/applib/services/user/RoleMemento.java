@@ -68,8 +68,8 @@ public class RoleMemento implements Serializable {
      * Creates a new role with the specified name and description.
      */
     public RoleMemento(
-            @NonNull final String name,
-            @NonNull final String description) {
+            final @NonNull String name,
+            final @NonNull String description) {
         this.name = name;
         this.description = description;
     }

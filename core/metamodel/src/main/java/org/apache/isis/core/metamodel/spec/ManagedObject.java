@@ -137,7 +137,7 @@ public interface ManagedObject {
      * @param pojo - might also be a collection of pojos
      */
     public static ManagedObject of(
-            @NonNull final ObjectSpecification specification,
+            final @NonNull ObjectSpecification specification,
             @Nullable final Object pojo) {
 
         ManagedObjects.assertPojoNotManaged(pojo);
@@ -164,9 +164,9 @@ public interface ManagedObject {
      * Optimized for cases, when the pojo's specification and bookmark are already available.
      */
     public static ManagedObject bookmarked(
-            @NonNull final ObjectSpecification specification,
-            @NonNull final Object pojo,
-            @NonNull final Bookmark bookmark) {
+            final @NonNull ObjectSpecification specification,
+            final @NonNull Object pojo,
+            final @NonNull Bookmark bookmark) {
 
         if(!specification.getCorrespondingClass().isAssignableFrom(pojo.getClass())) {
             throw _Exceptions.illegalArgument(
@@ -202,7 +202,7 @@ public interface ManagedObject {
     }
 
     /** has an ObjectSpecification, but no value (pojo) */
-    static ManagedObject empty(@NonNull final ObjectSpecification spec) {
+    static ManagedObject empty(final @NonNull ObjectSpecification spec) {
         return ManagedObject.of(spec, null);
     }
 
@@ -267,7 +267,7 @@ public interface ManagedObject {
 
         private final _Lazy<ObjectSpecification> specification = _Lazy.threadSafe(this::loadSpec);
 
-        public LazyManagedObject(@NonNull final Function<Class<?>, ObjectSpecification> specLoader, @NonNull final Object pojo) {
+        public LazyManagedObject(final @NonNull Function<Class<?>, ObjectSpecification> specLoader, final @NonNull Object pojo) {
             this.specLoader = specLoader;
             this.pojo = pojo;
         }

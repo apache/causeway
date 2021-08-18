@@ -23,10 +23,10 @@ import java.util.Map;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.base._With;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Multimaps;
 
+import lombok.NonNull;
 import lombok.Value;
 import lombok.val;
 
@@ -52,15 +52,12 @@ final class _Context_ThreadLocal {
     private static final class ThreadKey {
         long threadId;
         int threadHashCode;
-        static ThreadKey of(Thread thread) {
+        static ThreadKey of(final Thread thread) {
             return of(thread.getId(), thread.hashCode());
         }
     }
 
-    static <T> Runnable put(Class<? super T> type, T variant) {
-        _With.requires(type, "type");
-        _With.requires(variant, "variant");
-
+    static <T> Runnable put(final @NonNull Class<? super T> type, final @NonNull T variant) {
         val threadLocalMap = getOrCreateThreadLocalMap();
         threadLocalMap
         .compute(type, (k, v) -> v == null
@@ -72,16 +69,16 @@ final class _Context_ThreadLocal {
         return ()->{MAPS_BY_KEY.remove(key);};
     }
 
-    static <T> Can<T> select(Class<? super T> type, Class<? super T> instanceOf) {
+    static <T> Can<T> select(final Class<? super T> type, final Class<? super T> instanceOf) {
         val bin = _Context_ThreadLocal.<T>get(type);
         return bin.filter(t -> isInstanceOf(t, instanceOf));
     }
 
-    private static boolean isInstanceOf(Object obj, Class<?> type) {
+    private static boolean isInstanceOf(final Object obj, final Class<?> type) {
         return type.isAssignableFrom(obj.getClass());
     }
 
-    static <T> Can<T> get(Class<? super T> type) {
+    static <T> Can<T> get(final Class<? super T> type) {
         val threadLocalMap = getThreadLocalMap();
         if(threadLocalMap==null) {
             return Can.empty();
@@ -93,7 +90,7 @@ final class _Context_ThreadLocal {
         return _Casts.uncheckedCast(bin);
     }
 
-    static void clear(Class<?> type) {
+    static void clear(final Class<?> type) {
         val threadLocalMap = getThreadLocalMap();
         if(threadLocalMap==null) {
             return;

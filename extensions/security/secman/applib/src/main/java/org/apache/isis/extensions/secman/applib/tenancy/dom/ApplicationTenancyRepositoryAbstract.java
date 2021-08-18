@@ -159,30 +159,30 @@ implements ApplicationTenancyRepository {
 
     @Override
     public void setTenancyOnUser(
-            @NonNull final ApplicationTenancy tenancy,
-            @NonNull final ApplicationUser user) {
+            final @NonNull ApplicationTenancy tenancy,
+            final @NonNull ApplicationUser user) {
         // no need to add to users set, since will be done by the ORM.
         user.setAtPath(tenancy.getPath());
     }
 
     @Override
     public void clearTenancyOnUser(
-            @NonNull final ApplicationUser user) {
+            final @NonNull ApplicationUser user) {
         // no need to remove from users set, since will be done by the ORM.
         user.setAtPath(null);
     }
 
     @Override
     public void setParentOnTenancy(
-            @NonNull final ApplicationTenancy tenancy,
-            @NonNull final ApplicationTenancy parent) {
+            final @NonNull ApplicationTenancy tenancy,
+            final @NonNull ApplicationTenancy parent) {
         tenancy.setParent(parent);
         parent.getChildren().add(tenancy);
     }
 
     @Override
     public void clearParentOnTenancy(
-            @NonNull final ApplicationTenancy tenancy) {
+            final @NonNull ApplicationTenancy tenancy) {
         val parent = tenancy.getParent();
         if(parent != null) {
             parent.getChildren().add(tenancy);
@@ -192,7 +192,7 @@ implements ApplicationTenancyRepository {
 
     @Override
     public Collection<ApplicationTenancy> getChildren(
-            @NonNull final ApplicationTenancy tenancy) {
+            final @NonNull ApplicationTenancy tenancy) {
         return tenancy.getChildren()
                 .stream()
                 .collect(_Sets.toUnmodifiableSorted());

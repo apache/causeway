@@ -272,7 +272,7 @@ implements
 
     @Override
     @SneakyThrows
-    public <R> R callAnonymous(@NonNull final Callable<R> callable) {
+    public <R> R callAnonymous(final @NonNull Callable<R> callable) {
         if(isInInteraction()) {
             return callInternal(callable); // participate in existing session
         }

@@ -40,11 +40,11 @@ public class ConfirmUiModel implements Serializable {
         TOP, BOTTOM, RIGHT, LEFT;
     }
 
-    @NonNull final String title;
-    @NonNull final Optional<String> message;
-    @NonNull final String okLabel;
-    @NonNull final String cancelLabel;
-    @NonNull final Placement placement;
+    final @NonNull String title;
+    final @NonNull Optional<String> message;
+    final @NonNull String okLabel;
+    final @NonNull String cancelLabel;
+    final @NonNull Placement placement;
 
     public static ConfirmUiModel ofAreYouSure(TranslationService translationService, Placement placement) {
 

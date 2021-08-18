@@ -85,13 +85,13 @@ public class InteractionContext implements Serializable {
      * own simulated (or actual) clock
      */
     @With @Getter @Builder.Default
-    @NonNull final VirtualClock clock = VirtualClock.system();
+    final @NonNull VirtualClock clock = VirtualClock.system();
 
     @With @Getter @Builder.Default
-    @NonNull final Locale locale = Locale.getDefault();
+    final @NonNull Locale locale = Locale.getDefault();
 
     @With @Getter @Builder.Default
-    @NonNull final TimeZone timeZone = TimeZone.getDefault();
+    final @NonNull TimeZone timeZone = TimeZone.getDefault();
 
 
     /**
@@ -99,7 +99,7 @@ public class InteractionContext implements Serializable {
      * {@link UnaryOperator} that will act upon the provided {@link InteractionContext} to return the same but with
      * the specified {@link UserMemento}.
      */
-    public static UnaryOperator<InteractionContext> switchUser(@NonNull final UserMemento userMemento) {
+    public static UnaryOperator<InteractionContext> switchUser(final @NonNull UserMemento userMemento) {
         return interactionContext -> interactionContext.withUser(userMemento);
     }
 
@@ -108,7 +108,7 @@ public class InteractionContext implements Serializable {
      * {@link UnaryOperator} that will act upon the provided {@link InteractionContext} to return the same but with
      * the specified {@link VirtualClock}.
      */
-    public static UnaryOperator<InteractionContext> switchClock(@NonNull final VirtualClock clock) {
+    public static UnaryOperator<InteractionContext> switchClock(final @NonNull VirtualClock clock) {
         return interactionContext -> interactionContext.withClock(clock);
     }
 
@@ -117,7 +117,7 @@ public class InteractionContext implements Serializable {
      * {@link UnaryOperator} that will act upon the provided {@link InteractionContext} to return the same but with
      * the specified {@link Locale}.
      */
-    public static UnaryOperator<InteractionContext> switchLocale(@NonNull final Locale locale) {
+    public static UnaryOperator<InteractionContext> switchLocale(final @NonNull Locale locale) {
         return interactionContext -> interactionContext.withLocale(locale);
     }
 
@@ -126,7 +126,7 @@ public class InteractionContext implements Serializable {
      * {@link UnaryOperator} that will act upon the provided {@link InteractionContext} to return the same but with
      * the specified {@link TimeZone}.
      */
-    public static UnaryOperator<InteractionContext> switchTimeZone(@NonNull final TimeZone timeZone) {
+    public static UnaryOperator<InteractionContext> switchTimeZone(final @NonNull TimeZone timeZone) {
         return interactionContext -> interactionContext.withTimeZone(timeZone);
     }
 

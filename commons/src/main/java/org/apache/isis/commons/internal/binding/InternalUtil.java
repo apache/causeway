@@ -92,8 +92,8 @@ abstract class InternalUtil<T> {
 
     static <T> InternalUtil<T> addListener(
             @Nullable final InternalUtil<T> helper,
-            @NonNull final Observable<T> observable,
-            @NonNull final InvalidationListener listener) {
+            final @NonNull Observable<T> observable,
+            final @NonNull InvalidationListener listener) {
         observable.getValue(); // validate observable
         return (helper == null)
                 ? new SingleInvalidation<T>(observable, listener)
@@ -102,7 +102,7 @@ abstract class InternalUtil<T> {
 
     static <T> InternalUtil<T> removeListener(
             @Nullable final InternalUtil<T> helper,
-            @NonNull final InvalidationListener listener) {
+            final @NonNull InvalidationListener listener) {
         return (helper == null)
                 ? null
                 : helper.removeListener(listener);
@@ -110,8 +110,8 @@ abstract class InternalUtil<T> {
 
     static <T> InternalUtil<T> addListener(
             @Nullable final InternalUtil<T> helper,
-            @NonNull final Observable<T> observable,
-            @NonNull final ChangeListener<? super T> listener) {
+            final @NonNull Observable<T> observable,
+            final @NonNull ChangeListener<? super T> listener) {
         return (helper == null)
                 ? new SingleChange<T>(observable, listener)
                 : helper.addListener(listener);

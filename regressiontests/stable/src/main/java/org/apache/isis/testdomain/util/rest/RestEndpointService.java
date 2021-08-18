@@ -80,7 +80,7 @@ public class RestEndpointService {
 
     public RestfulClient newClient(
             final boolean useRequestDebugLogging,
-            @NonNull final Can<ClientConversationFilter> additionalFilters) {
+            final @NonNull Can<ClientConversationFilter> additionalFilters) {
 
         val restRootPath =
                 String.format("http://localhost:%d%s/",

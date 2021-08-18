@@ -26,10 +26,9 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import org.apache.isis.commons.internal.base._With;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -65,7 +64,7 @@ public final class _VersionedList<T> {
                     .flatMap(List::stream);
         }
 
-        public void forEach(Consumer<T> action) {
+        public void forEach(final Consumer<T> action) {
             for(val ver : versions) {
                 for(val element : ver) {
                     action.accept(element);
@@ -73,7 +72,7 @@ public final class _VersionedList<T> {
             }
         }
 
-        public void forEachParallel(Consumer<T> action) {
+        public void forEachParallel(final Consumer<T> action) {
             for(val ver : versions) {
                 if(ver.size()>8) {
                     ver.parallelStream().forEach(action);
@@ -95,9 +94,7 @@ public final class _VersionedList<T> {
         }
     }
 
-    public Snapshot<T> deltaSince(Snapshot<T> snapshot) {
-
-        _With.requires(snapshot, "snapshot");
+    public Snapshot<T> deltaSince(final @NonNull Snapshot<T> snapshot) {
 
         if(snapshot.ownerUuid!=uuid) {
             throw new IllegalArgumentException("Snapshot's UUID is different from the VersionedList's.");
@@ -130,14 +127,14 @@ public final class _VersionedList<T> {
                 .flatMap(List::stream);
     }
 
-    public boolean add(T e) {
+    public boolean add(final T e) {
         synchronized(versions) {
             ++size;
             return currentVersion.add(e);
         }
     }
 
-    public boolean addAll(Collection<? extends T> c) {
+    public boolean addAll(final Collection<? extends T> c) {
         synchronized(versions) {
             size+=c.size();
             return currentVersion.addAll(c);
@@ -157,7 +154,7 @@ public final class _VersionedList<T> {
      * Also handles concurrent additions that occur during traversal.
      * @param action
      */
-    public void forEach(Consumer<T> action) {
+    public void forEach(final Consumer<T> action) {
         val snapshot = snapshot();
         snapshot.forEach(action);
         Snapshot<T> delta = deltaSince(snapshot);
@@ -171,7 +168,7 @@ public final class _VersionedList<T> {
      * Also handles concurrent additions that occur during traversal.
      * @param action
      */
-    public void forEachParallel(Consumer<T> action) {
+    public void forEachParallel(final Consumer<T> action) {
         val snapshot = snapshot();
         snapshot.forEachParallel(action);
         Snapshot<T> delta = deltaSince(snapshot);
@@ -190,7 +187,7 @@ public final class _VersionedList<T> {
      * @param fromIndex low endpoint (inclusive) of the copy
      * @param toIndex high endpoint (exclusive) of the copy
      */
-    private List<List<T>> defensiveCopy(int fromIndex, int toIndex) {
+    private List<List<T>> defensiveCopy(final int fromIndex, final int toIndex) {
         if(fromIndex==toIndex) {
             return Collections.emptyList();
         }

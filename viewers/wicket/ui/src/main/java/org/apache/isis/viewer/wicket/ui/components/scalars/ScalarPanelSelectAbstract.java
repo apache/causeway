@@ -177,8 +177,8 @@ public abstract class ScalarPanelSelectAbstract extends ScalarPanelAbstract {
      */
     @Override
     public Repaint updateIfNecessary(
-            @NonNull final FormPendingParamUiModel argAndConsents,
-            @NonNull final Optional<AjaxRequestTarget> target) {
+            final @NonNull FormPendingParamUiModel argAndConsents,
+            final @NonNull Optional<AjaxRequestTarget> target) {
 
         val repaint = super.updateIfNecessary(argAndConsents, target);
         final boolean choicesUpdated = updateChoices();

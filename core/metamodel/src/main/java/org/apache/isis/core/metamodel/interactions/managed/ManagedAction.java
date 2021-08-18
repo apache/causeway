@@ -50,9 +50,9 @@ public final class ManagedAction extends ManagedMember {
     }
 
     public static final Optional<ManagedAction> lookupAction(
-            @NonNull final ManagedObject owner,
-            @NonNull final String memberId,
-            @NonNull final Where where) {
+            final @NonNull ManagedObject owner,
+            final @NonNull String memberId,
+            final @NonNull Where where) {
 
         return ManagedMember.<ObjectAction>lookup(owner, MemberType.ACTION, memberId)
         .map(objectAction -> of(owner, objectAction, where));

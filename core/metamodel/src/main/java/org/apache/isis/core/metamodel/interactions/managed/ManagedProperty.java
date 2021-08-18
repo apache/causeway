@@ -51,9 +51,9 @@ public final class ManagedProperty extends ManagedMember {
     }
 
     public static final Optional<ManagedProperty> lookupProperty(
-            @NonNull final ManagedObject owner,
-            @NonNull final String memberId,
-            @NonNull final Where where) {
+            final @NonNull ManagedObject owner,
+            final @NonNull String memberId,
+            final @NonNull Where where) {
 
         return ManagedMember.<OneToOneAssociation>lookup(owner, MemberType.PROPERTY, memberId)
         .map(objectAction -> of(owner, objectAction, where));

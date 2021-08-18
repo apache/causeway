@@ -115,10 +115,10 @@ public class TableViewFx extends VBox {
      * @param where
      */
     private TableViewFx(
-            @NonNull final UiContextFx uiContext,
-            @NonNull final ObjectSpecification elementSpec,
+            final @NonNull UiContextFx uiContext,
+            final @NonNull ObjectSpecification elementSpec,
             @Nullable final Can<ManagedObject> objects,
-            @NonNull final Where where) {
+            final @NonNull Where where) {
 
         val objectGrid = new TableView<ManagedObject>();
         super.getChildren().add(objectGrid);

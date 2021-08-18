@@ -67,10 +67,10 @@ public class ObjectViewVaa extends VerticalLayout {
     private static final long serialVersionUID = 1L;
 
     public static ObjectViewVaa fromObject(
-            @NonNull final UiContextVaa uiContext,
-            @NonNull final UiComponentFactoryVaa uiComponentFactory,
-            @NonNull final Consumer<ManagedAction> actionEventHandler,
-            @NonNull final ManagedObject managedObject) {
+            final @NonNull UiContextVaa uiContext,
+            final @NonNull UiComponentFactoryVaa uiComponentFactory,
+            final @NonNull Consumer<ManagedAction> actionEventHandler,
+            final @NonNull ManagedObject managedObject) {
         return new ObjectViewVaa(uiContext, uiComponentFactory, actionEventHandler, managedObject);
     }
 

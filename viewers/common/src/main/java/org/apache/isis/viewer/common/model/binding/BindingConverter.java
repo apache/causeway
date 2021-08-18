@@ -42,7 +42,7 @@ public interface BindingConverter<T> {
         return ManagedObject.of(getValueSpecification(), pojo);
     }
 
-    default Optional<? extends Facet> lookupFacet(@NonNull final Class<? extends Facet> facetType) {
+    default Optional<? extends Facet> lookupFacet(final @NonNull Class<? extends Facet> facetType) {
         return Optional.ofNullable(getValueSpecification().getFacet(facetType));
     }
 

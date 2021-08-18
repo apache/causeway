@@ -39,7 +39,6 @@ import java.util.stream.Stream;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.base._With;
 
 import static org.apache.isis.commons.internal.functions._Predicates.not;
 
@@ -69,8 +68,7 @@ public final class _Sets {
      * @param element (required)
      * @return non null
      */
-    public static <T> Set<T> singleton(T element) {
-        _With.requires(element, "element"); // don't accept null element
+    public static <T> Set<T> singleton(final @NonNull T element) {
         return Collections.singleton(element);
     }
 
@@ -80,7 +78,7 @@ public final class _Sets {
      * @param element
      * @return non null
      */
-    public static <T> Set<T> singletonOrElseEmpty(@Nullable T element) {
+    public static <T> Set<T> singletonOrElseEmpty(@Nullable final T element) {
         return element != null ? Collections.singleton(element) : Collections.emptySet();
     }
 
@@ -90,8 +88,7 @@ public final class _Sets {
      * @return non null
      */
     @SafeVarargs
-    public static <T> Set<T> of(T ... elements) {
-        _With.requires(elements, "elements");// don't accept null as argument
+    public static <T> Set<T> of(final @NonNull T ... elements) {
         if(elements.length==0) {
             return Collections.emptySet();
         }
@@ -105,8 +102,7 @@ public final class _Sets {
      * @return non null
      */
     @SafeVarargs
-    public static <T> SortedSet<T> ofSorted(T ... elements) {
-        _With.requires(elements, "elements");// don't accept null as argument
+    public static <T> SortedSet<T> ofSorted(final @NonNull T ... elements) {
         if(elements.length==0) {
             return Collections.emptySortedSet();
         }
@@ -121,7 +117,7 @@ public final class _Sets {
      * @param iterable
      * @return non null
      */
-    public static <T> Set<T> unmodifiable(@Nullable Iterable<T> iterable) {
+    public static <T> Set<T> unmodifiable(@Nullable final Iterable<T> iterable) {
         if(iterable==null) {
             return Collections.emptySet();
         }
@@ -135,16 +131,16 @@ public final class _Sets {
         return new TreeSet<T>();
     }
 
-    public static <T> TreeSet<T> newTreeSet(@Nullable Comparator<T> comparator) {
+    public static <T> TreeSet<T> newTreeSet(@Nullable final Comparator<T> comparator) {
         return comparator!=null ? new TreeSet<T>(comparator) : new TreeSet<T>();
     }
 
-    public static <T> TreeSet<T> newTreeSet(@Nullable Iterable<T> iterable) {
+    public static <T> TreeSet<T> newTreeSet(@Nullable final Iterable<T> iterable) {
         return _NullSafe.stream(iterable)
                 .collect(Collectors.<T, TreeSet<T>>toCollection(TreeSet::new));
     }
 
-    public static <T> TreeSet<T> newTreeSet(@Nullable Iterable<T> iterable, @Nullable Comparator<T> comparator) {
+    public static <T> TreeSet<T> newTreeSet(@Nullable final Iterable<T> iterable, @Nullable final Comparator<T> comparator) {
         return _NullSafe.stream(iterable)
                 .collect(Collectors.<T, TreeSet<T>>toCollection(()->new TreeSet<T>(comparator)));
     }
@@ -156,14 +152,14 @@ public final class _Sets {
         return new HashSet<T>();
     }
 
-    public static <T> HashSet<T> newHashSet(@Nullable Collection<T> collection) {
+    public static <T> HashSet<T> newHashSet(@Nullable final Collection<T> collection) {
         if(collection==null) {
             return newHashSet();
         }
         return new HashSet<T>(collection);
     }
 
-    public static <T> HashSet<T> newHashSet(@Nullable Iterable<T> iterable) {
+    public static <T> HashSet<T> newHashSet(@Nullable final Iterable<T> iterable) {
         return _Collections.collectFromIterable(iterable, _Sets::newHashSet,
                 ()->Collectors.<T, HashSet<T>>toCollection(HashSet::new) );
     }
@@ -174,14 +170,14 @@ public final class _Sets {
         return new LinkedHashSet<T>();
     }
 
-    public static <T> LinkedHashSet<T> newLinkedHashSet(@Nullable Collection<T> collection) {
+    public static <T> LinkedHashSet<T> newLinkedHashSet(@Nullable final Collection<T> collection) {
         if(collection==null) {
             return newLinkedHashSet();
         }
         return new LinkedHashSet<T>(collection);
     }
 
-    public static <T> LinkedHashSet<T> newLinkedHashSet(@Nullable Iterable<T> iterable) {
+    public static <T> LinkedHashSet<T> newLinkedHashSet(@Nullable final Iterable<T> iterable) {
         return _Collections.collectFromIterable(iterable, _Sets::newLinkedHashSet,
                 ()->Collectors.<T, LinkedHashSet<T>>toCollection(LinkedHashSet::new) );
     }
@@ -192,7 +188,7 @@ public final class _Sets {
         return ConcurrentHashMap.newKeySet();
     }
 
-    public static <T> KeySetView<T, Boolean> newConcurrentHashSet(@Nullable Collection<T> collection) {
+    public static <T> KeySetView<T, Boolean> newConcurrentHashSet(@Nullable final Collection<T> collection) {
         final KeySetView<T, Boolean> keySetView = newConcurrentHashSet();
         if(collection!=null) {
             keySetView.addAll(collection);
@@ -200,7 +196,7 @@ public final class _Sets {
         return keySetView;
     }
 
-    public static <T> KeySetView<T, Boolean> newConcurrentHashSet(@Nullable Iterable<T> iterable) {
+    public static <T> KeySetView<T, Boolean> newConcurrentHashSet(@Nullable final Iterable<T> iterable) {
         return _Collections.collectFromIterable(iterable, _Sets::newConcurrentHashSet,
                 ()->Collectors.<T, KeySetView<T, Boolean>>toCollection(ConcurrentHashMap::newKeySet) );
     }
@@ -211,14 +207,14 @@ public final class _Sets {
         return new CopyOnWriteArraySet<T>();
     }
 
-    public static <T> CopyOnWriteArraySet<T> newCopyOnWriteArraySet(@Nullable Collection<T> collection) {
+    public static <T> CopyOnWriteArraySet<T> newCopyOnWriteArraySet(@Nullable final Collection<T> collection) {
         if(collection==null) {
             return newCopyOnWriteArraySet();
         }
         return new CopyOnWriteArraySet<T>(collection);
     }
 
-    public static <T> CopyOnWriteArraySet<T> newCopyOnWriteArraySet(@Nullable Iterable<T> iterable) {
+    public static <T> CopyOnWriteArraySet<T> newCopyOnWriteArraySet(@Nullable final Iterable<T> iterable) {
         return _Collections.collectFromIterable(iterable, _Sets::newCopyOnWriteArraySet,
                 ()->Collectors.<T, CopyOnWriteArraySet<T>>toCollection(CopyOnWriteArraySet::new) );
     }
@@ -233,7 +229,7 @@ public final class _Sets {
      * @param b
      * @return non null, unmodifiable
      */
-    public static <T> Set<T> intersect(@Nullable Set<T> a, @Nullable Set<T> b) {
+    public static <T> Set<T> intersect(@Nullable final Set<T> a, @Nullable final Set<T> b) {
         if(a==null && b==null) {
             return Collections.emptySet();
         }
@@ -254,7 +250,7 @@ public final class _Sets {
      * @param b
      * @return non null, unmodifiable
      */
-    public static <T> SortedSet<T> intersectSorted(@Nullable SortedSet<T> a, @Nullable SortedSet<T> b) {
+    public static <T> SortedSet<T> intersectSorted(@Nullable final SortedSet<T> a, @Nullable final SortedSet<T> b) {
         if(a==null && b==null) {
             return Collections.emptySortedSet();
         }
@@ -276,7 +272,7 @@ public final class _Sets {
      * @param b
      * @return {@code a - b}, non null, unmodifiable
      */
-    public static <T> Set<T> minus(@Nullable Set<T> a, @Nullable Set<T> b) {
+    public static <T> Set<T> minus(@Nullable final Set<T> a, @Nullable final Set<T> b) {
         return minus(a, b, HashSet::new);
     }
 
@@ -289,7 +285,7 @@ public final class _Sets {
      * @param b
      * @return {@code a - b}, non null, unmodifiable
      */
-    public static <T> SortedSet<T> minusSorted(@Nullable SortedSet<T> a, @Nullable SortedSet<T> b) {
+    public static <T> SortedSet<T> minusSorted(@Nullable final SortedSet<T> a, @Nullable final SortedSet<T> b) {
         return minusSorted(a, b, TreeSet::new);
     }
 
@@ -304,9 +300,9 @@ public final class _Sets {
      * @return {@code a - b}, non null, unmodifiable
      */
     public static <T> Set<T> minus(
-            @Nullable Set<T> a,
-            @Nullable Set<T> b,
-            @NonNull Supplier<Set<T>> collectionFactory) {
+            @Nullable final Set<T> a,
+            @Nullable final Set<T> b,
+            final @NonNull Supplier<Set<T>> collectionFactory) {
 
         if(a==null || a.isEmpty()) {
             return Collections.emptySet();
@@ -333,9 +329,9 @@ public final class _Sets {
      * @return {@code a - b}, non null, unmodifiable
      */
     public static <T> SortedSet<T> minusSorted(
-            @Nullable SortedSet<T> a,
-            @Nullable SortedSet<T> b,
-            @NonNull Supplier<SortedSet<T>> collectionFactory) {
+            @Nullable final SortedSet<T> a,
+            @Nullable final SortedSet<T> b,
+            final @NonNull Supplier<SortedSet<T>> collectionFactory) {
 
         if(a==null || a.isEmpty()) {
             return Collections.emptySortedSet();
@@ -354,7 +350,7 @@ public final class _Sets {
     // -- COLLECTORS
 
     public static <T>
-    Collector<T, ?, Set<T>> toUnmodifiable(Supplier<Set<T>> collectionFactory) {
+    Collector<T, ?, Set<T>> toUnmodifiable(final Supplier<Set<T>> collectionFactory) {
         return Collectors.collectingAndThen(
                 Collectors.toCollection(collectionFactory),
                 Collections::unmodifiableSet);
@@ -371,7 +367,7 @@ public final class _Sets {
     }
 
     public static <T>
-    Collector<T, ?, SortedSet<T>> toUnmodifiableSorted(Supplier<SortedSet<T>> collectionFactory) {
+    Collector<T, ?, SortedSet<T>> toUnmodifiableSorted(final Supplier<SortedSet<T>> collectionFactory) {
         return Collectors.collectingAndThen(
                 Collectors.toCollection(collectionFactory),
                 Collections::unmodifiableSortedSet);

@@ -32,11 +32,11 @@ import lombok.val;
 
 final class _SwingUtil {
 
-    static JTable newTable(Object[][] tableData, String[] columnNames) {
+    static JTable newTable(final Object[][] tableData, final String[] columnNames) {
         val table = new JTable(tableData, columnNames) {
             private static final long serialVersionUID = 1L;
             @Override
-               public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+               public Component prepareRenderer(final TableCellRenderer renderer, final int row, final int column) {
                    Component component = super.prepareRenderer(renderer, row, column);
                    int rendererWidth = component.getPreferredSize().width;
                    TableColumn tableColumn = getColumnModel().getColumn(column);
@@ -48,13 +48,12 @@ final class _SwingUtil {
         return table;
     }
 
-    static void setTreeExpandedState(JTree tree, boolean expanded) {
+    static void setTreeExpandedState(final JTree tree, final boolean expanded) {
         DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getModel().getRoot();
         setNodeExpandedState(tree, node, expanded);
     }
 
-    @SuppressWarnings("unchecked")
-    static void setNodeExpandedState(JTree tree, DefaultMutableTreeNode node, boolean expanded) {
+    static void setNodeExpandedState(final JTree tree, final DefaultMutableTreeNode node, final boolean expanded) {
         for (Object treeNode : Collections.list(node.children())) {
             setNodeExpandedState(tree, (DefaultMutableTreeNode) treeNode, expanded);
         }

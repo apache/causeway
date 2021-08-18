@@ -129,8 +129,8 @@ public final class ActionUiMetaModel implements Serializable {
     // -- USABILITY
 
     private static Optional<DisablingUiModel> disabledUiModelFor(
-            @NonNull final ManagedObject actionHolder,
-            @NonNull final ObjectAction objectAction) {
+            final @NonNull ManagedObject actionHolder,
+            final @NonNull ObjectAction objectAction) {
 
         // check usability
         final Consent usability = objectAction.isUsable(

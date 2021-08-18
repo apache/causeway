@@ -27,7 +27,7 @@ import java.util.function.UnaryOperator;
 
 import org.springframework.lang.Nullable;
 
-import static org.apache.isis.commons.internal.base._With.requires;
+import lombok.NonNull;
 
 /**
  * <h1>- internal use only -</h1>
@@ -152,8 +152,7 @@ public final class _Bytes {
      * @param input
      * @return null if {@code input} is null
      */
-    public static final byte[] encodeToBase64(Base64.Encoder encoder, @Nullable final byte[] input) {
-        requires(encoder, "encoder");
+    public static final byte[] encodeToBase64(final @NonNull Base64.Encoder encoder, @Nullable final byte[] input) {
         return input!=null ? encoder.encode(input) : null;
     }
 
@@ -164,8 +163,7 @@ public final class _Bytes {
      * @param base64
      * @return null if {@code base64} is null
      */
-    public static final byte[] decodeBase64(Base64.Decoder decoder, @Nullable final byte[] base64) {
-        requires(decoder, "decoder");
+    public static final byte[] decodeBase64(final @NonNull Base64.Decoder decoder, @Nullable final byte[] base64) {
         return base64!=null ? decoder.decode(base64) : null;
     }
 
@@ -178,7 +176,7 @@ public final class _Bytes {
      * @param input
      * @return null if {@code input} is null
      */
-    public static final byte[] compress(@Nullable byte[] input) {
+    public static final byte[] compress(@Nullable final byte[] input) {
         if(input==null) {
             return null;
         }
@@ -199,7 +197,7 @@ public final class _Bytes {
      * @param compressed
      * @return null if {@code compressed} is null
      */
-    public static final byte[] decompress(@Nullable byte[] compressed) {
+    public static final byte[] decompress(@Nullable final byte[] compressed) {
         if(compressed==null) {
             return null;
         }
@@ -222,15 +220,15 @@ public final class _Bytes {
 
         private final UnaryOperator<byte[]> operator;
 
-        private BytesOperator(UnaryOperator<byte[]> operator) {
-            this.operator = requires(operator, "operator");
+        private BytesOperator(final @NonNull UnaryOperator<byte[]> operator) {
+            this.operator = operator;
         }
 
-        public byte[] apply(byte[] input) {
+        public byte[] apply(final byte[] input) {
             return operator.apply(input);
         }
 
-        public BytesOperator andThen(UnaryOperator<byte[]> andThen) {
+        public BytesOperator andThen(final UnaryOperator<byte[]> andThen) {
             return new BytesOperator(s->andThen.apply(operator.apply(s)));
         }
 

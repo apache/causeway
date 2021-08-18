@@ -123,7 +123,7 @@ implements ScalarModelSubscriber {
     /** this is a hack for the ScalarParameterModel, which does not support usability constraints in the model*/
     private transient Runnable postInit;
     @Deprecated // properly implement ScalarParameterModel
-    public void postInit(@NonNull final FormPendingParamUiModel argAndConsents) {
+    public void postInit(final @NonNull FormPendingParamUiModel argAndConsents) {
         this.postInit = () ->{
             // visibility
             val visibilityConsent = argAndConsents.getVisibilityConsent();
@@ -147,8 +147,8 @@ implements ScalarModelSubscriber {
      * @return - true if changed as a result of these pending arguments.
      */
     public Repaint updateIfNecessary(
-            @NonNull final FormPendingParamUiModel argsAndConsents,
-            @NonNull final Optional<AjaxRequestTarget> target) {
+            final @NonNull FormPendingParamUiModel argsAndConsents,
+            final @NonNull Optional<AjaxRequestTarget> target) {
 
         val argModel = argsAndConsents.getParamModel();
 
@@ -456,7 +456,7 @@ implements ScalarModelSubscriber {
      * The widget should be made editable.
      *
      */
-    protected void onEditable(@NonNull final Optional<AjaxRequestTarget> target) {
+    protected void onEditable(final @NonNull Optional<AjaxRequestTarget> target) {
     }
 
     private void addCssFromMetaModel() {

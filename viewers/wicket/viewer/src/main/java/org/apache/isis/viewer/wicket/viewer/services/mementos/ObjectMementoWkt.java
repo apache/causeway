@@ -428,7 +428,7 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
         this.recreateStrategy = RecreateStrategy.LOOKUP;
     }
 
-    private ObjectMementoWkt(@NonNull final ManagedObject adapter) {
+    private ObjectMementoWkt(final @NonNull ManagedObject adapter) {
         this.cardinality = Cardinality.SCALAR;
         val spec = adapter.getSpecification();
         this.logicalType = spec.getLogicalType();

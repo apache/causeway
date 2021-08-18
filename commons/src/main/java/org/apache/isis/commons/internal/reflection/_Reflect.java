@@ -43,15 +43,13 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import org.springframework.lang.Nullable;
-
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.base._With;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.functions._Predicates;
 
@@ -77,7 +75,7 @@ public final class _Reflect {
 
     // -- PREDICATES
 
-    public static boolean same(Method method, Method superMethod) {
+    public static boolean same(final Method method, final Method superMethod) {
         if(!method.getName().equals(superMethod.getName())) {
             return false;
         }
@@ -101,8 +99,7 @@ public final class _Reflect {
      * Whether member name equals given {@code memberName}
      * @param memberName
      */
-    public static <T extends Member> Predicate<T> withName(final String memberName) {
-        _With.requires(memberName, "memberName");
+    public static <T extends Member> Predicate<T> withName(final @NonNull String memberName) {
         return m -> m != null && memberName.equals(m.getName());
     }
 
@@ -110,8 +107,7 @@ public final class _Reflect {
      * Whether member name starts with given {@code prefix}
      * @param prefix
      */
-    public static <T extends Member> Predicate<T> withPrefix(final String prefix) {
-        _With.requires(prefix, "prefix");
+    public static <T extends Member> Predicate<T> withPrefix(final @NonNull String prefix) {
         return m -> m != null && m.getName().startsWith(prefix);
     }
 
@@ -120,16 +116,15 @@ public final class _Reflect {
      * @param count
      */
     public static Predicate<Method> withMethodParametersCount(final int count) {
-        return (Method m) -> m != null && m.getParameterTypes().length == count;
+        return (final Method m) -> m != null && m.getParameterTypes().length == count;
     }
 
     /**
      * Whether field type is assignable to given {@code type}
      * @param type
      */
-    public static <T> Predicate<Field> withTypeAssignableTo(final Class<T> type) {
-        _With.requires(type, "type");
-        return (Field f) -> f != null && type.isAssignableFrom(f.getType());
+    public static <T> Predicate<Field> withTypeAssignableTo(final @NonNull Class<T> type) {
+        return (final Field f) -> f != null && type.isAssignableFrom(f.getType());
     }
 
     // -- FIELDS
@@ -140,7 +135,7 @@ public final class _Reflect {
      * @param ignoreAccess - whether to include non-public members
      */
     public static Stream<Field> streamFields(
-            @Nullable Class<?> type,
+            @Nullable final Class<?> type,
             final boolean ignoreAccess) {
 
         if(type==null) {
@@ -158,7 +153,7 @@ public final class _Reflect {
      * @param ignoreAccess - whether to include non-public members
      */
     public static Stream<Field> streamAllFields(
-            @Nullable Class<?> type,
+            @Nullable final Class<?> type,
             final boolean ignoreAccess) {
 
         return streamTypeHierarchy(type, InterfacePolicy.EXCLUDE) // interfaces don't have fields
@@ -174,7 +169,7 @@ public final class _Reflect {
      * @return non-null
      */
     public static Stream<Method> streamMethods(
-            @Nullable Class<?> type,
+            @Nullable final Class<?> type,
             final boolean ignoreAccess) {
 
         if(type==null) {
@@ -193,7 +188,7 @@ public final class _Reflect {
      * @return non-null
      */
     public static Stream<Method> streamAllMethods(
-            @Nullable Class<?> type,
+            @Nullable final Class<?> type,
             final boolean ignoreAccess
             ) {
 
@@ -216,7 +211,7 @@ public final class _Reflect {
      * @return non-null
      */
     public static Stream<Class<?>> streamTypeHierarchy(
-            @Nullable Class<?> type,
+            @Nullable final Class<?> type,
             final InterfacePolicy interfacePolicy) {
 
         val includeInterfaces = interfacePolicy == InterfacePolicy.INCLUDE;
@@ -230,7 +225,7 @@ public final class _Reflect {
                         Spliterator.ORDERED|Spliterator.IMMUTABLE|Spliterator.NONNULL) {
                     Class<?> current = type;
                     @Override
-                    public boolean tryAdvance(Consumer<? super Class<?>> action) {
+                    public boolean tryAdvance(final Consumer<? super Class<?>> action) {
                         if(current == null) return false;
                         action.accept(current);
                         if(includeInterfaces) {
@@ -242,7 +237,7 @@ public final class _Reflect {
                         return true;
                     }
 
-                    private void recur(Class<?> iface, Consumer<? super Class<?>> action) {
+                    private void recur(final Class<?> iface, final Consumer<? super Class<?>> action) {
                         action.accept(iface);
                         for(Class<?> subIface : iface.getInterfaces()) {
                             recur(subIface, action);
@@ -321,13 +316,11 @@ public final class _Reflect {
      *            if the method or annotation are {@code null}
      */
     public static <A extends Annotation> A getAnnotation(
-            final Method method,
-            final Class<A> annotationCls,
+            final @NonNull Method method,
+            final @NonNull Class<A> annotationCls,
             final boolean searchSupers,
             final boolean ignoreAccess) {
 
-        _With.requires(method, "method");
-        _With.requires(annotationCls, "annotationCls");
         if (!ignoreAccess && !isAccessible(method)) {
             return null;
         }
@@ -363,7 +356,7 @@ public final class _Reflect {
      * @param annotationName - fully qualified class name of the {@link Annotation} to match against
      * @return false - if any of the arguments is null
      */
-    public static boolean containsAnnotation(@Nullable final Class<?> cls, @Nullable String annotationName) {
+    public static boolean containsAnnotation(@Nullable final Class<?> cls, @Nullable final String annotationName) {
         if(cls==null || _Strings.isEmpty(annotationName)) {
             return false;
         }
@@ -377,7 +370,7 @@ public final class _Reflect {
 
     // -- METHOD/FIELD HANDLES
 
-    public static MethodHandle handleOf(Method method) throws IllegalAccessException {
+    public static MethodHandle handleOf(final Method method) throws IllegalAccessException {
         if(!method.isAccessible()) { // java9+ to replace by canAccess
             /*sonar-ignore-on*/
             method.setAccessible(true);
@@ -389,7 +382,7 @@ public final class _Reflect {
         return MethodHandles.publicLookup().unreflect(method);
     }
 
-    public static MethodHandle handleOfGetterOn(Field field) throws IllegalAccessException {
+    public static MethodHandle handleOfGetterOn(final Field field) throws IllegalAccessException {
         if(!field.isAccessible()) { // java9+ to replace by canAccess
             /*sonar-ignore-on*/
             field.setAccessible(true);
@@ -404,20 +397,20 @@ public final class _Reflect {
     // -- FIND GETTER
 
     @SneakyThrows
-    public static Stream<PropertyDescriptor> streamGetters(@NonNull Class<?> cls) {
+    public static Stream<PropertyDescriptor> streamGetters(final @NonNull Class<?> cls) {
         return Stream.of(
                 Introspector.getBeanInfo(cls, Object.class)
                     .getPropertyDescriptors())
                 .filter(pd->pd.getReadMethod()!=null);
     }
 
-    public static Map<String, Method> getGettersByName(@NonNull Class<?> cls) {
+    public static Map<String, Method> getGettersByName(final @NonNull Class<?> cls) {
         return streamGetters(cls)
                 .collect(Collectors.toMap(PropertyDescriptor::getName, PropertyDescriptor::getReadMethod));
     }
 
 
-    public static Method getGetter(Class<?> cls, String propertyName) throws IntrospectionException {
+    public static Method getGetter(final Class<?> cls, final String propertyName) throws IntrospectionException {
         final BeanInfo beanInfo = Introspector.getBeanInfo(cls);
         for(PropertyDescriptor pd:beanInfo.getPropertyDescriptors()){
             if(!pd.getName().equals(propertyName))
@@ -430,8 +423,8 @@ public final class _Reflect {
     // -- MODIFIERS
 
     public static Object getFieldOn(
-            @NonNull final Field field,
-            @NonNull final Object target) throws IllegalArgumentException, IllegalAccessException {
+            final @NonNull Field field,
+            final @NonNull Object target) throws IllegalArgumentException, IllegalAccessException {
 
         /*sonar-ignore-on*/
         if(field.isAccessible()) {
@@ -447,8 +440,8 @@ public final class _Reflect {
     }
 
     public static void setFieldOn(
-            @NonNull final Field field,
-            @NonNull final Object target,
+            final @NonNull Field field,
+            final @NonNull Object target,
             final Object fieldValue) throws IllegalArgumentException, IllegalAccessException {
 
         /*sonar-ignore-on*/
@@ -467,8 +460,8 @@ public final class _Reflect {
 
 
     public static Result<Object> invokeMethodOn(
-            @NonNull final Method method,
-            @NonNull final Object target,
+            final @NonNull Method method,
+            final @NonNull Object target,
             final Object... args) {
 
         /*sonar-ignore-on*/
@@ -487,7 +480,7 @@ public final class _Reflect {
     }
 
     public static <T> Result<T> invokeConstructor(
-            @NonNull final Constructor<T> constructor,
+            final @NonNull Constructor<T> constructor,
             final Object... args) {
 
         /*sonar-ignore-on*/
@@ -508,11 +501,11 @@ public final class _Reflect {
 
     // -- COMMON CONSTRUCTOR IDIOMS
 
-    public static Can<Constructor<?>> getDeclaredConstructors(Class<?> cls) {
+    public static Can<Constructor<?>> getDeclaredConstructors(final Class<?> cls) {
         return Can.ofArray(cls.getDeclaredConstructors());
     }
 
-    public static Can<Constructor<?>> getPublicConstructors(Class<?> cls) {
+    public static Can<Constructor<?>> getPublicConstructors(final Class<?> cls) {
         return Can.ofArray(cls.getConstructors());
     }
 
@@ -525,15 +518,15 @@ public final class _Reflect {
             return ex->Modifier.isPublic(ex.getModifiers());
         }
 
-        public static Predicate<Executable> paramCount(int paramCount) {
+        public static Predicate<Executable> paramCount(final int paramCount) {
             return ex->ex.getParameterCount() == paramCount;
         }
 
-        public static Predicate<Executable> paramAssignableFrom(int paramIndex, Class<?> paramType) {
+        public static Predicate<Executable> paramAssignableFrom(final int paramIndex, final Class<?> paramType) {
             return ex->ex.getParameterTypes()[paramIndex].isAssignableFrom(paramType);
         }
 
-        public static Predicate<Executable> paramSignatureMatch(Class<?>[] matchingParamTypes) {
+        public static Predicate<Executable> paramSignatureMatch(final Class<?>[] matchingParamTypes) {
             return ex->{
                 // check params (if required)
                 if (matchingParamTypes != null) {
@@ -552,7 +545,7 @@ public final class _Reflect {
             };
         }
 
-        public static Predicate<Executable> paramAssignableFromValue(int paramIndex, @Nullable Object value) {
+        public static Predicate<Executable> paramAssignableFromValue(final int paramIndex, @Nullable final Object value) {
             if(value==null) {
                 return _Predicates.alwaysTrue();
             }

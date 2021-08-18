@@ -60,10 +60,10 @@ import javafx.scene.layout.VBox;
 public class ObjectViewFx extends VBox {
 
     public static ObjectViewFx fromObject(
-            @NonNull final UiContextFx uiContext,
-            @NonNull final UiComponentFactoryFx uiComponentFactory,
-            @NonNull final Consumer<ManagedAction> actionEventHandler,
-            @NonNull final ManagedObject managedObject) {
+            final @NonNull UiContextFx uiContext,
+            final @NonNull UiComponentFactoryFx uiComponentFactory,
+            final @NonNull Consumer<ManagedAction> actionEventHandler,
+            final @NonNull ManagedObject managedObject) {
         return new ObjectViewFx(uiContext, uiComponentFactory, actionEventHandler, managedObject);
     }
 

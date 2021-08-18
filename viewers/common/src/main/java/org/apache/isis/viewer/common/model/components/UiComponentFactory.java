@@ -114,7 +114,7 @@ public interface UiComponentFactory<B, C> {
         }
 
         public <T extends Facet> boolean hasFeatureTypeFacetAnyOf(
-                @NonNull final Can<Class<? extends Facet>> facetTypes) {
+                final @NonNull Can<Class<? extends Facet>> facetTypes) {
             return facetTypes.stream()
                     .map(getFeatureTypeSpec()::getFacet)
                     .anyMatch(_NullSafe::isPresent);

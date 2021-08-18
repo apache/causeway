@@ -152,7 +152,7 @@ implements ApplicationUserRepository {
 
     @Override
     public Collection<ApplicationUser> findByTenancy(
-            @NonNull final ApplicationTenancy genericTenancy) {
+            final @NonNull ApplicationTenancy genericTenancy) {
         return findByAtPath(genericTenancy.getPath())
                 .stream()
                 .collect(_Sets.toUnmodifiableSorted());

@@ -51,18 +51,18 @@ public interface FacetHolder extends HasMetaModelContext {
     // -- LOOKUP
 
     default <T extends Facet> Optional<T> lookupFacet(
-            @NonNull final Class<T> facetType) {
+            final @NonNull Class<T> facetType) {
         return Optional.ofNullable(getFacet(facetType));
     }
 
     default <T extends Facet> Optional<T> lookupFacet(
-            @NonNull final Class<T> facetType,
-            @NonNull final Predicate<T> filter) {
+            final @NonNull Class<T> facetType,
+            final @NonNull Predicate<T> filter) {
         return lookupFacet(facetType).map(facet->filter.test(facet) ? facet : null);
     }
 
     default <T extends Facet> Optional<T> lookupNonFallbackFacet(
-            @NonNull final Class<T> facetType) {
+            final @NonNull Class<T> facetType) {
         return lookupFacet(facetType, facet->!facet.getPrecedence().isFallback());
     }
 

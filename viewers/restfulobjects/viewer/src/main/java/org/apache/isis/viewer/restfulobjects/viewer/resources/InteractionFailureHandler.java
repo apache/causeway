@@ -72,8 +72,8 @@ public class InteractionFailureHandler {
     }
 
     public static RestfulObjectsApplicationException onParameterListInvalid(
-            @NonNull final InteractionVeto veto,
-            @NonNull final JsonRepresentation arguments) {
+            final @NonNull InteractionVeto veto,
+            final @NonNull JsonRepresentation arguments) {
 
         if(veto!=null) {
             arguments.mapPut("x-ro-invalidReason", veto.getReason());
@@ -86,9 +86,9 @@ public class InteractionFailureHandler {
 
     // collect info for each individual param that is not valid
     public static void collectParameterInvalid(
-            @NonNull final ObjectActionParameter paramMeta,
-            @NonNull final InteractionVeto veto,
-            @NonNull final JsonRepresentation arguments) {
+            final @NonNull ObjectActionParameter paramMeta,
+            final @NonNull InteractionVeto veto,
+            final @NonNull JsonRepresentation arguments) {
 
         val paramId = paramMeta.getId();
         val argRepr = arguments.getRepresentation(paramId);

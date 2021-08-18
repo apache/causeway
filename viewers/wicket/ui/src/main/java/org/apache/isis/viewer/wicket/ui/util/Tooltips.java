@@ -56,7 +56,7 @@ public class Tooltips {
      * @param tooltipUiModel
      */
     public static void addTooltip(
-            @NonNull final Component target,
+            final @NonNull Component target,
             @Nullable final TooltipUiModel tooltipUiModel) {
         if(tooltipUiModel==null || _Strings.isEmpty(tooltipUiModel.getBody())) {
             return; // no body so don't render

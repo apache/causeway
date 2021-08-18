@@ -32,9 +32,9 @@ import lombok.val;
 public final class CollectionInteraction extends MemberInteraction<ManagedCollection, CollectionInteraction> {
 
     public static final CollectionInteraction start(
-            @NonNull final ManagedObject owner,
-            @NonNull final String memberId,
-            @NonNull final Where where) {
+            final @NonNull ManagedObject owner,
+            final @NonNull String memberId,
+            final @NonNull Where where) {
 
         val managedCollection = ManagedCollection.lookupCollection(owner, memberId, where);
 
@@ -67,7 +67,7 @@ public final class CollectionInteraction extends MemberInteraction<ManagedCollec
     }
 
 //    public PropertyHandle modifyProperty(
-//            @NonNull final Function<ManagedProperty, ManagedObject> newProperyValueProvider) {
+//            final @NonNull Function<ManagedProperty, ManagedObject> newProperyValueProvider) {
 //
 //        chain = chain.leftRemap(property->{
 //            val validityVeto = property.modifyProperty(newProperyValueProvider.apply(property));

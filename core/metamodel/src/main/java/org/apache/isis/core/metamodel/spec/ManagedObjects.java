@@ -160,14 +160,14 @@ public final class ManagedObjects {
      */
     public static Optional<String> stringify(
             @Nullable final ManagedObject managedObject,
-            @NonNull final String separator) {
+            final @NonNull String separator) {
         return bookmark(managedObject)
                 .map(oid->oid.getLogicalTypeName() + separator + oid.getIdentifier());
     }
 
     public static String stringifyElseFail(
             @Nullable final ManagedObject managedObject,
-            @NonNull final String separator) {
+            final @NonNull String separator) {
         return stringify(managedObject, separator)
                 .orElseThrow(()->_Exceptions.illegalArgument("cannot stringify %s", managedObject));
     }
@@ -243,7 +243,7 @@ public final class ManagedObjects {
 
     // -- DEFAULTS UTILITIES
 
-    public static ManagedObject emptyToDefault(final boolean mandatory, @NonNull final ManagedObject input) {
+    public static ManagedObject emptyToDefault(final boolean mandatory, final @NonNull ManagedObject input) {
         if(!isSpecified(input)) {
             return input;
         }
@@ -608,7 +608,7 @@ public final class ManagedObjects {
          * @throws AssertionError if managedObject is a detached entity
          */
         @NonNull
-        public static ManagedObject requiresAttached(@NonNull final ManagedObject managedObject) {
+        public static ManagedObject requiresAttached(final @NonNull ManagedObject managedObject) {
             val entityState = EntityUtil.getEntityState(managedObject);
             if(entityState.isPersistable()) {
                 // ensure we have an attached entity
@@ -964,7 +964,7 @@ public final class ManagedObjects {
         // -- AS ARRAY
 
         @Nullable
-        public static Object[] multipleAsArray(@NonNull final Can<ManagedObject> adapters) {
+        public static Object[] multipleAsArray(final @NonNull Can<ManagedObject> adapters) {
             val unwrappedObjects = _Arrays.mapCollection(adapters.toList(), UnwrapUtil::single);
             return unwrappedObjects;
         }

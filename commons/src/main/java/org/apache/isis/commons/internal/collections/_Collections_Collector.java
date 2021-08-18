@@ -28,7 +28,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
 
-import org.apache.isis.commons.internal.base._With;
+import lombok.NonNull;
 
 /**
  *
@@ -42,9 +42,9 @@ class _Collections_Collector<T, C extends Collection<T>> implements Collector<T,
     private final Supplier<C> supplier;
     private final Function<C, C> finisher;
 
-    _Collections_Collector(Supplier<C> supplier, Function<C, C> finisher) {
-        this.supplier = _With.requires(supplier, "supplier");
-        this.finisher = _With.requires(finisher, "finisher");
+    _Collections_Collector(final @NonNull Supplier<C> supplier, final @NonNull Function<C, C> finisher) {
+        this.supplier = supplier;
+        this.finisher = finisher;
     }
 
     @Override

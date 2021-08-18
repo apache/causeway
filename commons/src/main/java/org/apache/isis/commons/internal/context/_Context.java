@@ -32,6 +32,8 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._With;
 import org.apache.isis.commons.internal.collections._Lists;
 
+import lombok.NonNull;
+
 /**
  * <h1>- internal use only -</h1>
  * <p>
@@ -67,9 +69,7 @@ public final class _Context {
      * @throws IllegalStateException if there is already an instance of same {@code type}
      *  on the current context.
      */
-    public static <T> void putSingleton(Class<? super T> type, T singleton) {
-        _With.requires(type, "type");
-        _With.requires(singleton, "singleton");
+    public static <T> void putSingleton(final @NonNull Class<? super T> type, final @NonNull T singleton) {
 
         // let writes to the map be atomic
         synchronized ($LOCK) {
@@ -88,10 +88,7 @@ public final class _Context {
      * @param override whether to overrides any already present singleton or not
      * @return whether the {@code singleton} was put on the context or ignored because there is already one present
      */
-    public static <T> boolean put(Class<? super T> type, T singleton, boolean override) {
-        _With.requires(type, "type");
-        _With.requires(singleton, "singleton");
-
+    public static <T> boolean put(final @NonNull Class<? super T> type, final @NonNull T singleton, final boolean override) {
         // let writes to the map be atomic
         synchronized ($LOCK) {
             if(singletonMap.containsKey(type)) {
@@ -109,7 +106,7 @@ public final class _Context {
      * @param type non-null
      * @return null, if there is no such instance
      */
-    public static <T> T getIfAny(Class<? super T> type) {
+    public static <T> T getIfAny(final Class<? super T> type) {
         return _Casts.uncheckedCast(singletonMap.get(type));
     }
 
@@ -120,9 +117,7 @@ public final class _Context {
      * @param factory
      * @return null, if there is no such instance
      */
-    public static <T> T computeIfAbsent(Class<? super T> type, Function<Class<? super T>, T> factory) {
-        _With.requires(type, "type");
-        _With.requires(factory, "factory");
+    public static <T> T computeIfAbsent(final @NonNull Class<? super T> type, final @NonNull Function<Class<? super T>, T> factory) {
 
         final T existingIfAny = _Casts.uncheckedCast(singletonMap.get(type));
         if(existingIfAny!=null) {
@@ -163,9 +158,7 @@ public final class _Context {
      * @param factory
      * @return null, if there is no such instance
      */
-    public static <T> T computeIfAbsent(Class<? super T> type, Supplier<T> factory) {
-        _With.requires(type, "type");
-        _With.requires(factory, "factory");
+    public static <T> T computeIfAbsent(final @NonNull Class<? super T> type, final @NonNull Supplier<T> factory) {
         return computeIfAbsent(type, __->factory.get());
     }
 
@@ -178,8 +171,7 @@ public final class _Context {
      * @param type non-null
      * @param fallback non-null
      */
-    public static <T> T getOrElse(Class<? super T> type, Supplier<T> fallback) {
-        _With.requires(fallback, "fallback");
+    public static <T> T getOrElse(final Class<? super T> type, final @NonNull Supplier<T> fallback) {
         return _With.ifPresentElseGet(getIfAny(type), fallback);
     }
 
@@ -191,12 +183,8 @@ public final class _Context {
      * @throws Exception
      */
     public static <T, E extends Exception> T getElseThrow (
-            Class<? super T> type,
-            Supplier<E> onNotFound)
-                    throws E {
-
-        _With.requires(type, "type");
-        _With.requires(onNotFound, "onNotFound");
+            final @NonNull Class<? super T> type,
+            final @NonNull Supplier<E> onNotFound) throws E {
         return _With.ifPresentElseThrow(getIfAny(type), onNotFound);
     }
 
@@ -205,7 +193,7 @@ public final class _Context {
      * otherwise throws a NoSuchElementException.
      * @param type non-null
      */
-    public static <T> T getElseFail(Class<? super T> type) {
+    public static <T> T getElseFail(final Class<? super T> type) {
         return _With.ifPresentElseThrow(getIfAny(type), ()->
         new NoSuchElementException(String.format("Could not resolve an instance of type '%s'", type.getName())));
     }
@@ -213,7 +201,7 @@ public final class _Context {
 
     // -- REMOVAL
 
-    public static void remove(Class<?> type) {
+    public static void remove(final Class<?> type) {
         // let writes to the map be atomic
         synchronized ($LOCK) {
             singletonMap.remove(type);
@@ -239,7 +227,7 @@ public final class _Context {
         }
     }
 
-    private static void closeAnyClosables(List<Object> objects) {
+    private static void closeAnyClosables(final List<Object> objects) {
         _NullSafe.stream(objects)
         .forEach(_Context::tryClose);
     }
@@ -250,7 +238,7 @@ public final class _Context {
      * Clear key {@code type} from current thread's map.
      * @param type - the key into the thread-local store
      */
-    public static void threadLocalClear(Class<?> type) {
+    public static void threadLocalClear(final Class<?> type) {
         _Context_ThreadLocal.clear(type);
     }
 
@@ -260,7 +248,7 @@ public final class _Context {
      * @param payload
      * @return a Runnable which, when run, removes any references to payload
      */
-    public static <T> Runnable threadLocalPut(Class<? super T> type, T payload) {
+    public static <T> Runnable threadLocalPut(final Class<? super T> type, final T payload) {
         return _Context_ThreadLocal.put(type, payload);
     }
 
@@ -270,7 +258,7 @@ public final class _Context {
      * with {@link _Context#threadLocalPut(Class, Object)}.
      * @param type - the key into the thread-local store
      */
-    public static <T> Can<T> threadLocalGet(Class<? super T> type) {
+    public static <T> Can<T> threadLocalGet(final Class<? super T> type) {
         return _Context_ThreadLocal.get(type);
     }
 
@@ -280,7 +268,7 @@ public final class _Context {
      * @param type - the key into the thread-local store
      * @param requiredType - the required type of the elements in the returned bin
      */
-    public static <T> Can<T> threadLocalSelect(Class<? super T> type, Class<? super T> requiredType) {
+    public static <T> Can<T> threadLocalSelect(final Class<? super T> type, final Class<? super T> requiredType) {
         return _Context_ThreadLocal.select(type, requiredType);
     }
 
@@ -310,12 +298,12 @@ public final class _Context {
      * @param classLoader the framework's default class loader
      * @param override whether to override if already registered
      */
-    public static void setDefaultClassLoader(ClassLoader classLoader, boolean override) {
+    public static void setDefaultClassLoader(final @NonNull ClassLoader classLoader, final boolean override) {
         final boolean alreadyRegistered = _Context.getIfAny(ClassLoader.class)!=null;
         if(!alreadyRegistered || override) {
             // let writes to the map be atomic
             synchronized ($LOCK) {
-                singletonMap.put(ClassLoader.class, _With.requires(classLoader, "classLoader"));
+                singletonMap.put(ClassLoader.class, classLoader);
             }
         }
     }
@@ -328,7 +316,7 @@ public final class _Context {
      * @return class by name
      * @throws ClassNotFoundException
      */
-    public static Class<?> loadClass(String className) throws ClassNotFoundException{
+    public static Class<?> loadClass(final String className) throws ClassNotFoundException{
         return getDefaultClassLoader().loadClass(className);
     }
 
@@ -339,7 +327,7 @@ public final class _Context {
      * @param className
      * @throws ClassNotFoundException
      */
-    public static Class<?> loadClassAndInitialize(String className) throws ClassNotFoundException{
+    public static Class<?> loadClassAndInitialize(final String className) throws ClassNotFoundException{
         return Class.forName(className, true, getDefaultClassLoader());
     }
 
@@ -354,7 +342,7 @@ public final class _Context {
 
     // -- HELPER
 
-    private static void tryClose(Object singleton) {
+    private static void tryClose(final Object singleton) {
         if(singleton==null) {
             return;
         }

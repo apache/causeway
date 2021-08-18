@@ -196,11 +196,11 @@ class DomainResourceHelper {
     }
 
     private Response invokeAction(
-            @NonNull final String actionId,
-            @NonNull final AccessIntent intent,
-            @NonNull final SemanticConstraint semanticConstraint,
-            @NonNull final JsonRepresentation arguments,
-            @NonNull final ActionResultReprRenderer.SelfLink selfLink) {
+            final @NonNull String actionId,
+            final @NonNull AccessIntent intent,
+            final @NonNull SemanticConstraint semanticConstraint,
+            final @NonNull JsonRepresentation arguments,
+            final @NonNull ActionResultReprRenderer.SelfLink selfLink) {
 
         val where = resourceContext.getWhere();
 

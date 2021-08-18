@@ -109,9 +109,9 @@ public class TableViewVaa extends VerticalLayout {
      * @param objects - (wrapped) domain objects to be rendered by this table
      */
     private TableViewVaa(
-            @NonNull final ObjectSpecification elementSpec,
-            @NonNull final Can<ManagedObject> objects,
-            @NonNull final Where where) {
+            final @NonNull ObjectSpecification elementSpec,
+            final @NonNull Can<ManagedObject> objects,
+            final @NonNull Where where) {
 
         //            final ComboBox<ManagedObject> listBox = new ComboBox<>();
         //            listBox.setLabel(label + " #" + objects.size());

@@ -31,8 +31,6 @@ import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -61,8 +59,8 @@ public class _Ints {
     public static class Bound {
         int value;
         boolean inclusive;
-        public static @NonNull Bound inclusive(int value) { return of(value, true); }
-        public static @NonNull Bound exclusive(int value) { return of(value, true); }
+        public static @NonNull Bound inclusive(final int value) { return of(value, true); }
+        public static @NonNull Bound exclusive(final int value) { return of(value, true); }
     }
 
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -73,15 +71,15 @@ public class _Ints {
         }
 
         public static Range of(
-                @NonNull Bound lowerBound,
-                @NonNull Bound upperBound) {
+                final @NonNull Bound lowerBound,
+                final @NonNull Bound upperBound) {
             return new Range(lowerBound, upperBound, false);
         }
 
         private final Bound lowerBound;
         private final Bound upperBound;
         private final boolean empty;
-        public boolean contains(int value) {
+        public boolean contains(final int value) {
             if(empty) return false;
             val isBelowLower = lowerBound.isInclusive()
                     ? value < lowerBound.getValue()
@@ -101,7 +99,7 @@ public class _Ints {
          * @param value
          * @return the value or if not within range, the nearest integer to the value, that is within range
          */
-        public int bounded(int value) {
+        public int bounded(final int value) {
             if(empty) return value; // noop
             if(contains(value)) {
                 return value;
@@ -122,7 +120,7 @@ public class _Ints {
             if(empty) throw _Exceptions.unsupportedOperation();
             return upperBound.isInclusive() ? upperBound.getValue() : upperBound.getValue()-1;
         }
-        public @NonNull Optional<Range> intersect(@NonNull Range other) {
+        public @NonNull Optional<Range> intersect(final @NonNull Range other) {
             if(empty) return Optional.empty();
             final int s1 = this.nearestToLower();
             final int e1 = this.nearestToUpper();
@@ -175,7 +173,7 @@ public class _Ints {
     /**
      * Range includes a and b.
      */
-    public static Range rangeClosed(int a, int b) {
+    public static Range rangeClosed(final int a, final int b) {
         if(a>b) {
             throw _Exceptions.illegalArgument("bounds must be ordered in [%d, %d]", a, b);
         }
@@ -185,7 +183,7 @@ public class _Ints {
     /**
      * Range includes a but not b.
      */
-    public static Range rangeOpenEnded(int a, int b) {
+    public static Range rangeOpenEnded(final int a, final int b) {
         if(a==b) {
             return Range.empty();
         }
@@ -245,7 +243,7 @@ public class _Ints {
 
     // -- LOW LEVEL HELPER
 
-    private static boolean isParseSuccess(long value) {
+    private static boolean isParseSuccess(final long value) {
         return value!=Long.MAX_VALUE;
     }
 
@@ -258,9 +256,7 @@ public class _Ints {
     private static long parseIntElseLongMaxValue(
             @Nullable final String s,
             final int radix,
-            final Consumer<String> onFailure) {
-
-        requires(onFailure, "onFailure");
+            final @NonNull Consumer<String> onFailure) {
 
         if (s == null) {
             onFailure.accept("null");

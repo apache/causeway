@@ -37,7 +37,7 @@ public class DisablingUiModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @NonNull final String reason;
+    final @NonNull String reason;
 
     /**
      * @param disabled - overwritten to be {@code true}, whenever {@code reason} is not empty

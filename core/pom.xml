@@ -90,8 +90,6 @@
 
 		<camel.version>3.11.1</camel.version>
 		
-		<checkerframework.version>3.17.0</checkerframework.version>
-
 		<commons-email.version>1.5</commons-email.version>
 		<commons-httpclient.version>4.5.12</commons-httpclient.version>
 		<commons-io.version>2.11.0</commons-io.version>

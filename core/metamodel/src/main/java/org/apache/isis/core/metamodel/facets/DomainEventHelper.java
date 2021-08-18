@@ -71,7 +71,7 @@ public class DomainEventHelper {
     // variant using eventType and no existing event
     public ActionDomainEvent<?> postEventForAction(
             final AbstractDomainEvent.Phase phase,
-            @NonNull final Class<? extends ActionDomainEvent<?>> eventType,
+            final @NonNull Class<? extends ActionDomainEvent<?>> eventType,
             final ObjectAction objectAction,
             final FacetHolder facetHolder,
             final InteractionHead head,
@@ -86,7 +86,7 @@ public class DomainEventHelper {
     // variant using existing event and not eventType (is derived from event)
     public ActionDomainEvent<?> postEventForAction(
             final AbstractDomainEvent.Phase phase,
-            @NonNull final ActionDomainEvent<?> existingEvent,
+            final @NonNull ActionDomainEvent<?> existingEvent,
             final ObjectAction objectAction,
             final FacetHolder facetHolder,
             final InteractionHead head,
@@ -413,7 +413,7 @@ public class DomainEventHelper {
     }
 
     private static <T> T invokeConstructor(
-            @NonNull final Constructor<T> constructor,
+            final @NonNull Constructor<T> constructor,
             final Object... args){
 
         try {

@@ -50,8 +50,8 @@ extends SpringServlet {
     private final InteractionService interactionService;
 
     public IsisServletForVaadin(
-            @NonNull final InteractionService interactionService,
-            @NonNull final ApplicationContext context,
+            final @NonNull InteractionService interactionService,
+            final @NonNull ApplicationContext context,
             final boolean forwardingEnforced) {
         super(context, forwardingEnforced);
         this.interactionService = interactionService;
