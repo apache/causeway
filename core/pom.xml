@@ -891,7 +891,7 @@
 				<version>${error_prone_annotations.version}</version>
 			</dependency>
 
-			<!-- provides @Nullable that's required by Spring -->
+			<!-- provides @Nullable that's required by Spring 5.x -->
 			<dependency>
 				<groupId>com.google.code.findbugs</groupId>
 				<artifactId>jsr305</artifactId>

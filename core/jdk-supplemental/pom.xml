@@ -152,10 +152,17 @@
 			<artifactId>jaxb-impl</artifactId>
 		</dependency>
 		
+		<!-- v8.0.0 provides @Inject, @Qualifier, ... that's required by Spring 5.x -->
         <dependency>
             <groupId>jakarta.platform</groupId>
             <artifactId>jakarta.jakartaee-api</artifactId>
         </dependency>
+		
+		<!-- provides @Nullable that's required by Spring 5.x -->
+		<dependency>
+			<groupId>com.google.code.findbugs</groupId>
+			<artifactId>jsr305</artifactId>
+		</dependency>
 		
 	</dependencies>
 
