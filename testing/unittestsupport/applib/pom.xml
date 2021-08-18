@@ -110,6 +110,13 @@
         <dependency>
             <groupId>com.approvaltests</groupId>
             <artifactId>approvaltests</artifactId>
+            <exclusions>
+                <exclusion>
+                	<!-- we use jakarta instead -->
+                    <groupId>com.sun.mail</groupId>
+   					<artifactId>javax.mail</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
