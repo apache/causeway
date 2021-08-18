@@ -44,11 +44,6 @@
        			</exclusion>
 			</exclusions>
 		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.woodstox</groupId>
-          	<artifactId>woodstox-core</artifactId>
-          	<version>6.2.6</version>
-		</dependency>
 
 	</dependencies>
 
