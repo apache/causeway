@@ -66,8 +66,8 @@ public final class _Arrays {
      * @throws NullPointerException - if {@code test} is null
      */
     public static <T> boolean testAnyMatch(
-            @Nullable final T[] array1,
-            @Nullable final T[] array2,
+            final @Nullable T[] array1,
+            final @Nullable T[] array2,
             final @NonNull BiPredicate<T, T> test) {
 
         final int s1 = _NullSafe.size(array1);
@@ -99,8 +99,8 @@ public final class _Arrays {
      * @throws NullPointerException - if {@code test} is null
      */
     public static <T> boolean testAllMatch(
-            @Nullable final T[] array1,
-            @Nullable final T[] array2,
+            final @Nullable T[] array1,
+            final @Nullable T[] array2,
             final @NonNull BiPredicate<T, T> test) {
         return !testAnyMatch(array1, array2, test.negate());
     }
@@ -110,7 +110,7 @@ public final class _Arrays {
      * @param cls
      * @return whether {@code cls} represents an array
      */
-    public static boolean isArrayType(@Nullable final Class<?> cls) {
+    public static boolean isArrayType(final @Nullable Class<?> cls) {
         return cls!=null ? cls.isArray() : false;
     }
 
@@ -155,7 +155,7 @@ public final class _Arrays {
      *               because of a type mismatch.
      */
     @SafeVarargs
-    public static <T> T[] combine(final @NonNull T first, @Nullable final  T... rest) {
+    public static <T> T[] combine(final @NonNull T first, final @Nullable  T... rest) {
         final int restLength = _NullSafe.size(rest);
         final T[] all = _Casts.uncheckedCast(Array.newInstance(first.getClass(), restLength+1));
         all[0] = first;
@@ -173,7 +173,7 @@ public final class _Arrays {
      * @return (non-null)
      */
     @SafeVarargs
-    public static <T, X extends T, Y extends T> T[] combineWithExplicitType(final @NonNull Class<T> type, final @NonNull X first, @Nullable final  Y... rest) {
+    public static <T, X extends T, Y extends T> T[] combineWithExplicitType(final @NonNull Class<T> type, final @NonNull X first, final @Nullable  Y... rest) {
         final int restLength = _NullSafe.size(rest);
         final T[] all = _Casts.uncheckedCast(Array.newInstance(type, restLength+1));
         all[0] = first;
@@ -272,7 +272,7 @@ public final class _Arrays {
      * @param array
      * @return null for empty arrays
      */
-    public static @Nullable <T> T[] emptyToNull(@Nullable final T[] array) {
+    public static @Nullable <T> T[] emptyToNull(final @Nullable T[] array) {
         if(array!=null && array.length==0) {
             return null;
         }
@@ -335,7 +335,7 @@ public final class _Arrays {
      * @param array
      * @param index
      */
-    public static <T> Optional<T> get(@Nullable final T[] array, final int index) {
+    public static <T> Optional<T> get(final @Nullable T[] array, final int index) {
         val size = _NullSafe.size(array);
         if(size==0) {
             return Optional.empty();
@@ -364,7 +364,7 @@ public final class _Arrays {
      */
     @Nullable
     public static <T, R> R[] map(
-            @Nullable final T[] array,
+            final @Nullable T[] array,
             final @NonNull Class<R> resultElementType,
             final @NonNull Function<T, R> mapper) {
 
@@ -392,7 +392,7 @@ public final class _Arrays {
      */
     @Nullable
     public static <T> Object[] map(
-            @Nullable final T[] array,
+            final @Nullable T[] array,
             final @NonNull Function<T, ?> mapper) {
 
         if (array == null) {
@@ -420,7 +420,7 @@ public final class _Arrays {
      */
     @Nullable
     public static <T, R> R[] mapCollection(
-            @Nullable final Collection<T> collection,
+            final @Nullable Collection<T> collection,
             final @NonNull Class<R> resultElementType,
             final @NonNull Function<T, R> mapper) {
 
@@ -448,7 +448,7 @@ public final class _Arrays {
      */
     @Nullable
     public static <T> Object[] mapCollection(
-            @Nullable final Collection<T> collection,
+            final @Nullable Collection<T> collection,
             final @NonNull Function<T, ?> mapper) {
 
         if (collection == null) {

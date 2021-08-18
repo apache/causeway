@@ -203,7 +203,7 @@ public class ArchitectureModuleRules {
     }
 
 
-    static String nameOf(Class<?> moduleClass, @Nullable final String subpackageName) {
+    static String nameOf(Class<?> moduleClass, final @Nullable String subpackageName) {
         val simpleName = moduleClass.getSimpleName();
         val moduleName = simpleName.replace("Module", "");
         return moduleName + (subpackageName != null ? (" " + subpackageName) : "");

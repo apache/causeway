@@ -116,7 +116,7 @@ public final class ManagedProperty extends ManagedMember {
      * @param proposedNewValue
      * @return non-empty if the interaction is not valid for given {@code proposedNewValue}
      */
-    public Optional<InteractionVeto> modifyProperty(@Nullable final ManagedObject proposedNewValue) {
+    public Optional<InteractionVeto> modifyProperty(final @Nullable ManagedObject proposedNewValue) {
 
         val interactionVeto = checkValidity(proposedNewValue);
         if(interactionVeto.isPresent()) {

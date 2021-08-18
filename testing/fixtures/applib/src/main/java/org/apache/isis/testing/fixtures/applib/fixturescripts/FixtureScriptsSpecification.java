@@ -100,7 +100,7 @@ public class FixtureScriptsSpecification {
         public Builder(final Class<?> contextClass) {
             this(contextClass.getPackage().getName());
         }
-        public Builder(@Nullable final String packagePrefix) {
+        public Builder(final @Nullable String packagePrefix) {
             this.packagePrefix = packagePrefix;
         }
 

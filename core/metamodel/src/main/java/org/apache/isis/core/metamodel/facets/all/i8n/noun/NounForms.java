@@ -41,12 +41,12 @@ import lombok.val;
 @Value @Builder
 public class NounForms {
 
-    public static NounFormsBuilder builderSingular(@Nullable final String singular) {
+    public static NounFormsBuilder builderSingular(final @Nullable String singular) {
         return NounForms.builder()
                 .singular(singular);
     }
 
-    public static NounFormsBuilder builderPlural(@Nullable final String plural) {
+    public static NounFormsBuilder builderPlural(final @Nullable String plural) {
         return NounForms.builder()
                 .plural(plural);
     }

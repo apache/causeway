@@ -58,7 +58,7 @@ public class ClassSubstitutorRegistry {
      * @param originalClass
      * @return (non-null) the aggregated Substitution that applies to given originalClass
      */
-    public Substitution getSubstitution(@Nullable final Class<?> originalClass) {
+    public Substitution getSubstitution(final @Nullable Class<?> originalClass) {
         if(originalClass == null) {
             return Substitution.neverReplaceClass();
         }

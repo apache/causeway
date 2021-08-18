@@ -134,7 +134,7 @@ final class _IocContainer_Spring implements _IocContainer {
      * @param annotations
      * @return non-null
      */
-    private static Set<Annotation> filterQualifiers(@Nullable final Annotation[] annotations) {
+    private static Set<Annotation> filterQualifiers(final @Nullable Annotation[] annotations) {
         if(_NullSafe.isEmpty(annotations)) {
             return Collections.emptySet();
         }

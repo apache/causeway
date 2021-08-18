@@ -521,7 +521,7 @@ extends
 
     // -- TYPE COMPATIBILITY UTILITIES
 
-    default public void assertPojoCompatible(@Nullable final Object pojo) {
+    default public void assertPojoCompatible(final @Nullable Object pojo) {
 
         // can do this check only when the pojo is not null, otherwise is always considered valid
         if(pojo==null) {

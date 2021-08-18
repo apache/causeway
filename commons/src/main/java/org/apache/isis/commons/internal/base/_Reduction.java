@@ -55,7 +55,7 @@ public final class _Reduction<T> implements Consumer<T> {
      * @param identity
      * @param accumulator
      */
-    public static <T> _Reduction<T> of(@Nullable final T identity, final BinaryOperator<T> accumulator){
+    public static <T> _Reduction<T> of(final @Nullable T identity, final BinaryOperator<T> accumulator){
         return new _Reduction<T>(identity, accumulator, true);
     }
 
@@ -67,14 +67,14 @@ public final class _Reduction<T> implements Consumer<T> {
         return new _Reduction<T>(null, accumulator, false);
     }
 
-    private _Reduction(@Nullable final T identity, final @NonNull BinaryOperator<T> accumulator, final boolean initialized) {
+    private _Reduction(final @Nullable T identity, final @NonNull BinaryOperator<T> accumulator, final boolean initialized) {
         this.initialized = initialized;
         this.result = identity;
         this.accumulator = accumulator;
     }
 
     @Override
-    public void accept(@Nullable final T next) {
+    public void accept(final @Nullable T next) {
         if(!initialized) {
             result = next;
             initialized = true;

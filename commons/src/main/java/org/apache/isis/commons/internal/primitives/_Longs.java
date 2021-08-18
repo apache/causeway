@@ -169,7 +169,7 @@ public class _Longs {
      * @implNote Copied over from JDK's {@link Integer#parseInt(String)} to provide a variant
      * with minimum potential heap pollution (does not produce stack-traces on parsing failures)
      */
-    public OptionalLong parseLong(@Nullable final String s, final int radix, final @NonNull Consumer<String> onFailure) {
+    public OptionalLong parseLong(final @Nullable String s, final int radix, final @NonNull Consumer<String> onFailure) {
 
         if (s == null) {
             onFailure.accept("null");

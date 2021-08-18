@@ -45,7 +45,7 @@ public class DnEntityStateProvider implements JdoFacetContext {
     }
 
     @Override
-    public boolean isPersistenceEnhanced(@Nullable final Class<?> cls) {
+    public boolean isPersistenceEnhanced(final @Nullable Class<?> cls) {
         if(cls==null) {
             return false;
         }
@@ -53,7 +53,7 @@ public class DnEntityStateProvider implements JdoFacetContext {
     }
 
     @Override
-    public boolean isMethodProvidedByEnhancement(@Nullable final Method method) {
+    public boolean isMethodProvidedByEnhancement(final @Nullable Method method) {
         if(method==null) {
             return false;
         }

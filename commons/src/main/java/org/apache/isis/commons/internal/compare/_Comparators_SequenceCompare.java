@@ -37,8 +37,8 @@ final class _Comparators_SequenceCompare {
     private _Comparators_SequenceCompare(){}
 
     public static int compareNullLast(
-            @Nullable final String sequence1,
-            @Nullable final String sequence2,
+            final @Nullable String sequence1,
+            final @Nullable String sequence2,
             final String separator) {
 
         if(_Strings.isEmpty(separator))

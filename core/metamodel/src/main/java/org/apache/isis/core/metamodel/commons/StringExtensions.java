@@ -242,7 +242,7 @@ public final class StringExtensions {
      *
      * @param extendee
      */
-    public static String normalized(@Nullable final String extendee) {
+    public static String normalized(final @Nullable String extendee) {
         return _Strings.asNormalized.apply(extendee);
     }
 

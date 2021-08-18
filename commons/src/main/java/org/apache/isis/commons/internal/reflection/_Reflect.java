@@ -135,7 +135,7 @@ public final class _Reflect {
      * @param ignoreAccess - whether to include non-public members
      */
     public static Stream<Field> streamFields(
-            @Nullable final Class<?> type,
+            final @Nullable Class<?> type,
             final boolean ignoreAccess) {
 
         if(type==null) {
@@ -153,7 +153,7 @@ public final class _Reflect {
      * @param ignoreAccess - whether to include non-public members
      */
     public static Stream<Field> streamAllFields(
-            @Nullable final Class<?> type,
+            final @Nullable Class<?> type,
             final boolean ignoreAccess) {
 
         return streamTypeHierarchy(type, InterfacePolicy.EXCLUDE) // interfaces don't have fields
@@ -169,7 +169,7 @@ public final class _Reflect {
      * @return non-null
      */
     public static Stream<Method> streamMethods(
-            @Nullable final Class<?> type,
+            final @Nullable Class<?> type,
             final boolean ignoreAccess) {
 
         if(type==null) {
@@ -188,7 +188,7 @@ public final class _Reflect {
      * @return non-null
      */
     public static Stream<Method> streamAllMethods(
-            @Nullable final Class<?> type,
+            final @Nullable Class<?> type,
             final boolean ignoreAccess
             ) {
 
@@ -211,7 +211,7 @@ public final class _Reflect {
      * @return non-null
      */
     public static Stream<Class<?>> streamTypeHierarchy(
-            @Nullable final Class<?> type,
+            final @Nullable Class<?> type,
             final InterfacePolicy interfacePolicy) {
 
         val includeInterfaces = interfacePolicy == InterfacePolicy.INCLUDE;
@@ -356,7 +356,7 @@ public final class _Reflect {
      * @param annotationName - fully qualified class name of the {@link Annotation} to match against
      * @return false - if any of the arguments is null
      */
-    public static boolean containsAnnotation(@Nullable final Class<?> cls, @Nullable final String annotationName) {
+    public static boolean containsAnnotation(final @Nullable Class<?> cls, final @Nullable String annotationName) {
         if(cls==null || _Strings.isEmpty(annotationName)) {
             return false;
         }
@@ -545,7 +545,7 @@ public final class _Reflect {
             };
         }
 
-        public static Predicate<Executable> paramAssignableFromValue(final int paramIndex, @Nullable final Object value) {
+        public static Predicate<Executable> paramAssignableFromValue(final int paramIndex, final @Nullable Object value) {
             if(value==null) {
                 return _Predicates.alwaysTrue();
             }

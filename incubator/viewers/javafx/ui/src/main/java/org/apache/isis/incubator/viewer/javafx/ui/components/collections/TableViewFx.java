@@ -117,7 +117,7 @@ public class TableViewFx extends VBox {
     private TableViewFx(
             final @NonNull UiContextFx uiContext,
             final @NonNull ObjectSpecification elementSpec,
-            @Nullable final Can<ManagedObject> objects,
+            final @Nullable Can<ManagedObject> objects,
             final @NonNull Where where) {
 
         val objectGrid = new TableView<ManagedObject>();

@@ -179,7 +179,7 @@ public final class _Maps {
     // -- TRANSFORMATIONS
 
     public static <K, V0, V1> Map<K, V1> mapValues(
-            @Nullable final Map<K, V0> input,
+            final @Nullable Map<K, V0> input,
             final @NonNull Supplier<Map<K, V1>> mapFactory,
             final @NonNull Function<V0, V1> valueMapper) {
 
@@ -196,7 +196,7 @@ public final class _Maps {
 
 
     public static <K, V> Map<K, V> filterKeys(
-            @Nullable final Map<K, V> input,
+            final @Nullable Map<K, V> input,
             final @NonNull Predicate<K> keyFilter,
             final @NonNull Supplier<Map<K, V>> factory) {
 

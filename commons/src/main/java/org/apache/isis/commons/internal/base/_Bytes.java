@@ -55,7 +55,7 @@ public final class _Bytes {
      * @return null if {@code input} is null
      * @throws IOException
      */
-    public static byte[] of(@Nullable final InputStream input) throws IOException {
+    public static byte[] of(final @Nullable InputStream input) throws IOException {
         if(input==null) {
             return null;
         }
@@ -80,7 +80,7 @@ public final class _Bytes {
      * @return null if {@code input} is null
      * @throws IOException
      */
-    public static byte[] ofKeepOpen(@Nullable final InputStream input) throws IOException {
+    public static byte[] ofKeepOpen(final @Nullable InputStream input) throws IOException {
         if(input==null) {
             return null;
         }
@@ -105,7 +105,7 @@ public final class _Bytes {
      * @param bytes to be prepended to {@code target}
      * @return bytes + target, or null if both {@code target} and {@code bytes} are null
      */
-    public static final byte[] prepend(@Nullable final byte[] target, @Nullable final byte ... bytes) {
+    public static final byte[] prepend(final @Nullable byte[] target, final @Nullable byte ... bytes) {
         if(target==null) {
             if(bytes==null) {
                 return null;
@@ -127,7 +127,7 @@ public final class _Bytes {
      * @param bytes to be appended to {@code target}
      * @return target + bytes, or null if both {@code target} and {@code bytes} are null
      */
-    public static final byte[] append(@Nullable final byte[] target, @Nullable final byte ... bytes) {
+    public static final byte[] append(final @Nullable byte[] target, final @Nullable byte ... bytes) {
         if(target==null) {
             if(bytes==null) {
                 return null;
@@ -152,7 +152,7 @@ public final class _Bytes {
      * @param input
      * @return null if {@code input} is null
      */
-    public static final byte[] encodeToBase64(final @NonNull Base64.Encoder encoder, @Nullable final byte[] input) {
+    public static final byte[] encodeToBase64(final @NonNull Base64.Encoder encoder, final @Nullable byte[] input) {
         return input!=null ? encoder.encode(input) : null;
     }
 
@@ -163,7 +163,7 @@ public final class _Bytes {
      * @param base64
      * @return null if {@code base64} is null
      */
-    public static final byte[] decodeBase64(final @NonNull Base64.Decoder decoder, @Nullable final byte[] base64) {
+    public static final byte[] decodeBase64(final @NonNull Base64.Decoder decoder, final @Nullable byte[] base64) {
         return base64!=null ? decoder.decode(base64) : null;
     }
 
@@ -176,7 +176,7 @@ public final class _Bytes {
      * @param input
      * @return null if {@code input} is null
      */
-    public static final byte[] compress(@Nullable final byte[] input) {
+    public static final byte[] compress(final @Nullable byte[] input) {
         if(input==null) {
             return null;
         }
@@ -197,7 +197,7 @@ public final class _Bytes {
      * @param compressed
      * @return null if {@code compressed} is null
      */
-    public static final byte[] decompress(@Nullable final byte[] compressed) {
+    public static final byte[] decompress(final @Nullable byte[] compressed) {
         if(compressed==null) {
             return null;
         }

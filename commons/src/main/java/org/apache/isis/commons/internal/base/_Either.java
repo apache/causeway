@@ -62,11 +62,11 @@ public final class _Either<L, R> {
         return of(null, right, false);
     }
 
-    public static <L, R> _Either<L, R> leftNullable(@Nullable final L left) {
+    public static <L, R> _Either<L, R> leftNullable(final @Nullable L left) {
         return of(left, null, true);
     }
 
-    public static <L, R> _Either<L, R> rightNullable(@Nullable final R right) {
+    public static <L, R> _Either<L, R> rightNullable(final @Nullable R right) {
         return of(null, right, false);
     }
 

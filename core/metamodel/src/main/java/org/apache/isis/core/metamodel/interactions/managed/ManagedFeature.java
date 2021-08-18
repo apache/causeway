@@ -58,7 +58,7 @@ public interface ManagedFeature {
      * @return Optionally the feature's facet of the specified {@code facetType}
      * (as per the type it reports from {@link Facet#facetType()}), based on existence.
      */
-    default <T extends Facet> Optional<T> getFacet(@Nullable final Class<T> facetType) {
+    default <T extends Facet> Optional<T> getFacet(final @Nullable Class<T> facetType) {
         return facetType!=null
                 ? Optional.ofNullable(getMetaModel().getFacet(facetType))
                 : Optional.empty();
@@ -69,13 +69,13 @@ public interface ManagedFeature {
      * @return Whether there exists a facet for this feature, that is of the
      * specified {@code facetType} (as per the type it reports from {@link Facet#facetType()}).
      */
-    default <T extends Facet> boolean hasFacet(@Nullable final Class<T> facetType) {
+    default <T extends Facet> boolean hasFacet(final @Nullable Class<T> facetType) {
         return facetType!=null
                 ? getMetaModel().getFacet(facetType)!=null
                 : false;
     }
 
-    default <T extends Facet> T getFacetElseFail(@Nullable final Class<T> facetType) {
+    default <T extends Facet> T getFacetElseFail(final @Nullable Class<T> facetType) {
         return getFacet(facetType)
                 .orElseThrow(()->_Exceptions
                         .noSuchElement("Feature %s has no such facet %s",

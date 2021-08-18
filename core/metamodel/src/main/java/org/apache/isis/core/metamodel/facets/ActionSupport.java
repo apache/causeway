@@ -192,7 +192,7 @@ public final class ActionSupport {
     private static Class<?>[] concat(
             final Class<?>[] paramTypes,
             final int paramsConsidered,
-            @Nullable final Class<?> additionalParamType) {
+            final @Nullable Class<?> additionalParamType) {
 
         if(paramsConsidered>paramTypes.length) {
             val msg = String.format("paramsConsidered %d exceeds size of paramTypes %d",

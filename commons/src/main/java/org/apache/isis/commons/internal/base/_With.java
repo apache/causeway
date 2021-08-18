@@ -58,7 +58,7 @@ public final class _With<T> {
      * @param orElse (nullable)
      * @return {@code obj!=null ? obj : orElse}
      */
-    public static <X> X ifPresentElse(@Nullable final X obj, @Nullable final X orElse) {
+    public static <X> X ifPresentElse(final @Nullable X obj, final @Nullable X orElse) {
         return obj!=null ? obj : orElse;
     }
 
@@ -68,7 +68,7 @@ public final class _With<T> {
      * @param elseGet
      * @return {@code obj!=null ? obj : elseGet.get()}
      */
-    public static <X> X ifPresentElseGet(@Nullable final X obj, final Supplier<X> elseGet) {
+    public static <X> X ifPresentElseGet(final @Nullable X obj, final Supplier<X> elseGet) {
         return obj!=null ? obj : requires(elseGet, "elseGet").get();
     }
 
@@ -80,7 +80,7 @@ public final class _With<T> {
      * @throws E
      */
     public static <X, E extends Exception> X ifPresentElseThrow(
-            @Nullable final X obj,
+            final @Nullable X obj,
             final Supplier<E> elseThrow)
                     throws E {
         if(obj!=null) {
@@ -97,7 +97,7 @@ public final class _With<T> {
      * @param consumer
      * @return {@code obj}
      */
-    public static <X> X accept(@Nullable final X obj, final Consumer<X> consumer) {
+    public static <X> X accept(final @Nullable X obj, final Consumer<X> consumer) {
         requires(consumer, "consumer").accept(obj);
         return obj;
     }
@@ -108,7 +108,7 @@ public final class _With<T> {
      * @param ifPresent
      * @return {@code obj}
      */
-    public static <X> X acceptIfPresent(@Nullable final X obj, final Consumer<X> ifPresent) {
+    public static <X> X acceptIfPresent(final @Nullable X obj, final Consumer<X> ifPresent) {
         if(obj!=null) {
             requires(ifPresent, "ifPresent").accept(obj);
         }
@@ -123,7 +123,7 @@ public final class _With<T> {
      * @param elseRun
      * @return {@code obj}
      */
-    public static <X> X acceptIfPresentElseRun(@Nullable final X obj, final Consumer<X> ifPresent, final Runnable elseRun) {
+    public static <X> X acceptIfPresentElseRun(final @Nullable X obj, final Consumer<X> ifPresent, final Runnable elseRun) {
         if(obj!=null) {
             requires(ifPresent, "ifPresent").accept(obj);
         } else {
@@ -142,7 +142,7 @@ public final class _With<T> {
      * @throws E
      */
     public static <X, E extends Exception> X acceptIfPresentElseThrow(
-            @Nullable final X obj, final Consumer<X> ifPresent, final Supplier<E> elseThrow)
+            final @Nullable X obj, final Consumer<X> ifPresent, final Supplier<E> elseThrow)
                     throws E {
 
         if(obj!=null) {
@@ -160,7 +160,7 @@ public final class _With<T> {
      * @param supplier
      * @return {@code obj!=null ? obj : supplier.get()}
      */
-    public static <X> X computeIfAbsent(@Nullable final X obj, final Supplier<X> supplier) {
+    public static <X> X computeIfAbsent(final @Nullable X obj, final Supplier<X> supplier) {
         return obj!=null ? obj : requires(supplier, "supplier").get();
     }
 
@@ -173,7 +173,7 @@ public final class _With<T> {
      * @param orElse (nullable)
      * @return {@code obj!=null ? mapper.apply(obj) : orElse}
      */
-    public static <X, R> R mapIfPresentElse(@Nullable final X obj, final Function<X, R> mapper, @Nullable final R orElse) {
+    public static <X, R> R mapIfPresentElse(final @Nullable X obj, final Function<X, R> mapper, final @Nullable R orElse) {
         return obj!=null ? requires(mapper, "mapper").apply(obj) : orElse;
     }
 
@@ -184,7 +184,7 @@ public final class _With<T> {
      * @param elseGet
      * @return {@code obj!=null ? mapper.apply(obj) : elseGet.get()}
      */
-    public static <X, R> R mapIfPresentElseGet(@Nullable final X obj, final Function<X, R> mapper, final Supplier<R> elseGet) {
+    public static <X, R> R mapIfPresentElseGet(final @Nullable X obj, final Function<X, R> mapper, final Supplier<R> elseGet) {
         return obj!=null ? requires(mapper, "mapper").apply(obj) : requires(elseGet, "elseGet").get();
     }
 
@@ -197,7 +197,7 @@ public final class _With<T> {
      * @throws E
      */
     public static <X, R, E extends Exception> R mapIfPresentElseThrow(
-            @Nullable final X obj,
+            final @Nullable X obj,
             final Function<X, R> mapper,
             final Supplier<E> elseThrow)
                     throws E {
@@ -219,7 +219,7 @@ public final class _With<T> {
      * or {@link java.util.Objects#requireNonNull(Object, String)} on fields
      */
     @Deprecated
-    public static <T> T requires(@Nullable final T obj, final String paramName) {
+    public static <T> T requires(final @Nullable T obj, final String paramName) {
         if (obj == null) {
             val msg = String.format("Parameter/Field '%s' is required to be present (not null).", paramName);
             throw new IllegalArgumentException(msg);
@@ -237,7 +237,7 @@ public final class _With<T> {
      * @throws NullPointerException if {@code obj} is {@code null}
      * @throws IllegalArgumentException if {@code obj} is 'empty'
      */
-    public static String requiresNotEmpty(@Nullable final String obj, final String paramName) {
+    public static String requiresNotEmpty(final @Nullable String obj, final String paramName) {
         if (obj == null) {
             throw new NullPointerException(String.format("Parameter/Field '%s' is required to be present (not null).", paramName));
         }

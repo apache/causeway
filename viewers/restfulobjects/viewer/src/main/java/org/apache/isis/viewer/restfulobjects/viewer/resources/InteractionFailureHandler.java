@@ -32,7 +32,7 @@ import lombok.val;
 public class InteractionFailureHandler {
 
     public static RestfulObjectsApplicationException onFailure(
-            @Nullable final InteractionVeto veto) {
+            final @Nullable InteractionVeto veto) {
 
         if(veto==null) {
             return RestfulObjectsApplicationException

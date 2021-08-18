@@ -61,7 +61,7 @@ public final class _Exceptions {
      * @param _case the unmatched case to be reported
      * @return new IllegalArgumentException
      */
-    public static final IllegalArgumentException unmatchedCase(@Nullable final Object _case) {
+    public static final IllegalArgumentException unmatchedCase(final @Nullable Object _case) {
         return new IllegalArgumentException("internal error: unmatched case in switch statement: "+_case);
     }
 
@@ -113,7 +113,7 @@ public final class _Exceptions {
 
     public static final NoSuchElementException noSuchElement(
             final @NonNull String format,
-            @Nullable final Object ...args) {
+            final @Nullable Object ...args) {
         return noSuchElement(String.format(format, args));
     }
 
@@ -276,7 +276,7 @@ public final class _Exceptions {
 
     // -- STACKTRACE UTILITITIES
 
-    public static final Stream<String> streamStacktraceLines(@Nullable final Throwable ex, final int maxLines) {
+    public static final Stream<String> streamStacktraceLines(final @Nullable Throwable ex, final int maxLines) {
         if(ex==null) {
             return Stream.empty();
         }
@@ -285,16 +285,16 @@ public final class _Exceptions {
                 .limit(maxLines);
     }
 
-    public static final String asStacktrace(@Nullable final Throwable ex, final int maxLines, final String delimiter) {
+    public static final String asStacktrace(final @Nullable Throwable ex, final int maxLines, final String delimiter) {
         return _Exceptions.streamStacktraceLines(ex, maxLines)
                 .collect(Collectors.joining(delimiter));
     }
 
-    public static final String asStacktrace(@Nullable final Throwable ex, final int maxLines) {
+    public static final String asStacktrace(final @Nullable Throwable ex, final int maxLines) {
         return asStacktrace(ex, maxLines, "\n");
     }
 
-    public static final String asStacktrace(@Nullable final Throwable ex) {
+    public static final String asStacktrace(final @Nullable Throwable ex) {
         return asStacktrace(ex, 1000);
     }
 
@@ -318,7 +318,7 @@ public final class _Exceptions {
 
     // -- CAUSAL CHAIN
 
-    public static List<Throwable> getCausalChain(@Nullable final Throwable ex) {
+    public static List<Throwable> getCausalChain(final @Nullable Throwable ex) {
         if(ex==null) {
             return Collections.emptyList();
         }
@@ -331,7 +331,7 @@ public final class _Exceptions {
         return chain;
     }
 
-    public static Stream<Throwable> streamCausalChain(@Nullable final Throwable ex) {
+    public static Stream<Throwable> streamCausalChain(final @Nullable Throwable ex) {
         if(ex==null) {
             return Stream.empty();
         }
@@ -339,7 +339,7 @@ public final class _Exceptions {
         return chain.stream();
     }
 
-    public static Throwable getRootCause(@Nullable final Throwable ex) {
+    public static Throwable getRootCause(final @Nullable Throwable ex) {
         return _Lists.lastElementIfAny(getCausalChain(ex));
     }
 

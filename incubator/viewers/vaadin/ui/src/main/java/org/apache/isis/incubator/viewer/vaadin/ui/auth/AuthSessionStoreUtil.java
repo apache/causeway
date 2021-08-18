@@ -42,7 +42,7 @@ public class AuthSessionStoreUtil {
 
     public static void put(
             final @NonNull HttpSession httpSession,
-            @Nullable final InteractionContext auth) {
+            final @Nullable InteractionContext auth) {
         httpSession.setAttribute(InteractionContext.class.getName(), auth);
     }
 
@@ -55,7 +55,7 @@ public class AuthSessionStoreUtil {
 
     /** when within a VaadinSession */
     public static void put(
-            @Nullable final InteractionContext auth) {
+            final @Nullable InteractionContext auth) {
         Optional.ofNullable(VaadinSession.getCurrent())
         .map(VaadinSession::getSession)
         .ifPresent(sessionVaa->{

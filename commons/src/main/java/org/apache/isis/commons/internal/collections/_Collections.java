@@ -206,7 +206,7 @@ public final class _Collections {
      * @return a collector that collects elements of a stream into an unmodifiable SortedSet
      */
     public static <T> Collector<T, SortedSet<T>, SortedSet<T>> toUnmodifiableSortedSet(
-            @Nullable final Comparator<T> comparator) {
+            final @Nullable Comparator<T> comparator) {
 
         if(comparator==null) {
             return toUnmodifiableSortedSet();
@@ -255,7 +255,7 @@ public final class _Collections {
      * @return
      */
     static <T, R> R collectFromIterable(
-            @Nullable final Iterable<T> iterable,
+            final @Nullable Iterable<T> iterable,
             final Function<Collection<T>, R> factory,
             final Supplier<Collector<T, ?, R>> elementCollector) {
 
@@ -335,7 +335,7 @@ public final class _Collections {
                 .collect(Collectors.joining(delimiter));
     }
 
-    public static String toStringJoiningNewLine(@Nullable final Collection<?> collection) {
+    public static String toStringJoiningNewLine(final @Nullable Collection<?> collection) {
         return toStringJoining(collection, "\n");
     }
 

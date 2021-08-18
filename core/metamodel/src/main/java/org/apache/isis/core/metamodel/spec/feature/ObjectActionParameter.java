@@ -219,7 +219,7 @@ extends ObjectFeature, CurrentHolder {
             }
 
             @Override
-            public boolean test(@Nullable final ObjectActionParameter objectActionParameter) {
+            public boolean test(final @Nullable ObjectActionParameter objectActionParameter) {
                 if (!(objectActionParameter instanceof OneToManyActionParameter)) {
                     return false;
                 }
@@ -250,7 +250,7 @@ extends ObjectFeature, CurrentHolder {
             }
 
             @Override
-            public boolean test(@Nullable final ObjectActionParameter objectActionParameter) {
+            public boolean test(final @Nullable ObjectActionParameter objectActionParameter) {
                 if (!(objectActionParameter instanceof OneToOneActionParameter)) {
                     return false;
                 }

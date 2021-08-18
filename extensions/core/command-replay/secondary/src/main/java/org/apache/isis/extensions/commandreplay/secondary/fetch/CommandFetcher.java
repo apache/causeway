@@ -67,7 +67,7 @@ public class CommandFetcher {
      * @throws StatusException
      */
     public List<CommandDto> fetchCommand(
-            @Nullable final CommandModel previousHwmIfAny)
+            final @Nullable CommandModel previousHwmIfAny)
             throws StatusException {
 
         log.debug("finding command on primary ...");

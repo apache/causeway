@@ -122,7 +122,7 @@ final class Can_Singleton<T> implements Can<T> {
     }
 
     @Override
-    public Can<T> filter(@Nullable final Predicate<? super T> predicate) {
+    public Can<T> filter(final @Nullable Predicate<? super T> predicate) {
         if(predicate==null) {
             return this; // identity
         }

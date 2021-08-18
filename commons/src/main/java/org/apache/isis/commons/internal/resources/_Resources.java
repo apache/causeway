@@ -128,7 +128,7 @@ public final class _Resources {
      * @param extendee
      * @param suffix
      */
-    public static String combinePath(@Nullable final String extendee, @Nullable final String suffix) {
+    public static String combinePath(final @Nullable String extendee, final @Nullable String suffix) {
         return _Strings.combineWithDelimiter(extendee, suffix, "/");
     }
 

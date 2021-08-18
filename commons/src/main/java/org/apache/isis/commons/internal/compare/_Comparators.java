@@ -42,8 +42,8 @@ public final class _Comparators {
     private static final String DEWEY_SEPERATOR = ".";
 
     public static int deweyOrderCompare(
-            @Nullable final String sequence1,
-            @Nullable final String sequence2) {
+            final @Nullable String sequence1,
+            final @Nullable String sequence2) {
         return _Comparators_SequenceCompare.compareNullLast(sequence1, sequence2, DEWEY_SEPERATOR);
     }
 

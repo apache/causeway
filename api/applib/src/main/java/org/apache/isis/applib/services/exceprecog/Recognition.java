@@ -46,8 +46,8 @@ public class Recognition {
      * @return optionally a recognition of the specified type, based on a whether given reason is non-null
      */
     public static Optional<Recognition> of(
-            @Nullable final Category category,
-            @Nullable final String reason) {
+            final @Nullable Category category,
+            final @Nullable String reason) {
 
         if (reason == null) {
             return Optional.empty();

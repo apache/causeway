@@ -180,7 +180,7 @@ public class ParameterNegotiationModel {
         paramModels.getElseFail(paramNr).getBindableParamValue().setValue(newParamValue);
     }
 
-    @NonNull public ManagedObject adaptParamValuePojo(final int paramNr, @Nullable final Object newParamValuePojo) {
+    @NonNull public ManagedObject adaptParamValuePojo(final int paramNr, final @Nullable Object newParamValuePojo) {
         val paramMeta = getParamMetamodel(paramNr);
         val paramSpec = paramMeta.getSpecification();
         val paramValue = newParamValuePojo!=null

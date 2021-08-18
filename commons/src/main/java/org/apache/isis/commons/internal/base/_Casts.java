@@ -43,7 +43,7 @@ public final class _Casts {
     private _Casts(){}
 
     @SuppressWarnings("unchecked")
-    public static <T> T uncheckedCast(@Nullable final Object obj) {
+    public static <T> T uncheckedCast(final @Nullable Object obj) {
         return (T) obj;
     }
 
@@ -56,7 +56,7 @@ public final class _Casts {
      * @param cls
      * @return non-null
      */
-    public static <T> Optional<T> castTo(@Nullable final Object value, final @NonNull Class<T> cls) {
+    public static <T> Optional<T> castTo(final @Nullable Object value, final @NonNull Class<T> cls) {
         if(value==null) {
             return Optional.empty();
         }
@@ -74,7 +74,7 @@ public final class _Casts {
      * @param cls
      * @return casted value, or null
      */
-    public static @Nullable <T> T castToOrElseNull(@Nullable final Object value, final @NonNull Class<T> cls) {
+    public static @Nullable <T> T castToOrElseNull(final @Nullable Object value, final @NonNull Class<T> cls) {
         if(value==null) {
             return null;
         }
@@ -96,8 +96,8 @@ public final class _Casts {
      * @param onNonCast
      */
     public static <T, R, U, V> R castThenApply(
-            @Nullable final U left,
-            @Nullable final V right,
+            final @Nullable U left,
+            final @Nullable V right,
             final @NonNull Class<T> cls,
             final BiFunction<T, T, R> onBothCast,
             final BiFunction<T, V, R> onLeftCast,

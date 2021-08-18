@@ -181,7 +181,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @param element
      * @return non-null
      */
-    public static <T> Can<T> ofNullable(@Nullable final T element) {
+    public static <T> Can<T> ofNullable(final @Nullable T element) {
         if(element==null) {
             return empty();
         }
@@ -220,7 +220,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @param array
      * @return non-null
      */
-    public static <T> Can<T> ofArray(@Nullable final T[] array) {
+    public static <T> Can<T> ofArray(final @Nullable T[] array) {
 
         if(_NullSafe.size(array)==0) {
             return empty();
@@ -258,7 +258,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @param collection
      * @return non-null
      */
-    public static <T> Can<T> ofCollection(@Nullable final Collection<T> collection) {
+    public static <T> Can<T> ofCollection(final @Nullable Collection<T> collection) {
 
         if(_NullSafe.size(collection)==0) {
             return empty();
@@ -295,7 +295,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @param iterable
      * @return non-null
      */
-    public static <T> Can<T> ofIterable(@Nullable final Iterable<T> iterable) {
+    public static <T> Can<T> ofIterable(final @Nullable Iterable<T> iterable) {
 
         if(iterable==null) {
             return empty();
@@ -317,7 +317,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @param enumeration
      * @return non-null
      */
-    public static <T> Can<T> ofEnumeration(@Nullable final Enumeration<T> enumeration) {
+    public static <T> Can<T> ofEnumeration(final @Nullable Enumeration<T> enumeration) {
 
         if(enumeration==null) {
             return empty();
@@ -340,7 +340,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @param stream
      * @return non-null
      */
-    public static <T> Can<T> ofStream(@Nullable final Stream<T> stream) {
+    public static <T> Can<T> ofStream(final @Nullable Stream<T> stream) {
 
         if(stream==null) {
             return empty();
@@ -371,7 +371,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @param instance
      * @return non-null
      */
-    public static <T> Can<T> ofInstance(@Nullable final Instance<T> instance) {
+    public static <T> Can<T> ofInstance(final @Nullable Instance<T> instance) {
         if(instance==null || instance.isUnsatisfied()) {
             return empty();
         }
@@ -446,7 +446,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @param element - nullable
      * @return non-null
      */
-    public static <T> Can<T> concat(@Nullable final Can<T> can, @Nullable final T element) {
+    public static <T> Can<T> concat(final @Nullable Can<T> can, final @Nullable T element) {
         if(can==null || can.isEmpty()) {
             return ofNullable(element);
         }

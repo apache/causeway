@@ -135,7 +135,7 @@ implements HasDynamicallyVisibleContent {
         // visibility needs to be determined at point of rendering, by ActionLink itself
         //
         //.filter(new Predicate<ObjectAction>() {
-        //    @Override public boolean apply(@Nullable final ObjectAction objectAction) {
+        //    @Override public boolean apply(final @Nullable ObjectAction objectAction) {
         //        final Consent visibility = objectAction
         //                .isVisible(getModel().getObject(), InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
         //        return visibility.isAllowed();

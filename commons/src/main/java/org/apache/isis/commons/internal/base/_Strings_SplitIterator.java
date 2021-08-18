@@ -33,7 +33,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
  */
 final class _Strings_SplitIterator {
 
-    public static Iterator<String> splitIterator(@Nullable final String x, final String delimiter){
+    public static Iterator<String> splitIterator(final @Nullable String x, final String delimiter){
         if(_Strings.isEmpty(delimiter)) {
             throw new IllegalArgumentException("a non empty delimiter is required");
         }

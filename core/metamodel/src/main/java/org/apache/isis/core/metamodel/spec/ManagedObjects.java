@@ -82,7 +82,7 @@ public final class ManagedObjects {
     // -- CATEGORISATION
 
     /** is null or has neither an ObjectSpecification and a value (pojo) */
-    public static boolean isNullOrUnspecifiedOrEmpty(@Nullable final ManagedObject adapter) {
+    public static boolean isNullOrUnspecifiedOrEmpty(final @Nullable ManagedObject adapter) {
         if(adapter==null || adapter==ManagedObject.unspecified()) {
             return true;
         }
@@ -90,7 +90,7 @@ public final class ManagedObjects {
     }
 
     /** whether has at least a spec */
-    public static boolean isSpecified(@Nullable final ManagedObject adapter) {
+    public static boolean isSpecified(final @Nullable ManagedObject adapter) {
         return adapter!=null && adapter!=ManagedObject.unspecified();
     }
 
@@ -98,7 +98,7 @@ public final class ManagedObjects {
      * @return whether the corresponding type can be mapped onto a REFERENCE (schema) or an Oid,
      * that is, the type is 'identifiable' (aka 'referencable' or 'bookmarkable')
      */
-    public static boolean isIdentifiable(@Nullable final ManagedObject managedObject) {
+    public static boolean isIdentifiable(final @Nullable ManagedObject managedObject) {
         return spec(managedObject)
                 .map(ObjectSpecification::isIdentifiable)
                 .orElse(false);
@@ -123,15 +123,15 @@ public final class ManagedObjects {
 
     // -- IDENTIFICATION
 
-    public static Optional<ObjectSpecification> spec(@Nullable final ManagedObject managedObject) {
+    public static Optional<ObjectSpecification> spec(final @Nullable ManagedObject managedObject) {
         return isSpecified(managedObject) ? Optional.of(managedObject.getSpecification()) : Optional.empty();
     }
 
-    public static Optional<Bookmark> bookmark(@Nullable final ManagedObject managedObject) {
+    public static Optional<Bookmark> bookmark(final @Nullable ManagedObject managedObject) {
         return isSpecified(managedObject) ? managedObject.getBookmark() : Optional.empty();
     }
 
-    public static Bookmark bookmarkElseFail(@Nullable final ManagedObject managedObject) {
+    public static Bookmark bookmarkElseFail(final @Nullable ManagedObject managedObject) {
         return bookmark(managedObject)
                 .orElseThrow(()->_Exceptions.illegalArgument("cannot identify %s", managedObject));
     }
@@ -141,12 +141,12 @@ public final class ManagedObjects {
      * @return optionally a String representing a reference to the <em>identifiable</em>
      * {@code managedObject}, usually made up of the object's type and its ID.
      */
-    public static Optional<String> stringify(@Nullable final ManagedObject managedObject) {
+    public static Optional<String> stringify(final @Nullable ManagedObject managedObject) {
         return bookmark(managedObject)
                 .map(Bookmark::stringify);
     }
 
-    public static String stringifyElseFail(@Nullable final ManagedObject managedObject) {
+    public static String stringifyElseFail(final @Nullable ManagedObject managedObject) {
         return stringify(managedObject)
                 .orElseThrow(()->_Exceptions.illegalArgument("cannot stringify %s", managedObject));
     }
@@ -159,14 +159,14 @@ public final class ManagedObjects {
      * {@code managedObject}, made of the form &lt;object-type&gt; &lt;separator&gt; &lt;object-id&gt;.
      */
     public static Optional<String> stringify(
-            @Nullable final ManagedObject managedObject,
+            final @Nullable ManagedObject managedObject,
             final @NonNull String separator) {
         return bookmark(managedObject)
                 .map(oid->oid.getLogicalTypeName() + separator + oid.getIdentifier());
     }
 
     public static String stringifyElseFail(
-            @Nullable final ManagedObject managedObject,
+            final @Nullable ManagedObject managedObject,
             final @NonNull String separator) {
         return stringify(managedObject, separator)
                 .orElseThrow(()->_Exceptions.illegalArgument("cannot stringify %s", managedObject));
@@ -175,7 +175,7 @@ public final class ManagedObjects {
 
     // -- COMPARE UTILITIES
 
-    public static int compare(@Nullable final ManagedObject p, @Nullable final ManagedObject q) {
+    public static int compare(final @Nullable ManagedObject p, final @Nullable ManagedObject q) {
         return NATURAL_NULL_FIRST.compare(p, q);
     }
 
@@ -198,7 +198,7 @@ public final class ManagedObjects {
     private static final Comparator<ManagedObject> NATURAL_NULL_FIRST = new Comparator<ManagedObject>(){
         @SuppressWarnings({"rawtypes" })
         @Override
-        public int compare(@Nullable final ManagedObject p, @Nullable final ManagedObject q) {
+        public int compare(final @Nullable ManagedObject p, final @Nullable ManagedObject q) {
             val pPojo = UnwrapUtil.single(p);
             val qPojo = UnwrapUtil.single(q);
             if(pPojo instanceof Comparable && qPojo instanceof Comparable) {
@@ -221,7 +221,7 @@ public final class ManagedObjects {
     // -- COPY UTILITIES
 
     @Nullable
-    public static ManagedObject copyIfClonable(@Nullable final ManagedObject adapter) {
+    public static ManagedObject copyIfClonable(final @Nullable ManagedObject adapter) {
 
         if(adapter==null) {
             return null;
@@ -290,7 +290,7 @@ public final class ManagedObjects {
      * are not empty
      */
     public static Optional<ObjectSpecification> commonSpecification(
-            @Nullable final Can<ManagedObject> objects) {
+            final @Nullable Can<ManagedObject> objects) {
 
         if (_NullSafe.isEmpty(objects)) {
             return Optional.empty();
@@ -321,7 +321,7 @@ public final class ManagedObjects {
 
     public static Can<ManagedObject> adaptMultipleOfType(
             @NonNull  final ObjectSpecification elementSpec,
-            @Nullable final Object collectionOrArray) {
+            final @Nullable Object collectionOrArray) {
 
         return _NullSafe.streamAutodetect(collectionOrArray)
         .map(pojo->ManagedObject.of(elementSpec, pojo)) // pojo is nullable here
@@ -333,7 +333,7 @@ public final class ManagedObjects {
      */
     public static Can<ManagedObject> adaptMultipleOfTypeThenAttachThenFilterByVisibility(
             @NonNull  final ObjectSpecification elementSpec,
-            @Nullable final Object collectionOrArray,
+            final @Nullable Object collectionOrArray,
             @NonNull  final InteractionInitiatedBy interactionInitiatedBy) {
 
         return _NullSafe.streamAutodetect(collectionOrArray)
@@ -363,7 +363,7 @@ public final class ManagedObjects {
     /**
      * eg. in order to prevent wrapping an object that is already wrapped
      */
-    public static void assertPojoNotManaged(@Nullable final Object pojo) {
+    public static void assertPojoNotManaged(final @Nullable Object pojo) {
         // can do this check only when the pojo is not null, otherwise is always considered valid
         if(pojo==null) {
             return;
@@ -539,7 +539,7 @@ public final class ManagedObjects {
     public static final class EntityUtil {
 
         @NonNull
-        public static Optional<PersistenceStandard> getPersistenceStandard(@Nullable final ManagedObject adapter) {
+        public static Optional<PersistenceStandard> getPersistenceStandard(final @Nullable ManagedObject adapter) {
             if(adapter==null) {
                 return Optional.empty();
             }
@@ -557,7 +557,7 @@ public final class ManagedObjects {
         }
 
         @NonNull
-        public static EntityState getEntityState(@Nullable final ManagedObject adapter) {
+        public static EntityState getEntityState(final @Nullable ManagedObject adapter) {
             if(isNullOrUnspecifiedOrEmpty(adapter)) {
                 return EntityState.NOT_PERSISTABLE;
             }
@@ -622,7 +622,7 @@ public final class ManagedObjects {
         }
 
         @Nullable
-        public static ManagedObject reattach(@Nullable final ManagedObject managedObject) {
+        public static ManagedObject reattach(final @Nullable ManagedObject managedObject) {
             if(isNullOrUnspecifiedOrEmpty(managedObject)) {
                 return managedObject;
             }
@@ -680,16 +680,16 @@ public final class ManagedObjects {
 
         // -- SHORTCUTS
 
-        public static boolean isAttached(@Nullable final ManagedObject adapter) {
+        public static boolean isAttached(final @Nullable ManagedObject adapter) {
             return EntityUtil.getEntityState(adapter).isAttached();
         }
 
-        public static boolean isDetachedOrRemoved(@Nullable final ManagedObject adapter) {
+        public static boolean isDetachedOrRemoved(final @Nullable ManagedObject adapter) {
             return EntityUtil.getEntityState(adapter).isDetachedOrRemoved();
         }
 
         /** only supported by JDO - always false with JPA */
-        public static boolean isRemoved(@Nullable final ManagedObject adapter) {
+        public static boolean isRemoved(final @Nullable ManagedObject adapter) {
             return EntityUtil.getEntityState(adapter).isRemoved();
         }
 
@@ -943,14 +943,14 @@ public final class ManagedObjects {
         // -- SINGLE
 
         @Nullable
-        public static Object single(@Nullable final ManagedObject adapter) {
+        public static Object single(final @Nullable ManagedObject adapter) {
             return ManagedObjects.isSpecified(adapter)
                     ? adapter.getPojo()
                     : null;
         }
 
         @Nullable
-        public static String singleAsStringOrElse(@Nullable final ManagedObject adapter, @Nullable final String orElse) {
+        public static String singleAsStringOrElse(final @Nullable ManagedObject adapter, final @Nullable String orElse) {
             final Object obj = UnwrapUtil.single(adapter);
             if (obj == null) {
                 return null;
@@ -970,13 +970,13 @@ public final class ManagedObjects {
         }
 
         @Nullable
-        public static Object[] multipleAsArray(@Nullable final Collection<ManagedObject> adapters) {
+        public static Object[] multipleAsArray(final @Nullable Collection<ManagedObject> adapters) {
             val unwrappedObjects = _Arrays.mapCollection(adapters, UnwrapUtil::single);
             return unwrappedObjects;
         }
 
         @Nullable
-        public static Object[] multipleAsArray(@Nullable final ManagedObject[] adapters) {
+        public static Object[] multipleAsArray(final @Nullable ManagedObject[] adapters) {
             val unwrappedObjects = _Arrays.map(adapters, UnwrapUtil::single);
             return unwrappedObjects;
         }
@@ -988,7 +988,7 @@ public final class ManagedObjects {
          * @param adapters
          * @return non-null, unmodifiable
          */
-        public static List<Object> multipleAsList(@Nullable final Collection<? extends ManagedObject> adapters) {
+        public static List<Object> multipleAsList(final @Nullable Collection<? extends ManagedObject> adapters) {
             if (adapters == null) {
                 return Collections.emptyList();
             }
@@ -1002,7 +1002,7 @@ public final class ManagedObjects {
          * @param adapters
          * @return non-null, unmodifiable
          */
-        public static List<Object> multipleAsList(@Nullable final Can<? extends ManagedObject> adapters) {
+        public static List<Object> multipleAsList(final @Nullable Can<? extends ManagedObject> adapters) {
             if (adapters == null) {
                 return Collections.emptyList();
             }
@@ -1017,7 +1017,7 @@ public final class ManagedObjects {
          * @param adapters
          * @return non-null, unmodifiable
          */
-        public static Set<Object> multipleAsSet(@Nullable final Collection<? extends ManagedObject> adapters) {
+        public static Set<Object> multipleAsSet(final @Nullable Collection<? extends ManagedObject> adapters) {
             if (adapters == null) {
                 return Collections.emptySet();
             }

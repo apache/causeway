@@ -254,7 +254,7 @@ public class _Ints {
      * with minimum potential heap pollution (does not produce stack-traces on parsing failures)
      */
     private static long parseIntElseLongMaxValue(
-            @Nullable final String s,
+            final @Nullable String s,
             final int radix,
             final @NonNull Consumer<String> onFailure) {
 

@@ -381,8 +381,8 @@ public class _Multimaps {
      * @return TreeMap of TreeSets
      */
     public static <K, V> SetMultimap<K, V> newSortedSetMultimap(
-            @Nullable final Comparator<K> keyComparator,
-            @Nullable final Comparator<V> elementComparator){
+            final @Nullable Comparator<K> keyComparator,
+            final @Nullable Comparator<V> elementComparator){
 
         final Supplier<SortedMap<K, SortedSet<V>>> mapFactory = ()->new TreeMap<K, SortedSet<V>>(keyComparator);
         final Supplier<SortedSet<V>> elementSetFactory = ()->new TreeSet<V>(elementComparator);

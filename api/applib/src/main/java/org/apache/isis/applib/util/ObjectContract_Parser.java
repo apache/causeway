@@ -51,7 +51,7 @@ class ObjectContract_Parser<T> {
      * @param propertyNames
      */
     @SuppressWarnings("unchecked")
-    public static <T> ObjectContract<T> parse(Class<T> cls, @Nullable final String propertyNames) {
+    public static <T> ObjectContract<T> parse(Class<T> cls, final @Nullable String propertyNames) {
 
         Objects.requireNonNull(cls);
 

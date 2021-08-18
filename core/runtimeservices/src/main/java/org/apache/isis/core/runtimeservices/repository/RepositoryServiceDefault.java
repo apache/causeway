@@ -80,7 +80,7 @@ public class RepositoryServiceDefault implements RepositoryService {
     }
 
     @Override
-    public EntityState getEntityState(@Nullable final Object object) {
+    public EntityState getEntityState(final @Nullable Object object) {
         val adapter = objectManager.adapt(unwrapped(object));
         return EntityUtil.getEntityState(adapter);
     }

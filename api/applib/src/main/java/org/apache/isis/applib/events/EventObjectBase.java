@@ -39,7 +39,7 @@ public abstract class EventObjectBase<T> {
      *
      * @param    source    The object on which the Event initially occurred.
      */
-    protected EventObjectBase(@Nullable final T source) {
+    protected EventObjectBase(final @Nullable T source) {
         this.source = source;
     }
 

@@ -59,7 +59,7 @@ public class WebAppContextPath implements Serializable {
      * @param contextPath - any form allowed: leading or trailing '/',
      * no matter what, gets normalized
      */
-    public void setContextPath(@Nullable final String contextPath) {
+    public void setContextPath(final @Nullable String contextPath) {
         this.contextPath = normalizeContextPath(contextPath);
     }
 
@@ -74,7 +74,7 @@ public class WebAppContextPath implements Serializable {
      * @param localPath - last part of an URL to be prefixed (nullable)
      * @return (non-null)
      */
-    public String prependContextPath(@Nullable final String localPath) {
+    public String prependContextPath(final @Nullable String localPath) {
         if(localPath==null) {
             return getContextPath();
         }
@@ -89,7 +89,7 @@ public class WebAppContextPath implements Serializable {
      * identity operator otherwise
      */
     @Nullable
-    public String prependContextPathIfLocal(@Nullable final String urlOrLocalPath) {
+    public String prependContextPathIfLocal(final @Nullable String urlOrLocalPath) {
         if(urlOrLocalPath==null) {
             return null;
         }
@@ -110,7 +110,7 @@ public class WebAppContextPath implements Serializable {
     /**
      * make sure result is either empty or has a leading slash followed by a non-empty string
      */
-    private String normalizeContextPath(@Nullable final String contextPath) {
+    private String normalizeContextPath(final @Nullable String contextPath) {
         if(contextPath == null) {
             return "";
         }
@@ -127,7 +127,7 @@ public class WebAppContextPath implements Serializable {
     }
 
     @Nullable
-    private String ensureLeadingSlash(@Nullable final String url) {
+    private String ensureLeadingSlash(final @Nullable String url) {
         if(url==null || url.length()<2) {
             return url;
         }

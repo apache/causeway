@@ -106,7 +106,7 @@ class _Mementos_MementoDefault implements _Mementos.Memento {
 
     // -- PARSER
 
-    static Memento parse(final @NonNull EncoderDecoder codec, final SerializingAdapter serializer, @Nullable final String str) {
+    static Memento parse(final @NonNull EncoderDecoder codec, final SerializingAdapter serializer, final @Nullable String str) {
         if(_NullSafe.isEmpty(str)) {
             return null;
         }

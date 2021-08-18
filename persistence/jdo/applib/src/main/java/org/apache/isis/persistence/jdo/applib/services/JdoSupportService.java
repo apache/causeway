@@ -104,7 +104,7 @@ public interface JdoSupportService {
      *     </pre>
      * </p>
      */
-    <T> List<T> executeQuery(final Class<T> cls, @Nullable final BooleanExpression filter);
+    <T> List<T> executeQuery(final Class<T> cls, final @Nullable BooleanExpression filter);
 
     default <T> List<T> executeQuery(final Class<T> cls) {
         return executeQuery(cls, null);
@@ -126,7 +126,7 @@ public interface JdoSupportService {
      *     </pre>
      * </p>
      */
-    <T> T executeQueryUnique(final Class<T> cls, @Nullable final BooleanExpression filter);
+    <T> T executeQueryUnique(final Class<T> cls, final @Nullable BooleanExpression filter);
 
     default <T> T executeQueryUnique(final Class<T> cls) {
         return executeQueryUnique(cls, null);

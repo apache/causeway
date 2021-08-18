@@ -138,7 +138,7 @@ public interface ManagedObject {
      */
     public static ManagedObject of(
             final @NonNull ObjectSpecification specification,
-            @Nullable final Object pojo) {
+            final @Nullable Object pojo) {
 
         ManagedObjects.assertPojoNotManaged(pojo);
         specification.assertPojoCompatible(pojo);
@@ -216,7 +216,7 @@ public interface ManagedObject {
 
         public static ManagedObject identified(
                 @NonNull  final ObjectSpecification spec,
-                @Nullable final Object pojo,
+                final @Nullable Object pojo,
                 @NonNull  final Bookmark bookmark) {
             val managedObject = SimpleManagedObject.of(spec, pojo);
             managedObject.bookmarkLazy.set(Optional.of(bookmark));
