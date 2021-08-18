@@ -65,12 +65,20 @@
             </testResource>
         </testResources>
 	</build>
+	
 
 	<dependencies>
 
 		<dependency>
 			<groupId>org.apache.isis.persistence</groupId>
 			<artifactId>isis-persistence-jpa-integration</artifactId>
+			<exclusions>
+				<!-- already provided by aspectj-weaver -->
+				<exclusion>
+					<groupId>org.aspectj</groupId>
+					<artifactId>aspectjrt</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		
 		<dependency>

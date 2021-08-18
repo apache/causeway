@@ -358,12 +358,11 @@
 						<splitindex>true</splitindex>
 						<encoding>${project.build.sourceEncoding}</encoding>
 						<links>
-							<link>https://docs.oracle.com/javase/8/docs/api/</link>
+							<link>https://docs.oracle.com/en/java/javase/11/docs/api/</link>
 						</links>
 						<linksource>true</linksource>
 						<!-- http://jira.codehaus.org/browse/MJAVADOC-268 and http://jira.codehaus.org/browse/MJAVADOC-284 -->
 						<detectOfflineLinks>false</detectOfflineLinks>
-						<!-- <additionalparam> -Xdoclint:none </additionalparam> -->
 					</configuration>
 					<!-- goal:aggregate (for aggregator modules) has no binding; explicitly
 						bound in profiles -->
