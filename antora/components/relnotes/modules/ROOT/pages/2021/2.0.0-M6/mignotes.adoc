@@ -60,6 +60,37 @@ isis.core.meta-model.validator.explicit-object-type // renamed to ...
 isis.core.meta-model.validator.explicit-logical-type-names
 ----
 
+Some 'mavendeps' artifacts have been removed:
+
+[source,xml]
+----
+
+<!-- removed 
+<groupId>org.apache.isis.mavendeps</groupId>
+<artifactId>isis-mavendeps-jdk11</artifactId>
+
+no replacement, no longer required
+-->
+
+<!-- removed 
+<groupId>org.apache.isis.mavendeps</groupId>
+<artifactId>isis-mavendeps-jpa</artifactId>
+-->
+
+<!-- instead use -->
+<groupId>org.apache.isis.persistence</groupId>
+<artifactId>isis-persistence-jpa-eclipselink</artifactId>
+
+<!-- removed
+<groupId>org.apache.isis.mavendeps</groupId>
+<artifactId>isis-mavendeps-jdo</artifactId>
+-->
+
+<!-- instead use -->
+<groupId>org.apache.isis.persistence</groupId>
+<artifactId>isis-persistence-jdo-datanucleus</artifactId>
+----
+
 == Other Changes
 
 Module `IsisModuleExtCorsImpl` was renamed to `IsisModuleExtCors`.
