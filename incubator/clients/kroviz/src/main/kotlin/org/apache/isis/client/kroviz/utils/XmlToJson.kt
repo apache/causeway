@@ -18,8 +18,6 @@
  */
 package org.apache.isis.client.kroviz.utils
 
-import org.w3c.dom.Document
-
 @JsModule("xmltojson")
 @JsNonModule
 external object XmlToJson {

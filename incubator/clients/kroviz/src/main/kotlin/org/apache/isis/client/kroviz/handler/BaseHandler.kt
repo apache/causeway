@@ -75,8 +75,11 @@ abstract class BaseHandler {
         throw Exception("Subclass Responsibility")
     }
 
-    protected fun update() {
-        logEntry.getAggregator()!!.update(logEntry, Constants.subTypeJson)
+    open fun update() {
+        logEntry.getAggregator().update(logEntry, Constants.subTypeJson)
+        logEntry.aggregators.forEach {
+//            console.log(it)
+        }
     }
 
 }

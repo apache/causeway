@@ -11,24 +11,35 @@ abstract class AggregatorWithLayout : BaseAggregator() {
     protected fun handleLayout(layout: Layout, dm: DisplayModelWithLayout) {
         if (dm.layout == null) {
             dm.addLayout(layout)
-            dm.propertyLayoutList.forEach { p ->
-                val l = p.link!!
-                val isDn = l.href.contains("datanucleus")
-                if (isDn) {
-                    //invoking DN links leads to an error
-                    invoke(l, this)
+            dm.properties.propertyLayoutList.forEach { p ->
+                val l = p.link
+                if (l == null) {
+                    console.log("[AWL.handleLayout] propertyLayoutList doesn't have links anymore? ")
+                    console.log(p)
+                    console.log(dm)
+                } else {
+                    val isDn = l.href.contains("datanucleus")
+                    if (!isDn) {
+                        //invoking DN links leads to an error
+                        invoke(l, this)
+                    }
                 }
             }
         }
     }
 
-    protected fun invokeLayoutLink(obj: TObject) {
-        val l = obj.getLayoutLink()!!
+    protected fun invokeLayoutLink(obj: TObject, aggregator: AggregatorWithLayout) {
+        val l = obj.getLayoutLink()
         if (l.representation() == Represention.OBJECT_LAYOUT_BS3) {
-            invoke(l, this, Constants.subTypeXml)
+            invoke(l, aggregator, Constants.subTypeXml)
         } else {
-            invoke(l, this)
+            invoke(l, aggregator)
         }
+    }
+
+    protected fun invokeIconLink(obj: TObject, aggregator: AggregatorWithLayout) {
+        val l = obj.getIconLink()!!
+        invoke(l, aggregator)
     }
 
 }

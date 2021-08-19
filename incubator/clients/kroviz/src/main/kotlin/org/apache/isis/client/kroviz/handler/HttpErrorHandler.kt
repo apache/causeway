@@ -30,7 +30,6 @@ class HttpErrorHandler : BaseHandler() {
         update()
     }
 
-    
     override fun parse(response: String): TransferObject {
         return Json.decodeFromString(HttpError.serializer(), response)
     }

@@ -30,7 +30,7 @@ class CollectionDM(override val title: String) : DisplayModelWithLayout() {
         if (!rawData.contains(obj)) {
             rawData.add(obj)
             val exo = Exposer(obj as TObject)
-            data.add(exo.dynamise())  //if exposer is not dynamised, data access in tables won't work
+            data.add(exo.dynamise())  //if exposer is not dynamised, data access in Tabulator tables won't work
         }
     }
 
@@ -38,15 +38,6 @@ class CollectionDM(override val title: String) : DisplayModelWithLayout() {
         isRendered = false
         data = observableListOf()
         rawData = observableListOf()
-    }
-
-    // canBeDisplayed checks for grid AND layout - for parented collection there seems to be no layout
-    fun parentedCollectionCanBeDisplayed(): Boolean {
-        console.log("[CDM.parentedCollectionCanBeDisplayed]")
-        console.log(this)
-        val answer = grid != null
-        console.log(answer)
-        return answer
     }
 
 }

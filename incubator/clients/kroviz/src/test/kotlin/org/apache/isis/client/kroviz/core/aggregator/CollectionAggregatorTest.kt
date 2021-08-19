@@ -44,7 +44,7 @@ class CollectionAggregatorTest : IntegrationTest() {
             mockResponse(FR_OBJECT_LAYOUT, obs)
             mockResponse(FR_OBJECT_PROPERTY, obs)
             val reSpec = ResourceSpecification(FR_OBJECT_PROPERTY.url)
-            val pLe = EventStore.find(reSpec)!!
+            val pLe = EventStore.findBy(reSpec)!!
             val pdLe = mockResponse(FR_PROPERTY_DESCRIPTION, obs)
             val layoutLe = mockResponse(FR_OBJECT_LAYOUT, obs)
 
@@ -66,11 +66,12 @@ class CollectionAggregatorTest : IntegrationTest() {
 
             // then
             val dl = obs.dpm as CollectionDM
-            val propertyLabels = dl.propertyDescriptionList
+            val propertyLabels = dl.properties.propertyDescriptionList
             val property = pdLe.getTransferObject() as Property
             assertTrue(propertyLabels.size > 0)  // 5
-            val lbl = propertyLabels.get(property.id)!!
-            assertEquals("ResultListResult class", lbl)  // 6
+            val lbl = dl.properties.find(property.id)!!.friendlyName
+            val expected = "ResultListResult class"
+            assertEquals(expected, lbl)  // 6
         }
     }
 

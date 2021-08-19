@@ -22,7 +22,7 @@ import org.apache.isis.client.kroviz.to.Argument
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Method
 import org.apache.isis.client.kroviz.utils.DateHelper
-import org.apache.isis.client.kroviz.utils.Utils
+import org.apache.isis.client.kroviz.utils.StringUtils
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -35,7 +35,7 @@ class UtilsTest {
         val word = "OK"
         val expected = "OK"
         //when
-        val actual = Utils.deCamel(word)
+        val actual = StringUtils.deCamel(word)
         //
         assertEquals(expected, actual)
     }
@@ -85,7 +85,7 @@ class UtilsTest {
         //link.setArgument(arguments)
 
         // when
-        val body = Utils.argumentsAsBody(link)  //TODO link seems to be null
+        val body = StringUtils.argumentsAsBody(link)  //TODO link seems to be null
 
         // then
 //        console.log("[UtilsTest.test_argumentsAsBody]")
@@ -100,7 +100,7 @@ class UtilsTest {
         val value = "http://localhost:8080"
         val arg = Argument("script", value)
         // when
-        val actual = Utils.asBody(arg)
+        val actual = StringUtils.asBody(arg)
         // then
         assertEquals(expected, actual)
     }
@@ -112,7 +112,7 @@ class UtilsTest {
         val value = ""
         val arg = Argument("parameters", value)
         // when
-        val actual = Utils.asBody(arg)
+        val actual = StringUtils.asBody(arg)
         // then
         assertEquals(expected, actual)
     }

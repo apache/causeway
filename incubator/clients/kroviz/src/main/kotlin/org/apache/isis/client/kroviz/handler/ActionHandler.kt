@@ -26,6 +26,10 @@ import org.apache.isis.client.kroviz.to.TransferObject
 class ActionHandler : BaseHandler() {
 
     override fun parse(response: String): TransferObject {
+        // due to some ambiguity in members, collection-description is accepted as action
+        if (response.contains("collection-description")) {
+            throw RuntimeException()
+        }
         return Json.decodeFromString(Action.serializer(), response)
     }
 

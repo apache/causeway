@@ -19,7 +19,7 @@
 package org.apache.isis.client.kroviz.core.aggregator
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
-import org.apache.isis.client.kroviz.core.event.RoXmlHttpRequest
+import org.apache.isis.client.kroviz.core.event.RequestProxy
 import org.apache.isis.client.kroviz.core.model.CollectionDM
 import org.apache.isis.client.kroviz.core.model.ObjectDM
 import org.apache.isis.client.kroviz.layout.Layout
@@ -43,17 +43,22 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
     }
 
     override fun update(logEntry: LogEntry, subType: String) {
-        when (val obj = logEntry.getTransferObject()) {
-            is TObject -> handleObject(obj)
-            is ResultObject -> handleResultObject(obj)
-            is Property -> handleProperty(obj)
-            is Layout -> handleLayout(obj, dpm as ObjectDM)
-            is Grid -> handleGrid(obj)
-            is HttpError -> ErrorDialog(logEntry).open()
-            else -> log(logEntry)
+        if (logEntry.url != "") {  // le=="" -> invoked from CollectionAggregrator
+            when (val obj = logEntry.getTransferObject()) {
+                is TObject -> handleObject(obj)
+                is ResultObject -> handleResultObject(obj)
+                is Property -> handleProperty(obj)
+                is Layout -> handleLayout(obj, dpm as ObjectDM)
+                is Grid -> handleGrid(obj)
+                is HttpError -> ErrorDialog(logEntry).open()
+                else -> log(logEntry)
+            }
         }
 
         if (dpm.canBeDisplayed() && collectionsCanBeDisplayed()) {
+            collectionMap.forEach {
+                (dpm as ObjectDM).addCollection(it.key, it.value.dpm as CollectionDM)
+            }
             UiManager.openObjectView(this)
         }
     }
@@ -62,7 +67,7 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
         if (collectionMap.isEmpty()) return true
         return collectionMap.all {
             val cdm = it.value.dpm as CollectionDM
-            cdm.parentedCollectionCanBeDisplayed()
+            cdm.canBeDisplayed()
         }
     }
 
@@ -74,10 +79,10 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
         } else {
             dpm.addData(obj)
         }
-        if (collectionMap.size == 0) {
+        if (collectionMap.isEmpty()) {
             handleCollections(obj)
         }
-        invokeLayoutLink(obj)
+        invokeLayoutLink(obj, this)
     }
 
     private fun invokeInstance(obj: TObject) {
@@ -96,18 +101,17 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
     }
 
     private fun handleCollections(obj: TObject) {
-        console.log("[OA.handleCollections]")
         obj.getCollections().forEach {
             val key = it.id
             val aggregator = CollectionAggregator(key, this)
             collectionMap.put(key, aggregator)
-            console.log(key)
             val link = it.links.first()
-            RoXmlHttpRequest().invoke(link, aggregator)
+            RequestProxy().invoke(link, aggregator)
         }
     }
 
     private fun handleProperty(property: Property) {
+        console.log("[OA.handleProperty]")
         console.log(property)
         throw Throwable("[ObjectAggregator.handleProperty] not implemented yet")
     }
@@ -119,6 +123,13 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
     override fun reset(): ObjectAggregator {
         dpm.isRendered = false
         return this
+    }
+
+    /**
+     * This is done in order to have the parent check, if it and it's children can be displayed
+     */
+    private fun LogEntry.isUpdatedFromParentedCollection(): Boolean {
+        return this.url == ""
     }
 
 }

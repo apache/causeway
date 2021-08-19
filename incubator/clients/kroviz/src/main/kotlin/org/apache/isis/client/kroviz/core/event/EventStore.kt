@@ -22,11 +22,12 @@ import io.kvision.panel.SimplePanel
 import io.kvision.state.observableListOf
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.isis.client.kroviz.core.aggregator.SvgDispatcher
+import org.apache.isis.client.kroviz.to.HasLinks
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.apache.isis.client.kroviz.ui.core.UiManager
-import org.apache.isis.client.kroviz.utils.ScalableVectorGraphic
 import org.apache.isis.client.kroviz.utils.UUID
+import org.w3c.files.Blob
 
 /**
  * Keeps a log of remote invocations and the responses.
@@ -77,13 +78,13 @@ object EventStore {
         val logEntry = findView(title)
         if (null != logEntry) {
             logEntry.setClose()
-            logEntry.getAggregator()!!.reset()
+            logEntry.getAggregator().reset()
             updateStatus(logEntry)
         }
     }
 
     fun end(reSpec: ResourceSpecification, response: String): LogEntry? {
-        val entry: LogEntry? = find(reSpec)
+        val entry: LogEntry? = findBy(reSpec)
         if (entry != null) {
             entry.response = response
             entry.setSuccess()
@@ -92,26 +93,35 @@ object EventStore {
         return entry
     }
 
+    fun end(reSpec: ResourceSpecification, pumlCode: String, response: Any?): LogEntry? {
+        val entry: LogEntry? = findBy(reSpec, pumlCode)
+        if (entry != null) {
+            when (response) {
+                is String -> entry.response = response
+                is Blob -> entry.blob = response
+                else -> {
+                }
+            }
+            entry.setSuccess()
+            updateStatus(entry)
+        }
+        return entry
+    }
+
     fun fault(reSpec: ResourceSpecification, fault: String) {
-        val entry: LogEntry? = find(reSpec)
+        val entry: LogEntry? = findBy(reSpec)
         entry!!.setError(fault)
         updateStatus(entry)
     }
 
-    fun cached(reSpec: ResourceSpecification): LogEntry {
-        val entry: LogEntry? = find(reSpec)
-        entry!!.setCached()
-        return entry
-    }
-
-    private fun updateStatus(entry: LogEntry) {
+    internal fun updateStatus(entry: LogEntry) {
         UiManager.updateStatus(entry)
     }
 
     /**
      * Answers the first matching entry.
      */
-    fun find(reSpec: ResourceSpecification): LogEntry? {
+    fun findBy(reSpec: ResourceSpecification): LogEntry? {
         return if (reSpec.isRedundant()) {
             findEquivalent(reSpec)
         } else {
@@ -119,7 +129,15 @@ object EventStore {
         }
     }
 
-    fun find(tObject: TObject): LogEntry? {
+    fun findBy(reSpec: ResourceSpecification, body: String): LogEntry? {
+        return log.firstOrNull() {
+            it.url == reSpec.url
+                    && it.subType == reSpec.subType
+                    && it.request == body
+        }
+    }
+
+    fun findBy(tObject: TObject): LogEntry? {
         return log.firstOrNull() {
             it.obj is TObject && (it.obj as TObject).instanceId == tObject.instanceId
         }
@@ -131,8 +149,9 @@ object EventStore {
 
     fun findByDispatcher(uuid: UUID): LogEntry {
         return log.first {
-            it.getAggregator() is SvgDispatcher
-                    && (it.getAggregator() as SvgDispatcher).callBack == uuid
+            val aggt = it.getAggregator()
+            aggt is SvgDispatcher
+                    && aggt.callBack == uuid
         }
     }
 
@@ -163,18 +182,17 @@ object EventStore {
         }
     }
 
-    fun isCached(reSpec: ResourceSpecification, method: String): Boolean {
-        val le = find(reSpec)
-        return when {
-            le == null -> false
-            le.hasResponse() && le.method == method && le.subType == reSpec.subType -> true
-            le.isView() -> true
-            else -> false
-        }
-    }
-
     fun reset() {
         log.removeAll(log)
+    }
+
+    fun getLinked(): List<LogEntry> {
+        // we use all LE's - eventually to be refined to a single LE (chain up and down)
+        val linked = mutableListOf<LogEntry>()
+        log.forEach {
+            if (it.obj is HasLinks) linked.add(it)
+        }
+        return linked
     }
 
 }

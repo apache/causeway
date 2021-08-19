@@ -137,9 +137,9 @@ div {
     /* font-family: Chicago, sans-serif;*/
 }
 
-.logo-button-image:before {
+.isis-logo-button-image:before {
     content: "";
-    width: 75px;
+    width: 65px;
     height: 40px;
     display: inline-block;
     vertical-align: text-top;
@@ -150,6 +150,21 @@ div {
     /*background-image: url(/img/kroviz-logo.svg);*/
     background-image: url("https://svn.apache.org/repos/asf/comdev/project-logos/originals/isis.svg");
 }
+
+.kvision-logo-button-image:before {
+    content: "";
+    width: 25px;
+    height: 40px;
+    display: inline-block;
+    vertical-align: text-top;
+    background-color: transparent;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain, cover;
+    background-image: url("https://kvision.io/0cdf370d4484d5f175f0.svg");
+}
+
+
 
 .kv-window {
     /* background-color: rgba(255,255,255, 0) !important;*/

@@ -18,27 +18,20 @@
  */
 package org.apache.isis.client.kroviz.ui.builder
 
+import io.kvision.panel.VPanel
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.bs3.Grid
 import org.apache.isis.client.kroviz.ui.core.RoDisplay
-import io.kvision.core.CssSize
-import io.kvision.core.UNIT
-import io.kvision.panel.VPanel
 
 class LayoutBuilder {
 
     fun create(grid: Grid, tObject: TObject, dsp: RoDisplay): VPanel {
-        val result = VPanel()
-
-        val oCpt = RowBuilder().createMenu(tObject, dsp)
-        oCpt.width = CssSize(100, UNIT.perc)
-        result.add(oCpt)
-
+        val panel = VPanel()
         for (rl in grid.rows) {
             val cpt = RowBuilder().create(rl, tObject, dsp)
-            result.add(cpt)
+            panel.add(cpt)
         }
-        return result
+        return panel
     }
 
 }

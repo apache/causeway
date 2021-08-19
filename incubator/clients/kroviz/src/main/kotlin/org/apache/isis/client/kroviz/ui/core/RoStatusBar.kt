@@ -18,13 +18,6 @@
  */
 package org.apache.isis.client.kroviz.ui.core
 
-import org.apache.isis.client.kroviz.core.event.EventState
-import org.apache.isis.client.kroviz.core.event.LogEntry
-import org.apache.isis.client.kroviz.core.model.DiagramDM
-import org.apache.isis.client.kroviz.ui.dialog.DiagramDialog
-import org.apache.isis.client.kroviz.ui.dialog.NotificationDialog
-import org.apache.isis.client.kroviz.ui.diagram.ClassDiagram
-import org.apache.isis.client.kroviz.utils.IconManager
 import io.kvision.core.*
 import io.kvision.html.Button
 import io.kvision.html.ButtonStyle
@@ -32,6 +25,14 @@ import io.kvision.navbar.Nav
 import io.kvision.navbar.Navbar
 import io.kvision.navbar.NavbarType
 import io.kvision.panel.SimplePanel
+import kotlinx.browser.window
+import org.apache.isis.client.kroviz.core.event.EventState
+import org.apache.isis.client.kroviz.core.event.LogEntry
+import org.apache.isis.client.kroviz.core.model.DiagramDM
+import org.apache.isis.client.kroviz.ui.diagram.ClassDiagram
+import org.apache.isis.client.kroviz.ui.dialog.DiagramDialog
+import org.apache.isis.client.kroviz.ui.dialog.NotificationDialog
+import org.apache.isis.client.kroviz.utils.IconManager
 
 object RoStatusBar {
     val navbar = Navbar(
@@ -55,6 +56,8 @@ object RoStatusBar {
 
     init {
         navbar.add(nav)
+        nav.add(isisButton())
+        nav.add(kvisionButton())
         nav.add(lastError)
         nav.add(classDiagram)
         nav.add(userBtn)
@@ -110,6 +113,22 @@ object RoStatusBar {
         lastError.style = ButtonStyle.OUTLINEDANGER
         lastError.icon = IconManager.find("Error")
         notify(text)
+    }
+
+    private fun isisButton(): Button {
+        val classes = setOf("isis-logo-button-image", "logo-button")
+        return Button("", style = ButtonStyle.LINK, classes = classes)
+                .onClick {
+                    window.open("https://isis.apache.org")
+                }
+    }
+
+    private fun kvisionButton(): Button {
+        val classes = setOf("kvision-logo-button-image", "logo-button")
+        return Button("", style = ButtonStyle.LINK, classes = classes)
+                .onClick {
+                    window.open("https://kvision.io")
+                }
     }
 
 }

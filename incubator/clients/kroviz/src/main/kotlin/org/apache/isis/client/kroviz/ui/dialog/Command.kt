@@ -19,17 +19,17 @@
 package org.apache.isis.client.kroviz.ui.dialog
 
 import org.apache.isis.client.kroviz.core.aggregator.ActionDispatcher
-import org.apache.isis.client.kroviz.core.event.RoXmlHttpRequest
+import org.apache.isis.client.kroviz.core.event.RequestProxy
 import org.apache.isis.client.kroviz.to.Link
 
 abstract class Command {
 
-    open fun execute() {
+    open fun execute(action: String? = null) {
         // subclass responsibility
     }
 
     fun invoke(link: Link) {
-        RoXmlHttpRequest().invoke(link, ActionDispatcher())
+        RequestProxy().invoke(link, ActionDispatcher())
     }
 
 }

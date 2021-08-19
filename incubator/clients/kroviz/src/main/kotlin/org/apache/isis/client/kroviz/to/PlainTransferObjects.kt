@@ -29,15 +29,6 @@ enum class ActionSemantics(val type: String) {
 }
 
 @Serializable
-data class DomainType(
-        override val links: List<Link>,
-        val canonicalName: String,
-        val members: List<Link>,   // change to Map<String, Member>, once https://issues.apache.org/jira/browse/ISIS-2684 is fixed
-        val typeActions: List<Link>,
-        val extensions: Extensions
-) : TransferObject, HasLinks
-
-@Serializable
 data class DomainTypes(override val links: List<Link> = emptyList(),
                        val values: List<Link> = emptyList(),
                        val extensions: Extensions? = null

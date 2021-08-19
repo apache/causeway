@@ -35,7 +35,7 @@ class DownloadDialog(val fileName:String, val content:String) : Command() {
         form.open()
     }
 
-    override fun execute() {
+    override fun execute(action:String?) {
         DomUtil.download(fileName, content)
     }
 

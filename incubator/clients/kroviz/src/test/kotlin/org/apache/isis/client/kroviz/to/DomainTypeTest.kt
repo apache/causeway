@@ -18,9 +18,9 @@
  */
 package org.apache.isis.client.kroviz.to
 
-import kotlinx.serialization.json.Json
+import org.apache.isis.client.kroviz.handler.DomainTypeHandler
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.FILE_NODE
-import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.SO
+import org.apache.isis.client.kroviz.snapshots.demo2_0_0.JAVA_LANG_STRING_ENTITY
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -28,24 +28,13 @@ import kotlin.test.assertNotNull
 class DomainTypeTest {
 
     @Test
-    fun testParseSimpleObject() {
-        // given
-        val jsonStr = SO.str
-        // when
-        val domainType = Json.decodeFromString(DomainType.serializer(), jsonStr)
-        // then
-        val linkList = domainType.links
-        assertEquals(2, linkList.size)
-
-        assertEquals("domainapp.modules.simple.dom.impl.SimpleObject", domainType.canonicalName)
-
-        val members = domainType.members
-        assertEquals(9, members.size)
-
-        val typeActions = domainType.typeActions
-        assertEquals(2, typeActions.size)
-
-        assertNotNull(domainType.extensions)
+    fun testParseJavaLangStringEntity() {
+        //given
+        val jsonStr = JAVA_LANG_STRING_ENTITY.str
+        //when
+        val to = DomainTypeHandler().parse(jsonStr) as DomainType
+        //then
+        assertEquals("Java Lang String Jdo", to.extensions.friendlyName)
     }
 
     @Test
@@ -53,15 +42,15 @@ class DomainTypeTest {
         // given
         val jsonStr = FILE_NODE.str
         // when
-        val domainType = Json.decodeFromString(DomainType.serializer(), jsonStr)
+        val domainType = DomainTypeHandler().parse(jsonStr) as DomainType
         // then
         val linkList = domainType.links
         assertEquals(2, linkList.size)
 
-        assertEquals("demoapp.dom.tree.FileNode", domainType.canonicalName)
+        assertEquals("demoapp.dom.domain.properties.PropertyLayout.navigable.FileNodeVm", domainType.canonicalName)
 
         val members = domainType.members
-        assertEquals(8, members.size)
+        assertEquals(19, members.size)
 
         val typeActions = domainType.typeActions
         assertEquals(2, typeActions.size)

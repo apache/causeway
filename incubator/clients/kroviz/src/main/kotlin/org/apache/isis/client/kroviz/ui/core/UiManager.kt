@@ -29,18 +29,15 @@ import org.apache.isis.client.kroviz.core.aggregator.ObjectAggregator
 import org.apache.isis.client.kroviz.core.aggregator.UndefinedDispatcher
 import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.event.LogEntry
-import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.core.model.CollectionDM
 import org.apache.isis.client.kroviz.core.model.ObjectDM
-import org.apache.isis.client.kroviz.to.Relation
-import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.apache.isis.client.kroviz.ui.kv.override.RoTab
 import org.apache.isis.client.kroviz.utils.DomUtil
 import org.apache.isis.client.kroviz.utils.ScalableVectorGraphic
+import org.apache.isis.client.kroviz.utils.StringUtils
 import org.apache.isis.client.kroviz.utils.UUID
-import org.apache.isis.client.kroviz.utils.Utils
 import org.w3c.dom.events.KeyboardEvent
 
 /**
@@ -91,6 +88,13 @@ object UiManager {
      * is added as attribute to the tab in order to being able to recreate it on refresh.
      */
     fun addSvg(title: String, svgCode: String) {
+        fun buildSvgPanel(uuid: UUID): FormPanelFactory {
+            val formItems = mutableListOf<FormItem>()
+            val newFi = FormItem("svg", ValueType.SVG_INLINE, callBack = uuid)
+            formItems.add(newFi)
+            return FormPanelFactory(formItems)
+        }
+
         val uuid = UUID()
         DomUtil.appendTo(uuid, svgCode)
 
@@ -105,16 +109,7 @@ object UiManager {
         EventStore.addView(title, aggregator, panel)
     }
 
-    private fun buildSvgPanel(uuid: UUID): FormPanelFactory {
-        val formItems = mutableListOf<FormItem>()
-        val newFi = FormItem("svg", ValueType.SVG_INLINE, callBack = uuid)
-        formItems.add(newFi)
-        return FormPanelFactory(formItems)
-    }
-
     fun closeView(tab: SimplePanel) {
-        console.log("[UM.closeView]")
-        console.log(tab)
         val tt = tab.title
         if (tt != null) {
             EventStore.closeView(tt)
@@ -133,9 +128,9 @@ object UiManager {
         RoStatusBar.updateUser(user)
     }
 
-    fun openListView(aggregator: BaseAggregator) {
+    fun openCollectionView(aggregator: BaseAggregator) {
         val displayable = aggregator.dpm
-        val title: String = Utils.extractTitle(displayable.title)
+        val title: String = StringUtils.extractTitle(displayable.title)
         val panel = RoTable(displayable as CollectionDM)
         add(title, panel, aggregator)
         displayable.isRendered = true
@@ -143,31 +138,13 @@ object UiManager {
 
     fun openObjectView(aggregator: ObjectAggregator) {
         val dm = aggregator.dpm as ObjectDM
-        var title: String = Utils.extractTitle(dm.title)
+        var title: String = StringUtils.extractTitle(dm.title)
         if (title.isEmpty()) {
             title = aggregator.actionTitle
         }
         val panel = RoDisplay(dm)
         add(title, panel, aggregator)
         dm.isRendered = true
-    }
-
-    fun displayModel(tObject: TObject) {
-        val aggregator = ObjectAggregator(tObject.title)
-        linkLayout(tObject, aggregator)
-        val logEntry = EventStore.find(tObject)!!
-        logEntry.addAggregator(aggregator)
-        aggregator.update(logEntry, Constants.subTypeJson)
-        aggregator.handleObject(tObject)
-    }
-
-    private fun linkLayout(tObject: TObject, aggregator: ObjectAggregator) {
-        val layoutLink = tObject.links.firstOrNull {
-            it.relation() == Relation.OBJECT_LAYOUT
-        }
-        val reSpec = ResourceSpecification(layoutLink!!.href)
-        val logEntry = EventStore.find(reSpec)
-        logEntry!!.addAggregator(aggregator)
     }
 
     fun openDialog(panel: RoDialog) {

@@ -20,7 +20,7 @@ package org.apache.isis.client.kroviz.to
 
 import org.apache.isis.client.kroviz.IntegrationTest
 import org.apache.isis.client.kroviz.handler.CollectionHandler
-import org.apache.isis.client.kroviz.snapshots.demo2_0_0.COLLECTIONS_ENTITIES
+import org.apache.isis.client.kroviz.snapshots.demo2_0_0.OBJECT_COLLECTION
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -29,7 +29,7 @@ class CollectionTest : IntegrationTest() {
     @Test
     fun testParse() {
         //given
-        val jsonStr = COLLECTIONS_ENTITIES.str
+        val jsonStr = OBJECT_COLLECTION.str
         //when
         val collection = CollectionHandler().parse(jsonStr) as Collection
         //then
@@ -43,8 +43,6 @@ class CollectionTest : IntegrationTest() {
 
         val valueList = collection.value
         assertEquals(2, valueList.size)
-
-        assertEquals("Immutable", collection.disabledReason)
     }
 
 }

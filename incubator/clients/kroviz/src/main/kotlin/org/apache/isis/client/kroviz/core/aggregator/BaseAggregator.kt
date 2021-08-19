@@ -19,7 +19,7 @@
 package org.apache.isis.client.kroviz.core.aggregator
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
-import org.apache.isis.client.kroviz.core.event.RoXmlHttpRequest
+import org.apache.isis.client.kroviz.core.event.RequestProxy
 import org.apache.isis.client.kroviz.core.model.DisplayModel
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.TObject
@@ -56,11 +56,17 @@ abstract class BaseAggregator {
 
     protected fun log(logEntry: LogEntry) {
         logEntry.setUndefined("no handler found")
-        throw Throwable("[BaseAggregator.log] no handler found: ${this::class.simpleName}")
+        console.log("[BaseAggregator.log] ")
+        console.log(logEntry)
+        throw Throwable("no handler found: ${this::class.simpleName}")
     }
 
     fun TObject.getLayoutLink(): Link? {
         return links.firstOrNull { it.isLayout() }
+    }
+
+    fun TObject.getIconLink(): Link? {
+        return links.firstOrNull { it.isIcon() }
     }
 
     override fun toString(): String {
@@ -72,8 +78,12 @@ abstract class BaseAggregator {
         return href.isNotEmpty() && href.contains("layout")
     }
 
-    protected fun invoke(link:Link, aggregator: BaseAggregator, subType :String = Constants.subTypeJson) {
-        RoXmlHttpRequest().invoke(link, aggregator, subType)
+    private fun Link.isIcon(): Boolean {
+        return href.isNotEmpty() && href.endsWith("object-icon")
+    }
+
+    protected fun invoke(link: Link, aggregator: BaseAggregator, subType: String = Constants.subTypeJson) {
+        RequestProxy().invoke(link, aggregator, subType)
     }
 
 }

@@ -22,10 +22,12 @@ import org.w3c.dom.Node
 import org.w3c.dom.asList
 
 class Col(node: Node) {
+    val rowList = mutableListOf<Row>()
     var domainObject: DomainObject? = null
     var actionList = mutableListOf<Action>()
     val tabGroupList = mutableListOf<TabGroup>()
     var fieldSetList = mutableListOf<FieldSet>()
+    var collectionList = mutableListOf<Collection>()
     var span: Int = 0
 
     init {
@@ -33,6 +35,12 @@ class Col(node: Node) {
         span = dyNode.getAttribute("span")
 
         val nl = node.childNodes.asList()
+
+        val rl = nl.filter { it.nodeName.equals("bs3:row") }
+        for (n: Node in rl) {
+            val row = Row(n)
+            rowList.add(row)
+        }
 
         val doNodes = nl.filter { it.nodeName.equals("cpt:domainObject") }
         if (!doNodes.isEmpty()) {
@@ -56,6 +64,12 @@ class Col(node: Node) {
             val fs = FieldSet(n)
             fieldSetList.add(fs)
         }
+
+        val collNodes = nl.filter { it.nodeName.equals("cpt:collection") }
+        for (n: Node in collNodes) {
+            val c = Collection(n)
+            collectionList.add(c)
+        }
     }
 
     fun getPropertyList(): List<Property> {
@@ -66,6 +80,7 @@ class Col(node: Node) {
         tabGroupList.forEach { tg ->
             list.addAll(tg.getPropertyList())
         }
+        console.log("[CB.getPropertyList]")
         return list
     }
 

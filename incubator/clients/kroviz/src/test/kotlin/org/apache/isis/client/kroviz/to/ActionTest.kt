@@ -21,11 +21,11 @@ package org.apache.isis.client.kroviz.to
 import org.apache.isis.client.kroviz.IntegrationTest
 import org.apache.isis.client.kroviz.core.aggregator.ActionDispatcher
 import org.apache.isis.client.kroviz.core.event.EventStore
+import org.apache.isis.client.kroviz.core.event.RequestProxy
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
-import org.apache.isis.client.kroviz.core.event.RoXmlHttpRequest
 import org.apache.isis.client.kroviz.handler.ActionHandler
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.*
-import org.apache.isis.client.kroviz.utils.Utils
+import org.apache.isis.client.kroviz.utils.StringUtils
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -58,13 +58,13 @@ class ActionTest : IntegrationTest() {
             val arg = Argument(href)
             arguments.put("script", arg)
             //ensure link arguments make up valid json body
-            val body = Utils.argumentsAsBody(link)
+            val body = StringUtils.argumentsAsBody(link)
             console.log(body)
             val json = JSON.parse<Argument>(body)
             console.log(json)
-            RoXmlHttpRequest().invoke(link, ActionDispatcher())
+            RequestProxy().invoke(link, ActionDispatcher())
             val urlSpec = ResourceSpecification(url)
-            val le = EventStore.find(urlSpec)!!
+            val le = EventStore.findBy(urlSpec)!!
             console.log(EventStore.log)
             console.log(le)
             assertTrue(!le.isError())

@@ -18,21 +18,20 @@
  */
 package org.apache.isis.client.kroviz.ui.core
 
-import org.apache.isis.client.kroviz.core.event.EventStore
-import org.apache.isis.client.kroviz.core.event.RoXmlHttpRequest
-import org.apache.isis.client.kroviz.to.Link
-import org.apache.isis.client.kroviz.to.Member
-import org.apache.isis.client.kroviz.to.TObject
-import org.apache.isis.client.kroviz.to.mb.Menu
-import org.apache.isis.client.kroviz.to.mb.MenuEntry
-import org.apache.isis.client.kroviz.to.mb.Menubars
-import org.apache.isis.client.kroviz.utils.IconManager
-import org.apache.isis.client.kroviz.utils.Utils
 import io.kvision.core.Component
 import io.kvision.dropdown.DropDown
 import io.kvision.dropdown.separator
 import io.kvision.html.ButtonStyle
 import io.kvision.utils.set
+import org.apache.isis.client.kroviz.core.event.EventStore
+import org.apache.isis.client.kroviz.core.event.RequestProxy
+import org.apache.isis.client.kroviz.to.Link
+import org.apache.isis.client.kroviz.to.TObject
+import org.apache.isis.client.kroviz.to.mb.Menu
+import org.apache.isis.client.kroviz.to.mb.MenuEntry
+import org.apache.isis.client.kroviz.to.mb.Menubars
+import org.apache.isis.client.kroviz.utils.IconManager
+import org.apache.isis.client.kroviz.utils.StringUtils
 import io.kvision.html.Link as KvisionHtmlLink
 
 object MenuFactory {
@@ -53,9 +52,7 @@ object MenuFactory {
             val link = buildActionLink(it.id, text)
             val invokeLink = it.getInvokeLink()!!
             link.onClick {
-                console.log("[MF.buildForObject]")
-                console.log(invokeLink)
-                RoXmlHttpRequest().invoke(invokeLink)
+                RequestProxy().invoke(invokeLink)
             }
             dd.add(link)
         }
@@ -80,7 +77,7 @@ object MenuFactory {
             section.serviceAction.forEach { sa ->
                 val action = buildActionLink(sa.id!!, menuTitle)
                 action.onClick {
-                    RoXmlHttpRequest().invoke(sa.link!!)
+                    RequestProxy().invoke(sa.link!!)
                 }
                 action.setDragDropData(Constants.stdMimeType, action.id!!)
                 dd.add(action)
@@ -118,12 +115,12 @@ object MenuFactory {
         val menu = findMenuByTitle(menuTitle)!!
         menu.section.forEachIndexed { _, section ->
             section.serviceAction.forEach { sa ->
-                val saTitle = Utils.deCamel(sa.id!!)
+                val saTitle = StringUtils.deCamel(sa.id!!)
                 if (saTitle == actionTitle) {
                     val action = buildActionLink(sa.id, menuTitle)
                     action.label = ""
                     action.onClick {
-                        RoXmlHttpRequest().invoke(sa.link!!)
+                        RequestProxy().invoke(sa.link!!)
                     }
                     return action
                 }
@@ -135,7 +132,7 @@ object MenuFactory {
      fun buildActionLink(
             label: String,
             menuTitle: String): KvisionHtmlLink {
-        val actionTitle = Utils.deCamel(label)
+        val actionTitle = StringUtils.deCamel(label)
         val actionLink: KvisionHtmlLink = ddLink(
                 label = actionTitle,
                 icon = IconManager.find(label),
@@ -175,7 +172,7 @@ object MenuFactory {
                 label = "save",
                 menuTitle = tObject.domainType)
         saveAction.onClick {
-            RoXmlHttpRequest().invoke(saveLink)
+            RequestProxy().invoke(saveLink)
         }
         dd.add(saveAction)
 
@@ -184,7 +181,7 @@ object MenuFactory {
                 label = "undo",
                 menuTitle = tObject.domainType)
         undoAction.onClick {
-            RoXmlHttpRequest().invoke(undoLink)
+            RequestProxy().invoke(undoLink)
         }
         dd.add(undoAction)
     }
@@ -214,10 +211,6 @@ object MenuFactory {
     private fun switchCssClass(menuItem: Component, from: String, to: String) {
         menuItem.removeCssClass(from)
         menuItem.addCssClass(to)
-    }
-
-    private fun Member.getInvokeLink(): Link? {
-        return links.firstOrNull { it.rel.indexOf(id) > 0 }
     }
 
 }

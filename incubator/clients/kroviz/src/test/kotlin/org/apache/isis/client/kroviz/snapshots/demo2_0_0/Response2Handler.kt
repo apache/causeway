@@ -24,11 +24,11 @@ object Response2Handler {
 
     val map = mapOf(
             ACTIONS_STRINGS to ActionHandler(),
-            ACTIONS_STRINGS_INVOKE to TObjectHandler(),
+//            ACTIONS_STRINGS_INVOKE to TObjectHandler(),    // commented out due to issues with object-icon
             ACTIONS_WHEREINTHEWORLD_INVOKE to TObjectHandler(),
             ACTIONS_TEXT_INVOKE to TObjectHandler(),
             ASSOCIATED_ACTION_OBJECT_LAYOUT to LayoutHandler(),
-            COLLECTIONS_ENTITIES to CollectionHandler(),
+            OBJECT_COLLECTION to CollectionHandler(),
             DOMAIN_TYPES_PROPERTY to PropertyHandler(),
             FILE_NODE to DomainTypeHandler(),
             HTTP_ERROR_405 to HttpErrorHandler(),

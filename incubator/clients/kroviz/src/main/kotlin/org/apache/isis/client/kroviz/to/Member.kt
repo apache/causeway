@@ -36,13 +36,21 @@ data class Member(val id: String,
     var type: String? = ValueType.TEXT.type
 
     init {
-        if (memberType == MemberType.PROPERTY.type
+        if (isProperty()
                 && value == null
                 && extensions != null
                 && extensions.xIsisFormat == "string") {
             value = Value("")
         }
         type = TypeMapper().match(this)
+    }
+
+    fun isProperty(): Boolean {
+        return memberType == MemberType.PROPERTY.type
+    }
+
+    fun isAction(): Boolean {
+        return memberType == MemberType.ACTION.type
     }
 
     fun isReadOnly(): Boolean {
@@ -52,5 +60,11 @@ data class Member(val id: String,
     fun isReadWrite(): Boolean {
         return (memberType == MemberType.PROPERTY.type && disabledReason == "")
     }
+
+    fun getInvokeLink(): Link? {
+        return links.firstOrNull { it.rel.indexOf(id) > 0 }
+    }
+
+
 
 }

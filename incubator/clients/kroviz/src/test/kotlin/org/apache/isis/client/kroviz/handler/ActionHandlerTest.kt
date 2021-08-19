@@ -19,22 +19,31 @@
 
 package org.apache.isis.client.kroviz.handler
 
-import org.apache.isis.client.kroviz.snapshots.demo2_0_0.ACTIONS_STRINGS_INVOKE
+import org.apache.isis.client.kroviz.snapshots.demo2_0_0.ACTIONS_STRINGS
+import org.apache.isis.client.kroviz.snapshots.demo2_0_0.COLLECTION_DESCRIPTION
+import org.apache.isis.client.kroviz.to.Action
 import kotlin.test.Test
-import kotlin.test.assertFalse
+import kotlin.test.assertTrue
+import kotlin.test.fail
 
 class ActionHandlerTest {
 
     @Test
-    fun testCanHandle() {
-        //given
-        val json = ACTIONS_STRINGS_INVOKE.str
+    fun testParse() {
+        val json = ACTIONS_STRINGS.str
+        val action = ActionHandler().parse(json)
+        assertTrue(action is Action)
+    }
 
-        //when
-        val actual = ActionHandler().canHandle(json)
-
-        //then
-        assertFalse(actual)
+    @Test
+    fun testParseSadCase() {
+        val json = COLLECTION_DESCRIPTION.str
+        try {
+            ActionHandler().parse(json)
+            fail("Exception expected")
+        } catch (re: RuntimeException) {
+            assertTrue(true)
+        }
     }
 
 }

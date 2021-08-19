@@ -20,7 +20,7 @@ package org.apache.isis.client.kroviz.core.aggregator
 
 import org.apache.isis.client.kroviz.core.event.EventState
 import org.apache.isis.client.kroviz.core.event.LogEntry
-import org.apache.isis.client.kroviz.core.event.RoXmlHttpRequest
+import org.apache.isis.client.kroviz.core.event.RequestProxy
 import org.apache.isis.client.kroviz.core.model.CollectionDM
 import org.apache.isis.client.kroviz.layout.Layout
 import org.apache.isis.client.kroviz.to.*
@@ -44,25 +44,28 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
 
         if (logEntry.state == EventState.DUPLICATE) {
             console.log("[CollectionAggregator.update] TODO duplicates should not be propagated to handlers")
+            //TODO this may not hold true for changed and deleted objects - object version required to deal with it?
         } else {
             when (val obj = logEntry.getTransferObject()) {
                 null -> log(logEntry)
                 is ResultList -> handleList(obj)
                 is TObject -> handleObject(obj)
+                is DomainType -> handleDomainType(obj)
                 is Layout -> handleLayout(obj, dpm as CollectionDM)
                 is Grid -> handleGrid(obj)
                 is Property -> handleProperty(obj)
                 is Collection -> handleCollection(obj)
+                is Icon -> handleIcon(obj)
                 else -> log(logEntry)
             }
 
             if (parent == null) {
                 if (dpm.canBeDisplayed()) {
-                    UiManager.openListView(this)
+                    UiManager.openCollectionView(this)
                 }
             } else {
-                console.log("[CA.opdate] can be displayed / parent = OA")
-                parent.update(logEntry, subType)
+                val le = LogEntry("")
+                parent.update(le, subType)
             }
         }
     }
@@ -77,13 +80,28 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
     }
 
     private fun handleObject(obj: TObject) {
-        console.log("[CA.handleObject]")
-        console.log(obj)
         dpm.addData(obj)
-        invokeLayoutLink(obj)
-//TODO        invokeIconLink(obj)
+        invokeLayoutLink(obj, this)
+        invokeIconLink(obj, this)
     }
 
+    private fun handleIcon(obj: TransferObject?) {
+        (dpm as CollectionDM).addIcon(obj)
+    }
+
+    private fun handleDomainType(obj: DomainType) {
+        obj.links.forEach {
+            if (it.relation() == Relation.LAYOUT) {
+                invoke(it, this)
+            }
+        }
+        obj.members.forEach {
+            val m = it.value
+            if (m.isProperty()) {
+                invoke(m, this)
+            }
+        }
+    }
 
     private fun handleGrid(grid: Grid) {
         (dpm as CollectionDM).grid = grid
@@ -95,14 +113,21 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
             dm.addPropertyDescription(p)
         } else {
             dm.addProperty(p)
-            invoke(p.descriptionLink()!!, this)
+            val pdl = p.descriptionLink()
+            if (pdl != null) {
+                invoke(pdl, this)
+            }
         }
     }
 
     private fun handleCollection(collection: Collection) {
+        collection.links.forEach {
+            if (it.relation() == Relation.DESCRIBED_BY) {
+                RequestProxy().invoke(it, this)
+            }
+        }
         collection.value.forEach {
-            console.log(it)
-            RoXmlHttpRequest().invoke(it, this)
+            RequestProxy().invoke(it, this)
         }
     }
 
@@ -113,7 +138,7 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
 
     private fun Property.descriptionLink(): Link? {
         return links.find {
-            it.relation() == Relation.DESCRIBED_BY
+            it.relation() == Relation.ELEMENT_TYPE
         }
     }
 

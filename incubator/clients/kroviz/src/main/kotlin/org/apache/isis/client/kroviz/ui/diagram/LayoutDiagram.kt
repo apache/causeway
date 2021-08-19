@@ -24,42 +24,36 @@ import org.apache.isis.client.kroviz.to.bs3.Row
 
 object LayoutDiagram {
 
-    @Deprecated("pass in as arg")
-    val sampleCode = "@startsalt\n" +
-            "{#\n" +
-            ". | Column 2 | Column 3\n" +
-            "Row header 1 | value 1 | value 2\n" +
-            "Row header 2 | A long cell | *\n" +
-            "}\n" +
-            "@endsalt"
-
     fun build(grid: Grid): String {
         var pumlCode = "@startsalt\n{#\n"
-        grid.rows.forEach {
-            pumlCode += buildRow(it)
+        grid.rows.forEachIndexed() { index, it ->
+            val rLabel = "r" + index.toString()
+            pumlCode += buildRow(it, rLabel)
         }
         return pumlCode + "}\n@endsalt"
     }
 
-    val blue = "<color:Blue>"
-    val green = "<color:Green>"
-    private fun buildRow(row: Row): String {
+    private val blue = "<color:Blue>"
+    private val red = "<color:Red>"
+    private fun buildRow(row: Row, rLabel: String): String {
         var s = ""
         row.colList.forEachIndexed() { index, it ->
-            if (index % 2 == 0)
-                s += buildCol(it, blue)
-            else
-                s += buildCol(it, green)
+            val cLabel = rLabel + ".c" + index.toString()
+            if (index % 2 == 0) {
+                s += buildCol(it, blue, cLabel)
+            } else {
+                s += buildCol(it, red, cLabel)
+            }
         }
         s = s.dropLast(1)
         return s + "\n"
     }
 
-    private fun buildCol(col: Col, colorCode: String): String {
+    private fun buildCol(col: Col, colorCode: String, label: String): String {
         var s = ""
         val span: Int = col.span
         repeat(span) {
-            s += "$colorCode C |"
+            s += "$colorCode $label |"
         }
         return s
     }

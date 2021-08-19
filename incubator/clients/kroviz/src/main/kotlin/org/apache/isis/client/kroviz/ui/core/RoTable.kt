@@ -18,9 +18,6 @@
  */
 package org.apache.isis.client.kroviz.ui.core
 
-import org.apache.isis.client.kroviz.core.model.Exposer
-import org.apache.isis.client.kroviz.core.model.CollectionDM
-import org.apache.isis.client.kroviz.utils.Utils
 import io.kvision.core.Container
 import io.kvision.core.CssSize
 import io.kvision.core.UNIT
@@ -29,7 +26,12 @@ import io.kvision.table.TableType
 import io.kvision.tabulator.Layout
 import io.kvision.tabulator.Tabulator
 import io.kvision.tabulator.TabulatorOptions
+import io.kvision.tabulator.js.Tabulator.CellComponent
 import io.kvision.utils.set
+import org.apache.isis.client.kroviz.core.event.RequestProxy
+import org.apache.isis.client.kroviz.core.model.CollectionDM
+import org.apache.isis.client.kroviz.core.model.Exposer
+import org.apache.isis.client.kroviz.utils.StringUtils
 
 /**
  * access attributes from dynamic (JS) objects with varying
@@ -40,26 +42,32 @@ import io.kvision.utils.set
 class RoTable(displayCollection: CollectionDM) : SimplePanel() {
 
     init {
-        title = Utils.extractTitle(displayCollection.title)
+        title = StringUtils.extractTitle(displayCollection.title)
         width = CssSize(100, UNIT.perc)
         val model = displayCollection.data
         val columns = ColumnFactory().buildColumns(
-                displayCollection,
-                true)
+                displayCollection)
         val options = TabulatorOptions(
                 movableColumns = true,
                 height = Constants.calcHeight,
-                layout = Layout.FITCOLUMNS,
+                layout = Layout.FITDATA,
                 columns = columns,
-                persistenceMode = false//,
-                //selectable = true
+                persistenceMode = false,
         )
 
         val tableTypes = setOf(TableType.STRIPED, TableType.HOVER)
 
         tabulator(model, options = options, types = tableTypes) {
             setEventListener<Tabulator<Exposer>> {
-                tabulatorRowClick = {
+                tabulatorCellClick = {
+                    // can't check cast to external interface
+                    val cc = it.detail as CellComponent
+                    val column = cc.getColumn().getField()
+                    if (column == "icon") {
+                        val exposer = cc.getData() as Exposer
+                        val tObject = exposer.delegate
+                        RequestProxy().load(tObject)
+                    }
                 }
             }
         }
