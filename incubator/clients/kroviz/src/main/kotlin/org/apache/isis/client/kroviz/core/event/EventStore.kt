@@ -143,12 +143,6 @@ object EventStore {
         }
     }
 
-    fun findAllBy(tObject: TObject): List<LogEntry> {
-        return log.filter {
-            it.obj is TObject && (it.obj as TObject).instanceId == tObject.instanceId
-        }
-    }
-
     fun findBy(aggregator: BaseAggregator): LogEntry? {
         return log.firstOrNull { it.getAggregator() == aggregator }
     }

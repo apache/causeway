@@ -30,13 +30,12 @@ import org.apache.isis.client.kroviz.to.Link
 import org.w3c.dom.url.URL
 import org.w3c.files.Blob
 import org.w3c.files.BlobPropertyBag
-import kotlin.test.Test
 import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
 
 class IconHandlerTest : IntegrationTest() {
 
-    @Test
+//    @Test
     fun handleTest() {
         if (isAppAvailable()) {
             //given

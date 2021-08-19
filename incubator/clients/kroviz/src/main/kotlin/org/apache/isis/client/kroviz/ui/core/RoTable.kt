@@ -28,6 +28,7 @@ import io.kvision.tabulator.Tabulator
 import io.kvision.tabulator.TabulatorOptions
 import io.kvision.tabulator.js.Tabulator.CellComponent
 import io.kvision.utils.set
+import org.apache.isis.client.kroviz.core.event.RequestProxy
 import org.apache.isis.client.kroviz.core.model.CollectionDM
 import org.apache.isis.client.kroviz.core.model.Exposer
 import org.apache.isis.client.kroviz.utils.StringUtils
@@ -59,12 +60,13 @@ class RoTable(displayCollection: CollectionDM) : SimplePanel() {
         tabulator(model, options = options, types = tableTypes) {
             setEventListener<Tabulator<Exposer>> {
                 tabulatorCellClick = {
-                    // can not check cast to external
+                    // can't check cast to external interface
                     val cc = it.detail as CellComponent
                     val column = cc.getColumn().getField()
                     if (column == "icon") {
                         val exposer = cc.getData() as Exposer
-                        UiManager.displayModel(exposer.delegate)
+                        val tObject = exposer.delegate
+                        RequestProxy().load(tObject)
                     }
                 }
             }

@@ -61,7 +61,9 @@ data class LogEntry(
     var title: String = ""
     var requestLength: Int = 0 // must be accessible (public) for LogEntryTable
     var response = ""
-    @Contextual var blob: Blob? = null
+
+    @Contextual
+    var blob: Blob? = null
     var responseLength: Int = 0 // must be accessible (public) for LogEntryTable
     var type: String = ""
 
@@ -140,6 +142,16 @@ data class LogEntry(
         state = EventState.DUPLICATE
     }
 
+    internal fun isCached(rs: ResourceSpecification, method: String): Boolean {
+        return when {
+            hasResponse()
+                    && this.method == method
+                    && subType == rs.subType -> true
+            isView() -> true
+            else -> false
+        }
+    }
+
     fun setReload() {
         state = EventState.RELOAD
     }
@@ -167,7 +179,7 @@ data class LogEntry(
     }
 
 
-    // region response
+// region response
     /**
      * This is for access from the views only.
      * DomainObjects have to use retrieveResponse,
@@ -189,7 +201,7 @@ data class LogEntry(
         return response
     }
 
-    //end region response
+//end region response
 
     fun isView(): Boolean {
         return isOpenView() || isClosedView()
@@ -208,17 +220,17 @@ data class LogEntry(
     }
 
     fun getAggregator(): BaseAggregator {
-        //TODO is the last agg always the right one?
+        //FIXME the last aggt is not always the right one
+        // callers need to filter  !!!
         return aggregators.last()
     }
 
     fun addAggregator(aggregator: BaseAggregator) {
-        console.log("[LE.addAggregator]")
-//        console.log(aggregator)
         aggregators.add(aggregator)
         if ((aggregators.size > 1) && ((aggregator is ObjectAggregator) || (aggregator is CollectionAggregator))) {
-            console.log(aggregators)
-  //          throw Throwable("[LE.addAggregator] not implemented yet")
+            console.log("[LE.addAggregator] last one just added")
+//            console.log(aggregators)
+            //          throw Throwable("[LE.addAggregator] not implemented yet")
         }
         nOfAggregators = aggregators.size
     }
@@ -242,10 +254,7 @@ data class LogEntry(
         return if (obj is HasLinks) {
             (obj as HasLinks).getLinks()
         } else {
-            console.log("[LE.getLinks]")
-            console.log(obj)
-            console.log(response)
-            emptyList<Link>()
+            emptyList()
         }
     }
 

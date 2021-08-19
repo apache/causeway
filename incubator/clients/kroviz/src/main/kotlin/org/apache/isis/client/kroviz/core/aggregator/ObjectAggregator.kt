@@ -79,7 +79,7 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
         } else {
             dpm.addData(obj)
         }
-        if (collectionMap.size == 0) {
+        if (collectionMap.isEmpty()) {
             handleCollections(obj)
         }
         invokeLayoutLink(obj, this)
@@ -123,6 +123,13 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
     override fun reset(): ObjectAggregator {
         dpm.isRendered = false
         return this
+    }
+
+    /**
+     * This is done in order to have the parent check, if it and it's children can be displayed
+     */
+    private fun LogEntry.isUpdatedFromParentedCollection(): Boolean {
+        return this.url == ""
     }
 
 }

@@ -40,7 +40,7 @@ class LogEntryDecorator(val logEntry: LogEntry) {
         val kids = children.map { it.url }
         val orphans = mutableSetOf<String>()
         links.forEach {
-            console.log(it)
+//            console.log(it)
             val rel = it.relation()
             when {
                 (rel == Relation.UP) -> {

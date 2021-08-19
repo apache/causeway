@@ -29,10 +29,8 @@ import org.apache.isis.client.kroviz.core.aggregator.ObjectAggregator
 import org.apache.isis.client.kroviz.core.aggregator.UndefinedDispatcher
 import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.event.LogEntry
-import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.core.model.CollectionDM
 import org.apache.isis.client.kroviz.core.model.ObjectDM
-import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.apache.isis.client.kroviz.ui.kv.override.RoTab
@@ -147,35 +145,6 @@ object UiManager {
         val panel = RoDisplay(dm)
         add(title, panel, aggregator)
         dm.isRendered = true
-    }
-
-    fun displayModel(tObject: TObject) {
-        console.log("[UM.displayModel]")
-        val aggregator = ObjectAggregator(tObject.title)
-        console.log(aggregator)
-        val logEntries = EventStore.findAllBy(tObject)
-        logEntries.forEach {
-            if (tObject == it.obj) {
-                //there may be more than one aggt - which may break this code
-                loadObject(it, tObject, aggregator)
-            } else {
-                //  addMissingLayout(tObject, aggregator)
-            }
-        }
-    }
-
-    private fun loadObject(logEntry: LogEntry, tObject: TObject, objAggt: ObjectAggregator) {
-        console.log("[UM.loadObject]")
-        logEntry.addAggregator(objAggt)
-        objAggt.update(logEntry, Constants.subTypeJson)
-        val layoutLink = tObject.getLayoutLink()
-        console.log(layoutLink)
-        val reSpec = ResourceSpecification(layoutLink.href)
-        val layoutEntry: LogEntry? = EventStore.findBy(reSpec)
-        if (layoutEntry != null) {
-            layoutEntry.addAggregator(objAggt)
-            objAggt.update(layoutEntry, Constants.subTypeJson)
-        }
     }
 
     fun openDialog(panel: RoDialog) {

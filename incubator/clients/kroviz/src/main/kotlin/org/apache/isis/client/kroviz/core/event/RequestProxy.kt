@@ -18,10 +18,13 @@
  */
 package org.apache.isis.client.kroviz.core.event
 
+import org.apache.isis.client.kroviz.core.aggregator.AggregatorWithLayout
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
+import org.apache.isis.client.kroviz.core.aggregator.ObjectAggregator
 import org.apache.isis.client.kroviz.core.aggregator.SvgDispatcher
 import org.apache.isis.client.kroviz.handler.ResponseHandler
 import org.apache.isis.client.kroviz.to.Link
+import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.core.Constants
 
 /**
@@ -37,20 +40,35 @@ class RequestProxy {
     fun invoke(link: Link, aggregator: BaseAggregator? = null, subType: String = Constants.subTypeJson) {
         val rs = ResourceSpecification(link.href)
         when {
-            isCached(rs, link.method) -> processCached(rs)
+            isCached(rs, link.method) -> processCached(rs, aggregator)
             else -> RoXmlHttpRequest().process(link, aggregator, subType)
         }
     }
 
-    private fun processCached(rs: ResourceSpecification) {
+    private fun isNotRenderedYet(aggregator: BaseAggregator?): Boolean {
+        if (aggregator != null && aggregator is AggregatorWithLayout) {
+            return !aggregator.dpm.isRendered
+        } else {
+            return false
+        }
+    }
+
+    private fun processCached(rs: ResourceSpecification, aggregator: BaseAggregator?) {
+        console.log("[RP.processCached]")
         val le = EventStore.findBy(rs)!!
         le.retrieveResponse()
-        ResponseHandler.handle(le)
+        if (aggregator == null) {
+            ResponseHandler.handle(le)
+        } else {
+            console.log(aggregator)
+            console.log(le)
+            aggregator.update(le, le.subType)
+        }
         cached(rs)
     }
 
-    fun cached(reSpec: ResourceSpecification): LogEntry {
-        val entry: LogEntry = EventStore.findBy(reSpec)!!
+    private fun cached(rs: ResourceSpecification): LogEntry {
+        val entry: LogEntry = EventStore.findBy(rs)!!
         entry.setCached()
         EventStore.updateStatus(entry)
         return entry
@@ -59,26 +77,41 @@ class RequestProxy {
     fun invokeNonREST(link: Link, aggregator: BaseAggregator?, subType: String = Constants.subTypeXml) {
         val rs = ResourceSpecification(link.href)
         when {
-            isCached(rs, link.method) -> processCached(rs)
+            isCached(rs, link.method) -> processCached(rs, aggregator)
             else -> RoXmlHttpRequest().processNonREST(link, aggregator, subType)
         }
     }
 
-    private fun isCached(reSpec: ResourceSpecification, method: String): Boolean {
-        val le = EventStore.findBy(reSpec)
-        return when {
-            le == null -> false
-            le.hasResponse() && le.method == method && le.subType == reSpec.subType -> {
-                le.setCached()
-                true
-            }
-            le.isView() -> true
-            else -> false
+    private fun isCached(rs: ResourceSpecification, method: String): Boolean {
+        val le = EventStore.findBy(rs)
+        if (le == null) {
+            return false
+        } else {
+            val result = le.isCached(rs, method)
+            if (result) le.setCached()
+            return result
         }
     }
 
     fun invokeKroki(pumlCode: String, agr: SvgDispatcher) {
         RoXmlHttpRequest().invokeKroki(pumlCode, agr)
+    }
+
+    // there may be more than one aggt - which may break this code
+    // we are coming from a parented collection ...
+    // we can assume the object hat been loaded as part of the collection before
+    fun load(tObject: TObject) {
+        console.log("[RP.load]")
+        val aggregator = ObjectAggregator(tObject.title)
+        // ASSUMPTION: there can be max one LogEntry for an Object
+        val le = EventStore.findBy(tObject)
+        console.log(le)
+        if (le != null) {
+            le.addAggregator(aggregator)
+            console.log(aggregator)
+            console.log(le)
+            aggregator.update(le, le.subType)
+        }
     }
 
 }
