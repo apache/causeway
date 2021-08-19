@@ -113,11 +113,11 @@ This ensures that persisted/serialized bookmarks of domain objects are stable ev
 *** `every_DomainObject_must_specify_logicalTypeName()`
 *** `every_DomainService_must_specify_logicalTypeName()`
 
-** JAXB view models are annotated with `@DomainObject`
+** JAXB view models are annotated with `@DomainObject(nature=VIEW_MODEL)`
 +
 This ensures that the framework is able to correctly detect the view models in the metamodel:
 
-*** `every_jaxb_view_model_must_also_be_annotated_with_DomainObject_nature_MIXIN()`
+*** `every_jaxb_view_model_must_also_be_annotated_with_DomainObject_nature_VIEWMODEL()`
 
 ** allow injected fields in view models (strongly recommended)
 +
