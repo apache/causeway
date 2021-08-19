@@ -16,6 +16,7 @@
 //  specific language governing permissions and limitations
 //  under the License.
 //
+import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
@@ -119,6 +120,9 @@ tasks {
     }
 }
 afterEvaluate {
+    extensions.configure<NodeJsRootExtension> {
+        versions.webpackDevServer.version = "4.0.0"
+    }
     tasks {
         getByName("processResources", Copy::class) {
             dependsOn("compileKotlinJs")
