@@ -36,22 +36,31 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 
-import lombok.experimental.UtilityClass;
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
 @UtilityClass
 class CommonPredicates {
 
     static DescribedPredicate<JavaAnnotation<?>> DomainObject_nature_ENTITY() {
-        return new DescribedPredicate<JavaAnnotation<?>>("@DomainObject(nature=ENTITY)") {
-            @Override public boolean apply(final JavaAnnotation<?> javaAnnotation) {
+        return DomainObject_nature(Nature.ENTITY);
+    }
+
+    static DescribedPredicate<JavaAnnotation<?>> DomainObject_nature_MIXIN() {
+        return DomainObject_nature(Nature.MIXIN);
+    }
+
+    static DescribedPredicate<JavaAnnotation<?>> DomainObject_nature(final Nature expectedNature) {
+        return new DescribedPredicate<>(String.format("@DomainObject(nature=%s)", expectedNature.name())) {
+            @Override
+            public boolean apply(final JavaAnnotation<?> javaAnnotation) {
                 if (!javaAnnotation.getRawType().isAssignableTo(DomainObject.class)) {
                     return false;
                 }
                 val properties = javaAnnotation.getProperties();
                 val nature = properties.get("nature");
                 return nature instanceof JavaEnumConstant &&
-                        Objects.equals(((JavaEnumConstant) nature).name(), Nature.ENTITY.name());
+                        Objects.equals(((JavaEnumConstant) nature).name(), expectedNature.name());
             }
         };
     }

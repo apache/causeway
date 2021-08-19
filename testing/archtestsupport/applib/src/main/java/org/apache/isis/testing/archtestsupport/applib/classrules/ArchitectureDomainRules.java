@@ -33,11 +33,20 @@ import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaCodeUnit;
 import com.tngtech.archunit.core.domain.JavaMethod;
 import com.tngtech.archunit.core.domain.JavaModifier;
+import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ArchRule;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
+import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
 import com.tngtech.archunit.lang.syntax.elements.ClassesShouldConjunction;
+
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.methods;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Collection;
@@ -47,14 +56,9 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
-import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.methods;
-import lombok.experimental.UtilityClass;
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
 /**
  * A library of architecture tests to ensure coding conventions are followed for domain classes, for example as
@@ -106,7 +110,6 @@ public class ArchitectureDomainRules {
                 .should().beAnnotatedWith(DomainServiceLayout.class);
     }
 
-
     static DescribedPredicate<JavaAnnotation<?>> DomainService_logicalTypeName() {
         return DomainXxx_logicalTypeName(DomainService.class);
     }
@@ -116,9 +119,9 @@ public class ArchitectureDomainRules {
     }
 
     static DescribedPredicate<JavaAnnotation<?>> DomainXxx_logicalTypeName(final Class<? extends Annotation> annotationClass) {
-        return new DescribedPredicate<JavaAnnotation<?>>(
-                String.format("@%s(logicalTypeName=...)", annotationClass.getSimpleName())) {
-            @Override public boolean apply(final JavaAnnotation<?> javaAnnotation) {
+        return new DescribedPredicate<>(String.format("@%s(logicalTypeName=...)", annotationClass.getSimpleName())) {
+            @Override
+            public boolean apply(final JavaAnnotation<?> javaAnnotation) {
                 if (!javaAnnotation.getRawType().isAssignableTo(annotationClass)) {
                     return false;
                 }
@@ -128,6 +131,22 @@ public class ArchitectureDomainRules {
             }
         };
     }
+
+    /**
+     * This rule requires that classes annotated with the {@link XmlRootElement} annotation must also be
+     * annotated with the {@link DomainObject} annotation specifying a {@link Nature nature} of {@link Nature#MIXIN MIXIN}.
+     *
+     * <p>
+     *     This is required because the framework uses Spring to detect entities and view models (the
+     *     {@link DomainObject} annotation is actually a meta-annotation for Spring's
+     *     {@link org.springframework.stereotype.Component} annotation.
+     * </p>
+     */
+    @ArchTest
+    public static ArchRule every_jaxb_view_model_must_also_be_annotated_with_DomainObject_nature_MIXIN =
+            ArchRuleDefinition.classes().that()
+                    .areAnnotatedWith(XmlRootElement.class)
+                    .should().beAnnotatedWith(CommonPredicates.DomainObject_nature_MIXIN());
 
     /**
      * This rule requires that action mixin classes should follow the naming convention
