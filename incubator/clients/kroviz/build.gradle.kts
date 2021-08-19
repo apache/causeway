@@ -19,6 +19,12 @@
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
+import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
+afterEvaluate {
+    extensions.configure<NodeJsRootExtension> {
+        versions.webpackDevServer.version = "4.0.0"
+    }
+}
 
 plugins {
     val kotlinVersion: String by System.getProperties()
