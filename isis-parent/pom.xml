@@ -40,7 +40,7 @@ under the License.
 
 	ORG.APACHE:APACHE : commented out : end -->
 
-	<!-- APACHE ISIS customisation 1/14: : start -->
+	<!-- APACHE ISIS customisation 1/15: : start -->
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -54,7 +54,7 @@ under the License.
 	<version>2.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<!-- APACHE ISIS customisation 1/14: end -->
+	<!-- APACHE ISIS customisation 1/15: end -->
 
 
 	<!-- ORG.APACHE:APACHE : commented out : start
@@ -71,13 +71,13 @@ under the License.
 
 	ORG.APACHE:APACHE : commented out : end -->
 
-	<!-- APACHE ISIS customisation 2/14: start -->
+	<!-- APACHE ISIS customisation 2/15: start -->
 	<name>Apache Isis</name>
 	<description>Parent for the core framework + extensions, starter parent pom for starter apps.</description>
 
     <url>https://isis.apache.org</url>
 	<inceptionYear>2010</inceptionYear>
-	<!-- APACHE ISIS customisation 2/14: end -->
+	<!-- APACHE ISIS customisation 2/15: end -->
 
 	<organization>
 		<name>The Apache Software Foundation</name>
@@ -110,7 +110,7 @@ under the License.
     </scm>
 	ORG.APACHE:APACHE : commented out : end -->
 
-	<!-- APACHE ISIS customisation 3/14: start -->
+	<!-- APACHE ISIS customisation 3/15: start -->
 	<mailingLists>
 		<mailingList>
 			<name>developers</name>
@@ -298,7 +298,7 @@ under the License.
 			<timezone>+3</timezone>
 		</developer>
 	</developers>
-	<!-- APACHE ISIS customisation 3/14: end -->
+	<!-- APACHE ISIS customisation 3/15: end -->
 
 	<distributionManagement>
 		<repository>
@@ -323,7 +323,7 @@ under the License.
 		<gpg.useagent>true</gpg.useagent>
 		<minimalMavenBuildVersion>3.1.1</minimalMavenBuildVersion>
 		<minimalJavaBuildVersion>1.8</minimalJavaBuildVersion>
-		<!-- APACHE ISIS customisation 4/14: start -->
+		<!-- APACHE ISIS customisation 4/15: start -->
 		<java.version>11</java.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
@@ -331,7 +331,7 @@ under the License.
 
 		<lombok.version>1.18.20</lombok.version> <!-- overriding Spring -->
 		<delombok.output>${project.build.directory}/delombok</delombok.output>
-		<!-- APACHE ISIS customisation 4/14: end -->
+		<!-- APACHE ISIS customisation 4/15: end -->
 		<surefire.version>2.22.2</surefire.version>
 		<assembly.tarLongFileMode>posix</assembly.tarLongFileMode>
 		<!-- set this property for all derived projects:
@@ -542,7 +542,7 @@ under the License.
 					<artifactId>apache-rat-plugin</artifactId>
 					<version>0.13</version>
 
-					<!-- APACHE ISIS customisation 5/14: start -->
+					<!-- APACHE ISIS customisation 5/15: start -->
 					<configuration>
 						<addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
 						<excludeSubProjects>true</excludeSubProjects>
@@ -707,16 +707,16 @@ under the License.
 							</licenseFamily>
 						</licenseFamilies>
 					</configuration>
-					<!-- APACHE ISIS customisation 5/14: end -->
+					<!-- APACHE ISIS customisation 5/15: end -->
 				</plugin>
 
-				<!-- APACHE ISIS customisation 6/14: start -->
+				<!-- APACHE ISIS customisation 6/15: start -->
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>clirr-maven-plugin</artifactId>
 					<version>2.8</version>
 				</plugin>
-				<!-- APACHE ISIS customisation 6/14: end -->
+				<!-- APACHE ISIS customisation 6/15: end -->
 			</plugins>
 		</pluginManagement>
 		<plugins>
@@ -734,7 +734,7 @@ under the License.
 							<resourceBundles>
 								<resourceBundle>org.apache:apache-jar-resource-bundle:1.4</resourceBundle>
 							</resourceBundles>
-							<!-- APACHE ISIS customisation 7/14: start -->
+							<!-- APACHE ISIS customisation 7/15: start -->
 
 						    <!-- Reference the supplemental-model artifact from module supplemental-model -->
 				            <supplementalModelArtifacts>
@@ -763,7 +763,7 @@ under the License.
 									${license.additional-notes}
 								</postDepListText>
 							</properties>
-							<!-- APACHE ISIS customisation 7/14: end -->
+							<!-- APACHE ISIS customisation 7/15: end -->
 						</configuration>
 					</execution>
 				</executions>
@@ -812,7 +812,7 @@ under the License.
 					</execution>
 				</executions>
 			</plugin>
-			<!-- APACHE ISIS customisation 8/14: start -->
+			<!-- APACHE ISIS customisation 8/15: start -->
 			<plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -835,7 +835,7 @@ under the License.
                     -->
                 </executions>
             </plugin>
-			<!-- APACHE ISIS customisation 8/14: end -->
+			<!-- APACHE ISIS customisation 8/15: end -->
 		</plugins>
 	</build>
 
@@ -843,7 +843,7 @@ under the License.
 		<!-- START SNIPPET: release-profile -->
 		<profile>
 			<id>apache-release</id>
-			<!-- APACHE ISIS customisation 9/14: start -->
+			<!-- APACHE ISIS customisation 9/15: start -->
 			<activation>
 				<property>
 					<name>apache-release</name>
@@ -852,10 +852,10 @@ under the License.
 			<properties>
 				<skipTests>true</skipTests>
 			</properties>
-			<!-- APACHE ISIS customisation 9/14: end -->
+			<!-- APACHE ISIS customisation 9/15: end -->
 			<build>
 				<plugins>
-					<!-- APACHE ISIS customisation 10/14: end -->
+					<!-- APACHE ISIS customisation 10/15: end -->
 					<plugin>
 						<groupId>org.projectlombok</groupId>
 						<artifactId>lombok-maven-plugin</artifactId>
@@ -874,7 +874,7 @@ under the License.
 							</execution>
 						</executions>
 					</plugin>
-					<!-- APACHE ISIS customisation 10/14: end -->
+					<!-- APACHE ISIS customisation 10/15: end -->
 
 					<!-- Create a source-release artifact that contains the fully buildable
                          project directory source structure. This is the artifact which is
@@ -897,9 +897,9 @@ under the License.
 									<goal>single</goal>
 								</goals>
 								<configuration>
-									<!-- APACHE ISIS customisation 11/14: start -->
+									<!-- APACHE ISIS customisation 11/15: start -->
 									<archiveBaseDirectory>..</archiveBaseDirectory>
-									<!-- APACHE ISIS customisation 11/14: end -->
+									<!-- APACHE ISIS customisation 11/15: end -->
                                     <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
 									<descriptorRefs>
 										<descriptorRef>${sourceReleaseAssemblyDescriptor}</descriptorRef>
@@ -939,12 +939,12 @@ under the License.
 								<goals>
 									<goal>jar</goal>
 								</goals>
-								<!-- APACHE ISIS customisation 12/14: start -->
+								<!-- APACHE ISIS customisation 12/15: start -->
 								<configuration>
 									<sourcepath>${delombok.output}</sourcepath>
 									<doclint>none</doclint>
 								</configuration>
-								<!-- APACHE ISIS customisation 12/14: end -->
+								<!-- APACHE ISIS customisation 12/15: end -->
 							</execution>
 						</executions>
 					</plugin>
@@ -991,7 +991,7 @@ under the License.
 					</plugin>
 				</plugins>
 			</build>
-			<!-- APACHE ISIS customisation 13/14: start -->
+			<!-- APACHE ISIS customisation 13/15: start -->
 			<modules>
 				<module>../core</module>
 				<module>../extensions</module>
@@ -1002,12 +1002,18 @@ under the License.
 				<module>../testing</module>
 				<module>../valuetypes</module>
 			</modules>
-			<!-- APACHE ISIS customisation 13/14: end -->
+			<!-- APACHE ISIS customisation 13/15: end -->
 		</profile>
 		<!-- END SNIPPET: release-profile -->
 		<profile>
 			<id>enforce-output-timestamp-property</id>
 			<activation>
+				<!-- APACHE ISIS customisation 14/15: start -->
+				<!-- multiple profile activation conditions have AND logic ... -->
+				<property>
+					<name>apache-release</name>
+				</property>
+				<!-- APACHE ISIS customisation 14/15: end -->
 				<file>
 					<missing>${basedir}/.maven-apache-parent.marker</missing>
 				</file>
@@ -1038,7 +1044,7 @@ under the License.
 			</build>
 		</profile>
 
-		<!-- APACHE ISIS customisation 14/14: start -->
+		<!-- APACHE ISIS customisation 15/15: start -->
 		<profile>
 			<id>released</id>
 			<activation>
@@ -1084,6 +1090,6 @@ under the License.
 			</build>
 		</profile>
 
-		<!-- APACHE ISIS customisation 14/14: end -->
+		<!-- APACHE ISIS customisation 15/15: end -->
 	</profiles>
 </project>
