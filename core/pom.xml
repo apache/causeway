@@ -155,8 +155,8 @@
 
 		<!-- See https://nodejs.org/en/download/ for latest node and npm (lts)
 			versions -->
-		<node.version>v12.14.0</node.version>
-		<npm.version>6.13.1</npm.version>
+		<node.version>v14.17.5</node.version>
+		<npm.version>6.14.14</npm.version>
 
 		<objenesis.version>3.2</objenesis.version>
 		<ognl.version>3.2.21</ognl.version>
