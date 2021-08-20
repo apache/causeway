@@ -28,10 +28,14 @@ import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermis
  *
  * @since 2.0 {@index}
  *
- * @deprecated - use <code>application.yml</code> config properties instead.
+ * @deprecated - use <code>application.yml</code> config properties instead;
+ * corresponds to <code>isis.extensions.secman.permissions-evaluation-policy=ALLOW_BEATS_VETO</code>,
+ * with supported values <code>ALLOW_BEATS_VETO</code> (default) and <code>VETO_BEATS_ALLOW</code>
+ *
  */
 @Deprecated
-public class PermissionsEvaluationServiceAllowBeatsVeto extends PermissionsEvaluationServiceAbstract {
+public class PermissionsEvaluationServiceAllowBeatsVeto
+extends PermissionsEvaluationServiceAbstract {
 
     private static final long serialVersionUID = 1L;
 
