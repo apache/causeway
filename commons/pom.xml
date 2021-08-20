@@ -112,6 +112,11 @@
 					<groupId>org.slf4j</groupId>
 					<artifactId>slf4j-api</artifactId>
 				</exclusion>
+				<exclusion>
+					<!-- version clash -->
+				    <groupId>org.osgi</groupId>
+				    <artifactId>org.osgi.core</artifactId>
+			    </exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>

@@ -72,6 +72,13 @@
         <dependency>
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
+            <exclusions>
+				<exclusion>
+					<!-- version clash -->
+				    <groupId>org.osgi</groupId>
+				    <artifactId>org.osgi.core</artifactId>
+			    </exclusion>
+			</exclusions>				
         </dependency>
         
 		<!-- IDE support (optional) -->

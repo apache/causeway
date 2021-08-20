@@ -46,6 +46,11 @@
 					<groupId>org.glassfish.jaxb</groupId>
 					<artifactId>jaxb-runtime</artifactId>
 				</exclusion>
+				<exclusion>
+					<!-- version clash -->
+				    <groupId>org.osgi</groupId>
+				    <artifactId>org.osgi.core</artifactId>
+			    </exclusion>
 			</exclusions>
 		</dependency>
 
