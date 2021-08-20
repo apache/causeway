@@ -18,9 +18,6 @@
  */
 package org.apache.isis.testdomain.conf;
 
-import javax.inject.Singleton;
-
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -29,9 +26,6 @@ import org.springframework.context.annotation.PropertySources;
 
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.isis.extensions.secman.applib.SecmanConfiguration;
-import org.apache.isis.extensions.secman.applib.permission.spi.PermissionsEvaluationService;
-import org.apache.isis.extensions.secman.applib.permission.spi.PermissionsEvaluationServiceAllowBeatsVeto;
 import org.apache.isis.persistence.jdo.datanucleus.IsisModulePersistenceJdoDatanucleus;
 import org.apache.isis.security.shiro.IsisModuleSecurityShiro;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
@@ -56,16 +50,5 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
     @PropertySource(IsisPresets.H2InMemory_withUniqueSchema),
 })
 public class Configuration_usingJdoAndShiro {
-
-    @Bean @Singleton
-    public SecmanConfiguration securityModuleConfigBean() {
-        return SecmanConfiguration.builder()
-                .build();
-    }
-
-    @Bean @Singleton
-    public PermissionsEvaluationService permissionsEvaluationService() {
-        return new PermissionsEvaluationServiceAllowBeatsVeto();
-    }
 
 }

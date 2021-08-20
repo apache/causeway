@@ -328,6 +328,9 @@ under the License.
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<maven.compiler.release>11</maven.compiler.release>
+		
+		<!-- overriding Spring, since v3.0.0 breaks artifact retrieval of org.jruby:jruby (of any version) -->
+		<maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version> 
 
 		<lombok.version>1.18.20</lombok.version> <!-- overriding Spring -->
 		<delombok.output>${project.build.directory}/delombok</delombok.output>
@@ -407,7 +410,7 @@ under the License.
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-enforcer-plugin</artifactId>
-					<version>${maven-enforcer-plugin.version}</version>
+ 					<version>${maven-enforcer-plugin.version}</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
