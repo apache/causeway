@@ -121,11 +121,6 @@
 	           	</exclusion>
            	</exclusions>
         </dependency>
-        <dependency>
-		    <groupId>org.ow2.asm</groupId>
-		    <artifactId>asm</artifactId>
-		    <version>9.0</version> <!-- keep in sync with org.jboss.resteasy:resteasy-spring-boot-starter -->
-		</dependency>
 		<!-- Cglib patch END -->        
 
         <dependency>

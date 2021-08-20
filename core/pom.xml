@@ -84,6 +84,7 @@
 
 		<!-- LIBRARY DEPENDENCIES -->
 		<archunit.version>0.20.1</archunit.version>
+		<asm.version>9.1</asm.version> <!-- keep in sync with org.eclipse.persistence:org.eclipse.persistence.asm -->
 		<approvaltests.version>12.0.1</approvaltests.version>
 
 		<assertj-guava.version>3.4.0</assertj-guava.version>
@@ -167,7 +168,7 @@
 		<quartz-scheduler.version>2.3.2</quartz-scheduler.version>
 
 		<resteasy-spring-boot-starter.version>4.9.0.Final</resteasy-spring-boot-starter.version>
-		<resteasy.version>4.6.2.Final</resteasy.version> <!-- keep in sync with property defined in resteasy4-spring-boot-starter -->
+		<resteasy.version>4.7.0.Final</resteasy.version> <!-- keep in sync with property defined in resteasy4-spring-boot-starter -->
 
 		<select2.version>4.0.13</select2.version>
 		<shiro.version>1.7.1</shiro.version>
@@ -853,6 +854,18 @@
 			</dependency>
 
 			<!-- THIRD PARTY DEPENDENCIES -->
+			
+			<dependency>
+				<groupId>org.ow2.asm</groupId>
+				<artifactId>asm</artifactId>
+				<version>${asm.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.ow2.asm</groupId>
+				<artifactId>asm-util</artifactId>
+				<version>${asm.version}</version>
+			</dependency>
 
 			<dependency>
 				<groupId>org.hibernate</groupId>

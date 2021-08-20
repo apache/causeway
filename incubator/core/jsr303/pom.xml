@@ -62,6 +62,13 @@
 			<artifactId>jmock</artifactId>
 			<version>2.5.1</version>
 			<scope>test</scope>
+			<exclusions>
+            	<!-- transitively provided by isis-jdk-supplemental -->
+            	<exclusion>
+            		<groupId>org.ow2.asm</groupId>
+            		<artifactId>asm</artifactId>
+            	</exclusion>
+            </exclusions>
 		</dependency>
 	</dependencies>
 
