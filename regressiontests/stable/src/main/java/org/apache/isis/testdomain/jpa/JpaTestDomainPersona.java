@@ -23,7 +23,7 @@ import java.util.TreeSet;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.extensions.secman.applib.SecmanConfiguration;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserRepository;
@@ -101,7 +101,7 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<?>>  {
                 @Override
                 protected void execute(final ExecutionContext ec) {
 
-                    val regularUserRoleName = securityConfig.getRegularUserRoleName();
+                    val regularUserRoleName = isisConfig.getExtensions().getSecman().getSeed().getRegularUser().getRoleName();
                     val regularUserRole = applicationRoleRepository.findByName(regularUserRoleName).orElse(null);
                     val username = LdapConstants.SVEN_PRINCIPAL;
                     ApplicationUser svenUser = applicationUserRepository.findByUsername(username).orElse(null);
@@ -118,7 +118,7 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<?>>  {
 
                 @Inject private ApplicationUserRepository applicationUserRepository;
                 @Inject private ApplicationRoleRepository applicationRoleRepository;
-                @Inject private SecmanConfiguration securityConfig;
+                @Inject private IsisConfiguration isisConfig;
 
             };
         }

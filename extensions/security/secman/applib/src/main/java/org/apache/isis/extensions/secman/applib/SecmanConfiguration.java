@@ -48,7 +48,18 @@ import lombok.Singular;
  * provides reasonable defaults.
  * </p>
  *
- * @deprecated - use <code>application.yml</code> config properties instead.
+ * @deprecated - use <code>application.yml</code> config properties instead;
+ * defaults are
+ * <ul>
+ * <li><code>isis.extensions.secman.seed.admin.user-name=secman-admin</code></li>
+ * <li><code>isis.extensions.secman.seed.admin.namespace-permissions.sticky=isis ...</code></li>
+ * <li><code>isis.extensions.secman.seed.admin.password=pass</code></li>
+ * <li><code>isis.extensions.secman.seed.admin.role-name=isis-ext-secman-admin</code></li>
+ * <li><code>isis.extensions.secman.seed.admin.user-name=sven</code></li>
+ * <li><code>isis.extensions.secman.seed.regular-user.role-name=isis-ext-secman-user</code></li>
+ * <li><code>isis.extensions.secman.seed.admin.namespace-permissions.additional=</code></li>
+ * <li><code>isis.extensions.secman.delegated-users.auto-create-policy=AUTO_CREATE_AS_UNLOCKED</code></li>
+ * </ul>
  *
  * @since 2.0 {@index}
  */
@@ -149,15 +160,15 @@ public class SecmanConfiguration {
                 _NullSafe.stream(adminAdditionalNamespacePermissions));
     }
 
-    public boolean isStickyAdminNamespace(String featureFqn) {
+    public boolean isStickyAdminNamespace(final String featureFqn) {
         return _NullSafe.stream(adminStickyNamespacePermissions)
                 .anyMatch(stickyPackage -> stickyPackage.equals(featureFqn));
     }
 
-    private static Set<String> setOf(Collection<String> coll) {
+    private static Set<String> setOf(final Collection<String> coll) {
         return _Sets.newTreeSet(coll);
     }
-    private static String[] arrayOf(List<String> list) {
+    private static String[] arrayOf(final List<String> list) {
         return list.toArray(new String[]{});
     }
 

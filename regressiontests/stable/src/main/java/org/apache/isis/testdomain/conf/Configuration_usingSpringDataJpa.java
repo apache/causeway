@@ -31,7 +31,6 @@ import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 import org.apache.isis.testdomain.jpa.springdata.SpringDataJpaTestModule;
 import org.apache.isis.testdomain.model.stereotypes.MyService;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
-import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 
 @SpringBootConfiguration
 @EnableAutoConfiguration
