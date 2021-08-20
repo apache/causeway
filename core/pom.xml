@@ -146,6 +146,7 @@
 		<jquery-ui.version>1.12.1</jquery-ui.version> <!-- org.webjars:jquery-ui -->
 
 		<jsr305.version>3.0.2</jsr305.version>
+		<junit-jupiter.version>5.8.0-RC1</junit-jupiter.version> <!-- overrides spring -->
 		<junit-platform.version>1.7.2</junit-platform.version>
 
 		<log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
