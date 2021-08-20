@@ -1406,6 +1406,13 @@
 				<artifactId>objenesis</artifactId>
 				<version>${objenesis.version}</version>
 			</dependency>
+			
+			<dependency>
+			    <groupId>org.osgi</groupId>
+			    <artifactId>osgi.core</artifactId>
+			    <version>${osgi.version}</version>
+			    <scope>provided</scope>
+			</dependency>
 
 			<dependency>
 				<groupId>org.picocontainer</groupId>
