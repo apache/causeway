@@ -20,7 +20,7 @@
 package org.apache.isis.client.kroviz.ui.dialog
 
 import org.apache.isis.client.kroviz.core.aggregator.SvgDispatcher
-import org.apache.isis.client.kroviz.core.event.RequestProxy
+import org.apache.isis.client.kroviz.core.event.ResourceProxy
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Method
 import org.apache.isis.client.kroviz.to.ValueType
@@ -52,7 +52,7 @@ class SvgInline : Command() {
         val url = "https://upload.wikimedia.org/wikipedia/commons/6/6c/Trajans-Column-lower-animated.svg"
         val link = Link(href = url, method = Method.GET.operation)
         val agr = SvgDispatcher(callBack)
-        RequestProxy().invokeNonREST(link, agr)
+        ResourceProxy().fetch(link, agr, isRest = false)
     }
 
 }

@@ -14,9 +14,7 @@ abstract class AggregatorWithLayout : BaseAggregator() {
             dm.properties.propertyLayoutList.forEach { p ->
                 val l = p.link
                 if (l == null) {
-                    console.log("[AWL.handleLayout] propertyLayoutList doesn't have links anymore? ")
-                    console.log(p)
-                    console.log(dm)
+                    //                   console.log(p.id + " link empty")  // ISIS-2846
                 } else {
                     val isDn = l.href.contains("datanucleus")
                     if (!isDn) {

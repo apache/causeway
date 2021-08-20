@@ -24,7 +24,7 @@ import io.kvision.dropdown.separator
 import io.kvision.html.ButtonStyle
 import io.kvision.utils.set
 import org.apache.isis.client.kroviz.core.event.EventStore
-import org.apache.isis.client.kroviz.core.event.RequestProxy
+import org.apache.isis.client.kroviz.core.event.ResourceProxy
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.mb.Menu
@@ -52,7 +52,7 @@ object MenuFactory {
             val link = buildActionLink(it.id, text)
             val invokeLink = it.getInvokeLink()!!
             link.onClick {
-                RequestProxy().invoke(invokeLink)
+                ResourceProxy().fetch(invokeLink)
             }
             dd.add(link)
         }
@@ -77,7 +77,7 @@ object MenuFactory {
             section.serviceAction.forEach { sa ->
                 val action = buildActionLink(sa.id!!, menuTitle)
                 action.onClick {
-                    RequestProxy().invoke(sa.link!!)
+                    ResourceProxy().fetch(sa.link!!)
                 }
                 action.setDragDropData(Constants.stdMimeType, action.id!!)
                 dd.add(action)
@@ -120,7 +120,7 @@ object MenuFactory {
                     val action = buildActionLink(sa.id, menuTitle)
                     action.label = ""
                     action.onClick {
-                        RequestProxy().invoke(sa.link!!)
+                        ResourceProxy().fetch(sa.link!!)
                     }
                     return action
                 }
@@ -172,7 +172,7 @@ object MenuFactory {
                 label = "save",
                 menuTitle = tObject.domainType)
         saveAction.onClick {
-            RequestProxy().invoke(saveLink)
+            ResourceProxy().fetch(saveLink)
         }
         dd.add(saveAction)
 
@@ -181,7 +181,7 @@ object MenuFactory {
                 label = "undo",
                 menuTitle = tObject.domainType)
         undoAction.onClick {
-            RequestProxy().invoke(undoLink)
+            ResourceProxy().fetch(undoLink)
         }
         dd.add(undoAction)
     }

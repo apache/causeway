@@ -18,8 +18,8 @@
  */
 package org.apache.isis.client.kroviz.core.event
 
+import org.apache.isis.client.kroviz.core.aggregator.AggregatorWithLayout
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
-import org.apache.isis.client.kroviz.core.aggregator.SvgDispatcher
 import org.apache.isis.client.kroviz.handler.ResponseHandler
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Method
@@ -34,12 +34,14 @@ import org.w3c.xhr.XMLHttpRequestResponseType
 /**
  * The name is somewhat misleading, see: https://en.wikipedia.org/wiki/XMLHttpRequest
  */
-class RoXmlHttpRequest {
+class RoXmlHttpRequest(val aggregator: BaseAggregator?) {
+
+    private val xhr = XMLHttpRequest()
 
     private val CONTENT_TYPE = "Content-Type"
     private val ACCEPT = "Accept"
 
-    internal fun process(link: Link, aggregator: BaseAggregator?, subType: String) {
+    internal fun process(link: Link, subType: String) {
         val method = link.method
         var url = link.href
         if (method != Method.POST.operation) {
@@ -47,7 +49,6 @@ class RoXmlHttpRequest {
         }
         val credentials: String = UiManager.getCredentials()
 
-        val xhr = XMLHttpRequest()
         xhr.open(method, url, true)
         xhr.setRequestHeader("Authorization", "Basic $credentials")
         xhr.setRequestHeader(CONTENT_TYPE, "application/$subType;charset=UTF-8")
@@ -56,8 +57,8 @@ class RoXmlHttpRequest {
             xhr.responseType = XMLHttpRequestResponseType.BLOB
         }
 
-        val body = buildBody(link, aggregator)
-        val rs = buildResourceSpecificationAndSetupHandler(url, subType, body, xhr)
+        val body = buildBody(link)
+        val rs = buildResourceSpecificationAndSetupHandler(url, subType, body)
 
         when {
             body.isEmpty() -> xhr.send()
@@ -66,7 +67,7 @@ class RoXmlHttpRequest {
         EventStore.start(rs, method, body, aggregator)
     }
 
-    private fun buildBody(link: Link, aggregator: BaseAggregator?): String {
+    private fun buildBody(link: Link): String {
         return when {
             link.hasArguments() -> StringUtils.argumentsAsBody(link)
             link.method == Method.PUT.operation -> {
@@ -80,56 +81,60 @@ class RoXmlHttpRequest {
         }
     }
 
-    internal fun processNonREST(link: Link, aggregator: BaseAggregator?, subType: String) {
+    internal fun processNonREST(link: Link, subType: String) {
         val method = link.method
         val url = link.href
 
-        val xhr = XMLHttpRequest()
         xhr.open(method, url, true)
         xhr.setRequestHeader(CONTENT_TYPE, Constants.stdMimeType)
         xhr.setRequestHeader(ACCEPT, Constants.svgMimeType)
 
         val body = StringUtils.argumentsAsList(link)
         xhr.send(body)
-        val rs = buildResourceSpecificationAndSetupHandler(url, subType, body, xhr)
+        val rs = buildResourceSpecificationAndSetupHandler(url, subType, body)
 
         EventStore.start(rs, method, body, aggregator)
     }
 
-    internal fun invokeKroki(pumlCode: String, agr: SvgDispatcher) {
+    internal fun invokeKroki(pumlCode: String) {
         val method = Method.POST.operation
         val url = Constants.krokiUrl + "plantuml"
 
-        val xhr = XMLHttpRequest()
         xhr.open(method, url, true)
         xhr.setRequestHeader(CONTENT_TYPE, Constants.stdMimeType)
         xhr.setRequestHeader(ACCEPT, Constants.svgMimeType)
 
-        val rs = buildResourceSpecificationAndSetupHandler(url, Constants.subTypeJson, pumlCode, xhr)
+        val rs = buildResourceSpecificationAndSetupHandler(url, Constants.subTypeJson, pumlCode)
 
         xhr.send(pumlCode)
-        EventStore.start(rs, method, pumlCode, agr)
+        EventStore.start(rs, method, pumlCode, aggregator)
     }
 
     private fun buildResourceSpecificationAndSetupHandler(
             url: String,
             subType: String,
-            body: String,
-            xhr: XMLHttpRequest): ResourceSpecification {
+            body: String): ResourceSpecification {
         val rs = ResourceSpecification(url, subType)
-        xhr.onload = { _ -> handleResult(rs, body, xhr) }
-        xhr.onerror = { _ -> handleError(rs, xhr) }
-        xhr.ontimeout = { _ -> handleError(rs, xhr) }
+        xhr.onload = { _ -> handleResult(rs, body) }
+        xhr.onerror = { _ -> handleError(rs) }
+        xhr.ontimeout = { _ -> handleError(rs) }
         return rs
     }
 
-    private fun handleResult(rs: ResourceSpecification, body: String, xhr: XMLHttpRequest) {
-        val response:Any? = xhr.response
-        val logEntry: LogEntry? = EventStore.end(rs, body, response)
-        if (logEntry != null) ResponseHandler.handle(logEntry)
+    private fun handleResult(rs: ResourceSpecification, body: String) {
+        val response: Any? = xhr.response
+        val le: LogEntry? = EventStore.end(rs, body, response)
+        if (le != null) {
+            when {
+                aggregator == null -> ResponseHandler.handle(le)
+                le.obj == null -> ResponseHandler.handle(le)
+                aggregator is AggregatorWithLayout -> aggregator.update(le, le.subType)
+                else -> ResponseHandler.handle(le)
+            }
+        }
     }
 
-    private fun handleError(rs: ResourceSpecification, xhr: XMLHttpRequest) {
+    private fun handleError(rs: ResourceSpecification) {
         val responseText = xhr.responseText
         EventStore.fault(rs, responseText)
     }

@@ -19,7 +19,7 @@
 package org.apache.isis.client.kroviz.utils
 
 import org.apache.isis.client.kroviz.core.aggregator.SvgDispatcher
-import org.apache.isis.client.kroviz.core.event.RequestProxy
+import org.apache.isis.client.kroviz.core.event.ResourceProxy
 import org.apache.isis.client.kroviz.to.Argument
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Method
@@ -39,13 +39,12 @@ object UmlUtils {
         val link = Link(href = Constants.krokiUrl, method = Method.POST.operation, args = args)
         val agr = SvgDispatcher(callBack)
 
-        RequestProxy().invokeNonREST(link, agr)
+        ResourceProxy().fetch(link, agr, isRest = false)
     }
 
     fun generateJsonDiagram(pumlCode: String, callBack: Any) {
         val agr = SvgDispatcher(callBack)
-        RequestProxy().invokeKroki(pumlCode, agr)
+        ResourceProxy().invokeKroki(pumlCode, agr)
     }
-
 
 }

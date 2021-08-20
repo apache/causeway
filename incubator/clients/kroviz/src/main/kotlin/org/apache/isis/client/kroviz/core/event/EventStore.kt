@@ -147,6 +147,10 @@ object EventStore {
         return log.firstOrNull { it.getAggregator() == aggregator }
     }
 
+    fun findAllBy(aggregator: BaseAggregator): List<LogEntry> {
+        return log.filter { it.getAggregator() == aggregator }
+    }
+
     fun findByDispatcher(uuid: UUID): LogEntry {
         return log.first {
             val aggt = it.getAggregator()

@@ -18,8 +18,9 @@
  */
 package org.apache.isis.client.kroviz.core.model
 
+import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.event.EventStore.findBy
-import org.apache.isis.client.kroviz.core.event.RequestProxy
+import org.apache.isis.client.kroviz.core.event.ResourceProxy
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.to.*
 
@@ -29,10 +30,34 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
     private var dirty: Boolean = false
 
     override fun canBeDisplayed(): Boolean {
+ //       debug()
         return when {
             isRendered -> false
             (layout == null) && (grid == null) -> false
             else -> true
+        }
+    }
+
+    private fun debug()  {
+        console.log("[]")
+        console.log("[ODM.debug] data / collections / layout / grid / properties / icon / aggregator / logEntries")
+        console.log(data)
+        console.log(collections)
+        console.log(layout)
+        console.log(grid)
+        console.log(properties)
+        console.log(icon)
+        if (data != null) {
+            val delegate = (data as Exposer).delegate
+            val selfLink = delegate.getSelfLink()
+            val rs = ResourceSpecification(selfLink.href)
+            val le = EventStore.findBy(rs)!!
+            val aggt = le.getAggregator()
+            console.log(aggt)
+            val logEntries = EventStore.findAllBy(aggt)
+            logEntries.forEach {
+                console.log(it)
+            }
         }
     }
 
@@ -78,9 +103,9 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
             val aggregator = logEntry?.getAggregator()!!
             // there may be more than one aggt - which may break this code
 
-            RequestProxy().invoke(putLink, aggregator)
+            ResourceProxy().fetch(putLink, aggregator)
             // now data should be reloaded
-            RequestProxy().invoke(getLink, aggregator)
+            ResourceProxy().fetch(getLink, aggregator)
         }
     }
 

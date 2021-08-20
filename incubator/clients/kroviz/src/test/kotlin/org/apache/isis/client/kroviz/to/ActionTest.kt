@@ -21,7 +21,7 @@ package org.apache.isis.client.kroviz.to
 import org.apache.isis.client.kroviz.IntegrationTest
 import org.apache.isis.client.kroviz.core.aggregator.ActionDispatcher
 import org.apache.isis.client.kroviz.core.event.EventStore
-import org.apache.isis.client.kroviz.core.event.RequestProxy
+import org.apache.isis.client.kroviz.core.event.ResourceProxy
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.handler.ActionHandler
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.*
@@ -62,7 +62,7 @@ class ActionTest : IntegrationTest() {
             console.log(body)
             val json = JSON.parse<Argument>(body)
             console.log(json)
-            RequestProxy().invoke(link, ActionDispatcher())
+            ResourceProxy().fetch(link, ActionDispatcher())
             val urlSpec = ResourceSpecification(url)
             val le = EventStore.findBy(urlSpec)!!
             console.log(EventStore.log)

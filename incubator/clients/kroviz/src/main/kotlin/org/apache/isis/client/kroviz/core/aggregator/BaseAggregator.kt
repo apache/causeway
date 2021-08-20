@@ -19,7 +19,7 @@
 package org.apache.isis.client.kroviz.core.aggregator
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
-import org.apache.isis.client.kroviz.core.event.RequestProxy
+import org.apache.isis.client.kroviz.core.event.ResourceProxy
 import org.apache.isis.client.kroviz.core.model.DisplayModel
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.TObject
@@ -29,7 +29,7 @@ import org.apache.isis.client.kroviz.ui.core.Constants
  * An Aggregator:
  * @item is initially created in ResponseHandlers, displayModels, Menus
  * @item is assigned to at least one LogEntry,
- * @item is passed on to related LogEntries (eg. sibblings in a list, Layout),
+ * @item is passed on to related LogEntries (eg. siblings in a list, Layout),
  * @item is notified about changes to related LogEntries,
  * @item invokes subsequent links, and
  * @item triggers creation a view for an object or a list.
@@ -83,7 +83,7 @@ abstract class BaseAggregator {
     }
 
     protected fun invoke(link: Link, aggregator: BaseAggregator, subType: String = Constants.subTypeJson) {
-        RequestProxy().invoke(link, aggregator, subType)
+        ResourceProxy().fetch(link, aggregator, subType)
     }
 
 }
