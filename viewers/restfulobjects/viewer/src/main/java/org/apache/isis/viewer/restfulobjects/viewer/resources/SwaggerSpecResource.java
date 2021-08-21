@@ -40,9 +40,11 @@ import org.apache.isis.applib.services.swagger.Visibility;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Component
 @Path("/swagger")
+@Log4j2
 public class SwaggerSpecResource {
 
     private final SwaggerService swaggerService;

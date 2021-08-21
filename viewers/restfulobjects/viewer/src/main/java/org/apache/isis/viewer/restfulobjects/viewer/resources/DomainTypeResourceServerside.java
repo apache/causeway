@@ -66,6 +66,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 import org.apache.isis.viewer.restfulobjects.viewer.util.UrlParserUtils;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Implementation note: it seems to be necessary to annotate the implementation
@@ -74,6 +75,7 @@ import lombok.val;
  */
 @Component
 @Path("/domain-types")
+@Log4j2
 public class DomainTypeResourceServerside extends ResourceAbstract implements DomainTypeResource {
 
     @Inject

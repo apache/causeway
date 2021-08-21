@@ -47,6 +47,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
 import org.apache.isis.viewer.restfulobjects.viewer.context.ResourceContext;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Implementation note: it seems to be necessary to annotate the implementation
@@ -55,6 +56,7 @@ import lombok.val;
  */
 @Component
 @Path("/version")
+@Log4j2
 public class VersionResourceServerside extends ResourceAbstract implements VersionResource {
 
     @Inject

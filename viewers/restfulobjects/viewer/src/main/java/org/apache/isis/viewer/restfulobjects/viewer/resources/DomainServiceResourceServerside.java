@@ -57,9 +57,11 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainServi
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Component
 @Path("/services")
+@Log4j2
 public class DomainServiceResourceServerside extends ResourceAbstract implements DomainServiceResource {
 
     private static final Predicate<ManagedObject> NATURE_REST = (final ManagedObject input) -> {
@@ -176,7 +178,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
                 RepresentationType.OBJECT_ACTION, Where.OBJECT_FORMS, RepresentationService.Intent.ALREADY_PERSISTENT);
 
         val serviceAdapter = getServiceAdapter(serviceId);
-        val domainResourceHelper = DomainResourceHelper.ofServiceResource(resourceContext, serviceAdapter);
+        val domainResourceHelper = _DomainResourceHelper.ofServiceResource(resourceContext, serviceAdapter);
 
         return domainResourceHelper.actionPrompt(actionId);
     }
@@ -227,7 +229,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         final JsonRepresentation arguments = resourceContext.getQueryStringAsJsonRepr();
 
         val serviceAdapter = getServiceAdapter(serviceId);
-        val domainResourceHelper = DomainResourceHelper.ofServiceResource(resourceContext, serviceAdapter);
+        val domainResourceHelper = _DomainResourceHelper.ofServiceResource(resourceContext, serviceAdapter);
 
         return domainResourceHelper.invokeActionQueryOnly(actionId, arguments);
     }
@@ -253,7 +255,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         final JsonRepresentation arguments = resourceContext.getQueryStringAsJsonRepr();
 
         val serviceAdapter = getServiceAdapter(serviceId);
-        val domainResourceHelper = DomainResourceHelper.ofServiceResource(resourceContext, serviceAdapter);
+        val domainResourceHelper = _DomainResourceHelper.ofServiceResource(resourceContext, serviceAdapter);
 
         return domainResourceHelper.invokeActionIdempotent(actionId, arguments);
     }
@@ -275,7 +277,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         final JsonRepresentation arguments = resourceContext.getQueryStringAsJsonRepr();
 
         val serviceAdapter = getServiceAdapter(serviceId);
-        val domainResourceHelper = DomainResourceHelper.ofServiceResource(resourceContext, serviceAdapter);
+        val domainResourceHelper = _DomainResourceHelper.ofServiceResource(resourceContext, serviceAdapter);
 
         return domainResourceHelper.invokeAction(actionId, arguments);
     }

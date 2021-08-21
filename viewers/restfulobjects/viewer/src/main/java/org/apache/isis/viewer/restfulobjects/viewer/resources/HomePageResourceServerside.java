@@ -43,8 +43,10 @@ import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplication
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Component
+@Log4j2
 public class HomePageResourceServerside extends ResourceAbstract implements HomePageResource {
 
     @Inject

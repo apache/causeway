@@ -37,7 +37,6 @@ public interface HealthResource {
 
     @GET
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_HEALTH })
-    //TODO @ClientResponseType(entityType = String.class)
     public Response health();
 
     @DELETE

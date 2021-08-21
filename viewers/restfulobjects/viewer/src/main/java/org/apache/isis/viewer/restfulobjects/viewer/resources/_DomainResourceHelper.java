@@ -46,25 +46,25 @@ import org.apache.isis.viewer.restfulobjects.viewer.context.ResourceContext;
 import lombok.NonNull;
 import lombok.val;
 
-class DomainResourceHelper {
+class _DomainResourceHelper {
 
     private final IResourceContext resourceContext;
     private final RepresentationService representationService;
     private final TransactionService transactionService;
 
-    public static DomainResourceHelper ofObjectResource(
+    public static _DomainResourceHelper ofObjectResource(
             IResourceContext resourceContext,
             ManagedObject objectAdapter) {
-        return new DomainResourceHelper(resourceContext, objectAdapter, new DomainObjectLinkTo());
+        return new _DomainResourceHelper(resourceContext, objectAdapter, new DomainObjectLinkTo());
     }
 
-    public static DomainResourceHelper ofServiceResource(
+    public static _DomainResourceHelper ofServiceResource(
             IResourceContext resourceContext,
             ManagedObject objectAdapter) {
-        return new DomainResourceHelper(resourceContext, objectAdapter, new DomainServiceLinkTo());
+        return new _DomainResourceHelper(resourceContext, objectAdapter, new DomainServiceLinkTo());
     }
 
-    private DomainResourceHelper(
+    private _DomainResourceHelper(
             final IResourceContext resourceContext,
             final ManagedObject objectAdapter,
             final ObjectAdapterLinkTo adapterLinkTo) {
