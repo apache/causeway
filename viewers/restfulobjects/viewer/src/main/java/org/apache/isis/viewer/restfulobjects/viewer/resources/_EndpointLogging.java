@@ -35,6 +35,20 @@ class _EndpointLogging {
     Response response(
             final Logger log,
             final String format,
+            final Response response) {
+        if(log.isDebugEnabled()) {
+            logRequest(log, format);
+            logResponse(log, response);
+        }
+        return response;
+    }
+
+    /**
+     * Returns given {@code Response} untampered.
+     */
+    Response response(
+            final Logger log,
+            final String format,
             final String arg0,
             final Response response) {
         if(log.isDebugEnabled()) {
@@ -75,6 +89,35 @@ class _EndpointLogging {
             logResponse(log, response);
         }
         return response;
+    }
+
+    /**
+     * Returns given {@code RestfulObjectsApplicationException} untampered.
+     */
+    RestfulObjectsApplicationException error(
+            final Logger log,
+            final String format,
+            final RestfulObjectsApplicationException roException) {
+        if(log.isDebugEnabled()) {
+            logRequest(log, format);
+            logError(log, roException);
+        }
+        return roException;
+    }
+
+    /**
+     * Returns given {@code RestfulObjectsApplicationException} untampered.
+     */
+    RestfulObjectsApplicationException error(
+            final Logger log,
+            final String format,
+            final String arg0,
+            final RestfulObjectsApplicationException roException) {
+        if(log.isDebugEnabled()) {
+            logRequest(log, format, arg0);
+            logError(log, roException);
+        }
+        return roException;
     }
 
     /**
@@ -126,7 +169,7 @@ class _EndpointLogging {
     private void logError(final Logger log, final RestfulObjectsApplicationException roException) {
         log.debug("<<< ERROR");
         log.debug(roException.getBody());
-        log.debug("--- ERROR");
+        log.debug("--- END ERROR");
     }
 
 }
