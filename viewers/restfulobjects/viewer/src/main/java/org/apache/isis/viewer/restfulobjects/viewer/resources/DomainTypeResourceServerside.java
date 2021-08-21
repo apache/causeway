@@ -76,7 +76,9 @@ import lombok.extern.log4j.Log4j2;
 @Component
 @Path("/domain-types")
 @Log4j2
-public class DomainTypeResourceServerside extends ResourceAbstract implements DomainTypeResource {
+public class DomainTypeResourceServerside
+extends ResourceAbstract
+implements DomainTypeResource {
 
     @Inject
     public DomainTypeResourceServerside(
@@ -84,12 +86,15 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
             final IsisConfiguration isisConfiguration,
             final InteractionLayerTracker iInteractionLayerTracker) {
         super(metaModelContext, isisConfiguration, iInteractionLayerTracker);
+        log.debug("<init>");
     }
 
     @Override
     @GET
     @Path("/")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_TYPE_LIST })
+    @Produces({
+        MediaType.APPLICATION_JSON,
+        RestfulMediaType.APPLICATION_JSON_TYPE_LIST })
     public Response domainTypes() {
 
         val resourceContext = createResourceContext(
@@ -102,14 +107,18 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
                 new TypeListReprRenderer(resourceContext, null, JsonRepresentation.newMap());
         renderer.with(domainTypeSpecifications).includesSelf();
 
+        //TODO log
         return Responses.ofOk(renderer, Caching.ONE_DAY).build();
     }
 
     @Override
     @GET
     @Path("/{domainType}")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPE })
-    public Response domainType(@PathParam("domainType") final String domainType) {
+    @Produces({
+        MediaType.APPLICATION_JSON,
+        RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPE })
+    public Response domainType(
+            @PathParam("domainType") final String domainType) {
 
         val resourceContext = createResourceContext(
                 RepresentationType.DOMAIN_TYPE, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
@@ -119,6 +128,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         val renderer = new DomainTypeReprRenderer(resourceContext, null, JsonRepresentation.newMap());
         renderer.with(objectSpec).includesSelf();
 
+      //TODO log
         return Responses.ofOk(renderer, Caching.ONE_DAY).build();
     }
 
@@ -129,7 +139,8 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_LAYOUT_BS3,
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_LAYOUT_BS3
     })
-    public Response layout(@PathParam("domainType") final String domainType) {
+    public Response layout(
+            @PathParam("domainType") final String domainType) {
 
         val resourceContext = createResourceContext(
                 RepresentationType.LAYOUT, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
@@ -150,27 +161,33 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
                     .type(serializationStrategy.type(RepresentationType.LAYOUT));
         }
 
+      //TODO log
         return builder.build();
     }
 
     @Override
     @GET
     @Path("/{domainType}/properties/{propertyId}")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_PROPERTY_DESCRIPTION })
-    public Response typeProperty(@PathParam("domainType") final String domainType, @PathParam("propertyId") final String propertyId) {
+    @Produces({
+        MediaType.APPLICATION_JSON,
+        RestfulMediaType.APPLICATION_JSON_PROPERTY_DESCRIPTION })
+    public Response typeProperty(
+            @PathParam("domainType") final String domainType,
+            @PathParam("propertyId") final String propertyId) {
 
         val resourceContext = createResourceContext(
                 RepresentationType.PROPERTY_DESCRIPTION, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
         val parentSpec = getSpecificationLoader().specForLogicalTypeName(domainType).orElse(null);
         if (parentSpec == null) {
-            throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
+            throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND); //TODO log
         }
 
         val objectMember = parentSpec.getAssociation(propertyId)
-                .orElseThrow(()->RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND));
+                .orElseThrow(()->RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND)); //TODO log
 
         if (objectMember.isOneToManyAssociation()) {
+          //TODO log
             throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
         final OneToOneAssociation property = (OneToOneAssociation) objectMember;
@@ -178,27 +195,34 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         final PropertyDescriptionReprRenderer renderer = new PropertyDescriptionReprRenderer(resourceContext, null, JsonRepresentation.newMap());
         renderer.with(new ParentSpecAndProperty(parentSpec, property)).includesSelf();
 
+      //TODO log
         return Responses.ofOk(renderer, Caching.ONE_DAY).build();
     }
 
     @Override
     @GET
     @Path("/{domainType}/collections/{collectionId}")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_COLLECTION_DESCRIPTION })
-    public Response typeCollection(@PathParam("domainType") final String domainType, @PathParam("collectionId") final String collectionId) {
+    @Produces({
+        MediaType.APPLICATION_JSON,
+        RestfulMediaType.APPLICATION_JSON_COLLECTION_DESCRIPTION })
+    public Response typeCollection(
+            @PathParam("domainType") final String domainType,
+            @PathParam("collectionId") final String collectionId) {
 
         val resourceContext = createResourceContext(
                 RepresentationType.COLLECTION_DESCRIPTION, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
         val parentSpec = getSpecificationLoader().specForLogicalTypeName(domainType).orElse(null);
         if (parentSpec == null) {
+          //TODO log
             throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
 
         val objectMember = parentSpec.getAssociation(collectionId)
-                .orElseThrow(()->RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND));
+                .orElseThrow(()->RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND)); //TODO log
 
         if (objectMember.isOneToOneAssociation()) {
+          //TODO log
             throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
         final OneToManyAssociation collection = (OneToManyAssociation) objectMember;
@@ -206,54 +230,68 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         final CollectionDescriptionReprRenderer renderer = new CollectionDescriptionReprRenderer(resourceContext, null, JsonRepresentation.newMap());
         renderer.with(new ParentSpecAndCollection(parentSpec, collection)).includesSelf();
 
+      //TODO log
         return Responses.ofOk(renderer, Caching.ONE_DAY).build();
     }
 
     @Override
     @GET
     @Path("/{domainType}/actions/{actionId}")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_DESCRIPTION })
-    public Response typeAction(@PathParam("domainType") final String domainType, @PathParam("actionId") final String actionId) {
+    @Produces({
+        MediaType.APPLICATION_JSON,
+        RestfulMediaType.APPLICATION_JSON_ACTION_DESCRIPTION })
+    public Response typeAction(
+            @PathParam("domainType") final String domainType,
+            @PathParam("actionId") final String actionId) {
 
         val resourceContext = createResourceContext(
                 RepresentationType.ACTION_DESCRIPTION, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
         val parentSpec = getSpecificationLoader().specForLogicalTypeName(domainType).orElse(null);
         if (parentSpec == null) {
+          //TODO log
             throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
 
         val action = parentSpec.getAction(actionId)
-                .orElseThrow(()->RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND));
+                .orElseThrow(()->RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND)); //TODO log
 
         final ActionDescriptionReprRenderer renderer = new ActionDescriptionReprRenderer(resourceContext, null, JsonRepresentation.newMap());
         renderer.with(new ParentSpecAndAction(parentSpec, action)).includesSelf();
 
+      //TODO log
         return Responses.ofOk(renderer, Caching.ONE_DAY).build();
     }
 
     @Override
     @GET
     @Path("/{domainType}/actions/{actionId}/params/{paramName}")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION })
-    public Response typeActionParam(@PathParam("domainType") final String domainType, @PathParam("actionId") final String actionId, @PathParam("paramName") final String paramName) {
+    @Produces({
+        MediaType.APPLICATION_JSON,
+        RestfulMediaType.APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION })
+    public Response typeActionParam(
+            @PathParam("domainType") final String domainType,
+            @PathParam("actionId") final String actionId,
+            @PathParam("paramName") final String paramName) {
 
         val resourceContext = createResourceContext(
                 RepresentationType.ACTION_PARAMETER_DESCRIPTION, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
         val parentSpec = getSpecificationLoader().specForLogicalTypeName(domainType).orElse(null);
         if (parentSpec == null) {
+          //TODO log
             throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
 
         val parentAction = parentSpec.getAction(actionId)
-                .orElseThrow(()->RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND));
+                .orElseThrow(()->RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND)); //TODO log
 
         final ObjectActionParameter actionParam = parentAction.getParameterByName(paramName);
 
         final ActionParameterDescriptionReprRenderer renderer = new ActionParameterDescriptionReprRenderer(resourceContext, null, JsonRepresentation.newMap());
         renderer.with(new ParentSpecAndActionParam(parentSpec, actionParam)).includesSelf();
 
+      //TODO log
         return Responses.ofOk(renderer, Caching.ONE_DAY).build();
     }
 
@@ -264,7 +302,10 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     @Override
     @GET
     @Path("/{domainType}/type-actions/isSubtypeOf/invoke")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Produces({
+        MediaType.APPLICATION_JSON,
+        RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT,
+        RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response domainTypeIsSubtypeOf(
             @PathParam("domainType") final String domainType,
             @QueryParam("supertype") final String superTypeStr, // simple style
@@ -280,6 +321,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         val supertypeSpec = getSpecificationLoader().specForLogicalTypeName(supertype).orElse(null);
         if (domainTypeSpec == null
                 || supertypeSpec == null) {
+          //TODO log
             throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
 
@@ -293,6 +335,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         final boolean value = domainTypeSpec.isOfType(supertypeSpec);
         renderer.with(domainTypeSpec).withSelf(selfLink).withValue(value);
 
+      //TODO log
         return Responses.ofOk(renderer, Caching.ONE_DAY).build();
     }
 
@@ -300,7 +343,10 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     @Override
     @GET
     @Path("/{domainType}/type-actions/isSupertypeOf/invoke")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Produces({
+        MediaType.APPLICATION_JSON,
+        RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT,
+        RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response domainTypeIsSupertypeOf(
             @PathParam("domainType") final String domainType,
             @QueryParam("subtype") final String subTypeStr, // simple style
@@ -316,6 +362,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         val subtypeSpec = getSpecificationLoader().specForLogicalTypeName(subtype).orElse(null);
         if (domainTypeSpec == null
                 || subtypeSpec == null) {
+          //TODO log
             throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
 
@@ -329,6 +376,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         final boolean value = subtypeSpec.isOfType(domainTypeSpec);
         renderer.with(domainTypeSpec).withSelf(selfLink).withValue(value);
 
+      //TODO log
         return Responses.ofOk(renderer, Caching.ONE_DAY).build();
     }
 
@@ -342,7 +390,6 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
             return domainTypeStr;
         }
 
-
         // formal style; must parse from args that has a link with an href to the domain type
         final String argsAsQueryString = UrlEncodingUtils.urlDecode(argsAsUrlEncodedQueryString);
         final String href = linkFromFormalArgs(argsAsQueryString, argsParamName);
@@ -352,6 +399,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     private static String linkFromFormalArgs(final String argumentsAsQueryString, final String paramName) {
         final JsonRepresentation arguments = Util.readQueryStringAsMap(argumentsAsQueryString);
         if (!arguments.isLink(paramName)) {
+          //TODO log
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Args should contain a link '%s'", paramName);
         }
 

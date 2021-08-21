@@ -20,6 +20,7 @@ package org.apache.isis.viewer.restfulobjects.viewer.resources;
 
 import java.io.InputStream;
 import java.util.Map;
+import java.util.function.UnaryOperator;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -48,6 +49,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 import org.apache.isis.viewer.restfulobjects.viewer.context.ResourceContext;
 
+import lombok.NonNull;
 import lombok.val;
 
 public abstract class ResourceAbstract {
@@ -123,15 +125,19 @@ public abstract class ResourceAbstract {
 
     // -- ISIS INTEGRATION
 
-    protected ManagedObject getObjectAdapterElseThrowNotFound(String domainType, final String instanceIdEncoded) {
+    protected ManagedObject getObjectAdapterElseThrowNotFound(
+            final String domainType,
+            final String instanceIdEncoded,
+            final @NonNull UnaryOperator<RestfulObjectsApplicationException> onRoException) {
         final String instanceIdDecoded = UrlDecoderUtils.urlDecode(instanceIdEncoded);
 
         val bookmark = Bookmark.forLogicalTypeNameAndIdentifier(domainType, instanceIdDecoded);
         return metaModelContext.loadObject(bookmark)
-                .orElseThrow(()->RestfulObjectsApplicationException
+                .orElseThrow(()->onRoException.apply(
+                        RestfulObjectsApplicationException
                         .createWithMessage(HttpStatusCode.NOT_FOUND,
                                 "Could not determine adapter for bookmark: '%s'",
-                                bookmark));
+                                bookmark)));
     }
 
     protected ManagedObject getServiceAdapter(final String serviceId) {
