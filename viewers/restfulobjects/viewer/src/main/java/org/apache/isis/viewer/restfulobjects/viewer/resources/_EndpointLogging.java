@@ -29,6 +29,21 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 class _EndpointLogging {
 
+
+    /**
+     * Returns given {@code stringResponse} untampered.
+     */
+    String stringResponse(
+            final Logger log,
+            final String format,
+            final String stringResponse) {
+        if(log.isDebugEnabled()) {
+            logRequest(log, format);
+            logResponse(log, stringResponse);
+        }
+        return stringResponse;
+    }
+
     /**
      * Returns given {@code Response} untampered.
      */
@@ -163,6 +178,12 @@ class _EndpointLogging {
     private void logResponse(final Logger log, final Response response) {
         log.debug("<<< RESPONSE");
         log.debug(response.getEntity());
+        log.debug("--- END RESPONSE");
+    }
+
+    private void logResponse(final Logger log, final String stringResponse) {
+        log.debug("<<< RESPONSE");
+        log.debug(stringResponse);
         log.debug("--- END RESPONSE");
     }
 

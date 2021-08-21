@@ -59,6 +59,7 @@ public class SwaggerSpecResource {
             final InteractionService interactionService) {
         this.swaggerService = swaggerService;
         this.interactionService = interactionService;
+        log.debug("<init>");
     }
 
     @Path("/private")
@@ -68,7 +69,8 @@ public class SwaggerSpecResource {
         MediaType.APPLICATION_JSON, "text/yaml"
     })
     public String swaggerPrivate() {
-        return swagger(Visibility.PRIVATE);
+        return _EndpointLogging.stringResponse(log, "GET /swagger/private",
+                swagger(Visibility.PRIVATE));
     }
 
     @Path("/prototyping")
@@ -78,7 +80,8 @@ public class SwaggerSpecResource {
         MediaType.APPLICATION_JSON, "text/yaml"
     })
     public String swaggerPrototyping() {
-        return swagger(Visibility.PRIVATE_WITH_PROTOTYPING);
+        return _EndpointLogging.stringResponse(log, "GET /swagger/prototyping",
+                swagger(Visibility.PRIVATE_WITH_PROTOTYPING));
     }
 
     @Path("/public")
@@ -88,8 +91,11 @@ public class SwaggerSpecResource {
         MediaType.APPLICATION_JSON, "text/yaml"
     })
     public String swaggerPublic() {
-        return swagger(Visibility.PUBLIC);
+        return _EndpointLogging.stringResponse(log, "GET /swagger/public",
+                swagger(Visibility.PUBLIC));
     }
+
+    // -- HELPER
 
     private String swagger(final Visibility visibility) {
 

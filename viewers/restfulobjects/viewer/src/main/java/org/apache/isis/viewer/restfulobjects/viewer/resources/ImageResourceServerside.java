@@ -48,6 +48,7 @@ public class ImageResourceServerside extends ResourceAbstract {
             final IsisConfiguration isisConfiguration,
             final InteractionLayerTracker iInteractionLayerTracker) {
         super(metaModelContext, isisConfiguration, iInteractionLayerTracker);
+        log.debug("<init>");
     }
 
     @GET
@@ -63,7 +64,7 @@ public class ImageResourceServerside extends ResourceAbstract {
         //                "attachment; filename=SimpleObject.png");
         //        return response.build();
 
-        return Response.ok(bytes).build();
-
+        return _EndpointLogging.response(log, "GET /image",
+                Response.ok(bytes).build());
     }
 }
