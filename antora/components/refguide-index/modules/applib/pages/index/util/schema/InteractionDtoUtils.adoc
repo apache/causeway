@@ -28,8 +28,8 @@ class InteractionDtoUtils {
   ValueDto getParameterArgument(final ActionInvocationDto ai, final int paramNum)
   String getParameterName(final ActionInvocationDto ai, final int paramNum)
   ValueType getParameterType(final ActionInvocationDto ai, final int paramNum)
-  boolean isNull(final ActionInvocationDto ai, int paramNum)
-  T getParameterArgValue(final ActionInvocationDto ai, int paramNum)
+  boolean isNull(final ActionInvocationDto ai, final int paramNum)
+  T getParameterArgValue(final ActionInvocationDto ai, final int paramNum)
   void dump(final InteractionDto ixnDto, final PrintStream out)
 }
 ----

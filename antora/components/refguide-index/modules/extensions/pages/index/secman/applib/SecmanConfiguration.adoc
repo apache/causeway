@@ -5,7 +5,16 @@
 ====
 [red]#_deprecated:_#
 
-- use `application.yml` config properties instead.
+- use `application.yml` config properties instead; defaults are
+
+* `isis.extensions.secman.seed.admin.user-name=secman-admin`
+* `isis.extensions.secman.seed.admin.namespace-permissions.sticky=isis ...`
+* `isis.extensions.secman.seed.admin.password=pass`
+* `isis.extensions.secman.seed.admin.role-name=isis-ext-secman-admin`
+* `isis.extensions.secman.seed.admin.user-name=sven`
+* `isis.extensions.secman.seed.regular-user.role-name=isis-ext-secman-user`
+* `isis.extensions.secman.seed.admin.namespace-permissions.additional=`
+* `isis.extensions.secman.delegated-users.auto-create-policy=AUTO_CREATE_AS_UNLOCKED`
 ====
 
 Applications consuming secman must instantiate a _org.springframework.context.annotation.Bean_ of this type; secman then uses this bean to configure itself.
@@ -21,7 +30,7 @@ This class is implemented as a builder (courtesy of Lombok) but it provides reas
 ----
 class SecmanConfiguration {
   Stream<String> streamAdminNamespacePermissions()
-  boolean isStickyAdminNamespace(String featureFqn)
+  boolean isStickyAdminNamespace(final String featureFqn)
 }
 ----
 

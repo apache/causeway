@@ -9,6 +9,8 @@ A library of architecture tests to ensure coding conventions are followed for do
 .ArchitectureDomainRules.java
 ----
 class ArchitectureDomainRules {
+  @ArchTest
+public static ArchRule every_jaxb_view_model_must_also_be_annotated_with_DomainObject_nature_MIXIN;     // <.>
   ArchRule every_DomainObject_must_specify_logicalTypeName()     // <.>
   ArchRule every_DomainService_must_specify_logicalTypeName()     // <.>
   ArchRule every_DomainObject_must_also_be_annotated_with_DomainObjectLayout()     // <.>
@@ -30,6 +32,11 @@ class ArchitectureDomainRules {
 }
 ----
 
+<.> xref:#every_jaxb_view_model_must_also_be_annotated_with_DomainObject_nature_MIXIN[every_jaxb_view_model_must_also_be_annotated_with_DomainObject_nature_MIXIN]
++
+--
+This rule requires that classes annotated with the _XmlRootElement_ annotation must also be annotated with the xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation specifying a xref:refguide:applib:index/annotation/Nature.adoc[Nature] of _Nature#MIXIN MIXIN_ .
+--
 <.> xref:#every_DomainObject_must_specify_logicalTypeName__[every_DomainObject_must_specify_logicalTypeName()]
 +
 --
@@ -102,6 +109,13 @@ This rule requires that finders of repos reutrn either _java.util.Collection_ s 
 --
 
 == Members
+
+[#every_jaxb_view_model_must_also_be_annotated_with_DomainObject_nature_MIXIN]
+=== every_jaxb_view_model_must_also_be_annotated_with_DomainObject_nature_MIXIN
+
+This rule requires that classes annotated with the _XmlRootElement_ annotation must also be annotated with the xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation specifying a xref:refguide:applib:index/annotation/Nature.adoc[Nature] of _Nature#MIXIN MIXIN_ .
+
+This is required because the framework uses Spring to detect entities and view models (the xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation is actually a meta-annotation for Spring's _org.springframework.stereotype.Component_ annotation.
 
 [#every_DomainObject_must_specify_logicalTypeName__]
 === every_DomainObject_must_specify_logicalTypeName()
