@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.services.classsubstitutor;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -58,7 +58,7 @@ public class ClassSubstitutorRegistry {
      * @param originalClass
      * @return (non-null) the aggregated Substitution that applies to given originalClass
      */
-    public Substitution getSubstitution(@Nullable final Class<?> originalClass) {
+    public Substitution getSubstitution(final @Nullable Class<?> originalClass) {
         if(originalClass == null) {
             return Substitution.neverReplaceClass();
         }

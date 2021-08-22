@@ -36,6 +36,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoderJwkSupport;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
@@ -43,7 +44,6 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import static org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter.DEFAULT_AUTHORIZATION_REQUEST_BASE_URI;
 
 /**
  * Configuration Bean to support Isis Security using Keycloak.
@@ -119,6 +119,8 @@ public class IsisModuleSecurityKeycloak {
 
             val successUrl = isisConfiguration.getSecurity().getKeycloak().getLoginSuccessUrl();
             val realm = isisConfiguration.getSecurity().getKeycloak().getRealm();
+            val loginPage = OAuth2AuthorizationRequestRedirectFilter.DEFAULT_AUTHORIZATION_REQUEST_BASE_URI 
+                    + "/" + realm;
 
             val httpSecurityLogoutConfigurer =
                 http
@@ -138,7 +140,7 @@ public class IsisModuleSecurityKeycloak {
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
 
             logoutHandlers.forEach(httpSecurityLogoutConfigurer::addLogoutHandler);
-
+            
             httpSecurityLogoutConfigurer
                     .and()
 
@@ -151,7 +153,7 @@ public class IsisModuleSecurityKeycloak {
                             .oidcUserService(keycloakOidcUserService)
                     .and()
 
-                    .loginPage(DEFAULT_AUTHORIZATION_REQUEST_BASE_URI + "/" + realm);
+                    .loginPage(loginPage);
         }
     }
 }

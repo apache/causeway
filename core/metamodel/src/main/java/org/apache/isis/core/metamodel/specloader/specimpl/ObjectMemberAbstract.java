@@ -252,8 +252,8 @@ implements
     // -- MIXIN ADAPTER FACTORY
 
     protected ManagedObject mixinAdapterFor(
-            @NonNull final Class<?> mixinType,
-            @NonNull final ManagedObject mixee) {
+            final @NonNull Class<?> mixinType,
+            final @NonNull ManagedObject mixee) {
 
         val spec = getSpecificationLoader().loadSpecification(mixinType);
         val mixinFacet = spec.getFacet(MixinFacet.class);

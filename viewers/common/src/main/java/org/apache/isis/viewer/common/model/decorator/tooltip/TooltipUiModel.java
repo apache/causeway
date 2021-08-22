@@ -21,7 +21,7 @@ package org.apache.isis.viewer.common.model.decorator.tooltip;
 import java.io.Serializable;
 import java.util.Optional;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import lombok.NonNull;
 import lombok.Value;
@@ -31,8 +31,8 @@ public class TooltipUiModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @NonNull final Optional<String> label;
-    @NonNull final String body;
+    final @NonNull Optional<String> label;
+    final @NonNull String body;
 
     public static TooltipUiModel ofBody(@NonNull String body) {
         return of(Optional.empty(), body);

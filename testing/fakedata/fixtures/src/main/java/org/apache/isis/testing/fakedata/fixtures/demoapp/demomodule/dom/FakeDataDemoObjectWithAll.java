@@ -23,16 +23,15 @@ import java.math.BigInteger;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.UUID;
 
-import javax.annotation.Nullable;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 import javax.validation.constraints.Digits;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.springframework.lang.Nullable;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
@@ -319,7 +318,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
 
 
     @Action(semantics=SemanticsOf.IDEMPOTENT)
-    public FakeDataDemoObjectWithAll updateSomeByteWrapper(@Nullable final Byte b) {
+    public FakeDataDemoObjectWithAll updateSomeByteWrapper(final @Nullable Byte b) {
         setSomeByteWrapper(b);
         return this;
     }
@@ -335,7 +334,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
 
 
     @Action(semantics=SemanticsOf.IDEMPOTENT)
-    public FakeDataDemoObjectWithAll updateSomeShortWrapper(@Nullable final Short s) {
+    public FakeDataDemoObjectWithAll updateSomeShortWrapper(final @Nullable Short s) {
         setSomeShortWrapper(s);
         return this;
     }
@@ -351,7 +350,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
 
 
     @Action(semantics=SemanticsOf.IDEMPOTENT)
-    public FakeDataDemoObjectWithAll updateSomeIntegerWrapper(@Nullable final Integer i) {
+    public FakeDataDemoObjectWithAll updateSomeIntegerWrapper(final @Nullable Integer i) {
         setSomeIntegerWrapper(i);
         return this;
     }
@@ -367,7 +366,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
 
 
     @Action(semantics=SemanticsOf.IDEMPOTENT)
-    public FakeDataDemoObjectWithAll updateSomeLongWrapper(@Nullable final Long l) {
+    public FakeDataDemoObjectWithAll updateSomeLongWrapper(final @Nullable Long l) {
         setSomeLongWrapper(l);
         return this;
     }
@@ -380,7 +379,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
 
 
     @Action(semantics=SemanticsOf.IDEMPOTENT)
-    public FakeDataDemoObjectWithAll updateSomeFloatWrapper(@Nullable final Float f) {
+    public FakeDataDemoObjectWithAll updateSomeFloatWrapper(final @Nullable Float f) {
         setSomeFloatWrapper(f);
         return this;
     }
@@ -395,7 +394,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
     }
 
     @Action(semantics=SemanticsOf.IDEMPOTENT)
-    public FakeDataDemoObjectWithAll updateSomeDoubleWrapper(@Nullable final Double d) {
+    public FakeDataDemoObjectWithAll updateSomeDoubleWrapper(final @Nullable Double d) {
         setSomeDoubleWrapper(d);
         return this;
     }
@@ -411,7 +410,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
 
 
     @Action(semantics=SemanticsOf.IDEMPOTENT)
-    public FakeDataDemoObjectWithAll updateSomeCharacterWrapper(@Nullable final Character i) {
+    public FakeDataDemoObjectWithAll updateSomeCharacterWrapper(final @Nullable Character i) {
         setSomeCharacterWrapper(i);
         return this;
     }
@@ -427,7 +426,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
 
 
     @Action(semantics=SemanticsOf.IDEMPOTENT)
-    public FakeDataDemoObjectWithAll updateSomeString(@Nullable final String i) {
+    public FakeDataDemoObjectWithAll updateSomeString(final @Nullable String i) {
         setSomeString(i);
         return this;
     }
@@ -442,7 +441,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
     }
 
     @Action(semantics=SemanticsOf.IDEMPOTENT)
-    public FakeDataDemoObjectWithAll updateSomePassword(@Nullable final Password password) {
+    public FakeDataDemoObjectWithAll updateSomePassword(final @Nullable Password password) {
         setSomePassword(password);
         return this;
     }
@@ -473,7 +472,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
 
 
     @Action(semantics=SemanticsOf.IDEMPOTENT)
-    public FakeDataDemoObjectWithAll updateSomeClob(@Nullable final Clob clob) {
+    public FakeDataDemoObjectWithAll updateSomeClob(final @Nullable Clob clob) {
         setSomeClob(clob);
         return this;
     }
@@ -486,7 +485,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
 
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
-    public FakeDataDemoObjectWithAll updateSomeJavaUtilDate(@Nullable final Date i) {
+    public FakeDataDemoObjectWithAll updateSomeJavaUtilDate(final @Nullable java.util.Date i) {
         setSomeJavaUtilDate(i);
         return this;
     }
@@ -502,7 +501,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
 
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
-    public FakeDataDemoObjectWithAll updateSomeJavaSqlDate(@Nullable final java.sql.Date i) {
+    public FakeDataDemoObjectWithAll updateSomeJavaSqlDate(final @Nullable java.sql.Date i) {
         setSomeJavaSqlDate(i);
         return this;
     }
@@ -518,7 +517,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
 
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
-    public FakeDataDemoObjectWithAll updateSomeJodaLocalDate(@Nullable final LocalDate i) {
+    public FakeDataDemoObjectWithAll updateSomeJodaLocalDate(final @Nullable LocalDate i) {
         setSomeJodaLocalDate(i);
         return this;
     }
@@ -556,7 +555,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
 
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
-    public FakeDataDemoObjectWithAll updateSomeJodaDateTime(@Nullable final DateTime i) {
+    public FakeDataDemoObjectWithAll updateSomeJodaDateTime(final @Nullable DateTime i) {
         setSomeJodaDateTime(i);
         return this;
     }
@@ -572,7 +571,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
 
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
-    public FakeDataDemoObjectWithAll updateSomeJavaSqlTimestamp(@Nullable final Timestamp i) {
+    public FakeDataDemoObjectWithAll updateSomeJavaSqlTimestamp(final @Nullable Timestamp i) {
         setSomeJavaSqlTimestamp(i);
         return this;
     }
@@ -623,7 +622,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
 
 
     @Action(semantics= SemanticsOf.IDEMPOTENT)
-    public FakeDataDemoObjectWithAll updateSomeUrl(@Nullable final URL i) {
+    public FakeDataDemoObjectWithAll updateSomeUrl(final @Nullable URL i) {
         setSomeUrl(i);
         return this;
     }
@@ -639,7 +638,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
 
 
     @Action(semantics=SemanticsOf.IDEMPOTENT)
-    public FakeDataDemoObjectWithAll updateSomeUuid(@Nullable final UUID i) {
+    public FakeDataDemoObjectWithAll updateSomeUuid(final @Nullable UUID i) {
         setSomeUuid(i);
         return this;
     }
@@ -655,7 +654,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
 
   //TODO[2249] deprecated
 //    @Action(semantics=SemanticsOf.IDEMPOTENT)
-//    public FakeDataDemoObjectWithAll updateSomeMoney(@Nullable final Money i) {
+//    public FakeDataDemoObjectWithAll updateSomeMoney(final @Nullable Money i) {
 //        setSomeMoney(i);
 //        return this;
 //    }
@@ -671,7 +670,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
 
 
     @Action(semantics=SemanticsOf.IDEMPOTENT)
-    public FakeDataDemoObjectWithAll updateSomeEnumOf3(@Nullable final EnumOf3 i) {
+    public FakeDataDemoObjectWithAll updateSomeEnumOf3(final @Nullable EnumOf3 i) {
         setSomeEnumOf3(i);
         return this;
     }

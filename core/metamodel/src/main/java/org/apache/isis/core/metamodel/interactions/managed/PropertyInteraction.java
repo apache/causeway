@@ -32,9 +32,9 @@ import lombok.val;
 public final class PropertyInteraction extends MemberInteraction<ManagedProperty, PropertyInteraction> {
 
     public static final PropertyInteraction start(
-            @NonNull final ManagedObject owner,
-            @NonNull final String memberId,
-            @NonNull final Where where) {
+            final @NonNull ManagedObject owner,
+            final @NonNull String memberId,
+            final @NonNull Where where) {
 
         val managedProperty = ManagedProperty.lookupProperty(owner, memberId, where);
 
@@ -50,7 +50,7 @@ public final class PropertyInteraction extends MemberInteraction<ManagedProperty
     }
 
     public PropertyInteraction modifyProperty(
-            @NonNull final Function<ManagedProperty, ManagedObject> newProperyValueProvider) {
+            final @NonNull Function<ManagedProperty, ManagedObject> newProperyValueProvider) {
 
         chain = chain.mapIfLeft(property->{
             val validityVeto = property.modifyProperty(newProperyValueProvider.apply(property));

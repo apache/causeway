@@ -18,29 +18,20 @@
  */
 package org.apache.isis.client.kroviz.ui.core
 
-import org.apache.isis.client.kroviz.core.event.EventStore
-import org.apache.isis.client.kroviz.core.model.Exposer
-import org.apache.isis.client.kroviz.core.model.CollectionDM
-import io.kvision.html.Button
-import io.kvision.html.ButtonStyle
 import io.kvision.tabulator.Align
 import io.kvision.tabulator.ColumnDefinition
 import io.kvision.tabulator.Editor
 import io.kvision.tabulator.Formatter
 import io.kvision.tabulator.js.Tabulator
 import io.kvision.utils.obj
+import org.apache.isis.client.kroviz.core.model.CollectionDM
+import org.apache.isis.client.kroviz.core.model.Exposer
+import org.apache.isis.client.kroviz.ui.panel.DynamicMenuBuilder
 
 /**
  * Create ColumnDefinitions for Tabulator tables
  */
 class ColumnFactory {
-
-    private val checkFormatterParams = obj {
-        allowEmpty = true
-        allowTruthy = true
-        tickElement = "<i class='fa fa-square-o'></i>"
-        crossElement = "<i class='fa fa-check-square-o'></i>"
-    }
 
     private val menuFormatterParams = obj {
         allowEmpty = true
@@ -49,123 +40,87 @@ class ColumnFactory {
         crossElement = "<i class='fa fa-ellipsis-v'></i>"
     }
 
-    fun buildColumns(
-            displayCollection: CollectionDM,
-            withCheckBox: Boolean = false): List<ColumnDefinition<dynamic>> {
+    fun buildColumns(displayCollection: CollectionDM): List<ColumnDefinition<dynamic>> {
 
-        val columns = mutableListOf<ColumnDefinition<dynamic>>()
-        if (withCheckBox) {
-            val checkBox = buildCheckBox()
-            columns.add(checkBox)
-        }
-
-        val menu = buildMenu()
-        columns.add(menu)
-
-        val model = displayCollection.data as List<dynamic>
-        if (model[0].hasOwnProperty("iconName") as Boolean) {
-            val icon = buildLinkIcon()
-            columns.add(icon)
-        }
-
-        val propertyLabels = displayCollection.propertyDescriptionList
-        for (pl in propertyLabels) {
-            val id = pl.key
-            val friendlyName = pl.value
-            var cd = ColumnDefinition<Exposer>(
-                    title = friendlyName,
-                    field = id,
-                    headerFilter = Editor.INPUT)
-            if (id == "object") {
-                cd = buildLink()
-            }
-            columns.add(cd)
-        }
+        val columns = mutableListOf<ColumnDefinition<Exposer>>()
+        addColumnForObjectIcon(displayCollection, columns)
+        addColumnsForProperties(displayCollection, columns)
+        columns.add(columnForObjectMenu())
         return columns
     }
 
-    private fun buildLinkIcon(): ColumnDefinition<Exposer> {
+    private fun columnForObjectMenu(): ColumnDefinition<dynamic> {
         return ColumnDefinition<dynamic>(
                 "",
-                field = "iconName",
+                field = "iconName", // any existing field can be used
+                formatter = Formatter.TICKCROSS,
+                formatterParams = menuFormatterParams,
                 hozAlign = Align.CENTER,
                 width = "40",
-                formatterComponentFunction = { _, _, data ->
-                    buildButton(data, data["iconName"] as? String)
-                })
+                headerSort = false,
+                clickMenu = { component: dynamic, e: dynamic ->
+                    buildObjectMenu(component)
+                }
+        )
     }
 
-    private fun buildButton(data: Exposer, iconName: String?): Button {
-        val tObject = data.delegate
-        val b = Button(text = "", icon = iconName, style = ButtonStyle.LINK).onClick {
-            UiManager.displayModel(tObject)
+    private fun buildObjectMenu(cell: Tabulator.CellComponent): dynamic {
+        val exposer = cell.getData() as Exposer
+        val tObject = exposer.delegate
+        return DynamicMenuBuilder().buildObjectMenu(tObject)
+    }
+
+    private fun addColumnForObjectIcon(displayCollection: CollectionDM, columns: MutableList<ColumnDefinition<Exposer>>) {
+        exposeIcons(displayCollection)
+        val iconColumn = buildIconColumn()
+        columns.add(iconColumn)
+    }
+
+    private fun exposeIcons(displayCollection: CollectionDM) {
+        val model = displayCollection.data
+        val icon = displayCollection.icon
+        model.forEach { exposer ->
+            if (icon != null) {
+                exposer.setIcon(icon)
+            }
         }
-        val logEntry = EventStore.find(tObject)!!
-        b.setDragDropData(Constants.stdMimeType, logEntry.url)
-        return b
     }
 
+    private fun buildIconColumn(): ColumnDefinition<Exposer> {
+        return ColumnDefinition<dynamic>(
+                "",
+                field = "icon",
+                formatter = Formatter.IMAGE,
+                formatterParams = obj { width = "16px"; height = "16px" },
+                hozAlign = Align.CENTER,
+                width = "40",
+                headerSort = false)
+    }
+
+    private fun addColumnsForProperties(displayCollection: CollectionDM, columns: MutableList<ColumnDefinition<Exposer>>) {
+        val propertyLabels = displayCollection.properties.list
+        for (pl in propertyLabels) {
+            if (!pl.hidden) {
+                val id = pl.key
+                val friendlyName = pl.friendlyName
+                var cd = ColumnDefinition<dynamic>(
+                        title = friendlyName,
+                        field = id,
+                        headerFilter = Editor.INPUT)
+                if (id == "object") {
+                    cd = buildLink()
+                }
+                columns.add(cd)
+            }
+        }
+    }
 
     private fun buildLink(): ColumnDefinition<Exposer> {
         return ColumnDefinition<dynamic>(
                 title = "ResultListResult",
                 field = "result",
-                headerFilter = Editor.INPUT,
-                formatterComponentFunction = { _, _, data ->
-                    Button(text = data["object"].title as String, icon = "fas fa-star-o", style = ButtonStyle.LINK).onClick {
-                        console.log(data)
-                    }
-                })
-    }
-
-    private fun buildCheckBox(): ColumnDefinition<Exposer> {
-        return ColumnDefinition<Exposer>(
-                title = "",
-                field = "selected",
-                formatter = Formatter.TICKCROSS,
-                formatterParams = checkFormatterParams,
-                /*               formatterComponentFunction = { cell, _, _ ->
-                                   if (isSelected(cell)) {
-                                       obj {"<i class='fa fa-check-square-o'></i>"}
-                                   } else {
-                                       obj {"<i class='fa fa-square-o'></i>"}
-                                   }
-                               }, */
-                hozAlign = Align.CENTER,
-                width = "40",
-                headerSort = false,
-                cellClick = { evt, cell ->
-                    evt.stopPropagation()
-                    toggleSelection(cell)
-                })
-    }
-
-    private fun buildMenu(): ColumnDefinition<Exposer> {
-        return ColumnDefinition("",
-                field = "iconName", // any existing field can be used
-                formatter = Formatter.TICKCROSS,
-                formatterParams = menuFormatterParams,
-                hozAlign = Align.CENTER,
-                width = "60",
-                headerSort = false,
-                formatterComponentFunction = { _, _, data ->
-                    val tObject = data.delegate
-                    MenuFactory.buildForObject(
-                            tObject,
-                            false)
-                })
-    }
-
-    private fun getData(cell: Tabulator.CellComponent): Exposer {
-        val row = cell.getRow()
-        val data = row.getData().asDynamic()
-        return data as Exposer
-    }
-
-    private fun toggleSelection(cell: Tabulator.CellComponent) {
-        val exposer = getData(cell)
-        val oldValue = exposer.selected
-        exposer.selected = !oldValue
+                headerFilter = Editor.INPUT
+        )
     }
 
 }

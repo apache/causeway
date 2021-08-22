@@ -72,12 +72,12 @@ implements ApplicationPermissionRepository {
     }
 
     // -- findByRole (programmatic)
-    public List<ApplicationPermission> findByRoleCached(@NonNull final ApplicationRole role) {
+    public List<ApplicationPermission> findByRoleCached(final @NonNull ApplicationRole role) {
         return queryResultsCacheProvider.get().execute(this::findByRole,
                 ApplicationPermissionRepositoryAbstract.class, "findByRoleCached", role);
     }
 
-    public List<ApplicationPermission> findByRole(@NonNull final ApplicationRole role) {
+    public List<ApplicationPermission> findByRole(final @NonNull ApplicationRole role) {
         return _Casts.uncheckedCast(
                 repository.allMatches(
                 Query.named(this.applicationPermissionClass, ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE)
@@ -87,23 +87,23 @@ implements ApplicationPermissionRepository {
 
 
     // -- findByUser (programmatic)
-    public List<ApplicationPermission> findByUserCached(@NonNull final ApplicationUser user) {
+    public List<ApplicationPermission> findByUserCached(final @NonNull ApplicationUser user) {
         return queryResultsCacheProvider.get().execute(this::findByUser,
                 ApplicationPermissionRepositoryAbstract.class, "findByUserCached", user);
     }
 
-    public List<ApplicationPermission> findByUser(@NonNull final ApplicationUser user) {
+    public List<ApplicationPermission> findByUser(final @NonNull ApplicationUser user) {
         return findByUser(user.getUsername());
     }
 
-    public List<ApplicationPermission> findByUserMemento(@NonNull final UserMemento userMemento) {
+    public List<ApplicationPermission> findByUserMemento(final @NonNull UserMemento userMemento) {
         val roleNames = userMemento.getRoles().stream()
                 .map(RoleMemento::getName)
                 .collect(Collectors.toList());
         return findByRoleNames(roleNames);
     }
 
-    public List<ApplicationPermission> findByRoleNames(@NonNull final List<String> roleNames) {
+    public List<ApplicationPermission> findByRoleNames(final @NonNull List<String> roleNames) {
         return _Casts.uncheckedCast(
                 repository.allMatches(
                         Query.named(this.applicationPermissionClass, ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE_NAMES)

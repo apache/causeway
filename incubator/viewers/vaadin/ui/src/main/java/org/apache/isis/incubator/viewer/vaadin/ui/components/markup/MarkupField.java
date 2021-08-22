@@ -18,7 +18,7 @@
  */
 package org.apache.isis.incubator.viewer.vaadin.ui.components.markup;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.customfield.CustomField;

@@ -44,9 +44,9 @@ public final class ManagedCollection extends ManagedMember {
     }
 
     public static final Optional<ManagedCollection> lookupCollection(
-            @NonNull final ManagedObject owner,
-            @NonNull final String memberId,
-            @NonNull final Where where) {
+            final @NonNull ManagedObject owner,
+            final @NonNull String memberId,
+            final @NonNull Where where) {
 
         return ManagedMember.<OneToManyAssociation>lookup(owner, MemberType.COLLECTION, memberId)
         .map(objectAction -> of(owner, objectAction, where));

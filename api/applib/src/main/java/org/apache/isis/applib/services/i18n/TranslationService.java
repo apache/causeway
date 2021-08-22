@@ -72,16 +72,16 @@ public interface TranslationService {
      *
      * <p>
      *     If in read mode, then the translations are expected to be present.  In such cases, the
-     *     {@link #translate(String, String) translate}
-     *     {@link #translate(String, String, String, int) method}s should be <i>lazily</i> called,
+     *     {@link #translate(TranslationContext, String) translate}
+     *     {@link #translate(TranslationContext, String, String, int) method}s should be <i>lazily</i> called,
      *     if only because there will (most likely) need to be a session in progress (such that the locale of the
      *     current user can be determined).
      * </p>
      *
      * <p>
      *     If in write mode, then the implementation is saving translation keys, and will
-     *     always return the untranslated translation.  In such cases, the {@link #translate(String, String) translate}
-     *     {@link #translate(String, String, String, int) method}s should be <i>eagerly</i> called
+     *     always return the untranslated translation.  In such cases, the {@link #translate(TranslationContext, String) translate}
+     *     {@link #translate(TranslationContext, String, String, int) method}s should be <i>eagerly</i> called
      *     such that all pathways are exercised..
      * </p>
      */

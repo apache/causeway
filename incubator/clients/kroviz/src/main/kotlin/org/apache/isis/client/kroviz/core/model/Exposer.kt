@@ -19,6 +19,7 @@
 package org.apache.isis.client.kroviz.core.model
 
 import kotlinx.serialization.Serializable
+import org.apache.isis.client.kroviz.to.Icon
 import org.apache.isis.client.kroviz.to.MemberType
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.utils.IconManager
@@ -35,8 +36,7 @@ import org.apache.isis.client.kroviz.utils.IconManager
 @Serializable
 class Exposer(val delegate: TObject) {
 
-    var iconName = ""
-    var selected = false //TODO add attribute dynamically???
+    var iconName = ""  //required by ColumnFactory
 
     fun dynamise(): dynamic {
         val thys = this.asDynamic()
@@ -59,6 +59,10 @@ class Exposer(val delegate: TObject) {
     // eg. for dataNucleusId
     fun get(propertyName: String): Any? {
         return this.delegate.getProperty(propertyName)?.value
+    }
+
+    fun setIcon(icon: Icon) {
+        this.asDynamic()["icon"] = icon.image.src
     }
 
 }

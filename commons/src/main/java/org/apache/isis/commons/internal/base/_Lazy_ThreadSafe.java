@@ -24,8 +24,7 @@ import java.util.function.Supplier;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
+import lombok.NonNull;
 import lombok.Synchronized;
 
 /**
@@ -39,8 +38,8 @@ final class _Lazy_ThreadSafe<T> implements _Lazy<T> {
     private boolean memoized;
     private boolean getting;
 
-    _Lazy_ThreadSafe(Supplier<? extends T> supplier) {
-        this.supplier = requires(supplier, "supplier");
+    _Lazy_ThreadSafe(final @NonNull Supplier<? extends T> supplier) {
+        this.supplier = supplier;
     }
 
     @Override @Synchronized
@@ -76,7 +75,7 @@ final class _Lazy_ThreadSafe<T> implements _Lazy<T> {
     }
 
     @Override @Synchronized
-    public void set(T value) {
+    public void set(final T value) {
         if(memoized) {
             throw _Exceptions.illegalState("cannot set value '%s' on Lazy that has already memoized a value", ""+value);
         }

@@ -22,7 +22,7 @@ import java.lang.ref.WeakReference;
 import java.util.Arrays;
 import java.util.function.Predicate;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.binding.ChangeListener;
 import org.apache.isis.commons.binding.InvalidationListener;
@@ -91,9 +91,9 @@ abstract class InternalUtil<T> {
     // -- LISTENER ADD/REMOVE
 
     static <T> InternalUtil<T> addListener(
-            @Nullable final InternalUtil<T> helper,
-            @NonNull final Observable<T> observable,
-            @NonNull final InvalidationListener listener) {
+            final @Nullable InternalUtil<T> helper,
+            final @NonNull Observable<T> observable,
+            final @NonNull InvalidationListener listener) {
         observable.getValue(); // validate observable
         return (helper == null)
                 ? new SingleInvalidation<T>(observable, listener)
@@ -101,24 +101,24 @@ abstract class InternalUtil<T> {
     }
 
     static <T> InternalUtil<T> removeListener(
-            @Nullable final InternalUtil<T> helper,
-            @NonNull final InvalidationListener listener) {
+            final @Nullable InternalUtil<T> helper,
+            final @NonNull InvalidationListener listener) {
         return (helper == null)
                 ? null
                 : helper.removeListener(listener);
     }
 
     static <T> InternalUtil<T> addListener(
-            @Nullable final InternalUtil<T> helper,
-            @NonNull final Observable<T> observable,
-            @NonNull final ChangeListener<? super T> listener) {
+            final @Nullable InternalUtil<T> helper,
+            final @NonNull Observable<T> observable,
+            final @NonNull ChangeListener<? super T> listener) {
         return (helper == null)
                 ? new SingleChange<T>(observable, listener)
                 : helper.addListener(listener);
     }
 
     static <T> InternalUtil<T> removeListener(
-            @Nullable final InternalUtil<T> helper,
+            final @Nullable InternalUtil<T> helper,
             @NonNull ChangeListener<? super T> listener) {
         return (helper == null)
                 ? null

@@ -19,7 +19,6 @@
 package org.apache.isis.applib.services.user;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
@@ -68,8 +67,8 @@ public class RoleMemento implements Serializable {
      * Creates a new role with the specified name and description.
      */
     public RoleMemento(
-            @NonNull final String name,
-            @NonNull final String description) {
+            final @NonNull String name,
+            final @NonNull String description) {
         this.name = name;
         this.description = description;
     }
@@ -77,7 +76,7 @@ public class RoleMemento implements Serializable {
     public static class UiSubscriber {
         @Order(PriorityPrecedence.LATE)
         @EventListener(RoleMemento.TitleUiEvent.class)
-        public void on(RoleMemento.TitleUiEvent ev) {
+        public void on(final RoleMemento.TitleUiEvent ev) {
             val roleMemento = ev.getSource();
             assert roleMemento != null;
             ev.setTitle(roleMemento.getName());

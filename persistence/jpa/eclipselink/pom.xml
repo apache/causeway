@@ -65,12 +65,20 @@
             </testResource>
         </testResources>
 	</build>
+	
 
 	<dependencies>
 
 		<dependency>
 			<groupId>org.apache.isis.persistence</groupId>
 			<artifactId>isis-persistence-jpa-integration</artifactId>
+			<exclusions>
+				<!-- already provided by aspectj-weaver -->
+				<exclusion>
+					<groupId>org.aspectj</groupId>
+					<artifactId>aspectjrt</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		
 		<dependency>
@@ -101,6 +109,16 @@
 					<!-- we use log4j-2 instead -->
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+				<!-- at the moment unavailable -->
+				<exclusion>
+				    <groupId>org.springframework.roo</groupId>
+				    <artifactId>org.springframework.roo.annotations</artifactId>
+				</exclusion>
+				<!--  version clash -->
+				<exclusion>
+					<groupId>com.google.code.findbugs</groupId>
+				    <artifactId>annotations</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>

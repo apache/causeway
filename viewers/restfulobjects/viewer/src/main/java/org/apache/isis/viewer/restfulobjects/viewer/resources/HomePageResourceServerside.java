@@ -43,9 +43,13 @@ import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplication
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Component
-public class HomePageResourceServerside extends ResourceAbstract implements HomePageResource {
+@Log4j2
+public class HomePageResourceServerside
+extends ResourceAbstract
+implements HomePageResource {
 
     @Inject
     public HomePageResourceServerside(
@@ -53,10 +57,13 @@ public class HomePageResourceServerside extends ResourceAbstract implements Home
             final IsisConfiguration isisConfiguration,
             final InteractionLayerTracker iInteractionLayerTracker) {
         super(metaModelContext, isisConfiguration, iInteractionLayerTracker);
+        log.debug("<init>");
     }
 
     @Override
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_HOME_PAGE })
+    @Produces({
+        MediaType.APPLICATION_JSON,
+        RestfulMediaType.APPLICATION_JSON_HOME_PAGE })
     public Response homePage() {
 
         val resourceContext = createResourceContext(
@@ -65,22 +72,35 @@ public class HomePageResourceServerside extends ResourceAbstract implements Home
         val homePageReprRenderer = new HomePageReprRenderer(resourceContext, null, JsonRepresentation.newMap());
         homePageReprRenderer.includesSelf();
 
-        return Responses.ofOk(homePageReprRenderer, Caching.ONE_DAY).build();
+        return _EndpointLogging.response(log, "GET /",
+                Responses.ofOk(homePageReprRenderer, Caching.ONE_DAY).build());
     }
 
     @Override
     public Response deleteHomePageNotAllowed() {
-        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Deleting the home page resource is not allowed.");
+        throw _EndpointLogging.error(log, "DELETE /",
+                RestfulObjectsApplicationException
+                .createWithMessage(
+                        RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED,
+                        "Deleting the home page resource is not allowed."));
     }
 
     @Override
     public Response putHomePageNotAllowed() {
-        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Putting to the home page resource is not allowed.");
+        throw _EndpointLogging.error(log, "PUT /",
+                RestfulObjectsApplicationException
+                .createWithMessage(
+                        RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED,
+                        "Putting to the home page resource is not allowed."));
     }
 
     @Override
     public Response postHomePageNotAllowed() {
-        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Posting to the home page resource is not allowed.");
+        throw _EndpointLogging.error(log, "POST /",
+                RestfulObjectsApplicationException
+                .createWithMessage(
+                        RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED,
+                        "Posting to the home page resource is not allowed."));
     }
 
 
@@ -89,8 +109,8 @@ public class HomePageResourceServerside extends ResourceAbstract implements Home
     @Path("/notAuthenticated")
     @Produces({ MediaType.APPLICATION_JSON })
     public Response notAuthenticated() {
-
-        throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED);
+        throw _EndpointLogging.error(log, "GET /notAuthenticated",
+                RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED));
     }
 
 }

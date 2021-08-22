@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.param.parameter.mandatory;
 
 import java.util.Optional;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
@@ -39,11 +39,11 @@ public class MandatoryFacetInvertedByNullableAnnotationOnParameter
 extends MandatoryFacetAbstract {
 
     public static Optional<MandatoryFacet> create(
-            final Optional<Nullable> nullableIfAny,
+            final boolean hasNullable,
             final Class<?> parameterType,
             final FacetedMethodParameter holder) {
 
-        if(!nullableIfAny.isPresent()) {
+        if(!hasNullable) {
             return Optional.empty();
         }
         if(parameterType.isPrimitive()) {

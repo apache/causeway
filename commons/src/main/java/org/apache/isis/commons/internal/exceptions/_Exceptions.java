@@ -24,20 +24,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.base._With;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.functions._Functions;
 
 import lombok.NonNull;
 import lombok.val;
@@ -65,7 +61,7 @@ public final class _Exceptions {
      * @param _case the unmatched case to be reported
      * @return new IllegalArgumentException
      */
-    public static final IllegalArgumentException unmatchedCase(@Nullable final Object _case) {
+    public static final IllegalArgumentException unmatchedCase(final @Nullable Object _case) {
         return new IllegalArgumentException("internal error: unmatched case in switch statement: "+_case);
     }
 
@@ -100,9 +96,8 @@ public final class _Exceptions {
     // -- ILLEGAL ACCESS
 
     public static IllegalAccessException illegalAccess(
-            final String format,
+            final @NonNull String format,
             final @Nullable Object ... args) {
-        _With.requires(format, "format");
         return new IllegalAccessException(String.format(format, args));
     }
 
@@ -117,8 +112,8 @@ public final class _Exceptions {
     }
 
     public static final NoSuchElementException noSuchElement(
-            @NonNull final String format,
-            @Nullable final Object ...args) {
+            final @NonNull String format,
+            final @Nullable Object ...args) {
         return noSuchElement(String.format(format, args));
     }
 
@@ -281,7 +276,7 @@ public final class _Exceptions {
 
     // -- STACKTRACE UTILITITIES
 
-    public static final Stream<String> streamStacktraceLines(@Nullable final Throwable ex, final int maxLines) {
+    public static final Stream<String> streamStacktraceLines(final @Nullable Throwable ex, final int maxLines) {
         if(ex==null) {
             return Stream.empty();
         }
@@ -290,16 +285,16 @@ public final class _Exceptions {
                 .limit(maxLines);
     }
 
-    public static final String asStacktrace(@Nullable final Throwable ex, final int maxLines, final String delimiter) {
+    public static final String asStacktrace(final @Nullable Throwable ex, final int maxLines, final String delimiter) {
         return _Exceptions.streamStacktraceLines(ex, maxLines)
                 .collect(Collectors.joining(delimiter));
     }
 
-    public static final String asStacktrace(@Nullable final Throwable ex, final int maxLines) {
+    public static final String asStacktrace(final @Nullable Throwable ex, final int maxLines) {
         return asStacktrace(ex, maxLines, "\n");
     }
 
-    public static final String asStacktrace(@Nullable final Throwable ex) {
+    public static final String asStacktrace(final @Nullable Throwable ex) {
         return asStacktrace(ex, 1000);
     }
 
@@ -323,7 +318,7 @@ public final class _Exceptions {
 
     // -- CAUSAL CHAIN
 
-    public static List<Throwable> getCausalChain(@Nullable final Throwable ex) {
+    public static List<Throwable> getCausalChain(final @Nullable Throwable ex) {
         if(ex==null) {
             return Collections.emptyList();
         }
@@ -336,7 +331,7 @@ public final class _Exceptions {
         return chain;
     }
 
-    public static Stream<Throwable> streamCausalChain(@Nullable final Throwable ex) {
+    public static Stream<Throwable> streamCausalChain(final @Nullable Throwable ex) {
         if(ex==null) {
             return Stream.empty();
         }
@@ -344,7 +339,7 @@ public final class _Exceptions {
         return chain.stream();
     }
 
-    public static Throwable getRootCause(@Nullable final Throwable ex) {
+    public static Throwable getRootCause(final @Nullable Throwable ex) {
         return _Lists.lastElementIfAny(getCausalChain(ex));
     }
 
@@ -401,8 +396,7 @@ public final class _Exceptions {
 
         private final E cause;
 
-        private FluentException(final E cause) {
-            _With.requires(cause, "cause");
+        private FluentException(final @NonNull E cause) {
             this.cause = cause;
         }
 
@@ -420,30 +414,26 @@ public final class _Exceptions {
             throw cause;
         }
 
-        public void rethrowIf(final Predicate<E> condition) throws E {
-            _With.requires(condition, "condition");
+        public void rethrowIf(final @NonNull Predicate<E> condition) throws E {
             if(condition.test(cause)) {
                 throw cause;
             }
         }
 
-        public void suppressIf(final Predicate<E> condition) throws E {
-            _With.requires(condition, "condition");
+        public void suppressIf(final @NonNull Predicate<E> condition) throws E {
             if(!condition.test(cause)) {
                 throw cause;
             }
         }
 
-        public void rethrowIfMessageContains(final String string) throws E {
-            _With.requires(string, "string");
+        public void rethrowIfMessageContains(final @NonNull String string) throws E {
             final boolean containsMessage = getMessage().map(msg->msg.contains(string)).orElse(false);
             if(containsMessage) {
                 throw cause;
             }
         }
 
-        public void suppressIfMessageContains(final String string) throws E {
-            _With.requires(string, "string");
+        public void suppressIfMessageContains(final @NonNull String string) throws E {
             final boolean containsMessage = getMessage().map(msg->msg.contains(string)).orElse(false);
             if(!containsMessage) {
                 throw cause;
@@ -451,53 +441,6 @@ public final class _Exceptions {
         }
 
     }
-
-    // --
-
-    /**
-     * [ahuber] Experimental, remove if it adds no value.
-     */
-    public static class TryContext {
-
-        private final Function<Exception, ? extends RuntimeException> toUnchecked;
-
-        public TryContext(final Function<Exception, ? extends RuntimeException> toUnchecked) {
-            this.toUnchecked = toUnchecked;
-        }
-
-        // -- SHORTCUTS (RUNNABLE)
-
-        public Runnable uncheckedRunnable(final _Functions.CheckedRunnable checkedRunnable) {
-            return checkedRunnable.toUnchecked(toUnchecked);
-        }
-
-        public void tryRun(final _Functions.CheckedRunnable checkedRunnable) {
-            uncheckedRunnable(checkedRunnable).run();
-        }
-
-        // -- SHORTCUTS (FUNCTION)
-
-        public <T, R> Function<T, R> uncheckedFunction(final _Functions.CheckedFunction<T, R> checkedFunction) {
-            return checkedFunction.toUnchecked(toUnchecked);
-        }
-
-        public <T, R> R tryApply(final T obj, final _Functions.CheckedFunction<T, R> checkedFunction) {
-            return uncheckedFunction(checkedFunction).apply(obj);
-        }
-
-        // -- SHORTCUTS (CONSUMER)
-
-        public <T> Consumer<T> uncheckedConsumer(final _Functions.CheckedConsumer<T> checkedConsumer) {
-            return checkedConsumer.toUnchecked(toUnchecked);
-        }
-
-        public <T> void tryAccept(final T obj, final _Functions.CheckedConsumer<T> checkedConsumer) {
-            uncheckedConsumer(checkedConsumer).accept(obj);
-        }
-    }
-
-
-
 
 
 }

@@ -68,7 +68,7 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
      * @param intent
      * @return self
      */
-    public H checkUsability(@NonNull final AccessIntent intent) {
+    public H checkUsability(final @NonNull AccessIntent intent) {
         if(intent.isMutate()) {
             return checkUsability();
         }

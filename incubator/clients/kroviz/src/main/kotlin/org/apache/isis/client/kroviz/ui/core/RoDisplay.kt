@@ -34,8 +34,6 @@ class RoDisplay(val displayModel: ObjectDM) : Displayable, VPanel() {
     private var objectPanel: VPanel
 
     init {
-        console.log("[RD.init] tObject / grid")
-        console.log(displayModel)
         val model = displayModel.data!!
         val tObject: TObject = model.delegate
         val grid = displayModel.grid!!

@@ -18,46 +18,34 @@
  */
 package org.apache.isis.client.kroviz.ui.builder
 
+import io.kvision.core.*
+import io.kvision.panel.FlexPanel
+import io.kvision.panel.SimplePanel
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.bs3.Row
-import org.apache.isis.client.kroviz.ui.core.MenuFactory
 import org.apache.isis.client.kroviz.ui.core.RoDisplay
-import io.kvision.core.*
-import io.kvision.core.FlexWrap
-import io.kvision.panel.*
 
-class RowBuilder {
+class RowBuilder : UiBuilder() {
 
     fun create(row: Row, tObject: TObject, dsp: RoDisplay): SimplePanel {
-        val result = FlexPanel(
+        val panel = buildPanel()
+        panel.justifyContent = JustifyContent.SPACEBETWEEN
+
+        for (c in row.colList) {
+            val cpt = ColBuilder().create(c, tObject, dsp)
+            panel.add(cpt)
+        }
+        return panel
+    }
+
+    private fun buildPanel(): FlexPanel {
+        return FlexPanel(
                 FlexDirection.ROW,
                 FlexWrap.NOWRAP,
                 JustifyContent.FLEXSTART,
                 AlignItems.FLEXSTART,
                 AlignContent.STRETCH,
-                spacing = 10 )
-
-        for (c in row.colList) {
-            val cpt = ColBuilder().create(c, tObject, dsp)
-            result.add(cpt)
-        }
-        return result
-    }
-
-    fun createMenu(tObject: TObject, dsp: RoDisplay): HPanel {
-        val result = HPanel()
-        result.width = CssSize(100, UNIT.perc)
-        result.height = CssSize(100, UNIT.perc)
-
-        val dd = MenuFactory.buildForObject(tObject)
-        dd.marginTop = CssSize(10, UNIT.px)
-        dd.marginBottom = CssSize(10, UNIT.px)
-        MenuFactory.amendWithSaveUndo(dd, tObject)
-        MenuFactory.disableSaveUndo(dd)
-        dsp.menu = dd
-        result.add(dd)
-
-        return result
+                spacing = 10)
     }
 
 }

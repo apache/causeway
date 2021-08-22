@@ -18,7 +18,7 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus.changetracking;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 import javax.jdo.JDOHelper;
 import javax.jdo.ObjectState;
 import javax.jdo.listener.InstanceLifecycleEvent;

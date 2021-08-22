@@ -19,14 +19,14 @@
 package org.apache.isis.client.kroviz.to
 
 import kotlinx.serialization.Serializable
-import org.apache.isis.client.kroviz.utils.Utils
+import org.apache.isis.client.kroviz.utils.StringUtils
 
 @Serializable
 data class Link(val rel: String = "",
                 val method: String = Method.GET.operation,
                 val href: String,
                 val type: String = "",
-        //IMPROVE RO SPEC? "args" should be changed to "arguments" - RO spec or SimpleApp?
+        //RO SPEC OR ISIS IMPL? can "args" be folded into "arguments"
                 val args: Map<String, Argument> = emptyMap(),
         /* arguments can either be:
          * -> empty Map {}
@@ -46,7 +46,7 @@ data class Link(val rel: String = "",
     }
 
     fun setArgument(key: String, value: String?) {
-        val k = Utils.enCamel(key)
+        val k = StringUtils.enCamel(key)
         val arg = argMap()!!.get(k)
         arg!!.key = k
         arg.value = value
@@ -103,6 +103,7 @@ enum class Relation(val type: String) {
     DOMAIN_TYPE("domain-type"),
     DOMAIN_TYPES("domain-types"),
     ELEMENT("element"),
+    ELEMENT_TYPE("element-type"),
     HELP("help"),               //IANA
     ICON("icon"),               //IANA
     INVOKE("invoke"),

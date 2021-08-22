@@ -27,12 +27,11 @@ import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.stream.Collector;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.base._With;
 
 import lombok.NonNull;
 import lombok.val;
@@ -67,9 +66,9 @@ public final class _Arrays {
      * @throws NullPointerException - if {@code test} is null
      */
     public static <T> boolean testAnyMatch(
-            @Nullable final T[] array1,
-            @Nullable final T[] array2,
-            final BiPredicate<T, T> test) {
+            final @Nullable T[] array1,
+            final @Nullable T[] array2,
+            final @NonNull BiPredicate<T, T> test) {
 
         final int s1 = _NullSafe.size(array1);
         final int s2 = _NullSafe.size(array2);
@@ -79,8 +78,6 @@ public final class _Arrays {
         if(s1==0) {
             return false;
         }
-        _With.requires(test, "test");
-
         for(int i=0; i<s1; ++i) {
             if(test.test(array1[i], array2[i])) {
                 return true;
@@ -102,10 +99,9 @@ public final class _Arrays {
      * @throws NullPointerException - if {@code test} is null
      */
     public static <T> boolean testAllMatch(
-            @Nullable final T[] array1,
-            @Nullable final T[] array2,
-            final BiPredicate<T, T> test) {
-        _With.requires(test, "test");
+            final @Nullable T[] array1,
+            final @Nullable T[] array2,
+            final @NonNull BiPredicate<T, T> test) {
         return !testAnyMatch(array1, array2, test.negate());
     }
 
@@ -114,7 +110,7 @@ public final class _Arrays {
      * @param cls
      * @return whether {@code cls} represents an array
      */
-    public static boolean isArrayType(@Nullable final Class<?> cls) {
+    public static boolean isArrayType(final @Nullable Class<?> cls) {
         return cls!=null ? cls.isArray() : false;
     }
 
@@ -135,8 +131,7 @@ public final class _Arrays {
      * @param componentType
      * @param length
      */
-    public static <T> Collector<T,?,T[]> toArray(final Class<T> componentType, final int length){
-        _With.requires(componentType, "componentType");
+    public static <T> Collector<T,?,T[]> toArray(final @NonNull Class<T> componentType, final int length){
         return new _Arrays_Collector<T>(componentType, length);
     }
 
@@ -144,8 +139,7 @@ public final class _Arrays {
      * Unknown-size Collector.
      * @param componentType
      */
-    public static <T> Collector<T,?,T[]> toArray(final Class<T> componentType){
-        _With.requires(componentType, "componentType");
+    public static <T> Collector<T,?,T[]> toArray(final @NonNull Class<T> componentType){
         return new _Arrays_CollectorUnknownSize<T>(componentType);
     }
 
@@ -161,8 +155,7 @@ public final class _Arrays {
      *               because of a type mismatch.
      */
     @SafeVarargs
-    public static <T> T[] combine(T first, @Nullable  T... rest) {
-        _With.requires(first, "first");
+    public static <T> T[] combine(final @NonNull T first, final @Nullable  T... rest) {
         final int restLength = _NullSafe.size(rest);
         final T[] all = _Casts.uncheckedCast(Array.newInstance(first.getClass(), restLength+1));
         all[0] = first;
@@ -180,9 +173,7 @@ public final class _Arrays {
      * @return (non-null)
      */
     @SafeVarargs
-    public static <T, X extends T, Y extends T> T[] combineWithExplicitType(Class<T> type, X first, @Nullable  Y... rest) {
-        _With.requires(type, "type");
-        _With.requires(first, "first");
+    public static <T, X extends T, Y extends T> T[] combineWithExplicitType(final @NonNull Class<T> type, final @NonNull X first, final @Nullable  Y... rest) {
         final int restLength = _NullSafe.size(rest);
         final T[] all = _Casts.uncheckedCast(Array.newInstance(type, restLength+1));
         all[0] = first;
@@ -199,7 +190,7 @@ public final class _Arrays {
      * @return (non-null)
      */
     @SafeVarargs
-    public static <T> T[] combine(T[] first, T... rest) {
+    public static <T> T[] combine(final T[] first, final T... rest) {
         final int firstLength = _NullSafe.size(first);
         final int restLength = _NullSafe.size(rest);
         if(firstLength + restLength == 0) {
@@ -257,7 +248,7 @@ public final class _Arrays {
      * @param array
      * @param index
      */
-    public static <T> T[] removeByIndex(T[] array, int index) {
+    public static <T> T[] removeByIndex(final T[] array, final int index) {
         if(array==null || array.length<1) {
             throw new IllegalArgumentException("Array must be of lenght 1 or larger.");
         }
@@ -281,7 +272,7 @@ public final class _Arrays {
      * @param array
      * @return null for empty arrays
      */
-    public static @Nullable <T> T[] emptyToNull(@Nullable T[] array) {
+    public static @Nullable <T> T[] emptyToNull(final @Nullable T[] array) {
         if(array!=null && array.length==0) {
             return null;
         }
@@ -305,7 +296,7 @@ public final class _Arrays {
      *             {@code beginIndex} is larger than
      *             {@code endIndex}.
      */
-    public static <T> T[] subArray(@NonNull T[] array, int beginIndex, int endIndex) {
+    public static <T> T[] subArray(final @NonNull T[] array, final int beginIndex, final int endIndex) {
         if (beginIndex < 0) {
             throw new ArrayIndexOutOfBoundsException(beginIndex);
         }
@@ -344,7 +335,7 @@ public final class _Arrays {
      * @param array
      * @param index
      */
-    public static <T> Optional<T> get(@Nullable T[] array, int index) {
+    public static <T> Optional<T> get(final @Nullable T[] array, final int index) {
         val size = _NullSafe.size(array);
         if(size==0) {
             return Optional.empty();
@@ -373,9 +364,9 @@ public final class _Arrays {
      */
     @Nullable
     public static <T, R> R[] map(
-            @Nullable T[] array,
-            @NonNull Class<R> resultElementType,
-            @NonNull Function<T, R> mapper) {
+            final @Nullable T[] array,
+            final @NonNull Class<R> resultElementType,
+            final @NonNull Function<T, R> mapper) {
 
         if (array == null) {
             return null;
@@ -401,8 +392,8 @@ public final class _Arrays {
      */
     @Nullable
     public static <T> Object[] map(
-            @Nullable T[] array,
-            @NonNull Function<T, ?> mapper) {
+            final @Nullable T[] array,
+            final @NonNull Function<T, ?> mapper) {
 
         if (array == null) {
             return null;
@@ -429,9 +420,9 @@ public final class _Arrays {
      */
     @Nullable
     public static <T, R> R[] mapCollection(
-            @Nullable Collection<T> collection,
-            @NonNull Class<R> resultElementType,
-            @NonNull Function<T, R> mapper) {
+            final @Nullable Collection<T> collection,
+            final @NonNull Class<R> resultElementType,
+            final @NonNull Function<T, R> mapper) {
 
         if (collection == null) {
             return null;
@@ -457,8 +448,8 @@ public final class _Arrays {
      */
     @Nullable
     public static <T> Object[] mapCollection(
-            @Nullable Collection<T> collection,
-            @NonNull Function<T, ?> mapper) {
+            final @Nullable Collection<T> collection,
+            final @NonNull Function<T, ?> mapper) {
 
         if (collection == null) {
             return null;

@@ -28,7 +28,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 import javax.imageio.ImageIO;
 
 import org.apache.isis.commons.internal.base._Bytes;

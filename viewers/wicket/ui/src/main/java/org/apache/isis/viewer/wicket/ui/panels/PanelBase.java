@@ -20,7 +20,7 @@ package org.apache.isis.viewer.wicket.ui.panels;
 
 import java.util.function.Supplier;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;

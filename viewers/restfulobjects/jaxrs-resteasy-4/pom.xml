@@ -60,8 +60,8 @@
 			<artifactId>isis-viewer-restfulobjects-rendering</artifactId>
 			<exclusions>
 				<exclusion>
-					<groupId>javax.xml.bind</groupId>
-					<artifactId>jaxb-api</artifactId>
+					<groupId>org.jboss.logging</groupId>
+					<artifactId>jboss-logging</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -83,12 +83,31 @@
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-starter-logging</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>org.jboss.logging</groupId>
+					<artifactId>jboss-logging</artifactId>
+				</exclusion>
+				<!-- transitively provided by isis-jdk-supplemental -->
+				<exclusion>
+					<groupId>org.ow2.asm</groupId>
+					<artifactId>asm</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 
 		<dependency>
 		    <groupId>org.jboss.resteasy</groupId>
 		    <artifactId>resteasy-jaxb-provider</artifactId>
+		    <exclusions>
+		    	<exclusion>
+		    		<groupId>org.jboss.logging</groupId>
+		    		<artifactId>jboss-logging</artifactId>
+		    	</exclusion>
+		    	<exclusion>
+		    		<groupId>org.glassfish.jaxb</groupId>
+		    		<artifactId>jaxb-runtime</artifactId>
+		    	</exclusion>
+		    </exclusions>
 		</dependency>
 		
 		<!-- TESTING -->

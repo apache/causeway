@@ -36,8 +36,8 @@ extends DisabledFacetAbstract {
     // -- FACTORY
 
     public static DisabledFacetOnPropertyInferredFromImmutable forImmutable(
-            @NonNull final FacetedMethod facetedMethodFor,
-            @NonNull final ImmutableFacet immutableFacet) {
+            final @NonNull FacetedMethod facetedMethodFor,
+            final @NonNull ImmutableFacet immutableFacet) {
 
         return new DisabledFacetOnPropertyInferredFromImmutable(facetedMethodFor, immutableFacet);
     }
@@ -49,8 +49,8 @@ extends DisabledFacetAbstract {
     // -- CONSTRUCTOR
 
     private DisabledFacetOnPropertyInferredFromImmutable(
-            @NonNull final FacetHolder holder,
-            @NonNull final ImmutableFacet reasonProvidingImmutableFacet) {
+            final @NonNull FacetHolder holder,
+            final @NonNull ImmutableFacet reasonProvidingImmutableFacet) {
 
         super(Where.ANYWHERE,
                 "calculated at runtime, delegating to ImmutableFacet " +

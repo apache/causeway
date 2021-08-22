@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.defaults.annotcfg;
 
 import java.util.Optional;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

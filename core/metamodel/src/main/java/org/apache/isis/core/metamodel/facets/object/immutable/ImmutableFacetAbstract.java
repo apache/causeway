@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.immutable;
 
 import java.util.function.BiConsumer;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.Facet;

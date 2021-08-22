@@ -95,6 +95,7 @@ final class ObjectBulkLoader_builtinHandlers {
             val serviceInjector = metaModelContext.getServiceInjector();
 
             //TODO injection should have already be done by DataNucleus
+            //especially since we fixed https://issues.apache.org/jira/browse/ISIS-2845
             entities.map(ManagedObject::getPojo).forEach(serviceInjector::injectServicesInto);
             return entities;
         }

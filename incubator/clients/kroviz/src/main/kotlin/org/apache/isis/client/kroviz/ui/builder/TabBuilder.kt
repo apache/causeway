@@ -22,23 +22,21 @@ import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.bs3.Tab
 import org.apache.isis.client.kroviz.ui.core.RoDisplay
 import io.kvision.core.Component
-import io.kvision.core.CssSize
-import io.kvision.core.UNIT
 import io.kvision.panel.SimplePanel
 
-class TabBuilder {
+class TabBuilder : UiBuilder() {
 
     fun create(tabLayout: Tab, tObject: TObject, tab: RoDisplay): Component {
-        val result = SimplePanel()
-        result.width = CssSize(100, UNIT.perc)
-        result.height = CssSize(100, UNIT.perc)
+        val panel = SimplePanel()
+        style(panel)
+
         var b: SimplePanel
         for (r in tabLayout.rowList) {
             b = RowBuilder().create(r, tObject, tab)
             b.title = r.id
-            result.add(b)
+            panel.add(b)
         }
-        return result
+        return panel
     }
 
 }

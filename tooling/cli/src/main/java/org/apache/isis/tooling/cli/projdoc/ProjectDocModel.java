@@ -33,7 +33,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import com.structurizr.model.Container;
 import com.structurizr.view.AutomaticLayout.RankDirection;

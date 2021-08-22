@@ -20,7 +20,7 @@ package org.apache.isis.commons.internal.compare;
 
 import java.util.StringTokenizer;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.primitives._Ints;
@@ -37,8 +37,8 @@ final class _Comparators_SequenceCompare {
     private _Comparators_SequenceCompare(){}
 
     public static int compareNullLast(
-            @Nullable final String sequence1,
-            @Nullable final String sequence2,
+            final @Nullable String sequence1,
+            final @Nullable String sequence2,
             final String separator) {
 
         if(_Strings.isEmpty(separator))

@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.members.disabled;
 
 import java.util.function.BiConsumer;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.base._Strings;

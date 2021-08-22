@@ -22,9 +22,9 @@ package org.apache.isis.commons.internal.base;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
-import static org.apache.isis.commons.internal.base._With.requires;
+import lombok.NonNull;
 
 /**
  * <h1>- internal use only -</h1>
@@ -43,7 +43,7 @@ public final class _Casts {
     private _Casts(){}
 
     @SuppressWarnings("unchecked")
-    public static <T> T uncheckedCast(@Nullable Object obj) {
+    public static <T> T uncheckedCast(final @Nullable Object obj) {
         return (T) obj;
     }
 
@@ -56,11 +56,10 @@ public final class _Casts {
      * @param cls
      * @return non-null
      */
-    public static <T> Optional<T> castTo(@Nullable Object value, Class<T> cls) {
+    public static <T> Optional<T> castTo(final @Nullable Object value, final @NonNull Class<T> cls) {
         if(value==null) {
             return Optional.empty();
         }
-        requires(cls, "cls");
         if(cls.isAssignableFrom(value.getClass())) {
             return Optional.of(cls.cast(value));
         }
@@ -75,11 +74,10 @@ public final class _Casts {
      * @param cls
      * @return casted value, or null
      */
-    public static @Nullable <T> T castToOrElseNull(@Nullable Object value, Class<T> cls) {
+    public static @Nullable <T> T castToOrElseNull(final @Nullable Object value, final @NonNull Class<T> cls) {
         if(value==null) {
             return null;
         }
-        requires(cls, "cls");
         if(cls.isAssignableFrom(value.getClass())) {
             return cls.cast(value);
         }
@@ -98,15 +96,13 @@ public final class _Casts {
      * @param onNonCast
      */
     public static <T, R, U, V> R castThenApply(
-            @Nullable U left,
-            @Nullable V right,
-            Class<T> cls,
-            BiFunction<T, T, R> onBothCast,
-            BiFunction<T, V, R> onLeftCast,
-            BiFunction<U, T, R> onRightCast,
-            BiFunction<U, V, R> onNonCast) {
-
-        requires(cls, "cls");
+            final @Nullable U left,
+            final @Nullable V right,
+            final @NonNull Class<T> cls,
+            final BiFunction<T, T, R> onBothCast,
+            final BiFunction<T, V, R> onLeftCast,
+            final BiFunction<U, T, R> onRightCast,
+            final BiFunction<U, V, R> onNonCast) {
 
         T left_casted=null, right_casted=null;
         boolean left_not_casted=false, right_not_casted=false;

@@ -66,8 +66,8 @@ public abstract class ManagedMember implements ManagedFeature {
             > memberProvider;
 
         public <T extends ObjectMember> Optional<T> lookup(
-                @NonNull final ManagedObject owner,
-                @NonNull final String memberId) {
+                final @NonNull ManagedObject owner,
+                final @NonNull String memberId) {
             val onwerSpec = owner.getSpecification();
             val member = memberProvider.apply(onwerSpec, memberId);
             return _Casts.uncheckedCast(member);
@@ -108,7 +108,7 @@ public abstract class ManagedMember implements ManagedFeature {
      *
      * @param managedObject
      */
-    protected void setOwner(@NonNull final ManagedObject managedObject) {
+    protected void setOwner(final @NonNull ManagedObject managedObject) {
         this.owner = managedObject;
     }
 
@@ -189,9 +189,9 @@ public abstract class ManagedMember implements ManagedFeature {
     }
 
     protected static <T extends ObjectMember> Optional<T> lookup(
-            @NonNull final ManagedObject owner,
-            @NonNull final MemberType memberType,
-            @NonNull final String memberId) {
+            final @NonNull ManagedObject owner,
+            final @NonNull MemberType memberType,
+            final @NonNull String memberId) {
         return memberType.lookup(owner, memberId);
     }
 

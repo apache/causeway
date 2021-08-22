@@ -47,6 +47,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
 import org.apache.isis.viewer.restfulobjects.viewer.context.ResourceContext;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Implementation note: it seems to be necessary to annotate the implementation
@@ -55,7 +56,10 @@ import lombok.val;
  */
 @Component
 @Path("/version")
-public class VersionResourceServerside extends ResourceAbstract implements VersionResource {
+@Log4j2
+public class VersionResourceServerside
+extends ResourceAbstract
+implements VersionResource {
 
     @Inject
     public VersionResourceServerside(
@@ -63,6 +67,7 @@ public class VersionResourceServerside extends ResourceAbstract implements Versi
             final IsisConfiguration isisConfiguration,
             final InteractionLayerTracker iInteractionLayerTracker) {
         super(metaModelContext, isisConfiguration, iInteractionLayerTracker);
+        log.debug("<init>");
     }
 
     @Override
@@ -77,29 +82,43 @@ public class VersionResourceServerside extends ResourceAbstract implements Versi
         final VersionReprRenderer renderer = new VersionReprRenderer(resourceContext, null, JsonRepresentation.newMap());
         renderer.includesSelf();
 
-        return Responses.ofOk(renderer, Caching.ONE_DAY).build();
+        return _EndpointLogging.response(log, "GET /version",
+                Responses.ofOk(renderer, Caching.ONE_DAY).build());
     }
 
     @Override
     public Response deleteVersionNotAllowed() {
-        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Deleting the version resource is not allowed.");
+        throw _EndpointLogging.error(log, "DELETE /version",
+                RestfulObjectsApplicationException
+                .createWithMessage(
+                        RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED,
+                        "Deleting the version resource is not allowed."));
     }
 
     @Override
     public Response putVersionNotAllowed() {
-        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Putting to the version resource is not allowed.");
+        throw _EndpointLogging.error(log, "PUT /version",
+                RestfulObjectsApplicationException
+                .createWithMessage(
+                        RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED,
+                        "Putting to the version resource is not allowed."));
     }
 
     @Override
     public Response postVersionNotAllowed() {
-        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Posting to the version resource is not allowed.");
+        throw _EndpointLogging.error(log, "POST /version",
+                RestfulObjectsApplicationException
+                .createWithMessage(
+                        RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED,
+                        "Posting to the version resource is not allowed."));
     }
 
-    private void fakeRuntimeExceptionIfXFail(ResourceContext resourceContext) {
+    private void fakeRuntimeExceptionIfXFail(final ResourceContext resourceContext) {
         final HttpHeaders httpHeaders = resourceContext.getHttpHeaders();
         final List<String> requestHeader = httpHeaders.getRequestHeader("X-Fail");
         if (requestHeader != null && !requestHeader.isEmpty()) {
-            throw RestfulObjectsApplicationException.create(HttpStatusCode.METHOD_FAILURE);
+            throw _EndpointLogging.error(log, "GET /version",
+                    RestfulObjectsApplicationException.create(HttpStatusCode.METHOD_FAILURE));
         }
     }
 

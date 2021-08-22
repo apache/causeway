@@ -50,9 +50,9 @@ public class ActionDialog extends Dialog {
     private static final long serialVersionUID = 1L;
 
     public static ActionDialog forManagedAction(
-            @NonNull final UiComponentFactoryVaa uiComponentFactory,
-            @NonNull final ManagedAction managedAction,
-            @NonNull final Predicate<Can<ManagedObject>> submitCallback) {
+            final @NonNull UiComponentFactoryVaa uiComponentFactory,
+            final @NonNull ManagedAction managedAction,
+            final @NonNull Predicate<Can<ManagedObject>> submitCallback) {
 
         val actionDialog = new ActionDialog(uiComponentFactory, managedAction, submitCallback);
         return actionDialog;

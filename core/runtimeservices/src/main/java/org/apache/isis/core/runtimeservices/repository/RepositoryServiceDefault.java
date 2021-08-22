@@ -26,7 +26,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 import javax.annotation.PostConstruct;
 import javax.annotation.Priority;
 import javax.inject.Named;
@@ -80,7 +80,7 @@ public class RepositoryServiceDefault implements RepositoryService {
     }
 
     @Override
-    public EntityState getEntityState(@Nullable final Object object) {
+    public EntityState getEntityState(final @Nullable Object object) {
         val adapter = objectManager.adapt(unwrapped(object));
         return EntityUtil.getEntityState(adapter);
     }

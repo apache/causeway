@@ -20,7 +20,7 @@ package org.apache.isis.incubator.viewer.vaadin.ui.auth;
 
 import java.util.Optional;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 import javax.servlet.http.HttpSession;
 
 import com.vaadin.flow.server.VaadinSession;
@@ -41,13 +41,13 @@ import lombok.experimental.UtilityClass;
 public class AuthSessionStoreUtil {
 
     public static void put(
-            @NonNull final HttpSession httpSession,
-            @Nullable final InteractionContext auth) {
+            final @NonNull HttpSession httpSession,
+            final @Nullable InteractionContext auth) {
         httpSession.setAttribute(InteractionContext.class.getName(), auth);
     }
 
     public static Optional<InteractionContext> get(
-            @NonNull final HttpSession httpSession) {
+            final @NonNull HttpSession httpSession) {
         return Optional.ofNullable(
                 (InteractionContext)httpSession
                 .getAttribute(InteractionContext.class.getName()));
@@ -55,7 +55,7 @@ public class AuthSessionStoreUtil {
 
     /** when within a VaadinSession */
     public static void put(
-            @Nullable final InteractionContext auth) {
+            final @Nullable InteractionContext auth) {
         Optional.ofNullable(VaadinSession.getCurrent())
         .map(VaadinSession::getSession)
         .ifPresent(sessionVaa->{

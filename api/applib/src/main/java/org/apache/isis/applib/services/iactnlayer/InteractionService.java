@@ -21,6 +21,7 @@ package org.apache.isis.applib.services.iactnlayer;
 import java.util.concurrent.Callable;
 
 import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.functional.ThrowingRunnable;
 
 import lombok.NonNull;
 

@@ -23,7 +23,7 @@ import org.apache.isis.client.kroviz.snapshots.demo2_0_0.ACTIONS_STRINGS_INVOKE
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.ACTIONS_TEXT_INVOKE
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.ISIS_SECURITY_ME_SERVICE
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.SO_0
-import org.apache.isis.client.kroviz.utils.Utils
+import org.apache.isis.client.kroviz.utils.StringUtils
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -56,7 +56,7 @@ class TObjectTest {
         //when
         mutable.first().value!!.content = "l on the hill"
         //then
-        val putBody = Utils.propertiesAsBody(tObject)
+        val putBody = StringUtils.propertiesAsBody(tObject)
         assertTrue(putBody.contains("notes"))
         assertTrue(putBody.contains("value"))
         assertTrue(putBody.contains("l on the hill"))
@@ -114,13 +114,13 @@ class TObjectTest {
         val to = TObjectHandler().parse(jsonStr) as TObject
         // then
         assertEquals("String data type", to.links[0].title)
-        assertEquals(13, to.members.size)
+        assertEquals(9, to.members.size)
         assertEquals(1, to.getCollections().size)
         assertEquals(8, to.getActions().size)
-        assertEquals(4, to.getProperties().size)
+        assertEquals(0, to.getProperties().size)
 
         val filteredProperties = to.getProperties().filter { it.id == "description" }
-        assertEquals(1, filteredProperties.size)
+        assertEquals(0, filteredProperties.size)
     }
 
 }

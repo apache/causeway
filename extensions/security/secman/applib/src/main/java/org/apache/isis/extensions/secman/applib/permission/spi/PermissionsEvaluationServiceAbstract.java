@@ -29,7 +29,8 @@ import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermis
 /**
  * @since 2.0 {@index}
  */
-public abstract class PermissionsEvaluationServiceAbstract implements PermissionsEvaluationService {
+public abstract class PermissionsEvaluationServiceAbstract
+implements PermissionsEvaluationService {
 
     private static final long serialVersionUID = 1L;
 

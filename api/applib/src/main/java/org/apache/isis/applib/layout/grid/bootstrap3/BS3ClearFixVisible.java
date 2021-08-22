@@ -22,8 +22,6 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3ClearFix.CssDisplay;
-
 /**
  * One of the <a href="http://getbootstrap.com/css/#responsive-utilities">Responsive utility classes</a>.
  *
@@ -60,7 +58,7 @@ public class BS3ClearFixVisible extends BS3ClearFix {
     @Override
     public String toCssClass() {
         return "clearfix "
-        		+ getDisplayFragment(getCssDisplay(), getSize())                
+        		+ getDisplayFragment(getCssDisplay(), getSize())
                 + (getCssClass() != null? " " + getCssClass(): "");
     }
 

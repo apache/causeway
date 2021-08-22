@@ -24,13 +24,11 @@ import org.apache.isis.client.kroviz.to.TransferObject
 
 class CollectionHandler : BaseHandler() {
 
-    
     override fun parse(response: String): TransferObject {
         return Json.decodeFromString(Collection.serializer(), response)
     }
 
     override fun doHandle() {
-        //logEntry.addAggregator(ActionDispatcher())
         update()
     }
 

@@ -18,7 +18,7 @@
  */
 package org.apache.isis.commons.internal.proxy;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 /**
  * Replaces the former ProxyFactoryPlugin

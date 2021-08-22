@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.config.beans.aoppatch;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 import javax.inject.Named;
 
 import org.springframework.beans.BeansException;

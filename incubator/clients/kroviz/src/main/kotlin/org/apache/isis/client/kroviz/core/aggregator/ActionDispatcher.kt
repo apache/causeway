@@ -23,7 +23,7 @@ import org.apache.isis.client.kroviz.to.*
 import org.apache.isis.client.kroviz.ui.dialog.ActionPrompt
 import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.utils.Point
-import org.apache.isis.client.kroviz.utils.Utils
+import org.apache.isis.client.kroviz.utils.StringUtils
 
 class ActionDispatcher(private val at: Point = Point(100, 100)) : BaseAggregator() {
 
@@ -63,7 +63,7 @@ class ActionDispatcher(private val at: Point = Point(100, 100)) : BaseAggregator
     }
 
     private fun invoke(action: Action, link: Link) {
-        val title = Utils.deCamel(action.id)
+        val title = StringUtils.deCamel(action.id)
         invoke(link, ObjectAggregator(title))
     }
 

@@ -16,6 +16,7 @@
 //  specific language governing permissions and limitations
 //  under the License.
 //
+import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
@@ -48,13 +49,16 @@ kotlin {
                 outputFileName = "main.bundle.js"
                 sourceMaps = true
                 devServer = KotlinWebpackConfig.DevServer(
-                        open = false,
-                        port = 3000,
-                        proxy = mapOf(
-                                "/kv/*" to "http://localhost:8080",
-                                "/kvws/*" to mapOf("target" to "ws://localhost:8080", "ws" to true)
-                        ),
-                        contentBase = listOf("$buildDir/processedResources/js/main")
+                    open = false,
+                    port = 3000,
+                    proxy = mutableMapOf(
+                        "/kv/*" to "http://localhost:8080",
+                        "/kvws/*" to mapOf(
+                            "target" to "ws://localhost:8080",
+                            "ws" to true
+                        )
+                    ),
+                    static = mutableListOf("$buildDir/processedResources/js/main")
                 )
             }
             webpackTask {
@@ -116,6 +120,9 @@ tasks {
     }
 }
 afterEvaluate {
+    extensions.configure<NodeJsRootExtension> {
+        versions.webpackDevServer.version = "4.0.0"
+    }
     tasks {
         getByName("processResources", Copy::class) {
             dependsOn("compileKotlinJs")
@@ -127,9 +134,9 @@ afterEvaluate {
                     exec {
                         executable = getNodeJsBinaryExecutable()
                         args(
-                                "${rootProject.buildDir}/js/node_modules/gettext.js/bin/po2json",
-                                it.absolutePath,
-                                "${it.parent}/${it.nameWithoutExtension}.json"
+                            "${rootProject.buildDir}/js/node_modules/gettext.js/bin/po2json",
+                            it.absolutePath,
+                            "${it.parent}/${it.nameWithoutExtension}.json"
                         )
                         println("Converted ${it.name} to ${it.nameWithoutExtension}.json")
                     }
@@ -142,7 +149,7 @@ afterEvaluate {
             group = "package"
             destinationDirectory.set(file("$buildDir/libs"))
             val distribution =
-                    project.tasks.getByName("browserProductionWebpack", KotlinWebpack::class).destinationDirectory!!
+                project.tasks.getByName("browserProductionWebpack", KotlinWebpack::class).destinationDirectory!!
             from(distribution) {
                 include("*.*")
             }

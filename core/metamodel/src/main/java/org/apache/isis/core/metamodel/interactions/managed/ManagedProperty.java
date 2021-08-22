@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.interactions.managed;
 
 import java.util.Optional;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.binding.Observable;
@@ -51,9 +51,9 @@ public final class ManagedProperty extends ManagedMember {
     }
 
     public static final Optional<ManagedProperty> lookupProperty(
-            @NonNull final ManagedObject owner,
-            @NonNull final String memberId,
-            @NonNull final Where where) {
+            final @NonNull ManagedObject owner,
+            final @NonNull String memberId,
+            final @NonNull Where where) {
 
         return ManagedMember.<OneToOneAssociation>lookup(owner, MemberType.PROPERTY, memberId)
         .map(objectAction -> of(owner, objectAction, where));
@@ -116,7 +116,7 @@ public final class ManagedProperty extends ManagedMember {
      * @param proposedNewValue
      * @return non-empty if the interaction is not valid for given {@code proposedNewValue}
      */
-    public Optional<InteractionVeto> modifyProperty(@Nullable final ManagedObject proposedNewValue) {
+    public Optional<InteractionVeto> modifyProperty(final @Nullable ManagedObject proposedNewValue) {
 
         val interactionVeto = checkValidity(proposedNewValue);
         if(interactionVeto.isPresent()) {

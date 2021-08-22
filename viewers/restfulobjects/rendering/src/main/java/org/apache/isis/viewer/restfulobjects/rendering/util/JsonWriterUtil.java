@@ -20,7 +20,7 @@ package org.apache.isis.viewer.restfulobjects.rendering.util;
 
 import java.io.IOException;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;

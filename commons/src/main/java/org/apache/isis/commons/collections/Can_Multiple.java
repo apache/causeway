@@ -35,7 +35,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Objects;
@@ -169,7 +169,7 @@ final class Can_Multiple<T> implements Can<T> {
 
 
     @Override
-    public <R> void zip(@NonNull final Iterable<R> zippedIn, @NonNull final BiConsumer<? super T, ? super R> action) {
+    public <R> void zip(final @NonNull Iterable<R> zippedIn, final @NonNull BiConsumer<? super T, ? super R> action) {
         val zippedInIterator = zippedIn.iterator();
         stream().forEach(t->{
             action.accept(t, zippedInIterator.next());
@@ -177,7 +177,7 @@ final class Can_Multiple<T> implements Can<T> {
     }
 
     @Override
-    public <R, Z> Can<R> zipMap(@NonNull final Iterable<Z> zippedIn, @NonNull final BiFunction<? super T, ? super Z, R> mapper) {
+    public <R, Z> Can<R> zipMap(final @NonNull Iterable<Z> zippedIn, final @NonNull BiFunction<? super T, ? super Z, R> mapper) {
         val zippedInIterator = zippedIn.iterator();
         return map(t->mapper.apply(t, zippedInIterator.next()));
     }
@@ -341,7 +341,7 @@ final class Can_Multiple<T> implements Can<T> {
     }
 
     @Override
-    public Set<T> toSet(@NonNull final Consumer<T> onDuplicated) {
+    public Set<T> toSet(final @NonNull Consumer<T> onDuplicated) {
         val set = _Sets.<T>newHashSet(); // serializable
         elements
         .forEach(s->{
@@ -353,14 +353,14 @@ final class Can_Multiple<T> implements Can<T> {
     }
 
     @Override
-    public <C extends Collection<T>> C toCollection(@NonNull final Supplier<C> collectionFactory) {
+    public <C extends Collection<T>> C toCollection(final @NonNull Supplier<C> collectionFactory) {
         val collection = collectionFactory.get();
         collection.addAll(elements);
         return collection;
     }
 
     @Override
-    public T[] toArray(@NonNull final Class<T> elementType) {
+    public T[] toArray(final @NonNull Class<T> elementType) {
         val array = _Casts.<T[]>uncheckedCast(Array.newInstance(elementType, size()));
         return elements.toArray(array);
     }

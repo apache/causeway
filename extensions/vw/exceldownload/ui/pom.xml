@@ -34,6 +34,23 @@
         <git-plugin.propertiesDir>org/apache/isis/extensions/exceldownload/ui</git-plugin.propertiesDir>
     </properties>
 
+	<build>
+		<plugins>
+			<plugin>
+				<!-- can be removed, once isis-viewer-wicket-ui does no longer need this switch -->
+				<!-- overrides defaults as configured in our core pom, 
+        			to make javadoc failures non fatal and let the build continue;
+        			this we can set on a per module basis, to apply only to those, 
+        			we don't know how to fix otherwise -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<failOnError>false</failOnError>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
     <dependencies>
         <dependency>
             <groupId>org.apache.isis.viewer</groupId>

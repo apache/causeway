@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;

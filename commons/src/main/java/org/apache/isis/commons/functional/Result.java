@@ -26,7 +26,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;

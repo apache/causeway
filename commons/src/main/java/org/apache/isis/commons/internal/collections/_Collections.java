@@ -38,11 +38,10 @@ import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.base._With;
 import org.apache.isis.commons.internal.reflection._Generics;
 
 import lombok.NonNull;
@@ -207,7 +206,7 @@ public final class _Collections {
      * @return a collector that collects elements of a stream into an unmodifiable SortedSet
      */
     public static <T> Collector<T, SortedSet<T>, SortedSet<T>> toUnmodifiableSortedSet(
-            @Nullable Comparator<T> comparator) {
+            final @Nullable Comparator<T> comparator) {
 
         if(comparator==null) {
             return toUnmodifiableSortedSet();
@@ -221,9 +220,7 @@ public final class _Collections {
      * @throws IllegalArgumentException if {@code typeOfCollection} is not one of
      * List, Set, SortedSet or Collection.
      */
-    public static <T> Collector<T, ?, ? extends Collection<T>> toUnmodifiableOfType(Class<?> typeOfCollection) {
-
-        _With.requires(typeOfCollection, "typeOfCollection");
+    public static <T> Collector<T, ?, ? extends Collection<T>> toUnmodifiableOfType(final @NonNull Class<?> typeOfCollection) {
 
         if(SortedSet.class.equals(typeOfCollection)) {
             return toUnmodifiableSortedSet();
@@ -258,9 +255,9 @@ public final class _Collections {
      * @return
      */
     static <T, R> R collectFromIterable(
-            @Nullable Iterable<T> iterable,
-            Function<Collection<T>, R> factory,
-            Supplier<Collector<T, ?, R>> elementCollector) {
+            final @Nullable Iterable<T> iterable,
+            final Function<Collection<T>, R> factory,
+            final Supplier<Collector<T, ?, R>> elementCollector) {
 
         if(iterable==null) {
             return factory.apply(Collections.emptyList());
@@ -338,7 +335,7 @@ public final class _Collections {
                 .collect(Collectors.joining(delimiter));
     }
 
-    public static String toStringJoiningNewLine(@Nullable Collection<?> collection) {
+    public static String toStringJoiningNewLine(final @Nullable Collection<?> collection) {
         return toStringJoining(collection, "\n");
     }
 

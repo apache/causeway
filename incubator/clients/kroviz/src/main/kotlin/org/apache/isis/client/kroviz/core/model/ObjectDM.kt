@@ -19,15 +19,18 @@
 package org.apache.isis.client.kroviz.core.model
 
 import org.apache.isis.client.kroviz.core.event.EventStore
+import org.apache.isis.client.kroviz.core.event.EventStore.findBy
+import org.apache.isis.client.kroviz.core.event.ResourceProxy
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
-import org.apache.isis.client.kroviz.core.event.RoXmlHttpRequest
 import org.apache.isis.client.kroviz.to.*
 
 class ObjectDM(override val title: String) : DisplayModelWithLayout() {
     var data: Exposer? = null
+    val collections = mutableMapOf<String, CollectionDM>()
     private var dirty: Boolean = false
 
     override fun canBeDisplayed(): Boolean {
+ //       debug()
         return when {
             isRendered -> false
             (layout == null) && (grid == null) -> false
@@ -35,8 +38,35 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
         }
     }
 
+    private fun debug()  {
+        console.log("[]")
+        console.log("[ODM.debug] data / collections / layout / grid / properties / icon / aggregator / logEntries")
+        console.log(data)
+        console.log(collections)
+        console.log(layout)
+        console.log(grid)
+        console.log(properties)
+        console.log(icon)
+        if (data != null) {
+            val delegate = (data as Exposer).delegate
+            val selfLink = delegate.getSelfLink()
+            val rs = ResourceSpecification(selfLink.href)
+            val le = EventStore.findBy(rs)!!
+            val aggt = le.getAggregator()
+            console.log(aggt)
+            val logEntries = EventStore.findAllBy(aggt)
+            logEntries.forEach {
+                console.log(it)
+            }
+        }
+    }
+
     fun setDirty(value: Boolean) {
         dirty = value
+    }
+
+    fun addCollection(key: String, value: CollectionDM) {
+        collections.put(key, value)
     }
 
     override fun addData(obj: TransferObject) {
@@ -65,23 +95,23 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
             val href = getLink.href
             val reSpec = ResourceSpecification(href)
             //WATCHOUT this is sequence dependent: GET and PUT share the same URL - if called after PUTting, it may fail
-            val getLogEntry = EventStore.find(reSpec)!!
+            val getLogEntry = findBy(reSpec)!!
             getLogEntry.setReload()
 
             val putLink = Link(method = Method.PUT.operation, href = href)
-            val logEntry = EventStore.find(reSpec)
+            val logEntry = findBy(reSpec)
             val aggregator = logEntry?.getAggregator()!!
-            RoXmlHttpRequest().invoke(putLink, aggregator)
+            // there may be more than one aggt - which may break this code
 
-            // now data should be reloaded - wait for invoking PUT?
-            RoXmlHttpRequest().invoke(getLink, aggregator)
-            //refresh of display to be triggered?
+            ResourceProxy().fetch(putLink, aggregator)
+            // now data should be reloaded
+            ResourceProxy().fetch(getLink, aggregator)
         }
     }
 
     fun undo() {
         if (dirty) {
-            //TODO reset()
+            reset()
         }
     }
 

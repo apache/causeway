@@ -18,15 +18,13 @@
  */
 package org.apache.isis.applib.layout.grid.bootstrap3;
 
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3ClearFix.CssDisplay;
-
 /**
  * @since 1.x {@index}
  */
 public abstract class BS3ClearFix extends BS3RowContent {
-	
+
     private static final long serialVersionUID = 1L;
-    
+
     public enum CssDisplay {
     	NONE,
         BLOCK,
@@ -42,16 +40,16 @@ public abstract class BS3ClearFix extends BS3RowContent {
         public String toCssClassFragment() {
             return name().toLowerCase().replace('_', '-');
         }
-    }    
+    }
 
-	protected String getDisplayFragment(CssDisplay displayValue, Size breakpoint) {
+	protected String getDisplayFragment(final CssDisplay displayValue, final Size breakpoint) {
 		switch(breakpoint) {
 		case XS:
 			return String.format("d-%s", displayValue.toCssClassFragment());
 		default:
-			return String.format("d-%s-%s", breakpoint.toCssClassFragment(), displayValue.toCssClassFragment());		
+			return String.format("d-%s-%s", breakpoint.toCssClassFragment(), displayValue.toCssClassFragment());
 		}
-	}    
-    
+	}
+
     public abstract String toCssClass();
 }

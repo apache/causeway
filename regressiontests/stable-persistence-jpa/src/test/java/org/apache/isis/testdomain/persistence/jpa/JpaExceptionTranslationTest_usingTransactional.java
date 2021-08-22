@@ -44,8 +44,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
-import org.apache.isis.applib.services.iactnlayer.ThrowingRunnable;
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.commons.functional.ThrowingRunnable;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.jpa.JpaInventoryDao;

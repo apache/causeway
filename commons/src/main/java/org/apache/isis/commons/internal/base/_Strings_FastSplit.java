@@ -21,12 +21,12 @@ package org.apache.isis.commons.internal.base;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 class _Strings_FastSplit {
 
     public static void splitThenAccept(
-            @Nullable final String input,
+            final @Nullable String input,
             final String separator,
             BiConsumer<String, String> onNonEmptySplit,
             Consumer<String> onNonEmptyLhs,

@@ -21,7 +21,7 @@ package org.apache.isis.core.runtimeservices.factory;
 
 import java.lang.reflect.InvocationTargetException;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;

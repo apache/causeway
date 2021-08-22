@@ -17,7 +17,7 @@
 
 package org.apache.isis.viewer.wicket.ui.util;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.head.CssHeaderItem;
@@ -56,8 +56,8 @@ public class Tooltips {
      * @param tooltipUiModel
      */
     public static void addTooltip(
-            @NonNull final Component target,
-            @Nullable final TooltipUiModel tooltipUiModel) {
+            final @NonNull Component target,
+            final @Nullable TooltipUiModel tooltipUiModel) {
         if(tooltipUiModel==null || _Strings.isEmpty(tooltipUiModel.getBody())) {
             return; // no body so don't render
         }

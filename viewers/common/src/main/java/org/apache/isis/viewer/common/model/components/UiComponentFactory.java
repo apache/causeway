@@ -21,7 +21,7 @@ package org.apache.isis.viewer.common.model.components;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.commons.collections.Can;
@@ -86,17 +86,17 @@ public interface UiComponentFactory<B, C> {
             return managedFeature.getCorrespondingClass();
         }
 
-        public boolean isFeatureTypeEqualTo(@Nullable final Class<?> type) {
+        public boolean isFeatureTypeEqualTo(final @Nullable Class<?> type) {
             return getFeatureType() == type;
         }
 
-        public boolean isFeatureTypeAssignableFrom(@Nullable final Class<?> type) {
+        public boolean isFeatureTypeAssignableFrom(final @Nullable Class<?> type) {
             return type!=null
                     ? getFeatureType().isAssignableFrom(type)
                     : false;
         }
 
-        public boolean isFeatureTypeInstanceOf(@Nullable final Class<?> type) {
+        public boolean isFeatureTypeInstanceOf(final @Nullable Class<?> type) {
             return type!=null
                     ? type.isAssignableFrom(getFeatureType())
                     : false;
@@ -107,14 +107,14 @@ public interface UiComponentFactory<B, C> {
          * @return Whether there exists a facet for this feature, that is of the
          * specified {@code facetType} (as per the type it reports from {@link Facet#facetType()}).
          */
-        public <T extends Facet> boolean hasFeatureTypeFacet(@Nullable final Class<T> facetType) {
+        public <T extends Facet> boolean hasFeatureTypeFacet(final @Nullable Class<T> facetType) {
             return facetType!=null
                     ? getFeatureTypeSpec().getFacet(facetType)!=null
                     : false;
         }
 
         public <T extends Facet> boolean hasFeatureTypeFacetAnyOf(
-                @NonNull final Can<Class<? extends Facet>> facetTypes) {
+                final @NonNull Can<Class<? extends Facet>> facetTypes) {
             return facetTypes.stream()
                     .map(getFeatureTypeSpec()::getFacet)
                     .anyMatch(_NullSafe::isPresent);
@@ -126,7 +126,7 @@ public interface UiComponentFactory<B, C> {
         }
 
         @Deprecated
-        public <T> Optional<T> getFeatureValue(@Nullable final Class<T> type) {
+        public <T> Optional<T> getFeatureValue(final @Nullable Class<T> type) {
             val managedProperty = (ManagedProperty)managedFeature;
             //TODO do a type check before the cast, so we can throw a more detailed exception
             // that is, given type must be assignable from the actual pojo type

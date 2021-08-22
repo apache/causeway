@@ -18,7 +18,11 @@
  */
 package org.apache.isis.client.kroviz.ui.dialog
 
+import org.apache.isis.client.kroviz.core.aggregator.CollectionAggregator
+import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.event.LogEntry
+import org.apache.isis.client.kroviz.core.event.LogEntryDecorator
+import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.to.bs3.Grid
 import org.apache.isis.client.kroviz.ui.core.Constants
@@ -26,29 +30,44 @@ import org.apache.isis.client.kroviz.ui.core.FormItem
 import org.apache.isis.client.kroviz.ui.core.RoDialog
 import org.apache.isis.client.kroviz.ui.diagram.JsonDiagram
 import org.apache.isis.client.kroviz.ui.diagram.LayoutDiagram
-import org.apache.isis.client.kroviz.utils.Utils
+import org.apache.isis.client.kroviz.utils.StringUtils
 import org.apache.isis.client.kroviz.utils.XmlHelper
 
-class EventLogDetail(val logEntry: LogEntry) : Command() {
+class EventLogDetail(val logEntryFromTabulator: LogEntry) : Command() {
+    private var logEntry: LogEntry
+
+    init {
+        // For a yet unknown reason, aggregators are not transmitted via tabulator.
+        // As a WORKAROUND, we fetch the full blown LogEntry from the EventStore again.
+        val rs = ResourceSpecification(logEntryFromTabulator.title)
+        logEntry = EventStore.findBy(rs)?: logEntryFromTabulator  // in case of xml, we use the entry passed in
+    }
+
+    // callback parameter
+    private val LOG: String = "log"
+    private val OBJ: String = "obj"
 
     fun open() {
-        val formItems = mutableListOf<FormItem>()
-
-        formItems.add(FormItem("Url", ValueType.TEXT, logEntry.url))
-
-        var responseStr = logEntry.response
-        if (logEntry.subType == Constants.subTypeJson) {
-            responseStr = Utils.format(responseStr)
+        val responseStr = if (logEntry.subType == Constants.subTypeJson) {
+            StringUtils.format(logEntry.response)
         } else {
-            responseStr = XmlHelper.formatXml(responseStr)
+            XmlHelper.format(logEntry.response)
         }
-        formItems.add(FormItem("Response", ValueType.TEXT_AREA, responseStr, 10))
 
-        var aggtStr = ""
-        logEntry.aggregators.forEach { it ->
-            aggtStr += it.toString()
-        }
-        formItems.add(FormItem("Aggregators", ValueType.TEXT_AREA, aggtStr, 5))
+        val led = LogEntryDecorator(logEntry)
+        val children = led.findChildren()
+        var kids = ""
+        children.forEach { kids += it.url + "\n" }
+        var orphans = ""
+        led.findOrphans(children).forEach { orphans += it + "\n" }
+        val formItems = mutableListOf<FormItem>()
+        formItems.add(FormItem("Url", ValueType.TEXT, logEntry.title))
+        formItems.add(FormItem("Response", ValueType.TEXT_AREA, responseStr, 10))
+        formItems.add(FormItem("Aggregators", ValueType.TEXT, content = logEntry.aggregators))
+        formItems.add(FormItem("Children", ValueType.TEXT_AREA, kids, size = 5))
+        formItems.add(FormItem("Orphans", ValueType.TEXT_AREA, orphans, size = 5))
+        formItems.add(FormItem("Object Diagram", ValueType.BUTTON, null, callBack = this, callBackAction = OBJ))
+        formItems.add(FormItem("Console", ValueType.BUTTON, null, callBack = this, callBackAction = LOG))
 
         RoDialog(
                 caption = "Details :" + logEntry.title,
@@ -58,7 +77,37 @@ class EventLogDetail(val logEntry: LogEntry) : Command() {
                 widthPerc = 60).open()
     }
 
-    override fun execute() {
+    override fun execute(action: String?) {
+        when {
+            action.isNullOrEmpty() -> defaultAction()
+            action == LOG -> {
+                console.log(logEntry)
+            }
+            action == OBJ -> {
+                objectDiagram()
+            }
+            else -> {
+                console.log(logEntry)
+                console.log("Action not defined yet: " + action)
+            }
+        }
+    }
+
+    private fun objectDiagram() {
+        logEntry.aggregators.forEach {
+            console.log(it)
+            if (it is CollectionAggregator) {
+                val displayModel = it.dpm
+                // https://github.com/moll/json-stringify-safe/blob/master/stringify.js
+                val jsonStr = JSON.stringify(displayModel)
+                console.log(jsonStr)
+                val pumlCode = JsonDiagram.build(jsonStr)
+                DiagramDialog("Object Diagram", pumlCode).open()
+            }
+        }
+    }
+
+    private fun defaultAction() {
         val str = logEntry.response
         val pumlCode = when {
             str.startsWith("<") -> {
@@ -69,8 +118,6 @@ class EventLogDetail(val logEntry: LogEntry) : Command() {
                 JsonDiagram.build(str)
             else -> "{}"
         }
-        console.log("[ELD.execute]")
-        console.log(pumlCode)
         DiagramDialog("Response Diagram", pumlCode).open()
     }
 

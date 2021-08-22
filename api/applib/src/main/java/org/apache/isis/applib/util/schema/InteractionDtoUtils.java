@@ -298,7 +298,7 @@ public final class InteractionDtoUtils {
     }
 
     static String deriveLogicalMemberId(final Bookmark bookmark, final String memberId) {
-        String logicalTypeName = bookmark.getObjectType();
+        String logicalTypeName = bookmark.getLogicalTypeName();
         int hashAt = memberId.lastIndexOf("#");
         String localMemberId = hashAt >= 0 && hashAt < memberId.length() ? memberId.substring(hashAt + 1) : memberId;
         return logicalTypeName + "#" + localMemberId;
@@ -429,7 +429,7 @@ public final class InteractionDtoUtils {
         final ParamDto paramDto = getParameter(ai, paramNum);
         return paramDto.getType();
     }
-    public static boolean isNull(final ActionInvocationDto ai, int paramNum) {
+    public static boolean isNull(final ActionInvocationDto ai, final int paramNum) {
         final ParamDto paramDto = getParameter(ai, paramNum);
         return paramDto.isNull();
     }
@@ -437,7 +437,7 @@ public final class InteractionDtoUtils {
 
     // -- getParameterArgValue
 
-    public static <T> T getParameterArgValue(final ActionInvocationDto ai, int paramNum) {
+    public static <T> T getParameterArgValue(final ActionInvocationDto ai, final int paramNum) {
         final ParamDto paramDto = getParameter(ai, paramNum);
         return CommonDtoUtils.getValue(paramDto);
     }

@@ -23,9 +23,9 @@ import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
-import static org.apache.isis.commons.internal.base._With.requires;
+import lombok.NonNull;
 
 /**
  * <h1>- internal use only -</h1>
@@ -55,7 +55,7 @@ public final class _Reduction<T> implements Consumer<T> {
      * @param identity
      * @param accumulator
      */
-    public static <T> _Reduction<T> of(@Nullable T identity, BinaryOperator<T> accumulator){
+    public static <T> _Reduction<T> of(final @Nullable T identity, final BinaryOperator<T> accumulator){
         return new _Reduction<T>(identity, accumulator, true);
     }
 
@@ -63,19 +63,18 @@ public final class _Reduction<T> implements Consumer<T> {
      * Inspired by {@link Stream#reduce(BinaryOperator)}
      * @param accumulator
      */
-    public static <T> _Reduction<T> of(BinaryOperator<T> accumulator){
+    public static <T> _Reduction<T> of(final BinaryOperator<T> accumulator){
         return new _Reduction<T>(null, accumulator, false);
     }
 
-    private _Reduction(@Nullable T identity, BinaryOperator<T> accumulator, boolean initialized) {
-        requires(accumulator, "accumulator");
+    private _Reduction(final @Nullable T identity, final @NonNull BinaryOperator<T> accumulator, final boolean initialized) {
         this.initialized = initialized;
         this.result = identity;
         this.accumulator = accumulator;
     }
 
     @Override
-    public void accept(@Nullable T next) {
+    public void accept(final @Nullable T next) {
         if(!initialized) {
             result = next;
             initialized = true;

@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 import javax.jdo.JDOQLTypedQuery;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
@@ -104,7 +104,7 @@ public interface JdoSupportService {
      *     </pre>
      * </p>
      */
-    <T> List<T> executeQuery(final Class<T> cls, @Nullable final BooleanExpression filter);
+    <T> List<T> executeQuery(final Class<T> cls, final @Nullable BooleanExpression filter);
 
     default <T> List<T> executeQuery(final Class<T> cls) {
         return executeQuery(cls, null);
@@ -126,7 +126,7 @@ public interface JdoSupportService {
      *     </pre>
      * </p>
      */
-    <T> T executeQueryUnique(final Class<T> cls, @Nullable final BooleanExpression filter);
+    <T> T executeQueryUnique(final Class<T> cls, final @Nullable BooleanExpression filter);
 
     default <T> T executeQueryUnique(final Class<T> cls) {
         return executeQueryUnique(cls, null);

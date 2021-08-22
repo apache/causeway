@@ -25,6 +25,8 @@ import java.util.stream.Collectors;
 
 import org.apache.isis.commons.internal.collections._Lists;
 
+import lombok.Getter;
+
 /**
  * Helper class to construct reason strings, with support for evaluating the
  * condition.
@@ -69,6 +71,7 @@ public class ReasonBuffer2 {
         public String evaluate();
     }
 
+    @Getter
     private static class ConditionAndReason implements LazyReason {
         private final Condition condition;
         private final String reason;
@@ -76,7 +79,7 @@ public class ReasonBuffer2 {
         public static ConditionAndReason create(final Condition condition, final String reason) {
             return reason != null
                     ? new ConditionAndReason(condition, reason)
-                            : null;
+                    : null;
         }
 
         private ConditionAndReason(final Condition condition, final String reason) {
@@ -89,13 +92,6 @@ public class ReasonBuffer2 {
             return condition.evaluate() ? reason : null;
         }
 
-        public Condition getCondition() {
-            return this.condition;
-        }
-
-        public String getReason() {
-            return this.reason;
-        }
     }
 
     public enum Mode {
@@ -216,12 +212,12 @@ public class ReasonBuffer2 {
         Builder() {
         }
 
-        public Builder mode(Mode mode) {
+        public Builder mode(final Mode mode) {
             this.mode = mode;
             return this;
         }
 
-        public Builder prefix(String prefix) {
+        public Builder prefix(final String prefix) {
             this.prefix = prefix;
             return this;
         }

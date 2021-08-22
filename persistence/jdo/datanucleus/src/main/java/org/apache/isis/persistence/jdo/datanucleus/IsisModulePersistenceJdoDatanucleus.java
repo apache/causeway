@@ -135,11 +135,12 @@ public class IsisModulePersistenceJdoDatanucleus {
     @Qualifier("transaction-aware-pmf-proxy")
     @Bean @Primary
     public TransactionAwarePersistenceManagerFactoryProxy getTransactionAwarePersistenceManagerFactoryProxy(
+            final MetaModelContext metaModelContext,
             final @Qualifier("local-pmf-proxy") LocalPersistenceManagerFactoryBean localPmfBean) {
 
         val pmf = localPmfBean.getObject(); // created once per application lifecycle
 
-        val tapmfProxy = new TransactionAwarePersistenceManagerFactoryProxy();
+        val tapmfProxy = new TransactionAwarePersistenceManagerFactoryProxy(metaModelContext);
         tapmfProxy.setTargetPersistenceManagerFactory(pmf);
         tapmfProxy.setAllowCreate(false);
         return tapmfProxy;

@@ -9,6 +9,7 @@
 --_ basics
 --- HTML
 --- CSS
+---- Flexbox
 --- <&script>JavaScript
 --_ code
 --- Kotlin<&star>
@@ -44,13 +45,10 @@
 +++ ~~Mocha~~
 +++ ChromeHeadless
 +++ qunit
-+++ PhtantomJS
++++ PhantomJS
 +++ coverage
 ++++ istanbul
 ++++ nyc
---_ CI
---- Travis
---- Coveralls
 --_ <&bug>debug
 --- Chrome
 ---- Plugins

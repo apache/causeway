@@ -21,6 +21,7 @@ package org.apache.isis.client.kroviz.to
 import org.apache.isis.client.kroviz.utils.XmlHelper
 
 enum class ValueType(val type: String) {
+    BUTTON("Button"),
     BOOLEAN("Boolean"),
     DATE("Date"),
     HTML("Html"),

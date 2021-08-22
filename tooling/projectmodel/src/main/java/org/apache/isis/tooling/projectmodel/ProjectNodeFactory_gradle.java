@@ -20,7 +20,7 @@ package org.apache.isis.tooling.projectmodel;
 
 import java.io.File;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.gradle.tooling.GradleConnector;
 import org.gradle.tooling.model.GradleProject;

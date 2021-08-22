@@ -98,14 +98,6 @@
 			<artifactId>isis-security-shiro</artifactId>
 		</dependency>
 
-		<!-- JDK11+ SUPPORT -->
-
-		<dependency>
-			<groupId>org.apache.isis.mavendeps</groupId>
-			<artifactId>isis-mavendeps-jdk11</artifactId>
-			<type>pom</type>
-		</dependency>
-
 		<!-- INCUBATOR: JAVAFX VIEWER -->
 
 		<dependency>

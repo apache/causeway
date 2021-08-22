@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.postprocessors.object;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 import javax.inject.Inject;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;

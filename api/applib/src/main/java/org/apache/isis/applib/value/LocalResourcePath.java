@@ -22,8 +22,7 @@ package org.apache.isis.applib.value;
 import java.io.Serializable;
 import java.net.URISyntaxException;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
@@ -84,7 +83,7 @@ public final class LocalResourcePath implements Serializable {
         return path;
     }
 
-    @Nonnull
+    @NonNull
     public String getPath() {
         return path;
     }

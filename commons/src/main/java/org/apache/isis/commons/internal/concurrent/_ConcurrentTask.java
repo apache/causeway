@@ -21,9 +21,8 @@ package org.apache.isis.commons.internal.concurrent;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
-import org.apache.isis.commons.internal.base._With;
-
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -65,7 +64,7 @@ public abstract class _ConcurrentTask<T> implements Runnable {
         status = State.STARTED;
     }
 
-    protected void postCall(T completedWith, Throwable failedWith) {
+    protected void postCall(final T completedWith, final Throwable failedWith) {
         if(failedWith!=null) {
             this.failedAtNanos = System.nanoTime();
             this.failedWith = failedWith;
@@ -99,9 +98,7 @@ public abstract class _ConcurrentTask<T> implements Runnable {
 
     // -- NAMING
 
-    public _ConcurrentTask<T> withName(String name) {
-
-        _With.requires(name, "name");
+    public _ConcurrentTask<T> withName(final @NonNull String name) {
 
         val delegate = this;
 
@@ -121,9 +118,7 @@ public abstract class _ConcurrentTask<T> implements Runnable {
 
     }
 
-    public _ConcurrentTask<T> withName(Supplier<String> nameSupplier) {
-
-        _With.requires(nameSupplier, "nameSupplier");
+    public _ConcurrentTask<T> withName(final @NonNull Supplier<String> nameSupplier) {
 
         val delegate = this;
 
@@ -146,9 +141,7 @@ public abstract class _ConcurrentTask<T> implements Runnable {
 
     // -- FACTORIES
 
-    public static _ConcurrentTask<Void> of(Runnable runnable) {
-
-        _With.requires(runnable, "runnable");
+    public static _ConcurrentTask<Void> of(final @NonNull Runnable runnable) {
 
         return new _ConcurrentTask<Void>() {
 
@@ -166,9 +159,7 @@ public abstract class _ConcurrentTask<T> implements Runnable {
         };
     }
 
-    public static <X> _ConcurrentTask<X> of(Callable<X> callable) {
-
-        _With.requires(callable, "callable");
+    public static <X> _ConcurrentTask<X> of(final @NonNull Callable<X> callable) {
 
         return new _ConcurrentTask<X>() {
 

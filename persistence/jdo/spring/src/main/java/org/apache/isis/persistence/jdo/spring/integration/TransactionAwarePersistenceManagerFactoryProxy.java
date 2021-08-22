@@ -30,6 +30,10 @@ import org.springframework.beans.factory.FactoryBean;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
+import org.apache.isis.core.metamodel.context.MetaModelContext;
+
+import lombok.NonNull;
+
 /**
  * Proxy for a target JDO {@link javax.jdo.PersistenceManagerFactory},
  * returning the current thread-bound PersistenceManager (the Spring-managed
@@ -66,20 +70,31 @@ public class TransactionAwarePersistenceManagerFactoryProxy
 implements
     FactoryBean<PersistenceManagerFactory> {
 
+    /**
+     * Key of the key-value pair into the map of the PM's user objects,
+     * we store the Isis MetaModelContext to.
+     * @see PersistenceManager#putUserObject(Object, Object)
+     */
+    public static final String MMC_USER_OBJECT_KEY = "isis.mmc";
+
 	private PersistenceManagerFactory target;
 
 	private boolean allowCreate = true;
 
 	private PersistenceManagerFactory proxy;
+	private final MetaModelContext metaModelContext;
 
+	public TransactionAwarePersistenceManagerFactoryProxy(final @NonNull MetaModelContext metaModelContext) {
+        this.metaModelContext = metaModelContext;
+    }
 
-	/**
+    /**
 	 * Set the target JDO PersistenceManagerFactory that this proxy should
 	 * delegate to. This should be the raw PersistenceManagerFactory, as
 	 * accessed by JdoTransactionManager.
 	 * @see org.apache.isis.persistence.jdo.spring.integration.JdoTransactionManager
 	 */
-	public void setTargetPersistenceManagerFactory(PersistenceManagerFactory target) {
+	public void setTargetPersistenceManagerFactory(final PersistenceManagerFactory target) {
 		Assert.notNull(target, "Target PersistenceManagerFactory must not be null");
 		this.target = target;
 		Class<?>[] ifcs = ClassUtils.getAllInterfacesForClass(target.getClass(), target.getClass().getClassLoader());
@@ -105,7 +120,7 @@ implements
 	 * call without corresponding {@code PersistenceManager.close()} call).
 	 * @see PersistenceManagerFactoryUtils#getPersistenceManager(javax.jdo.PersistenceManagerFactory, boolean)
 	 */
-	public void setAllowCreate(boolean allowCreate) {
+	public void setAllowCreate(final boolean allowCreate) {
 		this.allowCreate = allowCreate;
 	}
 
@@ -143,7 +158,7 @@ implements
 	private class PersistenceManagerFactoryInvocationHandler implements InvocationHandler {
 
 		@Override
-		public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+		public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
 			// Invocation on PersistenceManagerFactory interface coming in...
 
 			if (method.getName().equals("equals")) {
@@ -155,12 +170,15 @@ implements
 				return System.identityHashCode(proxy);
 			}
 			else if (method.getName().equals("getPersistenceManager")) {
-				PersistenceManagerFactory target = getTargetPersistenceManagerFactory();
+				PersistenceManagerFactory pmf = getTargetPersistenceManagerFactory();
 				PersistenceManager pm =
-						PersistenceManagerFactoryUtils.doGetPersistenceManager(target, isAllowCreate());
+						PersistenceManagerFactoryUtils.doGetPersistenceManager(pmf, isAllowCreate());
+				pm.putUserObject(MMC_USER_OBJECT_KEY, metaModelContext);
 				Class<?>[] ifcs = ClassUtils.getAllInterfacesForClass(pm.getClass(), pm.getClass().getClassLoader());
 				return Proxy.newProxyInstance(
-						pm.getClass().getClassLoader(), ifcs, new PersistenceManagerInvocationHandler(pm, target));
+						pm.getClass().getClassLoader(),
+						ifcs,
+						new PersistenceManagerInvocationHandler(pm, pmf));
 			}
 
 			// Invoke method on target PersistenceManagerFactory.
@@ -173,24 +191,24 @@ implements
 		}
 	}
 
-
 	/**
 	 * Invocation handler that delegates close calls on PersistenceManagers to
 	 * PersistenceManagerFactoryUtils for being aware of thread-bound transactions.
 	 */
 	private static class PersistenceManagerInvocationHandler implements InvocationHandler {
 
-		private final PersistenceManager target;
-
+		private final PersistenceManager pm;
 		private final PersistenceManagerFactory persistenceManagerFactory;
 
-		public PersistenceManagerInvocationHandler(PersistenceManager target, PersistenceManagerFactory pmf) {
-			this.target = target;
+		public PersistenceManagerInvocationHandler(
+		        final @NonNull PersistenceManager pm,
+		        final @NonNull PersistenceManagerFactory pmf) {
+			this.pm = pm;
 			this.persistenceManagerFactory = pmf;
 		}
 
 		@Override
-		public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+		public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
 			// Invocation on PersistenceManager interface coming in...
 
 			if (method.getName().equals("equals")) {
@@ -204,13 +222,13 @@ implements
 			else if (method.getName().equals("close")) {
 				// Handle close method: only close if not within a transaction.
 				PersistenceManagerFactoryUtils.doReleasePersistenceManager(
-						this.target, this.persistenceManagerFactory);
+						this.pm, this.persistenceManagerFactory);
 				return null;
 			}
 
 			// Invoke method on target PersistenceManager.
 			try {
-				return method.invoke(this.target, args);
+				return method.invoke(this.pm, args);
 			}
 			catch (InvocationTargetException ex) {
 				throw ex.getTargetException();

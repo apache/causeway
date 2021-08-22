@@ -70,6 +70,13 @@
 
     <dependencies>
 
+		<!-- JDK11+ SUPPORT AND JEE API -->
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-jdk-supplemental</artifactId>
+			<type>pom</type>
+		</dependency>
+
         <dependency>
             <groupId>org.apache.isis.commons</groupId>
 			<artifactId>isis-commons</artifactId>
@@ -79,16 +86,6 @@
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-schema</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.code.findbugs</groupId>
-            <artifactId>annotations</artifactId>
         </dependency>
 
         <!-- TEST -->
@@ -103,6 +100,13 @@
             <groupId>org.jmock</groupId>
             <artifactId>jmock</artifactId>
             <scope>test</scope>
+            <exclusions>
+            	<!-- transitively provided by isis-jdk-supplemental -->
+            	<exclusion>
+            		<groupId>org.ow2.asm</groupId>
+            		<artifactId>asm</artifactId>
+            	</exclusion>
+            </exclusions>
         </dependency>
 
     </dependencies>

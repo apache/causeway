@@ -21,21 +21,21 @@ package org.apache.isis.persistence.jdo.datanucleus.metamodel;
 import java.lang.reflect.Method;
 import java.util.Set;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Sets;
 
 public class JdoMetamodelUtil {
 
-    public static boolean isPersistenceEnhanced(@Nullable final Class<?> cls) {
+    public static boolean isPersistenceEnhanced(final @Nullable Class<?> cls) {
         if(cls==null) {
             return false;
         }
         return org.datanucleus.enhancement.Persistable.class.isAssignableFrom(cls);
     }
 
-    public static boolean isMethodProvidedByEnhancement(@Nullable final Method method) {
+    public static boolean isMethodProvidedByEnhancement(final @Nullable Method method) {
         if(method==null) {
             return false;
         }

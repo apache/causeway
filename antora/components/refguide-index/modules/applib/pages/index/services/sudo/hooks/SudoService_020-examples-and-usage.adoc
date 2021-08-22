@@ -15,11 +15,10 @@ Or, this fixture script uses the `SudoService` to set up `ToDoItem` objects:
 ----
 protected void execute(final ExecutionContext ec) {
     ...
-    ExecutionContext ec =
-        ExecutionContext.ofUserWithSystemDefaults(
-            UserMemento.ofName("joe"));
-
-    sudoService.sudo(ec, () -> wrap(toDoItem).completed());
+    sudoService.sudo(
+        InteractionContext.switchUser(UserMemento.ofName("joe")),
+        () -> wrap(toDoItem).completed()
+    );
     ...
 }
 ----

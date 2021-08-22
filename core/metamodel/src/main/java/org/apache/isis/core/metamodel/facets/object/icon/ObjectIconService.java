@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.object.icon;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;

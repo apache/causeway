@@ -74,13 +74,13 @@ class _JdoObjectIdDecoder implements ChainOfResponsibility.Handler<JdoObjectIdDe
         return parser.apply(request);
     }
 
-    public static Predicate<JdoObjectIdDecodingRequest> filter(@NonNull final String token) {
+    public static Predicate<JdoObjectIdDecodingRequest> filter(final @NonNull String token) {
         return request->token.equals(request.getDistinguisher());
     }
 
     public static Function<JdoObjectIdDecodingRequest, Object> parser(
-            @NonNull final Function<String, ? extends Object> appIdFactory,
-            @NonNull final BiFunction<Class<?>, String, Object> jdoObjectIdFactory) {
+            final @NonNull Function<String, ? extends Object> appIdFactory,
+            final @NonNull BiFunction<Class<?>, String, Object> jdoObjectIdFactory) {
         return request->request.isApplicationIdentity()
                 ? appIdFactory.apply(request.getKeyStr())
                 : jdoObjectIdFactory.apply(request.getSpec().getCorrespondingClass(), request.getKeyStr());

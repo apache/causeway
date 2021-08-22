@@ -20,7 +20,7 @@ package org.apache.isis.incubator.viewer.vaadin.ui.components.temporal;
 
 import java.time.LocalDate;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import com.vaadin.flow.component.customfield.CustomField;
 import com.vaadin.flow.component.datepicker.DatePicker;

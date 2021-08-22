@@ -21,7 +21,7 @@ package org.apache.isis.extensions.commandreplay.primary.ui;
 import java.util.List;
 import java.util.UUID;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 

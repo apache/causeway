@@ -22,7 +22,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.util.function.Function;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;

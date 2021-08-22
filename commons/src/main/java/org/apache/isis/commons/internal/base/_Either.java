@@ -24,9 +24,7 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import javax.annotation.Nullable;
-
-import static org.apache.isis.commons.internal.base._With.requires;
+import org.springframework.lang.Nullable;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -56,21 +54,19 @@ public final class _Either<L, R> {
 
     // -- FACTORIES
 
-    public static <L, R> _Either<L, R> left(L left) {
-        requires(left, "left");
+    public static <L, R> _Either<L, R> left(final @NonNull L left) {
         return of(left, null, true);
     }
 
-    public static <L, R> _Either<L, R> right(R right) {
-        requires(right, "right");
+    public static <L, R> _Either<L, R> right(final @NonNull R right) {
         return of(null, right, false);
     }
 
-    public static <L, R> _Either<L, R> leftNullable(@Nullable L left) {
+    public static <L, R> _Either<L, R> leftNullable(final @Nullable L left) {
         return of(left, null, true);
     }
 
-    public static <L, R> _Either<L, R> rightNullable(@Nullable R right) {
+    public static <L, R> _Either<L, R> rightNullable(final @Nullable R right) {
         return of(null, right, false);
     }
 
@@ -140,13 +136,13 @@ public final class _Either<L, R> {
                 : rightNullable(rightMapper.apply(right));
     }
 
-    public _Either<L, R> mapIfLeft(Function<L, _Either<L, R>> leftRemapper){
+    public _Either<L, R> mapIfLeft(final Function<L, _Either<L, R>> leftRemapper){
         return isLeft()
                 ? leftRemapper.apply(left)
                 : this;
     }
 
-    public _Either<L, R> mapIfRight(Function<R, _Either<L, R>> rightRemapper){
+    public _Either<L, R> mapIfRight(final Function<R, _Either<L, R>> rightRemapper){
         return isLeft()
                 ? this
                 : rightRemapper.apply(right);
@@ -155,7 +151,7 @@ public final class _Either<L, R> {
 
     // -- FOLDING
 
-    public <T> T fold(BiFunction<L, R, T> biMapper){
+    public <T> T fold(final BiFunction<L, R, T> biMapper){
         return biMapper.apply(left, right);
     }
 
@@ -169,7 +165,7 @@ public final class _Either<L, R> {
 
     // -- TERMINALS
 
-    public void accept(Consumer<L> leftConsumer, Consumer<R> rightConsumer) {
+    public void accept(final Consumer<L> leftConsumer, final Consumer<R> rightConsumer) {
         if(isLeft()) {
             leftConsumer.accept(left);
         } else {

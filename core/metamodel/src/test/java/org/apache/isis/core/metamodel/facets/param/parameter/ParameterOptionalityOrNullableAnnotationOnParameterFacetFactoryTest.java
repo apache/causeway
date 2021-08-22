@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.param.parameter;
 
 import java.lang.reflect.Method;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
@@ -72,12 +72,11 @@ public class ParameterOptionalityOrNullableAnnotationOnParameterFacetFactoryTest
         assertNull(facetedMethod.getFacet(MandatoryFacet.class));
     }
 
-
     public void testNullableAnnotationPickedUpOnActionParameter() {
 
         class Customer {
             @SuppressWarnings("unused")
-            public void someAction(@Nullable final String foo) {
+            public void someAction(final @Nullable String foo) {
             }
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { String.class });
@@ -93,7 +92,7 @@ public class ParameterOptionalityOrNullableAnnotationOnParameterFacetFactoryTest
 
         class Customer {
             @SuppressWarnings("unused")
-            public void someAction(@Nullable final int foo) {
+            public void someAction(final @Nullable int foo) {
             }
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { int.class });

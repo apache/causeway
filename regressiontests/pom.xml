@@ -161,12 +161,6 @@
 			<type>pom</type>
 		</dependency>
 
-		<dependency>
-			<groupId>org.apache.isis.mavendeps</groupId>
-			<artifactId>isis-mavendeps-jdk11</artifactId>
-			<type>pom</type>
-		</dependency>
-
        <dependency>
 	    	<groupId>org.apache.isis.testing</groupId>
         	<artifactId>isis-testing-unittestsupport-applib</artifactId>
@@ -188,15 +182,13 @@
 		</dependency>
 
         <dependency>
-            <groupId>org.apache.isis.mavendeps</groupId>
-            <artifactId>isis-mavendeps-jpa</artifactId>
-            <type>pom</type>
+            <groupId>org.apache.isis.persistence</groupId>
+			<artifactId>isis-persistence-jpa-eclipselink</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.mavendeps</groupId>
-            <artifactId>isis-mavendeps-jdo</artifactId>
-            <type>pom</type>
+            <groupId>org.apache.isis.persistence</groupId>
+			<artifactId>isis-persistence-jdo-datanucleus</artifactId>
         </dependency>
 
 		<dependency>

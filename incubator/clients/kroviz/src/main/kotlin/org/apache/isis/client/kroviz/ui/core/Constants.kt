@@ -20,8 +20,10 @@ package org.apache.isis.client.kroviz.ui.core
 
 object Constants {
 
+    const val restInfix = "restful/"
     const val stdMimeType = "text/plain"
     const val svgMimeType = "image/svg+xml"
+    const val pngMimeType = "image/png"
     const val xmlMimeType = "application/xml"
     const val calcHeight = "calc(100vh - 88px)"
     const val actionSeparator = "\n"
@@ -33,4 +35,8 @@ object Constants {
     //host:port depend on how docker is started
     // docker run -d --name kroki -p 8080:8000 yuzutech/kroki
 
+    const val demoUrl = "http://localhost:8080/"
+    const val demoUser = "sven"
+    const val demoPass = "pass"
+    //const val demoUrl = "https://demo-wicket.jdo.isis.incode.work/"
 }

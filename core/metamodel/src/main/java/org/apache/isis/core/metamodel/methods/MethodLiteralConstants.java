@@ -22,7 +22,7 @@ import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.util.function.IntFunction;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.commons.StringExtensions;

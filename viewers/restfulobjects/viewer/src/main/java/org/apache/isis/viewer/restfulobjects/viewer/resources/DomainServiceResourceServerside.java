@@ -57,10 +57,14 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainServi
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Component
 @Path("/services")
-public class DomainServiceResourceServerside extends ResourceAbstract implements DomainServiceResource {
+@Log4j2
+public class DomainServiceResourceServerside
+extends ResourceAbstract
+implements DomainServiceResource {
 
     private static final Predicate<ManagedObject> NATURE_REST = (final ManagedObject input) -> {
         return DomainServiceFacet.isContributing(input.getSpecification());
@@ -72,12 +76,16 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
             final IsisConfiguration isisConfiguration,
             final InteractionLayerTracker iInteractionLayerTracker) {
         super(metaModelContext, isisConfiguration, iInteractionLayerTracker);
+        log.debug("<init>");
     }
 
     @Override
     @GET
     @Path("/")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Produces({
+        MediaType.APPLICATION_JSON,
+        RestfulMediaType.APPLICATION_JSON_LIST,
+        RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response services() {
 
         val resourceContext = createResourceContext(
@@ -93,22 +101,35 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         .includesSelf()
         .with(serviceAdapters);
 
-        return Responses.ofOk(renderer, Caching.ONE_DAY).build();
+        return _EndpointLogging.response(log, "GET /services/",
+                Responses.ofOk(renderer, Caching.ONE_DAY).build());
     }
 
     @Override
     public Response deleteServicesNotAllowed() {
-        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Deleting the services resource is not allowed.");
+        throw _EndpointLogging.error(log, "DELETE /services",
+                RestfulObjectsApplicationException
+                .createWithMessage(
+                        RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED,
+                        "Deleting the services resource is not allowed."));
     }
 
     @Override
     public Response putServicesNotAllowed() {
-        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Putting to the services resource is not allowed.");
+        throw _EndpointLogging.error(log, "PUT /services",
+                RestfulObjectsApplicationException
+                .createWithMessage(
+                        RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED,
+                        "Putting to the services resource is not allowed."));
     }
 
     @Override
     public Response postServicesNotAllowed() {
-        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Posting to the services resource is not allowed.");
+        throw _EndpointLogging.error(log, "POST /services",
+                RestfulObjectsApplicationException
+                .createWithMessage(
+                        RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED,
+                        "Posting to the services resource is not allowed."));
     }
 
     // //////////////////////////////////////////////////////////
@@ -122,7 +143,8 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    public Response service(@PathParam("serviceId") final String serviceId) {
+    public Response service(
+            @PathParam("serviceId") final String serviceId) {
 
         val resourceContext = createResourceContext(
                 RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS, RepresentationService.Intent.ALREADY_PERSISTENT);
@@ -134,30 +156,45 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         .with(serviceAdapter)
         .includesSelf();
 
-        return Responses.ofOk(renderer, Caching.ONE_DAY).build();
+        return _EndpointLogging.response(log, "GET /services/{}", serviceId,
+                Responses.ofOk(renderer, Caching.ONE_DAY).build());
     }
 
     @DELETE
     @Path("/{serviceId}")
     @Override
-    public Response deleteServiceNotAllowed(@PathParam("serviceId") String serviceId) {
-        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Deleting a service resource is not allowed.");
+    public Response deleteServiceNotAllowed(
+            @PathParam("serviceId") final String serviceId) {
+        throw _EndpointLogging.error(log, "DELETE /services/{}", serviceId,
+                RestfulObjectsApplicationException
+                .createWithMessage(
+                        RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED,
+                        "Deleting a service resource is not allowed."));
     }
 
     @PUT
     @Path("/{serviceId}")
     @Override
-    public Response putServiceNotAllowed(@PathParam("serviceId") String serviceId) {
-        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Putting to a service resource is not allowed.");
+    public Response putServiceNotAllowed(
+            @PathParam("serviceId") final String serviceId) {
+        throw _EndpointLogging.error(log, "PUT /services/{}", serviceId,
+                RestfulObjectsApplicationException
+                .createWithMessage(
+                        RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED,
+                        "Putting to a service resource is not allowed."));
     }
 
     @POST
     @Path("/{serviceId}")
     @Override
-    public Response postServiceNotAllowed(@PathParam("serviceId") String serviceId) {
-        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Posting to a service resource is not allowed.");
+    public Response postServiceNotAllowed(
+            @PathParam("serviceId") final String serviceId) {
+        throw _EndpointLogging.error(log, "POST /services/{}", serviceId,
+                RestfulObjectsApplicationException
+                .createWithMessage(
+                        RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED,
+                        "Posting to a service resource is not allowed."));
     }
-
 
     // //////////////////////////////////////////////////////////
     // domain service action
@@ -170,36 +207,57 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR,
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_ACTION, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    public Response actionPrompt(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId) {
+    public Response actionPrompt(
+            @PathParam("serviceId") final String serviceId,
+            @PathParam("actionId") final String actionId) {
 
         val resourceContext = createResourceContext(
                 RepresentationType.OBJECT_ACTION, Where.OBJECT_FORMS, RepresentationService.Intent.ALREADY_PERSISTENT);
 
         val serviceAdapter = getServiceAdapter(serviceId);
-        val domainResourceHelper = DomainResourceHelper.ofServiceResource(resourceContext, serviceAdapter);
+        val domainResourceHelper = _DomainResourceHelper.ofServiceResource(resourceContext, serviceAdapter);
 
-        return domainResourceHelper.actionPrompt(actionId);
+        return _EndpointLogging.response(log, "GET /services/{}/actions/{}", serviceId, actionId,
+                domainResourceHelper.actionPrompt(actionId));
     }
 
     @DELETE
     @Path("/{serviceId}/actions/{actionId}")
     @Override
-    public Response deleteActionPromptNotAllowed(@PathParam("serviceId") String serviceId, @PathParam("actionId") String actionId) {
-        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Deleting action prompt resource is not allowed.");
+    public Response deleteActionPromptNotAllowed(
+            @PathParam("serviceId") final String serviceId,
+            @PathParam("actionId") final String actionId) {
+        throw _EndpointLogging.error(log, "DELETE /services/{}/actions/{}", serviceId, actionId,
+                RestfulObjectsApplicationException
+                .createWithMessage(
+                        RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED,
+                        "Deleting action prompt resource is not allowed."));
     }
 
     @PUT
     @Path("/{serviceId}/actions/{actionId}")
     @Override
-    public Response putActionPromptNotAllowed(@PathParam("serviceId") String serviceId, @PathParam("actionId") String actionId) {
-        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Putting to an action prompt resource is not allowed.");
+    public Response putActionPromptNotAllowed(
+            @PathParam("serviceId") final String serviceId,
+            @PathParam("actionId") final String actionId) {
+        throw _EndpointLogging.error(log, "PUT /services/{}/actions/{}", serviceId, actionId,
+                RestfulObjectsApplicationException
+                .createWithMessage(
+                        RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED,
+                        "Putting to an action prompt resource is not allowed."));
     }
 
     @POST
     @Path("/{serviceId}/actions/{actionId}")
     @Override
-    public Response postActionPromptNotAllowed(@PathParam("serviceId") String serviceId, @PathParam("actionId") String actionId) {
-        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Posting to an action prompt resource is not allowed.");
+    public Response postActionPromptNotAllowed(
+            @PathParam("serviceId") final String serviceId,
+            @PathParam("actionId") final String actionId) {
+        throw _EndpointLogging.error(log, "POST /services/{}/actions/{}", serviceId, actionId,
+                RestfulObjectsApplicationException
+                .createWithMessage(
+                        RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED,
+                        "Posting to an action prompt resource is not allowed."));
     }
 
     // //////////////////////////////////////////////////////////
@@ -227,9 +285,10 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         final JsonRepresentation arguments = resourceContext.getQueryStringAsJsonRepr();
 
         val serviceAdapter = getServiceAdapter(serviceId);
-        val domainResourceHelper = DomainResourceHelper.ofServiceResource(resourceContext, serviceAdapter);
+        val domainResourceHelper = _DomainResourceHelper.ofServiceResource(resourceContext, serviceAdapter);
 
-        return domainResourceHelper.invokeActionQueryOnly(actionId, arguments);
+        return _EndpointLogging.response(log, "GET /services/{}/actions/{}/invoke", serviceId, actionId,
+                domainResourceHelper.invokeActionQueryOnly(actionId, arguments));
     }
 
 
@@ -253,9 +312,10 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         final JsonRepresentation arguments = resourceContext.getQueryStringAsJsonRepr();
 
         val serviceAdapter = getServiceAdapter(serviceId);
-        val domainResourceHelper = DomainResourceHelper.ofServiceResource(resourceContext, serviceAdapter);
+        val domainResourceHelper = _DomainResourceHelper.ofServiceResource(resourceContext, serviceAdapter);
 
-        return domainResourceHelper.invokeActionIdempotent(actionId, arguments);
+        return _EndpointLogging.response(log, "PUT /services/{}/actions/{}/invoke", serviceId, actionId,
+                domainResourceHelper.invokeActionIdempotent(actionId, arguments));
     }
 
     @Override
@@ -266,7 +326,10 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    public Response invokeAction(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId, final InputStream body) {
+    public Response invokeAction(
+            @PathParam("serviceId") final String serviceId,
+            @PathParam("actionId") final String actionId,
+            final InputStream body) {
 
         val resourceContext = createResourceContext(
                 ResourceDescriptor.of(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
@@ -275,16 +338,23 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         final JsonRepresentation arguments = resourceContext.getQueryStringAsJsonRepr();
 
         val serviceAdapter = getServiceAdapter(serviceId);
-        val domainResourceHelper = DomainResourceHelper.ofServiceResource(resourceContext, serviceAdapter);
+        val domainResourceHelper = _DomainResourceHelper.ofServiceResource(resourceContext, serviceAdapter);
 
-        return domainResourceHelper.invokeAction(actionId, arguments);
+        return _EndpointLogging.response(log, "POST /services/{}/actions/{}/invoke", serviceId, actionId,
+                domainResourceHelper.invokeAction(actionId, arguments));
     }
 
     @DELETE
     @Path("/{serviceId}/actions/{actionId}/invoke")
     @Override
-    public Response deleteInvokeActionNotAllowed(@PathParam("serviceId") String serviceId, @PathParam("actionId") String actionId) {
-        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Deleting an action invocation resource is not allowed.");
+    public Response deleteInvokeActionNotAllowed(
+            @PathParam("serviceId") final String serviceId,
+            @PathParam("actionId") final String actionId) {
+        throw _EndpointLogging.error(log, "DELETE /services/{}/actions/{}/invoke", serviceId, actionId,
+                RestfulObjectsApplicationException
+                .createWithMessage(
+                        RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED,
+                        "Deleting an action invocation resource is not allowed."));
     }
 
 

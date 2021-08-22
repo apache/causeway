@@ -20,13 +20,12 @@ package org.apache.isis.core.runtimeservices.publish;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
-import javax.annotation.PostConstruct;
 import javax.annotation.Priority;
-import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
@@ -39,25 +38,27 @@ import org.apache.isis.commons.having.HasEnabling;
 import org.apache.isis.core.metamodel.services.publishing.CommandPublisher;
 
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 @Service
 @Named("isis.runtimeservices.CommandPublisherDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
 public class CommandPublisherDefault implements CommandPublisher {
 
-    private final List<CommandSubscriber> subscribers;
-    private final InteractionLayerTracker iaTracker;
+    final List<CommandSubscriber> subscribers;
+    final Provider<InteractionLayerTracker> interactionServiceProvider;
 
-    private Can<CommandSubscriber> enabledSubscribers = Can.empty();
+    final Can<CommandSubscriber> enabledSubscribers;
 
-    @PostConstruct
-    public void init() {
+    public CommandPublisherDefault(
+            final List<CommandSubscriber> subscribers,
+            final Provider<InteractionLayerTracker> interactionServiceProvider) {
+        this.subscribers = subscribers;
+        this.interactionServiceProvider = interactionServiceProvider;
+
         enabledSubscribers = Can.ofCollection(subscribers)
                 .filter(HasEnabling::isEnabled);
     }
@@ -66,7 +67,7 @@ public class CommandPublisherDefault implements CommandPublisher {
     public void complete(final @NonNull Command command) {
 
         val handle = _Xray.enterCommandPublishing(
-                iaTracker,
+                interactionServiceProvider.get(),
                 command,
                 enabledSubscribers,
                 ()->getCannotPublishReason(command));

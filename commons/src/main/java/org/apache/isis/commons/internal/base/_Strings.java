@@ -39,7 +39,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Bytes.BytesOperator;
@@ -48,7 +48,6 @@ import org.apache.isis.commons.internal.functions._Predicates;
 import static org.apache.isis.commons.internal.base._NullSafe.size;
 import static org.apache.isis.commons.internal.base._Strings_SplitIterator.splitIterator;
 import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
-import static org.apache.isis.commons.internal.base._With.requires;
 import static org.apache.isis.commons.internal.base._With.requiresNotEmpty;
 import static org.apache.isis.commons.internal.functions._Predicates.not;
 
@@ -97,7 +96,7 @@ public final class _Strings {
      * @return a non-empty Optional, if (and only if) the {@code keyValueLiteral}
      * does contain at least one {@code separator}
      */
-    public static Optional<KeyValuePair> parseKeyValuePair(@Nullable final String keyValueLiteral, final char separator) {
+    public static Optional<KeyValuePair> parseKeyValuePair(final @Nullable String keyValueLiteral, final char separator) {
         return _Strings_KeyValuePair.parse(keyValueLiteral, separator);
     }
 
@@ -171,7 +170,7 @@ public final class _Strings {
      * @param x
      * @return true only if string is of zero length or null.
      */
-    public static boolean isEmpty(@Nullable final CharSequence x){
+    public static boolean isEmpty(final @Nullable CharSequence x){
         return x==null || x.length()==0;
     }
     /**
@@ -179,7 +178,7 @@ public final class _Strings {
      * @param x
      * @return true only if string is of zero length or null.
      */
-    public static boolean isNullOrEmpty(@Nullable final CharSequence x){
+    public static boolean isNullOrEmpty(final @Nullable CharSequence x){
         return x==null || x.length()==0;
     }
 
@@ -189,7 +188,7 @@ public final class _Strings {
      * @param x
      * @return inverse of isEmpty(CharSequence).
      */
-    public static boolean isNotEmpty(@Nullable final CharSequence x){
+    public static boolean isNotEmpty(final @Nullable CharSequence x){
         return x!=null && x.length()!=0;
     }
 
@@ -199,7 +198,7 @@ public final class _Strings {
      * @param x - input string
      * @return optionally the input string based on whether the input is not empty
      */
-    public static Optional<String> nonEmpty(@Nullable final CharSequence x) {
+    public static Optional<String> nonEmpty(final @Nullable CharSequence x) {
         return isEmpty(x) ? Optional.empty() : Optional.of(x.toString());
     }
 
@@ -209,7 +208,7 @@ public final class _Strings {
      * @param input
      * @return null if the {@code input} is null or empty, the {@code input} otherwise
      */
-    public static @Nullable String emptyToNull(@Nullable final String input) {
+    public static @Nullable String emptyToNull(final @Nullable String input) {
         if(isEmpty(input)) {
             return null;
         }
@@ -220,7 +219,7 @@ public final class _Strings {
      * @param input
      * @return the empty string if the {@code input} is null, the {@code input} otherwise
      */
-    public static String nullToEmpty(@Nullable final String input) {
+    public static String nullToEmpty(final @Nullable String input) {
         if(input==null) {
             return "";
         }
@@ -233,7 +232,7 @@ public final class _Strings {
      * @param input
      * @return null if the {@code input} is null
      */
-    public static String trim(@Nullable final String input) {
+    public static String trim(final @Nullable String input) {
         return mapIfPresentElse(input, String::trim, null);
     }
 
@@ -242,7 +241,7 @@ public final class _Strings {
      * @param input
      * @return null if {@code input} is null
      */
-    public static String lower(@Nullable final String input) {
+    public static String lower(final @Nullable String input) {
         return mapIfPresentElse(input, String::toLowerCase, null);
     }
 
@@ -251,7 +250,7 @@ public final class _Strings {
      * @param input
      * @return null if {@code input} is null
      */
-    public static String upper(@Nullable final String input) {
+    public static String upper(final @Nullable String input) {
         return mapIfPresentElse(input, String::toUpperCase, null);
     }
 
@@ -260,7 +259,7 @@ public final class _Strings {
      * @param input
      * @return null if {@code input} is null
      */
-    public static String capitalize(@Nullable final String input) {
+    public static String capitalize(final @Nullable String input) {
         if(input==null) {
             return null;
         }
@@ -278,7 +277,7 @@ public final class _Strings {
      * @param input
      * @return null if {@code input} is null
      */
-    public static String decapitalize(@Nullable final String input) {
+    public static String decapitalize(final @Nullable String input) {
         if(input==null) {
             return null;
         }
@@ -305,11 +304,10 @@ public final class _Strings {
      * @param prefix
      * @return null if {@code input} is null
      */
-    public static String prefix(@Nullable final String input, final String prefix) {
+    public static String prefix(final @Nullable String input, final @NonNull String prefix) {
         if(input==null) {
             return null;
         }
-        requires(prefix, "prefix");
         if(input.startsWith(prefix)) {
             return input;
         }
@@ -322,11 +320,10 @@ public final class _Strings {
      * @param suffix
      * @return null if {@code input} is null
      */
-    public static String suffix(@Nullable final String input, final String suffix) {
+    public static String suffix(final @Nullable String input, final @NonNull String suffix) {
         if(input==null) {
             return null;
         }
-        requires(suffix, "suffix");
         if(input.endsWith(suffix)) {
             return input;
         }
@@ -347,7 +344,7 @@ public final class _Strings {
      * @return non-null
      */
     public static String combineWithDelimiter(
-            @Nullable final String left, @Nullable final String right, final String delimiter) {
+            final @Nullable String left, final @Nullable String right, final String delimiter) {
 
         requiresNotEmpty(delimiter, "pathDelimiter");
 
@@ -376,7 +373,7 @@ public final class _Strings {
      * @param minLength
      * @param c
      */
-    public static String padStart(@Nullable final String str, final int minLength, final char c) {
+    public static String padStart(final @Nullable String str, final int minLength, final char c) {
         if(minLength<=0) {
             return str;
         }
@@ -397,7 +394,7 @@ public final class _Strings {
      * @param minLength
      * @param c
      */
-    public static String padEnd(@Nullable final String str, final int minLength, final char c) {
+    public static String padEnd(final @Nullable String str, final int minLength, final char c) {
         if(minLength<=0) {
             return str;
         }
@@ -428,7 +425,7 @@ public final class _Strings {
      * @return empty stream if {@code input} is null
      * @throws IllegalArgumentException if {@code separator} is empty
      */
-    public static Stream<String> splitThenStream(@Nullable final String input, final String separator) {
+    public static Stream<String> splitThenStream(final @Nullable String input, final String separator) {
         if(isEmpty(separator)) {
             throw new IllegalArgumentException("a non empty separator is required");
         }
@@ -449,11 +446,10 @@ public final class _Strings {
      * @param input
      * @param delimiterPattern
      */
-    public static Stream<String> splitThenStream(@Nullable final CharSequence input, final Pattern delimiterPattern) {
+    public static Stream<String> splitThenStream(final @Nullable CharSequence input, final @NonNull Pattern delimiterPattern) {
         if(isEmpty(input)) {
             return Stream.of();
         }
-        requires(delimiterPattern, "delimiterPattern");
         return delimiterPattern.splitAsStream(input);
     }
 
@@ -466,7 +462,7 @@ public final class _Strings {
      * @param onNonEmptySplit
      */
     public static <T> Optional<T> splitThenApplyRequireNonEmpty(
-            @Nullable final String input,
+            final @Nullable String input,
             final String separator,
             final BiFunction<String, String, T> onNonEmptySplit) {
 
@@ -489,7 +485,7 @@ public final class _Strings {
     }
 
     public static void splitThenAccept(
-            @Nullable final String input,
+            final @Nullable String input,
             final String separator,
             final BiConsumer<String, String> onNonEmptySplit,
             final Consumer<String> onNonEmptyLhs,
@@ -499,7 +495,7 @@ public final class _Strings {
     }
 
     public static void splitThenAcceptEmptyAsNull(
-            @Nullable final String input,
+            final @Nullable String input,
             final String separator,
             final BiConsumer<String, String> onSplit) {
 
@@ -509,7 +505,7 @@ public final class _Strings {
     }
 
 
-    public static Stream<String> grep(@Nullable final String input, @Nullable Predicate<String> matcher){
+    public static Stream<String> grep(final @Nullable String input, @Nullable Predicate<String> matcher){
         matcher = matcher!=null ? matcher : _Predicates.alwaysTrue();
         return splitThenStream(input, "\n")
                 .filter(_Strings::isNotEmpty)
@@ -517,7 +513,7 @@ public final class _Strings {
                 .map(s->s.replace("\r", ""));
     }
 
-    public static Stream<String> grep(@Nullable final String input, @Nullable final String contains){
+    public static Stream<String> grep(final @Nullable String input, final @Nullable String contains){
         final Predicate<String> matcher = contains!=null ? line->line.contains(contains) : _Predicates.alwaysTrue();
         return grep(input, matcher);
     }
@@ -532,8 +528,7 @@ public final class _Strings {
      * @param replacement
      * @return null if {@code input} is null
      */
-    public static String condenseWhitespaces(@Nullable final String input, final String replacement) {
-        requires(replacement, "replacement");
+    public static String condenseWhitespaces(final @Nullable String input, final @NonNull String replacement) {
         return mapIfPresentElse(input, __->input.replaceAll("\\s+", replacement), null);
     }
 
@@ -545,9 +540,9 @@ public final class _Strings {
      * @return (non-null), ellipsified version of {@code input}, if {@code input} exceeds length {@code maxLength}
      */
     public static String ellipsifyAtStart(
-            @Nullable final CharSequence input,
+            final @Nullable CharSequence input,
             final int maxLength,
-            @NonNull final CharSequence ellipsis) {
+            final @NonNull CharSequence ellipsis) {
 
         if(input==null) {
             return "";
@@ -569,9 +564,9 @@ public final class _Strings {
      * @return (non-null), ellipsified version of {@code input}, if {@code input} exceeds length {@code maxLength}
      */
     public static String ellipsifyAtEnd(
-            @Nullable final CharSequence input,
+            final @Nullable CharSequence input,
             final int maxLength,
-            @NonNull final CharSequence ellipsis) {
+            final @NonNull CharSequence ellipsis) {
 
         if(input==null) {
             return "";
@@ -585,8 +580,7 @@ public final class _Strings {
 
     // -- READ FROM INPUT STREAM
 
-    public static String read(@Nullable final InputStream input, final Charset charset) {
-        requires(charset, "charset");
+    public static String read(final @Nullable InputStream input, final @NonNull Charset charset) {
         if(input==null) {
             return "";
         }
@@ -615,8 +609,7 @@ public final class _Strings {
      * @param charset
      * @return null if {@code str} is null
      */
-    public static final byte[] toBytes(@Nullable final String str, final Charset charset) {
-        requires(charset, "charset");
+    public static final byte[] toBytes(final @Nullable String str, final @NonNull Charset charset) {
         return mapIfPresentElse(str, __->str.getBytes(charset), null);
     }
 
@@ -626,8 +619,7 @@ public final class _Strings {
      * @param charset
      * @return null if {@code bytes} is null
      */
-    public static final String ofBytes(@Nullable final byte[] bytes, final Charset charset) {
-        requires(charset, "charset");
+    public static final String ofBytes(final @Nullable byte[] bytes, final @NonNull Charset charset) {
         return mapIfPresentElse(bytes, __->new String(bytes, charset), null);
     }
 
@@ -640,9 +632,7 @@ public final class _Strings {
      * @param charset
      * @return null if {@code input} is null
      */
-    public static final String convert(@Nullable final String input, final BytesOperator converter, final Charset charset) {
-        requires(converter, "converter");
-        requires(charset, "charset");
+    public static final String convert(final @Nullable String input, final @NonNull BytesOperator converter, final @NonNull Charset charset) {
         return mapIfPresentElse(input, __->ofBytes(converter.apply(toBytes(input, charset)), charset), null);
     }
 
@@ -655,8 +645,8 @@ public final class _Strings {
 
         private final UnaryOperator<String> operator;
 
-        private StringOperator(final UnaryOperator<String> operator) {
-            this.operator = requires(operator, "operator");
+        private StringOperator(final @NonNull UnaryOperator<String> operator) {
+            this.operator = operator;
         }
 
         public String apply(final String input) {
@@ -691,9 +681,7 @@ public final class _Strings {
             .andThen(s->_Strings_NaturalNames.naturalName2(s, true));
 
 
-    public static final String asFileNameWithExtension(final String fileName, final String fileExtension) {
-        requires(fileName, "fileName");
-        requires(fileExtension, "fileExtension");
+    public static final String asFileNameWithExtension(final @NonNull String fileName, final @NonNull String fileExtension) {
         return suffix(fileName, prefix(fileExtension, "."));
     }
 
@@ -704,7 +692,7 @@ public final class _Strings {
      * empty chunks.
      * @return empty stream if {@code input} is null
      */
-    public static Stream<String> splitThenStreamTrimmed(@Nullable final String input, final String separator) {
+    public static Stream<String> splitThenStreamTrimmed(final @Nullable String input, final String separator) {
         return splitThenStream(input, separator)
                 .map(String::trim)
                 .filter(not(String::isEmpty));
@@ -715,7 +703,7 @@ public final class _Strings {
      * then discarding empty chunks.
      * @return empty stream if {@code input} is null
      */
-    public static Stream<String> splitThenStreamTrimmed(@Nullable final CharSequence input, final Pattern delimiterPattern) {
+    public static Stream<String> splitThenStreamTrimmed(final @Nullable CharSequence input, final Pattern delimiterPattern) {
         return splitThenStream(input, delimiterPattern)
                 .map(String::trim)
                 .filter(not(String::isEmpty));

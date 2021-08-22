@@ -23,7 +23,7 @@ import org.apache.isis.client.kroviz.layout.Layout
 import org.apache.isis.client.kroviz.to.TransferObject
 import org.apache.isis.client.kroviz.utils.XmlHelper
 
-class LayoutHandler : org.apache.isis.client.kroviz.handler.BaseHandler() {
+class LayoutHandler : BaseHandler() {
 
     override fun canHandle(response: String): Boolean {
         val isJsonLayout = !XmlHelper.isXml(response)
@@ -34,7 +34,7 @@ class LayoutHandler : org.apache.isis.client.kroviz.handler.BaseHandler() {
         return false
     }
 
-    
+
     override fun parse(response: String): TransferObject {
         return Json.decodeFromString(Layout.serializer(), response)
     }

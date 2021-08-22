@@ -22,7 +22,7 @@ import org.apache.isis.client.kroviz.to.TransferObject
 import org.apache.isis.client.kroviz.to.bs3.Grid
 import org.apache.isis.client.kroviz.utils.XmlHelper
 
-class LayoutXmlHandler : org.apache.isis.client.kroviz.handler.BaseHandler() {
+class LayoutXmlHandler : BaseHandler() {
 
     override fun canHandle(response: String): Boolean {
         val isLayoutXml = XmlHelper.isXml(response)

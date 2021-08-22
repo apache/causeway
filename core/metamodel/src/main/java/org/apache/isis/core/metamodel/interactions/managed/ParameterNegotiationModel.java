@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.interactions.managed;
 
 import java.util.stream.IntStream;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.binding.Bindable;
@@ -54,8 +54,8 @@ import lombok.val;
 public class ParameterNegotiationModel {
 
     public static ParameterNegotiationModel of(
-            @NonNull final ActionInteractionHead head,
-            @NonNull final Can<ManagedObject> initialParamValues) {
+            final @NonNull ActionInteractionHead head,
+            final @NonNull Can<ManagedObject> initialParamValues) {
         return new ParameterNegotiationModel(head, initialParamValues);
 
     }
@@ -66,8 +66,8 @@ public class ParameterNegotiationModel {
     private final LazyObservable<String> observableActionValidation;
 
     private ParameterNegotiationModel(
-            @NonNull final ActionInteractionHead head,
-            @NonNull final Can<ManagedObject> initialParamValues) {
+            final @NonNull ActionInteractionHead head,
+            final @NonNull Can<ManagedObject> initialParamValues) {
         this.head = head;
         this.validationFeedbackActive = _Bindables.forValue(false);
 
@@ -114,7 +114,7 @@ public class ParameterNegotiationModel {
         return validationFeedbackActive;
     }
 
-    public void setParamValues(@NonNull final Can<ManagedObject> paramValues) {
+    public void setParamValues(final @NonNull Can<ManagedObject> paramValues) {
         // allow overflow and underflow
         val valueIterator = paramValues.iterator();
         paramModels.forEach(paramModel->{
@@ -176,11 +176,11 @@ public class ParameterNegotiationModel {
         return paramModels.getElseFail(paramNr).getValue().getValue();
     }
 
-    public void setParamValue(final int paramNr, @NonNull final ManagedObject newParamValue) {
+    public void setParamValue(final int paramNr, final @NonNull ManagedObject newParamValue) {
         paramModels.getElseFail(paramNr).getBindableParamValue().setValue(newParamValue);
     }
 
-    @NonNull public ManagedObject adaptParamValuePojo(final int paramNr, @Nullable final Object newParamValuePojo) {
+    @NonNull public ManagedObject adaptParamValuePojo(final int paramNr, final @Nullable Object newParamValuePojo) {
         val paramMeta = getParamMetamodel(paramNr);
         val paramSpec = paramMeta.getSpecification();
         val paramValue = newParamValuePojo!=null
@@ -223,8 +223,8 @@ public class ParameterNegotiationModel {
 
         private ParameterModel(
                 final int paramNr,
-                @NonNull final ParameterNegotiationModel negotiationModel,
-                @NonNull final ManagedObject initialValue) {
+                final @NonNull ParameterNegotiationModel negotiationModel,
+                final @NonNull ManagedObject initialValue) {
 
             this.paramNr = paramNr;
             this.metaModel = negotiationModel.getHead().getMetaModel().getParameters().getElseFail(paramNr);

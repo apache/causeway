@@ -30,7 +30,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.library.Architectures;
@@ -203,7 +203,7 @@ public class ArchitectureModuleRules {
     }
 
 
-    static String nameOf(Class<?> moduleClass, @Nullable final String subpackageName) {
+    static String nameOf(Class<?> moduleClass, final @Nullable String subpackageName) {
         val simpleName = moduleClass.getSimpleName();
         val moduleName = simpleName.replace("Module", "");
         return moduleName + (subpackageName != null ? (" " + subpackageName) : "");

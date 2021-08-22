@@ -49,7 +49,7 @@ object XmlHelper {
     }
 
     // Adopted from @link https://stackoverflow.com/questions/376373/pretty-printing-xml-with-javascript
-    fun formatXml(xml: String): String {
+    fun format(xml: String): String {
         var formatted = ""
         val reg = "/(>)(<)(/*)/g"
         var pad = 0

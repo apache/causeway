@@ -36,8 +36,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>javax</groupId>
-			<artifactId>javaee-api</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-jdk-supplemental</artifactId>
+			<type>pom</type>
 		</dependency>
 
 	</dependencies>

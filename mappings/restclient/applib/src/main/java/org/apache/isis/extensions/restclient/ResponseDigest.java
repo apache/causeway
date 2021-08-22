@@ -28,7 +28,7 @@ import java.util.Optional;
 import java.util.concurrent.Future;
 import java.util.function.Function;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
@@ -61,8 +61,8 @@ public class ResponseDigest<T> {
      * @param entityType
      */
     public static <T> ResponseDigest<T> of(
-            @NonNull final Response response,
-            @NonNull final Class<T> entityType) {
+            final @NonNull Response response,
+            final @NonNull Class<T> entityType) {
 
         return new ResponseDigest<>(response, entityType, null).digest();
     }
@@ -75,9 +75,9 @@ public class ResponseDigest<T> {
      * @param genericType
      */
     public static <T> ResponseDigest<T> ofList(
-            @NonNull final Response response,
-            @NonNull final Class<T> entityType,
-            @NonNull final GenericType<List<T>> genericType) {
+            final @NonNull Response response,
+            final @NonNull Class<T> entityType,
+            final @NonNull GenericType<List<T>> genericType) {
 
         return new ResponseDigest<>(response, entityType, genericType).digest();
     }

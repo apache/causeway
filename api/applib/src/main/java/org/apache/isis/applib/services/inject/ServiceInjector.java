@@ -18,7 +18,7 @@
  */
 package org.apache.isis.applib.services.inject;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 /**
  * Resolves injection points using the

@@ -19,14 +19,13 @@
 package org.apache.isis.applib.services.wrapper.control;
 
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.commons.collections.ImmutableEnumSet;
 
 /**
  * Whether interactions with the wrapper are actually passed onto the
  * underlying domain object.
  *
  * @see WrapperFactory#wrap(Object, org.apache.isis.applib.services.wrapper.control.SyncControl)
- * 
+ *
  * @since 2.0 {@index}
  */
 public enum ExecutionMode {
@@ -38,7 +37,7 @@ public enum ExecutionMode {
      * Skip actual execution.
      *
      * <p>
-     * This is not supported for {@link WrapperFactory#asyncWrap(Object, AsyncControl)}; 
+     * This is not supported for {@link WrapperFactory#asyncWrap(Object, AsyncControl)};
      * instead just invoke {@link WrapperFactory#wrap(Object, SyncControl)}.
      */
     SKIP_EXECUTION,

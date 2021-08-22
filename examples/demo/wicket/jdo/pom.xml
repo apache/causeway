@@ -46,9 +46,8 @@
 		<!-- PERSISTENCE -->
 
 		<dependency>
-			<groupId>org.apache.isis.mavendeps</groupId>
-			<artifactId>isis-mavendeps-jdo</artifactId>
-			<type>pom</type>
+			<groupId>org.apache.isis.persistence</groupId>
+			<artifactId>isis-persistence-jdo-datanucleus</artifactId>
 		</dependency>
 
 	</dependencies>

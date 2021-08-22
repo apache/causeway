@@ -53,7 +53,7 @@ extends MetaModelVisitingValidatorAbstract {
     }
 
     @Override
-    public void validate(@NonNull final ObjectSpecification spec) {
+    public void validate(final @NonNull ObjectSpecification spec) {
 
         if(!(spec instanceof ObjectSpecificationAbstract)) {
             return; // continue

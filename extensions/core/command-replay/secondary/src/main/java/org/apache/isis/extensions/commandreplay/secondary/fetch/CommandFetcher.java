@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.core.Response;
@@ -67,7 +67,7 @@ public class CommandFetcher {
      * @throws StatusException
      */
     public List<CommandDto> fetchCommand(
-            @Nullable final CommandModel previousHwmIfAny)
+            final @Nullable CommandModel previousHwmIfAny)
             throws StatusException {
 
         log.debug("finding command on primary ...");

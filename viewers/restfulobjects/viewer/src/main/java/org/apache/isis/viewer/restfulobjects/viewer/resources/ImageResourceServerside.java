@@ -29,14 +29,17 @@ import javax.ws.rs.core.Response;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+
+import lombok.extern.log4j.Log4j2;
 
 @Component
 @Path("/image")
+@Log4j2
 public class ImageResourceServerside extends ResourceAbstract {
 
     @Inject
@@ -45,6 +48,7 @@ public class ImageResourceServerside extends ResourceAbstract {
             final IsisConfiguration isisConfiguration,
             final InteractionLayerTracker iInteractionLayerTracker) {
         super(metaModelContext, isisConfiguration, iInteractionLayerTracker);
+        log.debug("<init>");
     }
 
     @GET
@@ -60,7 +64,7 @@ public class ImageResourceServerside extends ResourceAbstract {
         //                "attachment; filename=SimpleObject.png");
         //        return response.build();
 
-        return Response.ok(bytes).build();
-
+        return _EndpointLogging.response(log, "GET /image",
+                Response.ok(bytes).build());
     }
 }

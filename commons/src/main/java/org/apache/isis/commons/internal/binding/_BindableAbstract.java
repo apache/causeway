@@ -109,7 +109,7 @@ public abstract class _BindableAbstract<T> implements Bindable<T> {
     }
 
     @Override
-    public void bind(@NonNull final Observable<? extends T> newObservable) {
+    public void bind(final @NonNull Observable<? extends T> newObservable) {
         if (!newObservable.equals(this.observable)) {
             unbind();
             observable = newObservable;

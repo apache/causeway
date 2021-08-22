@@ -47,6 +47,7 @@ class DiagramDialog(
 
         dialog = RoDialog(
                 widthPerc = 80,
+                heightPerc = 80,
                 caption = "Diagram",
                 items = formItems,
                 command = this,
@@ -55,7 +56,7 @@ class DiagramDialog(
         )
     }
 
-    override fun execute() {
+    override fun execute(action:String?) {
         pin()
     }
 

@@ -21,7 +21,7 @@ package org.apache.isis.applib.services.i18n;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.internal.base._Strings;

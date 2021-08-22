@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.members.disabled;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.WhereValueFacet;

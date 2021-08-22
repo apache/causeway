@@ -57,7 +57,7 @@ public class InteractionHead {
     }
 
     /** Mixin case, when target is a mixin for the owner. */
-    public static InteractionHead mixin(@NonNull final ManagedObject owner, @NonNull final ManagedObject target) {
+    public static InteractionHead mixin(final @NonNull ManagedObject owner, final @NonNull ManagedObject target) {
         return InteractionHead.of(owner, target);
     }
 
@@ -74,7 +74,7 @@ public class InteractionHead {
     // -- HELPER
 
     /** factory with consistency checks */
-    private static InteractionHead of(@NonNull final ManagedObject owner, @NonNull final ManagedObject target) {
+    private static InteractionHead of(final @NonNull ManagedObject owner, final @NonNull ManagedObject target) {
         if(ManagedObjects.isSpecified(owner)
                 && owner.getSpecification().getBeanSort().isMixin()) {
             throw _Exceptions.unrecoverableFormatted("unexpected: owner is a mixin %s", owner);

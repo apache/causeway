@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.query.Query;
@@ -152,7 +152,7 @@ implements ApplicationUserRepository {
 
     @Override
     public Collection<ApplicationUser> findByTenancy(
-            @NonNull final ApplicationTenancy genericTenancy) {
+            final @NonNull ApplicationTenancy genericTenancy) {
         return findByAtPath(genericTenancy.getPath())
                 .stream()
                 .collect(_Sets.toUnmodifiableSorted());

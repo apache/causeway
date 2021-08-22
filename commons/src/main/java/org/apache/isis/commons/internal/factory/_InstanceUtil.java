@@ -31,19 +31,19 @@ public final class _InstanceUtil {
     private _InstanceUtil() {
     }
 
-    public static Object createInstance(final String className, Object... args) {
+    public static Object createInstance(final String className, final Object... args) {
         return createInstance(className, (Class<?>) null, null, args);
     }
 
-    public static Object createInstance(final Class<?> cls, Object... args) {
+    public static Object createInstance(final Class<?> cls, final Object... args) {
         return createInstance(cls, (Class<?>) null, null, args);
     }
 
-    public static <T> T createInstance(final String className, final Class<T> requiredClass, Object... args) {
+    public static <T> T createInstance(final String className, final Class<T> requiredClass, final Object... args) {
         return createInstance(className, (Class<T>) null, requiredClass, args);
     }
 
-    public static <T> T createInstance(final Class<?> cls, final Class<T> requiredClass, Object... args) {
+    public static <T> T createInstance(final Class<?> cls, final Class<T> requiredClass, final Object... args) {
         return createInstance(cls, (Class<T>) null, requiredClass, args);
     }
 
@@ -51,7 +51,7 @@ public final class _InstanceUtil {
             final String className,
             final String defaultTypeName,
             final Class<T> requiredType,
-            Object... args) {
+            final Object... args) {
         Class<? extends T> defaultType = null;
         if (defaultTypeName != null) {
             try {
@@ -72,7 +72,7 @@ public final class _InstanceUtil {
             final Class<?> cls,
             final String defaultTypeName,
             final Class<T> requiredType,
-            Object... args) {
+            final Object... args) {
         Class<? extends T> defaultType = null;
         if (defaultTypeName != null) {
             defaultType = loadClass(defaultTypeName, requiredType);
@@ -94,7 +94,7 @@ public final class _InstanceUtil {
             final String className,
             final Class<? extends T> defaultType,
             final Class<T> requiredType,
-            Object... args) {
+            final Object... args) {
         _Assert.assertNotNull("Class to instantiate must be specified", className);
         try {
             final Class<?> cls = _Context.loadClass(className);
@@ -116,14 +116,14 @@ public final class _InstanceUtil {
             final Class<?> cls,
             final Class<? extends T> defaultType,
             final Class<T> requiredType,
-            Object... args) {
+            final Object... args) {
         _Assert.assertNotNull(cls, "Class to instantiate must be specified");
         try {
             if (requiredType == null || requiredType.isAssignableFrom(cls)) {
                 final Class<T> tClass = _Casts.uncheckedCast(cls);
 
                 if(args == null || args.length == 0) {
-                    return tClass.newInstance();
+                    return tClass.getDeclaredConstructor().newInstance();
                 } else {
                     Class<?>[] paramTypes = new Class[args.length];
                     for (int i = 0; i < args.length; i++) {

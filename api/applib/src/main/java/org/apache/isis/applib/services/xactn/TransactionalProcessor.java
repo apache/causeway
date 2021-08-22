@@ -24,8 +24,8 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-import org.apache.isis.applib.services.iactnlayer.ThrowingRunnable;
 import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.functional.ThrowingRunnable;
 
 import lombok.val;
 

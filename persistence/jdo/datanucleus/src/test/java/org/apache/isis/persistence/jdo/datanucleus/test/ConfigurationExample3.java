@@ -31,6 +31,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
 
 import lombok.Getter;
@@ -43,7 +45,12 @@ import lombok.val;
 @Import({
 })
 public class ConfigurationExample3 {
-    
+
+    @Bean
+    public MetaModelContext getMetaModelContext() {
+        return MetaModelContext_forTesting.buildDefault();
+    }
+
     @Bean(destroyMethod = "close")
     public DataSource getDataSource() {
         val dataSourceBuilder = DataSourceBuilder.create().type(BasicDataSource.class);
@@ -53,7 +60,7 @@ public class ConfigurationExample3 {
         dataSourceBuilder.password("");
         return dataSourceBuilder.build();
     }
-  
+
     @Bean(destroyMethod = "close") @Named("myPmf")
     public PersistenceManagerFactory myPmf(final DataSource dataSource) {
         val myPmf = new JDOPersistenceManagerFactory();
@@ -61,23 +68,25 @@ public class ConfigurationExample3 {
         myPmf.setNontransactionalRead(true);
         return myPmf;
     }
-    
+
     @Bean @Named("myPmfProxy")
-    public TransactionAwarePersistenceManagerFactoryProxy myPmfProxy(final PersistenceManagerFactory myPmf) {
-        val myPmfProxy = new TransactionAwarePersistenceManagerFactoryProxy();
+    public TransactionAwarePersistenceManagerFactoryProxy myPmfProxy(
+            final MetaModelContext metaModelContext,
+            final PersistenceManagerFactory myPmf) {
+        val myPmfProxy = new TransactionAwarePersistenceManagerFactoryProxy(metaModelContext);
         myPmfProxy.setTargetPersistenceManagerFactory(myPmf);
         myPmfProxy.setAllowCreate(false); // enforce active transactions
         return myPmfProxy;
     }
-    
+
     @Component
     public static class ExampleDao {
 
         @Inject
         @Named("myPmfProxy")
-        @Getter 
+        @Getter
         private PersistenceManagerFactory persistenceManagerFactory;
-        
+
     }
 
 }

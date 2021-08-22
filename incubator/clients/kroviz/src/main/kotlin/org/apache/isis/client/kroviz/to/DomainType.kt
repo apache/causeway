@@ -16,37 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.iactnlayer;
 
-import java.util.concurrent.Callable;
+package org.apache.isis.client.kroviz.to
 
-import org.apache.isis.commons.functional.Result;
+import kotlinx.serialization.Serializable
 
-import lombok.NonNull;
+@Serializable
+data class DomainType(
+        override val links: List<Link>,
+        val canonicalName: String,
+        val members: Map<String, Link>,
+        val typeActions: Map<String, Link>,
+        val extensions: Extensions
+) : TransferObject, HasLinks {
 
-/**
- * Similar to a {@link Runnable}, except that it can also throw exceptions.
- *
- * @since 2.x [@index}
- */
-@FunctionalInterface
-public interface ThrowingRunnable {
-
-
-    // -- INTERFACE
-
-    void run() throws Exception;
-
-    // -- UTILITY
-
-    static Callable<Void> toCallable(final @NonNull ThrowingRunnable runnable) {
-        return ()->{
-            runnable.run();
-            return null;
-        };
-    }
-
-    static Result<Void> resultOf(final @NonNull ThrowingRunnable runnable) {
-        return Result.of(toCallable(runnable));
-    }
 }

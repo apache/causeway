@@ -25,7 +25,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 import javax.inject.Qualifier;
 
 import org.springframework.context.ApplicationContext;
@@ -134,7 +134,7 @@ final class _IocContainer_Spring implements _IocContainer {
      * @param annotations
      * @return non-null
      */
-    private static Set<Annotation> filterQualifiers(@Nullable final Annotation[] annotations) {
+    private static Set<Annotation> filterQualifiers(final @Nullable Annotation[] annotations) {
         if(_NullSafe.isEmpty(annotations)) {
             return Collections.emptySet();
         }

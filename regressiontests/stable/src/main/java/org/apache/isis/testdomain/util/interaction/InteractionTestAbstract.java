@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 import javax.inject.Inject;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -78,7 +78,7 @@ public abstract class InteractionTestAbstract extends IsisIntegrationTestAbstrac
 
     // -- SHORTCUTS
 
-    protected Object invokeAction(final Class<?> type, final String actionId, @Nullable final List<Object> pojoArgList) {
+    protected Object invokeAction(final Class<?> type, final String actionId, final @Nullable List<Object> pojoArgList) {
         val managedAction = startActionInteractionOn(type, actionId, Where.OBJECT_FORMS)
                 .getManagedAction().get(); // should not throw
 

@@ -55,7 +55,7 @@ implements EntityPropertyChangePublishingPolicyFacet {
     }
 
     @Override
-    public boolean semanticEquals(@NonNull final Facet other) {
+    public boolean semanticEquals(final @NonNull Facet other) {
         return other instanceof EntityPropertyChangePublishingPolicyFacet
                 ? Objects.equals(
                         this.getEntityChangePublishing(),

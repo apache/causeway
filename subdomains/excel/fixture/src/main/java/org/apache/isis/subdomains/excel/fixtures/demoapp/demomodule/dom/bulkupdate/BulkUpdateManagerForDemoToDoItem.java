@@ -21,7 +21,7 @@ package org.apache.isis.subdomains.excel.fixtures.demoapp.demomodule.dom.bulkupd
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

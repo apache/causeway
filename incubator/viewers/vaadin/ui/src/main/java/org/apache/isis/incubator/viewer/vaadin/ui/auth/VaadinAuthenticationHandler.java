@@ -34,7 +34,7 @@ import com.vaadin.flow.theme.lumo.Lumo;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
-import org.apache.isis.applib.services.iactnlayer.ThrowingRunnable;
+import org.apache.isis.commons.functional.ThrowingRunnable;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.incubator.viewer.vaadin.ui.pages.login.VaadinLoginView;

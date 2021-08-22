@@ -22,13 +22,12 @@ package org.apache.isis.core.security.authentication.manager;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nullable;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Lazy;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,11 +67,10 @@ public class AuthenticationManager {
     @Inject
     public AuthenticationManager(
             final List<Authenticator> authenticators,
-            // needs @Lazy due to circular provisioning dependency
-            final @Lazy InteractionService anonymousInteractionFactory,
+            final InteractionService interactionService,
             final RandomCodeGenerator randomCodeGenerator,
             final List<UserMementoRefiner> userMementoRefiners) {
-        this.interactionService = anonymousInteractionFactory;
+        this.interactionService = interactionService;
         this.randomCodeGenerator = randomCodeGenerator;
         this.authenticators = Can.ofCollection(authenticators);
         this.userMementoRefiners = userMementoRefiners;

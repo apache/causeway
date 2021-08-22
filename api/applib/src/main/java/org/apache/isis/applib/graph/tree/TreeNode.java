@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.LongAdder;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -38,6 +38,8 @@ import org.apache.isis.applib.graph.Vertex;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+
+import lombok.SneakyThrows;
 
 /**
  * Fundamental building block of Tree structures.
@@ -57,11 +59,11 @@ public class TreeNode<T> implements Vertex<T> {
     private final _Lazy<TreeAdapter<T>> treeAdapter = _Lazy.of(this::newTreeAdapter);
     private final _Lazy<TreePath> treePath = _Lazy.of(this::resolveTreePath);
 
-    public static <T> TreeNode<T> of(T value, Class<? extends TreeAdapter<T>> treeAdapterClass, TreeState sharedState) {
+    public static <T> TreeNode<T> of(final T value, final Class<? extends TreeAdapter<T>> treeAdapterClass, final TreeState sharedState) {
         return new TreeNode<T>(value, treeAdapterClass, sharedState);
     }
 
-    protected TreeNode(T value, Class<? extends TreeAdapter<T>> treeAdapterClass, TreeState sharedState) {
+    protected TreeNode(final T value, final Class<? extends TreeAdapter<T>> treeAdapterClass, final TreeState sharedState) {
         this.value = Objects.requireNonNull(value);
         this.treeAdapterClass = Objects.requireNonNull(treeAdapterClass);
         this.sharedState = sharedState;
@@ -149,7 +151,7 @@ public class TreeNode<T> implements Vertex<T> {
     }
 
 
-    public boolean isExpanded(TreePath treePath) {
+    public boolean isExpanded(final TreePath treePath) {
         final Set<TreePath> expandedPaths = getTreeState().getExpandedNodePaths();
         return expandedPaths.contains(treePath);
     }
@@ -159,7 +161,7 @@ public class TreeNode<T> implements Vertex<T> {
      * @param treePaths
      */
     @Programmatic
-    public void expand(TreePath ... treePaths) {
+    public void expand(final TreePath ... treePaths) {
         final Set<TreePath> expandedPaths = getTreeState().getExpandedNodePaths();
         _NullSafe.stream(treePaths).forEach(expandedPaths::add);
     }
@@ -180,7 +182,7 @@ public class TreeNode<T> implements Vertex<T> {
      * @param treePaths
      */
     @Programmatic
-    public void collapse(TreePath ... treePaths) {
+    public void collapse(final TreePath ... treePaths) {
         final Set<TreePath> expandedPaths = getTreeState().getExpandedNodePaths();
         _NullSafe.stream(treePaths).forEach(expandedPaths::remove);
     }
@@ -193,7 +195,7 @@ public class TreeNode<T> implements Vertex<T> {
      * @param treeAdapterClass
      * @return new LazyTreeNode
      */
-    public static <T> TreeNode<T> lazy(T node, Class<? extends TreeAdapter<T>> treeAdapterClass) {
+    public static <T> TreeNode<T> lazy(final T node, final Class<? extends TreeAdapter<T>> treeAdapterClass) {
         return TreeNode.of(node, treeAdapterClass, TreeState.rootCollapsed());
     }
 
@@ -245,14 +247,12 @@ public class TreeNode<T> implements Vertex<T> {
         return treeAdapterClass;
     }
 
-
-
-
     // -- HELPER
 
+    @SneakyThrows
     private TreeAdapter<T> newTreeAdapter() {
         try {
-            return treeAdapterClass.newInstance();
+            return treeAdapterClass.getDeclaredConstructor().newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
             throw new IllegalArgumentException(
                     String.format("failed to instantiate TreeAdapter '%s'", treeAdapterClass.getName()), e);
@@ -263,7 +263,7 @@ public class TreeNode<T> implements Vertex<T> {
         return treeAdapter.get();
     }
 
-    private TreeNode<T> toTreeNode(T value){
+    private TreeNode<T> toTreeNode(final T value){
         return of(value, getTreeAdapterClass(), sharedState);
     }
 
@@ -278,7 +278,7 @@ public class TreeNode<T> implements Vertex<T> {
     /*
      * @return zero based index
      */
-    private int indexWithinSiblings(TreeNode<T> parent) {
+    private int indexWithinSiblings(final TreeNode<T> parent) {
         final LongAdder indexOneBased = new LongAdder();
 
         boolean found = parent.streamChildren()
@@ -292,7 +292,7 @@ public class TreeNode<T> implements Vertex<T> {
         return indexOneBased.intValue()-1;
     }
 
-    private boolean isEqualTo(TreeNode<T> other) {
+    private boolean isEqualTo(final TreeNode<T> other) {
         if(other==null) {
             return false;
         }

@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.properties.property;
 
 import java.util.Optional;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.validation.constraints.Pattern;
 
@@ -29,6 +28,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.mixins.system.HasInteractionId;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -322,15 +322,18 @@ extends FacetFactoryAbstract {
     void processOptional(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
 
         val method = processMethodContext.getMethod();
-
         val holder = processMethodContext.getFacetHolder();
-
+        
         // check for @Nullable
-        val nullableIfAny = processMethodContext.synthesizeOnMethod(Nullable.class);
+        val hasNullable = 
+                _NullSafe.stream(method.getAnnotations())
+                    .map(annot->annot.annotationType().getSimpleName())
+                    .anyMatch(name->name.equals("Nullable"));
+        //val nullableIfAny = processMethodContext.synthesizeOnMethod(Nullable.class);
 
         addFacetIfPresent(
                 MandatoryFacetInvertedByNullableAnnotationOnProperty
-                .create(nullableIfAny, method, holder))
+                .create(hasNullable, method, holder))
         .ifPresent(mandatoryFacet->
                 MetaModelValidatorForConflictingOptionality
                 .flagIfConflict(

@@ -326,7 +326,7 @@ implements TextFieldValueModel.ScalarModelProvider {
 
         @NonNull private final IConverter<X> converter;
 
-        private ToStringConvertingModel(@NonNull final IConverter<X> converter) {
+        private ToStringConvertingModel(final @NonNull IConverter<X> converter) {
             this.converter = converter;
         }
 
@@ -411,14 +411,14 @@ implements TextFieldValueModel.ScalarModelProvider {
 
     // //////////////////////////////////////
 
-    private static Integer getMaxLengthOf(@NonNull final ScalarModel model) {
+    private static Integer getMaxLengthOf(final @NonNull ScalarModel model) {
         return model
                 .lookupFacet(MaxLengthFacet.class)
                 .map(MaxLengthFacet::value)
                 .orElse(null);
     }
 
-    private static Integer getTypicalLenghtOf(@NonNull final ScalarModel model) {
+    private static Integer getTypicalLenghtOf(final @NonNull ScalarModel model) {
         return model
                 .lookupFacet(TypicalLengthFacet.class)
                 .map(TypicalLengthFacet::value)

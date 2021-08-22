@@ -24,8 +24,7 @@ import org.apache.isis.client.kroviz.to.DomainTypes
 import org.apache.isis.client.kroviz.to.TransferObject
 import org.apache.isis.client.kroviz.ui.core.UiManager
 
-class DomainTypesHandler : org.apache.isis.client.kroviz.handler.BaseHandler() {
-
+class DomainTypesHandler : BaseHandler() {
 
     override fun parse(response: String): TransferObject {
         return Json.decodeFromString(DomainTypes.serializer(), response)
@@ -39,5 +38,5 @@ class DomainTypesHandler : org.apache.isis.client.kroviz.handler.BaseHandler() {
             update()
         }
     }
-}
 
+}

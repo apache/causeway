@@ -18,7 +18,7 @@
  */
 package org.apache.isis.applib.events;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
@@ -39,7 +39,7 @@ public abstract class EventObjectBase<T> {
      *
      * @param    source    The object on which the Event initially occurred.
      */
-    protected EventObjectBase(@Nullable final T source) {
+    protected EventObjectBase(final @Nullable T source) {
         this.source = source;
     }
 

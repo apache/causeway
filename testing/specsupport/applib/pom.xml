@@ -42,14 +42,35 @@
 		<dependency>
 		    <groupId>io.cucumber</groupId>
 		    <artifactId>cucumber-java</artifactId>
+		    <exclusions>
+		    	<exclusion>
+		    		<!-- version clash, already provided by org.junit.jupiter:junit-jupiter-api -->
+		    		<groupId>org.apiguardian</groupId>
+		    		<artifactId>apiguardian-api</artifactId>
+		    	</exclusion>
+		    </exclusions>
 		</dependency>
 		<dependency>
 		    <groupId>io.cucumber</groupId>
 		    <artifactId>cucumber-spring</artifactId>
+		    <exclusions>
+		    	<exclusion>
+		    		<!-- version clash, already provided by org.junit.jupiter:junit-jupiter-api -->
+		    		<groupId>org.apiguardian</groupId>
+		    		<artifactId>apiguardian-api</artifactId>
+		    	</exclusion>
+		    </exclusions>
 		</dependency>
 		<dependency>
 			<groupId>io.cucumber</groupId>
 			<artifactId>cucumber-junit-platform-engine</artifactId>
+			<exclusions>
+		    	<exclusion>
+		    		<!-- version clash, already provided by org.junit.jupiter:junit-jupiter-api -->
+		    		<groupId>org.apiguardian</groupId>
+		    		<artifactId>apiguardian-api</artifactId>
+		    	</exclusion>
+		    </exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>

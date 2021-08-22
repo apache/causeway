@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.object.paged;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 

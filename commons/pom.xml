@@ -53,34 +53,14 @@
 		</resources>
 	</build>
 
-	<profiles>
-		<profile>
-			<id>jdk11-supplemental</id>
-			<activation>
-				<jdk>[11,)</jdk>
-			</activation>
-			<!-- These dependencies are required in order to build on JDK11+ -->
-			<dependencies>
-				<dependency>
-					<groupId>org.apache.isis.core</groupId>
-					<artifactId>isis-jdk-supplemental</artifactId>
-					<type>pom</type>
-				</dependency>
-			</dependencies>
-		</profile>
-	</profiles>
-
 	<dependencies>
-
-		<!-- JEE API -->
+	
+		<!-- JDK11+ SUPPORT AND JEE API -->
+		
 		<dependency>
-			<groupId>javax</groupId>
-			<artifactId>javaee-api</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>com.google.code.findbugs</groupId>
-			<artifactId>annotations</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-jdk-supplemental</artifactId>
+			<type>pom</type>
 		</dependency>
 
 		<dependency>
@@ -132,6 +112,11 @@
 					<groupId>org.slf4j</groupId>
 					<artifactId>slf4j-api</artifactId>
 				</exclusion>
+				<exclusion>
+					<!-- version clash -->
+				    <groupId>org.osgi</groupId>
+				    <artifactId>org.osgi.core</artifactId>
+			    </exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>

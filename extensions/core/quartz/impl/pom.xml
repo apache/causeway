@@ -27,6 +27,22 @@
 		<jar-plugin.automaticModuleName>org.apache.isis.extensions.quartz.impl</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/isis/extensions/quartz/impl</git-plugin.propertiesDir>
 	</properties>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<!-- overrides defaults as configured in our core pom, 
+        			to make javadoc failures non fatal and let the build continue;
+        			this we can set on a per module basis, to apply only to those, 
+        			we don't know how to fix otherwise -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<failOnError>false</failOnError>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
 	<dependencies>
 		<dependency>
@@ -37,6 +53,12 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-quartz</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>

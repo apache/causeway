@@ -109,7 +109,7 @@ public final class Blob implements NamedWithMimeType {
      * @param content - bytes
      * @return new {@link Blob}
      */
-    public static Blob of(String name, CommonMimeType mimeType, byte[] content) {
+    public static Blob of(final String name, final CommonMimeType mimeType, final byte[] content) {
         val proposedFileExtension = mimeType.getProposedFileExtensions().getFirst().orElse("");
         val fileName = _Strings.asFileNameWithExtension(name, proposedFileExtension);
         return new Blob(fileName, mimeType.getMimeType(), content);
@@ -121,15 +121,15 @@ public final class Blob implements NamedWithMimeType {
     private final byte[] bytes;
     private final String name;
 
-    public Blob(String name, String primaryType, String subtype, byte[] bytes) {
+    public Blob(final String name, final String primaryType, final String subtype, final byte[] bytes) {
         this(name, CommonMimeType.newMimeType(primaryType, subtype), bytes);
     }
 
-    public Blob(String name, String mimeTypeBase, byte[] bytes) {
+    public Blob(final String name, final String mimeTypeBase, final byte[] bytes) {
         this(name, CommonMimeType.newMimeType(mimeTypeBase), bytes);
     }
 
-    public Blob(String name, MimeType mimeType, byte[] bytes) {
+    public Blob(final String name, final MimeType mimeType, final byte[] bytes) {
         if(name == null) {
             throw new IllegalArgumentException("Name cannot be null");
         }
@@ -162,11 +162,11 @@ public final class Blob implements NamedWithMimeType {
     }
 
     // -- UTILITIES
-    
+
     public Clob toClob(final @NonNull Charset charset) {
         return new Clob(getName(), getMimeType(), _Strings.ofBytes(getBytes(), charset));
     }
-    
+
     /**
      * Does not close the OutputStream.
      * @param os
@@ -180,26 +180,25 @@ public final class Blob implements NamedWithMimeType {
             os.write(bytes);
         }
     }
-    
+
     /**
      * The {@link InputStream} involved is closed after consumption.
      * @param consumer
      * @throws IOException
      */
-    public void consume(Consumer<InputStream> consumer) throws IOException {
+    public void consume(final Consumer<InputStream> consumer) throws IOException {
      // null to empty
         val bytes = Optional.ofNullable(getBytes())
                 .orElse(new byte[0]);
         try(val bis = new ByteArrayInputStream(bytes)) {
-            consumer.accept(bis);    
+            consumer.accept(bis);
         }
     }
-    
+
     /**
      * The {@link InputStream} involved is closed after digestion.
      * @param <R>
-     * @param mapper
-     * @return
+     * @param digester
      * @throws IOException
      */
     public <R> R digest(final @NonNull Function<InputStream, R> digester) throws IOException {
@@ -207,19 +206,19 @@ public final class Blob implements NamedWithMimeType {
         val bytes = Optional.ofNullable(getBytes())
                 .orElse(new byte[0]);
         try(val bis = new ByteArrayInputStream(bytes)) {
-            return digester.apply(bis);    
+            return digester.apply(bis);
         }
     }
-    
+
     public Blob zip() {
         val zipWriter = ZipWriter.newInstance();
         zipWriter.nextEntry(getName(), outputStream->outputStream.writeBytes(getBytes()));
         return Blob.of(getName()+".zip", CommonMimeType.ZIP, zipWriter.toBytes());
     }
-    
+
     @SneakyThrows
     public Blob unZip(final @NonNull CommonMimeType resultingMimeType) {
-        
+
         return digest(is->
             ZipReader.digest(is, (zipEntry, zipInputStream)->{
                 if(zipEntry.isDirectory()) {
@@ -234,11 +233,11 @@ public final class Blob implements NamedWithMimeType {
                 }
                 return Blob.of(zipEntry.getName(), resultingMimeType, unzippedBytes);
             })
-                
+
         )
         .orElse(Blob.of("blob_unzip_failed", resultingMimeType, new byte[0]));
     }
-    
+
     // -- OBJECT CONTRACT
 
     @Override
@@ -274,7 +273,7 @@ public final class Blob implements NamedWithMimeType {
         private final PrimitiveJaxbAdapters.BytesAdapter bytesAdapter = new PrimitiveJaxbAdapters.BytesAdapter(); // thread-safe
 
         @Override
-        public Blob unmarshal(String data) throws Exception {
+        public Blob unmarshal(final String data) throws Exception {
             if(data==null) {
                 return null;
             }
@@ -292,7 +291,7 @@ public final class Blob implements NamedWithMimeType {
         }
 
         @Override
-        public String marshal(Blob blob) throws Exception {
+        public String marshal(final Blob blob) throws Exception {
             if(blob==null) {
                 return null;
             }

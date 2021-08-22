@@ -37,8 +37,8 @@ public class ActionForm extends FormLayout {
     private final ParameterNegotiationModel pendingArgs;
 
     public static ActionForm forManagedAction(
-            @NonNull final UiComponentFactoryVaa uiComponentFactory,
-            @NonNull final ManagedAction managedAction) {
+            final @NonNull UiComponentFactoryVaa uiComponentFactory,
+            final @NonNull ManagedAction managedAction) {
 
         val actionForm = new ActionForm(uiComponentFactory, managedAction);
         return actionForm;

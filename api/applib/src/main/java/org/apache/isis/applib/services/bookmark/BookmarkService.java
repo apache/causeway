@@ -20,7 +20,7 @@ package org.apache.isis.applib.services.bookmark;
 
 import java.util.Optional;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 

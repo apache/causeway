@@ -34,7 +34,7 @@ import lombok.val;
                 ConfigurationExample3.class
         },
         properties = {
-//                XXX not used with this example 
+//                XXX not used with this example
 //                "spring.datasource.url=jdbc:h2:mem:test",
 //                "spring.datasource.driver-class-name=org.h2.Driver",
 //                "spring.datasource.username=sa",
@@ -45,20 +45,20 @@ class ConfigurationTest3 {
 
     @Inject
     private Provider<ConfigurationExample3.ExampleDao> exampleDaoProvider;
-    
-    @Test 
+
+    @Test
     void contextLoads() {
-        
+
         assertNotNull(exampleDaoProvider);
-        
+
         val dao = exampleDaoProvider.get();
         assertNotNull(dao);
-        
+
         val pmf = dao.getPersistenceManagerFactory();
         assertNotNull(pmf);
-        
+
         assertTrue(pmf.getClass().getName().contains("Proxy"));
-        
+
     }
-    
+
 }

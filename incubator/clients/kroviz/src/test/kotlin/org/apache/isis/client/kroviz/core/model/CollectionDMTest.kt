@@ -43,7 +43,7 @@ class CollectionDMTest {
 
         assertEquals(2, dl.data.size) //1
 
-        val properties = dl.propertyLayoutList
+        val properties = dl.properties.propertyLayoutList
         assertEquals(5, properties.size) //2    // includes datanucleus IdLong, VersionLong, VersionTimestamp
         assertEquals("name", properties[0].id) //3
         assertEquals("notes", properties[1].id)  //4
@@ -61,7 +61,7 @@ class CollectionDMTest {
         dl.addLayout(lt)
         assertEquals(1, dl.data.size) //1
 
-        val properties = dl.propertyLayoutList
+        val properties = dl.properties.propertyLayoutList
         assertEquals("key", properties[0].id) // 2
         assertEquals("value", properties[1].id)   // 3
     }
@@ -78,7 +78,7 @@ class CollectionDMTest {
         assertEquals(1, dl.data.size)
 
         assertNotNull(dl.layout)
-        val properties = dl.propertyList
+        val properties = dl.properties.propertyList
         assertNotNull(properties)
         //Sequence in FR_OBJECT differs from sequence in FR_OBJECT_LAYOUT
         // FR_OBJECT: fixtureScriptClassName, key, object, className

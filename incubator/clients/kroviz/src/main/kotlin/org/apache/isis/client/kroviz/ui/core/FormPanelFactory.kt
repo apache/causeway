@@ -33,6 +33,7 @@ import io.kvision.form.text.Text
 import io.kvision.form.text.TextArea
 import io.kvision.form.time.DateTime
 import io.kvision.form.time.dateTime
+import io.kvision.html.Button
 import io.kvision.html.Div
 import io.kvision.html.Iframe
 import io.kvision.html.Image
@@ -42,8 +43,10 @@ import io.kvision.utils.auto
 import io.kvision.utils.perc
 import io.kvision.utils.px
 import org.apache.isis.client.kroviz.to.ValueType
+import org.apache.isis.client.kroviz.ui.dialog.Command
 import org.apache.isis.client.kroviz.ui.panel.SvgPanel
 import org.apache.isis.client.kroviz.utils.DateHelper
+import org.apache.isis.client.kroviz.utils.IconManager
 import org.apache.isis.client.kroviz.utils.UUID
 
 class FormPanelFactory(items: List<FormItem>) : VPanel() {
@@ -70,19 +73,29 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
                     ValueType.IFRAME -> add(createIFrame(fi))
                     ValueType.SVG_INLINE -> add(createSvgInline(fi))
                     ValueType.SVG_MAPPED -> add(createSvgMap(fi))
+                    ValueType.BUTTON -> add(createButton(fi))
                 }
             }
         }
     }
 
+    private fun createButton(fi: FormItem): Button {
+        val item = Button(text = fi.label, icon = IconManager.find(fi.label))
+        val obj = fi.callBack!! as Command
+        val action = fi.callBackAction
+        item.onClick {
+            obj.execute(action)
+        }
+        return item
+    }
+
     private fun createBoolean(fi: FormItem): Component {
-        if (fi.content == "true") {
-            return CheckBox(label = fi.label, value = true)
+        val value = fi.content
+        val bools = arrayOf("true", "false")
+        return when {
+            value in bools -> CheckBox(label = fi.label, value = (value == "true"))
+            else -> createText(fi)
         }
-        if (fi.content == "false") {
-            return CheckBox(label = fi.label, value = false)
-        }
-        return createText(fi)
     }
 
     private fun createTime(fi: FormItem): DateTime {
@@ -154,9 +167,8 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
 
     private fun createImage(fi: FormItem): VPanel {
         val panel = VPanel {
-            val fc = fi.content
-            when {
-                fc is Image -> fc
+            when (val fc = fi.content) {
+//                fc is Image -> fc
                 fc is String -> {
                     // interpret as (file) URL and load locally
                     console.log("[FPF.createImage]")
@@ -171,7 +183,8 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
             }
         }
         panel.height = auto
-        panel.width = 100.perc
+        panel.width = auto
+        panel.overflow = Overflow.AUTO
         return panel
     }
 
@@ -189,14 +202,16 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
             }
         }
         panel.height = auto
-        panel.width = 100.perc
+        panel.width = auto
+        panel.overflow = Overflow.AUTO
         return panel
     }
 
     private fun createSvgMap(fi: FormItem): SvgPanel {
         val panel = SvgPanel()
-        panel.height = 100.perc
-        panel.width = 100.perc
+        panel.height = auto
+        panel.width = auto
+        panel.overflow = Overflow.AUTO
         fi.callBack = panel
         return panel
     }

@@ -21,7 +21,7 @@ package org.apache.isis.commons.internal.base;
 import java.util.Comparator;
 import java.util.Objects;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 

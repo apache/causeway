@@ -22,12 +22,12 @@ import kotlinx.serialization.Serializable
 import org.apache.isis.client.kroviz.to.Link
 
 @Serializable
-data class PropertyLt(val named: String? = null,
+data class PropertyLt(val id: String? = null,
+                      val named: String? = null,
                       val describedAs: String? = null,
                       val action: List<ActionLt> = emptyList(),
                       var metadataError: String? = null,
                       val link: Link? = null,
-                      val id: String? = null,
                       val cssClass: String? = null,
                       val hidden: String? = null,  //ALL_TABLES
                       val labelPosition: String? = null,

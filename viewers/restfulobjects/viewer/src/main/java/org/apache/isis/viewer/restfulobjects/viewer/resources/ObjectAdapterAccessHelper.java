@@ -52,9 +52,9 @@ public class ObjectAdapterAccessHelper {
     private final Where where;
 
     public ManagedAction getObjectActionThatIsVisibleForIntentAndSemanticConstraint(
-            @NonNull final String actionId,
-            @NonNull final AccessIntent intent,
-            @NonNull final SemanticConstraint semanticConstraint) {
+            final @NonNull String actionId,
+            final @NonNull AccessIntent intent,
+            final @NonNull SemanticConstraint semanticConstraint) {
 
         return ActionInteraction
                 .start(managedObject, actionId, where)
@@ -65,8 +65,8 @@ public class ObjectAdapterAccessHelper {
     }
 
     public ManagedProperty getPropertyThatIsVisibleForIntent(
-            @NonNull final String propertyId,
-            @NonNull final AccessIntent intent) {
+            final @NonNull String propertyId,
+            final @NonNull AccessIntent intent) {
 
         return PropertyInteraction
                 .start(managedObject, propertyId, where)
@@ -77,8 +77,8 @@ public class ObjectAdapterAccessHelper {
     }
 
     public ManagedCollection getCollectionThatIsVisibleForIntent(
-            @NonNull final String collectionId,
-            @NonNull final AccessIntent intent) {
+            final @NonNull String collectionId,
+            final @NonNull AccessIntent intent) {
 
         return CollectionInteraction
                 .start(managedObject, collectionId, where)

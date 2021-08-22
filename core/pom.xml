@@ -84,17 +84,18 @@
 
 		<!-- LIBRARY DEPENDENCIES -->
 		<archunit.version>0.20.1</archunit.version>
-		<approvaltests.version>11.7.0</approvaltests.version>
+		<asm.version>9.1</asm.version> <!-- keep in sync with org.eclipse.persistence:org.eclipse.persistence.asm -->
+		<approvaltests.version>12.0.1</approvaltests.version>
 
 		<assertj-guava.version>3.4.0</assertj-guava.version>
 
 		<camel.version>3.11.1</camel.version>
-
+		
 		<commons-email.version>1.5</commons-email.version>
 		<commons-httpclient.version>4.5.12</commons-httpclient.version>
 		<commons-io.version>2.11.0</commons-io.version>
 
-		<cucumber.version>6.9.1</cucumber.version>
+		<cucumber.version>6.11.0</cucumber.version>
 
 		<cxf-rt-rs-client.version>3.4.4</cxf-rt-rs-client.version>
 
@@ -107,14 +108,12 @@
 		<datanucleus-jdo-query.version>5.0.9</datanucleus-jdo-query.version>
 		<datanucleus-jodatime.version>5.2.0-release</datanucleus-jodatime.version>
 		<datanucleus-maven-plugin.version>5.2.1</datanucleus-maven-plugin.version>
-		<datanucleus-rdbms.version>5.2.8</datanucleus-rdbms.version>
+		<datanucleus-rdbms.version>5.2.9</datanucleus-rdbms.version>
 
 		<docx4j.version>8.3.1</docx4j.version>
 
 		<easymock.version>4.3</easymock.version>
-		<error_prone_annotations.version>2.8.1</error_prone_annotations.version>
-
-		<findbugs-annotations.version>3.0.1u2</findbugs-annotations.version>
+		<error_prone_annotations.version>2.9.0</error_prone_annotations.version>
 
 		<git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
 		<guava.version>30.1.1-jre</guava.version>
@@ -122,7 +121,7 @@
 		<htmlparser.version>2.1</htmlparser.version>
 
 		<jakarta.annotation-api.version>2.0.0</jakarta.annotation-api.version>
-		<javaee.version>8.0.1</javaee.version>
+		<jakartaee.version>8.0.0</jakartaee.version>
 		<javafaker.version>1.0.2</javafaker.version>
 		<javassist.version>3.28.0-GA</javassist.version>
 		<javax-servlet.version>4.0.1</javax-servlet.version>
@@ -147,6 +146,7 @@
 		<jquery-ui.version>1.12.1</jquery-ui.version> <!-- org.webjars:jquery-ui -->
 
 		<jsr305.version>3.0.2</jsr305.version>
+		<junit-jupiter.version>5.8.0-RC1</junit-jupiter.version> <!-- overrides spring -->
 		<junit-platform.version>1.7.2</junit-platform.version>
 
 		<log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
@@ -156,8 +156,8 @@
 
 		<!-- See https://nodejs.org/en/download/ for latest node and npm (lts)
 			versions -->
-		<node.version>v12.14.0</node.version>
-		<npm.version>6.13.1</npm.version>
+		<node.version>v14.17.5</node.version>
+		<npm.version>6.14.14</npm.version>
 
 		<objenesis.version>3.2</objenesis.version>
 		<ognl.version>3.2.21</ognl.version>
@@ -169,13 +169,13 @@
 		<quartz-scheduler.version>2.3.2</quartz-scheduler.version>
 
 		<resteasy-spring-boot-starter.version>4.9.0.Final</resteasy-spring-boot-starter.version>
-		<resteasy.version>4.6.2.Final</resteasy.version> <!-- keep in sync with property defined in resteasy4-spring-boot-starter -->
+		<resteasy.version>4.7.0.Final</resteasy.version> <!-- keep in sync with property defined in resteasy4-spring-boot-starter -->
 
 		<select2.version>4.0.13</select2.version>
 		<shiro.version>1.7.1</shiro.version>
 		<simpleslackapi.version>1.3.0</simpleslackapi.version>
 		<slf4j-api.version>1.7.32</slf4j-api.version> <!-- also provided by spring-boot-starter-logging, needed to solve convergence issues -->
-		<spring-boot.version>2.5.3</spring-boot.version> <!-- has no effect here, needs to be set in isis-parent/pom.xml -->
+		<spring-boot.version>2.5.4</spring-boot.version> <!-- has no effect here, needs to be set in isis-parent/pom.xml -->
 		<summernote.version>0.8.11</summernote.version>
 		<swagger-core.version>1.6.2</swagger-core.version>
 
@@ -183,7 +183,7 @@
 
 		<vaadin.version>20.0.6</vaadin.version>
 
-		<wicket.version>8.12.0</wicket.version>
+		<wicket.version>8.13.0</wicket.version>
 		<wicket-bootstrap.version>3.0.0-M18</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
 		<wicket-fullcalendar.version>4.2</wicket-fullcalendar.version>
 		<wicket-source.version>7.0.0</wicket-source.version>
@@ -193,7 +193,7 @@
 		<bootstrap.version>4.6.0-1</bootstrap.version>
 		<popper-js.version>1.16.1-lts</popper-js.version> <!-- org.webjars:popper-js, dictated by bootstrap.version -->
 
-		<wicketstuff.version>8.12.0</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
+		<wicketstuff.version>8.13.0</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
 		<wicketstuff-gmap3.version>${wicket.version}</wicketstuff-gmap3.version>
 
 		<xdocreport.version>1.0.6</xdocreport.version>
@@ -360,12 +360,11 @@
 						<splitindex>true</splitindex>
 						<encoding>${project.build.sourceEncoding}</encoding>
 						<links>
-							<link>https://docs.oracle.com/javase/8/docs/api/</link>
+							<link>https://docs.oracle.com/en/java/javase/11/docs/api/</link>
 						</links>
 						<linksource>true</linksource>
 						<!-- http://jira.codehaus.org/browse/MJAVADOC-268 and http://jira.codehaus.org/browse/MJAVADOC-284 -->
 						<detectOfflineLinks>false</detectOfflineLinks>
-						<!-- <additionalparam> -Xdoclint:none </additionalparam> -->
 					</configuration>
 					<!-- goal:aggregate (for aggregator modules) has no binding; explicitly
 						bound in profiles -->
@@ -643,9 +642,6 @@
 
 			<!-- CHILD MODULES -->
 			<dependency>
-				<!-- meant to be imported only when on JDK 11 or newer; usually by wrapping
-					this dependency within a profile, that activates based on the JDK version
-					in use -->
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis-jdk-supplemental</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
@@ -847,31 +843,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.mavendeps</groupId>
-				<artifactId>isis-mavendeps-archtests</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-				<type>pom</type>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.mavendeps</groupId>
 				<artifactId>isis-mavendeps-integtests</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-				<type>pom</type>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.mavendeps</groupId>
-				<artifactId>isis-mavendeps-integspecs</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-				<type>pom</type>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.mavendeps</groupId>
-				<artifactId>isis-mavendeps-jdo</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-				<type>pom</type>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.mavendeps</groupId>
-				<artifactId>isis-mavendeps-jpa</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<type>pom</type>
 			</dependency>
@@ -881,15 +853,20 @@
 				<version>2.0.0-SNAPSHOT</version>
 				<type>pom</type>
 			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.mavendeps</groupId>
-				<artifactId>isis-mavendeps-jdk11</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-				<type>pom</type>
-			</dependency>
-
 
 			<!-- THIRD PARTY DEPENDENCIES -->
+			
+			<dependency>
+				<groupId>org.ow2.asm</groupId>
+				<artifactId>asm</artifactId>
+				<version>${asm.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.ow2.asm</groupId>
+				<artifactId>asm-util</artifactId>
+				<version>${asm.version}</version>
+			</dependency>
 
 			<dependency>
 				<groupId>org.hibernate</groupId>
@@ -927,13 +904,7 @@
 				<version>${error_prone_annotations.version}</version>
 			</dependency>
 
-			<!-- provides @Nullable -->
-			<dependency>
-				<groupId>com.google.code.findbugs</groupId>
-				<artifactId>annotations</artifactId>
-				<version>${findbugs-annotations.version}</version>
-			</dependency>
-
+			<!-- provides @Nullable that's required by Spring 5.x -->
 			<dependency>
 				<groupId>com.google.code.findbugs</groupId>
 				<artifactId>jsr305</artifactId>
@@ -980,11 +951,6 @@
 				<version>${simpleslackapi.version}</version>
 			</dependency>
 
-			<dependency>
-				<groupId>com.sun.xml.bind</groupId>
-				<artifactId>jaxb-core</artifactId>
-				<version>${jaxb-core.version}</version>
-			</dependency>
 			<dependency>
 				<groupId>com.sun.xml.bind</groupId>
 				<artifactId>jaxb-impl</artifactId>
@@ -1073,9 +1039,9 @@
 			</dependency>
 
 			<dependency>
-				<groupId>javax</groupId>
-				<artifactId>javaee-api</artifactId>
-				<version>${javaee.version}</version>
+				<groupId>jakarta.platform</groupId>
+				<artifactId>jakarta.jakartaee-api</artifactId>
+				<version>${jakartaee.version}</version>
 			</dependency>
 
 			<dependency>
@@ -1084,11 +1050,13 @@
 				<version>${javax-servlet.version}</version>
 			</dependency>
 
+			<!-- 3.2 not available yet, instead use org.datanucleus:javax.jdo 
 			<dependency>
 				<groupId>javax.jdo</groupId>
 				<artifactId>jdo-api</artifactId>
 				<version>${jdo-api.version}</version>
 			</dependency>
+			-->
 
 			<dependency>
 				<groupId>net.sf.jopt-simple</groupId>
@@ -1438,6 +1406,13 @@
 				<groupId>org.objenesis</groupId>
 				<artifactId>objenesis</artifactId>
 				<version>${objenesis.version}</version>
+			</dependency>
+			
+			<dependency>
+			    <groupId>org.osgi</groupId>
+			    <artifactId>osgi.core</artifactId>
+			    <version>${osgi.version}</version>
+			    <scope>provided</scope>
 			</dependency>
 
 			<dependency>

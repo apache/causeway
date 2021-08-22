@@ -86,8 +86,8 @@ public abstract class LinkAndLabelAbstract implements Serializable {
     }
 
     private static boolean isVisible(
-            @NonNull final ManagedObject actionHolder,
-            @NonNull final ObjectAction objectAction) {
+            final @NonNull ManagedObject actionHolder,
+            final @NonNull ObjectAction objectAction) {
 
         // check hidden
         if (actionHolder.getSpecification().isHidden()) {

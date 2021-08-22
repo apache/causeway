@@ -26,7 +26,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Arrays;
@@ -297,7 +297,7 @@ public final class ParameterSupport {
     private static Class<?>[] concat(
             final Class<?>[] paramTypes,
             final int paramsConsidered,
-            @Nullable final Class<?> additionalParamType) {
+            final @Nullable Class<?> additionalParamType) {
 
         if(paramsConsidered>paramTypes.length) {
             val msg = String.format("paramsConsidered %d exceeds size of paramTypes %d",

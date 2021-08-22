@@ -18,7 +18,7 @@
  */
 package org.apache.isis.valuetypes.asciidoc.ui.vaa.components;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.customfield.CustomField;

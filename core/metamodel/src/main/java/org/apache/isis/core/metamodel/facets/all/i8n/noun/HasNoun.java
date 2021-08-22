@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.all.i8n.noun;
 
 import java.util.Optional;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.metamodel.facets.all.i8n.HasMemoizableTranslation;

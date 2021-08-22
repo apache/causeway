@@ -49,7 +49,7 @@ extends MetaModelVisitingValidatorAbstract {
     }
 
     @Override
-    public void validate(@NonNull final ObjectSpecification spec) {
+    public void validate(final @NonNull ObjectSpecification spec) {
 
         if(spec.getBeanSort()!=BeanSort.UNKNOWN
                 && !spec.isAbstract()) {

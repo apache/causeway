@@ -26,7 +26,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
@@ -128,7 +128,7 @@ public final class _Resources {
      * @param extendee
      * @param suffix
      */
-    public static String combinePath(@Nullable final String extendee, @Nullable final String suffix) {
+    public static String combinePath(final @Nullable String extendee, final @Nullable String suffix) {
         return _Strings.combineWithDelimiter(extendee, suffix, "/");
     }
 

@@ -32,7 +32,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -229,17 +229,17 @@ final class Can_Empty<T> implements Can<T> {
     }
 
     @Override
-    public Set<T> toSet(@NonNull final Consumer<T> onDuplicated) {
+    public Set<T> toSet(final @NonNull Consumer<T> onDuplicated) {
         return Collections.emptySet(); // serializable and immutable
     }
 
     @Override
-    public <C extends Collection<T>> C toCollection(@NonNull final Supplier<C> collectionFactory) {
+    public <C extends Collection<T>> C toCollection(final @NonNull Supplier<C> collectionFactory) {
         return collectionFactory.get();
     }
 
     @Override
-    public T[] toArray(@NonNull final Class<T> elementType) {
+    public T[] toArray(final @NonNull Class<T> elementType) {
         val array = _Casts.<T[]>uncheckedCast(Array.newInstance(elementType, 0));
         return array;
     }

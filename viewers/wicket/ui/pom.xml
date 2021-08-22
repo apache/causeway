@@ -51,6 +51,17 @@
 				<groupId>net.alchim31.maven</groupId>
 				<artifactId>yuicompressor-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<!-- overrides defaults as configured in our core pom, 
+        			to make javadoc failures non fatal and let the build continue;
+        			this we can set on a per module basis, to apply only to those, 
+        			we don't know how to fix otherwise -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<failOnError>false</failOnError>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -59,21 +70,6 @@
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
 			<artifactId>isis-viewer-wicket-model</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.wicket</groupId>
-			<artifactId>wicket-core</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>commons-io</groupId>
-					<artifactId>commons-io</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 
 		<dependency>
@@ -136,7 +132,15 @@
 					<groupId>cglib</groupId>
 					<artifactId>cglib</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>org.ow2.asm</groupId>
+					<artifactId>asm-util</artifactId>
+				</exclusion>
 			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.ow2.asm</groupId>
+			<artifactId>asm-util</artifactId>
 		</dependency>
 
 		<dependency>

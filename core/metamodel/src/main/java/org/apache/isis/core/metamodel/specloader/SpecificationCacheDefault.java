@@ -24,7 +24,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -107,7 +107,6 @@ class SpecificationCacheDefault<T extends ObjectSpecification> implements Specif
 
     // -- HELPER
 
-    @Nullable
     private void internalPut(@Nullable T spec) {
         if(spec==null) {
             return;

@@ -31,6 +31,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.persistence.jdo.datanucleus.entities.DnObjectProviderForIsis;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -106,6 +107,8 @@ public class DnSettings {
             }
             // nothing further to do
         }
+
+        props.computeIfAbsent(PropertyNames.PROPERTY_OBJECT_PROVIDER_CLASS_NAME, key->DnObjectProviderForIsis.class.getName());
 
     }
 

@@ -30,7 +30,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.applib.id.HasLogicalType;
@@ -521,7 +521,7 @@ extends
 
     // -- TYPE COMPATIBILITY UTILITIES
 
-    default public void assertPojoCompatible(@Nullable final Object pojo) {
+    default public void assertPojoCompatible(final @Nullable Object pojo) {
 
         // can do this check only when the pojo is not null, otherwise is always considered valid
         if(pojo==null) {

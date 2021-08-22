@@ -23,15 +23,13 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import javax.annotation.Nullable;
-
 import org.springframework.context.ApplicationContext;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.Cardinality;
-import org.apache.isis.commons.internal.base._With;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -70,10 +68,10 @@ public interface _IocContainer {
      *     is used instead.
      * </p>
      *
-     * @param <T>  - the genericised type (to save the caller from having to downcast)
+     * @param <T> - the generic type parameter (to save the caller from having to downcast)
      * @param requiredType - the required type
      * @throws NoSuchElementException - if the singleton is not resolvable
-     * 
+     *
      * @see #select(Class, Annotation[])
      * @see #getSingletonElseFail(Class)
      */
@@ -89,11 +87,11 @@ public interface _IocContainer {
      *     is used instead.
      * </p>
      *
-     * @param <T>  - the genericised type (to save the caller from having to downcast)
+     * @param <T> - the generic type parameter (to save the caller from having to downcast)
      * @param requiredType - the required type
      * @param qualifiersRequired - if contains annotations, that are not qualifiers, these are just ignored
      * @throws NoSuchElementException - if the singleton is not resolvable
-     * 
+     *
      * @see #select(Class)
      */
     <T> Can<T> select(Class<T> requiredType, Annotation[] qualifiersRequired);
@@ -110,12 +108,11 @@ public interface _IocContainer {
      * </p>
      *
      * @param type - the required type
-     * @param <T>  - the genericised type (to save the caller from having to downcast)
+     * @param <T>  - the generic type parameter (to save the caller from having to downcast)
      * @return IoC managed singleton
      * @throws NoSuchElementException - if the singleton is not resolvable
      */
-    public default <T> T getSingletonElseFail(@Nullable Class<T> type) {
-        _With.requires(type, "type");
+    public default <T> T getSingletonElseFail(final @NonNull Class<T> type) {
 
         val candidates = select(type);
         if (candidates.getCardinality() == Cardinality.ZERO) {
@@ -126,7 +123,7 @@ public interface _IocContainer {
 
     // -- FACTORIES
 
-    static _IocContainer spring(ApplicationContext springContext) {
+    static _IocContainer spring(final ApplicationContext springContext) {
         return _IocContainer_Spring.of(springContext);
     }
 

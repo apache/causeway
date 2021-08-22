@@ -18,7 +18,7 @@
  */
 package org.apache.isis.testing.fixtures.applib.fixturescripts;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
@@ -100,7 +100,7 @@ public class FixtureScriptsSpecification {
         public Builder(final Class<?> contextClass) {
             this(contextClass.getPackage().getName());
         }
-        public Builder(@Nullable final String packagePrefix) {
+        public Builder(final @Nullable String packagePrefix) {
             this.packagePrefix = packagePrefix;
         }
 

@@ -26,7 +26,7 @@ import org.apache.isis.client.kroviz.core.model.Exposer
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.core.MenuFactory.buildForTitle
 import org.apache.isis.client.kroviz.utils.IconManager
-import org.apache.isis.client.kroviz.utils.Utils
+import org.apache.isis.client.kroviz.utils.StringUtils
 import io.kvision.core.CssSize
 import io.kvision.core.UNIT
 import io.kvision.core.Widget
@@ -47,7 +47,7 @@ object RoIconBar : SimplePanel() {
         add(createDeleteIcon())
         panel.setDropTargetData(Constants.stdMimeType) { id ->
             when {
-                Utils.isUrl(id!!) ->
+                StringUtils.isUrl(id!!) ->
                     add(createObjectIcon(id)!!)
                 id.contains(Constants.actionSeparator) ->
                     add(createActionIcon(id))
@@ -101,7 +101,7 @@ object RoIconBar : SimplePanel() {
 
     private fun createObjectIcon(url: String): DropDown? {
         val reSpec = ResourceSpecification(url)
-        val logEntry = EventStore.find(reSpec)!!
+        val logEntry = EventStore.findBy(reSpec)!!
         return when (val obj = logEntry.obj) {
             (obj == null) -> null
             is TObject -> {
@@ -114,7 +114,7 @@ object RoIconBar : SimplePanel() {
                         tObject = obj,
                         iconName = iconName,
                         withText = false)
-                var title = Utils.extractTitle(logEntry.title)
+                var title = StringUtils.extractTitle(logEntry.title)
                 title += "\n${obj.title}"
                 initIcon(icon, url, title, "icon-bar-object", icon.buttonId()!!)
                 icon

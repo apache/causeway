@@ -24,6 +24,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.isis.applib.util.Enums;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.resources._Resources;
@@ -240,7 +242,7 @@ public final class StringExtensions {
      *
      * @param extendee
      */
-    public static String normalized(@javax.annotation.Nullable final String extendee) {
+    public static String normalized(final @Nullable String extendee) {
         return _Strings.asNormalized.apply(extendee);
     }
 

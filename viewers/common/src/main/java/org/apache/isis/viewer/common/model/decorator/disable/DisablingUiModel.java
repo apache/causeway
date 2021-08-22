@@ -21,7 +21,7 @@ package org.apache.isis.viewer.common.model.decorator.disable;
 import java.io.Serializable;
 import java.util.Optional;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.interactions.managed.MemberInteraction;
@@ -37,7 +37,7 @@ public class DisablingUiModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @NonNull final String reason;
+    final @NonNull String reason;
 
     /**
      * @param disabled - overwritten to be {@code true}, whenever {@code reason} is not empty

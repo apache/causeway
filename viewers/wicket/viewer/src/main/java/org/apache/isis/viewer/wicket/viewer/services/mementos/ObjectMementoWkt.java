@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.id.HasLogicalType;
 import org.apache.isis.applib.id.LogicalType;
@@ -428,7 +428,7 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
         this.recreateStrategy = RecreateStrategy.LOOKUP;
     }
 
-    private ObjectMementoWkt(@NonNull final ManagedObject adapter) {
+    private ObjectMementoWkt(final @NonNull ManagedObject adapter) {
         this.cardinality = Cardinality.SCALAR;
         val spec = adapter.getSpecification();
         this.logicalType = spec.getLogicalType();

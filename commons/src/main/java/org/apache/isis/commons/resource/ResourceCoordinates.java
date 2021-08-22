@@ -21,7 +21,7 @@ package org.apache.isis.commons.resource;
 import java.io.File;
 import java.util.Comparator;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Refs;

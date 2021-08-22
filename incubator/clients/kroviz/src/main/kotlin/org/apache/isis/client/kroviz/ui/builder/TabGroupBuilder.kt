@@ -22,22 +22,19 @@ import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.bs3.TabGroup
 import org.apache.isis.client.kroviz.ui.core.RoDisplay
 import io.kvision.core.Component
-import io.kvision.core.CssSize
-import io.kvision.core.UNIT
 import io.kvision.panel.TabPanel
 
-class TabGroupBuilder {
+class TabGroupBuilder : UiBuilder() {
 
     fun create(tabGroupLayout: TabGroup, tObject: TObject, dsp: RoDisplay): Component {
-        val result = TabPanel()
-        result.width = CssSize(100, UNIT.perc)
-        result.height = CssSize(100, UNIT.perc)
+        val panel = TabPanel()
+        style(panel)
 
         for (t in tabGroupLayout.tabList) {
             val cpt = TabBuilder().create(t, tObject, dsp)
-            result.addTab(t.name, cpt)
+            panel.addTab(t.name, cpt)
         }
-        return result
+        return panel
     }
 
 }

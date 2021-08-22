@@ -18,7 +18,7 @@
  */
 package org.apache.isis.applib.services.commanddto.processor.spi;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Property;
@@ -57,7 +57,7 @@ public interface CommandDtoProcessorService {
      * @param commandDto - is either <code>null</code>, or is passed from a
      *                     previous implementation for further refinement.
      */
-    CommandDto process(final Object domainObject, @Nullable final CommandDto commandDto);
+    CommandDto process(final Object domainObject, final @Nullable CommandDto commandDto);
 
 
 }

@@ -23,20 +23,26 @@ import io.kvision.panel.SimplePanel
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
+import org.apache.isis.client.kroviz.core.aggregator.CollectionAggregator
+import org.apache.isis.client.kroviz.core.aggregator.ObjectAggregator
+import org.apache.isis.client.kroviz.to.HasLinks
+import org.apache.isis.client.kroviz.to.Link
+import org.apache.isis.client.kroviz.to.Relation
 import org.apache.isis.client.kroviz.to.TransferObject
 import org.apache.isis.client.kroviz.ui.core.Constants
-import org.apache.isis.client.kroviz.ui.core.UiManager
-import org.apache.isis.client.kroviz.utils.Utils.removeHexCode
+import org.w3c.files.Blob
 import kotlin.js.Date
 
 // use color codes from css instead?
 enum class EventState(val id: String, val iconName: String, val style: ButtonStyle) {
     INITIAL("INITIAL", "fas fa-power-off", ButtonStyle.LIGHT),
-    RUNNING("RUNNING", "fas fa-play-circle", ButtonStyle.WARNING),
+    RUNNING("RUNNING", "fas fa-hourglass-start", ButtonStyle.WARNING),
     ERROR("ERROR", "fas fa-exclamation-circle", ButtonStyle.DANGER),
-    SUCCESS("SUCCESS", "fas fa-check-circle", ButtonStyle.SUCCESS),
+    SUCCESS_JS("SUCCESS_JS", "fab fa-js", ButtonStyle.SUCCESS),
+    SUCCESS_XML("SUCCESS_XML", "fas fa-code", ButtonStyle.SUCCESS),
+    SUCCESS_IMG("SUCCESS_IMG", "fas fa-image", ButtonStyle.SUCCESS),
     VIEW("VIEW", "fas fa-eye", ButtonStyle.INFO),
-    DUPLICATE("DUPLICATE", "fas fa-link", ButtonStyle.OUTLINESUCCESS),
+    DUPLICATE("DUPLICATE", "fas fa-copy", ButtonStyle.OUTLINESUCCESS),
     CLOSED("CLOSED", "fas fa-eye-slash", ButtonStyle.OUTLINEINFO),
     RELOAD("RELOAD", "fas fa-retweet", ButtonStyle.OUTLINEWARNING),
     MISSING("MISSING", "fas fa-bug", ButtonStyle.OUTLINEDANGER)
@@ -44,9 +50,7 @@ enum class EventState(val id: String, val iconName: String, val style: ButtonSty
     // encapsulate access with managers?
 }
 
-@OptIn(ExperimentalJsExport::class)
 @Serializable
-@JsExport
 data class LogEntry(
         val url: String,
         val method: String? = "",
@@ -57,13 +61,17 @@ data class LogEntry(
     var title: String = ""
     var requestLength: Int = 0 // must be accessible (public) for LogEntryTable
     var response = ""
+
+    @Contextual
+    var blob: Blob? = null
     var responseLength: Int = 0 // must be accessible (public) for LogEntryTable
+    var type: String = ""
 
     init {
         state = EventState.RUNNING
-        title = url // stripHostPort(url)
+        title = url
         requestLength = request?.length
-                ?: 0 // if this is simplyfied to request.length, Tabulator.js goes in ERROR and EventLogTable shows no entries
+                ?: 0 // ?. is required, otherwise Tabulator.js/EventLogTable shows no entries
     }
 
     @Contextual
@@ -79,6 +87,7 @@ data class LogEntry(
 
     var cacheHits = 0
 
+    @Contextual
     val aggregators = mutableListOf<@Contextual BaseAggregator>()
     var nOfAggregators: Int = 0 // must be accessible (public) for LogEntryTable
 
@@ -122,11 +131,25 @@ data class LogEntry(
     fun setSuccess() {
         calculate()
         responseLength = response.length
-        state = EventState.SUCCESS
+        state = when {
+            url.startsWith(Constants.krokiUrl) -> EventState.SUCCESS_IMG
+            subType == Constants.subTypeXml -> EventState.SUCCESS_XML
+            else -> EventState.SUCCESS_JS
+        }
     }
 
     fun setCached() {
         state = EventState.DUPLICATE
+    }
+
+    internal fun isCached(rs: ResourceSpecification, method: String): Boolean {
+        return when {
+            hasResponse()
+                    && this.method == method
+                    && subType == rs.subType -> true
+            isView() -> true
+            else -> false
+        }
     }
 
     fun setReload() {
@@ -142,9 +165,21 @@ data class LogEntry(
 
     fun setTransferObject(to: TransferObject) {
         this.obj = to
+        initType()
     }
 
-    // region response
+    fun initType() {
+        if (obj != null && obj is HasLinks) {
+            val self = (obj as HasLinks).getLinks().firstOrNull() { it.relation() == Relation.SELF }
+            if (self != null) {
+                val t = self.type.removePrefix("application/json;profile=\"urn:org.restfulobjects:repr-types/")
+                this.type = t.removeSuffix("\"")
+            }
+        }
+    }
+
+
+// region response
     /**
      * This is for access from the views only.
      * DomainObjects have to use retrieveResponse,
@@ -166,18 +201,7 @@ data class LogEntry(
         return response
     }
 
-    //end region response
-
-    private fun stripHostPort(url: String): String {
-        var result = url
-        val signature = "restful/"
-        if (url.contains(signature)) {
-            val protocolHostPort = UiManager.getUrl()
-            result = result.replace(protocolHostPort + signature, "")
-            result = removeHexCode(result)
-        }
-        return result
-    }
+//end region response
 
     fun isView(): Boolean {
         return isOpenView() || isClosedView()
@@ -195,18 +219,43 @@ data class LogEntry(
         return fault != null
     }
 
-    fun getAggregator(): BaseAggregator? {
-        //TODO is the last agg always the right one?
+    fun getAggregator(): BaseAggregator {
+        //FIXME the last aggt is not always the right one
+        // callers need to filter  !!!
         return aggregators.last()
     }
 
     fun addAggregator(aggregator: BaseAggregator) {
         aggregators.add(aggregator)
+        if ((aggregators.size > 1) && ((aggregator is ObjectAggregator) || (aggregator is CollectionAggregator))) {
+            console.log("[LE.addAggregator] last one just added")
+//            console.log(aggregators)
+            //          throw Throwable("[LE.addAggregator] not implemented yet")
+        }
         nOfAggregators = aggregators.size
     }
 
     fun matches(reSpec: ResourceSpecification): Boolean {
         return url == reSpec.url && subType.equals(reSpec.subType)
+    }
+
+    fun selfHref(): String {
+        if (selfLink() != null) {
+            return selfLink()!!.href
+        } else return ""
+    }
+
+    fun selfLink(): Link? {
+        getLinks().forEach { if (it.relation() == Relation.SELF) return it }
+        return null
+    }
+
+    fun getLinks(): List<Link> {
+        return if (obj is HasLinks) {
+            (obj as HasLinks).getLinks()
+        } else {
+            emptyList()
+        }
     }
 
 }

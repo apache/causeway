@@ -38,7 +38,7 @@ class NotificationDialog(val message: String) : Command() {
                 widthPerc = 80).open()
     }
 
-    override fun execute() {
+    override fun execute(action: String?) {
         RoStatusBar.acknowledge()
     }
 

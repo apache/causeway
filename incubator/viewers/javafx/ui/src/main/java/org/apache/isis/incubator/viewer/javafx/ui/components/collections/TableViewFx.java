@@ -20,7 +20,7 @@ package org.apache.isis.incubator.viewer.javafx.ui.components.collections;
 
 import java.util.Optional;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.grid.Grid;
@@ -115,10 +115,10 @@ public class TableViewFx extends VBox {
      * @param where
      */
     private TableViewFx(
-            @NonNull final UiContextFx uiContext,
-            @NonNull final ObjectSpecification elementSpec,
-            @Nullable final Can<ManagedObject> objects,
-            @NonNull final Where where) {
+            final @NonNull UiContextFx uiContext,
+            final @NonNull ObjectSpecification elementSpec,
+            final @Nullable Can<ManagedObject> objects,
+            final @NonNull Where where) {
 
         val objectGrid = new TableView<ManagedObject>();
         super.getChildren().add(objectGrid);

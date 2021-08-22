@@ -150,7 +150,7 @@ extends HasMetaModelContext {
 
         addValidator(new MetaModelVisitingValidatorAbstract(getMetaModelContext()) {
             @Override
-            public void validate(@NonNull final ObjectSpecification spec) {
+            public void validate(final @NonNull ObjectSpecification spec) {
                 validator.accept(spec);
             }
         });
@@ -162,7 +162,7 @@ extends HasMetaModelContext {
 
         addValidator(new MetaModelVisitingValidatorAbstract(getMetaModelContext()) {
             @Override
-            public void validate(@NonNull final ObjectSpecification spec) {
+            public void validate(final @NonNull ObjectSpecification spec) {
                 if(spec.isManagedBean()) {
                     return;
                 }

@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.all.i8n.noun;
 import java.util.EnumSet;
 import java.util.Optional;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
@@ -41,12 +41,12 @@ import lombok.val;
 @Value @Builder
 public class NounForms {
 
-    public static NounFormsBuilder builderSingular(@Nullable final String singular) {
+    public static NounFormsBuilder builderSingular(final @Nullable String singular) {
         return NounForms.builder()
                 .singular(singular);
     }
 
-    public static NounFormsBuilder builderPlural(@Nullable final String plural) {
+    public static NounFormsBuilder builderPlural(final @Nullable String plural) {
         return NounForms.builder()
                 .plural(plural);
     }

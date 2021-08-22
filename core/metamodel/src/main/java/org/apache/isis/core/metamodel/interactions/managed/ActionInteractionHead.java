@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.interactions.managed;
 import java.util.List;
 import java.util.Objects;
 
-import javax.annotation.Nullable;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
