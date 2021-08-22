@@ -97,10 +97,12 @@ implements
     final InteractionAwareTransactionalBoundaryHandler txBoundaryHandler;
     final ClockService clockService;
     final Provider<CommandPublisher> commandPublisherProvider;
-    final List<TransactionBoundaryAware> transactionBoundaryAwareBeans;
     final ConfigurableBeanFactory beanFactory;
 
     final InteractionScopeLifecycleHandler interactionScopeLifecycleHandler;
+
+    // to allow implementations to have dependencies back on this service.
+    @Inject List<TransactionBoundaryAware> transactionBoundaryAwareBeans;
 
     @Inject
     public InteractionServiceDefault(
@@ -110,7 +112,6 @@ implements
             final InteractionAwareTransactionalBoundaryHandler txBoundaryHandler,
             final ClockService clockService,
             final Provider<CommandPublisher> commandPublisherProvider,
-            final List<TransactionBoundaryAware> transactionBoundaryAwareBeans,
             final ConfigurableBeanFactory beanFactory) {
         this.runtimeEventService = runtimeEventService;
         this.specificationLoader = specificationLoader;
@@ -118,7 +119,6 @@ implements
         this.txBoundaryHandler = txBoundaryHandler;
         this.clockService = clockService;
         this.commandPublisherProvider = commandPublisherProvider;
-        this.transactionBoundaryAwareBeans = transactionBoundaryAwareBeans;
         this.beanFactory = beanFactory;
 
         this.interactionScopeLifecycleHandler = InteractionScopeBeanFactoryPostProcessor.lookupScope(beanFactory);
