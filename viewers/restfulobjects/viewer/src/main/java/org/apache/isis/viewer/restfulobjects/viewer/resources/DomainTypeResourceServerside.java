@@ -32,7 +32,6 @@ import javax.ws.rs.core.Response;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.IsisConfiguration;
@@ -150,22 +149,17 @@ implements DomainTypeResource {
 
         val serializationStrategy = resourceContext.getSerializationStrategy();
 
-        val gridFacet = getSpecificationLoader().specForLogicalTypeName(domainType)
-                .map(spec->spec.getFacet(GridFacet.class))
-                .orElse(null);
-
-        final Response.ResponseBuilder builder;
-        if(gridFacet == null) {
-            builder = Responses.ofNotFound();
-        } else {
-            Grid grid = gridFacet.getGrid(null);
-            builder = Response.status(Response.Status.OK)
-                    .entity(serializationStrategy.entity(grid))
-                    .type(serializationStrategy.type(RepresentationType.LAYOUT));
-        }
+        val responseBuilder = getSpecificationLoader().specForLogicalTypeName(domainType)
+                .map(spec -> spec.getFacet(GridFacet.class))
+                .map(gridFacet -> gridFacet.getGrid(null))
+                .map(grid ->
+                        Response.status(Response.Status.OK)
+                                .entity(serializationStrategy.entity(grid))
+                                .type(serializationStrategy.type(RepresentationType.LAYOUT)))
+                .orElse(Responses.ofNotFound());
 
         return _EndpointLogging.response(log, "GET({}) /domain-types/{}/layout", serializationStrategy.name(), domainType,
-                builder.build());
+                responseBuilder.build());
     }
 
     @Override
