@@ -28,9 +28,6 @@ import java.util.Stack;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 
-import static java.util.Objects.requireNonNull;
-
-import javax.annotation.PostConstruct;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -73,8 +70,8 @@ import org.apache.isis.core.security.authentication.manager.AuthenticationManage
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 /**
  * Is the factory of {@link Interaction}s.
@@ -91,32 +88,39 @@ implements
     InteractionService,
     InteractionLayerTracker {
 
-    @Inject AuthenticationManager authenticationManager;
-    @Inject MetamodelEventService runtimeEventService;
-    @Inject SpecificationLoader specificationLoader;
-    @Inject ServiceInjector serviceInjector;
+    final ThreadLocal<Stack<InteractionLayer>> interactionLayerStack = ThreadLocal.withInitial(Stack::new);
 
-    @Inject InteractionAwareTransactionalBoundaryHandler txBoundaryHandler;
-    @Inject ClockService clockService;
-    @Inject CommandPublisher commandPublisher;
-    @Inject List<TransactionBoundaryAware> transactionBoundaryAwareBeans;
-    @Inject ConfigurableBeanFactory beanFactory;
+    final AuthenticationManager authenticationManager;
+    final MetamodelEventService runtimeEventService;
+    final SpecificationLoader specificationLoader;
+    final ServiceInjector serviceInjector;
 
-    private InteractionScopeLifecycleHandler interactionScopeLifecycleHandler;
+    final InteractionAwareTransactionalBoundaryHandler txBoundaryHandler;
+    final ClockService clockService;
+    final CommandPublisher commandPublisher;
+    final List<TransactionBoundaryAware> transactionBoundaryAwareBeans;
+    final ConfigurableBeanFactory beanFactory;
 
-    public InteractionServiceDefault() {
-    }
+    final InteractionScopeLifecycleHandler interactionScopeLifecycleHandler;
 
-    @PostConstruct
-    public void initIsisInteractionScopeSupport() {
+    @Inject
+    public InteractionServiceDefault(AuthenticationManager authenticationManager, MetamodelEventService runtimeEventService, SpecificationLoader specificationLoader, ServiceInjector serviceInjector, InteractionAwareTransactionalBoundaryHandler txBoundaryHandler, ClockService clockService, CommandPublisher commandPublisher, List<TransactionBoundaryAware> transactionBoundaryAwareBeans, ConfigurableBeanFactory beanFactory) {
+        this.authenticationManager = authenticationManager;
+        this.runtimeEventService = runtimeEventService;
+        this.specificationLoader = specificationLoader;
+        this.serviceInjector = serviceInjector;
+        this.txBoundaryHandler = txBoundaryHandler;
+        this.clockService = clockService;
+        this.commandPublisher = commandPublisher;
+        this.transactionBoundaryAwareBeans = transactionBoundaryAwareBeans;
+        this.beanFactory = beanFactory;
+
         this.interactionScopeLifecycleHandler = InteractionScopeBeanFactoryPostProcessor.lookupScope(beanFactory);
     }
 
-    //@PostConstruct .. too early, needs services to be provisioned first
+
     @EventListener
     public void init(final ContextRefreshedEvent event) {
-
-        requireNonNull(authenticationManager, "authenticationManager");
 
         log.info("Initialising Isis System");
         log.info("working directory: {}", new File(".").getAbsolutePath());
@@ -149,9 +153,6 @@ implements
         runtimeEventService.fireAfterMetamodelLoaded();
 
     }
-
-    private final ThreadLocal<Stack<InteractionLayer>> interactionLayerStack =
-            ThreadLocal.withInitial(Stack::new);
 
     @Override
     public int getInteractionLayerCount() {

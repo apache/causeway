@@ -19,6 +19,7 @@
 package org.apache.isis.extensions.secman.integration.usermementorefiner;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import org.springframework.stereotype.Service;
 
@@ -34,11 +35,11 @@ import lombok.extern.log4j.Log4j2;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class UserMementoRefinerFromApplicationUser implements UserMementoRefiner {
 
-    private final ApplicationUserRepository applicationUserRepository;
+    final Provider<ApplicationUserRepository> applicationUserRepositoryProvider;
 
     @Override
     public UserMemento refine(UserMemento userMemento) {
-        return applicationUserRepository.findByUsername(userMemento.getName())
+        return applicationUserRepositoryProvider.get().findByUsername(userMemento.getName())
                 .map(applicationUser -> userMemento.withMultiTenancyToken(applicationUser.getAtPath()))
                 .orElse(userMemento);
     }
