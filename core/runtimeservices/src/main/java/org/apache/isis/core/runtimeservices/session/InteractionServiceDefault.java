@@ -31,6 +31,7 @@ import java.util.concurrent.Callable;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -66,7 +67,6 @@ import org.apache.isis.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.events.MetamodelEventService;
 import org.apache.isis.core.security.authentication.InteractionContextFactory;
-import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -90,28 +90,34 @@ implements
 
     final ThreadLocal<Stack<InteractionLayer>> interactionLayerStack = ThreadLocal.withInitial(Stack::new);
 
-    final AuthenticationManager authenticationManager;
     final MetamodelEventService runtimeEventService;
     final SpecificationLoader specificationLoader;
     final ServiceInjector serviceInjector;
 
     final InteractionAwareTransactionalBoundaryHandler txBoundaryHandler;
     final ClockService clockService;
-    final CommandPublisher commandPublisher;
+    final Provider<CommandPublisher> commandPublisherProvider;
     final List<TransactionBoundaryAware> transactionBoundaryAwareBeans;
     final ConfigurableBeanFactory beanFactory;
 
     final InteractionScopeLifecycleHandler interactionScopeLifecycleHandler;
 
     @Inject
-    public InteractionServiceDefault(AuthenticationManager authenticationManager, MetamodelEventService runtimeEventService, SpecificationLoader specificationLoader, ServiceInjector serviceInjector, InteractionAwareTransactionalBoundaryHandler txBoundaryHandler, ClockService clockService, CommandPublisher commandPublisher, List<TransactionBoundaryAware> transactionBoundaryAwareBeans, ConfigurableBeanFactory beanFactory) {
-        this.authenticationManager = authenticationManager;
+    public InteractionServiceDefault(
+            final MetamodelEventService runtimeEventService,
+            final SpecificationLoader specificationLoader,
+            final ServiceInjector serviceInjector,
+            final InteractionAwareTransactionalBoundaryHandler txBoundaryHandler,
+            final ClockService clockService,
+            final Provider<CommandPublisher> commandPublisherProvider,
+            final List<TransactionBoundaryAware> transactionBoundaryAwareBeans,
+            final ConfigurableBeanFactory beanFactory) {
         this.runtimeEventService = runtimeEventService;
         this.specificationLoader = specificationLoader;
         this.serviceInjector = serviceInjector;
         this.txBoundaryHandler = txBoundaryHandler;
         this.clockService = clockService;
-        this.commandPublisher = commandPublisher;
+        this.commandPublisherProvider = commandPublisherProvider;
         this.transactionBoundaryAwareBeans = transactionBoundaryAwareBeans;
         this.beanFactory = beanFactory;
 
@@ -416,7 +422,7 @@ implements
             command.updater().setCompletedAt(completedAt);
         }
 
-        commandPublisher.complete(command);
+        commandPublisherProvider.get().complete(command);
 
         interaction.clear();
     }
