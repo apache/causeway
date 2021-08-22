@@ -164,7 +164,7 @@ implements DomainTypeResource {
                     .type(serializationStrategy.type(RepresentationType.LAYOUT));
         }
 
-        return _EndpointLogging.response(log, "GET /domain-types/{}/layout", domainType,
+        return _EndpointLogging.response(log, "GET({}) /domain-types/{}/layout", serializationStrategy.name(), domainType,
                 builder.build());
     }
 
