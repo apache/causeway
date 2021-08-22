@@ -159,7 +159,7 @@ implements DomainTypeResource {
                 .orElse(Responses.ofNotFound());
 
         return _EndpointLogging.response(log, "GET({}) /domain-types/{}/layout", serializationStrategy.name(), domainType,
-                builder.build());
+                responseBuilder.build());
     }
 
     @Override
