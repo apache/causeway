@@ -318,7 +318,7 @@ implements DomainObjectResource {
 
         val serializationStrategy = resourceContext.getSerializationStrategy();
 
-        return _EndpointLogging.response(log, "GET /objects/{}/{}/object-layout", domainType, instanceId,
+        return _EndpointLogging.response(log, "GET({}) /objects/{}/{}/object-layout", serializationStrategy.name(), domainType, instanceId,
                 layoutAsGrid(domainType, instanceId)
                 .map(grid->{
 

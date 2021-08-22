@@ -22,8 +22,12 @@ import javax.ws.rs.core.Response;
 
 import org.apache.logging.log4j.Logger;
 
+import org.apache.isis.commons.internal.collections._Collections;
+import org.apache.isis.commons.internal.resources._Xml;
+import org.apache.isis.commons.internal.resources._Xml.WriteOptions;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 
+import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -177,7 +181,24 @@ class _EndpointLogging {
 
     private void logResponse(final Logger log, final Response response) {
         log.debug("<<< RESPONSE");
-        log.debug(response.getEntity());
+
+        val dto = response.getEntity();
+        if(dto==null
+                || dto instanceof String) {
+            log.debug(dto);
+        } else if(_Collections.isCollectionOrArrayOrCanType(dto.getClass())){
+            log.debug("non-scalar content of type {}", dto.getClass());
+        } else {
+            val xmlResult = _Xml.writeXml(dto, WriteOptions.builder().allowMissingRootElement(true).build());
+            xmlResult
+            .ifSuccess(xml->log.debug(xml))
+            .ifFailure(toXmlConversionError->
+                log
+                .debug("could not convert response content to XML for logging: {}",
+                        toXmlConversionError.getMessage(),
+                        toXmlConversionError));
+        }
+
         log.debug("--- END RESPONSE");
     }
 
