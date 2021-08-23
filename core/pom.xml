@@ -83,7 +83,7 @@
 
 
 		<!-- LIBRARY DEPENDENCIES -->
-		<archunit.version>0.20.1</archunit.version>
+		<archunit.version>0.21.0</archunit.version>
 		<asm.version>9.1</asm.version> <!-- keep in sync with org.eclipse.persistence:org.eclipse.persistence.asm -->
 		<approvaltests.version>12.0.1</approvaltests.version>
 
