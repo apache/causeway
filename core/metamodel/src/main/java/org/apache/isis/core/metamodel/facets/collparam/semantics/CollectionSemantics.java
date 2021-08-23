@@ -41,7 +41,7 @@ public enum CollectionSemantics {
     SET_IMPLEMENTATION,
     SET_INTERFACE(true),
 
-    CAN,
+    CAN(true),
 
     OTHER_IMPLEMENTATION
     ;
@@ -52,7 +52,7 @@ public enum CollectionSemantics {
         this(false);
     }
 
-    private CollectionSemantics(boolean isSupportedInterfaceForActionParameters) {
+    private CollectionSemantics(final boolean isSupportedInterfaceForActionParameters) {
         this.isSupportedInterfaceForActionParameters = isSupportedInterfaceForActionParameters;
     }
 

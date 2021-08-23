@@ -247,7 +247,7 @@ extends FacetFactoryAbstract {
         val facetedMethod = processMethodContext.getFacetHolder();
 
         val methodReturnType = method.getReturnType();
-        if (!_Collections.isCollectionOrArrayType(methodReturnType)) {
+        if (!_Collections.isCollectionOrArrayOrCanType(methodReturnType)) {
             return;
         }
 
@@ -260,7 +260,7 @@ extends FacetFactoryAbstract {
                 .map(typeOf -> new TypeOfFacetForActionAnnotation(typeOf, facetedMethod)),
 
                 // else infer from generic type arg if any
-                ()->TypeOfFacet.inferFromMethodReturnType(facetedMethod, method));
+                ()->TypeOfFacet.inferFromMethodReturnType(method, facetedMethod));
 
         addFacetIfPresent(typeOfFacet);
     }

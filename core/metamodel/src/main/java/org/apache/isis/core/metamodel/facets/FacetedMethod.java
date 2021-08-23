@@ -104,7 +104,7 @@ extends TypedHolderAbstract {
 
             val facetedMethodParamToUse =
                     TypeOfFacet
-                    .inferFromParameterType(facetedMethodParam, param)
+                    .inferFromParameterType(param, facetedMethodParam)
                     .map(typeOfFacet->{
                         // (corresponds to similar code for OneToManyAssociation in FacetMethodsBuilder).
                         FacetUtil.addFacet(typeOfFacet);

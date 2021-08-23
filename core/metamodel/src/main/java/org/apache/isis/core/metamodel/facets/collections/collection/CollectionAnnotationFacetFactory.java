@@ -33,8 +33,6 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
 import org.apache.isis.core.metamodel.facets.actions.contributing.ContributingFacet.Contributing;
 import org.apache.isis.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
@@ -181,7 +179,7 @@ extends FacetFactoryAbstract {
 
             // else infer from return type
             ()-> method.getReturnType().isArray()
-                        ? new TypeOfFacetInferredFromArray(
+                        ? TypeOfFacet.inferredFromArray(
                                 method.getReturnType().getComponentType(),
                                 facetHolder)
                         : null
@@ -202,7 +200,7 @@ extends FacetFactoryAbstract {
 
         return _Generics.streamGenericTypeArgumentsOfMethodReturnType(method)
                 .findFirst()
-                .map(elementType->new TypeOfFacetInferredFromGenerics(elementType, facetHolder));
+                .map(elementType->TypeOfFacet.inferredFromGenerics(elementType, facetHolder));
     }
 
 

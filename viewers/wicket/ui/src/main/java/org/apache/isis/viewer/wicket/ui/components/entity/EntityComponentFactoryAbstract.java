@@ -40,16 +40,16 @@ public abstract class EntityComponentFactoryAbstract extends ComponentFactoryAbs
     private static final long serialVersionUID = 1L;
 
     public EntityComponentFactoryAbstract(
-            ComponentType componentType,
-            Class<?> componentClass) {
+            final ComponentType componentType,
+            final Class<?> componentClass) {
 
         super(componentType, componentClass);
     }
 
     public EntityComponentFactoryAbstract(
-            ComponentType componentType,
-            String name,
-            Class<?> componentClass) {
+            final ComponentType componentType,
+            final String name,
+            final Class<?> componentClass) {
 
         super(componentType, name, componentClass);
     }
@@ -70,14 +70,12 @@ public abstract class EntityComponentFactoryAbstract extends ComponentFactoryAbs
             // is ok;
         }
         final ObjectSpecification specification = entityModel.getTypeOfSpecification();
-        final boolean isObject = specification.isNotCollection();
+        final boolean isScalar = specification.isNotCollection();
         final boolean isValue = specification.containsFacet(ValueFacet.class);
-        boolean b = isObject && !isValue;
-        if (!b) {
-            return ApplicationAdvice.DOES_NOT_APPLY;
+        if (isScalar && !isValue) {
+            return doAppliesTo(entityModel);
         }
-
-        return doAppliesTo(entityModel);
+        return ApplicationAdvice.DOES_NOT_APPLY;
     }
 
     /**

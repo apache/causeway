@@ -104,7 +104,7 @@ implements MetaModelRefiner {
 
                 val messageFormat = "Collection action parameter found that is not exactly one "
                         + "of the following supported types: "
-                        + "List, Set, SortedSet, Collection or Array.  "
+                        + "List, Set, SortedSet, Collection, Can or Array.  "
                         + "Class: %s action: %s parameter %d";
 
                 ValidationFailure.raise(
