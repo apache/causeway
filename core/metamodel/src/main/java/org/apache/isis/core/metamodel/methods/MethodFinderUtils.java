@@ -252,6 +252,7 @@ public final class MethodFinderUtils {
             final Class<?>[] paramTypes) {
 
         val nonScalarTypes = new Class<?>[]{
+            Can.class,
             Collection.class,
             Array.newInstance(elementReturnType, 0).getClass()};
 
@@ -271,7 +272,7 @@ public final class MethodFinderUtils {
     private static class MethodAndPpmCandidate {
         @NonNull Method supportingMethod;
         @NonNull Class<?> ppmCandidate;
-        Optional<MethodAndPpmConstructor> lookupConstructor(Class<?>[] paramTypes) {
+        Optional<MethodAndPpmConstructor> lookupConstructor(final Class<?>[] paramTypes) {
             return _Reflect.getPublicConstructors(getPpmCandidate()).stream()
             .filter(paramSignatureMatch(paramTypes))
             .map(constructor->MethodAndPpmConstructor.of(supportingMethod, constructor))
