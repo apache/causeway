@@ -42,13 +42,13 @@ public enum Encapsulation {
     AS_CONFIGURED,
 
     /**
-     * Introspect non-public members and their supporting methods.
+     * Introspect public and non-public members.
      * Enforces member and member-support annotations to be present.
      */
     ENABLED,
 
     /**
-     * Do <b>not</b> introspect non-public members nor their supporting methods.
+     * Introspect public members only.
      */
     DISABLED
 
