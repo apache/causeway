@@ -46,7 +46,6 @@ import org.apache.isis.commons.internal.base._Objects;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.commons.MethodExtensions;
@@ -65,7 +64,6 @@ import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
 import lombok.NonNull;
-import lombok.SneakyThrows;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
@@ -332,9 +330,9 @@ public final class ManagedObjects {
      * used eg. to adapt the result of supporting methods, that return choice pojos
      */
     public static Can<ManagedObject> adaptMultipleOfTypeThenAttachThenFilterByVisibility(
-            @NonNull  final ObjectSpecification elementSpec,
+            final @NonNull  ObjectSpecification elementSpec,
             final @Nullable Object collectionOrArray,
-            @NonNull  final InteractionInitiatedBy interactionInitiatedBy) {
+            final @NonNull  InteractionInitiatedBy interactionInitiatedBy) {
 
         return _NullSafe.streamAutodetect(collectionOrArray)
         .map(pojo->ManagedObject.of(elementSpec, pojo)) // pojo is nullable here
@@ -343,22 +341,7 @@ public final class ManagedObjects {
         .collect(Can.toCan());
     }
 
-    /**
-     * TODO just for debugging, remove!
-     * print stacktrace to console, if {@code pojo} is an attached entity
-     * @deprecated
-     */
-    @Deprecated
-    @SneakyThrows
-    public static void warnIfAttachedEntity(final ManagedObject adapter, final String logMessage) {
-        if(isNullOrUnspecifiedOrEmpty(adapter)) {
-            return;
-        }
-        if(EntityUtil.isAttached(adapter)) {
-            _Probe.errOut("%s [%s]", logMessage, adapter.getSpecification().getFullIdentifier());
-            _Exceptions.dumpStackTrace();
-        }
-    }
+
 
     /**
      * eg. in order to prevent wrapping an object that is already wrapped
