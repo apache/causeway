@@ -31,7 +31,7 @@ import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
-import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
+import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -46,7 +46,7 @@ import demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.J
     schema = "demo",
     name = "JaxbRefJpa"
 )
-@EntityListeners(JpaEntityInjectionPointResolver.class)
+@EntityListeners(IsisEntityListener.class)
 @DomainObject(
         bounding = Bounding.BOUNDED
         , logicalTypeName = "demo.JaxbRefEntity")
@@ -55,7 +55,7 @@ import demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.J
 public class JaxbRefJpa
         extends JaxbRefEntity {
 
-    public JaxbRefJpa(String name) {
+    public JaxbRefJpa(final String name) {
         this.name = name;
     }
 

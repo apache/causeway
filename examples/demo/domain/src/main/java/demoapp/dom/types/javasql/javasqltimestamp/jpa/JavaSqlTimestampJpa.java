@@ -33,7 +33,7 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
+import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,7 +48,7 @@ import demoapp.dom.types.javasql.javasqltimestamp.persistence.JavaSqlTimestampEn
       schema = "demo",
       name = "JavaSqlTimestampJpa"
 )
-@EntityListeners(JpaEntityInjectionPointResolver.class)
+@EntityListeners(IsisEntityListener.class)
 @DomainObject(
       logicalTypeName = "demo.JavaSqlTimestampEntity"
 )
@@ -57,7 +57,7 @@ public class JavaSqlTimestampJpa
         extends JavaSqlTimestampEntity {
 
 //end::class[]
-    public JavaSqlTimestampJpa(java.sql.Timestamp initialValue) {
+    public JavaSqlTimestampJpa(final java.sql.Timestamp initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

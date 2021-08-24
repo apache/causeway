@@ -33,7 +33,7 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
+import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,7 +48,7 @@ import demoapp.dom.types.javalang.integers.persistence.WrapperIntegerEntity;
       schema = "demo",
       name = "WrapperIntegerJpa"
 )
-@EntityListeners(JpaEntityInjectionPointResolver.class)
+@EntityListeners(IsisEntityListener.class)
 @DomainObject(
       logicalTypeName = "demo.WrapperIntegerEntity"
 )
@@ -57,7 +57,7 @@ public class WrapperIntegerJpa
         extends WrapperIntegerEntity {
 
 //end::class[]
-    public WrapperIntegerJpa(Integer initialValue) {
+    public WrapperIntegerJpa(final Integer initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

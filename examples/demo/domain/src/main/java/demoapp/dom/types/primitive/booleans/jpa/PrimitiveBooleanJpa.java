@@ -31,7 +31,7 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
+import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -46,7 +46,7 @@ import demoapp.dom.types.primitive.booleans.persistence.PrimitiveBooleanEntity;
       schema = "demo",
       name = "PrimitiveBooleanJpa"
 )
-@EntityListeners(JpaEntityInjectionPointResolver.class)
+@EntityListeners(IsisEntityListener.class)
 @DomainObject(
       logicalTypeName = "demo.PrimitiveBooleanEntity"
 )
@@ -55,7 +55,7 @@ public class PrimitiveBooleanJpa
         extends PrimitiveBooleanEntity {
 
 //end::class[]
-    public PrimitiveBooleanJpa(boolean initialValue) {
+    public PrimitiveBooleanJpa(final boolean initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

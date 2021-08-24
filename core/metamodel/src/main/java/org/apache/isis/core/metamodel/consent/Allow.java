@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.metamodel.consent;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
-
 /**
  * An instance of this type is used to allow something.
  */
@@ -31,20 +29,7 @@ public class Allow extends ConsentAbstract {
     public static final Allow DEFAULT = new Allow();
 
     private Allow() {
-        this((String) null);
-    }
-
-    /**
-     * Called by DnD viewer; we should instead find a way to put the calling
-     * logic into {@link Facet}s so that it is available for use by other
-     * viewers.
-     *
-     * @see Veto
-     * @deprecated
-     */
-    @Deprecated
-    public Allow(final String description) {
-        super(description, null);
+        super(null, null);
     }
 
     public Allow(final InteractionResult interactionResult) {

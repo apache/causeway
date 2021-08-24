@@ -38,14 +38,15 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.control.AsyncControl;
-import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
+import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
-import demoapp.dom.services.core.wrapperFactory.WrapperFactoryEntity;
-import demoapp.dom.services.core.wrapperFactory.WrapperFactoryEntity_updatePropertyAsyncMixin;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.val;
+
+import demoapp.dom.services.core.wrapperFactory.WrapperFactoryEntity;
+import demoapp.dom.services.core.wrapperFactory.WrapperFactoryEntity_updatePropertyAsyncMixin;
 
 @Profile("demo-jpa")
 //tag::class[]
@@ -54,7 +55,7 @@ import lombok.val;
   schema = "demo",
   name = "WrapperFactoryJpa"
 )
-@EntityListeners(JpaEntityInjectionPointResolver.class)
+@EntityListeners(IsisEntityListener.class)
 @DomainObject(
         nature=Nature.ENTITY
         , logicalTypeName = "demo.WrapperFactoryEntity"
@@ -70,7 +71,7 @@ public class WrapperFactoryJpa
     // ...
 //end::class[]
 
-    public WrapperFactoryJpa(String initialValue) {
+    public WrapperFactoryJpa(final String initialValue) {
         this.propertyAsync = initialValue;
         this.propertyAsyncMixin = initialValue;
     }

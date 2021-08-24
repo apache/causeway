@@ -34,13 +34,14 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
+import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 import org.apache.isis.persistence.jpa.integration.typeconverters.JavaAwtBufferedImageByteArrayConverter;
 
-import demoapp.dom.types.javaawt.images.persistence.JavaAwtBufferedImageEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import demoapp.dom.types.javaawt.images.persistence.JavaAwtBufferedImageEntity;
 
 @Profile("demo-jpa")
 //tag::class[]
@@ -49,7 +50,7 @@ import lombok.Setter;
       schema = "demo",
       name = "JavaAwtBufferedImageJpa"
 )
-@EntityListeners(JpaEntityInjectionPointResolver.class)
+@EntityListeners(IsisEntityListener.class)
 @DomainObject(
       logicalTypeName = "demo.JavaAwtBufferedImageEntity"
 )
@@ -62,7 +63,7 @@ public class JavaAwtBufferedImageJpa
 {
 
 //end::class[]
-    public JavaAwtBufferedImageJpa(BufferedImage initialValue) {
+    public JavaAwtBufferedImageJpa(final BufferedImage initialValue) {
         this.readOnlyProperty = initialValue;
 //        this.readWriteProperty = initialValue;    // editable properties not yet supported
     }

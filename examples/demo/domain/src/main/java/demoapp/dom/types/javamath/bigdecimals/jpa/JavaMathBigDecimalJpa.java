@@ -33,7 +33,7 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
+import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,7 +48,7 @@ import demoapp.dom.types.javamath.bigdecimals.persistence.JavaMathBigDecimalEnti
       schema = "demo",
       name = "JavaMathBigDecimalJpa"
 )
-@EntityListeners(JpaEntityInjectionPointResolver.class)
+@EntityListeners(IsisEntityListener.class)
 @DomainObject(
       logicalTypeName = "demo.JavaMathBigDecimalEntity"
 )
@@ -57,7 +57,7 @@ public class JavaMathBigDecimalJpa
         extends JavaMathBigDecimalEntity {
 
 //end::class[]
-    public JavaMathBigDecimalJpa(java.math.BigDecimal initialValue) {
+    public JavaMathBigDecimalJpa(final java.math.BigDecimal initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

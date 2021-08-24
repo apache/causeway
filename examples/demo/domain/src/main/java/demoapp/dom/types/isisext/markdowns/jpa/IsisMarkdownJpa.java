@@ -39,13 +39,14 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
+import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
 
-import demoapp.dom.types.isisext.markdowns.persistence.IsisMarkdownEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import demoapp.dom.types.isisext.markdowns.persistence.IsisMarkdownEntity;
 
 @Profile("demo-jpa")
 //tag::class[]
@@ -54,7 +55,7 @@ import lombok.Setter;
       schema = "demo",
       name = "IsisMarkdownJpa"
 )
-@EntityListeners(JpaEntityInjectionPointResolver.class)
+@EntityListeners(IsisEntityListener.class)
 @DomainObject(
       logicalTypeName = "demo.IsisMarkdownEntity"
 )
@@ -63,7 +64,7 @@ public class IsisMarkdownJpa
         extends IsisMarkdownEntity {
 
 //end::class[]
-    public IsisMarkdownJpa(Markdown initialValue) {
+    public IsisMarkdownJpa(final Markdown initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

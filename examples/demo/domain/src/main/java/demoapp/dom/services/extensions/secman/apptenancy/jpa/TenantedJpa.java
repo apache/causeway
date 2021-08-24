@@ -34,12 +34,13 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
+import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
-import demoapp.dom.services.extensions.secman.apptenancy.persistence.TenantedEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import demoapp.dom.services.extensions.secman.apptenancy.persistence.TenantedEntity;
 
 @Profile("demo-jpa")
 //tag::class[]
@@ -48,7 +49,7 @@ import lombok.Setter;
     schema = "demo",
     name = "TenantedJpa"
 )
-@EntityListeners(JpaEntityInjectionPointResolver.class)
+@EntityListeners(IsisEntityListener.class)
 @DomainObject(
     logicalTypeName = "demo.TenantedEntity"
 )
@@ -56,7 +57,7 @@ import lombok.Setter;
 public class TenantedJpa
         extends TenantedEntity {
 
-    public TenantedJpa(String name) {
+    public TenantedJpa(final String name) {
         this.name = name;
     }
 

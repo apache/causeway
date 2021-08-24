@@ -41,18 +41,19 @@ import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
 import com.tngtech.archunit.lang.syntax.elements.ClassesShouldConjunction;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
-import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
-
 import static com.tngtech.archunit.base.DescribedPredicate.not;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
-import lombok.experimental.UtilityClass;
-import lombok.val;
+
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
+
 import static org.apache.isis.testing.archtestsupport.applib.classrules.CommonPredicates.annotationOf;
 import static org.apache.isis.testing.archtestsupport.applib.classrules.CommonPredicates.haveNoArgProtectedConstructor;
 import static org.apache.isis.testing.archtestsupport.applib.classrules.CommonPredicates.ofAnEnum;
+
+import lombok.val;
+import lombok.experimental.UtilityClass;
 
 /**
  * A library of architecture tests to ensure coding conventions are followed for classes annotated with
@@ -118,7 +119,7 @@ public class ArchitectureJpaRules {
             private boolean containsIsisEntityListener(final JavaClass[] classes) {
                 //noinspection deprecation
                 return Arrays.stream(classes)
-                        .anyMatch(x -> Objects.equals(x.getFullName(), JpaEntityInjectionPointResolver.class.getName())
+                        .anyMatch(x -> Objects.equals(x.getFullName(), IsisEntityListener.class.getName())
                                 || x.isAssignableTo(IsisEntityListener.class));
             }
         };
@@ -274,7 +275,7 @@ public class ArchitectureJpaRules {
     static DescribedPredicate<JavaClass> areEntities() {
         return new DescribedPredicate<JavaClass>("are entities") {
             @Override
-            public boolean apply(JavaClass input) {
+            public boolean apply(final JavaClass input) {
                 return input.isAnnotatedWith(Entity.class);
             }
         };

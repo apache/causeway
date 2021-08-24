@@ -32,7 +32,7 @@ import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
+import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,7 +48,7 @@ import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotO
     schema = "demo",
     name = "DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJpa"
 )
-@EntityListeners(JpaEntityInjectionPointResolver.class)
+@EntityListeners(IsisEntityListener.class)
 @DomainObjectEntityChangePublishingDisabledMetaAnnotation                   // <.>
 @DomainObject(
         nature=Nature.ENTITY
@@ -67,7 +67,7 @@ public class DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJpa
     // ...
 //end::class[]
 
-    public DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJpa(String initialValue) {
+    public DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJpa(final String initialValue) {
         this.property = initialValue;
         this.propertyUpdatedByAction = initialValue;
     }

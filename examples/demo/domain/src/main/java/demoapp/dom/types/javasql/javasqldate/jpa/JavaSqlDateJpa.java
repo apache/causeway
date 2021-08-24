@@ -33,7 +33,7 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
+import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,7 +48,7 @@ import demoapp.dom.types.javasql.javasqldate.persistence.JavaSqlDateEntity;
       schema = "demo",
       name = "JavaSqlDateJpa"
 )
-@EntityListeners(JpaEntityInjectionPointResolver.class)
+@EntityListeners(IsisEntityListener.class)
 @DomainObject(
       logicalTypeName = "demo.JavaSqlDateEntity"
 )
@@ -57,7 +57,7 @@ public class JavaSqlDateJpa
         extends JavaSqlDateEntity {
 
 //end::class[]
-    public JavaSqlDateJpa(java.sql.Date initialValue) {
+    public JavaSqlDateJpa(final java.sql.Date initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

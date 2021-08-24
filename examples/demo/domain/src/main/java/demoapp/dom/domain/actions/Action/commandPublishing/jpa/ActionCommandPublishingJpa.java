@@ -34,7 +34,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
+import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -51,7 +51,7 @@ import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishi
     schema = "demo",
     name = "ActionCommandPublishingJpa"
 )
-@EntityListeners(JpaEntityInjectionPointResolver.class)
+@EntityListeners(IsisEntityListener.class)
 @DomainObject(
     logicalTypeName = "demo.ActionCommandPublishingEntity"
     , editing = Editing.DISABLED
@@ -62,7 +62,7 @@ public class ActionCommandPublishingJpa
     // ...
 //end::class[]
 
-    public ActionCommandPublishingJpa(String initialValue) {
+    public ActionCommandPublishingJpa(final String initialValue) {
         this.property = initialValue;
         this.propertyCommandDisabled = initialValue;
         this.propertyMetaAnnotated = initialValue;
