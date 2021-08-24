@@ -672,28 +672,12 @@ public class JsonRepresentation {
         return isDecimal(asJsonNode());
     }
 
-    /**
-     * @deprecated - use {@link #isDecimal(String)}
-     */
-    @Deprecated
-    public boolean isDouble(final String path) {
-        return isDecimal(path);
-    }
-
-    /**
-     * @deprecated - use {@link #isDecimal()}
-     */
-    @Deprecated
-    public boolean isDouble() {
-        return isDecimal();
-    }
-
     private boolean isDecimal(final JsonNode node) {
         return !representsNull(node) && node.isValueNode() && (node.isDouble() || node.isFloat());
     }
 
     /**
-     * Use {@link #isDouble(String)} to check first, if required.
+     * Use {@link #isDecimal(String)} to check first, if required.
      */
     public Double getDouble(final String path) {
         final JsonNode node = getNode(path);
@@ -701,7 +685,7 @@ public class JsonRepresentation {
     }
 
     /**
-     * Use {@link #isDouble()} to check first, if required.
+     * Use {@link #isDecimal()} to check first, if required.
      */
     public Double asDouble() {
         return getDouble(null, asJsonNode());
@@ -734,7 +718,7 @@ public class JsonRepresentation {
         return !representsNull(node) && node.isValueNode() && (node.isBigInteger() || node.isLong() || node.isInt() || node.isTextual() && parseableAsBigInteger(node.textValue()));
     }
 
-    private static boolean parseableAsBigInteger(String str) {
+    private static boolean parseableAsBigInteger(final String str) {
         try {
             new BigInteger(str);
             return true;
@@ -801,7 +785,7 @@ public class JsonRepresentation {
         return bigInteger;
     }
 
-    private BigInteger getBigInteger(String path, JsonNode node) {
+    private BigInteger getBigInteger(final String path, final JsonNode node) {
         if (node.isBigInteger()) {
             return node.bigIntegerValue();
         }
@@ -833,7 +817,7 @@ public class JsonRepresentation {
         return !representsNull(node) && node.isValueNode() && (node.isBigDecimal() || node.isDouble() || node.isLong() || node.isInt() || node.isBigInteger() || node.isTextual() && parseableAsBigDecimal(node.textValue()));
     }
 
-    private static boolean parseableAsBigDecimal(String str) {
+    private static boolean parseableAsBigDecimal(final String str) {
         try {
             new BigDecimal(str);
             return true;
@@ -876,7 +860,7 @@ public class JsonRepresentation {
     /**
      * Use {@link #isBigDecimal()} to check first, if required.
      */
-    public BigDecimal asBigDecimal(String format) {
+    public BigDecimal asBigDecimal(final String format) {
         return getBigDecimal(null, format, asJsonNode());
     }
 
@@ -905,7 +889,7 @@ public class JsonRepresentation {
         return bigDecimal;
     }
 
-    private BigDecimal getBigDecimal(String path, JsonNode node) {
+    private BigDecimal getBigDecimal(final String path, final JsonNode node) {
         if (node.isBigDecimal()) {
             return node.decimalValue();
         }
@@ -1529,14 +1513,14 @@ public class JsonRepresentation {
         return this;
     }
 
-    public JsonRepresentation mapPut(Iterable<Entry<String, JsonRepresentation>> entries) {
+    public JsonRepresentation mapPut(final Iterable<Entry<String, JsonRepresentation>> entries) {
         for (Entry<String, JsonRepresentation> entry : entries) {
             mapPut(entry);
         }
         return this;
     }
 
-    public JsonRepresentation mapPut(Entry<String, JsonRepresentation> entry) {
+    public JsonRepresentation mapPut(final Entry<String, JsonRepresentation> entry) {
         mapPut(entry.getKey(), entry.getValue());
         return this;
     }
@@ -1665,7 +1649,7 @@ public class JsonRepresentation {
     private static class NodeAndFormat {
         JsonNode node;
         String format;
-        NodeAndFormat(JsonNode jsonNode, String format) {
+        NodeAndFormat(final JsonNode jsonNode, final String format) {
             node = jsonNode;
             this.format = format;
         }
@@ -1706,7 +1690,7 @@ public class JsonRepresentation {
         return new NodeAndFormat(jsonNode, format);
     }
 
-    private String getFormatValueIfAnyFrom(JsonNode jsonNode) {
+    private String getFormatValueIfAnyFrom(final JsonNode jsonNode) {
         String format;
         final JsonNode formatNode = jsonNode.get("format");
         format = formatNode != null && formatNode.isTextual()? formatNode.textValue(): null;
@@ -1769,7 +1753,7 @@ public class JsonRepresentation {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj)
             return true;
         if (obj == null)

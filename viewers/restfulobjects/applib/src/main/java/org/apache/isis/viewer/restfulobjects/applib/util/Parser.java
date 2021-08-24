@@ -152,24 +152,6 @@ public abstract class Parser<T> {
         };
     }
 
-    //    @Deprecated // [ahuber] MediaType is in standard API! proposing removal
-    //    public static Parser<com.google.common.net.MediaType> forGuavaMediaType() {
-    //        return new Parser<com.google.common.net.MediaType>() {
-    //            @Override
-    //            public com.google.common.net.MediaType valueOf(final String str) {
-    //                if (str == null) {
-    //                    return null;
-    //                }
-    //                return com.google.common.net.MediaType.parse(str);
-    //            }
-    //
-    //            @Override
-    //            public String asString(final com.google.common.net.MediaType t) {
-    //                return t.toString();
-    //            }
-    //        };
-    //    }
-
     public static Parser<Boolean> forBoolean() {
         return new Parser<Boolean>() {
             @Override
@@ -376,12 +358,12 @@ public abstract class Parser<T> {
         return new Parser<String>(){
 
             @Override
-            public String valueOf(String str) {
+            public String valueOf(final String str) {
                 return null;
             }
 
             @Override
-            public String asString(String t) {
+            public String asString(final String t) {
                 return null;
             }};
     }
