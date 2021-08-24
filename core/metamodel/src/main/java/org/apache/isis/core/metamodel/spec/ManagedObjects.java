@@ -219,23 +219,23 @@ public final class ManagedObjects {
     // -- COPY UTILITIES
 
     @Nullable
-    public static ManagedObject copyIfClonable(final @Nullable ManagedObject adapter) {
+    public static Optional<ManagedObject> copyViewModel(final @Nullable ManagedObject viewModel) {
 
-        if(adapter==null) {
-            return null;
+        if(viewModel==null) {
+            return Optional.empty();
         }
 
-        val viewModelFacet = adapter.getSpecification().getFacet(ViewModelFacet.class);
+        val viewModelFacet = viewModel.getSpecification().getFacet(ViewModelFacet.class);
         if(viewModelFacet != null) {
-            val viewModelPojo = adapter.getPojo();
+            val viewModelPojo = viewModel.getPojo();
             if(viewModelFacet.isCloneable(viewModelPojo)) {
-                return ManagedObject.of(
-                        adapter.getSpecification(),
-                        viewModelFacet.clone(viewModelPojo));
+                return Optional.of(ManagedObject.of(
+                        viewModel.getSpecification(),
+                        viewModelFacet.cloneViewModelPojo(viewModelPojo)));
             }
         }
 
-        return adapter;
+        return Optional.empty();
 
     }
 

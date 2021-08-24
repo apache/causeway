@@ -40,10 +40,10 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -174,24 +174,11 @@ implements ImperativeFacet {
 
         if (resultPojo != null) {
             final ManagedObject resultAdapter = getObjectManager().adapt(resultPojo);
-            return cloneIfViewModelElse(resultAdapter, resultAdapter);
+            return ManagedObjects.copyViewModel(resultAdapter).orElse(resultAdapter);
         } else {
             // if void or null, attempt to clone the original target, else return null.
-            return cloneIfViewModelElse(targetAdapter, null);
+            return ManagedObjects.copyViewModel(targetAdapter).orElse(null);
         }
-    }
-
-    private ManagedObject cloneIfViewModelElse(final ManagedObject adapter, final ManagedObject dfltAdapter) {
-
-        if (!adapter.getSpecification().isViewModelCloneable(adapter)) {
-            return dfltAdapter;
-        }
-
-        final ViewModelFacet viewModelFacet = adapter.getSpecification().getFacet(ViewModelFacet.class);
-        final Object clone = viewModelFacet.clone(adapter.getPojo());
-
-        final ManagedObject clonedAdapter = getObjectManager().adapt(clone);
-        return clonedAdapter;
     }
 
     private QueryResultsCache getQueryResultsCache() {

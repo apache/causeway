@@ -19,7 +19,13 @@
 
 package org.apache.isis.applib;
 
+import java.io.Serializable;
+
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.commons.internal.resources._Serializables;
+
+import lombok.SneakyThrows;
+import lombok.val;
 
 /**
  * Indicates that an object belongs to the UI/application layer, and is intended to be used as a view model.
@@ -44,20 +50,54 @@ public interface ViewModel {
      * through {@link #viewModelInit(String)}.
      */
     @Programmatic
-    public String viewModelMemento();
+    String viewModelMemento();
 
     /**
      * Used to re-initialize a view model with a memento obtained from {@link #viewModelMemento()}.
      */
     @Programmatic
-    public void viewModelInit(String memento);
+    void viewModelInit(String memento);
 
     /**
      * Cloneable view models can in effect appear to be editable; the viewer can build a new view model from a
      * view model whose state has been edited.
      */
-    public interface Cloneable extends java.lang.Cloneable {
+    public interface Cloneable {
+        /**
+         *
+         * @return a copy of this object - injection points are automatically resolved by the framework
+         */
         @Programmatic
-        public Object clone();
+        Object copy();
     }
+
+    public interface CloneableViaSerialization
+    extends
+        Cloneable,
+        Serializable {
+        @Override
+        @Programmatic
+        default Object copy() {
+            val bytes = _Serializables.write(this);
+            val copy =  _Serializables.read(this.getClass(), bytes);
+            return copy;
+        }
+    }
+
+    public interface CloneableViaMemento
+    extends
+        Cloneable,
+        ViewModel {
+        @Override
+        @Programmatic
+        @SneakyThrows
+        default Object copy() {
+            val memento = this.viewModelMemento();
+            val copy =  this.getClass().getDeclaredConstructor().newInstance();
+            copy.viewModelInit(memento);
+            return copy;
+        }
+    }
+
+
 }

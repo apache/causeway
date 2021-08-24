@@ -64,9 +64,9 @@ public interface ViewModelFacet extends Facet {
     }
 
     default Object createViewModelPojo(
-            ObjectSpecification spec,
-            String mementoStr,
-            Function<ObjectSpecification, Object> factory) {
+            final ObjectSpecification spec,
+            final String mementoStr,
+            final Function<ObjectSpecification, Object> factory) {
 
         final Object viewModelPojo;
         if(getRecreationMechanism().isInitializes()) {
@@ -90,22 +90,22 @@ public interface ViewModelFacet extends Facet {
     /**
      * Will be called if {@link #getRecreationMechanism()} is {@link RecreationMechanism#INITIALIZES}.
      */
-    void initialize(Object pojo, String memento);
+    void initialize(Object viewModelPojo, String viewModelMemento);
 
     /**
      * Will be called only if {@link #getRecreationMechanism()} is {@link RecreationMechanism#INSTANTIATES}.
      */
-    Object instantiate(final Class<?> viewModelClass, String memento);
+    Object instantiate(final Class<?> viewModelClass, String viewModelMemento);
 
     /**
      * Obtain a memento of the pojo, which can then be used to reinstantiate (either by {@link #instantiate(Class, String)} or {@link #initialize(Object, String)}) subsequently.
      */
-    String memento(Object pojo);
+    String memento(Object viewModelPojo);
 
     /**
-     * Whether {@link #clone(Object)} can be called.
+     * Whether {@link #cloneViewModelPojo(Object)} can be called.
      */
-    boolean isCloneable(Object pojo);
+    boolean isCloneable(Object viewModelPojo);
 
     /**
      * Whether can infer the view model is immutable or not.
@@ -120,7 +120,8 @@ public interface ViewModelFacet extends Facet {
      * View models are implicitly immutable (their state is determined by their {@link #memento(Object)}), so this
      * method allows the framework to clone an existing view model to mutate it, thereby simulating editable
      * view models.
+     * @return a clone of the argument with injection points resolved
      */
-    Object clone(Object pojo);
+    <T> T cloneViewModelPojo(T viewModelPojo);
 
 }

@@ -26,7 +26,6 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -59,22 +58,8 @@ implements ImperativeFacet {
 
         val method = methods.getFirstOrFail();
         ManagedObjects.InvokeUtil.invoke(method, targetAdapter);
-        return cloneIfViewModelCloneable(targetAdapter);
+        return ManagedObjects.copyViewModel(targetAdapter).orElse(targetAdapter);
     }
-
-    private ManagedObject cloneIfViewModelCloneable(final ManagedObject adapter) {
-
-        if (!adapter.getSpecification().isViewModelCloneable(adapter)) {
-            return adapter;
-        }
-
-        final ViewModelFacet viewModelFacet = adapter.getSpecification().getFacet(ViewModelFacet.class);
-        final Object clone = viewModelFacet.clone(adapter.getPojo());
-
-        final ManagedObject clonedAdapter = getObjectManager().adapt(clone);
-        return clonedAdapter;
-    }
-
 
     @Override
     protected String toStringValues() {

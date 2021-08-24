@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.ViewModel;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.commons.MethodExtensions;
@@ -31,7 +32,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
@@ -67,15 +68,15 @@ implements ViewModelFacet {
 
 
     @Override
-    public boolean isCloneable(Object pojo) {
+    public boolean isCloneable(final Object pojo) {
         return pojo != null && pojo instanceof ViewModel.Cloneable;
     }
 
     @Override
     public boolean isImplicitlyImmutable() {
         final FacetHolder facetHolder = getFacetHolder();
-        if (facetHolder instanceof ObjectSpecificationDefault) {
-            final ObjectSpecificationDefault objectSpec = (ObjectSpecificationDefault) facetHolder;
+        if (facetHolder instanceof ObjectSpecification) {
+            final ObjectSpecification objectSpec = (ObjectSpecification) facetHolder;
             final Class<?> correspondingClass = objectSpec.getCorrespondingClass();
             if (ViewModel.Cloneable.class.isAssignableFrom(correspondingClass)) {
                 return false;
@@ -85,9 +86,11 @@ implements ViewModelFacet {
     }
 
     @Override
-    public Object clone(Object pojo) {
+    public <T> T cloneViewModelPojo(final T pojo) {
         ViewModel.Cloneable viewModelCloneable = (ViewModel.Cloneable) pojo;
-        return viewModelCloneable.clone();
+        val copy = viewModelCloneable.copy();
+        return _Casts.uncheckedCast(
+                getServiceInjector().injectServicesInto(copy));
     }
 
     @Override
