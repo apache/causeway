@@ -18,6 +18,7 @@
  */
 package org.apache.isis.testdomain.domainmodel;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
@@ -29,6 +30,14 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.metamodel.Config;
@@ -43,6 +52,8 @@ import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
+import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
+import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.postprocessors.collparam.ActionParameterChoicesFacetFromParentedCollection;
 import org.apache.isis.core.metamodel.postprocessors.collparam.ActionParameterDefaultsFacetFromAssociatedCollection;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -56,6 +67,7 @@ import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
 import org.apache.isis.testdomain.model.good.ElementTypeAbstract;
 import org.apache.isis.testdomain.model.good.ElementTypeConcrete;
 import org.apache.isis.testdomain.model.good.ElementTypeInterface;
+import org.apache.isis.testdomain.model.good.Encapsulated;
 import org.apache.isis.testdomain.model.good.ProperChoicesWhenChoicesFrom;
 import org.apache.isis.testdomain.model.good.ProperElementTypeVm;
 import org.apache.isis.testdomain.model.good.ProperInterface2;
@@ -65,12 +77,6 @@ import org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingInterf
 import org.apache.isis.testdomain.model.good.ProperMemberSupport;
 import org.apache.isis.testdomain.model.good.ProperServiceWithMixin;
 import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.val;
 
@@ -100,6 +106,7 @@ class DomainModelTest_usingGoodDomain {
 //    @Inject private FactoryService factoryService;
     @Inject private SpecificationLoader specificationLoader;
     @Inject private TitleService titleService;
+    @Inject private InteractionService interactionService;
 
     void debug() {
         val config = new Config()
@@ -423,6 +430,59 @@ class DomainModelTest_usingGoodDomain {
                 .count());
 
     }
+
+    @Test
+    void nonPublicMembersAndSupport_shouldBeAllowed() {
+
+        val objectSpec = specificationLoader.specForTypeElseFail(Encapsulated.class);
+        val vm = ManagedObject.of(objectSpec, new Encapsulated());
+
+        val actionIx = ActionInteraction.start(vm, "myAction", Where.NOT_SPECIFIED);
+        val managedAction = actionIx
+                .getManagedAction().get(); // should not throw
+
+        val propIx = PropertyInteraction.start(vm, "myProperty", Where.NOT_SPECIFIED);
+        val managedProperty = propIx
+                .getManagedProperty().get(); // should not throw
+
+        interactionService.runAnonymous(()->{
+
+            // ACTION
+
+            assertFalse(managedAction.checkVisibility().isPresent()); // is visible
+            assertTrue(managedAction.checkUsability().isPresent()); // cannot invoke when checking rules
+            assertEquals("disabled for testing purposes", managedAction.checkUsability().get().getReason());
+
+            val args = managedAction.getInteractionHead()
+                    .getPopulatedParameterValues(List.of());
+
+            // spawns its own transactional boundary, or reuses an existing one if available
+            val either = managedAction.invoke(args);
+
+            assertTrue(either.isLeft()); // assert action did not throw
+
+            val actionResultAsPojo = either.leftIfAny().getPojo();
+
+            assertEquals("Hallo World!", actionResultAsPojo);
+
+            // PROPERTY
+
+            assertFalse(managedProperty.checkVisibility().isPresent()); // is visible
+            assertFalse(managedProperty.checkUsability().isPresent()); // can invoke
+
+            assertEquals("Foo", managedProperty.getPropertyValue().getPojo());
+
+            val newPropertyValue = managedProperty.getMetaModel().getMetaModelContext()
+                    .getObjectManager().adapt("Bar");
+
+            managedProperty.modifyProperty(newPropertyValue);
+
+            assertEquals("Bar", managedProperty.getPropertyValue().getPojo());
+
+        });
+
+    }
+
 
     // -- HELPER
 
