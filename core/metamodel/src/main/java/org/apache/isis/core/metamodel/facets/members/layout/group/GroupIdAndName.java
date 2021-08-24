@@ -54,7 +54,7 @@ implements
     private final @NonNull String name;
 
     @Override
-    public int compareTo(GroupIdAndName other) {
+    public int compareTo(final GroupIdAndName other) {
         if(other==null) {
             return -1; // null last
         }
@@ -63,20 +63,11 @@ implements
 
     // -- FACTORIES FOR ANNOTATIONS
 
-    @SuppressWarnings("deprecation")
     public static Optional<GroupIdAndName> forAction(
             final @NonNull Action action) {
 
-        val nonLegacy = GroupIdAndName.inferIfOneMissing(
-                action.choicesFrom(),
-                null);
-
-        if(nonLegacy.isPresent()) {
-            return nonLegacy;
-        }
-
         return GroupIdAndName.inferIfOneMissing(
-                action.associateWith(),
+                action.choicesFrom(),
                 null);
     }
 

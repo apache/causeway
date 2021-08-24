@@ -271,13 +271,6 @@ extends FacetFactoryAbstract {
             val choicesFrom = action.choicesFrom();
             if(_Strings.isNotEmpty(choicesFrom)) {
                 addFacet(new ChoicesFromFacetForActionAnnotation(choicesFrom, facetedMethod));
-                return;
-            }
-            @SuppressWarnings("deprecation")
-            val associateWith = action.associateWith();
-            if(_Strings.isNotEmpty(associateWith)) {
-                addFacet(new ChoicesFromFacetForActionAnnotation(associateWith, facetedMethod));
-                return;
             }
         });
 

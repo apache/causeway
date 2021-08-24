@@ -106,7 +106,7 @@ public @interface PropertyLayout {
      * specified.
      * </p>
      *
-     * @see Action#associateWith()
+     * @see Action#choicesFrom()
      * @see ActionLayout#fieldSetId()
      * @see ActionLayout#fieldSetName()
      * @see PropertyLayout#fieldSetName()
@@ -125,7 +125,7 @@ public @interface PropertyLayout {
      * For a more in depth description see {@link PropertyLayout#fieldSetId()}.
      * </p>
      *
-     * @see Action#associateWith()
+     * @see Action#choicesFrom()
      * @see ActionLayout#fieldSetId()
      * @see ActionLayout#fieldSetName()
      * @see PropertyLayout#fieldSetId()

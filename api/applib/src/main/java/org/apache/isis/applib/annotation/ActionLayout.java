@@ -141,7 +141,7 @@ public @interface ActionLayout {
      * For a more in depth description see the analogous {@link PropertyLayout#fieldSetId()}.
      * </p>
      *
-     * To associate an <i>Action</i> with a <i>Collection</i>, use {@link Action#associateWith()}
+     * To associate an <i>Action</i> with a <i>Collection</i>, use {@link Action#choicesFrom()}
      * instead.
      *
      * @apiNote An <i>Action</i> can be associated with with a <i>Property</i> or <i>Collection</i>
@@ -168,7 +168,7 @@ public @interface ActionLayout {
      * For a more in depth description see the analogous {@link PropertyLayout#fieldSetId()};
      * </p>
      *
-     * To associate an <i>Action</i> with a <i>Collection</i>, use {@link Action#associateWith()}
+     * To associate an <i>Action</i> with a <i>Collection</i>, use {@link Action#choicesFrom()}
      * instead.
      *
      * @see Action#choicesFrom()
@@ -205,7 +205,7 @@ public @interface ActionLayout {
 
     /**
      * For actions that are associated with a property (using either
-     * {@link Action#associateWith()} or {@link ActionLayout#fieldSetId()}
+     * {@link Action#choicesFrom()} or {@link ActionLayout#fieldSetId()}
      * or {@link ActionLayout#fieldSetName()},
      * indicates the positioning of the action's button relative to the
      * property.
