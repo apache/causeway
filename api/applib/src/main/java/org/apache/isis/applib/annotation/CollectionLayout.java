@@ -111,19 +111,9 @@ public @interface CollectionLayout {
      * @see PropertyLayout#named()
      * @see DomainObjectLayout#named()
      * @see DomainServiceLayout#named()
-     * @see CollectionLayout#namedEscaped()
      */
     String named()
             default "";
-
-    /**
-     * A flag indicating whether the value of {@linkplain #named()} should be HTML escaped or not.
-     *
-     * @see CollectionLayout#named()
-     */
-    @Deprecated
-    boolean namedEscaped()
-            default true;
 
     /**
      * The page size for instances of this class when rendered within

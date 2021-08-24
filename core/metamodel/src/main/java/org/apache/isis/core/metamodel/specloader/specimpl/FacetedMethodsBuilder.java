@@ -35,7 +35,6 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
@@ -50,12 +49,9 @@ import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
-import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.facets.object.facets.FacetsFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
@@ -179,24 +175,6 @@ implements HasMetaModelContext {
         // process facets at object level
         // this will also remove some methods, such as the superclass methods.
         getFacetProcessor().process(introspectedClass, methodRemover, inspectedTypeSpec);
-
-        // if this class has additional facets (as per @Facets), then process
-        // them.
-        final FacetsFacet facetsFacet = inspectedTypeSpec.getFacet(FacetsFacet.class);
-        if (facetsFacet != null) {
-            final Class<? extends FacetFactory>[] facetFactories = facetsFacet.facetFactories();
-            for (final Class<? extends FacetFactory> facetFactorie : facetFactories) {
-                FacetFactory facetFactory;
-                try {
-                    facetFactory = facetFactorie.newInstance();
-                } catch (final InstantiationException | IllegalAccessException e) {
-                    throw new UnrecoverableException(e);
-                }
-                getFacetProcessor().injectDependenciesInto(facetFactory);
-                facetFactory.process(new ProcessClassContext(introspectedClass, methodRemover, inspectedTypeSpec));
-            }
-        }
-
     }
 
     // ////////////////////////////////////////////////////////////////////////////

@@ -58,7 +58,6 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.DomainObjectAnn
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.DomainObjectLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.domainservice.annotation.DomainServiceFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.facets.annotation.FacetsFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.hidden.HiddenTypeFacetDerivedFromAuthorizationFactory;
 import org.apache.isis.core.metamodel.facets.object.hidden.method.HiddenObjectFacetViaMethodFactory;
@@ -369,8 +368,6 @@ extends ProgrammingModelAbstract {
         addFactory(FacetProcessingOrder.Z1_FINALLY, new DisabledFacetOnPropertyInferredFactory(mmc));
 
         addFactory(FacetProcessingOrder.Z1_FINALLY, new ActionChoicesForCollectionParameterFacetFactory(mmc));
-
-        addFactory(FacetProcessingOrder.Z1_FINALLY, new FacetsFacetAnnotationFactory(mmc));
 
         addFactory(FacetProcessingOrder.Z1_FINALLY, new ViewModelSemanticCheckingFacetFactory(mmc));
     }
