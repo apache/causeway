@@ -67,6 +67,8 @@ import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.applib.services.userui.UserMenu;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.core.config.IsisConfiguration.Core;
+import org.apache.isis.core.config.IsisConfiguration.Viewer;
 import org.apache.isis.core.config.metamodel.facets.DefaultViewConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.ActionPublishingPolicy;
@@ -2135,13 +2137,6 @@ public class IsisConfiguration {
              * </p>
              */
             private boolean suppressPasswordReset = false;
-
-            /**
-             * @deprecated - seemingly unused
-             */
-            @Deprecated
-            @NotNull @NotEmpty
-            private String timestampPattern = "yyyy-MM-dd HH:mm:ss.SSS";
 
             /**
              * Whether to show an indicator for a form submit button that it has been clicked.
