@@ -71,6 +71,11 @@ public interface ViewModel {
         Object copy();
     }
 
+    /**
+     * Specialization of {@link ViewModel.Cloneable},
+     * that utilizes Java serialization to in-memory create ViewModel clones.
+     * @since 2.0
+     */
     public interface CloneableViaSerialization
     extends
         Cloneable,
@@ -84,6 +89,11 @@ public interface ViewModel {
         }
     }
 
+    /**
+     * Specialization of {@link ViewModel.Cloneable},
+     * that utilizes {@link ViewModel}'s mementos to in-memory create ViewModel clones.
+     * @since 2.0
+     */
     public interface CloneableViaMemento
     extends
         Cloneable,
