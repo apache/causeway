@@ -26,7 +26,6 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.mixins.system.HasInteractionId;
-import org.apache.isis.commons.internal.base._Optionals;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -252,15 +251,13 @@ extends FacetFactoryAbstract {
         }
 
         // check for @Action(typeOf=...)
-        val typeOfFacet = _Optionals.<TypeOfFacet>or(
-
-                actionIfAny
+        val typeOfFacet = actionIfAny
                 .map(Action::typeOf)
                 .filter(typeOf -> typeOf != null && typeOf != Object.class)
-                .map(typeOf -> new TypeOfFacetForActionAnnotation(typeOf, facetedMethod)),
-
-                // else infer from generic type arg if any
-                ()->TypeOfFacet.inferFromMethodReturnType(method, facetedMethod));
+                .<TypeOfFacet>map(typeOf -> new TypeOfFacetForActionAnnotation(typeOf, facetedMethod))
+                .or(
+                    // else infer from generic type arg if any
+                    ()->TypeOfFacet.inferFromMethodReturnType(method, facetedMethod));
 
         addFacetIfPresent(typeOfFacet);
     }

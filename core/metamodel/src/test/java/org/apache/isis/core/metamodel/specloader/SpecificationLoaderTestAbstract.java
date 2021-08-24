@@ -24,7 +24,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import org.apache.isis.commons.internal.base._Optionals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -35,9 +37,6 @@ import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 import lombok.val;
 
@@ -85,10 +84,9 @@ abstract class SpecificationLoaderTestAbstract {
     @Test
     public void testNamedFaced() throws Exception {
 
-        val facet =
-                _Optionals.<Facet>or(
-                        specification.lookupFacet(ObjectNamedFacet.class),
-                        ()->specification.lookupFacet(MemberNamedFacet.class))
+        val facet = specification.lookupFacet(ObjectNamedFacet.class)
+                .map(Facet.class::cast)
+                .or(()->specification.lookupFacet(MemberNamedFacet.class))
                 .orElse(null);
 
         assertNotNull(facet);
@@ -97,10 +95,9 @@ abstract class SpecificationLoaderTestAbstract {
     @Test @Disabled("we allow descriptions to be absent - no need to install empty fallbacks")
     public void testDescriptionFacet() throws Exception {
 
-        val facet =
-                _Optionals.<Facet>or(
-                        specification.lookupFacet(ObjectDescribedFacet.class),
-                        ()->specification.lookupFacet(MemberDescribedFacet.class))
+        val facet = specification.lookupFacet(ObjectDescribedFacet.class)
+                .map(Facet.class::cast)
+                .or(()->specification.lookupFacet(MemberDescribedFacet.class))
                 .orElse(null);
 
         assertNotNull(facet);

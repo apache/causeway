@@ -24,12 +24,10 @@ import java.util.Optional;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Defaulted;
-import org.apache.isis.commons.internal.base._Optionals;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultsProviderUtil;
 
 import lombok.val;
@@ -50,22 +48,21 @@ extends FacetFactoryAbstract {
         val config = super.getConfiguration();
         val defaultedIfAny = processClassContext.synthesizeOnType(Defaulted.class);
 
-        addFacetIfPresent(_Optionals.<DefaultedFacet>or(
+        addFacetIfPresent(
 
             // create from annotation, if present
             defaultedIfAny
                 .flatMap(defaultedAnnot->DefaultedFacetAnnotation.create(config, cls, facetHolder))
-            ,
+            .or(
 
-            // otherwise, try to create from configuration, if present
-            ()->{
-                val providerName = DefaultsProviderUtil.defaultsProviderNameFromConfiguration(config, cls);
-                return _Strings.isNotEmpty(providerName)
-                    ? DefaultedFacetFromConfiguration.create(providerName, facetHolder)
-                    : Optional.empty();
-            }
-
-        ));
+                // otherwise, try to create from configuration, if present
+                ()->{
+                    val providerName = DefaultsProviderUtil.defaultsProviderNameFromConfiguration(config, cls);
+                    return _Strings.isNotEmpty(providerName)
+                        ? DefaultedFacetFromConfiguration.create(providerName, facetHolder)
+                        : Optional.empty();
+                })
+        );
     }
 
 

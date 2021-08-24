@@ -26,7 +26,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.isis.commons.internal.base._Optionals;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
@@ -61,9 +60,10 @@ class ObjectReflectorDefaultTest_object extends SpecificationLoaderTestAbstract 
     void testStandardFacets() throws Exception {
 
         assertNotNull(
-                _Optionals.<Facet>or(
-                        specification.lookupFacet(ObjectNamedFacet.class),
-                        ()->specification.lookupFacet(MemberNamedFacet.class))
+
+                specification.lookupFacet(ObjectNamedFacet.class)
+                .map(Facet.class::cast)
+                .or(()->specification.lookupFacet(MemberNamedFacet.class))
                 .orElse(null));
 
         //assertNotNull(specification.getFacet(ObjectDescribedFacet.class));
