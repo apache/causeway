@@ -68,7 +68,7 @@ public class _Serializables {
                         "de-serializion of input stream did not yield an object of required type %s",
                         requiredClass.getName());
             }
-            return _Casts.uncheckedCast(ois.readObject());
+            return _Casts.uncheckedCast(pojo);
         }
     }
 

@@ -218,6 +218,11 @@ public final class ManagedObjects {
 
     // -- COPY UTILITIES
 
+    /**
+     * Optionally returns a new ManagedObject wrapping a clone of the given ViewModel,
+     * with injection points resolved,
+     * based on whether given {@code viewModel} is a clone-able ViewModel.
+     */
     @Nullable
     public static Optional<ManagedObject> copyViewModel(final @Nullable ManagedObject viewModel) {
 
