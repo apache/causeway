@@ -29,7 +29,6 @@ import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryRange;
 
 import lombok.NonNull;
-import lombok.SneakyThrows;
 import lombok.val;
 
 /**
@@ -123,7 +122,7 @@ public interface RepositoryService {
      * @see #persist(Object)
      * @see #persistAndFlush(Object)
      */
-    default void persistAndFlush(Object... domainObjects) {
+    default void persistAndFlush(final Object... domainObjects) {
         final int length = domainObjects.length;
         for (int i = 0; i < length; i++) {
             val domainObject = domainObjects[i];
@@ -412,34 +411,5 @@ public interface RepositoryService {
      * @param entity - to detach
      */
     <T> T detach(T entity);
-
-
-    // -- DEPRECATIONS
-
-    /**
-     * Overload of {@link #detachedEntity(Object)}, but will also instantiate
-     * the domain class first.
-     *
-     * @deprecated as it requires that the domain entity has a no-arg
-     *             constructor.  Use {@link #detachedEntity(Object)} instead.
-     */
-    @Deprecated
-    @SneakyThrows
-    default <T> T detachedEntity(Class<T> ofType) {
-        return detachedEntity(ofType.newInstance());
-    }
-
-    /**
-     * Equivalent to {@link #detachedEntity(Class)}.
-     *
-     * @deprecated as it requires that the domain entity has a no-arg
-     *             constructor.  Use {@link #detachedEntity(Object)} instead.
-     */
-    @Deprecated
-    @SneakyThrows
-    default <T> T instantiate(Class<T> ofType) {
-        return detachedEntity(ofType);
-    }
-
 
 }
