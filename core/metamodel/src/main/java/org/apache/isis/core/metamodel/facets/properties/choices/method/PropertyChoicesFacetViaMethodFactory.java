@@ -62,6 +62,7 @@ public class PropertyChoicesFacetViaMethodFactory extends MethodPrefixBasedFacet
         val returnType = getterOrMixinMain.getReturnType();
         val choicesMethod = MethodFinder
                 .findMethod(
+                    processMethodContext.getEncapsulationPolicy(),
                     cls,
                     namingConvention,
                     NO_RETURN,

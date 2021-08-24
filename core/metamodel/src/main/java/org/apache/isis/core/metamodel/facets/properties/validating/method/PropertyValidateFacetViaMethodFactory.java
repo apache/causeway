@@ -56,6 +56,7 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
         val returnType = getterMethod.getReturnType();
 
         val validateMethod = MethodFinder.findMethod_returningText(
+                processMethodContext.getEncapsulationPolicy(),
                 cls,
                 namingConvention,
                 new Class[] { returnType })

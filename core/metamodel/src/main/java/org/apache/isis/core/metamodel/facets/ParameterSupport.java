@@ -102,7 +102,7 @@ public final class ParameterSupport {
         public void search(
                 final ParamSupportingMethodSearchRequest searchRequest,
                 final int paramNum,
-                Consumer<ParamSupportingMethodSearchResult> onMethodFound) {
+                final Consumer<ParamSupportingMethodSearchResult> onMethodFound) {
             searchFunction.search(searchRequest, paramNum, onMethodFound);
         }
     }
@@ -139,25 +139,33 @@ public final class ParameterSupport {
         switch(searchRequest.getReturnType()) {
         case BOOLEAN:
             MethodFinder
-                .findMethodWithPPMArg_returningBoolean(type, methodNames, paramTypes, additionalParamTypes)
+                .findMethodWithPPMArg_returningBoolean(
+                        processMethodContext.getEncapsulationPolicy(),
+                        type, methodNames, paramTypes, additionalParamTypes)
                 .map(methodAndPpmConstructor->toSearchResult(paramIndex, paramType, methodAndPpmConstructor))
                 .forEach(onMethodFound);
             break;
         case TEXT:
             MethodFinder
-                .findMethodWithPPMArg_returningText(type, methodNames, paramTypes, additionalParamTypes)
+                .findMethodWithPPMArg_returningText(
+                        processMethodContext.getEncapsulationPolicy(),
+                        type, methodNames, paramTypes, additionalParamTypes)
                 .map(methodAndPpmConstructor->toSearchResult(paramIndex, paramType, methodAndPpmConstructor))
                 .forEach(onMethodFound);
             break;
         case NON_SCALAR:
             MethodFinder
-                .findMethodWithPPMArg_returningNonScalar(type, methodNames, paramType, paramTypes, additionalParamTypes)
+                .findMethodWithPPMArg_returningNonScalar(
+                        processMethodContext.getEncapsulationPolicy(),
+                        type, methodNames, paramType, paramTypes, additionalParamTypes)
                 .map(methodAndPpmConstructor->toSearchResult(paramIndex, paramType, methodAndPpmConstructor))
                 .forEach(onMethodFound);
             break;
         case SAME_AS_PARAMETER_TYPE:
             MethodFinder
-                .findMethodWithPPMArg(type, methodNames, paramType, paramTypes, additionalParamTypes)
+                .findMethodWithPPMArg(
+                        processMethodContext.getEncapsulationPolicy(),
+                        type, methodNames, paramType, paramTypes, additionalParamTypes)
                 .map(methodAndPpmConstructor->toSearchResult(paramIndex, paramType, methodAndPpmConstructor))
                 .forEach(onMethodFound);
             break;
@@ -193,25 +201,33 @@ public final class ParameterSupport {
         switch(searchRequest.getReturnType()) {
         case BOOLEAN:
             MethodFinder
-                .findMethod_returningBoolean(type, methodNames, singleArg)
+                .findMethod_returningBoolean(
+                        processMethodContext.getEncapsulationPolicy(),
+                        type, methodNames, singleArg)
                 .map(supportingMethod->toSearchResult(paramIndex, paramType, supportingMethod))
                 .forEach(onMethodFound);
             break;
         case TEXT:
             MethodFinder
-                .findMethod_returningText(type, methodNames, singleArg)
+                .findMethod_returningText(
+                        processMethodContext.getEncapsulationPolicy(),
+                        type, methodNames, singleArg)
                 .map(supportingMethod->toSearchResult(paramIndex, paramType, supportingMethod))
                 .forEach(onMethodFound);
             break;
         case NON_SCALAR:
             MethodFinder
-                .findMethod_returningNonScalar(type, methodNames, paramType, singleArg)
+                .findMethod_returningNonScalar(
+                        processMethodContext.getEncapsulationPolicy(),
+                        type, methodNames, paramType, singleArg)
                 .map(supportingMethod->toSearchResult(paramIndex, paramType, supportingMethod))
                 .forEach(onMethodFound);
             break;
         case SAME_AS_PARAMETER_TYPE:
             MethodFinder
-                .findMethod(type, methodNames, paramType, singleArg)
+                .findMethod(
+                        processMethodContext.getEncapsulationPolicy(),
+                        type, methodNames, paramType, singleArg)
                 .map(supportingMethod->toSearchResult(paramIndex, paramType, supportingMethod))
                 .forEach(onMethodFound);
             break;
@@ -246,25 +262,33 @@ public final class ParameterSupport {
             switch(searchRequest.getReturnType()) {
             case BOOLEAN:
                 supportingMethod = MethodFinder
-                    .findMethod_returningBoolean(type, methodNames, paramTypesToLookFor)
+                    .findMethod_returningBoolean(
+                            processMethodContext.getEncapsulationPolicy(),
+                            type, methodNames, paramTypesToLookFor)
                     .findFirst()
                     .orElse(null);
                 break;
             case TEXT:
                 supportingMethod = MethodFinder
-                    .findMethod_returningText(type, methodNames, paramTypesToLookFor)
+                    .findMethod_returningText(
+                            processMethodContext.getEncapsulationPolicy(),
+                            type, methodNames, paramTypesToLookFor)
                     .findFirst()
                     .orElse(null);
                 break;
             case NON_SCALAR:
                 supportingMethod = MethodFinder
-                    .findMethod_returningNonScalar(type, methodNames, paramType, paramTypesToLookFor)
+                    .findMethod_returningNonScalar(
+                            processMethodContext.getEncapsulationPolicy(),
+                            type, methodNames, paramType, paramTypesToLookFor)
                     .findFirst()
                     .orElse(null);
                 break;
             case SAME_AS_PARAMETER_TYPE:
                 supportingMethod = MethodFinder
-                    .findMethod(type, methodNames, paramType, paramTypesToLookFor)
+                    .findMethod(
+                            processMethodContext.getEncapsulationPolicy(),
+                            type, methodNames, paramType, paramTypesToLookFor)
                     .findFirst()
                     .orElse(null);
                 break;

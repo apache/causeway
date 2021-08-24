@@ -74,17 +74,17 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
     // ///////////////////////////////////////////////////////////////
 
     @Override
-    public boolean isPropertyOrCollectionAccessorCandidate(final Method method) {
+    public boolean isPropertyOrCollectionGetterCandidate(final Method method) {
         return method.getName().startsWith(MethodLiteralConstants.GET_PREFIX);
     }
 
     @Override
     public boolean isCollectionAccessor(final Method method) {
-        if (!isPropertyOrCollectionAccessorCandidate(method)) {
+        if (!isPropertyOrCollectionGetterCandidate(method)) {
             return false;
         }
         final Class<?> methodReturnType = method.getReturnType();
-        return isCollectionOrArray(methodReturnType);
+        return isNonScalar(methodReturnType);
     }
 
     /**

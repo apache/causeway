@@ -22,6 +22,7 @@ import java.lang.reflect.Method;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.core.config.IsisConfiguration.Core.MetaModel.EncapsulationPolicy;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
@@ -93,6 +94,7 @@ abstract class MixinIntendedAs {
         val processParameterContext =
                 new FacetFactory.ProcessParameterContext(
                         owningType,
+                        EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED,
                         actionMethod,
                         paramIndex,
                         MethodRemover.NOOP,

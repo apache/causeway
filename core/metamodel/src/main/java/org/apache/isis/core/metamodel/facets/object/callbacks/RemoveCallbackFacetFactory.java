@@ -53,7 +53,9 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         val facets = new ArrayList<Facet>();
 
         Method method = MethodFinderUtils
-                .findMethod(cls, MethodLiteralConstants.REMOVING_PREFIX, void.class,
+                .findMethod(
+                        processClassContext.getEncapsulationPolicy(),
+                        cls, MethodLiteralConstants.REMOVING_PREFIX, void.class,
                         NO_ARG);
         if (method != null) {
             processClassContext.removeMethod(method);

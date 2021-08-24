@@ -48,7 +48,9 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         val cls = processClassContext.getCls();
         val facetHolder = processClassContext.getFacetHolder();
 
-        Method method = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.LOADED_PREFIX, void.class, NO_ARG);
+        Method method = MethodFinderUtils.findMethod(
+                processClassContext.getEncapsulationPolicy(),
+                cls, MethodLiteralConstants.LOADED_PREFIX, void.class, NO_ARG);
         if (method != null) {
             processClassContext.removeMethod(method);
             addFacet(new LoadedCallbackFacetViaMethod(method, facetHolder));

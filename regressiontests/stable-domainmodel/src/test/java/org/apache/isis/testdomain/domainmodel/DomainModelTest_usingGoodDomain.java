@@ -44,10 +44,13 @@ import org.apache.isis.applib.services.metamodel.Config;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.title.TitleService;
+import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.config.IsisConfiguration.Core.MetaModel.EncapsulationPolicy;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
+import org.apache.isis.core.metamodel.facets.object.encapsulation.EncapsulationFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
@@ -67,7 +70,6 @@ import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
 import org.apache.isis.testdomain.model.good.ElementTypeAbstract;
 import org.apache.isis.testdomain.model.good.ElementTypeConcrete;
 import org.apache.isis.testdomain.model.good.ElementTypeInterface;
-import org.apache.isis.testdomain.model.good.Encapsulated;
 import org.apache.isis.testdomain.model.good.ProperChoicesWhenChoicesFrom;
 import org.apache.isis.testdomain.model.good.ProperElementTypeVm;
 import org.apache.isis.testdomain.model.good.ProperInterface2;
@@ -76,6 +78,7 @@ import org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingAbstra
 import org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingInterface;
 import org.apache.isis.testdomain.model.good.ProperMemberSupport;
 import org.apache.isis.testdomain.model.good.ProperServiceWithMixin;
+import org.apache.isis.testdomain.model.good.ViewModelWithEncapsulatedMembers;
 import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
 
 import lombok.val;
@@ -107,6 +110,7 @@ class DomainModelTest_usingGoodDomain {
     @Inject private SpecificationLoader specificationLoader;
     @Inject private TitleService titleService;
     @Inject private InteractionService interactionService;
+    @Inject private IsisConfiguration isisConfig;
 
     void debug() {
         val config = new Config()
@@ -434,16 +438,27 @@ class DomainModelTest_usingGoodDomain {
     @Test
     void nonPublicMembersAndSupport_shouldBeAllowed() {
 
-        val objectSpec = specificationLoader.specForTypeElseFail(Encapsulated.class);
-        val vm = ManagedObject.of(objectSpec, new Encapsulated());
+        val objectSpec = specificationLoader.specForTypeElseFail(ViewModelWithEncapsulatedMembers.class);
+        val encapsulationFacet = objectSpec.getFacet(EncapsulationFacet.class);
+        assertNotNull(encapsulationFacet);
+        assertEquals(
+                EncapsulationPolicy.ENCAPSULATED_MEMBERS_SUPPORTED,
+                encapsulationFacet.getEncapsulationPolicy(isisConfig));
+
+        val vm = ManagedObject.of(objectSpec, new ViewModelWithEncapsulatedMembers());
 
         val actionIx = ActionInteraction.start(vm, "myAction", Where.NOT_SPECIFIED);
         val managedAction = actionIx
                 .getManagedAction().get(); // should not throw
 
-        val propIx = PropertyInteraction.start(vm, "myProperty", Where.NOT_SPECIFIED);
-        val managedProperty = propIx
+        val propIx1 = PropertyInteraction.start(vm, "propWithPrivateAccessors", Where.NOT_SPECIFIED);
+        val managedProperty1 = propIx1
                 .getManagedProperty().get(); // should not throw
+
+//TODO yet unclear whether thats gonna be hard to implement
+//        val propIx2 = PropertyInteraction.start(vm, "propWithoutAccessors", Where.NOT_SPECIFIED);
+//        val managedProperty2 = propIx2
+//                .getManagedProperty().get(); // should not throw
 
         interactionService.runAnonymous(()->{
 
@@ -465,19 +480,36 @@ class DomainModelTest_usingGoodDomain {
 
             assertEquals("Hallo World!", actionResultAsPojo);
 
-            // PROPERTY
+            // -- PROPERTY WITH PRIVATE GETTER AND SETTER
 
-            assertFalse(managedProperty.checkVisibility().isPresent()); // is visible
-            assertFalse(managedProperty.checkUsability().isPresent()); // can invoke
+            //System.err.println(managedProperty1.checkUsability().get().getReason());
 
-            assertEquals("Foo", managedProperty.getPropertyValue().getPojo());
+            assertFalse(managedProperty1.checkVisibility().isPresent()); // is visible
+            assertFalse(managedProperty1.checkUsability().isPresent()); // can invoke
 
-            val newPropertyValue = managedProperty.getMetaModel().getMetaModelContext()
+            assertEquals("Foo", managedProperty1.getPropertyValue().getPojo());
+
+            val newPropertyValue = managedProperty1.getMetaModel().getMetaModelContext()
                     .getObjectManager().adapt("Bar");
 
-            managedProperty.modifyProperty(newPropertyValue);
+            managedProperty1.modifyProperty(newPropertyValue);
 
-            assertEquals("Bar", managedProperty.getPropertyValue().getPojo());
+            assertEquals("Bar", managedProperty1.getPropertyValue().getPojo());
+
+            // -- PROPERTY WITHOUT GETTER OR SETTER
+//TODO yet unclear whether thats gonna be hard to implement
+//            assertFalse(managedProperty2.checkVisibility().isPresent()); // is visible
+//            assertFalse(managedProperty2.checkUsability().isPresent()); // can invoke
+//
+//            assertEquals("foo", managedProperty2.getPropertyValue().getPojo());
+//
+//            val newPropertyValue2 = managedProperty2.getMetaModel().getMetaModelContext()
+//                    .getObjectManager().adapt("bar");
+//
+//            managedProperty2.modifyProperty(newPropertyValue2);
+//
+//            assertEquals("bar", managedProperty2.getPropertyValue().getPojo());
+
 
         });
 

@@ -35,6 +35,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.reflection._MethodCache;
 import org.apache.isis.commons.internal.reflection._Reflect;
+import org.apache.isis.core.config.IsisConfiguration.Core.MetaModel.EncapsulationPolicy;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 
@@ -64,6 +65,7 @@ public final class MethodFinderUtils {
      * If the parameter type array is null, is also not checked.
      */
     public static Method findMethod(
+            final EncapsulationPolicy encapsulationPolicy,
             final Class<?> type,
             final String name,
             final Class<?> expectedReturnType,
@@ -76,8 +78,10 @@ public final class MethodFinderUtils {
             return null;
         }
 
-        if (!MethodUtil.isPublic(method)) {
-            return null;
+        if(!encapsulationPolicy.isEncapsulatedMembersSupported()) {
+            if (!MethodUtil.isPublic(method)) {
+                return null;
+            }
         }
 
         if(MethodUtil.isStatic(method)) {
@@ -109,13 +113,14 @@ public final class MethodFinderUtils {
     }
 
     public static Method findMethod_returningAnyOf(
+            final EncapsulationPolicy encapsulationPolicy,
             final Class<?>[] returnTypes,
             final Class<?> type,
             final String name,
             final Class<?>[] paramTypes) {
 
         for (val returnType : returnTypes) {
-            val method = findMethod(type, name, returnType, paramTypes);
+            val method = findMethod(encapsulationPolicy, type, name, returnType, paramTypes);
             if(method != null) {
                 return method;
             }
@@ -123,22 +128,34 @@ public final class MethodFinderUtils {
         return null;
     }
 
-    public static Optional<Method> findNoArgMethod(final Class<?> type, final String name, final Class<?> returnType) {
-        return streamMethods(type, Can.ofSingleton(name), returnType)
+    public static Optional<Method> findNoArgMethod(
+            final EncapsulationPolicy encapsulationPolicy,
+            final Class<?> type, final String name, final Class<?> returnType) {
+        return streamMethods(encapsulationPolicy, type, Can.ofSingleton(name), returnType)
                 .filter(MethodUtil.Predicates.paramCount(0))
                 .findFirst();
     }
 
-    public static Optional<Method> findSingleArgMethod(final Class<?> type, final String name, final Class<?> returnType) {
-        return streamMethods(type, Can.ofSingleton(name), returnType)
+    public static Optional<Method> findSingleArgMethod(
+            final EncapsulationPolicy encapsulationPolicy,
+            final Class<?> type, final String name, final Class<?> returnType) {
+        return streamMethods(encapsulationPolicy, type, Can.ofSingleton(name), returnType)
                 .filter(MethodUtil.Predicates.paramCount(1))
                 .findFirst();
     }
 
-    public static Stream<Method> streamMethods(final Class<?> type, final Can<String> names, final Class<?> returnType) {
+    public static Stream<Method> streamMethods(
+            final EncapsulationPolicy encapsulationPolicy,
+            final Class<?> type,
+            final Can<String> names,
+            final Class<?> returnType) {
         try {
 
-            return _NullSafe.stream(type.getMethods())
+            val methods = encapsulationPolicy.isEncapsulatedMembersSupported()
+                    ? type.getDeclaredMethods()
+                    : type.getMethods();
+
+            return _NullSafe.stream(methods)
                     .filter(MethodUtil::isPublic)
                     .filter(MethodUtil::isNotStatic)
                     .filter(method -> names.contains(method.getName()))
@@ -155,6 +172,7 @@ public final class MethodFinderUtils {
     }
 
     public static List<Method> findMethodsWithAnnotation(
+            final EncapsulationPolicy encapsulationPolicy,
             final Class<?> type,
             final Class<? extends Annotation> annotationClass) {
 
@@ -163,8 +181,12 @@ public final class MethodFinderUtils {
             throw new IllegalArgumentException("One or more arguments are 'null' valued");
         }
 
+        val methods = encapsulationPolicy.isEncapsulatedMembersSupported()
+                ? type.getDeclaredMethods()
+                : type.getMethods();
+
         // Find methods annotated with the specified annotation
-        return Arrays.stream(type.getMethods())
+        return Arrays.stream(methods)
                 .filter(method -> !MethodUtil.isStatic(method))
                 .filter(method -> method.isAnnotationPresent(annotationClass))
                 .collect(Collectors.toList());
@@ -227,10 +249,11 @@ public final class MethodFinderUtils {
 
 
     public static Method findMethod_returningBoolean(
+            final EncapsulationPolicy encapsulationPolicy,
             final Class<?> type,
             final String name,
             final Class<?>[] paramTypes) {
-        return findMethod_returningAnyOf(BOOLEAN_TYPES, type, name, paramTypes);
+        return findMethod_returningAnyOf(encapsulationPolicy, BOOLEAN_TYPES, type, name, paramTypes);
     }
 
     private static final Class<?>[] TEXT_TYPES = new Class<?>[]{
@@ -239,13 +262,15 @@ public final class MethodFinderUtils {
 
 
     public static Method findMethod_returningText(
+            final EncapsulationPolicy encapsulationPolicy,
             final Class<?> type,
             final String name,
             final Class<?>[] paramTypes) {
-        return findMethod_returningAnyOf(TEXT_TYPES, type, name, paramTypes);
+        return findMethod_returningAnyOf(encapsulationPolicy, TEXT_TYPES, type, name, paramTypes);
     }
 
     public static Method findMethod_returningNonScalar(
+            final EncapsulationPolicy encapsulationPolicy,
             final Class<?> type,
             final String name,
             final Class<?> elementReturnType,
@@ -256,7 +281,7 @@ public final class MethodFinderUtils {
             Collection.class,
             Array.newInstance(elementReturnType, 0).getClass()};
 
-        return findMethod_returningAnyOf(nonScalarTypes, type, name, paramTypes);
+        return findMethod_returningAnyOf(encapsulationPolicy, nonScalarTypes, type, name, paramTypes);
     }
 
     // -- PPM SUPPORT
@@ -281,13 +306,14 @@ public final class MethodFinderUtils {
     }
 
     public static MethodAndPpmConstructor findMethodWithPPMArg(
+            final EncapsulationPolicy encapsulationPolicy,
             final Class<?> type,
             final String name,
             final Class<?> returnType,
             final Class<?>[] paramTypes,
             final Can<Class<?>> additionalParamTypes) {
 
-        return streamMethods(type, Can.ofSingleton(name), returnType)
+        return streamMethods(encapsulationPolicy, type, Can.ofSingleton(name), returnType)
             .filter(MethodUtil.Predicates.paramCount(additionalParamTypes.size()+1))
             .filter(MethodUtil.Predicates.matchParamTypes(1, additionalParamTypes))
             .map(method->MethodAndPpmCandidate.of(method, method.getParameterTypes()[0]))
@@ -299,6 +325,7 @@ public final class MethodFinderUtils {
     }
 
     public static MethodAndPpmConstructor findMethodWithPPMArg_returningAnyOf(
+            final EncapsulationPolicy encapsulationPolicy,
             final Class<?>[] returnTypes,
             final Class<?> type,
             final String name,
@@ -306,7 +333,7 @@ public final class MethodFinderUtils {
             final Can<Class<?>> additionalParamTypes) {
 
         for (val returnType : returnTypes) {
-            val result = findMethodWithPPMArg(type, name, returnType, paramTypes, additionalParamTypes);
+            val result = findMethodWithPPMArg(encapsulationPolicy, type, name, returnType, paramTypes, additionalParamTypes);
             if(result != null) {
                 return result;
             }
@@ -315,24 +342,27 @@ public final class MethodFinderUtils {
     }
 
     public static MethodAndPpmConstructor findMethodWithPPMArg_returningBoolean(
+            final EncapsulationPolicy encapsulationPolicy,
             final Class<?> type,
             final String name,
             final Class<?>[] paramTypes,
             final Can<Class<?>> additionalParamTypes) {
 
-        return findMethodWithPPMArg_returningAnyOf(BOOLEAN_TYPES, type, name, paramTypes, additionalParamTypes);
+        return findMethodWithPPMArg_returningAnyOf(encapsulationPolicy, BOOLEAN_TYPES, type, name, paramTypes, additionalParamTypes);
     }
 
     public static MethodAndPpmConstructor findMethodWithPPMArg_returningText(
+            final EncapsulationPolicy encapsulationPolicy,
             final Class<?> type,
             final String name,
             final Class<?>[] paramTypes,
             final Can<Class<?>> additionalParamTypes) {
 
-        return findMethodWithPPMArg_returningAnyOf(TEXT_TYPES, type, name, paramTypes, additionalParamTypes);
+        return findMethodWithPPMArg_returningAnyOf(encapsulationPolicy, TEXT_TYPES, type, name, paramTypes, additionalParamTypes);
     }
 
     public static MethodAndPpmConstructor findMethodWithPPMArg_returningNonScalar(
+            final EncapsulationPolicy encapsulationPolicy,
             final Class<?> type,
             final String name,
             final Class<?> elementReturnType,
@@ -343,7 +373,7 @@ public final class MethodFinderUtils {
             Collection.class,
             Array.newInstance(elementReturnType, 0).getClass()};
 
-        return findMethodWithPPMArg_returningAnyOf(nonScalarTypes, type, name, paramTypes, additionalParamTypes);
+        return findMethodWithPPMArg_returningAnyOf(encapsulationPolicy, nonScalarTypes, type, name, paramTypes, additionalParamTypes);
     }
 
 

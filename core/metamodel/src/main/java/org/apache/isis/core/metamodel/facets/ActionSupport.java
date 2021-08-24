@@ -82,7 +82,7 @@ public final class ActionSupport {
         @Override
         public void search(
                 final ActionSupportingMethodSearchRequest searchRequest,
-                Consumer<ActionSupportingMethodSearchResult> onMethodFound) {
+                final Consumer<ActionSupportingMethodSearchResult> onMethodFound) {
             searchFunction.search(searchRequest, onMethodFound);
         }
     }
@@ -120,13 +120,17 @@ public final class ActionSupport {
         switch(searchRequest.getReturnType()) {
         case BOOLEAN:
             MethodFinder
-                .findMethodWithPPMArg_returningBoolean(type, methodNames, paramTypes, additionalParamTypes)
+                .findMethodWithPPMArg_returningBoolean(
+                        processMethodContext.getEncapsulationPolicy(),
+                        type, methodNames, paramTypes, additionalParamTypes)
                 .map(ActionSupport::toSearchResult)
                 .forEach(onMethodFound);
             break;
         case TEXT:
             MethodFinder
-                .findMethodWithPPMArg_returningText(type, methodNames, paramTypes, additionalParamTypes)
+                .findMethodWithPPMArg_returningText(
+                        processMethodContext.getEncapsulationPolicy(),
+                        type, methodNames, paramTypes, additionalParamTypes)
                 .map(ActionSupport::toSearchResult)
                 .forEach(onMethodFound);
             break;
@@ -165,13 +169,17 @@ public final class ActionSupport {
             switch(searchRequest.getReturnType()) {
             case BOOLEAN:
                 MethodFinder
-                    .findMethod_returningBoolean(type, methodNames, paramTypesToLookFor)
+                    .findMethod_returningBoolean(
+                            processMethodContext.getEncapsulationPolicy(),
+                            type, methodNames, paramTypesToLookFor)
                     .map(ActionSupport::toSearchResult)
                     .forEach(onMethodFound);
                 break;
             case TEXT:
                 MethodFinder
-                    .findMethod_returningText(type, methodNames, paramTypesToLookFor)
+                    .findMethod_returningText(
+                            processMethodContext.getEncapsulationPolicy(),
+                            type, methodNames, paramTypesToLookFor)
                     .map(ActionSupport::toSearchResult)
                     .forEach(onMethodFound);
                 break;

@@ -76,6 +76,7 @@ public class ActionDefaultsFacetViaMethodFactory extends MethodPrefixBasedFacetF
         val cls = processMethodContext.getCls();
         val namingConvention = processMethodContext.memberSupportCandidates(PREFIX);
         return MethodFinder.findMethod(
+                processMethodContext.getEncapsulationPolicy(),
                 cls, namingConvention, returnType, NO_ARG)
                 .findFirst()
                 .orElse(null);

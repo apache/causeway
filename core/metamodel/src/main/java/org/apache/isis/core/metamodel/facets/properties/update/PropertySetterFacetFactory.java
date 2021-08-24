@@ -70,7 +70,9 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         final Class<?> returnType = getMethod.getReturnType();
         final Class<?>[] paramTypes = new Class[] { returnType };
         final Method setMethod = MethodFinderUtils
-                .findMethod(cls, MethodLiteralConstants.SET_PREFIX + capitalizedName, void.class, paramTypes);
+                .findMethod(
+                        processMethodContext.getEncapsulationPolicy(),
+                        cls, MethodLiteralConstants.SET_PREFIX + capitalizedName, void.class, paramTypes);
         processMethodContext.removeMethod(setMethod);
 
         final FacetHolder property = processMethodContext.getFacetHolder();

@@ -55,6 +55,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         val namingConvention = processMethodContext.memberSupportCandidates(PREFIX);
 
         val describedMethod = MethodFinder.findMethod_returningText(
+                processMethodContext.getEncapsulationPolicy(),
                 cls,
                 namingConvention,
                 NO_ARG)

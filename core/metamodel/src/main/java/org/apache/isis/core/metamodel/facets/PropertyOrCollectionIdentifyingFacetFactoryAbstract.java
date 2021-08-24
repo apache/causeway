@@ -38,8 +38,8 @@ implements PropertyOrCollectionIdentifyingFacetFactory {
         super(mmc, featureTypes, OrphanValidation.DONT_VALIDATE, prefixes);
     }
 
-    protected boolean isCollectionOrArray(final Class<?> cls) {
-        return _Collections.isCollectionOrArrayType(cls);
+    protected boolean isNonScalar(final Class<?> cls) {
+        return _Collections.isCollectionOrArrayOrCanType(cls);
     }
 
 }

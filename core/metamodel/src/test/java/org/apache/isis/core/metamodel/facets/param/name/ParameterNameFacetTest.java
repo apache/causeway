@@ -29,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.commons.internal.reflection._Reflect;
+import org.apache.isis.core.config.IsisConfiguration.Core.MetaModel.EncapsulationPolicy;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
@@ -97,7 +98,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
         // when
         val processParameterContext =
                 new FacetFactory.ProcessParameterContext(
-                        Customer.class, actionMethod, 0, null, facetedMethodParameter);
+                        Customer.class, EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED, actionMethod, 0, null, facetedMethodParameter);
 
         programmingModel.streamFactories()
         .forEach(facetFactory->facetFactory.processParams(processParameterContext));
@@ -129,7 +130,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
         // when
         val processParameterContext =
                 new FacetFactory.ProcessParameterContext(
-                        Customer.class, actionMethod, 0, null, facetedMethodParameter);
+                        Customer.class, EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED, actionMethod, 0, null, facetedMethodParameter);
         programmingModel.streamFactories().forEach(facetFactory->facetFactory.processParams(processParameterContext));
 
         // then

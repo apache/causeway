@@ -22,12 +22,11 @@ package org.apache.isis.core.metamodel.facets.object.choices.enums;
 import java.lang.reflect.Method;
 import java.util.function.BiConsumer;
 
-import org.apache.isis.applib.adapters.EncoderDecoder;
-import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.util.Enums;
+import org.apache.isis.core.config.IsisConfiguration.Core.MetaModel.EncapsulationPolicy;
 import org.apache.isis.core.metamodel.commons.MethodExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -62,14 +61,17 @@ public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemantic
 
     private final Method titleMethod;
 
-    /**
-     * Required because {@link Parser} and {@link EncoderDecoder}.
-     */
-    public EnumValueSemanticsProvider() {
-        this(null, null);
-    }
+//    /**
+//     * Required because {@link Parser} and {@link EncoderDecoder}.
+//     */
+//    public EnumValueSemanticsProvider() {
+//        this(EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED, null, null);
+//    }
 
-    public EnumValueSemanticsProvider(final FacetHolder holder, final Class<T> adaptedClass) {
+    public EnumValueSemanticsProvider(
+            final EncapsulationPolicy encapsulationPolicy,
+            final FacetHolder holder,
+            final Class<T> adaptedClass) {
         super(
                 type(), holder,  adaptedClass,
                 maxLengthFor(adaptedClass),
@@ -78,6 +80,7 @@ public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemantic
                 defaultFor(adaptedClass));
 
         titleMethod = MethodFinderUtils.findMethod_returningText(
+                encapsulationPolicy,
                 getAdaptedClass(),
                 TITLE,
                 null);

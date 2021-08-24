@@ -21,8 +21,9 @@ package org.apache.isis.core.metamodel.facets.object.title.methods;
 
 import java.lang.reflect.Method;
 
-import org.springframework.lang.Nullable;
 import javax.inject.Inject;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.collections.Can;
@@ -67,6 +68,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         val facetHolder = processClassContext.getFacetHolder();
 
         val titleMethod = MethodFinderUtils.findMethod_returningText(
+                processClassContext.getEncapsulationPolicy(),
                 cls,
                 TITLE,
                 NO_ARG);
@@ -107,7 +109,9 @@ extends MethodPrefixBasedFacetFactoryAbstract {
 
     private @Nullable Method removeToString(final ProcessClassContext processClassContext) {
         val cls = processClassContext.getCls();
-        val toStringMethod = MethodFinderUtils.findMethod(cls, TO_STRING, String.class, null);
+        val toStringMethod = MethodFinderUtils.findMethod(
+                processClassContext.getEncapsulationPolicy(),
+                cls, TO_STRING, String.class, null);
         if (toStringMethod != null) {
             processClassContext.removeMethod(toStringMethod);
         }

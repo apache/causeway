@@ -64,6 +64,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         val returnType = getterOrMixinMain.getReturnType();
         val autoCompleteMethod = MethodFinder
                 .findMethod(
+                        processMethodContext.getEncapsulationPolicy(),
                         cls,
                         namingConvention,
                         NO_RETURN,

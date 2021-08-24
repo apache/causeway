@@ -30,6 +30,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.config.IsisConfiguration.Core.MetaModel.EncapsulationPolicy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -41,6 +42,8 @@ import org.apache.isis.core.metamodel.facets.fallback.FallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaMethodsFactory;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 public class TitleAnnotationFacetFactory
@@ -157,20 +160,25 @@ implements MetaModelRefiner {
         programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec -> {
 
             final Class<?> cls = objectSpec.getCorrespondingClass();
+            final var encapsulationPolicy = ((ObjectSpecificationAbstract)objectSpec).getEncapsulationPolicy();
 
-            final Method titleMethod = MethodFinderUtils.findMethod(cls, TITLE_METHOD_NAME, String.class, null);
+            final Method titleMethod = MethodFinderUtils.findMethod(
+                    encapsulationPolicy,
+                    cls, TITLE_METHOD_NAME, String.class, null);
             if (titleMethod == null) {
                 return;
             }
 
             // determine if cls contains an @Title annotated method, not inherited from superclass
-            final Class<?> supClass = cls.getSuperclass();
+            final ObjectSpecification supClass = objectSpec.superclass();
             if (supClass == null) {
                 return;
             }
 
-            final List<Method> methods = methodsWithTitleAnnotation(cls);
-            final List<Method> superClassMethods = methodsWithTitleAnnotation(supClass);
+            final var superEncapsulationPolicy = ((ObjectSpecificationAbstract)supClass).getEncapsulationPolicy();
+
+            final List<Method> methods = methodsWithTitleAnnotation(encapsulationPolicy, cls);
+            final List<Method> superClassMethods = methodsWithTitleAnnotation(superEncapsulationPolicy, supClass.getCorrespondingClass());
             if (methods.size() > superClassMethods.size()) {
                 ValidationFailure.raiseFormatted(
                         objectSpec,
@@ -183,8 +191,10 @@ implements MetaModelRefiner {
         });
     }
 
-    private static List<Method> methodsWithTitleAnnotation(final Class<?> cls) {
-        return MethodFinderUtils.findMethodsWithAnnotation(cls, Title.class);
+    private static List<Method> methodsWithTitleAnnotation(
+            final EncapsulationPolicy encapsulationPolicy,
+            final Class<?> cls) {
+        return MethodFinderUtils.findMethodsWithAnnotation(encapsulationPolicy, cls, Title.class);
     }
 
 }

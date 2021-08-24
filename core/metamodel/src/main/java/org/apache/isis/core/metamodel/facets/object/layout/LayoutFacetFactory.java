@@ -44,6 +44,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         final Method method = MethodFinderUtils.findMethod(
+                processClassContext.getEncapsulationPolicy(),
                 cls, MethodLiteralConstants.LAYOUT_METHOD_NAME, String.class, NO_ARG);
 
         final LayoutFacet layoutFacet;

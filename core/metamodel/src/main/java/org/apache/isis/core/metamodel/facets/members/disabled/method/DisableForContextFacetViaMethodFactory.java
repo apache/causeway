@@ -63,6 +63,7 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
         if(searchExactMatch) {
             // search for exact match
             disableMethod = MethodFinder.findMethod_returningText(
+                    processMethodContext.getEncapsulationPolicy(),
                     cls,
                     namingConvention,
                     actionOrGetter.getParameterTypes())
@@ -72,6 +73,7 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
         if (disableMethod == null) {
             // search for no-arg version
             disableMethod = MethodFinder.findMethod_returningText(
+                    processMethodContext.getEncapsulationPolicy(),
                     cls,
                     namingConvention,
                     NO_ARG)

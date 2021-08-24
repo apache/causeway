@@ -45,7 +45,8 @@ extends ValueFacetUsingSemanticsProviderFactory<Enum<?>> {
         }
 
         addFacets(_Casts.uncheckedCast(
-                new EnumValueSemanticsProvider<>(facetHolder, _Casts.uncheckedCast(cls))));
+                new EnumValueSemanticsProvider<>(
+                        processClassContext.getEncapsulationPolicy(), facetHolder, _Casts.uncheckedCast(cls))));
         addFacet(new ChoicesFacetEnum(facetHolder, cls));
     }
 

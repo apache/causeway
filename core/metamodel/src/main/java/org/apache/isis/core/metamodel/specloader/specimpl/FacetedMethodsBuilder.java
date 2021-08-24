@@ -177,7 +177,8 @@ implements HasMetaModelContext {
 
         // process facets at object level
         // this will also remove some methods, such as the superclass methods.
-        getFacetProcessor().process(introspectedClass, methodRemover, inspectedTypeSpec);
+        getFacetProcessor()
+        .process(introspectedClass, encapsulationPolicy(), methodRemover, inspectedTypeSpec);
     }
 
     // ////////////////////////////////////////////////////////////////////////////
@@ -204,9 +205,9 @@ implements HasMetaModelContext {
 
         val associationCandidateMethods = new HashSet<Method>();
 
-        //FIXME honor encapsulationPolicy
-
-        getFacetProcessor().findAssociationCandidateAccessors(
+        getFacetProcessor()
+        .findAssociationCandidateGetters(
+                    encapsulationPolicy(),
                     methodRemover.streamRemaining(),
                     associationCandidateMethods::add);
 
@@ -259,8 +260,10 @@ implements HasMetaModelContext {
 
             // create property and add facets
             val facetedMethod = FacetedMethod.createForCollection(mmc, introspectedClass, accessorMethod);
-            getFacetProcessor().process(
+            getFacetProcessor()
+            .process(
                     introspectedClass,
+                    encapsulationPolicy(),
                     accessorMethod,
                     methodRemover,
                     facetedMethod,
@@ -302,8 +305,10 @@ implements HasMetaModelContext {
                     .createForProperty(getMetaModelContext(), introspectedClass, accessorMethod);
 
             // process facets for the 1:1 association (eg. contributed properties)
-            getFacetProcessor().process(
+            getFacetProcessor()
+            .process(
                     introspectedClass,
+                    encapsulationPolicy(),
                     accessorMethod,
                     methodRemover,
                     facetedMethod,
@@ -346,8 +351,6 @@ implements HasMetaModelContext {
             log.debug("  looking for action methods");
         }
 
-        //FIXME honor encapsulationPolicy
-
         methodRemover.removeMethods(method->{
             val actionPeer = findActionFacetedMethod(method);
             if (actionPeer != null) {
@@ -387,8 +390,10 @@ implements HasMetaModelContext {
                 .createForAction(getMetaModelContext(), introspectedClass, actionMethod);
 
         // process facets on the action & parameters
-        getFacetProcessor().process(
+        getFacetProcessor()
+        .process(
                 introspectedClass,
+                encapsulationPolicy(),
                 actionMethod,
                 methodRemover,
                 action,
@@ -397,7 +402,8 @@ implements HasMetaModelContext {
 
         final List<FacetedMethodParameter> actionParams = action.getParameters();
         for (int j = 0; j < actionParams.size(); j++) {
-            getFacetProcessor().processParams(introspectedClass, actionMethod, j, methodRemover, actionParams.get(j));
+            getFacetProcessor()
+            .processParams(introspectedClass, encapsulationPolicy(), actionMethod, j, methodRemover, actionParams.get(j));
         }
 
         return action;

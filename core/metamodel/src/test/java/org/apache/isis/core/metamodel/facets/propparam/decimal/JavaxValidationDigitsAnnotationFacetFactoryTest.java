@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.propparam.decimal;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 
+import org.apache.isis.core.config.IsisConfiguration.Core.MetaModel.EncapsulationPolicy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
@@ -69,7 +70,9 @@ extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Order.class, "updateCost", new Class[] { BigDecimal.class });
 
-        facetFactory.processParams(new FacetFactory.ProcessParameterContext(Customer.class, method, 0, null, facetedMethodParameter));
+
+
+        facetFactory.processParams(new FacetFactory.ProcessParameterContext(Customer.class, EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED, method, 0, null, facetedMethodParameter));
 
         final Facet facet = facetedMethodParameter.getFacet(BigDecimalValueFacet.class);
         assertNotNull(facet);

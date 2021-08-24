@@ -55,13 +55,17 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         val facets = new ArrayList<Facet>();
 
         Method method = null;
-        method = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.UPDATING_PREFIX, void.class, NO_ARG);
+        method = MethodFinderUtils.findMethod(
+                processClassContext.getEncapsulationPolicy(),
+                cls, MethodLiteralConstants.UPDATING_PREFIX, void.class, NO_ARG);
         if (method != null) {
             processClassContext.removeMethod(method);
             facets.add(new UpdatingCallbackFacetViaMethod(method, facetHolder));
         }
 
-        method = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.UPDATED_PREFIX, void.class, NO_ARG);
+        method = MethodFinderUtils.findMethod(
+                processClassContext.getEncapsulationPolicy(),
+                cls, MethodLiteralConstants.UPDATED_PREFIX, void.class, NO_ARG);
         if (method != null) {
             processClassContext.removeMethod(method);
             facets.add(new UpdatedCallbackFacetViaMethod(method, facetHolder));

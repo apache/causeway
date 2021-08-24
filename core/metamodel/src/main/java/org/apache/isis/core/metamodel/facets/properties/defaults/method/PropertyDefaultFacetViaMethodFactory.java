@@ -62,6 +62,7 @@ public class PropertyDefaultFacetViaMethodFactory extends MethodPrefixBasedFacet
         val returnType = getterOrMixinMain.getReturnType();
         val method = MethodFinder
                 .findMethod(
+                    processMethodContext.getEncapsulationPolicy(),
                     cls,
                     namingConvention,
                     returnType,

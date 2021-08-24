@@ -66,7 +66,9 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         val paramTypes = new Class<?>[] {Identifier.Type.class};
 
         val method = MethodFinderUtils.findMethod_returningText(
-                cls, MethodLiteralConstants.DISABLED,
+                processClassContext.getEncapsulationPolicy(),
+                cls,
+                MethodLiteralConstants.DISABLED,
                 paramTypes);
         if (method == null) {
             return;

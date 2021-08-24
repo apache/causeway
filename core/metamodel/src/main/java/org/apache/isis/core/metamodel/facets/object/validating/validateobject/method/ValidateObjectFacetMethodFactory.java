@@ -51,6 +51,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         final Method method = MethodFinderUtils.findMethod_returningText(
+                processClassContext.getEncapsulationPolicy(),
                 cls,
                 MethodLiteralConstants.VALIDATE_PREFIX,
                 NO_ARG);

@@ -27,6 +27,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.core.config.IsisConfiguration.Core.MetaModel.EncapsulationPolicy;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.all.named.ParamNamedFacet;
@@ -49,7 +50,7 @@ public class NamedFacetForParameterLayoutAnnotationFactoryTest extends AbstractF
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[]{String.class});
 
-        facetFactory.processParams(new FacetFactory.ProcessParameterContext(Customer.class, method, 0, null, facetedMethodParameter));
+        facetFactory.processParams(new FacetFactory.ProcessParameterContext(Customer.class, EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED, method, 0, null, facetedMethodParameter));
 
         val facet = facetedMethodParameter.getFacet(ParamNamedFacet.class);
         assertThat(facet, is(notNullValue()));

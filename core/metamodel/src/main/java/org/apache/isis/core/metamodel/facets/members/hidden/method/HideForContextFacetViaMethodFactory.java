@@ -57,6 +57,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
 
         val cls = processMethodContext.getCls();
         Method hideMethod = MethodFinder.findMethod(
+                processMethodContext.getEncapsulationPolicy(),
                 cls,
                 namingConvention,
                 boolean.class,
@@ -69,6 +70,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
             boolean searchExactMatch = !noParamsOnly;
             if(searchExactMatch) {
                 hideMethod = MethodFinder.findMethod(
+                        processMethodContext.getEncapsulationPolicy(),
                         cls,
                         namingConvention,
                         boolean.class,
