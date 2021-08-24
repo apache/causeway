@@ -24,7 +24,6 @@ import java.util.NoSuchElementException;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.exceptions.UnrecoverableException;
-import org.apache.isis.applib.services.repository.RepositoryService;
 
 import lombok.NonNull;
 
@@ -140,7 +139,7 @@ public interface FactoryService {
      * @apiNote forces the viewModelClass to be added to the meta-model if not already
      * @since 2.0
      */
-    default <T> T viewModel(@NonNull Class<T> viewModelClass) {
+    default <T> T viewModel(@NonNull final Class<T> viewModelClass) {
         return viewModel(viewModelClass, /*mementoStr*/null);
     }
 
@@ -164,43 +163,5 @@ public interface FactoryService {
      * @since 2.0
      */
     <T> T create(@NonNull Class<T> domainClass);
-
-    // -- DEPRECATIONS
-
-    /**
-     * Creates a new instance of the specified class, but does not persist it.
-     *
-     * <p>
-     * It is recommended that the object be initially instantiated using
-     * this method, though the framework will also handle the case when
-     * the object is simply <i>new()</i>ed up.  The benefits of using
-     * {@link #instantiate(Class)} are:
-     * </p>
-     *
-     * <ul>
-     * <li>any services will be injected into the object immediately
-     *     (otherwise they will not be injected until the framework
-     *     becomes aware of the object, typically when it is
-     *     {@link RepositoryService#persist(Object) persist}ed</li>
-     * <li>the default value for any properties (usually as specified by
-     *     <tt>default<i>Xxx</i>()</tt> supporting methods) will (since 2.0) be
-     *     used</li>
-     * <li>the <tt>created()</tt> callback will not be called.
-     * </ul>
-     *
-     * <p>
-     * The corollary is: if your code never uses <tt>default<i>Xxx</i>()</tt>
-     * supporting methods or the <tt>created()</tt> callback, then you can
-     * alternatively just <i>new()</i> up the object rather than call this
-     * method.
-     * </p>
-     * @deprecated with semantic changes since 2.0 previous behavior is no longer guaranteed,
-     * instead consider use of @{@link #detachedEntity(Class)} or {@link #getOrCreate(Class)}
-     * if applicable
-     */
-    @Deprecated
-    default <T> T instantiate(Class<T> domainClass) {
-        return getOrCreate(domainClass);
-    }
 
 }
