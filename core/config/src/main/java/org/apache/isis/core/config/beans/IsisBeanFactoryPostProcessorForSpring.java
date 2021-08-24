@@ -35,6 +35,7 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.beans.aoppatch.AopPatch;
 
 import lombok.val;
@@ -66,13 +67,13 @@ implements
     private IsisComponentScanInterceptor isisComponentScanInterceptor;
 
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         isisBeanTypeClassifier = IsisBeanTypeClassifier.createInstance(applicationContext);
         isisComponentScanInterceptor = IsisComponentScanInterceptor.createInstance(isisBeanTypeClassifier);
     }
 
     @Override
-    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+    public void postProcessBeanFactory(final ConfigurableListableBeanFactory beanFactory) throws BeansException {
 
         // make sure we have an applicationContext before calling post processing
         Objects.requireNonNull(isisBeanTypeClassifier,
@@ -101,7 +102,7 @@ implements
             if(typeMetaData.isInjectable()) {
 
                 val beanNameOverride = typeMetaData.getBeanNameOverride();
-                if(beanNameOverride!=null) {
+                if(_Strings.isNotEmpty(beanNameOverride)) {
                     registry.removeBeanDefinition(beanDefinitionName);
                     registry.registerBeanDefinition(beanNameOverride, beanDefinition);
                     log.debug("renaming bean {} -> {}", beanDefinitionName, beanNameOverride);
