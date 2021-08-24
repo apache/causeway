@@ -51,7 +51,7 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.editing.Immutab
 import org.apache.isis.core.metamodel.facets.object.domainobject.entitychangepublishing.EntityChangePublishingFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.entitychangepublishing.EntityChangePublishingFacetForDomainObjectAnnotationAsConfigured;
 import org.apache.isis.core.metamodel.facets.object.domainobject.entitychangepublishing.EntityChangePublishingFacetFromConfiguration;
-import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.LogicalTypeFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.logicaltype.LogicalTypeFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.recreatable.RecreatableObjectFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;

@@ -71,8 +71,9 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.Co
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.PropertyDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.EditingEnabledFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.ImmutableFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.encapsulation.EncapsulationFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.entitychangepublishing.EntityChangePublishingFacetForDomainObjectAnnotation;
-import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.LogicalTypeFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.logicaltype.LogicalTypeFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.recreatable.RecreatableObjectFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.mixin.MetaModelValidatorForMixinTypes;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation;
@@ -311,6 +312,10 @@ implements
 
         FacetUtil.addFacetIfPresent(
                 LogicalTypeFacetForDomainObjectAnnotation
+                .create(domainObjectIfAny, cls, facetHolder));
+
+        FacetUtil.addFacetIfPresent(
+                EncapsulationFacetForDomainObjectAnnotation
                 .create(domainObjectIfAny, cls, facetHolder));
     }
 

@@ -129,6 +129,13 @@ public @interface DomainObject {
             default "Disabled";
 
     /**
+     * Controls on a per class basis,
+     * whether meta-model inspection should process non-public members and their supporting methods.
+     */
+    Encapsulation encapsulation()
+            default Encapsulation.NOT_SPECIFIED;
+
+    /**
      * Whether entity changes (persistent property updates) should be published to
      * {@link org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber}s
      * and whether entity changes, captured as {@link org.apache.isis.applib.services.publishing.spi.EntityChanges},

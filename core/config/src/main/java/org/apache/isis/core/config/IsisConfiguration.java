@@ -1279,6 +1279,11 @@ public class IsisConfiguration {
         @Data
         public static class MetaModel {
 
+            public static enum EncapsulationPolicy {
+                ONLY_PUBLIC_MEMBERS_SUPPORTED,
+                ENCAPSULATED_MEMBERS_SUPPORTED,
+            }
+
             /**
              * Whether domain objects to which the current user does not have visibility access should be rendered
              * within collections or drop-down choices/autocompletes.
@@ -1307,6 +1312,14 @@ public class IsisConfiguration {
             private final Introspector introspector = new Introspector();
             @Data
             public static class Introspector {
+
+                //TODO missing java-doc
+                private EncapsulationPolicy encapsulationPolicy;
+                public EncapsulationPolicy getEncapsulationPolicy() {
+                    return Optional.ofNullable(encapsulationPolicy)
+                            .orElse(EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED);
+                }
+
                 /**
                  * Whether to perform introspection in parallel. Meant to speed up bootstrapping.
                  * <p>

@@ -35,6 +35,7 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.reflection._Reflect;
+import org.apache.isis.core.config.IsisConfiguration.Core.MetaModel.EncapsulationPolicy;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -44,6 +45,7 @@ import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
+import org.apache.isis.core.metamodel.facets.object.encapsulation.EncapsulationFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.object.wizard.WizardFacet;
@@ -87,6 +89,7 @@ implements FacetHolder {
 
     private final FacetedMethodsBuilder facetedMethodsBuilder;
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
+    private final EncapsulationPolicy encapsulationPolicy;
 
 
     /**
@@ -109,8 +112,15 @@ implements FacetHolder {
         this.facetedMethodsBuilder = new FacetedMethodsBuilder(this, facetProcessor, classSubstitutorRegistry);
         this.classSubstitutorRegistry = classSubstitutorRegistry;
 
+        // must install EncapsulationFacet (if any)
         facetProcessor.processObjectType(correspondingClass, this);
 
+        this.encapsulationPolicy =
+                this.lookupFacet(EncapsulationFacet.class)
+                .map(encapsulationFacet->
+                        encapsulationFacet
+                        .getEncapsulationPolicy(mmc.getConfiguration()))
+                .orElse(EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED);
     }
 
     @Override
@@ -319,7 +329,7 @@ implements FacetHolder {
      * for any synthetic method also add an entry with its regular method,
      * as found in the method's declaring class type-hierarchy
      */
-    private void postprocessSyntheticMembers(HashMap<Method, ObjectMember> membersByMethod) {
+    private void postprocessSyntheticMembers(final HashMap<Method, ObjectMember> membersByMethod) {
         val syntheticEntries = Can.ofStream(
             membersByMethod
             .entrySet()

@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid;
+package org.apache.isis.core.metamodel.facets.object.domainobject.logicaltype;
 
 import java.util.Optional;
 
