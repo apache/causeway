@@ -56,8 +56,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import lombok.NonNull;
 import lombok.val;
 
@@ -76,12 +74,12 @@ implements
             final FeatureType featureType,
             final int number,
             final ObjectActionDefault objectAction,
-            final TypedHolder peer) {
+            final @NonNull TypedHolder peer) {
 
         this.featureType = featureType;
         this.number = number;
         this.parentAction = objectAction;
-        this.peer = requires(peer, "peer");
+        this.peer = peer;
 
         this.javaSourceParamName =
                 objectAction.getFacetedMethod().getMethod().getParameters()[number].getName();

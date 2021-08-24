@@ -26,7 +26,8 @@ import java.util.Map.Entry;
 import org.apache.isis.commons.internal.base._Strings.KeyValuePair;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
-import static org.apache.isis.commons.internal.base._With.requires;
+
+import lombok.NonNull;
 
 /**
  * Package private mixin for ResourceServlet
@@ -36,9 +37,7 @@ final class TemplateResourceServlet_HtmlTemplateVariables {
 
     final Map<String, String> placeholders = new HashMap<>();
 
-    public TemplateResourceServlet_HtmlTemplateVariables(KeyValuePair ... kvPairs) {
-        requires(kvPairs, "placeholders");
-
+    public TemplateResourceServlet_HtmlTemplateVariables(@NonNull final KeyValuePair ... kvPairs) {
         stream(kvPairs)
         .forEach(kvPair->placeholders.put(kvPair.getKey(), kvPair.getValue()));
     }

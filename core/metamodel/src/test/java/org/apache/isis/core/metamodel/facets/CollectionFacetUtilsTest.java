@@ -34,33 +34,29 @@ import java.util.TreeSet;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class CollectionFacetUtilsTest {
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
+class CollectionFacetUtilsTest {
 
     List<Object> iterable;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
         iterable = Arrays.<Object>asList("a", "b", "c");
     }
 
     @Test
-    public void whenLinkedList() throws Exception {
+    void whenLinkedList() throws Exception {
 
         List<Class<?>> collectionTypes = _Lists.<Class<?>>of(
                 LinkedList.class,
@@ -90,7 +86,7 @@ public class CollectionFacetUtilsTest {
     }
 
     @Test
-    public void whenArray() throws Exception {
+    void whenArray() throws Exception {
         Object o = CollectionFacet.AutofitUtils.collect(iterable.stream(), String[].class);
         assertThat(o instanceof String[], is(true));
 
@@ -99,25 +95,23 @@ public class CollectionFacetUtilsTest {
     }
 
     @Test
-    public void whenNotSupported() throws Exception {
+    void whenNotSupported() throws Exception {
         Object o = CollectionFacet.AutofitUtils.collect(iterable.stream(), Map.class);
         assertThat(o, is(nullValue()));
     }
 
     @Test
-    public void whenRequiredTypeIsNull() throws Exception {
+    void whenRequiredTypeIsNull() throws Exception {
 
-        expectedException.expect(IllegalArgumentException.class);
-
-        CollectionFacet.AutofitUtils.collect(iterable.stream(), null);
+        Assertions.assertThrows(NullPointerException.class, ()->
+            CollectionFacet.AutofitUtils.collect(iterable.stream(), null));
     }
 
     @Test
-    public void whenIterableIsNull() throws Exception {
+    void whenIterableIsNull() throws Exception {
 
-        expectedException.expect(IllegalArgumentException.class);
-
-        CollectionFacet.AutofitUtils.collect(null, List.class);
+        Assertions.assertThrows(NullPointerException.class, ()->
+            CollectionFacet.AutofitUtils.collect(null, List.class));
     }
 
 

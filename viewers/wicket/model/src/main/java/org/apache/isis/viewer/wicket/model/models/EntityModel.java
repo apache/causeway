@@ -24,10 +24,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -43,8 +42,6 @@ import org.apache.isis.viewer.common.model.object.ObjectUiModel.HasRenderingHint
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
-
-import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -82,8 +79,8 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
     // -- FACTORIES
 
     public static EntityModel ofParameters(
-            IsisAppCommonContext commonContext,
-            PageParameters pageParameters) {
+            final IsisAppCommonContext commonContext,
+            final PageParameters pageParameters) {
 
         val memento = bookmarkFrom(pageParameters)
                 .map(commonContext::mementoForBookmark)
@@ -93,8 +90,8 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
     }
 
     public static EntityModel ofAdapter(
-            IsisAppCommonContext commonContext,
-            ManagedObject adapter) {
+            final IsisAppCommonContext commonContext,
+            final ManagedObject adapter) {
         val adapterMemento = commonContext.mementoFor(adapter);
         return ofMemento(commonContext, adapterMemento);
     }
@@ -119,8 +116,8 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
      * As used by TreeModel (same as {@link #ofAdapter(IsisAppCommonContext, ManagedObject)}
      */
     protected EntityModel(
-            IsisAppCommonContext commonContext,
-            ManagedObject adapter) {
+            final IsisAppCommonContext commonContext,
+            final ManagedObject adapter) {
 
         this(commonContext,
                 commonContext.mementoFor(adapter),
@@ -131,7 +128,7 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
     /**
      * As used by ScalarModel
      */
-    protected EntityModel(IsisAppCommonContext commonContext, Mode mode, RenderingHint renderingHint) {
+    protected EntityModel(final IsisAppCommonContext commonContext, final Mode mode, final RenderingHint renderingHint) {
         this(commonContext, null, _Maps.<PropertyMemento, ScalarModel>newHashMap(),
                 mode, renderingHint);
     }
@@ -140,10 +137,10 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
             final @NonNull IsisAppCommonContext commonContext,
             final @Nullable ObjectMemento adapterMemento,
             final @Nullable Map<PropertyMemento, ScalarModel> propertyScalarModels,
-            Mode mode,
-            RenderingHint renderingHint) {
+            final Mode mode,
+            final RenderingHint renderingHint) {
 
-        super(requires(commonContext, "commonContext"), adapterMemento);
+        super(commonContext, adapterMemento);
 
         this.propertyScalarModels = propertyScalarModels!=null
                 ? propertyScalarModels
@@ -197,13 +194,13 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
     }
 
     @Override
-    public void setHint(Component component, String keyName, String hintValue) {
+    public void setHint(final Component component, final String keyName, final String hintValue) {
         ComponentHintKey componentHintKey = ComponentHintKey.create(super.getCommonContext(), component, keyName);
         componentHintKey.set(super.asHintingBookmarkIfSupported(), hintValue);
     }
 
     @Override
-    public void clearHint(Component component, String attributeName) {
+    public void clearHint(final Component component, final String attributeName) {
         setHint(component, attributeName, null);
     }
 

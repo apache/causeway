@@ -51,8 +51,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
+import lombok.NonNull;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
@@ -75,7 +74,7 @@ public interface CollectionFacet extends Facet {
      */
     Stream<ManagedObject> stream(ManagedObject collectionAdapter);
 
-    default Optional<ManagedObject> firstElement(ManagedObject collectionAdapter) {
+    default Optional<ManagedObject> firstElement(final ManagedObject collectionAdapter) {
         return stream(collectionAdapter).findFirst();
     }
 
@@ -104,7 +103,7 @@ public interface CollectionFacet extends Facet {
 
     // -- UTILS
 
-    public static Optional<CollectionFacet> lookup(@Nullable ManagedObject container) {
+    public static Optional<CollectionFacet> lookup(@Nullable final ManagedObject container) {
         if(container==null) {
             return Optional.empty();
         }
@@ -112,19 +111,19 @@ public interface CollectionFacet extends Facet {
         return Optional.ofNullable(collectionSpec.getFacet(CollectionFacet.class));
     }
 
-    public static int elementCount(@Nullable ManagedObject container) {
+    public static int elementCount(@Nullable final ManagedObject container) {
         return lookup(container)
                 .map(collectionFacet->collectionFacet.size(container))
                 .orElse(0);
     }
 
-    public static Stream<ManagedObject> streamAdapters(@Nullable ManagedObject container) {
+    public static Stream<ManagedObject> streamAdapters(@Nullable final ManagedObject container) {
         return lookup(container)
                 .map(collectionFacet->collectionFacet.stream(container))
                 .orElse(Stream.empty());
     }
 
-    public static Object[] toArrayOfPojos(@Nullable ManagedObject container) {
+    public static Object[] toArrayOfPojos(@Nullable final ManagedObject container) {
         val elementAdapters = streamAdapters(container)
                 .collect(Collectors.toList());
         return UnwrapUtil.multipleAsArray(elementAdapters);
@@ -138,11 +137,8 @@ public interface CollectionFacet extends Facet {
          */
         @SuppressWarnings({ "rawtypes", "unchecked" })
         public static Object collect(
-                final Stream<?> stream,
-                final Class<?> requiredType) {
-
-            requires(stream, "stream");
-            requires(requiredType, "requiredType");
+                final @NonNull Stream<?> stream,
+                final @NonNull Class<?> requiredType) {
 
             Stream rawStream = stream;
 

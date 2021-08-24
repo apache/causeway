@@ -22,6 +22,7 @@ package org.apache.isis.commons.internal.base;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -69,7 +70,7 @@ public final class _With<T> {
      * @return {@code obj!=null ? obj : elseGet.get()}
      */
     public static <X> X ifPresentElseGet(final @Nullable X obj, final Supplier<X> elseGet) {
-        return obj!=null ? obj : requires(elseGet, "elseGet").get();
+        return obj!=null ? obj : Objects.requireNonNull(elseGet, "elseGet").get();
     }
 
     /**
@@ -86,7 +87,7 @@ public final class _With<T> {
         if(obj!=null) {
             return obj;
         }
-        throw requires(elseThrow, "elseThrow").get();
+        throw Objects.requireNonNull(elseThrow, "elseThrow").get();
     }
 
     // -- CONSUMER IDIOMS
@@ -98,7 +99,7 @@ public final class _With<T> {
      * @return {@code obj}
      */
     public static <X> X accept(final @Nullable X obj, final Consumer<X> consumer) {
-        requires(consumer, "consumer").accept(obj);
+        Objects.requireNonNull(consumer, "consumer").accept(obj);
         return obj;
     }
 
@@ -110,7 +111,7 @@ public final class _With<T> {
      */
     public static <X> X acceptIfPresent(final @Nullable X obj, final Consumer<X> ifPresent) {
         if(obj!=null) {
-            requires(ifPresent, "ifPresent").accept(obj);
+            Objects.requireNonNull(ifPresent, "ifPresent").accept(obj);
         }
         return obj;
     }
@@ -125,9 +126,9 @@ public final class _With<T> {
      */
     public static <X> X acceptIfPresentElseRun(final @Nullable X obj, final Consumer<X> ifPresent, final Runnable elseRun) {
         if(obj!=null) {
-            requires(ifPresent, "ifPresent").accept(obj);
+            Objects.requireNonNull(ifPresent, "ifPresent").accept(obj);
         } else {
-            requires(elseRun, "elseRun").run();
+            Objects.requireNonNull(elseRun, "elseRun").run();
         }
         return obj;
     }
@@ -146,9 +147,9 @@ public final class _With<T> {
                     throws E {
 
         if(obj!=null) {
-            requires(ifPresent, "ifPresent").accept(obj);
+            Objects.requireNonNull(ifPresent, "ifPresent").accept(obj);
         } else {
-            throw requires(elseThrow, "elseThrow").get();
+            throw Objects.requireNonNull(elseThrow, "elseThrow").get();
         }
         return obj;
     }
@@ -161,7 +162,7 @@ public final class _With<T> {
      * @return {@code obj!=null ? obj : supplier.get()}
      */
     public static <X> X computeIfAbsent(final @Nullable X obj, final Supplier<X> supplier) {
-        return obj!=null ? obj : requires(supplier, "supplier").get();
+        return obj!=null ? obj : Objects.requireNonNull(supplier, "supplier").get();
     }
 
     // -- MAPPING IDIOMS
@@ -174,7 +175,7 @@ public final class _With<T> {
      * @return {@code obj!=null ? mapper.apply(obj) : orElse}
      */
     public static <X, R> R mapIfPresentElse(final @Nullable X obj, final Function<X, R> mapper, final @Nullable R orElse) {
-        return obj!=null ? requires(mapper, "mapper").apply(obj) : orElse;
+        return obj!=null ? Objects.requireNonNull(mapper, "mapper").apply(obj) : orElse;
     }
 
     /**
@@ -185,7 +186,7 @@ public final class _With<T> {
      * @return {@code obj!=null ? mapper.apply(obj) : elseGet.get()}
      */
     public static <X, R> R mapIfPresentElseGet(final @Nullable X obj, final Function<X, R> mapper, final Supplier<R> elseGet) {
-        return obj!=null ? requires(mapper, "mapper").apply(obj) : requires(elseGet, "elseGet").get();
+        return obj!=null ? Objects.requireNonNull(mapper, "mapper").apply(obj) : Objects.requireNonNull(elseGet, "elseGet").get();
     }
 
     /**
@@ -202,29 +203,9 @@ public final class _With<T> {
             final Supplier<E> elseThrow)
                     throws E {
         if(obj!=null) {
-            return requires(mapper, "mapper").apply(obj);
+            return Objects.requireNonNull(mapper, "mapper").apply(obj);
         }
-        throw requires(elseThrow, "elseThrow").get();
-    }
-
-    // -- PARAMETER NON-NULL CHECK
-
-    /**
-     * Allows for convenient named parameter non-null-check.
-     * @param obj target for the non-null-check
-     * @param paramName to use for the exception message, when the non-null-check fails
-     * @return {@code obj!=null ? obj : throw NullPointerException}
-     * @throws NullPointerException if {@code obj} is {@code null}
-     * @deprecated instead use {@code @lombok.NonNull} on parameters
-     * or {@link java.util.Objects#requireNonNull(Object, String)} on fields
-     */
-    @Deprecated
-    public static <T> T requires(final @Nullable T obj, final String paramName) {
-        if (obj == null) {
-            val msg = String.format("Parameter/Field '%s' is required to be present (not null).", paramName);
-            throw new IllegalArgumentException(msg);
-        }
-        return obj;
+        throw Objects.requireNonNull(elseThrow, "elseThrow").get();
     }
 
     // -- PARAMETER NON-EMPTY CHECK(S)
