@@ -42,6 +42,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.commons.internal.reflection._Reflect;
+import org.apache.isis.core.config.IsisConfiguration.Core.MetaModel.EncapsulationPolicy;
 import org.apache.isis.core.metamodel.commons.CanBeVoid;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
 import org.apache.isis.core.metamodel.commons.ToString;
@@ -141,9 +142,12 @@ implements HasMetaModelContext {
         this.introspectedClass = inspectedTypeSpec.getCorrespondingClass();
 
         this.explicitAnnotationsForActions =
-                getConfiguration().getApplib().getAnnotation().getAction().isExplicit();
+                encapsulationPolicy().isEncapsulatedMembersSupported()
+                    || getConfiguration().getApplib().getAnnotation().getAction().isExplicit();
 
-        val methodsRemaining = introspectedClass.getMethods();
+        val methodsRemaining = encapsulationPolicy().isEncapsulatedMembersSupported()
+                ? introspectedClass.getDeclaredMethods()
+                : introspectedClass.getMethods();
         this.methodRemover = new ConcurrentMethodRemover(introspectedClass, methodsRemaining);
 
     }
@@ -152,7 +156,6 @@ implements HasMetaModelContext {
     public MetaModelContext getMetaModelContext() {
         return inspectedTypeSpec.getMetaModelContext();
     }
-
 
     // ////////////////////////////////////////////////////////////////////////////
     // Class and stuff immediately derived from class
@@ -194,13 +197,14 @@ implements HasMetaModelContext {
 
     private List<FacetedMethod> createAssociationFacetedMethods() {
         if (log.isDebugEnabled()) {
-            log.debug("introspecting {}: properties and collections", getClassName());
+            log.debug("introspecting(policy={}) {}: properties and collections", encapsulationPolicy().name(), getClassName());
         }
 
         val specLoader = getSpecificationLoader();
 
         val associationCandidateMethods = new HashSet<Method>();
 
+        //FIXME honor encapsulationPolicy
 
         getFacetProcessor().findAssociationCandidateAccessors(
                     methodRemover.streamRemaining(),
@@ -328,7 +332,7 @@ implements HasMetaModelContext {
     private List<FacetedMethod> findActionFacetedMethods() {
 
         if (log.isDebugEnabled()) {
-            log.debug("introspecting {}: actions", getClassName());
+            log.debug("introspecting(policy={}) {}: actions", encapsulationPolicy().name(), getClassName());
         }
         val actionFacetedMethods = _Lists.<FacetedMethod>newArrayList();
         collectActionFacetedMethods(actionFacetedMethods::add);
@@ -341,6 +345,8 @@ implements HasMetaModelContext {
         if (log.isDebugEnabled()) {
             log.debug("  looking for action methods");
         }
+
+        //FIXME honor encapsulationPolicy
 
         methodRemover.removeMethods(method->{
             val actionPeer = findActionFacetedMethod(method);
@@ -557,6 +563,10 @@ implements HasMetaModelContext {
                 .map(FacetedMethod::getMethod)
                 .map(method::equals)
                 .orElse(false);
+    }
+
+    private EncapsulationPolicy encapsulationPolicy() {
+        return inspectedTypeSpec.getEncapsulationPolicy();
     }
 
     // ////////////////////////////////////////////////////////////////////////////

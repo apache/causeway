@@ -45,6 +45,7 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.collections._Streams;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.functions._Predicates;
+import org.apache.isis.core.config.IsisConfiguration.Core.MetaModel.EncapsulationPolicy;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -253,6 +254,8 @@ implements ObjectSpecification {
     public final String getFullIdentifier() {
         return fullName;
     }
+
+    public abstract EncapsulationPolicy getEncapsulationPolicy();
 
     @Override
     public void introspectUpTo(final IntrospectionState upTo) {

@@ -67,8 +67,6 @@ import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.applib.services.userui.UserMenu;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.config.IsisConfiguration.Core;
-import org.apache.isis.core.config.IsisConfiguration.Viewer;
 import org.apache.isis.core.config.metamodel.facets.DefaultViewConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.ActionPublishingPolicy;
@@ -1281,7 +1279,8 @@ public class IsisConfiguration {
 
             public static enum EncapsulationPolicy {
                 ONLY_PUBLIC_MEMBERS_SUPPORTED,
-                ENCAPSULATED_MEMBERS_SUPPORTED,
+                ENCAPSULATED_MEMBERS_SUPPORTED;
+                public boolean isEncapsulatedMembersSupported() { return this == ENCAPSULATED_MEMBERS_SUPPORTED; }
             }
 
             /**

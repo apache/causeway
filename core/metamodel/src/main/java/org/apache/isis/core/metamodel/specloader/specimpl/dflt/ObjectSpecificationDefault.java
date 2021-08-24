@@ -67,6 +67,7 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbs
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationDefault;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationDefault;
 
+import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -89,8 +90,9 @@ implements FacetHolder {
 
     private final FacetedMethodsBuilder facetedMethodsBuilder;
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
-    private final EncapsulationPolicy encapsulationPolicy;
 
+    @Getter(onMethod_ = {@Override})
+    private final EncapsulationPolicy encapsulationPolicy;
 
     /**
      * available only for managed-beans
@@ -109,18 +111,21 @@ implements FacetHolder {
         super(correspondingClass, determineShortName(correspondingClass), beanSort, facetProcessor, postProcessor);
 
         this.nameIfIsManagedBean = nameIfIsManagedBean;
-        this.facetedMethodsBuilder = new FacetedMethodsBuilder(this, facetProcessor, classSubstitutorRegistry);
         this.classSubstitutorRegistry = classSubstitutorRegistry;
 
         // must install EncapsulationFacet (if any)
         facetProcessor.processObjectType(correspondingClass, this);
 
+        // naturally supports attribute inheritance from the type's hierarchy
         this.encapsulationPolicy =
                 this.lookupFacet(EncapsulationFacet.class)
                 .map(encapsulationFacet->
                         encapsulationFacet
                         .getEncapsulationPolicy(mmc.getConfiguration()))
-                .orElse(EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED);
+                .orElseGet(()->mmc.getConfiguration().getCore().getMetaModel().getIntrospector().getEncapsulationPolicy());
+
+        this.facetedMethodsBuilder =
+                new FacetedMethodsBuilder(this, facetProcessor, classSubstitutorRegistry);
     }
 
     @Override
@@ -199,10 +204,11 @@ implements FacetHolder {
 
     // -- create associations and actions
     private List<ObjectAssociation> createAssociations() {
-        final List<ObjectAssociation> associations = _Lists.newArrayList();
-        final List<FacetedMethod> associationFacetedMethods = facetedMethodsBuilder.getAssociationFacetedMethods();
-        for (FacetedMethod facetedMethod : associationFacetedMethods) {
-            final ObjectAssociation association = createAssociation(facetedMethod);
+        val associations = _Lists.<ObjectAssociation>newArrayList();
+        val associationFacetedMethods =
+                facetedMethodsBuilder.getAssociationFacetedMethods();
+        for (val facetedMethod : associationFacetedMethods) {
+            val association = createAssociation(facetedMethod);
             if(association != null) {
                 associations.add(association);
             }
@@ -222,7 +228,8 @@ implements FacetHolder {
 
     private List<ObjectAction> createActions() {
         val actions = _Lists.<ObjectAction>newArrayList();
-        val actionFacetedMethods = facetedMethodsBuilder.getActionFacetedMethods();
+        val actionFacetedMethods =
+                facetedMethodsBuilder.getActionFacetedMethods();
         for (val facetedMethod : actionFacetedMethods) {
             val action = createAction(facetedMethod);
             if(action != null) {
