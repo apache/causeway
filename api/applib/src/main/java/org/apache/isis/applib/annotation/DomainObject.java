@@ -25,7 +25,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.springframework.context.annotation.Scope;
-import org.springframework.core.annotation.AliasFor;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
@@ -165,17 +164,6 @@ public @interface DomainObject {
      */
     Nature nature()
             default Nature.NOT_SPECIFIED;
-
-    /**
-     * Synonym for {@link #logicalTypeName()}.
-     *
-     * @deprecated use {@link #logicalTypeName()} instead
-     *
-     * @see #logicalTypeName()
-     */
-    @AliasFor(annotation = DomainObject.class, value = "logicalTypeName")
-    String objectType()
-            default "";
 
     /**
      * The logical name of this object's type, that uniquely and fully qualifies it.

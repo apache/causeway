@@ -24,7 +24,6 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.config.util.LogicalTypeNameUtil;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacetAbstract;
@@ -37,7 +36,7 @@ public class LogicalTypeFacetForDomainObjectAnnotation extends LogicalTypeFacetA
             final FacetHolder holder) {
 
         return domainObjectIfAny
-                .map(annot->LogicalTypeNameUtil.logicalTypeName(annot))
+                .map(annot->annot.logicalTypeName())
                 .filter(_Strings::isNotEmpty)
                 .map(logicalTypeName -> new LogicalTypeFacetForDomainObjectAnnotation(
                         LogicalType.eager(correspondingClass, logicalTypeName),

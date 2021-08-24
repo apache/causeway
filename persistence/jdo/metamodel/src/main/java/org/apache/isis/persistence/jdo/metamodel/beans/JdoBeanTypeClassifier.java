@@ -20,14 +20,14 @@ package org.apache.isis.persistence.jdo.metamodel.beans;
 
 import java.util.Locale;
 
-import org.springframework.lang.Nullable;
 import javax.jdo.annotations.EmbeddedOnly;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.beans.IsisBeanTypeClassifier;
-import org.apache.isis.core.config.util.LogicalTypeNameUtil;
 
 import static org.apache.isis.commons.internal.reflection._Annotations.findNearestAnnotation;
 
@@ -60,7 +60,7 @@ public class JdoBeanTypeClassifier implements IsisBeanTypeClassifier {
 
             val aDomainObject = findNearestAnnotation(type, DomainObject.class).orElse(null);
             if(aDomainObject!=null) {
-                logicalTypeName = LogicalTypeNameUtil.logicalTypeName(aDomainObject);
+                logicalTypeName = aDomainObject.logicalTypeName();
             }
 
             // don't trample over the @DomainObject(logicalTypeName=..) if present

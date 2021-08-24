@@ -68,17 +68,6 @@ public @interface DomainService {
             default NatureOfService.VIEW;
 
     /**
-     * Synonym for {@link #logicalTypeName()}.
-     *
-     * @deprecated use {@link #logicalTypeName()} instead
-     *
-     * @see #logicalTypeName()
-     */
-    @AliasFor(annotation = Named.class, attribute = "value")
-    String objectType()
-            default "";
-
-    /**
      * The logical name of this object's type, that uniquely and fully qualifies it.
      * The logical name is analogous to - but independent of - the actual fully qualified class name.
      * eg. {@code sales.CustomerService} for a class 'org.mycompany.services.CustomerService'
