@@ -17,7 +17,7 @@
 
 name: mappings
 title: "BC Mapping Libraries"
-version: latest
+version: 2.0.0-M6
 start_page: ROOT:about.adoc
 nav:
 - modules/ROOT/nav.adoc
