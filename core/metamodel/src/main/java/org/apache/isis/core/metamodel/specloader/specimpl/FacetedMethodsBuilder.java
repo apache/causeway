@@ -34,7 +34,6 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Encapsulation.EncapsulationPolicy;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.isis.commons.collections.Can;
@@ -53,6 +52,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
+import org.apache.isis.core.metamodel.facets.MemberIntrospectionPolicy;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
@@ -143,11 +143,11 @@ implements HasMetaModelContext {
         this.introspectedClass = inspectedTypeSpec.getCorrespondingClass();
 
         this.explicitAnnotationsForActions =
-                encapsulationPolicy().isEncapsulatedMembersSupported()
+                memberIntrospectionPolicy().getEncapsulationPolicy().isEncapsulatedMembersSupported()
                     || getConfiguration().getApplib().getAnnotation().getAction().isExplicit();
 
         val methodCache = _MethodCache.getInstance();
-        val methodsRemaining = encapsulationPolicy().isEncapsulatedMembersSupported()
+        val methodsRemaining = memberIntrospectionPolicy().getEncapsulationPolicy().isEncapsulatedMembersSupported()
                 ? methodCache.streamPublicOrDeclaredMethods(introspectedClass)
                 : methodCache.streamPublicMethods(introspectedClass);
         this.methodRemover = new ConcurrentMethodRemover(introspectedClass, methodsRemaining);
@@ -180,7 +180,7 @@ implements HasMetaModelContext {
         // process facets at object level
         // this will also remove some methods, such as the superclass methods.
         getFacetProcessor()
-        .process(introspectedClass, encapsulationPolicy(), methodRemover, inspectedTypeSpec);
+        .process(introspectedClass, memberIntrospectionPolicy(), methodRemover, inspectedTypeSpec);
     }
 
     // ////////////////////////////////////////////////////////////////////////////
@@ -200,7 +200,7 @@ implements HasMetaModelContext {
 
     private List<FacetedMethod> createAssociationFacetedMethods() {
         if (log.isDebugEnabled()) {
-            log.debug("introspecting(policy={}) {}: properties and collections", encapsulationPolicy().name(), getClassName());
+            log.debug("introspecting(policy={}) {}: properties and collections", memberIntrospectionPolicy(), getClassName());
         }
 
         val specLoader = getSpecificationLoader();
@@ -209,7 +209,6 @@ implements HasMetaModelContext {
 
         getFacetProcessor()
         .findAssociationCandidateGetters(
-                    encapsulationPolicy(),
                     methodRemover.streamRemaining(),
                     associationCandidateMethods::add);
 
@@ -265,7 +264,7 @@ implements HasMetaModelContext {
             getFacetProcessor()
             .process(
                     introspectedClass,
-                    encapsulationPolicy(),
+                    memberIntrospectionPolicy(),
                     accessorMethod,
                     methodRemover,
                     facetedMethod,
@@ -310,7 +309,7 @@ implements HasMetaModelContext {
             getFacetProcessor()
             .process(
                     introspectedClass,
-                    encapsulationPolicy(),
+                    memberIntrospectionPolicy(),
                     accessorMethod,
                     methodRemover,
                     facetedMethod,
@@ -339,7 +338,7 @@ implements HasMetaModelContext {
     private List<FacetedMethod> findActionFacetedMethods() {
 
         if (log.isDebugEnabled()) {
-            log.debug("introspecting(policy={}) {}: actions", encapsulationPolicy().name(), getClassName());
+            log.debug("introspecting(policy={}) {}: actions", memberIntrospectionPolicy(), getClassName());
         }
         val actionFacetedMethods = _Lists.<FacetedMethod>newArrayList();
         collectActionFacetedMethods(actionFacetedMethods::add);
@@ -395,7 +394,7 @@ implements HasMetaModelContext {
         getFacetProcessor()
         .process(
                 introspectedClass,
-                encapsulationPolicy(),
+                memberIntrospectionPolicy(),
                 actionMethod,
                 methodRemover,
                 action,
@@ -405,7 +404,7 @@ implements HasMetaModelContext {
         final List<FacetedMethodParameter> actionParams = action.getParameters();
         for (int j = 0; j < actionParams.size(); j++) {
             getFacetProcessor()
-            .processParams(introspectedClass, encapsulationPolicy(), actionMethod, j, methodRemover, actionParams.get(j));
+            .processParams(introspectedClass, memberIntrospectionPolicy(), actionMethod, j, methodRemover, actionParams.get(j));
         }
 
         return action;
@@ -573,8 +572,8 @@ implements HasMetaModelContext {
                 .orElse(false);
     }
 
-    private EncapsulationPolicy encapsulationPolicy() {
-        return inspectedTypeSpec.getEncapsulationPolicy();
+    private MemberIntrospectionPolicy memberIntrospectionPolicy() {
+        return inspectedTypeSpec.getMemberIntrospectionPolicy();
     }
 
     // ////////////////////////////////////////////////////////////////////////////

@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.methods;
 import java.lang.reflect.Method;
 import java.util.stream.Stream;
 
-import org.apache.isis.applib.annotation.Encapsulation.EncapsulationPolicy;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils.MethodAndPpmConstructor;
@@ -34,7 +33,7 @@ import org.apache.isis.core.metamodel.methods.MethodFinderUtils.MethodAndPpmCons
 public final class MethodFinder {
 
     public static Stream<Method> findMethod(
-            final EncapsulationPolicy encapsulationPolicy,
+            final MethodFinderOptions options,
             final Class<?> type,
             final Can<String> names,
             final Class<?> expectedReturnType,
@@ -43,14 +42,14 @@ public final class MethodFinder {
         return names.stream()
         .distinct()
         .map(name->MethodFinderUtils
-                .findMethod(encapsulationPolicy, type, name, expectedReturnType, paramTypes))
+                .findMethod(options, type, name, expectedReturnType, paramTypes))
         .filter(_NullSafe::isPresent);
     }
 
     // -- SEARCH FOR MULTIPLE NAME CANDIDATES
 
     public static Stream<Method> findMethod_returningBoolean(
-            final EncapsulationPolicy encapsulationPolicy,
+            final MethodFinderOptions options,
             final Class<?> type,
             final Can<String> names,
             final Class<?>[] paramTypes) {
@@ -58,12 +57,12 @@ public final class MethodFinder {
         return names.stream()
         .distinct()
         .map(name->MethodFinderUtils
-                .findMethod_returningBoolean(encapsulationPolicy, type, name, paramTypes))
+                .findMethod_returningBoolean(options, type, name, paramTypes))
         .filter(_NullSafe::isPresent);
     }
 
     public static Stream<Method> findMethod_returningText(
-            final EncapsulationPolicy encapsulationPolicy,
+            final MethodFinderOptions options,
             final Class<?> type,
             final Can<String> names,
             final Class<?>[] paramTypes) {
@@ -71,12 +70,12 @@ public final class MethodFinder {
         return names.stream()
         .distinct()
         .map(name->MethodFinderUtils
-                .findMethod_returningText(encapsulationPolicy, type, name, paramTypes))
+                .findMethod_returningText(options, type, name, paramTypes))
         .filter(_NullSafe::isPresent);
     }
 
     public static Stream<Method> findMethod_returningNonScalar(
-            final EncapsulationPolicy encapsulationPolicy,
+            final MethodFinderOptions options,
             final Class<?> type,
             final Can<String> names,
             final Class<?> elementReturnType,
@@ -85,7 +84,7 @@ public final class MethodFinder {
         return names.stream()
         .distinct()
         .map(name->MethodFinderUtils
-                .findMethod_returningNonScalar(encapsulationPolicy, type, name, elementReturnType, paramTypes))
+                .findMethod_returningNonScalar(options, type, name, elementReturnType, paramTypes))
         .filter(_NullSafe::isPresent);
     }
 
@@ -93,7 +92,7 @@ public final class MethodFinder {
     // -- SEARCH FOR MULTIPLE NAME CANDIDATES (PPM)
 
     public static Stream<MethodAndPpmConstructor> findMethodWithPPMArg(
-            final EncapsulationPolicy encapsulationPolicy,
+            final MethodFinderOptions options,
             final Class<?> type,
             final Can<String> names,
             final Class<?> returnType,
@@ -103,12 +102,12 @@ public final class MethodFinder {
         return names.stream()
         .distinct()
         .map(name->MethodFinderUtils
-                .findMethodWithPPMArg(encapsulationPolicy, type, name, returnType, paramTypes, additionalParamTypes))
+                .findMethodWithPPMArg(options, type, name, returnType, paramTypes, additionalParamTypes))
         .filter(_NullSafe::isPresent);
     }
 
     public static Stream<MethodAndPpmConstructor> findMethodWithPPMArg_returningAnyOf(
-            final EncapsulationPolicy encapsulationPolicy,
+            final MethodFinderOptions options,
             final Class<?>[] returnTypes,
             final Class<?> type,
             final Can<String> names,
@@ -118,12 +117,12 @@ public final class MethodFinder {
         return names.stream()
         .distinct()
         .map(name->MethodFinderUtils
-                .findMethodWithPPMArg_returningAnyOf(encapsulationPolicy, returnTypes, type, name, paramTypes, additionalParamTypes))
+                .findMethodWithPPMArg_returningAnyOf(options, returnTypes, type, name, paramTypes, additionalParamTypes))
         .filter(_NullSafe::isPresent);
     }
 
     public static Stream<MethodAndPpmConstructor> findMethodWithPPMArg_returningBoolean(
-            final EncapsulationPolicy encapsulationPolicy,
+            final MethodFinderOptions options,
             final Class<?> type,
             final Can<String> names,
             final Class<?>[] paramTypes,
@@ -132,12 +131,12 @@ public final class MethodFinder {
         return names.stream()
         .distinct()
         .map(name->MethodFinderUtils
-                .findMethodWithPPMArg_returningBoolean(encapsulationPolicy, type, name, paramTypes, additionalParamTypes))
+                .findMethodWithPPMArg_returningBoolean(options, type, name, paramTypes, additionalParamTypes))
         .filter(_NullSafe::isPresent);
     }
 
     public static Stream<MethodAndPpmConstructor> findMethodWithPPMArg_returningText(
-            final EncapsulationPolicy encapsulationPolicy,
+            final MethodFinderOptions options,
             final Class<?> type,
             final Can<String> names,
             final Class<?>[] paramTypes,
@@ -146,12 +145,12 @@ public final class MethodFinder {
         return names.stream()
         .distinct()
         .map(name->MethodFinderUtils
-                .findMethodWithPPMArg_returningText(encapsulationPolicy, type, name, paramTypes, additionalParamTypes))
+                .findMethodWithPPMArg_returningText(options, type, name, paramTypes, additionalParamTypes))
         .filter(_NullSafe::isPresent);
     }
 
     public static Stream<MethodAndPpmConstructor> findMethodWithPPMArg_returningNonScalar(
-            final EncapsulationPolicy encapsulationPolicy,
+            final MethodFinderOptions options,
             final Class<?> type,
             final Can<String> names,
             final Class<?> elementReturnType,
@@ -161,7 +160,7 @@ public final class MethodFinder {
         return names.stream()
         .distinct()
         .map(name->MethodFinderUtils
-                .findMethodWithPPMArg_returningNonScalar(encapsulationPolicy, type, name, elementReturnType, paramTypes, additionalParamTypes))
+                .findMethodWithPPMArg_returningNonScalar(options, type, name, elementReturnType, paramTypes, additionalParamTypes))
         .filter(_NullSafe::isPresent);
     }
 

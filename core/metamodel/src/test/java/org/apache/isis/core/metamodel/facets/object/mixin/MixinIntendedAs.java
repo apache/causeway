@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.object.mixin;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.Encapsulation.EncapsulationPolicy;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -30,6 +29,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
+import org.apache.isis.core.metamodel.facets.MemberIntrospectionPolicy;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 
 import lombok.val;
@@ -94,7 +94,7 @@ abstract class MixinIntendedAs {
         val processParameterContext =
                 new FacetFactory.ProcessParameterContext(
                         owningType,
-                        EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED,
+                        MemberIntrospectionPolicy.legacy(),
                         actionMethod,
                         paramIndex,
                         MethodRemover.NOOP,

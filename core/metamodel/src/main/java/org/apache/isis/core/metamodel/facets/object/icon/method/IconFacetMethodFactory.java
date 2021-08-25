@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
@@ -35,7 +36,7 @@ import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstr
 public class IconFacetMethodFactory
 extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.ICON_NAME_PREFIX);
+    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.ICON_NAME);
 
     @Inject
     public IconFacetMethodFactory(final MetaModelContext mmc) {
@@ -48,8 +49,9 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         final Method method = MethodFinderUtils.findMethod(
-                processClassContext.getEncapsulationPolicy(),
-                cls, MethodLiteralConstants.ICON_NAME_PREFIX, String.class, NO_ARG);
+                MethodFinderOptions
+                .layout(processClassContext.getMemberIntrospectionPolicy()),
+                cls, MethodLiteralConstants.ICON_NAME, String.class, NO_ARG);
         if (method == null) {
             return;
         }

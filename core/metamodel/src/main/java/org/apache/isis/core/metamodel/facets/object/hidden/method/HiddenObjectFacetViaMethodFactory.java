@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.object.hidden.HiddenObjectFacet;
+import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
@@ -53,7 +54,7 @@ import lombok.val;
 public class HiddenObjectFacetViaMethodFactory
 extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.HIDDEN_PREFIX);
+    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.HIDDEN);
 
     @Inject
     public HiddenObjectFacetViaMethodFactory(final MetaModelContext mmc) {
@@ -86,8 +87,9 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         final Method method = MethodFinderUtils.findMethod(
-                processClassContext.getEncapsulationPolicy(),
-                cls, MethodLiteralConstants.HIDDEN_PREFIX, returnType, NO_ARG);
+                MethodFinderOptions
+                .objectSupport(processClassContext.getMemberIntrospectionPolicy()),
+                cls, MethodLiteralConstants.HIDDEN, returnType, NO_ARG);
         if (method == null) {
             return false;
         }

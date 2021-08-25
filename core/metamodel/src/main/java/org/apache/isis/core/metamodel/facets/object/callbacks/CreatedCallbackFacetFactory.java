@@ -24,6 +24,7 @@ import javax.inject.Inject;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
@@ -43,10 +44,13 @@ public class CreatedCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAb
     public void process(final ProcessClassContext processClassContext) {
         val cls = processClassContext.getCls();
         val facetHolder = processClassContext.getFacetHolder();
-        val encapsulationPolicy = processClassContext.getEncapsulationPolicy();
 
         val method = MethodFinderUtils
-                .findMethod(encapsulationPolicy, cls, MethodLiteralConstants.CREATED_PREFIX, void.class, NO_ARG);
+                .findMethod(
+                        MethodFinderOptions
+                        .livecycleCallback(processClassContext.getMemberIntrospectionPolicy()),
+                        cls, MethodLiteralConstants.CREATED_PREFIX, void.class, NO_ARG);
+
         if (method != null) {
             addFacet(new CreatedCallbackFacetViaMethod(method, facetHolder));
             processClassContext.removeMethod(method);

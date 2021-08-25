@@ -26,6 +26,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
@@ -33,7 +34,7 @@ import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstr
 public class CssClassFacetMethodFactory
 extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.CSS_CLASS_PREFIX);
+    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.CSS_CLASS);
 
     @Inject
     public CssClassFacetMethodFactory(final MetaModelContext mmc) {
@@ -46,8 +47,9 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         final Method method = MethodFinderUtils.findMethod(
-                processClassContext.getEncapsulationPolicy(),
-                cls, MethodLiteralConstants.CSS_CLASS_PREFIX, String.class, NO_ARG);
+                MethodFinderOptions
+                .layout(processClassContext.getMemberIntrospectionPolicy()),
+                cls, MethodLiteralConstants.CSS_CLASS, String.class, NO_ARG);
         if (method == null) {
             return;
         }

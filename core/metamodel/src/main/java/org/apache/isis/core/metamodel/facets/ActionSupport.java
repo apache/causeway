@@ -30,6 +30,7 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
+import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils.MethodAndPpmConstructor;
 
 import lombok.Builder;
@@ -121,7 +122,8 @@ public final class ActionSupport {
         case BOOLEAN:
             MethodFinder
                 .findMethodWithPPMArg_returningBoolean(
-                        processMethodContext.getEncapsulationPolicy(),
+                        MethodFinderOptions
+                        .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
                         type, methodNames, paramTypes, additionalParamTypes)
                 .map(ActionSupport::toSearchResult)
                 .forEach(onMethodFound);
@@ -129,7 +131,8 @@ public final class ActionSupport {
         case TEXT:
             MethodFinder
                 .findMethodWithPPMArg_returningText(
-                        processMethodContext.getEncapsulationPolicy(),
+                        MethodFinderOptions
+                        .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
                         type, methodNames, paramTypes, additionalParamTypes)
                 .map(ActionSupport::toSearchResult)
                 .forEach(onMethodFound);
@@ -170,7 +173,8 @@ public final class ActionSupport {
             case BOOLEAN:
                 MethodFinder
                     .findMethod_returningBoolean(
-                            processMethodContext.getEncapsulationPolicy(),
+                            MethodFinderOptions
+                            .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
                             type, methodNames, paramTypesToLookFor)
                     .map(ActionSupport::toSearchResult)
                     .forEach(onMethodFound);
@@ -178,7 +182,8 @@ public final class ActionSupport {
             case TEXT:
                 MethodFinder
                     .findMethod_returningText(
-                            processMethodContext.getEncapsulationPolicy(),
+                            MethodFinderOptions
+                            .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
                             type, methodNames, paramTypesToLookFor)
                     .map(ActionSupport::toSearchResult)
                     .forEach(onMethodFound);

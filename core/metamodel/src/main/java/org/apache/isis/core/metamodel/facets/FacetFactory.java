@@ -26,7 +26,6 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import org.apache.isis.applib.annotation.Encapsulation.EncapsulationPolicy;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -82,15 +81,15 @@ public interface FacetFactory {
          * </p>
          */
         @Getter private final Class<?> cls;
-        @Getter private final EncapsulationPolicy encapsulationPolicy;
+        @Getter private final MemberIntrospectionPolicy memberIntrospectionPolicy;
 
         AbstractProcessWithClsContext(
                 final Class<?> cls,
-                final EncapsulationPolicy encapsulationPolicy,
+                final MemberIntrospectionPolicy introspectionPolicy,
                 final T facetHolder) {
             super(facetHolder);
             this.cls = cls;
-            this.encapsulationPolicy = encapsulationPolicy;
+            this.memberIntrospectionPolicy = introspectionPolicy;
         }
 
         /**
@@ -112,12 +111,12 @@ public interface FacetFactory {
 
         AbstractProcessWithMethodContext(
                 final Class<?> cls,
-                final EncapsulationPolicy encapsulationPolicy,
+                final MemberIntrospectionPolicy introspectionPolicy,
                 final Method method,
                 final MethodRemover methodRemover,
                 final T facetHolder) {
 
-            super(cls, encapsulationPolicy, facetHolder);
+            super(cls, introspectionPolicy, facetHolder);
             this.method = method;
             this.methodRemover = methodRemover;
         }
@@ -169,19 +168,20 @@ public interface FacetFactory {
         /**
          * For testing only.
          */
+        @Deprecated // use static utility method 'forTesting(...)' instead
         public ProcessClassContext(
                 final Class<?> cls,
                 final MethodRemover methodRemover,
                 final FacetHolder facetHolder) {
-            this(cls, EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED, methodRemover, facetHolder);
+            this(cls, MemberIntrospectionPolicy.legacy(), methodRemover, facetHolder);
         }
 
         public ProcessClassContext(
                 final Class<?> cls,
-                final EncapsulationPolicy encapsulationPolicy,
+                final MemberIntrospectionPolicy introspectionPolicy,
                 final MethodRemover methodRemover,
                 final FacetHolder facetHolder) {
-            super(cls, encapsulationPolicy, facetHolder);
+            super(cls, introspectionPolicy, facetHolder);
             this.methodRemover = methodRemover;
         }
 
@@ -237,26 +237,27 @@ public interface FacetFactory {
          */
         public ProcessMethodContext(
                 final Class<?> cls,
-                final EncapsulationPolicy encapsulationPolicy,
+                final MemberIntrospectionPolicy introspectionPolicy,
                 final FeatureType featureType,
                 final Method method,
                 final MethodRemover methodRemover,
                 final FacetedMethod facetedMethod,
                 final boolean isMixinMain) {
 
-            super(cls, encapsulationPolicy, method, methodRemover, facetedMethod);
+            super(cls, introspectionPolicy, method, methodRemover, facetedMethod);
             this.featureType = featureType;
             this.mixinMain = isMixinMain;
         }
 
         /** JUnit support, historically not using 'isMixinMain' */
+        @Deprecated // use static utility method 'forTesting(...)' instead
         public ProcessMethodContext(
                 final Class<?> cls,
                 final FeatureType featureType,
                 final Method method,
                 final MethodRemover methodRemover,
                 final FacetedMethod facetedMethod) {
-            this(cls, EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED, featureType, method, methodRemover, facetedMethod, false);
+            this(cls, MemberIntrospectionPolicy.legacy(), featureType, method, methodRemover, facetedMethod, false);
         }
 
 
@@ -370,13 +371,13 @@ public interface FacetFactory {
 
         public ProcessParameterContext(
                 final Class<?> cls,
-                final EncapsulationPolicy encapsulationPolicy,
+                final MemberIntrospectionPolicy introspectionPolicy,
                 final Method method,
                 final int paramNum,
                 final MethodRemover methodRemover,
                 final FacetedMethodParameter facetedMethodParameter) {
 
-            super(cls, encapsulationPolicy, method, methodRemover, facetedMethodParameter);
+            super(cls, introspectionPolicy, method, methodRemover, facetedMethodParameter);
             if(paramNum>=method.getParameterCount()) {
                 throw _Exceptions.unrecoverable("invalid ProcessParameterContext");
             }

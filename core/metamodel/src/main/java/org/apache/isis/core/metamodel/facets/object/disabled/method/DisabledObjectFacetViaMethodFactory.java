@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.object.disabled.DisabledObjectFacet;
+import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
@@ -66,7 +67,8 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         val paramTypes = new Class<?>[] {Identifier.Type.class};
 
         val method = MethodFinderUtils.findMethod_returningText(
-                processClassContext.getEncapsulationPolicy(),
+                MethodFinderOptions
+                .objectSupport(processClassContext.getMemberIntrospectionPolicy()),
                 cls,
                 MethodLiteralConstants.DISABLED,
                 paramTypes);

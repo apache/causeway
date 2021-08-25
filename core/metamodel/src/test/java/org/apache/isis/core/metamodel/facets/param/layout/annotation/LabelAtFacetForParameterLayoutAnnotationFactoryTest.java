@@ -26,12 +26,12 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
-import org.apache.isis.applib.annotation.Encapsulation.EncapsulationPolicy;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.MemberIntrospectionPolicy;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.facets.param.layout.LabelAtFacetForParameterLayoutAnnotation;
 import org.apache.isis.core.metamodel.facets.param.layout.ParameterLayoutFacetFactory;
@@ -48,7 +48,10 @@ public class LabelAtFacetForParameterLayoutAnnotationFactoryTest extends Abstrac
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { String.class });
 
-        facetFactory.processParams(new FacetFactory.ProcessParameterContext(Customer.class, EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED, method, 0, null, facetedMethodParameter));
+        facetFactory.processParams(new FacetFactory.ProcessParameterContext(
+                Customer.class,
+                MemberIntrospectionPolicy.legacy(),
+                method, 0, null, facetedMethodParameter));
 
         final Facet facet = facetedMethodParameter.getFacet(LabelAtFacet.class);
         assertThat(facet, is(notNullValue()));

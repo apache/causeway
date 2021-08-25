@@ -26,6 +26,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
+import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
@@ -56,7 +57,8 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
         val returnType = getterMethod.getReturnType();
 
         val validateMethod = MethodFinder.findMethod_returningText(
-                processMethodContext.getEncapsulationPolicy(),
+                MethodFinderOptions
+                .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
                 cls,
                 namingConvention,
                 new Class[] { returnType })

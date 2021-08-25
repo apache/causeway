@@ -31,7 +31,6 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Encapsulation.EncapsulationPolicy;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Value;
@@ -75,10 +74,12 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.editing.Immutab
 import org.apache.isis.core.metamodel.facets.object.domainobject.encapsulation.EncapsulationFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.entitychangepublishing.EntityChangePublishingFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.logicaltype.LogicalTypeFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.memberannot.MemberAnnotationPolicyFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.recreatable.RecreatableObjectFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.mixin.MetaModelValidatorForMixinTypes;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
+import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -324,6 +325,11 @@ implements
         FacetUtil.addFacetIfPresent(
                 EncapsulationFacetForDomainObjectAnnotation
                 .create(domainObjectIfAny, cls, facetHolder));
+
+        FacetUtil.addFacetIfPresent(
+                MemberAnnotationPolicyFacetForDomainObjectAnnotation
+                .create(domainObjectIfAny, cls, facetHolder));
+
     }
 
 
@@ -645,7 +651,7 @@ implements
     public Method postConstructMethodFor(final Object pojo) {
         return MethodFinderUtils.findAnnotatedMethod(
                 // @PostConstruct is allowed to appear on non-public methods
-                EncapsulationPolicy.ENCAPSULATED_MEMBERS_SUPPORTED,
+                MethodFinderOptions.notNecessarilyPublic(),
                 pojo, PostConstruct.class, postConstructMethodsCache);
     }
 

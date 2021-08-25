@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
+import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
@@ -76,7 +77,8 @@ public class ActionDefaultsFacetViaMethodFactory extends MethodPrefixBasedFacetF
         val cls = processMethodContext.getCls();
         val namingConvention = processMethodContext.memberSupportCandidates(PREFIX);
         return MethodFinder.findMethod(
-                processMethodContext.getEncapsulationPolicy(),
+                MethodFinderOptions
+                .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
                 cls, namingConvention, returnType, NO_ARG)
                 .findFirst()
                 .orElse(null);

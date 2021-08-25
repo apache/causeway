@@ -146,6 +146,13 @@ public @interface DomainObject {
             default Publishing.NOT_SPECIFIED;
 
     /**
+     * Controls on a per class basis,
+     * whether meta-model inspection should process non-annotated members and their supporting methods.
+     */
+    MemberAnnotations memberAnnotations()
+            default MemberAnnotations.NOT_SPECIFIED;
+
+    /**
      * Applicable only if {@link #nature()} is {@link Nature#MIXIN}, indicates
      * the name of the method within the mixin class to be inferred as the
      * action of that mixin.

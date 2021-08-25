@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
+import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
@@ -57,7 +58,8 @@ extends MethodPrefixBasedFacetFactoryAbstract {
 
         val cls = processMethodContext.getCls();
         Method hideMethod = MethodFinder.findMethod(
-                processMethodContext.getEncapsulationPolicy(),
+                MethodFinderOptions
+                .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
                 cls,
                 namingConvention,
                 boolean.class,
@@ -70,7 +72,8 @@ extends MethodPrefixBasedFacetFactoryAbstract {
             boolean searchExactMatch = !noParamsOnly;
             if(searchExactMatch) {
                 hideMethod = MethodFinder.findMethod(
-                        processMethodContext.getEncapsulationPolicy(),
+                        MethodFinderOptions
+                        .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
                         cls,
                         namingConvention,
                         boolean.class,

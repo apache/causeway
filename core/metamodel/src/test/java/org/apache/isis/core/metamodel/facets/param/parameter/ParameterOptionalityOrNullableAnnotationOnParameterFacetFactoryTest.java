@@ -23,12 +23,12 @@ import java.lang.reflect.Method;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.annotation.Encapsulation.EncapsulationPolicy;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
+import org.apache.isis.core.metamodel.facets.MemberIntrospectionPolicy;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetInvertedByNullableAnnotationOnParameter;
@@ -52,7 +52,9 @@ public class ParameterOptionalityOrNullableAnnotationOnParameterFacetFactoryTest
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { String.class });
 
-        facetFactory.processParamsOptional(new ProcessParameterContext(Customer.class, EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED, method, 0, null, facetedMethodParameter));
+        facetFactory.processParamsOptional(
+                new ProcessParameterContext(
+                        Customer.class, MemberIntrospectionPolicy.legacy(), method, 0, null, facetedMethodParameter));
 
         final Facet facet = facetedMethodParameter.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
@@ -68,7 +70,9 @@ public class ParameterOptionalityOrNullableAnnotationOnParameterFacetFactoryTest
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { int.class });
 
-        facetFactory.processParamsOptional(new ProcessParameterContext(Customer.class, EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED, method, 0, null, facetedMethodParameter));
+        facetFactory.processParamsOptional(
+                new ProcessParameterContext(
+                        Customer.class, MemberIntrospectionPolicy.legacy(), method, 0, null, facetedMethodParameter));
 
         assertNull(facetedMethod.getFacet(MandatoryFacet.class));
     }
@@ -82,7 +86,9 @@ public class ParameterOptionalityOrNullableAnnotationOnParameterFacetFactoryTest
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { String.class });
 
-        facetFactory.processParamsOptional(new ProcessParameterContext(Customer.class, EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED, method, 0, null, facetedMethodParameter));
+        facetFactory.processParamsOptional(
+                new ProcessParameterContext(
+                        Customer.class, MemberIntrospectionPolicy.legacy(), method, 0, null, facetedMethodParameter));
 
         final Facet facet = facetedMethodParameter.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
@@ -98,7 +104,9 @@ public class ParameterOptionalityOrNullableAnnotationOnParameterFacetFactoryTest
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { int.class });
 
-        facetFactory.processParamsOptional(new ProcessParameterContext(Customer.class, EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED, method, 0, null, facetedMethodParameter));
+        facetFactory.processParamsOptional(
+                new ProcessParameterContext(
+                        Customer.class, MemberIntrospectionPolicy.legacy(), method, 0, null, facetedMethodParameter));
 
         assertNull(facetedMethod.getFacet(MandatoryFacet.class));
     }

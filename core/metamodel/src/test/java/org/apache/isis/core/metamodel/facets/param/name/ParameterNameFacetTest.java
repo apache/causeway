@@ -27,12 +27,12 @@ import org.junit.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.apache.isis.applib.annotation.Encapsulation.EncapsulationPolicy;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.MemberIntrospectionPolicy;
 import org.apache.isis.core.metamodel.facets.all.named.ParamNamedFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 
@@ -98,7 +98,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
         // when
         val processParameterContext =
                 new FacetFactory.ProcessParameterContext(
-                        Customer.class, EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED, actionMethod, 0, null, facetedMethodParameter);
+                        Customer.class, MemberIntrospectionPolicy.legacy(), actionMethod, 0, null, facetedMethodParameter);
 
         programmingModel.streamFactories()
         .forEach(facetFactory->facetFactory.processParams(processParameterContext));
@@ -130,7 +130,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
         // when
         val processParameterContext =
                 new FacetFactory.ProcessParameterContext(
-                        Customer.class, EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED, actionMethod, 0, null, facetedMethodParameter);
+                        Customer.class, MemberIntrospectionPolicy.legacy(), actionMethod, 0, null, facetedMethodParameter);
         programmingModel.streamFactories().forEach(facetFactory->facetFactory.processParams(processParameterContext));
 
         // then

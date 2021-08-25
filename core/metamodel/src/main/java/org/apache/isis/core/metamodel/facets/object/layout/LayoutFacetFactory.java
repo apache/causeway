@@ -25,6 +25,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
@@ -32,7 +33,7 @@ import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstr
 public class LayoutFacetFactory
 extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.LAYOUT_METHOD_NAME);
+    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.LAYOUT);
 
     public LayoutFacetFactory(final MetaModelContext mmc) {
         super(mmc, FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
@@ -44,8 +45,9 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         final Method method = MethodFinderUtils.findMethod(
-                processClassContext.getEncapsulationPolicy(),
-                cls, MethodLiteralConstants.LAYOUT_METHOD_NAME, String.class, NO_ARG);
+                MethodFinderOptions
+                .layout(processClassContext.getMemberIntrospectionPolicy()),
+                cls, MethodLiteralConstants.LAYOUT, String.class, NO_ARG);
 
         final LayoutFacet layoutFacet;
         if (method == null) {

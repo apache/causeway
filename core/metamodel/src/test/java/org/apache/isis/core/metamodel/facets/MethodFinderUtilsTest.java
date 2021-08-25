@@ -30,7 +30,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.applib.annotation.Encapsulation.EncapsulationPolicy;
+import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 
@@ -52,7 +52,7 @@ public class MethodFinderUtilsTest {
         val cache = new MethodByClassMap();
         final Method method = MethodFinderUtils
                 .findAnnotatedMethod(
-                        EncapsulationPolicy.ENCAPSULATED_MEMBERS_SUPPORTED,
+                        MethodFinderOptions.notNecessarilyPublic(),
                         new WithPostConstruct(), PostConstruct.class, cache );
 
         assertThat(method, is(not(nullValue())));
@@ -68,7 +68,7 @@ public class MethodFinderUtilsTest {
         val cache = new MethodByClassMap();
         final Method method = MethodFinderUtils
                 .findAnnotatedMethod(
-                        EncapsulationPolicy.ENCAPSULATED_MEMBERS_SUPPORTED,
+                        MethodFinderOptions.notNecessarilyPublic(),
                         new NoPostConstruct(), PostConstruct.class, cache);
 
         assertThat(method, is(nullValue()));

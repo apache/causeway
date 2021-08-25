@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod;
 import org.apache.isis.core.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacetViaSetterMethod;
+import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
@@ -71,7 +72,8 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         final Class<?>[] paramTypes = new Class[] { returnType };
         final Method setterMethod = MethodFinderUtils
                 .findMethod(
-                        processMethodContext.getEncapsulationPolicy(),
+                        MethodFinderOptions
+                        .accessor(processMethodContext.getMemberIntrospectionPolicy()),
                         cls, MethodLiteralConstants.SET_PREFIX + capitalizedName, void.class, paramTypes);
         processMethodContext.removeMethod(setterMethod);
 

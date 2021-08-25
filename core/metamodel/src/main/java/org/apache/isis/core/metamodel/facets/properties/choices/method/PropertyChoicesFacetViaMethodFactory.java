@@ -27,6 +27,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
+import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
@@ -62,7 +63,8 @@ public class PropertyChoicesFacetViaMethodFactory extends MethodPrefixBasedFacet
         val returnType = getterOrMixinMain.getReturnType();
         val choicesMethod = MethodFinder
                 .findMethod(
-                    processMethodContext.getEncapsulationPolicy(),
+                        MethodFinderOptions
+                        .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
                     cls,
                     namingConvention,
                     NO_RETURN,

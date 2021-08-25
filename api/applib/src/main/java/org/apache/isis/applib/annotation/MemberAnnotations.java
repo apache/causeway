@@ -20,11 +20,11 @@ package org.apache.isis.applib.annotation;
 
 /**
  * The available policies as to whether meta-model inspection should process
- * non-public members and their supporting methods.
+ * non-annotated members and their supporting methods.
  *
  * @since 2.0 {@index}
  */
-public enum Encapsulation {
+public enum MemberAnnotations {
 
     /**
      * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
@@ -33,23 +33,22 @@ public enum Encapsulation {
     NOT_SPECIFIED,
 
     /**
-     * Encapsulation should be handled as per the default encapsulation policy
+     * Meta-model annotations should be handled as per the default policy
      * configured in <tt>application.properties</tt>.
      * <p>
-     * If not configured, then encapsulation is disabled.
+     * If not configured, then meta-model annotations are optional.
      */
     AS_CONFIGURED,
 
     /**
-     * Introspect public and non-public members.
      * Enforces member and member-support annotations to be present.
      */
-    ENABLED,
+    ENFORCED,
 
     /**
-     * Introspect public members only.
+     * Member and member-support annotations are optional.
      */
-    DISABLED
+    OPTIONAL
 
     ;
 
@@ -61,23 +60,23 @@ public enum Encapsulation {
         return this == AS_CONFIGURED;
     }
 
-    public boolean isEnabled() {
-        return this == ENABLED;
+    public boolean isEnforced() {
+        return this == ENFORCED;
     }
 
-    public boolean isDisabled() {
-        return this == DISABLED;
+    public boolean isOptional() {
+        return this == OPTIONAL;
     }
 
     /**
      * Effectively applies on a per class basis, when introspecting
      * meta-model members and member-support methods.
      */
-    public static enum EncapsulationPolicy {
-        ONLY_PUBLIC_MEMBERS_SUPPORTED,
-        ENCAPSULATED_MEMBERS_SUPPORTED;
-        public boolean isEncapsulatedMembersSupported() {
-            return this == ENCAPSULATED_MEMBERS_SUPPORTED;
+    public static enum MemberAnnotationPolicy {
+        MEMBER_ANNOTATIONS_REQUIRED,
+        MEMBER_ANNOTATIONS_OPTIONAL;
+        public boolean isMemberAnnotationsRequired() {
+            return this == MEMBER_ANNOTATIONS_REQUIRED;
         }
     }
 

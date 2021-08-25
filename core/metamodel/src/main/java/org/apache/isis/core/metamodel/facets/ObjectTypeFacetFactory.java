@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.facets;
 
-import org.apache.isis.applib.annotation.Encapsulation.EncapsulationPolicy;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
@@ -32,14 +31,15 @@ public interface ObjectTypeFacetFactory extends FacetFactory {
                 final Class<?> cls,
                 final FacetHolder facetHolder) {
             super(cls,
-                    EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED, // not used - but to satisfy constraints
+                    MemberIntrospectionPolicy.legacy(), // not used - but to satisfy constraints
                     facetHolder);
         }
         @Override
-        public EncapsulationPolicy getEncapsulationPolicy() {
+        public MemberIntrospectionPolicy getMemberIntrospectionPolicy() {
             throw _Exceptions.unsupportedOperation(
-                    "ProcessObjectTypeContext does not support getEncapsulationPolicy() "
-                    + "as the EncapsulationPolicy is not yet available this early in the meta-model processing stage.");
+                    "ProcessObjectTypeContext does not support getMemberIntrospectionPolicy() "
+                    + "as eg. the EncapsulationPolicy is not yet available this early "
+                    + "in the meta-model processing stage.");
         }
     }
 

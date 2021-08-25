@@ -28,6 +28,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
+import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
@@ -63,7 +64,8 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
         if(searchExactMatch) {
             // search for exact match
             disableMethod = MethodFinder.findMethod_returningText(
-                    processMethodContext.getEncapsulationPolicy(),
+                    MethodFinderOptions
+                    .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
                     cls,
                     namingConvention,
                     actionOrGetter.getParameterTypes())
@@ -73,7 +75,8 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
         if (disableMethod == null) {
             // search for no-arg version
             disableMethod = MethodFinder.findMethod_returningText(
-                    processMethodContext.getEncapsulationPolicy(),
+                    MethodFinderOptions
+                    .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
                     cls,
                     namingConvention,
                     NO_ARG)

@@ -29,22 +29,13 @@ import org.apache.isis.core.metamodel.commons.StringExtensions;
 
 public final class MethodLiteralConstants {
 
-    // -- PREFIXES
+    // -- ACCESSORS
 
     public static final String GET_PREFIX = "get";
     public static final String IS_PREFIX = "is";
     public static final String SET_PREFIX = "set";
 
-    public static final String DEFAULT_PREFIX = "default";
-    public static final String CHOICES_PREFIX = "choices";
-    public static final String AUTO_COMPLETE_PREFIX = "autoComplete";
-
-    public static final String HIDE_PREFIX = "hide";
-    public static final String DISABLE_PREFIX = "disable";
-    public static final String VALIDATE_PREFIX = "validate";
-
-    public static final String NAMED_PREFIX = "named"; // dynamic naming
-    public static final String DESCRIBED_PREFIX = "described"; // dynamic description
+    // -- LIFECYCLE CALLBACKS
 
     public static final String CREATED_PREFIX = "created";
     public static final String LOADED_PREFIX = "loaded";
@@ -57,16 +48,34 @@ public final class MethodLiteralConstants {
     public static final String UPDATED_PREFIX = "updated";
     public static final String UPDATING_PREFIX = "updating";
 
-    // -- LITERALS
+    // -- OBJECT SUPPORT
 
     public static final String DISABLED = "disabled"; // for batch disabling all members
-    public static final String TITLE = "title";
-    public static final String TO_STRING = "toString";
+    public static final String HIDDEN = "hidden"; // for batch hiding all members
 
-    public static final String CSS_CLASS_PREFIX = "cssClass";
-    public static final String HIDDEN_PREFIX = "hidden";
-    public static final String ICON_NAME_PREFIX = "iconName";
-    public static final String LAYOUT_METHOD_NAME = "layout";
+    // -- MEMBER SUPPORT
+
+    public static final String DEFAULT_PREFIX = "default";
+    public static final String CHOICES_PREFIX = "choices";
+    public static final String AUTO_COMPLETE_PREFIX = "autoComplete";
+
+    public static final String HIDE_PREFIX = "hide";
+    public static final String DISABLE_PREFIX = "disable";
+    public static final String VALIDATE_PREFIX = "validate";
+
+    public static final String NAMED_PREFIX = "named"; // dynamic naming
+    public static final String DESCRIBED_PREFIX = "described"; // dynamic description
+
+    // -- LAYOUT SUPPORT
+
+    public static final String TITLE = "title";
+    public static final String CSS_CLASS = "cssClass";
+    public static final String ICON_NAME = "iconName";
+    public static final String LAYOUT = "layout";
+
+    // -- OTHER LITERALS
+
+    public static final String TO_STRING = "toString";
 
     @FunctionalInterface
     public static interface SupportingMethodNameProviderForAction {

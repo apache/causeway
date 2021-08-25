@@ -25,10 +25,10 @@ import javax.validation.constraints.Pattern;
 
 import org.junit.Before;
 
-import org.apache.isis.applib.annotation.Encapsulation.EncapsulationPolicy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
+import org.apache.isis.core.metamodel.facets.MemberIntrospectionPolicy;
 import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.isis.core.metamodel.facets.param.parameter.regex.RegExFacetForPatternAnnotationOnParameter;
 
@@ -52,7 +52,9 @@ public class RegExAnnotationOnParameterFacetFactoryTest extends AbstractFacetFac
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { String.class });
 
-        facetFactory.processParams(new ProcessParameterContext(Customer.class, EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED, method, 0, null, facetedMethodParameter));
+        facetFactory.processParams(
+                new ProcessParameterContext(
+                        Customer.class, MemberIntrospectionPolicy.legacy(), method, 0, null, facetedMethodParameter));
 
         final Facet facet = facetedMethodParameter.getFacet(RegExFacet.class);
         assertNotNull(facet);
@@ -71,7 +73,9 @@ public class RegExAnnotationOnParameterFacetFactoryTest extends AbstractFacetFac
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { int.class });
 
-        facetFactory.processParams(new ProcessParameterContext(Customer.class, EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED, method, 0, null, facetedMethodParameter));
+        facetFactory.processParams(
+                new ProcessParameterContext(
+                        Customer.class, MemberIntrospectionPolicy.legacy(), method, 0, null, facetedMethodParameter));
 
         assertNull(facetedMethod.getFacet(RegExFacet.class));
     }

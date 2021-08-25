@@ -20,7 +20,7 @@ package org.apache.isis.viewer.restfulobjects.viewer.mappers;
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.apache.isis.applib.annotation.Encapsulation.EncapsulationPolicy;
+import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
@@ -34,7 +34,7 @@ final class FailureUtil {
     public static HttpStatusCode getFailureStatusCodeIfAny(final Throwable ex) {
 
         val errorCodeGetter = MethodFinderUtils.findNoArgMethod(
-                EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED,
+                MethodFinderOptions.publicOnly(),
                 ex.getClass(), "getErrorCode", int.class)
                 .orElse(null);
         if(errorCodeGetter!=null) {

@@ -31,6 +31,7 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
+import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils.MethodAndPpmConstructor;
 
 import lombok.Builder;
@@ -140,7 +141,8 @@ public final class ParameterSupport {
         case BOOLEAN:
             MethodFinder
                 .findMethodWithPPMArg_returningBoolean(
-                        processMethodContext.getEncapsulationPolicy(),
+                        MethodFinderOptions
+                        .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
                         type, methodNames, paramTypes, additionalParamTypes)
                 .map(methodAndPpmConstructor->toSearchResult(paramIndex, paramType, methodAndPpmConstructor))
                 .forEach(onMethodFound);
@@ -148,7 +150,8 @@ public final class ParameterSupport {
         case TEXT:
             MethodFinder
                 .findMethodWithPPMArg_returningText(
-                        processMethodContext.getEncapsulationPolicy(),
+                        MethodFinderOptions
+                        .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
                         type, methodNames, paramTypes, additionalParamTypes)
                 .map(methodAndPpmConstructor->toSearchResult(paramIndex, paramType, methodAndPpmConstructor))
                 .forEach(onMethodFound);
@@ -156,7 +159,8 @@ public final class ParameterSupport {
         case NON_SCALAR:
             MethodFinder
                 .findMethodWithPPMArg_returningNonScalar(
-                        processMethodContext.getEncapsulationPolicy(),
+                        MethodFinderOptions
+                        .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
                         type, methodNames, paramType, paramTypes, additionalParamTypes)
                 .map(methodAndPpmConstructor->toSearchResult(paramIndex, paramType, methodAndPpmConstructor))
                 .forEach(onMethodFound);
@@ -164,7 +168,8 @@ public final class ParameterSupport {
         case SAME_AS_PARAMETER_TYPE:
             MethodFinder
                 .findMethodWithPPMArg(
-                        processMethodContext.getEncapsulationPolicy(),
+                        MethodFinderOptions
+                        .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
                         type, methodNames, paramType, paramTypes, additionalParamTypes)
                 .map(methodAndPpmConstructor->toSearchResult(paramIndex, paramType, methodAndPpmConstructor))
                 .forEach(onMethodFound);
@@ -202,7 +207,8 @@ public final class ParameterSupport {
         case BOOLEAN:
             MethodFinder
                 .findMethod_returningBoolean(
-                        processMethodContext.getEncapsulationPolicy(),
+                        MethodFinderOptions
+                        .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
                         type, methodNames, singleArg)
                 .map(supportingMethod->toSearchResult(paramIndex, paramType, supportingMethod))
                 .forEach(onMethodFound);
@@ -210,7 +216,8 @@ public final class ParameterSupport {
         case TEXT:
             MethodFinder
                 .findMethod_returningText(
-                        processMethodContext.getEncapsulationPolicy(),
+                        MethodFinderOptions
+                        .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
                         type, methodNames, singleArg)
                 .map(supportingMethod->toSearchResult(paramIndex, paramType, supportingMethod))
                 .forEach(onMethodFound);
@@ -218,7 +225,8 @@ public final class ParameterSupport {
         case NON_SCALAR:
             MethodFinder
                 .findMethod_returningNonScalar(
-                        processMethodContext.getEncapsulationPolicy(),
+                        MethodFinderOptions
+                        .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
                         type, methodNames, paramType, singleArg)
                 .map(supportingMethod->toSearchResult(paramIndex, paramType, supportingMethod))
                 .forEach(onMethodFound);
@@ -226,7 +234,8 @@ public final class ParameterSupport {
         case SAME_AS_PARAMETER_TYPE:
             MethodFinder
                 .findMethod(
-                        processMethodContext.getEncapsulationPolicy(),
+                        MethodFinderOptions
+                        .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
                         type, methodNames, paramType, singleArg)
                 .map(supportingMethod->toSearchResult(paramIndex, paramType, supportingMethod))
                 .forEach(onMethodFound);
@@ -263,7 +272,8 @@ public final class ParameterSupport {
             case BOOLEAN:
                 supportingMethod = MethodFinder
                     .findMethod_returningBoolean(
-                            processMethodContext.getEncapsulationPolicy(),
+                            MethodFinderOptions
+                            .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
                             type, methodNames, paramTypesToLookFor)
                     .findFirst()
                     .orElse(null);
@@ -271,7 +281,8 @@ public final class ParameterSupport {
             case TEXT:
                 supportingMethod = MethodFinder
                     .findMethod_returningText(
-                            processMethodContext.getEncapsulationPolicy(),
+                            MethodFinderOptions
+                            .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
                             type, methodNames, paramTypesToLookFor)
                     .findFirst()
                     .orElse(null);
@@ -279,7 +290,8 @@ public final class ParameterSupport {
             case NON_SCALAR:
                 supportingMethod = MethodFinder
                     .findMethod_returningNonScalar(
-                            processMethodContext.getEncapsulationPolicy(),
+                            MethodFinderOptions
+                            .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
                             type, methodNames, paramType, paramTypesToLookFor)
                     .findFirst()
                     .orElse(null);
@@ -287,7 +299,8 @@ public final class ParameterSupport {
             case SAME_AS_PARAMETER_TYPE:
                 supportingMethod = MethodFinder
                     .findMethod(
-                            processMethodContext.getEncapsulationPolicy(),
+                            MethodFinderOptions
+                            .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
                             type, methodNames, paramType, paramTypesToLookFor)
                     .findFirst()
                     .orElse(null);

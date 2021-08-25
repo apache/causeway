@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.fallback.FallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
+import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
@@ -68,7 +69,8 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         val facetHolder = processClassContext.getFacetHolder();
 
         val titleMethod = MethodFinderUtils.findMethod_returningText(
-                processClassContext.getEncapsulationPolicy(),
+                MethodFinderOptions
+                .layout(processClassContext.getMemberIntrospectionPolicy()),
                 cls,
                 TITLE,
                 NO_ARG);
@@ -110,7 +112,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
     private @Nullable Method removeToString(final ProcessClassContext processClassContext) {
         val cls = processClassContext.getCls();
         val toStringMethod = MethodFinderUtils.findMethod(
-                processClassContext.getEncapsulationPolicy(),
+                MethodFinderOptions.publicOnly(),
                 cls, TO_STRING, String.class, null);
         if (toStringMethod != null) {
             processClassContext.removeMethod(toStringMethod);

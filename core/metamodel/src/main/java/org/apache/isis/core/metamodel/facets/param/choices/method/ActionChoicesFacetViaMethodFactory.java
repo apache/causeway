@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
+import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
@@ -88,7 +89,8 @@ extends MethodPrefixBasedFacetFactoryAbstract {
 
         Method choicesMethod =
                 MethodFinder.findMethod(
-                        processMethodContext.getEncapsulationPolicy(),
+                        MethodFinderOptions
+                        .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
                         cls, namingConvention, returnType, NO_ARG)
                 .findFirst()
                 .orElse(null);

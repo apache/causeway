@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.object.choices.enums;
 import java.lang.reflect.Method;
 import java.util.function.BiConsumer;
 
-import org.apache.isis.applib.annotation.Encapsulation.EncapsulationPolicy;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationContext;
@@ -30,12 +29,16 @@ import org.apache.isis.applib.util.Enums;
 import org.apache.isis.core.metamodel.commons.MethodExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.MemberIntrospectionPolicy;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
+import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 
 import lombok.val;
 
-public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemanticsProviderAndFacetAbstract<T> implements EnumFacet {
+public class EnumValueSemanticsProvider<T extends Enum<T>>
+extends ValueSemanticsProviderAndFacetAbstract<T>
+implements EnumFacet {
 
 
     private static Class<? extends Facet> type() {
@@ -69,7 +72,7 @@ public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemantic
 //    }
 
     public EnumValueSemanticsProvider(
-            final EncapsulationPolicy encapsulationPolicy,
+            final MemberIntrospectionPolicy introspectionPolicy,
             final FacetHolder holder,
             final Class<T> adaptedClass) {
         super(
@@ -80,7 +83,7 @@ public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemantic
                 defaultFor(adaptedClass));
 
         titleMethod = MethodFinderUtils.findMethod_returningText(
-                encapsulationPolicy,
+                MethodFinderOptions.layout(introspectionPolicy),
                 getAdaptedClass(),
                 TITLE,
                 null);

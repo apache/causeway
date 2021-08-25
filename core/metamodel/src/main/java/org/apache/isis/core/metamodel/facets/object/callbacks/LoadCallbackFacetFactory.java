@@ -26,6 +26,7 @@ import javax.inject.Inject;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
@@ -49,7 +50,8 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         val facetHolder = processClassContext.getFacetHolder();
 
         Method method = MethodFinderUtils.findMethod(
-                processClassContext.getEncapsulationPolicy(),
+                MethodFinderOptions
+                .livecycleCallback(processClassContext.getMemberIntrospectionPolicy()),
                 cls, MethodLiteralConstants.LOADED_PREFIX, void.class, NO_ARG);
         if (method != null) {
             processClassContext.removeMethod(method);

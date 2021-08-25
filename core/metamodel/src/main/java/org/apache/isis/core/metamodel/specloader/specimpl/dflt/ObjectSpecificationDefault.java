@@ -29,6 +29,7 @@ import java.util.function.BiConsumer;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.Encapsulation.EncapsulationPolicy;
+import org.apache.isis.applib.annotation.MemberAnnotations.MemberAnnotationPolicy;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
@@ -42,10 +43,12 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.MemberIntrospectionPolicy;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
 import org.apache.isis.core.metamodel.facets.object.encapsulation.EncapsulationFacet;
+import org.apache.isis.core.metamodel.facets.object.memberannot.MemberAnnotationPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.object.wizard.WizardFacet;
@@ -93,7 +96,7 @@ implements FacetHolder {
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
 
     @Getter(onMethod_ = {@Override})
-    private final EncapsulationPolicy encapsulationPolicy;
+    private final MemberIntrospectionPolicy memberIntrospectionPolicy;
 
     /**
      * available only for managed-beans
@@ -114,16 +117,27 @@ implements FacetHolder {
         this.nameIfIsManagedBean = nameIfIsManagedBean;
         this.classSubstitutorRegistry = classSubstitutorRegistry;
 
-        // must install EncapsulationFacet (if any)
+        // must install EncapsulationFacet (if any) and MemberAnnotationPolicyFacet (if any)
         facetProcessor.processObjectType(correspondingClass, this);
 
         // naturally supports attribute inheritance from the type's hierarchy
-        this.encapsulationPolicy =
+        final EncapsulationPolicy encapsulationPolicy =
                 this.lookupFacet(EncapsulationFacet.class)
                 .map(encapsulationFacet->
                         encapsulationFacet
                         .getEncapsulationPolicy(mmc.getConfiguration()))
                 .orElseGet(()->mmc.getConfiguration().getCore().getMetaModel().getIntrospector().getEncapsulationPolicy());
+
+        // naturally supports attribute inheritance from the type's hierarchy
+        final MemberAnnotationPolicy memberAnnotationPolicy =
+                this.lookupFacet(MemberAnnotationPolicyFacet.class)
+                .map(memberAnnotationPolicyFacet->
+                        memberAnnotationPolicyFacet
+                        .getMemberAnnotationPolicy(mmc.getConfiguration()))
+                .orElseGet(()->mmc.getConfiguration().getCore().getMetaModel().getIntrospector().getMemberAnnotationPolicy());
+
+        this.memberIntrospectionPolicy = MemberIntrospectionPolicy
+                .of(encapsulationPolicy, memberAnnotationPolicy);
 
         this.facetedMethodsBuilder =
                 new FacetedMethodsBuilder(this, facetProcessor, classSubstitutorRegistry);

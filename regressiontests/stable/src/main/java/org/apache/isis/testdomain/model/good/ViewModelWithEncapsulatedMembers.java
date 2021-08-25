@@ -18,8 +18,6 @@
  */
 package org.apache.isis.testdomain.model.good;
 
-import java.io.Serializable;
-
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -37,7 +35,6 @@ import lombok.Setter;
         encapsulation = Encapsulation.ENABLED)
 public class ViewModelWithEncapsulatedMembers
 implements
-    Serializable,
     ViewModel.CloneableViaSerialization {
 
     private static final long serialVersionUID = 1L;
