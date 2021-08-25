@@ -70,6 +70,7 @@ extends MetaModelVisitingValidatorAbstract {
 
         // methods intended to be included with the meta-model
         final HashSet<Method> intendedMethods = _Sets.<Method>newHashSet();
+
         for(Method method: type.getDeclaredMethods()) {
             if(method.getDeclaredAnnotation(MemberSupport.class)!=null) {
                 intendedMethods.add(method);

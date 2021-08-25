@@ -42,24 +42,24 @@ implements
 
     private static final long serialVersionUID = 1L;
 
-    // should be allowed to be private since 2.0.0-M7
+    // allowed to be private since 2.0.0-M7
     @Action
     private String myAction() {
         return "Hallo World!";
     }
 
-    // TODO should be allowed to be private since 2.0.0-M7
+    // allowed to be private since 2.0.0-M7
     @MemberSupport
-    public String disableMyAction() {
+    private String disableMyAction() {
         return "disabled for testing purposes";
     }
 
     // -- PROPERTY WITH PRIVATE GETTER AND SETTER
 
     @Property
-    // should be allowed to be private since 2.0.0-M7
+    // allowed to be private since 2.0.0-M7
     @Getter(AccessLevel.PRIVATE)
-    @Setter//TODO(AccessLevel.PRIVATE)
+    @Setter(AccessLevel.PRIVATE)
     private String propWithPrivateAccessors = "Foo";
 
     // -- PROPERTY WITHOUT GETTER OR SETTER

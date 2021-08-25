@@ -49,9 +49,9 @@ extends MethodPrefixBasedFacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        final Method setMethod = attachPropertyModifyFacetIfSetterIsFound(processMethodContext);
+        final Method setterMethod = attachPropertyModifyFacetIfSetterIsFound(processMethodContext);
 
-        attachPropertyClearFacetUsingSetterIfRequired(processMethodContext, setMethod);
+        attachPropertyClearFacetUsingSetterIfRequired(processMethodContext, setterMethod);
     }
 
     /**
@@ -63,22 +63,22 @@ extends MethodPrefixBasedFacetFactoryAbstract {
     private Method attachPropertyModifyFacetIfSetterIsFound(
             final ProcessMethodContext processMethodContext) {
 
-        final Method getMethod = processMethodContext.getMethod();
-        final String capitalizedName = StringExtensions.asJavaBaseName(getMethod.getName());
+        final Method getterMethod = processMethodContext.getMethod();
+        final String capitalizedName = StringExtensions.asJavaBaseName(getterMethod.getName());
 
         final Class<?> cls = processMethodContext.getCls();
-        final Class<?> returnType = getMethod.getReturnType();
+        final Class<?> returnType = getterMethod.getReturnType();
         final Class<?>[] paramTypes = new Class[] { returnType };
-        final Method setMethod = MethodFinderUtils
+        final Method setterMethod = MethodFinderUtils
                 .findMethod(
                         processMethodContext.getEncapsulationPolicy(),
                         cls, MethodLiteralConstants.SET_PREFIX + capitalizedName, void.class, paramTypes);
-        processMethodContext.removeMethod(setMethod);
+        processMethodContext.removeMethod(setterMethod);
 
         final FacetHolder property = processMethodContext.getFacetHolder();
-        if (setMethod != null) {
-            addFacet(new PropertySetterFacetViaSetterMethod(setMethod, property));
-            addFacet(new PropertyInitializationFacetViaSetterMethod(setMethod, property));
+        if (setterMethod != null) {
+            addFacet(new PropertySetterFacetViaSetterMethod(setterMethod, property));
+            addFacet(new PropertyInitializationFacetViaSetterMethod(setterMethod, property));
         } else {
             addFacet(new SnapshotExcludeFacetInferred(property));
 
@@ -89,7 +89,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
 
         }
 
-        return setMethod;
+        return setterMethod;
     }
 
     private void attachPropertyClearFacetUsingSetterIfRequired(

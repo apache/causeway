@@ -42,6 +42,7 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.reflection._Annotations;
+import org.apache.isis.commons.internal.reflection._MethodCache;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.commons.CanBeVoid;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
@@ -74,8 +75,8 @@ implements HasMetaModelContext {
 
         private final Set<Method> methodsRemaining;
 
-        private ConcurrentMethodRemover(final Class<?> introspectedClass, final Method[] methods) {
-            this.methodsRemaining = Stream.of(methods)
+        private ConcurrentMethodRemover(final Class<?> introspectedClass, final Stream<Method> methodStream) {
+            this.methodsRemaining = methodStream
                     .filter(_NullSafe::isPresent)
                     .collect(Collectors.toCollection(_Sets::newConcurrentHashSet));
         }
@@ -145,9 +146,10 @@ implements HasMetaModelContext {
                 encapsulationPolicy().isEncapsulatedMembersSupported()
                     || getConfiguration().getApplib().getAnnotation().getAction().isExplicit();
 
+        val methodCache = _MethodCache.getInstance();
         val methodsRemaining = encapsulationPolicy().isEncapsulatedMembersSupported()
-                ? introspectedClass.getDeclaredMethods()
-                : introspectedClass.getMethods();
+                ? methodCache.streamPublicOrDeclaredMethods(introspectedClass)
+                : methodCache.streamPublicMethods(introspectedClass);
         this.methodRemover = new ConcurrentMethodRemover(introspectedClass, methodsRemaining);
 
     }

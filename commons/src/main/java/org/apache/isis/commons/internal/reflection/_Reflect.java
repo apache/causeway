@@ -176,6 +176,7 @@ public final class _Reflect {
             return Stream.empty();
         }
         if(ignoreAccess) {
+            //FIXME does not include public inherited - thats either intended or not by the caller!
             return _NullSafe.stream(type.getDeclaredMethods());
         }
         return _NullSafe.stream(type.getMethods());

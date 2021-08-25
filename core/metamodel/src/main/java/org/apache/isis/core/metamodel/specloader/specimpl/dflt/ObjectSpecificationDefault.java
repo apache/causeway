@@ -37,6 +37,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
+import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -357,14 +358,14 @@ implements FacetHolder {
 
     // -- toString
 
-//    @Override
-//    public String toString() {
-//        final ToString str = new ToString(this);
-//        str.append("class", getFullIdentifier());
-//        str.append("type", getBeanSort().name());
-//        str.append("superclass", superclass() == null ? "Object" : superclass().getFullIdentifier());
-//        return str.toString();
-//    }
+    @Override
+    public String toString() {
+        final ToString str = new ToString(this);
+        str.append("class", getFullIdentifier());
+        str.append("type", getBeanSort().name());
+        str.append("superclass", superclass() == null ? "Object" : superclass().getFullIdentifier());
+        return str.toString();
+    }
 
     // -- ELEMENT SPECIFICATION
 

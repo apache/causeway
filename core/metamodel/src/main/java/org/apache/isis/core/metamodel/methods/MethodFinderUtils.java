@@ -33,7 +33,6 @@ import java.util.stream.Stream;
 import org.apache.isis.applib.annotation.Encapsulation.EncapsulationPolicy;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.reflection._MethodCache;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
@@ -73,7 +72,9 @@ public final class MethodFinderUtils {
 
         val methodCache = _MethodCache.getInstance();
 
-        val method = methodCache.lookupMethod(type, name, paramTypes);
+        val method = encapsulationPolicy.isEncapsulatedMembersSupported()
+                ? methodCache.lookupPublicOrDeclaredMethod(type, name, paramTypes)
+                : methodCache.lookupPublicMethod(type, name, paramTypes);
         if(method == null) {
             return null;
         }
@@ -151,12 +152,13 @@ public final class MethodFinderUtils {
             final Class<?> returnType) {
         try {
 
-            val methods = encapsulationPolicy.isEncapsulatedMembersSupported()
-                    ? type.getDeclaredMethods()
-                    : type.getMethods();
+            val methodCache = _MethodCache.getInstance();
 
-            return _NullSafe.stream(methods)
-                    .filter(MethodUtil::isPublic)
+            val methodStream = encapsulationPolicy.isEncapsulatedMembersSupported()
+                    ? methodCache.streamPublicOrDeclaredMethods(type)
+                    : methodCache.streamPublicMethods(type);
+
+            return methodStream
                     .filter(MethodUtil::isNotStatic)
                     .filter(method -> names.contains(method.getName()))
                     .filter(method -> returnType == null
