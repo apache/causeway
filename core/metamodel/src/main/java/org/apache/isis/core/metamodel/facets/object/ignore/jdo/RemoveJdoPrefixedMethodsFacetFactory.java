@@ -20,8 +20,6 @@
 package org.apache.isis.core.metamodel.facets.object.ignore.jdo;
 
 
-import java.lang.reflect.Method;
-
 import javax.inject.Inject;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -41,13 +39,12 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessClassContext context) {
-        Class<?> cls = context.getCls();
-        Method[] methods = cls.getMethods();
-        for(Method method: methods) {
-            if(method.getName().startsWith("jdo")) {
-                context.removeMethod(method);
-            }
-        }
+
+        getMethodCache()
+        .streamPublicMethods(context.getCls())
+        .filter(method->method.getName().startsWith("jdo"))
+        .forEach(context::removeMethod);
+
     }
 
 }

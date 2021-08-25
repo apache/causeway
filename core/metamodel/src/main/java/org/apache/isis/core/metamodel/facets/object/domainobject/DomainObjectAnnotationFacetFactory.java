@@ -31,6 +31,7 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Encapsulation.EncapsulationPolicy;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Value;
@@ -253,15 +254,21 @@ implements
             final Class<?> repositoryClass,
             final String methodName) {
 
-        final Method[] methods = repositoryClass.getMethods();
-        for (Method method : methods) {
-            if(method.getName().equals(methodName)) {
-                final Class<?>[] parameterTypes = method.getParameterTypes();
-                if(parameterTypes.length == 1 && parameterTypes[0].equals(String.class)) {
-                    return method;
-                }
-            }
+        val repoMethod = getMethodCache()
+        .streamPublicMethods(repositoryClass)
+        .filter(method->method.getName().equals(methodName))
+        .filter(method->{
+            final Class<?>[] parameterTypes = method.getParameterTypes();
+            return parameterTypes.length == 1
+                    && parameterTypes[0].equals(String.class);
+        })
+        .findFirst()
+        .orElse(null);
+
+        if(repoMethod!=null) {
+            return repoMethod;
         }
+
         ValidationFailure.raise(
                 facetHolder.getSpecificationLoader(),
                 Identifier.classIdentifier(LogicalType.fqcn(cls)),
@@ -636,7 +643,10 @@ implements
 
     @Override
     public Method postConstructMethodFor(final Object pojo) {
-        return MethodFinderUtils.findAnnotatedMethod(pojo, PostConstruct.class, postConstructMethodsCache);
+        return MethodFinderUtils.findAnnotatedMethod(
+                // @PostConstruct is allowed to appear on non-public methods
+                EncapsulationPolicy.ENCAPSULATED_MEMBERS_SUPPORTED,
+                pojo, PostConstruct.class, postConstructMethodsCache);
     }
 
 

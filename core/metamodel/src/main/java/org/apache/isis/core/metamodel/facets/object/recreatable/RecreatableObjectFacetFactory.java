@@ -27,6 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.isis.applib.RecreatableDomainObject;
 import org.apache.isis.applib.ViewModel;
+import org.apache.isis.applib.annotation.Encapsulation.EncapsulationPolicy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -129,7 +130,10 @@ implements
 
     @Override
     public Method postConstructMethodFor(final Object pojo) {
-        return MethodFinderUtils.findAnnotatedMethod(pojo, PostConstruct.class, postConstructMethodsCache);
+        return MethodFinderUtils.findAnnotatedMethod(
+                // @PostConstruct is allowed to appear on non-public methods
+                EncapsulationPolicy.ENCAPSULATED_MEMBERS_SUPPORTED,
+                pojo, PostConstruct.class, postConstructMethodsCache);
     }
 
 

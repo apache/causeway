@@ -56,6 +56,10 @@ public final class _MethodCache implements AutoCloseable {
         return _Context.computeIfAbsent(_MethodCache.class, _MethodCache::new);
     }
 
+    public void add(final Class<?> type) {
+        inspectType(type);
+    }
+
     /**
      * A drop-in replacement for {@link Class#getMethod(String, Class...)} that only looks up
      * public methods and does not throw {@link NoSuchMethodException}s.

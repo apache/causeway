@@ -151,13 +151,7 @@ public final class MethodFinderUtils {
             final Class<?> returnType) {
         try {
 
-            val methodCache = _MethodCache.getInstance();
-
-            val methodStream = encapsulationPolicy.isEncapsulatedMembersSupported()
-                    ? methodCache.streamPublicOrDeclaredMethods(type)
-                    : methodCache.streamPublicMethods(type);
-
-            return methodStream
+            return streamMethods(encapsulationPolicy, type)
                     .filter(MethodUtil::isNotStatic)
                     .filter(method -> names.contains(method.getName()))
                     .filter(method -> returnType == null
@@ -182,13 +176,8 @@ public final class MethodFinderUtils {
             throw new IllegalArgumentException("One or more arguments are 'null' valued");
         }
 
-        val methodCache = _MethodCache.getInstance();
-        val methodStream = encapsulationPolicy.isEncapsulatedMembersSupported()
-                ? methodCache.streamPublicOrDeclaredMethods(type)
-                : methodCache.streamPublicMethods(type);
-
         // Find methods annotated with the specified annotation
-        return methodStream
+        return streamMethods(encapsulationPolicy, type)
                 .filter(method -> !MethodUtil.isStatic(method))
                 .filter(method -> method.isAnnotationPresent(annotationClass))
                 .collect(Collectors.toList());
@@ -216,32 +205,26 @@ public final class MethodFinderUtils {
 
 
     public static Method findAnnotatedMethod(
+            final EncapsulationPolicy encapsulationPolicy,
             final Object pojo,
             final Class<? extends Annotation> annotationClass,
             final MethodByClassMap methods) {
 
         val clz = pojo.getClass();
         val annotatedMethodIfAny =
-                methods.computeIfAbsent(clz, __->search(clz, annotationClass, methods));
+                methods.computeIfAbsent(clz, __->search(encapsulationPolicy, clz, annotationClass, methods));
         return annotatedMethodIfAny.orElse(null);
     }
 
     private static Optional<Method> search(
+            final EncapsulationPolicy encapsulationPolicy,
             final Class<?> clz,
             final Class<? extends Annotation> annotationClass,
             final Map<Class<?>, Optional<Method>> postConstructMethods) {
 
-        final Method[] methods = clz.getMethods();
-
-        Optional<Method> nullableMethod = Optional.empty();
-        for (final Method method : methods) {
-            final Annotation annotation = method.getAnnotation(annotationClass);
-            if(annotation != null) {
-                nullableMethod = Optional.of(method);
-                break;
-            }
-        }
-        return nullableMethod;
+        return streamMethods(encapsulationPolicy, clz)
+        .filter(method->method.getAnnotation(annotationClass)!=null)
+        .findFirst();
     }
 
     // -- SHORTCUTS
@@ -378,7 +361,15 @@ public final class MethodFinderUtils {
         return findMethodWithPPMArg_returningAnyOf(encapsulationPolicy, nonScalarTypes, type, name, paramTypes, additionalParamTypes);
     }
 
+    // -- HELPER
 
-
+    public static Stream<Method> streamMethods(
+            final EncapsulationPolicy encapsulationPolicy,
+            final Class<?> type) {
+        val methodCache = _MethodCache.getInstance();
+        return encapsulationPolicy.isEncapsulatedMembersSupported()
+                ? methodCache.streamPublicOrDeclaredMethods(type)
+                : methodCache.streamPublicMethods(type);
+    }
 
 }

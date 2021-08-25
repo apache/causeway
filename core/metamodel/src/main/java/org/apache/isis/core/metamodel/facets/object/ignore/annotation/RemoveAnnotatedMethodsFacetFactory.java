@@ -77,15 +77,17 @@ extends FacetFactoryAbstract {
             return;
         }
 
-        final Method[] methods = cls.getMethods();
-        for (final Method method : methods) {
+        getMethodCache()
+        .streamPublicMethods(cls)
+        .forEach(method->{
             removeAnnotatedMethods(methodRemover, method, PreDestroy.class);
             removeAnnotatedMethods(methodRemover, method, PostConstruct.class);
             removeAnnotatedMethods(methodRemover, method, Programmatic.class);
             eventHandlerClasses.forEach(eventHandlerClass->{
                 removeAnnotatedMethods(methodRemover, method, eventHandlerClass);
             });
-        }
+        });
+
     }
 
     private static <T extends Annotation> void removeAnnotatedMethods(
