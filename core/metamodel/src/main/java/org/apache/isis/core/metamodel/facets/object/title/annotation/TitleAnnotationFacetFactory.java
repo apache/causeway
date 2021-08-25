@@ -164,7 +164,7 @@ implements MetaModelRefiner {
             final var memberIntrospectionPolicy = ((ObjectSpecificationAbstract)objectSpec).getMemberIntrospectionPolicy();
 
             final Method titleMethod = MethodFinderUtils.findMethod(
-                    MethodFinderOptions.layout(memberIntrospectionPolicy),
+                    MethodFinderOptions.layoutSupport(memberIntrospectionPolicy),
                     cls, TITLE_METHOD_NAME, String.class, null);
             if (titleMethod == null) {
                 return;
@@ -196,7 +196,7 @@ implements MetaModelRefiner {
             final MemberIntrospectionPolicy memberIntrospectionPolicy,
             final Class<?> cls) {
         return MethodFinderUtils.findMethodsWithAnnotation(
-                MethodFinderOptions.layout(memberIntrospectionPolicy), cls, Title.class);
+                MethodFinderOptions.layoutSupport(memberIntrospectionPolicy), cls, Title.class);
     }
 
 }

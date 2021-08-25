@@ -50,7 +50,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
 
         final Method method = MethodFinderUtils.findMethod(
                 MethodFinderOptions
-                .layout(processClassContext.getMemberIntrospectionPolicy()),
+                .layoutSupport(processClassContext.getMemberIntrospectionPolicy()),
                 cls, MethodLiteralConstants.ICON_NAME, String.class, NO_ARG);
         if (method == null) {
             return;

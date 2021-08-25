@@ -70,7 +70,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
 
         val titleMethod = MethodFinderUtils.findMethod_returningText(
                 MethodFinderOptions
-                .layout(processClassContext.getMemberIntrospectionPolicy()),
+                .layoutSupport(processClassContext.getMemberIntrospectionPolicy()),
                 cls,
                 TITLE,
                 NO_ARG);

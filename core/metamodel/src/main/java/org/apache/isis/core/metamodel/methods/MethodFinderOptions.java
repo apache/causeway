@@ -67,7 +67,7 @@ public class MethodFinderOptions {
         return havingAnyOrNoAnnotation(memberIntrospectionPolicy);
     }
 
-    public static MethodFinderOptions layout(
+    public static MethodFinderOptions layoutSupport(
             final MemberIntrospectionPolicy memberIntrospectionPolicy) {
         return havingAnyOrNoAnnotation(memberIntrospectionPolicy);
     }
