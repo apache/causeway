@@ -168,17 +168,9 @@
 				</file>
 			</activation>
 			<properties>
-
-				<!-- keep in sync with versions used in Apache Isis -->
-				<datanucleus-api-jdo.version>5.2.7</datanucleus-api-jdo.version>
-				<datanucleus-core.version>5.2.8</datanucleus-core.version>
-				<datanucleus-jodatime.version>5.2.0-release</datanucleus-jodatime.version>
-				<datanucleus-maven-plugin.version>5.2.1</datanucleus-maven-plugin.version>
-
 				<datanucleus-maven-plugin.log4jConfiguration>${basedir}/logging-dn-enhance.properties</datanucleus-maven-plugin.log4jConfiguration>
 				<datanucleus-maven-plugin.verbose>true</datanucleus-maven-plugin.verbose>
 				<datanucleus-maven-plugin.fork>false</datanucleus-maven-plugin.fork>
-
 			</properties>
 			<build>
 				<plugins>

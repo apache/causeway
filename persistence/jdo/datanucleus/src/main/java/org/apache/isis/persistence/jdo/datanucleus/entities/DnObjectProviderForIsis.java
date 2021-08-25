@@ -108,7 +108,7 @@ extends ReferentialStateManagerImpl {
     }
 
     @Override
-    public void initialiseForCachedPC(final CachedPC<Persistable> cachedPC, final Object id) {
+    public void initialiseForCachedPC(final CachedPC cachedPC, final Object id) {
         super.initialiseForCachedPC(cachedPC, id);
         injectServices(myPC);
     }
