@@ -53,7 +53,6 @@ Documentation tooling was also developed to automate large parts of the xref:ref
 
 == SecMan
 
-* link:https://issues.apache.org/jira/browse/ISIS-2480[ISIS-2480] - SecMan to support JPA
 * link:https://issues.apache.org/jira/browse/ISIS-2565[ISIS-2565] - SecMan: fix outdated semantics PACKAGE, CLASS and TYPE
 * link:https://issues.apache.org/jira/browse/ISIS-2560[ISIS-2560] - SecMan: ApplicationRole ... make adding Permissions more convenient
 * link:https://issues.apache.org/jira/browse/ISIS-2559[ISIS-2559] - SecMan: ApplicationUser_delete has no are_u_sure semantics
@@ -61,6 +60,7 @@ Documentation tooling was also developed to automate large parts of the xref:ref
 * link:https://issues.apache.org/jira/browse/ISIS-2541[ISIS-2541] - SecMan: existing admin user is not attached to the new secman-admin role
 * link:https://issues.apache.org/jira/browse/ISIS-2509[ISIS-2509] - SecMan: add multi select action to relocate orphaned CLASSes to new namespace
 * link:https://issues.apache.org/jira/browse/ISIS-2500[ISIS-2500] - SecMan: Regular User is missing Permision for LogoutMenu#logout
+* link:https://issues.apache.org/jira/browse/ISIS-2480[ISIS-2480] - SecMan to support JPA
 * link:https://issues.apache.org/jira/browse/ISIS-2431[ISIS-2431] - SecMan support for ObjectType (canonical object names)
 * link:https://issues.apache.org/jira/browse/ISIS-2543[ISIS-2543] - SecMan/JPA: user-role (many-to-many) management is not working
 * link:https://issues.apache.org/jira/browse/ISIS-2542[ISIS-2542] - SecMan/JPA: cannot add user to role (autocomplete search issue)

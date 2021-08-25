@@ -39,6 +39,14 @@
     <release>
       <Version>
         <name>isis</name>
+        <created>2021-08-26</created>
+        <revision>2.0.0-M6</revision>
+      </Version>
+    </release>
+
+    <release>
+      <Version>
+        <name>isis</name>
         <created>2021-03-28</created>
         <revision>2.0.0-M5</revision>
       </Version>

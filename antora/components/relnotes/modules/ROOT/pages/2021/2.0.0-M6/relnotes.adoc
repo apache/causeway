@@ -4,5 +4,169 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
-(This page will be updated once the milestone is released).
 
+This release adds plenty of new features, along with numerous improvements and bugfixes.
+
+Highlights are:
+
+* full support for the `CommandPublisher`,`ExecutionPublisher` and `EntityPropertyChangePublisher` SPIs for both JPA and JDO.
+* support for keycloak authentication (leveraging Spring security)
+* view models for serializable classes now view models;
+* a library of architecture tests to detect possible programming issues with your domain apps
+* `InteractionFactory` now part of the applib, allowing full control of the framework session
+
+Also, the minimum version of Java was bumped to JDK11.
+
+
+== New Feature
+
+* link:https://issues.apache.org/jira/browse/ISIS-2826[ISIS-2826] - Implement Lightweight Property Change Tracking for JPA
+* link:https://issues.apache.org/jira/browse/ISIS-2820[ISIS-2820] - Additional arch tests for entities etc.
+* link:https://issues.apache.org/jira/browse/ISIS-2813[ISIS-2813] - `TableColumnOrderingService` using files
+* link:https://issues.apache.org/jira/browse/ISIS-2807[ISIS-2807] - Improve arch tests for subpackages to work across modules.
+* link:https://issues.apache.org/jira/browse/ISIS-2803[ISIS-2803] - Rewrite keycloak integration to use Spring security
+* link:https://issues.apache.org/jira/browse/ISIS-2802[ISIS-2802] - Change `AsciiDoc` and `MarkDown` types to convert on the fly, and rename 'Markup' to 'Html'
+* link:https://issues.apache.org/jira/browse/ISIS-2789[ISIS-2789] - Implement `EntityChangePublisher` for JPA
+* link:https://issues.apache.org/jira/browse/ISIS-2781[ISIS-2781] - Add library of architecture tests.
+* link:https://issues.apache.org/jira/browse/ISIS-2779[ISIS-2779] - Support JVM serialization as a way to mementos of view models that implement java.io.Serializable.
+* link:https://issues.apache.org/jira/browse/ISIS-2775[ISIS-2775] - Allow mixin actions to be declared on domain services.
+* link:https://issues.apache.org/jira/browse/ISIS-2757[ISIS-2757] - `ServiceRegistry.lookupService` should honour `@Primary` as earlier than any `@Priority`
+* link:https://issues.apache.org/jira/browse/ISIS-2756[ISIS-2756] - Unit test support fixes (docs and impl)
+* link:https://issues.apache.org/jira/browse/ISIS-2754[ISIS-2754] - Use `@AliasFor` to declare Spring's `@Named` from `@DomainService(logicalTypeName)`
+* link:https://issues.apache.org/jira/browse/ISIS-2738[ISIS-2738] - Metamodel: add diff report (along the various MM downloads)
+* link:https://issues.apache.org/jira/browse/ISIS-2736[ISIS-2736] - Metamodel: add (diff friendly) download format ASCII (as a variant to XML)
+* link:https://issues.apache.org/jira/browse/ISIS-2734[ISIS-2734] - Extend the API of `VirtualClock` to make it a little easier to work with.
+* link:https://issues.apache.org/jira/browse/ISIS-2733[ISIS-2733] - Surface `UserMemento` on the UI
+* link:https://issues.apache.org/jira/browse/ISIS-2728[ISIS-2728] - Extend `UserMemento` to contain application tenancy path, and callback to allow secman etc to populate.
+* link:https://issues.apache.org/jira/browse/ISIS-2727[ISIS-2727] - Expose minimal `InteractionFactory` in the applib, to create new InteractionLayers. Perhaps this is an extension of SudoService ?
+* link:https://issues.apache.org/jira/browse/ISIS-2705[ISIS-2705] - Allow positioning of Wicket viewer's popups to be configured
+* link:https://issues.apache.org/jira/browse/ISIS-2677[ISIS-2677] - Locating the `layout.xml` should search up the (class) inheritance hierarchy
+* link:https://issues.apache.org/jira/browse/ISIS-2673[ISIS-2673] - Rationalize secman fixture scripts. In particular, all regular users of secman should be granted isis.security.LogoutMenu
+* link:https://issues.apache.org/jira/browse/ISIS-2672[ISIS-2672] - Consider promoting the feature dom out of secman and up into core.
+* link:https://issues.apache.org/jira/browse/ISIS-2658[ISIS-2658] - Factor out BDD specs as a separate surefire execution so can turn on or off via system properties.
+* link:https://issues.apache.org/jira/browse/ISIS-2608[ISIS-2608] - Extend Wicket viewer to show `avatarUrl` and `realName` on header (if available)
+* link:https://issues.apache.org/jira/browse/ISIS-2607[ISIS-2607] - Decouple SecMan from the authenticator API that is in use.
+* link:https://issues.apache.org/jira/browse/ISIS-2606[ISIS-2606] - Extend `UserMemento` to include gravatar URL
+* link:https://issues.apache.org/jira/browse/ISIS-2605[ISIS-2605] - Allow spring security to handle arbitrary authenticated principals (SPI)
+* link:https://issues.apache.org/jira/browse/ISIS-2534[ISIS-2534] - Spring Security Integration
+* link:https://issues.apache.org/jira/browse/ISIS-2442[ISIS-2442] - Bring/document in base, docx from incode-platform.
+
+
+
+== Improvement
+
+* link:https://issues.apache.org/jira/browse/ISIS-2853[ISIS-2853] - Cover all RO Viewer Endpoints with Debug Logging
+* link:https://issues.apache.org/jira/browse/ISIS-2850[ISIS-2850] - Remove uses of deprectated SecMan config beans
+* link:https://issues.apache.org/jira/browse/ISIS-2841[ISIS-2841] - Fix module path issues to allow javadoc plugin to be reinstated
+* link:https://issues.apache.org/jira/browse/ISIS-2836[ISIS-2836] - Remove the unnecessary mavendeps, cleanup uses of JDK11+support
+* link:https://issues.apache.org/jira/browse/ISIS-2831[ISIS-2831] - WicketViewer/ScalarPanelTextField: page scrolls to the top on editing a field
+* link:https://issues.apache.org/jira/browse/ISIS-2829[ISIS-2829] - Cannot run WicketViewer on JVM 17
+* link:https://issues.apache.org/jira/browse/ISIS-2819[ISIS-2819] - Extend base subdomain's convenience annotations, provide JDO applib variants
+* link:https://issues.apache.org/jira/browse/ISIS-2818[ISIS-2818] - Add overrides for XxxDomainEvent for hide/disable/invalidate to evaluate a supplier
+* link:https://issues.apache.org/jira/browse/ISIS-2817[ISIS-2817] - Module 'Apache Isis Core - Schemas' cannot build with JDK-16 (or 17-ea)
+* link:https://issues.apache.org/jira/browse/ISIS-2809[ISIS-2809] - HiddenTypeFacetDerivedFromAuthorization should take actions into account
+* link:https://issues.apache.org/jira/browse/ISIS-2806[ISIS-2806] - Add some overrides for `SudoService` / `InteractionContext` to switch the clock.
+* link:https://issues.apache.org/jira/browse/ISIS-2801[ISIS-2801] - Add JPA support for `Blob` and `Clob` (multi-valued)
+* link:https://issues.apache.org/jira/browse/ISIS-2790[ISIS-2790] - Allow the Wicket viewer's Password reset feature email to support xxx+yyy@ format for emails.
+* link:https://issues.apache.org/jira/browse/ISIS-2777[ISIS-2777] - Extend `AbstractUserAndRoleFixtureScript` to allow username and roles to be supplied lazily.
+* link:https://issues.apache.org/jira/browse/ISIS-2773[ISIS-2773] - Extend `FixtureScript` API to allow checking of optional params
+* link:https://issues.apache.org/jira/browse/ISIS-2772[ISIS-2772] - Extend ``ApplicationFeatureId``'s API to create from LogicalType
+* link:https://issues.apache.org/jira/browse/ISIS-2771[ISIS-2771] - Remove `Object_stopImpersonating` mixin
+* link:https://issues.apache.org/jira/browse/ISIS-2769[ISIS-2769] - Remove execPrereq and addPrereq from `BuilderScriptAbstract`
+* link:https://issues.apache.org/jira/browse/ISIS-2766[ISIS-2766] - Make ObjectIcon(s) available via ManagedObject(s) directly.
+* link:https://issues.apache.org/jira/browse/ISIS-2764[ISIS-2764] - `stopImpersonating` should always be available (under isis.applib)
+* link:https://issues.apache.org/jira/browse/ISIS-2762[ISIS-2762] - Allow `HomePageResolverService` to be substituted out.
+* link:https://issues.apache.org/jira/browse/ISIS-2760[ISIS-2760] - Wicket/BS-Grid: remove css class "col" from container div
+* link:https://issues.apache.org/jira/browse/ISIS-2755[ISIS-2755] - add `@Priority` to all menu ``@DomainService``'s
+* link:https://issues.apache.org/jira/browse/ISIS-2753[ISIS-2753] - to avoid explicit casting, make `AbstractDomainEvent#getSubject()` return `<T> T`
+* link:https://issues.apache.org/jira/browse/ISIS-2742[ISIS-2742] - Allow meta-annotations to be declared for entities.
+* link:https://issues.apache.org/jira/browse/ISIS-2740[ISIS-2740] - Wicket Viewer: menu dropdowns should have higher z-index than toast messages
+* link:https://issues.apache.org/jira/browse/ISIS-2732[ISIS-2732] - Rationalize fixture applib's `Clock` singleton vs `VirtualClock` (hopefully remove the former)
+* link:https://issues.apache.org/jira/browse/ISIS-2730[ISIS-2730] - If home page fails to render (eg due to insufficient permissions), then just suppress.
+* link:https://issues.apache.org/jira/browse/ISIS-2726[ISIS-2726] - Simplify SudoService and others to be based on InteractionService
+* link:https://issues.apache.org/jira/browse/ISIS-2725[ISIS-2725] - Support logical type names with value types
+* link:https://issues.apache.org/jira/browse/ISIS-2717[ISIS-2717] - Replace `FixtureScriptsSpecificationProvider` with configuration properties.
+* link:https://issues.apache.org/jira/browse/ISIS-2715[ISIS-2715] - Shiro permissions should use namespace rather than package; fix
+* link:https://issues.apache.org/jira/browse/ISIS-2713[ISIS-2713] - All framework-contributed metamodel features should be in isis.<something> namespace
+* link:https://issues.apache.org/jira/browse/ISIS-2712[ISIS-2712] - `MetaModelServiceMenu` `downloadMetamodelXml` should filter on logical type namespaces, not on packages
+* link:https://issues.apache.org/jira/browse/ISIS-2707[ISIS-2707] - Extend `MetaModelServiceMenu` `downloadMetaModelCsv` to include the logicalTypeName as a column.
+* link:https://issues.apache.org/jira/browse/ISIS-2750[ISIS-2750] - To allow beans to be overridden, use `@Priority` instead of `@Order` and remove any `@Primary` annotations.
+* link:https://issues.apache.org/jira/browse/ISIS-2711[ISIS-2711] - `TreeNode` should be a value in the metamodel
+* link:https://issues.apache.org/jira/browse/ISIS-2709[ISIS-2709] - Fix permission seed data for h2console, make available to secman admin; other minor simplifications
+* link:https://issues.apache.org/jira/browse/ISIS-2674[ISIS-2674] - Collections of Interfaces do not show columns (eg ApplicationUser#getRoles())
+
+
+== Bug
+
+* link:https://issues.apache.org/jira/browse/ISIS-2854[ISIS-2854] - Secman's `UserMementoRefinerForApplicationUser` introduces circular dependency
+* link:https://issues.apache.org/jira/browse/ISIS-2845[ISIS-2845] - Reinstate automatic injection into entities when resolved.
+* link:https://issues.apache.org/jira/browse/ISIS-2835[ISIS-2835] - `JpaPropertyPublishingTest` succeeds in isolation, fails when run in sequence to other tests
+* link:https://issues.apache.org/jira/browse/ISIS-2834[ISIS-2834] - Pending Parameters Model is not capturing values of type LocalDateTime
+* link:https://issues.apache.org/jira/browse/ISIS-2833[ISIS-2833] - `@Title` throws NPE.
+* link:https://issues.apache.org/jira/browse/ISIS-2830[ISIS-2830] - Wicket Viewer: `ScalarPropertyModel.getManagedProperty()` caching is too agressive
+* link:https://issues.apache.org/jira/browse/ISIS-2828[ISIS-2828] - `ExecutionParametersDefault`: `asKeyValueMap(...)` assumes newline to be 'n'
+* link:https://issues.apache.org/jira/browse/ISIS-2827[ISIS-2827] - Wicket `Blob`/`Clob`: filename is rendered twice in table cells
+* link:https://issues.apache.org/jira/browse/ISIS-2824[ISIS-2824] - Ensure `ImpersonatedUserHolder` can be accessed during initial fixtures
+* link:https://issues.apache.org/jira/browse/ISIS-2816[ISIS-2816] - Impersonation: eventually throws exception (in the background?)
+* link:https://issues.apache.org/jira/browse/ISIS-2815[ISIS-2815] - TableColumnOrderServiceUsingTxtFile: line parsing will eventually fail
+* link:https://issues.apache.org/jira/browse/ISIS-2814[ISIS-2814] - Tooltip doesn't appear for icons in collections
+* link:https://issues.apache.org/jira/browse/ISIS-2812[ISIS-2812] - Regression: `cssClassFa` and `cssClass` not honored with `menubars.layout.xml`
+* link:https://issues.apache.org/jira/browse/ISIS-2811[ISIS-2811] - Regression: Fontawesome Icons are not showing up when based on prefix pattern.
+* link:https://issues.apache.org/jira/browse/ISIS-2800[ISIS-2800] - reasonVetoed is null, causing NPE
+* link:https://issues.apache.org/jira/browse/ISIS-2799[ISIS-2799] - JPA: Framework caches and does not re-read changed state from the database.
+* link:https://issues.apache.org/jira/browse/ISIS-2798[ISIS-2798] - ObjectBulkLoader should inject dependencies into Pojos
+* link:https://issues.apache.org/jira/browse/ISIS-2796[ISIS-2796] - Use base64 encoding with o.a.wicket....CookieUtils.save/load.
+* link:https://issues.apache.org/jira/browse/ISIS-2794[ISIS-2794] - JPA Lifecycle events do not fire
+* link:https://issues.apache.org/jira/browse/ISIS-2793[ISIS-2793] - Impersonation with roles doesn't work with keycloak (next interaction logs out)
+* link:https://issues.apache.org/jira/browse/ISIS-2791[ISIS-2791] - `TitleFacetViaMethodsFactory` needs to unconditionally remove `toString` method from action candidates
+* link:https://issues.apache.org/jira/browse/ISIS-2788[ISIS-2788] - XRay interferes with auditing, as it causes the pending changes to be drained/discarded.
+* link:https://issues.apache.org/jira/browse/ISIS-2787[ISIS-2787] - Names cannot be overridden in `menubars.layout.xml`
+* link:https://issues.apache.org/jira/browse/ISIS-2785[ISIS-2785] - Title tooltip shows the base class, rather than concrete
+* link:https://issues.apache.org/jira/browse/ISIS-2784[ISIS-2784] - fix implementation of `FixtureScript#wrapMixin`
+* link:https://issues.apache.org/jira/browse/ISIS-2780[ISIS-2780] - Regression: `IllegalArgumentException` with Wrapper using Mixin
+* link:https://issues.apache.org/jira/browse/ISIS-2778[ISIS-2778] - Action returning an unchanged view model does not re-inject domain services into local mixins...
+* link:https://issues.apache.org/jira/browse/ISIS-2776[ISIS-2776] - `@Parameter`(regex=...) does not allow for parameter to also be optional.
+* link:https://issues.apache.org/jira/browse/ISIS-2767[ISIS-2767] - secman m:n link table for ApplicationUser/ApplicationRole is in default schema
+* link:https://issues.apache.org/jira/browse/ISIS-2763[ISIS-2763] - JPA `ApplicationUser` / `ApplicationRole` should not use CascadeType.ALL
+* link:https://issues.apache.org/jira/browse/ISIS-2761[ISIS-2761] - Invoking link for rel object-icon results in HTTP 404
+* link:https://issues.apache.org/jira/browse/ISIS-2758[ISIS-2758] - Initial fixture scripts can fail to load due to JSF not present exception.
+* link:https://issues.apache.org/jira/browse/ISIS-2751[ISIS-2751] - `ModuleFixtureService#modules()` needs to be well-defined, to walk the graph correctly ...
+* link:https://issues.apache.org/jira/browse/ISIS-2748[ISIS-2748] - Presence of "mustSatisfy" Specifications causes integ tests to fail .... UNKNOWN bean sort
+* link:https://issues.apache.org/jira/browse/ISIS-2746[ISIS-2746] - Fix the order of listeners for metamodel event (security seeding should be early, fixture installation should be late)
+* link:https://issues.apache.org/jira/browse/ISIS-2739[ISIS-2739] - Download menubars XML is broken, due to `@DomainObject` annotation on enum
+* link:https://issues.apache.org/jira/browse/ISIS-2724[ISIS-2724] - [Regression] Some mixed-in actions don't show up
+* link:https://issues.apache.org/jira/browse/ISIS-2723[ISIS-2723] - [Regression] JDO: `@Column(allowsNull="true")` is not interpreted as Optionality.OPTIONAL
+* link:https://issues.apache.org/jira/browse/ISIS-2722[ISIS-2722] - [Regression] Markup value types are hidden
+* link:https://issues.apache.org/jira/browse/ISIS-2721[ISIS-2721] - [Regression] `Blob`/`Clob` properties are not rendered with table columns
+* link:https://issues.apache.org/jira/browse/ISIS-2720[ISIS-2720] - [Regression] `FormExecutorDefault#executeAndProcessResults` throws `IllegalArgumentException`
+* link:https://issues.apache.org/jira/browse/ISIS-2719[ISIS-2719] - with secman, Impersonation does not correctly figure out permissions of switched user
+* link:https://issues.apache.org/jira/browse/ISIS-2716[ISIS-2716] - Can't Login to demo wicket nightly 20210602
+* link:https://issues.apache.org/jira/browse/ISIS-2714[ISIS-2714] - Update helloworld and simpleapp with permissions to allow users to logout (!)
+* link:https://issues.apache.org/jira/browse/ISIS-2710[ISIS-2710] - Provide a mechanism so that view models wrapping "just deleted" entity objects don't attempt to reset their state after execution (resulting in runtime error).
+* link:https://issues.apache.org/jira/browse/ISIS-2708[ISIS-2708] - Add bottom margin spacing after tab groups in Wicket viewer
+* link:https://issues.apache.org/jira/browse/ISIS-2706[ISIS-2706] - JPA does not persist entities with application-defined primary keys
+* link:https://issues.apache.org/jira/browse/ISIS-2704[ISIS-2704] - If there is an select2 drop-down param, this takes focus even if not first field
+* link:https://issues.apache.org/jira/browse/ISIS-2696[ISIS-2696] - [Regression] MM validation fails on abtract mixin member support method
+* link:https://issues.apache.org/jira/browse/ISIS-2688[ISIS-2688] - Impersonation doesn't actually work ... AuthorizorShiro still delegates to ApplicationUser as originally logged in.
+* link:https://issues.apache.org/jira/browse/ISIS-2686[ISIS-2686] - cannot 'identify' the value type org.apache.isis.applib.value.LocalResourcePath, as values have no identifier
+
+
+== Dependency upgrade
+
+The list below is not comprehensive:
+
+* link:https://issues.apache.org/jira/browse/ISIS-2849[ISIS-2849] - Bump Spring Boot from 2.5.3 to 2.5.4
+* link:https://issues.apache.org/jira/browse/ISIS-2783[ISIS-2783] - Bump resteasy-spring-boot-starter from 4.8.0.Final to 4.8.1.Final
+* link:https://issues.apache.org/jira/browse/ISIS-2808[ISIS-2808] - Java 11 to replace Java 8 compliance for the entire code base
+
+
+== Won't Fix / Not a Problem / Duplicates
+
+No code changes were made to close these tickets:
+
+* link:https://issues.apache.org/jira/browse/ISIS-2786[ISIS-2786] - [NOT A PROBLEM] A tabgroup with tab that contains multiple fieldsets does not surround them correctly (UI cosmetics only)
+* link:https://issues.apache.org/jira/browse/ISIS-2747[ISIS-2747] - [OBSOLETE] Document the fact that secman requires SudoService to specify a user with appropriate roles
+* link:https://issues.apache.org/jira/browse/ISIS-2745[ISIS-2745] - [DUPLICATE] Allow actions to be contributed to domain services also.
+* link:https://issues.apache.org/jira/browse/ISIS-2675[ISIS-2675] - [WON'T FIX] Object_ mixins should only be contributed to entities and view models.
+* link:https://issues.apache.org/jira/browse/ISIS-2671[ISIS-2671] - [WON'T FIX] Extend ApplicationRole to show the inferred permissions (similar to ApplicationUser)
+* link:https://issues.apache.org/jira/browse/ISIS-2040[ISIS-2040] - [WON'T FIX] Authentication/Shiro: Add OpenID support
