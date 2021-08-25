@@ -27,9 +27,9 @@ import org.junit.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.apache.isis.applib.annotation.Encapsulation.EncapsulationPolicy;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.commons.internal.reflection._Reflect;
-import org.apache.isis.core.config.IsisConfiguration.Core.MetaModel.EncapsulationPolicy;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory;

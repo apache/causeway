@@ -21,8 +21,8 @@ package org.apache.isis.core.metamodel.facets.object.mixin;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.Encapsulation.EncapsulationPolicy;
 import org.apache.isis.applib.id.LogicalType;
-import org.apache.isis.core.config.IsisConfiguration.Core.MetaModel.EncapsulationPolicy;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;

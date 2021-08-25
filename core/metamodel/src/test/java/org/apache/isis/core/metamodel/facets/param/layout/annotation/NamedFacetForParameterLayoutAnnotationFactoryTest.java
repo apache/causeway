@@ -26,8 +26,8 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
+import org.apache.isis.applib.annotation.Encapsulation.EncapsulationPolicy;
 import org.apache.isis.applib.annotation.ParameterLayout;
-import org.apache.isis.core.config.IsisConfiguration.Core.MetaModel.EncapsulationPolicy;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.all.named.ParamNamedFacet;

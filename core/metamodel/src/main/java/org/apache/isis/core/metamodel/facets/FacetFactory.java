@@ -26,11 +26,11 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+import org.apache.isis.applib.annotation.Encapsulation.EncapsulationPolicy;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.reflection._Annotations;
-import org.apache.isis.core.config.IsisConfiguration.Core.MetaModel.EncapsulationPolicy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;

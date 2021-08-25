@@ -34,6 +34,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Encapsulation.EncapsulationPolicy;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.isis.commons.collections.Can;
@@ -42,7 +43,6 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.commons.internal.reflection._Reflect;
-import org.apache.isis.core.config.IsisConfiguration.Core.MetaModel.EncapsulationPolicy;
 import org.apache.isis.core.metamodel.commons.CanBeVoid;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
 import org.apache.isis.core.metamodel.commons.ToString;

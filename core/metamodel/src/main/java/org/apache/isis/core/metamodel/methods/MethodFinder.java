@@ -21,9 +21,9 @@ package org.apache.isis.core.metamodel.methods;
 import java.lang.reflect.Method;
 import java.util.stream.Stream;
 
+import org.apache.isis.applib.annotation.Encapsulation.EncapsulationPolicy;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.core.config.IsisConfiguration.Core.MetaModel.EncapsulationPolicy;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils.MethodAndPpmConstructor;
 
 /**

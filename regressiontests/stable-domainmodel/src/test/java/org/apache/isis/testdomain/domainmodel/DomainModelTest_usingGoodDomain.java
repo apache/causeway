@@ -36,6 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.isis.applib.annotation.Encapsulation.EncapsulationPolicy;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
@@ -45,7 +46,6 @@ import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.IsisConfiguration.Core.MetaModel.EncapsulationPolicy;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;

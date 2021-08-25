@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets.propparam.decimal;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 
-import org.apache.isis.core.config.IsisConfiguration.Core.MetaModel.EncapsulationPolicy;
+import org.apache.isis.applib.annotation.Encapsulation.EncapsulationPolicy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;

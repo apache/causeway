@@ -56,6 +56,7 @@ import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.Encapsulation.EncapsulationPolicy;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.i18n.Mode;
@@ -1276,12 +1277,6 @@ public class IsisConfiguration {
         private final MetaModel metaModel = new MetaModel();
         @Data
         public static class MetaModel {
-
-            public static enum EncapsulationPolicy {
-                ONLY_PUBLIC_MEMBERS_SUPPORTED,
-                ENCAPSULATED_MEMBERS_SUPPORTED;
-                public boolean isEncapsulatedMembersSupported() { return this == ENCAPSULATED_MEMBERS_SUPPORTED; }
-            }
 
             /**
              * Whether domain objects to which the current user does not have visibility access should be rendered

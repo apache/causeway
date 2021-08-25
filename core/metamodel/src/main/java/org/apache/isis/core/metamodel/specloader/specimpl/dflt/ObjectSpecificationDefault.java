@@ -28,6 +28,7 @@ import java.util.function.BiConsumer;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.isis.applib.annotation.Encapsulation.EncapsulationPolicy;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
@@ -35,9 +36,7 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.reflection._Reflect;
-import org.apache.isis.core.config.IsisConfiguration.Core.MetaModel.EncapsulationPolicy;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
-import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -89,6 +88,7 @@ implements FacetHolder {
     private Map<Method, ObjectMember> membersByMethod = null;
 
     private final FacetedMethodsBuilder facetedMethodsBuilder;
+
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
 
     @Getter(onMethod_ = {@Override})
@@ -357,14 +357,14 @@ implements FacetHolder {
 
     // -- toString
 
-    @Override
-    public String toString() {
-        final ToString str = new ToString(this);
-        str.append("class", getFullIdentifier());
-        str.append("type", getBeanSort().name());
-        str.append("superclass", superclass() == null ? "Object" : superclass().getFullIdentifier());
-        return str.toString();
-    }
+//    @Override
+//    public String toString() {
+//        final ToString str = new ToString(this);
+//        str.append("class", getFullIdentifier());
+//        str.append("type", getBeanSort().name());
+//        str.append("superclass", superclass() == null ? "Object" : superclass().getFullIdentifier());
+//        return str.toString();
+//    }
 
     // -- ELEMENT SPECIFICATION
 

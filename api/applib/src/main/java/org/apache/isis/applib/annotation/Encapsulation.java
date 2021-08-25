@@ -33,11 +33,10 @@ public enum Encapsulation {
     NOT_SPECIFIED,
 
     /**
-     * Encapsulation policy
-     * should be handled as per the default encapsulation policy
+     * Encapsulation should be handled as per the default encapsulation policy
      * configured in <tt>application.properties</tt>.
      * <p>
-     * If no encapsulation policy is configured, then encapsulation is disabled.
+     * If not configured, then encapsulation is disabled.
      */
     AS_CONFIGURED,
 
@@ -70,5 +69,16 @@ public enum Encapsulation {
         return this == DISABLED;
     }
 
+    /**
+     * Effectively applies on a per class basis, when introspecting
+     * for meta-model members and member-support methods.
+     */
+    public static enum EncapsulationPolicy {
+        ONLY_PUBLIC_MEMBERS_SUPPORTED,
+        ENCAPSULATED_MEMBERS_SUPPORTED;
+        public boolean isEncapsulatedMembersSupported() {
+            return this == ENCAPSULATED_MEMBERS_SUPPORTED;
+        }
+    }
 
 }

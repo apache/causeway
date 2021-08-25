@@ -30,6 +30,7 @@ import java.util.stream.Stream;
 import javax.enterprise.inject.Vetoed;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.Encapsulation.EncapsulationPolicy;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.Can;
@@ -45,7 +46,6 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.collections._Streams;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.functions._Predicates;
-import org.apache.isis.core.config.IsisConfiguration.Core.MetaModel.EncapsulationPolicy;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.consent.Consent;
