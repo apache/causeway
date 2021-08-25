@@ -54,7 +54,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
-import org.apache.isis.persistence.jdo.datanucleus.metamodel.JdoMetamodelUtil;
 import org.apache.isis.persistence.jdo.datanucleus.oid.JdoObjectIdSerializer;
 import org.apache.isis.persistence.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacetFactory;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
@@ -78,6 +77,7 @@ implements EntityFacet {
     @Inject private TransactionService txService;
     @Inject private ObjectManager objectManager;
     @Inject private ExceptionRecognizerService exceptionRecognizerService;
+    @Inject private JdoFacetContext jdoFacetContext;
 
     public JdoEntityFacet(
             final FacetHolder holder) {
@@ -325,7 +325,7 @@ implements EntityFacet {
 
     @Override
     public boolean isProxyEnhancement(final Method method) {
-        return JdoMetamodelUtil.isMethodProvidedByEnhancement(method);
+        return jdoFacetContext.isMethodProvidedByEnhancement(method);
     }
 
     // -- INTERACTION TRACKER LAZY LOOKUP

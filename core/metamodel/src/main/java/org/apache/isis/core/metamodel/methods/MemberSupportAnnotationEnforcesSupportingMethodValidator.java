@@ -30,6 +30,7 @@ import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.reflection._MethodCache;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -45,9 +46,12 @@ import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 public class MemberSupportAnnotationEnforcesSupportingMethodValidator
 extends MetaModelVisitingValidatorAbstract {
 
+    private final _MethodCache methodCache;
+
     @Inject
     public MemberSupportAnnotationEnforcesSupportingMethodValidator(final MetaModelContext mmc) {
         super(mmc);
+        this.methodCache = _MethodCache.getInstance();
     }
 
     @Override
@@ -71,11 +75,10 @@ extends MetaModelVisitingValidatorAbstract {
         // methods intended to be included with the meta-model
         final HashSet<Method> intendedMethods = _Sets.<Method>newHashSet();
 
-        for(Method method: type.getDeclaredMethods()) {
-            if(method.getDeclaredAnnotation(MemberSupport.class)!=null) {
-                intendedMethods.add(method);
-            }
-        }
+        methodCache.streamDeclaredMethods(type)
+        //FIXME add meta-annotation support: perhaps a feature for the methodCache?
+        .filter(method->method.getDeclaredAnnotation(MemberSupport.class)!=null)
+        .forEach(intendedMethods::add);
 
         // methods intended to be included with the meta-model but missing
         final Set<Method> notRecognizedMethods =

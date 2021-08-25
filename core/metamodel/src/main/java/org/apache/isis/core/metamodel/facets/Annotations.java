@@ -31,11 +31,13 @@ import java.util.function.Predicate;
 
 import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.reflection._MethodCache;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
 import org.apache.isis.core.metamodel.commons.ThrowableExtensions;
 
 import lombok.Getter;
+import lombok.val;
 import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
 
@@ -126,15 +128,18 @@ public final class Annotations  {
             final Class<T> annotationClass,
             final Consumer<Evaluator<T>> visitor) {
 
-        for (Method method : cls.getDeclaredMethods()) {
-            if(! MethodUtil.isStatic(method) &&
-                 method.getParameterTypes().length == 0) {
-                final Annotation annotation = method.getAnnotation(annotationClass);
-                if(annotation != null) {
-                    visitor.accept(new MethodEvaluator(method, annotation));
-                }
+        val methodCache = _MethodCache.getInstance();
+
+        methodCache
+        .streamDeclaredMethods(cls)
+        .filter(MethodUtil::isNotStatic)
+        .filter(method->method.getParameterTypes().length == 0)
+        .forEach(method->{
+            final Annotation annotation = method.getAnnotation(annotationClass);
+            if(annotation != null) {
+                visitor.accept(new MethodEvaluator(method, annotation));
             }
-        }
+        });
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })

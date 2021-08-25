@@ -24,6 +24,9 @@ import java.lang.reflect.Method;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.reflection._MethodCache;
+
+import lombok.val;
 
 /**
  * Adapter to make it easy to write {@link Specification}s.
@@ -54,12 +57,21 @@ public abstract class AbstractSpecification2<T> implements Specification2 {
     }
 
     private static Class<?> findExpectedType(final Class<?> fromClass) {
+
+        val methodCache = _MethodCache.getInstance();
+
         for (Class<?> c = fromClass; c != Object.class; c = c.getSuperclass()) {
-            for (final Method method : c.getDeclaredMethods()) {
-                if (isSatisfiesTranslatableSafelyMethod(method)) {
-                    return method.getParameterTypes()[0];
-                }
+
+            val methodFound = methodCache
+            .streamDeclaredMethods(c)
+            .filter(AbstractSpecification2::isSatisfiesTranslatableSafelyMethod)
+            .findFirst()
+            .orElse(null);
+
+            if(methodFound!=null) {
+                return methodFound.getParameterTypes()[0];
             }
+
         }
 
         throw new Error("Cannot determine correct type for satisfiesSafely() method.");

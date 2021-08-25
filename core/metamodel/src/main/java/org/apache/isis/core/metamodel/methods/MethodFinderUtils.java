@@ -22,7 +22,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -183,12 +182,13 @@ public final class MethodFinderUtils {
             throw new IllegalArgumentException("One or more arguments are 'null' valued");
         }
 
-        val methods = encapsulationPolicy.isEncapsulatedMembersSupported()
-                ? type.getDeclaredMethods()
-                : type.getMethods();
+        val methodCache = _MethodCache.getInstance();
+        val methodStream = encapsulationPolicy.isEncapsulatedMembersSupported()
+                ? methodCache.streamPublicOrDeclaredMethods(type)
+                : methodCache.streamPublicMethods(type);
 
         // Find methods annotated with the specified annotation
-        return Arrays.stream(methods)
+        return methodStream
                 .filter(method -> !MethodUtil.isStatic(method))
                 .filter(method -> method.isAnnotationPresent(annotationClass))
                 .collect(Collectors.toList());
