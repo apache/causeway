@@ -22,6 +22,7 @@ import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Encapsulation;
+import org.apache.isis.applib.annotation.MemberAnnotations;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
@@ -32,7 +33,8 @@ import lombok.Setter;
 
 @DomainObject(
         nature = Nature.VIEW_MODEL,
-        encapsulation = Encapsulation.ENABLED)
+        encapsulation = Encapsulation.ENABLED,
+        memberAnnotations = MemberAnnotations.ENFORCED)
 public class ViewModelWithEncapsulatedMembers
 implements
     ViewModel.CloneableViaSerialization {
@@ -48,7 +50,7 @@ implements
     // allowed to be private since 2.0.0-M7
     @MemberSupport
     private String disableMyAction() {
-        return "disabled for testing purposes";
+        return "action disabled for testing purposes";
     }
 
     // -- PROPERTY WITH PRIVATE GETTER AND SETTER
@@ -59,12 +61,11 @@ implements
     @Setter(AccessLevel.PRIVATE)
     private String propWithPrivateAccessors = "Foo";
 
-    // -- PROPERTY WITHOUT GETTER OR SETTER
-
-    // TODO should be allowed have no getter/setter since 2.0.0-M7
-    // yet unclear whether thats gonna be hard to implement
-    @Property
-    private String propWithoutAccessors = "foo";
+    // allowed to be private since 2.0.0-M7
+    @MemberSupport
+    private String disablePropWithPrivateAccessors() {
+        return "property disabled for testing purposes";
+    }
 
 
 }

@@ -37,8 +37,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.annotation.Encapsulation.EncapsulationPolicy;
-import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.services.iactnlayer.InteractionService;
+import org.apache.isis.applib.annotation.MemberAnnotations.MemberAnnotationPolicy;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.metamodel.Config;
@@ -52,11 +52,10 @@ import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
 import org.apache.isis.core.metamodel.facets.object.encapsulation.EncapsulationFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
+import org.apache.isis.core.metamodel.facets.object.memberannot.MemberAnnotationPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
-import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
-import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.postprocessors.collparam.ActionParameterChoicesFacetFromParentedCollection;
 import org.apache.isis.core.metamodel.postprocessors.collparam.ActionParameterDefaultsFacetFromAssociatedCollection;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -79,6 +78,7 @@ import org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingInterf
 import org.apache.isis.testdomain.model.good.ProperMemberSupport;
 import org.apache.isis.testdomain.model.good.ProperServiceWithMixin;
 import org.apache.isis.testdomain.model.good.ViewModelWithEncapsulatedMembers;
+import org.apache.isis.testdomain.util.interaction.DomainObjectTesterFactory;
 import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
 
 import lombok.val;
@@ -106,11 +106,10 @@ class DomainModelTest_usingGoodDomain {
     @Inject private MetaModelService metaModelService;
     @Inject private JaxbService jaxbService;
     @Inject private ServiceRegistry serviceRegistry;
-//    @Inject private FactoryService factoryService;
     @Inject private SpecificationLoader specificationLoader;
     @Inject private TitleService titleService;
-    @Inject private InteractionService interactionService;
     @Inject private IsisConfiguration isisConfig;
+    @Inject private ServiceInjector serviceInjector;
 
     void debug() {
         val config = new Config()
@@ -435,83 +434,47 @@ class DomainModelTest_usingGoodDomain {
 
     }
 
+
+
     @Test
     void nonPublicMembersAndSupport_shouldBeAllowed() {
 
+        val testerFactory = new DomainObjectTesterFactory(serviceInjector);
+
+        // OBJECT
+
         val objectSpec = specificationLoader.specForTypeElseFail(ViewModelWithEncapsulatedMembers.class);
+
         val encapsulationFacet = objectSpec.getFacet(EncapsulationFacet.class);
         assertNotNull(encapsulationFacet);
         assertEquals(
                 EncapsulationPolicy.ENCAPSULATED_MEMBERS_SUPPORTED,
                 encapsulationFacet.getEncapsulationPolicy(isisConfig));
 
-        val vm = ManagedObject.of(objectSpec, new ViewModelWithEncapsulatedMembers());
+        val memberAnnotationPolicyFacet = objectSpec.getFacet(MemberAnnotationPolicyFacet.class);
+        assertNotNull(memberAnnotationPolicyFacet);
+        assertEquals(
+                MemberAnnotationPolicy.MEMBER_ANNOTATIONS_REQUIRED,
+                memberAnnotationPolicyFacet.getMemberAnnotationPolicy(isisConfig));
 
-        val actionIx = ActionInteraction.start(vm, "myAction", Where.NOT_SPECIFIED);
-        val managedAction = actionIx
-                .getManagedAction().get(); // should not throw
+        // PRIVATE ACTION
 
-        val propIx1 = PropertyInteraction.start(vm, "propWithPrivateAccessors", Where.NOT_SPECIFIED);
-        val managedProperty1 = propIx1
-                .getManagedProperty().get(); // should not throw
+        val myActionTester = testerFactory
+                .actionTester(ViewModelWithEncapsulatedMembers.class, "myAction");
+        myActionTester.assertExists(true);
+        myActionTester.assertVisibilityIsNotVetoed();
+        myActionTester.assertUsabilityIsVetoedWith("action disabled for testing purposes");
+        myActionTester.assertInvocationResult("Hallo World!", List.of());
 
-//TODO yet unclear whether thats gonna be hard to implement
-//        val propIx2 = PropertyInteraction.start(vm, "propWithoutAccessors", Where.NOT_SPECIFIED);
-//        val managedProperty2 = propIx2
-//                .getManagedProperty().get(); // should not throw
+        // -- PROPERTY WITH PRIVATE GETTER AND SETTER
 
-        interactionService.runAnonymous(()->{
-
-            // ACTION
-
-            assertFalse(managedAction.checkVisibility().isPresent()); // is visible
-            assertTrue(managedAction.checkUsability().isPresent()); // cannot invoke when checking rules
-            assertEquals("disabled for testing purposes", managedAction.checkUsability().get().getReason());
-
-            val args = managedAction.getInteractionHead()
-                    .getPopulatedParameterValues(List.of());
-
-            // spawns its own transactional boundary, or reuses an existing one if available
-            val either = managedAction.invoke(args);
-
-            assertTrue(either.isLeft()); // assert action did not throw
-
-            val actionResultAsPojo = either.leftIfAny().getPojo();
-
-            assertEquals("Hallo World!", actionResultAsPojo);
-
-            // -- PROPERTY WITH PRIVATE GETTER AND SETTER
-
-            //System.err.println(managedProperty1.checkUsability().get().getReason());
-
-            assertFalse(managedProperty1.checkVisibility().isPresent()); // is visible
-            assertFalse(managedProperty1.checkUsability().isPresent()); // can invoke
-
-            assertEquals("Foo", managedProperty1.getPropertyValue().getPojo());
-
-            val newPropertyValue = managedProperty1.getMetaModel().getMetaModelContext()
-                    .getObjectManager().adapt("Bar");
-
-            managedProperty1.modifyProperty(newPropertyValue);
-
-            assertEquals("Bar", managedProperty1.getPropertyValue().getPojo());
-
-            // -- PROPERTY WITHOUT GETTER OR SETTER
-//TODO yet unclear whether thats gonna be hard to implement
-//            assertFalse(managedProperty2.checkVisibility().isPresent()); // is visible
-//            assertFalse(managedProperty2.checkUsability().isPresent()); // can invoke
-//
-//            assertEquals("foo", managedProperty2.getPropertyValue().getPojo());
-//
-//            val newPropertyValue2 = managedProperty2.getMetaModel().getMetaModelContext()
-//                    .getObjectManager().adapt("bar");
-//
-//            managedProperty2.modifyProperty(newPropertyValue2);
-//
-//            assertEquals("bar", managedProperty2.getPropertyValue().getPojo());
-
-
-        });
+        val propWithPrivateAccessorsTester = testerFactory
+                .propertyTester(ViewModelWithEncapsulatedMembers.class, "propWithPrivateAccessors");
+        propWithPrivateAccessorsTester.assertExists(true);
+        propWithPrivateAccessorsTester.assertVisibilityIsNotVetoed();
+        propWithPrivateAccessorsTester.assertUsabilityIsVetoedWith("property disabled for testing purposes");
+        propWithPrivateAccessorsTester.assertValue("Foo");
+        propWithPrivateAccessorsTester.assertValueUpdate("Bar");
 
     }
 
