@@ -132,7 +132,7 @@ content:
       branches: [2.0.0-M5, 2.0.0-M6]
     - url: .
       start_path: extensions/security/spring-oauth2/src/main/adoc # security
-      branches: [2.0.0-M5, 2.0.0-M6]
+      branches: [2.0.0-M6]
 
     - url: .
       start_path: extensions/vro/cors/adoc # vro
