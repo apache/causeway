@@ -260,7 +260,7 @@ content:
       branches: [2.0.0-M5, 2.0.0-M6]
     - url: .
       start_path: testing/archtestsupport/adoc # testing
-      branches: [2.0.0-M5, 2.0.0-M6]
+      branches: [2.0.0-M6]
     - url: .
       start_path: testing/fakedata/adoc # testing
       branches: [2.0.0-M5, 2.0.0-M6]
