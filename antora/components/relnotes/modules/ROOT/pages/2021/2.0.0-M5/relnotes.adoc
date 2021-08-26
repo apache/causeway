@@ -89,6 +89,16 @@ Documentation tooling was also developed to automate large parts of the xref:ref
 * link:https://issues.apache.org/jira/browse/ISIS-2466[ISIS-2466] - Avoid duplicate metamodel validations when objectType is reused
 * link:https://issues.apache.org/jira/browse/ISIS-2464[ISIS-2464] - Application Layer Overhaul for v2
 * link:https://issues.apache.org/jira/browse/ISIS-2455[ISIS-2455] - Build 'essential' Artefacts From Root with Maven
+* link:https://issues.apache.org/jira/browse/ISIS-2424[ISIS-2424] - Separation of Concerns for Spec-Loader-Cache and `IsisBeanTypeRegistry`
+* link:https://issues.apache.org/jira/browse/ISIS-2396[ISIS-2396] - Make `Markup` final, remove `ListeningMarkup` (can just use Markup)
+* link:https://issues.apache.org/jira/browse/ISIS-1922[ISIS-1922] - Session Timeout Indication
+* link:https://issues.apache.org/jira/browse/ISIS-1678[ISIS-1678] - Remove `org.apache.isis.applib.clock.Clock,` replace with `org.apache.isis.applib.services.clock.ClockService`
+* link:https://issues.apache.org/jira/browse/ISIS-1628[ISIS-1628] - Mixins requires method to be overridden in subclass.
+* link:https://issues.apache.org/jira/browse/ISIS-1451[ISIS-1451] - `SessionManagement#nextSession` does not close off the current ``Interaction``'s execution graph.
+* link:https://issues.apache.org/jira/browse/ISIS-1264[ISIS-1264] - No-arg actions returning `Blob`/`Clob` but whose return type is simply `java.lang.Object` throw exception.
+* link:https://issues.apache.org/jira/browse/ISIS-826[ISIS-826] - Remove `WrappedObject` interface, use instead `WrappingObject` as its replacement.
+* link:https://issues.apache.org/jira/browse/ISIS-439[ISIS-439] - Remove concept of mutable collections from programming model.
+
 
 == Bug
 
@@ -153,14 +163,22 @@ Documentation tooling was also developed to automate large parts of the xref:ref
 * link:https://issues.apache.org/jira/browse/ISIS-2450[ISIS-2450] - Isis 2.0.0 M5 Release activities
 
 
-== Won't Fix / Not a Problem
+== Won't Fix / Not a Problem / Duplicates
 
-* link:https://issues.apache.org/jira/browse/ISIS-1001[ISIS-1001] - [WON'T FIX] For hard-coded methods such as title(), iconName(), and cssClass(), hidden(), disabled(), validate(), provide an alternative mechanism to specify such methods.
-* link:https://issues.apache.org/jira/browse/ISIS-471[ISIS-471] - [WON'T FIX] Pinnable (for session) bookmarks
-
-* link:https://issues.apache.org/jira/browse/ISIS-2472[ISIS-2472] - [WON'T FIX] Move Tooling to isis-lab project (github).
+No code changes were made to close these tickets:
 
 * link:https://issues.apache.org/jira/browse/ISIS-2503[ISIS-2503] - [NOT AN ISSUE] RO Viewer does not emit object members of type 'property'
 * link:https://issues.apache.org/jira/browse/ISIS-2487[ISIS-2487] - [NOT AN ISSUE] DomainService(nature=View) recreate from memento has empty result
+* link:https://issues.apache.org/jira/browse/ISIS-2472[ISIS-2472] - [WON'T FIX] Move Tooling to isis-lab project (github).
 
+
+* link:https://issues.apache.org/jira/browse/ISIS-2245[ISIS-2245] - [WON'T FIX] convert WebModuleLogOnExceptionLogger, make into an extension.
+* link:https://issues.apache.org/jira/browse/ISIS-2016[ISIS-2016] - [NOT A PROBLEM] Slow initial loading - webjars for bootswatch themes?
+* link:https://issues.apache.org/jira/browse/ISIS-1735[ISIS-1735] - [DUPLICATE] Bind action with property/collection by naming convention.
+* link:https://issues.apache.org/jira/browse/ISIS-1734[ISIS-1734] - [WON'T FIX] Enhance TitleService , return an enhanced TitleBuffer that uses TitleService for new appendTitleOf(...)
 * link:https://issues.apache.org/jira/browse/ISIS-1709[ISIS-1709] - [INVALID] Inconsistent handling of commands vs auditing for objects implementing HasTransactionId
+* link:https://issues.apache.org/jira/browse/ISIS-1620[ISIS-1620] - [WON'T FIX] Metamodel exception if choices specified incorrectly
+* link:https://issues.apache.org/jira/browse/ISIS-1270[ISIS-1270] - [WON'T FIX] @Pattern annotation should support internationalization
+* link:https://issues.apache.org/jira/browse/ISIS-1230[ISIS-1230] - [WON'T FIX] How use SudoService with fixture scripts that themselves are nested?
+* link:https://issues.apache.org/jira/browse/ISIS-1001[ISIS-1001] - [WON'T FIX] For hard-coded methods such as title(), iconName(), and cssClass(), hidden(), disabled(), validate(), provide an alternative mechanism to specify such methods.
+* link:https://issues.apache.org/jira/browse/ISIS-471[ISIS-471] - [WON'T FIX] Pinnable (for session) bookmarks
