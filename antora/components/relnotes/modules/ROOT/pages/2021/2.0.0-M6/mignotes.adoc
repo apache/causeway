@@ -4,8 +4,6 @@
 :page-partial:
 
 
-(This page will be added to as development progresses).
-
 == Java Source Compliance Level
 
 The minimum required JVM version was updated from Java 8 to Java 11.
@@ -65,14 +63,14 @@ Some 'mavendeps' artifacts have been removed:
 [source,xml]
 ----
 
-<!-- removed 
+<!-- removed
 <groupId>org.apache.isis.mavendeps</groupId>
 <artifactId>isis-mavendeps-jdk11</artifactId>
 
 no replacement, no longer required
 -->
 
-<!-- removed 
+<!-- removed
 <groupId>org.apache.isis.mavendeps</groupId>
 <artifactId>isis-mavendeps-jpa</artifactId>
 -->

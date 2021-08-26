@@ -5,7 +5,7 @@
 ====
 [red]#_deprecated:_#
 
-- use `application.yml` config properties instead.
+- use `application.yml` config properties instead; corresponds to `isis.extensions.secman.permissions-evaluation-policy=ALLOW_BEATS_VETO` , with supported values `ALLOW_BEATS_VETO` (default) and `VETO_BEATS_ALLOW` 
 ====
 
 An implementation whereby a VETO permission for a feature overrides an ALLOW (for same scope).

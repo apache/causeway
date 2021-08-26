@@ -51,7 +51,7 @@
     </div>
     <div class="social-links float-right">
       <a href="https://lists.apache.org/list.html?users@isis.apache.org" class="email"><i class="fa fa-at"></i></a>
-      <a href="docs/latest/support/slack-channel.html" class="slack"><i class="fa fa-slack"></i></a>
+      <a href="docs/2.0.0-M6/support/slack-channel.html" class="slack"><i class="fa fa-slack"></i></a>
       <a href="https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87" class="bug"><i class="fa fa-bug"></i></a>
       <a href="https://stackoverflow.com/questions/tagged/isis" class="stackoverflow"><i class="fa fa-stack-overflow"></i></a>
       <a href="https://twitter.com/ApacheIsis" class="twitter"><i class="fa fa-twitter"></i></a>
@@ -98,15 +98,15 @@
         </li>
         <li><a href="#call-to-action">Quick Start</a></li>
         <li class="menu-has-children">
-          <a href="docs/latest/about.html">Docs</a>
+          <a href="docs/2.0.0-M6/about.html">Docs</a>
           <ul>
-            <li><a href="docs/latest/about.html">Table of Contents</a></li>
+            <li><a href="docs/2.0.0-M6/about.html">Table of Contents</a></li>
             <li><hr/></li>
-            <li><a href="docs/latest/starters/about.html">Starter Apps</a></li>
-            <li><a href="docs/latest/landing-page/guides.html">Guides</a></li>
-            <li><a href="docs/latest/landing-page/components.html">Components</a></li>
-            <li><a href="docs/latest/landing-page/libraries.html">Libraries</a></li>
-            <li><a href="docs/latest/landing-page/releases.html">Releases</a></li>
+            <li><a href="docs/2.0.0-M6/starters/about.html">Starter Apps</a></li>
+            <li><a href="docs/2.0.0-M6/landing-page/guides.html">Guides</a></li>
+            <li><a href="docs/2.0.0-M6/landing-page/components.html">Components</a></li>
+            <li><a href="docs/2.0.0-M6/landing-page/libraries.html">Libraries</a></li>
+            <li><a href="docs/2.0.0-M6/landing-page/releases.html">Releases</a></li>
           </ul>
         </li>
         <li><a href="#contact">Support</a></li>
@@ -171,16 +171,17 @@
         </div>
 
         <div class="col-lg-6 content">
-          <h3><b>Apache Isis™ provides your apps with a standard, automatically generated UI.  That means:</b></h3>
+          <h3><b>Apache Isis™ enables domain-driven application development by automatically generating a UI for your Spring Boot™ apps.  That means:</b></h3>
 
           <ul>
-            <li><i class="ion-android-checkmark-circle"></i><span>On new apps, the business domain experts and the techies can work closely to learn, discover and then deliver.</span></li>
-            <li><i class="ion-android-checkmark-circle"></i><span>Existing apps are easy to modify - the app is mostly business logic, with costly UI code eliminated.</span></li>
-            <li><i class="ion-android-checkmark-circle"></i><span>Business users will find the app easy to learn as the business concepts are front and center</span></li>
-            <li><i class="ion-android-checkmark-circle"></i><span>When integrating with other systems, the development cost is minimized through built-in mechanisms</span></li>
+            <li><i class="ion-android-checkmark-circle"></i><span><b>Productivity</b> - the app is mostly business logic, with costly UI code eliminated.</span></li>
+            <li><i class="ion-android-checkmark-circle"></i><span><b>Discovery</b> - the business domain experts and the techies can work hand-in-hand to understand the problem space and then the solution space.</span></li>
+            <li><i class="ion-android-checkmark-circle"></i><span><b>Ease of Use</b> - business users will find the app easy to learn as the business concepts are front and center</span></li>
+            <li><i class="ion-android-checkmark-circle"></i><span><b>Clean Architecture</b> - the framework ensures separation of concerns within your app's internal architecture</span></li>
+            <li><i class="ion-android-checkmark-circle"></i><span><b>Simple Integration</b> - automatically publishes generic domain event for async integrations and a REST API for sync integration.</span></li>
           </ul>
 
-          <p>And because Apache Isis™ is <b>open source</b>, built on industry/de-facto standards, there's no vendor lock-in.</p>
+          <p>And because Apache Isis™ is <b>open source</b>, built on industry/de-facto standards such as Spring Boot™, there's no vendor lock-in.</p>
         </div>
       </div>
 
@@ -198,6 +199,15 @@
       </div>
       <div class="owl-carousel testimonials-carousel">
 
+
+        <div class="testimonial-item">
+          <p>
+            <img src="_/img/home/quote-sign-left.png" class="quote-sign-left" alt="">
+            I'm super happy with Apache Isis! It allows us to move forward at an amazing speed.
+            <img src="_/img/home/quote-sign-right.png" class="quote-sign-right" alt="">
+          </p>
+          <h3>Martin Hesse</h3>
+        </div>
 
         <div class="testimonial-item">
           <p>
@@ -270,6 +280,8 @@
         </div>
 
 
+        <!--
+        commented out Joerg's, cos he's since come on board as a committer.
         <div class="testimonial-item">
           <p>
             <img src="_/img/home/quote-sign-left.png" class="quote-sign-left" alt="">
@@ -279,6 +291,7 @@
           <h3>Joerg Rade</h3>
           <h4></h4>
         </div>
+        -->
 
 
         <div class="testimonial-item">
@@ -301,7 +314,6 @@
           <h3>Steve Cameron</h3>
           <h4></h4>
         </div>
-
 
 
         <div class="testimonial-item">
@@ -424,75 +436,6 @@
 
     </div>
   </section>
-  <!-- #testimonials -->
-
-
-  <!--==========================
-Examples
-============================-->
-
-  <!--
-    <section id="portfolio" class="wow fadeInUp">
-      <div class="container">
-        <div class="section-header">
-          <h2>Examples</h2>
-          <p>Apache Isis apps are often (though not exclusively) line-of-business systems.  The section below shows some examples of built using by the Apache Isis user community.  You can read more about these apps <a href="toc/powered-by/powered-by.html">here</a>.</p>
-        </div>
-      </div>
-
-      <div class="container-fluid">
-        <div class="row no-gutters">
-
-          <div class="col-lg-3 col-md-4">
-            <div class="portfolio-item wow fadeInUp">
-              <a href="_/img/home/portfolio/transportplanner/TransportDemand.png" class="portfolio-popup">
-                <img src="_/img/home/portfolio/transportplanner/TransportDemand.png" alt="">
-                <div class="portfolio-overlay">
-                  <div class="portfolio-info"><h2 class="wow fadeInUp">Transport Planner</h2></div>
-                </div>
-              </a>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-md-4">
-            <div class="portfolio-item wow fadeInUp">
-              <a href="_/img/home/portfolio/commapp/screenshot-1.png" class="portfolio-popup">
-                <img src="_/img/home/portfolio/commapp/screenshot-1.png" height="141px" alt="">
-                <div class="portfolio-overlay">
-                  <div class="portfolio-info"><h2 class="wow fadeInUp">CommApp</h2></div>
-                </div>
-              </a>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-md-4">
-            <div class="portfolio-item wow fadeInUp">
-              <a href="_/img/home/portfolio/estatio/est-invoice.png" class="portfolio-popup">
-                <img src="_/img/home/portfolio/estatio/est-invoice.png" alt="">
-                <div class="portfolio-overlay">
-                  <div class="portfolio-info"><h2 class="wow fadeInUp">Estatio</h2></div>
-                </div>
-              </a>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-md-4">
-            <div class="portfolio-item wow fadeInUp">
-              <a href="_/img/home/portfolio/gesconsultor-grc/fig-3-custom-ui-analyzing-risk-scenarios.png" class="portfolio-popup">
-                <img src="_/img/home/portfolio/gesconsultor-grc/fig-3-custom-ui-analyzing-risk-scenarios.png" alt="">
-                <div class="portfolio-overlay">
-                  <div class="portfolio-info"><h2 class="wow fadeInUp">GRC</h2></div>
-                </div>
-              </a>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-    </section>
-  -->
-
 
   <!--==========================
   How it works
@@ -522,7 +465,7 @@ Examples
         <div class="col-lg-4">
           <div class="box wow fadeInUp" data-wow-delay="0.1s">
             <h2>Add-ons</h2>
-            <p class="description">Apache Isis™ includes a large number of add-on modules for security, auditing, command profiling, mail merge and other cross-cutting concerns. It also has a number of UI extensions for maps, calendars etc. as well as a catalog of generic subdomains such as documents, communications, notes and tasks. All are open source and designed for out-of-the-box use or to modify as you require.</p>
+            <p class="description">Apache Isis™ includes a large number of add-on modules for security, auditing, command profiling, mail merge and other cross-cutting concerns. It also has a number of UI extensions for maps, calendars etc. All are open source and designed for out-of-the-box use or to modify as you require.</p>
           </div>
         </div>
 
@@ -574,18 +517,27 @@ Examples
         </div>
 
         <div class="col-lg-4">
-          <div class="box wow fadeInLeft" data-wow-delay="0.2s">
-            <div class="pic"><img src="_/img/home/built-with/datanucleus-logo.png" width="300px" alt=""></div>
-            <p class="description"><a href="https://www.datanucleus.org">DataNucleus AccessPlatform</a> provides persistence and retrieval of data to a range of datastores using a range of APIs, with a range of query languages.</p>
+          <div class="box wow fadeInLeft" data-wow-delay="0.1s">
+            <div class="pic"><img src="_/img/home/built-with/EclipseLink.png" width="300px" height="105px" alt=""></div>
+            <p class="description"><a href="https://www.eclipse.org/eclipselink/">EclipseLink</a>, the reference implementation for JPA, is a comprehensive open-source Java persistence solution addressing relational, XML, and database web services.</p>
           </div>
         </div>
 
+        <div class="col-lg-4">
+          <div class="box wow fadeInLeft" data-wow-delay="0.2s">
+            <div class="pic"><img src="_/img/home/built-with/datanucleus-logo.png" width="300px" alt=""></div>
+            <p class="description"><a href="https://www.datanucleus.org">DataNucleus AccessPlatform</a>, the reference implementation for JDO, provides persistence and retrieval of data to a range of datastores using a range of APIs, with a range of query languages.</p>
+          </div>
+        </div>
+
+<!--
         <div class="col-lg-4">
           <div class="box wow fadeInLeft" data-wow-delay="0.1s">
             <div class="pic"><img src="_/img/home/built-with/project-lombok.png" height="105px" alt=""></div>
             <p class="description"><a href="https://projectlombok.org/">Lombok</a> is a java library that automatically plugs into your editor and build tools, spicing up your java. Never write another getter or equals method again.</p>
           </div>
         </div>
+-->
 
         <div class="col-lg-4">
           <div class="box wow fadeInRight" data-wow-delay="0.2s">
@@ -612,13 +564,13 @@ Examples
           <div class="row">
             <div class="col-lg-6 text-left text-lg-left">
               <p class="cta-text text-center" style="margin-block-end: 0; ">
-                Learn about Apache Isis™ by running the minimal <a href="docs/latest/starters/helloworld.html">helloworld</a> starter&nbsp;app.
+                Learn about Apache Isis™ by running the minimal <a href="docs/2.0.0-M6/starters/helloworld.html">helloworld</a> starter&nbsp;app.
                 You can see the app running <a href="https://helloworld.jdo.isis.incode.work/" target="_blank">here (jdo)</a> and <a href="https://helloworld.jpa.isis.incode.work/" target="_blank">here (jpa)</a>.
               </p>
             </div>
             <div class="col-lg-6 text-left text-lg-left">
               <p class="cta-text text-center" style="margin-block-end: 0; ">
-                Develop your own Apache Isis™ app with the structured <a href="docs/latest/starters/simpleapp.html">simpleapp</a> starter&nbsp;app.
+                Develop your own Apache Isis™ app with the structured <a href="docs/2.0.0-M6/starters/simpleapp.html">simpleapp</a> starter&nbsp;app.
                 You can see the app running <a href="https://simpleapp.jdo.isis.incode.work/" target="_blank">here (jdo)</a> and <a href="https://simpleapp.jpa.isis.incode.work/" target="_blank">here (jpa)</a>.
               </p>
             </div>
@@ -767,7 +719,7 @@ mvn -pl webapp jetty:run</pre>
           <div class="contact-email">
             <i class="ion-ios-filing-outline"></i>
             <h3>Slack</h3>
-            <p><a href="docs/latest/support/slack-channel.html">Join #apache-isis <br/>(on the ASF slack workspace)</a></p>
+            <p><a href="docs/2.0.0-M6/support/slack-channel.html">Join #apache-isis <br/>(on the ASF slack workspace)</a></p>
           </div>
         </div>
 

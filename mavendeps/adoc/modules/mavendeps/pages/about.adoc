@@ -49,41 +49,7 @@ So, you must also add in the appropriate `IsisModuleXxx` to your application's t
 For example, see the xref:docs:starters:simpleapp.adoc#appmanifest[AppManifest for the SimpleApp] starter app.
 
 
-[#jdo-and-jpa]
-== JDO and JPA
-
-The `isis-mavendeps-jdo` aggregates the xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] dependencies, while the `isis-mavendeps-jpa` similarly aggregates the xref:pjpa:ROOT:about.adoc[JPA/EclipseLink] dependencies.
-Applications should use one or the other:
-
-* to use JDO, add:
-+
-[source,xml]
-.pom.xml
-----
-<dependencies>
-    <dependency>
-        <groupId>org.apache.isis.mavendeps</groupId>
-        <artifactId>isis-mavendeps-jdo</artifactId>
-        <type>pom</type>
-    </dependency>
-</dependencies>
-----
-
-* to use JPA, add:
-+
-[source,xml]
-.pom.xml
-----
-<dependencies>
-    <dependency>
-        <groupId>org.apache.isis.mavendeps</groupId>
-        <artifactId>isis-mavendeps-jpa</artifactId>
-        <type>pom</type>
-    </dependency>
-</dependencies>
-----
-
-== Testing and BDD Specs
+== Testing
 
 Three aggregator POMs are provided to support  xref:testing:unittestsupport:about.adoc[unit testing], xref:testing:integtestsupport:about.adoc[integ testing] or running xref:testing:specsupport:about.adoc[BDD (Cucumber) specs].
 
@@ -117,25 +83,11 @@ For integration testing, add:
 </dependencies>
 ----
 
-For BDD (Cucumber) specs, within an integration testing context:
-
-[source,xml]
-.pom.xml
-----
-<dependencies>
-    <dependency>
-        <groupId>org.apache.isis.mavendeps</groupId>
-        <artifactId>isis-mavendeps-integspecs</artifactId>
-        <type>pom</type>
-        <scope>test</scope>
-    </dependency>
-</dependencies>
-----
 
 The table below summarises the dependencies that each of these aggregator POMs brings in.
 
-.Dependencies of the Aggregator POM for Tests/Specs
-[cols="3a,^1a,^1a,^1a", options="header"]
+.Dependencies of the Aggregator POM for Tests
+[cols="3a,^1a,^1a", options="header"]
 |===
 
 | Dependency
@@ -143,110 +95,71 @@ The table below summarises the dependencies that each of these aggregator POMs b
 unittests
 | mavendeps-
 integtests
-| mavendeps-
-integspecs
 
 
 |Apache Isis +
 xref:testing:unittestsupport:about.adoc[unit test support] +
-| Y |  |
+| Y |
 
 |Apache Isis +
 xref:testing:integtestsupport:about.adoc[integ test support] +
-|   | Y | Y
+|   | Y
 
-|Apache Isis +
-xref:testing:specsupport:about.adoc[BDD spec support] +
-|   |   | Y
 
 | Apache Isis +
 xref:refguide:ROOT:about.adoc[Applib]
-| Y | Y | Y
+| Y | Y
 
 | Apache Isis +
 xref:security:bypass:about.adoc[Bypass] security
-|   | Y | Y
+|   | Y
 
 | Apache Isis +
 xref:testing:fakedata:about.adoc[Fake Data]
-| Y | Y | Y
+| Y | Y
 
 |Apache Isis +
 xref:testing:fixtures:about.adoc[Fixture Scripts]
-|   | Y | Y
+|   | Y
 
 | link:https://junit.org/junit5/docs/current/user-guide/[JUnit 5 "jupiter"]
-| Y | Y | Y
+| Y | Y
 
 | link:https://junit.org/junit5/docs/current/user-guide/#migrating-from-junit4[JUnit 5 "vintage"]
-| Y |   |
+| Y |
 
 | link:https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-testing[Spring Boot Test]
-| Y | Y | Y
+| Y | Y
 
 | link:http://hamcrest.org/JavaHamcrest/[Hamcrest] (core + library)
-| Y | Y | Y
+| Y | Y
 
 | link:https://joel-costigliola.github.io/assertj/[AssertJ]
-| Y | Y | Y
+| Y | Y
 
 | link:https://site.mockito.org/[Mockito]
-| Y | Y | Y
+| Y | Y
 
 | link:http://jmock.org/[JMock]
-| Y |   |
+| Y |
 
 | link:https://github.com/approvals/ApprovalTests.Java[Approval tests]
-| Y | Y | Y
+| Y | Y
 
 | link:http://picocontainer.com/[PicoContainer] +
 (for JMock2 extensions)
-| Y |   |
+| Y |
 
 | link:https://github.com/google/guava/wiki[Google's Guava]
-| Y |   |
+| Y |
 
 | link:http://hsqldb.org[HSQLDB]
-|   | Y | Y
+|   | Y
 
 | link:https://www.h2database.com[H2 Database]
-|   | Y | Y
+|   | Y
 
 |===
 
 
 
-== jdk11
-
-While Apache Isis v2 will run happily on Java 11, it is of course also possible to run it on later versions.
-
-Historically, between Java 8 and Java 11 a number of packages related to JavaEE were removed from the JRE, but these packages are used by the framework, specifically
-
-* JAX-WS packages (`javax.jws`, `javax.jws.soap`, `javax.xml.soap`, and `javax.xml.ws.*`)
-* JAXB packages (`javax.xml.bind.*`)
-
-These dependencies are added in automatically. For reference, these dependencies are bundled with:
-
-[source,xml]
-.pom.xml
-----
-<dependencies>
-    <dependency>
-        <groupId>org.apache.isis.mavendeps</groupId>
-        <artifactId>isis-mavendeps-jdk11</artifactId>
-        <type>pom</type>
-    </dependency>
-</dependencies>
-----
-
-[NOTE] 
-====
-TODO v2 - once JDK 17 is released, we might consider upgrading this module to provide any dependencies that are in JDK 11 but not in JDK 17 (if any), and with that rename this module to _jdk17_.  
-====
-
-For more on this topic, see:
-
-* link:https://www.oracle.com/technetwork/java/javase/11-relnote-issues-5012449.html#JDK-8190378[JDK11 release notes]
-* link:http://openjdk.java.net/jeps/320[JEP 320] under which the packages were removed (also includes notes on replacements)
-* link:https://blog.codefx.org/java/java-11-migration-guide/#Removal-Of-Java-EE-Modules[this blog post] on how to fix it
-* link:https://stackoverflow.com/questions/48204141/replacements-for-deprecated-jpms-modules-with-java-ee-apis/48204154#48204154[this SO answer] on how to fix it
