@@ -37,6 +37,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.CollectionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -57,120 +58,49 @@ public class DomainObjectTesterFactory {
     public <T> ActionTester<T> actionTester(
             final Class<T> domainObjectType,
             final String actionName) {
-        return serviceInjector.injectServicesInto(
-                new ActionTester<T>(domainObjectType, actionName))
-                .init();
+        val tester = serviceInjector.injectServicesInto(
+                new ActionTester<T>(domainObjectType, actionName));
+        tester.init();
+        return tester;
     }
 
     public <T> PropertyTester<T> propertyTester(
             final Class<T> domainObjectType,
             final String propertyName) {
-        return serviceInjector.injectServicesInto(
-                new PropertyTester<T>(domainObjectType, propertyName))
-                .init();
+        val tester = serviceInjector.injectServicesInto(
+                new PropertyTester<T>(domainObjectType, propertyName));
+        tester.init();
+        return tester;
     }
 
     public <T> CollectionTester<T> collectionTester(
             final Class<T> domainObjectType,
             final String collectionName) {
-        return serviceInjector.injectServicesInto(
-                new CollectionTester<T>(domainObjectType, collectionName))
-                .init();
+        val tester = serviceInjector.injectServicesInto(
+                new CollectionTester<T>(domainObjectType, collectionName));
+        tester.init();
+        return tester;
     }
 
 
     // -- ACTION TESTER
 
-    public static class ActionTester<T> {
+    public static class ActionTester<T>
+    extends MemberTester<T> {
 
-        @Inject private SpecificationLoader specificationLoader;
-        @Inject private InteractionService interactionService;
-        @Inject private FactoryService factoryService;
-
-        @Getter private final Class<T> domainObjectType;
-        @Getter private final String actionName;
-
-        @Getter private ObjectSpecification objectSpecification;
         private Optional<ManagedAction> managedActionIfAny;
 
         private ActionTester(
                 final @NonNull Class<T> domainObjectType,
                 final @NonNull String actionName) {
-
-            this.domainObjectType = domainObjectType;
-            this.actionName = actionName;
+            super(domainObjectType, actionName, "actionName");
         }
 
-        private ActionTester<T> init() {
-            this.objectSpecification = specificationLoader.specForTypeElseFail(domainObjectType);
-            val vm = ManagedObject.of(objectSpecification, factoryService.viewModel(domainObjectType));
-            this.managedActionIfAny = ActionInteraction.start(vm, actionName, Where.NOT_SPECIFIED)
+        @Override
+        protected Optional<? extends ManagedMember> startInteractionOn(final ManagedObject viewModel) {
+            return this.managedActionIfAny = ActionInteraction
+                    .start(viewModel, getMemberName(), Where.NOT_SPECIFIED)
                     .getManagedAction();
-            return this;
-        }
-
-        public void assertExists(final boolean isExpectedToExist) {
-
-            if(isExpectedToExist
-                    && managedActionIfAny.isEmpty()) {
-                fail(String.format("action {} does not exist", actionName));
-            }
-
-            if(!isExpectedToExist
-                    && managedActionIfAny.isPresent()) {
-                fail(String.format("action {} does exist", actionName));
-            }
-        }
-
-        public void assertVisibilityIsNotVetoed() {
-            assertVisibilityIsVetoedWith(null);
-        }
-
-        public void assertVisibilityIsVetoedWith(final @Nullable String expectedVetoReason) {
-
-            final boolean isExpectedVisible = expectedVetoReason == null;
-
-            if(isExpectedVisible) {
-                assertExists(true);
-            }
-
-            managedActionIfAny
-            .ifPresent(managedAction->{
-                interactionService.runAnonymous(()->{
-
-                    final String actualVetoResaon = managedAction
-                        .checkVisibility()
-                        .map(veto->veto.getReason())
-                        .orElse(null);
-
-                    assertEquals(expectedVetoReason, actualVetoResaon);
-                });
-            });
-        }
-
-        public void assertUsabilityIsNotVetoed() {
-            assertUsabilityIsVetoedWith(null);
-        }
-
-        public void assertUsabilityIsVetoedWith(final @Nullable String expectedVetoReason) {
-
-            final boolean isExpectedUsable = expectedVetoReason == null;
-
-            if(isExpectedUsable) {
-                assertExists(true);
-            }
-
-            managedActionIfAny
-            .ifPresent(managedAction->{
-                interactionService.runAnonymous(()->{
-                    final String actualVetoResaon = managedAction
-                            .checkUsability()
-                            .map(veto->veto.getReason())
-                            .orElse(null);
-
-                        assertEquals(expectedVetoReason, actualVetoResaon);
-                });
-            });
         }
 
         /**
@@ -205,98 +135,24 @@ public class DomainObjectTesterFactory {
 
     }
 
-    // -- PROPERTY/COLLECTION TESTER
+    // -- PROPERTY TESTER
 
-    public static class PropertyTester<T> {
+    public static class PropertyTester<T>
+    extends MemberTester<T> {
 
-        @Inject private SpecificationLoader specificationLoader;
-        @Inject private InteractionService interactionService;
-        @Inject private FactoryService factoryService;
-
-        @Getter private final Class<T> domainObjectType;
-        @Getter private final String propertyName;
-
-        @Getter private ObjectSpecification objectSpecification;
         private Optional<ManagedProperty> managedPropertyIfAny;
 
         private PropertyTester(
                 final @NonNull Class<T> domainObjectType,
                 final @NonNull String propertyName) {
-
-            this.domainObjectType = domainObjectType;
-            this.propertyName = propertyName;
+            super(domainObjectType, propertyName, "property");
         }
 
-        private PropertyTester<T> init() {
-            this.objectSpecification = specificationLoader.specForTypeElseFail(domainObjectType);
-            val vm = ManagedObject.of(objectSpecification, factoryService.viewModel(domainObjectType));
-            this.managedPropertyIfAny = PropertyInteraction.start(vm, propertyName, Where.NOT_SPECIFIED)
+        @Override
+        protected Optional<? extends ManagedMember> startInteractionOn(final ManagedObject viewModel) {
+            return this.managedPropertyIfAny = PropertyInteraction
+                    .start(viewModel, getMemberName(), Where.NOT_SPECIFIED)
                     .getManagedProperty();
-            return this;
-        }
-
-        public void assertExists(final boolean isExpectedToExist) {
-
-            if(isExpectedToExist
-                    && managedPropertyIfAny.isEmpty()) {
-                fail(String.format("property {} does not exist", propertyName));
-            }
-
-            if(!isExpectedToExist
-                    && managedPropertyIfAny.isPresent()) {
-                fail(String.format("property {} does exist", propertyName));
-            }
-        }
-
-        public void assertVisibilityIsNotVetoed() {
-            assertVisibilityIsVetoedWith(null);
-        }
-
-        public void assertVisibilityIsVetoedWith(final @Nullable String expectedVetoReason) {
-
-            final boolean isExpectedVisible = expectedVetoReason == null;
-
-            if(isExpectedVisible) {
-                assertExists(true);
-            }
-
-            managedPropertyIfAny
-            .ifPresent(managedProperty->{
-                interactionService.runAnonymous(()->{
-
-                    final String actualVetoResaon = managedProperty
-                        .checkVisibility()
-                        .map(veto->veto.getReason())
-                        .orElse(null);
-
-                    assertEquals(expectedVetoReason, actualVetoResaon);
-                });
-            });
-        }
-
-        public void assertUsabilityIsNotVetoed() {
-            assertUsabilityIsVetoedWith(null);
-        }
-
-        public void assertUsabilityIsVetoedWith(final @Nullable String expectedVetoReason) {
-
-            final boolean isExpectedUsable = expectedVetoReason == null;
-
-            if(isExpectedUsable) {
-                assertExists(true);
-            }
-
-            managedPropertyIfAny
-            .ifPresent(managedProperty->{
-                interactionService.runAnonymous(()->{
-                    final String actualVetoResaon = managedProperty
-                            .checkUsability()
-                            .map(veto->veto.getReason())
-                            .orElse(null);
-
-                        assertEquals(expectedVetoReason, actualVetoResaon);
-                });
-            });
         }
 
         /**
@@ -339,96 +195,22 @@ public class DomainObjectTesterFactory {
 
     // -- COLLECTION TESTER
 
-    public static class CollectionTester<T> {
+    public static class CollectionTester<T>
+    extends MemberTester<T> {
 
-        @Inject private SpecificationLoader specificationLoader;
-        @Inject private InteractionService interactionService;
-        @Inject private FactoryService factoryService;
-
-        @Getter private final Class<T> domainObjectType;
-        @Getter private final String collectionName;
-
-        @Getter private ObjectSpecification objectSpecification;
         private Optional<ManagedCollection> managedCollectionIfAny;
 
         private CollectionTester(
                 final @NonNull Class<T> domainObjectType,
-                final @NonNull String propertyName) {
-
-            this.domainObjectType = domainObjectType;
-            this.collectionName = propertyName;
+                final @NonNull String collectionName) {
+            super(domainObjectType, collectionName, "collection");
         }
 
-        private CollectionTester<T> init() {
-            this.objectSpecification = specificationLoader.specForTypeElseFail(domainObjectType);
-            val vm = ManagedObject.of(objectSpecification, factoryService.viewModel(domainObjectType));
-            this.managedCollectionIfAny = CollectionInteraction.start(vm, collectionName, Where.NOT_SPECIFIED)
+        @Override
+        protected Optional<? extends ManagedMember> startInteractionOn(final ManagedObject viewModel) {
+            return this.managedCollectionIfAny = CollectionInteraction
+                    .start(viewModel, getMemberName(), Where.NOT_SPECIFIED)
                     .getManagedCollection();
-            return this;
-        }
-
-        public void assertExists(final boolean isExpectedToExist) {
-
-            if(isExpectedToExist
-                    && managedCollectionIfAny.isEmpty()) {
-                fail(String.format("collection {} does not exist", collectionName));
-            }
-
-            if(!isExpectedToExist
-                    && managedCollectionIfAny.isPresent()) {
-                fail(String.format("collection {} does exist", collectionName));
-            }
-        }
-
-        public void assertVisibilityIsNotVetoed() {
-            assertVisibilityIsVetoedWith(null);
-        }
-
-        public void assertVisibilityIsVetoedWith(final @Nullable String expectedVetoReason) {
-
-            final boolean isExpectedVisible = expectedVetoReason == null;
-
-            if(isExpectedVisible) {
-                assertExists(true);
-            }
-
-            managedCollectionIfAny
-            .ifPresent(managedCollection->{
-                interactionService.runAnonymous(()->{
-
-                    final String actualVetoResaon = managedCollection
-                        .checkVisibility()
-                        .map(veto->veto.getReason())
-                        .orElse(null);
-
-                    assertEquals(expectedVetoReason, actualVetoResaon);
-                });
-            });
-        }
-
-        public void assertUsabilityIsNotVetoed() {
-            assertUsabilityIsVetoedWith(null);
-        }
-
-        public void assertUsabilityIsVetoedWith(final @Nullable String expectedVetoReason) {
-
-            final boolean isExpectedUsable = expectedVetoReason == null;
-
-            if(isExpectedUsable) {
-                assertExists(true);
-            }
-
-            managedCollectionIfAny
-            .ifPresent(managedCollection->{
-                interactionService.runAnonymous(()->{
-                    final String actualVetoResaon = managedCollection
-                            .checkUsability()
-                            .map(veto->veto.getReason())
-                            .orElse(null);
-
-                        assertEquals(expectedVetoReason, actualVetoResaon);
-                });
-            });
         }
 
         /**
@@ -447,6 +229,106 @@ public class DomainObjectTesterFactory {
             });
         }
 
+    }
+
+    // -- COMMON ABSTRACT MEMBER TESTER
+
+    private static abstract class MemberTester<T> {
+
+        @Inject protected SpecificationLoader specificationLoader;
+        @Inject protected InteractionService interactionService;
+        @Inject protected FactoryService factoryService;
+
+        @Getter private final Class<T> domainObjectType;
+        @Getter private final String memberName;
+        private final String memberSort;
+
+        @Getter private ObjectSpecification objectSpecification;
+        private Optional<? extends ManagedMember> managedMemberIfAny;
+
+        protected MemberTester(
+                final @NonNull Class<T> domainObjectType,
+                final @NonNull String memberName,
+                final @NonNull String memberSort) {
+
+            this.domainObjectType = domainObjectType;
+            this.memberName = memberName;
+            this.memberSort = memberSort;
+        }
+
+        protected final MemberTester<T> init() {
+            this.objectSpecification = specificationLoader.specForTypeElseFail(domainObjectType);
+            val vm = ManagedObject.of(objectSpecification, factoryService.viewModel(domainObjectType));
+            this.managedMemberIfAny = startInteractionOn(vm);
+            return this;
+        }
+
+        protected abstract Optional<? extends ManagedMember> startInteractionOn(ManagedObject viewModel);
+
+
+        public final void assertExists(final boolean isExpectedToExist) {
+
+            if(isExpectedToExist
+                    && managedMemberIfAny.isEmpty()) {
+                fail(String.format("{} {} does not exist", memberSort, memberName));
+            }
+
+            if(!isExpectedToExist
+                    && managedMemberIfAny.isPresent()) {
+                fail(String.format("{} {} does exist", memberSort, memberName));
+            }
+        }
+
+        public final void assertVisibilityIsNotVetoed() {
+            assertVisibilityIsVetoedWith(null);
+        }
+
+        public final void assertVisibilityIsVetoedWith(final @Nullable String expectedVetoReason) {
+
+            final boolean isExpectedVisible = expectedVetoReason == null;
+
+            if(isExpectedVisible) {
+                assertExists(true);
+            }
+
+            managedMemberIfAny
+            .ifPresent(managedCollection->{
+                interactionService.runAnonymous(()->{
+
+                    final String actualVetoResaon = managedCollection
+                        .checkVisibility()
+                        .map(veto->veto.getReason())
+                        .orElse(null);
+
+                    assertEquals(expectedVetoReason, actualVetoResaon);
+                });
+            });
+        }
+
+        public final void assertUsabilityIsNotVetoed() {
+            assertUsabilityIsVetoedWith(null);
+        }
+
+        public final void assertUsabilityIsVetoedWith(final @Nullable String expectedVetoReason) {
+
+            final boolean isExpectedUsable = expectedVetoReason == null;
+
+            if(isExpectedUsable) {
+                assertExists(true);
+            }
+
+            managedMemberIfAny
+            .ifPresent(managedCollection->{
+                interactionService.runAnonymous(()->{
+                    final String actualVetoResaon = managedCollection
+                            .checkUsability()
+                            .map(veto->veto.getReason())
+                            .orElse(null);
+
+                        assertEquals(expectedVetoReason, actualVetoResaon);
+                });
+            });
+        }
 
     }
 
