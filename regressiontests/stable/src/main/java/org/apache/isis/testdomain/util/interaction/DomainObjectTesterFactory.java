@@ -34,12 +34,15 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
+import org.apache.isis.core.metamodel.interactions.managed.CollectionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.testdomain.util.CollectionAssertions;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -64,6 +67,14 @@ public class DomainObjectTesterFactory {
             final String propertyName) {
         return serviceInjector.injectServicesInto(
                 new PropertyTester<T>(domainObjectType, propertyName))
+                .init();
+    }
+
+    public <T> CollectionTester<T> collectionTester(
+            final Class<T> domainObjectType,
+            final String collectionName) {
+        return serviceInjector.injectServicesInto(
+                new CollectionTester<T>(domainObjectType, collectionName))
                 .init();
     }
 
@@ -228,12 +239,12 @@ public class DomainObjectTesterFactory {
 
             if(isExpectedToExist
                     && managedPropertyIfAny.isEmpty()) {
-                fail(String.format("action {} does not exist", propertyName));
+                fail(String.format("property {} does not exist", propertyName));
             }
 
             if(!isExpectedToExist
                     && managedPropertyIfAny.isPresent()) {
-                fail(String.format("action {} does exist", propertyName));
+                fail(String.format("property {} does exist", propertyName));
             }
         }
 
@@ -325,5 +336,119 @@ public class DomainObjectTesterFactory {
         }
 
     }
+
+    // -- COLLECTION TESTER
+
+    public static class CollectionTester<T> {
+
+        @Inject private SpecificationLoader specificationLoader;
+        @Inject private InteractionService interactionService;
+        @Inject private FactoryService factoryService;
+
+        @Getter private final Class<T> domainObjectType;
+        @Getter private final String collectionName;
+
+        @Getter private ObjectSpecification objectSpecification;
+        private Optional<ManagedCollection> managedCollectionIfAny;
+
+        private CollectionTester(
+                final @NonNull Class<T> domainObjectType,
+                final @NonNull String propertyName) {
+
+            this.domainObjectType = domainObjectType;
+            this.collectionName = propertyName;
+        }
+
+        private CollectionTester<T> init() {
+            this.objectSpecification = specificationLoader.specForTypeElseFail(domainObjectType);
+            val vm = ManagedObject.of(objectSpecification, factoryService.viewModel(domainObjectType));
+            this.managedCollectionIfAny = CollectionInteraction.start(vm, collectionName, Where.NOT_SPECIFIED)
+                    .getManagedCollection();
+            return this;
+        }
+
+        public void assertExists(final boolean isExpectedToExist) {
+
+            if(isExpectedToExist
+                    && managedCollectionIfAny.isEmpty()) {
+                fail(String.format("collection {} does not exist", collectionName));
+            }
+
+            if(!isExpectedToExist
+                    && managedCollectionIfAny.isPresent()) {
+                fail(String.format("collection {} does exist", collectionName));
+            }
+        }
+
+        public void assertVisibilityIsNotVetoed() {
+            assertVisibilityIsVetoedWith(null);
+        }
+
+        public void assertVisibilityIsVetoedWith(final @Nullable String expectedVetoReason) {
+
+            final boolean isExpectedVisible = expectedVetoReason == null;
+
+            if(isExpectedVisible) {
+                assertExists(true);
+            }
+
+            managedCollectionIfAny
+            .ifPresent(managedCollection->{
+                interactionService.runAnonymous(()->{
+
+                    final String actualVetoResaon = managedCollection
+                        .checkVisibility()
+                        .map(veto->veto.getReason())
+                        .orElse(null);
+
+                    assertEquals(expectedVetoReason, actualVetoResaon);
+                });
+            });
+        }
+
+        public void assertUsabilityIsNotVetoed() {
+            assertUsabilityIsVetoedWith(null);
+        }
+
+        public void assertUsabilityIsVetoedWith(final @Nullable String expectedVetoReason) {
+
+            final boolean isExpectedUsable = expectedVetoReason == null;
+
+            if(isExpectedUsable) {
+                assertExists(true);
+            }
+
+            managedCollectionIfAny
+            .ifPresent(managedCollection->{
+                interactionService.runAnonymous(()->{
+                    final String actualVetoResaon = managedCollection
+                            .checkUsability()
+                            .map(veto->veto.getReason())
+                            .orElse(null);
+
+                        assertEquals(expectedVetoReason, actualVetoResaon);
+                });
+            });
+        }
+
+        /**
+         * circumvents rule checking
+         */
+        public void assertCollectionElements(final Iterable<?> expectedCollectionElements) {
+
+            assertExists(true);
+
+            managedCollectionIfAny
+            .ifPresent(managedCollection->{
+                interactionService.runAnonymous(()->{
+                    CollectionAssertions
+                    .assertComponentWiseEquals(expectedCollectionElements, managedCollection.getCollectionValue().getPojo());
+                });
+            });
+        }
+
+
+    }
+
 
 }
