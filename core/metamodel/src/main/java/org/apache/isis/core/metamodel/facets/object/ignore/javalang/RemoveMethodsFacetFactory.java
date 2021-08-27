@@ -82,8 +82,8 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
                 ? ((ObjectSpecification)facetHolder).getBeanSort().isMixin()
                 : false;
 
-        val config = processClassContext.getFacetHolder().getMetaModelContext().getConfiguration();
-        val isExplicitAction = config.getApplib().getAnnotation().getAction().isExplicit();
+        val isActionAnnotationRequired = processClassContext.getIntrospectionPolicy()
+                .getMemberAnnotationPolicy().isMemberAnnotationsRequired();
 
         getMethodCache()
         .streamPublicMethods(cls)
@@ -102,7 +102,7 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
 
             // remove property setter, if has not explicitly an @Action annotation
             // this code block is not required, if @Action annotations are explicit per config
-            if(!isExplicitAction
+            if(!isActionAnnotationRequired
                     && method.getParameterCount() == 1
                     && method.getName().startsWith("set")
                     && method.getName().length() > 3) {

@@ -22,9 +22,10 @@ import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
+/**
+ * Processes logicalTypeName and determines the effective IntrospectionPolicy.
+ */
 public interface ObjectTypeFacetFactory extends FacetFactory {
-
-    // -- process logicalTypeName
 
     public static class ProcessObjectTypeContext
     extends AbstractProcessWithClsContext<FacetHolder> {
@@ -39,7 +40,7 @@ public interface ObjectTypeFacetFactory extends FacetFactory {
         public IntrospectionPolicy getIntrospectionPolicy() {
             throw _Exceptions.unsupportedOperation(
                     "ProcessObjectTypeContext does not support getIntrospectionPolicy() "
-                    + "as eg. the EncapsulationPolicy is not yet available this early "
+                    + "as the IntrospectionPolicy is not yet available this early "
                     + "in the meta-model processing stage.");
         }
     }

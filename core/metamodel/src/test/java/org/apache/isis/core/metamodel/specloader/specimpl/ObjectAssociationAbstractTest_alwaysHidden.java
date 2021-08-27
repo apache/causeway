@@ -151,6 +151,11 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
             public int getAutoCompleteMinLength() {
                 return 0;
             }
+            @Override
+            public boolean isExplicitlyAnnotated() {
+                return false;
+            }
+
         };
     }
 

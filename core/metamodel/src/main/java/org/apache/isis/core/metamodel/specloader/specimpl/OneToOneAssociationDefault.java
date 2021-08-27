@@ -20,11 +20,14 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -310,6 +313,14 @@ implements OneToOneAssociation {
         setupCommand(head, interactionId ->
             getCommandDtoFactory()
                 .asCommandDto(interactionId, Can.ofSingleton(head), this, valueAdapterOrNull));
+    }
+
+    @Override
+    public boolean isExplicitlyAnnotated() {
+        //FIXME[ISIS-2774] memoize or even better, make this a final field
+        val javaMethod = getFacetedMethod().getMethod();
+        return _Annotations.synthesize(javaMethod, Property.class).isPresent()
+                || _Annotations.synthesize(javaMethod, PropertyLayout.class).isPresent();
     }
 
     // -- OBJECT CONTRACT

@@ -68,6 +68,8 @@ import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.applib.services.userui.UserMenu;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.core.config.IsisConfiguration.Core;
+import org.apache.isis.core.config.IsisConfiguration.Viewer;
 import org.apache.isis.core.config.metamodel.facets.DefaultViewConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.ActionPublishingPolicy;
@@ -713,13 +715,6 @@ public class IsisConfiguration {
                  */
                 private ActionPublishingPolicy executionPublishing = ActionPublishingPolicy.NONE;
 
-                /**
-                 * Whether or not a public method needs to be annotated with
-                 * @{@link org.apache.isis.applib.annotation.Action} in order to be picked up as an action in the
-                 * metamodel.
-                 */
-                private boolean explicit = false;
-
                 private final DomainEvent domainEvent = new DomainEvent();
                 @Data
                 public static class DomainEvent {
@@ -1313,9 +1308,9 @@ public class IsisConfiguration {
                  * <p>
                  * Default is to only introspect public class members, while annotating these is optional.
                  */
-                private IntrospectionPolicy introspectionPolicy;
-                public IntrospectionPolicy getIntrospectionPolicy() {
-                    return Optional.ofNullable(introspectionPolicy)
+                private IntrospectionPolicy policy;
+                public IntrospectionPolicy getPolicy() {
+                    return Optional.ofNullable(policy)
                             .orElse(IntrospectionPolicy.ANNOTATION_OPTIONAL);
                 }
 

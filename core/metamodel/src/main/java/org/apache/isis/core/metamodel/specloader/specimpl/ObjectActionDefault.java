@@ -25,6 +25,8 @@ import java.util.UUID;
 import java.util.function.Predicate;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.exceptions.RecoverableException;
@@ -36,6 +38,7 @@ import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
@@ -523,6 +526,14 @@ implements ObjectAction {
     @Override
     public boolean isPrototype() {
         return getType().isPrototype();
+    }
+
+    @Override
+    public boolean isExplicitlyAnnotated() {
+        //FIXME[ISIS-2774] memoize or even better, make this a final field
+        val javaMethod = getFacetedMethod().getMethod();
+        return _Annotations.synthesize(javaMethod, Action.class).isPresent()
+                || _Annotations.synthesize(javaMethod, ActionLayout.class).isPresent();
     }
 
     /**

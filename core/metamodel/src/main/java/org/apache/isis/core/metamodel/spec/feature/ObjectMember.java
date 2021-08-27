@@ -52,7 +52,7 @@ public interface ObjectMember extends ObjectFeature {
      * Return the help text for this member - the field or action - to
      * complement the description.
      *
-     * @see #getDescription()
+     * @see #getDescription(java.util.function.Supplier)
      */
     String getHelp();
 
@@ -142,6 +142,14 @@ public interface ObjectMember extends ObjectFeature {
         return false;
     }
 
+    /**
+     * Whether this member has at least one appropriate domain annotation.
+     * @apiNote such that meta-model verification can reason about why this
+     * member was discovered during introspection
+     */
+    boolean isExplicitlyAnnotated();
+
+
     // /////////////////////////////////////////////////////////////
     // Debugging
     // /////////////////////////////////////////////////////////////
@@ -184,7 +192,7 @@ public interface ObjectMember extends ObjectFeature {
             super(null);
         }
 
-        public static boolean isInstanceOf(Throwable throwable) {
+        public static boolean isInstanceOf(final Throwable throwable) {
             return throwable instanceof HiddenException;
         }
 
@@ -197,7 +205,7 @@ public interface ObjectMember extends ObjectFeature {
             super(message, null);
         }
 
-        public static boolean isInstanceOf(Throwable throwable) {
+        public static boolean isInstanceOf(final Throwable throwable) {
             return throwable instanceof DisabledException;
         }
     }

@@ -5,3 +5,35 @@
 
 (This page will be added to as development progresses).
 
+== Programming Model
+
+[cols="2a,3a", options="header"]
+
+|===
+
+| previously
+| new
+
+| had introspection control via global config option 
+`isis.core.meta-model.annotation.action.explicit=true/false`
+| use `@DomainObject(introspection=...)` instead ... 
+as it allows to set the policy on a per class basis, and also introduces support 
+for non-public class member introspection 
+
+|===
+
+== Configuration
+
+Following configuration options changed:
+[source,java]
+----
+// removed:
+isis.core.meta-model.annotation.action.explicit=true/false
+
+// semantic equivalent replacement for i.c.m.a.action.explicit=false 
+isis.core.meta-model.introspector.policy=ANNOTATION_OPTIONAL
+
+// semantic equivalent replacement for i.c.m.a.action.explicit=true 
+isis.core.meta-model.introspector.policy=ANNOTATION_REQUIRED
+
+----

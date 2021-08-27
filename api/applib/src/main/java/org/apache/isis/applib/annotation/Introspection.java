@@ -59,7 +59,7 @@ public enum Introspection {
      * Introspect public members only, while
      * presence of at least one appropriate domain annotation is enforced.
      */
-    ANNOTATION_ENFORCED,
+    ANNOTATION_REQUIRED,
 
     /**
      * Introspect public members only, while
@@ -96,7 +96,7 @@ public enum Introspection {
          * Introspect public members only, while
          * presence of at least one appropriate domain annotation is enforced.
          */
-        ANNOTATION_ENFORCED(
+        ANNOTATION_REQUIRED(
                 EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED,
                 MemberAnnotationPolicy.MEMBER_ANNOTATIONS_REQUIRED),
 

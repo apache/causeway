@@ -30,6 +30,9 @@ gradlew.*
 /.gradle/
 **/build/
 
+#Asciidoctor Plugins
+.asciidoctorconfig.adoc
+
 #Lombok (don't accept config alterations, might lead to a maintenance hell)
 lombok.config
 

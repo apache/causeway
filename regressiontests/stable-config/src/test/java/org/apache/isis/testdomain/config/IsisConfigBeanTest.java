@@ -32,10 +32,9 @@ import org.apache.isis.core.config.IsisModuleCoreConfig;
 import org.apache.isis.core.config.presets.IsisPresets;
 
 @SpringBootTest(
-        classes = { 
+        classes = {
                 IsisModuleCoreConfig.class
-        }
-        )
+        })
 @TestPropertySource({
     "classpath:/application-config-test.properties",
     IsisPresets.UseLog4j2Test
@@ -48,7 +47,9 @@ class IsisConfigBeanTest {
     @Test
     void configurationBean_shouldBePickedUpBySpring() {
         assertNotNull(isisConfiguration);
-        assertTrue(isisConfiguration.getApplib().getAnnotation().getAction().isExplicit());
+        assertTrue(isisConfiguration
+                .getCore().getMetaModel().getIntrospector().getPolicy()
+                .getMemberAnnotationPolicy().isMemberAnnotationsRequired());
     }
 
 }

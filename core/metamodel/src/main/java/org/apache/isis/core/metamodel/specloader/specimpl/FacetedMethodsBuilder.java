@@ -55,6 +55,7 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
+import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.core.metamodel.specloader.typeextract.TypeExtractor;
@@ -66,9 +67,6 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class FacetedMethodsBuilder
 implements HasMetaModelContext {
-
-    private static final String GET_PREFIX = "get";
-    private static final String IS_PREFIX = "is";
 
     /* thread-safety ... make sure every methodsRemaining access is synchronized! */
     private static final class ConcurrentMethodRemover implements MethodRemover {
@@ -124,7 +122,7 @@ implements HasMetaModelContext {
 
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
 
-    private final boolean explicitAnnotationsForActions;
+    private final boolean isMemberAnnotationsRequired;
 
     // -- CONSTRUCTOR
 
@@ -142,9 +140,8 @@ implements HasMetaModelContext {
         this.inspectedTypeSpec = inspectedTypeSpec;
         this.introspectedClass = inspectedTypeSpec.getCorrespondingClass();
 
-        this.explicitAnnotationsForActions =
-                introspectionPolicy().getEncapsulationPolicy().isEncapsulatedMembersSupported()
-                    || getConfiguration().getApplib().getAnnotation().getAction().isExplicit();
+        this.isMemberAnnotationsRequired =
+                introspectionPolicy().getMemberAnnotationPolicy().isMemberAnnotationsRequired();
 
         val methodCache = _MethodCache.getInstance();
         val methodsRemaining = introspectionPolicy().getEncapsulationPolicy().isEncapsulatedMembersSupported()
@@ -243,8 +240,10 @@ implements HasMetaModelContext {
         val propertyAccessors = _Lists.<Method>newArrayList();
         getFacetProcessor().findAndRemovePropertyAccessors(methodRemover, propertyAccessors);
 
-        findAndRemovePrefixedNonVoidMethods(GET_PREFIX, Object.class, 0, propertyAccessors::add);
-        findAndRemovePrefixedNonVoidMethods(IS_PREFIX, Boolean.class, 0, propertyAccessors::add);
+        findAndRemovePrefixedNonVoidMethods(
+                MethodLiteralConstants.GET_PREFIX, Object.class, 0, propertyAccessors::add);
+        findAndRemovePrefixedNonVoidMethods(
+                MethodLiteralConstants.IS_PREFIX, Boolean.class, 0, propertyAccessors::add);
 
         createPropertyFacetedMethodsFromAccessors(propertyAccessors, onNewField);
     }
@@ -434,7 +433,7 @@ implements HasMetaModelContext {
         // return false if both are true
         // 1. actionMethod has no @Action annotation
         // 2. actionMethod does not identify as a mixin's main method
-        if(isExplicitActionAnnotationConfigured()) {
+        if(isMemberAnnotationsRequired) {
 
             // even though when @Action is mandatory for action methods,
             // mixins now can contribute methods,
@@ -500,7 +499,7 @@ implements HasMetaModelContext {
             return false;
         }
 
-        if(isExplicitActionAnnotationConfigured()) {
+        if(isMemberAnnotationsRequired) {
             // we have no @Action, so dismiss
             return false;
         }
@@ -508,11 +507,6 @@ implements HasMetaModelContext {
         // we have a valid action candidate, so fall through
         log.debug("  identified action {}", actionMethod);
         return true;
-    }
-
-
-    private boolean isExplicitActionAnnotationConfigured() {
-        return explicitAnnotationsForActions;
     }
 
     // ////////////////////////////////////////////////////////////////////////////

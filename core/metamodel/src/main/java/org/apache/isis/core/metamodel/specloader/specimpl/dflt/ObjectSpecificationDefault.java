@@ -123,7 +123,7 @@ implements FacetHolder {
                 .map(introspectionPolicyFacet->
                         introspectionPolicyFacet
                         .getIntrospectionPolicy(mmc.getConfiguration()))
-                .orElseGet(()->mmc.getConfiguration().getCore().getMetaModel().getIntrospector().getIntrospectionPolicy());
+                .orElseGet(()->mmc.getConfiguration().getCore().getMetaModel().getIntrospector().getPolicy());
 
         this.introspectionPolicy = introspectionPolicy;
 

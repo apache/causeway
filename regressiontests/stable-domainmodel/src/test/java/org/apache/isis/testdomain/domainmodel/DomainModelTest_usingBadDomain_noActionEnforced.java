@@ -44,12 +44,12 @@ import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValid
 import lombok.val;
 
 @SpringBootTest(
-        classes = { 
+        classes = {
                 Configuration_headless.class,
                 Configuration_usingInvalidDomain_noActionEnforced.class
-        }, 
+        },
         properties = {
-                "isis.applib.annotation.action.explicit=false",
+                "isis.core.meta-model.introspector.policy=ANNOTATION_OPTIONAL",
                 "isis.core.meta-model.introspector.mode=FULL"
         })
 @TestPropertySource({
@@ -59,32 +59,34 @@ import lombok.val;
     IsisPresets.SilenceProgrammingModel
 })
 class DomainModelTest_usingBadDomain_noActionEnforced {
-    
+
     @Inject private IsisConfiguration configuration;
     @Inject private IsisSystemEnvironment isisSystemEnvironment;
     @Inject private SpecificationLoader specificationLoader;
 
-    
+
     @Test
     void fullIntrospection_shouldBeEnabledByThisTestClass() {
         assertTrue(IntrospectionMode.isFullIntrospect(configuration, isisSystemEnvironment));
     }
-    
+
     @Test
     void actionAnnotation_shouldBeOptionalByThisTestClass() {
-        assertFalse(configuration.getApplib().getAnnotation().getAction().isExplicit());
+        assertFalse(configuration
+                .getCore().getMetaModel().getIntrospector().getPolicy()
+                .getMemberAnnotationPolicy().isMemberAnnotationsRequired());
     }
-    
+
     @Test
     void orphanedActionSupport_shouldFail() {
-           
+
         val validateDomainModel = new DomainModelValidator(specificationLoader, configuration, isisSystemEnvironment);
-        
+
         assertThrows(DomainModelException.class, validateDomainModel::throwIfInvalid);
         assertTrue(validateDomainModel.anyMatchesContaining(
-                Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedActionSupportNoActionEnforced.class)), 
+                Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedActionSupportNoActionEnforced.class)),
                 "is assumed to support"));
     }
-    
+
 
 }

@@ -42,10 +42,10 @@ public interface IntrospectionPolicyFacet extends Facet {
             return IntrospectionPolicy.ENCAPSULATION_ENABLED;
         case ANNOTATION_OPTIONAL:
             return IntrospectionPolicy.ANNOTATION_OPTIONAL;
-        case ANNOTATION_ENFORCED:
-            return IntrospectionPolicy.ANNOTATION_ENFORCED;
+        case ANNOTATION_REQUIRED:
+            return IntrospectionPolicy.ANNOTATION_REQUIRED;
         case AS_CONFIGURED:
-            return isisConfig.getCore().getMetaModel().getIntrospector().getIntrospectionPolicy();
+            return isisConfig.getCore().getMetaModel().getIntrospector().getPolicy();
         case NOT_SPECIFIED:
             throw _Exceptions.unexpectedCodeReach(); // there must be no such facet that returns such a case
         default:

@@ -20,8 +20,11 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -166,7 +169,13 @@ implements OneToManyAssociation {
         return 0; // n/a
     }
 
-
+    @Override
+    public boolean isExplicitlyAnnotated() {
+        //FIXME[ISIS-2774] memoize or even better, make this a final field
+        val javaMethod = getFacetedMethod().getMethod();
+        return _Annotations.synthesize(javaMethod, Collection.class).isPresent()
+                || _Annotations.synthesize(javaMethod, CollectionLayout.class).isPresent();
+    }
 
     // -- toString
 
