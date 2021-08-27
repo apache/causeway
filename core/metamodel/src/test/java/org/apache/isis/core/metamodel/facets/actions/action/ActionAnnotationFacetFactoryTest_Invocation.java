@@ -21,6 +21,8 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -34,18 +36,17 @@ import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInv
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromDefault;
 
 import static org.apache.isis.core.metamodel.commons.matchers.IsisMatchers.classEqualTo;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 import lombok.val;
 
 public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotationFacetFactoryTest {
 
     private void processInvocation(
-            ActionAnnotationFacetFactory facetFactory, ProcessMethodContext processMethodContext) {
+            final ActionAnnotationFacetFactory facetFactory, final ProcessMethodContext processMethodContext) {
         val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
         facetFactory.processInvocation(processMethodContext, actionIfAny);
     }
-    
+
     @Test
     public void withPostsActionInvokedEvent() {
 
@@ -65,13 +66,13 @@ public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotatio
         // expect
         allowingLoadSpecificationRequestsFor(cls, actionMethod.getReturnType());
         expectRemoveMethod(actionMethod);
-        
+
         super.metaModelContext.getConfiguration()
         .getApplib().getAnnotation().getAction().getDomainEvent().setPostForDefault(true);
 
         // when
-        final ProcessMethodContext processMethodContext = new ProcessMethodContext(
-                cls, null, actionMethod, mockMethodRemover, facetedMethod);
+        final ProcessMethodContext processMethodContext = ProcessMethodContext
+                .forTesting(cls, null, actionMethod, mockMethodRemover, facetedMethod);
         processInvocation(facetFactory, processMethodContext);
 
         // then
@@ -109,15 +110,15 @@ public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotatio
         expectRemoveMethod(actionMethod);
 
         // when
-        final ProcessMethodContext processMethodContext = new ProcessMethodContext(
-                cls, null, actionMethod, mockMethodRemover, facetedMethod);
+        final ProcessMethodContext processMethodContext = ProcessMethodContext
+                .forTesting(cls, null, actionMethod, mockMethodRemover, facetedMethod);
         processInvocation(facetFactory, processMethodContext);
 
         // then
         final Facet domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);
         Assert.assertNotNull(domainEventFacet);
         Assert.assertTrue(domainEventFacet instanceof ActionDomainEventFacetForActionAnnotation);
-        final ActionDomainEventFacetForActionAnnotation domainEventFacetImpl = 
+        final ActionDomainEventFacetForActionAnnotation domainEventFacetImpl =
                 (ActionDomainEventFacetForActionAnnotation) domainEventFacet;
         assertThat(domainEventFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
 
@@ -125,7 +126,7 @@ public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotatio
         Assert.assertNotNull(invocationFacet);
 
         Assert.assertTrue(invocationFacet instanceof ActionInvocationFacetForDomainEventFromActionAnnotation);
-        final ActionInvocationFacetForDomainEventFromActionAnnotation invocationFacetImpl = 
+        final ActionInvocationFacetForDomainEventFromActionAnnotation invocationFacetImpl =
                 (ActionInvocationFacetForDomainEventFromActionAnnotation) invocationFacet;
         assertThat(invocationFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
     }
@@ -151,8 +152,8 @@ public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotatio
         expectRemoveMethod(actionMethod);
 
         // when
-        final ProcessMethodContext processMethodContext = new ProcessMethodContext(
-                cls, null, actionMethod, mockMethodRemover, facetedMethod);
+        final ProcessMethodContext processMethodContext = ProcessMethodContext
+                .forTesting(cls, null, actionMethod, mockMethodRemover, facetedMethod);
         processInvocation(facetFactory, processMethodContext);
 
         // then
@@ -190,8 +191,8 @@ public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotatio
                 .getApplib().getAnnotation().getAction().getDomainEvent().setPostForDefault(true);
 
         // when
-        final ProcessMethodContext processMethodContext = new ProcessMethodContext(
-                cls, null, actionMethod, mockMethodRemover, facetedMethod);
+        final ProcessMethodContext processMethodContext = ProcessMethodContext
+                .forTesting(cls, null, actionMethod, mockMethodRemover, facetedMethod);
         processInvocation(facetFactory, processMethodContext);
 
         // then

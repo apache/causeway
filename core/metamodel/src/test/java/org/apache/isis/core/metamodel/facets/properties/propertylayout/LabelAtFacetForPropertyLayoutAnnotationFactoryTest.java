@@ -32,6 +32,7 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 
 public class LabelAtFacetForPropertyLayoutAnnotationFactoryTest extends AbstractFacetFactoryTest {
@@ -48,7 +49,8 @@ public class LabelAtFacetForPropertyLayoutAnnotationFactoryTest extends Abstract
         final Method method = findMethod(Customer.class, "getFirstName");
 
         final FacetFactory.ProcessMethodContext processMethodContext =
-                new FacetFactory.ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod);
+                ProcessMethodContext
+                .forTesting(Customer.class, null, method, methodRemover, facetedMethod);
 
         // when
         facetFactory.process(processMethodContext);

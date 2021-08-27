@@ -24,7 +24,7 @@ import javax.jdo.annotations.PrimaryKey;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.persistence.jdo.metamodel.testing.AbstractFacetFactoryTest;
@@ -62,7 +62,8 @@ extends AbstractFacetFactoryTest {
     public void testIdAnnotationPickedUpOnProperty() throws Exception {
         final Class<?> cls = SimpleObjectWithPrimaryKey.class;
         final Method method = cls.getMethod("getId");
-        facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, method, methodRemover, facetedMethod));
+        facetFactory.process(ProcessMethodContext
+                .forTesting(cls, null, method, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(JdoPrimaryKeyFacet.class);
         assertNotNull(facet);
@@ -72,7 +73,8 @@ extends AbstractFacetFactoryTest {
     public void testOptionalDerivedFromId() throws Exception {
         final Class<?> cls = SimpleObjectWithPrimaryKey.class;
         final Method method = cls.getMethod("getId");
-        facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, method, methodRemover, facetedMethod));
+        facetFactory.process(ProcessMethodContext
+                .forTesting(cls, null, method, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
@@ -82,7 +84,8 @@ extends AbstractFacetFactoryTest {
     public void testDisabledDerivedFromId() throws Exception {
         final Class<?> cls = SimpleObjectWithPrimaryKey.class;
         final Method method = cls.getMethod("getId");
-        facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, method, methodRemover, facetedMethod));
+        facetFactory.process(ProcessMethodContext
+                .forTesting(cls, null, method, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         assertNotNull(facet);
@@ -108,7 +111,8 @@ extends AbstractFacetFactoryTest {
 
         final Class<?> cls = Customer.class;
         final Method method = cls.getMethod("getId");
-        facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, method, methodRemover, facetedMethod));
+        facetFactory.process(ProcessMethodContext
+                .forTesting(cls, null, method, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(JdoPrimaryKeyFacet.class);
         assertNull(facet);
@@ -132,7 +136,8 @@ extends AbstractFacetFactoryTest {
 
         final Class<?> cls = Customer.class;
         final Method method = cls.getMethod("getId");
-        facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, method, methodRemover, facetedMethod));
+        facetFactory.process(ProcessMethodContext
+                .forTesting(cls, null, method, methodRemover, facetedMethod));
 
         assertNoMethodsRemoved();
     }

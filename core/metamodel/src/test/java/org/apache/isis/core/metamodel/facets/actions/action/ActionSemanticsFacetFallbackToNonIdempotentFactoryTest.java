@@ -36,7 +36,7 @@ extends AbstractFacetFactoryTest {
     private ActionAnnotationFacetFactory facetFactory;
 
     private void processSemantics(
-            ActionAnnotationFacetFactory facetFactory, ProcessMethodContext processMethodContext) {
+            final ActionAnnotationFacetFactory facetFactory, final ProcessMethodContext processMethodContext) {
         val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
         facetFactory.processSemantics(processMethodContext, actionIfAny);
     }
@@ -62,7 +62,8 @@ extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        processSemantics(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
+        processSemantics(facetFactory, ProcessMethodContext
+                .forTesting(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
         assertNotNull(facet);

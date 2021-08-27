@@ -37,7 +37,7 @@ extends AbstractFacetFactoryTest {
     private ActionAnnotationFacetFactory facetFactory;
 
     private void processRestrictTo(
-            ActionAnnotationFacetFactory facetFactory, ProcessMethodContext processMethodContext) {
+            final ActionAnnotationFacetFactory facetFactory, final ProcessMethodContext processMethodContext) {
         val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
         facetFactory.processRestrictTo(processMethodContext, actionIfAny);
     }
@@ -63,7 +63,8 @@ extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        processRestrictTo(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
+        processRestrictTo(facetFactory, ProcessMethodContext
+                .forTesting(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(PrototypeFacet.class);
         assertNotNull(facet);

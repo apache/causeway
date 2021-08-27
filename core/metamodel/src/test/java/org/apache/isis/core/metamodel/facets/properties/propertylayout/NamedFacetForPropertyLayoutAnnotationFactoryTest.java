@@ -30,6 +30,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 
@@ -50,9 +51,9 @@ extends AbstractFacetFactoryTest {
         final Method method = findMethod(Customer.class, "getFirstName");
 
         // when
-        final FacetFactory.ProcessMethodContext processMethodContext
-            = new FacetFactory.ProcessMethodContext(Customer.class, null, method,
-                        methodRemover, facetedMethod);
+        final FacetFactory.ProcessMethodContext processMethodContext =
+                ProcessMethodContext
+                .forTesting(Customer.class, null, method, methodRemover, facetedMethod);
 
         facetFactory.process(processMethodContext);
 

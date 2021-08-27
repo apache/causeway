@@ -49,6 +49,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.PropertyDomainEventDefaultFacetForDomainObjectAnnotation;
@@ -244,7 +245,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             }});
 
             // when
-            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+            val processMethodContext = ProcessMethodContext
+                    .forTesting(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
             processModify(facetFactory, processMethodContext);
 
@@ -297,7 +299,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             }});
 
             // when
-            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+            val processMethodContext = ProcessMethodContext
+                    .forTesting(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
             processModify(facetFactory, processMethodContext);
 
@@ -349,7 +352,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
                 will(returnValue(null));
             }});
             // when
-            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+            val processMethodContext = ProcessMethodContext
+                    .forTesting(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
             processModify(facetFactory, processMethodContext);
 
@@ -397,7 +401,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             allowingLoadSpecificationRequestsFor(cls, propertyMethod.getReturnType());
 
             // when
-            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+            val processMethodContext = ProcessMethodContext
+                    .forTesting(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
             processModify(facetFactory, processMethodContext);
 
@@ -440,7 +445,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+            val processMethodContext = ProcessMethodContext
+                    .forTesting(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
             processHidden(facetFactory, processMethodContext);
 
@@ -482,7 +488,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+            val processMethodContext = ProcessMethodContext
+                    .forTesting(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
             processEditing(facetFactory, processMethodContext);
 
@@ -513,7 +520,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+            val processMethodContext = ProcessMethodContext
+                    .forTesting(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
             processMaxLength(facetFactory, processMethodContext);
 
@@ -557,7 +565,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+            val processMethodContext = ProcessMethodContext
+                    .forTesting(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
             processMustSatisfy(facetFactory, processMethodContext);
 
@@ -590,7 +599,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+            val processMethodContext = ProcessMethodContext
+                    .forTesting(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
             processEntityPropertyChangePublishing(facetFactory, processMethodContext);
 
@@ -614,7 +624,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+            val processMethodContext = ProcessMethodContext
+                    .forTesting(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
             processEntityPropertyChangePublishing(facetFactory, processMethodContext);
 
@@ -640,7 +651,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+            val processMethodContext = ProcessMethodContext
+                    .forTesting(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
             processSnapshot(facetFactory, processMethodContext);
 
@@ -669,7 +681,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+            val processMethodContext = ProcessMethodContext
+                    .forTesting(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
             processOptional(facetFactory, processMethodContext);
 
@@ -694,7 +707,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+            val processMethodContext = ProcessMethodContext
+                    .forTesting(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
             processOptional(facetFactory, processMethodContext);
 
@@ -719,7 +733,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+            val processMethodContext = ProcessMethodContext
+                    .forTesting(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
             processOptional(facetFactory, processMethodContext);
 
@@ -742,7 +757,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+            val processMethodContext = ProcessMethodContext
+                    .forTesting(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
             processOptional(facetFactory, processMethodContext);
 
@@ -770,7 +786,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+            val processMethodContext = ProcessMethodContext
+                    .forTesting(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
             processRegEx(facetFactory, processMethodContext);
 
@@ -796,7 +813,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+            val processMethodContext = ProcessMethodContext
+                    .forTesting(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
             processRegEx(facetFactory, processMethodContext);
 
@@ -820,7 +838,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+            val processMethodContext = ProcessMethodContext
+                    .forTesting(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
             processRegEx(facetFactory, processMethodContext);
 
@@ -845,7 +864,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+            val processMethodContext = ProcessMethodContext
+                    .forTesting(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
             processRegEx(facetFactory, processMethodContext);
 

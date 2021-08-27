@@ -76,7 +76,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
             }
         });
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, method, mockMethodRemover,
+        facetFactory.process(ProcessMethodContext.forTesting(Customer.class, null, method, mockMethodRemover,
                 facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionPositionFacet.class);
@@ -112,7 +112,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
             }
         });
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, method, mockMethodRemover,
+        facetFactory.process(ProcessMethodContext.forTesting(Customer.class, null, method, mockMethodRemover,
                 facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionPositionFacet.class);
@@ -146,8 +146,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
                 }
             });
 
-            facetFactory.process(new ProcessMethodContext(Customer.class, null, method, mockMethodRemover,
-                    facetedMethod));
+            facetFactory.process(ProcessMethodContext
+                    .forTesting(Customer.class, null, method, mockMethodRemover, facetedMethod));
 
             Facet facet = facetedMethod.getFacet(CssClassFaFacet.class);
             assertThat(facet, is(notNullValue()));
@@ -181,8 +181,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
                 }
             });
 
-            facetFactory.process(new ProcessMethodContext(Customer.class, null, method, mockMethodRemover,
-                    facetedMethod));
+            facetFactory.process(ProcessMethodContext
+                    .forTesting(Customer.class, null, method, mockMethodRemover, facetedMethod));
 
             Facet facet = facetedMethod.getFacet(CssClassFaFacet.class);
             assertThat(facet, is(notNullValue()));

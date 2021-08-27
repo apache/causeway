@@ -30,7 +30,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
-import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
@@ -147,7 +147,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
                 .createForAction(metaModelContext, CustomerService.class, "name");
 
         // when
-        facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+        facetFactory.process(ProcessMethodContext
+                .forTesting(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
         // then
         final Facet facet = facetedMethod.getFacet(NotInServiceMenuFacet.class);
@@ -181,7 +182,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
                 .createForAction(metaModelContext, CustomerService.class, "name");
 
         // when
-        facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+        facetFactory.process(ProcessMethodContext
+                .forTesting(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
         // then
         final Facet facet = facetedMethod.getFacet(NotInServiceMenuFacet.class);
@@ -213,7 +215,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
                 .createForAction(metaModelContext, CustomerService.class, "name");
 
         // when
-        facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+        facetFactory.process(ProcessMethodContext
+                .forTesting(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
         // then
         final Facet facet = facetedMethod.getFacet(NotInServiceMenuFacet.class);

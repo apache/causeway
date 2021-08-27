@@ -28,6 +28,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 
@@ -61,7 +62,8 @@ extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Customer.class, "getFirstName");
 
-        processOptional(facetFactory, new FacetFactory.ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
+        processOptional(facetFactory, ProcessMethodContext
+                .forTesting(Customer.class, null, method, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);

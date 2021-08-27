@@ -27,7 +27,7 @@ import org.jmock.auto.Mock;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
@@ -67,7 +67,8 @@ extends AbstractFacetFactoryTest {
             will(returnValue(mockCustomerSpec));
         }});
 
-        facetFactory.process(new FacetFactory.ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.process(ProcessMethodContext
+                .forTesting(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(TypeOfFacet.class);
         assertNotNull(facet);
@@ -94,7 +95,8 @@ extends AbstractFacetFactoryTest {
 
         final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
 
-        facetFactory.process(new FacetFactory.ProcessMethodContext(Customer.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(ProcessMethodContext
+                .forTesting(Customer.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(TypeOfFacet.class);
         assertNotNull(facet);
@@ -123,7 +125,8 @@ extends AbstractFacetFactoryTest {
             will(returnValue(mockCustomerSpec));
         }});
 
-        facetFactory.process(new FacetFactory.ProcessMethodContext(Customer.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(ProcessMethodContext
+                .forTesting(Customer.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(TypeOfFacet.class);
         assertNotNull(facet);

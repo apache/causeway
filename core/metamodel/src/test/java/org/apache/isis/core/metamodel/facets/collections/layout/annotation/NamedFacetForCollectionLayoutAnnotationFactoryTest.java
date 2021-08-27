@@ -31,7 +31,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.layout.CollectionLayoutFacetFactory;
@@ -52,7 +52,8 @@ public class NamedFacetForCollectionLayoutAnnotationFactoryTest extends Abstract
         }
         final Method method = findMethod(Customer.class, "getFirstNames");
 
-        facetFactory.process(new FacetFactory.ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
+        facetFactory.process(ProcessMethodContext
+                .forTesting(Customer.class, null, method, methodRemover, facetedMethod));
 
         val facet = facetedMethod.getFacet(MemberNamedFacet.class);
         assertThat(facet, is(notNullValue()));

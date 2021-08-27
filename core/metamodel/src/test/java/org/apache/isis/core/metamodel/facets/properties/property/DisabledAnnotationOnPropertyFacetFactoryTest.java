@@ -29,6 +29,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
 
@@ -67,7 +68,8 @@ extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "getNumberOfOrders");
 
-        processEditing(facetFactory, new FacetFactory.ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
+        processEditing(facetFactory, ProcessMethodContext
+                .forTesting(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         assertNotNull(facet);
@@ -88,7 +90,8 @@ extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "getNumberOfOrders");
 
-        processEditing(facetFactory, new FacetFactory.ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
+        processEditing(facetFactory, ProcessMethodContext
+                .forTesting(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         assertNotNull(facet);

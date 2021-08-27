@@ -226,7 +226,6 @@ public interface FacetFactory {
         @Getter private final boolean mixinMain;
 
         /**
-         *
          * @param cls
          * @param featureType
          * @param method
@@ -250,15 +249,17 @@ public interface FacetFactory {
             this.mixinMain = isMixinMain;
         }
 
-        /** JUnit support, historically not using 'isMixinMain' */
-        @Deprecated // use static utility method 'forTesting(...)' instead
-        public ProcessMethodContext(
+        /** JUnit support, historically using classic IntrospectionPolicy ANNOTATION_OPTIONAL
+         *  and not using 'isMixinMain' */
+        public static ProcessMethodContext forTesting(
                 final Class<?> cls,
                 final FeatureType featureType,
                 final Method method,
                 final MethodRemover methodRemover,
                 final FacetedMethod facetedMethod) {
-            this(cls, IntrospectionPolicy.ANNOTATION_OPTIONAL, featureType, method, methodRemover, facetedMethod, false);
+            return new ProcessMethodContext(
+                    cls, IntrospectionPolicy.ANNOTATION_OPTIONAL, featureType, method,
+                    methodRemover, facetedMethod, false);
         }
 
 

@@ -34,7 +34,7 @@ import lombok.val;
 public class ActionAnnotationFacetFactoryTest_Hidden extends ActionAnnotationFacetFactoryTest {
 
     private void processHidden(
-            ActionAnnotationFacetFactory facetFactory, ProcessMethodContext processMethodContext) {
+            final ActionAnnotationFacetFactory facetFactory, final ProcessMethodContext processMethodContext) {
 
         val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
         facetFactory.processHidden(processMethodContext, actionIfAny);
@@ -54,8 +54,8 @@ public class ActionAnnotationFacetFactoryTest_Hidden extends ActionAnnotationFac
         actionMethod = findMethod(cls, "someAction");
 
         // when
-        val processMethodContext = new ProcessMethodContext(
-                cls, null, actionMethod, mockMethodRemover, facetedMethod);
+        val processMethodContext = ProcessMethodContext
+                .forTesting(cls, null, actionMethod, mockMethodRemover, facetedMethod);
         processHidden(facetFactory, processMethodContext);
 
         // then

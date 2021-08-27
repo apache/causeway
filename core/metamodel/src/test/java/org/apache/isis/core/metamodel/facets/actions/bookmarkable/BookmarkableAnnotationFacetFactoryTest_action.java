@@ -53,7 +53,8 @@ extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "placeOrder");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.process(ProcessMethodContext
+                .forTesting(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(BookmarkPolicyFacet.class);
         assertNotNull(facet);

@@ -76,7 +76,8 @@ extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        processInvocation(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
+        processInvocation(facetFactory, ProcessMethodContext
+                .forTesting(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
         assertNotNull(facet);
@@ -97,7 +98,8 @@ extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        processInvocation(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
+        processInvocation(facetFactory, ProcessMethodContext
+                .forTesting(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
         final ActionInvocationFacetForDomainEventAbstract actionInvocationFacetViaMethod = (ActionInvocationFacetForDomainEventAbstract) facet;
@@ -115,7 +117,8 @@ extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        processInvocation(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
+        processInvocation(facetFactory, ProcessMethodContext
+                .forTesting(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
         final ActionInvocationFacetForDomainEventAbstract actionInvocationFacetViaMethod = (ActionInvocationFacetForDomainEventAbstract) facet;
@@ -133,7 +136,8 @@ extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        processInvocation(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
+        processInvocation(facetFactory, ProcessMethodContext
+                .forTesting(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
         final ActionInvocationFacetForDomainEventAbstract actionInvocationFacetViaMethod = (ActionInvocationFacetForDomainEventAbstract) facet;
@@ -157,7 +161,8 @@ extends AbstractFacetFactoryTest {
         final FacetedMethod facetHolderWithParms = FacetedMethod
                 .createForAction(metaModelContext, CustomerEx.class, actionMethod);
 
-        processInvocation(facetFactory, new ProcessMethodContext(CustomerEx.class, null, actionMethod, methodRemover, facetHolderWithParms));
+        processInvocation(facetFactory, ProcessMethodContext
+                .forTesting(CustomerEx.class, null, actionMethod, methodRemover, facetHolderWithParms));
 
         final Facet facet0 = facetHolderWithParms.getFacet(ActionInvocationFacet.class);
         assertNotNull(facet0);
@@ -205,7 +210,8 @@ extends AbstractFacetFactoryTest {
 
         final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(metaModelContext, CustomerEx.class, actionMethod);
 
-        final ProcessMethodContext processMethodContext = new ProcessMethodContext(CustomerEx.class, FeatureType.ACTION, actionMethod, methodRemover, facetHolderWithParms);
+        final ProcessMethodContext processMethodContext = ProcessMethodContext
+                .forTesting(CustomerEx.class, FeatureType.ACTION, actionMethod, methodRemover, facetHolderWithParms);
         processInvocation(facetFactory, processMethodContext);
 
         facetFactoryForChoices.process(processMethodContext);

@@ -29,6 +29,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetForPatternAnnotationOnProperty;
 
@@ -62,7 +63,8 @@ extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Customer.class, "getFirstName");
 
-        processRegEx(facetFactory, new FacetFactory.ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
+        processRegEx(facetFactory, ProcessMethodContext
+                .forTesting(Customer.class, null, method, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(RegExFacet.class);
         assertNotNull(facet);
@@ -82,7 +84,8 @@ extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Customer.class, "getNumberOfOrders");
 
-        processRegEx(facetFactory, new FacetFactory.ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
+        processRegEx(facetFactory, ProcessMethodContext
+                .forTesting(Customer.class, null, method, methodRemover, facetedMethod));
 
         assertNull(facetedMethod.getFacet(RegExFacet.class));
     }

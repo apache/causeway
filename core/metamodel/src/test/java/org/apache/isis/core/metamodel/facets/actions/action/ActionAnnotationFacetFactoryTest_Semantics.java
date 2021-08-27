@@ -21,24 +21,24 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 import lombok.val;
 
 public class ActionAnnotationFacetFactoryTest_Semantics extends ActionAnnotationFacetFactoryTest {
 
     private void processSemantics(
-            ActionAnnotationFacetFactory facetFactory, ProcessMethodContext processMethodContext) {
+            final ActionAnnotationFacetFactory facetFactory, final ProcessMethodContext processMethodContext) {
         val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
         facetFactory.processSemantics(processMethodContext, actionIfAny);
     }
-    
+
     @Test
     public void whenSafe() {
 
@@ -53,7 +53,8 @@ public class ActionAnnotationFacetFactoryTest_Semantics extends ActionAnnotation
         actionMethod = findMethod(cls, "someAction");
 
         // when
-        final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
+        final ProcessMethodContext processMethodContext = ProcessMethodContext
+                .forTesting(cls, null, actionMethod, mockMethodRemover, facetedMethod);
         processSemantics(facetFactory, processMethodContext);
 
         // then
@@ -76,7 +77,8 @@ public class ActionAnnotationFacetFactoryTest_Semantics extends ActionAnnotation
         actionMethod = findMethod(cls, "someAction");
 
         // when
-        final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
+        final ProcessMethodContext processMethodContext = ProcessMethodContext
+                .forTesting(cls, null, actionMethod, mockMethodRemover, facetedMethod);
         processSemantics(facetFactory, processMethodContext);
 
         // then
@@ -99,7 +101,8 @@ public class ActionAnnotationFacetFactoryTest_Semantics extends ActionAnnotation
         actionMethod = findMethod(cls, "someAction");
 
         // when
-        final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
+        final ProcessMethodContext processMethodContext = ProcessMethodContext
+                .forTesting(cls, null, actionMethod, mockMethodRemover, facetedMethod);
         processSemantics(facetFactory, processMethodContext);
 
         // then

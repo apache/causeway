@@ -22,6 +22,10 @@ import java.lang.reflect.Method;
 
 import org.junit.Test;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -29,16 +33,12 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
 import org.apache.isis.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionAnnotation;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-
 import lombok.val;
 
 public class ActionAnnotationFacetFactoryTest_commandPublishing extends ActionAnnotationFacetFactoryTest {
 
     private void processCommandPublishing(
-            ActionAnnotationFacetFactory facetFactory, ProcessMethodContext processMethodContext) {
+            final ActionAnnotationFacetFactory facetFactory, final ProcessMethodContext processMethodContext) {
         val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
         facetFactory.processCommandPublishing(processMethodContext, actionIfAny);
     }
@@ -49,7 +49,8 @@ public class ActionAnnotationFacetFactoryTest_commandPublishing extends ActionAn
         final Method actionMethod = findMethod(SomeHasInteractionId.class, "someAction");
 
         // when
-        processCommandPublishing(facetFactory, new ProcessMethodContext(SomeHasInteractionId.class, null, actionMethod, mockMethodRemover, facetedMethod));
+        processCommandPublishing(facetFactory, ProcessMethodContext
+                .forTesting(SomeHasInteractionId.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
         // then
         assertFalse(CommandPublishingFacet.isPublishingEnabled(facetedMethod));
@@ -67,7 +68,8 @@ public class ActionAnnotationFacetFactoryTest_commandPublishing extends ActionAn
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
         // when
-        processCommandPublishing(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
+        processCommandPublishing(facetFactory, ProcessMethodContext
+                .forTesting(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
         // then
         assertFalse(CommandPublishingFacet.isPublishingEnabled(facetedMethod));
@@ -85,7 +87,8 @@ public class ActionAnnotationFacetFactoryTest_commandPublishing extends ActionAn
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
         // when
-        processCommandPublishing(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
+        processCommandPublishing(facetFactory, ProcessMethodContext
+                .forTesting(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
         // then
         final Facet facet = facetedMethod.getFacet(CommandPublishingFacet.class);
@@ -106,7 +109,8 @@ public class ActionAnnotationFacetFactoryTest_commandPublishing extends ActionAn
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
         // when
-        processCommandPublishing(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
+        processCommandPublishing(facetFactory, ProcessMethodContext
+                .forTesting(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
         // then
         assertFalse(CommandPublishingFacet.isPublishingEnabled(facetedMethod));

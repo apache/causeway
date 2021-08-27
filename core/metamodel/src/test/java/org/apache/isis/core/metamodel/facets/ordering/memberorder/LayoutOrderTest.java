@@ -83,7 +83,8 @@ extends AbstractFacetFactoryTest {
         final Method method = findMethod(Customer.class, "getFirstName");
 
         val facetFactory = super.createPropertyLayoutFacetFactory(metaModelContext);
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
+        facetFactory.process(ProcessMethodContext
+                .forTesting(Customer.class, null, method, methodRemover, facetedMethod));
 
         val facet = facetedMethod.getFacet(LayoutOrderFacet.class);
         assertNotNull(facet);
@@ -109,7 +110,8 @@ extends AbstractFacetFactoryTest {
         final Method method = findMethod(Customer.class, "getOrders");
 
         val facetFactory = super.createCollectionLayoutFacetFactory(metaModelContext);
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
+        facetFactory.process(ProcessMethodContext
+                .forTesting(Customer.class, null, method, methodRemover, facetedMethod));
 
         val facet = facetedMethod.getFacet(LayoutOrderFacet.class);
         assertNotNull(facet);
@@ -128,7 +130,8 @@ extends AbstractFacetFactoryTest {
         final Method method = findMethod(Customer.class, "someAction");
 
         val facetFactory = super.createActionLayoutFacetFactory(metaModelContext);
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
+        facetFactory.process(ProcessMethodContext
+                .forTesting(Customer.class, null, method, methodRemover, facetedMethod));
 
         val facet = facetedMethod.getFacet(LayoutOrderFacet.class);
         assertNotNull(facet);

@@ -21,22 +21,22 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static org.junit.Assert.assertNull;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
-
-import static org.junit.Assert.assertNull;
 
 import lombok.val;
 
 public class ActionAnnotationFacetFactoryTest_RestrictTo extends ActionAnnotationFacetFactoryTest {
 
     private void processRestrictTo(
-            ActionAnnotationFacetFactory facetFactory, ProcessMethodContext processMethodContext) {
+            final ActionAnnotationFacetFactory facetFactory, final ProcessMethodContext processMethodContext) {
         val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
         facetFactory.processRestrictTo(processMethodContext, actionIfAny);
     }
-    
+
     @Test
     public void whenRestrictedToPrototyping() {
 
@@ -51,8 +51,8 @@ public class ActionAnnotationFacetFactoryTest_RestrictTo extends ActionAnnotatio
         actionMethod = findMethod(cls, "someAction");
 
         // when
-        final ProcessMethodContext processMethodContext = new ProcessMethodContext(
-                cls, null, actionMethod, mockMethodRemover, facetedMethod);
+        final ProcessMethodContext processMethodContext = ProcessMethodContext
+                .forTesting(cls, null, actionMethod, mockMethodRemover, facetedMethod);
         processRestrictTo(facetFactory, processMethodContext);
 
         // then
@@ -74,8 +74,8 @@ public class ActionAnnotationFacetFactoryTest_RestrictTo extends ActionAnnotatio
         actionMethod = findMethod(cls, "someAction");
 
         // when
-        final ProcessMethodContext processMethodContext = new ProcessMethodContext(
-                cls, null, actionMethod, mockMethodRemover, facetedMethod);
+        final ProcessMethodContext processMethodContext = ProcessMethodContext
+                .forTesting(cls, null, actionMethod, mockMethodRemover, facetedMethod);
         processRestrictTo(facetFactory, processMethodContext);
 
         // then
@@ -97,8 +97,8 @@ public class ActionAnnotationFacetFactoryTest_RestrictTo extends ActionAnnotatio
         actionMethod = findMethod(cls, "someAction");
 
         // when
-        final ProcessMethodContext processMethodContext = new ProcessMethodContext(
-                cls, null, actionMethod, mockMethodRemover, facetedMethod);
+        final ProcessMethodContext processMethodContext = ProcessMethodContext
+                .forTesting(cls, null, actionMethod, mockMethodRemover, facetedMethod);
         processRestrictTo(facetFactory, processMethodContext);
 
         // then
