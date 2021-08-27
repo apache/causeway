@@ -465,7 +465,7 @@ Enjoy!
 
 --The Apache Isis team
 
-[1] http://isis.apache.org/relnotes/{page-isisrel}/about.html
+[1] https://isis.apache.org/relnotes/{page-isisrel}/about.html
 [2] https://search.maven.org
 [3] https://isis.apache.org/docs/{page-isisrel}/downloads/how-to.html
 ----

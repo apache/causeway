@@ -46,12 +46,19 @@ function die {
 #
 # validate script args
 #
-if [ $# -ne 2 ]; then
-    die "usage: jira-release-notes.sh proj version"
+if [ $# -ne 2 -a $# -ne 3 ]; then
+    die "usage: jira-release-notes.sh proj version [maxResults]"
 fi
 
 project=$1
 version=$2
+
+if [ $# -eq 3  ]; then
+    maxResults=$3
+else
+    maxResults=500
+fi
+
 project_lower=$(echo $project | tr '[:upper:]' '[:lower:]')
 project_upper=$(echo $project | tr '[:lower:]' '[:upper:]')
 
@@ -76,16 +83,15 @@ function rawurlencode() {
 
 
 
-
-
-
 function jira_by_type () {
 
     type=$1
     type_trimmed=$( echo "$type" | awk '{$1=$1};1' )
     type_url_encoded=$( rawurlencode "$type_trimmed" )
+
+    maxResults=$2
     
-    jira_url="https://issues.apache.org/jira/rest/api/2/search?jql=project%20in%20($project_upper)%20AND%20fixVersion%20in%20($version)%20AND%20type=\"$type_url_encoded\"&fields=summary"
+    jira_url="https://issues.apache.org/jira/rest/api/2/search?jql=project%20in%20($project_upper)%20AND%20fixVersion%20in%20($version)%20AND%20type=\"$type_url_encoded\"&fields=summary&maxResults=${maxResults}"
 
     #echo $jira_url
 
@@ -213,6 +219,6 @@ echo
 
 
 for type in "${types[@]}"; do
-    jira_by_type "$type"
+    jira_by_type "$type" "$maxResults"
 done
 
