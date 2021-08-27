@@ -27,6 +27,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -44,7 +45,6 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
-import org.apache.isis.core.metamodel.facets.MemberIntrospectionPolicy;
 import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory.ProcessObjectTypeContext;
 import org.apache.isis.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactory;
@@ -288,7 +288,7 @@ implements HasMetaModelContext{
      */
     public void process(
             final Class<?> cls,
-            final MemberIntrospectionPolicy introspectionPolicy,
+            final IntrospectionPolicy introspectionPolicy,
             final MethodRemover methodRemover,
             final FacetHolder facetHolder) {
 
@@ -328,7 +328,7 @@ implements HasMetaModelContext{
      */
     public void process(
             final Class<?> cls,
-            final MemberIntrospectionPolicy memberIntrospectionPolicy,
+            final IntrospectionPolicy introspectionPolicy,
             final Method method,
             final MethodRemover methodRemover,
             final FacetedMethod facetedMethod,
@@ -338,7 +338,7 @@ implements HasMetaModelContext{
         val processMethodContext =
                 new ProcessMethodContext(
                         cls,
-                        memberIntrospectionPolicy,
+                        introspectionPolicy,
                         featureType,
                         method,
                         removerElseNoopRemover(methodRemover), facetedMethod, isMixinMain);
@@ -373,20 +373,20 @@ implements HasMetaModelContext{
      */
     public void processParams(
             final Class<?> introspectedClass,
-            final MemberIntrospectionPolicy memberIntrospectionPolicy,
+            final IntrospectionPolicy introspectionPolicy,
             final Method method,
             final int paramNum,
             final MethodRemover methodRemover,
             final FacetedMethodParameter facetedMethodParameter) {
 
         for (val featureType : FeatureType.PARAMETERS_ONLY) {
-            processParams(introspectedClass, memberIntrospectionPolicy, method, paramNum, methodRemover, facetedMethodParameter, featureType);
+            processParams(introspectedClass, introspectionPolicy, method, paramNum, methodRemover, facetedMethodParameter, featureType);
         }
     }
 
     public void processParams(
             final Class<?> introspectedClass,
-            final MemberIntrospectionPolicy memberIntrospectionPolicy,
+            final IntrospectionPolicy introspectionPolicy,
             final Method method,
             final int paramNum,
             final MethodRemover methodRemover,
@@ -394,7 +394,7 @@ implements HasMetaModelContext{
             final FeatureType featureType) {
 
         val processParameterContext =
-                new ProcessParameterContext(introspectedClass, memberIntrospectionPolicy, method, paramNum, methodRemover, facetedMethodParameter);
+                new ProcessParameterContext(introspectedClass, introspectionPolicy, method, paramNum, methodRemover, facetedMethodParameter);
 
         factoryListByFeatureType.get().getOrElseEmpty(featureType)
         .forEach(facetFactory->facetFactory.processParams(processParameterContext));

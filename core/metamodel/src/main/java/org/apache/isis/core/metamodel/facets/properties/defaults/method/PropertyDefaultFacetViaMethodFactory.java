@@ -64,7 +64,7 @@ public class PropertyDefaultFacetViaMethodFactory extends MethodPrefixBasedFacet
         val method = MethodFinder
                 .findMethod(
                     MethodFinderOptions
-                        .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
+                        .memberSupport(processMethodContext.getIntrospectionPolicy()),
                     cls,
                     namingConvention,
                     returnType,

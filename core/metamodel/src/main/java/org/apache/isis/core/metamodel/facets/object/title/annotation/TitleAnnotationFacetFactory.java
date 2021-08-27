@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -37,7 +38,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.MemberIntrospectionPolicy;
 import org.apache.isis.core.metamodel.facets.fallback.FallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaMethodsFactory;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
@@ -161,10 +161,10 @@ implements MetaModelRefiner {
         programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec -> {
 
             final Class<?> cls = objectSpec.getCorrespondingClass();
-            final var memberIntrospectionPolicy = ((ObjectSpecificationAbstract)objectSpec).getMemberIntrospectionPolicy();
+            final var introspectionPolicy = ((ObjectSpecificationAbstract)objectSpec).getIntrospectionPolicy();
 
             final Method titleMethod = MethodFinderUtils.findMethod(
-                    MethodFinderOptions.layoutSupport(memberIntrospectionPolicy),
+                    MethodFinderOptions.layoutSupport(introspectionPolicy),
                     cls, TITLE_METHOD_NAME, String.class, null);
             if (titleMethod == null) {
                 return;
@@ -176,10 +176,10 @@ implements MetaModelRefiner {
                 return;
             }
 
-            final var superMemberIntrospectionPolicy = ((ObjectSpecificationAbstract)supClass).getMemberIntrospectionPolicy();
+            final var superIntrospectionPolicy = ((ObjectSpecificationAbstract)supClass).getIntrospectionPolicy();
 
-            final List<Method> methods = methodsWithTitleAnnotation(superMemberIntrospectionPolicy, cls);
-            final List<Method> superClassMethods = methodsWithTitleAnnotation(superMemberIntrospectionPolicy, supClass.getCorrespondingClass());
+            final List<Method> methods = methodsWithTitleAnnotation(superIntrospectionPolicy, cls);
+            final List<Method> superClassMethods = methodsWithTitleAnnotation(superIntrospectionPolicy, supClass.getCorrespondingClass());
             if (methods.size() > superClassMethods.size()) {
                 ValidationFailure.raiseFormatted(
                         objectSpec,
@@ -193,10 +193,10 @@ implements MetaModelRefiner {
     }
 
     private static List<Method> methodsWithTitleAnnotation(
-            final MemberIntrospectionPolicy memberIntrospectionPolicy,
+            final IntrospectionPolicy introspectionPolicy,
             final Class<?> cls) {
         return MethodFinderUtils.findMethodsWithAnnotation(
-                MethodFinderOptions.layoutSupport(memberIntrospectionPolicy), cls, Title.class);
+                MethodFinderOptions.layoutSupport(introspectionPolicy), cls, Title.class);
     }
 
 }

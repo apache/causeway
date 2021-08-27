@@ -68,7 +68,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
 
         val method = MethodFinderUtils.findMethod_returningText(
                 MethodFinderOptions
-                .objectSupport(processClassContext.getMemberIntrospectionPolicy()),
+                .objectSupport(processClassContext.getIntrospectionPolicy()),
                 cls,
                 MethodLiteralConstants.DISABLED,
                 paramTypes);

@@ -26,12 +26,12 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
+import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.facets.MemberIntrospectionPolicy;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.facets.param.layout.LabelAtFacetForParameterLayoutAnnotation;
 import org.apache.isis.core.metamodel.facets.param.layout.ParameterLayoutFacetFactory;
@@ -50,7 +50,7 @@ public class LabelAtFacetForParameterLayoutAnnotationFactoryTest extends Abstrac
 
         facetFactory.processParams(new FacetFactory.ProcessParameterContext(
                 Customer.class,
-                MemberIntrospectionPolicy.legacy(),
+                IntrospectionPolicy.ANNOTATION_OPTIONAL,
                 method, 0, null, facetedMethodParameter));
 
         final Facet facet = facetedMethodParameter.getFacet(LabelAtFacet.class);

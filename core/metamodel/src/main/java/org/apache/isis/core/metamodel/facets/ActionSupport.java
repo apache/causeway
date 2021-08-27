@@ -123,7 +123,7 @@ public final class ActionSupport {
             MethodFinder
                 .findMethodWithPPMArg_returningBoolean(
                         MethodFinderOptions
-                        .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
+                        .memberSupport(processMethodContext.getIntrospectionPolicy()),
                         type, methodNames, paramTypes, additionalParamTypes)
                 .map(ActionSupport::toSearchResult)
                 .forEach(onMethodFound);
@@ -132,7 +132,7 @@ public final class ActionSupport {
             MethodFinder
                 .findMethodWithPPMArg_returningText(
                         MethodFinderOptions
-                        .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
+                        .memberSupport(processMethodContext.getIntrospectionPolicy()),
                         type, methodNames, paramTypes, additionalParamTypes)
                 .map(ActionSupport::toSearchResult)
                 .forEach(onMethodFound);
@@ -174,7 +174,7 @@ public final class ActionSupport {
                 MethodFinder
                     .findMethod_returningBoolean(
                             MethodFinderOptions
-                            .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
+                            .memberSupport(processMethodContext.getIntrospectionPolicy()),
                             type, methodNames, paramTypesToLookFor)
                     .map(ActionSupport::toSearchResult)
                     .forEach(onMethodFound);
@@ -183,7 +183,7 @@ public final class ActionSupport {
                 MethodFinder
                     .findMethod_returningText(
                             MethodFinderOptions
-                            .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
+                            .memberSupport(processMethodContext.getIntrospectionPolicy()),
                             type, methodNames, paramTypesToLookFor)
                     .map(ActionSupport::toSearchResult)
                     .forEach(onMethodFound);

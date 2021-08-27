@@ -53,7 +53,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
 
         final Method method = MethodFinderUtils.findMethod_returningText(
                 MethodFinderOptions
-                .objectSupport(processClassContext.getMemberIntrospectionPolicy()),
+                .objectSupport(processClassContext.getIntrospectionPolicy()),
                 cls,
                 MethodLiteralConstants.VALIDATE_PREFIX,
                 NO_ARG);

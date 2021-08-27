@@ -65,7 +65,7 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
             // search for exact match
             disableMethod = MethodFinder.findMethod_returningText(
                     MethodFinderOptions
-                    .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
+                    .memberSupport(processMethodContext.getIntrospectionPolicy()),
                     cls,
                     namingConvention,
                     actionOrGetter.getParameterTypes())
@@ -76,7 +76,7 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
             // search for no-arg version
             disableMethod = MethodFinder.findMethod_returningText(
                     MethodFinderOptions
-                    .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
+                    .memberSupport(processMethodContext.getIntrospectionPolicy()),
                     cls,
                     namingConvention,
                     NO_ARG)

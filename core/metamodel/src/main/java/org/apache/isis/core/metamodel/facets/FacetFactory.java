@@ -26,6 +26,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -81,15 +82,15 @@ public interface FacetFactory {
          * </p>
          */
         @Getter private final Class<?> cls;
-        @Getter private final MemberIntrospectionPolicy memberIntrospectionPolicy;
+        @Getter private final IntrospectionPolicy introspectionPolicy;
 
         AbstractProcessWithClsContext(
                 final Class<?> cls,
-                final MemberIntrospectionPolicy introspectionPolicy,
+                final IntrospectionPolicy introspectionPolicy,
                 final T facetHolder) {
             super(facetHolder);
             this.cls = cls;
-            this.memberIntrospectionPolicy = introspectionPolicy;
+            this.introspectionPolicy = introspectionPolicy;
         }
 
         /**
@@ -111,7 +112,7 @@ public interface FacetFactory {
 
         AbstractProcessWithMethodContext(
                 final Class<?> cls,
-                final MemberIntrospectionPolicy introspectionPolicy,
+                final IntrospectionPolicy introspectionPolicy,
                 final Method method,
                 final MethodRemover methodRemover,
                 final T facetHolder) {
@@ -173,12 +174,12 @@ public interface FacetFactory {
                 final Class<?> cls,
                 final MethodRemover methodRemover,
                 final FacetHolder facetHolder) {
-            this(cls, MemberIntrospectionPolicy.legacy(), methodRemover, facetHolder);
+            this(cls, IntrospectionPolicy.ANNOTATION_OPTIONAL, methodRemover, facetHolder);
         }
 
         public ProcessClassContext(
                 final Class<?> cls,
-                final MemberIntrospectionPolicy introspectionPolicy,
+                final IntrospectionPolicy introspectionPolicy,
                 final MethodRemover methodRemover,
                 final FacetHolder facetHolder) {
             super(cls, introspectionPolicy, facetHolder);
@@ -237,7 +238,7 @@ public interface FacetFactory {
          */
         public ProcessMethodContext(
                 final Class<?> cls,
-                final MemberIntrospectionPolicy introspectionPolicy,
+                final IntrospectionPolicy introspectionPolicy,
                 final FeatureType featureType,
                 final Method method,
                 final MethodRemover methodRemover,
@@ -257,7 +258,7 @@ public interface FacetFactory {
                 final Method method,
                 final MethodRemover methodRemover,
                 final FacetedMethod facetedMethod) {
-            this(cls, MemberIntrospectionPolicy.legacy(), featureType, method, methodRemover, facetedMethod, false);
+            this(cls, IntrospectionPolicy.ANNOTATION_OPTIONAL, featureType, method, methodRemover, facetedMethod, false);
         }
 
 
@@ -371,7 +372,7 @@ public interface FacetFactory {
 
         public ProcessParameterContext(
                 final Class<?> cls,
-                final MemberIntrospectionPolicy introspectionPolicy,
+                final IntrospectionPolicy introspectionPolicy,
                 final Method method,
                 final int paramNum,
                 final MethodRemover methodRemover,

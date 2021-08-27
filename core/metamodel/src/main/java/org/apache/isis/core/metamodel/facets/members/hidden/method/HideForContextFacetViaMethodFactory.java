@@ -59,7 +59,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         val cls = processMethodContext.getCls();
         Method hideMethod = MethodFinder.findMethod(
                 MethodFinderOptions
-                .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
+                .memberSupport(processMethodContext.getIntrospectionPolicy()),
                 cls,
                 namingConvention,
                 boolean.class,
@@ -73,7 +73,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
             if(searchExactMatch) {
                 hideMethod = MethodFinder.findMethod(
                         MethodFinderOptions
-                        .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
+                        .memberSupport(processMethodContext.getIntrospectionPolicy()),
                         cls,
                         namingConvention,
                         boolean.class,

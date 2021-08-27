@@ -42,7 +42,6 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.metamodel.facets.MemberIntrospectionPolicy;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
@@ -94,7 +93,7 @@ implements FacetHolder {
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
 
     @Getter(onMethod_ = {@Override})
-    private final MemberIntrospectionPolicy memberIntrospectionPolicy;
+    private final IntrospectionPolicy introspectionPolicy;
 
     /**
      * available only for managed-beans
@@ -126,8 +125,7 @@ implements FacetHolder {
                         .getIntrospectionPolicy(mmc.getConfiguration()))
                 .orElseGet(()->mmc.getConfiguration().getCore().getMetaModel().getIntrospector().getIntrospectionPolicy());
 
-        this.memberIntrospectionPolicy = MemberIntrospectionPolicy
-                .of(introspectionPolicy.getEncapsulationPolicy(), introspectionPolicy.getMemberAnnotationPolicy());
+        this.introspectionPolicy = introspectionPolicy;
 
         this.facetedMethodsBuilder =
                 new FacetedMethodsBuilder(this, facetProcessor, classSubstitutorRegistry);

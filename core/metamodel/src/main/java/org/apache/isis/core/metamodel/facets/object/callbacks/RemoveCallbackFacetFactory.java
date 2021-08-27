@@ -56,7 +56,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         Method method = MethodFinderUtils
                 .findMethod(
                         MethodFinderOptions
-                        .livecycleCallback(processClassContext.getMemberIntrospectionPolicy()),
+                        .livecycleCallback(processClassContext.getIntrospectionPolicy()),
                         cls, MethodLiteralConstants.REMOVING_PREFIX, void.class,
                         NO_ARG);
         if (method != null) {

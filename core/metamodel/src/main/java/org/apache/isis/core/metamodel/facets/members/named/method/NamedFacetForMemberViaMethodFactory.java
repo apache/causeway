@@ -57,7 +57,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
 
         val namedMethod = MethodFinder.findMethod_returningText(
                 MethodFinderOptions
-                .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
+                .memberSupport(processMethodContext.getIntrospectionPolicy()),
                 cls,
                 namingConvention,
                 NO_ARG)

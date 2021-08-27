@@ -73,7 +73,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         final Method setterMethod = MethodFinderUtils
                 .findMethod(
                         MethodFinderOptions
-                        .accessor(processMethodContext.getMemberIntrospectionPolicy()),
+                        .accessor(processMethodContext.getIntrospectionPolicy()),
                         cls, MethodLiteralConstants.SET_PREFIX + capitalizedName, void.class, paramTypes);
         processMethodContext.removeMethod(setterMethod);
 

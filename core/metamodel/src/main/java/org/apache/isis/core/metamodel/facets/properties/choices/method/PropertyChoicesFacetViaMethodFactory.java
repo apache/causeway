@@ -64,7 +64,7 @@ public class PropertyChoicesFacetViaMethodFactory extends MethodPrefixBasedFacet
         val choicesMethod = MethodFinder
                 .findMethod(
                         MethodFinderOptions
-                        .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
+                        .memberSupport(processMethodContext.getIntrospectionPolicy()),
                     cls,
                     namingConvention,
                     NO_RETURN,

@@ -48,7 +48,7 @@ public class CreatedCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAb
         val method = MethodFinderUtils
                 .findMethod(
                         MethodFinderOptions
-                        .livecycleCallback(processClassContext.getMemberIntrospectionPolicy()),
+                        .livecycleCallback(processClassContext.getIntrospectionPolicy()),
                         cls, MethodLiteralConstants.CREATED_PREFIX, void.class, NO_ARG);
 
         if (method != null) {

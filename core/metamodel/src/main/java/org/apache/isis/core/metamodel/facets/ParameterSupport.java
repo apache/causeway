@@ -142,7 +142,7 @@ public final class ParameterSupport {
             MethodFinder
                 .findMethodWithPPMArg_returningBoolean(
                         MethodFinderOptions
-                        .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
+                        .memberSupport(processMethodContext.getIntrospectionPolicy()),
                         type, methodNames, paramTypes, additionalParamTypes)
                 .map(methodAndPpmConstructor->toSearchResult(paramIndex, paramType, methodAndPpmConstructor))
                 .forEach(onMethodFound);
@@ -151,7 +151,7 @@ public final class ParameterSupport {
             MethodFinder
                 .findMethodWithPPMArg_returningText(
                         MethodFinderOptions
-                        .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
+                        .memberSupport(processMethodContext.getIntrospectionPolicy()),
                         type, methodNames, paramTypes, additionalParamTypes)
                 .map(methodAndPpmConstructor->toSearchResult(paramIndex, paramType, methodAndPpmConstructor))
                 .forEach(onMethodFound);
@@ -160,7 +160,7 @@ public final class ParameterSupport {
             MethodFinder
                 .findMethodWithPPMArg_returningNonScalar(
                         MethodFinderOptions
-                        .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
+                        .memberSupport(processMethodContext.getIntrospectionPolicy()),
                         type, methodNames, paramType, paramTypes, additionalParamTypes)
                 .map(methodAndPpmConstructor->toSearchResult(paramIndex, paramType, methodAndPpmConstructor))
                 .forEach(onMethodFound);
@@ -169,7 +169,7 @@ public final class ParameterSupport {
             MethodFinder
                 .findMethodWithPPMArg(
                         MethodFinderOptions
-                        .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
+                        .memberSupport(processMethodContext.getIntrospectionPolicy()),
                         type, methodNames, paramType, paramTypes, additionalParamTypes)
                 .map(methodAndPpmConstructor->toSearchResult(paramIndex, paramType, methodAndPpmConstructor))
                 .forEach(onMethodFound);
@@ -208,7 +208,7 @@ public final class ParameterSupport {
             MethodFinder
                 .findMethod_returningBoolean(
                         MethodFinderOptions
-                        .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
+                        .memberSupport(processMethodContext.getIntrospectionPolicy()),
                         type, methodNames, singleArg)
                 .map(supportingMethod->toSearchResult(paramIndex, paramType, supportingMethod))
                 .forEach(onMethodFound);
@@ -217,7 +217,7 @@ public final class ParameterSupport {
             MethodFinder
                 .findMethod_returningText(
                         MethodFinderOptions
-                        .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
+                        .memberSupport(processMethodContext.getIntrospectionPolicy()),
                         type, methodNames, singleArg)
                 .map(supportingMethod->toSearchResult(paramIndex, paramType, supportingMethod))
                 .forEach(onMethodFound);
@@ -226,7 +226,7 @@ public final class ParameterSupport {
             MethodFinder
                 .findMethod_returningNonScalar(
                         MethodFinderOptions
-                        .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
+                        .memberSupport(processMethodContext.getIntrospectionPolicy()),
                         type, methodNames, paramType, singleArg)
                 .map(supportingMethod->toSearchResult(paramIndex, paramType, supportingMethod))
                 .forEach(onMethodFound);
@@ -235,7 +235,7 @@ public final class ParameterSupport {
             MethodFinder
                 .findMethod(
                         MethodFinderOptions
-                        .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
+                        .memberSupport(processMethodContext.getIntrospectionPolicy()),
                         type, methodNames, paramType, singleArg)
                 .map(supportingMethod->toSearchResult(paramIndex, paramType, supportingMethod))
                 .forEach(onMethodFound);
@@ -273,7 +273,7 @@ public final class ParameterSupport {
                 supportingMethod = MethodFinder
                     .findMethod_returningBoolean(
                             MethodFinderOptions
-                            .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
+                            .memberSupport(processMethodContext.getIntrospectionPolicy()),
                             type, methodNames, paramTypesToLookFor)
                     .findFirst()
                     .orElse(null);
@@ -282,7 +282,7 @@ public final class ParameterSupport {
                 supportingMethod = MethodFinder
                     .findMethod_returningText(
                             MethodFinderOptions
-                            .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
+                            .memberSupport(processMethodContext.getIntrospectionPolicy()),
                             type, methodNames, paramTypesToLookFor)
                     .findFirst()
                     .orElse(null);
@@ -291,7 +291,7 @@ public final class ParameterSupport {
                 supportingMethod = MethodFinder
                     .findMethod_returningNonScalar(
                             MethodFinderOptions
-                            .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
+                            .memberSupport(processMethodContext.getIntrospectionPolicy()),
                             type, methodNames, paramType, paramTypesToLookFor)
                     .findFirst()
                     .orElse(null);
@@ -300,7 +300,7 @@ public final class ParameterSupport {
                 supportingMethod = MethodFinder
                     .findMethod(
                             MethodFinderOptions
-                            .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
+                            .memberSupport(processMethodContext.getIntrospectionPolicy()),
                             type, methodNames, paramType, paramTypesToLookFor)
                     .findFirst()
                     .orElse(null);

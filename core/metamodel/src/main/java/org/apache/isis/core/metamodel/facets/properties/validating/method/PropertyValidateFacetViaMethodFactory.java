@@ -58,7 +58,7 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
 
         val validateMethod = MethodFinder.findMethod_returningText(
                 MethodFinderOptions
-                .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
+                .memberSupport(processMethodContext.getIntrospectionPolicy()),
                 cls,
                 namingConvention,
                 new Class[] { returnType })

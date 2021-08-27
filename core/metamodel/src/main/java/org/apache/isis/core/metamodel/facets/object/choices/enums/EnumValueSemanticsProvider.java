@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.object.choices.enums;
 import java.lang.reflect.Method;
 import java.util.function.BiConsumer;
 
+import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationContext;
@@ -29,7 +30,6 @@ import org.apache.isis.applib.util.Enums;
 import org.apache.isis.core.metamodel.commons.MethodExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.MemberIntrospectionPolicy;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
@@ -72,7 +72,7 @@ implements EnumFacet {
 //    }
 
     public EnumValueSemanticsProvider(
-            final MemberIntrospectionPolicy introspectionPolicy,
+            final IntrospectionPolicy introspectionPolicy,
             final FacetHolder holder,
             final Class<T> adaptedClass) {
         super(

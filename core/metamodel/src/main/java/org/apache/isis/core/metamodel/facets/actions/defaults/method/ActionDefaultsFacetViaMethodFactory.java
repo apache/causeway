@@ -78,7 +78,7 @@ public class ActionDefaultsFacetViaMethodFactory extends MethodPrefixBasedFacetF
         val namingConvention = processMethodContext.memberSupportCandidates(PREFIX);
         return MethodFinder.findMethod(
                 MethodFinderOptions
-                .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
+                .memberSupport(processMethodContext.getIntrospectionPolicy()),
                 cls, namingConvention, returnType, NO_ARG)
                 .findFirst()
                 .orElse(null);

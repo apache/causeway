@@ -23,10 +23,10 @@ import java.lang.reflect.Method;
 import java.util.function.Predicate;
 
 import org.apache.isis.applib.annotation.Introspection.EncapsulationPolicy;
+import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.commons.internal.reflection._Annotations;
-import org.apache.isis.core.metamodel.facets.MemberIntrospectionPolicy;
 
 import lombok.Value;
 
@@ -48,27 +48,27 @@ public class MethodFinderOptions {
     }
 
     public static MethodFinderOptions accessor(
-            final MemberIntrospectionPolicy memberIntrospectionPolicy) {
+            final IntrospectionPolicy memberIntrospectionPolicy) {
         return havingAnyOrNoAnnotation(memberIntrospectionPolicy);
     }
 
     public static MethodFinderOptions memberSupport(
-            final MemberIntrospectionPolicy memberIntrospectionPolicy) {
+            final IntrospectionPolicy memberIntrospectionPolicy) {
         return havingAnnotation(memberIntrospectionPolicy, MemberSupport.class);
     }
 
     public static MethodFinderOptions objectSupport(
-            final MemberIntrospectionPolicy memberIntrospectionPolicy) {
+            final IntrospectionPolicy memberIntrospectionPolicy) {
         return havingAnyOrNoAnnotation(memberIntrospectionPolicy);
     }
 
     public static MethodFinderOptions livecycleCallback(
-            final MemberIntrospectionPolicy memberIntrospectionPolicy) {
+            final IntrospectionPolicy memberIntrospectionPolicy) {
         return havingAnyOrNoAnnotation(memberIntrospectionPolicy);
     }
 
     public static MethodFinderOptions layoutSupport(
-            final MemberIntrospectionPolicy memberIntrospectionPolicy) {
+            final IntrospectionPolicy memberIntrospectionPolicy) {
         return havingAnyOrNoAnnotation(memberIntrospectionPolicy);
     }
 
@@ -78,7 +78,7 @@ public class MethodFinderOptions {
     // -- HELPER
 
     private static MethodFinderOptions havingAnyOrNoAnnotation(
-            final MemberIntrospectionPolicy memberIntrospectionPolicy) {
+            final IntrospectionPolicy memberIntrospectionPolicy) {
         return of(
                 memberIntrospectionPolicy.getEncapsulationPolicy(),
                 _Predicates.alwaysTrue());
@@ -86,7 +86,7 @@ public class MethodFinderOptions {
 
 
     private static MethodFinderOptions havingAnnotation(
-            final MemberIntrospectionPolicy memberIntrospectionPolicy,
+            final IntrospectionPolicy memberIntrospectionPolicy,
             final Class<? extends Annotation> associatedAnnotationType) {
         return of(
                 memberIntrospectionPolicy.getEncapsulationPolicy(),

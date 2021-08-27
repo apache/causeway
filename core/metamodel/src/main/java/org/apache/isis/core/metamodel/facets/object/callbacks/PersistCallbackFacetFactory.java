@@ -58,7 +58,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         Method method = null;
         method = MethodFinderUtils.findMethod(
                 MethodFinderOptions
-                .livecycleCallback(processClassContext.getMemberIntrospectionPolicy()),
+                .livecycleCallback(processClassContext.getIntrospectionPolicy()),
                 cls, MethodLiteralConstants.PERSISTING_PREFIX, void.class, NO_ARG);
         if (method != null) {
             processClassContext.removeMethod(method);
@@ -72,7 +72,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
 
         method = MethodFinderUtils.findMethod(
                 MethodFinderOptions
-                .livecycleCallback(processClassContext.getMemberIntrospectionPolicy()),
+                .livecycleCallback(processClassContext.getIntrospectionPolicy()),
                 cls, MethodLiteralConstants.PERSISTED_PREFIX, void.class, NO_ARG);
         if (method != null) {
             processClassContext.removeMethod(method);

@@ -66,7 +66,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         val autoCompleteMethod = MethodFinder
                 .findMethod(
                         MethodFinderOptions
-                        .memberSupport(processMethodContext.getMemberIntrospectionPolicy()),
+                        .memberSupport(processMethodContext.getIntrospectionPolicy()),
                         cls,
                         namingConvention,
                         NO_RETURN,
