@@ -16,38 +16,40 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.encapsulation;
+package org.apache.isis.core.metamodel.facets.object.introspection;
 
 
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Encapsulation;
-import org.apache.isis.applib.annotation.Encapsulation.EncapsulationPolicy;
+import org.apache.isis.applib.annotation.Introspection;
+import org.apache.isis.applib.annotation.Introspection.EncapsulationPolicy;
+import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
-
 /**
- *  Corresponds to the value of {@link DomainObject#encapsulation()},
+ *  Corresponds to the value of {@link DomainObject#introspection()},
  *  that specifies the {@link EncapsulationPolicy} of a domain object.
- *  @see Encapsulation
+ *  @see Introspection
  */
-public interface EncapsulationFacet extends Facet {
+public interface IntrospectionPolicyFacet extends Facet {
 
-    Encapsulation getEncapsulation();
+    Introspection getIntrospection();
 
-    default EncapsulationPolicy getEncapsulationPolicy(final IsisConfiguration isisConfig) {
-        switch(getEncapsulation()) {
-        case ENABLED:
-            return EncapsulationPolicy.ENCAPSULATED_MEMBERS_SUPPORTED;
-        case DISABLED:
-            return EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED;
+    default IntrospectionPolicy getIntrospectionPolicy(final IsisConfiguration isisConfig) {
+        switch(getIntrospection()) {
+        case ENCAPSULATION_ENABLED:
+            return IntrospectionPolicy.ENCAPSULATION_ENABLED;
+        case ANNOTATION_OPTIONAL:
+            return IntrospectionPolicy.ANNOTATION_OPTIONAL;
+        case ANNOTATION_ENFORCED:
+            return IntrospectionPolicy.ANNOTATION_ENFORCED;
         case AS_CONFIGURED:
-            return isisConfig.getCore().getMetaModel().getIntrospector().getEncapsulationPolicy();
+            return isisConfig.getCore().getMetaModel().getIntrospector().getIntrospectionPolicy();
         case NOT_SPECIFIED:
             throw _Exceptions.unexpectedCodeReach(); // there must be no such facet that returns such a case
         default:
-            throw _Exceptions.unmatchedCase(getEncapsulation());
+            throw _Exceptions.unmatchedCase(getIntrospection());
         }
 
     }

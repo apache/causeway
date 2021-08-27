@@ -36,8 +36,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.isis.applib.annotation.Encapsulation.EncapsulationPolicy;
-import org.apache.isis.applib.annotation.MemberAnnotations.MemberAnnotationPolicy;
+import org.apache.isis.applib.annotation.Introspection.EncapsulationPolicy;
+import org.apache.isis.applib.annotation.Introspection.MemberAnnotationPolicy;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.metamodel.BeanSort;
@@ -50,9 +50,8 @@ import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
-import org.apache.isis.core.metamodel.facets.object.encapsulation.EncapsulationFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
-import org.apache.isis.core.metamodel.facets.object.memberannot.MemberAnnotationPolicyFacet;
+import org.apache.isis.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
@@ -445,17 +444,16 @@ class DomainModelTest_usingGoodDomain {
 
         val objectSpec = specificationLoader.specForTypeElseFail(ViewModelWithEncapsulatedMembers.class);
 
-        val encapsulationFacet = objectSpec.getFacet(EncapsulationFacet.class);
-        assertNotNull(encapsulationFacet);
+        val introspectionPolicyFacet = objectSpec.getFacet(IntrospectionPolicyFacet.class);
+        assertNotNull(introspectionPolicyFacet);
+
+        val introspectionPolicy = introspectionPolicyFacet.getIntrospectionPolicy(isisConfig);
         assertEquals(
                 EncapsulationPolicy.ENCAPSULATED_MEMBERS_SUPPORTED,
-                encapsulationFacet.getEncapsulationPolicy(isisConfig));
-
-        val memberAnnotationPolicyFacet = objectSpec.getFacet(MemberAnnotationPolicyFacet.class);
-        assertNotNull(memberAnnotationPolicyFacet);
+                introspectionPolicy.getEncapsulationPolicy());
         assertEquals(
                 MemberAnnotationPolicy.MEMBER_ANNOTATIONS_REQUIRED,
-                memberAnnotationPolicyFacet.getMemberAnnotationPolicy(isisConfig));
+                introspectionPolicy.getMemberAnnotationPolicy());
 
         // PRIVATE ACTION
 

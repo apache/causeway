@@ -56,9 +56,8 @@ import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.Encapsulation.EncapsulationPolicy;
+import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.applib.annotation.MemberAnnotations.MemberAnnotationPolicy;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.i18n.Mode;
 import org.apache.isis.applib.services.iactn.Execution;
@@ -69,8 +68,6 @@ import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.applib.services.userui.UserMenu;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.config.IsisConfiguration.Core;
-import org.apache.isis.core.config.IsisConfiguration.Viewer;
 import org.apache.isis.core.config.metamodel.facets.DefaultViewConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.ActionPublishingPolicy;
@@ -1311,13 +1308,15 @@ public class IsisConfiguration {
             public static class Introspector {
 
                 /**
-                 * Policy as to whether introspection should process
-                 * non-public members and their supporting methods.
+                 * Policy as to how introspection should process
+                 * class members and supporting methods.
+                 * <p>
+                 * Default is to only introspect public class members, while annotating these is optional.
                  */
-                private EncapsulationPolicy encapsulationPolicy;
-                public EncapsulationPolicy getEncapsulationPolicy() {
-                    return Optional.ofNullable(encapsulationPolicy)
-                            .orElse(EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED);
+                private IntrospectionPolicy introspectionPolicy;
+                public IntrospectionPolicy getIntrospectionPolicy() {
+                    return Optional.ofNullable(introspectionPolicy)
+                            .orElse(IntrospectionPolicy.ANNOTATION_OPTIONAL);
                 }
 
                 /**
@@ -1327,16 +1326,6 @@ public class IsisConfiguration {
                  * </p>
                  */
                 private boolean parallelize = false; //TODO[ISIS-2382] concurrent spec-loading is experimental
-
-                /**
-                 * Policy as to whether annotations for members and their supporting methods
-                 * are required.
-                 */
-                private MemberAnnotationPolicy memberAnnotationPolicy;
-                public MemberAnnotationPolicy getMemberAnnotationPolicy() {
-                    return Optional.ofNullable(memberAnnotationPolicy)
-                            .orElse(MemberAnnotationPolicy.MEMBER_ANNOTATIONS_OPTIONAL);
-                }
 
                 /**
                  * Whether all known types should be fully introspected as part of the bootstrapping, or should only be

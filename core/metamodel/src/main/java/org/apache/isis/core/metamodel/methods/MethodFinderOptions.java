@@ -22,7 +22,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.function.Predicate;
 
-import org.apache.isis.applib.annotation.Encapsulation.EncapsulationPolicy;
+import org.apache.isis.applib.annotation.Introspection.EncapsulationPolicy;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.commons.internal.reflection._Annotations;

@@ -21,8 +21,7 @@ package org.apache.isis.testdomain.model.good;
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Encapsulation;
-import org.apache.isis.applib.annotation.MemberAnnotations;
+import org.apache.isis.applib.annotation.Introspection;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
@@ -33,8 +32,7 @@ import lombok.Setter;
 
 @DomainObject(
         nature = Nature.VIEW_MODEL,
-        encapsulation = Encapsulation.ENABLED,
-        memberAnnotations = MemberAnnotations.ENFORCED)
+        introspection = Introspection.ENCAPSULATION_ENABLED)
 public class ViewModelWithEncapsulatedMembers
 implements
     ViewModel.CloneableViaSerialization {

@@ -18,11 +18,12 @@
  */
 package org.apache.isis.core.metamodel.facets;
 
-import org.apache.isis.applib.annotation.Encapsulation.EncapsulationPolicy;
-import org.apache.isis.applib.annotation.MemberAnnotations.MemberAnnotationPolicy;
+import org.apache.isis.applib.annotation.Introspection.EncapsulationPolicy;
+import org.apache.isis.applib.annotation.Introspection.MemberAnnotationPolicy;
 
 import lombok.Value;
 
+@Deprecated // replace with IntrospectionPolicy
 @Value(staticConstructor = "of")
 public class MemberIntrospectionPolicy {
 

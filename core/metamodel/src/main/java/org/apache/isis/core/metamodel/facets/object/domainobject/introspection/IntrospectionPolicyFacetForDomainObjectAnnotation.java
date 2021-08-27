@@ -17,43 +17,43 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.domainobject.memberannot;
+package org.apache.isis.core.metamodel.facets.object.domainobject.introspection;
 
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.MemberAnnotations;
+import org.apache.isis.applib.annotation.Introspection;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.memberannot.MemberAnnotationPolicyFacet;
-import org.apache.isis.core.metamodel.facets.object.memberannot.MemberAnnotationPolicyFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet;
+import org.apache.isis.core.metamodel.facets.object.introspection.IntrospectionPolicyFacetAbstract;
 
-public class MemberAnnotationPolicyFacetForDomainObjectAnnotation
-extends MemberAnnotationPolicyFacetAbstract {
+public class IntrospectionPolicyFacetForDomainObjectAnnotation
+extends IntrospectionPolicyFacetAbstract {
 
     /**
      * If {@link DomainObject} annotation not present
-     * or {@link DomainObject#memberAnnotations()}
+     * or {@link DomainObject#introspection()}
      * is unspecified or null returns an empty Optional.
      */
-    public static Optional<MemberAnnotationPolicyFacet> create(
+    public static Optional<IntrospectionPolicyFacet> create(
             final Optional<DomainObject> domainObjectIfAny,
             final Class<?> correspondingClass,
             final FacetHolder holder) {
 
         return domainObjectIfAny
-                .map(annot->annot.memberAnnotations())
+                .map(annot->annot.introspection())
                 .filter(_NullSafe::isPresent)
-                .filter(memberAnnotations->!memberAnnotations.isNotSpecified())
-                .map(memberAnnotations -> new MemberAnnotationPolicyFacetForDomainObjectAnnotation(
-                        memberAnnotations,
+                .filter(encapsulation->!encapsulation.isNotSpecified())
+                .map(encapsulation -> new IntrospectionPolicyFacetForDomainObjectAnnotation(
+                        encapsulation,
                         holder));
     }
 
-    private MemberAnnotationPolicyFacetForDomainObjectAnnotation(
-            final MemberAnnotations memberAnnotations,
+    private IntrospectionPolicyFacetForDomainObjectAnnotation(
+            final Introspection encapsulation,
             final FacetHolder holder) {
-        super(memberAnnotations, holder);
+        super(encapsulation, holder);
     }
 
 }

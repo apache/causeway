@@ -16,11 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.memberannot;
+package org.apache.isis.core.metamodel.facets.object.introspection;
 
 import java.util.function.BiConsumer;
 
-import org.apache.isis.applib.annotation.MemberAnnotations;
+import org.apache.isis.applib.annotation.Introspection;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -28,34 +28,34 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import lombok.Getter;
 import lombok.NonNull;
 
-public abstract class MemberAnnotationPolicyFacetAbstract
+public abstract class IntrospectionPolicyFacetAbstract
 extends FacetAbstract
-implements MemberAnnotationPolicyFacet {
+implements IntrospectionPolicyFacet {
 
     private static final Class<? extends Facet> type() {
-        return MemberAnnotationPolicyFacet.class;
+        return IntrospectionPolicyFacet.class;
     }
 
     @Getter(onMethod_ = {@Override})
-    private final @NonNull MemberAnnotations memberAnnotations;
+    private final @NonNull Introspection introspection;
 
-    protected MemberAnnotationPolicyFacetAbstract(
-            final MemberAnnotations memberAnnotations,
+    protected IntrospectionPolicyFacetAbstract(
+            final Introspection introspection,
             final FacetHolder holder) {
-        this(memberAnnotations, holder, Precedence.DEFAULT);
+        this(introspection, holder, Precedence.DEFAULT);
     }
 
-    protected MemberAnnotationPolicyFacetAbstract(
-            final MemberAnnotations memberAnnotations,
+    protected IntrospectionPolicyFacetAbstract(
+            final Introspection introspection,
             final FacetHolder holder,
             final Facet.Precedence precedence) {
-        super(MemberAnnotationPolicyFacetAbstract.type(), holder, precedence);
-        this.memberAnnotations = memberAnnotations;
+        super(IntrospectionPolicyFacetAbstract.type(), holder, precedence);
+        this.introspection = introspection;
     }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("annotations", memberAnnotations.name());
+        visitor.accept("introspection", introspection.name());
     }
 }
