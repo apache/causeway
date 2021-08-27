@@ -52,7 +52,8 @@ public class ObjectValidMethodFacetFactoryTest extends AbstractFacetFactoryTest 
         }
         final Method validateMethod = findMethod(Customer.class, "validate");
 
-        final ProcessClassContext processClassContext = new ProcessClassContext(Customer.class, methodRemover, facetHolder);
+        final ProcessClassContext processClassContext = ProcessClassContext
+                .forTesting(Customer.class, methodRemover, facetHolder);
         facetFactory.process(processClassContext);
 
         final Facet facet = facetHolder.getFacet(ValidateObjectFacet.class);

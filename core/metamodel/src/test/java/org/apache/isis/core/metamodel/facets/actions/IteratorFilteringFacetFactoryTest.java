@@ -49,7 +49,8 @@ public class IteratorFilteringFacetFactoryTest extends AbstractFacetFactoryTest 
             public void someAction() {
             }
         }
-        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
+        facetFactory.process(ProcessClassContext
+                .forTesting(Customer.class, methodRemover, facetedMethod));
 
         assertEquals(1, methodRemover.getRemoveMethodArgsCalls().size());
     }

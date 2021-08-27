@@ -59,7 +59,8 @@ public class LayoutFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Customer.class, "layout");
 
-        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
+        facetFactory.process(ProcessClassContext
+                .forTesting(Customer.class, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(LayoutFacet.class);
         assertThat(facet, is(notNullValue()));

@@ -59,7 +59,8 @@ public class IconFacetMethodFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method iconNameMethod = findMethod(Customer.class, "iconName");
 
-        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
+        facetFactory.process(ProcessClassContext
+                .forTesting(Customer.class, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(IconFacet.class);
         assertThat(facet, is(notNullValue()));

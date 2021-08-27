@@ -53,7 +53,8 @@ public class ObjectHiddenMethodFacetFactoryTest extends AbstractFacetFactoryTest
         }
         final Method hiddenMethod = findMethod(Customer.class, "hidden");
 
-        final ProcessClassContext processClassContext = new ProcessClassContext(Customer.class, methodRemover, facetHolder);
+        final ProcessClassContext processClassContext = ProcessClassContext
+                .forTesting(Customer.class, methodRemover, facetHolder);
         facetFactory.process(processClassContext);
 
         final Facet facet = facetHolder.getFacet(HiddenObjectFacet.class);
@@ -72,7 +73,8 @@ public class ObjectHiddenMethodFacetFactoryTest extends AbstractFacetFactoryTest
         }
         final Method hiddenMethod = findMethod(Customer.class, "hidden");
 
-        final ProcessClassContext processClassContext = new ProcessClassContext(Customer.class, methodRemover, facetHolder);
+        final ProcessClassContext processClassContext = ProcessClassContext
+                .forTesting(Customer.class, methodRemover, facetHolder);
         facetFactory.process(processClassContext);
 
         final Facet facet = facetHolder.getFacet(HiddenObjectFacet.class);

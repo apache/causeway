@@ -23,7 +23,7 @@ import javax.jdo.annotations.PersistenceCapable;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;
 import org.apache.isis.persistence.jdo.metamodel.testing.AbstractFacetFactoryTest;
@@ -62,7 +62,8 @@ public class GivenJdoDiscriminatorAnnotationFacetFactoryTest extends AbstractFac
         abstract class Customer {
         }
 
-        facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
+        facetFactory.process(ProcessClassContext
+                .forTesting(Customer.class, methodRemover, facetHolder));
 
         final Facet facet = facetHolder.getFacet(JdoDiscriminatorFacet.class);
         assertNotNull(facet);
@@ -86,7 +87,8 @@ public class GivenJdoDiscriminatorAnnotationFacetFactoryTest extends AbstractFac
         abstract class Customer {
         }
 
-        facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
+        facetFactory.process(ProcessClassContext
+                .forTesting(Customer.class, methodRemover, facetHolder));
 
         final Facet facet = facetHolder.getFacet(LogicalTypeFacet.class);
         assertNull(facet);
@@ -108,7 +110,8 @@ public class GivenJdoDiscriminatorAnnotationFacetFactoryTest extends AbstractFac
         abstract class Customer {
         }
 
-        facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
+        facetFactory.process(ProcessClassContext
+                .forTesting(Customer.class, methodRemover, facetHolder));
 
         assertNoMethodsRemoved();
     }

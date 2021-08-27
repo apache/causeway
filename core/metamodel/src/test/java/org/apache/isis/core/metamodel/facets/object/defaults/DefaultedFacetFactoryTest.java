@@ -46,7 +46,8 @@ extends AbstractFacetFactoryTest {
     }
 
     public void testFacetPickedUp() {
-        facetFactory.process(new ProcessClassContext(MyDefaultedUsingDefaultsProvider.class, methodRemover, facetedMethod));
+        facetFactory.process(ProcessClassContext
+                .forTesting(MyDefaultedUsingDefaultsProvider.class, methodRemover, facetedMethod));
 
         final DefaultedFacet facet = facetedMethod.getFacet(DefaultedFacet.class);
         assertNotNull(facet);
@@ -55,7 +56,8 @@ extends AbstractFacetFactoryTest {
 
     public void testFacetFacetHolderStored() {
 
-        facetFactory.process(new ProcessClassContext(MyDefaultedUsingDefaultsProvider.class, methodRemover, facetedMethod));
+        facetFactory.process(ProcessClassContext
+                .forTesting(MyDefaultedUsingDefaultsProvider.class, methodRemover, facetedMethod));
 
         final DefaultedFacetAbstract valueFacet = (DefaultedFacetAbstract) facetedMethod.getFacet(DefaultedFacet.class);
         assertEquals(facetedMethod, valueFacet.getFacetHolder());
@@ -63,7 +65,8 @@ extends AbstractFacetFactoryTest {
 
     public void testNoMethodsRemoved() {
 
-        facetFactory.process(new ProcessClassContext(MyDefaultedUsingDefaultsProvider.class, methodRemover, facetedMethod));
+        facetFactory.process(ProcessClassContext
+                .forTesting(MyDefaultedUsingDefaultsProvider.class, methodRemover, facetedMethod));
 
         assertNoMethodsRemoved();
     }
@@ -91,7 +94,8 @@ extends AbstractFacetFactoryTest {
     }
 
     public void testDefaultedUsingDefaultsProviderName() {
-        facetFactory.process(new ProcessClassContext(MyDefaultedUsingDefaultsProvider.class, methodRemover, facetedMethod));
+        facetFactory.process(ProcessClassContext
+                .forTesting(MyDefaultedUsingDefaultsProvider.class, methodRemover, facetedMethod));
         final DefaultedFacetAbstract facet = (DefaultedFacetAbstract) facetedMethod.getFacet(DefaultedFacet.class);
         assertEquals(MyDefaultedUsingDefaultsProvider.class, facet.getDefaultsProviderClass());
     }
@@ -112,7 +116,8 @@ extends AbstractFacetFactoryTest {
     }
 
     public void testDefaultedUsingDefaultsProviderClass() {
-        facetFactory.process(new ProcessClassContext(MyDefaultedUsingDefaultsProviderClass.class, methodRemover, facetedMethod));
+        facetFactory.process(ProcessClassContext
+                .forTesting(MyDefaultedUsingDefaultsProviderClass.class, methodRemover, facetedMethod));
         final DefaultedFacetAbstract facet = (DefaultedFacetAbstract) facetedMethod.getFacet(DefaultedFacet.class);
         assertEquals(MyDefaultedUsingDefaultsProviderClass.class, facet.getDefaultsProviderClass());
     }
@@ -139,7 +144,8 @@ extends AbstractFacetFactoryTest {
     }
 
     public void testDefaultedMustHaveANoArgConstructor() {
-        facetFactory.process(new ProcessClassContext(MyDefaultedWithoutNoArgConstructor.class, methodRemover, facetedMethod));
+        facetFactory.process(ProcessClassContext
+                .forTesting(MyDefaultedWithoutNoArgConstructor.class, methodRemover, facetedMethod));
         final DefaultedFacetAbstract facet = (DefaultedFacetAbstract) facetedMethod.getFacet(DefaultedFacet.class);
         assertNull(facet);
     }
@@ -162,7 +168,8 @@ extends AbstractFacetFactoryTest {
     }
 
     public void testDefaultedHaveAPublicNoArgConstructor() {
-        facetFactory.process(new ProcessClassContext(MyDefaultedWithoutPublicNoArgConstructor.class, methodRemover, facetedMethod));
+        facetFactory.process(ProcessClassContext
+                .forTesting(MyDefaultedWithoutPublicNoArgConstructor.class, methodRemover, facetedMethod));
         final DefaultedFacetAbstract facet = (DefaultedFacetAbstract) facetedMethod.getFacet(DefaultedFacet.class);
         assertNull(facet);
     }
@@ -192,7 +199,8 @@ extends AbstractFacetFactoryTest {
             map->map.put(configKey, className),
             ()->{
 
-                facetFactory.process(new ProcessClassContext(MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration.class, methodRemover, facetedMethod));
+                facetFactory.process(ProcessClassContext
+                        .forTesting(MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration.class, methodRemover, facetedMethod));
 
             });
 
@@ -226,7 +234,7 @@ extends AbstractFacetFactoryTest {
             map->map.put(configKey, className),
             ()->{
 
-                facetFactory.process(new ProcessClassContext(NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration.class, methodRemover, facetedMethod));
+                facetFactory.process(ProcessClassContext.forTesting(NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration.class, methodRemover, facetedMethod));
 
             });
 

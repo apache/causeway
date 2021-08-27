@@ -53,7 +53,8 @@ extends AbstractFacetFactoryTest {
         class Customer {
         }
 
-        val context = new ProcessClassContext(Customer.class, methodRemover, facetedMethod);
+        val context = ProcessClassContext
+                .forTesting(Customer.class, methodRemover, facetedMethod);
         facetFactory.processBounded(context.synthesizeOnType(DomainObject.class), context);
 
         final Facet facet = facetedMethod.getFacet(ChoicesFacet.class);

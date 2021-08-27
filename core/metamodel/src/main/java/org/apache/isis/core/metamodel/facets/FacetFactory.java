@@ -166,17 +166,6 @@ public interface FacetFactory {
 
         private final MethodRemover methodRemover;
 
-        /**
-         * For testing only.
-         */
-        @Deprecated // use static utility method 'forTesting(...)' instead
-        public ProcessClassContext(
-                final Class<?> cls,
-                final MethodRemover methodRemover,
-                final FacetHolder facetHolder) {
-            this(cls, IntrospectionPolicy.ANNOTATION_OPTIONAL, methodRemover, facetHolder);
-        }
-
         public ProcessClassContext(
                 final Class<?> cls,
                 final IntrospectionPolicy introspectionPolicy,
@@ -199,6 +188,19 @@ public interface FacetFactory {
         @Override
         public Can<Method> snapshot() {
             return methodRemover.snapshot();
+        }
+
+        // -- JUNIT SUPPORT
+
+        /**
+         * For testing only.
+         */
+        public static ProcessClassContext forTesting(
+                final Class<?> cls,
+                final MethodRemover methodRemover,
+                final FacetHolder facetHolder) {
+            return new ProcessClassContext(
+                    cls, IntrospectionPolicy.ANNOTATION_OPTIONAL, methodRemover, facetHolder);
         }
 
     }
@@ -248,20 +250,6 @@ public interface FacetFactory {
             this.featureType = featureType;
             this.mixinMain = isMixinMain;
         }
-
-        /** JUnit support, historically using classic IntrospectionPolicy ANNOTATION_OPTIONAL
-         *  and not using 'isMixinMain' */
-        public static ProcessMethodContext forTesting(
-                final Class<?> cls,
-                final FeatureType featureType,
-                final Method method,
-                final MethodRemover methodRemover,
-                final FacetedMethod facetedMethod) {
-            return new ProcessMethodContext(
-                    cls, IntrospectionPolicy.ANNOTATION_OPTIONAL, featureType, method,
-                    methodRemover, facetedMethod, false);
-        }
-
 
         /**
          * Annotation lookup on this context's method. Also honors annotations on fields, if this method is a getter.
@@ -353,6 +341,22 @@ public interface FacetFactory {
                     .map(naming->naming.getMemberSupportingMethodName(getterMethod, prefix, isMixin));
         }
 
+        // -- JUNIT SUPPORT
+
+        /**
+         * JUnit support, historically using classic IntrospectionPolicy ANNOTATION_OPTIONAL
+         *  and not using 'isMixinMain'
+         */
+        public static ProcessMethodContext forTesting(
+                final Class<?> cls,
+                final FeatureType featureType,
+                final Method method,
+                final MethodRemover methodRemover,
+                final FacetedMethod facetedMethod) {
+            return new ProcessMethodContext(
+                    cls, IntrospectionPolicy.ANNOTATION_OPTIONAL, featureType, method,
+                    methodRemover, facetedMethod, false);
+        }
 
     }
 

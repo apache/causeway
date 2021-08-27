@@ -60,7 +60,8 @@ extends AbstractFacetFactoryTest {
         }
         final Method cssClassNameMethod = findMethod(Customer.class, "cssClass");
 
-        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
+        facetFactory.process(ProcessClassContext
+                .forTesting(Customer.class, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(CssClassFacet.class);
         assertThat(facet, is(notNullValue()));

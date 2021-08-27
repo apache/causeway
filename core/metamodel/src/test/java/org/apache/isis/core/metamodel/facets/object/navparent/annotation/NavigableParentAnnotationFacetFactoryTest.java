@@ -65,7 +65,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
         final Class<?> domainClass = domainObject.getClass();
 
-        facetFactory.process(new ProcessClassContext(domainClass, mockMethodRemover, facetedMethod));
+        facetFactory.process(ProcessClassContext
+                .forTesting(domainClass, mockMethodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(NavigableParentFacet.class);
         Assert.assertNotNull(facet);

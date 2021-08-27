@@ -65,8 +65,10 @@ extends AbstractFacetFactoryTest {
         final Method deleteMethod = findMethod(Customer.class, "deleting");
         final Method removeMethod = findMethod(Customer.class, "removing");
 
-        removeFacetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
-        deleteFacetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
+        removeFacetFactory.process(ProcessClassContext
+                .forTesting(Customer.class, methodRemover, facetedMethod));
+        deleteFacetFactory.process(ProcessClassContext
+                .forTesting(Customer.class, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(RemovingCallbackFacet.class);
         assertNotNull(facet);

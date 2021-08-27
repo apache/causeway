@@ -50,7 +50,8 @@ extends AbstractFacetFactoryTest {
         class Customer {
         }
 
-        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
+        facetFactory.process(ProcessClassContext
+                .forTesting(Customer.class, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(BookmarkPolicyFacet.class);
         assertNotNull(facet);

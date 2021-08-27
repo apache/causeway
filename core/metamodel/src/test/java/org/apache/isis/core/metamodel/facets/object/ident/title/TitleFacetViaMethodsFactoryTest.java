@@ -58,7 +58,8 @@ public class TitleFacetViaMethodsFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method titleMethod = findMethod(Customer.class, "title");
 
-        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
+        facetFactory.process(ProcessClassContext
+                .forTesting(Customer.class, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(TitleFacet.class);
         assertNotNull(facet);
@@ -78,7 +79,8 @@ public class TitleFacetViaMethodsFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method toStringMethod = findMethod(Customer.class, "toString");
 
-        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
+        facetFactory.process(ProcessClassContext
+                .forTesting(Customer.class, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(TitleFacet.class);
         assertNotNull(facet);
@@ -101,7 +103,8 @@ public class TitleFacetViaMethodsFactoryTest extends AbstractFacetFactoryTest {
         class Customer {
         }
 
-        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
+        facetFactory.process(ProcessClassContext
+                .forTesting(Customer.class, methodRemover, facetedMethod));
 
         assertNull(facetedMethod.getFacet(TitleFacet.class));
         assertFalse(methodRemover.getRemovedMethodMethodCalls().isEmpty());

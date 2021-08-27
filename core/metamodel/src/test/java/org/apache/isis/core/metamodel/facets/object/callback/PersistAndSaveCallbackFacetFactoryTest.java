@@ -66,8 +66,10 @@ public class PersistAndSaveCallbackFacetFactoryTest extends AbstractFacetFactory
         final Method saveMethod = findMethod(Customer.class, "saving");
         final Method persistMethod = findMethod(Customer.class, "persisting");
 
-        saveFacetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
-        persistFacetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
+        saveFacetFactory.process(ProcessClassContext
+                .forTesting(Customer.class, methodRemover, facetedMethod));
+        persistFacetFactory.process(ProcessClassContext
+                .forTesting(Customer.class, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(PersistingCallbackFacet.class);
         assertNotNull(facet);
@@ -93,8 +95,10 @@ public class PersistAndSaveCallbackFacetFactoryTest extends AbstractFacetFactory
         final Method saveMethod = findMethod(Customer.class, "saved");
         final Method persistMethod = findMethod(Customer.class, "persisted");
 
-        saveFacetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
-        persistFacetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
+        saveFacetFactory.process(ProcessClassContext
+                .forTesting(Customer.class, methodRemover, facetedMethod));
+        persistFacetFactory.process(ProcessClassContext
+                .forTesting(Customer.class, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(PersistedCallbackFacet.class);
         assertNotNull(facet);

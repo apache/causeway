@@ -30,6 +30,9 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
@@ -39,9 +42,6 @@ import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public class TitleAnnotationFacetFactoryTest
 extends AbstractFacetFactoryJUnit4TestCase {
@@ -76,7 +76,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
     @Test
     public void testTitleAnnotatedMethodPickedUpOnClassRemoved() throws Exception {
-        facetFactory.process(new ProcessClassContext(Customer.class, mockMethodRemover, facetedMethod));
+        facetFactory.process(ProcessClassContext
+                .forTesting(Customer.class, mockMethodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(TitleFacet.class);
         Assert.assertNotNull(facet);
@@ -116,7 +117,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
     @Test
     public void testTitleAnnotatedMethodsPickedUpOnClass() throws Exception {
 
-        facetFactory.process(new ProcessClassContext(Customer2.class, mockMethodRemover, facetedMethod));
+        facetFactory.process(ProcessClassContext
+                .forTesting(Customer2.class, mockMethodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(TitleFacet.class);
         Assert.assertNotNull(facet);
@@ -152,7 +154,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
     @Test
     public void testNoExplicitTitleAnnotations() {
 
-        facetFactory.process(new ProcessClassContext(Customer3.class, mockMethodRemover, facetedMethod));
+        facetFactory.process(ProcessClassContext
+                .forTesting(Customer3.class, mockMethodRemover, facetedMethod));
 
         Assert.assertNull(facetedMethod.getFacet(TitleFacet.class));
     }
@@ -205,7 +208,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
     @Test
     public void titleAnnotatedMethodsSomeOfWhichReturnNulls() throws Exception {
 
-        facetFactory.process(new ProcessClassContext(Customer4.class, mockMethodRemover, facetedMethod));
+        facetFactory.process(ProcessClassContext
+                .forTesting(Customer4.class, mockMethodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(TitleFacet.class);
         final TitleFacetViaTitleAnnotation titleFacetViaTitleAnnotation = (TitleFacetViaTitleAnnotation) facet;

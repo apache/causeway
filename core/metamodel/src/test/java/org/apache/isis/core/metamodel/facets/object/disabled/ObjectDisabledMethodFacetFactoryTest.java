@@ -58,7 +58,8 @@ public class ObjectDisabledMethodFacetFactoryTest extends AbstractFacetFactoryTe
         final Method disabledMethod = findMethod(Customer.class, "disabled", params);
         assertNotNull(disabledMethod);
 
-        final ProcessClassContext processClassContext = new ProcessClassContext(Customer.class, methodRemover, facetHolder);
+        final ProcessClassContext processClassContext = ProcessClassContext
+                .forTesting(Customer.class, methodRemover, facetHolder);
         facetFactory.process(processClassContext);
 
         final Facet facet = facetHolder.getFacet(DisabledObjectFacet.class);
