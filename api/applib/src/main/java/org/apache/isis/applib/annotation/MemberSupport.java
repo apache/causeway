@@ -42,6 +42,7 @@ import java.lang.annotation.Target;
 @Inherited
 @Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
+@Domain.Include // meta annotation, in support of meta-model validation
 public @interface MemberSupport {
 
 }
