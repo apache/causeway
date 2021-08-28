@@ -55,8 +55,8 @@ import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.bad.AmbiguousMixinAnnotations;
 import org.apache.isis.testdomain.model.bad.AmbiguousTitle;
 import org.apache.isis.testdomain.model.bad.Configuration_usingInvalidDomain;
-import org.apache.isis.testdomain.model.bad.InvalidContradictingTypeSemantics;
 import org.apache.isis.testdomain.model.bad.InvalidActionOverloading;
+import org.apache.isis.testdomain.model.bad.InvalidContradictingTypeSemantics;
 import org.apache.isis.testdomain.model.bad.InvalidLogicalTypeNameClash;
 import org.apache.isis.testdomain.model.bad.InvalidOrphanedActionSupport;
 import org.apache.isis.testdomain.model.bad.InvalidOrphanedCollectionSupport;
@@ -111,7 +111,7 @@ class DomainModelTest_usingBadDomain {
     void orphanedActionSupport_shouldFail() {
         assertTrue(validator.anyMatchesContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedActionSupport.class)),
-                "InvalidOrphanedActionSupport#hideOrphaned: has annotation @MemberSupport, "
+                "InvalidOrphanedActionSupport#hideOrphaned: has annotation @Domain.Include, "
                 + "is assumed to support"));
 
         assertTrue(validator.anyMatchesContaining(
@@ -127,7 +127,7 @@ class DomainModelTest_usingBadDomain {
     void orphanedPropertySupport_shouldFail() {
         assertTrue(validator.anyMatchesContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedPropertySupport.class)),
-                "InvalidOrphanedPropertySupport#hideMyProperty: has annotation @MemberSupport, "
+                "InvalidOrphanedPropertySupport#hideMyProperty: has annotation @Domain.Include, "
                 + "is assumed to support"));
 
         assertTrue(validator.anyMatchesContaining(
@@ -142,7 +142,7 @@ class DomainModelTest_usingBadDomain {
     void orphanedCollectionSupport_shouldFail() {
         assertTrue(validator.anyMatchesContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedCollectionSupport.class)),
-                "InvalidOrphanedCollectionSupport#hideMyCollection: has annotation @MemberSupport, "
+                "InvalidOrphanedCollectionSupport#hideMyCollection: has annotation @Domain.Include, "
                 + "is assumed to support"));
 
         assertTrue(validator.anyMatchesContaining(
@@ -168,7 +168,7 @@ class DomainModelTest_usingBadDomain {
                 InvalidLogicalTypeNameClash.VariantC.class));
     }
 
-    private void assertLogicalTypeNameClashesAmong(Can<Class<?>> types) {
+    private void assertLogicalTypeNameClashesAmong(final Can<Class<?>> types) {
 
         val typeLiteralList = types.stream()
                 .map(t->t.getName())
