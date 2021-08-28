@@ -41,6 +41,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
+import lombok.Getter;
 import lombok.val;
 
 public class OneToManyAssociationDefault
@@ -169,13 +170,8 @@ implements OneToManyAssociation {
         return 0; // n/a
     }
 
-    @Override
-    public boolean isExplicitlyAnnotated() {
-        //FIXME[ISIS-2774] memoize or even better, make this a final field
-        val javaMethod = getFacetedMethod().getMethod();
-        return _Annotations.synthesize(javaMethod, Collection.class).isPresent()
-                || _Annotations.synthesize(javaMethod, CollectionLayout.class).isPresent();
-    }
+    @Getter(lazy=true, onMethod_ = {@Override})
+    private final boolean explicitlyAnnotated = calculateIsExplicitlyAnnotated();
 
     // -- toString
 
@@ -186,6 +182,14 @@ implements OneToManyAssociation {
         str.append(",");
         str.append("type", getSpecification() == null ? "unknown" : getSpecification().getShortIdentifier());
         return str.toString();
+    }
+
+    // -- HELPER
+
+    private boolean calculateIsExplicitlyAnnotated() {
+        val javaMethod = getFacetedMethod().getMethod();
+        return _Annotations.synthesize(javaMethod, Collection.class).isPresent()
+                || _Annotations.synthesize(javaMethod, CollectionLayout.class).isPresent();
     }
 
 

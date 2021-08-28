@@ -56,6 +56,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
+import lombok.Getter;
 import lombok.val;
 
 public class OneToOneAssociationDefault
@@ -315,13 +316,8 @@ implements OneToOneAssociation {
                 .asCommandDto(interactionId, Can.ofSingleton(head), this, valueAdapterOrNull));
     }
 
-    @Override
-    public boolean isExplicitlyAnnotated() {
-        //FIXME[ISIS-2774] memoize or even better, make this a final field
-        val javaMethod = getFacetedMethod().getMethod();
-        return _Annotations.synthesize(javaMethod, Property.class).isPresent()
-                || _Annotations.synthesize(javaMethod, PropertyLayout.class).isPresent();
-    }
+    @Getter(lazy=true, onMethod_ = {@Override})
+    private final boolean explicitlyAnnotated = calculateIsExplicitlyAnnotated();
 
     // -- OBJECT CONTRACT
 
@@ -333,6 +329,14 @@ implements OneToOneAssociation {
         str.append("persisted", !isNotPersisted());
         str.append("type", getSpecification().getShortIdentifier());
         return str.toString();
+    }
+
+    // -- HELPER
+
+    private boolean calculateIsExplicitlyAnnotated() {
+        val javaMethod = getFacetedMethod().getMethod();
+        return _Annotations.synthesize(javaMethod, Property.class).isPresent()
+                || _Annotations.synthesize(javaMethod, PropertyLayout.class).isPresent();
     }
 
 

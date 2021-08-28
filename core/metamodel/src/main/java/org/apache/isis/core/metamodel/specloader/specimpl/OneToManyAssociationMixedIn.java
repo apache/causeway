@@ -174,12 +174,15 @@ implements MixedInMember {
         return this.mixinAction == mixinAction;
     }
 
-    @Override
-    public boolean isExplicitlyAnnotated() {
-        //FIXME[ISIS-2774] memoize or even better, make this a final field
+    @Getter(lazy=true, onMethod_ = {@Override})
+    private final boolean explicitlyAnnotated = calculateIsExplicitlyAnnotated();
+
+    // -- HELPER
+
+    private boolean calculateIsExplicitlyAnnotated() {
         val javaMethod = getFacetedMethod().getMethod();
-        return _Annotations.synthesize(javaMethod, Domain.Include.class).isPresent()
-                || super.isExplicitlyAnnotated();
+        return super.isExplicitlyAnnotated() // legacy programming style
+                || _Annotations.synthesize(javaMethod, Domain.Include.class).isPresent();
     }
 
     private ExecutionPublisher getPublishingServiceInternal() {

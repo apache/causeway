@@ -68,6 +68,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 
@@ -528,13 +529,8 @@ implements ObjectAction {
         return getType().isPrototype();
     }
 
-    @Override
-    public boolean isExplicitlyAnnotated() {
-        //FIXME[ISIS-2774] memoize or even better, make this a final field
-        val javaMethod = getFacetedMethod().getMethod();
-        return _Annotations.synthesize(javaMethod, Action.class).isPresent()
-                || _Annotations.synthesize(javaMethod, ActionLayout.class).isPresent();
-    }
+    @Getter(lazy=true, onMethod_ = {@Override})
+    private final boolean explicitlyAnnotated = calculateIsExplicitlyAnnotated();
 
     /**
      * Internal API, called by the various implementations of
@@ -588,6 +584,12 @@ implements ObjectAction {
 
         return getCommandDtoFactory()
                 .asCommandDto(interactionId, Can.ofSingleton(head), this, argumentAdapters);
+    }
+
+    private boolean calculateIsExplicitlyAnnotated() {
+        val javaMethod = getFacetedMethod().getMethod();
+        return _Annotations.synthesize(javaMethod, Action.class).isPresent()
+                || _Annotations.synthesize(javaMethod, ActionLayout.class).isPresent();
     }
 
 }
