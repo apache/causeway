@@ -46,6 +46,7 @@ import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 })
 @Retention(RetentionPolicy.RUNTIME)
 @DomainObject(nature=Nature.MIXIN, mixinMethod = "coll") // meta annotation, only applies at class level
+@Domain.Include // meta annotation, in support of meta-model validation
 public @interface Collection {
 
     /**

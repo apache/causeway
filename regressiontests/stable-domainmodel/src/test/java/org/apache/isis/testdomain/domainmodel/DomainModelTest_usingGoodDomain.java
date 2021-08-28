@@ -465,8 +465,6 @@ class DomainModelTest_usingGoodDomain {
         act.assertUsabilityIsVetoedWith("action disabled for testing purposes");
         act.assertInvocationResult("Hallo World!", List.of());
 
-        act.getMetaModel().get().isExplicitlyAnnotated();
-
         // -- PROPERTY WITH PRIVATE GETTER AND SETTER
 
         val prop = testerFactory

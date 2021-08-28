@@ -45,6 +45,7 @@ import java.util.Comparator;
 })
 @Retention(RetentionPolicy.RUNTIME)
 @DomainObject(nature=Nature.MIXIN, mixinMethod = "coll") // meta annotation, only applies at class level
+@Domain.Include // meta annotation, in support of meta-model validation
 public @interface CollectionLayout {
 
     /**

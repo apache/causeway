@@ -40,6 +40,7 @@ import java.lang.annotation.Target;
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @DomainObject(nature=Nature.MIXIN, mixinMethod = "prop") // meta annotation, only applies at class level
+@Domain.Include // meta annotation, in support of meta-model validation
 public @interface PropertyLayout {
 
     /**

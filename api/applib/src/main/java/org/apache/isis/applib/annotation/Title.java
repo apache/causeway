@@ -29,7 +29,7 @@ import java.lang.annotation.Target;
  *
  * <p>
  * If more than one property is used, the order can be specified (using the
- * same Dewey-decimal notation). 
+ * same Dewey-decimal notation).
  * The string to use between the components can also be specified.
  * </p>
  *
@@ -40,6 +40,7 @@ import java.lang.annotation.Target;
         ElementType.METHOD,
         ElementType.FIELD
 })
+@Domain.Include // meta annotation, in support of meta-model validation
 public @interface Title {
 
     /**
