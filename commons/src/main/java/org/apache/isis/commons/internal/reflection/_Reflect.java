@@ -75,18 +75,52 @@ public final class _Reflect {
 
     // -- PREDICATES
 
-    public static boolean methodsCompatible(final Method a, final Method b) {
+    /**
+     * Other than checking for Method equality, this function is weaker and only
+     * checks for method name, method signature equality
+     * and whether a overrides b or vice versa.
+     * <p>
+     * Example of co-variant overriding:
+     * <pre>
+     * class Parent {
+     *     Object getSomething(){ return 10; }
+     * }
+     *
+     * class Child extends Parent {
+     *     &#64;Override Integer getSomething() { return 10; }
+     * }
+     * </pre>
+     * @param a
+     * @param b
+     * @see Method#equals(Object)
+     */
+    public static boolean methodsSame(final Method a, final Method b) {
         if(!a.getName().equals(b.getName())) {
             return false;
         }
         if(a.getParameterCount()!=b.getParameterCount()) {
             return false;
         }
-        return _Arrays.testAllMatch(a.getParameters(), b.getParameters(),
-                (p1, p2)->p1.getType().equals(p2.getType()));
+        if(!_Arrays.testAllMatch(a.getParameters(), b.getParameters(),
+                (p1, p2)->p1.getType().equals(p2.getType()))) {
+            return false;
+        }
+        return a.getReturnType().isAssignableFrom(b.getReturnType())
+                || b.getReturnType().isAssignableFrom(a.getReturnType());
     }
 
-    public static int methodsCompare(final Method a, final Method b) {
+    // -- COMPARATORS
+
+    /**
+     * In compliance with the sameness relation {@link #methodsSame(Method, Method)}
+     * provides a comparator (with an arbitrarily chosen ordering relation).
+     * @apiNote don't depend on the chosen ordering
+     * @param a
+     * @param b
+     * @see #methodsSame(Method, Method)
+     */
+    public static int methodWeakCompare(final Method a, final Method b) {
+
         int c = a.getName().compareTo(b.getName());
         if(c!=0) {
             return c;
@@ -103,7 +137,14 @@ public final class _Reflect {
                 return c;
             }
         }
-        return 0; // same
+        c = typesCompare(a.getReturnType(), b.getReturnType());
+        if(c!=0) {
+            return a.getReturnType().isAssignableFrom(b.getReturnType())
+                    || b.getReturnType().isAssignableFrom(a.getReturnType())
+                    ? 0 // same
+                    : c;
+        }
+        return 0; // equal
     }
 
     public static int typesCompare(final Class<?> a, final Class<?> b) {
@@ -602,6 +643,17 @@ public final class _Reflect {
             (!ref.getName().equals(other.getName()))
             ? false
             : Arrays.equals(refSignature, other.getParameterTypes());
+    }
+
+    public static String methodToShortString(final @NonNull Method method) {
+
+        return method.getName() + "(" +
+
+            Stream.of(method.getParameterTypes())
+            .map(parameterType->parameterType.getTypeName())
+            .collect(Collectors.joining(", "))
+
+        + ")";
     }
 
 
