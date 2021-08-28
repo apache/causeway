@@ -43,6 +43,7 @@ import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 import org.apache.isis.testdomain.util.CollectionAssertions;
 
 import lombok.Getter;
@@ -88,12 +89,20 @@ public class DomainObjectTesterFactory {
     public static class ActionTester<T>
     extends MemberTester<T> {
 
+        @Getter
         private Optional<ManagedAction> managedActionIfAny;
 
         private ActionTester(
                 final @NonNull Class<T> domainObjectType,
                 final @NonNull String actionName) {
             super(domainObjectType, actionName, "actionName");
+        }
+
+        @Override
+        public Optional<ObjectMemberAbstract> getMetaModel() {
+            return managedActionIfAny
+            .map(ManagedAction::getMetaModel)
+            .map(ObjectMemberAbstract.class::cast);
         }
 
         @Override
@@ -140,12 +149,20 @@ public class DomainObjectTesterFactory {
     public static class PropertyTester<T>
     extends MemberTester<T> {
 
+        @Getter
         private Optional<ManagedProperty> managedPropertyIfAny;
 
         private PropertyTester(
                 final @NonNull Class<T> domainObjectType,
                 final @NonNull String propertyName) {
             super(domainObjectType, propertyName, "property");
+        }
+
+        @Override
+        public Optional<ObjectMemberAbstract> getMetaModel() {
+            return managedPropertyIfAny
+            .map(ManagedProperty::getMetaModel)
+            .map(ObjectMemberAbstract.class::cast);
         }
 
         @Override
@@ -198,12 +215,20 @@ public class DomainObjectTesterFactory {
     public static class CollectionTester<T>
     extends MemberTester<T> {
 
+        @Getter
         private Optional<ManagedCollection> managedCollectionIfAny;
 
         private CollectionTester(
                 final @NonNull Class<T> domainObjectType,
                 final @NonNull String collectionName) {
             super(domainObjectType, collectionName, "collection");
+        }
+
+        @Override
+        public Optional<ObjectMemberAbstract> getMetaModel() {
+            return managedCollectionIfAny
+            .map(ManagedCollection::getMetaModel)
+            .map(ObjectMemberAbstract.class::cast);
         }
 
         @Override
@@ -263,19 +288,20 @@ public class DomainObjectTesterFactory {
             return this;
         }
 
-        protected abstract Optional<? extends ManagedMember> startInteractionOn(ManagedObject viewModel);
+        protected abstract Optional<ObjectMemberAbstract> getMetaModel();
 
+        protected abstract Optional<? extends ManagedMember> startInteractionOn(ManagedObject viewModel);
 
         public final void assertExists(final boolean isExpectedToExist) {
 
             if(isExpectedToExist
                     && managedMemberIfAny.isEmpty()) {
-                fail(String.format("{} {} does not exist", memberSort, memberName));
+                fail(String.format("%s %s does not exist", memberSort, memberName));
             }
 
             if(!isExpectedToExist
                     && managedMemberIfAny.isPresent()) {
-                fail(String.format("{} {} does exist", memberSort, memberName));
+                fail(String.format("%s %s does exist", memberSort, memberName));
             }
         }
 
@@ -329,6 +355,19 @@ public class DomainObjectTesterFactory {
                 });
             });
         }
+
+        public final void assertIsExplicitlyAnnotated(final boolean isExpectedExplicitlyAnnotated) {
+            if(isExpectedExplicitlyAnnotated
+                    && !getMetaModel().get().isExplicitlyAnnotated()) {
+                fail(String.format("%s %s is not explicitly annotated", memberSort, memberName));
+            }
+
+            if(!isExpectedExplicitlyAnnotated
+                    && getMetaModel().get().isExplicitlyAnnotated()) {
+                fail(String.format("%s %s is explicitly annotated", memberSort, memberName));
+            }
+        }
+
 
     }
 

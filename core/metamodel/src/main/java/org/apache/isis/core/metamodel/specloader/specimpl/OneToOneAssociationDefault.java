@@ -335,8 +335,8 @@ implements OneToOneAssociation {
 
     private boolean calculateIsExplicitlyAnnotated() {
         val javaMethod = getFacetedMethod().getMethod();
-        return _Annotations.synthesize(javaMethod, Property.class).isPresent()
-                || _Annotations.synthesize(javaMethod, PropertyLayout.class).isPresent();
+        return _Annotations.synthesizeInherited(javaMethod, Property.class).isPresent()
+                || _Annotations.synthesizeInherited(javaMethod, PropertyLayout.class).isPresent();
     }
 
 

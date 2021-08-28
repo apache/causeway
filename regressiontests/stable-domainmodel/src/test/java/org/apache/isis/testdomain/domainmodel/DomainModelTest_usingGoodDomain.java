@@ -457,23 +457,36 @@ class DomainModelTest_usingGoodDomain {
 
         // PRIVATE ACTION
 
-        val myActionTester = testerFactory
+        val act = testerFactory
                 .actionTester(ViewModelWithEncapsulatedMembers.class, "myAction");
-        myActionTester.assertExists(true);
-        myActionTester.assertVisibilityIsNotVetoed();
-        myActionTester.assertUsabilityIsVetoedWith("action disabled for testing purposes");
-        myActionTester.assertInvocationResult("Hallo World!", List.of());
+        act.assertExists(true);
+        act.assertIsExplicitlyAnnotated(true);
+        act.assertVisibilityIsNotVetoed();
+        act.assertUsabilityIsVetoedWith("action disabled for testing purposes");
+        act.assertInvocationResult("Hallo World!", List.of());
+
+        act.getMetaModel().get().isExplicitlyAnnotated();
 
         // -- PROPERTY WITH PRIVATE GETTER AND SETTER
 
-        val propWithPrivateAccessorsTester = testerFactory
+        val prop = testerFactory
                 .propertyTester(ViewModelWithEncapsulatedMembers.class, "propWithPrivateAccessors");
-        propWithPrivateAccessorsTester.assertExists(true);
-        propWithPrivateAccessorsTester.assertVisibilityIsNotVetoed();
-        propWithPrivateAccessorsTester.assertUsabilityIsVetoedWith("property disabled for testing purposes");
-        propWithPrivateAccessorsTester.assertValue("Foo");
-        propWithPrivateAccessorsTester.assertValueUpdate("Bar");
+        prop.assertExists(true);
+        prop.assertIsExplicitlyAnnotated(true);
+        prop.assertVisibilityIsNotVetoed();
+        prop.assertUsabilityIsVetoedWith("property disabled for testing purposes");
+        prop.assertValue("Foo");
+        prop.assertValueUpdate("Bar");
 
+        // -- COLLECTION WITH PRIVATE GETTER AND SETTER
+
+        val coll = testerFactory
+                .collectionTester(ViewModelWithEncapsulatedMembers.class, "collWithPrivateAccessors");
+        coll.assertExists(true);
+        coll.assertIsExplicitlyAnnotated(true);
+        coll.assertVisibilityIsNotVetoed();
+        coll.assertUsabilityIsVetoedWith("collection disabled for testing purposes");
+        coll.assertCollectionElements(List.of("Foo"));
     }
 
 

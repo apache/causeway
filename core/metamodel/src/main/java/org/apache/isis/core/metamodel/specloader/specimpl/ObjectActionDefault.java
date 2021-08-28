@@ -588,8 +588,8 @@ implements ObjectAction {
 
     private boolean calculateIsExplicitlyAnnotated() {
         val javaMethod = getFacetedMethod().getMethod();
-        return _Annotations.synthesize(javaMethod, Action.class).isPresent()
-                || _Annotations.synthesize(javaMethod, ActionLayout.class).isPresent();
+        return _Annotations.synthesizeInherited(javaMethod, Action.class).isPresent()
+                || _Annotations.synthesizeInherited(javaMethod, ActionLayout.class).isPresent();
     }
 
 }

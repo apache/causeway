@@ -188,8 +188,8 @@ implements OneToManyAssociation {
 
     private boolean calculateIsExplicitlyAnnotated() {
         val javaMethod = getFacetedMethod().getMethod();
-        return _Annotations.synthesize(javaMethod, Collection.class).isPresent()
-                || _Annotations.synthesize(javaMethod, CollectionLayout.class).isPresent();
+        return _Annotations.synthesizeInherited(javaMethod, Collection.class).isPresent()
+                || _Annotations.synthesizeInherited(javaMethod, CollectionLayout.class).isPresent();
     }
 
 

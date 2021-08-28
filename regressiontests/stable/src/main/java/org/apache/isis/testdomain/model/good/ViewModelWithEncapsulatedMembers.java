@@ -18,8 +18,11 @@
  */
 package org.apache.isis.testdomain.model.good;
 
+import java.util.List;
+
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Introspection;
 import org.apache.isis.applib.annotation.MemberSupport;
@@ -63,6 +66,20 @@ implements
     @MemberSupport
     private String disablePropWithPrivateAccessors() {
         return "property disabled for testing purposes";
+    }
+
+    // -- COLLECTION WITH PRIVATE GETTER AND SETTER
+
+    @Collection
+    // allowed to be private since 2.0.0-M7
+    @Getter(AccessLevel.PRIVATE)
+    @Setter(AccessLevel.PRIVATE)
+    private List<String> collWithPrivateAccessors = List.of("Foo");
+
+    // allowed to be private since 2.0.0-M7
+    @MemberSupport
+    private String disableCollWithPrivateAccessors() {
+        return "collection disabled for testing purposes";
     }
 
 
