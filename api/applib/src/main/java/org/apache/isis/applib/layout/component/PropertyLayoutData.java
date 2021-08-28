@@ -71,7 +71,7 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
     private String id;
 
     /**
-     * Property identifier, being the getter method without "get" or "is" prefix, first letter lower cased.
+     * Property identifier, being the getter method without 'get' or 'is' prefix, first letter lower cased.
      */
     @XmlAttribute(required = true)
     public String getId() {

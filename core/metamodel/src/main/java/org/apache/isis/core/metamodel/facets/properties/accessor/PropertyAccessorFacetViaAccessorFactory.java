@@ -72,7 +72,8 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
     @Override
     public boolean isPropertyOrCollectionGetterCandidate(final Method method) {
         final String methodName = method.getName();
-        if (methodName.startsWith(MethodLiteralConstants.GET_PREFIX)) {
+        if (methodName.startsWith(MethodLiteralConstants.GET_PREFIX)
+                && method.getReturnType() != void.class) {
             return true;
         }
         if (methodName.startsWith(MethodLiteralConstants.IS_PREFIX)

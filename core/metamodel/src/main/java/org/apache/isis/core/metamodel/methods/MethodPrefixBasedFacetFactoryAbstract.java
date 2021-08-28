@@ -76,7 +76,8 @@ implements MethodPrefixBasedFacetFactory {
 
             @Override
             public String toString() {
-                return "MetaModelValidatorVisiting.Visitor : MethodPrefixBasedFacetFactoryAbstract : " + prefixes.toList().toString();
+                return "MetaModelValidatorVisiting.Visitor : MethodPrefixBasedFacetFactoryAbstract : " +
+                        prefixes.toList().toString();
             }
 
             @Override

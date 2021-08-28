@@ -29,23 +29,24 @@ import lombok.extern.log4j.Log4j2;
 
 /**
  * Provides fluent composition for Objects' equals, hashCode and toString.
- *
+ * @deprecated heavily relies on reflection, there are probably better alternatives, eg. lombok
  * @since 1.x revised for 2.0 {@index}
  */
+@Deprecated(forRemoval = true, since = "2.0.0-M6")
 @Log4j2
 public final class ObjectContracts {
 
     private ObjectContracts() {}
 
-    public static <T> ToString<T> toString(String name, Function<T, ?> getter) {
+    public static <T> ToString<T> toString(final String name, final Function<T, ?> getter) {
         return ToString.toString(name, getter);
     }
 
-    public static <T> Equality<T> checkEquals(Function<T, ?> getter) {
+    public static <T> Equality<T> checkEquals(final Function<T, ?> getter) {
         return Equality.checkEquals(getter);
     }
 
-    public static <T> Hashing<T> hashing(Function<T, ?> getter) {
+    public static <T> Hashing<T> hashing(final Function<T, ?> getter) {
         return Hashing.hashing(getter);
     }
 
@@ -98,12 +99,12 @@ public final class ObjectContracts {
          * @param getter function extracting the property value of an object
          */
         public default <U extends Comparable<? super U>> ObjectContract<T> thenUse(
-                String propertyLabel,
-                Function<? super T, ? extends U> getter){
+                final String propertyLabel,
+                final Function<? super T, ? extends U> getter){
             return thenUse(propertyLabel, getter, Comparator.<U>naturalOrder());
         }
 
-        public static <T> ObjectContract<T> empty(Class<T> objectClass) {
+        public static <T> ObjectContract<T> empty(final Class<T> objectClass) {
             return new ObjectContract_Empty<>(objectClass);
         }
 
@@ -111,11 +112,11 @@ public final class ObjectContracts {
 
     // -- COMPOSITION ENTRY POINTS
 
-    public static <T> ObjectContract<T> contract(Class<T> objectClass) {
+    public static <T> ObjectContract<T> contract(final Class<T> objectClass) {
         return ObjectContract.empty(objectClass);
     }
 
-    public static <T> ObjectContract<T> parse(Class<T> target, String propertyNames) {
+    public static <T> ObjectContract<T> parse(final Class<T> target, final String propertyNames) {
         return ObjectContract_Parser.parse(target, propertyNames);
     }
 
@@ -126,7 +127,7 @@ public final class ObjectContracts {
         public boolean canEvaluate(Object o);
         public String evaluate(Object o);
 
-        public static Function<Object, String> combineToFunction(ToStringEvaluator ... evaluators){
+        public static Function<Object, String> combineToFunction(final ToStringEvaluator ... evaluators){
             return value -> {
                 if(value == null) {
                     return null;
@@ -146,7 +147,7 @@ public final class ObjectContracts {
     // -- BACKWARDS COMPATIBILITY
 
     @Deprecated // uses reflection on each call
-    public static <T> String toString(T obj, String propertyNames) {
+    public static <T> String toString(final T obj, final String propertyNames) {
         Objects.requireNonNull(obj, "obj required, otherwise undecidable");
 
         return parse(_Casts.uncheckedCast(obj.getClass()), propertyNames)
@@ -154,7 +155,7 @@ public final class ObjectContracts {
     }
 
     @Deprecated // uses reflection on each call
-    public static <T> boolean equals(T obj, Object other, String propertyNames) {
+    public static <T> boolean equals(final T obj, final Object other, final String propertyNames) {
 
         if(obj==null && other==null) {
             if(log.isWarnEnabled()) {
@@ -171,7 +172,7 @@ public final class ObjectContracts {
     }
 
     @Deprecated // uses reflection on each call
-    public static int hashCode(Object obj, String propertyNames) {
+    public static int hashCode(final Object obj, final String propertyNames) {
         Objects.requireNonNull(obj, "obj required, otherwise undecidable");
 
         return parse(_Casts.uncheckedCast(obj.getClass()), propertyNames)
@@ -179,7 +180,7 @@ public final class ObjectContracts {
     }
 
     @Deprecated // uses reflection on each call
-    public static <T> int compare(T obj, T other, String propertyNames) {
+    public static <T> int compare(final T obj, final T other, final String propertyNames) {
         Objects.requireNonNull(obj, "obj required, otherwise undecidable");
 
         return parse(_Casts.uncheckedCast(obj.getClass()), propertyNames)
