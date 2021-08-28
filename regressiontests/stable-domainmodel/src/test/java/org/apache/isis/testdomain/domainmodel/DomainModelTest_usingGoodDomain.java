@@ -76,6 +76,7 @@ import org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingAbstra
 import org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingInterface;
 import org.apache.isis.testdomain.model.good.ProperMemberSupport;
 import org.apache.isis.testdomain.model.good.ProperServiceWithMixin;
+import org.apache.isis.testdomain.model.good.ViewModelWithAnnotationOptionalUsingPrivateSupport;
 import org.apache.isis.testdomain.model.good.ViewModelWithEncapsulatedMembers;
 import org.apache.isis.testdomain.util.interaction.DomainObjectTesterFactory;
 import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
@@ -436,7 +437,7 @@ class DomainModelTest_usingGoodDomain {
 
 
     @Test
-    void nonPublicMembersAndSupport_shouldBeAllowed() {
+    void viewmodelWithEncapsulatedMembers() {
 
         val testerFactory = new DomainObjectTesterFactory(serviceInjector);
 
@@ -480,6 +481,58 @@ class DomainModelTest_usingGoodDomain {
 
         val coll = testerFactory
                 .collectionTester(ViewModelWithEncapsulatedMembers.class, "collWithPrivateAccessors");
+        coll.assertExists(true);
+        coll.assertIsExplicitlyAnnotated(true);
+        coll.assertVisibilityIsNotVetoed();
+        coll.assertUsabilityIsVetoedWith("collection disabled for testing purposes");
+        coll.assertCollectionElements(List.of("Foo"));
+    }
+
+    @Test
+    void viewmodelWithAnnotationOptional_usingPrivateSupport() {
+
+        val testerFactory = new DomainObjectTesterFactory(serviceInjector);
+
+        // OBJECT
+
+        val objectSpec = specificationLoader.specForTypeElseFail(ViewModelWithAnnotationOptionalUsingPrivateSupport.class);
+
+        val introspectionPolicyFacet = objectSpec.getFacet(IntrospectionPolicyFacet.class);
+        assertNotNull(introspectionPolicyFacet);
+
+        val introspectionPolicy = introspectionPolicyFacet.getIntrospectionPolicy(isisConfig);
+        assertEquals(
+                EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED,
+                introspectionPolicy.getEncapsulationPolicy());
+        assertEquals(
+                MemberAnnotationPolicy.MEMBER_ANNOTATIONS_OPTIONAL,
+                introspectionPolicy.getMemberAnnotationPolicy());
+
+        // PRIVATE ACTION
+
+        val act = testerFactory
+                .actionTester(ViewModelWithAnnotationOptionalUsingPrivateSupport.class, "myAction");
+        act.assertExists(true);
+        act.assertIsExplicitlyAnnotated(true);
+        act.assertVisibilityIsNotVetoed();
+        act.assertUsabilityIsVetoedWith("action disabled for testing purposes");
+        act.assertInvocationResult("Hallo World!", List.of());
+
+        // -- PROPERTY WITH PRIVATE GETTER AND SETTER
+
+        val prop = testerFactory
+                .propertyTester(ViewModelWithAnnotationOptionalUsingPrivateSupport.class, "propWithPrivateAccessors");
+        prop.assertExists(true);
+        prop.assertIsExplicitlyAnnotated(true);
+        prop.assertVisibilityIsNotVetoed();
+        prop.assertUsabilityIsVetoedWith("property disabled for testing purposes");
+        prop.assertValue("Foo");
+        prop.assertValueUpdate("Bar");
+
+        // -- COLLECTION WITH PRIVATE GETTER AND SETTER
+
+        val coll = testerFactory
+                .collectionTester(ViewModelWithAnnotationOptionalUsingPrivateSupport.class, "collWithPrivateAccessors");
         coll.assertExists(true);
         coll.assertIsExplicitlyAnnotated(true);
         coll.assertVisibilityIsNotVetoed();

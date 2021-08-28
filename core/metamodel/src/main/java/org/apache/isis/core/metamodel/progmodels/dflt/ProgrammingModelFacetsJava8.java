@@ -139,7 +139,7 @@ import org.apache.isis.core.metamodel.facets.value.timesql.JavaSqlTimeValueFacet
 import org.apache.isis.core.metamodel.facets.value.timestampsql.JavaSqlTimeStampValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.url.URLValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.uuid.UUIDValueFacetUsingSemanticsProviderFactory;
-import org.apache.isis.core.metamodel.methods.MemberSupportAnnotationEnforcesSupportingMethodValidator;
+import org.apache.isis.core.metamodel.methods.DomainIncludeAnnotationEnforcesMetamodelContributionValidator;
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 import org.apache.isis.core.metamodel.methods.OrphanedSupportingMethodValidator;
 import org.apache.isis.core.metamodel.postprocessors.DeriveMixinMembersPostProcessor;
@@ -407,7 +407,7 @@ extends ProgrammingModelAbstract {
 
         val mmc = getMetaModelContext();
 
-        addValidator(new MemberSupportAnnotationEnforcesSupportingMethodValidator(mmc));
+        addValidator(new DomainIncludeAnnotationEnforcesMetamodelContributionValidator(mmc));
         addValidator(new OrphanedSupportingMethodValidator(mmc));
         addValidator(new TitlesAndTranslationsValidator(mmc));  // should this instead be a post processor, alongside TranslationPostProcessor ?
         addValidator(new ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator(mmc));

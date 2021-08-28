@@ -22,11 +22,12 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.function.Predicate;
 
+import org.apache.isis.applib.annotation.Domain;
 import org.apache.isis.applib.annotation.Introspection.EncapsulationPolicy;
 import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
-import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.commons.internal.reflection._Annotations;
+import org.apache.isis.commons.internal.reflection._Reflect;
 
 import lombok.Value;
 
@@ -54,7 +55,20 @@ public class MethodFinderOptions {
 
     public static MethodFinderOptions memberSupport(
             final IntrospectionPolicy memberIntrospectionPolicy) {
-        return havingAnnotation(memberIntrospectionPolicy, MemberSupport.class);
+        //return havingAnnotation(memberIntrospectionPolicy, MemberSupport.class);
+
+        //MemberAnnotationPolicy
+        //  when REQUIRED -> support also required
+        //  when OPTIONAL -> support only required when support method is private
+
+        return of(
+                EncapsulationPolicy.ENCAPSULATED_MEMBERS_SUPPORTED, // support methods are always allowed private
+                memberIntrospectionPolicy.getMemberAnnotationPolicy().isMemberAnnotationsRequired()
+                    ? method->_Annotations.synthesizeInherited(method, Domain.Include.class).isPresent()
+                    : method-> !_Reflect.isAccessible(method)
+                            ? _Annotations.synthesizeInherited(method, Domain.Include.class).isPresent()
+                            : true);
+
     }
 
     public static MethodFinderOptions objectSupport(
@@ -91,7 +105,7 @@ public class MethodFinderOptions {
         return of(
                 memberIntrospectionPolicy.getEncapsulationPolicy(),
                 memberIntrospectionPolicy.getMemberAnnotationPolicy().isMemberAnnotationsRequired()
-                    ? method->_Annotations.synthesize(method, associatedAnnotationType).isPresent()
+                    ? method->_Annotations.synthesizeInherited(method, associatedAnnotationType).isPresent()
                     : _Predicates.alwaysTrue());
     }
 

@@ -21,35 +21,40 @@ package org.apache.isis.core.metamodel.methods;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.Domain;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.commons.internal.reflection._MethodCache;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelVisitingValidatorAbstract;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
+import lombok.val;
+
 /**
  * @since 2.0
- * @see MemberSupport
+ * @see org.apache.isis.applib.annotation.Domain.Include
  */
-public class MemberSupportAnnotationEnforcesSupportingMethodValidator
+public class DomainIncludeAnnotationEnforcesMetamodelContributionValidator
 extends MetaModelVisitingValidatorAbstract {
 
     private final _MethodCache methodCache;
 
     @Inject
-    public MemberSupportAnnotationEnforcesSupportingMethodValidator(final MetaModelContext mmc) {
+    public DomainIncludeAnnotationEnforcesMetamodelContributionValidator(final MetaModelContext mmc) {
         super(mmc);
         this.methodCache = _MethodCache.getInstance();
     }
@@ -57,32 +62,57 @@ extends MetaModelVisitingValidatorAbstract {
     @Override
     public void validate(final ObjectSpecification spec) {
 
-        if(spec.isManagedBean()) {
+        if(spec.isManagedBean()
+                || spec.isAbstract()) {
             return;
         }
 
         final Class<?> type = spec.getCorrespondingClass();
 
-        // methods known to the meta-model
-        final HashSet<Method> recognizedMethods = spec.streamFacetHolders()
-                .flatMap(FacetHolder::streamFacets)
-                .filter(ImperativeFacet.class::isInstance)
-                .map(ImperativeFacet.class::cast)
-                .map(ImperativeFacet::getMethods)
-                .flatMap(Can::stream)
-                .collect(Collectors.toCollection(HashSet::new));
+        // assuming equality by member name (this vs. super)
+        val recognizedMemberMethodNames = new HashSet<String>();
+
+        spec
+        .streamAnyActions(MixedIn.EXCLUDED)
+        .map(ObjectMemberAbstract.class::cast)
+        .map(ObjectMemberAbstract::getFacetedMethod)
+        .map(FacetedMethod::getMethod)
+        .map(Method::getName)
+        .forEach(recognizedMemberMethodNames::add);
+
+        spec
+        .streamAssociations(MixedIn.EXCLUDED)
+        .map(ObjectMemberAbstract.class::cast)
+        .map(ObjectMemberAbstract::getFacetedMethod)
+        .map(FacetedMethod::getMethod)
+        .map(Method::getName)
+        .forEach(recognizedMemberMethodNames::add);
+
+        // support methods known to the meta-model
+        val recognizedSupportMethods = new HashSet<Method>();
+
+        spec
+        .streamFacetHolders()
+        .flatMap(FacetHolder::streamFacets)
+        .filter(ImperativeFacet.class::isInstance)
+        .map(ImperativeFacet.class::cast)
+        .map(ImperativeFacet::getMethods)
+        .flatMap(Can::stream)
+        .forEach(recognizedSupportMethods::add);
 
         // methods intended to be included with the meta-model
-        final HashSet<Method> intendedMethods = _Sets.<Method>newHashSet();
+        val notRecognizedMethods = _Sets.<Method>newHashSet();
 
-        methodCache.streamDeclaredMethods(type)
-        //FIXME add meta-annotation support: perhaps a feature for the methodCache?
-        .filter(method->method.getDeclaredAnnotation(MemberSupport.class)!=null)
-        .forEach(intendedMethods::add);
-
+        methodCache
         // methods intended to be included with the meta-model but missing
-        final Set<Method> notRecognizedMethods =
-                _Sets.minus(intendedMethods, recognizedMethods);
+        .streamDeclaredMethodsHaving(
+                type,
+                "domain-include",
+                method->_Annotations.synthesizeInherited(method, Domain.Include.class).isPresent())
+        // filter away those that are recognized
+        .filter(intendedMethod->!recognizedSupportMethods.contains(intendedMethod))
+        .filter(intendedMethod->!recognizedMemberMethodNames.contains(intendedMethod.getName()))
+        .forEach(notRecognizedMethods::add);
 
         // find reasons about why these are not recognized
         notRecognizedMethods.forEach(notRecognizedMethod->{
@@ -95,7 +125,7 @@ extends MetaModelVisitingValidatorAbstract {
                     messageFormat,
                     spec.getFeatureIdentifier().getClassName(),
                     notRecognizedMethod.getName(),
-                    MemberSupport.class.getSimpleName(),
+                    "Domain.Include",
                     unmetContraints.stream()
                     .collect(Collectors.joining("; ")));
         });

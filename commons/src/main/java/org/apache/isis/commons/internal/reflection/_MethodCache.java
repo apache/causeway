@@ -21,6 +21,7 @@ package org.apache.isis.commons.internal.reflection;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.apache.isis.commons.collections.Can;
@@ -70,7 +71,8 @@ public final class _MethodCache implements AutoCloseable {
 
     /**
      * Variant of {@link #lookupPublicMethod(Class, String, Class[])}
-     * that in addition looks up declared methods. (including non-public, but not including inherited ones)
+     * that in addition looks up declared methods. (including non-public,
+     * but not including inherited non-public ones)
      */
     public Method lookupPublicOrDeclaredMethod(final Class<?> type, final String name, final Class<?>[] paramTypes) {
         return lookupMethod(true, type, name, paramTypes);
@@ -91,28 +93,52 @@ public final class _MethodCache implements AutoCloseable {
         return inspectType(type).declaredMethods.stream();
     }
 
+    /**
+     * Returns a Stream of declared Methods, that pass the given {@code filter},
+     * while as an optimization, memoizing the result under given
+     * {@code attributeName}.
+     * @param type
+     * @param attributeName
+     * @param filter
+     */
+    public Stream<Method> streamDeclaredMethodsHaving(
+            final Class<?> type,
+            final String attributeName,
+            final Predicate<Method> filter) {
+
+        val methods = inspectType(type);
+
+        synchronized(methods.declaredMethodsByAttribute) {
+            return methods.declaredMethodsByAttribute
+            .computeIfAbsent(attributeName, key->methods.declaredMethods.filter(filter))
+            .stream();
+        }
+    }
+
     // -- IMPLEMENATION DETAILS
 
     @RequiredArgsConstructor
     private static class Methods {
-        private final Map<Key, Method> publicMethodsByKey = new HashMap<>();
-        private final Map<Key, Method> nonPublicDeclaredMethodsByKey  = new HashMap<>();
+        private final Map<MethodKey, Method> publicMethodsByKey = new HashMap<>();
+        private final Map<MethodKey, Method> nonPublicDeclaredMethodsByKey = new HashMap<>();
         private final Can<Method> declaredMethods;
+        private final Map<String, Can<Method>> declaredMethodsByAttribute = new HashMap<>();
     }
 
     private final Map<Class<?>, Methods> inspectedTypes = new HashMap<>();
 
     @AllArgsConstructor(staticName = "of") @EqualsAndHashCode
-    private static final class Key {
-        private final Class<?> type;
-        private final String name;
+    private static final class MethodKey {
+        private final Class<?> type; // method's declaring class
+        private final String name; // method name
         private final Class<?>[] paramTypes;
 
-        public static Key of(final Class<?> type, final Method method) {
-            return Key.of(type, method.getName(), _Arrays.emptyToNull(method.getParameterTypes()));
+        public static MethodKey of(final Class<?> type, final Method method) {
+            return MethodKey.of(type, method.getName(), _Arrays.emptyToNull(method.getParameterTypes()));
         }
 
     }
+
 
     @Override
     public void close() throws Exception {
@@ -133,11 +159,11 @@ public final class _MethodCache implements AutoCloseable {
                 val methods = new Methods(Can.ofArray(declaredMethods));
 
                 for(val method : declaredMethods) {
-                    methods.nonPublicDeclaredMethodsByKey.put(Key.of(type, method), method);
+                    methods.nonPublicDeclaredMethodsByKey.put(MethodKey.of(type, method), method);
                 }
 
                 for(val method : type.getMethods()) {
-                    val key = Key.of(type, method);
+                    val key = MethodKey.of(type, method);
                     methods.publicMethodsByKey.put(key, method);
                     methods.nonPublicDeclaredMethodsByKey.remove(key);
                 }
@@ -156,7 +182,7 @@ public final class _MethodCache implements AutoCloseable {
 
         val methods = inspectType(type);
 
-        val key = Key.of(type, name, _Arrays.emptyToNull(paramTypes));
+        val key = MethodKey.of(type, name, _Arrays.emptyToNull(paramTypes));
 
         val publicMethod = methods.publicMethodsByKey.get(key);
         if(publicMethod!=null) {

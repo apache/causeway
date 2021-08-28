@@ -75,16 +75,41 @@ public final class _Reflect {
 
     // -- PREDICATES
 
-    public static boolean same(final Method method, final Method superMethod) {
-        if(!method.getName().equals(superMethod.getName())) {
+    public static boolean methodsCompatible(final Method a, final Method b) {
+        if(!a.getName().equals(b.getName())) {
             return false;
         }
-        if(method.getParameterCount()!=superMethod.getParameterCount()) {
+        if(a.getParameterCount()!=b.getParameterCount()) {
             return false;
         }
-        return _Arrays.testAllMatch(method.getParameters(), superMethod.getParameters(),
+        return _Arrays.testAllMatch(a.getParameters(), b.getParameters(),
                 (p1, p2)->p1.getType().equals(p2.getType()));
     }
+
+    public static int methodsCompare(final Method a, final Method b) {
+        int c = a.getName().compareTo(b.getName());
+        if(c!=0) {
+            return c;
+        }
+        c = Integer.compare(a.getParameterCount(), b.getParameterCount());
+        if(c!=0) {
+            return c;
+        }
+        val paramsA = a.getParameters();
+        val paramsB = b.getParameters();
+        for(int i=0; i<a.getParameterCount(); ++i) {
+            c = typesCompare(paramsA[i].getType(), paramsB[i].getType());
+            if(c!=0) {
+                return c;
+            }
+        }
+        return 0; // same
+    }
+
+    public static int typesCompare(final Class<?> a, final Class<?> b) {
+        return a.getName().compareTo(b.getName());
+    }
+
 
     /**
      * Returns whether a {@link Member} is accessible.
