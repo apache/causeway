@@ -145,7 +145,7 @@ public class DomainModelValidator {
     /**
      * JUnit support
      */
-    public void assertAnyMatchesContaining(
+    public void assertAnyFailuresContaining(
             final @NonNull Identifier identifier,
             final @NonNull String messageSnippet) {
 
@@ -167,7 +167,7 @@ public class DomainModelValidator {
     /**
      * JUnit support
      */
-    public void assertAnyContainingAnyMatches(
+    public void assertAnyOfContainingAnyFailures(
             final Can<Identifier> classIdentifiers,
             final String messageSnippet) {
 

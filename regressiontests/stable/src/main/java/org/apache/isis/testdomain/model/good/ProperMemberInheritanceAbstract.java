@@ -62,7 +62,7 @@ abstract class ProperMemberInheritanceAbstract {
     public void sampleActionOverride() {
     }
 
-    //FIXME[ISIS-2774] method overriding is not allowed - MM validation must fail, but currently does not?
+    //FIXME[ISIS-2774] method overloading is not allowed - MM validation must fail, but currently does not?
     // move this to the 'bad' domain and check for validation failures
 //    @Action
 //    @ActionLayout(named = "foo", describedAs = "bar")
