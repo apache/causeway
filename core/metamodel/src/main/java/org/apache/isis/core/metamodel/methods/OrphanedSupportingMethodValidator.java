@@ -28,6 +28,7 @@ import javax.inject.Inject;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -86,6 +87,8 @@ extends MetaModelVisitingValidatorAbstract {
 
             val unmetContraints = unmetContraints(spec, notRecognizedMethod);
 
+            //FIXME[ISIS-2774] - update message to a more generic one ?
+            // why are we duplicating DomainIncludeAnnotationEnforcesMetamodelContributionValidator here?
             val messageFormat = "%s#%s: is assumed to support "
                     + "a property, collection or action. Unmet constraint(s): %s";
 
@@ -94,7 +97,7 @@ extends MetaModelVisitingValidatorAbstract {
                     String.format(
                             messageFormat,
                             spec.getFeatureIdentifier().getClassName(),
-                            notRecognizedMethod.getName(),
+                            _Reflect.methodToShortString(notRecognizedMethod),
                             unmetContraints.stream()
                             .collect(Collectors.joining("; "))));
         });

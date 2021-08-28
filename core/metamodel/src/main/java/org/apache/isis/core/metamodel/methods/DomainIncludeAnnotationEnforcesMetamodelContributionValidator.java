@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.methods;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.List;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -31,6 +32,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.commons.internal.reflection._MethodCache;
+import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -69,24 +71,22 @@ extends MetaModelVisitingValidatorAbstract {
 
         final Class<?> type = spec.getCorrespondingClass();
 
-        // assuming equality by member name (this vs. super)
-        val recognizedMemberMethodNames = new HashSet<String>();
+        // assuming 'weak' equality, treating overwritten and overriding methods as same
+        val recognizedMemberMethods = new TreeSet<Method>(_Reflect::methodWeakCompare);
 
         spec
         .streamAnyActions(MixedIn.EXCLUDED)
         .map(ObjectMemberAbstract.class::cast)
         .map(ObjectMemberAbstract::getFacetedMethod)
         .map(FacetedMethod::getMethod)
-        .map(Method::getName)
-        .forEach(recognizedMemberMethodNames::add);
+        .forEach(recognizedMemberMethods::add);
 
         spec
         .streamAssociations(MixedIn.EXCLUDED)
         .map(ObjectMemberAbstract.class::cast)
         .map(ObjectMemberAbstract::getFacetedMethod)
         .map(FacetedMethod::getMethod)
-        .map(Method::getName)
-        .forEach(recognizedMemberMethodNames::add);
+        .forEach(recognizedMemberMethods::add);
 
         // support methods known to the meta-model
         val recognizedSupportMethods = new HashSet<Method>();
@@ -111,20 +111,21 @@ extends MetaModelVisitingValidatorAbstract {
                 method->_Annotations.synthesizeInherited(method, Domain.Include.class).isPresent())
         // filter away those that are recognized
         .filter(intendedMethod->!recognizedSupportMethods.contains(intendedMethod))
-        .filter(intendedMethod->!recognizedMemberMethodNames.contains(intendedMethod.getName()))
+        .filter(intendedMethod->!recognizedMemberMethods.contains(intendedMethod))
         .forEach(notRecognizedMethods::add);
 
         // find reasons about why these are not recognized
         notRecognizedMethods.forEach(notRecognizedMethod->{
-            final List<String>  unmetContraints = unmetContraints(spec, notRecognizedMethod);
+            final List<String> unmetContraints = unmetContraints(spec, notRecognizedMethod);
 
+            //FIXME[ISIS-2774] - update message to a more generic one
             String messageFormat = "%s#%s: has annotation @%s, is assumed to support "
                     + "a property, collection or action. Unmet constraint(s): %s";
             ValidationFailure.raiseFormatted(
                     spec,
                     messageFormat,
                     spec.getFeatureIdentifier().getClassName(),
-                    notRecognizedMethod.getName(),
+                    _Reflect.methodToShortString(notRecognizedMethod),
                     "Domain.Include",
                     unmetContraints.stream()
                     .collect(Collectors.joining("; ")));
@@ -150,7 +151,5 @@ extends MetaModelVisitingValidatorAbstract {
         return unmetContraints;
 
     }
-
-
 
 }

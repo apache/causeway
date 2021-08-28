@@ -83,9 +83,9 @@ class DomainModelTest_usingBadDomain_noActionEnforced {
         val validateDomainModel = new DomainModelValidator(specificationLoader, configuration, isisSystemEnvironment);
 
         assertThrows(DomainModelException.class, validateDomainModel::throwIfInvalid);
-        assertTrue(validateDomainModel.anyMatchesContaining(
+        validateDomainModel.assertAnyMatchesContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedActionSupportNoActionEnforced.class)),
-                "is assumed to support"));
+                "is assumed to support");
     }
 
 
