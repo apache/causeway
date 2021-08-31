@@ -82,7 +82,9 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         .ifPresent(FacetUtil::addFacet);
     }
 
-    private boolean addFacetIfMethodFound(final ProcessClassContext processClassContext, final Class<?> returnType) {
+    private boolean addFacetIfMethodFound(
+            final ProcessClassContext processClassContext,
+            final Class<?> returnType) {
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
