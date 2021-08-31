@@ -56,7 +56,7 @@ class DiagramDialog(
         )
     }
 
-    override fun execute(action:String?) {
+    override fun execute(action: String?) {
         pin()
     }
 
@@ -84,14 +84,35 @@ class DiagramDialog(
 
     fun buildMenu(): List<KvisionHtmlLink> {
         val menu = mutableListOf<KvisionHtmlLink>()
+        menu.add(buildPinAction())
+        menu.add(buildDownloadAction())
+        return menu
+    }
+
+    private fun buildPinAction(): io.kvision.html.Link {
         val action = MenuFactory.buildActionLink(
                 label = "Pin",
                 menuTitle = "Pin")
         action.onClick {
             pin()
         }
-        menu.add(action)
-        return menu
+        return action
+    }
+
+    private fun buildDownloadAction(): io.kvision.html.Link {
+        val action = MenuFactory.buildActionLink(
+                label = "Download",
+                menuTitle = "Download")
+        action.onClick {
+            download()
+        }
+        return action
+    }
+
+    private fun download() {
+        val svgCode = getDiagramCode()
+        DownloadDialog(fileName = "diagram.svg", svgCode).open()
+        dialog.close()
     }
 
 }

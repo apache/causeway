@@ -25,8 +25,6 @@ import org.apache.isis.client.kroviz.core.event.ResourceProxy
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.chart.ChartFactory
 import org.apache.isis.client.kroviz.ui.core.UiManager
-import org.apache.isis.client.kroviz.ui.diagram.LinkTreeDiagram
-import org.apache.isis.client.kroviz.ui.dialog.DiagramDialog
 import org.apache.isis.client.kroviz.ui.dialog.EventExportDialog
 import org.apache.isis.client.kroviz.utils.IconManager
 import org.apache.isis.client.kroviz.utils.StringUtils
@@ -40,7 +38,7 @@ class DynamicMenuBuilder {
             val title = StringUtils.deCamel(it.id)
             val icon = IconManager.find(title)
             val invokeLink = it.getInvokeLink()!!
-            val command =  { ResourceProxy().fetch(invokeLink) }
+            val command = { ResourceProxy().fetch(invokeLink) }
             val me = buildMenuEntry(icon, title, command)
             menu.add(me)
         }
@@ -49,10 +47,6 @@ class DynamicMenuBuilder {
 
     fun buildTableMenu(table: EventLogTable): dynamic {
         val menu = mutableListOf<dynamic>()
-
-        val a1 = buildMenuEntry("Hierarchy", "Link Tree Diagram",
-                { this.linkTreeDiagram() })
-        menu.add(a1)
 
         val a2 = buildMenuEntry("Export", "Export Events ...", {
             EventExportDialog().open()
@@ -80,13 +74,6 @@ class DynamicMenuBuilder {
             label = l
             action = act
         }
-    }
-
-    private fun linkTreeDiagram() {
-        val code = LinkTreeDiagram.build()
-        console.log("[DMB.linkTreeDiagram]")
-        console.log(code)
-        DiagramDialog("Link Tree Diagram", code).open()
     }
 
     private fun downLoadCsv(table: EventLogTable) {

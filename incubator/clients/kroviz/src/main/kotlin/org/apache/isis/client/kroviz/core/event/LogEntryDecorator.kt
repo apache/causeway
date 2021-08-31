@@ -21,41 +21,12 @@ package org.apache.isis.client.kroviz.core.event
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Relation
 import org.apache.isis.client.kroviz.ui.core.Constants
-import org.apache.isis.client.kroviz.utils.StringUtils
 
 class LogEntryDecorator(val logEntry: LogEntry) {
 
-    val href: String
-    val links: List<Link>
-    val linked: List<LogEntry>
-
-    init {
-        href = logEntry.selfHref()
-        links = logEntry.getLinks()
-        linked = EventStore.getLinked()
-    }
-
-    fun findOrphans(children: Set<LogEntry>): Set<String> {
-        console.log("[LED.findOrphans] $href")
-        val kids = children.map { it.url }
-        val orphans = mutableSetOf<String>()
-        links.forEach {
-//            console.log(it)
-            val rel = it.relation()
-            when {
-                (rel == Relation.UP) -> {
-                }
-                (rel == Relation.SELF) -> {
-                }
-                else -> {
-                    val url = it.href
-                    if (!kids.contains(url))
-                        orphans.add(url)
-                }
-            }
-        }
-        return orphans
-    }
+    val href: String = logEntry.selfHref()
+    val links: List<Link> = logEntry.getLinks()
+    val linked: List<LogEntry> = EventStore.getLinked()
 
     fun findChildren(): Set<LogEntry> {
         val children = findChildrenByUpRelation()
@@ -77,7 +48,7 @@ class LogEntryDecorator(val logEntry: LogEntry) {
     }
 
     private fun findChildrenByLinks(): Set<LogEntry> {
-        console.log("[LED.findChildrenByLinks] $href")
+        console.log("[LED.findChildrenByLinks]")
         val children = mutableSetOf<LogEntry>()
         links.forEach {
             console.log(it.toString())
@@ -113,29 +84,30 @@ class LogEntryDecorator(val logEntry: LogEntry) {
         return children
     }
 
-    fun selfType(): String {
-        val selfLink = logEntry.selfLink()
-        if (selfLink != null) {
-            return selfLink.representation().type
-        } else return ""
-    }
-
-    private fun hasUp(): Boolean {
-        links.forEach {
-            if (it.relation() == Relation.UP) {
-                return true
+    fun findChildrenIn(aggregatedList: List<LogEntry>): List<LogEntry> {
+        console.log("[LED.findChildrenIn]")
+        val selfUrl = href
+        val children = mutableListOf<LogEntry>()
+        aggregatedList.forEach {
+            if (it.url != selfUrl && it.response.contains(selfUrl)) {
+                children.add(it)
             }
         }
-        return false
+        return children
     }
 
-    fun hasParent(): Boolean {
-        val answer = hasUp()
-        if (answer) return true
-        return findParent() != null
+    fun selfType(): String {
+        val selfLink = logEntry.selfLink()
+        return if (selfLink != null) {
+            selfLink.representation().type
+        } else {
+            console.log("[LED.selfType]")
+            console.log(logEntry)
+            ""
+        }
     }
 
-    private fun findParent(): LogEntry? {
+    fun findParent(): LogEntry? {
         val url = logEntry.url
         linked.forEach {
             when {
@@ -144,18 +116,6 @@ class LogEntryDecorator(val logEntry: LogEntry) {
             }
         }
         return null
-    }
-
-    fun shortTitle(): String {
-        var result = logEntry.url
-        val signature = Constants.restInfix
-        if (logEntry.url.contains(signature)) {
-            // strip off protocol, host, port
-            //           val protocolHostPort = UiManager.getUrl()
-//            result = result.replace(protocolHostPort + signature, "")
-            result = StringUtils.removeHexCode(result)
-        }
-        return result
     }
 
 }

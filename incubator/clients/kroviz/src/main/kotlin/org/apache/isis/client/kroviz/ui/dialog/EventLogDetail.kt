@@ -18,7 +18,6 @@
  */
 package org.apache.isis.client.kroviz.ui.dialog
 
-import org.apache.isis.client.kroviz.core.aggregator.CollectionAggregator
 import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.core.event.LogEntryDecorator
@@ -30,11 +29,13 @@ import org.apache.isis.client.kroviz.ui.core.FormItem
 import org.apache.isis.client.kroviz.ui.core.RoDialog
 import org.apache.isis.client.kroviz.ui.diagram.JsonDiagram
 import org.apache.isis.client.kroviz.ui.diagram.LayoutDiagram
+import org.apache.isis.client.kroviz.ui.diagram.LinkTreeDiagram
 import org.apache.isis.client.kroviz.utils.StringUtils
 import org.apache.isis.client.kroviz.utils.XmlHelper
 
 class EventLogDetail(val logEntryFromTabulator: LogEntry) : Command() {
     private var logEntry: LogEntry
+    private lateinit var dialog: RoDialog
 
     init {
         // For a yet unknown reason, aggregators are not transmitted via tabulator.
@@ -45,7 +46,7 @@ class EventLogDetail(val logEntryFromTabulator: LogEntry) : Command() {
 
     // callback parameter
     private val LOG: String = "log"
-    private val OBJ: String = "obj"
+    private val LNK: String = "lnk"
 
     fun open() {
         val responseStr = if (logEntry.subType == Constants.subTypeJson) {
@@ -58,23 +59,21 @@ class EventLogDetail(val logEntryFromTabulator: LogEntry) : Command() {
         val children = led.findChildren()
         var kids = ""
         children.forEach { kids += it.url + "\n" }
-        var orphans = ""
-        led.findOrphans(children).forEach { orphans += it + "\n" }
         val formItems = mutableListOf<FormItem>()
         formItems.add(FormItem("Url", ValueType.TEXT, logEntry.title))
         formItems.add(FormItem("Response", ValueType.TEXT_AREA, responseStr, 10))
         formItems.add(FormItem("Aggregators", ValueType.TEXT, content = logEntry.aggregators))
         formItems.add(FormItem("Children", ValueType.TEXT_AREA, kids, size = 5))
-        formItems.add(FormItem("Orphans", ValueType.TEXT_AREA, orphans, size = 5))
-        formItems.add(FormItem("Object Diagram", ValueType.BUTTON, null, callBack = this, callBackAction = OBJ))
+        formItems.add(FormItem("Link Tree Diagram", ValueType.BUTTON, null, callBack = this, callBackAction = LNK))
         formItems.add(FormItem("Console", ValueType.BUTTON, null, callBack = this, callBackAction = LOG))
 
-        RoDialog(
+        dialog = RoDialog(
                 caption = "Details :" + logEntry.title,
                 items = formItems,
                 command = this,
                 defaultAction = "Diagram",
-                widthPerc = 60).open()
+                widthPerc = 60)
+        dialog.open()
     }
 
     override fun execute(action: String?) {
@@ -83,8 +82,8 @@ class EventLogDetail(val logEntryFromTabulator: LogEntry) : Command() {
             action == LOG -> {
                 console.log(logEntry)
             }
-            action == OBJ -> {
-                objectDiagram()
+            action == LNK -> {
+                linkTreeDiagram()
             }
             else -> {
                 console.log(logEntry)
@@ -93,18 +92,12 @@ class EventLogDetail(val logEntryFromTabulator: LogEntry) : Command() {
         }
     }
 
-    private fun objectDiagram() {
+    private fun linkTreeDiagram() {
         logEntry.aggregators.forEach {
-            console.log(it)
-            if (it is CollectionAggregator) {
-                val displayModel = it.dpm
-                // https://github.com/moll/json-stringify-safe/blob/master/stringify.js
-                val jsonStr = JSON.stringify(displayModel)
-                console.log(jsonStr)
-                val pumlCode = JsonDiagram.build(jsonStr)
-                DiagramDialog("Object Diagram", pumlCode).open()
-            }
+            val code = LinkTreeDiagram.build(it)
+            DiagramDialog("Link Tree Diagram", code).open()
         }
+        dialog.close()
     }
 
     private fun defaultAction() {
@@ -118,7 +111,7 @@ class EventLogDetail(val logEntryFromTabulator: LogEntry) : Command() {
                 JsonDiagram.build(str)
             else -> "{}"
         }
-        DiagramDialog("Response Diagram", pumlCode).open()
+        DiagramDialog("Layout Diagram", pumlCode).open()
     }
 
 }

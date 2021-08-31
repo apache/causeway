@@ -250,6 +250,11 @@ data class LogEntry(
         return null
     }
 
+    fun upLink(): Link? {
+        getLinks().forEach { if (it.relation() == Relation.UP) return it }
+        return null
+    }
+
     fun getLinks(): List<Link> {
         return if (obj is HasLinks) {
             (obj as HasLinks).getLinks()

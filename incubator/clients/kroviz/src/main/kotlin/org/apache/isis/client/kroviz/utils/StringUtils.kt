@@ -21,6 +21,7 @@ package org.apache.isis.client.kroviz.utils
 import org.apache.isis.client.kroviz.to.Argument
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.TObject
+import org.apache.isis.client.kroviz.ui.core.Constants
 
 object StringUtils {
 
@@ -60,6 +61,17 @@ object StringUtils {
         // Skip acronyms like OK, USA
         val outputWithoutWhiteSpace = output.replace("\\s".toRegex(), "")
         return if (input == outputWithoutWhiteSpace) input else output
+    }
+
+    fun shortTitle(url: String, protocolHostPort: String): String {
+        var title = url
+        val signature = Constants.restInfix
+        if (title.contains(signature)) {
+            // strip off protocol, host, port
+            title = title.replace(protocolHostPort + signature, "")
+            title = StringUtils.removeHexCode(title)
+        }
+        return title
     }
 
     fun removeHexCode(input: String): String {
