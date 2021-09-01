@@ -21,6 +21,7 @@ package org.apache.isis.testdomain.model.good;
 import java.io.Serializable;
 import java.util.List;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -87,7 +88,7 @@ implements Serializable {
 
     // allowed to be private since 2.0.0-M7
     @MemberSupport//FIXME[ISIS-2774] be more specific, don't allow @MemberSupport
-    private String disabled() {
+    private String disabled(final Identifier.Type type) {
         return "object disabled for testing purposes";
     }
 

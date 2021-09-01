@@ -64,24 +64,4 @@ public class ObjectHiddenMethodFacetFactoryTest extends AbstractFacetFactoryTest
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(hiddenMethod));
     }
 
-    public void testHiddenMethodPickedUpAndMethodRemovedBooleanClass() {
-        class Customer {
-            @SuppressWarnings("unused")
-            public Boolean hidden() {
-                return true;
-            }
-        }
-        final Method hiddenMethod = findMethod(Customer.class, "hidden");
-
-        final ProcessClassContext processClassContext = ProcessClassContext
-                .forTesting(Customer.class, methodRemover, facetHolder);
-        facetFactory.process(processClassContext);
-
-        final Facet facet = facetHolder.getFacet(HiddenObjectFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof HiddenObjectFacetViaMethod);
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(hiddenMethod));
-    }
-
 }
