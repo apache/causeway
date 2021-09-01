@@ -53,11 +53,11 @@ import lombok.val;
 public class DisabledObjectFacetViaMethodFactory
 extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.DISABLED);
+    private static final String METHOD_NAME = MethodLiteralConstants.DISABLED;
 
     @Inject
     public DisabledObjectFacetViaMethodFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.EVERYTHING_BUT_PARAMETERS, OrphanValidation.VALIDATE, PREFIXES);
+        super(mmc, FeatureType.EVERYTHING_BUT_PARAMETERS, OrphanValidation.VALIDATE, Can.ofSingleton(METHOD_NAME));
     }
 
     @Override
@@ -70,7 +70,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
                 MethodFinderOptions
                 .objectSupport(processClassContext.getIntrospectionPolicy()),
                 cls,
-                MethodLiteralConstants.DISABLED,
+                METHOD_NAME,
                 paramTypes);
         if (method == null) {
             return;
@@ -80,7 +80,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         // sadness: same logic as in I18nFacetFactory
         val translationContext = TranslationContext.forMethod(method);
 
-        FacetUtil.addFacet(new DisabledObjectFacetViaMethod(method, translationService, translationContext, facetHolder));
+        addFacet(new DisabledObjectFacetViaMethod(method, translationService, translationContext, facetHolder));
 
         processClassContext.removeMethod(method);
     }

@@ -62,12 +62,12 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
 
         // attach ActionParameterDisabledFacet if disableNumMethod is found ...
 
-        val namingConvention = processMethodContext.parameterSupportCandidates(PREFIX);
+        val methodNameCandidates = processMethodContext.parameterSupportCandidates(PREFIX);
 
         val searchRequest = ParameterSupport.ParamSupportingMethodSearchRequest.builder()
                 .processMethodContext(processMethodContext)
                 .returnType(ReturnType.TEXT)
-                .paramIndexToMethodNameProviders(namingConvention)
+                .paramIndexToMethodNameProviders(methodNameCandidates)
                 .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.SWEEP))
                 .build();
 

@@ -129,7 +129,7 @@ public enum Introspection {
 
     /**
      * Effectively applies on a per class basis, when introspecting
-     * meta-model members and member-support methods.
+     * class members for the meta-model.
      */
     public static enum MemberAnnotationPolicy {
         MEMBER_ANNOTATIONS_REQUIRED,

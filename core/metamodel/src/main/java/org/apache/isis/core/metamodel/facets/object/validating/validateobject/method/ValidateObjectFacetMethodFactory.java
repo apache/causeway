@@ -55,7 +55,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
                 MethodFinderOptions
                 .objectSupport(processClassContext.getIntrospectionPolicy()),
                 cls,
-                MethodLiteralConstants.VALIDATE_PREFIX,
+                PREFIX,
                 NO_ARG);
         if (method != null) {
             val translationService = getTranslationService();

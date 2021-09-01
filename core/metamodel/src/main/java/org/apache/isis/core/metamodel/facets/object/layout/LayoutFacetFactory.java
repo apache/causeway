@@ -33,10 +33,10 @@ import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstr
 public class LayoutFacetFactory
 extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.LAYOUT);
+    private static final String PREFIX = MethodLiteralConstants.LAYOUT;
 
     public LayoutFacetFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
+        super(mmc, FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
     }
 
     @Override
@@ -47,7 +47,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         final Method method = MethodFinderUtils.findMethod(
                 MethodFinderOptions
                 .layoutSupport(processClassContext.getIntrospectionPolicy()),
-                cls, MethodLiteralConstants.LAYOUT, String.class, NO_ARG);
+                cls, PREFIX, String.class, NO_ARG);
 
         final LayoutFacet layoutFacet;
         if (method == null) {

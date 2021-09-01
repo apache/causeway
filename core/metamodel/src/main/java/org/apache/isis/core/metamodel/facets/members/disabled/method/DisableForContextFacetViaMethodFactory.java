@@ -57,7 +57,7 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
 
         Method disableMethod = null;
 
-        val namingConvention = processMethodContext.memberSupportCandidates(PREFIX);
+        val methodNameCandidates = processMethodContext.memberSupportCandidates(PREFIX);
 
         boolean noParamsOnly = getConfiguration().getCore().getMetaModel().getValidator().isNoParamsOnly();
         boolean searchExactMatch = !noParamsOnly;
@@ -67,7 +67,7 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
                     MethodFinderOptions
                     .memberSupport(processMethodContext.getIntrospectionPolicy()),
                     cls,
-                    namingConvention,
+                    methodNameCandidates,
                     actionOrGetter.getParameterTypes())
                     .findFirst()
                     .orElse(null);
@@ -78,7 +78,7 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
                     MethodFinderOptions
                     .memberSupport(processMethodContext.getIntrospectionPolicy()),
                     cls,
-                    namingConvention,
+                    methodNameCandidates,
                     NO_ARG)
                     .findFirst()
                     .orElse(null);

@@ -33,11 +33,11 @@ import lombok.val;
 
 public class CreatedCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.CREATED_PREFIX);
+    private static final String PREFIX = MethodLiteralConstants.CREATED_PREFIX;
 
     @Inject
     public CreatedCallbackFacetFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
+        super(mmc, FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
     }
 
     @Override
@@ -49,7 +49,7 @@ public class CreatedCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAb
                 .findMethod(
                         MethodFinderOptions
                         .livecycleCallback(processClassContext.getIntrospectionPolicy()),
-                        cls, MethodLiteralConstants.CREATED_PREFIX, void.class, NO_ARG);
+                        cls, PREFIX, void.class, NO_ARG);
 
         if (method != null) {
             addFacet(new CreatedCallbackFacetViaMethod(method, facetHolder));

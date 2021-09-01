@@ -55,35 +55,26 @@ public class MethodFinderOptions {
 
     public static MethodFinderOptions memberSupport(
             final IntrospectionPolicy memberIntrospectionPolicy) {
-        //return havingAnnotation(memberIntrospectionPolicy, MemberSupport.class);
-
-        //MemberAnnotationPolicy
-        //  when REQUIRED -> support also required
-        //  when OPTIONAL -> support only required when support method is private
-
-        return of(
-                EncapsulationPolicy.ENCAPSULATED_MEMBERS_SUPPORTED, // support methods are always allowed private
-                memberIntrospectionPolicy.getMemberAnnotationPolicy().isMemberAnnotationsRequired()
-                    ? method->_Annotations.synthesizeInherited(method, Domain.Include.class).isPresent()
-                    : method-> !_Reflect.isAccessible(method)
-                            ? _Annotations.synthesizeInherited(method, Domain.Include.class).isPresent()
-                            : true);
-
+        return havingAnnotationIfEnforcedByPolicyOrAccessibility(
+                memberIntrospectionPolicy, Domain.Include.class);
     }
 
     public static MethodFinderOptions objectSupport(
             final IntrospectionPolicy memberIntrospectionPolicy) {
-        return havingAnyOrNoAnnotation(memberIntrospectionPolicy);
+        return havingAnnotationIfEnforcedByPolicyOrAccessibility(
+                memberIntrospectionPolicy, Domain.Include.class);
     }
 
     public static MethodFinderOptions livecycleCallback(
             final IntrospectionPolicy memberIntrospectionPolicy) {
-        return havingAnyOrNoAnnotation(memberIntrospectionPolicy);
+        return havingAnnotationIfEnforcedByPolicyOrAccessibility(
+                memberIntrospectionPolicy, Domain.Include.class);
     }
 
     public static MethodFinderOptions layoutSupport(
             final IntrospectionPolicy memberIntrospectionPolicy) {
-        return havingAnyOrNoAnnotation(memberIntrospectionPolicy);
+        return havingAnnotationIfEnforcedByPolicyOrAccessibility(
+                memberIntrospectionPolicy, Domain.Include.class);
     }
 
     private final EncapsulationPolicy encapsulationPolicy;
@@ -98,15 +89,33 @@ public class MethodFinderOptions {
                 _Predicates.alwaysTrue());
     }
 
-
-    private static MethodFinderOptions havingAnnotation(
+    private static MethodFinderOptions havingAnnotationIfEnforcedByPolicyOrAccessibility(
             final IntrospectionPolicy memberIntrospectionPolicy,
-            final Class<? extends Annotation> associatedAnnotationType) {
+            final Class<? extends Annotation> annotationType) {
+
+        //MemberAnnotationPolicy
+        //  when REQUIRED -> annot. on support also required
+        //  when OPTIONAL -> annot. on support only required when support method is private
+
         return of(
-                memberIntrospectionPolicy.getEncapsulationPolicy(),
+                EncapsulationPolicy.ENCAPSULATED_MEMBERS_SUPPORTED, // support methods are always allowed private
                 memberIntrospectionPolicy.getMemberAnnotationPolicy().isMemberAnnotationsRequired()
-                    ? method->_Annotations.synthesizeInherited(method, associatedAnnotationType).isPresent()
-                    : _Predicates.alwaysTrue());
+                    ? method->_Annotations.synthesizeInherited(method, annotationType).isPresent()
+                    : method-> !_Reflect.isAccessible(method)
+                            ? _Annotations.synthesizeInherited(method, annotationType).isPresent()
+                            : true);
+
     }
+
+
+//    private static MethodFinderOptions havingAnnotation(
+//            final IntrospectionPolicy memberIntrospectionPolicy,
+//            final Class<? extends Annotation> associatedAnnotationType) {
+//        return of(
+//                memberIntrospectionPolicy.getEncapsulationPolicy(),
+//                memberIntrospectionPolicy.getMemberAnnotationPolicy().isMemberAnnotationsRequired()
+//                    ? method->_Annotations.synthesizeInherited(method, associatedAnnotationType).isPresent()
+//                    : _Predicates.alwaysTrue());
+//    }
 
 }

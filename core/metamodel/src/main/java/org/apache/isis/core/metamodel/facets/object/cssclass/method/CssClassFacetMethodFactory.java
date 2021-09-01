@@ -34,11 +34,11 @@ import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstr
 public class CssClassFacetMethodFactory
 extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.CSS_CLASS);
+    private static final String PREFIX = MethodLiteralConstants.CSS_CLASS;
 
     @Inject
     public CssClassFacetMethodFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
+        super(mmc, FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
     }
 
     @Override
@@ -49,7 +49,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         final Method method = MethodFinderUtils.findMethod(
                 MethodFinderOptions
                 .layoutSupport(processClassContext.getIntrospectionPolicy()),
-                cls, MethodLiteralConstants.CSS_CLASS, String.class, NO_ARG);
+                cls, PREFIX, String.class, NO_ARG);
         if (method == null) {
             return;
         }

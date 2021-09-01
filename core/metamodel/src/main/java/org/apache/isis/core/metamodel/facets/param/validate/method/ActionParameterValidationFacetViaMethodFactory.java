@@ -62,12 +62,12 @@ public class ActionParameterValidationFacetViaMethodFactory extends MethodPrefix
         // attach ActionParameterValidationFacet if validateNumMethod is found ...
         // in any case single-arg, either same as param-type or PPM style
 
-        val namingConvention = processMethodContext.parameterSupportCandidates(PREFIX);
+        val methodNameCandidates = processMethodContext.parameterSupportCandidates(PREFIX);
 
         val searchRequest = ParameterSupport.ParamSupportingMethodSearchRequest.builder()
                 .processMethodContext(processMethodContext)
                 .returnType(ReturnType.TEXT)
-                .paramIndexToMethodNameProviders(namingConvention)
+                .paramIndexToMethodNameProviders(methodNameCandidates)
                 .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.SINGLEARG_BEING_PARAMTYPE))
                 .build();
 

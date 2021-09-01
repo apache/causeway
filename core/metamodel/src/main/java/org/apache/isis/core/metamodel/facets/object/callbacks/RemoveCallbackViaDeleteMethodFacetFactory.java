@@ -39,12 +39,11 @@ import lombok.val;
 public class RemoveCallbackViaDeleteMethodFacetFactory
 extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final Can<String> PREFIXES = Can.of(
-            MethodLiteralConstants.DELETING_PREFIX);
+    private static final String PREFIX = MethodLiteralConstants.DELETING_PREFIX;
 
     @Inject
     public RemoveCallbackViaDeleteMethodFacetFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
+        super(mmc, FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
     }
 
     @Override
@@ -57,7 +56,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         method = MethodFinderUtils.findMethod(
                 MethodFinderOptions
                 .livecycleCallback(processClassContext.getIntrospectionPolicy()),
-                cls, MethodLiteralConstants.DELETING_PREFIX, void.class, NO_ARG);
+                cls, PREFIX, void.class, NO_ARG);
         if (method != null) {
             processClassContext.removeMethod(method);
             final RemovingCallbackFacet facet = facetHolder.getFacet(RemovingCallbackFacet.class);

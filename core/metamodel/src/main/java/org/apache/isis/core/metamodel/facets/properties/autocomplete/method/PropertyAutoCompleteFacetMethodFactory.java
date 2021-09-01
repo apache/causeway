@@ -59,7 +59,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         }
 
         val getterOrMixinMain = processMethodContext.getMethod();
-        val namingConvention = processMethodContext.memberSupportCandidates(PREFIX);
+        val methodNameCandidates = processMethodContext.memberSupportCandidates(PREFIX);
 
         val cls = processMethodContext.getCls();
         val returnType = getterOrMixinMain.getReturnType();
@@ -68,7 +68,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
                         MethodFinderOptions
                         .memberSupport(processMethodContext.getIntrospectionPolicy()),
                         cls,
-                        namingConvention,
+                        methodNameCandidates,
                         NO_RETURN,
                         STRING_ARG)
                 .findFirst()

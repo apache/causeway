@@ -57,7 +57,7 @@ public class PropertyChoicesFacetViaMethodFactory extends MethodPrefixBasedFacet
         }
 
         val getterOrMixinMain = processMethodContext.getMethod();
-        val namingConvention = processMethodContext.memberSupportCandidates(PREFIX);
+        val methodNameCandidates = processMethodContext.memberSupportCandidates(PREFIX);
 
         val cls = processMethodContext.getCls();
         val returnType = getterOrMixinMain.getReturnType();
@@ -66,7 +66,7 @@ public class PropertyChoicesFacetViaMethodFactory extends MethodPrefixBasedFacet
                         MethodFinderOptions
                         .memberSupport(processMethodContext.getIntrospectionPolicy()),
                     cls,
-                    namingConvention,
+                    methodNameCandidates,
                     NO_RETURN,
                     NO_ARG)
                 .findFirst()

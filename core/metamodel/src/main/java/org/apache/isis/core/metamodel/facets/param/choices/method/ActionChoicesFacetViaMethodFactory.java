@@ -85,13 +85,13 @@ extends MethodPrefixBasedFacetFactoryAbstract {
             final Class<?> returnType) {
 
         val cls = processMethodContext.getCls();
-        val namingConvention = processMethodContext.memberSupportCandidates(PREFIX);
+        val methodNameCandidates = processMethodContext.memberSupportCandidates(PREFIX);
 
         Method choicesMethod =
                 MethodFinder.findMethod(
                         MethodFinderOptions
                         .memberSupport(processMethodContext.getIntrospectionPolicy()),
-                        cls, namingConvention, returnType, NO_ARG)
+                        cls, methodNameCandidates, returnType, NO_ARG)
                 .findFirst()
                 .orElse(null);
         return choicesMethod;

@@ -36,11 +36,11 @@ import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstr
 public class IconFacetMethodFactory
 extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.ICON_NAME);
+    private static final String PREFIX = MethodLiteralConstants.ICON_NAME;
 
     @Inject
     public IconFacetMethodFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
+        super(mmc, FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
     }
 
     @Override
@@ -51,7 +51,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         final Method method = MethodFinderUtils.findMethod(
                 MethodFinderOptions
                 .layoutSupport(processClassContext.getIntrospectionPolicy()),
-                cls, MethodLiteralConstants.ICON_NAME, String.class, NO_ARG);
+                cls, PREFIX, String.class, NO_ARG);
         if (method == null) {
             return;
         }

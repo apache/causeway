@@ -54,11 +54,11 @@ import lombok.val;
 public class HiddenObjectFacetViaMethodFactory
 extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.HIDDEN);
+    private static final String METHOD_NAME = MethodLiteralConstants.HIDDEN;
 
     @Inject
     public HiddenObjectFacetViaMethodFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.EVERYTHING_BUT_PARAMETERS, OrphanValidation.VALIDATE, PREFIXES);
+        super(mmc, FeatureType.EVERYTHING_BUT_PARAMETERS, OrphanValidation.VALIDATE, Can.ofSingleton(METHOD_NAME));
     }
 
     @Override
@@ -91,7 +91,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         final Method method = MethodFinderUtils.findMethod(
                 MethodFinderOptions
                 .objectSupport(processClassContext.getIntrospectionPolicy()),
-                cls, MethodLiteralConstants.HIDDEN, returnType, NO_ARG);
+                cls, METHOD_NAME, returnType, NO_ARG);
         if (method == null) {
             return false;
         }

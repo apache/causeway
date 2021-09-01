@@ -36,12 +36,11 @@ import lombok.val;
 public class LoadCallbackFacetFactory
 extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final Can<String> PREFIXES = Can.of(
-            MethodLiteralConstants.LOADED_PREFIX);
+    private static final String PREFIX = MethodLiteralConstants.LOADED_PREFIX;
 
     @Inject
     public LoadCallbackFacetFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
+        super(mmc, FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
     }
 
     @Override
@@ -52,7 +51,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         Method method = MethodFinderUtils.findMethod(
                 MethodFinderOptions
                 .livecycleCallback(processClassContext.getIntrospectionPolicy()),
-                cls, MethodLiteralConstants.LOADED_PREFIX, void.class, NO_ARG);
+                cls, PREFIX, void.class, NO_ARG);
         if (method != null) {
             processClassContext.removeMethod(method);
             addFacet(new LoadedCallbackFacetViaMethod(method, facetHolder));

@@ -54,14 +54,14 @@ extends MethodPrefixBasedFacetFactoryAbstract {
 
         final Method actionOrGetter = processMethodContext.getMethod();
 
-        val namingConvention = processMethodContext.memberSupportCandidates(PREFIX);
+        val methodNameCandidates = processMethodContext.memberSupportCandidates(PREFIX);
 
         val cls = processMethodContext.getCls();
         Method hideMethod = MethodFinder.findMethod(
                 MethodFinderOptions
                 .memberSupport(processMethodContext.getIntrospectionPolicy()),
                 cls,
-                namingConvention,
+                methodNameCandidates,
                 boolean.class,
                 NO_ARG)
                 .findFirst()
@@ -75,7 +75,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
                         MethodFinderOptions
                         .memberSupport(processMethodContext.getIntrospectionPolicy()),
                         cls,
-                        namingConvention,
+                        methodNameCandidates,
                         boolean.class,
                         actionOrGetter.getParameterTypes())
                         .findFirst()
