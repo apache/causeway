@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.object.recreatable;
 
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
-import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 
@@ -54,24 +53,7 @@ extends RecreatableObjectFacetAbstract {
         return encoded;
     }
 
-    @Override
-    public boolean isCloneable(final Object pojo) {
-        return true;
-    }
-
-    @Override
-    public boolean isImplicitlyImmutable() {
-        return false;
-    }
-
-    @Override
-    public <T> T cloneViewModelPojo(final T pojo) {
-        final String xml = getJaxbService().toXml(pojo);
-        final Object cloned = getJaxbService().fromXml(pojo.getClass(), xml);
-        return _Casts.uncheckedCast(
-                getServiceInjector().injectServicesInto(cloned));
-    }
-
+    // -- DEPENDENCIES
 
     private JaxbService getJaxbService() {
         return getServiceRegistry().lookupServiceElseFail(JaxbService.class);

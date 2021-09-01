@@ -152,7 +152,6 @@ import org.apache.isis.core.metamodel.postprocessors.members.TweakDomainEventsFo
 import org.apache.isis.core.metamodel.postprocessors.members.navigation.DeriveNavigationFacetFromHiddenTypePostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.object.DeriveProjectionFacetsPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.properties.DeriveDisabledFromImmutablePostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.properties.DeriveDisabledFromViewModelPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.propparam.DeriveChoicesFromExistingChoicesPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.propparam.DeriveDefaultFromTypePostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.propparam.DeriveTypicalLengthFromTypePostProcessor;
@@ -391,7 +390,6 @@ extends ProgrammingModelAbstract {
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DeriveDefaultFromTypePostProcessor(mmc));
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DeriveChoicesFromExistingChoicesPostProcessor(mmc));
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DeriveDisabledFromImmutablePostProcessor(mmc));
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DeriveDisabledFromViewModelPostProcessor(mmc));
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DeriveCollectionParamDefaultsAndChoicesPostProcessor(mmc));
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new TweakDomainEventsForMixinPostProcessor(mmc));
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DeriveProjectionFacetsPostProcessor(mmc));

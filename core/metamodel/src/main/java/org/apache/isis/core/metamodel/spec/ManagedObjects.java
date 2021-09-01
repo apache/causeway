@@ -55,7 +55,6 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.facets.object.entity.PersistenceStandard;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
@@ -215,34 +214,6 @@ public final class ManagedObjects {
         }
 
     };
-
-    // -- COPY UTILITIES
-
-    /**
-     * Optionally returns a new ManagedObject wrapping a clone of the given ViewModel,
-     * with injection points resolved,
-     * based on whether given {@code viewModel} is a clone-able ViewModel.
-     */
-    @Nullable
-    public static Optional<ManagedObject> copyViewModel(final @Nullable ManagedObject viewModel) {
-
-        if(viewModel==null) {
-            return Optional.empty();
-        }
-
-        val viewModelFacet = viewModel.getSpecification().getFacet(ViewModelFacet.class);
-        if(viewModelFacet != null) {
-            val viewModelPojo = viewModel.getPojo();
-            if(viewModelFacet.isCloneable(viewModelPojo)) {
-                return Optional.of(ManagedObject.of(
-                        viewModel.getSpecification(),
-                        viewModelFacet.cloneViewModelPojo(viewModelPojo)));
-            }
-        }
-
-        return Optional.empty();
-
-    }
 
     // -- DEFAULTS UTILITIES
 

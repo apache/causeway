@@ -39,7 +39,6 @@ import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySe
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
@@ -232,10 +231,7 @@ implements
                             oldValuePojo, actualNewValue);
                 }
 
-                val targetManagedObjectPossiblyCloned =
-                        ManagedObjects.copyViewModel(head.getTarget()).orElse(head.getTarget());
-
-                return targetManagedObjectPossiblyCloned.getPojo();
+                return head.getTarget().getPojo();
 
                 //
                 // REVIEW: the corresponding action has a whole bunch of error handling here.

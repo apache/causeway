@@ -47,12 +47,10 @@ import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
 import org.apache.isis.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.object.wizard.WizardFacet;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -252,16 +250,6 @@ implements FacetHolder {
     }
 
     // -- PREDICATES
-
-    @Override
-    public boolean isViewModelCloneable(final ManagedObject targetAdapter) {
-        final ViewModelFacet facet = getFacet(ViewModelFacet.class);
-        if(facet == null) {
-            return false;
-        }
-        final Object pojo = targetAdapter.getPojo();
-        return facet.isCloneable(pojo);
-    }
 
     @Override
     public boolean isWizard() {

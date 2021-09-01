@@ -19,7 +19,6 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -163,14 +162,11 @@ implements PropertyUiModel {
      * Apply changes to the underlying adapter (possibly returning a new adapter).
      *
      * @return adapter, which may be different from the original
-     *  (specifically, if operating on a {@link ViewModelFacet#isCloneable(Object) cloneable} view model, for example.
      */
     public ManagedObject applyValue() {
-
         val proposedNewValue = getObject();
         getManagedProperty().modifyProperty(proposedNewValue);
         return getManagedProperty().getOwner();
-
     }
 
     @Override

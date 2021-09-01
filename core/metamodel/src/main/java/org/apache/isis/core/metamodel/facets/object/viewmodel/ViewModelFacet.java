@@ -102,26 +102,4 @@ public interface ViewModelFacet extends Facet {
      */
     String memento(Object viewModelPojo);
 
-    /**
-     * Whether {@link #cloneViewModelPojo(Object)} can be called.
-     */
-    boolean isCloneable(Object viewModelPojo);
-
-    /**
-     * Whether can infer the view model is immutable or not.
-     *
-     * <p>
-     *     Equivalent to {@link #isCloneable(Object)}, but at the class rather than object level.
-     * </p>
-     */
-    boolean isImplicitlyImmutable();
-
-    /**
-     * View models are implicitly immutable (their state is determined by their {@link #memento(Object)}), so this
-     * method allows the framework to clone an existing view model to mutate it, thereby simulating editable
-     * view models.
-     * @return a clone of the argument with injection points resolved
-     */
-    <T> T cloneViewModelPojo(T viewModelPojo);
-
 }

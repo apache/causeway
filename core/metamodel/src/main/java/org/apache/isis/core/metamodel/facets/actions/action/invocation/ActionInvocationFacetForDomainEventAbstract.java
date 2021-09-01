@@ -43,7 +43,6 @@ import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFa
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -166,21 +165,6 @@ implements ImperativeFacet {
         }
     }
 
-    private ManagedObject cloneIfViewModelCloneable(
-            final Object resultPojo,
-            final ManagedObject targetAdapter) {
-
-        // to remove boilerplate from the domain, we automatically clone the returned object if it is a view model.
-
-        if (resultPojo != null) {
-            final ManagedObject resultAdapter = getObjectManager().adapt(resultPojo);
-            return ManagedObjects.copyViewModel(resultAdapter).orElse(resultAdapter);
-        } else {
-            // if void or null, attempt to clone the original target, else return null.
-            return ManagedObjects.copyViewModel(targetAdapter).orElse(null);
-        }
-    }
-
     private QueryResultsCache getQueryResultsCache() {
         return serviceRegistry.lookupServiceElseFail(QueryResultsCache.class);
     }
@@ -229,8 +213,6 @@ implements ImperativeFacet {
 
                 // invoke method
                 val resultPojo = invokeMethodElseFromCache(head, argumentAdapters);
-                ManagedObject resultAdapterPossiblyCloned =
-                        cloneIfViewModelCloneable(resultPojo, head.getTarget());
 
                 // ... post the executed event
 
@@ -238,14 +220,9 @@ implements ImperativeFacet {
                         AbstractDomainEvent.Phase.EXECUTED,
                         actionDomainEvent,
                         owningAction, owningAction, head, argumentAdapters,
-                        resultAdapterPossiblyCloned);
+                        resultPojo);
 
-                final Object returnValue = actionDomainEvent.getReturnValue();
-                if(returnValue != resultPojo) {
-                    resultAdapterPossiblyCloned =
-                            cloneIfViewModelCloneable(returnValue, head.getTarget());
-                }
-                return UnwrapUtil.single(resultAdapterPossiblyCloned);
+                return actionDomainEvent.getReturnValue();
 
 //            } catch (Exception e) {
 //

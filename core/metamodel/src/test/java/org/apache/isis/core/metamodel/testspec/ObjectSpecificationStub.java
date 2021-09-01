@@ -319,11 +319,6 @@ implements ObjectSpecification {
     // /////////////////////////////////////////////////////////
 
     @Override
-    public boolean isViewModelCloneable(final ManagedObject targetAdapter) {
-        return false;
-    }
-
-    @Override
     public boolean isWizard() {
         return false;
     }

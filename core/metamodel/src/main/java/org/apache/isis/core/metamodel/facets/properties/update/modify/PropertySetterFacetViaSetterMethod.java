@@ -59,7 +59,7 @@ implements ImperativeFacet {
 
         val method = methods.getFirstOrFail();
         ManagedObjects.InvokeUtil.invoke(method, targetAdapter, valueAdapter);
-        return ManagedObjects.copyViewModel(targetAdapter).orElse(targetAdapter);
+        return targetAdapter;
     }
 
     @Override
