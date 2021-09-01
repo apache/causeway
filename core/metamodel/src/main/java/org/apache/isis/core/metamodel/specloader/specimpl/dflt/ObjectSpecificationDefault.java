@@ -47,7 +47,6 @@ import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
 import org.apache.isis.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.core.metamodel.facets.object.wizard.WizardFacet;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
@@ -250,11 +249,6 @@ implements FacetHolder {
     }
 
     // -- PREDICATES
-
-    @Override
-    public boolean isWizard() {
-        return containsFacet(WizardFacet.class);
-    }
 
     @Override
     public String getManagedBeanName() {

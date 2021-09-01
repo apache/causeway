@@ -420,8 +420,6 @@ extends
         return getBeanSort().isMixin();
     }
 
-    boolean isWizard();
-
     //TODO this predicate can now be answered by getBeanSort().isAbstract(), we can retire any old logic
     boolean isAbstract();
 

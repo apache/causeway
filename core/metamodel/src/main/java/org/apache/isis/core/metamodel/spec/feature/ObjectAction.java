@@ -47,7 +47,6 @@ import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
 import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
-import org.apache.isis.core.metamodel.facets.object.wizard.WizardFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.spec.ActionType;
@@ -349,8 +348,7 @@ public interface ObjectAction extends ObjectMember {
                     .isSharingAnyLayoutGroupOf(spec.streamAssociations(MixedIn.INCLUDED))
                     .negate())
             .filter(Predicates
-                    .dynamicallyVisible(adapter, InteractionInitiatedBy.USER, Where.ANYWHERE))
-            .filter(Predicates.isNotWizard(spec));
+                    .dynamicallyVisible(adapter, InteractionInitiatedBy.USER, Where.ANYWHERE));
         }
 
         public static Stream<ObjectAction> findForAssociation(
@@ -361,7 +359,6 @@ public interface ObjectAction extends ObjectMember {
 
             return spec.streamRuntimeActions(MixedIn.INCLUDED)
             .filter(Predicates.isSameLayoutGroupAs(association))
-            .filter(Predicates.isNotWizard(spec))
             .sorted(Comparators.byMemberOrderSequence(false));
         }
 
@@ -509,21 +506,6 @@ public interface ObjectAction extends ObjectMember {
                 return visible.isAllowed();
             };
         }
-
-        private static Predicate<ObjectAction> isNotWizard(final ObjectSpecification objectSpecification) {
-            return isWizard(objectSpecification).negate();
-        }
-
-        private static Predicate<ObjectAction> isWizard(final ObjectSpecification objectSpecification) {
-            return (final ObjectAction input) -> {
-                if (objectSpecification == null) {
-                    return false;
-                }
-                val wizardFacet = objectSpecification.getFacet(WizardFacet.class);
-                return wizardFacet != null && wizardFacet.isWizardAction(input);
-            };
-        }
-
 
     }
 

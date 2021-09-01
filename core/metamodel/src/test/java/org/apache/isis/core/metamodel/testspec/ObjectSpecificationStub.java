@@ -319,11 +319,6 @@ implements ObjectSpecification {
     // /////////////////////////////////////////////////////////
 
     @Override
-    public boolean isWizard() {
-        return false;
-    }
-
-    @Override
     public String toString() {
         return getFullIdentifier();
     }
