@@ -81,7 +81,6 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         val translationContext = TranslationContext.forMethod(method);
 
         addFacet(new DisabledObjectFacetViaMethod(method, translationContext, facetHolder));
-
         processClassContext.removeMethod(method);
     }
 

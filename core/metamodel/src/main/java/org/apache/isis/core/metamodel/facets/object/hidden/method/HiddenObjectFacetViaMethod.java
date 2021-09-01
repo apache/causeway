@@ -22,20 +22,32 @@ package org.apache.isis.core.metamodel.facets.object.hidden.method;
 import java.lang.reflect.Method;
 import java.util.function.BiConsumer;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.object.hidden.HiddenObjectFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
-public class HiddenObjectFacetViaMethod
-extends HiddenObjectFacetAbstract {
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.val;
 
-    private final Method method;
+public class HiddenObjectFacetViaMethod
+extends HiddenObjectFacetAbstract
+implements ImperativeFacet {
+
+    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
 
     public HiddenObjectFacetViaMethod(final Method method, final FacetHolder holder) {
         super(holder);
-        this.method = method;
+        this.methods = ImperativeFacet.singleMethod(method);;
+    }
+
+    @Override
+    public Intent getIntent(final Method method) {
+        return Intent.CHECK_IF_HIDDEN;
     }
 
     @Override
@@ -49,18 +61,22 @@ extends HiddenObjectFacetAbstract {
         if (target == null) {
             return null;
         }
+        val method = methods.getFirstOrFail();
         final Boolean isHidden = (Boolean) ManagedObjects.InvokeUtil.invoke(method, target);
         return isHidden ? "Hidden" : null;
     }
 
     @Override
     public HiddenObjectFacetViaMethod clone(final FacetHolder holder) {
-        return new HiddenObjectFacetViaMethod(this.method, holder);
+        val method = methods.getFirstOrFail();
+        return new HiddenObjectFacetViaMethod(method, holder);
     }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        val method = methods.getFirstOrFail();
         super.visitAttributes(visitor);
+        ImperativeFacet.visitAttributes(this, visitor);
         visitor.accept("method", method);
     }
 }
