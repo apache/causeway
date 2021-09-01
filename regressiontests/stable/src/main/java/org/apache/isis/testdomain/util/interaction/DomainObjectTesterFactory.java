@@ -33,6 +33,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.CollectionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
@@ -335,6 +336,33 @@ public class DomainObjectTesterFactory {
             assertUsabilityIsVetoedWith(null);
         }
 
+        public final void assertUsabilityIsVetoedWithAll(final Can<String> expectedVetoReasons) {
+
+            assertExists(true);
+
+            managedMemberIfAny
+            .ifPresent(managedCollection->{
+                interactionService.runAnonymous(()->{
+                    final String actualVetoReason = managedCollection
+                            .checkUsability()
+                            .map(veto->veto.getReason())
+                            .orElse(null);
+
+                    if(!expectedVetoReasons.isEmpty()
+                            && actualVetoReason==null) {
+                        fail("usability not vetoed, while expecting all of: " + expectedVetoReasons.toList());
+                    }
+
+                    expectedVetoReasons
+                    .forEach(expectedVetoReason->{
+                        assertTrue(actualVetoReason.contains(expectedVetoReason),
+                               ()->String.format("usability veto %s is not containing %s",
+                                       actualVetoReason, expectedVetoReason));
+                    });
+                });
+            });
+        }
+
         public final void assertUsabilityIsVetoedWith(final @Nullable String expectedVetoReason) {
 
             final boolean isExpectedUsable = expectedVetoReason == null;
@@ -346,12 +374,12 @@ public class DomainObjectTesterFactory {
             managedMemberIfAny
             .ifPresent(managedCollection->{
                 interactionService.runAnonymous(()->{
-                    final String actualVetoResaon = managedCollection
+                    final String actualVetoReason = managedCollection
                             .checkUsability()
                             .map(veto->veto.getReason())
                             .orElse(null);
 
-                        assertEquals(expectedVetoReason, actualVetoResaon);
+                        assertEquals(expectedVetoReason, actualVetoReason);
                 });
             });
         }

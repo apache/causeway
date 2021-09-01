@@ -19,13 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.object.hidden.method;
 
-import java.lang.reflect.Method;
-
 import javax.inject.Inject;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
@@ -63,12 +60,18 @@ extends MethodPrefixBasedFacetFactoryAbstract {
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        for (final Class<?> returnType : new Class<?>[] { Boolean.class, boolean.class }) {
-            if (addFacetIfMethodFound(processClassContext, returnType)) {
-                return;
-            }
+        val cls = processClassContext.getCls();
+        val facetHolder = processClassContext.getFacetHolder();
+
+        val method = MethodFinderUtils.findMethod_returningBoolean(
+                MethodFinderOptions
+                .objectSupport(processClassContext.getIntrospectionPolicy()),
+                cls, METHOD_NAME, NO_ARG);
+        if (method == null) {
+            return;
         }
-        return;
+        addFacet(new HiddenObjectFacetViaMethod(method, facetHolder));
+        processClassContext.removeMethod(method);
     }
 
     @Override
@@ -80,24 +83,6 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         owningSpec.lookupFacet(HiddenObjectFacet.class)
         .map(hiddenObjectFacet->hiddenObjectFacet.clone(member))
         .ifPresent(FacetUtil::addFacet);
-    }
-
-    private boolean addFacetIfMethodFound(
-            final ProcessClassContext processClassContext,
-            final Class<?> returnType) {
-        final Class<?> cls = processClassContext.getCls();
-        final FacetHolder facetHolder = processClassContext.getFacetHolder();
-
-        final Method method = MethodFinderUtils.findMethod(
-                MethodFinderOptions
-                .objectSupport(processClassContext.getIntrospectionPolicy()),
-                cls, METHOD_NAME, returnType, NO_ARG);
-        if (method == null) {
-            return false;
-        }
-        FacetUtil.addFacet(new HiddenObjectFacetViaMethod(method, facetHolder));
-        processClassContext.removeMethod(method);
-        return true;
     }
 
 }

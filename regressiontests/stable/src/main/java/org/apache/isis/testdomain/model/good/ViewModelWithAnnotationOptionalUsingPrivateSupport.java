@@ -46,6 +46,8 @@ implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    // -- PUBLIC ACTION WITH PRIVATE SUPPORT
+
     @Action
     public String myAction() {
         return "Hallo World!";
@@ -57,7 +59,7 @@ implements Serializable {
         return "action disabled for testing purposes";
     }
 
-    // -- PROPERTY WITH PRIVATE GETTER AND SETTER
+    // -- PROPERTY WITH PUBLIC GETTER AND SETTER, PRIVATE SUPPORT
 
     @Property
     @Getter @Setter
@@ -69,7 +71,7 @@ implements Serializable {
         return "property disabled for testing purposes";
     }
 
-    // -- COLLECTION WITH PRIVATE GETTER AND SETTER
+    // -- COLLECTION WITH PUBLIC GETTER AND SETTER, PRIVATE SUPPORT
 
     @Collection
     @Getter @Setter
@@ -80,6 +82,22 @@ implements Serializable {
     private String disableCollWithPrivateAccessors() {
         return "collection disabled for testing purposes";
     }
+
+    // -- PRIVATE OBJECT SUPPORT
+
+    // allowed to be private since 2.0.0-M7
+    @MemberSupport//FIXME[ISIS-2774] be more specific, don't allow @MemberSupport
+    private String disabled() {
+        return "object disabled for testing purposes";
+    }
+
+    // allowed to be private since 2.0.0-M7
+    @MemberSupport//FIXME[ISIS-2774] be more specific, don't allow @MemberSupport
+    private boolean hidden() {
+        return false;
+    }
+
+    // -- PRIVATE OBJECT LAYOUT SUPPORT
 
 
 }

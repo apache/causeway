@@ -45,6 +45,7 @@ import org.apache.isis.applib.services.metamodel.Config;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.title.TitleService;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -515,7 +516,8 @@ class DomainModelTest_usingGoodDomain {
         act.assertExists(true);
         act.assertIsExplicitlyAnnotated(true);
         act.assertVisibilityIsNotVetoed();
-        act.assertUsabilityIsVetoedWith("action disabled for testing purposes");
+        act.assertUsabilityIsVetoedWithAll(
+                Can.of("object disabled for testing purposes", "action disabled for testing purposes"));
         act.assertInvocationResult("Hallo World!", List.of());
 
         // -- PROPERTY WITH PRIVATE GETTER AND SETTER
@@ -525,7 +527,8 @@ class DomainModelTest_usingGoodDomain {
         prop.assertExists(true);
         prop.assertIsExplicitlyAnnotated(true);
         prop.assertVisibilityIsNotVetoed();
-        prop.assertUsabilityIsVetoedWith("property disabled for testing purposes");
+        prop.assertUsabilityIsVetoedWithAll(
+                Can.of("object disabled for testing purposes", "property disabled for testing purposes"));
         prop.assertValue("Foo");
         prop.assertValueUpdate("Bar");
 
@@ -536,7 +539,8 @@ class DomainModelTest_usingGoodDomain {
         coll.assertExists(true);
         coll.assertIsExplicitlyAnnotated(true);
         coll.assertVisibilityIsNotVetoed();
-        coll.assertUsabilityIsVetoedWith("collection disabled for testing purposes");
+        coll.assertUsabilityIsVetoedWithAll(
+                Can.of("object disabled for testing purposes", "collection disabled for testing purposes"));
         coll.assertCollectionElements(List.of("Foo"));
     }
 

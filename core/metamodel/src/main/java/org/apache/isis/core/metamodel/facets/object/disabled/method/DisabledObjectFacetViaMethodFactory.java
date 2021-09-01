@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.object.disabled.method;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -64,23 +63,21 @@ extends MethodPrefixBasedFacetFactoryAbstract {
     public void process(final ProcessClassContext processClassContext) {
         val cls = processClassContext.getCls();
         val facetHolder = processClassContext.getFacetHolder();
-        val paramTypes = new Class<?>[] {Identifier.Type.class};
 
         val method = MethodFinderUtils.findMethod_returningText(
                 MethodFinderOptions
                 .objectSupport(processClassContext.getIntrospectionPolicy()),
                 cls,
                 METHOD_NAME,
-                paramTypes);
+                NO_ARG);
         if (method == null) {
             return;
         }
 
-        val translationService = getTranslationService();
         // sadness: same logic as in I18nFacetFactory
         val translationContext = TranslationContext.forMethod(method);
 
-        addFacet(new DisabledObjectFacetViaMethod(method, translationService, translationContext, facetHolder));
+        addFacet(new DisabledObjectFacetViaMethod(method, translationContext, facetHolder));
 
         processClassContext.removeMethod(method);
     }

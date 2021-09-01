@@ -26,7 +26,6 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.Identifier.Type;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationContext;
-import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -43,17 +42,14 @@ extends DisabledObjectFacetAbstract
 implements ImperativeFacet {
 
     @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
-    private TranslationService translationService;
     private final TranslationContext translationContext;
 
     public DisabledObjectFacetViaMethod(
             final Method method,
-            final TranslationService translationService,
             final TranslationContext translationContext,
             final FacetHolder holder) {
         super(holder);
         this.methods = ImperativeFacet.singleMethod(method);
-        this.translationService = translationService;
         this.translationContext = translationContext;
     }
 
@@ -72,7 +68,7 @@ implements ImperativeFacet {
         }
         if(returnValue instanceof TranslatableString) {
             final TranslatableString ts = (TranslatableString) returnValue;
-            return ts.translate(translationService, translationContext);
+            return ts.translate(getTranslationService(), translationContext);
         }
         return null;
     }
@@ -86,7 +82,7 @@ implements ImperativeFacet {
     @Override
     public DisabledObjectFacetViaMethod clone(final FacetHolder holder) {
         val method = methods.getFirstOrFail();
-        return new DisabledObjectFacetViaMethod(method, translationService, translationContext, holder);
+        return new DisabledObjectFacetViaMethod(method, translationContext, holder);
     }
 
     @Override
