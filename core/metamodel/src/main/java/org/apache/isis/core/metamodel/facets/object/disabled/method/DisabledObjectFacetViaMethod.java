@@ -22,8 +22,6 @@ package org.apache.isis.core.metamodel.facets.object.disabled.method;
 import java.lang.reflect.Method;
 import java.util.function.BiConsumer;
 
-import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.Identifier.Type;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.collections.Can;
@@ -59,10 +57,9 @@ implements ImperativeFacet {
     }
 
     @Override
-    public String disabledReason(final ManagedObject owningAdapter, final Identifier identifier) {
+    public String disabledReason(final ManagedObject owningAdapter) {
         val method = methods.getFirstOrFail();
-        final Type type = identifier.getType();
-        final Object returnValue = ManagedObjects.InvokeUtil.invoke(method, owningAdapter, type);
+        final Object returnValue = ManagedObjects.InvokeUtil.invoke(method, owningAdapter);
         if(returnValue instanceof String) {
             return (String) returnValue;
         }

@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.object.disabled.method;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -54,8 +53,6 @@ public class DisabledObjectFacetViaMethodFactory
 extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final String METHOD_NAME = MethodLiteralConstants.DISABLED;
-    private static final Class<?>[] PARAM_TYPES = new Class<?>[] {Identifier.Type.class};
-
 
     @Inject
     public DisabledObjectFacetViaMethodFactory(final MetaModelContext mmc) {
@@ -72,7 +69,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
                 .objectSupport(processClassContext.getIntrospectionPolicy()),
                 cls,
                 METHOD_NAME,
-                PARAM_TYPES);
+                NO_ARG);
         if (method == null) {
             return;
         }
