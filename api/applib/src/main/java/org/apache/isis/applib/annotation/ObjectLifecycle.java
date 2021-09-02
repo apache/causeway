@@ -26,8 +26,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates that a method is a lifecycle callback method, one that contributes (disabled, hidden, ...)
- * to its <i>Object</i>.
+ * Indicates that a method is an <i>Object</i> lifecycle callback method,
+ * one of (created, loaded, saved, ...).
  * <p>
  * May only be placed on <i>domain object</i> methods, not <i>mixins</i> nor <i>domain services</i>.
  * <p>
