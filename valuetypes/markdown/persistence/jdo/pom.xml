@@ -16,16 +16,16 @@
 
 	<parent>
 		<groupId>org.apache.isis.valuetypes</groupId>
-		<artifactId>isis-valuetypes-asciidoc-persistence</artifactId>
+		<artifactId>isis-valuetypes-markdown-persistence</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-valuetypes-asciidoc-persistence-jdo-dn5</artifactId>
-	<name>Apache Isis Val - Asciidoctor (persistence jdo DN5)</name>
+	<artifactId>isis-valuetypes-markdown-persistence-jdo</artifactId>
+	<name>Apache Isis Val - Markdown (Persistence JDO)</name>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.valuetypes.asciidoc.persistence.jdo.dn5</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/valuetypes/asciidoc/persistence/jdo/dn5</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.valuetypes.markdown.persistence.jdo</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/valuetypes/markdown/persistence/jdo</git-plugin.propertiesDir>
 	</properties>
 
 	<dependencies>
@@ -33,6 +33,10 @@
 			<groupId>org.datanucleus</groupId>
 			<artifactId>datanucleus-core</artifactId>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>org.apache.isis.valuetypes</groupId>
+            <artifactId>isis-valuetypes-markdown-applib</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

@@ -37,3 +37,32 @@ isis.core.meta-model.introspector.policy=ANNOTATION_OPTIONAL
 isis.core.meta-model.introspector.policy=ANNOTATION_REQUIRED
 
 ----
+
+== Maven Artifacts
+
+`-dn5` suffix was removed from artifacts, because we migrated DataNucleus 5.x to 6.x
+
+[source,xml]
+----
+<!--
+<dependency>
+	<groupId>org.apache.isis.valuetypes</groupId>
+	<artifactId>isis-valuetypes-asciidoc-persistence-jdo-dn5</artifactId>
+</dependency>
+-->
+<dependency>
+	<groupId>org.apache.isis.valuetypes</groupId>
+	<artifactId>isis-valuetypes-asciidoc-persistence-jdo</artifactId>
+</dependency>
+
+<!--
+<dependency>
+	<groupId>org.apache.isis.valuetypes</groupId>
+	<artifactId>isis-valuetypes-markdown-persistence-jdo-dn5</artifactId>
+</dependency>
+-->
+<dependency>
+	<groupId>org.apache.isis.valuetypes</groupId>
+	<artifactId>isis-valuetypes-markdown-persistence-jdo</artifactId>
+</dependency>
+----

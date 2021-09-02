@@ -45,7 +45,7 @@
 	</dependencies>
 
 	<modules>
-		<module>jdo-dn5</module>
+		<module>jdo</module>
 		<module>jpa</module>
 	</modules>
 </project>
