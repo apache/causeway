@@ -19,43 +19,41 @@
 
 package org.apache.isis.core.metamodel.facets.object.icon.method;
 
-import java.lang.reflect.Method;
-
 import javax.inject.Inject;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
+import lombok.val;
+
 public class IconFacetMethodFactory
 extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String PREFIX = MethodLiteralConstants.ICON_NAME;
+    private static final String METHOD_NAME = MethodLiteralConstants.ICON_NAME;
 
     @Inject
     public IconFacetMethodFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
+        super(mmc, FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(METHOD_NAME));
     }
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
-        final FacetHolder facetHolder = processClassContext.getFacetHolder();
+        val cls = processClassContext.getCls();
+        val facetHolder = processClassContext.getFacetHolder();
 
-        final Method method = MethodFinderUtils.findMethod(
+        val method = MethodFinderUtils.findMethod(
                 MethodFinderOptions
-                .layoutSupport(processClassContext.getIntrospectionPolicy()),
-                cls, PREFIX, String.class, NO_ARG);
+                .objectSupport(processClassContext.getIntrospectionPolicy()),
+                cls, METHOD_NAME, String.class, NO_ARG);
         if (method == null) {
             return;
         }
         processClassContext.removeMethod(method);
-        FacetUtil.addFacet(new IconFacetMethod(method, facetHolder));
+        addFacet(new IconFacetViaIconNameMethod(method, facetHolder));
     }
 }

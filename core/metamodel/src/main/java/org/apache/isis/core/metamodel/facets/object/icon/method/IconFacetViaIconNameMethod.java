@@ -22,26 +22,32 @@ package org.apache.isis.core.metamodel.facets.object.icon.method;
 import java.lang.reflect.Method;
 import java.util.function.BiConsumer;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.val;
 
-public class IconFacetMethod
-extends IconFacetAbstract {
+public class IconFacetViaIconNameMethod
+extends IconFacetAbstract
+implements ImperativeFacet {
 
-    private final @NonNull Method method;
+    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
 
-    public IconFacetMethod(final Method method, final FacetHolder holder) {
+    public IconFacetViaIconNameMethod(final Method method, final FacetHolder holder) {
         super(holder);
-        this.method = method;
+        this.methods = ImperativeFacet.singleMethod(method);
     }
 
     @Override
     public String iconName(final ManagedObject owningAdapter) {
         try {
+            val method = methods.getFirstOrFail();
             return (String) ManagedObjects.InvokeUtil.invoke(method, owningAdapter);
         } catch (final RuntimeException ex) {
             return null;
@@ -49,8 +55,21 @@ extends IconFacetAbstract {
     }
 
     @Override
+    public Intent getIntent(final Method method) {
+        return Intent.UI_HINT;
+    }
+
+    @Override
+    protected String toStringValues() {
+        val method = methods.getFirstOrFail();
+        return "method=" + method;
+    }
+
+    @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        val method = methods.getFirstOrFail();
         super.visitAttributes(visitor);
+        ImperativeFacet.visitAttributes(this, visitor);
         visitor.accept("method", method);
     }
 

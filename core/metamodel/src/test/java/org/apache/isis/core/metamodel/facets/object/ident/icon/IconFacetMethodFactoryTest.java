@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
-import org.apache.isis.core.metamodel.facets.object.icon.method.IconFacetMethod;
+import org.apache.isis.core.metamodel.facets.object.icon.method.IconFacetViaIconNameMethod;
 import org.apache.isis.core.metamodel.facets.object.icon.method.IconFacetMethodFactory;
 
 public class IconFacetMethodFactoryTest extends AbstractFacetFactoryTest {
@@ -64,7 +64,7 @@ public class IconFacetMethodFactoryTest extends AbstractFacetFactoryTest {
 
         final Facet facet = facetedMethod.getFacet(IconFacet.class);
         assertThat(facet, is(notNullValue()));
-        assertThat(facet, is(instanceOf(IconFacetMethod.class)));
+        assertThat(facet, is(instanceOf(IconFacetViaIconNameMethod.class)));
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(iconNameMethod));
     }

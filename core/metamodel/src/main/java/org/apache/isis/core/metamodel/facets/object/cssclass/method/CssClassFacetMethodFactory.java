@@ -48,7 +48,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
 
         final Method method = MethodFinderUtils.findMethod(
                 MethodFinderOptions
-                .layoutSupport(processClassContext.getIntrospectionPolicy()),
+                .objectSupport(processClassContext.getIntrospectionPolicy()),
                 cls, PREFIX, String.class, NO_ARG);
         if (method == null) {
             return;

@@ -80,7 +80,7 @@ public interface FacetHolder extends HasMetaModelContext {
      * Convenience; saves having to {@link #getFacet(Class)} and then check if
      * <tt>null</tt> and not a fallback.
      */
-    default boolean containsNonFallbackFacet(Class<? extends Facet> facetType) {
+    default boolean containsNonFallbackFacet(final Class<? extends Facet> facetType) {
         val facet = getFacet(facetType);
         return facet != null
                 && !facet.getPrecedence().isFallback();
@@ -90,7 +90,7 @@ public interface FacetHolder extends HasMetaModelContext {
      * As {@link #containsNonFallbackFacet(Class)}, with additional requirement, that the
      * facet is <i>explicit</i>, not {@link Facet.Precedence#isInferred() inferred}.
      */
-    default boolean containsExplicitNonFallbackFacet(Class<? extends Facet> facetType) {
+    default boolean containsExplicitNonFallbackFacet(final Class<? extends Facet> facetType) {
         val facet = getFacet(facetType);
         return facet != null
                 && !facet.getPrecedence().isFallback()
@@ -99,7 +99,7 @@ public interface FacetHolder extends HasMetaModelContext {
 
     Stream<Facet> streamFacets();
 
-    default <F extends Facet> Stream<F> streamFacets(Class<F> requiredType) {
+    default <F extends Facet> Stream<F> streamFacets(final Class<F> requiredType) {
         return streamFacets()
                 .filter(facet->requiredType.isAssignableFrom(facet.getClass()))
                 .map(requiredType::cast);
@@ -117,6 +117,7 @@ public interface FacetHolder extends HasMetaModelContext {
 
     // -- VALIDATION SUPPORT
 
+    Stream<FacetRanking> streamFacetRankings();
     Optional<FacetRanking> getFacetRanking(Class<? extends Facet> facetType);
 
 }

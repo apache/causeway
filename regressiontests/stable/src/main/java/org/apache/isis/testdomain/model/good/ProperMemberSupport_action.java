@@ -37,7 +37,8 @@ public class ProperMemberSupport_action {
 
     // proper mix-in action
     //@Action // <-- inferred by annotation on type above
-    public ProperMemberSupport act(String p0, String p1) {
+    @MemberSupport
+    public ProperMemberSupport act(final String p0, final String p1) {
         return holder;
     }
 
@@ -52,17 +53,17 @@ public class ProperMemberSupport_action {
     }
 
     @MemberSupport
-    public String validateAct(String p0, String p1) {
+    public String validateAct(final String p0, final String p1) {
         return null;
     }
 
     @MemberSupport
-    public Set<String> autoComplete0Act(@MinLength(3) String search) {
+    public Set<String> autoComplete0Act(@MinLength(3) final String search) {
         return null;
     }
 
     @MemberSupport
-    public Set<String> autoComplete1Act(@MinLength(3) String search) {
+    public Set<String> autoComplete1Act(@MinLength(3) final String search) {
         return null;
     }
 
@@ -77,7 +78,7 @@ public class ProperMemberSupport_action {
     }
 
     @MemberSupport
-    public Set<String> choices1Act(String p0) {
+    public Set<String> choices1Act(final String p0) {
         return null;
     }
 
@@ -92,12 +93,12 @@ public class ProperMemberSupport_action {
     }
 
     @MemberSupport
-    public String validate0Act(String p0) {
+    public String validate0Act(final String p0) {
         return null;
     }
 
     @MemberSupport
-    public String validate1Act(String p1) {
+    public String validate1Act(final String p1) {
         return null;
     }
 

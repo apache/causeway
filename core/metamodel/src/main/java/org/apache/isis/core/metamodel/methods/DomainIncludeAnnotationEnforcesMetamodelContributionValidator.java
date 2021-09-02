@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.methods;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
@@ -93,7 +94,10 @@ extends MetaModelVisitingValidatorAbstract {
 
         spec
         .streamFacetHolders()
-        .flatMap(FacetHolder::streamFacets)
+        .flatMap(FacetHolder::streamFacetRankings)
+        .map(facetRanking->facetRanking.getWinnerNonEvent(facetRanking.facetType()))
+        .filter(Optional::isPresent)
+        .map(Optional::get)
         .filter(ImperativeFacet.class::isInstance)
         .map(ImperativeFacet.class::cast)
         .map(ImperativeFacet::getMethods)

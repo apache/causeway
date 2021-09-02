@@ -109,6 +109,11 @@ implements FacetHolder {
     // -- VALIDATION SUPPORT
 
     @Override
+    public Stream<FacetRanking> streamFacetRankings() {
+        return rankingByType.values().stream();
+    }
+
+    @Override
     public Optional<FacetRanking> getFacetRanking(final Class<? extends Facet> facetType) {
         return Optional.ofNullable(rankingByType.get(facetType));
     }

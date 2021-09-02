@@ -23,10 +23,8 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
@@ -108,6 +106,10 @@ public final class MethodFinderUtils {
             }
         }
 
+        if(!options.getMustSatisfy().test(method)) {
+            return null;
+        }
+
         return method;
     }
 
@@ -165,21 +167,15 @@ public final class MethodFinderUtils {
         }
     }
 
-    public static List<Method> findMethodsWithAnnotation(
-            final MethodFinderOptions options,
-            final Class<?> type,
-            final Class<? extends Annotation> annotationClass) {
-
-        // Validate arguments
-        if (type == null || annotationClass == null) {
-            throw new IllegalArgumentException("One or more arguments are 'null' valued");
-        }
+    public static Stream<Method> streamMethodsWithAnnotation(
+            final @NonNull MethodFinderOptions options,
+            final @NonNull Class<?> type,
+            final @NonNull Class<? extends Annotation> annotationClass) {
 
         // Find methods annotated with the specified annotation
         return streamMethods(options, type)
                 .filter(method -> !MethodUtil.isStatic(method))
-                .filter(method -> method.isAnnotationPresent(annotationClass))
-                .collect(Collectors.toList());
+                .filter(method -> method.isAnnotationPresent(annotationClass));
     }
 
     public static void removeMethod(final MethodRemover methodRemover, final Method method) {
@@ -368,7 +364,8 @@ public final class MethodFinderUtils {
         val methodCache = _MethodCache.getInstance();
         return options.getEncapsulationPolicy().isEncapsulatedMembersSupported()
                 ? methodCache.streamPublicOrDeclaredMethods(type)
-                : methodCache.streamPublicMethods(type);
+                : methodCache.streamPublicMethods(type)
+                .filter(options.getMustSatisfy()::test);
     }
 
 }

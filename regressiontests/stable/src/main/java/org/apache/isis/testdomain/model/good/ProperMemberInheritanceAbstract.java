@@ -32,10 +32,12 @@ import lombok.Setter;
 
 abstract class ProperMemberInheritanceAbstract {
 
+    //@Title //FIXME[ISIS-2774] either not picked up, or validation fails when abstract
     public String title() {
         return "inherited title";
     }
 
+    //@ObjectSupport //FIXME[ISIS-2774] either not picked up, or validation fails when abstract
     public String iconName() {
         return "inherited icon";
     }

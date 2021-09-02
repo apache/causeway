@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.object.title.annotation;
 
-import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -42,6 +41,7 @@ import org.apache.isis.core.metamodel.facets.fallback.FallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaMethodsFactory;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
+import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
@@ -147,43 +147,46 @@ implements MetaModelRefiner {
 
 
     /**
-     * Violation if there is a class that has both a <tt>title()</tt> method and also any non-inherited method
-     * annotated with <tt>@Title</tt>.
-     *
+     * Violation if there is a class that has both a <tt>title()</tt> method
+     * and also any declared (non-inherited) method annotated with <tt>@Title</tt>.
      * <p>
-     * If there are only inherited methods annotated with <tt>@Title</tt> then this is <i>not</i> a violation; but
-     * (from the implementation of {@link TitleFacetViaMethodsFactory} the imperative <tt>title()</tt> method will take
+     * If there are only inherited methods annotated with <tt>@Title</tt>
+     * then this is <i>not</i> a violation;
+     * but (from the implementation of {@link TitleFacetViaMethodsFactory}
+     * the imperative <tt>title()</tt> method will take
      * precedence.
      */
     @Override
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
 
-        programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec -> {
+        programmingModel.addVisitingValidatorSkipManagedBeans(_objectSpec -> {
 
-            final Class<?> cls = objectSpec.getCorrespondingClass();
-            final var introspectionPolicy = ((ObjectSpecificationAbstract)objectSpec).getIntrospectionPolicy();
+            final var objectSpec = (ObjectSpecificationAbstract)_objectSpec;
+            final var cls = objectSpec.getCorrespondingClass();
+            final var introspectionPolicy = objectSpec.getIntrospectionPolicy();
 
-            final Method titleMethod = MethodFinderUtils.findMethod(
-                    MethodFinderOptions.layoutSupport(introspectionPolicy),
+            final var titleMethod = MethodFinderUtils.findMethod(
+                    MethodFinderOptions.objectSupport(introspectionPolicy),
                     cls, TITLE_METHOD_NAME, String.class, null);
             if (titleMethod == null) {
                 return;
             }
 
             // determine if cls contains an @Title annotated method, not inherited from superclass
-            final ObjectSpecification supClass = objectSpec.superclass();
-            if (supClass == null) {
+            final ObjectSpecification superSpec = objectSpec.superclass();
+            if (superSpec == null) {
                 return;
             }
 
-            final var superIntrospectionPolicy = ((ObjectSpecificationAbstract)supClass).getIntrospectionPolicy();
+            final var superIntrospectionPolicy = ((ObjectSpecificationAbstract)superSpec).getIntrospectionPolicy();
+            final var superCls = superSpec.getCorrespondingClass();
 
-            final List<Method> methods = methodsWithTitleAnnotation(superIntrospectionPolicy, cls);
-            final List<Method> superClassMethods = methodsWithTitleAnnotation(superIntrospectionPolicy, supClass.getCorrespondingClass());
-            if (methods.size() > superClassMethods.size()) {
+            if (countMethodsWithTitleAnnotation(introspectionPolicy, cls)
+                    > countMethodsWithTitleAnnotation(superIntrospectionPolicy, superCls)) {
                 ValidationFailure.raiseFormatted(
                         objectSpec,
-                        "%s: conflict for determining a strategy for retrieval of title for class, contains a method '%s' and an annotation '@%s'",
+                        "%s: conflict for determining a strategy for retrieval of title for class, "
+                        + "contains a method '%s' and an annotation '@%s'",
                         objectSpec.getFeatureIdentifier().getClassName(),
                         TITLE_METHOD_NAME,
                         Title.class.getName());
@@ -192,11 +195,13 @@ implements MetaModelRefiner {
         });
     }
 
-    private static List<Method> methodsWithTitleAnnotation(
+    private static long countMethodsWithTitleAnnotation(
             final IntrospectionPolicy introspectionPolicy,
             final Class<?> cls) {
-        return MethodFinderUtils.findMethodsWithAnnotation(
-                MethodFinderOptions.layoutSupport(introspectionPolicy), cls, Title.class);
+        return MethodFinderUtils.streamMethodsWithAnnotation(
+                MethodFinderOptions.objectSupport(introspectionPolicy), cls, Title.class)
+                .filter(method->!method.getName().equals(MethodLiteralConstants.TITLE))
+                .count();
     }
 
 }

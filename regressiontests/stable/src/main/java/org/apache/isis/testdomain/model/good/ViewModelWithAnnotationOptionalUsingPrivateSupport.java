@@ -27,7 +27,9 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Introspection;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Title;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -45,6 +47,12 @@ public class ViewModelWithAnnotationOptionalUsingPrivateSupport
 implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    // allowed to be private since 2.0.0-M7
+    @Title
+    private String title() {
+        return "view-model with annotation optional using private support";
+    }
 
     // -- PUBLIC ACTION WITH PRIVATE SUPPORT
 
@@ -86,13 +94,13 @@ implements Serializable {
     // -- PRIVATE OBJECT SUPPORT
 
     // allowed to be private since 2.0.0-M7
-    @MemberSupport//FIXME[ISIS-2774] be more specific, don't allow @MemberSupport
+    @ObjectSupport
     private String disabled() {
         return "object disabled for testing purposes";
     }
 
     // allowed to be private since 2.0.0-M7
-    @MemberSupport//FIXME[ISIS-2774] be more specific, don't allow @MemberSupport
+    @ObjectSupport
     private boolean hidden() {
         return false;
     }

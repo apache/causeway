@@ -29,7 +29,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.icon.method.IconFacetMethod;
+import org.apache.isis.core.metamodel.facets.object.icon.method.IconFacetViaIconNameMethod;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -40,7 +40,7 @@ public class IconFacetMethodTest {
 
     private final Mockery mockery = new JUnit4Mockery();
 
-    private IconFacetMethod facet;
+    private IconFacetViaIconNameMethod facet;
     private FacetHolder mockFacetHolder;
 
     private ManagedObject mockOwningAdapter;
@@ -60,7 +60,7 @@ public class IconFacetMethodTest {
         mockFacetHolder = mockery.mock(FacetHolder.class);
         mockOwningAdapter = mockery.mock(ManagedObject.class);
         final Method iconNameMethod = DomainObjectWithProblemInIconNameMethod.class.getMethod("iconName");
-        facet = new IconFacetMethod(iconNameMethod, mockFacetHolder);
+        facet = new IconFacetViaIconNameMethod(iconNameMethod, mockFacetHolder);
 
         mockery.checking(new Expectations() {
             {

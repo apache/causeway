@@ -489,6 +489,23 @@ class DomainModelTest_usingGoodDomain {
         coll.assertCollectionElements(List.of("Foo"));
     }
 
+//    @Test
+//    void quicktest() {
+//        val testerFactory = new DomainObjectTesterFactory(serviceInjector);
+//        val prop = testerFactory.propertyTester(DomainObjectList.class, "elementTypeFqcn");
+//        prop.assertExists(true);
+//
+//        val objectSpec = specificationLoader.specForTypeElseFail(DomainObjectList.class);
+//
+//        val titleFacet = objectSpec.getFacetRanking(TitleFacet.class).get().getWinnerNonEvent(TitleFacet.class).get();
+//        assertNotNull(titleFacet);
+//        assertTrue(titleFacet instanceof ImperativeFacet, "no imperative: " + titleFacet.getClass());
+//
+//        ((ImperativeFacet)titleFacet).getMethods()
+//        .forEach(System.err::println);
+//
+//    }
+
     @Test
     void viewmodelWithAnnotationOptional_usingPrivateSupport() {
 

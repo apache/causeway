@@ -83,7 +83,7 @@ implements EnumFacet {
                 defaultFor(adaptedClass));
 
         titleMethod = MethodFinderUtils.findMethod_returningText(
-                MethodFinderOptions.layoutSupport(introspectionPolicy),
+                MethodFinderOptions.objectSupport(introspectionPolicy),
                 getAdaptedClass(),
                 TITLE,
                 null);

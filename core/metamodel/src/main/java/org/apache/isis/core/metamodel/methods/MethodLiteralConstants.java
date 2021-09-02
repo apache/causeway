@@ -18,14 +18,21 @@
  */
 package org.apache.isis.core.metamodel.methods;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.util.function.IntFunction;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.ObjectLifecycle;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 public final class MethodLiteralConstants {
 
@@ -76,6 +83,18 @@ public final class MethodLiteralConstants {
     // -- OTHER LITERALS
 
     public static final String TO_STRING = "toString";
+
+    // -- CONFLICTING MARKER ANNOTATIONS
+
+    @RequiredArgsConstructor @Getter
+    public static enum ConflictingAnnotations {
+        OBJECT_SUPPORT(Can.of(ObjectLifecycle.class, MemberSupport.class)),
+        OBJECT_LIFECYCLE(Can.of(ObjectSupport.class, MemberSupport.class)),
+        MEMBER_SUPPORT(Can.of(ObjectSupport.class, ObjectLifecycle.class));
+        final Can<Class<? extends Annotation>> prohibits;
+    }
+
+    // -- METHOD NAMING CONVENTIONS
 
     @FunctionalInterface
     public static interface SupportingMethodNameProviderForAction {

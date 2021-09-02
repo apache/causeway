@@ -25,11 +25,14 @@ import java.util.function.Predicate;
 import org.apache.isis.applib.annotation.Domain;
 import org.apache.isis.applib.annotation.Introspection.EncapsulationPolicy;
 import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.commons.internal.reflection._Reflect;
 
+import lombok.NonNull;
 import lombok.Value;
+import lombok.val;
 
 @Value(staticConstructor = "of")
 public class MethodFinderOptions {
@@ -53,32 +56,32 @@ public class MethodFinderOptions {
         return havingAnyOrNoAnnotation(memberIntrospectionPolicy);
     }
 
-    public static MethodFinderOptions memberSupport(
-            final IntrospectionPolicy memberIntrospectionPolicy) {
-        return havingAnnotationIfEnforcedByPolicyOrAccessibility(
-                memberIntrospectionPolicy, Domain.Include.class);
-    }
-
     public static MethodFinderOptions objectSupport(
             final IntrospectionPolicy memberIntrospectionPolicy) {
         return havingAnnotationIfEnforcedByPolicyOrAccessibility(
-                memberIntrospectionPolicy, Domain.Include.class);
+                memberIntrospectionPolicy,
+                Domain.Include.class,
+                MethodLiteralConstants.ConflictingAnnotations.OBJECT_SUPPORT.getProhibits());
     }
 
     public static MethodFinderOptions livecycleCallback(
             final IntrospectionPolicy memberIntrospectionPolicy) {
         return havingAnnotationIfEnforcedByPolicyOrAccessibility(
-                memberIntrospectionPolicy, Domain.Include.class);
+                memberIntrospectionPolicy,
+                Domain.Include.class,
+                MethodLiteralConstants.ConflictingAnnotations.OBJECT_LIFECYCLE.getProhibits());
     }
 
-    public static MethodFinderOptions layoutSupport(
+    public static MethodFinderOptions memberSupport(
             final IntrospectionPolicy memberIntrospectionPolicy) {
         return havingAnnotationIfEnforcedByPolicyOrAccessibility(
-                memberIntrospectionPolicy, Domain.Include.class);
+                memberIntrospectionPolicy,
+                Domain.Include.class,
+                MethodLiteralConstants.ConflictingAnnotations.MEMBER_SUPPORT.getProhibits());
     }
 
-    private final EncapsulationPolicy encapsulationPolicy;
-    private final Predicate<Method> mustSatisfy;
+    private final @NonNull EncapsulationPolicy encapsulationPolicy;
+    private final @NonNull Predicate<Method> mustSatisfy;
 
     // -- HELPER
 
@@ -91,7 +94,8 @@ public class MethodFinderOptions {
 
     private static MethodFinderOptions havingAnnotationIfEnforcedByPolicyOrAccessibility(
             final IntrospectionPolicy memberIntrospectionPolicy,
-            final Class<? extends Annotation> annotationType) {
+            final Class<? extends Annotation> annotationType,
+            final Can<Class<? extends Annotation>> conflictingAnnotations) {
 
         //MemberAnnotationPolicy
         //  when REQUIRED -> annot. on support also required
@@ -100,22 +104,33 @@ public class MethodFinderOptions {
         return of(
                 EncapsulationPolicy.ENCAPSULATED_MEMBERS_SUPPORTED, // support methods are always allowed private
                 memberIntrospectionPolicy.getMemberAnnotationPolicy().isMemberAnnotationsRequired()
-                    ? method->_Annotations.synthesizeInherited(method, annotationType).isPresent()
+                    ? method->havingAnnotation(method, annotationType, conflictingAnnotations)
                     : method-> !_Reflect.isAccessible(method)
-                            ? _Annotations.synthesizeInherited(method, annotationType).isPresent()
+                            ? havingAnnotation(method, annotationType, conflictingAnnotations)
                             : true);
 
     }
 
+    //FIXME[ISIS-2774] if annotation appears on an abstract method that was inherited with given method,
+    // its not detected here
+    private static boolean havingAnnotation(
+            final Method method,
+            final Class<? extends Annotation> annotationType,
+            final Can<Class<? extends Annotation>> conflictingAnnotations) {
 
-//    private static MethodFinderOptions havingAnnotation(
-//            final IntrospectionPolicy memberIntrospectionPolicy,
-//            final Class<? extends Annotation> associatedAnnotationType) {
-//        return of(
-//                memberIntrospectionPolicy.getEncapsulationPolicy(),
-//                memberIntrospectionPolicy.getMemberAnnotationPolicy().isMemberAnnotationsRequired()
-//                    ? method->_Annotations.synthesizeInherited(method, associatedAnnotationType).isPresent()
-//                    : _Predicates.alwaysTrue());
-//    }
+        val isMarkerAnnotationPresent = _Annotations.synthesizeInherited(method, annotationType).isPresent();
+        if(isMarkerAnnotationPresent) {
+
+            val isConflictingAnnotationPresent = conflictingAnnotations
+            .stream()
+            .anyMatch(conflictingAnnotationType->
+                    _Annotations.synthesizeInherited(method, conflictingAnnotationType).isPresent());
+
+            // do not pickup this method if conflicting - so meta-model validation will fail later on
+            return !isConflictingAnnotationPresent;
+        }
+        return isMarkerAnnotationPresent;
+    }
+
 
 }
