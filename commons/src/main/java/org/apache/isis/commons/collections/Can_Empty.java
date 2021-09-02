@@ -27,6 +27,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -102,6 +103,11 @@ final class Can_Empty<T> implements Can<T> {
 
     @Override
     public Can<T> unique() {
+        return this;
+    }
+
+    @Override
+    public Can<T> unique(final @NonNull BiPredicate<T, T> equality) {
         return this;
     }
 
@@ -243,7 +249,6 @@ final class Can_Empty<T> implements Can<T> {
         val array = _Casts.<T[]>uncheckedCast(Array.newInstance(elementType, 0));
         return array;
     }
-
 
 
 }

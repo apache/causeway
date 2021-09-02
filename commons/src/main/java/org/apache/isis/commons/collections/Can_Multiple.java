@@ -29,6 +29,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -39,6 +40,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Objects;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
@@ -117,6 +119,18 @@ final class Can_Multiple<T> implements Can<T> {
         val set = new LinkedHashSet<T>(); // preserve order
         set.addAll(elements);
         return Can.ofCollection(set);
+    }
+
+    @Override
+    public Can<T> unique(final @NonNull BiPredicate<T, T> equality) {
+        val list = _Lists.<T>newArrayList();
+        elements
+        .forEach(element->{
+            if(!list.stream().anyMatch(x->equality.test(x, element))) {
+                list.add(element);
+            }
+        });
+        return Can.ofCollection(list);
     }
 
     @Override

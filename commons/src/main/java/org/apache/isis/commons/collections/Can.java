@@ -30,6 +30,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -38,8 +39,9 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
 import javax.enterprise.inject.Instance;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -394,6 +396,13 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @return non-null
      */
     public Can<T> unique();
+
+    /**
+     * Returns a {@code Can} with all the elements from this {@code Can}, but
+     * duplicated elements removed, based on given {@code equality} relation.
+     * @return non-null
+     */
+    public Can<T> unique(@NonNull BiPredicate<T, T> equality);
 
     /**
      * Returns a {@code Can} with all the elements from this {@code Can}, but
