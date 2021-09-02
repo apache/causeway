@@ -34,13 +34,16 @@ import java.lang.annotation.Target;
  * By placing the {@link MemberSupport} annotation on a method, a contract with the meta-model is enforced,
  * such that this method must be recognized by the meta-model and cannot be ignored.
  * <p>
- * In some sense acts as the semantic counterpart to {@link Programmatic}.
+ * It is complementary to {@link ObjectSupport} and {@link ObjectLifecycle},
+ * and in some sense acts as the semantic counterpart to {@link Programmatic}.
  *
  * @since 2.0 {@index}
+ * @see ObjectSupport
+ * @see ObjectLifecycle
  * @see Programmatic
  */
 @Inherited
-@Target({ ElementType.METHOD })
+@Target({ ElementType.METHOD, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @Domain.Include // meta annotation, in support of meta-model validation
 public @interface MemberSupport {

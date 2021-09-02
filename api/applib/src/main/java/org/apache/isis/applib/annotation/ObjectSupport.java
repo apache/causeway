@@ -20,50 +20,32 @@
 package org.apache.isis.applib.annotation;
 
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Used to indicate which property or properties make up the object title.
- *
+ * Indicates that a method is a supporting-method, one that contributes (disabled, hidden, ...)
+ * to its <i>Object</i>.
  * <p>
- * If more than one property is used, the order can be specified (using the
- * same Dewey-decimal notation).
- * The string to use between the components can also be specified.
- * </p>
+ * May only be placed on <i>domain object</i> methods, not <i>mixins</i> nor <i>domain services</i>.
+ * <p>
+ * By placing the {@link ObjectSupport} annotation on a method, a contract with the meta-model is enforced,
+ * such that this method must be recognized by the meta-model and cannot be ignored.
+ * <p>
+ * It is complementary to {@link MemberSupport} and {@link ObjectLifecycle},
+ * and in some sense acts as the semantic counterpart to {@link Programmatic}.
  *
- * @since 1.x {@index}
+ * @since 2.0 {@index}
+ * @see ObjectLifecycle
+ * @see MemberSupport
+ * @see Programmatic
  */
+@Inherited
+@Target({ ElementType.METHOD, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-@Target({
-        ElementType.METHOD,
-        ElementType.FIELD
-})
-@ObjectSupport // meta annotation, in support of meta-model validation
-public @interface Title {
-
-    /**
-     * The order (in Dewey decimal notation) that the property annotated with
-     * {@link Title} appears with respect to other properties also annotated
-     * with {@link Title}.
-     */
-    String sequence() default "1.0";
-
-    /**
-     * The string to use to separate this property from any preceding properties
-     * in the title.
-     */
-    String prepend() default " ";
-
-    /**
-     * The string to append to this property if non-empty.
-     */
-    String append() default "";
-
-    /**
-     * The length to abbreviate this title element to.
-     */
-    int abbreviatedTo() default Integer.MAX_VALUE;
+@Domain.Include // meta annotation, in support of meta-model validation
+public @interface ObjectSupport {
 
 }
