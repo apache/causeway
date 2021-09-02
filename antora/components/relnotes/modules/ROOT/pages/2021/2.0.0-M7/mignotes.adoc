@@ -14,11 +14,14 @@
 | previously
 | new
 
-| had introspection control via global config option 
-`isis.core.meta-model.annotation.action.explicit=true/false`
-| use `@DomainObject(introspection=...)` instead ... 
+| We provided introspection control via global config option 
+`isis.core.meta-model.annotation.action.explicit=true/false`.
+| Use `@DomainObject(introspection=...)` instead ... 
 as it allows to set the policy on a per class basis, and also introduces support 
-for non-public class member introspection 
+for non-public class member introspection. 
+
+| Imperative _Object_ method `boolean disabled(Type type)` took a single argument.
+| The `Type` argument was removed, use `boolean disabled()` instead.
 
 |===
 
