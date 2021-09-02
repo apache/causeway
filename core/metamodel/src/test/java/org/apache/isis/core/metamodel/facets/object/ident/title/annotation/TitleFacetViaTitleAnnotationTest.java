@@ -28,8 +28,11 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
@@ -41,8 +44,7 @@ import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetV
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import lombok.val;
 
 public class TitleFacetViaTitleAnnotationTest {
 
@@ -54,7 +56,7 @@ public class TitleFacetViaTitleAnnotationTest {
     @Mock private ObjectManager mockObjectManager;
 
     protected MetaModelContext metaModelContext;
-    
+
     protected static class DomainObjectWithProblemInItsAnnotatedTitleMethod {
 
         @Title
@@ -98,16 +100,17 @@ public class TitleFacetViaTitleAnnotationTest {
 
         TitleAnnotationFacetFactory.sort(evaluatorList);
 
-        final List<TitleFacetViaTitleAnnotation.TitleComponent> components = _Lists.map(evaluatorList, TitleFacetViaTitleAnnotation.TitleComponent.FROM_EVALUATORS);
+        val components = Can.ofCollection(evaluatorList)
+                .map(TitleFacetViaTitleAnnotation.TitleComponent::of);
         final TitleFacetViaTitleAnnotation facet = new TitleFacetViaTitleAnnotation(components, mockFacetHolder);
         final NormalDomainObject normalPojo = new NormalDomainObject();
         final Sequence sequence = context.sequence("in-title-element-order");
         context.checking(new Expectations() {
             {
-                
+
                 allowing(mockFacetHolder).getMetaModelContext();
                 will(returnValue(metaModelContext));
-                
+
                 allowing(mockManagedObject).getPojo();
                 will(returnValue(normalPojo));
 
@@ -132,15 +135,16 @@ public class TitleFacetViaTitleAnnotationTest {
         final List<Annotations.Evaluator<Title>> evaluators = Annotations
                 .getEvaluators(DomainObjectWithProblemInItsAnnotatedTitleMethod.class, Title.class);
 
-        final List<TitleFacetViaTitleAnnotation.TitleComponent> components = _Lists.map(evaluators, TitleFacetViaTitleAnnotation.TitleComponent.FROM_EVALUATORS);
+        val components = Can.ofCollection(evaluators)
+                .map(TitleFacetViaTitleAnnotation.TitleComponent::of);
         final TitleFacetViaTitleAnnotation facet = new TitleFacetViaTitleAnnotation(components, mockFacetHolder);
         final DomainObjectWithProblemInItsAnnotatedTitleMethod screwedPojo = new DomainObjectWithProblemInItsAnnotatedTitleMethod();
         context.checking(new Expectations() {
             {
-                
+
                 allowing(mockFacetHolder).getMetaModelContext();
                 will(returnValue(metaModelContext));
-                
+
                 allowing(mockManagedObject).getPojo();
                 will(returnValue(screwedPojo));
             }

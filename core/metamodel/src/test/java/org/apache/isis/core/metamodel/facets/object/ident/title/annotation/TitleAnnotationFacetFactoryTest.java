@@ -86,7 +86,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
         final List<Method> titleMethods = Arrays.asList(Customer.class.getMethod("someTitle"));
         for (int i = 0; i < titleMethods.size(); i++) {
-            final Annotations.MethodEvaluator<Title> titleEvaluator = (Annotations.MethodEvaluator<Title>) titleFacetViaTitleAnnotation.getComponents().get(i)
+            final Annotations.MethodEvaluator<Title> titleEvaluator =
+                    (Annotations.MethodEvaluator<Title>) titleFacetViaTitleAnnotation.getComponents().getElseFail(i)
                     .getTitleEvaluator();
 
             Assert.assertEquals(titleMethods.get(i),
@@ -129,7 +130,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
         //final List<TitleComponent> components = titleFacetViaTitleAnnotation.getComponents();
         for (int i = 0; i < titleMethods.size(); i++) {
-            final Annotations.MethodEvaluator<Title> titleEvaluator = (Annotations.MethodEvaluator<Title>) titleFacetViaTitleAnnotation.getComponents().get(i)
+            final Annotations.MethodEvaluator<Title> titleEvaluator =
+                    (Annotations.MethodEvaluator<Title>) titleFacetViaTitleAnnotation.getComponents().getElseFail(i)
                     .getTitleEvaluator();
 
             Assert.assertEquals(titleMethods.get(i),

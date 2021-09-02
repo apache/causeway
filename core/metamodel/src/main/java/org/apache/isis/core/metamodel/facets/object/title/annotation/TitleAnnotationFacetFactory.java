@@ -26,32 +26,24 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.fallback.FallbackFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaMethodsFactory;
-import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
-import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 public class TitleAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
-
-    private static final String TITLE_METHOD_NAME = "title";
 
     @Inject
     public TitleAnnotationFacetFactory(final MetaModelContext mmc) {
@@ -67,15 +59,17 @@ implements MetaModelRefiner {
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        final List<Annotations.Evaluator<Title>> evaluators = Annotations.getEvaluators(cls, Title.class);
+        final var evaluators = Annotations.getEvaluators(cls, Title.class);
         if (evaluators.isEmpty()) {
             return;
         }
 
         sort(evaluators);
-        final List<TitleFacetViaTitleAnnotation.TitleComponent> titleComponents =
-                _Lists.map(evaluators, TitleFacetViaTitleAnnotation.TitleComponent.FROM_EVALUATORS);
-        FacetUtil.addFacet(new TitleFacetViaTitleAnnotation(titleComponents, facetHolder));
+        final var titleComponents =
+                Can.ofCollection(evaluators)
+                .map(TitleFacetViaTitleAnnotation.TitleComponent::of);
+
+        addFacet(new TitleFacetViaTitleAnnotation(titleComponents, facetHolder));
     }
 
     public static void sort(final List<Annotations.Evaluator<Title>> evaluators) {
@@ -159,49 +153,84 @@ implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
 
-        programmingModel.addVisitingValidatorSkipManagedBeans(_objectSpec -> {
+        programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec -> {
 
-            final var objectSpec = (ObjectSpecificationAbstract)_objectSpec;
-            final var cls = objectSpec.getCorrespondingClass();
-            final var introspectionPolicy = objectSpec.getIntrospectionPolicy();
+//            final var objectSpec = (ObjectSpecificationAbstract)_objectSpec;
+//            final var cls = objectSpec.getCorrespondingClass();
+//            final var introspectionPolicy = objectSpec.getIntrospectionPolicy();
 
-            final var titleMethod = MethodFinderUtils.findMethod(
-                    MethodFinderOptions.objectSupport(introspectionPolicy),
-                    cls, TITLE_METHOD_NAME, String.class, null);
-            if (titleMethod == null) {
-                return;
-            }
+            final var titleFacetTopRank =
+                objectSpec
+                .getFacetRanking(TitleFacet.class)
+                .map(facetRanking->facetRanking.getTopRank(TitleFacet.class))
+                .orElse(Can.empty())
+                .unique(TitleFacet::semanticEquals);
 
-            // determine if cls contains an @Title annotated method, not inherited from superclass
-            final ObjectSpecification superSpec = objectSpec.superclass();
-            if (superSpec == null) {
-                return;
-            }
+            // top-rank if present must not be ambiguous
+            if(titleFacetTopRank.isCardinalityMultiple()) {
 
-            final var superIntrospectionPolicy = ((ObjectSpecificationAbstract)superSpec).getIntrospectionPolicy();
-            final var superCls = superSpec.getCorrespondingClass();
+                final var conflictingFeatures =
+                        titleFacetTopRank
+                        .map(TitleFacet::getClass)
+                        .map(Class::getSimpleName)
+                        .toList();
 
-            if (countMethodsWithTitleAnnotation(introspectionPolicy, cls)
-                    > countMethodsWithTitleAnnotation(superIntrospectionPolicy, superCls)) {
                 ValidationFailure.raiseFormatted(
                         objectSpec,
                         "%s: conflict for determining a strategy for retrieval of title for class, "
-                        + "contains a method '%s' and an annotation '@%s'",
+                        + "conflicting title facets %s",
                         objectSpec.getFeatureIdentifier().getClassName(),
-                        TITLE_METHOD_NAME,
-                        Title.class.getName());
+                        conflictingFeatures.toString());
+
             }
+
+
+
+//
+//            final var titleMethod = MethodFinderUtils.findMethod(
+//                    MethodFinderOptions.objectSupport(introspectionPolicy),
+//                    cls, TITLE_METHOD_NAME, String.class, null);
+//            if (titleMethod == null) {
+//                return;
+//            }
+//
+//            // determine if cls contains an @Title annotated method, not inherited from superclass
+//            final ObjectSpecification superSpec = objectSpec.superclass();
+//            if (superSpec == null) {
+//                return;
+//            }
+//
+//            final var superIntrospectionPolicy = ((ObjectSpecificationAbstract)superSpec).getIntrospectionPolicy();
+//            final var superCls = superSpec.getCorrespondingClass();
+//
+//            //FIXME[ISIS-2774] also count declared fields that are @Title annotated
+//            if (countMethodsWithTitleAnnotation(introspectionPolicy, cls)
+//                    > 1L
+//                    //countMethodsWithTitleAnnotation(superIntrospectionPolicy, superCls)
+//                    ) {
+//                ValidationFailure.raiseFormatted(
+//                        objectSpec,
+//                        "%s: conflict for determining a strategy for retrieval of title for class, "
+//                        + "contains a method '%s' and an annotation '@%s' on a different members",
+//                        objectSpec.getFeatureIdentifier().getClassName(),
+//                        TITLE_METHOD_NAME,
+//                        Title.class.getName());
+//            }
 
         });
     }
 
-    private static long countMethodsWithTitleAnnotation(
-            final IntrospectionPolicy introspectionPolicy,
-            final Class<?> cls) {
-        return MethodFinderUtils.streamMethodsWithAnnotation(
-                MethodFinderOptions.objectSupport(introspectionPolicy), cls, Title.class)
-                .filter(method->!method.getName().equals(MethodLiteralConstants.TITLE))
-                .count();
-    }
+//    private static long countMethodsWithTitleAnnotation(
+//            final IntrospectionPolicy introspectionPolicy,
+//            final Class<?> cls) {
+//        return MethodFinderUtils.streamMethodsWithAnnotation(
+//                MethodFinderOptions.objectSupport(introspectionPolicy), cls, Title.class)
+//                // don't count methods that identify as title() methods
+//                .filter(method->
+//                        !
+//                        (method.getName().equals(MethodLiteralConstants.TITLE)
+//                                && method.getParameterCount() == 0))
+//                .count();
+//    }
 
 }

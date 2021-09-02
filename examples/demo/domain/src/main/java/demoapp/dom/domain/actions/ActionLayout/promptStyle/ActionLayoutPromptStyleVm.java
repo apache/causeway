@@ -52,7 +52,7 @@ public class ActionLayoutPromptStyleVm implements HasAsciiDocDescription {
         return "ActionLayout#promptStyle";
     }
 
-    @Title
+    //@Title //TODO is in conflict with the above, which one shall it be?
     @Property(editing = Editing.DISABLED)
     @PropertyLayout(fieldSetId = "general", sequence = "1")
     @XmlElement(required = true)
