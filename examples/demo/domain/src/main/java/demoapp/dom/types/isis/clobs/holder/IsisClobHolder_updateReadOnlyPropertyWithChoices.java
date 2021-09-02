@@ -25,12 +25,14 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Clob;
 
-import demoapp.dom.types.Samples;
 import lombok.RequiredArgsConstructor;
+
+import demoapp.dom.types.Samples;
 
 //tag::class[]
 @Action(
@@ -46,13 +48,18 @@ public class IsisClobHolder_updateReadOnlyPropertyWithChoices {
 
     private final IsisClobHolder holder;
 
-    public IsisClobHolder act(Clob newValue) {
+    @MemberSupport
+    public IsisClobHolder act(final Clob newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
+
+    @MemberSupport
     public Clob default0Act() {
         return holder.getReadOnlyProperty();
     }
+
+    @MemberSupport
     public List<Clob> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());

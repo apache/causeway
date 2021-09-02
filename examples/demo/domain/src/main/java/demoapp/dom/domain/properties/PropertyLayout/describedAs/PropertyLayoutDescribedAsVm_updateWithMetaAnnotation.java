@@ -20,6 +20,7 @@ package demoapp.dom.domain.properties.PropertyLayout.describedAs;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -39,6 +40,7 @@ public class PropertyLayoutDescribedAsVm_updateWithMetaAnnotation {
     private final PropertyLayoutDescribedAsVm propertyLayoutDescribedAsVm;
 
 //tag::meta-annotation[]
+    @MemberSupport
     public PropertyLayoutDescribedAsVm act(
             @Parameter(optionality = Optionality.OPTIONAL)
             @DescribedAsMetaAnnotation                            // <.>
@@ -50,6 +52,7 @@ public class PropertyLayoutDescribedAsVm_updateWithMetaAnnotation {
         return propertyLayoutDescribedAsVm;
     }
 //end::meta-annotation[]
+    @MemberSupport
     public String default0Act() {
         return propertyLayoutDescribedAsVm.getPropertyUsingMetaAnnotation();
     }

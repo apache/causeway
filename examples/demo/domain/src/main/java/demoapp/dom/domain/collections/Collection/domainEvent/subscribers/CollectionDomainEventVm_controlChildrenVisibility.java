@@ -22,12 +22,14 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Redirect;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import demoapp.dom.domain.collections.Collection.domainEvent.CollectionDomainEventVm;
 import lombok.RequiredArgsConstructor;
+
+import demoapp.dom.domain.collections.Collection.domainEvent.CollectionDomainEventVm;
 
 
 //tag::class[]
@@ -44,10 +46,12 @@ public class CollectionDomainEventVm_controlChildrenVisibility {
 
     private final CollectionDomainEventVm collectionDomainEventVm;
 
+    @MemberSupport
     public CollectionDomainEventVm act(final CollectionDomainEventControlStrategy controlStrategy) {
         eventControlService.controlStrategy = controlStrategy;
         return collectionDomainEventVm;
     }
+    @MemberSupport
     public CollectionDomainEventControlStrategy default0Act() {
         return eventControlService.controlStrategy;
     }

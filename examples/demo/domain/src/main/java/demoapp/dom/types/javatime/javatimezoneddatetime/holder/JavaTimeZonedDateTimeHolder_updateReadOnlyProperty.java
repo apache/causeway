@@ -20,6 +20,7 @@ package demoapp.dom.types.javatime.javatimezoneddatetime.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
@@ -39,10 +40,13 @@ public class JavaTimeZonedDateTimeHolder_updateReadOnlyProperty {
 
     private final JavaTimeZonedDateTimeHolder holder;
 
-    public JavaTimeZonedDateTimeHolder act(java.time.ZonedDateTime newValue) {
+    @MemberSupport
+    public JavaTimeZonedDateTimeHolder act(final java.time.ZonedDateTime newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
+
+    @MemberSupport
     public java.time.ZonedDateTime default0Act() {
         return holder.getReadOnlyProperty();
     }

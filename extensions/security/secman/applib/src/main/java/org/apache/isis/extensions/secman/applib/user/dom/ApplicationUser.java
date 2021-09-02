@@ -32,12 +32,15 @@ import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.mixins.security.HasUsername;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
@@ -116,10 +119,11 @@ public abstract class ApplicationUser
 
     // -- MODEL
 
+    @Title
     public String title() {
         return getName();
     }
-
+    @ObjectSupport
     public String iconName() {
         return getStatus().isUnlocked() ? "unlocked" : "locked";
     }
@@ -470,7 +474,7 @@ public abstract class ApplicationUser
     @EncryptedPassword
     public abstract String getEncryptedPassword();
     public abstract void setEncryptedPassword(String encryptedPassword);
-
+    @MemberSupport
     public boolean hideEncryptedPassword() {
         return !getApplicationUserRepository().isPasswordFeatureEnabled(this);
     }
@@ -497,7 +501,7 @@ public abstract class ApplicationUser
     public boolean isHasPassword() {
         return _Strings.isNotEmpty(getEncryptedPassword());
     }
-
+    @MemberSupport
     public boolean hideHasPassword() {
         return !getApplicationUserRepository().isPasswordFeatureEnabled(this);
     }

@@ -35,9 +35,11 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Title;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolderRepository;
@@ -52,15 +54,17 @@ import demoapp.dom.types.jodatime.jodadatetime.vm.JodaDateTimeVm;
 //@Log4j2
 public class JodaDateTimes implements HasAsciiDocDescription {
 
+    @Title
     public String title() {
         return "org.joda.time.DateTime data type";
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public JodaDateTimeVm openViewModel(org.joda.time.DateTime initialValue) {
+    public JodaDateTimeVm openViewModel(final org.joda.time.DateTime initialValue) {
         return new JodaDateTimeVm(initialValue);
     }
+    @MemberSupport
     public org.joda.time.DateTime default0OpenViewModel() {
         return stream.stream().findFirst().orElse(null);
     }

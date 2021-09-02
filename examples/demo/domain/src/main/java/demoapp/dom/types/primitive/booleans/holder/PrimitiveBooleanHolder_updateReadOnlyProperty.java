@@ -20,6 +20,7 @@ package demoapp.dom.types.primitive.booleans.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
@@ -39,10 +40,13 @@ public class PrimitiveBooleanHolder_updateReadOnlyProperty {
 
     private final PrimitiveBooleanHolder holder;
 
-    public PrimitiveBooleanHolder act(boolean newValue) {
+    @MemberSupport
+    public PrimitiveBooleanHolder act(final boolean newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
+
+    @MemberSupport
     public boolean default0Act() {
         return holder.isReadOnlyProperty();
     }

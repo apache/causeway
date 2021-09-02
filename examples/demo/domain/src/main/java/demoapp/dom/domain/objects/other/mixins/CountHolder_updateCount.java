@@ -20,6 +20,7 @@ package demoapp.dom.domain.objects.other.mixins;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,15 +34,18 @@ public class CountHolder_updateCount {
 
     private final CountHolder holder;   // <.>
 
-    public CountHolder act(int count) {
+    @MemberSupport
+    public CountHolder act(final int count) {
         holder.setCount(count);
         return holder;
     }
 
+    @MemberSupport
     public int default0Act() {
         return holder.getCount();
     }
 
+    @MemberSupport
     public String validate0Act(final int proposedCount) {
         return proposedCount >= 0 && proposedCount <= 46
                 ? null

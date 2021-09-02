@@ -30,6 +30,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
@@ -67,6 +68,7 @@ public class MeService {
     final javax.inject.Provider<QueryResultsCache> queryResultsCacheProvider;
 
     // -- iconName
+    @ObjectSupport
     public String iconName() {
         return "applicationUser";
     }
@@ -111,7 +113,7 @@ public class MeService {
         final IsisConfiguration isisConfiguration;
 
         @EventListener(UserMenu.MeDomainEvent.class)
-        public void on(UserMenu.MeDomainEvent event) {
+        public void on(final UserMenu.MeDomainEvent event) {
             switch (isisConfiguration.getExtensions().getSecman().getUserMenuMeActionPolicy()) {
                 case HIDE:
                     event.hide();

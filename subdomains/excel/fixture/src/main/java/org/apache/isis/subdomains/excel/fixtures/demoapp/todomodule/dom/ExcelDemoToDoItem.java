@@ -28,11 +28,12 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.function.Predicate;
 
-import org.springframework.lang.Nullable;
 import javax.inject.Inject;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
@@ -41,8 +42,10 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MinLength;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.message.MessageService;
@@ -132,6 +135,7 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
 
     //region > title, iconName
 
+    @Title
     public String title() {
         final TitleBuffer buf = new TitleBuffer();
         buf.append(getDescription());
@@ -145,6 +149,7 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
         return buf.toString();
     }
 
+    @ObjectSupport
     public String iconName() {
         return "ExcelModuleDemoToDoItem-" + (!isComplete() ? "todo" : "done");
     }

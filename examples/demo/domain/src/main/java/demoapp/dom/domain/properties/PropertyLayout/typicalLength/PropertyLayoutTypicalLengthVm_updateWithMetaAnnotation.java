@@ -20,6 +20,7 @@ package demoapp.dom.domain.properties.PropertyLayout.typicalLength;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -39,6 +40,7 @@ public class PropertyLayoutTypicalLengthVm_updateWithMetaAnnotation {
     private final PropertyLayoutTypicalLengthVm propertyLayoutTypicalLengthVm;
 
 //tag::meta-annotation[]
+    @MemberSupport
     public PropertyLayoutTypicalLengthVm act(
             @Parameter(optionality = Optionality.OPTIONAL)
             @TypicalLengthMetaAnnotation                            // <.>
@@ -50,6 +52,7 @@ public class PropertyLayoutTypicalLengthVm_updateWithMetaAnnotation {
         return propertyLayoutTypicalLengthVm;
     }
 //end::meta-annotation[]
+    @MemberSupport
     public String default0Act() {
         return propertyLayoutTypicalLengthVm.getPropertyUsingMetaAnnotation();
     }

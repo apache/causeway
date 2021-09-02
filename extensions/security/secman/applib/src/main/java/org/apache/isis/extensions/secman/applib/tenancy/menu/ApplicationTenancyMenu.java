@@ -28,6 +28,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -59,6 +60,7 @@ public class ApplicationTenancyMenu {
     @Inject private ApplicationTenancyRepository applicationTenancyRepository;
 
     // -- iconName
+    @ObjectSupport
     public String iconName() {
         return "applicationTenancy";
     }

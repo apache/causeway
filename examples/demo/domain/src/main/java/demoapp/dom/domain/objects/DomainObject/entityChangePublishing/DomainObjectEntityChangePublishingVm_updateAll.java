@@ -25,6 +25,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
@@ -45,12 +46,12 @@ public class DomainObjectEntityChangePublishingVm_updateAll {
 
     private final DomainObjectEntityChangePublishingVm domainObjectAuditingVm;
 
+    @MemberSupport
     public DomainObjectEntityChangePublishingVm act(
-            boolean publishingEnabled
-            , boolean publishingDisabled
-            , boolean publishingEnabledMetaAnnotated
-            , boolean publishingEnabledMetaAnnotOverridden
-    ) {
+            final boolean publishingEnabled
+            , final boolean publishingDisabled
+            , final boolean publishingEnabledMetaAnnotated
+            , final boolean publishingEnabledMetaAnnotOverridden) {
 
         if(publishingEnabled) {
             renumber((List)publishingEnabledEntities.all());
@@ -67,21 +68,25 @@ public class DomainObjectEntityChangePublishingVm_updateAll {
 
         return domainObjectAuditingVm;
     }
+    @MemberSupport
     public boolean default0Act() {
         return true;
     }
+    @MemberSupport
     public boolean default1Act() {
         return true;
     }
+    @MemberSupport
     public boolean default2Act() {
         return true;
     }
+    @MemberSupport
     public boolean default3Act() {
         return true;
     }
 
     final static AtomicInteger counter = new AtomicInteger(0);
-    private static void renumber(List<DomainObjectEntityChangePublishingEntity> all) {
+    private static void renumber(final List<DomainObjectEntityChangePublishingEntity> all) {
         all.forEach(x -> x.setPropertyUpdatedByAction("Object #" + counter.incrementAndGet()));
     }
 

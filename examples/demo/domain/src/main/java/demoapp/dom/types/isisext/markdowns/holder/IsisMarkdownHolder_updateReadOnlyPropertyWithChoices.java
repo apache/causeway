@@ -23,12 +23,14 @@ import java.util.stream.Collectors;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
 
-import demoapp.dom.types.Samples;
 import lombok.RequiredArgsConstructor;
+
+import demoapp.dom.types.Samples;
 
 //tag::class[]
 @Action(
@@ -44,13 +46,18 @@ public class IsisMarkdownHolder_updateReadOnlyPropertyWithChoices {
 
     private final IsisMarkdownHolder holder;
 
-    public IsisMarkdownHolder act(Markdown newValue) {
+    @MemberSupport
+    public IsisMarkdownHolder act(final Markdown newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
+
+    @MemberSupport
     public Markdown default0Act() {
         return holder.getReadOnlyProperty();
     }
+
+    @MemberSupport
     public List<Markdown> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());

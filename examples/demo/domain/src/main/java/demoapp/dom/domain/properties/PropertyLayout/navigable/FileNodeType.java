@@ -18,6 +18,7 @@
  */
 package demoapp.dom.domain.properties.PropertyLayout.navigable;
 
+import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.util.Enums;
 
 //tag::class[]
@@ -27,6 +28,7 @@ public enum FileNodeType {
     DIRECTORY,
     FILE;
 
+    @Title
     public String title() {
         return Enums.getFriendlyNameOf(this);   // <.>
     }

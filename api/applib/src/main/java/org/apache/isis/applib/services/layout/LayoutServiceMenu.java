@@ -28,6 +28,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.RestrictTo;
@@ -85,10 +86,10 @@ public class LayoutServiceMenu {
 
         final byte[] zipBytes = layoutService.toZip(style);
         return new Blob(fileName, mimeTypeApplicationZip, zipBytes);
-
         // ...
     }
 
+    @MemberSupport
     public Style default0DownloadLayouts() {
         return Style.NORMALIZED;
     }
@@ -115,10 +116,12 @@ public class LayoutServiceMenu {
         // ...
     }
 
+    @MemberSupport
     public String default0DownloadMenuBarsLayout() {
         return "menubars.layout.xml";
     }
 
+    @MemberSupport
     public MenuBarsService.Type default1DownloadMenuBarsLayout() {
         return MenuBarsService.Type.DEFAULT;
     }

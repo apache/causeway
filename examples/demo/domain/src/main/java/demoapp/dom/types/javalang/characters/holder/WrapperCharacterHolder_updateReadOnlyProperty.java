@@ -20,6 +20,7 @@ package demoapp.dom.types.javalang.characters.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
@@ -39,10 +40,12 @@ public class WrapperCharacterHolder_updateReadOnlyProperty {
 
     private final WrapperCharacterHolder holder;
 
-    public WrapperCharacterHolder act(Character newValue) {
+    @MemberSupport
+    public WrapperCharacterHolder act(final Character newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
+    @MemberSupport
     public Character default0Act() {
         return holder.getReadOnlyProperty();
     }

@@ -32,9 +32,11 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Title;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolderRepository;
@@ -52,15 +54,17 @@ import demoapp.dom.types.primitive.floats.vm.PrimitiveFloatVm;
 //@Log4j2
 public class PrimitiveFloats implements HasAsciiDocDescription {
 
+    @Title
     public String title() {
         return "float (primitive) data type";
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public PrimitiveFloatVm openViewModel(float initialValue) {
+    public PrimitiveFloatVm openViewModel(final float initialValue) {
         return new PrimitiveFloatVm(initialValue);
     }
+    @MemberSupport
     public float default0OpenViewModel() {
         return 1.23f;
     }

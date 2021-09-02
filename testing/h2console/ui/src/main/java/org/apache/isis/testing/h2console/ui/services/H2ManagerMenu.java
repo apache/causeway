@@ -25,6 +25,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.RestrictTo;
@@ -73,7 +74,7 @@ public class H2ManagerMenu {
         }
         return webModule.getLocalResourcePathIfEnabled();
     }
-
+    @MemberSupport
     public boolean hideOpenH2Console() {
         return webModule==null || webModule.getLocalResourcePathIfEnabled()==null;
     }

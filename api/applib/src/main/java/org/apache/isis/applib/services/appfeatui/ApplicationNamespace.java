@@ -30,6 +30,7 @@ import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 
@@ -75,6 +76,7 @@ public class ApplicationNamespace extends ApplicationFeatureViewModel {
         final SortedSet<ApplicationFeatureId> contents = getFeature().getContents();
         return asViewModels(contents, ApplicationFeatureViewModel.class);
     }
+    @MemberSupport
     public boolean hideContents() {
         return getSort() != ApplicationFeatureSort.NAMESPACE;
     }

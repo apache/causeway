@@ -25,11 +25,13 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import demoapp.dom.types.Samples;
 import lombok.RequiredArgsConstructor;
+
+import demoapp.dom.types.Samples;
 
 //tag::class[]
 @Action(
@@ -45,17 +47,24 @@ public class PrimitiveShortHolder_updateReadOnlyPropertyWithChoices {
 
     private final PrimitiveShortHolder holder;
 
-    public PrimitiveShortHolder act(short newValue) {
+    @MemberSupport
+    public PrimitiveShortHolder act(final short newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
+
+    @MemberSupport
     public short default0Act() {
         return holder.getReadOnlyProperty();
     }
+
+    @MemberSupport
     public List<Short> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }
+
+    @MemberSupport
     public boolean hideAct() {
         return true; // TODO: choices doesn't seem to work for this datatype
     }

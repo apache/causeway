@@ -20,6 +20,7 @@ package demoapp.dom.types.javalang.doubles.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -41,13 +42,16 @@ public class WrapperDoubleHolder_updateReadOnlyOptionalProperty {
 
     private final WrapperDoubleHolder holder;
 
+    @MemberSupport
     public WrapperDoubleHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
-            Double newValue
+            final Double newValue
     ) {
         holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
+
+    @MemberSupport
     public Double default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }

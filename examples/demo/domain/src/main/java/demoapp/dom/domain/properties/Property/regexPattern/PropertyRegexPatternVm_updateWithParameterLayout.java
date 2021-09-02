@@ -22,6 +22,7 @@ import java.util.regex.Pattern;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -40,6 +41,7 @@ public class PropertyRegexPatternVm_updateWithParameterLayout {
     private final PropertyRegexPatternVm propertyRegexPatternVm;
 
 //tag::annotation[]
+    @MemberSupport
     public PropertyRegexPatternVm act(
             @Parameter(
                 regexPattern = "^\\w+@\\w+[.]com$"                  // <.>
@@ -55,6 +57,7 @@ public class PropertyRegexPatternVm_updateWithParameterLayout {
         return propertyRegexPatternVm;
     }
 //end::annotation[]
+    @MemberSupport
     public String default0Act() {
         return propertyRegexPatternVm.getEmailAddressPropertyUsingAnnotation();
     }

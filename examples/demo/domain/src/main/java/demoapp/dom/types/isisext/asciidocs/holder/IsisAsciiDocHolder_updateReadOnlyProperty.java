@@ -20,6 +20,7 @@ package demoapp.dom.types.isisext.asciidocs.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
@@ -40,10 +41,13 @@ public class IsisAsciiDocHolder_updateReadOnlyProperty {
 
     private final IsisAsciiDocHolder holder;
 
-    public IsisAsciiDocHolder act(AsciiDoc newValue) {
+    @MemberSupport
+    public IsisAsciiDocHolder act(final AsciiDoc newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
+
+    @MemberSupport
     public AsciiDoc default0Act() {
         return holder.getReadOnlyProperty();
     }

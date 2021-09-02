@@ -42,18 +42,19 @@ public class DependentArgsActionDemo_useIndependent {
 
     private final DependentArgsActionDemo holder;
 
+    @MemberSupport
     public DependentArgsActionDemo act(
 
             // PARAM 0
-            @Parameter(optionality = Optionality.MANDATORY)
+            @Parameter(optionality = Optionality.MANDATORY) final
             Parity parity,
 
             // PARAM 1
-            @Parameter(optionality = Optionality.MANDATORY)
+            @Parameter(optionality = Optionality.MANDATORY) final
             DemoItem item1,
 
             // PARAM 2
-            @Parameter(optionality = Optionality.MANDATORY)
+            @Parameter(optionality = Optionality.MANDATORY) final
             DemoItem item2
 
             ) {

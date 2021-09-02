@@ -23,11 +23,13 @@ import java.util.Objects;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
+
+import lombok.RequiredArgsConstructor;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.domain.collections.Collection.domainEvent.child.CollectionDomainEventChildVm;
-import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(
@@ -44,18 +46,22 @@ public class CollectionDomainEventVm_removeChild implements HasAsciiDocDescripti
         return collectionDomainEventVm.getChildren();
     }
 
-    public CollectionDomainEventVm_removeChild act(CollectionDomainEventChildVm child) {
+    @MemberSupport
+    public CollectionDomainEventVm_removeChild act(final CollectionDomainEventChildVm child) {
         getChildren().removeIf(
                 x -> Objects.equals(x.getValue(), child.getValue()));
         return this;
     }
 
+    @MemberSupport
     public CollectionDomainEventChildVm default0Act() {
         return getChildren().isEmpty() ? null : getChildren().get(0);
     }
+    @MemberSupport
     public List<CollectionDomainEventChildVm> choices0Act() {
         return getChildren();
     }
+    @MemberSupport
     public String disableAct() {
         return getChildren().isEmpty() ? "No children to remove": null;
     }

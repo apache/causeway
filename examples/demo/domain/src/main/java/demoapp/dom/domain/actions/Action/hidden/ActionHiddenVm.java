@@ -27,16 +27,19 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.Where;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @XmlRootElement(name = "root")
 @XmlType
@@ -51,11 +54,12 @@ public class ActionHiddenVm implements HasAsciiDocDescription {
     // ...
 //end::class[]
 
-    public ActionHiddenVm(String value) {
+    public ActionHiddenVm(final String value) {
         this.text = value;
         this.otherText = value;
     }
 
+    @Title
     public String title() {
         return "Action#hidden";
     }
@@ -87,6 +91,7 @@ public class ActionHiddenVm implements HasAsciiDocDescription {
         setText(text);
         return this;
     }
+    @MemberSupport
     public String default0UpdateTextNoAnnotation() {
         return getText();
     }
@@ -107,6 +112,7 @@ public class ActionHiddenVm implements HasAsciiDocDescription {
         setText(text);
         return this;
     }
+    @MemberSupport
     public String default0UpdateTextAndHiddenNowhere() {
         return getText();
     }
@@ -127,6 +133,7 @@ public class ActionHiddenVm implements HasAsciiDocDescription {
         setText(text);
         return this;
     }
+    @MemberSupport
     public String default0UpdateTextButHiddenOnForms() {
         return getText();
     }
@@ -148,6 +155,7 @@ public class ActionHiddenVm implements HasAsciiDocDescription {
         setText(text);
         return this;
     }
+    @MemberSupport
     public String default0UpdateTextButHiddenEverywhere() {
         return getText();
     }

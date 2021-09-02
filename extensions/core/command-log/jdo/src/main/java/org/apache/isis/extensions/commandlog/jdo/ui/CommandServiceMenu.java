@@ -33,11 +33,12 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Optionality;
-import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.clock.ClockService;
@@ -83,6 +84,7 @@ public class CommandServiceMenu {
     public List<CommandJdo> activeCommands() {
         return commandServiceRepository.findCurrent();
     }
+    @MemberSupport
     public boolean hideActiveCommands() {
         return commandServiceRepository == null;
     }
@@ -100,12 +102,15 @@ public class CommandServiceMenu {
             final LocalDate to) {
         return commandServiceRepository.findByFromAndTo(from, to);
     }
+    @MemberSupport
     public boolean hideFindCommands() {
         return commandServiceRepository == null;
     }
+    @MemberSupport
     public LocalDate default0FindCommands() {
         return now().minusDays(7);
     }
+    @MemberSupport
     public LocalDate default1FindCommands() {
         return now();
     }
@@ -119,6 +124,7 @@ public class CommandServiceMenu {
             final UUID transactionId) {
         return commandServiceRepository.findByInteractionId(transactionId).orElse(null);
     }
+    @MemberSupport
     public boolean hideFindCommandById() {
         return commandServiceRepository == null;
     }

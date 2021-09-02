@@ -33,9 +33,11 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Title;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolderRepository;
@@ -50,15 +52,17 @@ import demoapp.dom.types.javamath.bigdecimals.vm.JavaMathBigDecimalVm;
 //@Log4j2
 public class JavaMathBigDecimals implements HasAsciiDocDescription {
 
+    @Title
     public String title() {
         return "java.math.BigDecimal data type";
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public JavaMathBigDecimalVm openViewModel(java.math.BigDecimal initialValue) {
+    public JavaMathBigDecimalVm openViewModel(final java.math.BigDecimal initialValue) {
         return new JavaMathBigDecimalVm(initialValue);
     }
+    @MemberSupport
     public java.math.BigDecimal default0OpenViewModel() {
         return samples.single();
     }

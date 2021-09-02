@@ -37,6 +37,7 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.value.Markup;
@@ -74,6 +75,7 @@ public class IsisMarkupJpa
     @GeneratedValue
     private Long id;
 
+    @Title
     public String title() {
         return "Markup JPA entity: " +
             bookmarkService.bookmarkForElseFail(this).getIdentifier();

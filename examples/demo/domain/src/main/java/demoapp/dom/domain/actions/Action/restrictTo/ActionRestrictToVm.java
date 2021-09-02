@@ -27,16 +27,19 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Title;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @XmlRootElement(name = "root")
 @XmlType
@@ -51,7 +54,7 @@ public class ActionRestrictToVm implements HasAsciiDocDescription {
     // ...
 //end::class[]
 
-    public ActionRestrictToVm(String value) {
+    public ActionRestrictToVm(final String value) {
         this.propertyNoAnnotation = value;
         this.propertyForPrototyping = value;
         this.propertyForNoRestrictions = value;
@@ -59,6 +62,7 @@ public class ActionRestrictToVm implements HasAsciiDocDescription {
         this.propertyForMetaAnnotationsOverridden = value;
     }
 
+    @Title
     public String title() {
         return "Action#restrictTo";
     }
@@ -108,6 +112,7 @@ public class ActionRestrictToVm implements HasAsciiDocDescription {
         setPropertyNoAnnotation(text);
         return this;
     }
+    @MemberSupport
     public String default0UpdateNoAnnotation() {
         return getPropertyNoAnnotation();
     }
@@ -128,6 +133,7 @@ public class ActionRestrictToVm implements HasAsciiDocDescription {
         setPropertyForPrototyping(text);
         return this;
     }
+    @MemberSupport
     public String default0UpdateRestrictToPrototyping() {
         return getPropertyForPrototyping();
     }
@@ -148,6 +154,7 @@ public class ActionRestrictToVm implements HasAsciiDocDescription {
         setPropertyForNoRestrictions(text);
         return this;
     }
+    @MemberSupport
     public String default0UpdateRestrictToNoRestrictions() {
         return getPropertyForNoRestrictions();
     }
@@ -168,6 +175,7 @@ public class ActionRestrictToVm implements HasAsciiDocDescription {
         setPropertyForMetaAnnotations(text);
         return this;
     }
+    @MemberSupport
     public String default0UpdateMetaAnnotated() {
         return getPropertyForMetaAnnotations();
     }
@@ -190,6 +198,7 @@ public class ActionRestrictToVm implements HasAsciiDocDescription {
         setPropertyForMetaAnnotationsOverridden(text);
         return this;
     }
+    @MemberSupport
     public String default0UpdateMetaAnnotatedOverridden() {
         return getPropertyForMetaAnnotationsOverridden();
     }

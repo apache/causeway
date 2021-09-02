@@ -55,10 +55,6 @@ public class Markdown implements HasHtml, Serializable {
         this.markdown = markdown !=null ? markdown : "";
     }
 
-    public String title() {
-        return getMarkdown();
-    }
-
     @Override
     public String asHtml() {
         return Converter.mdToHtml(markdown);

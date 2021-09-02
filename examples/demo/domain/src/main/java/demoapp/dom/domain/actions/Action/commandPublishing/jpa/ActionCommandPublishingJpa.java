@@ -30,10 +30,12 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
 import lombok.Getter;
@@ -69,6 +71,7 @@ public class ActionCommandPublishingJpa
         this.propertyMetaAnnotatedOverridden = initialValue;
     }
 
+    @Title
     public String title() {
         return "Action#commandPublishing (JPA)";
     }
@@ -116,6 +119,7 @@ public class ActionCommandPublishingJpa
         setProperty(value);
         return this;
     }
+    @MemberSupport
     public String default0UpdatePropertyUsingAnnotation() {
         return getProperty();
 //tag::annotation[]
@@ -139,6 +143,7 @@ public class ActionCommandPublishingJpa
         setPropertyCommandDisabled(value);
         return this;
     }
+    @MemberSupport
     public String default0UpdatePropertyCommandDisabledUsingAnnotation() {
         return getPropertyCommandDisabled();
 //tag::annotation-2[]
@@ -162,6 +167,7 @@ public class ActionCommandPublishingJpa
         setPropertyMetaAnnotated(value);
         return this;
     }
+    @MemberSupport
     public String default0UpdatePropertyUsingMetaAnnotation() {
         return getPropertyMetaAnnotated();
 //tag::meta-annotation[]
@@ -187,6 +193,7 @@ public class ActionCommandPublishingJpa
         setPropertyMetaAnnotatedOverridden(value);
         return this;
     }
+    @MemberSupport
     public String default0UpdatePropertyUsingMetaAnnotationButOverridden() {
         return getPropertyMetaAnnotatedOverridden();
 //tag::meta-annotation-overridden[]

@@ -26,11 +26,13 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import demoapp.dom.types.Samples;
 import lombok.RequiredArgsConstructor;
+
+import demoapp.dom.types.Samples;
 
 //tag::class[]
 @Action(
@@ -46,13 +48,18 @@ public class JavaTimeLocalDateHolder_updateReadOnlyPropertyWithChoices {
 
     private final JavaTimeLocalDateHolder holder;
 
-    public JavaTimeLocalDateHolder act(java.time.LocalDate newValue) {
+    @MemberSupport
+    public JavaTimeLocalDateHolder act(final java.time.LocalDate newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
+
+    @MemberSupport
     public java.time.LocalDate default0Act() {
         return holder.getReadOnlyProperty();
     }
+
+    @MemberSupport
     public List<java.time.LocalDate> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());

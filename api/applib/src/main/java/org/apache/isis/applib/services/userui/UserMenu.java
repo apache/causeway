@@ -25,6 +25,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -68,12 +69,10 @@ public class UserMenu {
     public UserMemento me() {
         return userService.currentUser().orElse(null);
     }
-
+    @MemberSupport
     public String disableMe() {
         return userService.currentUser().isPresent() ? null : "Current user not available";
     }
-
-
 
 
 }

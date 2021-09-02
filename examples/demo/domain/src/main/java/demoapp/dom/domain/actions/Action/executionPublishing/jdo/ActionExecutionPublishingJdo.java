@@ -29,11 +29,13 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Title;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -56,12 +58,13 @@ public class ActionExecutionPublishingJdo
     // ...
 //end::class[]
 
-    public ActionExecutionPublishingJdo(String initialValue) {
+    public ActionExecutionPublishingJdo(final String initialValue) {
         this.property = initialValue;
         this.propertyMetaAnnotated = initialValue;
         this.propertyMetaAnnotatedOverridden = initialValue;
     }
 
+    @Title
     public String title() {
         return "Action#executionPublishing (JDO)";
     }
@@ -98,6 +101,7 @@ public class ActionExecutionPublishingJdo
         setProperty(value);
         return this;
     }
+    @MemberSupport
     public String default0UpdatePropertyUsingAnnotation() {
         return getProperty();
     }
@@ -119,6 +123,7 @@ public class ActionExecutionPublishingJdo
         setPropertyMetaAnnotated(value);
         return this;
     }
+    @MemberSupport
     public String default0UpdatePropertyUsingMetaAnnotation() {
         return getPropertyMetaAnnotated();
     }
@@ -142,6 +147,7 @@ public class ActionExecutionPublishingJdo
         setPropertyMetaAnnotatedOverridden(value);
         return this;
     }
+    @MemberSupport
     public String default0UpdatePropertyUsingMetaAnnotationButOverridden() {
         return getPropertyMetaAnnotatedOverridden();
     }

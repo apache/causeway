@@ -20,6 +20,7 @@ package demoapp.dom.types.javalang.integers.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
@@ -39,10 +40,13 @@ public class WrapperIntegerHolder_updateReadOnlyProperty {
 
     private final WrapperIntegerHolder holder;
 
-    public WrapperIntegerHolder act(Integer newValue) {
+    @MemberSupport
+    public WrapperIntegerHolder act(final Integer newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
+
+    @MemberSupport
     public Integer default0Act() {
         return holder.getReadOnlyProperty();
     }

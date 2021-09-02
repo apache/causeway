@@ -20,6 +20,7 @@ package demoapp.dom.types.javalang.characters.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -41,13 +42,15 @@ public class WrapperCharacterHolder_updateReadOnlyOptionalProperty {
 
     private final WrapperCharacterHolder holder;
 
+    @MemberSupport
     public WrapperCharacterHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
-            Character newValue
+            final Character newValue
     ) {
         holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
+    @MemberSupport
     public Character default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }

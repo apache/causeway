@@ -27,6 +27,7 @@ import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.Title;
 
 @DomainObject(
         nature = Nature.VIEW_MODEL,
@@ -38,6 +39,7 @@ public class ConfigurationViewmodel {
     @Autowired(required = false)
     private ConfigurationViewService configurationService;
 
+    @Title
     public String title() {
         return "Configuration";
     }

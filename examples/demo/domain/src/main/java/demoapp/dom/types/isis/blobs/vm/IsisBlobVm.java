@@ -30,12 +30,14 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.value.Blob;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.isis.blobs.holder.IsisBlobHolder2;
-import lombok.Getter;
-import lombok.Setter;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -50,12 +52,13 @@ public class IsisBlobVm
         implements HasAsciiDocDescription, IsisBlobHolder2 {
 
 //end::class[]
-    public IsisBlobVm(Blob initialValue) {
+    public IsisBlobVm(final Blob initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
 
 //tag::class[]
+    @Title
     public String title() {
         return "Blob view model: " +getReadOnlyProperty().getName();
     }

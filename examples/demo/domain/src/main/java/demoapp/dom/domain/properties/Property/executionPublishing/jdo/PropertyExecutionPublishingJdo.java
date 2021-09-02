@@ -32,6 +32,7 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.applib.annotation.Title;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -54,12 +55,13 @@ public class PropertyExecutionPublishingJdo
     // ...
 //end::class[]
 
-    public PropertyExecutionPublishingJdo(String initialValue) {
+    public PropertyExecutionPublishingJdo(final String initialValue) {
         this.property = initialValue;
         this.propertyMetaAnnotated = initialValue;
         this.propertyMetaAnnotatedOverridden = initialValue;
     }
 
+    @Title
     public String title() {
         return "Property#executionPublishing (JDO)";
     }

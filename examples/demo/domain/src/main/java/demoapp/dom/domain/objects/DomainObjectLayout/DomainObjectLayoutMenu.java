@@ -21,24 +21,24 @@ package demoapp.dom.domain.objects.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
-
-import lombok.extern.log4j.Log4j2;
 
 @DomainService(
         nature=NatureOfService.VIEW,
         logicalTypeName = "demo.DomainObjectLayoutMenu"
 )
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
-@Log4j2
+//@Log4j2
 public class DomainObjectLayoutMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-bookmark", describedAs = "Add link to object once visited as a bookmark")
     public void bookmarking(){
     }
+    @MemberSupport
     public String disableBookmarking(){
         return "Add link to object once visited as a bookmark" +
                  " (not yet implemented in demo)";
@@ -51,6 +51,7 @@ public class DomainObjectLayoutMenu {
     )
     public void cssClass(){
     }
+    @MemberSupport
     public String disableCssClass(){
         return "CSS class to wrap the UI component representing the domain object" +
                  " (not yet implemented in demo)";
@@ -62,6 +63,7 @@ public class DomainObjectLayoutMenu {
     @ActionLayout(cssClassFa="fa-font-awesome-flag", describedAs = "Font awesome icon to represent domain object")
     public void cssClassFa(){
     }
+    @MemberSupport
     public String disableCssClassFa(){
         return "Font awesome icon to represent domain object" +
                 " (not yet implemented in demo)";
@@ -73,6 +75,7 @@ public class DomainObjectLayoutMenu {
     @ActionLayout(cssClassFa="fa-comment", describedAs = "Description of the property, shown as a tooltip")
     public void describedAs(){
     }
+    @MemberSupport
     public String disableDescribedAs(){
         return "Description of the property, shown as a tooltip" +
                 " (not yet implemented in demo)";
@@ -84,6 +87,7 @@ public class DomainObjectLayoutMenu {
     @ActionLayout(cssClassFa="fa-signature", describedAs = "Custom text for the domain object's type wherever labelled")
     public void named(){
     }
+    @MemberSupport
     public String disableNamed(){
         return "Custom text for the domain object's type wherever labelled" +
                 " (not yet implemented in demo)";
@@ -95,6 +99,7 @@ public class DomainObjectLayoutMenu {
     @ActionLayout(cssClassFa="fa-fast-forward", describedAs = "Number of domain objects per page in collections")
     public void paged(){
     }
+    @MemberSupport
     public String disablePaged(){
         return "Number of domain objects per page in collections" +
                 " (not yet implemented in demo)";
@@ -106,6 +111,7 @@ public class DomainObjectLayoutMenu {
     @ActionLayout(cssClassFa="fa-signature", describedAs = "Overrides plural form for the domain object's type, eg for irregular plurals")
     public void plural(){
     }
+    @MemberSupport
     public String disablePlural(){
         return "Overrides plural form for the domain object's type, eg for irregular plurals" +
                 " (not yet implemented in demo)";
@@ -117,6 +123,7 @@ public class DomainObjectLayoutMenu {
     @ActionLayout(cssClassFa="fa-desktop", describedAs = "Class of the UI events emitted to allow subscribers to specify title, icon etc")
     public void xxxUiEvent(){
     }
+    @MemberSupport
     public String disableXxxUiEvent(){
         return "Class of the UI events emitted to allow subscribers to specify title, icon etc" +
                 " (not yet implemented in demo)";

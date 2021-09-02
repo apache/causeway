@@ -25,6 +25,7 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Title;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,6 +39,7 @@ import lombok.Setter;
 @AllArgsConstructor(staticName="of")
 public class DemoItem {
 
+    @Title
     public String title() {
         return String.format("DemoItem '%s'", getName());
     }

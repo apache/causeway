@@ -36,9 +36,11 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
@@ -108,10 +110,13 @@ public class UserPermissionViewModel implements ViewModel {
 
 
     // -- identification
+
+    @Title
     public String title() {
         return getVerb() + " " + getFeatureId().getFullyQualifiedName();
     }
 
+    @ObjectSupport
     public String iconName() {
         return "userPermission";
     }
@@ -170,7 +175,7 @@ public class UserPermissionViewModel implements ViewModel {
         );
     }
 
-    private static String join(Object ... args) {
+    private static String join(final Object ... args) {
         return _NullSafe.stream(args)
                 .map(arg->""+arg)
                 .collect(Collectors.joining(":"));

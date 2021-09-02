@@ -25,6 +25,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.Publishing;
@@ -85,6 +86,7 @@ public class ImpersonateStopMenu {
         this.userService.stopImpersonating();
         this.messageService.informUser("No longer impersonating another user");
     }
+    @MemberSupport
     public boolean hideStopImpersonating() {
         return ! isImpersonating();
     }

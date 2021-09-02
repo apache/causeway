@@ -20,6 +20,7 @@ package demoapp.dom.types.javalang.strings.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
@@ -39,10 +40,13 @@ public class JavaLangStringHolder_updateReadOnlyProperty {
 
     private final JavaLangStringHolder holder;
 
-    public JavaLangStringHolder act(String newValue) {
+    @MemberSupport
+    public JavaLangStringHolder act(final String newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
+
+    @MemberSupport
     public String default0Act() {
         return holder.getReadOnlyProperty();
     }

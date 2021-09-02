@@ -30,6 +30,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Title;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -42,12 +43,13 @@ import demoapp.dom.services.core.eventbusservice.EventBusServiceDemoVm.UiButtonE
 @DomainObject(logicalTypeName = "demo.EventLogEntryJpa")
 public class EventLogEntryJpa {
 
-    public static EventLogEntryJpa of(UiButtonEvent even) {
+    public static EventLogEntryJpa of(final UiButtonEvent even) {
         val x = new EventLogEntryJpa();
         x.setEvent("Button clicked " + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_TIME));
         return x;
     }
 
+    @Title
     public String title() {
         return getEvent();
     }
@@ -73,7 +75,7 @@ public class EventLogEntryJpa {
 
     @Action
     @ActionLayout(associateWith = "acknowledge")
-    public EventLogEntryJpa acknowledge(Acknowledge acknowledge) {
+    public EventLogEntryJpa acknowledge(final Acknowledge acknowledge) {
         setAcknowledge(acknowledge);
         return this;
     }

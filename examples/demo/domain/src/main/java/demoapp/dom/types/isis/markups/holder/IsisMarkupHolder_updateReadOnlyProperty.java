@@ -20,6 +20,7 @@ package demoapp.dom.types.isis.markups.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Markup;
@@ -40,10 +41,13 @@ public class IsisMarkupHolder_updateReadOnlyProperty {
 
     private final IsisMarkupHolder holder;
 
-    public IsisMarkupHolder act(Markup newValue) {
+    @MemberSupport
+    public IsisMarkupHolder act(final Markup newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
+
+    @MemberSupport
     public Markup default0Act() {
         return holder.getReadOnlyProperty();
     }

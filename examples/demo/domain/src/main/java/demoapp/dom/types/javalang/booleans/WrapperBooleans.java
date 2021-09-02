@@ -36,6 +36,7 @@ import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Title;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolderRepository;
@@ -49,15 +50,17 @@ import demoapp.dom.types.javalang.booleans.vm.WrapperBooleanVm;
 //@Log4j2
 public class WrapperBooleans implements HasAsciiDocDescription {
 
+    @Title
     public String title() {
         return "Boolean (wrapper) data type";
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public WrapperBooleanVm openViewModel(Boolean initialValue) {
+    public WrapperBooleanVm openViewModel(final Boolean initialValue) {
         return new WrapperBooleanVm(initialValue);
     }
+    @MemberSupport
     public Boolean default0OpenViewModel() {
         return true;
     }
@@ -79,8 +82,8 @@ public class WrapperBooleans implements HasAsciiDocDescription {
             , describedAs = "FIXME[ISIS-2387] even though primitive1 gets initialized with true, the model thinks its null"
     )
     public WrapperBooleans booleanParams(
-            boolean primitive0,
-            boolean primitive1) {
+            final boolean primitive0,
+            final boolean primitive1) {
         return this;
     }
     @MemberSupport
@@ -99,8 +102,8 @@ public class WrapperBooleans implements HasAsciiDocDescription {
                     " initialize with FALSE when null"
     )
     public WrapperBooleans booleanBoxedParams(
-            Boolean boxed0,
-            Boolean boxed1) {
+            final Boolean boxed0,
+            final Boolean boxed1) {
         return this;
     }
     @MemberSupport

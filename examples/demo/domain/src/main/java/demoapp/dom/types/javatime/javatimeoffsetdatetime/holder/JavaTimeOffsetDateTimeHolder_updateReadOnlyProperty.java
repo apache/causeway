@@ -20,6 +20,7 @@ package demoapp.dom.types.javatime.javatimeoffsetdatetime.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
@@ -39,10 +40,13 @@ public class JavaTimeOffsetDateTimeHolder_updateReadOnlyProperty {
 
     private final JavaTimeOffsetDateTimeHolder holder;
 
-    public JavaTimeOffsetDateTimeHolder act(java.time.OffsetDateTime newValue) {
+    @MemberSupport
+    public JavaTimeOffsetDateTimeHolder act(final java.time.OffsetDateTime newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
+
+    @MemberSupport
     public java.time.OffsetDateTime default0Act() {
         return holder.getReadOnlyProperty();
     }

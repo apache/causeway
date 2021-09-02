@@ -27,11 +27,13 @@ import org.joda.time.DateTime;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import demoapp.dom.types.Samples;
 import lombok.RequiredArgsConstructor;
+
+import demoapp.dom.types.Samples;
 
 //tag::class[]
 @Action(
@@ -47,13 +49,18 @@ public class JodaDateTimeHolder_updateReadOnlyPropertyWithChoices {
 
     private final JodaDateTimeHolder holder;
 
-    public JodaDateTimeHolder act(org.joda.time.DateTime newValue) {
+    @MemberSupport
+    public JodaDateTimeHolder act(final org.joda.time.DateTime newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
+
+    @MemberSupport
     public org.joda.time.DateTime default0Act() {
         return holder.getReadOnlyProperty();
     }
+
+    @MemberSupport
     public List<org.joda.time.DateTime> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());

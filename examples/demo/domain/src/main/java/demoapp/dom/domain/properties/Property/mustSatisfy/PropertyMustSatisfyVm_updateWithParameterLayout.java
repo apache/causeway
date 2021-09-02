@@ -20,6 +20,7 @@ package demoapp.dom.domain.properties.Property.mustSatisfy;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -38,6 +39,7 @@ public class PropertyMustSatisfyVm_updateWithParameterLayout {
     private final PropertyMustSatisfyVm propertyMustSatisfyVm;
 
 //tag::annotation[]
+    @MemberSupport
     public PropertyMustSatisfyVm act(
             @Parameter(
                 mustSatisfy = OfWorkingAgeSpecification.class   // <.>
@@ -51,6 +53,7 @@ public class PropertyMustSatisfyVm_updateWithParameterLayout {
         return propertyMustSatisfyVm;
     }
 //end::annotation[]
+    @MemberSupport
     public Integer default0Act() {
         return propertyMustSatisfyVm.getCustomerAgePropertyUsingAnnotation();
     }

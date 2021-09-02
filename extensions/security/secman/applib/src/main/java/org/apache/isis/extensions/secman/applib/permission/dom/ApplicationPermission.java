@@ -34,6 +34,7 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
@@ -104,6 +105,7 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
 
     // -- MODEL
 
+    @Title
     public String title() {
         val buf = new StringBuilder();
         buf.append(getRole().getName()).append(":")  // admin:
@@ -288,7 +290,7 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
     // -- FIND FEATURE
 
     @Programmatic
-    public ApplicationFeature findFeature(ApplicationFeatureId featureId) {
+    public ApplicationFeature findFeature(final ApplicationFeatureId featureId) {
         return featureRepository.findFeature(featureId);
     }
 

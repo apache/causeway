@@ -32,9 +32,11 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Title;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolderRepository;
@@ -48,15 +50,17 @@ import demoapp.dom.types.javasql.javasqltimestamp.vm.JavaSqlTimestampVm;
 //@Log4j2
 public class JavaSqlTimestamps implements HasAsciiDocDescription {
 
+    @Title
     public String title() {
         return "java.sql.Timestamp data type";
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public JavaSqlTimestampVm openViewModel(java.sql.Timestamp initialValue) {
+    public JavaSqlTimestampVm openViewModel(final java.sql.Timestamp initialValue) {
         return new JavaSqlTimestampVm(initialValue);
     }
+    @MemberSupport
     public java.sql.Timestamp default0OpenViewModel() {
         return new java.sql.Timestamp(new java.util.Date(120,1,1, 1, 1).getTime()); // 1900 is the epoch
     }

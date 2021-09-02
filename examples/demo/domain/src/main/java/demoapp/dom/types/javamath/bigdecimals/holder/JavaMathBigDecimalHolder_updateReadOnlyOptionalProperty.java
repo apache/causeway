@@ -20,6 +20,7 @@ package demoapp.dom.types.javamath.bigdecimals.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -41,13 +42,16 @@ public class JavaMathBigDecimalHolder_updateReadOnlyOptionalProperty {
 
     private final JavaMathBigDecimalHolder holder;
 
+    @MemberSupport
     public JavaMathBigDecimalHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
-            java.math.BigDecimal newValue
+            final java.math.BigDecimal newValue
     ) {
         holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
+
+    @MemberSupport
     public java.math.BigDecimal default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }

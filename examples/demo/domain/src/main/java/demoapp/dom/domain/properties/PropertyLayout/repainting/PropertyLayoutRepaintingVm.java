@@ -31,12 +31,14 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Repainting;
+import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.annotations.PdfJsViewer;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.Setter;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -48,6 +50,7 @@ import lombok.Setter;
 )
 public class PropertyLayoutRepaintingVm implements HasAsciiDocDescription {
 
+    @Title
     public String title() {
         return "PropertyLayout#repainting";
     }

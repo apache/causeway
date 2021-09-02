@@ -35,6 +35,7 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.jaxb.PersistentEntitiesAdapter;
 
 import lombok.Getter;
@@ -113,6 +114,7 @@ public class DomainObjectList {
 
     // -- title
     private String title;
+    @Title
     public String title() {
         return title;
     }

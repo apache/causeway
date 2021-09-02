@@ -20,6 +20,7 @@ package demoapp.dom.types.javalang.strings.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -41,13 +42,16 @@ public class JavaLangStringHolder_updateReadOnlyOptionalProperty {
 
     private final JavaLangStringHolder holder;
 
+    @MemberSupport
     public JavaLangStringHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
-            String newValue
+            final String newValue
     ) {
         holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
+
+    @MemberSupport
     public String default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }

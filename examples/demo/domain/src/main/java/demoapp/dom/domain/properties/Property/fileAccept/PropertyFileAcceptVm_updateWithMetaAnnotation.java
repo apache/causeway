@@ -20,6 +20,7 @@ package demoapp.dom.domain.properties.Property.fileAccept;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -39,6 +40,7 @@ public class PropertyFileAcceptVm_updateWithMetaAnnotation {
     private final PropertyFileAcceptVm propertyFileAcceptVm;
 
 //tag::meta-annotation[]
+    @MemberSupport
     public PropertyFileAcceptVm act(
             @FileAcceptPdfMetaAnnotation                            // <.>
             @Parameter()
@@ -50,6 +52,7 @@ public class PropertyFileAcceptVm_updateWithMetaAnnotation {
         return propertyFileAcceptVm;
     }
 //end::meta-annotation[]
+    @MemberSupport
     public Blob default0Act() {
         return propertyFileAcceptVm.getPdfPropertyUsingMetaAnnotation();
     }

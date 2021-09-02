@@ -26,12 +26,15 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Title;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.Setter;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @XmlRootElement(name = "Demo")
 @XmlType
@@ -39,6 +42,7 @@ import lombok.Setter;
 @DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.Tab")
 public class TabDemo implements HasAsciiDocDescription {
 
+    @Title
     public String title() {
         return "Tab Demo";
     }
@@ -60,7 +64,7 @@ public class TabDemo implements HasAsciiDocDescription {
     // -- DEMO FIELD 1
 
     @Getter @Setter private String field1 = "field 1";
-
+    @MemberSupport
     public boolean hideField1() {
         return hidden;
     }

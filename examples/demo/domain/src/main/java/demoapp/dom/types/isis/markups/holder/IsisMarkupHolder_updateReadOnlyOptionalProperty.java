@@ -20,6 +20,7 @@ package demoapp.dom.types.isis.markups.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -42,13 +43,16 @@ public class IsisMarkupHolder_updateReadOnlyOptionalProperty {
 
     private final IsisMarkupHolder holder;
 
+    @MemberSupport
     public IsisMarkupHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
-            Markup newValue
+            final Markup newValue
     ) {
         holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
+
+    @MemberSupport
     public Markup default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }

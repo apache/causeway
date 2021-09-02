@@ -31,10 +31,12 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.control.AsyncControl;
@@ -76,6 +78,7 @@ public class WrapperFactoryJpa
         this.propertyAsyncMixin = initialValue;
     }
 
+    @Title
     public String title() {
         return "WrapperFactory";
     }
@@ -111,6 +114,7 @@ public class WrapperFactoryJpa
         wrapperFactoryJdo.setPropertyAsync(value);
         return this;
     }
+    @MemberSupport
     public String default0UpdatePropertyAsync() {
         return getPropertyAsync();
     }
@@ -134,6 +138,7 @@ public class WrapperFactoryJpa
         WrapperFactoryJpa act = (WrapperFactoryJpa) mixin.act(value);
         return this;
     }
+    @MemberSupport
     public String default0UpdatePropertyUsingAsyncWrapMixin() {
         return new WrapperFactoryEntity_updatePropertyAsyncMixin(this).default0Act();
     }

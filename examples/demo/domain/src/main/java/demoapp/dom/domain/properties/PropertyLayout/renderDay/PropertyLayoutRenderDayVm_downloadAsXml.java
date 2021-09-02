@@ -21,6 +21,7 @@ package demoapp.dom.domain.properties.PropertyLayout.renderDay;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.value.Clob;
@@ -38,10 +39,13 @@ public class PropertyLayoutRenderDayVm_downloadAsXml {
 
     private final PropertyLayoutRenderDayVm propertyLayoutRenderDayVm;
 
+    @MemberSupport
     public Clob act(final String fileName) {
         val xml = jaxbService.toXml(propertyLayoutRenderDayVm);
         return Clob.of(fileName, NamedWithMimeType.CommonMimeType.XML, xml);
     }
+
+    @MemberSupport
     public String default0Act() {
         return "PropertyLayoutRenderVm.xml";
     }

@@ -34,13 +34,15 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.Where;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.domain.properties.Property.hidden.child.PropertyHiddenChildVm;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.domain.properties.Property.hidden.child.PropertyHiddenChildVm;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -54,6 +56,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class PropertyHiddenVm implements HasAsciiDocDescription {
 
+    @Title
     public String title() {
         return "Property#hidden";
     }

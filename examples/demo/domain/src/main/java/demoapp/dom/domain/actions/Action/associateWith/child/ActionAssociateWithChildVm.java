@@ -28,6 +28,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Title;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -46,10 +47,11 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @NoArgsConstructor
 public class ActionAssociateWithChildVm implements HasAsciiDocDescription {
 
-    public ActionAssociateWithChildVm(String value) {
+    public ActionAssociateWithChildVm(final String value) {
         setValue(value);
     }
 
+    @Title
     public String title() {
         return getValue();
     }

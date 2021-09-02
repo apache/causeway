@@ -18,10 +18,13 @@
  */
 package demoapp.dom.domain.actions.progmodel.depargs;
 
+import org.apache.isis.applib.annotation.Title;
+
 public enum Parity {
     EVEN,
     ODD;
 
+    @Title
     public String title() {
         return name();
     }

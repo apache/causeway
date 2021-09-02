@@ -28,6 +28,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.RestrictTo;
@@ -87,7 +88,7 @@ public class SwaggerServiceMenu {
     public LocalResourcePath openSwaggerUi() {
         return new LocalResourcePath("/swagger-ui/index.thtml");
     }
-
+    @MemberSupport
     public String disableOpenSwaggerUi() {
         return disableReasonWhenRequiresROViewer();
     }
@@ -105,7 +106,7 @@ public class SwaggerServiceMenu {
     public LocalResourcePath openRestApi() {
         return new LocalResourcePath(basePath);
     }
-
+    @MemberSupport
     public String disableOpenRestApi() {
         return disableReasonWhenRequiresROViewer();
     }
@@ -130,13 +131,15 @@ public class SwaggerServiceMenu {
         final String spec = swaggerService.generateSwaggerSpec(visibility, format);
         return new Clob(fileName, format.mediaType(), spec);
     }
-
+    @MemberSupport
     public String default0DownloadSwaggerSchemaDefinition() {
         return "swagger";
     }
+    @MemberSupport
     public Visibility default1DownloadSwaggerSchemaDefinition() {
         return Visibility.PRIVATE;
     }
+    @MemberSupport
     public Format default2DownloadSwaggerSchemaDefinition() {
         return Format.YAML;
     }

@@ -20,6 +20,7 @@ package demoapp.dom.domain.actions.Action.domainEvent;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 
@@ -46,10 +47,12 @@ public class ActionDomainEventVm_mixinUpdateText {
 
     private final ActionDomainEventVm actionDomainEventVm;
 
+    @MemberSupport
     public ActionDomainEventVm act(final String text) {
         actionDomainEventVm.setText(text);
         return actionDomainEventVm;
     }
+    @MemberSupport
     public String default0Act() {
         return actionDomainEventVm.getText();
     }

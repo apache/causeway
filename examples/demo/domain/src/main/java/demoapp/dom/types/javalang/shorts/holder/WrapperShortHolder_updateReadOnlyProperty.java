@@ -20,6 +20,7 @@ package demoapp.dom.types.javalang.shorts.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
@@ -39,10 +40,13 @@ public class WrapperShortHolder_updateReadOnlyProperty {
 
     private final WrapperShortHolder holder;
 
-    public WrapperShortHolder act(Short newValue) {
+    @MemberSupport
+    public WrapperShortHolder act(final Short newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
+
+    @MemberSupport
     public Short default0Act() {
         return holder.getReadOnlyProperty();
     }

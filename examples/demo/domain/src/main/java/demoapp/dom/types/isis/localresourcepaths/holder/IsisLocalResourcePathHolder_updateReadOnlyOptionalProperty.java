@@ -20,6 +20,7 @@ package demoapp.dom.types.isis.localresourcepaths.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -43,13 +44,15 @@ public class IsisLocalResourcePathHolder_updateReadOnlyOptionalProperty {
 
     private final IsisLocalResourcePathHolder holder;
 
+    @MemberSupport
     public IsisLocalResourcePathHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
-            LocalResourcePath newValue
+            final LocalResourcePath newValue
     ) {
         holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
+    @MemberSupport
     public LocalResourcePath default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }

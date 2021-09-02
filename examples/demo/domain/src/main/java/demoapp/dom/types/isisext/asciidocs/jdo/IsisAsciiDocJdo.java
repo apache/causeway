@@ -25,19 +25,22 @@ import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 
+import org.springframework.context.annotation.Profile;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
-import org.springframework.context.annotation.Profile;
 
-import demoapp.dom.types.isisext.asciidocs.persistence.IsisAsciiDocEntity;
 import lombok.Getter;
 import lombok.Setter;
+
+import demoapp.dom.types.isisext.asciidocs.persistence.IsisAsciiDocEntity;
 
 @Profile("demo-jdo")
 //tag::class[]
@@ -50,12 +53,13 @@ public class IsisAsciiDocJdo                                          // <.>
         extends IsisAsciiDocEntity {
 
 //end::class[]
-    public IsisAsciiDocJdo(AsciiDoc initialValue) {
+    public IsisAsciiDocJdo(final AsciiDoc initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
 
 //tag::class[]
+    @Title
     public String title() {
         return "AsciiDoc JDO entity: " +
             bookmarkService.bookmarkForElseFail(this).getIdentifier();

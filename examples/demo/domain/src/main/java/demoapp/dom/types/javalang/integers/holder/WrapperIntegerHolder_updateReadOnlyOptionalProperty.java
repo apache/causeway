@@ -20,6 +20,7 @@ package demoapp.dom.types.javalang.integers.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -41,13 +42,15 @@ public class WrapperIntegerHolder_updateReadOnlyOptionalProperty {
 
     private final WrapperIntegerHolder holder;
 
+    @MemberSupport
     public WrapperIntegerHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
-            Integer newValue
+            final Integer newValue
     ) {
         holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
+    @MemberSupport
     public Integer default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }

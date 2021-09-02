@@ -20,6 +20,7 @@ package demoapp.dom.domain.actions.Action.semantics;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 
 import lombok.RequiredArgsConstructor;
 
@@ -38,11 +39,13 @@ public class ActionSemanticsVm_mixinIncrementNoAnnotation {
 
     private final ActionSemanticsVm actionSemanticsVm;
 
+    @MemberSupport
     public ActionSemanticsVm act(final int incrementBy) {
         actionSemanticsVm.setPropertyNoAnnotation(
                 actionSemanticsVm.getPropertyNoAnnotation() + incrementBy);
         return actionSemanticsVm;
     }
+    @MemberSupport
     public int default0Act() {
         return 1;
     }

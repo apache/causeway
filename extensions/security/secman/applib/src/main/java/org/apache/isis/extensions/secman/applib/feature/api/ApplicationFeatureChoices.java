@@ -34,6 +34,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.commons.internal.functions._Predicates;
@@ -92,15 +93,15 @@ public class ApplicationFeatureChoices {
         .collect(Collectors.toCollection(TreeSet::new));
     }
 
-    private static boolean isNamespace(ApplicationFeatureId featureId) {
+    private static boolean isNamespace(final ApplicationFeatureId featureId) {
         return featureId.getSort().isNamespace();
     }
 
-    private static boolean isType(ApplicationFeatureId featureId) {
+    private static boolean isType(final ApplicationFeatureId featureId) {
         return featureId.getSort().isType();
     }
 
-    private static boolean isMember(ApplicationFeatureId featureId) {
+    private static boolean isMember(final ApplicationFeatureId featureId) {
         return featureId.getSort().isMember();
     }
 
@@ -128,12 +129,13 @@ public class ApplicationFeatureChoices {
         @Getter
         private ApplicationFeatureId featureId;
 
+        @Title
         public String title() {
             return toString();
         }
 
         @Override
-        public int compareTo(AppFeat o) {
+        public int compareTo(final AppFeat o) {
             val thisId = this.getFeatureId();
             val otherId = o!=null ? o.getFeatureId() : null;
             if(Objects.equals(thisId, otherId)) {
@@ -163,7 +165,7 @@ public class ApplicationFeatureChoices {
         }
 
         @Override
-        public void viewModelInit(String memento) {
+        public void viewModelInit(final String memento) {
             featureId = ApplicationFeatureId.parseEncoded(memento); // fail by intention if memento is '<no id>'
         }
 

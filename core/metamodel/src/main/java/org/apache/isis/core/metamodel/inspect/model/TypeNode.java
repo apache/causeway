@@ -57,7 +57,7 @@ public class TypeNode extends MMNode {
     }
 
     @Override
-    public String iconName() {
+    protected String iconSuffix() {
         return "";
     }
 

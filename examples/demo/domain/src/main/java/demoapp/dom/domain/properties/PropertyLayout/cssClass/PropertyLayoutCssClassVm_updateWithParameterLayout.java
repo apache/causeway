@@ -20,6 +20,7 @@ package demoapp.dom.domain.properties.PropertyLayout.cssClass;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -39,6 +40,7 @@ public class PropertyLayoutCssClassVm_updateWithParameterLayout {
     private final PropertyLayoutCssClassVm propertyLayoutCssClassVm;
 
 //tag::annotation[]
+    @MemberSupport
     public PropertyLayoutCssClassVm act(
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(
@@ -51,6 +53,7 @@ public class PropertyLayoutCssClassVm_updateWithParameterLayout {
         return propertyLayoutCssClassVm;
     }
 //end::annotation[]
+    @MemberSupport
     public String default0Act() {
         return propertyLayoutCssClassVm.getPropertyUsingAnnotation();
     }

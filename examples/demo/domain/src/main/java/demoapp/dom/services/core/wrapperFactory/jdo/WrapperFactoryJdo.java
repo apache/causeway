@@ -30,19 +30,22 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.control.AsyncControl;
 
-import demoapp.dom.services.core.wrapperFactory.WrapperFactoryEntity;
-import demoapp.dom.services.core.wrapperFactory.WrapperFactoryEntity_updatePropertyAsyncMixin;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
+
+import demoapp.dom.services.core.wrapperFactory.WrapperFactoryEntity;
+import demoapp.dom.services.core.wrapperFactory.WrapperFactoryEntity_updatePropertyAsyncMixin;
 
 @Profile("demo-jdo")
 //tag::class[]
@@ -62,11 +65,12 @@ public class WrapperFactoryJdo
     // ...
 //end::class[]
 
-    public WrapperFactoryJdo(String initialValue) {
+    public WrapperFactoryJdo(final String initialValue) {
         this.propertyAsync = initialValue;
         this.propertyAsyncMixin = initialValue;
     }
 
+    @Title
     public String title() {
         return "WrapperFactory";
     }
@@ -98,6 +102,7 @@ public class WrapperFactoryJdo
         wrapperFactoryJdo.setPropertyAsync(value);
         return this;
     }
+    @MemberSupport
     public String default0UpdatePropertyAsync() {
         return getPropertyAsync();
     }
@@ -121,6 +126,7 @@ public class WrapperFactoryJdo
         WrapperFactoryJdo act = (WrapperFactoryJdo) mixin.act(value);
         return this;
     }
+    @MemberSupport
     public String default0UpdatePropertyUsingAsyncWrapMixin() {
         return new WrapperFactoryEntity_updatePropertyAsyncMixin(this).default0Act();
     }

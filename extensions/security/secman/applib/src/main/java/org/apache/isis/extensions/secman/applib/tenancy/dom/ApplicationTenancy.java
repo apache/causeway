@@ -32,6 +32,7 @@ import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.util.Equality;
 import org.apache.isis.applib.util.Hashing;
@@ -63,6 +64,7 @@ public abstract class ApplicationTenancy implements Comparable<ApplicationTenanc
 
     // -- MODEL
 
+    @Title
     public String title() {
         return getName();
     }
@@ -183,7 +185,7 @@ public abstract class ApplicationTenancy implements Comparable<ApplicationTenanc
 
     @Override
     public int compareTo(final org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy other) {
-        return comparator.compare(this, (ApplicationTenancy) other);
+        return comparator.compare(this, other);
     }
 
     @Override

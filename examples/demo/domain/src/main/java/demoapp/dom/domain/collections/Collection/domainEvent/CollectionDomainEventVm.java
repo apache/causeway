@@ -33,6 +33,7 @@ import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 
 import lombok.Getter;
@@ -54,6 +55,7 @@ public class CollectionDomainEventVm implements HasAsciiDocDescription {
     // ...
 //end::class[]
 
+    @Title
     public String title() {
         return "Collection#domainEvent";
     }

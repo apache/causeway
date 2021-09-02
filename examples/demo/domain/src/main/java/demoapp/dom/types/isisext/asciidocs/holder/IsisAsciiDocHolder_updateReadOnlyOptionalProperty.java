@@ -20,6 +20,7 @@ package demoapp.dom.types.isisext.asciidocs.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -42,13 +43,16 @@ public class IsisAsciiDocHolder_updateReadOnlyOptionalProperty {
 
     private final IsisAsciiDocHolder holder;
 
+    @MemberSupport
     public IsisAsciiDocHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
-            AsciiDoc newValue
+            final AsciiDoc newValue
     ) {
         holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
+
+    @MemberSupport
     public AsciiDoc default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }

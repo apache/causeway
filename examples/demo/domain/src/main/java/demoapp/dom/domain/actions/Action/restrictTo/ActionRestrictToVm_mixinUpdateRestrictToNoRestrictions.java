@@ -20,6 +20,7 @@ package demoapp.dom.domain.actions.Action.restrictTo;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
@@ -42,10 +43,12 @@ public class ActionRestrictToVm_mixinUpdateRestrictToNoRestrictions {
 
     private final ActionRestrictToVm actionRestrictToVm;
 
+    @MemberSupport
     public ActionRestrictToVm act(final String text) {
         actionRestrictToVm.setPropertyForNoRestrictions(text);
         return actionRestrictToVm;
     }
+    @MemberSupport
     public String default0Act() {
         return actionRestrictToVm.getPropertyForNoRestrictions();
     }

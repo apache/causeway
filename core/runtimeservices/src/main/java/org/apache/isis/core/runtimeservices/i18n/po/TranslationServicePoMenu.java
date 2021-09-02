@@ -26,6 +26,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.RestrictTo;
@@ -69,9 +70,11 @@ public class TranslationServicePoMenu {
                 .map(chars->new Clob(Util.withSuffix(potFileName, "pot"), "text/plain", chars))
                 .orElse(null);
     }
+    @MemberSupport
     public String default0DownloadTranslations() {
         return "translations.pot";
     }
+    @MemberSupport
     public String disableDownloadTranslations() {
         return !translationService.getMode().isWrite()
                 ? notAvailableForCurrentMode()
@@ -94,6 +97,7 @@ public class TranslationServicePoMenu {
     public void resetTranslationCache() {
         translationService.clearCache();
     }
+    @MemberSupport
     public String disableResetTranslationCache() {
         return !translationService.getMode().isRead()
                 ? notAvailableForCurrentMode()
@@ -115,6 +119,7 @@ public class TranslationServicePoMenu {
     public void switchToReadingTranslations() {
         translationService.toggleMode();
     }
+    @MemberSupport
     public String disableSwitchToReadingTranslations() {
         return !translationService.getMode().isWrite()
                 ? notAvailableForCurrentMode()
@@ -137,6 +142,7 @@ public class TranslationServicePoMenu {
     public void switchToWritingTranslations() {
         translationService.toggleMode();
     }
+    @MemberSupport
     public String disableSwitchToWritingTranslations() {
         return !translationService.getMode().isRead()
                 ? notAvailableForCurrentMode()

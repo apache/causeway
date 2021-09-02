@@ -29,6 +29,7 @@ import org.springframework.context.annotation.Profile;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
 import lombok.Getter;
@@ -54,6 +55,7 @@ public class NumberConstantJpa
     // ...
 
 //end::class[]
+    @Title
     public String title() {
         return getName();
     }

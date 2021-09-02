@@ -28,11 +28,13 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Title;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
 @XmlRootElement(name = "child")
@@ -45,13 +47,14 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ActionTypeOfChildVm implements HasAsciiDocDescription {
 
-    public ActionTypeOfChildVm(String value) {
+    public ActionTypeOfChildVm(final String value) {
         setValue(value);
         setValueUpper(value.toUpperCase());
         setValueLower(value.toLowerCase());
         setValueReversed(reverse(value));
     }
 
+    @Title
     public String title() {
         return getValue();
     }
@@ -80,7 +83,7 @@ public class ActionTypeOfChildVm implements HasAsciiDocDescription {
     @Getter @Setter
     private String valueReversed;
 
-    private static String reverse(String value) {
+    private static String reverse(final String value) {
         return new StringBuilder(value).reverse().toString();
     }
 

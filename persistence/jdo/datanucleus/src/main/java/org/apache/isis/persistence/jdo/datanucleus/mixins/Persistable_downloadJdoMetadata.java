@@ -29,6 +29,7 @@ import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.RestrictTo;
@@ -69,6 +70,7 @@ public class Persistable_downloadJdoMetadata {
 
     public static class ActionDomainEvent extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Persistable_downloadJdoMetadata> {}
 
+    @MemberSupport
     public Clob act(
             @ParameterLayout(named = "File name")
             final String fileName) throws JAXBException, IOException {
@@ -82,6 +84,7 @@ public class Persistable_downloadJdoMetadata {
         return new Clob(_Strings.asFileNameWithExtension(fileName, "jdo"), "text/xml", xml);
     }
 
+    @MemberSupport
     public String default0Act() {
         return _Strings.asFileNameWithExtension(persistable.getClass().getName(), "jdo");
     }

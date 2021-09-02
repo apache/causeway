@@ -20,6 +20,7 @@ package demoapp.dom.domain.actions.Action.semantics;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
@@ -40,12 +41,14 @@ public class ActionSemanticsVm_mixinIncrementByAmountNonIdempotent {
 
     private final ActionSemanticsVm actionSemanticsVm;
 
+    @MemberSupport
     public ActionSemanticsVm act(final int incrementBy) {
         actionSemanticsVm.setPropertyForNonIdempotent(
                 actionSemanticsVm.getPropertyForNonIdempotent() + incrementBy
         );
         return actionSemanticsVm;
     }
+    @MemberSupport
     public int default0Act() {
         return 1;
     }

@@ -20,6 +20,7 @@ package demoapp.dom.domain.properties.Property.fileAccept;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -40,6 +41,7 @@ public class PropertyFileAcceptVm_updateClobWithParameterLayout {
     private final PropertyFileAcceptVm propertyFileAcceptVm;
 
 //tag::annotation[]
+    @MemberSupport
     public PropertyFileAcceptVm act(
             @Parameter(
                 fileAccept = ".txt"                     // <.>
@@ -54,6 +56,7 @@ public class PropertyFileAcceptVm_updateClobWithParameterLayout {
         return propertyFileAcceptVm;
     }
 //end::annotation[]
+    @MemberSupport
     public Clob default0Act() {
         return propertyFileAcceptVm.getTxtPropertyUsingAnnotation();
     }

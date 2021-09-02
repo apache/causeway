@@ -32,10 +32,12 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Title;
 
-import demoapp.dom.types.javaawt.images.persistence.JavaAwtBufferedImageEntity;
 import lombok.Getter;
 import lombok.Setter;
+
+import demoapp.dom.types.javaawt.images.persistence.JavaAwtBufferedImageEntity;
 
 @Profile("demo-jdo")
 //tag::class[]
@@ -52,12 +54,13 @@ public class JavaAwtBufferedImageJdo
 {
 
 //end::class[]
-    public JavaAwtBufferedImageJdo(BufferedImage initialValue) {
+    public JavaAwtBufferedImageJdo(final BufferedImage initialValue) {
         this.readOnlyProperty = initialValue;
 //        this.readWriteProperty = initialValue;    // editable properties not yet supported
     }
 
     // @Title not yet supported
+    @Title
     public String title() {
         return "Image JDO entity";
     }

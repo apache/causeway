@@ -20,6 +20,7 @@ package demoapp.dom.domain.actions.Action.executionPublishing;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
@@ -42,15 +43,17 @@ public class ActionExecutionPublishingEntity_mixinUpdateProperty {
 
     private final ActionExecutionPublishingEntity actionPublishingEntity;
 
-    public ActionExecutionPublishingEntity_mixinUpdateProperty(ActionExecutionPublishingJdo actionPublishingJdo) {
+    public ActionExecutionPublishingEntity_mixinUpdateProperty(final ActionExecutionPublishingJdo actionPublishingJdo) {
         this.actionPublishingEntity = actionPublishingJdo;
     }
 
 //tag::class[]
+    @MemberSupport
     public ActionExecutionPublishingEntity act(final String value) {
         actionPublishingEntity.setProperty(value);
         return actionPublishingEntity;
     }
+    @MemberSupport
     public String default0Act() {
         return actionPublishingEntity.getProperty();
     }

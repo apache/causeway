@@ -20,6 +20,7 @@ package demoapp.dom.types.jodatime.jodalocaltime.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
@@ -39,10 +40,13 @@ public class JodaLocalTimeHolder_updateReadOnlyProperty {
 
     private final JodaLocalTimeHolder holder;
 
-    public JodaLocalTimeHolder act(org.joda.time.LocalTime newValue) {
+    @MemberSupport
+    public JodaLocalTimeHolder act(final org.joda.time.LocalTime newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
+
+    @MemberSupport
     public org.joda.time.LocalTime default0Act() {
         return holder.getReadOnlyProperty();
     }

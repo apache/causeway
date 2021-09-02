@@ -20,6 +20,7 @@ package demoapp.dom.types.javalang.bytes.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
@@ -39,10 +40,13 @@ public class WrapperByteHolder_updateReadOnlyProperty {
 
     private final WrapperByteHolder holder;
 
-    public WrapperByteHolder act(Byte newValue) {
+    @MemberSupport
+    public WrapperByteHolder act(final Byte newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
+
+    @MemberSupport
     public Byte default0Act() {
         return holder.getReadOnlyProperty();
     }

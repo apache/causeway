@@ -20,6 +20,7 @@ package demoapp.dom.types.isis.blobs.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Blob;
@@ -40,10 +41,13 @@ public class IsisBlobHolder_updateReadOnlyProperty {
 
     private final IsisBlobHolder holder;
 
-    public IsisBlobHolder act(Blob newValue) {
+    @MemberSupport
+    public IsisBlobHolder act(final Blob newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
+
+    @MemberSupport
     public Blob default0Act() {
         return holder.getReadOnlyProperty();
     }

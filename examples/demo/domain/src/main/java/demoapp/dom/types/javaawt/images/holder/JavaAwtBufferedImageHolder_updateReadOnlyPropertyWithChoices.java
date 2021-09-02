@@ -26,12 +26,14 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 
-import demoapp.dom.types.Samples;
 import lombok.RequiredArgsConstructor;
+
+import demoapp.dom.types.Samples;
 
 //tag::class[]
 @Action(
@@ -48,13 +50,18 @@ public class JavaAwtBufferedImageHolder_updateReadOnlyPropertyWithChoices {
 
     private final JavaAwtBufferedImageHolder holder;
 
-    public JavaAwtBufferedImageHolder act(BufferedImage newValue) {
+    @MemberSupport
+    public JavaAwtBufferedImageHolder act(final BufferedImage newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
+
+    @MemberSupport
     public BufferedImage default0Act() {
         return holder.getReadOnlyProperty();
     }
+
+    @MemberSupport
     public List<BufferedImage> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());

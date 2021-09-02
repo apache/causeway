@@ -22,6 +22,7 @@ import org.springframework.context.annotation.Profile;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 
 import lombok.RequiredArgsConstructor;
@@ -37,11 +38,13 @@ public class NumberConstantJpa_updateNumber {
 
     private final NumberConstantJpa numberConstantJdo;
 
-    public NumberConstantJpa act(ComplexNumberJpa complexNumberJdo) {
+    @MemberSupport
+    public NumberConstantJpa act(final ComplexNumberJpa complexNumberJdo) {
         numberConstantJdo.setNumber(complexNumberJdo);
         return numberConstantJdo;
     }
 
+    @MemberSupport
     public ComplexNumberJpa default0Act() {
         return numberConstantJdo.getNumber();
     }

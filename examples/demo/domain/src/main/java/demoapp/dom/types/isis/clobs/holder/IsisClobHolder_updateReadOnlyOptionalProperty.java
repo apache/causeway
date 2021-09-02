@@ -20,6 +20,7 @@ package demoapp.dom.types.isis.clobs.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -42,8 +43,10 @@ public class IsisClobHolder_updateReadOnlyOptionalProperty {
 
     private final IsisClobHolder holder;
 
+    @MemberSupport
     public IsisClobHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
+ final
             Clob newValue
     ) {
         holder.setReadOnlyOptionalProperty(newValue);

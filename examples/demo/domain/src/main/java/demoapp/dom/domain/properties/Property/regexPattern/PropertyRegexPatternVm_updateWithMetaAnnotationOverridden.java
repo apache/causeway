@@ -22,6 +22,7 @@ import java.util.regex.Pattern;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -40,6 +41,7 @@ public class PropertyRegexPatternVm_updateWithMetaAnnotationOverridden {
     private final PropertyRegexPatternVm propertyRegexPatternVm;
 
 //tag::meta-annotation-overridden[]
+    @MemberSupport
     public PropertyRegexPatternVm act(
             @RegexPatternEmailComMetaAnnotation                             // <.>
             @Parameter(
@@ -57,6 +59,7 @@ public class PropertyRegexPatternVm_updateWithMetaAnnotationOverridden {
         return propertyRegexPatternVm;
     }
 //end::meta-annotation-overridden[]
+    @MemberSupport
     public String default0Act() {
         return propertyRegexPatternVm.getEmailAddressPropertyUsingMetaAnnotationButOverridden();
     }

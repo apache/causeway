@@ -21,6 +21,7 @@ package demoapp.dom.domain.properties.PropertyLayout.labelPosition;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.LabelPosition;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -40,6 +41,7 @@ public class PropertyLayoutLabelPositionVm_updateVariantNone {
     private final PropertyLayoutLabelPositionVm propertyLayoutLabelPositionVm;
 
 //tag::annotation[]
+    @MemberSupport
     public PropertyLayoutLabelPositionVm act(
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(
@@ -52,6 +54,7 @@ public class PropertyLayoutLabelPositionVm_updateVariantNone {
         return propertyLayoutLabelPositionVm;
     }
 //end::annotation[]
+    @MemberSupport
     public String default0Act() {
         return propertyLayoutLabelPositionVm.getPropertyLabelPositionNone();
     }

@@ -33,17 +33,20 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Title;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.domain.actions.Action.associateWith.child.ActionAssociateWithChildVm;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.val;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.domain.actions.Action.associateWith.child.ActionAssociateWithChildVm;
 
 @XmlRootElement(name = "root")
 @XmlType
@@ -61,10 +64,11 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
 //end::class-properties[]
 //end::class-collections-children[]
 //end::class-collections-favorites[]
-    public ActionAssociateWithVm(String text) {
+    public ActionAssociateWithVm(final String text) {
         this.text = text;
     }
 
+    @Title
     public String title() {
         return "Action#associateWith";
     }
@@ -118,6 +122,7 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
         setText(text);
         return this;
     }
+    @MemberSupport
     public String default0UpdateText() {
         return getText();
     }

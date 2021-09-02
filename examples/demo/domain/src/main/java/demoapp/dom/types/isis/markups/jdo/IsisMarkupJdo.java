@@ -32,13 +32,15 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.value.Markup;
 
-import demoapp.dom.types.isis.markups.persistence.IsisMarkupEntity;
 import lombok.Getter;
 import lombok.Setter;
+
+import demoapp.dom.types.isis.markups.persistence.IsisMarkupEntity;
 
 @Profile("demo-jdo")
 //tag::class[]
@@ -51,12 +53,14 @@ public class IsisMarkupJdo                                          // <.>
         extends IsisMarkupEntity {
 
 //end::class[]
-    public IsisMarkupJdo(Markup initialValue) {
+    public IsisMarkupJdo(final Markup initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
 
 //tag::class[]
+
+    @Title
     public String title() {
         return "Markup JDO entity: " +
             bookmarkService.bookmarkForElseFail(this).getIdentifier();
