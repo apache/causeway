@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.title.annotation;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
@@ -29,10 +30,13 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.functions._Predicates;
+import org.apache.isis.commons.internal.reflection._Reflect.InterfacePolicy;
+import org.apache.isis.commons.internal.reflection._Reflect.TypeHierarchyPolicy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.Annotations;
-import org.apache.isis.core.metamodel.facets.Annotations.MethodEvaluator;
+import org.apache.isis.core.metamodel.facets.Evaluators;
+import org.apache.isis.core.metamodel.facets.Evaluators.MethodEvaluator;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
@@ -46,11 +50,30 @@ public class TitleFacetViaTitleAnnotation
 extends TitleFacetAbstract
 implements ImperativeFacet {
 
+    public static Optional<TitleFacet> create(
+            final @NonNull Class<?> cls,
+            final @NonNull FacetHolder holder){
+
+        val titleComponents = Evaluators.streamEvaluators(cls,
+                Title.class,
+                TypeHierarchyPolicy.EXCLUDE,
+                InterfacePolicy.INCLUDE)
+                .sorted(TitleAnnotationFacetFactory.getSequenceComparator())
+                .map(TitleFacetViaTitleAnnotation.TitleComponent::of)
+                .collect(Can.toCan());
+
+        if (titleComponents.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(new TitleFacetViaTitleAnnotation(titleComponents, holder));
+    }
+
     @Getter private final Can<TitleComponent> components;
 
     @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
 
-    public TitleFacetViaTitleAnnotation(final Can<TitleComponent> components, final FacetHolder holder) {
+    protected TitleFacetViaTitleAnnotation(final Can<TitleComponent> components, final FacetHolder holder) {
         super(holder);
         this.components = components;
 
@@ -151,7 +174,7 @@ implements ImperativeFacet {
 
     public static class TitleComponent {
 
-        public static TitleComponent of(final Annotations.Evaluator<Title> titleEvaluator) {
+        public static TitleComponent of(final Evaluators.Evaluator<Title> titleEvaluator) {
             final Title annotation = titleEvaluator.getAnnotation();
             final String prepend = annotation != null ? annotation.prepend() : " ";
             final String append = annotation != null ? annotation.append() : "";
@@ -161,13 +184,13 @@ implements ImperativeFacet {
 
         @Getter private final String prepend;
         @Getter private final String append;
-        @Getter private final Annotations.Evaluator<Title> titleEvaluator;
+        @Getter private final Evaluators.Evaluator<Title> titleEvaluator;
         private final int abbreviateTo;
 
         private TitleComponent(
                 final String prepend,
                 final String append,
-                final Annotations.Evaluator<Title> titleEvaluator,
+                final Evaluators.Evaluator<Title> titleEvaluator,
                 final int abbreviateTo) {
             super();
             this.prepend = prepend;

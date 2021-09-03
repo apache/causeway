@@ -34,17 +34,15 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
-import java.util.Spliterator;
-import java.util.Spliterators;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.lang.Nullable;
+import org.springframework.util.ClassUtils;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.Result;
@@ -266,52 +264,38 @@ public final class _Reflect {
 
     // -- SUPER CLASSES
 
+    public enum TypeHierarchyPolicy {
+        EXCLUDE,
+        INCLUDE;
+        public boolean isIncludeTypeHierarchy() {
+            return this == TypeHierarchyPolicy.INCLUDE;
+        }
+    }
+
     public enum InterfacePolicy {
-        INCLUDE,
-        EXCLUDE
+        EXCLUDE,
+        INCLUDE;
+        public boolean isIncludeInterfaces() {
+            return this == InterfacePolicy.INCLUDE;
+        }
     }
 
     /**
      * Stream all types of given {@code type}, up the super class hierarchy starting with self
      * @param type (nullable)
-     * @param interfacePolicy - whether to include all interfaces implemented by given {@code type}.
+     * @param interfacePolicy - whether to include all interfaces implemented by given {@code type} at the end
      * @return non-null
      */
     public static Stream<Class<?>> streamTypeHierarchy(
             final @Nullable Class<?> type,
-            final InterfacePolicy interfacePolicy) {
+            final @NonNull InterfacePolicy interfacePolicy) {
 
-        val includeInterfaces = interfacePolicy == InterfacePolicy.INCLUDE;
+        return interfacePolicy.isIncludeInterfaces()
+                ? Stream.concat(
+                        Stream.<Class<?>>iterate(type, Objects::nonNull, Class::getSuperclass),
+                        ClassUtils.getAllInterfacesForClassAsSet(type).stream())
+                : Stream.iterate(type, Objects::nonNull, Class::getSuperclass);
 
-        // https://stackoverflow.com/questions/40240450/java8-streaming-a-class-hierarchy?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
-        // Java 9+ will allow ...
-        // return Stream.iterate(type, Objects::nonNull, Class::getSuperclass);
-
-        return StreamSupport.stream(
-                new Spliterators.AbstractSpliterator<Class<?>>(Long.MAX_VALUE,
-                        Spliterator.ORDERED|Spliterator.IMMUTABLE|Spliterator.NONNULL) {
-                    Class<?> current = type;
-                    @Override
-                    public boolean tryAdvance(final Consumer<? super Class<?>> action) {
-                        if(current == null) return false;
-                        action.accept(current);
-                        if(includeInterfaces) {
-                            for(Class<?> subIface : current.getInterfaces()) {
-                                recur(subIface, action);
-                            }
-                        }
-                        current = current.getSuperclass();
-                        return true;
-                    }
-
-                    private void recur(final Class<?> iface, final Consumer<? super Class<?>> action) {
-                        action.accept(iface);
-                        for(Class<?> subIface : iface.getInterfaces()) {
-                            recur(subIface, action);
-                        }
-                    }
-
-                }, false);
     }
 
     // -- ANNOTATIONS

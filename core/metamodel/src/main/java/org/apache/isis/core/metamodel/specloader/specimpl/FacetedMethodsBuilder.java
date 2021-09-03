@@ -42,7 +42,7 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.reflection._Annotations;
-import org.apache.isis.commons.internal.reflection._MethodCache;
+import org.apache.isis.commons.internal.reflection._ClassCache;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.commons.CanBeVoid;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
@@ -143,7 +143,7 @@ implements HasMetaModelContext {
         this.isMemberAnnotationsRequired =
                 introspectionPolicy().getMemberAnnotationPolicy().isMemberAnnotationsRequired();
 
-        val methodCache = _MethodCache.getInstance();
+        val methodCache = _ClassCache.getInstance();
         val methodsRemaining = introspectionPolicy().getEncapsulationPolicy().isEncapsulatedMembersSupported()
                 ? methodCache.streamPublicOrDeclaredMethods(introspectedClass)
                 : methodCache.streamPublicMethods(introspectedClass);

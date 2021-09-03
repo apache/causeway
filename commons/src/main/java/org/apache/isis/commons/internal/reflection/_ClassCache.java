@@ -51,10 +51,10 @@ import lombok.val;
  * @since 2.0
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class _MethodCache implements AutoCloseable {
+public final class _ClassCache implements AutoCloseable {
 
-    public static _MethodCache getInstance() {
-        return _Context.computeIfAbsent(_MethodCache.class, _MethodCache::new);
+    public static _ClassCache getInstance() {
+        return _Context.computeIfAbsent(_ClassCache.class, _ClassCache::new);
     }
 
     public void add(final Class<?> type) {
@@ -83,10 +83,10 @@ public final class _MethodCache implements AutoCloseable {
     }
 
     public Stream<Method> streamPublicOrDeclaredMethods(final Class<?> type) {
-        val methods = inspectType(type);
+        val classModel = inspectType(type);
         return Stream.concat(
-                methods.publicMethodsByKey.values().stream(),
-                methods.nonPublicDeclaredMethodsByKey.values().stream());
+                classModel.publicMethodsByKey.values().stream(),
+                classModel.nonPublicDeclaredMethodsByKey.values().stream());
     }
 
     public Stream<Method> streamDeclaredMethods(final Class<?> type) {
@@ -106,11 +106,11 @@ public final class _MethodCache implements AutoCloseable {
             final String attributeName,
             final Predicate<Method> filter) {
 
-        val methods = inspectType(type);
+        val classModel = inspectType(type);
 
-        synchronized(methods.declaredMethodsByAttribute) {
-            return methods.declaredMethodsByAttribute
-            .computeIfAbsent(attributeName, key->methods.declaredMethods.filter(filter))
+        synchronized(classModel.declaredMethodsByAttribute) {
+            return classModel.declaredMethodsByAttribute
+            .computeIfAbsent(attributeName, key->classModel.declaredMethods.filter(filter))
             .stream();
         }
     }
@@ -118,14 +118,14 @@ public final class _MethodCache implements AutoCloseable {
     // -- IMPLEMENATION DETAILS
 
     @RequiredArgsConstructor
-    private static class Methods {
+    private static class ClassModel {
         private final Map<MethodKey, Method> publicMethodsByKey = new HashMap<>();
         private final Map<MethodKey, Method> nonPublicDeclaredMethodsByKey = new HashMap<>();
         private final Can<Method> declaredMethods;
         private final Map<String, Can<Method>> declaredMethodsByAttribute = new HashMap<>();
     }
 
-    private final Map<Class<?>, Methods> inspectedTypes = new HashMap<>();
+    private final Map<Class<?>, ClassModel> inspectedTypes = new HashMap<>();
 
     @AllArgsConstructor(staticName = "of") @EqualsAndHashCode
     private static final class MethodKey {
@@ -136,9 +136,7 @@ public final class _MethodCache implements AutoCloseable {
         public static MethodKey of(final Class<?> type, final Method method) {
             return MethodKey.of(type, method.getName(), _Arrays.emptyToNull(method.getParameterTypes()));
         }
-
     }
-
 
     @Override
     public void close() throws Exception {
@@ -149,14 +147,14 @@ public final class _MethodCache implements AutoCloseable {
 
     // -- HELPER
 
-    private Methods inspectType(final Class<?> type) {
+    private ClassModel inspectType(final Class<?> type) {
         synchronized(inspectedTypes) {
 
             return inspectedTypes.computeIfAbsent(type, __->{
 
                 val declaredMethods = type.getDeclaredMethods();
 
-                val methods = new Methods(Can.ofArray(declaredMethods));
+                val methods = new ClassModel(Can.ofArray(declaredMethods));
 
                 for(val method : declaredMethods) {
                     methods.nonPublicDeclaredMethodsByKey.put(MethodKey.of(type, method), method);

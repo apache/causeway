@@ -29,7 +29,7 @@ import java.util.stream.Stream;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.reflection._MethodCache;
+import org.apache.isis.commons.internal.reflection._ClassCache;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
@@ -66,7 +66,7 @@ public final class MethodFinderUtils {
             final Class<?> expectedReturnType,
             final Class<?>[] paramTypes) {
 
-        val methodCache = _MethodCache.getInstance();
+        val methodCache = _ClassCache.getInstance();
 
         val method = options.getEncapsulationPolicy().isEncapsulatedMembersSupported()
                 ? methodCache.lookupPublicOrDeclaredMethod(type, name, paramTypes)
@@ -361,7 +361,7 @@ public final class MethodFinderUtils {
     public static Stream<Method> streamMethods(
             final MethodFinderOptions options,
             final Class<?> type) {
-        val methodCache = _MethodCache.getInstance();
+        val methodCache = _ClassCache.getInstance();
         return options.getEncapsulationPolicy().isEncapsulatedMembersSupported()
                 ? methodCache.streamPublicOrDeclaredMethods(type)
                 : methodCache.streamPublicMethods(type)

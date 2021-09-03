@@ -29,7 +29,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.navparent.method.NavigableParentFacetMethod;
+import org.apache.isis.core.metamodel.facets.object.navparent.method.NavigableParentFacetViaGetterMethod;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -40,7 +40,7 @@ public class NavigableParentFacetMethodTest {
 
     private final Mockery mockery = new JUnit4Mockery();
 
-    private NavigableParentFacetMethod facet;
+    private NavigableParentFacetViaGetterMethod facet;
     private FacetHolder mockFacetHolder;
 
     private ManagedObject mockOwningAdapter;
@@ -60,7 +60,7 @@ public class NavigableParentFacetMethodTest {
         mockFacetHolder = mockery.mock(FacetHolder.class);
         mockOwningAdapter = mockery.mock(ManagedObject.class);
         final Method navigableParentMethod = DomainObjectWithProblemInNavigableParentMethod.class.getMethod("parent");
-        facet = new NavigableParentFacetMethod(navigableParentMethod, mockFacetHolder);
+        facet = new NavigableParentFacetViaGetterMethod(navigableParentMethod, mockFacetHolder);
 
         mockery.checking(new Expectations() {
             {

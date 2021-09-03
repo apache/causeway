@@ -24,7 +24,7 @@ import java.util.Optional;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.collections.ImmutableEnumSet;
-import org.apache.isis.commons.internal.reflection._MethodCache;
+import org.apache.isis.commons.internal.reflection._ClassCache;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -42,14 +42,14 @@ implements FacetFactory, HasMetaModelContext {
 
     @Getter(onMethod_ = {@Override}) private final ImmutableEnumSet<FeatureType> featureTypes;
 
-    @Getter(AccessLevel.PROTECTED) private final _MethodCache methodCache;
+    @Getter(AccessLevel.PROTECTED) private final _ClassCache methodCache;
 
     public FacetFactoryAbstract(
             final MetaModelContext metaModelContext,
             final ImmutableEnumSet<FeatureType> featureTypes) {
         this.metaModelContext = metaModelContext;
         this.featureTypes = featureTypes;
-        this.methodCache = _MethodCache.getInstance();
+        this.methodCache = _ClassCache.getInstance();
     }
 
     @Override

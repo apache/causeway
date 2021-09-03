@@ -36,7 +36,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
-import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.Evaluators;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
@@ -86,8 +86,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
         final List<Method> titleMethods = Arrays.asList(Customer.class.getMethod("someTitle"));
         for (int i = 0; i < titleMethods.size(); i++) {
-            final Annotations.MethodEvaluator<Title> titleEvaluator =
-                    (Annotations.MethodEvaluator<Title>) titleFacetViaTitleAnnotation.getComponents().getElseFail(i)
+            final Evaluators.MethodEvaluator<Title> titleEvaluator =
+                    (Evaluators.MethodEvaluator<Title>) titleFacetViaTitleAnnotation.getComponents().getElseFail(i)
                     .getTitleEvaluator();
 
             Assert.assertEquals(titleMethods.get(i),
@@ -114,7 +114,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
     }
 
-    @Ignore // to re-instate
+    @Ignore //FIXME[ISI-2774] to re-instate
     @Test
     public void testTitleAnnotatedMethodsPickedUpOnClass() throws Exception {
 
@@ -130,8 +130,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
         //final List<TitleComponent> components = titleFacetViaTitleAnnotation.getComponents();
         for (int i = 0; i < titleMethods.size(); i++) {
-            final Annotations.MethodEvaluator<Title> titleEvaluator =
-                    (Annotations.MethodEvaluator<Title>) titleFacetViaTitleAnnotation.getComponents().getElseFail(i)
+            final Evaluators.MethodEvaluator<Title> titleEvaluator =
+                    (Evaluators.MethodEvaluator<Title>) titleFacetViaTitleAnnotation.getComponents().getElseFail(i)
                     .getTitleEvaluator();
 
             Assert.assertEquals(titleMethods.get(i),
@@ -206,7 +206,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
     }
 
-    @Ignore // to re-instate
+    @Ignore //FIXME[ISI-2774] to re-instate
     @Test
     public void titleAnnotatedMethodsSomeOfWhichReturnNulls() throws Exception {
 

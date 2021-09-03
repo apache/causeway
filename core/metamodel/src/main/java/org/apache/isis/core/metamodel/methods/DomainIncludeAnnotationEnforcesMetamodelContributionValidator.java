@@ -32,7 +32,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.reflection._Annotations;
-import org.apache.isis.commons.internal.reflection._MethodCache;
+import org.apache.isis.commons.internal.reflection._ClassCache;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -54,12 +54,12 @@ import lombok.val;
 public class DomainIncludeAnnotationEnforcesMetamodelContributionValidator
 extends MetaModelVisitingValidatorAbstract {
 
-    private final _MethodCache methodCache;
+    private final _ClassCache methodCache;
 
     @Inject
     public DomainIncludeAnnotationEnforcesMetamodelContributionValidator(final MetaModelContext mmc) {
         super(mmc);
-        this.methodCache = _MethodCache.getInstance();
+        this.methodCache = _ClassCache.getInstance();
     }
 
     @Override

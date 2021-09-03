@@ -32,17 +32,20 @@ import org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFac
  * @since 2.0
  *
  */
-public class NavigableParentFacetMethod extends NavigableParentFacetAbstract {
+public class NavigableParentFacetViaGetterMethod
+extends NavigableParentFacetAbstract {
 
     private final MethodHandle methodHandle;
 
-    public NavigableParentFacetMethod(final Method method, final FacetHolder holder) throws IllegalAccessException {
+    public NavigableParentFacetViaGetterMethod(
+            final Method method,
+            final FacetHolder holder) throws IllegalAccessException {
         super(holder);
         this.methodHandle = _Reflect.handleOf(method);
     }
 
     @Override
-    public Object navigableParent(Object object) {
+    public Object navigableParent(final Object object) {
         try {
             return methodHandle.invoke(object);
         } catch (final Throwable ex) {

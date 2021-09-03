@@ -47,10 +47,15 @@ public class MethodUtil {
         return Modifier.isStatic(modifiers);
     }
 
-    public static boolean isPublic(Member method) {
+    public static boolean isPublic(final Member method) {
         final int modifiers = method.getModifiers();
         return Modifier.isPublic(modifiers);
     }
+
+    public static boolean isNoArg(final Method method) {
+        return method.getParameterCount() == 0;
+    }
+
 
     @UtilityClass
     public static class Predicates {
@@ -148,7 +153,7 @@ public class MethodUtil {
          * @return whether the method under test matches the given constraints
          */
         public static Predicate<Method> prefixed(
-                String prefix, Class<?> returnType, CanBeVoid canBeVoid, int paramCount) {
+                final String prefix, final Class<?> returnType, final CanBeVoid canBeVoid, final int paramCount) {
 
             return method -> {
 
@@ -172,7 +177,7 @@ public class MethodUtil {
 
         }
 
-        public static Predicate<Method> getter(Class<?> returnType) {
+        public static Predicate<Method> getter(final Class<?> returnType) {
             return prefixed(MethodLiteralConstants.GET_PREFIX, returnType, CanBeVoid.FALSE, 0);
         }
 

@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.object.title.annotation;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,16 +29,19 @@ import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.Evaluators;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.fallback.FallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaMethodsFactory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
+
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.val;
 
 public class TitleAnnotationFacetFactory
 extends FacetFactoryAbstract
@@ -56,35 +58,28 @@ implements MetaModelRefiner {
      */
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
-        final FacetHolder facetHolder = processClassContext.getFacetHolder();
+        val cls = processClassContext.getCls();
+        val facetHolder = processClassContext.getFacetHolder();
 
-        final var evaluators = Annotations.getEvaluators(cls, Title.class);
-        if (evaluators.isEmpty()) {
-            return;
-        }
-
-        sort(evaluators);
-        final var titleComponents =
-                Can.ofCollection(evaluators)
-                .map(TitleFacetViaTitleAnnotation.TitleComponent::of);
-
-        addFacet(new TitleFacetViaTitleAnnotation(titleComponents, facetHolder));
+        addFacetIfPresent(TitleFacetViaTitleAnnotation.create(cls, facetHolder));
     }
 
-    public static void sort(final List<Annotations.Evaluator<Title>> evaluators) {
-        Collections.sort(evaluators, new Comparator<Annotations.Evaluator<Title>>() {
-            Comparator<String> comparator = new SequenceComparator();
+    // static comparator memoization
+    @Getter(lazy = true, value = AccessLevel.PACKAGE)
+    private static final Comparator<Evaluators.Evaluator<Title>> sequenceComparator =
+            new Comparator<Evaluators.Evaluator<Title>>() {
+                final Comparator<String> comparator = new SequenceComparator();
 
-            @Override
-            public int compare(final Annotations.Evaluator<Title> o1, final Annotations.Evaluator<Title> o2) {
-                final Title a1 = o1.getAnnotation();
-                final Title a2 = o2.getAnnotation();
-                return comparator.compare(a1.sequence(), a2.sequence());
-            }
-        });
-    }
+                @Override
+                public int compare(final Evaluators.Evaluator<Title> o1, final Evaluators.Evaluator<Title> o2) {
+                    final Title a1 = o1.getAnnotation();
+                    final Title a2 = o2.getAnnotation();
+                    return comparator.compare(a1.sequence(), a2.sequence());
+                }
+            };
 
+
+    @Deprecated //FIXME[ISI-2774] I believe we have sequence comparators already else where (dewey order)
     static class SequenceComparator implements Comparator<String> {
 
         @Override

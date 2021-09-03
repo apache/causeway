@@ -22,7 +22,7 @@ package org.apache.isis.applib.spec;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.commons.internal.reflection._MethodCache;
+import org.apache.isis.commons.internal.reflection._ClassCache;
 
 import lombok.val;
 
@@ -56,7 +56,7 @@ public abstract class AbstractSpecification<T> implements Specification {
 
     private static Class<?> findExpectedType(final Class<?> fromClass) {
 
-        val methodCache = _MethodCache.getInstance();
+        val methodCache = _ClassCache.getInstance();
 
         for (Class<?> c = fromClass; c != Object.class; c = c.getSuperclass()) {
 
