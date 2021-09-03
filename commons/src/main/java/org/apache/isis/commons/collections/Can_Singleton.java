@@ -166,7 +166,7 @@ final class Can_Singleton<T> implements Can<T> {
         val newElements = new ArrayList<T>(other.size()+1);
         newElements.add(element);
         other.forEach(newElements::add);
-        return Can_Multiple.of(newElements);
+        return _CanFactory.ofNonNullElements(newElements);
     }
 
     @Override
@@ -234,7 +234,7 @@ final class Can_Singleton<T> implements Can<T> {
         for(int i=0; i<pickCount; i++) {
             newElements.add(element);
         }
-        return Can.ofCollection(newElements);
+        return _CanFactory.ofNonNullElements(newElements);
     }
 
     @Override

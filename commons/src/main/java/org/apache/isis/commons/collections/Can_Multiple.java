@@ -123,14 +123,15 @@ final class Can_Multiple<T> implements Can<T> {
 
     @Override
     public Can<T> unique(final @NonNull BiPredicate<T, T> equality) {
-        val list = _Lists.<T>newArrayList();
+        final int initialSize = Math.min(1024, elements.size());
+        val uniqueElements = _Lists.<T>newArrayList(initialSize);
         elements
         .forEach(element->{
-            if(!list.stream().anyMatch(x->equality.test(x, element))) {
-                list.add(element);
+            if(!uniqueElements.stream().anyMatch(x->equality.test(x, element))) {
+                uniqueElements.add(element);
             }
         });
-        return Can.ofCollection(list);
+        return _CanFactory.ofNonNullElements(uniqueElements);
     }
 
     @Override
