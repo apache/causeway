@@ -414,7 +414,10 @@ implements ObjectSpecification {
                 return titleString;
             }
         }
-        return (this.isManagedBean() ? "" : "Untitled ") + getSingularName();
+        val prefix = this.isManagedBean()
+                ? ""
+                : "Untitled ";
+        return prefix + getSingularName();
     }
 
     @Override

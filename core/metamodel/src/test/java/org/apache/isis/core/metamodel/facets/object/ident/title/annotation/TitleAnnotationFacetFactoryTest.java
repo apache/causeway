@@ -22,13 +22,13 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -52,6 +52,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
     @Mock private ManagedObject mockObjectAdapter;
     @Mock private ObjectSpecification mockStringSpec;
+    @Mock private ObjectSpecification mockIntegerSpec;
 
     @Before
     public void setUp() throws Exception {
@@ -144,11 +145,11 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
         context.checking(new Expectations() {{
 
-            allowing(mockSpecificationLoader).specForType(String.class);
-            will(returnValue(Optional.of(mockStringSpec)));
-
             allowing(mockObjectAdapter).getPojo();
             will(returnValue(customer));
+
+            allowing(mockSpecificationLoader).specForType(String.class);
+            will(returnValue(Optional.of(mockStringSpec)));
 
             allowing(mockStringSpec).getCorrespondingClass();
             will(returnValue(String.class));
@@ -156,9 +157,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
             allowing(mockStringSpec).isParentedOrFreeCollection();
             will(returnValue(false));
 
-            ignoring(mockStringSpec).assertPojoCompatible("titleElement1");
-            ignoring(mockStringSpec).assertPojoCompatible("titleElement2");
-            ignoring(mockStringSpec).assertPojoCompatible("titleElement3");
+            ignoring(mockStringSpec).assertPojoCompatible(with(any(String.class)));
+
         }});
         final String title = titleFacetViaTitleAnnotation.title(mockObjectAdapter);
         assertThat(title, is("titleElement1. titleElement3,titleElement2"));
@@ -220,7 +220,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
     }
 
-    @Ignore //FIXME[ISI-2774] to re-instate
+    //@Ignore //FIXME[ISI-2774] to re-instate
+    @SuppressWarnings("unchecked")
     @Test
     public void titleAnnotatedMethodsSomeOfWhichReturnNulls() throws Exception {
 
@@ -236,6 +237,33 @@ extends AbstractFacetFactoryJUnit4TestCase {
             {
                 allowing(mockObjectAdapter).getPojo();
                 will(returnValue(customer));
+
+                allowing(mockSpecificationLoader).specForType(String.class);
+                will(returnValue(Optional.of(mockStringSpec)));
+
+                allowing(mockStringSpec).getCorrespondingClass();
+                will(returnValue(String.class));
+
+                allowing(mockStringSpec).isParentedOrFreeCollection();
+                will(returnValue(false));
+
+                ignoring(mockStringSpec).assertPojoCompatible(with(any(String.class)));
+
+                allowing(mockSpecificationLoader).specForType(Integer.class);
+                will(returnValue(Optional.of(mockIntegerSpec)));
+
+                allowing(mockIntegerSpec).getCorrespondingClass();
+                will(returnValue(Integer.class));
+
+                allowing(mockIntegerSpec).isParentedOrFreeCollection();
+                will(returnValue(false));
+
+                allowing(mockIntegerSpec).getTitle(with(any(Predicate.class)), with(any(ManagedObject.class)));
+                will(returnValue("3"));
+
+                ignoring(mockIntegerSpec).assertPojoCompatible(with(any(Integer.class)));
+                ignoring(mockIntegerSpec).assertPojoCompatible(with(any(int.class)));
+
             }
         });
         final String title = titleFacetViaTitleAnnotation.title(mockObjectAdapter);

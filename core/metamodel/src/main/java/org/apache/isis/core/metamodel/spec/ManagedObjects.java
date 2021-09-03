@@ -417,7 +417,8 @@ public final class ManagedObjects {
                 val collectionFacet = managedObject.getSpecification().getFacet(CollectionFacet.class);
                 return collectionTitleString(managedObject, collectionFacet);
             } else {
-                return objectTitleString(managedObject, isContextAdapter);
+                return objectTitleString(managedObject, isContextAdapter)
+                        .trim();
             }
         }
 
