@@ -82,6 +82,7 @@ public final class Evaluators  {
         .streamDeclaredMethods(cls)
         .filter(MethodUtil::isNotStatic)
         .filter(MethodUtil::isNoArg)
+        .filter(MethodUtil::isNotVoid)
         .map(method->MethodEvaluator.create(method, annotationType))
         .flatMap(Optional::stream);
     }

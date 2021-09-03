@@ -26,6 +26,7 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 
 import lombok.val;
@@ -54,6 +55,21 @@ public class MethodUtil {
 
     public static boolean isNoArg(final Method method) {
         return method.getParameterCount() == 0;
+    }
+
+    public static boolean isVoid(final Method method) {
+        val returnType = method.getReturnType();
+        return returnType.equals(void.class)
+                    || returnType.equals(Void.class);
+    }
+
+    public static boolean isNotVoid(final Method method) {
+        return !isVoid(method);
+    }
+
+    public static boolean isScalar(final Method method) {
+        return isNotVoid(method)
+                    && ! _Collections.isCollectionOrArrayOrCanType(method.getReturnType());
     }
 
 
