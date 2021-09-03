@@ -24,20 +24,22 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Title;
 
 import lombok.Getter;
 import lombok.Setter;
 
 abstract class ProperMemberInheritanceAbstract {
 
-    //@Title //FIXME[ISIS-2774] either not picked up, or validation fails when abstract
+    @Title
     public String title() {
         return "inherited title";
     }
 
-    //@ObjectSupport //FIXME[ISIS-2774] either not picked up, or validation fails when abstract
+    @ObjectSupport
     public String iconName() {
         return "inherited icon";
     }

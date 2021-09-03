@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.methods;
 
 import java.lang.reflect.Method;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.TreeSet;
@@ -90,14 +89,13 @@ extends MetaModelVisitingValidatorAbstract {
         .forEach(recognizedMemberMethods::add);
 
         // support methods known to the meta-model
-        val recognizedSupportMethods = new HashSet<Method>();
+        val recognizedSupportMethods = new TreeSet<Method>(_Reflect::methodWeakCompare);
 
         spec
         .streamFacetHolders()
         .flatMap(FacetHolder::streamFacetRankings)
         .map(facetRanking->facetRanking.getWinnerNonEvent(facetRanking.facetType()))
-        .filter(Optional::isPresent)
-        .map(Optional::get)
+        .flatMap(Optional::stream)
         .filter(ImperativeFacet.class::isInstance)
         .map(ImperativeFacet.class::cast)
         .map(ImperativeFacet::getMethods)
