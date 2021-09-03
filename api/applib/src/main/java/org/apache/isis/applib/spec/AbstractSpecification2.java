@@ -58,11 +58,11 @@ public abstract class AbstractSpecification2<T> implements Specification2 {
 
     private static Class<?> findExpectedType(final Class<?> fromClass) {
 
-        val methodCache = _ClassCache.getInstance();
+        val classCache = _ClassCache.getInstance();
 
         for (Class<?> c = fromClass; c != Object.class; c = c.getSuperclass()) {
 
-            val methodFound = methodCache
+            val methodFound = classCache
             .streamDeclaredMethods(c)
             .filter(AbstractSpecification2::isSatisfiesTranslatableSafelyMethod)
             .findFirst()

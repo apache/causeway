@@ -54,7 +54,7 @@ extends FacetFactoryAbstract {
 
     private void addMethodsToBeIgnored(final Class<?> typeToIgnore) {
 
-        getMethodCache()
+        getClassCache()
         .streamPublicMethods(typeToIgnore)
         .forEach(method->{
             jdoEnhancementmethodsToIgnore

@@ -66,11 +66,11 @@ public final class MethodFinderUtils {
             final Class<?> expectedReturnType,
             final Class<?>[] paramTypes) {
 
-        val methodCache = _ClassCache.getInstance();
+        val classCache = _ClassCache.getInstance();
 
         val method = options.getEncapsulationPolicy().isEncapsulatedMembersSupported()
-                ? methodCache.lookupPublicOrDeclaredMethod(type, name, paramTypes)
-                : methodCache.lookupPublicMethod(type, name, paramTypes);
+                ? classCache.lookupPublicOrDeclaredMethod(type, name, paramTypes)
+                : classCache.lookupPublicMethod(type, name, paramTypes);
         if(method == null) {
             return null;
         }
@@ -361,11 +361,11 @@ public final class MethodFinderUtils {
     public static Stream<Method> streamMethods(
             final MethodFinderOptions options,
             final Class<?> type) {
-        val methodCache = _ClassCache.getInstance();
+        val classCache = _ClassCache.getInstance();
         return options.getEncapsulationPolicy().isEncapsulatedMembersSupported()
-                ? methodCache.streamPublicOrDeclaredMethods(type)
-                : methodCache.streamPublicMethods(type)
-                .filter(options.getMustSatisfy()::test);
+                ? classCache.streamPublicOrDeclaredMethods(type)
+                : classCache.streamPublicMethods(type)
+                    .filter(options.getMustSatisfy()::test);
     }
 
 }

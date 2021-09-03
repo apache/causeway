@@ -33,7 +33,7 @@ import lombok.val;
 
 public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
 
-    private final _ClassCache methodCache = _ClassCache.getInstance();
+    private final _ClassCache classCache = _ClassCache.getInstance();
 
     @Override
     public final Substitution getSubstitution(@NonNull final Class<?> cls) {
@@ -80,7 +80,7 @@ public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
 
         try {
             // guard against cannot introspect
-            methodCache.add(cls);
+            classCache.add(cls);
         } catch (Throwable e) {
             classesToIgnore.add(cls);
             return null;

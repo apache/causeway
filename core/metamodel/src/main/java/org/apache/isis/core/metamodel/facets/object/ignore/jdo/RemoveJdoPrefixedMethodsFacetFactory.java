@@ -40,7 +40,7 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessClassContext context) {
 
-        getMethodCache()
+        getClassCache()
         .streamPublicMethods(context.getCls())
         .filter(method->method.getName().startsWith("jdo"))
         .forEach(context::removeMethod);

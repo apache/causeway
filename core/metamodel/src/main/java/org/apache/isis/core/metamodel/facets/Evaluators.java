@@ -75,9 +75,9 @@ public final class Evaluators  {
             final Class<?> cls,
             final Class<T> annotationType) {
 
-        val methodCache = _ClassCache.getInstance();
+        val classCache = _ClassCache.getInstance();
 
-        return methodCache
+        return classCache
         .streamDeclaredMethods(cls)
         .filter(MethodUtil::isNotStatic)
         .filter(MethodUtil::isNoArg)

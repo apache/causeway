@@ -42,14 +42,14 @@ implements FacetFactory, HasMetaModelContext {
 
     @Getter(onMethod_ = {@Override}) private final ImmutableEnumSet<FeatureType> featureTypes;
 
-    @Getter(AccessLevel.PROTECTED) private final _ClassCache methodCache;
+    @Getter(AccessLevel.PROTECTED) private final _ClassCache classCache;
 
     public FacetFactoryAbstract(
             final MetaModelContext metaModelContext,
             final ImmutableEnumSet<FeatureType> featureTypes) {
         this.metaModelContext = metaModelContext;
         this.featureTypes = featureTypes;
-        this.methodCache = _ClassCache.getInstance();
+        this.classCache = _ClassCache.getInstance();
     }
 
     @Override

@@ -56,11 +56,11 @@ public abstract class AbstractSpecification<T> implements Specification {
 
     private static Class<?> findExpectedType(final Class<?> fromClass) {
 
-        val methodCache = _ClassCache.getInstance();
+        val classCache = _ClassCache.getInstance();
 
         for (Class<?> c = fromClass; c != Object.class; c = c.getSuperclass()) {
 
-            val methodFound = methodCache
+            val methodFound = classCache
             .streamDeclaredMethods(c)
             .filter(AbstractSpecification::isSatisfiesSafelyMethod)
             .findFirst()

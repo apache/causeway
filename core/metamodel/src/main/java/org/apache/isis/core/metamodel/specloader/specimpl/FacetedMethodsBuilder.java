@@ -143,10 +143,10 @@ implements HasMetaModelContext {
         this.isMemberAnnotationsRequired =
                 introspectionPolicy().getMemberAnnotationPolicy().isMemberAnnotationsRequired();
 
-        val methodCache = _ClassCache.getInstance();
+        val classCache = _ClassCache.getInstance();
         val methodsRemaining = introspectionPolicy().getEncapsulationPolicy().isEncapsulatedMembersSupported()
-                ? methodCache.streamPublicOrDeclaredMethods(introspectedClass)
-                : methodCache.streamPublicMethods(introspectedClass);
+                ? classCache.streamPublicOrDeclaredMethods(introspectedClass)
+                : classCache.streamPublicMethods(introspectedClass);
         this.methodRemover = new ConcurrentMethodRemover(introspectedClass, methodsRemaining);
 
     }

@@ -54,12 +54,12 @@ import lombok.val;
 public class DomainIncludeAnnotationEnforcesMetamodelContributionValidator
 extends MetaModelVisitingValidatorAbstract {
 
-    private final _ClassCache methodCache;
+    private final _ClassCache classCache;
 
     @Inject
     public DomainIncludeAnnotationEnforcesMetamodelContributionValidator(final MetaModelContext mmc) {
         super(mmc);
-        this.methodCache = _ClassCache.getInstance();
+        this.classCache = _ClassCache.getInstance();
     }
 
     @Override
@@ -107,7 +107,7 @@ extends MetaModelVisitingValidatorAbstract {
         // methods intended to be included with the meta-model
         val notRecognizedMethods = _Sets.<Method>newHashSet();
 
-        methodCache
+        classCache
         // methods intended to be included with the meta-model but missing
         .streamDeclaredMethodsHaving(
                 type,

@@ -63,7 +63,7 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
     public RemoveMethodsFacetFactory(final MetaModelContext mmc) {
         super(mmc, FeatureType.OBJECTS_ONLY);
 
-        getMethodCache()
+        getClassCache()
         .streamPublicMethods(Object.class)
         .forEach(method->{
             javaLangObjectMethodsToIgnore
@@ -85,7 +85,7 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
         val isActionAnnotationRequired = processClassContext.getIntrospectionPolicy()
                 .getMemberAnnotationPolicy().isMemberAnnotationsRequired();
 
-        getMethodCache()
+        getClassCache()
         .streamPublicMethods(cls)
         .forEach(method->{
             // remove synthetic methods (except when is a mixin)
@@ -134,7 +134,7 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
             return;
         }
 
-        getMethodCache()
+        getClassCache()
         .streamPublicMethods(type)
         .forEach(processClassContext::removeMethod);
 

@@ -254,7 +254,7 @@ implements
             final Class<?> repositoryClass,
             final String methodName) {
 
-        val repoMethod = getMethodCache()
+        val repoMethod = getClassCache()
         .streamPublicMethods(repositoryClass)
         .filter(method->method.getName().equals(methodName))
         .filter(method->{

@@ -77,7 +77,7 @@ extends FacetFactoryAbstract {
             return;
         }
 
-        getMethodCache()
+        getClassCache()
         .streamPublicMethods(cls)
         .forEach(method->{
             removeAnnotatedMethods(methodRemover, method, PreDestroy.class);

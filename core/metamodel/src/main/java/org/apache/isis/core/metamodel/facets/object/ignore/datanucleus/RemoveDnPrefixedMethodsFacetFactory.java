@@ -38,7 +38,7 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessClassContext context) {
 
-        getMethodCache()
+        getClassCache()
         .streamPublicMethods(context.getCls())
         .filter(method->method.getName().startsWith("dn"))
         .forEach(context::removeMethod);
