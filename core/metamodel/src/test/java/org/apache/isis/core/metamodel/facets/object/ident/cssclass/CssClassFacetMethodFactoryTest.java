@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFacetMethod;
+import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFacetViaCssClassMethod;
 import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFacetMethodFactory;
 
 public class CssClassFacetMethodFactoryTest
@@ -65,7 +65,7 @@ extends AbstractFacetFactoryTest {
 
         final Facet facet = facetedMethod.getFacet(CssClassFacet.class);
         assertThat(facet, is(notNullValue()));
-        assertThat(facet, is(instanceOf(CssClassFacetMethod.class)));
+        assertThat(facet, is(instanceOf(CssClassFacetViaCssClassMethod.class)));
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(cssClassNameMethod));
     }

@@ -17,49 +17,62 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.cssclass.method;
+package org.apache.isis.core.metamodel.facets.object.layout;
 
 import java.lang.reflect.Method;
 import java.util.function.BiConsumer;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
-public class CssClassFacetMethod
-extends FacetAbstract
-implements CssClassFacet {
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.val;
 
-    private static final Class<? extends Facet> type() {
-        return CssClassFacet.class;
-    }
+public class LayoutFacetViaLayoutMethod
+extends LayoutFacetAbstract
+implements ImperativeFacet {
 
-    private final Method method;
+    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
 
-
-    public CssClassFacetMethod(final Method method, final FacetHolder holder) {
-        super(type(), holder);
-        this.method = method;
+    public LayoutFacetViaLayoutMethod(final Method method, final FacetHolder holder) {
+        super(holder);
+        this.methods = ImperativeFacet.singleMethod(method);
     }
 
     @Override
-    public String cssClass(final ManagedObject owningAdapter) {
-        if(owningAdapter == null) {
-            return "";
+    public String layout(final ManagedObject domainObject) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(domainObject)) {
+            return null;
         }
         try {
-            return (String) ManagedObjects.InvokeUtil.invoke(method, owningAdapter);
+            val method = methods.getFirstOrFail();
+            return (String) ManagedObjects.InvokeUtil.invoke(method, domainObject);
         } catch (final RuntimeException ex) {
             return null;
         }
     }
 
     @Override
+    public Intent getIntent(final Method method) {
+        return Intent.UI_HINT;
+    }
+
+    @Override
+    protected String toStringValues() {
+        val method = methods.getFirstOrFail();
+        return "method=" + method;
+    }
+
+    @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        val method = methods.getFirstOrFail();
         super.visitAttributes(visitor);
+        ImperativeFacet.visitAttributes(this, visitor);
         visitor.accept("method", method);
     }
+
 }

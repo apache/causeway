@@ -29,7 +29,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFacetMethod;
+import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFacetViaCssClassMethod;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -40,7 +40,7 @@ public class CssClassFacetMethodWithProblemTest {
 
     private final Mockery mockery = new JUnit4Mockery();
 
-    private CssClassFacetMethod facet;
+    private CssClassFacetViaCssClassMethod facet;
     private FacetHolder mockFacetHolder;
 
     private ManagedObject mockOwningAdapter;
@@ -60,7 +60,7 @@ public class CssClassFacetMethodWithProblemTest {
         mockFacetHolder = mockery.mock(FacetHolder.class);
         mockOwningAdapter = mockery.mock(ManagedObject.class);
         final Method iconNameMethod = DomainObjectWithProblemInCssClassMethod.class.getMethod("cssClass");
-        facet = new CssClassFacetMethod(iconNameMethod, mockFacetHolder);
+        facet = new CssClassFacetViaCssClassMethod(iconNameMethod, mockFacetHolder);
 
         mockery.checking(new Expectations() {
             {

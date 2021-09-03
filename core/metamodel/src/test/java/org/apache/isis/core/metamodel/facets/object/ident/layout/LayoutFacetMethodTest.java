@@ -29,7 +29,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacetMethod;
+import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacetViaLayoutMethod;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -40,7 +40,7 @@ public class LayoutFacetMethodTest {
 
     private final Mockery mockery = new JUnit4Mockery();
 
-    private LayoutFacetMethod facet;
+    private LayoutFacetViaLayoutMethod facet;
     private FacetHolder mockFacetHolder;
 
     private ManagedObject mockOwningAdapter;
@@ -60,7 +60,7 @@ public class LayoutFacetMethodTest {
         mockFacetHolder = mockery.mock(FacetHolder.class);
         mockOwningAdapter = mockery.mock(ManagedObject.class);
         final Method iconNameMethod = DomainObjectWithProblemInLayoutMethod.class.getMethod("layout");
-        facet = new LayoutFacetMethod(iconNameMethod, mockFacetHolder);
+        facet = new LayoutFacetViaLayoutMethod(iconNameMethod, mockFacetHolder);
 
         mockery.checking(new Expectations() {
             {

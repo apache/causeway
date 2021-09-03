@@ -44,6 +44,16 @@ abstract class ProperMemberInheritanceAbstract {
         return "inherited icon";
     }
 
+    @ObjectSupport
+    public String cssClass(){
+        return "another-class";
+    }
+
+    @ObjectSupport
+    public String layout(){
+        return "layout";
+    }
+
     @Action
     @ActionLayout(named = "foo", describedAs = "bar")
     public void sampleAction() {

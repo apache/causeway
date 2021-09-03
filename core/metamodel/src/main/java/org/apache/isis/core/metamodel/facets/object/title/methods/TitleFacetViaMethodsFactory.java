@@ -50,13 +50,13 @@ import lombok.val;
 public class TitleFacetViaMethodsFactory
 extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final Can<String> PREFIXES = Can.ofCollection(_Lists.of(
+    private static final Can<String> METHOD_NAMES = Can.ofCollection(_Lists.of(
             TO_STRING,
             TITLE));
 
     @Inject
     public TitleFacetViaMethodsFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
+        super(mmc, FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, METHOD_NAMES);
     }
 
     /**

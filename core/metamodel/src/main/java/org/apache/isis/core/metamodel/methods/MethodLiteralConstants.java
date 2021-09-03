@@ -60,6 +60,11 @@ public final class MethodLiteralConstants {
     public static final String DISABLED = "disabled"; // for batch disabling all members
     public static final String HIDDEN = "hidden"; // for batch hiding all members
 
+    public static final String TITLE = "title";
+    public static final String CSS_CLASS = "cssClass";
+    public static final String ICON_NAME = "iconName";
+    public static final String LAYOUT = "layout";
+
     // -- MEMBER SUPPORT
 
     public static final String DEFAULT_PREFIX = "default";
@@ -73,12 +78,6 @@ public final class MethodLiteralConstants {
     public static final String NAMED_PREFIX = "named"; // dynamic naming
     public static final String DESCRIBED_PREFIX = "described"; // dynamic description
 
-    // -- LAYOUT SUPPORT
-
-    public static final String TITLE = "title";
-    public static final String CSS_CLASS = "cssClass";
-    public static final String ICON_NAME = "iconName";
-    public static final String LAYOUT = "layout";
 
     // -- OTHER LITERALS
 

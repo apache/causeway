@@ -45,10 +45,13 @@ implements ImperativeFacet {
     }
 
     @Override
-    public String iconName(final ManagedObject owningAdapter) {
+    public String iconName(final ManagedObject domainObject) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(domainObject)) {
+            return null;
+        }
         try {
             val method = methods.getFirstOrFail();
-            return (String) ManagedObjects.InvokeUtil.invoke(method, owningAdapter);
+            return (String) ManagedObjects.InvokeUtil.invoke(method, domainObject);
         } catch (final RuntimeException ex) {
             return null;
         }

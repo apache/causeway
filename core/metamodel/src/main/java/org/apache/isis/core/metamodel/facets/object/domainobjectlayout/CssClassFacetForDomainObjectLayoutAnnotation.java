@@ -23,7 +23,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetSimple;
-import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFacetMethod;
+import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFacetViaCssClassMethod;
 
 public class CssClassFacetForDomainObjectLayoutAnnotation extends CssClassFacetSimple {
 
@@ -38,7 +38,7 @@ public class CssClassFacetForDomainObjectLayoutAnnotation extends CssClassFacetS
         // a result of the cssClass attribute, but also as a result of the cssClassUiEvent.  The former has lower
         // "priority" to the cssClass() method, but the latter has *higher* priority.  Hence the special casing
         // that is required here.
-        if(facet != null && facet instanceof CssClassFacetMethod) {
+        if(facet != null && facet instanceof CssClassFacetViaCssClassMethod) {
             // don't overwrite
             return null;
         }

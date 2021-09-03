@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacet;
 import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacetMethod;
+import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacetViaLayoutMethod;
 
 public class LayoutFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -64,7 +64,7 @@ public class LayoutFacetFactoryTest extends AbstractFacetFactoryTest {
 
         final Facet facet = facetedMethod.getFacet(LayoutFacet.class);
         assertThat(facet, is(notNullValue()));
-        assertThat(facet, is(instanceOf(LayoutFacetMethod.class)));
+        assertThat(facet, is(instanceOf(LayoutFacetViaLayoutMethod.class)));
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
     }

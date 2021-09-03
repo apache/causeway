@@ -19,43 +19,39 @@
 
 package org.apache.isis.core.metamodel.facets.object.layout;
 
-import java.lang.reflect.Method;
-
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
+import lombok.val;
+
 public class LayoutFacetFactory
 extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String PREFIX = MethodLiteralConstants.LAYOUT;
+    private static final String METHOD_NAME = MethodLiteralConstants.LAYOUT;
 
     public LayoutFacetFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
+        super(mmc, FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(METHOD_NAME));
     }
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
-        final FacetHolder facetHolder = processClassContext.getFacetHolder();
+        val cls = processClassContext.getCls();
+        val facetHolder = processClassContext.getFacetHolder();
 
-        final Method method = MethodFinderUtils.findMethod(
+        val method = MethodFinderUtils.findMethod(
                 MethodFinderOptions
                 .objectSupport(processClassContext.getIntrospectionPolicy()),
-                cls, PREFIX, String.class, NO_ARG);
-
-        final LayoutFacet layoutFacet;
+                cls, METHOD_NAME, String.class, NO_ARG);
         if (method == null) {
-            layoutFacet = new LayoutFacetFallback(facetHolder);
-        } else {
-            processClassContext.removeMethod(method);
-            layoutFacet = new LayoutFacetMethod(method, facetHolder);
+            addFacet(new LayoutFacetFallback(facetHolder));
+            return;
         }
-        addFacet(layoutFacet);
+        processClassContext.removeMethod(method);
+        addFacet(new LayoutFacetViaLayoutMethod(method, facetHolder));
     }
 }

@@ -41,6 +41,7 @@ import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelVisitingValidatorAbstract;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
@@ -118,7 +119,8 @@ extends MetaModelVisitingValidatorAbstract {
 
         // find reasons about why these are not recognized
         notRecognizedMethods.forEach(notRecognizedMethod->{
-            final List<String> unmetContraints = unmetContraints(spec, notRecognizedMethod);
+            final List<String> unmetContraints =
+                    unmetContraints((ObjectSpecificationAbstract) spec, notRecognizedMethod);
 
             //FIXME[ISIS-2774] - update message to a more generic one
             String messageFormat = "%s#%s: has annotation @%s, is assumed to support "
@@ -138,13 +140,14 @@ extends MetaModelVisitingValidatorAbstract {
     // -- VALIDATION LOGIC
 
     private List<String> unmetContraints(
-            final ObjectSpecification spec,
+            final ObjectSpecificationAbstract spec,
             final Method method) {
 
         //val type = spec.getCorrespondingClass();
-        final List<String> unmetContraints = _Lists.<String>newArrayList();
+        val unmetContraints = _Lists.<String>newArrayList();
 
-        if (!MethodUtil.isPublic(method)) {
+        if(!spec.getIntrospectionPolicy().getEncapsulationPolicy().isEncapsulatedMembersSupported()
+                && !MethodUtil.isPublic(method)) {
             unmetContraints.add("method must be 'public'");
             return unmetContraints; // don't check any further
         }
