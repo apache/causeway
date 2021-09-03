@@ -220,7 +220,6 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
     }
 
-    //@Ignore //FIXME[ISI-2774] to re-instate
     @SuppressWarnings("unchecked")
     @Test
     public void titleAnnotatedMethodsSomeOfWhichReturnNulls() throws Exception {

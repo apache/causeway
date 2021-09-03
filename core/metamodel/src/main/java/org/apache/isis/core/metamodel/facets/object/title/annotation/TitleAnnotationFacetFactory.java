@@ -19,19 +19,13 @@
 
 package org.apache.isis.core.metamodel.facets.object.title.annotation;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.core.metamodel.facets.Evaluators;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.fallback.FallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
@@ -39,8 +33,6 @@ import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaM
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
-import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.val;
 
 public class TitleAnnotationFacetFactory
@@ -64,77 +56,6 @@ implements MetaModelRefiner {
         addFacetIfPresent(TitleFacetViaTitleAnnotation.create(cls, facetHolder));
     }
 
-    // static comparator memoization
-    @Getter(lazy = true, value = AccessLevel.PACKAGE)
-    private static final Comparator<Evaluators.Evaluator<Title>> sequenceComparator =
-            new Comparator<Evaluators.Evaluator<Title>>() {
-                final Comparator<String> comparator = new SequenceComparator();
-
-                @Override
-                public int compare(final Evaluators.Evaluator<Title> o1, final Evaluators.Evaluator<Title> o2) {
-                    final Title a1 = o1.getAnnotation();
-                    final Title a2 = o2.getAnnotation();
-                    return comparator.compare(a1.sequence(), a2.sequence());
-                }
-            };
-
-
-    @Deprecated //FIXME[ISI-2774] I believe we have sequence comparators already else where (dewey order)
-    static class SequenceComparator implements Comparator<String> {
-
-        @Override
-        public int compare(final String sequence1, final String sequence2) {
-
-            final List<String> components1 = componentsFor(sequence1);
-            final List<String> components2 = componentsFor(sequence2);
-
-            final int size1 = components1.size();
-            final int size2 = components2.size();
-
-            if (size1 == 0 && size2 == 0) {
-                return 0;
-            }
-
-            // continue to loop until we run out of components.
-            int n = 0;
-            while (true) {
-                final int length = n + 1;
-                // check if run out of components in either side
-                if (size1 < length && size2 >= length) {
-                    return -1; // o1 before o2
-                }
-                if (size2 < length && size1 >= length) {
-                    return +1; // o2 before o1
-                }
-                if (size1 < length && size2 < length) {
-                    // run out of components
-                    return 0;
-                }
-                // we have this component on each side
-                int componentCompare = 0;
-                try {
-                    final Integer c1 = Integer.valueOf(components1.get(n));
-                    final Integer c2 = Integer.valueOf(components2.get(n));
-                    componentCompare = c1.compareTo(c2);
-                } catch (final NumberFormatException nfe) {
-                    // not integers compare as strings
-                    componentCompare = components1.get(n).compareTo(components2.get(n));
-                }
-
-                if (componentCompare != 0) {
-                    return componentCompare;
-                }
-                // this component is the same; lets look at the next
-                n++;
-            }
-        }
-
-        private static List<String> componentsFor(final String sequence) {
-            return _Strings.splitThenStream(sequence, ".").collect(Collectors.toList());
-        }
-    }
-
-
     /**
      * Violation if there is a class that has both a <tt>title()</tt> method
      * and also any declared (non-inherited) method annotated with <tt>@Title</tt>.
@@ -149,10 +70,6 @@ implements MetaModelRefiner {
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
 
         programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec -> {
-
-//            final var objectSpec = (ObjectSpecificationAbstract)_objectSpec;
-//            final var cls = objectSpec.getCorrespondingClass();
-//            final var introspectionPolicy = objectSpec.getIntrospectionPolicy();
 
             final var titleFacetTopRank =
                 objectSpec
@@ -176,56 +93,9 @@ implements MetaModelRefiner {
                         + "conflicting title facets %s",
                         objectSpec.getFeatureIdentifier().getClassName(),
                         conflictingFeatures.toString());
-
             }
-
-
-
-//
-//            final var titleMethod = MethodFinderUtils.findMethod(
-//                    MethodFinderOptions.objectSupport(introspectionPolicy),
-//                    cls, TITLE_METHOD_NAME, String.class, null);
-//            if (titleMethod == null) {
-//                return;
-//            }
-//
-//            // determine if cls contains an @Title annotated method, not inherited from superclass
-//            final ObjectSpecification superSpec = objectSpec.superclass();
-//            if (superSpec == null) {
-//                return;
-//            }
-//
-//            final var superIntrospectionPolicy = ((ObjectSpecificationAbstract)superSpec).getIntrospectionPolicy();
-//            final var superCls = superSpec.getCorrespondingClass();
-//
-//            //FIXME[ISIS-2774] also count declared fields that are @Title annotated
-//            if (countMethodsWithTitleAnnotation(introspectionPolicy, cls)
-//                    > 1L
-//                    //countMethodsWithTitleAnnotation(superIntrospectionPolicy, superCls)
-//                    ) {
-//                ValidationFailure.raiseFormatted(
-//                        objectSpec,
-//                        "%s: conflict for determining a strategy for retrieval of title for class, "
-//                        + "contains a method '%s' and an annotation '@%s' on a different members",
-//                        objectSpec.getFeatureIdentifier().getClassName(),
-//                        TITLE_METHOD_NAME,
-//                        Title.class.getName());
-//            }
 
         });
     }
-
-//    private static long countMethodsWithTitleAnnotation(
-//            final IntrospectionPolicy introspectionPolicy,
-//            final Class<?> cls) {
-//        return MethodFinderUtils.streamMethodsWithAnnotation(
-//                MethodFinderOptions.objectSupport(introspectionPolicy), cls, Title.class)
-//                // don't count methods that identify as title() methods
-//                .filter(method->
-//                        !
-//                        (method.getName().equals(MethodLiteralConstants.TITLE)
-//                                && method.getParameterCount() == 0))
-//                .count();
-//    }
 
 }

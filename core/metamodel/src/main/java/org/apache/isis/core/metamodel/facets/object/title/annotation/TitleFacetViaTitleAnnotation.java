@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.object.title.annotation;
 
 import java.lang.reflect.Method;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
@@ -29,6 +30,7 @@ import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.compare._Comparators;
 import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.commons.internal.reflection._Reflect.InterfacePolicy;
 import org.apache.isis.commons.internal.reflection._Reflect.TypeHierarchyPolicy;
@@ -40,6 +42,7 @@ import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
@@ -58,7 +61,7 @@ implements ImperativeFacet {
                 Title.class,
                 TypeHierarchyPolicy.EXCLUDE,
                 InterfacePolicy.INCLUDE)
-                .sorted(TitleAnnotationFacetFactory.getSequenceComparator())
+                .sorted(getSequenceComparator())
                 .map(TitleFacetViaTitleAnnotation.TitleComponent::of)
                 .collect(Can.toCan());
 
@@ -70,7 +73,6 @@ implements ImperativeFacet {
     }
 
     @Getter private final Can<TitleComponent> components;
-
     @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
 
     protected TitleFacetViaTitleAnnotation(final Can<TitleComponent> components, final FacetHolder holder) {
@@ -101,17 +103,6 @@ implements ImperativeFacet {
     @Override
     public String title(final ManagedObject targetAdapter) {
         return title(_Predicates.alwaysFalse(), targetAdapter);
-    }
-
-    private String titleOf(final ManagedObject adapter) {
-        if (adapter == null) {
-            return null;
-        }
-        return adapter.titleString();
-    }
-
-    private static String abbreviated(final String str, final int maxLength) {
-        return str.length() < maxLength ? str : str.substring(0, maxLength - 3) + "...";
     }
 
     @Override
@@ -172,6 +163,24 @@ implements ImperativeFacet {
     }
 
     // -- HELPER
+
+    // static comparator memoization
+    @Getter(lazy = true, value = AccessLevel.PRIVATE)
+    private static final Comparator<Evaluators.Evaluator<Title>> sequenceComparator =
+        (eval1, eval2) -> _Comparators.deweyOrderCompare(
+                            eval1.getAnnotation().sequence(),
+                            eval2.getAnnotation().sequence());
+
+    private String titleOf(final ManagedObject adapter) {
+        if (adapter == null) {
+            return null;
+        }
+        return adapter.titleString();
+    }
+
+    private static String abbreviated(final String str, final int maxLength) {
+        return str.length() < maxLength ? str : str.substring(0, maxLength - 3) + "...";
+    }
 
     public static class TitleComponent {
 
