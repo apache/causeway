@@ -66,16 +66,17 @@ public final class Evaluators  {
             final Class<?> cls,
             final Class<T> annotationType) {
 
+        val classCache = _ClassCache.getInstance();
+
         return Stream.concat(
-                streamMethodEvaluators(cls, annotationType),
-                streamFieldEvaluators(cls, annotationType));
+                streamMethodEvaluators(cls, annotationType, classCache),
+                streamFieldEvaluators(cls, annotationType, classCache));
     }
 
     private static <T extends Annotation> Stream<Evaluator<T>> streamMethodEvaluators(
             final Class<?> cls,
-            final Class<T> annotationType) {
-
-        val classCache = _ClassCache.getInstance();
+            final Class<T> annotationType,
+            final _ClassCache classCache) {
 
         return classCache
         .streamDeclaredMethods(cls)
@@ -87,9 +88,11 @@ public final class Evaluators  {
 
     private static <T extends Annotation> Stream<Evaluator<T>> streamFieldEvaluators(
             final Class<?> cls,
-            final Class<T> annotationType) {
+            final Class<T> annotationType,
+            final _ClassCache classCache) {
 
-        return Stream.<Field>of(cls.getDeclaredFields())
+        return classCache
+        .streamDeclaredFields(cls)
         .map(field->FieldEvaluator.create(field, annotationType))
         .flatMap(Optional::stream);
     }

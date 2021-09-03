@@ -18,6 +18,7 @@
  */
 package org.apache.isis.commons.internal.reflection;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -93,6 +94,10 @@ public final class _ClassCache implements AutoCloseable {
         return inspectType(type).declaredMethods.stream();
     }
 
+    public Stream<Field> streamDeclaredFields(final Class<?> type) {
+        return inspectType(type).declaredFields.stream();
+    }
+
     /**
      * Returns a Stream of declared Methods, that pass the given {@code filter},
      * while as an optimization, memoizing the result under given
@@ -119,9 +124,10 @@ public final class _ClassCache implements AutoCloseable {
 
     @RequiredArgsConstructor
     private static class ClassModel {
+        private final Can<Field> declaredFields;
+        private final Can<Method> declaredMethods;
         private final Map<MethodKey, Method> publicMethodsByKey = new HashMap<>();
         private final Map<MethodKey, Method> nonPublicDeclaredMethodsByKey = new HashMap<>();
-        private final Can<Method> declaredMethods;
         private final Map<String, Can<Method>> declaredMethodsByAttribute = new HashMap<>();
     }
 
@@ -152,21 +158,24 @@ public final class _ClassCache implements AutoCloseable {
 
             return inspectedTypes.computeIfAbsent(type, __->{
 
+                val declaredFields = type.getDeclaredFields();
                 val declaredMethods = type.getDeclaredMethods();
 
-                val methods = new ClassModel(Can.ofArray(declaredMethods));
+                val model = new ClassModel(
+                        Can.ofArray(declaredFields),
+                        Can.ofArray(declaredMethods));
 
                 for(val method : declaredMethods) {
-                    methods.nonPublicDeclaredMethodsByKey.put(MethodKey.of(type, method), method);
+                    model.nonPublicDeclaredMethodsByKey.put(MethodKey.of(type, method), method);
                 }
 
                 for(val method : type.getMethods()) {
                     val key = MethodKey.of(type, method);
-                    methods.publicMethodsByKey.put(key, method);
-                    methods.nonPublicDeclaredMethodsByKey.remove(key);
+                    model.publicMethodsByKey.put(key, method);
+                    model.nonPublicDeclaredMethodsByKey.remove(key);
                 }
 
-                return methods;
+                return model;
 
             });
         }
@@ -191,6 +200,8 @@ public final class _ClassCache implements AutoCloseable {
         }
         return null;
     }
+
+
 
 
 }
