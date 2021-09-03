@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.object.title.annotation;
 
 import java.lang.reflect.Method;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
@@ -42,7 +41,6 @@ import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
@@ -61,7 +59,9 @@ implements ImperativeFacet {
                 Title.class,
                 TypeHierarchyPolicy.EXCLUDE,
                 InterfacePolicy.INCLUDE)
-                .sorted(getSequenceComparator())
+                .sorted((eval1, eval2) -> _Comparators.deweyOrderCompare(
+                        eval1.getAnnotation().sequence(),
+                        eval2.getAnnotation().sequence()))
                 .map(TitleFacetViaTitleAnnotation.TitleComponent::of)
                 .collect(Can.toCan());
 
@@ -163,13 +163,6 @@ implements ImperativeFacet {
     }
 
     // -- HELPER
-
-    // static comparator memoization
-    @Getter(lazy = true, value = AccessLevel.PRIVATE)
-    private static final Comparator<Evaluators.Evaluator<Title>> sequenceComparator =
-        (eval1, eval2) -> _Comparators.deweyOrderCompare(
-                            eval1.getAnnotation().sequence(),
-                            eval2.getAnnotation().sequence());
 
     private String titleOf(final ManagedObject adapter) {
         if (adapter == null) {
