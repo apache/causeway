@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.ident.title.annotation;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -42,6 +43,7 @@ import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class TitleAnnotationFacetFactoryTest
 extends AbstractFacetFactoryJUnit4TestCase {
@@ -49,6 +51,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
     private TitleAnnotationFacetFactory facetFactory;
 
     @Mock private ManagedObject mockObjectAdapter;
+    @Mock private ObjectSpecification mockStringSpec;
 
     @Before
     public void setUp() throws Exception {
@@ -114,7 +117,6 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
     }
 
-    @Ignore //FIXME[ISI-2774] to re-instate
     @Test
     public void testTitleAnnotatedMethodsPickedUpOnClass() throws Exception {
 
@@ -140,12 +142,24 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
         final Customer2 customer = new Customer2();
 
-        context.checking(new Expectations() {
-            {
-                allowing(mockObjectAdapter).getPojo();
-                will(returnValue(customer));
-            }
-        });
+        context.checking(new Expectations() {{
+
+            allowing(mockSpecificationLoader).specForType(String.class);
+            will(returnValue(Optional.of(mockStringSpec)));
+
+            allowing(mockObjectAdapter).getPojo();
+            will(returnValue(customer));
+
+            allowing(mockStringSpec).getCorrespondingClass();
+            will(returnValue(String.class));
+
+            allowing(mockStringSpec).isParentedOrFreeCollection();
+            will(returnValue(false));
+
+            ignoring(mockStringSpec).assertPojoCompatible("titleElement1");
+            ignoring(mockStringSpec).assertPojoCompatible("titleElement2");
+            ignoring(mockStringSpec).assertPojoCompatible("titleElement3");
+        }});
         final String title = titleFacetViaTitleAnnotation.title(mockObjectAdapter);
         assertThat(title, is("titleElement1. titleElement3,titleElement2"));
     }

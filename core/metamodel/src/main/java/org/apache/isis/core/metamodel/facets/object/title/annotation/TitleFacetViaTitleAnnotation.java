@@ -133,7 +133,8 @@ implements ImperativeFacet {
                 }
                 // ignore context, if provided
                 val titlePartAdapter = objectManager.adapt(titlePart);
-                if(skipTitlePartEvaluator != null && skipTitlePartEvaluator.test(titlePartAdapter)) {
+                if(skipTitlePartEvaluator != null
+                        && skipTitlePartEvaluator.test(titlePartAdapter)) {
                     continue;
                 }
                 String title = titleOf(titlePartAdapter);
