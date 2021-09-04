@@ -18,9 +18,12 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * @since 1.x {@index}
  */
+@RequiredArgsConstructor
 public enum Rel {
 
     SELF(RelDefinition.IANA, "self"),
@@ -66,31 +69,39 @@ public enum Rel {
     OBJECT_ICON(RelDefinition.IMPL, "object-icon"),
     LAYOUT(RelDefinition.IMPL, "layout"),
     MENUBARS(RelDefinition.IMPL, "menuBars"),
+    BRAND_LOGO_SIGNIN(RelDefinition.IMPL, "brand-logo-signin"),
+    BRAND_LOGO_HEADER(RelDefinition.IMPL, "brand-logo-header"),
     LOGOUT(RelDefinition.IMPL, "logout");
 
     private final RelDefinition relDef;
     private final String relSuffix;
 
-    private Rel(final RelDefinition relDef, final String name) {
-        this.relDef = relDef;
-        this.relSuffix = name;
-    }
-
+    /**
+     * full spec name with rel-def and suffix, eg.
+     * {@code urn:org.apache.isis.restfulobjects:rels/menuBars}
+     */
     public String getName() {
         return relDef.nameOf(relSuffix);
     }
 
     /**
-     * For those {@link Rel}s that also take a param
+     * suffix only, eg. {@code menuBars}
      */
-    public String andParam(String paramName, String paramValue) {
-        return getName() +
-                (relDef.canAddParams()
-                        ?";" + paramName + "=" + "\"" + paramValue + "\""
-                                :"");
+    public String getSimpleName() {
+        return relSuffix;
     }
 
-    public boolean matches(Rel otherRel) {
+    /**
+     * For those {@link Rel}s that also take a param
+     */
+    public String andParam(final String paramName, final String paramValue) {
+        return getName() +
+                (relDef.canAddParams()
+                        ? ";" + paramName + "=" + "\"" + paramValue + "\""
+                        : "");
+    }
+
+    public boolean matches(final Rel otherRel) {
         return this == otherRel;
     }
 

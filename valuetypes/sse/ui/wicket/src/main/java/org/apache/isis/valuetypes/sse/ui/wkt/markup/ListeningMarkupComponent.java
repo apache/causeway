@@ -25,7 +25,7 @@ import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.value.LocalResourcePath;
-import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
+import org.apache.isis.core.config.viewer.web.WebAppContextPath;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 
 import lombok.val;

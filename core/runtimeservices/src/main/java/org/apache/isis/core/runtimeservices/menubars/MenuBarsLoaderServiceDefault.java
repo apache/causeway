@@ -39,7 +39,7 @@ import org.apache.isis.applib.services.menu.MenuBarsLoaderService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
-import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
+import org.apache.isis.core.config.viewer.web.WebAppContextPath;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

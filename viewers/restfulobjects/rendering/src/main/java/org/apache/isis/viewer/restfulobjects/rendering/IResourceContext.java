@@ -44,9 +44,16 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
 public interface IResourceContext {
 
     /**
-     * Prepends with the base URI
+     * Prepends with the servlet's base URI
+     * @param url - (/restful/) relative resource
      */
-    String urlFor(final String url);
+    String restfulUrlFor(final String url);
+
+    /**
+     * Prepends with the application's base URI.
+     * @param url - relative resource, must include context-path if any
+     */
+    String applicationUrlFor(final String url);
 
     /**
      * Returns the {@link HttpHeaders#getAcceptableMediaTypes() acceptable media types}

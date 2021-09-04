@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.config.viewer.wicket;
+package org.apache.isis.core.config.viewer.web;
 
 import java.io.Serializable;
 import java.util.Optional;

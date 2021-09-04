@@ -20,10 +20,14 @@ package org.apache.isis.viewer.restfulobjects.viewer.resources;
 
 import java.util.stream.Stream;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.config.viewer.web.WebAppContextPath;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.viewer.common.model.branding.BrandingUiModelProvider;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -40,8 +44,16 @@ import lombok.val;
 public class HomePageReprRenderer
 extends ReprRendererAbstract<Void> {
 
-    HomePageReprRenderer(final IResourceContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
+    // injection points not directly managed by Spring, instead resolved via constructor
+    @Inject BrandingUiModelProvider brandingUiModelProvider;
+    @Inject WebAppContextPath webAppContextPath;
+
+    HomePageReprRenderer(
+            final IResourceContext resourceContext,
+            final LinkFollowSpecs linkFollower,
+            final JsonRepresentation representation) {
         super(resourceContext, linkFollower, RepresentationType.HOME_PAGE, representation);
+        resourceContext.getMetaModelContext().getServiceInjector().injectServicesInto(this);
     }
 
     @Override
@@ -60,6 +72,7 @@ extends ReprRendererAbstract<Void> {
         val metaModelContext = super.getResourceContext().getMetaModelContext();
 
         addLinkToUser(getResourceContext().getInteractionProvider().currentInteractionContextElseFail());
+        addLinksToApplicationLogos();
         addLinkToMenuBars();
         addLinkToServices(metaModelContext.streamServiceAdapters());
         addLinkToVersion();
@@ -156,6 +169,35 @@ extends ReprRendererAbstract<Void> {
         }
 
         getLinks().arrayAdd(link);
+    }
+
+    private void addLinksToApplicationLogos() {
+
+        brandingUiModelProvider
+        .getSignInBranding()
+        .getLogoHref()
+        .map(webAppContextPath::prependContextPathIfLocal)
+        .ifPresent(href->
+            getLinks()
+                .arrayAdd(LinkBuilder.newBuilder(
+                        getResourceContext(),
+                        Rel.BRAND_LOGO_SIGNIN.getName(),
+                        RepresentationType.IMAGE,
+                        href)
+                .buildAsApplicationResource()));
+
+        brandingUiModelProvider
+        .getHeaderBranding()
+        .getLogoHref()
+        .map(webAppContextPath::prependContextPathIfLocal)
+        .ifPresent(href->
+            getLinks()
+                .arrayAdd(LinkBuilder.newBuilder(
+                        getResourceContext(),
+                        Rel.BRAND_LOGO_HEADER.getName(),
+                        RepresentationType.IMAGE,
+                        href)
+                .buildAsApplicationResource()));
     }
 
     private void addLinkToMenuBars() {

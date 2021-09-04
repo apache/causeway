@@ -35,7 +35,7 @@ import org.apache.isis.core.config.environment.IsisLocaleInitializer;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.environment.IsisTimeZoneInitializer;
 import org.apache.isis.core.config.validators.PatternOptionalStringConstraintValidator;
-import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
+import org.apache.isis.core.config.viewer.web.WebAppContextPath;
 
 import lombok.Data;
 

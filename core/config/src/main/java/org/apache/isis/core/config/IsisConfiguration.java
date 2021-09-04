@@ -77,7 +77,7 @@ import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.EntityCha
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.PropertyPublishingPolicy;
 import org.apache.isis.core.config.metamodel.services.ApplicationFeaturesInitConfiguration;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
-import org.apache.isis.core.config.viewer.wicket.DialogMode;
+import org.apache.isis.core.config.viewer.web.DialogMode;
 
 import lombok.Data;
 import lombok.Getter;

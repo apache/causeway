@@ -363,7 +363,7 @@ implements DomainObjectResource {
                 Link link = new Link(
                         Rel.ELEMENT.getName(),
                         HttpMethod.GET,
-                        resourceContext.urlFor(
+                        resourceContext.restfulUrlFor(
                                 "objects/" + domainType + "/" + instanceId
                                 ),
                         RepresentationType.DOMAIN_OBJECT.getJsonMediaType().toString());
@@ -375,7 +375,7 @@ implements DomainObjectResource {
                 Link link = new Link(
                         Rel.ACTION.getName(),
                         HttpMethod.GET,
-                        resourceContext.urlFor(
+                        resourceContext.restfulUrlFor(
                                 "objects/" + domainType + "/" + instanceId + "/actions/" + actionLayoutData.getId()
                                 ),
                         RepresentationType.OBJECT_ACTION.getJsonMediaType().toString());
@@ -387,7 +387,7 @@ implements DomainObjectResource {
                 Link link = new Link(
                         Rel.PROPERTY.getName(),
                         HttpMethod.GET,
-                        resourceContext.urlFor(
+                        resourceContext.restfulUrlFor(
                                 "objects/" + domainType + "/" + instanceId + "/properties/" + propertyLayoutData.getId()
                                 ),
                         RepresentationType.OBJECT_PROPERTY.getJsonMediaType().toString());
@@ -399,7 +399,7 @@ implements DomainObjectResource {
                 Link link = new Link(
                         Rel.COLLECTION.getName(),
                         HttpMethod.GET,
-                        resourceContext.urlFor(
+                        resourceContext.restfulUrlFor(
                                 "objects/" + domainType + "/" + instanceId + "/collections/" + collectionLayoutData.getId()
                                 ),
                         RepresentationType.OBJECT_COLLECTION.getJsonMediaType().toString());

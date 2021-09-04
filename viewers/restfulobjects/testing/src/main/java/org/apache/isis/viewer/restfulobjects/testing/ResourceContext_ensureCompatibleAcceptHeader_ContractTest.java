@@ -33,9 +33,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
@@ -51,6 +48,9 @@ import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCo
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.viewer.context.ResourceContext;
 import org.apache.isis.viewer.restfulobjects.viewer.resources.ResourceDescriptor;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import lombok.val;
 
@@ -197,7 +197,7 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
 
         val resourceDescriptor = ResourceDescriptor.of(representationType, null, null);
 
-        return new ResourceContext(resourceDescriptor, mockHttpHeaders, null, null, null, null,
+        return new ResourceContext(resourceDescriptor, mockHttpHeaders, null, null, null, null, null,
                 mockHttpServletRequest, null, null,
                 metaModelContext, null, null);
     }

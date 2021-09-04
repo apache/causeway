@@ -82,7 +82,7 @@ extends ReprRendererAbstract<ManagedObject> {
         final Rel rel = Rel.OBJECT_ICON;
         final String objectRef = ManagedObjects.stringifyElseFail(objectAdapter, "/");
         final String url = "objects/" + objectRef + "/object-icon";
-        return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.OBJECT_ICON, url);
+        return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.IMAGE, url);
     }
 
     private static enum Mode {

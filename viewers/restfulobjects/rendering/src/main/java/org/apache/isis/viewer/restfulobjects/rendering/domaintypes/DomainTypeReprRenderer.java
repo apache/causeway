@@ -162,7 +162,7 @@ extends ReprRendererAbstract<ObjectSpecification> {
         final JsonRepresentation link = JsonRepresentation.newMap();
         arguments.mapPut(paramName, link);
         if (objectSpec != null) {
-            link.mapPut("href", resourceContext.urlFor("domain-types/" + objectSpec.getLogicalTypeName()));
+            link.mapPut("href", resourceContext.restfulUrlFor("domain-types/" + objectSpec.getLogicalTypeName()));
         } else {
             link.mapPut("href", NullNode.instance);
         }

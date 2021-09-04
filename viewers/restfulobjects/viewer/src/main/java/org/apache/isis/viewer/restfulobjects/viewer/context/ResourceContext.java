@@ -67,7 +67,8 @@ implements IResourceContext {
     @Getter private final HttpServletRequest httpServletRequest;
     @Getter private final HttpServletResponse httpServletResponse;
     @Getter private final SecurityContext securityContext;
-    private final String baseUri;
+    private final String applicationAbsoluteBase;
+    private final String restfulAbsoluteBase;
 
     @Getter private List<List<String>> followLinks;
     @Getter private boolean validateOnly;
@@ -84,8 +85,9 @@ implements IResourceContext {
             final ResourceDescriptor resourceDescriptor,
             final HttpHeaders httpHeaders,
             final Providers providers,
-            final String baseUri,
             final Request request,
+            final String applicationAbsoluteBase,
+            final String restfulAbsoluteBase,
             final String urlUnencodedQueryStringIfAny,
             final HttpServletRequest httpServletRequest,
             final HttpServletResponse httpServletResponse,
@@ -107,7 +109,8 @@ implements IResourceContext {
         this.securityContext = securityContext;
         this.interactionInitiatedBy = interactionInitiatedBy;
 
-        this.baseUri = baseUri;
+        this.applicationAbsoluteBase = _Strings.suffix(applicationAbsoluteBase, "/");
+        this.restfulAbsoluteBase = _Strings.suffix(restfulAbsoluteBase, "/");
 
         this.readQueryStringAsMap = requestArgsAsMap(requestParams);
 
@@ -181,7 +184,7 @@ implements IResourceContext {
         return str;
     }
 
-    private static boolean simpleQueryArgs(Map<String, String[]> params) {
+    private static boolean simpleQueryArgs(final Map<String, String[]> params) {
         if(params==null || params.isEmpty()) {
             return false;
         }
@@ -219,7 +222,7 @@ implements IResourceContext {
     // -- canEagerlyRender
     private Set<Bookmark> rendered = _Sets.newHashSet();
     @Override
-    public boolean canEagerlyRender(ManagedObject objectAdapter) {
+    public boolean canEagerlyRender(final ManagedObject objectAdapter) {
         return ManagedObjects.bookmark(objectAdapter)
         .map(rendered::add)
         .orElse(true);
@@ -268,8 +271,19 @@ implements IResourceContext {
     }
 
     @Override
-    public String urlFor(final String url) {
-        return baseUri.toString() + url;
+    public String restfulUrlFor(final String url) {
+        return restfulAbsoluteBase + url;
+    }
+
+    @Override
+    public String applicationUrlFor(final String url) {
+        if(_Strings.isEmpty(url)) {
+            return "";
+        }
+        return applicationAbsoluteBase + (
+                url.startsWith("/")
+                ? url.substring(1)
+                : url);
     }
 
     @Override

@@ -108,7 +108,7 @@ public enum RepresentationType {
             RestfulMediaType.APPLICATION_JSON_OBJECT_LAYOUT_BS3,
             RestfulMediaType.APPLICATION_XML_OBJECT_LAYOUT_BS3,
             null),
-    OBJECT_ICON(
+    IMAGE(
             "image/*",
             "image/*",
             null),

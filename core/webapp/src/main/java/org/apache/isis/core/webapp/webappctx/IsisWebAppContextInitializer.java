@@ -33,7 +33,7 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Oneshot;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
+import org.apache.isis.core.config.viewer.web.WebAppContextPath;
 import org.apache.isis.core.webapp.modules.WebModule;
 import org.apache.isis.core.webapp.modules.WebModuleContext;
 

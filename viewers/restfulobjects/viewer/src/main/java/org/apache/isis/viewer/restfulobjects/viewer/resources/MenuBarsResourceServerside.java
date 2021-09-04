@@ -99,7 +99,7 @@ public class MenuBarsResourceServerside extends ResourceAbstract implements Menu
                 Link link = new Link(
                         Rel.ACTION.getName(),
                         HttpMethod.GET,
-                        resourceContext.urlFor(relativeUrl),
+                        resourceContext.restfulUrlFor(relativeUrl),
                         RepresentationType.OBJECT_ACTION.getJsonMediaType().toString());
                 actionLayoutData.setLink(link);
             };
