@@ -43,14 +43,13 @@ import org.apache.isis.viewer.wicket.ui.pages.value.ValuePage;
 import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
 
 import lombok.SneakyThrows;
-import lombok.val;
 
 public enum ActionResultResponseType {
     OBJECT {
         @Override
         public ActionResultResponse interpretResult(final ActionModel actionModel, final AjaxRequestTarget target, final ManagedObject resultAdapter) {
-            val commonContext = actionModel.getCommonContext();
-            val actualAdapter = determineScalarAdapter(commonContext, resultAdapter); // intercepts collections
+            final var commonContext = actionModel.getCommonContext();
+            final var actualAdapter = determineScalarAdapter(commonContext, resultAdapter); // intercepts collections
             return toEntityPage(actionModel, actualAdapter);
         }
 
@@ -63,14 +62,14 @@ public enum ActionResultResponseType {
     COLLECTION {
         @Override
         public ActionResultResponse interpretResult(final ActionModel actionModel, final AjaxRequestTarget target, final ManagedObject resultAdapter) {
-            val collectionModel = EntityCollectionModel.createStandalone(resultAdapter, actionModel);
+            final var collectionModel = EntityCollectionModel.createStandalone(resultAdapter, actionModel);
             return ActionResultResponse.toPage(new StandaloneCollectionPage(collectionModel));
         }
     },
     VALUE {
         @Override
         public ActionResultResponse interpretResult(final ActionModel model, final AjaxRequestTarget target, final ManagedObject resultAdapter) {
-            val commonContext = model.getCommonContext();
+            final var commonContext = model.getCommonContext();
             ValueModel valueModel = new ValueModel(commonContext, resultAdapter);
             valueModel.setActionHint(model);
             final ValuePage valuePage = new ValuePage(valueModel);
@@ -97,7 +96,7 @@ public enum ActionResultResponseType {
         @Override @SneakyThrows
         public ActionResultResponse interpretResult(final ActionModel model, final AjaxRequestTarget target, final ManagedObject resultAdapter) {
             final LocalResourcePath localResPath = (LocalResourcePath)resultAdapter.getPojo();
-            val webAppContextPath = model.getCommonContext().getWebAppContextPath();
+            final var webAppContextPath = model.getCommonContext().getWebAppContextPath();
             return ActionResultResponse
                     .openUrlInBrowser(target, localResPath.getEffectivePath(webAppContextPath::prependContextPath), localResPath.getOpenUrlStrategy());
         }
@@ -107,7 +106,7 @@ public enum ActionResultResponseType {
         public ActionResultResponse interpretResult(final ActionModel model, final AjaxRequestTarget target, final ManagedObject resultAdapter) {
             // open URL server-side redirect
             final LocalResourcePath localResPath = (LocalResourcePath)resultAdapter.getPojo();
-            val webAppContextPath = model.getCommonContext().getWebAppContextPath();
+            final var webAppContextPath = model.getCommonContext().getWebAppContextPath();
             IRequestHandler handler = ActionModel.redirectHandler(localResPath, localResPath.getOpenUrlStrategy(), webAppContextPath);
             return ActionResultResponse.withHandler(handler);
         }
@@ -125,7 +124,7 @@ public enum ActionResultResponseType {
         public ActionResultResponse interpretResult(final ActionModel model, final AjaxRequestTarget target, final ManagedObject resultAdapter) {
             // open URL server-side redirect
             final Object value = resultAdapter.getPojo();
-            val webAppContextPath = model.getCommonContext().getWebAppContextPath();
+            final var webAppContextPath = model.getCommonContext().getWebAppContextPath();
             IRequestHandler handler = ActionModel.redirectHandler(value, OpenUrlStrategy.NEW_WINDOW, webAppContextPath); // default behavior
             return ActionResultResponse.withHandler(handler);
         }
@@ -133,7 +132,7 @@ public enum ActionResultResponseType {
     VOID {
         @Override
         public ActionResultResponse interpretResult(final ActionModel model, final AjaxRequestTarget target, final ManagedObject resultAdapter) {
-            val commonContext = model.getCommonContext();
+            final var commonContext = model.getCommonContext();
             final VoidModel voidModel = new VoidModel(commonContext);
             voidModel.setActionHint(model);
             return ActionResultResponse.toPage(new VoidReturnPage(voidModel));
