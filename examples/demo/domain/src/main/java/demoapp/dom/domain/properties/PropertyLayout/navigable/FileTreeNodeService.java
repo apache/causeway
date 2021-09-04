@@ -19,6 +19,7 @@
 package demoapp.dom.domain.properties.PropertyLayout.navigable;
 
 import java.nio.file.FileSystems;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -42,12 +43,18 @@ public class FileTreeNodeService {
     final Provider<HttpSession> httpSessionProvider;
 
     public TreeNode<FileNodeVm> sessionTree() {
-        TreeNode<FileNodeVm> tree = (TreeNode<FileNodeVm>) httpSessionProvider.get().getAttribute(TreeNode.class.getName());
-        if(tree == null) {
-            tree = newTree();
-            httpSessionProvider.get().setAttribute(TreeNode.class.getName(), tree);
-        }
-        return tree;
+        val session = httpSessionProvider.get();
+        val key = TreeNode.class.getName();
+
+        return Optional
+            .ofNullable(session.getAttribute(key))
+            .map(TreeNode.class::isInstance)
+            .<TreeNode<FileNodeVm>>map(TreeNode.class::cast)
+            .orElseGet(()->{
+                val tree = newTree();
+                session.setAttribute(key, tree);
+                return tree;
+            });
     }
 //end::sessionTree[]
 

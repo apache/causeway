@@ -18,11 +18,17 @@
  */
 package demoapp.dom._infra.resources;
 
+import java.util.stream.Collectors;
+
 import javax.inject.Named;
 
+import org.springframework.stereotype.Service;
+
+import org.apache.isis.commons.internal.base._Refs;
+import org.apache.isis.commons.internal.base._Refs.StringReference;
+import org.apache.isis.commons.internal.base._Text;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
-import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -36,30 +42,74 @@ public class AsciiDocReaderService {
     final ResourceReaderService resourceReaderService;
     final IsisConfiguration configuration;
 
-    public AsciiDoc readFor(Object anObject) {
+    public AsciiDoc readFor(final Object anObject) {
         return readFor(anObject.getClass());
     }
 
-    public AsciiDoc readFor(Object anObject, final String member) {
+    public AsciiDoc readFor(final Object anObject, final String member) {
         return readFor(anObject.getClass(), member);
     }
 
-    public AsciiDoc readFor(Class<?> aClass) {
+    public AsciiDoc readFor(final Class<?> aClass) {
         val adocResourceName = String.format("%s.adoc", aClass.getSimpleName());
-        val asciiDoc = readResourceAndReplaceProperties(aClass, adocResourceName);
-        return AsciiDoc.valueOfAdoc(asciiDoc);
+        val adocResource = readResource(aClass, adocResourceName);
+        return toAsciiDoc(adocResource, aClass);
     }
 
-    public AsciiDoc readFor(Class<?> aClass, final String member) {
+    public AsciiDoc readFor(final Class<?> aClass, final String member) {
         val adocResourceName = String.format("%s-%s.%s", aClass.getSimpleName(), member, "adoc");
-        val asciiDoc = readResourceAndReplaceProperties(aClass, adocResourceName);
-        return AsciiDoc.valueOfAdoc(asciiDoc);
+        val adocResource = readResource(aClass, adocResourceName);
+        return toAsciiDoc(adocResource, aClass);
     }
 
-    private String readResourceAndReplaceProperties(Class<?> aClass, String adocResourceName) {
-        val adoc = resourceReaderService.readResource(aClass, adocResourceName);
+    // -- HELPER
+
+    private StringReference readResource(final Class<?> aClass, final String adocResourceName) {
+        return _Refs.stringRef(resourceReaderService.readResource(aClass, adocResourceName));
+    }
+
+    private String replaceVersion(final String adoc) {
         return adoc.replace("{isis-version}",
                 configuration.getViewer().getWicket().getApplication().getVersion());
+    }
+
+    private String replaceJavaSourceReferences(final String adoc) {
+        return _Text.getLines(adoc)
+        .stream()
+        .map(line->line.startsWith("include::")
+                        && line.contains(".java")
+                ? replaceJavaSourceReference(line)
+                : line
+        )
+        .collect(Collectors.joining("\n"));
+    }
+
+    //  "include::DemoHomePage.java" -> "include::{sourcedir}/DemoHomePage.java
+    private String replaceJavaSourceReference(final String line) {
+        val lineRef = _Refs.stringRef(line);
+        lineRef.cutAtIndexOfAndDrop("::");
+        val classFileSimpleName = lineRef.cutAtIndexOf(".java");
+        val remainder = lineRef.getValue();
+        return "include::{sourcedir}/" + classFileSimpleName + remainder;
+    }
+
+    // setting up the java source root relative to the current directory (application main)
+    //XXX dependent on the location of the 'main' class within the file system,
+    // if we ever want to improve on that, we should place a marker file on the project root,
+    // so we can search up the folder hierarchy on dynamically figure out how many ../
+    // actually are required
+    private String prependSource(final String adoc, final Class<?> aClass) {
+        val packagePath = aClass.getPackage().getName().replace('.', '/');
+        return ":sourcedir: ../../domain/src/main/java/" + packagePath + "\n\n" + adoc;
+    }
+
+    private AsciiDoc toAsciiDoc(final StringReference adocRef, final Class<?> aClass) {
+        return AsciiDoc.valueOfAdoc(
+                adocRef
+                .update(this::replaceVersion)
+                .update(this::replaceJavaSourceReferences)
+                .update(adoc->prependSource(adoc, aClass))
+                .getValue());
     }
 
 
