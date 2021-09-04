@@ -19,7 +19,6 @@
 package demoapp.dom.domain.properties.PropertyLayout.navigable;
 
 import java.nio.file.FileSystems;
-import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -34,6 +33,7 @@ import org.apache.isis.applib.graph.tree.TreePath;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+@SuppressWarnings("unchecked")
 //tag::sessionTree[]
 @Service
 @Named("demo.FileTreeNodeService")
@@ -44,17 +44,14 @@ public class FileTreeNodeService {
 
     public TreeNode<FileNodeVm> sessionTree() {
         val session = httpSessionProvider.get();
-        val key = TreeNode.class.getName();
+        val cacheKey = TreeNode.class.getName();
+        var tree = (TreeNode<FileNodeVm>) session.getAttribute(cacheKey);
+        if(tree == null) {
+            tree = newTree();
+            session.setAttribute(cacheKey, tree);
+        }
+        return tree;
 
-        return Optional
-            .ofNullable(session.getAttribute(key))
-            .map(TreeNode.class::isInstance)
-            .<TreeNode<FileNodeVm>>map(TreeNode.class::cast)
-            .orElseGet(()->{
-                val tree = newTree();
-                session.setAttribute(key, tree);
-                return tree;
-            });
     }
 //end::sessionTree[]
 
