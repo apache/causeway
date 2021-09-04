@@ -97,8 +97,9 @@ public enum ActionResultResponseType {
         @Override @SneakyThrows
         public ActionResultResponse interpretResult(final ActionModel model, final AjaxRequestTarget target, final ManagedObject resultAdapter) {
             final LocalResourcePath localResPath = (LocalResourcePath)resultAdapter.getPojo();
+            val webAppContextPath = model.getCommonContext().getWebAppContextPath();
             return ActionResultResponse
-                    .openUrlInBrowser(target, localResPath.getPath(), localResPath.getOpenUrlStrategy());
+                    .openUrlInBrowser(target, localResPath.getEffectivePath(webAppContextPath::prependContextPath), localResPath.getOpenUrlStrategy());
         }
     },
     VALUE_LOCALRESPATH_NOAJAX {
@@ -106,7 +107,8 @@ public enum ActionResultResponseType {
         public ActionResultResponse interpretResult(final ActionModel model, final AjaxRequestTarget target, final ManagedObject resultAdapter) {
             // open URL server-side redirect
             final LocalResourcePath localResPath = (LocalResourcePath)resultAdapter.getPojo();
-            IRequestHandler handler = ActionModel.redirectHandler(localResPath, localResPath.getOpenUrlStrategy());
+            val webAppContextPath = model.getCommonContext().getWebAppContextPath();
+            IRequestHandler handler = ActionModel.redirectHandler(localResPath, localResPath.getOpenUrlStrategy(), webAppContextPath);
             return ActionResultResponse.withHandler(handler);
         }
     },
@@ -123,7 +125,8 @@ public enum ActionResultResponseType {
         public ActionResultResponse interpretResult(final ActionModel model, final AjaxRequestTarget target, final ManagedObject resultAdapter) {
             // open URL server-side redirect
             final Object value = resultAdapter.getPojo();
-            IRequestHandler handler = ActionModel.redirectHandler(value, OpenUrlStrategy.NEW_WINDOW); // default behavior
+            val webAppContextPath = model.getCommonContext().getWebAppContextPath();
+            IRequestHandler handler = ActionModel.redirectHandler(value, OpenUrlStrategy.NEW_WINDOW, webAppContextPath); // default behavior
             return ActionResultResponse.withHandler(handler);
         }
     },

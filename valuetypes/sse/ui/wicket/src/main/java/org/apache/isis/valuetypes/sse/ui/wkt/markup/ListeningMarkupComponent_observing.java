@@ -58,7 +58,7 @@ final class ListeningMarkupComponent_observing  {
         }
 
         final String targetId = UUID.randomUUID().toString();
-        final String observingPath = webAppContextPath.prependContextPath(observing.getPath());
+        final String observingPath = observing.getEffectivePath(webAppContextPath::prependContextPath);
 
         final StringBuilder sb = new StringBuilder();
         sb

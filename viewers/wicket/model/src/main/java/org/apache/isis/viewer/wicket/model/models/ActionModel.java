@@ -44,6 +44,7 @@ import org.apache.isis.applib.value.NamedWithMimeType;
 import org.apache.isis.applib.value.OpenUrlStrategy;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.core.config.viewer.web.WebAppContextPath;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -265,7 +266,8 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
 
     public static IRequestHandler redirectHandler(
             final Object value,
-            final @NonNull OpenUrlStrategy openUrlStrategy) {
+            final @NonNull OpenUrlStrategy openUrlStrategy,
+            final @NonNull WebAppContextPath webAppContextPath) {
 
         if(value instanceof java.net.URL) {
             val url = (java.net.URL) value;
@@ -274,7 +276,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
         if(value instanceof LocalResourcePath) {
             val localResourcePath = (LocalResourcePath) value;
             return new RedirectRequestHandlerWithOpenUrlStrategy(
-                    localResourcePath.getPath(),
+                    localResourcePath.getEffectivePath(webAppContextPath::prependContextPath),
                     localResourcePath.getOpenUrlStrategy());
         }
         return null;

@@ -32,15 +32,15 @@ public class IsisLocalResourcePathConverter implements TypeConverter<LocalResour
     @Override
     public String toDatastoreType(final LocalResourcePath memberValue) {
         return memberValue != null
-                ? memberValue.getPath()
-                        : null;
+                ? memberValue.getValue()
+                : null;
     }
 
     @Override
     public LocalResourcePath toMemberType(final String datastoreValue) {
         return datastoreValue != null
                 ? new LocalResourcePath(datastoreValue)
-                        : null;
+                : null;
     }
 
 }
