@@ -22,12 +22,12 @@ import java.io.Serializable;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
-import org.springframework.lang.Nullable;
 import javax.annotation.Priority;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
@@ -54,6 +54,12 @@ public class WebAppContextPath implements Serializable {
      */
     @Getter
     private String contextPath = "";
+
+//    public Optional<String> getContextPath() {
+//        return hasContextPath()
+//                ? Optional.of(contextPath)
+//                : Optional.empty();
+//    }
 
     /**
      * @param contextPath - any form allowed: leading or trailing '/',
@@ -82,6 +88,19 @@ public class WebAppContextPath implements Serializable {
             return localPath;
         }
         return getContextPath() + _Strings.prefix(localPath, "/");
+    }
+
+    public String appendContextPath(final @Nullable String path) {
+        if(path==null) {
+            return getContextPath();
+        }
+        if(!hasContextPath()) {
+            return path;
+        }
+        return _Strings.suffix(path, "/") +
+                (getContextPath().startsWith("/")
+                    ? getContextPath().substring(1)
+                    : path);
     }
 
     /**

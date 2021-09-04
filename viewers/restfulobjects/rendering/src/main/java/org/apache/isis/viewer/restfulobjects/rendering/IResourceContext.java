@@ -51,7 +51,7 @@ public interface IResourceContext {
 
     /**
      * Prepends with the application's base URI.
-     * @param url - relative resource, must include context-path if any
+     * @param url - relative resource, must not include context-path if any
      */
     String applicationUrlFor(final String url);
 

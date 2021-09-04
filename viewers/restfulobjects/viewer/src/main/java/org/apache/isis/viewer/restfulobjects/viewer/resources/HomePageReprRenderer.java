@@ -24,7 +24,6 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.config.viewer.web.WebAppContextPath;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.common.model.branding.BrandingUiModelProvider;
@@ -46,7 +45,6 @@ extends ReprRendererAbstract<Void> {
 
     // injection points not directly managed by Spring, instead resolved via constructor
     @Inject BrandingUiModelProvider brandingUiModelProvider;
-    @Inject WebAppContextPath webAppContextPath;
 
     HomePageReprRenderer(
             final IResourceContext resourceContext,
@@ -176,7 +174,6 @@ extends ReprRendererAbstract<Void> {
         brandingUiModelProvider
         .getSignInBranding()
         .getLogoHref()
-        .map(webAppContextPath::prependContextPathIfLocal)
         .ifPresent(href->
             getLinks()
                 .arrayAdd(LinkBuilder.newBuilder(
@@ -189,7 +186,6 @@ extends ReprRendererAbstract<Void> {
         brandingUiModelProvider
         .getHeaderBranding()
         .getLogoHref()
-        .map(webAppContextPath::prependContextPathIfLocal)
         .ifPresent(href->
             getLinks()
                 .arrayAdd(LinkBuilder.newBuilder(

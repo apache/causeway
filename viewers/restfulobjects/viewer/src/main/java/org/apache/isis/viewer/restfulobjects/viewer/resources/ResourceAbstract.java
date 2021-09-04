@@ -39,6 +39,7 @@ import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.codec._UrlDecoderUtil;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.config.viewer.web.WebAppContextPath;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -67,6 +68,8 @@ public abstract class ResourceAbstract {
     @Context HttpServletResponse httpServletResponse;
     @Context SecurityContext securityContext;
     @Context Providers providers;
+
+    @Inject WebAppContextPath webAppContextPath;
 
     @Inject
     protected ResourceAbstract(
@@ -110,20 +113,24 @@ public abstract class ResourceAbstract {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED);
         }
 
-        // eg. http://localhost:8080/restful/
+        // eg. http://localhost:8080/ctx/restful/
         final String restfulAbsoluteBase = isisConfiguration.getViewer().getRestfulobjects().getBaseUri()
                                     .orElseGet(()->uriInfo.getBaseUri().toString());
 
-        // eg. /restful/
+        // eg. /ctx/restful/
         val restfulRelativeBase = uriInfo.getBaseUri().getRawPath();
 
         // eg. http://localhost:8080/
-        val applicationAbsoluteBase =
+        val serverAbsoluteBase =
                 _Strings
                 .suffix(_Refs
                         .stringRef(restfulAbsoluteBase)
                         .cutAtLastIndexOfAndDrop(restfulRelativeBase),
                 "/");
+
+        // eg. http://localhost:8080/ctx/
+        val applicationAbsoluteBase = _Strings
+                .suffix(webAppContextPath.appendContextPath(serverAbsoluteBase), "/");
 
         return resourceContext(
                 resourceDescriptor,

@@ -55,6 +55,7 @@ import org.apache.isis.viewer.restfulobjects.viewer.resources.ResourceDescriptor
 import org.apache.isis.viewer.restfulobjects.viewer.resources.serialization.SerializationStrategy;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.val;
 
@@ -271,15 +272,12 @@ implements IResourceContext {
     }
 
     @Override
-    public String restfulUrlFor(final String url) {
+    public String restfulUrlFor(final @NonNull String url) {
         return restfulAbsoluteBase + url;
     }
 
     @Override
-    public String applicationUrlFor(final String url) {
-        if(_Strings.isEmpty(url)) {
-            return "";
-        }
+    public String applicationUrlFor(final @NonNull String url) {
         return applicationAbsoluteBase + (
                 url.startsWith("/")
                 ? url.substring(1)
