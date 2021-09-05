@@ -18,18 +18,17 @@
  */
 package org.apache.isis.core.metamodel.facets.object.callbacks;
 
-import java.lang.reflect.Method;
+import javax.inject.Inject;
 
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 
-public class UpdatingCallbackFacetViaMethod
-extends UpdatingCallbackFacetAbstract {
+public class UpdatedCallbackFacetFactory
+extends CallbackFacetFactoryAbstract {
 
-    public UpdatingCallbackFacetViaMethod(
-            final Can<Method> methods,
-            final FacetHolder holder) {
-        super(methods, holder);
+    @Inject
+    public UpdatedCallbackFacetFactory(final MetaModelContext mmc) {
+        super(mmc, MethodLiteralConstants.CallbackMethod.UPDATED, UpdatedCallbackFacetViaMethod::new);
     }
 
 }

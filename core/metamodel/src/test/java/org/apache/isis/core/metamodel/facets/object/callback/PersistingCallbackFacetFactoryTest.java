@@ -19,20 +19,20 @@
 
 package org.apache.isis.core.metamodel.facets.object.callback;
 
-import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallbackFacetFactory;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants.CallbackMethod;
 
-public class CreatedCallbackFacetFactoryTest
+public class PersistingCallbackFacetFactoryTest
 extends CallbackFacetFactoryTestAbstract {
 
-    private CreatedCallbackFacetFactory facetFactory;
+    private PersistingCallbackFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new CreatedCallbackFacetFactory(metaModelContext);
+        facetFactory = new PersistingCallbackFacetFactory(metaModelContext);
     }
 
     @Override
@@ -41,13 +41,36 @@ extends CallbackFacetFactoryTestAbstract {
         super.tearDown();
     }
 
-    public void testCreatedLifecycleMethodPickedUpOn() {
+    public void testPersistingLifecycleMethodPickedUpOn() {
         class Customer {
             @SuppressWarnings("unused")
-            public void created() {
-            };
+            public void persisting() {
+            }
         }
-        assertPicksUp(1, facetFactory, Customer.class, CallbackMethod.CREATED, CreatedCallbackFacet.class);
+        assertPicksUp(1, facetFactory, Customer.class, CallbackMethod.PERSISTING, PersistingCallbackFacet.class);
+    }
+
+    public void testSavingLifecycleMethodPickedUpOn() {
+        class Customer {
+            @SuppressWarnings("unused")
+            public void saving() {
+            }
+        }
+        assertPicksUp(1, facetFactory, Customer.class, CallbackMethod.PERSISTING, PersistingCallbackFacet.class);
+    }
+
+    public void testSavingAndPersistingLifecycleMethodPickedUpOn() {
+        class Customer {
+            @SuppressWarnings("unused")
+            public void saving() {
+            }
+
+            @SuppressWarnings("unused")
+            public void persisting() {
+            }
+        }
+
+        assertPicksUp(2, facetFactory, Customer.class, CallbackMethod.PERSISTING, PersistingCallbackFacet.class);
     }
 
 }

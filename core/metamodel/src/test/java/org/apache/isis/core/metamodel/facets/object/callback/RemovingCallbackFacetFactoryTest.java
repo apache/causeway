@@ -19,25 +19,20 @@
 
 package org.apache.isis.core.metamodel.facets.object.callback;
 
-import java.lang.reflect.Method;
-
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.isis.core.metamodel.facets.object.callbacks.RemoveCallbackViaDeleteMethodFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacetViaMethod;
+import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacetFactory;
+import org.apache.isis.core.metamodel.methods.MethodLiteralConstants.CallbackMethod;
 
-public class DeleteCallbackFacetFactoryTest
-extends AbstractFacetFactoryTest {
+public class RemovingCallbackFacetFactoryTest
+extends CallbackFacetFactoryTestAbstract {
 
-    private RemoveCallbackViaDeleteMethodFacetFactory facetFactory;
+    private RemovingCallbackFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new RemoveCallbackViaDeleteMethodFacetFactory(metaModelContext);
+        facetFactory = new RemovingCallbackFacetFactory(metaModelContext);
     }
 
     @Override
@@ -46,24 +41,34 @@ extends AbstractFacetFactoryTest {
         super.tearDown();
     }
 
+    public void testRemovingLifecycleMethodPickedUpOn() {
+        class Customer {
+            @SuppressWarnings("unused")
+            public void removing() {
+            }
+        }
+        assertPicksUp(1, facetFactory, Customer.class, CallbackMethod.REMOVING, RemovingCallbackFacet.class);
+    }
+
     public void testDeletingLifecycleMethodPickedUpOn() {
         class Customer {
             @SuppressWarnings("unused")
             public void deleting() {
-            };
+            }
         }
-        final Method method = findMethod(Customer.class, "deleting");
+        assertPicksUp(1, facetFactory, Customer.class, CallbackMethod.REMOVING, RemovingCallbackFacet.class);
+    }
 
-        facetFactory.process(ProcessClassContext
-                .forTesting(Customer.class, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(RemovingCallbackFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof RemovingCallbackFacetViaMethod);
-        final RemovingCallbackFacetViaMethod deletingCallbackFacetViaMethod = (RemovingCallbackFacetViaMethod) facet;
-        assertEquals(method, deletingCallbackFacetViaMethod.getMethods().getFirstOrFail());
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
+    public void testRemovingAndDeletingLifecycleMethodPickedUpOn() {
+        class Customer {
+            @SuppressWarnings("unused")
+            public void removing() {
+            }
+            @SuppressWarnings("unused")
+            public void deleting() {
+            }
+        }
+        assertPicksUp(2, facetFactory, Customer.class, CallbackMethod.REMOVING, RemovingCallbackFacet.class);
     }
 
 }

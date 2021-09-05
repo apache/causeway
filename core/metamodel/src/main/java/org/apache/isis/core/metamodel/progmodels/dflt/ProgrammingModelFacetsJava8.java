@@ -45,11 +45,12 @@ import org.apache.isis.core.metamodel.facets.members.named.method.NamedFacetForM
 import org.apache.isis.core.metamodel.facets.object.ViewModelSemanticCheckingFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetFallbackFactory;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.callbacks.LoadCallbackFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.callbacks.PersistCallbackFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.callbacks.PersistCallbackViaSaveMethodFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.callbacks.RemoveCallbackFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.callbacks.UpdateCallbackFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedCallbackFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallbackFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.choices.enums.EnumFacetUsingValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFacetMethodFactory;
 import org.apache.isis.core.metamodel.facets.object.defaults.annotcfg.DefaultedFacetAnnotationElseConfigurationFactory;
@@ -236,11 +237,12 @@ extends ProgrammingModelAbstract {
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new HideForContextFacetViaMethodFactory(mmc));
 
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new CreatedCallbackFacetFactory(mmc));
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new LoadCallbackFacetFactory(mmc));
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new PersistCallbackViaSaveMethodFacetFactory(mmc));
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new PersistCallbackFacetFactory(mmc));
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new UpdateCallbackFacetFactory(mmc));
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new RemoveCallbackFacetFactory(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new LoadedCallbackFacetFactory(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new PersistedCallbackFacetFactory(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new PersistingCallbackFacetFactory(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new UpdatingCallbackFacetFactory(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new UpdatedCallbackFacetFactory(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new RemovingCallbackFacetFactory(mmc));
 
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new ValidateObjectFacetMethodFactory(mmc));
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new ObjectValidPropertiesFacetImplFactory(mmc));

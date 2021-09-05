@@ -44,16 +44,20 @@ public final class MethodLiteralConstants {
 
     // -- LIFECYCLE CALLBACKS
 
-    public static final String CREATED_PREFIX = "created";
-    public static final String LOADED_PREFIX = "loaded";
-    public static final String SAVED_PREFIX = "saved";
-    public static final String SAVING_PREFIX = "saving";
-    public static final String PERSISTED_PREFIX = "persisted";
-    public static final String PERSISTING_PREFIX = "persisting";
-    public static final String DELETING_PREFIX = "deleting";
-    public static final String REMOVING_PREFIX = "removing";
-    public static final String UPDATED_PREFIX = "updated";
-    public static final String UPDATING_PREFIX = "updating";
+    @Getter
+    public enum CallbackMethod {
+        CREATED("created"),
+        LOADED("loaded"),
+        PERSISTED("persisted", "saved"),
+        PERSISTING("persisting", "saving"),
+        REMOVING("removing", "deleting"),
+        UPDATED("updated"),
+        UPDATING("updating");
+        CallbackMethod(final String ...methodNames) {
+            this.methodNames = Can.of(methodNames);
+        }
+        private final Can<String> methodNames;
+    }
 
     // -- OBJECT SUPPORT
 
@@ -77,7 +81,6 @@ public final class MethodLiteralConstants {
 
     public static final String NAMED_PREFIX = "named"; // dynamic naming
     public static final String DESCRIBED_PREFIX = "described"; // dynamic description
-
 
     // -- OTHER LITERALS
 

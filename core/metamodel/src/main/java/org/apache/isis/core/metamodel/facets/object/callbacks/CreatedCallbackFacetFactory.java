@@ -16,46 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.callbacks;
 
 import javax.inject.Inject;
 
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
-import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
-import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
-import lombok.val;
-
-public class CreatedCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
-
-    private static final String PREFIX = MethodLiteralConstants.CREATED_PREFIX;
+public class CreatedCallbackFacetFactory
+extends CallbackFacetFactoryAbstract {
 
     @Inject
     public CreatedCallbackFacetFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
-    }
-
-    @Override
-    public void process(final ProcessClassContext processClassContext) {
-        val cls = processClassContext.getCls();
-        val facetHolder = processClassContext.getFacetHolder();
-
-        val method = MethodFinderUtils
-                .findMethod(
-                        MethodFinderOptions
-                        .livecycleCallback(processClassContext.getIntrospectionPolicy()),
-                        cls, PREFIX, void.class, NO_ARG);
-
-        if (method != null) {
-            addFacet(new CreatedCallbackFacetViaMethod(method, facetHolder));
-            processClassContext.removeMethod(method);
-        }
-
+        super(mmc, MethodLiteralConstants.CallbackMethod.CREATED, CreatedCallbackFacetViaMethod::new);
     }
 
 }

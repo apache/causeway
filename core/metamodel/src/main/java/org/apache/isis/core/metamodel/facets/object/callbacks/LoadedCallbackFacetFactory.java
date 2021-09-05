@@ -16,19 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.core.metamodel.facets.object.callbacks;
 
-package org.apache.isis.core.metamodel.facets;
+import javax.inject.Inject;
 
-import java.lang.reflect.Method;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 
-public interface ImperativeFacetMulti
-extends ImperativeFacet {
+public class LoadedCallbackFacetFactory
+extends CallbackFacetFactoryAbstract {
 
-    /**
-     * Associate an additional method, to be returned from
-     * {@link ImperativeFacet#getMethods()}.
-     *
-     * @param method
-     */
-    public void addMethod(final Method method);
+    @Inject
+    public LoadedCallbackFacetFactory(final MetaModelContext mmc) {
+        super(mmc, MethodLiteralConstants.CallbackMethod.LOADED, LoadedCallbackFacetViaMethod::new);
+    }
+
 }

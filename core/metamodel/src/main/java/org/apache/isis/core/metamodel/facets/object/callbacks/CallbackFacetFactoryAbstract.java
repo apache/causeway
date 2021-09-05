@@ -16,58 +16,55 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.callbacks;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-
-import javax.inject.Inject;
+import java.util.function.BiFunction;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
+import lombok.NonNull;
 import lombok.val;
 
-public class RemoveCallbackViaDeleteMethodFacetFactory
+abstract class CallbackFacetFactoryAbstract
 extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String PREFIX = MethodLiteralConstants.DELETING_PREFIX;
+    private final MethodLiteralConstants.CallbackMethod callbackMethodEnum;
+    private final BiFunction<Can<Method>, FacetHolder, CallbackFacet> callbackFacetConstructor;
 
-    @Inject
-    public RemoveCallbackViaDeleteMethodFacetFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
+    protected CallbackFacetFactoryAbstract(
+            final @NonNull MetaModelContext mmc,
+            final @NonNull MethodLiteralConstants.CallbackMethod callbackMethodEnum,
+            final @NonNull BiFunction<Can<Method>, FacetHolder, CallbackFacet> callbackFacetConstructor) {
+
+        super(mmc, FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, callbackMethodEnum.getMethodNames());
+        this.callbackMethodEnum = callbackMethodEnum;
+        this.callbackFacetConstructor = callbackFacetConstructor;
     }
 
     @Override
-    public void process(final ProcessClassContext processClassContext) {
+    public final void process(final ProcessClassContext processClassContext) {
         val cls = processClassContext.getCls();
         val facetHolder = processClassContext.getFacetHolder();
-        val facets = new ArrayList<Facet>();
 
-        Method method = null;
-        method = MethodFinderUtils.findMethod(
-                MethodFinderOptions
-                .livecycleCallback(processClassContext.getIntrospectionPolicy()),
-                cls, PREFIX, void.class, NO_ARG);
-        if (method != null) {
-            processClassContext.removeMethod(method);
-            final RemovingCallbackFacet facet = facetHolder.getFacet(RemovingCallbackFacet.class);
-            if (facet == null) {
-                facets.add(new RemovingCallbackFacetViaMethod(method, facetHolder));
-            } else {
-                facet.addMethod(method);
-            }
+        val callbackMethods = callbackMethodEnum
+                .getMethodNames()
+                .map(callbackMethodName->MethodFinderUtils.findMethod(
+                        MethodFinderOptions
+                        .livecycleCallback(processClassContext.getIntrospectionPolicy()),
+                        cls, callbackMethodName, void.class, NO_ARG));
+
+        if(callbackMethods.isNotEmpty()) {
+            callbackMethods.forEach(processClassContext::removeMethod);
+            addFacet(callbackFacetConstructor.apply(callbackMethods, facetHolder));
         }
-
-        FacetUtil.addFacets(facets);
     }
 
 }

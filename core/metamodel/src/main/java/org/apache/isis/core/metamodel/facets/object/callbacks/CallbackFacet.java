@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.callbacks;
 
 import org.apache.isis.applib.exceptions.unrecoverable.DomainModelException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.ImperativeFacetMulti;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
  * (eg about to be persisted).
  */
 public interface CallbackFacet
-extends Facet, ImperativeFacetMulti {
+extends ImperativeFacet {
 
     public void invoke(ManagedObject object);
 

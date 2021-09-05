@@ -19,24 +19,20 @@
 
 package org.apache.isis.core.metamodel.facets.object.callback;
 
-import java.lang.reflect.Method;
-
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.isis.core.metamodel.facets.object.callbacks.LoadCallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedCallbackFacetViaMethod;
+import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedCallbackFacetFactory;
+import org.apache.isis.core.metamodel.methods.MethodLiteralConstants.CallbackMethod;
 
-public class LoadCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
+public class LoadedCallbackFacetFactoryTest
+extends CallbackFacetFactoryTestAbstract {
 
-    private LoadCallbackFacetFactory facetFactory;
+    private LoadedCallbackFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new LoadCallbackFacetFactory(metaModelContext);
+        facetFactory = new LoadedCallbackFacetFactory(metaModelContext);
     }
 
     @Override
@@ -49,20 +45,9 @@ public class LoadCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
         class Customer {
             @SuppressWarnings("unused")
             public void loaded() {
-            };
+            }
         }
-        final Method method = findMethod(Customer.class, "loaded");
-
-        facetFactory.process(ProcessClassContext
-                .forTesting(Customer.class, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(LoadedCallbackFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof LoadedCallbackFacetViaMethod);
-        final LoadedCallbackFacetViaMethod loadedCallbackFacetViaMethod = (LoadedCallbackFacetViaMethod) facet;
-        assertEquals(method, loadedCallbackFacetViaMethod.getMethods().getFirstOrFail());
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
+        assertPicksUp(1, facetFactory, Customer.class, CallbackMethod.LOADED, LoadedCallbackFacet.class);
     }
 
 }

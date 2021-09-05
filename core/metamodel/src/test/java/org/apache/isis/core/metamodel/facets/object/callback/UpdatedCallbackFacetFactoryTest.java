@@ -19,20 +19,20 @@
 
 package org.apache.isis.core.metamodel.facets.object.callback;
 
-import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFacetFactory;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants.CallbackMethod;
 
-public class CreatedCallbackFacetFactoryTest
+public class UpdatedCallbackFacetFactoryTest
 extends CallbackFacetFactoryTestAbstract {
 
-    private CreatedCallbackFacetFactory facetFactory;
+    private UpdatedCallbackFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new CreatedCallbackFacetFactory(metaModelContext);
+        facetFactory = new UpdatedCallbackFacetFactory(metaModelContext);
     }
 
     @Override
@@ -41,13 +41,13 @@ extends CallbackFacetFactoryTestAbstract {
         super.tearDown();
     }
 
-    public void testCreatedLifecycleMethodPickedUpOn() {
+    public void testUpdatedLifecycleMethodPickedUpOn() {
         class Customer {
             @SuppressWarnings("unused")
-            public void created() {
-            };
+            public void updated() {
+            }
         }
-        assertPicksUp(1, facetFactory, Customer.class, CallbackMethod.CREATED, CreatedCallbackFacet.class);
+        assertPicksUp(1, facetFactory, Customer.class, CallbackMethod.UPDATED, UpdatedCallbackFacet.class);
     }
 
 }

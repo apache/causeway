@@ -20,18 +20,16 @@
 package org.apache.isis.core.metamodel.facets.object.callbacks;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
+
+import lombok.Getter;
 
 /**
  * Adapter superclass for {@link Facet}s for {@link CallbackFacet}.
@@ -40,32 +38,21 @@ public abstract class CallbackFacetAbstract
 extends FacetAbstract
 implements CallbackFacet {
 
-    private final List<Method> methods = _Lists.newConcurrentList();
-    private final _Lazy<Can<Method>> methodsUnmodifiable = _Lazy.threadSafe(()->Can.ofCollection(methods));
+    @Getter(onMethod_ = {@Override})
+    private final Can<Method> methods;
 
-    protected CallbackFacetAbstract(final Class<? extends Facet> facetType, final FacetHolder holder) {
+    protected CallbackFacetAbstract(
+            final Class<? extends Facet> facetType,
+            final Can<Method> methods,
+            final FacetHolder holder) {
         super(facetType, holder);
+        this.methods = methods
+                .map(method->_Reflect.lookupRegularMethodForSynthetic(method).orElse(null));
     }
 
     @Override
     public final Intent getIntent(final Method method) {
         return Intent.LIFECYCLE;
-    }
-
-    @Override
-    public final void addMethod(Method method) {
-        if(methodsUnmodifiable.isMemoized()) {
-            throw _Exceptions
-                .illegalState("getMethods() was already called, can no longer add any method: %s", method);
-        }
-        _Reflect
-        .lookupRegularMethodForSynthetic(method)
-        .ifPresent(methods::add);
-    }
-
-    @Override
-    public final Can<Method> getMethods() {
-        return methodsUnmodifiable.get();
     }
 
     @Override

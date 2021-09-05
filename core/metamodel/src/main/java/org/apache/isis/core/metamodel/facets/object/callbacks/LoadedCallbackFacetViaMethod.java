@@ -21,16 +21,16 @@ package org.apache.isis.core.metamodel.facets.object.callbacks;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 
 public class LoadedCallbackFacetViaMethod
-extends LoadedCallbackFacetAbstract
-implements ImperativeFacet {
+extends LoadedCallbackFacetAbstract {
 
-    public LoadedCallbackFacetViaMethod(final Method method, final FacetHolder holder) {
-        super(holder);
-        addMethod(method);
+    public LoadedCallbackFacetViaMethod(
+            final Can<Method> methods,
+            final FacetHolder holder) {
+        super(methods, holder);
     }
 
 }

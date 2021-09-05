@@ -24,9 +24,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.commons.internal.reflection._Reflect;
@@ -35,6 +32,9 @@ import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.all.named.ParamNamedFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import lombok.val;
 
@@ -58,7 +58,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
         programmingModel = metaModelContext.getProgrammingModel();
 
         // verify that
-        assertEquals(118, programmingModel.streamFactories().count());
+        assertEquals(119, programmingModel.streamFactories().count());
     }
 
     @Override
