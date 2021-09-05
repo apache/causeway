@@ -108,33 +108,40 @@ public final class Evaluators  {
 
     // -- EVALUATOR
 
-    public static abstract class Evaluator {
+    public static interface Evaluator {
+        String name();
+        Object value(Object obj);
+    }
+
+    private static abstract class EvaluatorAbstract
+    implements Evaluator {
 
         @Getter(lazy = true, value = AccessLevel.PRIVATE)
         private final Result<MethodHandle> methodHandleRef = Result.of(this::createMethodHandle);
 
         protected abstract MethodHandle createMethodHandle() throws IllegalAccessException;
-        public abstract String name();
 
+        @Override
         public Object value(final Object obj) {
 
             return getMethodHandleRef()
-            .ifFailure(ex->{
-                throw new MetaModelException("failed to create a method handle for " + name(), ex);
-            })
             .mapSuccess(mh->{
                 try {
                     return mh.invoke(obj);
                 } catch (Throwable e) {
                     return ThrowableExtensions.handleInvocationException(e, name());
                 }
-            });
+            })
+            .optionalElseThrow(ex->
+                new MetaModelException("failed to create a method handle for " + name(), ex))
+            .orElse(null);
         }
 
     }
 
     @RequiredArgsConstructor
-    public static class MethodEvaluator extends Evaluator {
+    public static class MethodEvaluator
+    extends EvaluatorAbstract {
 
         @Getter private final Class<?> correspondingClass;
         @Getter private final Method method;
@@ -151,7 +158,8 @@ public final class Evaluators  {
     }
 
     @RequiredArgsConstructor
-    public static class FieldEvaluator extends Evaluator {
+    public static class FieldEvaluator
+    extends EvaluatorAbstract {
 
         @Getter private final Class<?> correspondingClass;
         @Getter private final Field field;
