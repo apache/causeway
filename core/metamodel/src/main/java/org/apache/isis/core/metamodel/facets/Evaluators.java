@@ -30,6 +30,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
+import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.reflection._ClassCache;
 import org.apache.isis.commons.internal.reflection._Reflect;
@@ -38,6 +39,7 @@ import org.apache.isis.commons.internal.reflection._Reflect.TypeHierarchyPolicy;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
 import org.apache.isis.core.metamodel.commons.ThrowableExtensions;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -108,27 +110,27 @@ public final class Evaluators  {
 
     public static abstract class Evaluator {
 
-        private MethodHandle mh;
+        @Getter(lazy = true, value = AccessLevel.PRIVATE)
+        private final Result<MethodHandle> methodHandleRef = Result.of(this::createMethodHandle);
 
         protected abstract MethodHandle createMethodHandle() throws IllegalAccessException;
         public abstract String name();
 
         public Object value(final Object obj) {
-            if(mh==null) {
+
+            return getMethodHandleRef()
+            .ifFailure(ex->{
+                throw new MetaModelException("failed to create a method handle for " + name(), ex);
+            })
+            .mapSuccess(mh->{
                 try {
-                    mh = createMethodHandle();
-                } catch (IllegalAccessException e) {
-                    throw new MetaModelException("illegal access of " + name(), e);
+                    return mh.invoke(obj);
+                } catch (Throwable e) {
+                    return ThrowableExtensions.handleInvocationException(e, name());
                 }
-            }
-
-            try {
-                return mh.invoke(obj);
-            } catch (Throwable e) {
-                return ThrowableExtensions.handleInvocationException(e, name());
-            }
-
+            });
         }
+
     }
 
     @RequiredArgsConstructor
@@ -161,7 +163,10 @@ public final class Evaluators  {
 
         @Override
         protected MethodHandle createMethodHandle() throws IllegalAccessException {
-            return _Reflect.handleOfGetterOn(field);
+            val getter = lookupGetter().orElse(null);
+            return getter!=null
+                    ? _Reflect.handleOf(getter)
+                    : _Reflect.handleOfGetterOn(field);
         }
 
         public Optional<Method> lookupGetter() {
