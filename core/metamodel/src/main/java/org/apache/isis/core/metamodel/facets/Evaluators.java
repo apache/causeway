@@ -22,12 +22,15 @@ package org.apache.isis.core.metamodel.facets;
 import java.beans.IntrospectionException;
 import java.lang.annotation.Annotation;
 import java.lang.invoke.MethodHandle;
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.reflection._ClassCache;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.commons.internal.reflection._Reflect.InterfacePolicy;
@@ -37,6 +40,7 @@ import org.apache.isis.core.metamodel.commons.ThrowableExtensions;
 
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -47,35 +51,35 @@ public final class Evaluators  {
      * Streams all fields and no-arg methods having a specified annotationType,
      * each wrapped with an {@link Evaluator} object.
      */
-    public static <T extends Annotation> Stream<Evaluator<T>> streamEvaluators(
+    public static <T extends Annotation> Stream<Evaluator> streamEvaluators(
             final @NonNull Class<?> cls,
-            final @NonNull Class<T> annotationType,
+            final @NonNull Predicate<AnnotatedElement> memberFilter,
             final @NonNull TypeHierarchyPolicy typeHierarchyPolicy,
             final @NonNull InterfacePolicy interfacePolicy) {
 
         return typeHierarchyPolicy.isIncludeTypeHierarchy()
                 ? _Reflect
                     .streamTypeHierarchy(cls, interfacePolicy)
-                    .flatMap(type->streamAnnotatedMemberEvaluators(type, annotationType))
-                : streamAnnotatedMemberEvaluators(cls, annotationType);
+                    .flatMap(type->streamAnnotatedMemberEvaluators(type, memberFilter))
+                : streamAnnotatedMemberEvaluators(cls, memberFilter);
     }
 
     // -- HELPER
 
-    private static <T extends Annotation> Stream<Evaluator<T>> streamAnnotatedMemberEvaluators(
+    private static <T extends Annotation> Stream<Evaluator> streamAnnotatedMemberEvaluators(
             final Class<?> cls,
-            final Class<T> annotationType) {
+            final Predicate<AnnotatedElement> memberFilter) {
 
         val classCache = _ClassCache.getInstance();
 
         return Stream.concat(
-                streamMethodEvaluators(cls, annotationType, classCache),
-                streamFieldEvaluators(cls, annotationType, classCache));
+                streamMethodEvaluators(cls, memberFilter, classCache),
+                streamFieldEvaluators(cls, memberFilter, classCache));
     }
 
-    private static <T extends Annotation> Stream<Evaluator<T>> streamMethodEvaluators(
+    private static Stream<Evaluator> streamMethodEvaluators(
             final Class<?> cls,
-            final Class<T> annotationType,
+            final Predicate<AnnotatedElement> memberFilter,
             final _ClassCache classCache) {
 
         return classCache
@@ -83,30 +87,28 @@ public final class Evaluators  {
         .filter(MethodUtil::isNotStatic)
         .filter(MethodUtil::isNoArg)
         .filter(MethodUtil::isNotVoid)
-        .map(method->MethodEvaluator.create(method, annotationType))
-        .flatMap(Optional::stream);
+        .map(method->memberFilter.test(method) ? new MethodEvaluator(cls, method) : null)
+        .filter(_NullSafe::isPresent)
+        .map(Evaluator.class::cast);
     }
 
-    private static <T extends Annotation> Stream<Evaluator<T>> streamFieldEvaluators(
+    private static <T extends Annotation> Stream<Evaluator> streamFieldEvaluators(
             final Class<?> cls,
-            final Class<T> annotationType,
+            final Predicate<AnnotatedElement> memberFilter,
             final _ClassCache classCache) {
 
         return classCache
         .streamDeclaredFields(cls)
-        .map(field->FieldEvaluator.create(field, annotationType))
-        .flatMap(Optional::stream);
+        .map(field->memberFilter.test(field) ? new FieldEvaluator(cls, field) : null)
+        .filter(_NullSafe::isPresent)
+        .map(Evaluator.class::cast);
     }
 
     // -- EVALUATOR
 
-    public static abstract class Evaluator<T extends Annotation> {
-        @Getter private final T annotation;
-        private MethodHandle mh;
+    public static abstract class Evaluator {
 
-        protected Evaluator(final T annotation) {
-            this.annotation = annotation;
-        }
+        private MethodHandle mh;
 
         protected abstract MethodHandle createMethodHandle() throws IllegalAccessException;
         public abstract String name();
@@ -129,22 +131,11 @@ public final class Evaluators  {
         }
     }
 
-    public static class MethodEvaluator<T extends Annotation> extends Evaluator<T> {
+    @RequiredArgsConstructor
+    public static class MethodEvaluator extends Evaluator {
 
-        static <T extends Annotation> Optional<MethodEvaluator<T>> create(
-                final Method method,
-                final Class<T> annotationType) {
-
-            return Optional.ofNullable(method.getAnnotation(annotationType))
-                    .map(annot->new MethodEvaluator<>(method, annot));
-        }
-
+        @Getter private final Class<?> correspondingClass;
         @Getter private final Method method;
-
-        MethodEvaluator(final Method method, final T annotation) {
-            super(annotation);
-            this.method = method;
-        }
 
         @Override
         public String name() {
@@ -157,22 +148,11 @@ public final class Evaluators  {
         }
     }
 
-    public static class FieldEvaluator<T extends Annotation> extends Evaluator<T> {
+    @RequiredArgsConstructor
+    public static class FieldEvaluator extends Evaluator {
 
-        static <T extends Annotation> Optional<FieldEvaluator<T>> create(
-                final Field field,
-                final Class<T> annotationType) {
-
-            return Optional.ofNullable(field.getAnnotation(annotationType))
-                    .map(annot->new FieldEvaluator<>(field, annot));
-        }
-
+        @Getter private final Class<?> correspondingClass;
         @Getter private final Field field;
-
-        FieldEvaluator(final Field field, final T annotation) {
-            super(annotation);
-            this.field = field;
-        }
 
         @Override
         public String name() {
@@ -184,13 +164,13 @@ public final class Evaluators  {
             return _Reflect.handleOfGetterOn(field);
         }
 
-        public Optional<Method> getGetter(final Class<?> originatingClass) {
+        public Optional<Method> lookupGetter() {
             try {
                 return Optional.ofNullable(
-                        _Reflect.getGetter(originatingClass, field.getName())    );
+                        _Reflect.getGetter(correspondingClass, field.getName())    );
             } catch (IntrospectionException e) {
                 log.warn("failed reflective introspection on {} field {}",
-                        originatingClass, field.getName(), e);
+                        correspondingClass, field.getName(), e);
             }
             return Optional.empty();
         }

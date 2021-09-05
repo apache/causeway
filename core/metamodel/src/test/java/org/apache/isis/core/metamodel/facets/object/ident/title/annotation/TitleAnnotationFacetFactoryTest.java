@@ -31,9 +31,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
@@ -44,6 +41,9 @@ import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnota
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class TitleAnnotationFacetFactoryTest
 extends AbstractFacetFactoryJUnit4TestCase {
@@ -90,8 +90,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
         final List<Method> titleMethods = Arrays.asList(Customer.class.getMethod("someTitle"));
         for (int i = 0; i < titleMethods.size(); i++) {
-            final Evaluators.MethodEvaluator<Title> titleEvaluator =
-                    (Evaluators.MethodEvaluator<Title>) titleFacetViaTitleAnnotation.getComponents().getElseFail(i)
+            final Evaluators.MethodEvaluator titleEvaluator =
+                    (Evaluators.MethodEvaluator) titleFacetViaTitleAnnotation.getComponents().getElseFail(i)
                     .getTitleEvaluator();
 
             Assert.assertEquals(titleMethods.get(i),
@@ -133,8 +133,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
         //final List<TitleComponent> components = titleFacetViaTitleAnnotation.getComponents();
         for (int i = 0; i < titleMethods.size(); i++) {
-            final Evaluators.MethodEvaluator<Title> titleEvaluator =
-                    (Evaluators.MethodEvaluator<Title>) titleFacetViaTitleAnnotation.getComponents().getElseFail(i)
+            final Evaluators.MethodEvaluator titleEvaluator =
+                    (Evaluators.MethodEvaluator) titleFacetViaTitleAnnotation.getComponents().getElseFail(i)
                     .getTitleEvaluator();
 
             Assert.assertEquals(titleMethods.get(i),

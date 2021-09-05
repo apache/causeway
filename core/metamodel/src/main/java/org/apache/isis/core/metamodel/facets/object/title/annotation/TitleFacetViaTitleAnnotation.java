@@ -19,18 +19,22 @@
 
 package org.apache.isis.core.metamodel.facets.object.title.annotation;
 
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.compare._Comparators;
 import org.apache.isis.commons.internal.functions._Predicates;
+import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.commons.internal.reflection._Reflect.InterfacePolicy;
 import org.apache.isis.commons.internal.reflection._Reflect.TypeHierarchyPolicy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -41,8 +45,10 @@ import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -55,14 +61,15 @@ implements ImperativeFacet {
             final @NonNull Class<?> cls,
             final @NonNull FacetHolder holder){
 
-        val titleComponents = Evaluators.streamEvaluators(cls,
-                Title.class,
-                TypeHierarchyPolicy.EXCLUDE,
-                InterfacePolicy.INCLUDE)
-                .sorted((eval1, eval2) -> _Comparators.deweyOrderCompare(
-                        eval1.getAnnotation().sequence(),
-                        eval2.getAnnotation().sequence()))
-                .map(TitleFacetViaTitleAnnotation.TitleComponent::of)
+        val titleRef = _Refs.<Title>objectRef(null);
+
+        val titleComponents = Evaluators
+                .streamEvaluators(cls,
+                    annotatedElement->isTitleComponent(annotatedElement, titleRef::set),
+                    TypeHierarchyPolicy.EXCLUDE,
+                    InterfacePolicy.INCLUDE)
+                .map(evaluator->TitleComponent.of(evaluator, titleRef.getValueElseFail()))
+                .sorted()
                 .collect(Can.toCan());
 
         if (titleComponents.isEmpty()) {
@@ -175,32 +182,35 @@ implements ImperativeFacet {
         return str.length() < maxLength ? str : str.substring(0, maxLength - 3) + "...";
     }
 
-    public static class TitleComponent {
+    private static boolean isTitleComponent(
+            final AnnotatedElement annotatedElement,
+            final Consumer<Title> onTitleFound){
+        return _Annotations
+                .synthesizeInherited(annotatedElement, Title.class)
+                .map(title->{onTitleFound.accept(title); return true;})
+                .orElse(false);
+    }
 
-        public static TitleComponent of(final Evaluators.Evaluator<Title> titleEvaluator) {
-            final Title annotation = titleEvaluator.getAnnotation();
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class TitleComponent
+    implements Comparable<TitleComponent> {
+
+        public static TitleComponent of(
+                final Evaluators.Evaluator titleEvaluator,
+                final Title annotation) {
+
+            final String deweyOrdinal = annotation != null ? annotation.sequence() : "1";
             final String prepend = annotation != null ? annotation.prepend() : " ";
             final String append = annotation != null ? annotation.append() : "";
             final int abbreviateTo = annotation != null ? annotation.abbreviatedTo() : Integer.MAX_VALUE;
-            return new TitleComponent(prepend, append, titleEvaluator, abbreviateTo);
+            return new TitleComponent(titleEvaluator, deweyOrdinal, prepend, append, abbreviateTo);
         }
 
+        @Getter private final Evaluators.Evaluator titleEvaluator;
+        @Getter private final String deweyOrdinal;
         @Getter private final String prepend;
         @Getter private final String append;
-        @Getter private final Evaluators.Evaluator<Title> titleEvaluator;
         private final int abbreviateTo;
-
-        private TitleComponent(
-                final String prepend,
-                final String append,
-                final Evaluators.Evaluator<Title> titleEvaluator,
-                final int abbreviateTo) {
-            super();
-            this.prepend = prepend;
-            this.append = append;
-            this.titleEvaluator = titleEvaluator;
-            this.abbreviateTo = abbreviateTo;
-        }
 
         @Override
         public String toString() {
@@ -215,6 +225,11 @@ implements ImperativeFacet {
                 parts.add("abbreviateTo=" + abbreviateTo);
             }
             return String.join(";", parts);
+        }
+
+        @Override
+        public int compareTo(final TitleComponent other) {
+            return _Comparators.deweyOrderCompare(this.getDeweyOrdinal(), other.getDeweyOrdinal());
         }
     }
 }
