@@ -85,7 +85,6 @@ public class MeService {
             //group = "Security",
             sequence = "100"
             )
-
     public class me{
 
         public class ActionEvent extends ActionDomainEvent<me> {}
