@@ -61,8 +61,7 @@ public class JavaLangStrings implements HasAsciiDocDescription {
     public JavaLangStringVm openViewModel(final String initialValue) {
         return new JavaLangStringVm(initialValue);
     }
-    @MemberSupport
-    public String default0OpenViewModel() {
+    @MemberSupport public String default0OpenViewModel() {
         return samples.single();
     }
 

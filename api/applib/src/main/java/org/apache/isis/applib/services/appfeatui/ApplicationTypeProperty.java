@@ -132,8 +132,7 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
                 ? maxLen.getAsInt()
                 : null; // unexpected code path, as this case should be hidden
     }
-    @MemberSupport
-    public boolean hideMaxLength() {
+    @MemberSupport public boolean hideMaxLength() {
         if(!getFeature().getPropertyMaxLength().isPresent()) {
             return true;
         }
@@ -165,8 +164,7 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
                 ? maxLen.getAsInt()
                 : null; // unexpected code path, as this case should be hidden
     }
-    @MemberSupport
-    public boolean hideTypicalLength() {
+    @MemberSupport public boolean hideTypicalLength() {
         if(!getFeature().getPropertyTypicalLength().isPresent()) {
             return true;
         }

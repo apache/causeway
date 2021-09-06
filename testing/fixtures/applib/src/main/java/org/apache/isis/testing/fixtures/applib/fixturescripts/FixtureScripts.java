@@ -333,18 +333,15 @@ public class FixtureScripts {
             eventBusService.post(new FixturesInstalledEvent(this));
         }
     }
-    @MemberSupport
-    public boolean hideRunFixtureScript() {
+    @MemberSupport public boolean hideRunFixtureScript() {
         return specification == null;
     }
-    @MemberSupport
-    public String disableRunFixtureScript() {
+    @MemberSupport public String disableRunFixtureScript() {
         return getFixtureScriptByFriendlyName().isEmpty()
                 ? String.format("No fixture scripts found under package '%s'", specification.getPackagePrefix())
                 : null;
     }
-    @MemberSupport
-    public String default0RunFixtureScript() {
+    @MemberSupport public String default0RunFixtureScript() {
         val defaultFixtureScript = defaultFromFixtureScriptsSpecification();
         if(defaultFixtureScript != null) {
             return defaultFixtureScript;
@@ -354,19 +351,16 @@ public class FixtureScripts {
                 ? choices.iterator().next()
                 : null;
     }
-    @MemberSupport
-    private String defaultFromFixtureScriptsSpecification() {
+    @MemberSupport private String defaultFromFixtureScriptsSpecification() {
         Class<? extends FixtureScript> defaultScript = specification.getRunScriptDefaultScriptClass();
         return defaultScript != null
                 ? findFixtureScriptNameFor(defaultScript)
                 : null;
     }
-    @MemberSupport
-    public Set<String> choices0RunFixtureScript() {
+    @MemberSupport public Set<String> choices0RunFixtureScript() {
         return fixtureScriptByFriendlyName.keySet();
     }
-    @MemberSupport
-    public String validateRunFixtureScript(final String fixtureScriptName, final String parameters) {
+    @MemberSupport public String validateRunFixtureScript(final String fixtureScriptName, final String parameters) {
         return fixtureScriptByFriendlyName.get(fixtureScriptName).validateRun(parameters);
     }
 
@@ -409,8 +403,7 @@ public class FixtureScripts {
         }
         return results.get(0).getObject();
     }
-    @MemberSupport
-    public boolean hideRecreateObjectsAndReturnFirst() {
+    @MemberSupport public boolean hideRecreateObjectsAndReturnFirst() {
         return specification == null || specification.getRecreateScriptClass() == null;
     }
 

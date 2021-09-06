@@ -64,8 +64,7 @@ public class PrimitiveDoubles implements HasAsciiDocDescription {
     public PrimitiveDoubleVm openViewModel(final double initialValue) {
         return new PrimitiveDoubleVm(initialValue);
     }
-    @MemberSupport
-    public double default0OpenViewModel() {
+    @MemberSupport public double default0OpenViewModel() {
         return 1234.5678;
     }
 

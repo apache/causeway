@@ -62,8 +62,7 @@ public class JavaNetUrls implements HasAsciiDocDescription {
     public JavaNetUrlVm openViewModel(final java.net.URL initialValue) {
         return new JavaNetUrlVm(initialValue);
     }
-    @MemberSupport
-    public java.net.URL default0OpenViewModel() {
+    @MemberSupport public java.net.URL default0OpenViewModel() {
         return samples.single();
     }
 

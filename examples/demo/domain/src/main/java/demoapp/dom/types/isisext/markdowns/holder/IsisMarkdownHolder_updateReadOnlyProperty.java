@@ -41,14 +41,12 @@ public class IsisMarkdownHolder_updateReadOnlyProperty {
 
     private final IsisMarkdownHolder holder;
 
-    @MemberSupport
-    public IsisMarkdownHolder act(final Markdown newValue) {
+    @MemberSupport public IsisMarkdownHolder act(final Markdown newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public Markdown default0Act() {
+    @MemberSupport public Markdown default0Act() {
         return holder.getReadOnlyProperty();
     }
 

@@ -26,8 +26,7 @@ import org.apache.isis.applib.annotation.Nature;
 public class InvalidOrphanedActionSupport {
 
     // should fail
-    @MemberSupport
-    public boolean hideOrphaned() {
+    @MemberSupport public boolean hideOrphaned() {
         return false;
     }
 

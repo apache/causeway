@@ -40,8 +40,7 @@ public class InteractionNpmDemo_biArgEnabled {
         int b;
     }
 
-    @MemberSupport
-    public int act(
+    @MemberSupport public int act(
 
             @Parameter(maxLength = 2) // setup so we can test for this facet
             @ParameterLayout(describedAs = "first") // setup so we can test for this facet
@@ -55,16 +54,14 @@ public class InteractionNpmDemo_biArgEnabled {
     // -- PARAM 0
 
     // [ISIS-2362] parameter supporting methods, to be referenced by param name
-    @MemberSupport
-    public int defaultA(Parameters params) {
+    @MemberSupport public int defaultA(Parameters params) {
         return 5;
     }
 
     // -- PARAM 1
 
     // [ISIS-2362] parameter supporting methods, to be referenced by param name
-    @MemberSupport
-    public int[] choicesB(Parameters params) {
+    @MemberSupport public int[] choicesB(Parameters params) {
         return new int[] {1, 2, 3, 4};
     }
 }

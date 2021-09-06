@@ -42,8 +42,7 @@ public class PropertyLayoutRenderDayVm_updateEndDateWithMetaAnnotation {
     private final PropertyLayoutRenderDayVm propertyLayoutRenderDayVm;
 
 //tag::meta-annotation[]
-    @MemberSupport
-    public PropertyLayoutRenderDayVm act(
+    @MemberSupport public PropertyLayoutRenderDayVm act(
             @Parameter(optionality = Optionality.OPTIONAL)
             @RenderDayMetaAnnotationEndDateExclusive        // <.>
             @ParameterLayout(
@@ -54,8 +53,7 @@ public class PropertyLayoutRenderDayVm_updateEndDateWithMetaAnnotation {
         return propertyLayoutRenderDayVm;
     }
 //end::meta-annotation[]
-    @MemberSupport
-    public LocalDate default0Act() {
+    @MemberSupport public LocalDate default0Act() {
         return propertyLayoutRenderDayVm.getEndDateUsingMetaAnnotation();
     }
 

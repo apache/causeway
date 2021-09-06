@@ -47,19 +47,16 @@ public class WrapperShortHolder_updateReadOnlyPropertyWithChoices {
 
     private final WrapperShortHolder holder;
 
-    @MemberSupport
-    public WrapperShortHolder act(final Short newValue) {
+    @MemberSupport public WrapperShortHolder act(final Short newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public Short default0Act() {
+    @MemberSupport public Short default0Act() {
         return holder.getReadOnlyProperty();
     }
 
-    @MemberSupport
-    public List<Short> choices0Act() {
+    @MemberSupport public List<Short> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }

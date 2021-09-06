@@ -41,13 +41,11 @@ public class DomainObjectEntityChangePublishingEntity_updatePropertyUsingAction
     }
 
 //tag::class[]
-    @MemberSupport
-    public DomainObjectEntityChangePublishingEntity_updatePropertyUsingAction act(final String value) {
+    @MemberSupport public DomainObjectEntityChangePublishingEntity_updatePropertyUsingAction act(final String value) {
         domainObjectAuditingEntity.setPropertyUpdatedByAction(value);
         return this;
     }
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return domainObjectAuditingEntity.getPropertyUpdatedByAction();
     }
 

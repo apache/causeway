@@ -60,8 +60,7 @@ public class JavaSqlTimestamps implements HasAsciiDocDescription {
     public JavaSqlTimestampVm openViewModel(final java.sql.Timestamp initialValue) {
         return new JavaSqlTimestampVm(initialValue);
     }
-    @MemberSupport
-    public java.sql.Timestamp default0OpenViewModel() {
+    @MemberSupport public java.sql.Timestamp default0OpenViewModel() {
         return new java.sql.Timestamp(new java.util.Date(120,1,1, 1, 1).getTime()); // 1900 is the epoch
     }
 

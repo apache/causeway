@@ -52,8 +52,7 @@ public class JodaTimeTypesMenu {
     public JodaDateTimes dateTimes(){
         return new JodaDateTimes();
     }
-    @MemberSupport
-    public String disableDateTimes(){
+    @MemberSupport public String disableDateTimes(){
         return getJodaDisabledMessage();
     }
 
@@ -62,8 +61,7 @@ public class JodaTimeTypesMenu {
     public JodaLocalDates localDates(){
         return new JodaLocalDates();
     }
-    @MemberSupport
-    public String disableLocalDates(){
+    @MemberSupport public String disableLocalDates(){
         return getJodaDisabledMessage();
     }
 
@@ -72,8 +70,7 @@ public class JodaTimeTypesMenu {
     public JodaLocalDateTimes localDateTimes(){
         return new JodaLocalDateTimes();
     }
-    @MemberSupport
-    public String disableLocalDateTimes(){
+    @MemberSupport public String disableLocalDateTimes(){
         return getJodaDisabledMessage();
     }
 
@@ -82,8 +79,7 @@ public class JodaTimeTypesMenu {
     public JodaLocalTimes localTimes(){
         return new JodaLocalTimes();
     }
-    @MemberSupport
-    public String disableLocalTimes(){
+    @MemberSupport public String disableLocalTimes(){
         return getJodaDisabledMessage();
     }
 

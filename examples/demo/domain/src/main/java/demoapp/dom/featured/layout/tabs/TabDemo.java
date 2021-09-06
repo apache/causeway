@@ -64,8 +64,7 @@ public class TabDemo implements HasAsciiDocDescription {
     // -- DEMO FIELD 1
 
     @Getter @Setter private String field1 = "field 1";
-    @MemberSupport
-    public boolean hideField1() {
+    @MemberSupport public boolean hideField1() {
         return hidden;
     }
 

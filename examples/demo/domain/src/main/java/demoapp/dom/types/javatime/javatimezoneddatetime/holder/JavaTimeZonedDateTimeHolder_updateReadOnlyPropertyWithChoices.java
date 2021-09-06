@@ -48,19 +48,16 @@ public class JavaTimeZonedDateTimeHolder_updateReadOnlyPropertyWithChoices {
 
     private final JavaTimeZonedDateTimeHolder holder;
 
-    @MemberSupport
-    public JavaTimeZonedDateTimeHolder act(final java.time.ZonedDateTime newValue) {
+    @MemberSupport public JavaTimeZonedDateTimeHolder act(final java.time.ZonedDateTime newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public java.time.ZonedDateTime default0Act() {
+    @MemberSupport public java.time.ZonedDateTime default0Act() {
         return holder.getReadOnlyProperty();
     }
 
-    @MemberSupport
-    public List<java.time.ZonedDateTime> choices0Act() {
+    @MemberSupport public List<java.time.ZonedDateTime> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }

@@ -34,19 +34,16 @@ public class CountHolder_updateCount {
 
     private final CountHolder holder;   // <.>
 
-    @MemberSupport
-    public CountHolder act(final int count) {
+    @MemberSupport public CountHolder act(final int count) {
         holder.setCount(count);
         return holder;
     }
 
-    @MemberSupport
-    public int default0Act() {
+    @MemberSupport public int default0Act() {
         return holder.getCount();
     }
 
-    @MemberSupport
-    public String validate0Act(final int proposedCount) {
+    @MemberSupport public String validate0Act(final int proposedCount) {
         return proposedCount >= 0 && proposedCount <= 46
                 ? null
                 : "Must be in the range [0,46]";

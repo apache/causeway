@@ -46,13 +46,11 @@ public class PropertyDomainEventVm_controlTextEditing {
 
     private final PropertyDomainEventVm propertyDomainEventVm;
 
-    @MemberSupport
-    public PropertyDomainEventVm act(final PropertyDomainEventControlStrategy controlStrategy) {
+    @MemberSupport public PropertyDomainEventVm act(final PropertyDomainEventControlStrategy controlStrategy) {
         eventControlService.controlStrategy = controlStrategy;
         return propertyDomainEventVm;
     }
-    @MemberSupport
-    public PropertyDomainEventControlStrategy default0Act() {
+    @MemberSupport public PropertyDomainEventControlStrategy default0Act() {
         return eventControlService.controlStrategy;
     }
 

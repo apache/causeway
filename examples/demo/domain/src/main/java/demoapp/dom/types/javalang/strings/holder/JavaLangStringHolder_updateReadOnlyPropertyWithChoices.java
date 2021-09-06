@@ -47,19 +47,16 @@ public class JavaLangStringHolder_updateReadOnlyPropertyWithChoices {
 
     private final JavaLangStringHolder holder;
 
-    @MemberSupport
-    public JavaLangStringHolder act(final String newValue) {
+    @MemberSupport public JavaLangStringHolder act(final String newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return holder.getReadOnlyProperty();
     }
 
-    @MemberSupport
-    public List<String> choices0Act() {
+    @MemberSupport public List<String> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }

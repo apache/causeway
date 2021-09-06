@@ -40,14 +40,12 @@ public class JavaTimeLocalDateTimeHolder_updateReadOnlyProperty {
 
     private final JavaTimeLocalDateTimeHolder holder;
 
-    @MemberSupport
-    public JavaTimeLocalDateTimeHolder act(final java.time.LocalDateTime newValue) {
+    @MemberSupport public JavaTimeLocalDateTimeHolder act(final java.time.LocalDateTime newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public java.time.LocalDateTime default0Act() {
+    @MemberSupport public java.time.LocalDateTime default0Act() {
         return holder.getReadOnlyProperty();
     }
 

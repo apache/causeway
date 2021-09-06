@@ -40,14 +40,12 @@ public class WrapperByteHolder_updateReadOnlyProperty {
 
     private final WrapperByteHolder holder;
 
-    @MemberSupport
-    public WrapperByteHolder act(final Byte newValue) {
+    @MemberSupport public WrapperByteHolder act(final Byte newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public Byte default0Act() {
+    @MemberSupport public Byte default0Act() {
         return holder.getReadOnlyProperty();
     }
 

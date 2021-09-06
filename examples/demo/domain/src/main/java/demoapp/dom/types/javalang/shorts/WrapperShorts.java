@@ -60,8 +60,7 @@ public class WrapperShorts implements HasAsciiDocDescription {
     public WrapperShortVm openViewModel(final Short initialValue) {
         return new WrapperShortVm(initialValue);
     }
-    @MemberSupport
-    public Short default0OpenViewModel() {
+    @MemberSupport public Short default0OpenViewModel() {
         return (short)12345;
     }
 

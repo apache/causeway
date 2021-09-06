@@ -40,8 +40,7 @@ public class ActionSemanticsVm_mixinIncrementNonIdempotent {
 
     private final ActionSemanticsVm actionSemanticsVm;
 
-    @MemberSupport
-    public ActionSemanticsVm act() {
+    @MemberSupport public ActionSemanticsVm act() {
         actionSemanticsVm.setPropertyForNonIdempotent(
                 actionSemanticsVm.getPropertyForNonIdempotent() + 1
         );

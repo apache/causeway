@@ -74,8 +74,7 @@ public class H2ManagerMenu {
         }
         return webModule.getLocalResourcePathIfEnabled();
     }
-    @MemberSupport
-    public boolean hideOpenH2Console() {
+    @MemberSupport public boolean hideOpenH2Console() {
         return webModule==null || webModule.getLocalResourcePathIfEnabled()==null;
     }
 

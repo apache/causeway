@@ -47,25 +47,21 @@ public class PrimitiveShortHolder_updateReadOnlyPropertyWithChoices {
 
     private final PrimitiveShortHolder holder;
 
-    @MemberSupport
-    public PrimitiveShortHolder act(final short newValue) {
+    @MemberSupport public PrimitiveShortHolder act(final short newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public short default0Act() {
+    @MemberSupport public short default0Act() {
         return holder.getReadOnlyProperty();
     }
 
-    @MemberSupport
-    public List<Short> choices0Act() {
+    @MemberSupport public List<Short> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }
 
-    @MemberSupport
-    public boolean hideAct() {
+    @MemberSupport public boolean hideAct() {
         return true; // TODO: choices doesn't seem to work for this datatype
     }
 

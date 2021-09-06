@@ -41,13 +41,11 @@ public class ActionSemanticsVm_mixinSetToValueForPropertySemanticsIdempotent {
 
     private final ActionSemanticsVm actionSemanticsVm;
 
-    @MemberSupport
-    public ActionSemanticsVm act(final int value) {
+    @MemberSupport public ActionSemanticsVm act(final int value) {
         actionSemanticsVm.setPropertyForIdempotent(value);
         return actionSemanticsVm;
     }
-    @MemberSupport
-    public int default0Act() {
+    @MemberSupport public int default0Act() {
         return actionSemanticsVm.getPropertyForIdempotent();
     }
 }

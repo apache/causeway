@@ -61,8 +61,7 @@ public class ApplicationTenancy_delete {
     private final ApplicationTenancy target;
 
 
-    @MemberSupport
-    public Collection<? extends ApplicationTenancy> act() {
+    @MemberSupport public Collection<? extends ApplicationTenancy> act() {
         for (val user : applicationUserRepository.findByTenancy(target)) {
             val updateAtPathMixin = factoryService.mixin(ApplicationUser_updateAtPath.class, user);
             updateAtPathMixin.act(null);

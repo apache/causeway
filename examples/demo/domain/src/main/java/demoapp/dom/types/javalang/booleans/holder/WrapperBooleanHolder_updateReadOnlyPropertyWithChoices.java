@@ -47,19 +47,16 @@ public class WrapperBooleanHolder_updateReadOnlyPropertyWithChoices {
 
     private final WrapperBooleanHolder holder;
 
-    @MemberSupport
-    public WrapperBooleanHolder act(final Boolean newValue) {
+    @MemberSupport public WrapperBooleanHolder act(final Boolean newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public Boolean default0Act() {
+    @MemberSupport public Boolean default0Act() {
         return holder.getReadOnlyProperty();
     }
 
-    @MemberSupport
-    public List<Boolean> choices0Act() {
+    @MemberSupport public List<Boolean> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }

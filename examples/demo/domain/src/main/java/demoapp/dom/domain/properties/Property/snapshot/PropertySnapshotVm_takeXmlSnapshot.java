@@ -42,8 +42,7 @@ public class PropertySnapshotVm_takeXmlSnapshot {
 
     private final PropertySnapshotVm vm;
 //tag::class[]
-    @MemberSupport
-    public Clob act(final String fileName) {
+    @MemberSupport public Clob act(final String fileName) {
         val builder = xmlSnapshotService.builderFor(vm);
         val snapshot = builder.build();
         val doc = snapshot.getXmlDocument();
@@ -51,8 +50,7 @@ public class PropertySnapshotVm_takeXmlSnapshot {
     }
     // ...
 //end::class[]
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return "snapshot.xml";
     }
 

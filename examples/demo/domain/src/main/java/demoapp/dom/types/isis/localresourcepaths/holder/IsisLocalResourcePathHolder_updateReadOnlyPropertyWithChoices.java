@@ -48,19 +48,16 @@ public class IsisLocalResourcePathHolder_updateReadOnlyPropertyWithChoices {
 
     private final IsisLocalResourcePathHolder holder;
 
-    @MemberSupport
-    public IsisLocalResourcePathHolder act(final LocalResourcePath newValue) {
+    @MemberSupport public IsisLocalResourcePathHolder act(final LocalResourcePath newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public LocalResourcePath default0Act() {
+    @MemberSupport public LocalResourcePath default0Act() {
         return holder.getReadOnlyProperty();
     }
 
-    @MemberSupport
-    public List<LocalResourcePath> choices0Act() {
+    @MemberSupport public List<LocalResourcePath> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }

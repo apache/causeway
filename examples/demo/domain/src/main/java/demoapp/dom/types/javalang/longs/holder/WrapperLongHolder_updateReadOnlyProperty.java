@@ -40,14 +40,12 @@ public class WrapperLongHolder_updateReadOnlyProperty {
 
     private final WrapperLongHolder holder;
 
-    @MemberSupport
-    public WrapperLongHolder act(final Long newValue) {
+    @MemberSupport public WrapperLongHolder act(final Long newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public Long default0Act() {
+    @MemberSupport public Long default0Act() {
         return holder.getReadOnlyProperty();
     }
 

@@ -86,14 +86,12 @@ public class StatefulVmJaxbRefsEntity implements HasAsciiDocDescription {
         favoriteChild = newFavorite;
         return this;
     }
-    @MemberSupport
-    public List<JaxbRefEntity> choices0ChangeFavoriteChild() {
+    @MemberSupport public List<JaxbRefEntity> choices0ChangeFavoriteChild() {
         List<JaxbRefEntity> children = new ArrayList<>(getChildren());
         children.remove(getFavoriteChild());
         return children;
     }
-    @MemberSupport
-    public String disableChangeFavoriteChild() {
+    @MemberSupport public String disableChangeFavoriteChild() {
         switch (getChildren().size()) {
             case 0: return "no children";
             case 1: return "only child";
@@ -125,12 +123,10 @@ public class StatefulVmJaxbRefsEntity implements HasAsciiDocDescription {
     }
 
     //XXX[ISIS-2383] in support of an editable property ...
-    @MemberSupport
-    public List<JaxbRefEntity> choicesFavoriteChild() {
+    @MemberSupport public List<JaxbRefEntity> choicesFavoriteChild() {
         return choices0ChangeFavoriteChild(); // reuse logic from above
     }
-    @MemberSupport
-    public String disableFavoriteChild() {
+    @MemberSupport public String disableFavoriteChild() {
         return disableChangeFavoriteChild(); // reuse logic from above
     }
 
@@ -157,10 +153,8 @@ public class StatefulVmJaxbRefsEntity implements HasAsciiDocDescription {
         children.remove(child);
         return this;
     }
-    @MemberSupport
-    public List<JaxbRefEntity> choices0RemoveChild() { return getChildren(); }
-    @MemberSupport
-    public String disableRemoveChild() {
+    @MemberSupport public List<JaxbRefEntity> choices0RemoveChild() { return getChildren(); }
+    @MemberSupport public String disableRemoveChild() {
         return choices0RemoveChild().isEmpty()? "No children to remove" : null;
     }
 

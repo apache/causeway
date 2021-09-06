@@ -65,8 +65,7 @@ public class Object_inspectMetamodel {
     public static class ActionDomainEvent
     extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Object_inspectMetamodel> {}
 
-    @MemberSupport
-    public Object act() {
+    @MemberSupport public Object act() {
 
         final Optional<LogicalType> logicalTypeIfAny = metaModelService.lookupLogicalTypeByClass(domainObject.getClass());
         if(!logicalTypeIfAny.isPresent()) {

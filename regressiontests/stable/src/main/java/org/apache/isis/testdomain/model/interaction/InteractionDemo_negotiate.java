@@ -64,8 +64,7 @@ public class InteractionDemo_negotiate {
     // for the purpose of testing we constrain parameters a, b, c by their ranges rangeA, rangeB, rangeC
     // and let the picked set {a, b, c} only be valid if a+b+c==0
 
-    @MemberSupport
-    public int act(
+    @MemberSupport public int act(
             NumberRange rangeA,
             int a,
             NumberRange rangeB,
@@ -77,8 +76,7 @@ public class InteractionDemo_negotiate {
     }
 
     // constraint considering all parameters
-    @MemberSupport
-    public String validate(Params p) {
+    @MemberSupport public String validate(Params p) {
         final int sum = p.a + p.b + p.c;
         if(sum == 0) {
             return null;

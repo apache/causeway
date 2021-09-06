@@ -66,18 +66,15 @@ public class WhereInTheWorldMenu {
         return vm;
     }
 //end::action[]
-    @MemberSupport
-    public List<String> choices0WhereInTheWorld() {
+    @MemberSupport public List<String> choices0WhereInTheWorld() {
         return Arrays.asList("Malvern, UK", "Vienna, Austria", "Leeuwarden, Netherlands", "Dublin, Ireland");
     }
 
-    @MemberSupport
-    public String default0WhereInTheWorld() {
+    @MemberSupport public String default0WhereInTheWorld() {
         return "Malvern, UK";
     }
 
-    @MemberSupport
-    public int default1WhereInTheWorld() {
+    @MemberSupport public int default1WhereInTheWorld() {
         return 14;
     }
 

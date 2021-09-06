@@ -48,19 +48,16 @@ public class JavaSqlTimestampHolder_updateReadOnlyPropertyWithChoices {
 
     private final JavaSqlTimestampHolder holder;
 
-    @MemberSupport
-    public JavaSqlTimestampHolder act(final java.sql.Timestamp newValue) {
+    @MemberSupport public JavaSqlTimestampHolder act(final java.sql.Timestamp newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public java.sql.Timestamp default0Act() {
+    @MemberSupport public java.sql.Timestamp default0Act() {
         return holder.getReadOnlyProperty();
     }
 
-    @MemberSupport
-    public List<java.sql.Timestamp> choices0Act() {
+    @MemberSupport public List<java.sql.Timestamp> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }

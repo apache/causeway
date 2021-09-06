@@ -60,8 +60,7 @@ public class WrapperBooleans implements HasAsciiDocDescription {
     public WrapperBooleanVm openViewModel(final Boolean initialValue) {
         return new WrapperBooleanVm(initialValue);
     }
-    @MemberSupport
-    public Boolean default0OpenViewModel() {
+    @MemberSupport public Boolean default0OpenViewModel() {
         return true;
     }
 
@@ -86,8 +85,7 @@ public class WrapperBooleans implements HasAsciiDocDescription {
             final boolean primitive1) {
         return this;
     }
-    @MemberSupport
-    public boolean default1BooleanParams() {
+    @MemberSupport public boolean default1BooleanParams() {
         return true;
     }
 
@@ -106,8 +104,7 @@ public class WrapperBooleans implements HasAsciiDocDescription {
             final Boolean boxed1) {
         return this;
     }
-    @MemberSupport
-    public Boolean default1BooleanBoxedParams() {
+    @MemberSupport public Boolean default1BooleanBoxedParams() {
         return true;
     }
 

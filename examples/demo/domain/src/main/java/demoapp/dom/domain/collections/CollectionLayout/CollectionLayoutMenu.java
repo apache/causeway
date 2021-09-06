@@ -38,8 +38,7 @@ public class CollectionLayoutMenu {
     @ActionLayout(cssClassFa="fa-pen-nib", describedAs = "CSS class to wrap the UI component representing this collection")
     public void cssClass(){
     }
-    @MemberSupport
-    public String disableCssClass(){
+    @MemberSupport public String disableCssClass(){
         return "CSS class to wrap the UI component representing this collection" +
                 " (not yet implemented in demo)";
     }
@@ -50,8 +49,7 @@ public class CollectionLayoutMenu {
     @ActionLayout(cssClassFa="fa-atom", describedAs = "View collection as a table, or collapsed, or some other representation if available")
     public void defaultView(){
     }
-    @MemberSupport
-    public String disableDefaultView(){
+    @MemberSupport public String disableDefaultView(){
         return "View collection as a table, or collapsed, or some other representation if available" +
                 " (not yet implemented in demo)";
     }
@@ -62,8 +60,7 @@ public class CollectionLayoutMenu {
     @ActionLayout(cssClassFa="fa-comment", describedAs = "Description of the collection, shown as a tooltip")
     public void describedAs(){
     }
-    @MemberSupport
-    public String disableDescribedAs(){
+    @MemberSupport public String disableDescribedAs(){
         return "Description of the collection, shown as a tooltip" +
                 " (not yet implemented in demo)";
     }
@@ -74,8 +71,7 @@ public class CollectionLayoutMenu {
     @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of the collection in different contexts")
     public void hidden(){
     }
-    @MemberSupport
-    public String disableHidden(){
+    @MemberSupport public String disableHidden(){
         return "Visibility of the collection in different contexts" +
                 " (not yet implemented in demo)";
     }
@@ -86,8 +82,7 @@ public class CollectionLayoutMenu {
     @ActionLayout(cssClassFa="fa-signature", describedAs = "Custom text for the collection's label")
     public void named(){
     }
-    @MemberSupport
-    public String disableNamed(){
+    @MemberSupport public String disableNamed(){
         return "Custom text for the collection's label" +
                 " (not yet implemented in demo)";
     }
@@ -97,8 +92,7 @@ public class CollectionLayoutMenu {
     @ActionLayout(cssClassFa="fa-fast-forward", describedAs = "Number of domain objects per page in this collection")
     public void paged(){
     }
-    @MemberSupport
-    public String disablePaged(){
+    @MemberSupport public String disablePaged(){
         return "Number of domain objects per page in this collection" +
                 " (not yet implemented in demo)";
     }
@@ -109,8 +103,7 @@ public class CollectionLayoutMenu {
     @ActionLayout(cssClassFa="fa-sort", describedAs = "Sort domain objects in this collection, overriding their default comparator")
     public void sortedBy(){
     }
-    @MemberSupport
-    public String disableSortedBy(){
+    @MemberSupport public String disableSortedBy(){
         return "Sort domain objects in this collection, overriding their default comparator" +
                 " (not yet implemented in demo)";
     }

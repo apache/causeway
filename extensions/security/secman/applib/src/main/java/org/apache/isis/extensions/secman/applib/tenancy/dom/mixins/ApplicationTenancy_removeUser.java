@@ -55,20 +55,14 @@ public class ApplicationTenancy_removeUser {
 
     private final ApplicationTenancy target;
 
-    @MemberSupport
-    public ApplicationTenancy act(final ApplicationUser applicationUser) {
+    @MemberSupport public ApplicationTenancy act(final ApplicationUser applicationUser) {
         applicationTenancyRepository.clearTenancyOnUser(applicationUser);
         return target;
     }
 
-    @MemberSupport
-    public Collection<? extends ApplicationUser> choices0Act() {
+    @MemberSupport public Collection<? extends ApplicationUser> choices0Act() {
         return applicationUserRepository.findByTenancy(target);
     }
-
-    @MemberSupport
-    public String disableAct() {
-        return choices0Act().isEmpty()? "No users to remove": null;
-    }
+    @MemberSupport public String disableAct() { return choices0Act().isEmpty()? "No users to remove": null; }
 
 }

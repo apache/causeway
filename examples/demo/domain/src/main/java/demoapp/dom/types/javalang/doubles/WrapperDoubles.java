@@ -60,8 +60,7 @@ public class WrapperDoubles implements HasAsciiDocDescription {
     public WrapperDoubleVm openViewModel(final Double initialValue) {
         return new WrapperDoubleVm(initialValue);
     }
-    @MemberSupport
-    public Double default0OpenViewModel() {
+    @MemberSupport public Double default0OpenViewModel() {
         return 12345678.1234;
     }
 

@@ -54,14 +54,12 @@ public class ApplicationUser_delete {
 
     private final ApplicationUser target;
 
-    @MemberSupport
-    public Collection<ApplicationUser> act() {
+    @MemberSupport public Collection<ApplicationUser> act() {
         repository.removeAndFlush(target);
         return applicationUserRepository.allUsers();
     }
 
-    @MemberSupport
-    public String disableAct() {
+    @MemberSupport public String disableAct() {
         return applicationUserRepository.isAdminUser(target)? "Cannot delete the admin user": null;
     }
 

@@ -48,8 +48,7 @@ implements Serializable {
     }
 
     // allowed to be private since 2.0.0-M7
-    @MemberSupport
-    private String disableMyAction() {
+    @MemberSupport private String disableMyAction() {
         return "action disabled for testing purposes";
     }
 
@@ -62,8 +61,7 @@ implements Serializable {
     private String propWithPrivateAccessors = "Foo";
 
     // allowed to be private since 2.0.0-M7
-    @MemberSupport
-    private String disablePropWithPrivateAccessors() {
+    @MemberSupport private String disablePropWithPrivateAccessors() {
         return "property disabled for testing purposes";
     }
 
@@ -76,8 +74,7 @@ implements Serializable {
     private List<String> collWithPrivateAccessors = List.of("Foo");
 
     // allowed to be private since 2.0.0-M7
-    @MemberSupport
-    private String disableCollWithPrivateAccessors() {
+    @MemberSupport private String disableCollWithPrivateAccessors() {
         return "collection disabled for testing purposes";
     }
 

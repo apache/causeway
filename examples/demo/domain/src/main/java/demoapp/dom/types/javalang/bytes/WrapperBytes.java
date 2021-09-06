@@ -61,8 +61,7 @@ public class WrapperBytes implements HasAsciiDocDescription {
         return new WrapperByteVm(initialValue);
     }
 
-    @MemberSupport
-    public Byte default0OpenViewModel() {
+    @MemberSupport public Byte default0OpenViewModel() {
         return (byte)123;
     }
 

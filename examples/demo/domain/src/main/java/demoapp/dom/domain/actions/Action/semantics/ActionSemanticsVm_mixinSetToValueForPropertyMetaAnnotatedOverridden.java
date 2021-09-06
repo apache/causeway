@@ -43,13 +43,11 @@ public class ActionSemanticsVm_mixinSetToValueForPropertyMetaAnnotatedOverridden
 
     private final ActionSemanticsVm actionSemanticsVm;
 
-    @MemberSupport
-    public ActionSemanticsVm act(final int value) {
+    @MemberSupport public ActionSemanticsVm act(final int value) {
         actionSemanticsVm.setPropertyForMetaAnnotationsOverridden(value);
         return actionSemanticsVm;
     }
-    @MemberSupport
-    public int default0Act() {
+    @MemberSupport public int default0Act() {
         return actionSemanticsVm.getPropertyForMetaAnnotationsOverridden();
     }
 }

@@ -43,13 +43,11 @@ public class ActionHiddenVm_mixinUpdateTextAndHiddenNowhere {
 
     private final ActionHiddenVm actionHiddenVm;
 
-    @MemberSupport
-    public ActionHiddenVm act(final String text) {
+    @MemberSupport public ActionHiddenVm act(final String text) {
         actionHiddenVm.setOtherText(text);
         return actionHiddenVm;
     }
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return actionHiddenVm.getOtherText();
     }
 }

@@ -78,8 +78,7 @@ public class TenantedJpa
         this.name = name;
         return this;
     }
-    @MemberSupport
-    public String default0UpdateName() {
+    @MemberSupport public String default0UpdateName() {
         return this.name;
     }
 

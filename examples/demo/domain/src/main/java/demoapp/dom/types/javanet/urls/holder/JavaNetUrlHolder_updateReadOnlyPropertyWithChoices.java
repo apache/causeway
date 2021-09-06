@@ -48,19 +48,16 @@ public class JavaNetUrlHolder_updateReadOnlyPropertyWithChoices {
 
     private final JavaNetUrlHolder holder;
 
-    @MemberSupport
-    public JavaNetUrlHolder act(final java.net.URL newValue) {
+    @MemberSupport public JavaNetUrlHolder act(final java.net.URL newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public java.net.URL default0Act() {
+    @MemberSupport public java.net.URL default0Act() {
         return holder.getReadOnlyProperty();
     }
 
-    @MemberSupport
-    public List<java.net.URL> choices0Act() {
+    @MemberSupport public List<java.net.URL> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }

@@ -79,8 +79,7 @@ public class Dto_downloadXsd {
      * common Apache Isis schemas; useful if there is only one other XSD schema
      * referenced by the DTO.
      */
-    @MemberSupport
-    public Object act(
+    @MemberSupport public Object act(
 
             @ParameterLayout(
                     named = DtoMixinConstants.FILENAME_PROPERTY_NAME,
@@ -121,16 +120,14 @@ public class Dto_downloadXsd {
     /**
      * Defaults to the fully qualified class name of the domain object.
      */
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return holder.getClass().getName();
     }
 
     /**
      * Defaults to {@link IsisSchemas#IGNORE}
      */
-    @MemberSupport
-    public IsisSchemas default1Act() {
+    @MemberSupport public IsisSchemas default1Act() {
         return IsisSchemas.IGNORE;
     }
 

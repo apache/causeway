@@ -114,8 +114,7 @@ public class WrapperFactoryJpa
         wrapperFactoryJdo.setPropertyAsync(value);
         return this;
     }
-    @MemberSupport
-    public String default0UpdatePropertyAsync() {
+    @MemberSupport public String default0UpdatePropertyAsync() {
         return getPropertyAsync();
     }
 //end::async[]
@@ -138,8 +137,7 @@ public class WrapperFactoryJpa
         WrapperFactoryJpa act = (WrapperFactoryJpa) mixin.act(value);
         return this;
     }
-    @MemberSupport
-    public String default0UpdatePropertyUsingAsyncWrapMixin() {
+    @MemberSupport public String default0UpdatePropertyUsingAsyncWrapMixin() {
         return new WrapperFactoryEntity_updatePropertyAsyncMixin(this).default0Act();
     }
 //end::async[]

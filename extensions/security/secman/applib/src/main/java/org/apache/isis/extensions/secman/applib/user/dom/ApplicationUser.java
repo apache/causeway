@@ -117,14 +117,12 @@ public abstract class ApplicationUser
     public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApplib.PropertyDomainEvent<ApplicationUser, T> {}
     public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApplib.CollectionDomainEvent<ApplicationUser, T> {}
 
-    // -- MODEL
 
-    @Title
-    public String title() {
+
+    @ObjectSupport public String title() {
         return getName();
     }
-    @ObjectSupport
-    public String iconName() {
+    @ObjectSupport public String iconName() {
         return getStatus().isUnlocked() ? "unlocked" : "locked";
     }
 
@@ -474,8 +472,7 @@ public abstract class ApplicationUser
     @EncryptedPassword
     public abstract String getEncryptedPassword();
     public abstract void setEncryptedPassword(String encryptedPassword);
-    @MemberSupport
-    public boolean hideEncryptedPassword() {
+    @MemberSupport public boolean hideEncryptedPassword() {
         return !getApplicationUserRepository().isPasswordFeatureEnabled(this);
     }
 
@@ -501,8 +498,7 @@ public abstract class ApplicationUser
     public boolean isHasPassword() {
         return _Strings.isNotEmpty(getEncryptedPassword());
     }
-    @MemberSupport
-    public boolean hideHasPassword() {
+    @MemberSupport public boolean hideHasPassword() {
         return !getApplicationUserRepository().isPasswordFeatureEnabled(this);
     }
 

@@ -41,14 +41,12 @@ public class IsisAsciiDocHolder_updateReadOnlyProperty {
 
     private final IsisAsciiDocHolder holder;
 
-    @MemberSupport
-    public IsisAsciiDocHolder act(final AsciiDoc newValue) {
+    @MemberSupport public IsisAsciiDocHolder act(final AsciiDoc newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public AsciiDoc default0Act() {
+    @MemberSupport public AsciiDoc default0Act() {
         return holder.getReadOnlyProperty();
     }
 

@@ -59,41 +59,48 @@ public class CommandReplayOnSecondaryService {
     @Inject CommandModelRepository<? extends CommandModel> commandModelRepository;
     @Inject final JaxbService jaxbService;
 
-    public static abstract class ActionDomainEvent
-            extends IsisModuleExtCommandReplaySecondary.ActionDomainEvent<CommandReplayOnSecondaryService> { }
+    public static abstract class ActionDomainEvent<T> extends IsisModuleExtCommandReplaySecondary.ActionDomainEvent<T> { }
 
-    public static class FindMostRecentReplayedDomainEvent extends ActionDomainEvent { }
-    @Action(domainEvent = FindMostRecentReplayedDomainEvent.class, semantics = SemanticsOf.SAFE)
+    @Action(domainEvent = findMostRecentReplayed.ActionEvent.class, semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa = "fa-bath", sequence="60.1")
-    public CommandModel findMostRecentReplayed() {
-        return commandModelRepository.findMostRecentReplayed().orElse(null);
+    public class findMostRecentReplayed{
+
+        public class ActionEvent extends ActionDomainEvent<findMostRecentReplayed> { }
+
+        @MemberSupport public CommandModel act() {
+            return commandModelRepository.findMostRecentReplayed().orElse(null);
+        }
     }
 
-    public static class UploadCommandsDomainEvent extends ActionDomainEvent { }
+
     @Action(
-        domainEvent = UploadCommandsDomainEvent.class,
+        domainEvent = uploadCommands.ActionEvent.class,
         semantics = SemanticsOf.NON_IDEMPOTENT
     )
     @ActionLayout(cssClassFa = "fa-upload", sequence="60.2")
-    public void uploadCommands(final Clob commandsDtoAsXml) {
-        val chars = commandsDtoAsXml.getChars();
-        List<CommandDto> commandDtoList;
+    public class uploadCommands{
 
-        try {
-            val commandsDto = jaxbService.fromXml(CommandsDto.class, chars.toString());
-            commandDtoList = commandsDto.getCommandDto();
+        public class ActionEvent extends ActionDomainEvent<uploadCommands> { }
 
-        } catch(Exception ex) {
-            val commandDto = jaxbService.fromXml(CommandDto.class, chars.toString());
-            commandDtoList = Collections.singletonList(commandDto);
+        @MemberSupport public void act(final Clob commandsDtoAsXml) {
+            val chars = commandsDtoAsXml.getChars();
+            List<CommandDto> commandDtoList;
+
+            try {
+                val commandsDto = jaxbService.fromXml(CommandsDto.class, chars.toString());
+                commandDtoList = commandsDto.getCommandDto();
+
+            } catch(Exception ex) {
+                val commandDto = jaxbService.fromXml(CommandDto.class, chars.toString());
+                commandDtoList = Collections.singletonList(commandDto);
+            }
+
+            for (final CommandDto commandDto : commandDtoList) {
+                commandModelRepository.saveForReplay(commandDto);
+            }
         }
 
-        for (final CommandDto commandDto : commandDtoList) {
-            commandModelRepository.saveForReplay(commandDto);
-        }
     }
-
-
 
 }
 

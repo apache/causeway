@@ -42,12 +42,26 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 class CommonPredicates {
 
+    static DescribedPredicate<JavaClass> notAbstract() {
+        return new DescribedPredicate<>("not abstract") {
+            @Override
+            public boolean apply(JavaClass javaClass) {
+                val isAbstract = javaClass.getModifiers().stream().anyMatch((JavaModifier x) -> x == JavaModifier.ABSTRACT);
+                return !isAbstract;
+            }
+        };
+    }
+
     static DescribedPredicate<JavaAnnotation<?>> DomainObject_nature_ENTITY() {
         return DomainObject_nature(Nature.ENTITY);
     }
 
     static DescribedPredicate<JavaAnnotation<?>> DomainObject_nature_MIXIN() {
         return DomainObject_nature(Nature.MIXIN);
+    }
+
+    static DescribedPredicate<JavaAnnotation<?>> DomainObject_nature_VIEW_MODEL() {
+        return DomainObject_nature(Nature.VIEW_MODEL);
     }
 
     static DescribedPredicate<JavaAnnotation<?>> DomainObject_nature(final Nature expectedNature) {
@@ -127,6 +141,16 @@ class CommonPredicates {
                             javaClass.getSimpleName())));
                     return;
                 }
+            }
+        };
+    }
+
+    static DescribedPredicate<JavaClass> areNotAbstract() {
+        return new DescribedPredicate<JavaClass>("are not abstract") {
+            @Override
+            public boolean apply(JavaClass javaClass) {
+                val isAbstract = javaClass.getModifiers().stream().anyMatch((JavaModifier x) -> x == JavaModifier.ABSTRACT);
+                return !isAbstract;
             }
         };
     }

@@ -40,14 +40,12 @@ public class JavaUtilUuidHolder_updateReadOnlyProperty {
 
     private final JavaUtilUuidHolder holder;
 
-    @MemberSupport
-    public JavaUtilUuidHolder act(final java.util.UUID newValue) {
+    @MemberSupport public JavaUtilUuidHolder act(final java.util.UUID newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public java.util.UUID default0Act() {
+    @MemberSupport public java.util.UUID default0Act() {
         return holder.getReadOnlyProperty();
     }
 

@@ -64,8 +64,7 @@ public class JodaDateTimes implements HasAsciiDocDescription {
     public JodaDateTimeVm openViewModel(final org.joda.time.DateTime initialValue) {
         return new JodaDateTimeVm(initialValue);
     }
-    @MemberSupport
-    public org.joda.time.DateTime default0OpenViewModel() {
+    @MemberSupport public org.joda.time.DateTime default0OpenViewModel() {
         return stream.stream().findFirst().orElse(null);
     }
 

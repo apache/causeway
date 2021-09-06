@@ -20,6 +20,8 @@ package org.apache.isis.testing.archtestsupport.applib.classrules;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -33,7 +35,6 @@ import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaCodeUnit;
 import com.tngtech.archunit.core.domain.JavaMethod;
 import com.tngtech.archunit.core.domain.JavaModifier;
-import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ArchRule;
 import com.tngtech.archunit.lang.ConditionEvents;
@@ -56,6 +57,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;
@@ -88,6 +90,56 @@ public class ArchitectureDomainRules {
         return classes()
                 .that().areAnnotatedWith(DomainService.class)
                 .should().beAnnotatedWith(DomainService_logicalTypeName());
+    }
+
+    private static Map<String, JavaClass> javaClassByLogicalTypeName = new TreeMap<>();
+
+    /**
+     * This rule requires that classes annotated the <code>logicalTypeName</code> must be unique across all
+     * non-abstract {@link DomainObject}s and {@link DomainService}s
+     */
+    public static ArchRule every_logicalTypeName_must_be_unique() {
+        return classes()
+                .that().areAnnotatedWith(DomainObject.class)
+                .or().areAnnotatedWith(DomainService.class)
+                .and(new DescribedPredicate<>("have an logicalTypeName") {
+                    @Override
+                    public boolean apply(JavaClass javaClass) {
+                        val domainObjectIfAny = javaClass.tryGetAnnotationOfType(DomainObject.class);
+                        if (domainObjectIfAny.isPresent() && !_Strings.isNullOrEmpty(domainObjectIfAny.get().logicalTypeName())) {
+                            return true;
+                        }
+                        val domainServiceIfAny = javaClass.tryGetAnnotationOfType(DomainService.class);
+                        if (domainServiceIfAny.isPresent() && !_Strings.isNullOrEmpty(domainServiceIfAny.get().logicalTypeName())) {
+                            return true;
+                        }
+
+                        return false;
+                    }
+                })
+                .should(new ArchCondition<>("be unique") {
+                    @Override
+                    public void check(JavaClass javaClass, ConditionEvents conditionEvents) {
+                        val domainObjectIfAny = javaClass.tryGetAnnotationOfType(DomainObject.class);
+                        String logicalTypeName = null;
+                        if (domainObjectIfAny.isPresent()) {
+                            logicalTypeName = domainObjectIfAny.get().logicalTypeName();
+                        } else {
+                            val domainServiceIfAny = javaClass.tryGetAnnotationOfType(DomainService.class);
+                            if (domainServiceIfAny.isPresent()) {
+                                logicalTypeName = domainServiceIfAny.get().logicalTypeName();
+                            }
+                        }
+                        final JavaClass existing = javaClassByLogicalTypeName.get(logicalTypeName);
+                        if (existing != null) {
+                            conditionEvents.add(
+                                    new SimpleConditionEvent(javaClass, false,
+                                            String.format("Classes '%s' and '%s' have the same logicalTypeName '%s'", javaClass.getName(), existing.getName(), logicalTypeName)));
+                        } else {
+                            javaClassByLogicalTypeName.put(logicalTypeName, javaClass);
+                        }
+                    }
+                });
     }
 
     /**
@@ -134,7 +186,7 @@ public class ArchitectureDomainRules {
 
     /**
      * This rule requires that classes annotated with the {@link XmlRootElement} annotation must also be
-     * annotated with the {@link DomainObject} annotation specifying a {@link Nature nature} of {@link Nature#MIXIN MIXIN}.
+     * annotated with the {@link DomainObject} annotation specifying a {@link Nature nature} of {@link Nature#VIEW_MODEL VIEW_MODEL}.
      *
      * <p>
      *     This is required because the framework uses Spring to detect entities and view models (the
@@ -142,11 +194,11 @@ public class ArchitectureDomainRules {
      *     {@link org.springframework.stereotype.Component} annotation.
      * </p>
      */
-    @ArchTest
-    public static ArchRule every_jaxb_view_model_must_also_be_annotated_with_DomainObject_nature_MIXIN =
-            ArchRuleDefinition.classes().that()
-                    .areAnnotatedWith(XmlRootElement.class)
-                    .should().beAnnotatedWith(CommonPredicates.DomainObject_nature_MIXIN());
+    public static ArchRule every_jaxb_view_model_must_also_be_annotated_with_DomainObject_nature_VIEW_MODEL() {
+        return ArchRuleDefinition.classes().that()
+                .areAnnotatedWith(XmlRootElement.class)
+                .should().beAnnotatedWith(CommonPredicates.DomainObject_nature_VIEW_MODEL());
+    }
 
     /**
      * This rule requires that action mixin classes should follow the naming convention

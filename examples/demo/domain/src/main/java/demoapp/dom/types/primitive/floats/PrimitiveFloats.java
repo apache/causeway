@@ -64,8 +64,7 @@ public class PrimitiveFloats implements HasAsciiDocDescription {
     public PrimitiveFloatVm openViewModel(final float initialValue) {
         return new PrimitiveFloatVm(initialValue);
     }
-    @MemberSupport
-    public float default0OpenViewModel() {
+    @MemberSupport public float default0OpenViewModel() {
         return 1.23f;
     }
 

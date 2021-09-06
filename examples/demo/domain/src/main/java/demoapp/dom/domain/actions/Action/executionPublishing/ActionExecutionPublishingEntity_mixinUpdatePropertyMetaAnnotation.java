@@ -47,13 +47,11 @@ public class ActionExecutionPublishingEntity_mixinUpdatePropertyMetaAnnotation {
     }
 
 //tag::class[]
-    @MemberSupport
-    public ActionExecutionPublishingEntity act(final String value) {
+    @MemberSupport public ActionExecutionPublishingEntity act(final String value) {
         actionPublishingEntity.setPropertyMetaAnnotated(value);
         return actionPublishingEntity;
     }
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return actionPublishingEntity.getPropertyMetaAnnotated();
     }
 }

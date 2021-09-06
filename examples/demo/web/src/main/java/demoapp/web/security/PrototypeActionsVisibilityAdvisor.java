@@ -75,14 +75,12 @@ public class PrototypeActionsVisibilityAdvisor {
     @Action(restrictTo = RestrictTo.PROTOTYPING)
     @ActionLayout(cssClassFa = "eye-slash")
     public void doNotShowPrototypeActions() { doNotShow = true; }
-    @MemberSupport
-    public boolean hideDoNotShowPrototypeActions() { return doNotShow; }
+    @MemberSupport public boolean hideDoNotShowPrototypeActions() { return doNotShow; }
 
 
     @Action(restrictTo = RestrictTo.PROTOTYPING)
     @ActionLayout(cssClassFa = "eye")
     public void showPrototypeActions() { doNotShow = false; }
-    @MemberSupport
-    public boolean hideShowPrototypeActions() { return !doNotShow; }
+    @MemberSupport public boolean hideShowPrototypeActions() { return !doNotShow; }
 
 }

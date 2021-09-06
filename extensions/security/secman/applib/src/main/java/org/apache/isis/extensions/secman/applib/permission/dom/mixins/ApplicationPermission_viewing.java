@@ -20,6 +20,7 @@ package org.apache.isis.extensions.secman.applib.permission.dom.mixins;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission;
@@ -44,12 +45,12 @@ public class ApplicationPermission_viewing {
 
     private final ApplicationPermission target;
 
-    public ApplicationPermission act() {
+    @MemberSupport public ApplicationPermission act() {
         target.setMode(ApplicationPermissionMode.VIEWING);
         return target;
     }
 
-    public String disableAct() {
+    @MemberSupport public String disableAct() {
         return target.getMode() == ApplicationPermissionMode.VIEWING ? "Mode is already set to VIEWING": null;
     }
 

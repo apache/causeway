@@ -40,8 +40,7 @@ public class PropertyLayoutMultiLineVm_updateWithMetaAnnotation {
     private final PropertyLayoutMultiLineVm propertyLayoutMultiLineVm;
 
 //tag::meta-annotation[]
-    @MemberSupport
-    public PropertyLayoutMultiLineVm act(
+    @MemberSupport public PropertyLayoutMultiLineVm act(
             @Parameter(optionality = Optionality.OPTIONAL)
             @MultiLine10MetaAnnotation                            // <.>
             @ParameterLayout(
@@ -52,8 +51,7 @@ public class PropertyLayoutMultiLineVm_updateWithMetaAnnotation {
         return propertyLayoutMultiLineVm;
     }
 //end::meta-annotation[]
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return propertyLayoutMultiLineVm.getPropertyUsingMetaAnnotation();
     }
 

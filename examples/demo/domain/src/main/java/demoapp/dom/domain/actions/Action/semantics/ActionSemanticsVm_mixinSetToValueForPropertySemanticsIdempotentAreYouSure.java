@@ -42,13 +42,11 @@ public class ActionSemanticsVm_mixinSetToValueForPropertySemanticsIdempotentAreY
 
     private final ActionSemanticsVm actionSemanticsVm;
 
-    @MemberSupport
-    public ActionSemanticsVm act(final int value) {
+    @MemberSupport public ActionSemanticsVm act(final int value) {
         actionSemanticsVm.setPropertyForIdempotentAreYouSure(value);
         return actionSemanticsVm;
     }
-    @MemberSupport
-    public int default0Act() {
+    @MemberSupport public int default0Act() {
         return actionSemanticsVm.getPropertyForIdempotentAreYouSure();
     }
 }

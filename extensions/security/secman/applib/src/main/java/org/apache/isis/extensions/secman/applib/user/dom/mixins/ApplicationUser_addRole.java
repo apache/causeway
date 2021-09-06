@@ -24,6 +24,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
@@ -54,20 +55,18 @@ public class ApplicationUser_addRole {
 
     private final ApplicationUser target;
 
-    public ApplicationUser act(final ApplicationRole role) {
+    @MemberSupport public ApplicationUser act(final ApplicationRole role) {
         applicationRoleRepository.addRoleToUser(role, target);
         return target;
     }
 
-    public Collection<? extends ApplicationRole> choices0Act() {
+    @MemberSupport public Collection<? extends ApplicationRole> choices0Act() {
         val allRoles = applicationRoleRepository.allRoles();
         val applicationRoles = _Sets.newTreeSet(allRoles);
         applicationRoles.removeAll(target.getRoles());
         return applicationRoles;
     }
 
-    public String disableAct() {
-        return choices0Act().isEmpty()? "All roles added": null;
-    }
+    @MemberSupport public String disableAct() { return choices0Act().isEmpty()? "All roles added": null; }
 
 }

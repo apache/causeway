@@ -40,8 +40,7 @@ public class PropertyLayoutCssClassVm_updateWithMetaAnnotationOverridden {
     private final PropertyLayoutCssClassVm propertyLayoutCssClassVm;
 
 //tag::meta-annotation-overridden[]
-    @MemberSupport
-    public PropertyLayoutCssClassVm act(
+    @MemberSupport public PropertyLayoutCssClassVm act(
             @CssClassRedMetaAnnotation                             // <.>
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(
@@ -55,8 +54,7 @@ public class PropertyLayoutCssClassVm_updateWithMetaAnnotationOverridden {
         return propertyLayoutCssClassVm;
     }
 //end::meta-annotation-overridden[]
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return propertyLayoutCssClassVm.getPropertyUsingMetaAnnotationButOverridden();
     }
 

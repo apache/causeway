@@ -40,14 +40,12 @@ public class PrimitiveBooleanHolder_updateReadOnlyProperty {
 
     private final PrimitiveBooleanHolder holder;
 
-    @MemberSupport
-    public PrimitiveBooleanHolder act(final boolean newValue) {
+    @MemberSupport public PrimitiveBooleanHolder act(final boolean newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public boolean default0Act() {
+    @MemberSupport public boolean default0Act() {
         return holder.isReadOnlyProperty();
     }
 

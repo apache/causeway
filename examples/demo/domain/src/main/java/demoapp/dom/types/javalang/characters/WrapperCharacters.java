@@ -60,8 +60,7 @@ public class WrapperCharacters implements HasAsciiDocDescription {
     public WrapperCharacterVm openViewModel(final Character initialValue) {
         return new WrapperCharacterVm(initialValue);
     }
-    @MemberSupport
-    public Character default0OpenViewModel() {
+    @MemberSupport public Character default0OpenViewModel() {
         return 'a';
     }
 

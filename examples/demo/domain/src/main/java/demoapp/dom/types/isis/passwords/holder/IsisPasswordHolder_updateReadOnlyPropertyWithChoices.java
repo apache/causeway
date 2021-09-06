@@ -49,19 +49,16 @@ public class IsisPasswordHolder_updateReadOnlyPropertyWithChoices {
 
     private final IsisPasswordHolder holder;
 
-    @MemberSupport
-    public IsisPasswordHolder act(final Password newValue) {
+    @MemberSupport public IsisPasswordHolder act(final Password newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public Password default0Act() {
+    @MemberSupport public Password default0Act() {
         return holder.getReadOnlyProperty();
     }
 
-    @MemberSupport
-    public List<Password> choices0Act() {
+    @MemberSupport public List<Password> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }

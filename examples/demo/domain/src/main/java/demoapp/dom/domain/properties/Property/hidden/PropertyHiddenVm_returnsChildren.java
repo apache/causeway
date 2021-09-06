@@ -37,8 +37,7 @@ public class PropertyHiddenVm_returnsChildren {
     private final PropertyHiddenVm propertyHiddenVm;
 
 //tag::meta-annotation[]
-    @MemberSupport
-    public List<PropertyHiddenChildVm> act() {
+    @MemberSupport public List<PropertyHiddenChildVm> act() {
         return propertyHiddenVm.getChildren();
     }
 //end::meta-annotation[]

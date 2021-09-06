@@ -41,8 +41,7 @@ public class PropertyFileAcceptVm_updateWithParameterLayout {
     private final PropertyFileAcceptVm propertyFileAcceptVm;
 
 //tag::annotation[]
-    @MemberSupport
-    public PropertyFileAcceptVm act(
+    @MemberSupport public PropertyFileAcceptVm act(
             @Parameter(
                 fileAccept = ".pdf"                     // <.>
                 , optionality = Optionality.OPTIONAL
@@ -56,8 +55,7 @@ public class PropertyFileAcceptVm_updateWithParameterLayout {
         return propertyFileAcceptVm;
     }
 //end::annotation[]
-    @MemberSupport
-    public Blob default0Act() {
+    @MemberSupport public Blob default0Act() {
         return propertyFileAcceptVm.getPdfPropertyUsingAnnotation();
     }
 

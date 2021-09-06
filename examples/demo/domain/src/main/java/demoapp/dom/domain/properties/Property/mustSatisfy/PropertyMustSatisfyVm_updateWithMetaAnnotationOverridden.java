@@ -39,8 +39,7 @@ public class PropertyMustSatisfyVm_updateWithMetaAnnotationOverridden {
     private final PropertyMustSatisfyVm propertyMustSatisfyVm;
 
 //tag::meta-annotation-overridden[]
-    @MemberSupport
-    public PropertyMustSatisfyVm act(
+    @MemberSupport public PropertyMustSatisfyVm act(
             @MustSatisfyOfWorkingAgeMetaAnnotation                  // <.>
             @Parameter(
                 mustSatisfy = OfRetirementAgeSpecification.class    // <.>
@@ -55,8 +54,7 @@ public class PropertyMustSatisfyVm_updateWithMetaAnnotationOverridden {
         return propertyMustSatisfyVm;
     }
 //end::meta-annotation-overridden[]
-    @MemberSupport
-    public Integer default0Act() {
+    @MemberSupport public Integer default0Act() {
         return propertyMustSatisfyVm.getCustomerAgePropertyUsingMetaAnnotationButOverridden();
     }
 

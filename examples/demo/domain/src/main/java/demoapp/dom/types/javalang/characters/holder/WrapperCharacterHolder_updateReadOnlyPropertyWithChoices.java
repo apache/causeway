@@ -47,17 +47,14 @@ public class WrapperCharacterHolder_updateReadOnlyPropertyWithChoices {
 
     private final WrapperCharacterHolder holder;
 
-    @MemberSupport
-    public WrapperCharacterHolder act(final Character newValue) {
+    @MemberSupport public WrapperCharacterHolder act(final Character newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
-    @MemberSupport
-    public Character default0Act() {
+    @MemberSupport public Character default0Act() {
         return holder.getReadOnlyProperty();
     }
-    @MemberSupport
-    public List<Character> choices0Act() {
+    @MemberSupport public List<Character> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }

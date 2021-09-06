@@ -40,14 +40,12 @@ public class PrimitiveLongHolder_updateReadOnlyProperty {
 
     private final PrimitiveLongHolder holder;
 
-    @MemberSupport
-    public PrimitiveLongHolder act(final long newValue) {
+    @MemberSupport public PrimitiveLongHolder act(final long newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public long default0Act() {
+    @MemberSupport public long default0Act() {
         return holder.getReadOnlyProperty();
     }
 

@@ -43,8 +43,7 @@ public class IsisBlobHolder_updateReadOnlyOptionalProperty {
 
     private final IsisBlobHolder holder;
 
-    @MemberSupport
-    public IsisBlobHolder act(
+    @MemberSupport public IsisBlobHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
             final Blob newValue
     ) {
@@ -52,8 +51,7 @@ public class IsisBlobHolder_updateReadOnlyOptionalProperty {
         return holder;
     }
 
-    @MemberSupport
-    public Blob default0Act() {
+    @MemberSupport public Blob default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

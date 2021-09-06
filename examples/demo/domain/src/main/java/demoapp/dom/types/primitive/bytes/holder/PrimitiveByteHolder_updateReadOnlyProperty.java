@@ -40,14 +40,12 @@ public class PrimitiveByteHolder_updateReadOnlyProperty {
 
     private final PrimitiveByteHolder holder;
 
-    @MemberSupport
-    public PrimitiveByteHolder act(final byte newValue) {
+    @MemberSupport public PrimitiveByteHolder act(final byte newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public byte default0Act() {
+    @MemberSupport public byte default0Act() {
         return holder.getReadOnlyProperty();
     }
 

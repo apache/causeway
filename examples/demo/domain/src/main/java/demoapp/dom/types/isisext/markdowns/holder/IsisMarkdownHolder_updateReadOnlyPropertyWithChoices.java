@@ -46,19 +46,16 @@ public class IsisMarkdownHolder_updateReadOnlyPropertyWithChoices {
 
     private final IsisMarkdownHolder holder;
 
-    @MemberSupport
-    public IsisMarkdownHolder act(final Markdown newValue) {
+    @MemberSupport public IsisMarkdownHolder act(final Markdown newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public Markdown default0Act() {
+    @MemberSupport public Markdown default0Act() {
         return holder.getReadOnlyProperty();
     }
 
-    @MemberSupport
-    public List<Markdown> choices0Act() {
+    @MemberSupport public List<Markdown> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }

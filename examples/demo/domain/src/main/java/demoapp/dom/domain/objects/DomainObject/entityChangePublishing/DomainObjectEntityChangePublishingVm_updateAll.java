@@ -46,8 +46,7 @@ public class DomainObjectEntityChangePublishingVm_updateAll {
 
     private final DomainObjectEntityChangePublishingVm domainObjectAuditingVm;
 
-    @MemberSupport
-    public DomainObjectEntityChangePublishingVm act(
+    @MemberSupport public DomainObjectEntityChangePublishingVm act(
             final boolean publishingEnabled
             , final boolean publishingDisabled
             , final boolean publishingEnabledMetaAnnotated
@@ -68,20 +67,16 @@ public class DomainObjectEntityChangePublishingVm_updateAll {
 
         return domainObjectAuditingVm;
     }
-    @MemberSupport
-    public boolean default0Act() {
+    @MemberSupport public boolean default0Act() {
         return true;
     }
-    @MemberSupport
-    public boolean default1Act() {
+    @MemberSupport public boolean default1Act() {
         return true;
     }
-    @MemberSupport
-    public boolean default2Act() {
+    @MemberSupport public boolean default2Act() {
         return true;
     }
-    @MemberSupport
-    public boolean default3Act() {
+    @MemberSupport public boolean default3Act() {
         return true;
     }
 

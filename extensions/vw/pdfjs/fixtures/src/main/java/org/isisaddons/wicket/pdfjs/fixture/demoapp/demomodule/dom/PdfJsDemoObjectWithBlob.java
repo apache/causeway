@@ -77,8 +77,7 @@ public class PdfJsDemoObjectWithBlob implements Comparable<PdfJsDemoObjectWithBl
         setName(name);
         return this;
     }
-    @MemberSupport
-    public String default0UpdateName() {
+    @MemberSupport public String default0UpdateName() {
         return getName();
     }
 
@@ -113,8 +112,7 @@ public class PdfJsDemoObjectWithBlob implements Comparable<PdfJsDemoObjectWithBl
     public URL openUrl() throws MalformedURLException {
         return new java.net.URL(getUrl());
     }
-    @MemberSupport
-    public String disableOpenUrl() {
+    @MemberSupport public String disableOpenUrl() {
         if (getUrl() == null)
             return "No URL to open";
         return null;

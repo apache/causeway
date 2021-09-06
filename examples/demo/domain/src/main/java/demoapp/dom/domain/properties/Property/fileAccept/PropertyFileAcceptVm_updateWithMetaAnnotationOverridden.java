@@ -40,8 +40,7 @@ public class PropertyFileAcceptVm_updateWithMetaAnnotationOverridden {
     private final PropertyFileAcceptVm propertyFileAcceptVm;
 
 //tag::meta-annotation-overridden[]
-    @MemberSupport
-    public PropertyFileAcceptVm act(
+    @MemberSupport public PropertyFileAcceptVm act(
             @FileAcceptPdfMetaAnnotation                    // <.>
             @Parameter(
                 fileAccept = ".docx"                        // <.>
@@ -56,8 +55,7 @@ public class PropertyFileAcceptVm_updateWithMetaAnnotationOverridden {
         return propertyFileAcceptVm;
     }
 //end::meta-annotation-overridden[]
-    @MemberSupport
-    public Blob default0Act() {
+    @MemberSupport public Blob default0Act() {
         return propertyFileAcceptVm.getDocxPropertyUsingMetaAnnotationButOverridden();
     }
 

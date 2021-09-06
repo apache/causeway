@@ -42,13 +42,11 @@ public class ActionLayoutPromptStyleVm_annotatedInline {
 
     private final ActionLayoutPromptStyleVm stringViewModel;
 
-    @MemberSupport
-    public ActionLayoutPromptStyleVm act(final String newValue) {
+    @MemberSupport public ActionLayoutPromptStyleVm act(final String newValue) {
         stringViewModel.setReadOnlyProperty1(newValue);
         return stringViewModel;
     }
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return stringViewModel.getReadOnlyProperty1();
     }
 

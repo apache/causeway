@@ -48,13 +48,11 @@ public class ActionExecutionPublishingEntity_mixinUpdateProperty {
     }
 
 //tag::class[]
-    @MemberSupport
-    public ActionExecutionPublishingEntity act(final String value) {
+    @MemberSupport public ActionExecutionPublishingEntity act(final String value) {
         actionPublishingEntity.setProperty(value);
         return actionPublishingEntity;
     }
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return actionPublishingEntity.getProperty();
     }
 }

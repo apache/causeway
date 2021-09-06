@@ -48,19 +48,16 @@ public class JavaTimeLocalDateHolder_updateReadOnlyPropertyWithChoices {
 
     private final JavaTimeLocalDateHolder holder;
 
-    @MemberSupport
-    public JavaTimeLocalDateHolder act(final java.time.LocalDate newValue) {
+    @MemberSupport public JavaTimeLocalDateHolder act(final java.time.LocalDate newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public java.time.LocalDate default0Act() {
+    @MemberSupport public java.time.LocalDate default0Act() {
         return holder.getReadOnlyProperty();
     }
 
-    @MemberSupport
-    public List<java.time.LocalDate> choices0Act() {
+    @MemberSupport public List<java.time.LocalDate> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }

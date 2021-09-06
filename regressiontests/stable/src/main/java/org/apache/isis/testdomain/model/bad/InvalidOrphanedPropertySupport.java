@@ -26,8 +26,7 @@ import org.apache.isis.applib.annotation.Nature;
 public class InvalidOrphanedPropertySupport {
 
     // should fail
-    @MemberSupport
-    public boolean hideMyProperty() {
+    @MemberSupport public boolean hideMyProperty() {
         return false;
     }
 

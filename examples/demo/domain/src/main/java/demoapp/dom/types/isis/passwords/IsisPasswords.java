@@ -63,8 +63,7 @@ public class IsisPasswords implements HasAsciiDocDescription {
         return new IsisPasswordVm(initialValue);
     }
 
-    @MemberSupport
-    public Password default0OpenViewModel() {
+    @MemberSupport public Password default0OpenViewModel() {
         return samples.single();
     }
 

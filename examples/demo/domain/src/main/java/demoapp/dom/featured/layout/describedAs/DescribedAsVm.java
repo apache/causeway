@@ -107,8 +107,7 @@ public class DescribedAsVm implements HasAsciiDocDescription {
         return this;
     }
 
-    @MemberSupport
-    public String validateBiArgAction(final String firstArg, final String secondArg) {
+    @MemberSupport public String validateBiArgAction(final String firstArg, final String secondArg) {
         return "always fail for demonstration";
     }
 
@@ -136,8 +135,7 @@ public class DescribedAsVm implements HasAsciiDocDescription {
         return this;
     }
 
-    @MemberSupport
-    public String validateBiArgActionWithConfirm(final String firstArg, final String secondArg) {
+    @MemberSupport public String validateBiArgActionWithConfirm(final String firstArg, final String secondArg) {
         return "always fail for demonstration";
     }
 
@@ -152,8 +150,7 @@ public class DescribedAsVm implements HasAsciiDocDescription {
         return this;
     }
 
-    @MemberSupport
-    public String disableDisabledAction() {
+    @MemberSupport public String disableDisabledAction() {
         return "Disabled for demonstration.";
     }
 
@@ -167,8 +164,7 @@ public class DescribedAsVm implements HasAsciiDocDescription {
         return this;
     }
 
-    @MemberSupport
-    public String disableDisabledActionWithConfirmation() {
+    @MemberSupport public String disableDisabledActionWithConfirmation() {
         return "Disabled for demonstration.";
     }
 

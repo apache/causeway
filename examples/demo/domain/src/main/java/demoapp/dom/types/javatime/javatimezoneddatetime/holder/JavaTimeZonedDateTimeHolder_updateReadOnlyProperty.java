@@ -40,14 +40,12 @@ public class JavaTimeZonedDateTimeHolder_updateReadOnlyProperty {
 
     private final JavaTimeZonedDateTimeHolder holder;
 
-    @MemberSupport
-    public JavaTimeZonedDateTimeHolder act(final java.time.ZonedDateTime newValue) {
+    @MemberSupport public JavaTimeZonedDateTimeHolder act(final java.time.ZonedDateTime newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public java.time.ZonedDateTime default0Act() {
+    @MemberSupport public java.time.ZonedDateTime default0Act() {
         return holder.getReadOnlyProperty();
     }
 

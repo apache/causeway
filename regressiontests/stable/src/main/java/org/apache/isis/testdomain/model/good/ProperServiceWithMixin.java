@@ -33,8 +33,7 @@ public class ProperServiceWithMixin {
     @Action
     public class Now {
 
-        @MemberSupport
-        public LocalDateTime act() {
+        @MemberSupport public LocalDateTime act() {
             return LocalDateTime.now();
         }
     }

@@ -30,29 +30,25 @@ public class InteractionDemo_multiEnum {
     @SuppressWarnings("unused")
     private final InteractionDemo holder;
 
-    @MemberSupport
-    public int act(DemoEnum a, DemoEnum b, DemoEnum c) {
+    @MemberSupport public int act(DemoEnum a, DemoEnum b, DemoEnum c) {
         return a.ordinal() * (b.ordinal() + c.ordinal());
     }
 
     // -- PARAM A
 
-    @MemberSupport
-    public DemoEnum defaultA(ParameterSamples.TriEnum p) {
+    @MemberSupport public DemoEnum defaultA(ParameterSamples.TriEnum p) {
         return DemoEnum.values()[1];
     }
 
     // -- PARAM B
 
-    @MemberSupport
-    public DemoEnum defaultB(ParameterSamples.TriEnum p) {
+    @MemberSupport public DemoEnum defaultB(ParameterSamples.TriEnum p) {
         return DemoEnum.values()[2];
     }
 
     // -- PARAM C
 
-    @MemberSupport
-    public DemoEnum defaultC(ParameterSamples.TriEnum p) {
+    @MemberSupport public DemoEnum defaultC(ParameterSamples.TriEnum p) {
         return DemoEnum.values()[3];
     }
 }

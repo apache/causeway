@@ -38,23 +38,19 @@ public class InteractionNpmDemo_biArgDisabled {
         int b;
     }
 
-    @MemberSupport
-    public int act(int a, int b) {
+    @MemberSupport public int act(int a, int b) {
         return a + b;
     }
 
-    @MemberSupport
-    public boolean hide() {
+    @MemberSupport public boolean hide() {
         return false;
     }
 
-    @MemberSupport
-    public String disable() {
+    @MemberSupport public String disable() {
         return "Disabled for demonstration.";
     }
 
-    @MemberSupport
-    public String validate(Parameters params) {
+    @MemberSupport public String validate(Parameters params) {
         return "Never valid for demonstration.";
     }
 

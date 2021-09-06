@@ -40,13 +40,11 @@ public class WrapperCharacterHolder_updateReadOnlyProperty {
 
     private final WrapperCharacterHolder holder;
 
-    @MemberSupport
-    public WrapperCharacterHolder act(final Character newValue) {
+    @MemberSupport public WrapperCharacterHolder act(final Character newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
-    @MemberSupport
-    public Character default0Act() {
+    @MemberSupport public Character default0Act() {
         return holder.getReadOnlyProperty();
     }
 

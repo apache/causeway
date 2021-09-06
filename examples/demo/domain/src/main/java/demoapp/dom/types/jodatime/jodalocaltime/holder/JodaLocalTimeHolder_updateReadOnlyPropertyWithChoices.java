@@ -49,19 +49,16 @@ public class JodaLocalTimeHolder_updateReadOnlyPropertyWithChoices {
 
     private final JodaLocalTimeHolder holder;
 
-    @MemberSupport
-    public JodaLocalTimeHolder act(final org.joda.time.LocalTime newValue) {
+    @MemberSupport public JodaLocalTimeHolder act(final org.joda.time.LocalTime newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public org.joda.time.LocalTime default0Act() {
+    @MemberSupport public org.joda.time.LocalTime default0Act() {
         return holder.getReadOnlyProperty();
     }
 
-    @MemberSupport
-    public List<org.joda.time.LocalTime> choices0Act() {
+    @MemberSupport public List<org.joda.time.LocalTime> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }

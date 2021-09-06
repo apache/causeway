@@ -62,8 +62,7 @@ public class IsisClobs implements HasAsciiDocDescription {
     public IsisClobVm openViewModel(final Clob initialValue) {
         return new IsisClobVm(initialValue);
     }
-    @MemberSupport
-    public Clob default0OpenViewModel() {
+    @MemberSupport public Clob default0OpenViewModel() {
         return samples.single();
     }
 

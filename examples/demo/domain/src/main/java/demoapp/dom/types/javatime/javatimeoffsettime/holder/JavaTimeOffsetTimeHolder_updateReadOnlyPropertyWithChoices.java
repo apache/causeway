@@ -48,19 +48,16 @@ public class JavaTimeOffsetTimeHolder_updateReadOnlyPropertyWithChoices {
 
     private final JavaTimeOffsetTimeHolder holder;
 
-    @MemberSupport
-    public JavaTimeOffsetTimeHolder act(final java.time.OffsetTime newValue) {
+    @MemberSupport public JavaTimeOffsetTimeHolder act(final java.time.OffsetTime newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public java.time.OffsetTime default0Act() {
+    @MemberSupport public java.time.OffsetTime default0Act() {
         return holder.getReadOnlyProperty();
     }
 
-    @MemberSupport
-    public List<java.time.OffsetTime> choices0Act() {
+    @MemberSupport public List<java.time.OffsetTime> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }

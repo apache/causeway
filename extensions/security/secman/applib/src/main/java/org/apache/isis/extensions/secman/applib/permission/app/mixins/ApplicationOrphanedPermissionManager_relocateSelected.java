@@ -26,6 +26,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -59,7 +60,7 @@ public class ApplicationOrphanedPermissionManager_relocateSelected {
 
     private final ApplicationOrphanedPermissionManager target;
 
-    public ApplicationOrphanedPermissionManager act(
+    @MemberSupport public ApplicationOrphanedPermissionManager act(
             final Collection<ApplicationPermission> permissions,
             @Parameter(optionality = Optionality.MANDATORY)
             final String targetNamespace) {
@@ -68,7 +69,7 @@ public class ApplicationOrphanedPermissionManager_relocateSelected {
         return target;
     }
 
-    public Collection<String> choices1Act() {
+    @MemberSupport public Collection<String> choices1Act() {
         return featureRepository.allNamespaces().stream()
                     .map(ApplicationFeature::getFullyQualifiedName)
                     .collect(Collectors.toCollection(TreeSet::new));

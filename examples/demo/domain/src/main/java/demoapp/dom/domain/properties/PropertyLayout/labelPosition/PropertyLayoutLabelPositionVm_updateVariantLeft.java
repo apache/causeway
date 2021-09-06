@@ -41,8 +41,7 @@ public class PropertyLayoutLabelPositionVm_updateVariantLeft {
     private final PropertyLayoutLabelPositionVm propertyLayoutLabelPositionVm;
 
 //tag::annotation[]
-    @MemberSupport
-    public PropertyLayoutLabelPositionVm act(
+    @MemberSupport public PropertyLayoutLabelPositionVm act(
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(
                 labelPosition = LabelPosition.LEFT              // <.>
@@ -54,8 +53,7 @@ public class PropertyLayoutLabelPositionVm_updateVariantLeft {
         return propertyLayoutLabelPositionVm;
     }
 //end::annotation[]
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return propertyLayoutLabelPositionVm.getPropertyLabelPositionLeft();
     }
 

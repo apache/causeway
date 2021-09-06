@@ -40,14 +40,12 @@ public class WrapperDoubleHolder_updateReadOnlyProperty {
 
     private final WrapperDoubleHolder holder;
 
-    @MemberSupport
-    public WrapperDoubleHolder act(final Double newValue) {
+    @MemberSupport public WrapperDoubleHolder act(final Double newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public Double default0Act() {
+    @MemberSupport public Double default0Act() {
         return holder.getReadOnlyProperty();
     }
 

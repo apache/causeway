@@ -52,8 +52,7 @@ public class DependentArgsActionDemo_useChoices {
         DemoItem item1;
     }
 
-    @MemberSupport
-    public DependentArgsActionDemo act(
+    @MemberSupport public DependentArgsActionDemo act(
 
             // PARAM 0
             @Parameter(optionality = Optionality.MANDATORY) final
@@ -71,15 +70,13 @@ public class DependentArgsActionDemo_useChoices {
 
     // -- PARAM 0 (Parity)
 
-    @MemberSupport
-    public Parity default0Act() {
+    @MemberSupport public Parity default0Act() {
         return holder.getDialogParityDefault();
     }
 
     // -- PARAM 1 (DemoItem)
 
-    @MemberSupport
-    public Collection<DemoItem> choices1Act(final Parameters params) {
+    @MemberSupport public Collection<DemoItem> choices1Act(final Parameters params) {
 
         val parity = params.parity(); // <-- the refining parameter from the dialog above
 

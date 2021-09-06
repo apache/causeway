@@ -47,19 +47,16 @@ public class WrapperByteHolder_updateReadOnlyPropertyWithChoices {
 
     private final WrapperByteHolder holder;
 
-    @MemberSupport
-    public WrapperByteHolder act(final Byte newValue) {
+    @MemberSupport public WrapperByteHolder act(final Byte newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public Byte default0Act() {
+    @MemberSupport public Byte default0Act() {
         return holder.getReadOnlyProperty();
     }
 
-    @MemberSupport
-    public List<Byte> choices0Act() {
+    @MemberSupport public List<Byte> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }

@@ -40,8 +40,7 @@ public class PropertyLayoutTypicalLengthVm_updateWithParameterLayout {
     private final PropertyLayoutTypicalLengthVm propertyLayoutTypicalLengthVm;
 
 //tag::annotation[]
-    @MemberSupport
-    public PropertyLayoutTypicalLengthVm act(
+    @MemberSupport public PropertyLayoutTypicalLengthVm act(
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(
                 typicalLength = 10                                 // <.>
@@ -53,8 +52,7 @@ public class PropertyLayoutTypicalLengthVm_updateWithParameterLayout {
         return propertyLayoutTypicalLengthVm;
     }
 //end::annotation[]
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return propertyLayoutTypicalLengthVm.getPropertyUsingAnnotation();
     }
 

@@ -225,8 +225,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         setSomeBoolean(b);
         return this;
     }
-    @MemberSupport
-    public boolean default0UpdateSomeBoolean() {
+    @MemberSupport public boolean default0UpdateSomeBoolean() {
         return isSomeBoolean();
     }
 
@@ -236,8 +235,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         setSomeByte(b);
         return this;
     }
-    @MemberSupport
-    public byte default0UpdateSomeByte() {
+    @MemberSupport public byte default0UpdateSomeByte() {
         return getSomeByte();
     }
 
@@ -247,8 +245,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         setSomeShort(s);
         return this;
     }
-    @MemberSupport
-    public short default0UpdateSomeShort() {
+    @MemberSupport public short default0UpdateSomeShort() {
         return getSomeShort();
     }
 
@@ -258,8 +255,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         setSomeInt(i);
         return this;
     }
-    @MemberSupport
-    public int default0UpdateSomeInt() {
+    @MemberSupport public int default0UpdateSomeInt() {
         return getSomeInt();
     }
 
@@ -269,8 +265,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         setSomeLong(l);
         return this;
     }
-    @MemberSupport
-    public long default0UpdateSomeLong() {
+    @MemberSupport public long default0UpdateSomeLong() {
         return getSomeLong();
     }
 
@@ -280,8 +275,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         setSomeFloat(f);
         return this;
     }
-    @MemberSupport
-    public float default0UpdateSomeFloat() {
+    @MemberSupport public float default0UpdateSomeFloat() {
         return getSomeFloat();
     }
 
@@ -291,8 +285,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         setSomeDouble(d);
         return this;
     }
-    @MemberSupport
-    public double default0UpdateSomeDouble() {
+    @MemberSupport public double default0UpdateSomeDouble() {
         return getSomeDouble();
     }
 
@@ -302,8 +295,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         setSomeChar(i);
         return this;
     }
-    @MemberSupport
-    public char default0UpdateSomeChar() {
+    @MemberSupport public char default0UpdateSomeChar() {
         return getSomeChar();
     }
 
@@ -315,8 +307,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         setSomeBooleanWrapper(i);
         return this;
     }
-    @MemberSupport
-    public Boolean default0UpdateSomeBooleanWrapper() {
+    @MemberSupport public Boolean default0UpdateSomeBooleanWrapper() {
         return getSomeBooleanWrapper();
     }
 
@@ -332,8 +323,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         setSomeByteWrapper(b);
         return this;
     }
-    @MemberSupport
-    public Byte default0UpdateSomeByteWrapper() {
+    @MemberSupport public Byte default0UpdateSomeByteWrapper() {
         return getSomeByteWrapper();
     }
 
@@ -349,8 +339,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         setSomeShortWrapper(s);
         return this;
     }
-    @MemberSupport
-    public Short default0UpdateSomeShortWrapper() {
+    @MemberSupport public Short default0UpdateSomeShortWrapper() {
         return getSomeShortWrapper();
     }
 
@@ -366,8 +355,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         setSomeIntegerWrapper(i);
         return this;
     }
-    @MemberSupport
-    public Integer default0UpdateSomeIntegerWrapper() {
+    @MemberSupport public Integer default0UpdateSomeIntegerWrapper() {
         return getSomeIntegerWrapper();
     }
 
@@ -396,8 +384,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         setSomeFloatWrapper(f);
         return this;
     }
-    @MemberSupport
-    public Float default0UpdateSomeFloatWrapper() {
+    @MemberSupport public Float default0UpdateSomeFloatWrapper() {
         return getSomeFloatWrapper();
     }
 
@@ -412,8 +399,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         setSomeDoubleWrapper(d);
         return this;
     }
-    @MemberSupport
-    public Double default0UpdateSomeDoubleWrapper() {
+    @MemberSupport public Double default0UpdateSomeDoubleWrapper() {
         return getSomeDoubleWrapper();
     }
 
@@ -429,8 +415,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         setSomeCharacterWrapper(i);
         return this;
     }
-    @MemberSupport
-    public Character default0UpdateSomeCharacterWrapper() {
+    @MemberSupport public Character default0UpdateSomeCharacterWrapper() {
         return getSomeCharacterWrapper();
     }
 
@@ -446,8 +431,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         setSomeString(i);
         return this;
     }
-    @MemberSupport
-    public String default0UpdateSomeString() {
+    @MemberSupport public String default0UpdateSomeString() {
         return getSomeString();
     }
 
@@ -462,8 +446,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         setSomePassword(password);
         return this;
     }
-    @MemberSupport
-    public Password default0UpdateSomePassword() {
+    @MemberSupport public Password default0UpdateSomePassword() {
         return getSomePassword();
     }
 
@@ -507,8 +490,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         setSomeJavaUtilDate(i);
         return this;
     }
-    @MemberSupport
-    public java.util.Date default0UpdateSomeJavaUtilDate() {
+    @MemberSupport public java.util.Date default0UpdateSomeJavaUtilDate() {
         return getSomeJavaUtilDate();
     }
 
@@ -524,8 +506,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         setSomeJavaSqlDate(i);
         return this;
     }
-    @MemberSupport
-    public java.sql.Date default0UpdateSomeJavaSqlDate() {
+    @MemberSupport public java.sql.Date default0UpdateSomeJavaSqlDate() {
         return getSomeJavaSqlDate();
     }
 
@@ -541,8 +522,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         setSomeJodaLocalDate(i);
         return this;
     }
-    @MemberSupport
-    public org.joda.time.LocalDate default0UpdateSomeJodaLocalDate() {
+    @MemberSupport public org.joda.time.LocalDate default0UpdateSomeJodaLocalDate() {
         return getSomeJodaLocalDate();
     }
 
@@ -563,8 +543,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         setSomeJodaLocalDateTime(i);
         return this;
     }
-    @MemberSupport
-    public org.joda.time.LocalDateTime default0UpdateSomeJodaLocalDateTime() {
+    @MemberSupport public org.joda.time.LocalDateTime default0UpdateSomeJodaLocalDateTime() {
         return getSomeJodaLocalDateTime();
     }
 
@@ -581,8 +560,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         setSomeJodaDateTime(i);
         return this;
     }
-    @MemberSupport
-    public org.joda.time.DateTime default0UpdateSomeJodaDateTime() {
+    @MemberSupport public org.joda.time.DateTime default0UpdateSomeJodaDateTime() {
         return getSomeJodaDateTime();
     }
 
@@ -598,8 +576,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         setSomeJavaSqlTimestamp(i);
         return this;
     }
-    @MemberSupport
-    public java.sql.Timestamp default0UpdateSomeJavaSqlTimestamp() {
+    @MemberSupport public java.sql.Timestamp default0UpdateSomeJavaSqlTimestamp() {
         return getSomeJavaSqlTimestamp();
     }
 
@@ -617,8 +594,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         setSomeBigInteger(d);
         return this;
     }
-    @MemberSupport
-    public BigInteger default0UpdateSomeBigInteger() {
+    @MemberSupport public BigInteger default0UpdateSomeBigInteger() {
         return getSomeBigInteger();
     }
 
@@ -635,8 +611,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         setSomeBigDecimal(d);
         return this;
     }
-    @MemberSupport
-    public BigDecimal default0UpdateSomeBigDecimal() {
+    @MemberSupport public BigDecimal default0UpdateSomeBigDecimal() {
         return getSomeBigDecimal();
     }
 
@@ -652,8 +627,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         setSomeUrl(i);
         return this;
     }
-    @MemberSupport
-    public java.net.URL default0UpdateSomeUrl() {
+    @MemberSupport public java.net.URL default0UpdateSomeUrl() {
         return getSomeUrl();
     }
 
@@ -669,8 +643,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         setSomeUuid(i);
         return this;
     }
-    @MemberSupport
-    public java.util.UUID default0UpdateSomeUuid() {
+    @MemberSupport public java.util.UUID default0UpdateSomeUuid() {
         return getSomeUuid();
     }
 
@@ -702,8 +675,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         setSomeEnumOf3(i);
         return this;
     }
-    @MemberSupport
-    public EnumOf3 default0UpdateSomeEnumOf3() {
+    @MemberSupport public EnumOf3 default0UpdateSomeEnumOf3() {
         return getSomeEnumOf3();
     }
 

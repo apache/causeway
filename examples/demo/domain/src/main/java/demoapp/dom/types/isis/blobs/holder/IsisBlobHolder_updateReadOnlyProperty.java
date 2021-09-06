@@ -41,14 +41,12 @@ public class IsisBlobHolder_updateReadOnlyProperty {
 
     private final IsisBlobHolder holder;
 
-    @MemberSupport
-    public IsisBlobHolder act(final Blob newValue) {
+    @MemberSupport public IsisBlobHolder act(final Blob newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public Blob default0Act() {
+    @MemberSupport public Blob default0Act() {
         return holder.getReadOnlyProperty();
     }
 

@@ -60,8 +60,7 @@ public class JavaSqlDates implements HasAsciiDocDescription {
     public JavaSqlDateVm openViewModel(final java.sql.Date initialValue) {
         return new JavaSqlDateVm(initialValue);
     }
-    @MemberSupport
-    public java.sql.Date default0OpenViewModel() {
+    @MemberSupport public java.sql.Date default0OpenViewModel() {
         return new java.sql.Date(120,1,1); // 1900 is the epoch
     }
 

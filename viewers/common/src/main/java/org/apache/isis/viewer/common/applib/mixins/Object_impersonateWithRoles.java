@@ -31,13 +31,14 @@ import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
 import org.apache.isis.applib.mixins.security.HasUsername;
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.user.ImpersonateMenu;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
- * Same as {@link ImpersonateMenu#impersonateWithRoles(String, List, String)},
+ * Same as {@link ImpersonateMenu.impersonateWithRoles#act(String, List, String)},
  * but implemented as a mixin so that can be invoked while accessing an object.
  *
  * @since 2.0 {@index}
@@ -69,20 +70,20 @@ public class Object_impersonateWithRoles {
             final String userName,
             final List<String> roleNames,
             final String multiTenancyToken) {
-        impersonateMenu.impersonateWithRoles(userName, roleNames, multiTenancyToken);
+        impersonateWithRoles().act(userName, roleNames, multiTenancyToken);
         return holder;
     }
 
     @MemberSupport public boolean hideAct() {
-        return impersonateMenu.hideImpersonateWithRoles();
+        return impersonateWithRoles().hideAct();
     }
 
     @MemberSupport public String disableAct() {
-        return impersonateMenu.disableImpersonateWithRoles();
+        return impersonateWithRoles().disableAct();
     }
 
     @MemberSupport public List<String> choices0Act() {
-        return impersonateMenu.choices0ImpersonateWithRoles();
+        return impersonateWithRoles().choices0Act();
     }
 
     @MemberSupport public String default0Act() {
@@ -96,17 +97,20 @@ public class Object_impersonateWithRoles {
     }
 
     @MemberSupport public List<String> choices1Act(final String userName) {
-        return impersonateMenu.choices1ImpersonateWithRoles(userName);
+        return impersonateWithRoles().choices1Act(userName);
     }
-
     @MemberSupport public List<String> default1Act(final String userName) {
-        return impersonateMenu.default1ImpersonateWithRoles(userName);
+        return impersonateWithRoles().default1Act(userName);
+    }
+    @MemberSupport public String default2Act(final String userName, final List<String> roleNames) {
+        return impersonateWithRoles().default2Act(userName, roleNames);
     }
 
-    @MemberSupport public String default2Act(final String userName, final List<String> roleNames) {
-        return impersonateMenu.default2ImpersonateWithRoles(userName, roleNames);
+    private ImpersonateMenu.impersonateWithRoles impersonateWithRoles() {
+        return factoryService.mixin(ImpersonateMenu.impersonateWithRoles.class, impersonateMenu);
     }
 
     @Inject ImpersonateMenu impersonateMenu;
+    @Inject FactoryService factoryService;
 
 }

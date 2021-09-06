@@ -41,13 +41,11 @@ public class ActionRestrictToVm_mixinUpdateNoAnnotation {
 
     private final ActionRestrictToVm actionRestrictToVm;
 
-    @MemberSupport
-    public ActionRestrictToVm act(final String text) {
+    @MemberSupport public ActionRestrictToVm act(final String text) {
         actionRestrictToVm.setPropertyNoAnnotation(text);
         return actionRestrictToVm;
     }
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return actionRestrictToVm.getPropertyNoAnnotation();
     }
 }

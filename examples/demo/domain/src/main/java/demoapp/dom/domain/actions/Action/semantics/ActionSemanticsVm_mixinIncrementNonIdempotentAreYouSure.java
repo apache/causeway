@@ -40,8 +40,7 @@ public class ActionSemanticsVm_mixinIncrementNonIdempotentAreYouSure {
 
     private final ActionSemanticsVm actionSemanticsVm;
 
-    @MemberSupport
-    public ActionSemanticsVm act() {
+    @MemberSupport public ActionSemanticsVm act() {
         actionSemanticsVm.setPropertyForNonIdempotentAreYouSure(
                 actionSemanticsVm.getPropertyForNonIdempotentAreYouSure() + 1
         );

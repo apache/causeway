@@ -46,8 +46,7 @@ public class DomainChangeRecord_openTargetObject {
 
     private final DomainChangeRecord domainChangeRecord;
 
-    @MemberSupport
-    public Object act() {
+    @MemberSupport public Object act() {
         try {
             return bookmarkService != null
                     ? bookmarkService.lookup(domainChangeRecord.getTarget()).orElse(null)
@@ -61,13 +60,11 @@ public class DomainChangeRecord_openTargetObject {
         }
     }
 
-    @MemberSupport
-    public boolean hideAct() {
+    @MemberSupport public boolean hideAct() {
         return domainChangeRecord.getTarget() == null;
     }
 
-    @MemberSupport
-    public String disableAct() {
+    @MemberSupport public String disableAct() {
         final Object targetObject = domainChangeRecord.getTarget();
         if (targetObject == null) {
             return null;

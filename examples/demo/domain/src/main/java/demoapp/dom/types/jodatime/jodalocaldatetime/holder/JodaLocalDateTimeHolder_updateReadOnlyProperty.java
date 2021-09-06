@@ -40,14 +40,12 @@ public class JodaLocalDateTimeHolder_updateReadOnlyProperty {
 
     private final JodaLocalDateTimeHolder holder;
 
-    @MemberSupport
-    public JodaLocalDateTimeHolder act(final org.joda.time.LocalDateTime newValue) {
+    @MemberSupport public JodaLocalDateTimeHolder act(final org.joda.time.LocalDateTime newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public org.joda.time.LocalDateTime default0Act() {
+    @MemberSupport public org.joda.time.LocalDateTime default0Act() {
         return holder.getReadOnlyProperty();
     }
 

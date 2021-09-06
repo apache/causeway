@@ -57,14 +57,12 @@ public class ApplicationTenancy_addUser {
 
     private final ApplicationTenancy target;
 
-    @MemberSupport
-    public ApplicationTenancy act(final ApplicationUser applicationUser) {
+    @MemberSupport public ApplicationTenancy act(final ApplicationUser applicationUser) {
         applicationTenancyRepository.setTenancyOnUser(target, applicationUser);
         return target;
     }
 
-    @MemberSupport
-    public List<? extends ApplicationUser> autoComplete0Act(final String search) {
+    @MemberSupport public List<? extends ApplicationUser> autoComplete0Act(final String search) {
         final Collection<? extends ApplicationUser> matchingSearch = applicationUserRepository.find(search);
         final List<? extends ApplicationUser> list = _Lists.newArrayList(matchingSearch);
         list.removeAll(applicationUserRepository.findByTenancy(target));

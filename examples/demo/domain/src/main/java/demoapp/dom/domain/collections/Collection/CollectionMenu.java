@@ -64,8 +64,7 @@ public class CollectionMenu {
     @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of collections")
     public void hidden(){
     }
-    @MemberSupport
-    public String disableHidden(){
+    @MemberSupport public String disableHidden(){
         return "Visibility of collections" +
                  " (not yet implemented in demo)";
     }
@@ -76,8 +75,7 @@ public class CollectionMenu {
     @ActionLayout(cssClassFa="fa-shapes", describedAs = "Element type of collections")
     public void typeOf(){
     }
-    @MemberSupport
-    public String disableTypeOf(){
+    @MemberSupport public String disableTypeOf(){
         return "Element type of collections" +
                  " (not yet implemented in demo)";
     }

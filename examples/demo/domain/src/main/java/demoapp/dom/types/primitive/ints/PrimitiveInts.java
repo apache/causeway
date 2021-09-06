@@ -64,8 +64,7 @@ public class PrimitiveInts implements HasAsciiDocDescription {
     public PrimitiveIntVm openViewModel(final int initialValue) {
         return new PrimitiveIntVm(initialValue);
     }
-    @MemberSupport
-    public int default0OpenViewModel() {
+    @MemberSupport public int default0OpenViewModel() {
         return 123456;
     }
 

@@ -41,13 +41,11 @@ public class ActionLayoutPositionVm_annotatedRight {
 
     private final ActionLayoutPositionVm stringViewModel;
 
-    @MemberSupport
-    public ActionLayoutPositionVm act(final String newValue) {
+    @MemberSupport public ActionLayoutPositionVm act(final String newValue) {
         stringViewModel.setReadOnlyProperty1(newValue);
         return stringViewModel;
     }
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return stringViewModel.getReadOnlyProperty1();
     }
 

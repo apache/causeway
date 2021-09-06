@@ -44,13 +44,11 @@ public class ActionDomainEventVm_controlUpdateTextInvocation {
 
     private final ActionDomainEventVm actionDomainEventVm;
 
-    @MemberSupport
-    public ActionDomainEventVm act(final ActionDomainEventControlStrategy controlStrategy) {
+    @MemberSupport public ActionDomainEventVm act(final ActionDomainEventControlStrategy controlStrategy) {
         eventActionDomainEventControlService.controlStrategy = controlStrategy;
         return actionDomainEventVm;
     }
-    @MemberSupport
-    public ActionDomainEventControlStrategy default0Act() {
+    @MemberSupport public ActionDomainEventControlStrategy default0Act() {
         return eventActionDomainEventControlService.controlStrategy;
     }
 

@@ -42,16 +42,14 @@ public class WrapperCharacterHolder_updateReadOnlyOptionalProperty {
 
     private final WrapperCharacterHolder holder;
 
-    @MemberSupport
-    public WrapperCharacterHolder act(
+    @MemberSupport public WrapperCharacterHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
             final Character newValue
     ) {
         holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
-    @MemberSupport
-    public Character default0Act() {
+    @MemberSupport public Character default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

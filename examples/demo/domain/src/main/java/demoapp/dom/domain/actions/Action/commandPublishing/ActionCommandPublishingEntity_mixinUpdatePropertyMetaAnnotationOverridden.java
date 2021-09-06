@@ -47,13 +47,11 @@ public class ActionCommandPublishingEntity_mixinUpdatePropertyMetaAnnotationOver
 
     private final ActionCommandPublishingEntity actionCommandEntity;
 
-    @MemberSupport
-    public ActionCommandPublishingEntity act(final String value) {
+    @MemberSupport public ActionCommandPublishingEntity act(final String value) {
         actionCommandEntity.setPropertyMetaAnnotatedOverridden(value);
         return actionCommandEntity;
     }
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return actionCommandEntity.getPropertyMetaAnnotatedOverridden();
     }
 //tag::class[]

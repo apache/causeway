@@ -42,8 +42,7 @@ public class WrapperDoubleHolder_updateReadOnlyOptionalProperty {
 
     private final WrapperDoubleHolder holder;
 
-    @MemberSupport
-    public WrapperDoubleHolder act(
+    @MemberSupport public WrapperDoubleHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
             final Double newValue
     ) {
@@ -51,8 +50,7 @@ public class WrapperDoubleHolder_updateReadOnlyOptionalProperty {
         return holder;
     }
 
-    @MemberSupport
-    public Double default0Act() {
+    @MemberSupport public Double default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

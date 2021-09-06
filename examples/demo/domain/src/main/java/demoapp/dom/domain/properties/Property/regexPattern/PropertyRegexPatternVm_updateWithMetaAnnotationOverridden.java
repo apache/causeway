@@ -41,8 +41,7 @@ public class PropertyRegexPatternVm_updateWithMetaAnnotationOverridden {
     private final PropertyRegexPatternVm propertyRegexPatternVm;
 
 //tag::meta-annotation-overridden[]
-    @MemberSupport
-    public PropertyRegexPatternVm act(
+    @MemberSupport public PropertyRegexPatternVm act(
             @RegexPatternEmailComMetaAnnotation                             // <.>
             @Parameter(
                 regexPattern = "^\\w+@\\w+[.]org$"                      // <.>
@@ -59,8 +58,7 @@ public class PropertyRegexPatternVm_updateWithMetaAnnotationOverridden {
         return propertyRegexPatternVm;
     }
 //end::meta-annotation-overridden[]
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return propertyRegexPatternVm.getEmailAddressPropertyUsingMetaAnnotationButOverridden();
     }
 

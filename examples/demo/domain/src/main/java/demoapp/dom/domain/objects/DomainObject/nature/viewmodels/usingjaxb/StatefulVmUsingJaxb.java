@@ -103,10 +103,8 @@ public class StatefulVmUsingJaxb implements HasAsciiDocDescription {
         children.remove(child);
         return this;
     }
-    @MemberSupport
-    public List<Child> choices0RemoveChild() { return getChildren(); }
-    @MemberSupport
-    public String disableRemoveChild() {
+    @MemberSupport public List<Child> choices0RemoveChild() { return getChildren(); }
+    @MemberSupport public String disableRemoveChild() {
         return choices0RemoveChild().isEmpty()? "No children to remove" : null;
     }
 //end::addChild[]

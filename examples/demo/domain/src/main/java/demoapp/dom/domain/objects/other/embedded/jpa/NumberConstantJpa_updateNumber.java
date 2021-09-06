@@ -38,14 +38,12 @@ public class NumberConstantJpa_updateNumber {
 
     private final NumberConstantJpa numberConstantJdo;
 
-    @MemberSupport
-    public NumberConstantJpa act(final ComplexNumberJpa complexNumberJdo) {
+    @MemberSupport public NumberConstantJpa act(final ComplexNumberJpa complexNumberJdo) {
         numberConstantJdo.setNumber(complexNumberJdo);
         return numberConstantJdo;
     }
 
-    @MemberSupport
-    public ComplexNumberJpa default0Act() {
+    @MemberSupport public ComplexNumberJpa default0Act() {
         return numberConstantJdo.getNumber();
     }
 }

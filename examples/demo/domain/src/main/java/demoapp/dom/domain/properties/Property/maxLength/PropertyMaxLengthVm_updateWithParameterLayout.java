@@ -39,8 +39,7 @@ public class PropertyMaxLengthVm_updateWithParameterLayout {
     private final PropertyMaxLengthVm propertyMaxLengthVm;
 
 //tag::annotation[]
-    @MemberSupport
-    public PropertyMaxLengthVm act(
+    @MemberSupport public PropertyMaxLengthVm act(
             @Parameter(
                 maxLength = 10                                 // <.>
             )
@@ -53,8 +52,7 @@ public class PropertyMaxLengthVm_updateWithParameterLayout {
         return propertyMaxLengthVm;
     }
 //end::annotation[]
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return propertyMaxLengthVm.getPropertyUsingAnnotation();
     }
 

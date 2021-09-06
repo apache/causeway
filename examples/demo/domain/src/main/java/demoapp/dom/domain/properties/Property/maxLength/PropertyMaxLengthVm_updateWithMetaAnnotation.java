@@ -39,8 +39,7 @@ public class PropertyMaxLengthVm_updateWithMetaAnnotation {
     private final PropertyMaxLengthVm propertyMaxLengthVm;
 
 //tag::meta-annotation[]
-    @MemberSupport
-    public PropertyMaxLengthVm act(
+    @MemberSupport public PropertyMaxLengthVm act(
             @MaxLength10MetaAnnotation                            // <.>
             @Parameter()
             @ParameterLayout(
@@ -51,8 +50,7 @@ public class PropertyMaxLengthVm_updateWithMetaAnnotation {
         return propertyMaxLengthVm;
     }
 //end::meta-annotation[]
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return propertyMaxLengthVm.getPropertyUsingMetaAnnotation();
     }
 

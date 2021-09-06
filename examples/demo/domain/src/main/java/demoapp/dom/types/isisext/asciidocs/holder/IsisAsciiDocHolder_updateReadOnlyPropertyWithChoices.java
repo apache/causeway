@@ -46,19 +46,16 @@ public class IsisAsciiDocHolder_updateReadOnlyPropertyWithChoices {
 
     private final IsisAsciiDocHolder holder;
 
-    @MemberSupport
-    public IsisAsciiDocHolder act(final AsciiDoc newValue) {
+    @MemberSupport public IsisAsciiDocHolder act(final AsciiDoc newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public AsciiDoc default0Act() {
+    @MemberSupport public AsciiDoc default0Act() {
         return holder.getReadOnlyProperty();
     }
 
-    @MemberSupport
-    public List<AsciiDoc> choices0Act() {
+    @MemberSupport public List<AsciiDoc> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }

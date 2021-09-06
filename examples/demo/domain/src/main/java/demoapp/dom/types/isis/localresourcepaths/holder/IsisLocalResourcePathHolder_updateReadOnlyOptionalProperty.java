@@ -44,16 +44,14 @@ public class IsisLocalResourcePathHolder_updateReadOnlyOptionalProperty {
 
     private final IsisLocalResourcePathHolder holder;
 
-    @MemberSupport
-    public IsisLocalResourcePathHolder act(
+    @MemberSupport public IsisLocalResourcePathHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
             final LocalResourcePath newValue
     ) {
         holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
-    @MemberSupport
-    public LocalResourcePath default0Act() {
+    @MemberSupport public LocalResourcePath default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

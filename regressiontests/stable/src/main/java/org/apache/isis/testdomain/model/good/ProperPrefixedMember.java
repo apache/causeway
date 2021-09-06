@@ -37,8 +37,7 @@ public class ProperPrefixedMember {
     }
 
     // should be identified as support
-    @MemberSupport
-    public String disableDisableSomething() {
+    @MemberSupport public String disableDisableSomething() {
         return null;
     }
 

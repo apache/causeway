@@ -46,8 +46,7 @@ public class ApplicationRole_updateName {
 
     private final ApplicationRole target;
 
-    @MemberSupport
-    public ApplicationRole act(
+    @MemberSupport public ApplicationRole act(
             @ApplicationRole.Name
             final String name) {
 
@@ -55,9 +54,6 @@ public class ApplicationRole_updateName {
         return target;
     }
 
-    @MemberSupport
-    public String default0Act() {
-        return target.getName();
-    }
+    @MemberSupport public String default0Act() { return target.getName(); }
 
 }

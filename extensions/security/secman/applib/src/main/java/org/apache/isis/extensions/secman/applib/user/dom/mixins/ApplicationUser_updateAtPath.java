@@ -46,16 +46,14 @@ public class ApplicationUser_updateAtPath {
 
     private final ApplicationUser target;
 
-    @MemberSupport
-    public ApplicationUser act(
+    @MemberSupport public ApplicationUser act(
             @ApplicationUser.AtPath
             final String atPath) {
         target.setAtPath(atPath);
         return target;
     }
 
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return target.getAtPath();
     }
 

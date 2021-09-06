@@ -41,14 +41,12 @@ public class IsisLocalResourcePathHolder_updateReadOnlyProperty {
 
     private final IsisLocalResourcePathHolder holder;
 
-    @MemberSupport
-    public IsisLocalResourcePathHolder act(final LocalResourcePath newValue) {
+    @MemberSupport public IsisLocalResourcePathHolder act(final LocalResourcePath newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public LocalResourcePath default0Act() {
+    @MemberSupport public LocalResourcePath default0Act() {
         return holder.getReadOnlyProperty();
     }
 

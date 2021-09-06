@@ -62,8 +62,7 @@ public class JavaMathBigDecimals implements HasAsciiDocDescription {
     public JavaMathBigDecimalVm openViewModel(final java.math.BigDecimal initialValue) {
         return new JavaMathBigDecimalVm(initialValue);
     }
-    @MemberSupport
-    public java.math.BigDecimal default0OpenViewModel() {
+    @MemberSupport public java.math.BigDecimal default0OpenViewModel() {
         return samples.single();
     }
 

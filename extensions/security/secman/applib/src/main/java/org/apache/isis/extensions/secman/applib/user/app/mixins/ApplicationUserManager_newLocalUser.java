@@ -66,8 +66,7 @@ extends ApplicationUserManager_newLocalUserAbstract {
 
     private final ApplicationUserManager target;
 
-    @MemberSupport
-    public ApplicationUserManager act(
+    @MemberSupport public ApplicationUserManager act(
           @Parameter(maxLength = ApplicationUser.Username.MAX_LENGTH)
           @ParameterLayout(named = "Name")
           final String username,
@@ -108,8 +107,7 @@ extends ApplicationUserManager_newLocalUserAbstract {
         return target;
     }
 
-    @MemberSupport
-    public String validateAct(
+    @MemberSupport public String validateAct(
             final String username,
             final Password newPassword,
             final Password newPasswordRepeat,
@@ -124,8 +122,7 @@ extends ApplicationUserManager_newLocalUserAbstract {
         return null;
     }
 
-    @MemberSupport
-    public ApplicationRole default3Act() {
+    @MemberSupport public ApplicationRole default3Act() {
         return applicationRoleRepository
                 .findByNameCached(configBean.getRegularUserRoleName())
                 .orElse(null);

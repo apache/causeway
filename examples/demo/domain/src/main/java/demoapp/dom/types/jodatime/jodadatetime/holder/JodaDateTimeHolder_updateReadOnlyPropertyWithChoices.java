@@ -49,19 +49,16 @@ public class JodaDateTimeHolder_updateReadOnlyPropertyWithChoices {
 
     private final JodaDateTimeHolder holder;
 
-    @MemberSupport
-    public JodaDateTimeHolder act(final org.joda.time.DateTime newValue) {
+    @MemberSupport public JodaDateTimeHolder act(final org.joda.time.DateTime newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public org.joda.time.DateTime default0Act() {
+    @MemberSupport public org.joda.time.DateTime default0Act() {
         return holder.getReadOnlyProperty();
     }
 
-    @MemberSupport
-    public List<org.joda.time.DateTime> choices0Act() {
+    @MemberSupport public List<org.joda.time.DateTime> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }
