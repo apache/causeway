@@ -6,12 +6,28 @@ import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacetFactory;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 
 import lombok.val;
 
 abstract class CallbackFacetFactoryTestAbstract
 extends AbstractFacetFactoryTest {
+
+    protected CallbackFacetFactory facetFactory;
+
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+
+        facetFactory = new CallbackFacetFactory(metaModelContext);
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        facetFactory = null;
+        super.tearDown();
+    }
 
     protected void assertPicksUp(
             final int expectedCallbackCount,

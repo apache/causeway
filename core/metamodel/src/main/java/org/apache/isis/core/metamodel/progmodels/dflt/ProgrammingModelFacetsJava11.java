@@ -44,13 +44,7 @@ import org.apache.isis.core.metamodel.facets.members.hidden.method.HideForContex
 import org.apache.isis.core.metamodel.facets.members.named.method.NamedFacetForMemberViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.object.ViewModelSemanticCheckingFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetFallbackFactory;
-import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedCallbackFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallbackFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.choices.enums.EnumFacetUsingValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFacetMethodFactory;
 import org.apache.isis.core.metamodel.facets.object.defaults.annotcfg.DefaultedFacetAnnotationElseConfigurationFactory;
@@ -162,10 +156,10 @@ import org.apache.isis.core.metamodel.services.title.TitlesAndTranslationsValida
 
 import lombok.val;
 
-public final class ProgrammingModelFacetsJava8
+public final class ProgrammingModelFacetsJava11
 extends ProgrammingModelAbstract {
 
-    public ProgrammingModelFacetsJava8(final MetaModelContext mmc) {
+    public ProgrammingModelFacetsJava11(final MetaModelContext mmc) {
         super(mmc);
 
         // act on the peer objects (FacetedMethod etc), rather than ObjectMembers etc
@@ -236,13 +230,7 @@ extends ProgrammingModelAbstract {
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new DisableForContextFacetViaMethodFactory(mmc));
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new HideForContextFacetViaMethodFactory(mmc));
 
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new CreatedCallbackFacetFactory(mmc));
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new LoadedCallbackFacetFactory(mmc));
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new PersistedCallbackFacetFactory(mmc));
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new PersistingCallbackFacetFactory(mmc));
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new UpdatingCallbackFacetFactory(mmc));
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new UpdatedCallbackFacetFactory(mmc));
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new RemovingCallbackFacetFactory(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new CallbackFacetFactory(mmc));
 
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new ValidateObjectFacetMethodFactory(mmc));
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new ObjectValidPropertiesFacetImplFactory(mmc));

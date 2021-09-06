@@ -20,6 +20,9 @@ package org.apache.isis.core.metamodel.facets.object.callbacks;
 
 import java.lang.reflect.Method;
 import java.util.function.BiFunction;
+import java.util.stream.Stream;
+
+import javax.inject.Inject;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -27,30 +30,38 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
+import org.apache.isis.core.metamodel.methods.MethodLiteralConstants.CallbackMethod;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
-import lombok.NonNull;
 import lombok.val;
 
-abstract class CallbackFacetFactoryAbstract
+public class CallbackFacetFactory
 extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private final MethodLiteralConstants.CallbackMethod callbackMethodEnum;
-    private final BiFunction<Can<Method>, FacetHolder, CallbackFacet> callbackFacetConstructor;
-
-    protected CallbackFacetFactoryAbstract(
-            final @NonNull MetaModelContext mmc,
-            final @NonNull MethodLiteralConstants.CallbackMethod callbackMethodEnum,
-            final @NonNull BiFunction<Can<Method>, FacetHolder, CallbackFacet> callbackFacetConstructor) {
-
-        super(mmc, FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, callbackMethodEnum.getMethodNames());
-        this.callbackMethodEnum = callbackMethodEnum;
-        this.callbackFacetConstructor = callbackFacetConstructor;
+    @Inject
+    public CallbackFacetFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE,
+                Stream.of(CallbackMethod.values())
+                .map(CallbackMethod::getMethodNames)
+                .flatMap(Can::stream)
+                .collect(Can.toCan()));
     }
 
     @Override
     public final void process(final ProcessClassContext processClassContext) {
+        processCallback(processClassContext, CallbackMethod.CREATED, CreatedCallbackFacetViaMethod::new);
+        processCallback(processClassContext, CallbackMethod.LOADED, LoadedCallbackFacetViaMethod::new);
+        processCallback(processClassContext, CallbackMethod.PERSISTED, PersistedCallbackFacetViaMethod::new);
+        processCallback(processClassContext, CallbackMethod.PERSISTING, PersistingCallbackFacetViaMethod::new);
+        processCallback(processClassContext, CallbackMethod.REMOVING, RemovingCallbackFacetViaMethod::new);
+        processCallback(processClassContext, CallbackMethod.UPDATED, UpdatedCallbackFacetViaMethod::new);
+        processCallback(processClassContext, CallbackMethod.UPDATING, UpdatingCallbackFacetViaMethod::new);
+    }
+
+    private void processCallback(
+            final ProcessClassContext processClassContext,
+            final CallbackMethod callbackMethodEnum,
+            final BiFunction<Can<Method>, FacetHolder, CallbackFacet> callbackFacetConstructor) {
         val cls = processClassContext.getCls();
         val facetHolder = processClassContext.getFacetHolder();
 
@@ -66,5 +77,6 @@ extends MethodPrefixBasedFacetFactoryAbstract {
             addFacet(callbackFacetConstructor.apply(callbackMethods, facetHolder));
         }
     }
+
 
 }

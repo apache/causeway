@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilter;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelService;
-import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
+import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava11;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -62,7 +62,7 @@ implements ProgrammingModelService {
 
         log.info("About to create the ProgrammingModel.");
 
-        val programmingModel = new ProgrammingModelFacetsJava8(metaModelContext);
+        val programmingModel = new ProgrammingModelFacetsJava11(metaModelContext);
 
         // from all plugins out there, add their contributed FacetFactories, Validators
         // and PostProcessors to the programming model

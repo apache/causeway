@@ -20,26 +20,10 @@
 package org.apache.isis.core.metamodel.facets.object.callback;
 
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallbackFacetFactory;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants.CallbackMethod;
 
 public class PersistingCallbackFacetFactoryTest
 extends CallbackFacetFactoryTestAbstract {
-
-    private PersistingCallbackFacetFactory facetFactory;
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        facetFactory = new PersistingCallbackFacetFactory(metaModelContext);
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        facetFactory = null;
-        super.tearDown();
-    }
 
     public void testPersistingLifecycleMethodPickedUpOn() {
         class Customer {

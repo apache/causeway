@@ -20,26 +20,10 @@
 package org.apache.isis.core.metamodel.facets.object.callback;
 
 import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacetFactory;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants.CallbackMethod;
 
 public class RemovingCallbackFacetFactoryTest
 extends CallbackFacetFactoryTestAbstract {
-
-    private RemovingCallbackFacetFactory facetFactory;
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        facetFactory = new RemovingCallbackFacetFactory(metaModelContext);
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        facetFactory = null;
-        super.tearDown();
-    }
 
     public void testRemovingLifecycleMethodPickedUpOn() {
         class Customer {

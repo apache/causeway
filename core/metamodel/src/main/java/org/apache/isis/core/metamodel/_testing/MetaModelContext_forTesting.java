@@ -27,6 +27,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.Objects.requireNonNull;
+
 import org.springframework.core.env.AbstractEnvironment;
 
 import org.apache.isis.applib.services.factory.FactoryService;
@@ -68,7 +70,7 @@ import org.apache.isis.core.metamodel.objectmanager.ObjectManagerDefault;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
-import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
+import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava11;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.core.metamodel.services.grid.GridLoaderServiceDefault;
@@ -83,8 +85,6 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
-
-import static java.util.Objects.requireNonNull;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -125,7 +125,7 @@ implements MetaModelContext {
     private SpecificationLoader specificationLoader;
 
     @Builder.Default
-    private Function<MetaModelContext,  ProgrammingModel> programmingModelFactory = ProgrammingModelFacetsJava8::new;
+    private Function<MetaModelContext,  ProgrammingModel> programmingModelFactory = ProgrammingModelFacetsJava11::new;
 
     private InteractionProvider interactionProvider;
 
