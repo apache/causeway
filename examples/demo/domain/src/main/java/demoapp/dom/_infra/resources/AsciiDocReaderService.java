@@ -73,6 +73,17 @@ public class AsciiDocReaderService {
                 configuration.getViewer().getWicket().getApplication().getVersion());
     }
 
+    private AsciiDoc toAsciiDoc(final StringReference adocRef, final Class<?> aClass) {
+        return AsciiDoc.valueOfAdoc(
+                adocRef
+                .update(this::replaceVersion)
+                //.update(this::replaceJavaSourceReferences)
+                //.update(adoc->prependSource(adoc, aClass))
+                .getValue());
+    }
+
+    // -- EXPERIMENTAL ... works within IDE, but not when packaged
+
     private String replaceJavaSourceReferences(final String adoc) {
         return _Text.getLines(adoc)
         .stream()
@@ -101,15 +112,6 @@ public class AsciiDocReaderService {
     private String prependSource(final String adoc, final Class<?> aClass) {
         val packagePath = aClass.getPackage().getName().replace('.', '/');
         return ":sourcedir: ../../domain/src/main/java/" + packagePath + "\n\n" + adoc;
-    }
-
-    private AsciiDoc toAsciiDoc(final StringReference adocRef, final Class<?> aClass) {
-        return AsciiDoc.valueOfAdoc(
-                adocRef
-                .update(this::replaceVersion)
-                .update(this::replaceJavaSourceReferences)
-                .update(adoc->prependSource(adoc, aClass))
-                .getValue());
     }
 
 
