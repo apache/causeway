@@ -40,14 +40,12 @@ public class WrapperBooleanHolder_updateReadOnlyProperty {
 
     private final WrapperBooleanHolder holder;
 
-    @MemberSupport
-    public WrapperBooleanHolder act(final Boolean newValue) {
+    @MemberSupport public WrapperBooleanHolder act(final Boolean newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public Boolean default0Act() {
+    @MemberSupport public Boolean default0Act() {
         return holder.getReadOnlyProperty();
     }
 

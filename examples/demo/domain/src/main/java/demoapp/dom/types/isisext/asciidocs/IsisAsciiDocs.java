@@ -63,8 +63,7 @@ public class IsisAsciiDocs implements HasAsciiDocDescription {
         return new IsisAsciiDocVm(initialValue);
     }
 
-    @MemberSupport
-    public AsciiDoc default0OpenViewModel() {
+    @MemberSupport public AsciiDoc default0OpenViewModel() {
         return samples.single();
     }
 

@@ -40,8 +40,7 @@ public class PropertyLayoutDescribedAsVm_updateWithParameterLayout {
     private final PropertyLayoutDescribedAsVm propertyLayoutDescribedAsVm;
 
 //tag::annotation[]
-    @MemberSupport
-    public PropertyLayoutDescribedAsVm act(
+    @MemberSupport public PropertyLayoutDescribedAsVm act(
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(
                 describedAs =
@@ -52,8 +51,7 @@ public class PropertyLayoutDescribedAsVm_updateWithParameterLayout {
         return propertyLayoutDescribedAsVm;
     }
 //end::annotation[]
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return propertyLayoutDescribedAsVm.getPropertyUsingAnnotation();
     }
 

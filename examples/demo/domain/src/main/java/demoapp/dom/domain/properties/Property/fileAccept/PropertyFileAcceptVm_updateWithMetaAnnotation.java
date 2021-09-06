@@ -40,8 +40,7 @@ public class PropertyFileAcceptVm_updateWithMetaAnnotation {
     private final PropertyFileAcceptVm propertyFileAcceptVm;
 
 //tag::meta-annotation[]
-    @MemberSupport
-    public PropertyFileAcceptVm act(
+    @MemberSupport public PropertyFileAcceptVm act(
             @FileAcceptPdfMetaAnnotation                            // <.>
             @Parameter()
             @ParameterLayout(
@@ -52,8 +51,7 @@ public class PropertyFileAcceptVm_updateWithMetaAnnotation {
         return propertyFileAcceptVm;
     }
 //end::meta-annotation[]
-    @MemberSupport
-    public Blob default0Act() {
+    @MemberSupport public Blob default0Act() {
         return propertyFileAcceptVm.getPdfPropertyUsingMetaAnnotation();
     }
 

@@ -64,8 +64,7 @@ public class PrimitiveBytes implements HasAsciiDocDescription {
     public PrimitiveByteVm openViewModel(final byte initialValue) {
         return new PrimitiveByteVm(initialValue);
     }
-    @MemberSupport
-    public byte default0OpenViewModel() {
+    @MemberSupport public byte default0OpenViewModel() {
         return (byte)123;
     }
 

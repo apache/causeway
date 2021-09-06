@@ -84,8 +84,7 @@ public class CommandServiceMenu {
     public List<CommandJdo> activeCommands() {
         return commandServiceRepository.findCurrent();
     }
-    @MemberSupport
-    public boolean hideActiveCommands() {
+    @MemberSupport public boolean hideActiveCommands() {
         return commandServiceRepository == null;
     }
 
@@ -102,16 +101,13 @@ public class CommandServiceMenu {
             final LocalDate to) {
         return commandServiceRepository.findByFromAndTo(from, to);
     }
-    @MemberSupport
-    public boolean hideFindCommands() {
+    @MemberSupport public boolean hideFindCommands() {
         return commandServiceRepository == null;
     }
-    @MemberSupport
-    public LocalDate default0FindCommands() {
+    @MemberSupport public LocalDate default0FindCommands() {
         return now().minusDays(7);
     }
-    @MemberSupport
-    public LocalDate default1FindCommands() {
+    @MemberSupport public LocalDate default1FindCommands() {
         return now();
     }
 
@@ -124,8 +120,7 @@ public class CommandServiceMenu {
             final UUID transactionId) {
         return commandServiceRepository.findByInteractionId(transactionId).orElse(null);
     }
-    @MemberSupport
-    public boolean hideFindCommandById() {
+    @MemberSupport public boolean hideFindCommandById() {
         return commandServiceRepository == null;
     }
 

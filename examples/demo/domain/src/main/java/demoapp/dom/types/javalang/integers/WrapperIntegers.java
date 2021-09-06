@@ -60,8 +60,7 @@ public class WrapperIntegers implements HasAsciiDocDescription {
     public WrapperIntegerVm openViewModel(final Integer initialValue) {
         return new WrapperIntegerVm(initialValue);
     }
-    @MemberSupport
-    public Integer default0OpenViewModel() {
+    @MemberSupport public Integer default0OpenViewModel() {
         return 12345678;
     }
 

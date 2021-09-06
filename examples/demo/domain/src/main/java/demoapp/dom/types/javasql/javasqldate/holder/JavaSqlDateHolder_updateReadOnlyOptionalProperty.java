@@ -42,8 +42,7 @@ public class JavaSqlDateHolder_updateReadOnlyOptionalProperty {
 
     private final JavaSqlDateHolder holder;
 
-    @MemberSupport
-    public JavaSqlDateHolder act(
+    @MemberSupport public JavaSqlDateHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
             final java.sql.Date newValue
     ) {
@@ -51,8 +50,7 @@ public class JavaSqlDateHolder_updateReadOnlyOptionalProperty {
         return holder;
     }
 
-    @MemberSupport
-    public java.sql.Date default0Act() {
+    @MemberSupport public java.sql.Date default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

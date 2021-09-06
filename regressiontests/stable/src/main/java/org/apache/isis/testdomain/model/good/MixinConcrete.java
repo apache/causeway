@@ -33,14 +33,12 @@ extends MixinAbstract {
 
     private final ProperMemberSupport holder;
 
-    @MemberSupport
-    public ProperMemberSupport act() {
+    @MemberSupport public ProperMemberSupport act() {
         return holder;
     }
 
-    @MemberSupport
     @Override
-    public String disableAct() {
+    @MemberSupport public String disableAct() {
         return null;
     }
 

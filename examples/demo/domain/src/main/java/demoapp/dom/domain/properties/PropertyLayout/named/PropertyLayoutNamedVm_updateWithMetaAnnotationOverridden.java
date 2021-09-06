@@ -40,8 +40,7 @@ public class PropertyLayoutNamedVm_updateWithMetaAnnotationOverridden {
     private final PropertyLayoutNamedVm propertyLayoutNamedVm;
 
 //tag::meta-annotation-overridden[]
-    @MemberSupport
-    public PropertyLayoutNamedVm act(
+    @MemberSupport public PropertyLayoutNamedVm act(
             @NamedMetaAnnotation                                        // <.>
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(
@@ -54,8 +53,7 @@ public class PropertyLayoutNamedVm_updateWithMetaAnnotationOverridden {
         return propertyLayoutNamedVm;
     }
 //end::meta-annotation-overridden[]
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return propertyLayoutNamedVm.getPropertyUsingMetaAnnotationButOverridden();
     }
 

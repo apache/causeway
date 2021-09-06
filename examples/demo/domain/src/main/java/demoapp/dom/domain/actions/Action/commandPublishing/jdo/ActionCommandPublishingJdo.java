@@ -109,8 +109,7 @@ public class ActionCommandPublishingJdo
         setProperty(value);
         return this;
     }
-    @MemberSupport
-    public String default0UpdatePropertyUsingAnnotation() {
+    @MemberSupport public String default0UpdatePropertyUsingAnnotation() {
         return getProperty();
 //tag::annotation[]
     }
@@ -133,8 +132,7 @@ public class ActionCommandPublishingJdo
         setPropertyCommandDisabled(value);
         return this;
     }
-    @MemberSupport
-    public String default0UpdatePropertyCommandDisabledUsingAnnotation() {
+    @MemberSupport public String default0UpdatePropertyCommandDisabledUsingAnnotation() {
         return getPropertyCommandDisabled();
 //tag::annotation-2[]
     }
@@ -157,8 +155,7 @@ public class ActionCommandPublishingJdo
         setPropertyMetaAnnotated(value);
         return this;
     }
-    @MemberSupport
-    public String default0UpdatePropertyUsingMetaAnnotation() {
+    @MemberSupport public String default0UpdatePropertyUsingMetaAnnotation() {
         return getPropertyMetaAnnotated();
 //tag::meta-annotation[]
     }
@@ -183,8 +180,7 @@ public class ActionCommandPublishingJdo
         setPropertyMetaAnnotatedOverridden(value);
         return this;
     }
-    @MemberSupport
-    public String default0UpdatePropertyUsingMetaAnnotationButOverridden() {
+    @MemberSupport public String default0UpdatePropertyUsingMetaAnnotationButOverridden() {
         return getPropertyMetaAnnotatedOverridden();
 //tag::meta-annotation-overridden[]
     }

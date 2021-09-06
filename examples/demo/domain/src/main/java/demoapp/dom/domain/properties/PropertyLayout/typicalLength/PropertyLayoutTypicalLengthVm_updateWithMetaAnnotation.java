@@ -40,8 +40,7 @@ public class PropertyLayoutTypicalLengthVm_updateWithMetaAnnotation {
     private final PropertyLayoutTypicalLengthVm propertyLayoutTypicalLengthVm;
 
 //tag::meta-annotation[]
-    @MemberSupport
-    public PropertyLayoutTypicalLengthVm act(
+    @MemberSupport public PropertyLayoutTypicalLengthVm act(
             @Parameter(optionality = Optionality.OPTIONAL)
             @TypicalLengthMetaAnnotation                            // <.>
             @ParameterLayout(
@@ -52,8 +51,7 @@ public class PropertyLayoutTypicalLengthVm_updateWithMetaAnnotation {
         return propertyLayoutTypicalLengthVm;
     }
 //end::meta-annotation[]
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return propertyLayoutTypicalLengthVm.getPropertyUsingMetaAnnotation();
     }
 

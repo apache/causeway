@@ -63,8 +63,7 @@ public class IsisMarkdowns implements HasAsciiDocDescription {
         return new IsisMarkdownVm(initialValue);
     }
 
-    @MemberSupport
-    public Markdown default0OpenViewModel() {
+    @MemberSupport public Markdown default0OpenViewModel() {
         return samples.single();
     }
 

@@ -39,14 +39,12 @@ public class PropertyLayoutRenderDayVm_downloadAsXml {
 
     private final PropertyLayoutRenderDayVm propertyLayoutRenderDayVm;
 
-    @MemberSupport
-    public Clob act(final String fileName) {
+    @MemberSupport public Clob act(final String fileName) {
         val xml = jaxbService.toXml(propertyLayoutRenderDayVm);
         return Clob.of(fileName, NamedWithMimeType.CommonMimeType.XML, xml);
     }
 
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return "PropertyLayoutRenderVm.xml";
     }
 

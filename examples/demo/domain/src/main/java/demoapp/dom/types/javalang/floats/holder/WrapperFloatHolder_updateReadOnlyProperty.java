@@ -40,14 +40,12 @@ public class WrapperFloatHolder_updateReadOnlyProperty {
 
     private final WrapperFloatHolder holder;
 
-    @MemberSupport
-    public WrapperFloatHolder act(final Float newValue) {
+    @MemberSupport public WrapperFloatHolder act(final Float newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public Float default0Act() {
+    @MemberSupport public Float default0Act() {
         return holder.getReadOnlyProperty();
     }
 

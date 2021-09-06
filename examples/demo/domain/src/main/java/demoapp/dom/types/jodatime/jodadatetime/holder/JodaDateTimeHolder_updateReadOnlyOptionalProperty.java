@@ -42,8 +42,7 @@ public class JodaDateTimeHolder_updateReadOnlyOptionalProperty {
 
     private final JodaDateTimeHolder holder;
 
-    @MemberSupport
-    public JodaDateTimeHolder act(
+    @MemberSupport public JodaDateTimeHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
             final org.joda.time.DateTime newValue
     ) {
@@ -51,8 +50,7 @@ public class JodaDateTimeHolder_updateReadOnlyOptionalProperty {
         return holder;
     }
 
-    @MemberSupport
-    public org.joda.time.DateTime default0Act() {
+    @MemberSupport public org.joda.time.DateTime default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

@@ -36,33 +36,27 @@ public class ProperMemberSupport_action3 {
 
     // proper mix-in action
 
-    @MemberSupport
-    public ProperMemberSupport act(final List<String> p0, final List<String> p1) {
+    @MemberSupport public ProperMemberSupport act(final List<String> p0, final List<String> p1) {
         return holder;
     }
 
-    @MemberSupport
-    public String disableAct() {
+    @MemberSupport public String disableAct() {
         return null;
     }
 
-    @MemberSupport
-    public boolean hideAct() {
+    @MemberSupport public boolean hideAct() {
         return false;
     }
 
-    @MemberSupport
-    public String validateAct(final List<String> p0, final List<String> p1) {
+    @MemberSupport public String validateAct(final List<String> p0, final List<String> p1) {
         return null;
     }
 
-    @MemberSupport
-    public Set<String> autoComplete0Act(@MinLength(3) final String search) {
+    @MemberSupport public Set<String> autoComplete0Act(@MinLength(3) final String search) {
         return null;
     }
 
-    @MemberSupport
-    public Set<String> autoComplete1Act(@MinLength(3) final String search) {
+    @MemberSupport public Set<String> autoComplete1Act(@MinLength(3) final String search) {
         return null;
     }
 
@@ -72,13 +66,11 @@ public class ProperMemberSupport_action3 {
 //        return null;
 //    }
 
-    @MemberSupport
-    public Set<String> choices0Act() {
+    @MemberSupport public Set<String> choices0Act() {
         return null;
     }
 
-    @MemberSupport
-    public Set<String> choices1Act() {
+    @MemberSupport public Set<String> choices1Act() {
         return null;
     }
 
@@ -88,23 +80,19 @@ public class ProperMemberSupport_action3 {
 //        return null;
 //    }
 
-    @MemberSupport
-    public List<String> default0Act() {
+    @MemberSupport public List<String> default0Act() {
         return null;
     }
 
-    @MemberSupport
-    public List<String> default1Act() {
+    @MemberSupport public List<String> default1Act() {
         return null;
     }
 
-    @MemberSupport
-    public String validate0Act(final List<String> p0) {
+    @MemberSupport public String validate0Act(final List<String> p0) {
         return null;
     }
 
-    @MemberSupport
-    public String validate1Act(final List<String> p1) {
+    @MemberSupport public String validate1Act(final List<String> p1) {
         return null;
     }
 

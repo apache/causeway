@@ -70,12 +70,10 @@ public class TranslationServicePoMenu {
                 .map(chars->new Clob(Util.withSuffix(potFileName, "pot"), "text/plain", chars))
                 .orElse(null);
     }
-    @MemberSupport
-    public String default0DownloadTranslations() {
+    @MemberSupport public String default0DownloadTranslations() {
         return "translations.pot";
     }
-    @MemberSupport
-    public String disableDownloadTranslations() {
+    @MemberSupport public String disableDownloadTranslations() {
         return !translationService.getMode().isWrite()
                 ? notAvailableForCurrentMode()
                 : null;
@@ -97,8 +95,7 @@ public class TranslationServicePoMenu {
     public void resetTranslationCache() {
         translationService.clearCache();
     }
-    @MemberSupport
-    public String disableResetTranslationCache() {
+    @MemberSupport public String disableResetTranslationCache() {
         return !translationService.getMode().isRead()
                 ? notAvailableForCurrentMode()
                 : null;
@@ -119,8 +116,7 @@ public class TranslationServicePoMenu {
     public void switchToReadingTranslations() {
         translationService.toggleMode();
     }
-    @MemberSupport
-    public String disableSwitchToReadingTranslations() {
+    @MemberSupport public String disableSwitchToReadingTranslations() {
         return !translationService.getMode().isWrite()
                 ? notAvailableForCurrentMode()
                 : null;
@@ -142,8 +138,7 @@ public class TranslationServicePoMenu {
     public void switchToWritingTranslations() {
         translationService.toggleMode();
     }
-    @MemberSupport
-    public String disableSwitchToWritingTranslations() {
+    @MemberSupport public String disableSwitchToWritingTranslations() {
         return !translationService.getMode().isRead()
                 ? notAvailableForCurrentMode()
                 : null;

@@ -65,8 +65,7 @@ public class PrimitiveBooleans implements HasAsciiDocDescription {
         return new PrimitiveBooleanVm(initialValue);
     }
     // TODO: there is a bug in the UI, requiring the user to explicitly set/unset the value (even though looks like is set)
-    @MemberSupport
-    public boolean default0OpenViewModel() {
+    @MemberSupport public boolean default0OpenViewModel() {
         return true;
     }
 

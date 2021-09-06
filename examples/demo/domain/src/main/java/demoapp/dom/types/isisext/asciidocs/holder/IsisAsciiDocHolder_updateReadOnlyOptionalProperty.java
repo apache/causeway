@@ -43,8 +43,7 @@ public class IsisAsciiDocHolder_updateReadOnlyOptionalProperty {
 
     private final IsisAsciiDocHolder holder;
 
-    @MemberSupport
-    public IsisAsciiDocHolder act(
+    @MemberSupport public IsisAsciiDocHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
             final AsciiDoc newValue
     ) {
@@ -52,8 +51,7 @@ public class IsisAsciiDocHolder_updateReadOnlyOptionalProperty {
         return holder;
     }
 
-    @MemberSupport
-    public AsciiDoc default0Act() {
+    @MemberSupport public AsciiDoc default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

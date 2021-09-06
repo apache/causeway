@@ -72,8 +72,7 @@ public class XmlSnapshotParentVm_takeXmlSnapshot {
 //end::SnapshotType[]
 
 //tag::class[]
-    @MemberSupport
-    public Clob act(
+    @MemberSupport public Clob act(
             final PathsToInclude pathsToInclude,
             final SnapshotType snapshotType) {
         val builder = xmlSnapshotService.builderFor(xmlSnapshotParentVm);
@@ -87,12 +86,10 @@ public class XmlSnapshotParentVm_takeXmlSnapshot {
         return asClob(fileName, xmlService.asString(doc));
     }
 //end::class[]
-    @MemberSupport
-    public PathsToInclude default0Act() {
+    @MemberSupport public PathsToInclude default0Act() {
         return PathsToInclude.NONE;
     }
-    @MemberSupport
-    public SnapshotType default1Act() {
+    @MemberSupport public SnapshotType default1Act() {
         return SnapshotType.XML;
     }
 

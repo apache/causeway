@@ -39,8 +39,7 @@ public class PropertyMustSatisfyVm_updateWithParameterLayout {
     private final PropertyMustSatisfyVm propertyMustSatisfyVm;
 
 //tag::annotation[]
-    @MemberSupport
-    public PropertyMustSatisfyVm act(
+    @MemberSupport public PropertyMustSatisfyVm act(
             @Parameter(
                 mustSatisfy = OfWorkingAgeSpecification.class   // <.>
             )
@@ -53,8 +52,7 @@ public class PropertyMustSatisfyVm_updateWithParameterLayout {
         return propertyMustSatisfyVm;
     }
 //end::annotation[]
-    @MemberSupport
-    public Integer default0Act() {
+    @MemberSupport public Integer default0Act() {
         return propertyMustSatisfyVm.getCustomerAgePropertyUsingAnnotation();
     }
 

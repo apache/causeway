@@ -47,13 +47,11 @@ public class ActionDomainEventVm_mixinUpdateText {
 
     private final ActionDomainEventVm actionDomainEventVm;
 
-    @MemberSupport
-    public ActionDomainEventVm act(final String text) {
+    @MemberSupport public ActionDomainEventVm act(final String text) {
         actionDomainEventVm.setText(text);
         return actionDomainEventVm;
     }
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return actionDomainEventVm.getText();
     }
 }

@@ -42,8 +42,7 @@ public class JavaMathBigIntegerHolder_updateReadOnlyOptionalProperty {
 
     private final JavaMathBigIntegerHolder holder;
 
-    @MemberSupport
-    public JavaMathBigIntegerHolder act(
+    @MemberSupport public JavaMathBigIntegerHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
             final java.math.BigInteger newValue
     ) {
@@ -51,8 +50,7 @@ public class JavaMathBigIntegerHolder_updateReadOnlyOptionalProperty {
         return holder;
     }
 
-    @MemberSupport
-    public java.math.BigInteger default0Act() {
+    @MemberSupport public java.math.BigInteger default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

@@ -39,14 +39,12 @@ public class ActionSemanticsVm_mixinIncrementNoAnnotation {
 
     private final ActionSemanticsVm actionSemanticsVm;
 
-    @MemberSupport
-    public ActionSemanticsVm act(final int incrementBy) {
+    @MemberSupport public ActionSemanticsVm act(final int incrementBy) {
         actionSemanticsVm.setPropertyNoAnnotation(
                 actionSemanticsVm.getPropertyNoAnnotation() + incrementBy);
         return actionSemanticsVm;
     }
-    @MemberSupport
-    public int default0Act() {
+    @MemberSupport public int default0Act() {
         return 1;
     }
 }

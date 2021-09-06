@@ -64,8 +64,7 @@ public class PrimitiveShorts implements HasAsciiDocDescription {
     public PrimitiveShortVm openViewModel(final short initialValue) {
         return new PrimitiveShortVm(initialValue);
     }
-    @MemberSupport
-    public short default0OpenViewModel() {
+    @MemberSupport public short default0OpenViewModel() {
         return 12345;
     }
 

@@ -42,8 +42,7 @@ public class JavaTimeLocalDateHolder_updateReadOnlyOptionalProperty {
 
     private final JavaTimeLocalDateHolder holder;
 
-    @MemberSupport
-    public JavaTimeLocalDateHolder act(
+    @MemberSupport public JavaTimeLocalDateHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
             final java.time.LocalDate newValue
     ) {
@@ -51,8 +50,7 @@ public class JavaTimeLocalDateHolder_updateReadOnlyOptionalProperty {
         return holder;
     }
 
-    @MemberSupport
-    public java.time.LocalDate default0Act() {
+    @MemberSupport public java.time.LocalDate default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

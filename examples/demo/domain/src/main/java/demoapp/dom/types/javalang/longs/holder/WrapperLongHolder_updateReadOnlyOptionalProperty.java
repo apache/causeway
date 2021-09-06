@@ -42,8 +42,7 @@ public class WrapperLongHolder_updateReadOnlyOptionalProperty {
 
     private final WrapperLongHolder holder;
 
-    @MemberSupport
-    public WrapperLongHolder act(
+    @MemberSupport public WrapperLongHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
             final Long newValue
     ) {
@@ -51,8 +50,7 @@ public class WrapperLongHolder_updateReadOnlyOptionalProperty {
         return holder;
     }
 
-    @MemberSupport
-    public Long default0Act() {
+    @MemberSupport public Long default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

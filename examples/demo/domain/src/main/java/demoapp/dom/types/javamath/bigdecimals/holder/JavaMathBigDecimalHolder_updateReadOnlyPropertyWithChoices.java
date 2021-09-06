@@ -48,19 +48,16 @@ public class JavaMathBigDecimalHolder_updateReadOnlyPropertyWithChoices {
 
     private final JavaMathBigDecimalHolder holder;
 
-    @MemberSupport
-    public JavaMathBigDecimalHolder act(final java.math.BigDecimal newValue) {
+    @MemberSupport public JavaMathBigDecimalHolder act(final java.math.BigDecimal newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public java.math.BigDecimal default0Act() {
+    @MemberSupport public java.math.BigDecimal default0Act() {
         return holder.getReadOnlyProperty();
     }
 
-    @MemberSupport
-    public List<java.math.BigDecimal> choices0Act() {
+    @MemberSupport public List<java.math.BigDecimal> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }

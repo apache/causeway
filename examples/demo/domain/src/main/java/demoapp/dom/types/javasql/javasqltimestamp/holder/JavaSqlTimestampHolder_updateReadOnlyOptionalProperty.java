@@ -43,8 +43,7 @@ public class JavaSqlTimestampHolder_updateReadOnlyOptionalProperty {
 
     private final JavaSqlTimestampHolder holder;
 
-    @MemberSupport
-    public JavaSqlTimestampHolder act(
+    @MemberSupport public JavaSqlTimestampHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
             final java.sql.Timestamp newValue
     ) {
@@ -52,8 +51,7 @@ public class JavaSqlTimestampHolder_updateReadOnlyOptionalProperty {
         return holder;
     }
 
-    @MemberSupport
-    public java.sql.Timestamp default0Act() {
+    @MemberSupport public java.sql.Timestamp default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

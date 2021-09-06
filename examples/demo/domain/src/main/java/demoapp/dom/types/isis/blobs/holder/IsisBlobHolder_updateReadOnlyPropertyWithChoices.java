@@ -48,19 +48,16 @@ public class IsisBlobHolder_updateReadOnlyPropertyWithChoices {
 
     private final IsisBlobHolder holder;
 
-    @MemberSupport
-    public IsisBlobHolder act(final Blob newValue) {
+    @MemberSupport public IsisBlobHolder act(final Blob newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public Blob default0Act() {
+    @MemberSupport public Blob default0Act() {
         return holder.getReadOnlyProperty();
     }
 
-    @MemberSupport
-    public List<Blob> choices0Act() {
+    @MemberSupport public List<Blob> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }

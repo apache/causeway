@@ -42,8 +42,7 @@ public class JodaLocalTimeHolder_updateReadOnlyOptionalProperty {
 
     private final JodaLocalTimeHolder holder;
 
-    @MemberSupport
-    public JodaLocalTimeHolder act(
+    @MemberSupport public JodaLocalTimeHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
             final org.joda.time.LocalTime newValue
     ) {
@@ -51,8 +50,7 @@ public class JodaLocalTimeHolder_updateReadOnlyOptionalProperty {
         return holder;
     }
 
-    @MemberSupport
-    public org.joda.time.LocalTime default0Act() {
+    @MemberSupport public org.joda.time.LocalTime default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

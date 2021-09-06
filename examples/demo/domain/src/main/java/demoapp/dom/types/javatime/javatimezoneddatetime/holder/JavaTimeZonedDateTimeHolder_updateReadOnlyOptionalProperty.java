@@ -42,8 +42,7 @@ public class JavaTimeZonedDateTimeHolder_updateReadOnlyOptionalProperty {
 
     private final JavaTimeZonedDateTimeHolder holder;
 
-    @MemberSupport
-    public JavaTimeZonedDateTimeHolder act(
+    @MemberSupport public JavaTimeZonedDateTimeHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
             final java.time.ZonedDateTime newValue
     ) {
@@ -51,8 +50,7 @@ public class JavaTimeZonedDateTimeHolder_updateReadOnlyOptionalProperty {
         return holder;
     }
 
-    @MemberSupport
-    public java.time.ZonedDateTime default0Act() {
+    @MemberSupport public java.time.ZonedDateTime default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

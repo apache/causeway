@@ -50,15 +50,13 @@ public class WrapperFactoryEntity_mixinUpdatePropertyAsync {
     private final WrapperFactoryEntity wrapperFactoryEntity;
 
 //tag::class[]
-    @MemberSupport
-    public WrapperFactoryEntity act(final String value) {
+    @MemberSupport public WrapperFactoryEntity act(final String value) {
         val control = AsyncControl.returningVoid().withSkipRules();
         val wrapped = this.wrapperFactory.asyncWrap(this.wrapperFactoryEntity, control);
         wrapped.setPropertyAsync(value);
         return this.wrapperFactoryEntity;
     }
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return wrapperFactoryEntity.getPropertyAsync();
     }
 }

@@ -74,8 +74,7 @@ public class AppTenancyVm implements HasAsciiDocDescription {
         applicationTenancyEvaluatorForDemo.setHideRegex(regex);
         return this;
     }
-    @MemberSupport
-    public String default0UpdateHideRegex() {
+    @MemberSupport public String default0UpdateHideRegex() {
         return getHideRegex();
     }
 //end::hideRegex[]
@@ -94,8 +93,7 @@ public class AppTenancyVm implements HasAsciiDocDescription {
         applicationTenancyEvaluatorForDemo.setDisableRegex(regex);
         return this;
     }
-    @MemberSupport
-    public String default0UpdateDisableRegex() {
+    @MemberSupport public String default0UpdateDisableRegex() {
         return getDisableRegex();
     }
 //end::disableRegex[]

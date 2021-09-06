@@ -61,8 +61,7 @@ public class JavaUtilUuids implements HasAsciiDocDescription {
     public JavaUtilUuidVm openViewModel(final java.util.UUID initialValue) {
         return new JavaUtilUuidVm(initialValue);
     }
-    @MemberSupport
-    public java.util.UUID default0OpenViewModel() {
+    @MemberSupport public java.util.UUID default0OpenViewModel() {
         return samples.single();
     }
 

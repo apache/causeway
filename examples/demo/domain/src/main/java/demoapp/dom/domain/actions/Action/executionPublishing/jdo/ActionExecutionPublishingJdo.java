@@ -101,8 +101,7 @@ public class ActionExecutionPublishingJdo
         setProperty(value);
         return this;
     }
-    @MemberSupport
-    public String default0UpdatePropertyUsingAnnotation() {
+    @MemberSupport public String default0UpdatePropertyUsingAnnotation() {
         return getProperty();
     }
 
@@ -123,8 +122,7 @@ public class ActionExecutionPublishingJdo
         setPropertyMetaAnnotated(value);
         return this;
     }
-    @MemberSupport
-    public String default0UpdatePropertyUsingMetaAnnotation() {
+    @MemberSupport public String default0UpdatePropertyUsingMetaAnnotation() {
         return getPropertyMetaAnnotated();
     }
 //end::meta-annotation[]
@@ -147,8 +145,7 @@ public class ActionExecutionPublishingJdo
         setPropertyMetaAnnotatedOverridden(value);
         return this;
     }
-    @MemberSupport
-    public String default0UpdatePropertyUsingMetaAnnotationButOverridden() {
+    @MemberSupport public String default0UpdatePropertyUsingMetaAnnotationButOverridden() {
         return getPropertyMetaAnnotatedOverridden();
     }
 //end::meta-annotation-overridden[]

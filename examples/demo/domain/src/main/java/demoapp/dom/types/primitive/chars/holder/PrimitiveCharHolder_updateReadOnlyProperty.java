@@ -40,14 +40,12 @@ public class PrimitiveCharHolder_updateReadOnlyProperty {
 
     private final PrimitiveCharHolder holder;
 
-    @MemberSupport
-    public PrimitiveCharHolder act(final char newValue) {
+    @MemberSupport public PrimitiveCharHolder act(final char newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public char default0Act() {
+    @MemberSupport public char default0Act() {
         return holder.getReadOnlyProperty();
     }
 

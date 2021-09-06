@@ -42,8 +42,7 @@ public class WrapperBooleanHolder_updateReadOnlyOptionalProperty {
 
     private final WrapperBooleanHolder holder;
 
-    @MemberSupport
-    public WrapperBooleanHolder act(
+    @MemberSupport public WrapperBooleanHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
             final Boolean newValue
     ) {
@@ -51,8 +50,7 @@ public class WrapperBooleanHolder_updateReadOnlyOptionalProperty {
         return holder;
     }
 
-    @MemberSupport
-    public Boolean default0Act() {
+    @MemberSupport public Boolean default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

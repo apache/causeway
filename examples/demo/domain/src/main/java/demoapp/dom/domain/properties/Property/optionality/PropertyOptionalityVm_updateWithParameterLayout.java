@@ -40,8 +40,7 @@ public class PropertyOptionalityVm_updateWithParameterLayout {
     private final PropertyOptionalityVm propertyOptionalityVm;
 
 //tag::annotation[]
-    @MemberSupport
-    public PropertyOptionalityVm act(
+    @MemberSupport public PropertyOptionalityVm act(
             @Parameter(
                 optionality = Optionality.OPTIONAL
             )
@@ -54,8 +53,7 @@ public class PropertyOptionalityVm_updateWithParameterLayout {
         return propertyOptionalityVm;
     }
 //end::annotation[]
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return propertyOptionalityVm.getPropertyUsingAnnotation();
     }
 

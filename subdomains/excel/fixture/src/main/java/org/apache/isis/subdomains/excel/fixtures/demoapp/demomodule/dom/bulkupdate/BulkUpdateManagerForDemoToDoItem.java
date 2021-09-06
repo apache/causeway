@@ -108,8 +108,7 @@ public class BulkUpdateManagerForDemoToDoItem {
         setFileName(fileName);
         return this;
     }
-    @MemberSupport
-    public String default0ChangeFileName() {
+    @MemberSupport public String default0ChangeFileName() {
         return getFileName();
     }
 
@@ -126,25 +125,20 @@ public class BulkUpdateManagerForDemoToDoItem {
         setComplete(completed);
         return this;
     }
-    @MemberSupport
-    public Category default0Select() {
+    @MemberSupport public Category default0Select() {
         return getCategory();
     }
-    @MemberSupport
-    public Subcategory default1Select() {
+    @MemberSupport public Subcategory default1Select() {
         return getSubcategory();
     }
-    @MemberSupport
-    public boolean default2Select() {
+    @MemberSupport public boolean default2Select() {
         return isComplete();
     }
-    @MemberSupport
-    public List<Subcategory> choices1Select(
+    @MemberSupport public List<Subcategory> choices1Select(
             final Category category) {
         return Subcategory.listFor(category);
     }
-    @MemberSupport
-    public String validateSelect(
+    @MemberSupport public String validateSelect(
             final Category category,
             final Subcategory subcategory,
             final boolean completed) {
@@ -169,8 +163,7 @@ public class BulkUpdateManagerForDemoToDoItem {
         final List<ExcelDemoToDoItem> items = getToDoItems();
         return toExcel(fileName, items);
     }
-    @MemberSupport
-    public String disableExport() {
+    @MemberSupport public String disableExport() {
         return getFileName() == null? "file name is required": null;
     }
 

@@ -50,19 +50,16 @@ public class JavaAwtBufferedImageHolder_updateReadOnlyPropertyWithChoices {
 
     private final JavaAwtBufferedImageHolder holder;
 
-    @MemberSupport
-    public JavaAwtBufferedImageHolder act(final BufferedImage newValue) {
+    @MemberSupport public JavaAwtBufferedImageHolder act(final BufferedImage newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public BufferedImage default0Act() {
+    @MemberSupport public BufferedImage default0Act() {
         return holder.getReadOnlyProperty();
     }
 
-    @MemberSupport
-    public List<BufferedImage> choices0Act() {
+    @MemberSupport public List<BufferedImage> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }

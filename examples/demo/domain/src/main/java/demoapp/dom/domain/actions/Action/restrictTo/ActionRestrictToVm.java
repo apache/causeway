@@ -112,8 +112,7 @@ public class ActionRestrictToVm implements HasAsciiDocDescription {
         setPropertyNoAnnotation(text);
         return this;
     }
-    @MemberSupport
-    public String default0UpdateNoAnnotation() {
+    @MemberSupport public String default0UpdateNoAnnotation() {
         return getPropertyNoAnnotation();
     }
 //end::action-no-annotation[]
@@ -133,8 +132,7 @@ public class ActionRestrictToVm implements HasAsciiDocDescription {
         setPropertyForPrototyping(text);
         return this;
     }
-    @MemberSupport
-    public String default0UpdateRestrictToPrototyping() {
+    @MemberSupport public String default0UpdateRestrictToPrototyping() {
         return getPropertyForPrototyping();
     }
 //end::action-restrict-to-prototyping[]
@@ -154,8 +152,7 @@ public class ActionRestrictToVm implements HasAsciiDocDescription {
         setPropertyForNoRestrictions(text);
         return this;
     }
-    @MemberSupport
-    public String default0UpdateRestrictToNoRestrictions() {
+    @MemberSupport public String default0UpdateRestrictToNoRestrictions() {
         return getPropertyForNoRestrictions();
     }
 //end::action-restrict-to-no-restrictions[]
@@ -175,8 +172,7 @@ public class ActionRestrictToVm implements HasAsciiDocDescription {
         setPropertyForMetaAnnotations(text);
         return this;
     }
-    @MemberSupport
-    public String default0UpdateMetaAnnotated() {
+    @MemberSupport public String default0UpdateMetaAnnotated() {
         return getPropertyForMetaAnnotations();
     }
 //end::action-meta-annotated[]
@@ -198,8 +194,7 @@ public class ActionRestrictToVm implements HasAsciiDocDescription {
         setPropertyForMetaAnnotationsOverridden(text);
         return this;
     }
-    @MemberSupport
-    public String default0UpdateMetaAnnotatedOverridden() {
+    @MemberSupport public String default0UpdateMetaAnnotatedOverridden() {
         return getPropertyForMetaAnnotationsOverridden();
     }
 //end::action-meta-annotated-overridden[]

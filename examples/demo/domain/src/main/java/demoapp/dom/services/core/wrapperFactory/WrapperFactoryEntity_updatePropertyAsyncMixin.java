@@ -43,13 +43,11 @@ public class WrapperFactoryEntity_updatePropertyAsyncMixin {
     private final WrapperFactoryEntity wrapperFactoryEntity;
 
 //tag::class[]
-    @MemberSupport
-    public WrapperFactoryEntity act(final String value) {
+    @MemberSupport public WrapperFactoryEntity act(final String value) {
         wrapperFactoryEntity.setPropertyAsyncMixin(value);
         return wrapperFactoryEntity;
     }
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return wrapperFactoryEntity.getPropertyAsyncMixin();
     }
 }

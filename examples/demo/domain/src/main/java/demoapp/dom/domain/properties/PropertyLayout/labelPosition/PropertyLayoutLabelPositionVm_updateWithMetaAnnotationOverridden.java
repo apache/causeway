@@ -41,8 +41,7 @@ public class PropertyLayoutLabelPositionVm_updateWithMetaAnnotationOverridden {
     private final PropertyLayoutLabelPositionVm propertyLayoutLabelPositionVm;
 
 //tag::meta-annotation-overridden[]
-    @MemberSupport
-    public PropertyLayoutLabelPositionVm act(
+    @MemberSupport public PropertyLayoutLabelPositionVm act(
             @LabelPositionTopMetaAnnotation                             // <.>
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(
@@ -55,8 +54,7 @@ public class PropertyLayoutLabelPositionVm_updateWithMetaAnnotationOverridden {
         return propertyLayoutLabelPositionVm;
     }
 //end::meta-annotation-overridden[]
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return propertyLayoutLabelPositionVm.getPropertyUsingMetaAnnotationButOverridden();
     }
 

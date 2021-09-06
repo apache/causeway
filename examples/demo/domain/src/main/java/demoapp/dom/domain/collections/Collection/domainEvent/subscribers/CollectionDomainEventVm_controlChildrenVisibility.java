@@ -46,13 +46,11 @@ public class CollectionDomainEventVm_controlChildrenVisibility {
 
     private final CollectionDomainEventVm collectionDomainEventVm;
 
-    @MemberSupport
-    public CollectionDomainEventVm act(final CollectionDomainEventControlStrategy controlStrategy) {
+    @MemberSupport public CollectionDomainEventVm act(final CollectionDomainEventControlStrategy controlStrategy) {
         eventControlService.controlStrategy = controlStrategy;
         return collectionDomainEventVm;
     }
-    @MemberSupport
-    public CollectionDomainEventControlStrategy default0Act() {
+    @MemberSupport public CollectionDomainEventControlStrategy default0Act() {
         return eventControlService.controlStrategy;
     }
 

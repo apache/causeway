@@ -45,13 +45,11 @@ public class ActionRestrictToVm_mixinUpdateMetaAnnotatedOverridden {
 
     private final ActionRestrictToVm actionRestrictToVm;
 
-    @MemberSupport
-    public ActionRestrictToVm act(final String text) {
+    @MemberSupport public ActionRestrictToVm act(final String text) {
         actionRestrictToVm.setPropertyForMetaAnnotationsOverridden(text);
         return actionRestrictToVm;
     }
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return actionRestrictToVm.getPropertyForMetaAnnotationsOverridden();
     }
 }

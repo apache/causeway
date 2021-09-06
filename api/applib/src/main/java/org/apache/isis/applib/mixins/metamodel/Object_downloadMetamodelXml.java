@@ -71,8 +71,7 @@ public class Object_downloadMetamodelXml {
     public static class ActionDomainEvent
     extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Object_downloadMetamodelXml> {}
 
-    @MemberSupport
-    public Object act(
+    @MemberSupport public Object act(
             @ParameterLayout(
                     named = DtoMixinConstants.FILENAME_PROPERTY_NAME,
                     describedAs = DtoMixinConstants.FILENAME_PROPERTY_DESCRIPTION)
@@ -110,8 +109,7 @@ public class Object_downloadMetamodelXml {
     /**
      * Defaults to the simple name of the domain object's class.
      */
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return holder.getClass().getSimpleName();
     }
 

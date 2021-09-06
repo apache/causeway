@@ -48,19 +48,16 @@ public class JavaMathBigIntegerHolder_updateReadOnlyPropertyWithChoices {
 
     private final JavaMathBigIntegerHolder holder;
 
-    @MemberSupport
-    public JavaMathBigIntegerHolder act(final java.math.BigInteger newValue) {
+    @MemberSupport public JavaMathBigIntegerHolder act(final java.math.BigInteger newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public java.math.BigInteger default0Act() {
+    @MemberSupport public java.math.BigInteger default0Act() {
         return holder.getReadOnlyProperty();
     }
 
-    @MemberSupport
-    public List<java.math.BigInteger> choices0Act() {
+    @MemberSupport public List<java.math.BigInteger> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }

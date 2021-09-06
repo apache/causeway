@@ -64,8 +64,7 @@ public class PrimitiveLongs implements HasAsciiDocDescription {
     public PrimitiveLongVm openViewModel(final long initialValue) {
         return new PrimitiveLongVm(initialValue);
     }
-    @MemberSupport
-    public long default0OpenViewModel() {
+    @MemberSupport public long default0OpenViewModel() {
         return 123_456_789_012L;
     }
 

@@ -44,14 +44,12 @@ public class JavaAwtBufferedImageHolder_updateReadOnlyProperty {
 
     private final JavaAwtBufferedImageHolder holder;
 
-    @MemberSupport
-    public JavaAwtBufferedImageHolder act(final BufferedImage newValue) {
+    @MemberSupport public JavaAwtBufferedImageHolder act(final BufferedImage newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public BufferedImage default0Act() {
+    @MemberSupport public BufferedImage default0Act() {
         return holder.getReadOnlyProperty();
     }
 

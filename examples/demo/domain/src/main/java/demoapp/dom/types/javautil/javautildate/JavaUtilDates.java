@@ -60,8 +60,7 @@ public class JavaUtilDates implements HasAsciiDocDescription {
     public JavaUtilDateVm openViewModel(final java.util.Date initialValue) {
         return new JavaUtilDateVm(initialValue);
     }
-    @MemberSupport
-    public java.util.Date default0OpenViewModel() {
+    @MemberSupport public java.util.Date default0OpenViewModel() {
         return new java.util.Date(120,1,1); // 1900 is the epoch
     }
 

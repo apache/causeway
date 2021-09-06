@@ -38,13 +38,11 @@ public class ActionAssociateWithVm_updateOtherProperty {
 
     private final ActionAssociateWithVm actionAssociateWithVm;
 
-    @MemberSupport
-    public ActionAssociateWithVm act(final String newValue) {
+    @MemberSupport public ActionAssociateWithVm act(final String newValue) {
         actionAssociateWithVm.setOtherProperty(newValue);
         return actionAssociateWithVm;
     }
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return actionAssociateWithVm.getOtherProperty();
     }
 }

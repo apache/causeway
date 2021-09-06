@@ -42,16 +42,14 @@ public class WrapperIntegerHolder_updateReadOnlyOptionalProperty {
 
     private final WrapperIntegerHolder holder;
 
-    @MemberSupport
-    public WrapperIntegerHolder act(
+    @MemberSupport public WrapperIntegerHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
             final Integer newValue
     ) {
         holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
-    @MemberSupport
-    public Integer default0Act() {
+    @MemberSupport public Integer default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

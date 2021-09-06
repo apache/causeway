@@ -42,8 +42,7 @@ public class JavaTimeOffsetDateTimeHolder_updateReadOnlyOptionalProperty {
 
     private final JavaTimeOffsetDateTimeHolder holder;
 
-    @MemberSupport
-    public JavaTimeOffsetDateTimeHolder act(
+    @MemberSupport public JavaTimeOffsetDateTimeHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
             final java.time.OffsetDateTime newValue
     ) {
@@ -51,8 +50,7 @@ public class JavaTimeOffsetDateTimeHolder_updateReadOnlyOptionalProperty {
         return holder;
     }
 
-    @MemberSupport
-    public java.time.OffsetDateTime default0Act() {
+    @MemberSupport public java.time.OffsetDateTime default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

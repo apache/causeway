@@ -47,19 +47,16 @@ public class WrapperFloatHolder_updateReadOnlyPropertyWithChoices {
 
     private final WrapperFloatHolder holder;
 
-    @MemberSupport
-    public WrapperFloatHolder act(final Float newValue) {
+    @MemberSupport public WrapperFloatHolder act(final Float newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public Float default0Act() {
+    @MemberSupport public Float default0Act() {
         return holder.getReadOnlyProperty();
     }
 
-    @MemberSupport
-    public List<Float> choices0Act() {
+    @MemberSupport public List<Float> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }

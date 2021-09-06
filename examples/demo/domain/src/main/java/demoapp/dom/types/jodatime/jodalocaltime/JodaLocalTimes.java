@@ -65,8 +65,7 @@ public class JodaLocalTimes implements HasAsciiDocDescription {
     public JodaLocalTimeVm openViewModel(final org.joda.time.LocalTime initialValue) {
         return new JodaLocalTimeVm(initialValue);
     }
-    @MemberSupport
-    public org.joda.time.LocalTime default0OpenViewModel() {
+    @MemberSupport public org.joda.time.LocalTime default0OpenViewModel() {
         return samples.single();
     }
 

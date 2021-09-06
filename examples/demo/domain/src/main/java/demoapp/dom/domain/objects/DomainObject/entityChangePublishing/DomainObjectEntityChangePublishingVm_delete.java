@@ -45,8 +45,7 @@ public class DomainObjectEntityChangePublishingVm_delete {
         this.domainObjectAuditingVm = domainObjectAuditingVm;
     }
 
-    @MemberSupport
-    public DomainObjectEntityChangePublishingVm act(
+    @MemberSupport public DomainObjectEntityChangePublishingVm act(
             @Nullable final DomainObjectEntityChangePublishingEnabledEntity enabledEntity
             , @Nullable final DomainObjectEntityChangePublishingDisabledEntity disabledEntity
             , @Nullable final DomainObjectEntityChangePublishingEnabledMetaAnnotatedEntity metaAnnotatedEntity
@@ -66,24 +65,19 @@ public class DomainObjectEntityChangePublishingVm_delete {
         }
         return domainObjectAuditingVm;
     }
-    @MemberSupport
-    public DomainObjectEntityChangePublishingEnabledEntity default0Act() {
+    @MemberSupport public DomainObjectEntityChangePublishingEnabledEntity default0Act() {
         return publishingEnabledEntities.first().orElse(null);
     }
-    @MemberSupport
-    public DomainObjectEntityChangePublishingDisabledEntity default1Act() {
+    @MemberSupport public DomainObjectEntityChangePublishingDisabledEntity default1Act() {
         return publishingDisabledEntities.first().orElse(null);
     }
-    @MemberSupport
-    public DomainObjectEntityChangePublishingEnabledMetaAnnotatedEntity default2Act() {
+    @MemberSupport public DomainObjectEntityChangePublishingEnabledMetaAnnotatedEntity default2Act() {
         return publishingEnabledMetaAnnotatedEntities.first().orElse(null);
     }
-    @MemberSupport
-    public DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenEntity default3Act() {
+    @MemberSupport public DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenEntity default3Act() {
         return publishingEnabledMetaAnnotOverriddenEntities.first().orElse(null);
     }
-    @MemberSupport
-    public String disableAct() {
+    @MemberSupport public String disableAct() {
         if(!publishingEnabledEntities.first().isPresent()) { return "No EnabledJdo to delete"; }
         if(!publishingDisabledEntities.first().isPresent()) { return "No DisabledJdo to delete"; }
         if(!publishingEnabledMetaAnnotatedEntities.first().isPresent()) { return "No MetaAnnotated to delete"; }

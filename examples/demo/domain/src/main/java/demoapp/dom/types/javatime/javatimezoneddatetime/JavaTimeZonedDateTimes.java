@@ -61,8 +61,7 @@ public class JavaTimeZonedDateTimes implements HasAsciiDocDescription {
     public JavaTimeZonedDateTimeVm openViewModel(final java.time.ZonedDateTime initialValue) {
         return new JavaTimeZonedDateTimeVm(initialValue);
     }
-    @MemberSupport
-    public java.time.ZonedDateTime default0OpenViewModel() {
+    @MemberSupport public java.time.ZonedDateTime default0OpenViewModel() {
         return java.time.ZonedDateTime.of(120,1,1, 1, 1, 1, 1, ZoneOffset.UTC);
     }
 

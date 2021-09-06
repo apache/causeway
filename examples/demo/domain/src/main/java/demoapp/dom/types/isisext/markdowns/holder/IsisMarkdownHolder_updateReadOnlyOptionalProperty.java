@@ -43,8 +43,7 @@ public class IsisMarkdownHolder_updateReadOnlyOptionalProperty {
 
     private final IsisMarkdownHolder holder;
 
-    @MemberSupport
-    public IsisMarkdownHolder act(
+    @MemberSupport public IsisMarkdownHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
             final Markdown newValue
     ) {
@@ -52,8 +51,7 @@ public class IsisMarkdownHolder_updateReadOnlyOptionalProperty {
         return holder;
     }
 
-    @MemberSupport
-    public Markdown default0Act() {
+    @MemberSupport public Markdown default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

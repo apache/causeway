@@ -52,8 +52,7 @@ public class DependentArgsActionDemo_useAutoComplete {
         DemoItem item1;
     }
 
-    @MemberSupport
-    public DependentArgsActionDemo act(
+    @MemberSupport public DependentArgsActionDemo act(
 
             // PARAM 0
             @Parameter(optionality = Optionality.MANDATORY) final
@@ -71,15 +70,13 @@ public class DependentArgsActionDemo_useAutoComplete {
 
     // -- PARAM 0 (Parity)
 
-    @MemberSupport
-    public Parity default0Act() {
+    @MemberSupport public Parity default0Act() {
         return holder.getDialogParityDefault();
     }
 
     // -- PARAM 1 (DemoItem)
 
-    @MemberSupport
-    public Collection<DemoItem> autoComplete1Act(
+    @MemberSupport public Collection<DemoItem> autoComplete1Act(
             final Parameters params,
             @MinLength(3) final String search) {
 

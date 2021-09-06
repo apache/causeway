@@ -87,8 +87,7 @@ public class ActionDomainEventVm implements HasAsciiDocDescription {
         setText(text);
         return this;
     }
-    @MemberSupport
-    public String default0UpdateText() {
+    @MemberSupport public String default0UpdateText() {
         return getText();
     }
 }

@@ -45,13 +45,12 @@ public class ActionCommandPublishingEntity_mixinUpdatePropertyCommandDisabled {
 
     private final ActionCommandPublishingEntity actionCommandEntity;
 
-    @MemberSupport
-    public ActionCommandPublishingEntity act(final String value) {
+    @MemberSupport public ActionCommandPublishingEntity act(final String value) {
         actionCommandEntity.setPropertyCommandDisabled(value);
         return actionCommandEntity;
     }
-    @MemberSupport
-    public String default0Act() {
+
+    @MemberSupport public String default0Act() {
         return actionCommandEntity.getPropertyCommandDisabled();
     }
 //tag::class[]

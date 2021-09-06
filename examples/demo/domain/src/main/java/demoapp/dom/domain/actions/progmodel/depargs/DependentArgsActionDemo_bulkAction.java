@@ -84,29 +84,25 @@ public class DependentArgsActionDemo_bulkAction {
 
     // -- PARAM 1
 
-    @MemberSupport
-    public int default1Act(Parameters params) {
+    @MemberSupport public int default1Act(Parameters params) {
         _Probe.sysOut("p0: %d %d %d %d", params.a, params.b, params.c, params.d);
         return 1;
     }
 
     // -- PARAM 2
 
-    @MemberSupport
-    public Integer default2Act(Parameters params) {
+    @MemberSupport public Integer default2Act(Parameters params) {
         _Probe.sysOut("p1: %d %d %d %d", params.a, params.b, params.c, params.d);
         return null;
     }
 
     // -- PARAM 3
 
-    @MemberSupport
-    public Collection<Integer> choices3Act(Parameters params) {
+    @MemberSupport public Collection<Integer> choices3Act(Parameters params) {
         return _Lists.of(1,2,3,4);
     }
 
-    @MemberSupport
-    public String validate3Act(Parameters params) {
+    @MemberSupport public String validate3Act(Parameters params) {
         return params.c() < 2 ? "please specify c>=2" : null;
     }
 
@@ -118,8 +114,7 @@ public class DependentArgsActionDemo_bulkAction {
 
     // -- PARAM 4
 
-    @MemberSupport
-    public int default4Act(Parameters params) {
+    @MemberSupport public int default4Act(Parameters params) {
         _Probe.sysOut("p3: %d %d %d %d", params.a, params.b, params.c, params.d);
         return params.c() + 1;
     }
@@ -136,8 +131,7 @@ public class DependentArgsActionDemo_bulkAction {
 //    }
 
 
-    @MemberSupport
-    public String validateAct(
+    @MemberSupport public String validateAct(
             Set<DemoItem> demoItems,
             int a,
             Integer b,

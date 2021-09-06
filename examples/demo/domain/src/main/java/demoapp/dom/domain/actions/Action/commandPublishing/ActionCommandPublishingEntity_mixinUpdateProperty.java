@@ -45,13 +45,11 @@ public class ActionCommandPublishingEntity_mixinUpdateProperty {
         this.actionCommandEntity = actionCommandEntity;
     }
 
-    @MemberSupport
-    public ActionCommandPublishingEntity act(final String value) {
+    @MemberSupport public ActionCommandPublishingEntity act(final String value) {
         actionCommandEntity.setProperty(value);
         return actionCommandEntity;
     }
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return actionCommandEntity.getProperty();
     }
 //tag::class[]

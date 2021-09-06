@@ -61,8 +61,7 @@ public class JavaTimeOffsetTimes implements HasAsciiDocDescription {
     public JavaTimeOffsetTimeVm openViewModel(final java.time.OffsetTime initialValue) {
         return new JavaTimeOffsetTimeVm(initialValue);
     }
-    @MemberSupport
-    public java.time.OffsetTime default0OpenViewModel() {
+    @MemberSupport public java.time.OffsetTime default0OpenViewModel() {
         return java.time.OffsetTime.of(1, 1, 1, 9, ZoneOffset.UTC);
     }
 

@@ -48,19 +48,16 @@ public class JavaUtilUuidHolder_updateReadOnlyPropertyWithChoices {
 
     private final JavaUtilUuidHolder holder;
 
-    @MemberSupport
-    public JavaUtilUuidHolder act(final java.util.UUID newValue) {
+    @MemberSupport public JavaUtilUuidHolder act(final java.util.UUID newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public java.util.UUID default0Act() {
+    @MemberSupport public java.util.UUID default0Act() {
         return holder.getReadOnlyProperty();
     }
 
-    @MemberSupport
-    public List<java.util.UUID> choices0Act() {
+    @MemberSupport public List<java.util.UUID> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }

@@ -40,14 +40,12 @@ public class JavaNetUrlHolder_updateReadOnlyProperty {
 
     private final JavaNetUrlHolder holder;
 
-    @MemberSupport
-    public JavaNetUrlHolder act(final java.net.URL newValue) {
+    @MemberSupport public JavaNetUrlHolder act(final java.net.URL newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public java.net.URL default0Act() {
+    @MemberSupport public java.net.URL default0Act() {
         return holder.getReadOnlyProperty();
     }
 

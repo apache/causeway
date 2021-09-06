@@ -42,8 +42,7 @@ public class WrapperShortHolder_updateReadOnlyOptionalProperty {
 
     private final WrapperShortHolder holder;
 
-    @MemberSupport
-    public WrapperShortHolder act(
+    @MemberSupport public WrapperShortHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
             final Short newValue
     ) {
@@ -51,8 +50,7 @@ public class WrapperShortHolder_updateReadOnlyOptionalProperty {
         return holder;
     }
 
-    @MemberSupport
-    public Short default0Act() {
+    @MemberSupport public Short default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

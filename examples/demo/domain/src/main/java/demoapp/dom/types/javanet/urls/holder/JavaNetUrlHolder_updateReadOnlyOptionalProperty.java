@@ -42,8 +42,7 @@ public class JavaNetUrlHolder_updateReadOnlyOptionalProperty {
 
     private final JavaNetUrlHolder holder;
 
-    @MemberSupport
-    public JavaNetUrlHolder act(
+    @MemberSupport public JavaNetUrlHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
             final java.net.URL newValue
     ) {
@@ -51,8 +50,7 @@ public class JavaNetUrlHolder_updateReadOnlyOptionalProperty {
         return holder;
     }
 
-    @MemberSupport
-    public java.net.URL default0Act() {
+    @MemberSupport public java.net.URL default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

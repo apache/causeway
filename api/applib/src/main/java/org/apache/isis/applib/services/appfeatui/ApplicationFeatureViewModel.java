@@ -250,8 +250,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     public String getTypeSimpleName() {
         return getFeatureId().getTypeSimpleName();
     }
-    @MemberSupport
-    public boolean hideTypeSimpleName() {
+    @MemberSupport public boolean hideTypeSimpleName() {
         return getSort().isNamespace();
     }
 
@@ -292,8 +291,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     public String getMemberName() {
         return getFeatureId().getLogicalMemberName();
     }
-    @MemberSupport
-    public boolean hideMemberName() {
+    @MemberSupport public boolean hideMemberName() {
         return !getSort().isMember();
     }
 

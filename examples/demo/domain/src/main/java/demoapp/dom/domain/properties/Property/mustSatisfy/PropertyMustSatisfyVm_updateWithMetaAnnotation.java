@@ -40,8 +40,7 @@ public class PropertyMustSatisfyVm_updateWithMetaAnnotation {
     private final PropertyMustSatisfyVm propertyMustSatisfyVm;
 
 //tag::meta-annotation[]
-    @MemberSupport
-    public PropertyMustSatisfyVm act(
+    @MemberSupport public PropertyMustSatisfyVm act(
             @MustSatisfyOfWorkingAgeMetaAnnotation                            // <.>
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(
@@ -52,8 +51,7 @@ public class PropertyMustSatisfyVm_updateWithMetaAnnotation {
         return propertyMustSatisfyVm;
     }
 //end::meta-annotation[]
-    @MemberSupport
-    public Integer default0Act() {
+    @MemberSupport public Integer default0Act() {
         return propertyMustSatisfyVm.getCustomerAgePropertyUsingMetaAnnotation();
     }
 

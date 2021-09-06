@@ -42,8 +42,7 @@ public class WrapperFloatHolder_updateReadOnlyOptionalProperty {
 
     private final WrapperFloatHolder holder;
 
-    @MemberSupport
-    public WrapperFloatHolder act(
+    @MemberSupport public WrapperFloatHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
             final Float newValue
     ) {
@@ -51,8 +50,7 @@ public class WrapperFloatHolder_updateReadOnlyOptionalProperty {
         return holder;
     }
 
-    @MemberSupport
-    public Float default0Act() {
+    @MemberSupport public Float default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

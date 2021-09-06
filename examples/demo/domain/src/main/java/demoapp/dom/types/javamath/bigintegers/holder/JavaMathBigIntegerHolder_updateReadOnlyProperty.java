@@ -40,14 +40,12 @@ public class JavaMathBigIntegerHolder_updateReadOnlyProperty {
 
     private final JavaMathBigIntegerHolder holder;
 
-    @MemberSupport
-    public JavaMathBigIntegerHolder act(final java.math.BigInteger newValue) {
+    @MemberSupport public JavaMathBigIntegerHolder act(final java.math.BigInteger newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public java.math.BigInteger default0Act() {
+    @MemberSupport public java.math.BigInteger default0Act() {
         return holder.getReadOnlyProperty();
     }
 

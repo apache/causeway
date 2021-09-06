@@ -91,8 +91,7 @@ public class ActionHiddenVm implements HasAsciiDocDescription {
         setText(text);
         return this;
     }
-    @MemberSupport
-    public String default0UpdateTextNoAnnotation() {
+    @MemberSupport public String default0UpdateTextNoAnnotation() {
         return getText();
     }
 //end::action-no-annotation[]
@@ -112,8 +111,7 @@ public class ActionHiddenVm implements HasAsciiDocDescription {
         setText(text);
         return this;
     }
-    @MemberSupport
-    public String default0UpdateTextAndHiddenNowhere() {
+    @MemberSupport public String default0UpdateTextAndHiddenNowhere() {
         return getText();
     }
 //end::action-hidden-nowhere[]
@@ -133,8 +131,7 @@ public class ActionHiddenVm implements HasAsciiDocDescription {
         setText(text);
         return this;
     }
-    @MemberSupport
-    public String default0UpdateTextButHiddenOnForms() {
+    @MemberSupport public String default0UpdateTextButHiddenOnForms() {
         return getText();
     }
 //end::action-but-hidden-on-forms[]
@@ -155,8 +152,7 @@ public class ActionHiddenVm implements HasAsciiDocDescription {
         setText(text);
         return this;
     }
-    @MemberSupport
-    public String default0UpdateTextButHiddenEverywhere() {
+    @MemberSupport public String default0UpdateTextButHiddenEverywhere() {
         return getText();
     }
 //end::action-but-hidden-everywhere[]

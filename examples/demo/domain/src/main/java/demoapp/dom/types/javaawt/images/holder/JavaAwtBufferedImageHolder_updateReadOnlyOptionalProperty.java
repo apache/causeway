@@ -46,8 +46,7 @@ public class JavaAwtBufferedImageHolder_updateReadOnlyOptionalProperty {
 
     private final JavaAwtBufferedImageHolder holder;
 
-    @MemberSupport
-    public JavaAwtBufferedImageHolder act(
+    @MemberSupport public JavaAwtBufferedImageHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
             final BufferedImage newValue
     ) {
@@ -55,8 +54,7 @@ public class JavaAwtBufferedImageHolder_updateReadOnlyOptionalProperty {
         return holder;
     }
 
-    @MemberSupport
-    public BufferedImage default0Act() {
+    @MemberSupport public BufferedImage default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

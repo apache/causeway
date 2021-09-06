@@ -40,8 +40,7 @@ public class PropertyRegexPatternVm_updateWithMetaAnnotation {
     private final PropertyRegexPatternVm propertyRegexPatternVm;
 
 //tag::meta-annotation[]
-    @MemberSupport
-    public PropertyRegexPatternVm act(
+    @MemberSupport public PropertyRegexPatternVm act(
             @RegexPatternEmailComMetaAnnotation                            // <.>
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(
@@ -52,8 +51,7 @@ public class PropertyRegexPatternVm_updateWithMetaAnnotation {
         return propertyRegexPatternVm;
     }
 //end::meta-annotation[]
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return propertyRegexPatternVm.getEmailAddressPropertyUsingMetaAnnotation();
     }
 

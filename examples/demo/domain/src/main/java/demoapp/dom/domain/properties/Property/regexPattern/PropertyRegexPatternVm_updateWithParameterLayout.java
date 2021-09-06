@@ -41,8 +41,7 @@ public class PropertyRegexPatternVm_updateWithParameterLayout {
     private final PropertyRegexPatternVm propertyRegexPatternVm;
 
 //tag::annotation[]
-    @MemberSupport
-    public PropertyRegexPatternVm act(
+    @MemberSupport public PropertyRegexPatternVm act(
             @Parameter(
                 regexPattern = "^\\w+@\\w+[.]com$"                  // <.>
                 , regexPatternReplacement = "Must be .com email address"
@@ -57,8 +56,7 @@ public class PropertyRegexPatternVm_updateWithParameterLayout {
         return propertyRegexPatternVm;
     }
 //end::annotation[]
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return propertyRegexPatternVm.getEmailAddressPropertyUsingAnnotation();
     }
 

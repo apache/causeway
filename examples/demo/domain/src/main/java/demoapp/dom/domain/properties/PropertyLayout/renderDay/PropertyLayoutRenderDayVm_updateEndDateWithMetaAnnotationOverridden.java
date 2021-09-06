@@ -43,8 +43,7 @@ public class PropertyLayoutRenderDayVm_updateEndDateWithMetaAnnotationOverridden
     private final PropertyLayoutRenderDayVm propertyLayoutRenderDayVm;
 
 //tag::meta-annotation-overridden[]
-    @MemberSupport
-    public PropertyLayoutRenderDayVm act(
+    @MemberSupport public PropertyLayoutRenderDayVm act(
             @RenderDayMetaAnnotationStartDateInclusive          // <.>
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(
@@ -58,8 +57,7 @@ public class PropertyLayoutRenderDayVm_updateEndDateWithMetaAnnotationOverridden
         return propertyLayoutRenderDayVm;
     }
 //end::meta-annotation-overridden[]
-    @MemberSupport
-    public LocalDate default0Act() {
+    @MemberSupport public LocalDate default0Act() {
         return propertyLayoutRenderDayVm.getEndDateUsingMetaAnnotationButOverridden();
     }
 

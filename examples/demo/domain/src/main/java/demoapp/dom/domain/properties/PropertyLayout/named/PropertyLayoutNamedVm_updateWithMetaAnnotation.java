@@ -40,8 +40,7 @@ public class PropertyLayoutNamedVm_updateWithMetaAnnotation {
     private final PropertyLayoutNamedVm propertyLayoutNamedVm;
 
 //tag::meta-annotation[]
-    @MemberSupport
-    public PropertyLayoutNamedVm act(
+    @MemberSupport public PropertyLayoutNamedVm act(
             @Parameter(optionality = Optionality.OPTIONAL)
             @NamedMetaAnnotation                            // <.>
             @ParameterLayout(
@@ -52,8 +51,7 @@ public class PropertyLayoutNamedVm_updateWithMetaAnnotation {
         return propertyLayoutNamedVm;
     }
 //end::meta-annotation[]
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return propertyLayoutNamedVm.getPropertyUsingMetaAnnotation();
     }
 

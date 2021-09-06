@@ -40,8 +40,7 @@ public class PropertyLayoutCssClassVm_updateWithParameterLayout {
     private final PropertyLayoutCssClassVm propertyLayoutCssClassVm;
 
 //tag::annotation[]
-    @MemberSupport
-    public PropertyLayoutCssClassVm act(
+    @MemberSupport public PropertyLayoutCssClassVm act(
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(
                 cssClass = "red"                            // <.>
@@ -53,8 +52,7 @@ public class PropertyLayoutCssClassVm_updateWithParameterLayout {
         return propertyLayoutCssClassVm;
     }
 //end::annotation[]
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return propertyLayoutCssClassVm.getPropertyUsingAnnotation();
     }
 

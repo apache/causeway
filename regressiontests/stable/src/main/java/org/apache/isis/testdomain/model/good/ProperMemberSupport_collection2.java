@@ -37,24 +37,22 @@ public class ProperMemberSupport_collection2 {
     //@Action(semantics=SAFE)   // <-- inferred (required)
     //@ActionLayout(contributed=ASSOCIATION)  // <-- inferred (required)
 
-    public List<String> coll() {
+    @MemberSupport public List<String> coll() {
         return Collections.singletonList(holder.toString());
     }
 
     // -- PROPERLY DECLARED SUPPORTING METHODS
 
-    @MemberSupport
-    public boolean hideColl() {
+    @MemberSupport public boolean hideColl() {
         return false;
     }
 
-    @MemberSupport
-    public String disableColl() {
+    @MemberSupport public String disableColl() {
         return null;
     }
 
-    @MemberSupport //TODO not documented with the support-matrix, what to do here?
-    public String validateColl() {
+    //TODO not documented with the support-matrix, what to do here?
+    @MemberSupport public String validateColl() {
         return null;
     }
 

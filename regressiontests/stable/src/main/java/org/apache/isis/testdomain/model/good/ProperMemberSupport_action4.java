@@ -48,58 +48,47 @@ public class ProperMemberSupport_action4 {
         return holder;
     }
 
-    @MemberSupport
-    public String disableAct() {
+    @MemberSupport public String disableAct() {
         return null;
     }
 
-    @MemberSupport
-    public boolean hideAct() {
+    @MemberSupport public boolean hideAct() {
         return false;
     }
 
-    @MemberSupport
-    public String validateAct(Parameter params) {
+    @MemberSupport public String validateAct(Parameter params) {
         return null;
     }
 
-    @MemberSupport
-    public Set<String> autoCompleteA(Parameter params, @MinLength(3) String search) {
+    @MemberSupport public Set<String> autoCompleteA(Parameter params, @MinLength(3) String search) {
         return null;
     }
 
-    @MemberSupport
-    public Set<String> autoCompleteB(Parameter params, @MinLength(3) String search) {
+    @MemberSupport public Set<String> autoCompleteB(Parameter params, @MinLength(3) String search) {
         return null;
     }
 
-    @MemberSupport
-    public Set<String> choicesA(Parameter params) {
+    @MemberSupport public Set<String> choicesA(Parameter params) {
         return null;
     }
 
-    @MemberSupport
-    public Set<String> choicesB(Parameter params) {
+    @MemberSupport public Set<String> choicesB(Parameter params) {
         return null;
     }
 
-    @MemberSupport
-    public List<String> defaultA(Parameter params) {
+    @MemberSupport public List<String> defaultA(Parameter params) {
         return null;
     }
 
-    @MemberSupport
-    public List<String> defaultB(Parameter params) {
+    @MemberSupport public List<String> defaultB(Parameter params) {
         return null;
     }
 
-    @MemberSupport
-    public String validateA(Parameter params) {
+    @MemberSupport public String validateA(Parameter params) {
         return null;
     }
 
-    @MemberSupport
-    public String validateB(Parameter params) {
+    @MemberSupport public String validateB(Parameter params) {
         return null;
     }
 

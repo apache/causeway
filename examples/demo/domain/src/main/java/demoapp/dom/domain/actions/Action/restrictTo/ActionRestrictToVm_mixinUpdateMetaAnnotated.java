@@ -42,13 +42,11 @@ public class ActionRestrictToVm_mixinUpdateMetaAnnotated {
 
     private final ActionRestrictToVm actionRestrictToVm;
 
-    @MemberSupport
-    public ActionRestrictToVm act(final String text) {
+    @MemberSupport public ActionRestrictToVm act(final String text) {
         actionRestrictToVm.setPropertyForMetaAnnotations(text);
         return actionRestrictToVm;
     }
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return actionRestrictToVm.getPropertyForMetaAnnotations();
     }
 }

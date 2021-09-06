@@ -43,8 +43,7 @@ public class IsisClobHolder_updateReadOnlyOptionalProperty {
 
     private final IsisClobHolder holder;
 
-    @MemberSupport
-    public IsisClobHolder act(
+    @MemberSupport public IsisClobHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
  final
             Clob newValue

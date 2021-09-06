@@ -41,14 +41,12 @@ public class IsisPasswordHolder_updateReadOnlyProperty {
 
     private final IsisPasswordHolder holder;
 
-    @MemberSupport
-    public IsisPasswordHolder act(final Password newValue) {
+    @MemberSupport public IsisPasswordHolder act(final Password newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public Password default0Act() {
+    @MemberSupport public Password default0Act() {
         return holder.getReadOnlyProperty();
     }
 

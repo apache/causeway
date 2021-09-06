@@ -40,14 +40,12 @@ public class JavaTimeOffsetDateTimeHolder_updateReadOnlyProperty {
 
     private final JavaTimeOffsetDateTimeHolder holder;
 
-    @MemberSupport
-    public JavaTimeOffsetDateTimeHolder act(final java.time.OffsetDateTime newValue) {
+    @MemberSupport public JavaTimeOffsetDateTimeHolder act(final java.time.OffsetDateTime newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public java.time.OffsetDateTime default0Act() {
+    @MemberSupport public java.time.OffsetDateTime default0Act() {
         return holder.getReadOnlyProperty();
     }
 

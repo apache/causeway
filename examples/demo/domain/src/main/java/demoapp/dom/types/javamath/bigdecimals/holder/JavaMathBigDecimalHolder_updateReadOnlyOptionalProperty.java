@@ -42,8 +42,7 @@ public class JavaMathBigDecimalHolder_updateReadOnlyOptionalProperty {
 
     private final JavaMathBigDecimalHolder holder;
 
-    @MemberSupport
-    public JavaMathBigDecimalHolder act(
+    @MemberSupport public JavaMathBigDecimalHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
             final java.math.BigDecimal newValue
     ) {
@@ -51,8 +50,7 @@ public class JavaMathBigDecimalHolder_updateReadOnlyOptionalProperty {
         return holder;
     }
 
-    @MemberSupport
-    public java.math.BigDecimal default0Act() {
+    @MemberSupport public java.math.BigDecimal default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

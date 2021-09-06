@@ -48,19 +48,16 @@ public class JavaUtilDateHolder_updateReadOnlyPropertyWithChoices {
 
     private final JavaUtilDateHolder holder;
 
-    @MemberSupport
-    public JavaUtilDateHolder act(final java.util.Date newValue) {
+    @MemberSupport public JavaUtilDateHolder act(final java.util.Date newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public java.util.Date default0Act() {
+    @MemberSupport public java.util.Date default0Act() {
         return holder.getReadOnlyProperty();
     }
 
-    @MemberSupport
-    public List<java.util.Date> choices0Act() {
+    @MemberSupport public List<java.util.Date> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }

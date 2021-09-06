@@ -42,8 +42,7 @@ public class JavaUtilDateHolder_updateReadOnlyOptionalProperty {
 
     private final JavaUtilDateHolder holder;
 
-    @MemberSupport
-    public JavaUtilDateHolder act(
+    @MemberSupport public JavaUtilDateHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
             final java.util.Date newValue
     ) {
@@ -51,8 +50,7 @@ public class JavaUtilDateHolder_updateReadOnlyOptionalProperty {
         return holder;
     }
 
-    @MemberSupport
-    public java.util.Date default0Act() {
+    @MemberSupport public java.util.Date default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

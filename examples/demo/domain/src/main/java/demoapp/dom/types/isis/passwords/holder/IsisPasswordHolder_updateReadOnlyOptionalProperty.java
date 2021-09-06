@@ -43,8 +43,7 @@ public class IsisPasswordHolder_updateReadOnlyOptionalProperty {
 
     private final IsisPasswordHolder holder;
 
-    @MemberSupport
-    public IsisPasswordHolder act(
+    @MemberSupport public IsisPasswordHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
             final Password newValue
     ) {
@@ -52,8 +51,7 @@ public class IsisPasswordHolder_updateReadOnlyOptionalProperty {
         return holder;
     }
 
-    @MemberSupport
-    public Password default0Act() {
+    @MemberSupport public Password default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

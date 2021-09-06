@@ -41,14 +41,12 @@ public class IsisClobHolder_updateReadOnlyProperty {
 
     private final IsisClobHolder holder;
 
-    @MemberSupport
-    public IsisClobHolder act(final Clob newValue) {
+    @MemberSupport public IsisClobHolder act(final Clob newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public Clob default0Act() {
+    @MemberSupport public Clob default0Act() {
         return holder.getReadOnlyProperty();
     }
 

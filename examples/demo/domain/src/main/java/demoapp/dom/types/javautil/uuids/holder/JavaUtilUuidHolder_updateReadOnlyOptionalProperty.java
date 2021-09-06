@@ -42,8 +42,7 @@ public class JavaUtilUuidHolder_updateReadOnlyOptionalProperty {
 
     private final JavaUtilUuidHolder holder;
 
-    @MemberSupport
-    public JavaUtilUuidHolder act(
+    @MemberSupport public JavaUtilUuidHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
             final java.util.UUID newValue
     ) {
@@ -51,8 +50,7 @@ public class JavaUtilUuidHolder_updateReadOnlyOptionalProperty {
         return holder;
     }
 
-    @MemberSupport
-    public java.util.UUID default0Act() {
+    @MemberSupport public java.util.UUID default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

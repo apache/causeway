@@ -43,13 +43,11 @@ public class ActionRestrictToVm_mixinUpdateRestrictToPrototyping {
 
     private final ActionRestrictToVm actionRestrictToVm;
 
-    @MemberSupport
-    public ActionRestrictToVm act(final String text) {
+    @MemberSupport public ActionRestrictToVm act(final String text) {
         actionRestrictToVm.setPropertyForPrototyping(text);
         return actionRestrictToVm;
     }
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return actionRestrictToVm.getPropertyForPrototyping();
     }
 }

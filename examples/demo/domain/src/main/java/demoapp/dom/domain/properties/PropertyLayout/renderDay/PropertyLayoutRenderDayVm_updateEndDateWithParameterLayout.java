@@ -43,8 +43,7 @@ public class PropertyLayoutRenderDayVm_updateEndDateWithParameterLayout {
     private final PropertyLayoutRenderDayVm propertyLayoutRenderDayVm;
 
 //tag::annotation[]
-    @MemberSupport
-    public PropertyLayoutRenderDayVm act(
+    @MemberSupport public PropertyLayoutRenderDayVm act(
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(
                 renderDay = RenderDay.AS_DAY_BEFORE             // <.>
@@ -56,8 +55,7 @@ public class PropertyLayoutRenderDayVm_updateEndDateWithParameterLayout {
         return propertyLayoutRenderDayVm;
     }
 //end::annotation[]
-    @MemberSupport
-    public LocalDate default0Act() {
+    @MemberSupport public LocalDate default0Act() {
         return propertyLayoutRenderDayVm.getEndDate();
     }
 

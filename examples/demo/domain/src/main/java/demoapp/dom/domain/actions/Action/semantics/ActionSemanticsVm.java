@@ -152,8 +152,7 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
         setPropertyNoAnnotation(getPropertyNoAnnotation() + amount);
         return this;
     }
-    @MemberSupport
-    public int default0IncrementByAmountNoAnnotation() {
+    @MemberSupport public int default0IncrementByAmountNoAnnotation() {
         return 1;
     }
 //end::action-no-annotation[]
@@ -227,8 +226,7 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
         setPropertyForIdempotent(value);
         return this;
     }
-    @MemberSupport
-    public int default0SetToValuePropertyForIdempotent() {
+    @MemberSupport public int default0SetToValuePropertyForIdempotent() {
         return getPropertyForIdempotent();
     }
 //end::action-semantics-idempotent[]
@@ -247,8 +245,7 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
         setPropertyForIdempotentAreYouSure(value);
         return this;
     }
-    @MemberSupport
-    public int default0SetToValuePropertyForIdempotentAreYouSure() {
+    @MemberSupport public int default0SetToValuePropertyForIdempotentAreYouSure() {
         return getPropertyForIdempotentAreYouSure();
     }
 //end::action-semantics-idempotent-are-you-sure[]
@@ -268,8 +265,7 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
         setPropertyForNonIdempotent(getPropertyForNonIdempotent() + amount);
         return this;
     }
-    @MemberSupport
-    public int default0IncrementByAmountPropertyForNonIdempotent() {
+    @MemberSupport public int default0IncrementByAmountPropertyForNonIdempotent() {
         return 1;
     }
 //end::action-semantics-non-idempotent[]
@@ -305,8 +301,7 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
         setPropertyForNonIdempotentAreYouSure(getPropertyForNonIdempotentAreYouSure() + amount);
         return this;
     }
-    @MemberSupport
-    public int default0IncrementByAmountPropertyForNonIdempotentAreYouSure() {
+    @MemberSupport public int default0IncrementByAmountPropertyForNonIdempotentAreYouSure() {
         return 1;
     }
 //end::action-semantics-non-idempotent-are-you-sure[]
@@ -327,8 +322,7 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
         setPropertyForMetaAnnotations(value);
         return this;
     }
-    @MemberSupport
-    public int default0SetToValueMetaAnnotated() {
+    @MemberSupport public int default0SetToValueMetaAnnotated() {
         return getPropertyForMetaAnnotations();
     }
 //end::action-meta-annotated[]
@@ -350,8 +344,7 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
         setPropertyForMetaAnnotationsOverridden(val);
         return this;
     }
-    @MemberSupport
-    public int default0SetToValueMetaAnnotatedOverridden() {
+    @MemberSupport public int default0SetToValueMetaAnnotatedOverridden() {
         return getPropertyForMetaAnnotationsOverridden();
     }
 //end::action-meta-annotated-overridden[]

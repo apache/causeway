@@ -40,14 +40,12 @@ public class JavaUtilDateHolder_updateReadOnlyProperty {
 
     private final JavaUtilDateHolder holder;
 
-    @MemberSupport
-    public JavaUtilDateHolder act(final java.util.Date newValue) {
+    @MemberSupport public JavaUtilDateHolder act(final java.util.Date newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public java.util.Date default0Act() {
+    @MemberSupport public java.util.Date default0Act() {
         return holder.getReadOnlyProperty();
     }
 

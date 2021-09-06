@@ -44,8 +44,7 @@ public class DomainObjectEntityChangePublishingVm_create {
         this.domainObjectAuditingVm = domainObjectAuditingVm;
     }
 
-    @MemberSupport
-    public DomainObjectEntityChangePublishingVm act(
+    @MemberSupport public DomainObjectEntityChangePublishingVm act(
             final String newValue
             , final boolean publishingEnabled
             , final boolean publishingDisabled
@@ -66,24 +65,19 @@ public class DomainObjectEntityChangePublishingVm_create {
         }
         return domainObjectAuditingVm;
     }
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return nameSamples.random();
     }
-    @MemberSupport
-    public boolean default1Act() {
+    @MemberSupport public boolean default1Act() {
         return true;
     }
-    @MemberSupport
-    public boolean default2Act() {
+    @MemberSupport public boolean default2Act() {
         return true;
     }
-    @MemberSupport
-    public boolean default3Act() {
+    @MemberSupport public boolean default3Act() {
         return true;
     }
-    @MemberSupport
-    public boolean default4Act() {
+    @MemberSupport public boolean default4Act() {
         return true;
     }
 

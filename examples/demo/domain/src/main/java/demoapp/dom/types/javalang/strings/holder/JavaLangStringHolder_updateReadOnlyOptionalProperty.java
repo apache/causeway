@@ -42,8 +42,7 @@ public class JavaLangStringHolder_updateReadOnlyOptionalProperty {
 
     private final JavaLangStringHolder holder;
 
-    @MemberSupport
-    public JavaLangStringHolder act(
+    @MemberSupport public JavaLangStringHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
             final String newValue
     ) {
@@ -51,8 +50,7 @@ public class JavaLangStringHolder_updateReadOnlyOptionalProperty {
         return holder;
     }
 
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

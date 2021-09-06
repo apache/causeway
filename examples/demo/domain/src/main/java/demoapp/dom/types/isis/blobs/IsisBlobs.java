@@ -62,8 +62,7 @@ public class IsisBlobs implements HasAsciiDocDescription {
     public IsisBlobVm openViewModel(final Blob initialValue) {
         return new IsisBlobVm(initialValue);
     }
-    @MemberSupport
-    public Blob default0OpenViewModel() {
+    @MemberSupport public Blob default0OpenViewModel() {
         return samples.single();
     }
 

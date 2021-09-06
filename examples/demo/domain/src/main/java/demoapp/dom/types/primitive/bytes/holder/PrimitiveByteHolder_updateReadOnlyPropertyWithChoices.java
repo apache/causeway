@@ -47,25 +47,21 @@ public class PrimitiveByteHolder_updateReadOnlyPropertyWithChoices {
 
     private final PrimitiveByteHolder holder;
 
-    @MemberSupport
-    public PrimitiveByteHolder act(final byte newValue) {
+    @MemberSupport public PrimitiveByteHolder act(final byte newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public byte default0Act() {
+    @MemberSupport public byte default0Act() {
         return holder.getReadOnlyProperty();
     }
 
-    @MemberSupport
-    public List<Byte> choices0Act() {
+    @MemberSupport public List<Byte> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }
 
-    @MemberSupport
-    public boolean hideAct() {
+    @MemberSupport public boolean hideAct() {
         return true; // TODO: choices doesn't seem to work for this datatype
     }
 

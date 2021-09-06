@@ -39,13 +39,11 @@ public class ActionLayoutPromptStyleVm_layoutInlineAsIfEdit {
 
     private final ActionLayoutPromptStyleVm stringViewModel;
 
-    @MemberSupport
-    public ActionLayoutPromptStyleVm act(final String newValue) {
+    @MemberSupport public ActionLayoutPromptStyleVm act(final String newValue) {
         stringViewModel.setReadOnlyProperty4(newValue);
         return stringViewModel;
     }
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return stringViewModel.getReadOnlyProperty4();
     }
 

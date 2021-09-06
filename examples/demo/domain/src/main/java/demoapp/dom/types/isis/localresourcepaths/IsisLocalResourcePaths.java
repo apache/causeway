@@ -63,8 +63,7 @@ public class IsisLocalResourcePaths implements HasAsciiDocDescription {
         return new IsisLocalResourcePathVm(initialValue);
     }
 
-    @MemberSupport
-    public LocalResourcePath default0OpenViewModel() {
+    @MemberSupport public LocalResourcePath default0OpenViewModel() {
         return samples.single();
     }
 

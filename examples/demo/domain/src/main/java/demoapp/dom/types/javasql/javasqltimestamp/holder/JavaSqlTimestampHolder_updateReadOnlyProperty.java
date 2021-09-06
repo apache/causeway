@@ -40,14 +40,12 @@ public class JavaSqlTimestampHolder_updateReadOnlyProperty {
 
     private final JavaSqlTimestampHolder holder;
 
-    @MemberSupport
-    public JavaSqlTimestampHolder act(final java.sql.Timestamp newValue) {
+    @MemberSupport public JavaSqlTimestampHolder act(final java.sql.Timestamp newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public java.sql.Timestamp default0Act() {
+    @MemberSupport public java.sql.Timestamp default0Act() {
         return holder.getReadOnlyProperty();
     }
 

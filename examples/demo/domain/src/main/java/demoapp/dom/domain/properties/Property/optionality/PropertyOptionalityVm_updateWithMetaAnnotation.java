@@ -40,8 +40,7 @@ public class PropertyOptionalityVm_updateWithMetaAnnotation {
     private final PropertyOptionalityVm propertyOptionalityVm;
 
 //tag::meta-annotation[]
-    @MemberSupport
-    public PropertyOptionalityVm act(
+    @MemberSupport public PropertyOptionalityVm act(
             @OptionalityOptionalMetaAnnotation                            // <.>
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(
@@ -52,8 +51,7 @@ public class PropertyOptionalityVm_updateWithMetaAnnotation {
         return propertyOptionalityVm;
     }
 //end::meta-annotation[]
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return propertyOptionalityVm.getPropertyUsingMetaAnnotation();
     }
 

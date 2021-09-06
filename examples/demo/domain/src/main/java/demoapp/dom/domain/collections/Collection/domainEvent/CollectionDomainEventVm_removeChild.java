@@ -46,23 +46,19 @@ public class CollectionDomainEventVm_removeChild implements HasAsciiDocDescripti
         return collectionDomainEventVm.getChildren();
     }
 
-    @MemberSupport
-    public CollectionDomainEventVm_removeChild act(final CollectionDomainEventChildVm child) {
+    @MemberSupport public CollectionDomainEventVm_removeChild act(final CollectionDomainEventChildVm child) {
         getChildren().removeIf(
                 x -> Objects.equals(x.getValue(), child.getValue()));
         return this;
     }
 
-    @MemberSupport
-    public CollectionDomainEventChildVm default0Act() {
+    @MemberSupport public CollectionDomainEventChildVm default0Act() {
         return getChildren().isEmpty() ? null : getChildren().get(0);
     }
-    @MemberSupport
-    public List<CollectionDomainEventChildVm> choices0Act() {
+    @MemberSupport public List<CollectionDomainEventChildVm> choices0Act() {
         return getChildren();
     }
-    @MemberSupport
-    public String disableAct() {
+    @MemberSupport public String disableAct() {
         return getChildren().isEmpty() ? "No children to remove": null;
     }
 

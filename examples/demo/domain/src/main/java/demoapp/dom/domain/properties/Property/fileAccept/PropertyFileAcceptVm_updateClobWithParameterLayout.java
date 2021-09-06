@@ -41,8 +41,7 @@ public class PropertyFileAcceptVm_updateClobWithParameterLayout {
     private final PropertyFileAcceptVm propertyFileAcceptVm;
 
 //tag::annotation[]
-    @MemberSupport
-    public PropertyFileAcceptVm act(
+    @MemberSupport public PropertyFileAcceptVm act(
             @Parameter(
                 fileAccept = ".txt"                     // <.>
                 , optionality = Optionality.OPTIONAL
@@ -56,8 +55,7 @@ public class PropertyFileAcceptVm_updateClobWithParameterLayout {
         return propertyFileAcceptVm;
     }
 //end::annotation[]
-    @MemberSupport
-    public Clob default0Act() {
+    @MemberSupport public Clob default0Act() {
         return propertyFileAcceptVm.getTxtPropertyUsingAnnotation();
     }
 

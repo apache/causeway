@@ -40,8 +40,7 @@ public class PropertyOptionalityVm_updateWithMetaAnnotationOverridden {
     private final PropertyOptionalityVm propertyOptionalityVm;
 
 //tag::meta-annotation-overridden[]
-    @MemberSupport
-    public PropertyOptionalityVm act(
+    @MemberSupport public PropertyOptionalityVm act(
             @OptionalityOptionalMetaAnnotation                  // <.>
             @Parameter(
                 optionality = Optionality.MANDATORY             // <.>
@@ -56,8 +55,7 @@ public class PropertyOptionalityVm_updateWithMetaAnnotationOverridden {
         return propertyOptionalityVm;
     }
 //end::meta-annotation-overridden[]
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return propertyOptionalityVm.getPropertyUsingMetaAnnotationButOverridden();
     }
 

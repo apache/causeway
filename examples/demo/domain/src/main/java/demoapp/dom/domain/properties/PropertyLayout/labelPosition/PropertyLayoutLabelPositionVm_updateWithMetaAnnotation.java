@@ -40,8 +40,7 @@ public class PropertyLayoutLabelPositionVm_updateWithMetaAnnotation {
     private final PropertyLayoutLabelPositionVm propertyLayoutLabelPositionVm;
 
 //tag::meta-annotation[]
-    @MemberSupport
-    public PropertyLayoutLabelPositionVm act(
+    @MemberSupport public PropertyLayoutLabelPositionVm act(
             @Parameter(optionality = Optionality.OPTIONAL)
             @LabelPositionTopMetaAnnotation                            // <.>
             @ParameterLayout(
@@ -52,8 +51,7 @@ public class PropertyLayoutLabelPositionVm_updateWithMetaAnnotation {
         return propertyLayoutLabelPositionVm;
     }
 //end::meta-annotation[]
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return propertyLayoutLabelPositionVm.getPropertyUsingMetaAnnotation();
     }
 

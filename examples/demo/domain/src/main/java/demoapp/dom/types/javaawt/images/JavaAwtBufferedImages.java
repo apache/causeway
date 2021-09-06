@@ -63,8 +63,7 @@ public class JavaAwtBufferedImages implements HasAsciiDocDescription {
         return new JavaAwtBufferedImageVm(initialValue);
     }
 
-    @MemberSupport
-    public BufferedImage default0OpenViewModel() {
+    @MemberSupport public BufferedImage default0OpenViewModel() {
         return samples.single();
     }
 

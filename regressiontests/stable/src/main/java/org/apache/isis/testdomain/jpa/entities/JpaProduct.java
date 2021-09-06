@@ -98,8 +98,7 @@ public class JpaProduct implements Comparable<JpaProduct> {
         this.setPrice(2.*getPrice());
     }
 
-    @MemberSupport
-    public String disableDoubleThePrice() {
+    @MemberSupport public String disableDoubleThePrice() {
         return "always disabled for testing purposes";
     }
 

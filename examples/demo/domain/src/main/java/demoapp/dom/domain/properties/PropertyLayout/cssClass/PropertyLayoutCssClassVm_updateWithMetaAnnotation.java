@@ -40,8 +40,7 @@ public class PropertyLayoutCssClassVm_updateWithMetaAnnotation {
     private final PropertyLayoutCssClassVm propertyLayoutCssClassVm;
 
 //tag::meta-annotation[]
-    @MemberSupport
-    public PropertyLayoutCssClassVm act(
+    @MemberSupport public PropertyLayoutCssClassVm act(
             @Parameter(optionality = Optionality.OPTIONAL)
             @CssClassRedMetaAnnotation                            // <.>
             @ParameterLayout(
@@ -52,8 +51,7 @@ public class PropertyLayoutCssClassVm_updateWithMetaAnnotation {
         return propertyLayoutCssClassVm;
     }
 //end::meta-annotation[]
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return propertyLayoutCssClassVm.getPropertyUsingMetaAnnotation();
     }
 

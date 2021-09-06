@@ -62,8 +62,7 @@ public class JavaMathBigIntegers implements HasAsciiDocDescription {
     public JavaMathBigIntegerVm openViewModel(final java.math.BigInteger initialValue) {
         return new JavaMathBigIntegerVm(initialValue);
     }
-    @MemberSupport
-    public java.math.BigInteger default0OpenViewModel() {
+    @MemberSupport public java.math.BigInteger default0OpenViewModel() {
         return samples.single();
     }
 

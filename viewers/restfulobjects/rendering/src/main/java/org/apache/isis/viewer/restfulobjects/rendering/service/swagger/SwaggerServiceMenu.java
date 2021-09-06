@@ -112,11 +112,11 @@ public class SwaggerServiceMenu {
 
         public class ActionEvent extends ActionDomainEvent<openRestApi> { }
 
-        @MemberSupport LocalResourcePath act() {
+        @MemberSupport public LocalResourcePath act() {
             return new LocalResourcePath(basePath);
         }
 
-        @MemberSupport String disableAct() { return disableReasonWhenRequiresROViewer(); }
+        @MemberSupport public String disableAct() { return disableReasonWhenRequiresROViewer(); }
 
     }
 

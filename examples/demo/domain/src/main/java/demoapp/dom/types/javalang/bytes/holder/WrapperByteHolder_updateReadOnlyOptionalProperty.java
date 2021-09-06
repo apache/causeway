@@ -42,8 +42,7 @@ public class WrapperByteHolder_updateReadOnlyOptionalProperty {
 
     private final WrapperByteHolder holder;
 
-    @MemberSupport
-    public WrapperByteHolder act(
+    @MemberSupport public WrapperByteHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
             final Byte newValue
     ) {
@@ -51,8 +50,7 @@ public class WrapperByteHolder_updateReadOnlyOptionalProperty {
         return holder;
     }
 
-    @MemberSupport
-    public Byte default0Act() {
+    @MemberSupport public Byte default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

@@ -64,8 +64,7 @@ public class PrimitiveChars implements HasAsciiDocDescription {
     public PrimitiveCharVm openViewModel(final char initialValue) {
         return new PrimitiveCharVm(initialValue);
     }
-    @MemberSupport
-    public char default0OpenViewModel() {
+    @MemberSupport public char default0OpenViewModel() {
         return 'a';
     }
 

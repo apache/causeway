@@ -43,13 +43,11 @@ public class ActionCommandPublishingEntity_mixinUpdatePropertyMetaAnnotation {
 
     private final ActionCommandPublishingEntity actionCommandEntity;
 
-    @MemberSupport
-    public ActionCommandPublishingEntity act(final String value) {
+    @MemberSupport public ActionCommandPublishingEntity act(final String value) {
         actionCommandEntity.setPropertyMetaAnnotated(value);
         return actionCommandEntity;
     }
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return actionCommandEntity.getPropertyMetaAnnotated();
     }
 //tag::class[]

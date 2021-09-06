@@ -416,8 +416,7 @@ implements
     @PropertyLayout(hidden = Where.ALL_TABLES, multiLine = 5)
     @Getter @Setter
     private String replayStateFailureReason;
-    @MemberSupport
-    public boolean hideReplayStateFailureReason() {
+    @MemberSupport public boolean hideReplayStateFailureReason() {
         return getReplayState() == null || !getReplayState().isFailed();
     }
 

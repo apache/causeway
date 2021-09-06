@@ -47,19 +47,16 @@ public class WrapperIntegerHolder_updateReadOnlyPropertyWithChoices {
 
     private final WrapperIntegerHolder holder;
 
-    @MemberSupport
-    public WrapperIntegerHolder act(final Integer newValue) {
+    @MemberSupport public WrapperIntegerHolder act(final Integer newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public Integer default0Act() {
+    @MemberSupport public Integer default0Act() {
         return holder.getReadOnlyProperty();
     }
 
-    @MemberSupport
-    public List<Integer> choices0Act() {
+    @MemberSupport public List<Integer> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }

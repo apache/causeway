@@ -40,14 +40,12 @@ public class PrimitiveDoubleHolder_updateReadOnlyProperty {
 
     private final PrimitiveDoubleHolder holder;
 
-    @MemberSupport
-    public PrimitiveDoubleHolder act(final double newValue) {
+    @MemberSupport public PrimitiveDoubleHolder act(final double newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport
-    public double default0Act() {
+    @MemberSupport public double default0Act() {
         return holder.getReadOnlyProperty();
     }
 
