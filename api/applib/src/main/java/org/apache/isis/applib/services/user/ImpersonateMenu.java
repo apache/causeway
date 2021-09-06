@@ -69,108 +69,111 @@ public class ImpersonateMenu {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE_SUDO + ".ImpersonateMenu";   // deliberately not part of isis.applib
 
+    public static abstract class ActionDomainEvent<T> extends IsisModuleApplib.ActionDomainEvent<T> {}
+
+
     final UserService userService;
     final MessageService messageService;
     final List<ImpersonateMenuAdvisor> impersonateMenuAdvisors;
 
 
 
-    public static abstract class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<ImpersonateMenu> {}
-
-
-
-    public static class ImpersonateDomainEvent extends ActionDomainEvent { }
-
-    /**
-     * Simple implementation that is surfaced if there is no advisor.
-     *
-     * @param userName
-     */
     @Action(
-            domainEvent = ImpersonateDomainEvent.class,
+            domainEvent = impersonate.ActionEvent.class,
             semantics = SemanticsOf.IDEMPOTENT,
             commandPublishing = Publishing.DISABLED,
             executionPublishing = Publishing.DISABLED,
             restrictTo = RestrictTo.PROTOTYPING
     )
     @ActionLayout(sequence = "100.1", cssClassFa = "fa-mask")
-    public void impersonate(
-            final String userName) {
+    public class impersonate {
 
-        // TODO: should use an SPI for each configured viewer to add in its own role if necessary.
-        this.userService.impersonateUser(userName, Collections.singletonList("org.apache.isis.viewer.wicket.roles.USER"), null);
-        this.messageService.informUser("Now impersonating " + userName);
+        public class ActionEvent extends ActionDomainEvent<impersonate.ActionEvent> { }
+
+        /**
+         * Simple implementation that is surfaced if there is no advisor.
+         *
+         * @param userName
+         */
+        @MemberSupport public void act(
+                final String userName) {
+
+            // TODO: should use an SPI for each configured viewer to add in its own role if necessary.
+            userService.impersonateUser(userName, Collections.singletonList("org.apache.isis.viewer.wicket.roles.USER"), null);
+            messageService.informUser("Now impersonating " + userName);
+        }
+        @MemberSupport public boolean hideAct() {
+            return ! userService.supportsImpersonation() || !hideAct();
+        }
+        @MemberSupport public String disableAct() {
+            return userService.isImpersonating() ? "currently impersonating" : null;
+        }
+
     }
-    @MemberSupport public boolean hideImpersonate() {
-        return ! this.userService.supportsImpersonation() || !hideImpersonateWithRoles();
-    }
-    @MemberSupport public String disableImpersonate() {
-        return this.userService.isImpersonating() ? "currently impersonating" : null;
-    }
 
 
-
-
-
-    public static class ImpersonateWithRolesDomainEvent extends ActionDomainEvent { }
-
-    /**
-     * Impersonate a selected user, either using their current roles or
-     * with a specific set of roles.
-     *
-     * <p>
-     * This more sophisticated implementation is only available if there is
-     * an {@link ImpersonateMenuAdvisor} implementation to provide the
-     * choices.
-     * </p>
-     *  @param userName
-     * @param roleNames
-     * @param multiTenancyToken
-     */
     @Action(
-            domainEvent = ImpersonateWithRolesDomainEvent.class,
+            domainEvent = impersonateWithRoles.ActionEvent.class,
             semantics = SemanticsOf.IDEMPOTENT,
             commandPublishing = Publishing.DISABLED,
             executionPublishing = Publishing.DISABLED,
             restrictTo = RestrictTo.PROTOTYPING
     )
     @ActionLayout(sequence = "100.2", cssClassFa = "fa-mask")
-    public void impersonateWithRoles(
-            final String userName,
-            final List<String> roleNames,
-            final String multiTenancyToken) {
+    public class impersonateWithRoles {
 
-        // TODO: should use an SPI for each configured viewer to add in its own role if necessary.
-        val roleNamesCopy = new ArrayList<>(roleNames);
-        if(!roleNamesCopy.contains("org.apache.isis.viewer.wicket.roles.USER")) {
-            roleNamesCopy.add("org.apache.isis.viewer.wicket.roles.USER");
+        public class ActionEvent extends ActionDomainEvent<impersonateWithRoles> { }
+
+        /**
+         * Impersonate a selected user, either using their current roles or
+         * with a specific set of roles.
+         *
+         * <p>
+         * This more sophisticated implementation is only available if there is
+         * an {@link ImpersonateMenuAdvisor} implementation to provide the
+         * choices.
+         * </p>
+         *
+         * @param userName - user name
+         * @param roleNames - role names
+         * @param multiTenancyToken - multi-tenancy token
+         */
+        @MemberSupport public void act(
+                final String userName,
+                final List<String> roleNames,
+                final String multiTenancyToken) {
+
+            // TODO: should use an SPI for each configured viewer to add in its own role if necessary.
+            val roleNamesCopy = new ArrayList<>(roleNames);
+            if(!roleNamesCopy.contains("org.apache.isis.viewer.wicket.roles.USER")) {
+                roleNamesCopy.add("org.apache.isis.viewer.wicket.roles.USER");
+            }
+            userService.impersonateUser(userName, roleNamesCopy, multiTenancyToken);
+            messageService.informUser("Now impersonating " + userName);
         }
-        this.userService.impersonateUser(userName, roleNamesCopy, multiTenancyToken);
-        this.messageService.informUser("Now impersonating " + userName);
-    }
-    @MemberSupport public boolean hideImpersonateWithRoles() {
-        return ! this.userService.supportsImpersonation() || choices0ImpersonateWithRoles().isEmpty();
-    }
-    @MemberSupport public String disableImpersonateWithRoles() {
-        return this.userService.isImpersonating() ? "currently impersonating" : null;
-    }
-    @MemberSupport public List<String> choices0ImpersonateWithRoles() {
-        return impersonateMenuAdvisor().allUserNames();
-    }
-    @MemberSupport public List<String> choices1ImpersonateWithRoles(final String userName) {
-        return impersonateMenuAdvisor().allRoleNames();
-    }
-    @MemberSupport public List<String> default1ImpersonateWithRoles(final String userName) {
-        return impersonateMenuAdvisor().roleNamesFor(userName);
-    }
-    @MemberSupport public String default2ImpersonateWithRoles(final String userName, final List<String> roleNames) {
-        return impersonateMenuAdvisor().multiTenancyTokenFor(userName);
+        @MemberSupport public boolean hideAct() {
+            return ! userService.supportsImpersonation() || choices0Act().isEmpty();
+        }
+        @MemberSupport public String disableAct() {
+            return userService.isImpersonating() ? "currently impersonating" : null;
+        }
+        @MemberSupport public List<String> choices0Act() {
+            return impersonateMenuAdvisor().allUserNames();
+        }
+        @MemberSupport public List<String> choices1Act(final String userName) {
+            return impersonateMenuAdvisor().allRoleNames();
+        }
+        @MemberSupport public List<String> default1Act(final String userName) {
+            return impersonateMenuAdvisor().roleNamesFor(userName);
+        }
+        @MemberSupport public String default2Act(final String userName, final List<String> roleNames) {
+            return impersonateMenuAdvisor().multiTenancyTokenFor(userName);
+        }
     }
 
     private ImpersonateMenuAdvisor impersonateMenuAdvisor() {
         // this is safe because there will always be at least one implementation.
         return impersonateMenuAdvisors.get(0);
     }
-
 
 }

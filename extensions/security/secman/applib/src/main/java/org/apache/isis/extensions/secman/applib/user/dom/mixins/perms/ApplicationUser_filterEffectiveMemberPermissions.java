@@ -61,8 +61,7 @@ public class ApplicationUser_filterEffectiveMemberPermissions {
 
     private final ApplicationUser user;
 
-    @MemberSupport
-    public List<UserPermissionViewModel> act(
+    @MemberSupport public List<UserPermissionViewModel> act(
 
             @ParameterLayout(
                     describedAs = ApplicationFeatureChoices.DESCRIBED_AS
@@ -78,8 +77,7 @@ public class ApplicationUser_filterEffectiveMemberPermissions {
             .collect(Collectors.toList());
     }
 
-    @MemberSupport
-    public java.util.Collection<ApplicationFeatureChoices.AppFeat> autoComplete0Act(
+    @MemberSupport public java.util.Collection<ApplicationFeatureChoices.AppFeat> autoComplete0Act(
             final @MinLength(3) String search) {
         return applicationFeatureChoices.autoCompleteFeature(search);
     }

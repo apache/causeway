@@ -52,8 +52,7 @@ public class ApplicationUser_resetPassword {
 
     private final ApplicationUser target;
 
-    @MemberSupport
-    public ApplicationUser act(
+    @MemberSupport public ApplicationUser act(
             final Password newPassword,
             final Password repeatPassword) {
 
@@ -61,13 +60,11 @@ public class ApplicationUser_resetPassword {
         return target;
     }
 
-    @MemberSupport
-    public boolean hideAct() {
+    @MemberSupport public boolean hideAct() {
         return !applicationUserRepository.isPasswordFeatureEnabled(target);
     }
 
-    @MemberSupport
-    public String validateAct(
+    @MemberSupport public String validateAct(
             final Password newPassword,
             final Password repeatPassword) {
 

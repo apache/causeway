@@ -26,6 +26,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Optionality;
@@ -53,66 +54,71 @@ public class ApplicationRoleMenu {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationRoleMenu";
 
-    // -- domain event classes
-    public static class PropertyDomainEvent<T> extends IsisModuleExtSecmanApplib.PropertyDomainEvent<ApplicationRoleMenu, T> {}
-    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApplib.CollectionDomainEvent<ApplicationRoleMenu, T> {}
-    public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationRoleMenu> {}
+    public static abstract class ActionDomainEvent<T> extends IsisModuleExtSecmanApplib.ActionDomainEvent<T> {}
 
     private final ApplicationRoleRepository applicationRoleRepository;
 
 
-    // -- iconName
-    @ObjectSupport
-    public String iconName() {
+    @ObjectSupport public String iconName() {
         return "applicationRole";
     }
 
 
-    // -- findRoles
-    public static class FindRolesDomainEvent extends ActionDomainEvent {}
 
     @Action(
-            domainEvent = FindRolesDomainEvent.class,
+            domainEvent = findRoles.ActionEvent.class,
             semantics = SemanticsOf.SAFE
             )
     @ActionLayout(sequence = "100.20.1")
-    public Collection<? extends ApplicationRole> findRoles(
-            @Parameter(maxLength = ApplicationRole.Name.MAX_LENGTH)
-            @ParameterLayout(named = "Search", typicalLength = ApplicationRole.Name.TYPICAL_LENGTH)
-            final String search) {
-        return applicationRoleRepository.findNameContaining(search);
+    public class findRoles {
+
+        public class ActionEvent extends ActionDomainEvent<findRoles> {}
+
+        @MemberSupport public Collection<? extends ApplicationRole> act(
+                @Parameter(maxLength = ApplicationRole.Name.MAX_LENGTH)
+                @ParameterLayout(named = "Search", typicalLength = ApplicationRole.Name.TYPICAL_LENGTH)
+                final String search) {
+            return applicationRoleRepository.findNameContaining(search);
+        }
+
     }
 
 
-    // -- newRole
-    public static class NewRoleDomainEvent extends ActionDomainEvent {}
-
     @Action(
-            domainEvent = NewRoleDomainEvent.class,
+            domainEvent = newRole.ActionEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
             )
     @ActionLayout(sequence = "100.20.2")
-    public ApplicationRole newRole(
-            @Parameter(maxLength = ApplicationRole.Name.MAX_LENGTH)
-            @ParameterLayout(named="Name", typicalLength= ApplicationRole.Name.TYPICAL_LENGTH)
-            final String name,
-            @Parameter(maxLength = ApplicationRole.Description.MAX_LENGTH, optionality = Optionality.OPTIONAL)
-            @ParameterLayout(named="Description", typicalLength= ApplicationRole.Description.TYPICAL_LENGTH)
-            final String description) {
-        return applicationRoleRepository.newRole(name, description);
+    public class newRole{
+
+        public class ActionEvent extends ActionDomainEvent<newRole> {}
+
+        @MemberSupport public ApplicationRole act (
+                @Parameter(maxLength = ApplicationRole.Name.MAX_LENGTH)
+                @ParameterLayout(named="Name", typicalLength= ApplicationRole.Name.TYPICAL_LENGTH)
+                final String name,
+                @Parameter(maxLength = ApplicationRole.Description.MAX_LENGTH, optionality = Optionality.OPTIONAL)
+                @ParameterLayout(named="Description", typicalLength= ApplicationRole.Description.TYPICAL_LENGTH)
+                final String description) {
+            return applicationRoleRepository.newRole(name, description);
+        }
     }
 
 
-    // -- allRoles
-    public static class AllRolesDomainEvent extends ActionDomainEvent {}
 
     @Action(
-            domainEvent = AllRolesDomainEvent.class,
+            domainEvent = allRoles.ActionEvent.class,
             semantics = SemanticsOf.SAFE
             )
     @ActionLayout(sequence = "100.20.3")
-    public Collection<? extends ApplicationRole> allRoles() {
-        return applicationRoleRepository.allRoles();
+    public class allRoles {
+
+        public class ActionEvent extends ActionDomainEvent<allRoles> {}
+
+        @MemberSupport public Collection<? extends ApplicationRole> act() {
+            return applicationRoleRepository.allRoles();
+        }
+
     }
 
 

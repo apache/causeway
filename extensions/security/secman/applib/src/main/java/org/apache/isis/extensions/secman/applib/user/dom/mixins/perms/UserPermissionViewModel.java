@@ -40,7 +40,6 @@ import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
@@ -111,13 +110,11 @@ public class UserPermissionViewModel implements ViewModel {
 
     // -- identification
 
-    @Title
-    public String title() {
+    @ObjectSupport public String title() {
         return getVerb() + " " + getFeatureId().getFullyQualifiedName();
     }
 
-    @ObjectSupport
-    public String iconName() {
+    @ObjectSupport public String iconName() {
         return "userPermission";
     }
 

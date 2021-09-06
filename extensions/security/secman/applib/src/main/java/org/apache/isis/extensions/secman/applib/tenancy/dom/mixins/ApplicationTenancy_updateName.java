@@ -46,17 +46,13 @@ public class ApplicationTenancy_updateName {
 
     private final ApplicationTenancy target;
 
-    @MemberSupport
-    public ApplicationTenancy act(
+    @MemberSupport public ApplicationTenancy act(
             @ApplicationTenancy.Name
             final String name) {
         target.setName(name);
         return target;
     }
 
-    @MemberSupport
-    public String default0Act() {
-        return target.getName();
-    }
+    @MemberSupport public String default0Act() { return target.getName(); }
 
 }

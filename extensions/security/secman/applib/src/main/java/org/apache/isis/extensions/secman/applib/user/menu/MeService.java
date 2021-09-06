@@ -27,8 +27,10 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Domain;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
@@ -61,23 +63,20 @@ public class MeService {
 
     public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApplib.PropertyDomainEvent<MeService, T> {}
     public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApplib.CollectionDomainEvent<MeService, T> {}
-    public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApplib.ActionDomainEvent<MeService> {}
+    public static abstract class ActionDomainEvent<T> extends IsisModuleExtSecmanApplib.ActionDomainEvent<T> {}
 
     final ApplicationUserRepository applicationUserRepository;
     final UserService userService;
     final javax.inject.Provider<QueryResultsCache> queryResultsCacheProvider;
 
-    // -- iconName
-    @ObjectSupport
-    public String iconName() {
+
+    @ObjectSupport public String iconName() {
         return "applicationUser";
     }
 
-    // -- me (action)
-    public static class MeDomainEvent extends ActionDomainEvent {}
 
     @Action(
-            domainEvent = MeDomainEvent.class,
+            domainEvent = me.ActionEvent.class,
             semantics = SemanticsOf.SAFE
             )
     @ActionLayout(
@@ -87,33 +86,35 @@ public class MeService {
             sequence = "100"
             )
 
-    public ApplicationUser me() {
-        return queryResultsCacheProvider.get().execute(new Callable<ApplicationUser>() {
-            @Override
-            public ApplicationUser call() throws Exception {
-                return doMe();
-            }
-        }, MeService.class, "me");
-    }
+    public class me{
 
-    protected ApplicationUser doMe() {
-        final String myName = userService.currentUserNameElseNobody();
-        return applicationUserRepository.findOrCreateUserByUsername(myName);
-    }
+        public class ActionEvent extends ActionDomainEvent<me> {}
 
-    protected ApplicationUser doMe(final String myName) {
-        return applicationUserRepository.findOrCreateUserByUsername(myName);
+        @MemberSupport public ApplicationUser act() {
+            return queryResultsCacheProvider.get().execute(
+                    (Callable<ApplicationUser>) this::doMe, MeService.class, "me");
+        }
+
+        @Domain.Exclude protected ApplicationUser doMe() {
+            final String myName = userService.currentUserNameElseNobody();
+            return applicationUserRepository.findOrCreateUserByUsername(myName);
+        }
+
+        @Domain.Exclude protected ApplicationUser doMe(final String myName) {
+            return applicationUserRepository.findOrCreateUserByUsername(myName);
+        }
+
     }
 
 
     @Component
-    @RequiredArgsConstructor(onConstructor_ = {@Inject})
+    @RequiredArgsConstructor
     public static class UserMenuMeActionAdvisor {
 
         final IsisConfiguration isisConfiguration;
 
-        @EventListener(UserMenu.MeDomainEvent.class)
-        public void on(final UserMenu.MeDomainEvent event) {
+        @EventListener(UserMenu.me.ActionEvent.class)
+        public void on(final UserMenu.me.ActionEvent event) {
             switch (isisConfiguration.getExtensions().getSecman().getUserMenuMeActionPolicy()) {
                 case HIDE:
                     event.hide();

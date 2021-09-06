@@ -85,18 +85,9 @@ public class ApplicationRole_addPermission {
         return target;
     }
 
-    @MemberSupport
-    public ApplicationPermissionRule defaultRule(Parameters params) {
-        return ApplicationPermissionRule.ALLOW;
-    }
-
-    @MemberSupport
-    public ApplicationPermissionMode defaultMode(Parameters params) {
-        return ApplicationPermissionMode.CHANGING;
-    }
-
-    @MemberSupport
-    public java.util.Collection<ApplicationFeatureChoices.AppFeat> autoCompleteFeature(
+    @MemberSupport public ApplicationPermissionRule defaultRule(Parameters params) { return ApplicationPermissionRule.ALLOW; }
+    @MemberSupport public ApplicationPermissionMode defaultMode(Parameters params) { return ApplicationPermissionMode.CHANGING; }
+    @MemberSupport public java.util.Collection<ApplicationFeatureChoices.AppFeat> autoCompleteFeature(
             final Parameters params,
             final @MinLength(3) String search) {
         return applicationFeatureChoices.autoCompleteFeature(search);

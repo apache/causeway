@@ -39,8 +39,7 @@ public class ApplicationUserManager_allUsers {
     @Inject
     private ApplicationUserRepository applicationUserRepository;
 
-    @MemberSupport
-    public Collection<ApplicationUser> coll() {
+    @MemberSupport public Collection<ApplicationUser> coll() {
         return applicationUserRepository.allUsers();
     }
 

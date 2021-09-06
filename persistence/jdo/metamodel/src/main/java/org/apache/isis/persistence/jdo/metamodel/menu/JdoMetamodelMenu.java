@@ -28,6 +28,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -58,13 +59,12 @@ public class JdoMetamodelMenu {
     final JdoSupportService jdoSupport;
     final JdoFacetContext jdoFacetContext;
 
-    public static abstract class ActionDomainEvent
-    extends IsisModuleApplib.ActionDomainEvent<JdoMetamodelMenu> {}
+    public static abstract class ActionDomainEvent<T>
+    extends IsisModuleApplib.ActionDomainEvent<T> {}
 
-    public static class DownloadJdoMetamodelDomainEvent extends ActionDomainEvent {}
 
     @Action(
-            domainEvent = DownloadJdoMetamodelDomainEvent.class,
+            domainEvent = downloadMetamodels.ActionEvent.class,
             semantics = SemanticsOf.NON_IDEMPOTENT, //disable client-side caching
             restrictTo = RestrictTo.PROTOTYPING
             )
@@ -72,11 +72,16 @@ public class JdoMetamodelMenu {
             cssClassFa = "fa-download",
             named = "Download JDO Metamodels (ZIP)",
             sequence="500.670.1")
-    public Blob downloadMetamodels() {
+    public class downloadMetamodels{
 
-        final byte[] zipBytes = zip();
-        return Blob.of("jdo-metamodels", CommonMimeType.ZIP, zipBytes);
+        public class ActionEvent extends ActionDomainEvent<downloadMetamodels> {}
+
+        @MemberSupport public Blob act() {
+            final byte[] zipBytes = zip();
+            return Blob.of("jdo-metamodels", CommonMimeType.ZIP, zipBytes);
+        }
     }
+
 
     // -- HELPER
 

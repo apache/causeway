@@ -59,8 +59,7 @@ public class ApplicationUserManager_newDelegateUser {
 
     private final ApplicationUserManager target;
 
-    @MemberSupport
-    public ApplicationUserManager act(
+    @MemberSupport public ApplicationUserManager act(
 
           @Parameter(maxLength = ApplicationUser.Username.MAX_LENGTH)
           @ParameterLayout(named = "Name")
@@ -86,8 +85,7 @@ public class ApplicationUserManager_newDelegateUser {
         return target;
     }
 
-    @MemberSupport
-    public ApplicationRole default1Act() {
+    @MemberSupport public ApplicationRole default1Act() {
         return applicationRoleRepository
                 .findByNameCached(configBean.getRegularUserRoleName())
                 .orElse(null);

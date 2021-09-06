@@ -20,7 +20,6 @@ package org.apache.isis.applib.services.layout;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.isis.applib.IsisModuleApplib;
@@ -55,12 +54,13 @@ public class LayoutServiceMenu {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".LayoutServiceMenu";
 
-    public static abstract class ActionDomainEvent
-    extends IsisModuleApplib.ActionDomainEvent<LayoutServiceMenu> {}
+    public static abstract class ActionDomainEvent<T> extends IsisModuleApplib.ActionDomainEvent<T> {}
 
+    private final LayoutService layoutService;
     private final MimeType mimeTypeApplicationZip;
 
-    public LayoutServiceMenu() {
+    public LayoutServiceMenu(final LayoutService layoutService) {
+        this.layoutService = layoutService;
         try {
             mimeTypeApplicationZip = new MimeType("application", "zip");
         } catch (final MimeTypeParseException ex) {
@@ -68,10 +68,9 @@ public class LayoutServiceMenu {
         }
     }
 
-    public static class DownloadLayoutsDomainEvent extends ActionDomainEvent {}
 
     @Action(
-            domainEvent = DownloadLayoutsDomainEvent.class,
+            domainEvent = downloadLayouts.ActionEvent.class,
             semantics = SemanticsOf.NON_IDEMPOTENT, //disable client-side caching
             restrictTo = RestrictTo.PROTOTYPING
             )
@@ -79,25 +78,25 @@ public class LayoutServiceMenu {
             cssClassFa = "fa-download",
             named = "Download Object Layouts (ZIP)",
             sequence="500.400.1")
-    // ...
-    public Blob downloadLayouts(final Style style) {
+    public class downloadLayouts{
 
-        final String fileName = "layouts." + style.name().toLowerCase() + ".zip";
+        public class ActionEvent extends ActionDomainEvent<downloadLayouts> {}
 
-        final byte[] zipBytes = layoutService.toZip(style);
-        return new Blob(fileName, mimeTypeApplicationZip, zipBytes);
-        // ...
+        @MemberSupport public Blob act(final Style style) {
+
+            final String fileName = "layouts." + style.name().toLowerCase() + ".zip";
+
+            final byte[] zipBytes = layoutService.toZip(style);
+            return new Blob(fileName, mimeTypeApplicationZip, zipBytes);
+        }
+
+        @MemberSupport public Style default0Act() { return Style.NORMALIZED; }
     }
 
-    @MemberSupport
-    public Style default0DownloadLayouts() {
-        return Style.NORMALIZED;
-    }
 
-    public static class DownloadMenuBarsLayoutDomainEvent extends ActionDomainEvent {}
 
     @Action(
-            domainEvent = DownloadMenuBarsLayoutDomainEvent.class,
+            domainEvent = downloadMenuBarsLayout.ActionEvent.class,
             semantics = SemanticsOf.NON_IDEMPOTENT, //disable client-side caching
             restrictTo = RestrictTo.PROTOTYPING
             )
@@ -105,27 +104,21 @@ public class LayoutServiceMenu {
             cssClassFa = "fa-download",
             named = "Download Menu Bars Layout (XML)",
             sequence="500.400.2")
-    // ...
-    public Clob downloadMenuBarsLayout(
-            @ParameterLayout(named = "File name") final String fileName,
-            final MenuBarsService.Type type) {
+    public class downloadMenuBarsLayout{
 
-        final String xml = layoutService.toMenuBarsXml(type);
+        public class ActionEvent extends ActionDomainEvent<downloadMenuBarsLayout> {}
 
-        return new Clob(_Strings.asFileNameWithExtension(fileName,  ".xml"), "text/xml", xml);
-        // ...
+        @MemberSupport public Clob act(
+                @ParameterLayout(named = "File name") final String fileName,
+                final MenuBarsService.Type type) {
+
+            final String xml = layoutService.toMenuBarsXml(type);
+
+            return new Clob(_Strings.asFileNameWithExtension(fileName,  ".xml"), "text/xml", xml);
+        }
+
+        @MemberSupport public String default0Act() { return "menubars.layout.xml"; }
+        @MemberSupport public MenuBarsService.Type default1Act() { return MenuBarsService.Type.DEFAULT; }
     }
-
-    @MemberSupport
-    public String default0DownloadMenuBarsLayout() {
-        return "menubars.layout.xml";
-    }
-
-    @MemberSupport
-    public MenuBarsService.Type default1DownloadMenuBarsLayout() {
-        return MenuBarsService.Type.DEFAULT;
-    }
-
-    @Inject LayoutService layoutService;
 
 }

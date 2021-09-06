@@ -52,20 +52,14 @@ public class ApplicationTenancy_removeChild {
 
     private final ApplicationTenancy target;
 
-    @MemberSupport
-    public ApplicationTenancy act(final ApplicationTenancy child) {
+    @MemberSupport public ApplicationTenancy act(final ApplicationTenancy child) {
         applicationTenancyRepository.clearParentOnTenancy(child);
         return target;
     }
 
-    @MemberSupport
-    public Collection<? extends ApplicationTenancy> choices0Act() {
+    @MemberSupport public Collection<? extends ApplicationTenancy> choices0Act() {
         return applicationTenancyRepository.getChildren(target);
     }
-
-    @MemberSupport
-    public String disableAct() {
-        return choices0Act().isEmpty()? "No children to remove": null;
-    }
+    @MemberSupport public String disableAct() { return choices0Act().isEmpty()? "No children to remove": null; }
 
 }

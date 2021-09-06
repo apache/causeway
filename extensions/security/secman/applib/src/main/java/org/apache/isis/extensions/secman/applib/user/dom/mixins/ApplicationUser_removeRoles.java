@@ -60,8 +60,7 @@ public class ApplicationUser_removeRoles {
     private final ApplicationUser target;
 
 
-    @MemberSupport
-    public ApplicationUser act(Collection<ApplicationRole> roles) {
+    @MemberSupport public ApplicationUser act(Collection<ApplicationRole> roles) {
 
         _NullSafe.stream(roles)
         .filter(this::canRemove)

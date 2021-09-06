@@ -69,26 +69,28 @@ public class ImpersonateStopMenu {
     final MessageService messageService;
 
 
-    public static abstract class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<ImpersonateStopMenu> {}
+    public static abstract class ActionDomainEvent<T> extends IsisModuleApplib.ActionDomainEvent<T> {}
 
-
-    public static class StopImpersonatingDomainEvent extends ActionDomainEvent { }
 
     @Action(
-            domainEvent = ImpersonateStopMenu.StopImpersonatingDomainEvent.class,
+            domainEvent = stopImpersonating.ActionEvent.class,
             semantics = SemanticsOf.IDEMPOTENT,
             commandPublishing = Publishing.DISABLED,
             executionPublishing = Publishing.DISABLED,
             restrictTo = RestrictTo.PROTOTYPING
     )
     @ActionLayout(sequence = "100.3", redirectPolicy = Redirect.EVEN_IF_SAME)
-    public void stopImpersonating() {
-        this.userService.stopImpersonating();
-        this.messageService.informUser("No longer impersonating another user");
-    }
-    @MemberSupport
-    public boolean hideStopImpersonating() {
-        return ! isImpersonating();
+    public class stopImpersonating{
+
+        public class ActionEvent extends ActionDomainEvent<stopImpersonating> { }
+
+        @MemberSupport public void act() {
+            userService.stopImpersonating();
+            messageService.informUser("No longer impersonating another user");
+        }
+        @MemberSupport public boolean hideAct() {
+            return ! isImpersonating();
+        }
     }
 
     private boolean isImpersonating() {

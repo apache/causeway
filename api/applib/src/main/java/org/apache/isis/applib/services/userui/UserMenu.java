@@ -50,15 +50,13 @@ public class UserMenu {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".UserMenu";
 
-    public static abstract class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<UserMenu> {}
+    public static abstract class ActionDomainEvent<T> extends IsisModuleApplib.ActionDomainEvent<T> {}
 
     final UserService userService;
 
 
-    public static class MeDomainEvent extends ActionDomainEvent {}
-
     @Action(
-            domainEvent = MeDomainEvent.class,
+            domainEvent = me.ActionEvent.class,
             semantics = SemanticsOf.SAFE
             )
     @ActionLayout(
@@ -66,13 +64,15 @@ public class UserMenu {
             describedAs = "Returns your user account details",
             sequence = "100"
         )
-    public UserMemento me() {
-        return userService.currentUser().orElse(null);
-    }
-    @MemberSupport
-    public String disableMe() {
-        return userService.currentUser().isPresent() ? null : "Current user not available";
-    }
+    public class me {
 
+        public class ActionEvent extends ActionDomainEvent<me> {}
+
+        @MemberSupport public UserMemento act() { return userService.currentUser().orElse(null); }
+        @MemberSupport public String disableAct() {
+            return userService.currentUser().isPresent() ? null : "Current user not available";
+        }
+
+    }
 
 }

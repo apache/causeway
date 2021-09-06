@@ -46,17 +46,13 @@ public class ApplicationUser_updateUsername {
 
     private final ApplicationUser target;
 
-    @MemberSupport
-    public ApplicationUser act(
+    @MemberSupport public ApplicationUser act(
             @ApplicationUser.Username
             final String username) {
         target.setUsername(username);
         return target;
     }
 
-    @MemberSupport
-    public String default0Act() {
-        return target.getUsername();
-    }
+    @MemberSupport public String default0Act() { return target.getUsername(); }
 
 }

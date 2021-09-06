@@ -46,8 +46,7 @@ public class ApplicationRole_updateDescription {
 
     private final ApplicationRole target;
 
-    @MemberSupport
-    public ApplicationRole act(
+    @MemberSupport public ApplicationRole act(
             @ApplicationRole.Description
             final String description) {
 
@@ -55,10 +54,7 @@ public class ApplicationRole_updateDescription {
         return target;
     }
 
-    @MemberSupport
-    public String default0Act() {
-        return target.getDescription();
-    }
+    @MemberSupport public String default0Act() { return target.getDescription(); }
 
 
 }

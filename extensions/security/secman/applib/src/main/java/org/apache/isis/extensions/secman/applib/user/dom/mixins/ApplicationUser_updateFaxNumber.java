@@ -46,21 +46,15 @@ public class ApplicationUser_updateFaxNumber {
 
     private final ApplicationUser holder;
 
-    @MemberSupport
-    public ApplicationUser act(
+    @MemberSupport public ApplicationUser act(
             @ApplicationUser.FaxNumber
             final String fax) {
         holder.setFaxNumber(fax);
         return holder;
     }
 
-    @MemberSupport
-    public String default0Act() {
-        return holder.getFaxNumber();
-    }
-
-    @MemberSupport
-    public String disableAct() {
+    @MemberSupport public String default0Act() { return holder.getFaxNumber(); }
+    @MemberSupport public String disableAct() {
         return holder.isForSelfOrRunAsAdministrator()? null: "Can only update your own user record.";
     }
 

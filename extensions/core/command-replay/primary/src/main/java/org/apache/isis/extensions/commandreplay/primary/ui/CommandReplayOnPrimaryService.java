@@ -21,12 +21,20 @@ package org.apache.isis.extensions.commandreplay.primary.ui;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.lang.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.*;
+import org.springframework.lang.Nullable;
+
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.exceptions.RecoverableException;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandsDto;
 import org.apache.isis.applib.services.jaxb.JaxbService;
@@ -67,11 +75,9 @@ public class CommandReplayOnPrimaryService {
     @Inject final ContentMappingServiceForCommandsDto contentMappingServiceForCommandsDto;
     @Inject final CommandRetrievalService commandRetrievalService;
 
-    public static abstract class ActionDomainEvent
-            extends IsisModuleExtCommandReplayPrimary.ActionDomainEvent<CommandReplayOnPrimaryService> { }
+    public static abstract class ActionDomainEvent<T> extends IsisModuleExtCommandReplayPrimary.ActionDomainEvent<T> { }
 
 
-    public static class FindCommandsDomainEvent extends ActionDomainEvent { }
     public static class NotFoundException extends RecoverableException {
         private static final long serialVersionUID = 1L;
         @Getter
@@ -82,106 +88,122 @@ public class CommandReplayOnPrimaryService {
         }
     }
 
-    /**
-     * These actions should be called with HTTP Accept Header set to:
-     * <code>application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandsDto"</code>
-     *
-     * @param interactionId - to search from.  This transactionId will <i>not</i> be included in the response.
-     * @param batchSize - the maximum number of commands to return.  If not specified, all found will be returned.
-     * @throws NotFoundException - if the command with specified transaction cannot be found.
-     */
-    @Action(domainEvent = FindCommandsDomainEvent.class, semantics = SemanticsOf.SAFE)
+    @Action(domainEvent = findCommands.ActionEvent.class, semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa = "fa-search", sequence="40")
-    public List<? extends CommandModel> findCommands(
-            @Nullable
-            @ParameterLayout(named="Interaction Id")
-            final UUID interactionId,
-            @Nullable
-            @ParameterLayout(named="Batch size")
-            final Integer batchSize)
-            throws NotFoundException {
-        return commandRetrievalService.findCommandsOnPrimaryFrom(interactionId, batchSize);
-    }
-    @MemberSupport public Integer default1FindCommandsOnPrimaryFrom() {
-        return commandRetrievalService.default1FindCommandsOnPrimaryFrom();
-    }
+    public class findCommands{
 
+        public class ActionEvent extends ActionDomainEvent<findCommands> { }
 
-
-    public static class DownloadCommandsDomainEvent extends ActionDomainEvent { }
-    /**
-     * These actions should be called with HTTP Accept Header set to:
-     * <code>application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandsDto"</code>
-     *
-     * @param interactionId - to search from.  This transactionId will <i>not</i> be included in the response.
-     * @param batchSize - the maximum number of commands to return.  If not specified, all found will be returned.
-     * @throws NotFoundException - if the command with specified transaction cannot be found.
-     */
-    @Action(domainEvent = DownloadCommandsDomainEvent.class, semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa = "fa-download", sequence="50")
-    public Clob downloadCommands(
-            @Nullable
-            final UUID interactionId,
-            @Nullable
-            final Integer batchSize,
-            final String filenamePrefix) {
-        final List<? extends CommandModel> commands = commandModelRepository.findSince(interactionId, batchSize);
-        if(commands == null) {
-            messageService.informUser("No commands found");
+        /**
+         * These actions should be called with HTTP Accept Header set to:
+         * <code>application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandsDto"</code>
+         *
+         * @param interactionId - to search from.  This transactionId will <i>not</i> be included in the response.
+         * @param batchSize - the maximum number of commands to return.  If not specified, all found will be returned.
+         * @throws NotFoundException - if the command with specified transaction cannot be found.
+         */
+        @MemberSupport public List<? extends CommandModel> act(
+                @Nullable
+                @ParameterLayout(named="Interaction Id")
+                final UUID interactionId,
+                @Nullable
+                @ParameterLayout(named="Batch size")
+                final Integer batchSize)
+                throws NotFoundException {
+            return commandRetrievalService.findCommandsOnPrimaryFrom(interactionId, batchSize);
+        }
+        @MemberSupport public Integer default1Act() {
+            return commandRetrievalService.default1FindCommandsOnPrimaryFrom();
         }
 
-        final CommandsDto commandsDto =
-                contentMappingServiceForCommandsDto.map(commands);
-
-        final String fileName = String.format(
-                "%s_%s.xml", filenamePrefix, elseDefault(interactionId));
-
-        final String xml = jaxbService.toXml(commandsDto);
-        return new Clob(fileName, "application/xml", xml);
-    }
-    @MemberSupport public Integer default1DownloadCommands() {
-        return 25;
-    }
-    @MemberSupport public String default2DownloadCommands() {
-        return "commands_from";
     }
 
 
 
-    public static class DownloadCommandByIdDomainEvent extends ActionDomainEvent { }
-    /**
-     * This action should be called with HTTP Accept Header set to:
-     * <code>application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandDto"</code>
-     *
-     * @param interactionId - to download.
-     * @throws NotFoundException - if the command with specified transaction cannot be found.
-     */
-    @Action(domainEvent = DownloadCommandByIdDomainEvent.class, semantics = SemanticsOf.SAFE)
+
+    @Action(domainEvent = downloadCommands.ActionEvent.class, semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa = "fa-download", sequence="50")
-    public Clob downloadCommandById(
-            final UUID interactionId,
-            final String filenamePrefix) {
+    public class downloadCommands {
 
-        return commandModelRepository.findByInteractionId(interactionId)
-                .map(commandJdo -> {
+        public class ActionEvent extends ActionDomainEvent<downloadCommands> { }
 
-                    final CommandDto commandDto = commandJdo.getCommandDto();
+        /**
+         * These actions should be called with HTTP Accept Header set to:
+         * <code>application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandsDto"</code>
+         *
+         * @param interactionId - to search from.  This transactionId will <i>not</i> be included in the response.
+         * @param batchSize - the maximum number of commands to return.  If not specified, all found will be returned.
+         * @throws NotFoundException - if the command with specified transaction cannot be found.
+         */
+        @MemberSupport public Clob act(
+                @Nullable
+                final UUID interactionId,
+                @Nullable
+                final Integer batchSize,
+                final String filenamePrefix) {
+            final List<? extends CommandModel> commands = commandModelRepository.findSince(interactionId, batchSize);
+            if(commands == null) {
+                messageService.informUser("No commands found");
+            }
 
-                    final String fileName = String.format(
-                            "%s_%s.xml", filenamePrefix, elseDefault(interactionId));
+            final CommandsDto commandsDto =
+                    contentMappingServiceForCommandsDto.map(commands);
 
-                    final String xml = jaxbService.toXml(commandDto);
-                    return new Clob(fileName, "application/xml", xml);
+            final String fileName = String.format(
+                    "%s_%s.xml", filenamePrefix, elseDefault(interactionId));
 
-                }).orElseGet(() -> {
-                    messageService.informUser("No command found");
-                    return null;
-                });
+            final String xml = jaxbService.toXml(commandsDto);
+            return new Clob(fileName, "application/xml", xml);
+        }
+        @MemberSupport public Integer default1Act() {
+            return 25;
+        }
+        @MemberSupport public String default2Act() {
+            return "commands_from";
+        }
+
     }
-    @MemberSupport public String default1DownloadCommandById() {
-        return "command";
-    }
 
+
+
+    @Action(domainEvent = downloadCommandById.ActionEvent.class, semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa = "fa-download", sequence="50")
+    public class downloadCommandById {
+
+        public class ActionEvent extends ActionDomainEvent<downloadCommandById> { }
+
+        /**
+         * This action should be called with HTTP Accept Header set to:
+         * <code>application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandDto"</code>
+         *
+         * @param interactionId - to download.
+         * @throws NotFoundException - if the command with specified transaction cannot be found.
+         */
+        @MemberSupport public Clob act(
+                final UUID interactionId,
+                final String filenamePrefix) {
+
+            return commandModelRepository.findByInteractionId(interactionId)
+                    .map(commandJdo -> {
+
+                        final CommandDto commandDto = commandJdo.getCommandDto();
+
+                        final String fileName = String.format(
+                                "%s_%s.xml", filenamePrefix, elseDefault(interactionId));
+
+                        final String xml = jaxbService.toXml(commandDto);
+                        return new Clob(fileName, "application/xml", xml);
+
+                    }).orElseGet(() -> {
+                        messageService.informUser("No command found");
+                        return null;
+                    });
+        }
+        @MemberSupport public String default1Act() {
+            return "command";
+        }
+
+    }
 
     private static String elseDefault(final UUID uuid) {
         return uuid != null ? uuid.toString() : "00000000-0000-0000-0000-000000000000";

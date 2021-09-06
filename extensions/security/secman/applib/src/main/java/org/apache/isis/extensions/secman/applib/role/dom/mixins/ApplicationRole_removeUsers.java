@@ -24,6 +24,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Domain;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.message.MessageService;
@@ -59,8 +60,7 @@ public class ApplicationRole_removeUsers {
 
     private final ApplicationRole target;
 
-    @MemberSupport
-    public ApplicationRole act(Collection<ApplicationUser> users) {
+    @MemberSupport public ApplicationRole act(Collection<ApplicationUser> users) {
 
         _NullSafe.stream(users)
         .filter(this::canRemove)
@@ -69,7 +69,8 @@ public class ApplicationRole_removeUsers {
         return target;
     }
 
-    public boolean canRemove(ApplicationUser applicationUser) {
+    @Domain.Exclude
+    boolean canRemove(ApplicationUser applicationUser) {
         if(applicationUserRepository.isAdminUser(applicationUser)
                 && applicationRoleRepository.isAdminRole(target)) {
             messageService.warnUser("Cannot remove admin user from the admin role.");
