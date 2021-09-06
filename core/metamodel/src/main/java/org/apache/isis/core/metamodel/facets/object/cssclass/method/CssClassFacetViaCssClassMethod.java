@@ -31,11 +31,9 @@ import org.apache.isis.core.metamodel.facets.ImperativeAspect;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 public class CssClassFacetViaCssClassMethod
 extends CssClassFacetAbstract
@@ -63,20 +61,7 @@ implements HasImperativeAspect {
 
     @Override
     public String cssClass(final ManagedObject domainObject) {
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(domainObject)) {
-            return "";
-        }
-        try {
-            return (String) imperativeAspect.invokeSingleMethod(domainObject);
-        } catch (final RuntimeException ex) {
-            return null;
-        }
-    }
-
-    @Override
-    protected String toStringValues() {
-        val method = imperativeAspect.getMethods().getFirstOrFail();
-        return "method=" + method;
+        return imperativeAspect.eval(domainObject, (String)null);
     }
 
     @Override

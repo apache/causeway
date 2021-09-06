@@ -68,22 +68,16 @@ implements HasImperativeAspect {
     }
 
     @Override
-    public String disabledReason(final ManagedObject owningAdapter) {
-        val returnValue = imperativeAspect.invokeSingleMethod(owningAdapter);
+    public String disabledReason(final ManagedObject domainObject) {
+        val returnValue = imperativeAspect.eval(domainObject, null);
         if(returnValue instanceof String) {
-            return (String) returnValue;
+            return (String)returnValue;
         }
         if(returnValue instanceof TranslatableString) {
-            final TranslatableString ts = (TranslatableString) returnValue;
+            final TranslatableString ts = (TranslatableString)returnValue;
             return ts.translate(getTranslationService(), translationContext);
         }
         return null;
-    }
-
-    @Override
-    protected String toStringValues() {
-        val method = imperativeAspect.getMethods().getFirstOrFail();
-        return "method=" + method;
     }
 
     @Override

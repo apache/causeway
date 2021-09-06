@@ -5,6 +5,7 @@ import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet.Intent;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -13,8 +14,10 @@ import lombok.Value;
 import lombok.val;
 
 @Value(staticConstructor = "of")
+//@Log4j2
 public class ImperativeAspect {
 
+//    private final MetaModelContext mmc;
     private final Can<Method> methods;
     private final Intent intent;
 
@@ -40,6 +43,21 @@ public class ImperativeAspect {
         val method = methods.getFirstOrFail();
         final Object returnValue = ManagedObjects.InvokeUtil.invoke(method, domainObject);
         return returnValue;
+    }
+
+    public <T> T eval(
+            final ManagedObject domainObject,
+            final T fallback) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(domainObject)) {
+            return fallback;
+        }
+        try {
+            return _Casts.uncheckedCast(invokeSingleMethod(domainObject));
+        } catch (final RuntimeException ex) {
+
+            return fallback;
+        }
+
     }
 
 }

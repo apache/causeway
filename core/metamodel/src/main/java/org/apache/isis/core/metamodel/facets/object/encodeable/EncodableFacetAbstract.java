@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.encodeable;
 
+import java.util.function.BiConsumer;
+
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -26,7 +28,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.encodeable.encoder.EncodableFacetUsingEncoderDecoder;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public abstract class EncodableFacetAbstract extends FacetAbstract implements EncodableFacet {
+public abstract class EncodableFacetAbstract
+extends FacetAbstract
+implements EncodableFacet {
 
     private final Class<?> encoderDecoderClass;
 
@@ -44,6 +48,7 @@ public abstract class EncodableFacetAbstract extends FacetAbstract implements En
         if (isValid()) {
             final EncoderDecoder<?> encoderDecoder =
                     (EncoderDecoder<?>) ClassExtensions.newInstance(encoderDecoderClass, FacetHolder.class, holder);
+            getServiceInjector().injectServicesInto(encoderDecoder);
             this.encodeableFacetUsingEncoderDecoder =
                     new EncodableFacetUsingEncoderDecoder(encoderDecoder, holder);
         } else {
@@ -68,8 +73,9 @@ public abstract class EncodableFacetAbstract extends FacetAbstract implements En
     }
 
     @Override
-    protected String toStringValues() {
-        return encoderDecoderClass.getName();
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("codec", encoderDecoderClass.getName());
     }
 
     @Override

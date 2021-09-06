@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.validating.validateobject;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -26,7 +25,9 @@ import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public abstract class ValidateObjectFacetAbstract extends FacetAbstract implements ValidateObjectFacet {
+public abstract class ValidateObjectFacetAbstract
+extends FacetAbstract
+implements ValidateObjectFacet {
 
     private static final Class<? extends Facet> type() {
         return ValidateObjectFacet.class;

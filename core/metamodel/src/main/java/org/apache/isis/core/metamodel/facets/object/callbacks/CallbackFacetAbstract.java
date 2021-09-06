@@ -56,12 +56,6 @@ implements CallbackFacet {
     }
 
     @Override
-    protected final String toStringValues() {
-        // free of side-effects, though might not reflect the final state if called too early
-        return "methods=" + methods;
-    }
-
-    @Override
     public final void invoke(final ManagedObject adapter) {
         // as a side effect memoizes the list of methods and locks it so cannot add any more
         ManagedObjects.InvokeUtil.invokeAll(getMethods(), adapter);

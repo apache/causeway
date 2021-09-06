@@ -70,10 +70,4 @@ implements ImperativeFacet {
         return null;
     }
 
-    @Override
-    protected String toStringValues() {
-        val method = methods.getFirstOrFail();
-        return "method=" + method;
-    }
-
 }

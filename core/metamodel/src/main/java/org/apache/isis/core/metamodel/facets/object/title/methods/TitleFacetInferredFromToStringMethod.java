@@ -34,7 +34,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 public class TitleFacetInferredFromToStringMethod
 extends TitleFacetAbstract
@@ -62,11 +61,8 @@ implements HasImperativeAspect {
     }
 
     @Override
-    public String title(final ManagedObject object) {
-        val pojo = object.getPojo();
-        return pojo!=null
-                ? pojo.toString()
-                : "(not present)";
+    public String title(final ManagedObject domainObject) {
+        return imperativeAspect.eval(domainObject, "(not present)");
     }
 
     @Override

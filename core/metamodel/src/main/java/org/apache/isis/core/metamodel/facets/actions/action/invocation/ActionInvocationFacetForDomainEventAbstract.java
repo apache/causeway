@@ -112,12 +112,6 @@ implements ImperativeFacet {
         visitor.accept("eventType", eventType);
     }
 
-    @Override
-    protected String toStringValues() {
-        val method = methods.getFirstOrFail();
-        return "method=" + method;
-    }
-
     // -- HELPER
 
     private ManagedObject doInvoke(

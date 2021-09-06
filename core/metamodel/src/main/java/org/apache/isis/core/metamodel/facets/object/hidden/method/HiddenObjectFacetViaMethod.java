@@ -63,10 +63,7 @@ implements HasImperativeAspect {
 
     @Override
     public String hiddenReason(final ManagedObject target) {
-        if (target == null) {
-            return null;
-        }
-        final boolean isHidden = (boolean) imperativeAspect.invokeSingleMethod(target);
+        final boolean isHidden = imperativeAspect.eval(target, false);
         return isHidden ? "Hidden" : null;
     }
 

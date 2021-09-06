@@ -33,7 +33,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 public class LayoutFacetViaLayoutMethod
 extends LayoutFacetAbstract
@@ -69,12 +68,6 @@ implements HasImperativeAspect {
         } catch (final RuntimeException ex) {
             return null;
         }
-    }
-
-    @Override
-    protected String toStringValues() {
-        val method = imperativeAspect.getMethods().getFirstOrFail();
-        return "method=" + method;
     }
 
     @Override

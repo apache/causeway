@@ -185,7 +185,4 @@ extends
      */
     void forEachContributedFacet(Consumer<Facet> onContributedFacet);
 
-
-
-
 }

@@ -31,11 +31,9 @@ import org.apache.isis.core.metamodel.facets.ImperativeAspect;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 public class IconFacetViaIconNameMethod
 extends IconFacetAbstract
@@ -63,20 +61,7 @@ implements HasImperativeAspect {
 
     @Override
     public String iconName(final ManagedObject domainObject) {
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(domainObject)) {
-            return null;
-        }
-        try {
-            return (String) imperativeAspect.invokeSingleMethod(domainObject);
-        } catch (final RuntimeException ex) {
-            return null;
-        }
-    }
-
-    @Override
-    protected String toStringValues() {
-        val method = imperativeAspect.getMethods().getFirstOrFail();
-        return "method=" + method;
+        return  imperativeAspect.eval(domainObject, (String)null);
     }
 
     @Override

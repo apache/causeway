@@ -51,7 +51,7 @@ implements ImperativeFacet {
             final Method method,
             final TranslationService translationService,
             final TranslationContext translationContext,
-            Optional<Constructor<?>> ppmFactory,
+            final Optional<Constructor<?>> ppmFactory,
             final FacetHolder holder) {
 
         super(holder);
@@ -82,12 +82,6 @@ implements ImperativeFacet {
             return ts.translate(translationService, translationContext);
         }
         return null;
-    }
-
-    @Override
-    protected String toStringValues() {
-        val method = methods.getFirstOrFail();
-        return "method=" + method;
     }
 
     @Override

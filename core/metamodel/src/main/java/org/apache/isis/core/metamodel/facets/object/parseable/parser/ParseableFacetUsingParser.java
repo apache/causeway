@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.object.parseable.parser;
 
 import java.util.IllegalFormatException;
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.adapters.Parser;
@@ -72,9 +73,9 @@ implements ParseableFacet {
     }
 
     @Override
-    protected String toStringValues() {
-        getServiceInjector().injectServicesInto(parser);
-        return parser.toString();
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("parser", parser.toString());
     }
 
     @Override
@@ -102,8 +103,6 @@ implements ParseableFacet {
         }
 
         final Object context = UnwrapUtil.single(contextAdapter);
-
-        getServiceInjector().injectServicesInto(parser);
 
         try {
             final Object parsed = parser.parseTextEntry(context, entry);
@@ -143,7 +142,6 @@ implements ParseableFacet {
     public String parseableTitle(final ManagedObject contextAdapter) {
         final Object pojo = UnwrapUtil.single(contextAdapter);
 
-        getServiceInjector().injectServicesInto(parser);
         return ((Parser)parser).parseableTitleOf(pojo);
     }
 

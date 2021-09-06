@@ -57,11 +57,6 @@ implements RedirectFacet {
     }
 
     @Override
-    protected String toStringValues() {
-        return "redirect=" + redirect;
-    }
-
-    @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("redirect", redirect);

@@ -95,12 +95,6 @@ implements ImperativeFacet {
     }
 
     @Override
-    protected String toStringValues() {
-        val method = methods.getFirstOrFail();
-        return "method=" + method + ",type=" + choicesType;
-    }
-
-    @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         ImperativeFacet.visitAttributes(this, visitor);

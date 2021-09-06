@@ -16,8 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.objectvalue.maxlen;
+
+import java.util.function.BiConsumer;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -78,9 +79,10 @@ implements MaxLengthFacet {
     }
 
     @Override
-    protected String toStringValues() {
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
         final int val = value();
-        return val == 0 ? "unlimited" : String.valueOf(val);
+        visitor.accept("maxLength", val == 0 ? "unlimited" : String.valueOf(val));
     }
 
     @Override

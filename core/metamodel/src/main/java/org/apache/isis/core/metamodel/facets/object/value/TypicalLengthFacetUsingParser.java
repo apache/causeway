@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.value;
 
+import java.util.function.BiConsumer;
+
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacetAbstract;
@@ -34,8 +36,9 @@ extends TypicalLengthFacetAbstract {
     }
 
     @Override
-    protected String toStringValues() {
-        return parser.toString();
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("parser", parser.toString());
     }
 
 }

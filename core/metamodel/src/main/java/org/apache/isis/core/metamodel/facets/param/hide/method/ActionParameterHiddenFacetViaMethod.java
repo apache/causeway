@@ -76,12 +76,6 @@ implements ImperativeFacet {
     }
 
     @Override
-    protected String toStringValues() {
-        val method = methods.getFirstOrFail();
-        return "method=" + method;
-    }
-
-    @Override
     public boolean semanticEquals(final @NonNull Facet otherFacet) {
 
         if(! (otherFacet instanceof ActionParameterHiddenFacetViaMethod)) {

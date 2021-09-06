@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.value;
 
 import java.util.function.BiConsumer;
@@ -36,12 +35,6 @@ extends MaxLengthFacetAbstract{
     }
 
     @Override
-    protected String toStringValues() {
-        return parser.toString();
-    }
-
-
-    @Override
     public String toString() {
         return "maxLength=" + value();
     }
@@ -49,6 +42,6 @@ extends MaxLengthFacetAbstract{
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("parser", parser);
+        visitor.accept("parser", parser.toString());
     }
 }

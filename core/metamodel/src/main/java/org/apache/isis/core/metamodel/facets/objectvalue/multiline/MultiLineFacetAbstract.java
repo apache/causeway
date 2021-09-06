@@ -53,11 +53,6 @@ implements MultiLineFacet {
     }
 
     @Override
-    protected String toStringValues() {
-        return "lines=" + numberOfLines;
-    }
-
-    @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("numberOfLines", numberOfLines);

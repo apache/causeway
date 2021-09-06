@@ -52,15 +52,6 @@ implements SingleStringValueFacet {
     }
 
     @Override
-    protected String toStringValues() {
-        if (value == null) {
-            return "null";
-        } else {
-            return "\"" + value + "\"";
-        }
-    }
-
-    @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("value", value);

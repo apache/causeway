@@ -69,7 +69,7 @@ implements ImperativeFacet {
     }
 
     @Override
-    public Object getDefault(@NonNull ParameterNegotiationModel pendingArgs) {
+    public Object getDefault(@NonNull final ParameterNegotiationModel pendingArgs) {
 
         val method = methods.getFirstOrFail();
 
@@ -86,12 +86,6 @@ implements ImperativeFacet {
                         pendingArgs.getActionTarget(), pendingArgs.getParamValues());
 
         return defaultValue;
-    }
-
-    @Override
-    protected String toStringValues() {
-        val method = methods.getFirstOrFail();
-        return "method=" + method;
     }
 
     @Override

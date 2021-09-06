@@ -46,11 +46,6 @@ implements ActionPositionFacet {
     }
 
     @Override
-    protected String toStringValues() {
-        return "position=" + position;
-    }
-
-    @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("position", position);

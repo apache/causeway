@@ -52,11 +52,6 @@ implements DefaultedFacet {
     }
 
     @Override
-    protected final String toStringValues() {
-        return defaultsProvider.toString();
-    }
-
-    @Override
     public final void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("defaultsProvider", defaultsProvider.getClass().getName());

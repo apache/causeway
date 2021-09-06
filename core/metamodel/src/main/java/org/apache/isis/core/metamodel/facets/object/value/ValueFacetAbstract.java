@@ -119,6 +119,7 @@ implements ValueFacet {
             // install the EncodeableFacet if we've been given an EncoderDecoder
             final EncoderDecoder<?> encoderDecoder = semanticsProvider.getEncoderDecoder();
             if (encoderDecoder != null) {
+                getServiceInjector().injectServicesInto(encoderDecoder);
                 this.addContributedFacet(new EncodableFacetUsingEncoderDecoder(encoderDecoder, holder));
             }
 

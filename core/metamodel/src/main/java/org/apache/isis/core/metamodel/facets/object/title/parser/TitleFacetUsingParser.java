@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.title.parser;
 
+import java.util.function.BiConsumer;
+
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -52,12 +54,6 @@ implements TitleFacet {
     }
 
     @Override
-    protected String toStringValues() {
-        getServiceInjector().injectServicesInto(parser);
-        return parser.toString();
-    }
-
-    @Override
     public String title(final ManagedObject adapter) {
         if (adapter == null) {
             return null;
@@ -66,7 +62,6 @@ implements TitleFacet {
         if (object == null) {
             return null;
         }
-        getServiceInjector().injectServicesInto(parser);
         return parser.displayTitleOf(_Casts.uncheckedCast(object));
     }
 
@@ -81,11 +76,14 @@ implements TitleFacet {
         if (object == null) {
             return null;
         }
-        getServiceInjector().injectServicesInto(parser);
         return parser.displayTitleOf(_Casts.uncheckedCast(object), usingMask);
     }
 
-
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("parser", parser.toString());
+    }
 
 
 }

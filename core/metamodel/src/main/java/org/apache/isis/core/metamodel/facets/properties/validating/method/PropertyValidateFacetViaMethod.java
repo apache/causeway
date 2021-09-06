@@ -73,11 +73,6 @@ public class PropertyValidateFacetViaMethod extends PropertyValidateFacetAbstrac
     }
 
     @Override
-    protected String toStringValues() {
-        return "method=" + method;
-    }
-
-    @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         ImperativeFacet.visitAttributes(this, visitor);
