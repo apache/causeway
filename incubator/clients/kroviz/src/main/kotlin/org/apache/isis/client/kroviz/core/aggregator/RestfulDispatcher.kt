@@ -40,11 +40,11 @@ class RestfulDispatcher() : BaseAggregator() {
     }
 
     private fun invokeNavigation(it: Link) {
-        invoke(it, NavigationDispatcher())
+        invoke(it, NavigationDispatcher(), referrer = "")
     }
 
     private fun invokeSystem(it: Link) {
-        invoke(it, SystemAggregator())
+        invoke(it, SystemAggregator(), referrer = "")
     }
 
 }

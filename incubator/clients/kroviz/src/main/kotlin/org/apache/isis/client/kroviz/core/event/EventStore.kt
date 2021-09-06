@@ -52,7 +52,7 @@ object EventStore {
               method: String,
               body: String = "",
               aggregator: BaseAggregator? = null): LogEntry {
-        val entry = LogEntry(reSpec.url, method, request = body, subType = reSpec.subType)
+        val entry = LogEntry(reSpec, method, request = body)
         if (aggregator != null) {
             entry.addAggregator(aggregator)
         }
@@ -62,7 +62,7 @@ object EventStore {
     }
 
     fun add(reSpec: ResourceSpecification) {
-        val entry = LogEntry(url = reSpec.url)
+        val entry = LogEntry(reSpec)
         log(entry)
         updateStatus(entry)
     }

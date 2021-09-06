@@ -73,6 +73,39 @@ class LogEntryDecorator(val logEntry: LogEntry) {
         return children
     }
 
+    fun findChildrenOfLogEntry(): List<LogEntry> {
+        console.log("[LED.findChildrenOfLogEntry]")
+        val children = mutableListOf<LogEntry>()
+        val links = logEntry.getLinks()
+        console.log("[links] ->")
+        console.log(links)
+        console.log(links.size)
+        links.forEach {
+            console.log(it.toString())
+            when (it.relation()) {
+                Relation.UP -> {
+                }
+                Relation.SELF -> {
+                }
+                else -> {
+                    val url = it.href
+                    console.log(url)
+                    val rsj = ResourceSpecification(url, Constants.subTypeJson)
+                    var le = EventStore.findBy(rsj)
+                    if (le == null) {
+                        val rsx = ResourceSpecification(url, Constants.subTypeXml)
+                        le = EventStore.findBy(rsx)
+                    }
+                    console.log(le.toString())
+                    if (le != null) children.add(le)
+                }
+            }
+        }
+        console.log("[children] ->")
+        console.log(children)
+        return children
+    }
+
     private fun findChildrenByReference(): Set<LogEntry> {
         val str = logEntry.response
         val children = mutableSetOf<LogEntry>()
@@ -86,6 +119,7 @@ class LogEntryDecorator(val logEntry: LogEntry) {
 
     fun findChildrenIn(aggregatedList: List<LogEntry>): List<LogEntry> {
         console.log("[LED.findChildrenIn]")
+        console.log(aggregatedList)
         val selfUrl = href
         val children = mutableListOf<LogEntry>()
         aggregatedList.forEach {
@@ -93,6 +127,7 @@ class LogEntryDecorator(val logEntry: LogEntry) {
                 children.add(it)
             }
         }
+        console.log(children)
         return children
     }
 

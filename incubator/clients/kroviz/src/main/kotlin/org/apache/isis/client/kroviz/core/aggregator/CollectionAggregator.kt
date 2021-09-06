@@ -21,6 +21,7 @@ package org.apache.isis.client.kroviz.core.aggregator
 import org.apache.isis.client.kroviz.core.event.EventState
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.core.event.ResourceProxy
+import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.core.model.CollectionDM
 import org.apache.isis.client.kroviz.layout.Layout
 import org.apache.isis.client.kroviz.to.*
@@ -41,20 +42,21 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
     }
 
     override fun update(logEntry: LogEntry, subType: String) {
-
+        super.update(logEntry, subType)
         if (logEntry.state == EventState.DUPLICATE) {
             console.log("[CollectionAggregator.update] TODO duplicates should not be propagated to handlers")
             //TODO this may not hold true for changed and deleted objects - object version required to deal with it?
         } else {
+            val referrer = logEntry.url
             when (val obj = logEntry.getTransferObject()) {
                 null -> log(logEntry)
-                is ResultList -> handleList(obj)
-                is TObject -> handleObject(obj)
-                is DomainType -> handleDomainType(obj)
-                is Layout -> handleLayout(obj, dpm as CollectionDM)
+                is ResultList -> handleList(obj, referrer)
+                is TObject -> handleObject(obj, referrer)
+                is DomainType -> handleDomainType(obj, referrer)
+                is Layout -> handleLayout(obj, dpm as CollectionDM, referrer)
                 is Grid -> handleGrid(obj)
-                is Property -> handleProperty(obj)
-                is Collection -> handleCollection(obj)
+                is Property -> handleProperty(obj, referrer)
+                is Collection -> handleCollection(obj, referrer)
                 is Icon -> handleIcon(obj)
                 else -> log(logEntry)
             }
@@ -64,41 +66,41 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
                     UiManager.openCollectionView(this)
                 }
             } else {
-                val le = LogEntry("")
+                val le = LogEntry(ResourceSpecification(""))
                 parent.update(le, subType)
             }
         }
     }
 
-    private fun handleList(resultList: ResultList) {
+    private fun handleList(resultList: ResultList, referrer: String) {
         if (resultList.resulttype != ResultType.VOID.type) {
             val result = resultList.result!!
             result.value.forEach {
-                invoke(it, this)
+                invoke(it, this, referrer = referrer)
             }
         }
     }
 
-    private fun handleObject(obj: TObject) {
+    private fun handleObject(obj: TObject, referrer: String) {
         dpm.addData(obj)
-        invokeLayoutLink(obj, this)
-        invokeIconLink(obj, this)
+        invokeLayoutLink(obj, this, referrer = referrer)
+        invokeIconLink(obj, this, referrer = referrer)
     }
 
     private fun handleIcon(obj: TransferObject?) {
         (dpm as CollectionDM).addIcon(obj)
     }
 
-    private fun handleDomainType(obj: DomainType) {
+    private fun handleDomainType(obj: DomainType, referrer: String) {
         obj.links.forEach {
             if (it.relation() == Relation.LAYOUT) {
-                invoke(it, this)
+                invoke(it, this, referrer = referrer)
             }
         }
         obj.members.forEach {
             val m = it.value
             if (m.isProperty()) {
-                invoke(m, this)
+                invoke(m, this, referrer = referrer)
             }
         }
     }
@@ -107,7 +109,7 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
         (dpm as CollectionDM).grid = grid
     }
 
-    private fun handleProperty(p: Property) {
+    private fun handleProperty(p: Property, referrer: String) {
         val dm = dpm as CollectionDM
         if (p.isPropertyDescription()) {
             dm.addPropertyDescription(p)
@@ -115,19 +117,19 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
             dm.addProperty(p)
             val pdl = p.descriptionLink()
             if (pdl != null) {
-                invoke(pdl, this)
+                invoke(pdl, this, referrer = referrer)
             }
         }
     }
 
-    private fun handleCollection(collection: Collection) {
+    private fun handleCollection(collection: Collection, referrer: String) {
         collection.links.forEach {
             if (it.relation() == Relation.DESCRIBED_BY) {
-                ResourceProxy().fetch(it, this)
+                ResourceProxy().fetch(it, this, referrer = referrer)
             }
         }
         collection.value.forEach {
-            ResourceProxy().fetch(it, this)
+            ResourceProxy().fetch(it, this, referrer = referrer)
         }
     }
 

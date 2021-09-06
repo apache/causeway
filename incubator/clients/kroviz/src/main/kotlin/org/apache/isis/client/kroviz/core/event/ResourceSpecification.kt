@@ -23,7 +23,8 @@ import org.apache.isis.client.kroviz.utils.StringUtils
 
 class ResourceSpecification(
         val url: String,
-        val subType: String = Constants.subTypeJson) {
+        val subType: String = Constants.subTypeJson,
+        val referrerUrl: String = "") {
 
     fun isRedundant(): Boolean {
         return when {

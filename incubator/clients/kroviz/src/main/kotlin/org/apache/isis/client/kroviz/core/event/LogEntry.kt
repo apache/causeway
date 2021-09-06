@@ -52,11 +52,13 @@ enum class EventState(val id: String, val iconName: String, val style: ButtonSty
 
 @Serializable
 data class LogEntry(
-        val url: String,
+        @Contextual val rs: ResourceSpecification,
         val method: String? = "",
         val request: String = "",
-        val subType: String = Constants.subTypeJson,
         @Contextual val createdAt: Date = Date()) {
+    val url:String = rs.url
+    val referrer = rs.referrerUrl
+    val subType = rs.subType
     var state = EventState.INITIAL
     var title: String = ""
     var requestLength: Int = 0 // must be accessible (public) for LogEntryTable
@@ -99,7 +101,7 @@ data class LogEntry(
 
     // alternative constructor for UI events (eg. from user interaction)
     @JsName("secondaryConstructor")
-    constructor(title: String, aggregator: BaseAggregator) : this("", "", "") {
+    constructor(title: String, aggregator: BaseAggregator) : this(ResourceSpecification(""), "", "") {
         this.title = title
         this.addAggregator(aggregator)
         state = EventState.VIEW
@@ -178,7 +180,6 @@ data class LogEntry(
         }
     }
 
-
 // region response
     /**
      * This is for access from the views only.
@@ -250,12 +251,9 @@ data class LogEntry(
         return null
     }
 
-    fun upLink(): Link? {
-        getLinks().forEach { if (it.relation() == Relation.UP) return it }
-        return null
-    }
-
     fun getLinks(): List<Link> {
+//        console.log("[LE.getLinks]")
+//        console.log(obj)
         return if (obj is HasLinks) {
             (obj as HasLinks).getLinks()
         } else {

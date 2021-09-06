@@ -43,12 +43,14 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
     }
 
     override fun update(logEntry: LogEntry, subType: String) {
+        super.update(logEntry, subType)
         if (!logEntry.isUpdatedFromParentedCollection()) {
+            val referrer = logEntry.url
             when (val obj = logEntry.getTransferObject()) {
-                is TObject -> handleObject(obj)
+                is TObject -> handleObject(obj, referrer)
                 is ResultObject -> handleResultObject(obj)
                 is Property -> handleProperty(obj)
-                is Layout -> handleLayout(obj, dpm as ObjectDM)
+                is Layout -> handleLayout(obj, dpm as ObjectDM, referrer)
                 is Grid -> handleGrid(obj)
                 is HttpError -> ErrorDialog(logEntry).open()
                 else -> log(logEntry)
@@ -71,25 +73,25 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
         }
     }
 
-    fun handleObject(obj: TObject) {
+    fun handleObject(obj: TObject, referrer : String) {
         // After ~/action/invoke is called, the actual object instance (containing properties) needs to be invoked as well.
         // Note that rel.self/href is identical and both are of type TObject. logEntry.url is different, though.
         if (obj.getProperties().size == 0) {
-            invokeInstance(obj)
+            invokeInstance(obj, referrer)
         } else {
             dpm.addData(obj)
         }
         if (collectionMap.isEmpty()) {
-            handleCollections(obj)
+            handleCollections(obj, referrer)
         }
-        invokeLayoutLink(obj, this)
+        invokeLayoutLink(obj, this, referrer = referrer)
     }
 
-    private fun invokeInstance(obj: TObject) {
+    private fun invokeInstance(obj: TObject, referrer: String) {
         val selfLink = obj.links.find { l ->
             l.relation() == Relation.SELF
         }
-        invoke(selfLink!!, this)
+        invoke(selfLink!!, this, referrer = referrer)
     }
 
     fun handleResultObject(resultObject: ResultObject) {
@@ -100,13 +102,13 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
         return dpm.getObject()
     }
 
-    private fun handleCollections(obj: TObject) {
+    private fun handleCollections(obj: TObject, referrer: String) {
         obj.getCollections().forEach {
             val key = it.id
             val aggregator = CollectionAggregator(key, this)
             collectionMap.put(key, aggregator)
             val link = it.links.first()
-            ResourceProxy().fetch(link, aggregator)
+            ResourceProxy().fetch(link, aggregator, referrer = referrer)
         }
     }
 

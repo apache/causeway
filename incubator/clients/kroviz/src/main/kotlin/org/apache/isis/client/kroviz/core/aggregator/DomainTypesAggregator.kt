@@ -63,7 +63,7 @@ class DomainTypesAggregator(val url: String) : BaseAggregator() {
             }
             (dpm as DiagramDM).incNumberOfProperties(propertyList.size)
             propertyList.forEach {
-                invoke(it.value, this)
+                invoke(it.value, this, referrer = "")
             }
         }
     }
@@ -102,7 +102,7 @@ class DomainTypesAggregator(val url: String) : BaseAggregator() {
         }
         (dpm as DiagramDM).numberOfClasses = domainTypeLinkList.size
         domainTypeLinkList.forEach {
-            invoke(it, this)
+            invoke(it, this, referrer = "")
         }
     }
 

@@ -58,7 +58,8 @@ abstract class BaseAggregator {
         logEntry.setUndefined("no handler found")
         console.log("[BaseAggregator.log] ")
         console.log(logEntry)
-        throw Throwable("no handler found: ${this::class.simpleName}")
+        val className = this::class.simpleName
+        throw Throwable("no handler found: $className")
     }
 
     fun TObject.getLayoutLink(): Link? {
@@ -82,8 +83,12 @@ abstract class BaseAggregator {
         return href.isNotEmpty() && href.endsWith("object-icon")
     }
 
-    protected fun invoke(link: Link, aggregator: BaseAggregator, subType: String = Constants.subTypeJson) {
-        ResourceProxy().fetch(link, aggregator, subType)
+    protected fun invoke(
+            link: Link,
+            aggregator: BaseAggregator,
+            subType: String = Constants.subTypeJson,
+            referrer: String) {
+        ResourceProxy().fetch(link, aggregator, subType, referrer = referrer)
     }
 
 }

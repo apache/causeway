@@ -20,8 +20,8 @@ package org.apache.isis.client.kroviz.core.aggregator
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.to.*
-import org.apache.isis.client.kroviz.ui.dialog.ActionPrompt
 import org.apache.isis.client.kroviz.ui.core.Constants
+import org.apache.isis.client.kroviz.ui.dialog.ActionPrompt
 import org.apache.isis.client.kroviz.utils.Point
 import org.apache.isis.client.kroviz.utils.StringUtils
 
@@ -29,14 +29,15 @@ class ActionDispatcher(private val at: Point = Point(100, 100)) : BaseAggregator
 
     override fun update(logEntry: LogEntry, subType: String) {
         val to = logEntry.getTransferObject()
+        val referrer = logEntry.url
         when {
             to is Action -> {
                 to.links.forEach { link ->
                     if (link.isInvokeAction()) {
                         when (link.method) {
-                            Method.GET.name -> process(to, link)
-                            Method.POST.name -> invoke(to, link)
-                            Method.PUT.name -> process(to, link)
+                            Method.GET.name -> process(to, link, referrer = referrer)
+                            Method.POST.name -> invoke(to, link, referrer = referrer)
+                            Method.PUT.name -> process(to, link, referrer = referrer)
                         }
                     }
                 }
@@ -54,17 +55,17 @@ class ActionDispatcher(private val at: Point = Point(100, 100)) : BaseAggregator
         }
     }
 
-    private fun process(action: Action, link: Link, aggregator: BaseAggregator = this) {
+    private fun process(action: Action, link: Link, aggregator: BaseAggregator = this, referrer: String) {
         when {
             link.hasArguments() -> ActionPrompt(action = action).open(at)
-            link.relation() == Relation.INVOKE -> invoke(action, link)
-            else -> invoke(link, aggregator)
+            link.relation() == Relation.INVOKE -> invoke(action, link, referrer)
+            else -> invoke(link, aggregator, referrer = referrer)
         }
     }
 
-    private fun invoke(action: Action, link: Link) {
+    private fun invoke(action: Action, link: Link, referrer: String) {
         val title = StringUtils.deCamel(action.id)
-        invoke(link, ObjectAggregator(title))
+        invoke(link, ObjectAggregator(title), referrer = referrer)
     }
 
     /**

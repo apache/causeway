@@ -26,6 +26,7 @@ import org.apache.isis.client.kroviz.handler.ResponseHandler
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.core.Constants
+import org.apache.isis.client.kroviz.ui.diagram.Node
 
 /**
  * Facade for RoXmlHttpRequest. If a resource is being fetched, it:
@@ -39,7 +40,7 @@ class ResourceProxy {
 
     // there may be more than one aggt - which may break this code
     // we are coming from a parented collection ...
-    // we can assume the object hat been loaded as part of the collection before
+    // we can assume the object has been loaded before as part of the collection
     fun load(tObject: TObject) {
         val aggregator = ObjectAggregator(tObject.title)
         // ASSUMPTION: there can be max one LogEntry for an Object
@@ -65,15 +66,22 @@ class ResourceProxy {
     fun fetch(link: Link,
               aggregator: BaseAggregator? = null,
               subType: String = Constants.subTypeJson,
-              isRest: Boolean = true) {
-        val rs = ResourceSpecification(link.href)
+              isRest: Boolean = true,
+              referrer: String = "") {
+        val rs = ResourceSpecification(link.href, referrerUrl = referrer)
         val isCached = when (val le = EventStore.findBy(rs)) {
             null -> false
             else -> le.isCached(rs, link.method)
         }
         when {
             isCached -> processCached(rs, aggregator)
-            !isCached && isRest -> RoXmlHttpRequest(aggregator).process(link, subType)
+            !isCached && isRest -> {
+                if (aggregator is AggregatorWithLayout) {
+                    val child = Node(link.href)
+//FIXME                    aggregator.root.add(child)
+                }
+                RoXmlHttpRequest(aggregator).process(link, subType)
+            }
             !isCached && !isRest -> RoXmlHttpRequest(aggregator).processNonREST(link, subType)
         }
     }
