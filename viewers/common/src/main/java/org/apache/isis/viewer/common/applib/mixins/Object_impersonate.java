@@ -29,12 +29,13 @@ import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
 import org.apache.isis.applib.mixins.security.HasUsername;
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.user.ImpersonateMenu;
 
 import lombok.RequiredArgsConstructor;
 
 /**
- * Same as {@link ImpersonateMenu#impersonate(String)},
+ * Same as {@link ImpersonateMenu.impersonate#act(String)},
  * but implemented as a mixin so that can be invoked while accessing an object.
  *
  * @since 2.0 {@index}
@@ -53,7 +54,6 @@ import lombok.RequiredArgsConstructor;
         redirectPolicy = Redirect.EVEN_IF_SAME,
         sequence = "850.1"
 )
-//mixin's don't need a logicalTypeName
 @RequiredArgsConstructor
 public class Object_impersonate {
 
@@ -63,15 +63,12 @@ public class Object_impersonate {
     private final Object holder;
 
     public Object act(final String userName) {
-        impersonateMenu.impersonate(userName);
+        impersonate().act(userName);
         return holder;
     }
 
-    @MemberSupport public boolean hideAct() {
-        return impersonateMenu.hideImpersonate();
-    }
-    @MemberSupport public String disableAct() {
-        return impersonateMenu.disableImpersonate();
+    @MemberSupport public boolean hideAct() { return impersonate().hideAct(); }
+    @MemberSupport public String disableAct() { return impersonate().disableAct();
     }
     @MemberSupport public String default0Act() {
         return holder instanceof HasUsername
@@ -79,6 +76,11 @@ public class Object_impersonate {
                 : null;
     }
 
+    private ImpersonateMenu.impersonate impersonate() {
+        return factoryService.mixin(ImpersonateMenu.impersonate.class, impersonateMenu);
+    }
+
     @Inject ImpersonateMenu impersonateMenu;
+    @Inject FactoryService factoryService;
 
 }
