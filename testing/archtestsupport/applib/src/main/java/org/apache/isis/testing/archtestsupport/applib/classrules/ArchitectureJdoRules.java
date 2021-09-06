@@ -18,7 +18,10 @@
  */
 package org.apache.isis.testing.archtestsupport.applib.classrules;
 
+import java.util.Objects;
+
 import javax.inject.Inject;
+import javax.jdo.annotations.Discriminator;
 import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
 
@@ -26,15 +29,20 @@ import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaAnnotation;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaEnumConstant;
+import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ArchRule;
-
-import org.apache.isis.applib.annotation.DomainObject;
+import com.tngtech.archunit.lang.ConditionEvents;
+import com.tngtech.archunit.lang.SimpleConditionEvent;
 
 import static com.tngtech.archunit.base.DescribedPredicate.not;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
-import lombok.experimental.UtilityClass;
+
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.commons.internal.base._Strings;
+
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
 /**
  * A library of architecture tests to ensure coding conventions are followed for classes annotated with
@@ -44,6 +52,38 @@ import lombok.val;
  */
 @UtilityClass
 public class ArchitectureJdoRules {
+
+    public static ArchRule every_logicalTypeName_and_jdo_discriminator_must_be_same() {
+        return classes()
+                .that().areAnnotatedWith(DomainObject.class)
+                .and(new DescribedPredicate<>("have a logicalTypeName") {
+                    @Override
+                    public boolean apply(JavaClass javaClass) {
+                        val domainObjectIfAny = javaClass.tryGetAnnotationOfType(DomainObject.class);
+                        return domainObjectIfAny.isPresent() && !_Strings.isNullOrEmpty(domainObjectIfAny.get().logicalTypeName());
+                    }
+                })
+                .and(new DescribedPredicate<>("have a @Discriminator") {
+                    @Override
+                    public boolean apply(JavaClass javaClass) {
+                        val discriminatorIfAny = javaClass.tryGetAnnotationOfType(Discriminator.class);
+                        return discriminatorIfAny.isPresent();
+                    }
+                })
+                .should(new ArchCondition<>("be the same") {
+                    @Override
+                    public void check(JavaClass javaClass, ConditionEvents conditionEvents) {
+                        val logicalTypeName = javaClass.getAnnotationOfType(DomainObject.class).logicalTypeName();
+                        val discriminatorValue = javaClass.getAnnotationOfType(Discriminator.class).value();
+                        if (!Objects.equals(logicalTypeName, discriminatorValue)) {
+                            conditionEvents.add(
+                                    new SimpleConditionEvent(javaClass, false,
+                                    String.format("@DomainObject(logicalTypeName = '%s') vs @Discriminator('%s')",
+                                            logicalTypeName, discriminatorValue)));
+                        }
+                    }
+                });
+    }
 
     /**
      * This rule requires that classes annotated with the JDO {@link javax.jdo.annotations.PersistenceCapable} annotation
@@ -154,8 +194,9 @@ public class ArchitectureJdoRules {
 
 
     static DescribedPredicate<JavaAnnotation<?>> PersistenceCapable_schema() {
-        return new DescribedPredicate<JavaAnnotation<?>>("@PersistenceCapable(schema=...)") {
-            @Override public boolean apply(final JavaAnnotation<?> javaAnnotation) {
+        return new DescribedPredicate<>("@PersistenceCapable(schema=...)") {
+            @Override
+            public boolean apply(final JavaAnnotation<?> javaAnnotation) {
                 if (!javaAnnotation.getRawType().isAssignableTo(PersistenceCapable.class)) {
                     return false;
                 }
@@ -168,8 +209,9 @@ public class ArchitectureJdoRules {
     }
 
     static DescribedPredicate<JavaAnnotation<?>> PersistenceCapable_with_DATASTORE_identityType() {
-        return new DescribedPredicate<JavaAnnotation<?>>("@PersistenceCapable(identityType=DATASTORE)") {
-            @Override public boolean apply(final JavaAnnotation<?> javaAnnotation) {
+        return new DescribedPredicate<>("@PersistenceCapable(identityType=DATASTORE)") {
+            @Override
+            public boolean apply(final JavaAnnotation<?> javaAnnotation) {
                 if (!javaAnnotation.getRawType().isAssignableTo(PersistenceCapable.class)) {
                     return false;
                 }
@@ -203,7 +245,7 @@ public class ArchitectureJdoRules {
     }
 
     static DescribedPredicate<JavaClass> areEntities() {
-        return new DescribedPredicate<JavaClass>("are entities") {
+        return new DescribedPredicate<>("are entities") {
             @Override
             public boolean apply(JavaClass input) {
                 return input.isAnnotatedWith(PersistenceCapable.class);
@@ -212,10 +254,11 @@ public class ArchitectureJdoRules {
     }
 
     static DescribedPredicate<? super JavaClass> areSubtypeEntities() {
-        return new DescribedPredicate<JavaClass>("are subtype entities ") {
-            @Override public boolean apply(final JavaClass input) {
+        return new DescribedPredicate<>("are subtype entities ") {
+            @Override
+            public boolean apply(final JavaClass input) {
                 val superclassIfAny = input.getSuperclass();
-                if(!superclassIfAny.isPresent()) {
+                if (!superclassIfAny.isPresent()) {
                     return false;
                 }
                 val superType = superclassIfAny.get();

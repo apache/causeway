@@ -113,6 +113,12 @@ This ensures that persisted/serialized bookmarks of domain objects are stable ev
 *** `every_DomainObject_must_specify_logicalTypeName()`
 *** `every_DomainService_must_specify_logicalTypeName()`
 
+** unique logical type name
++
+This ensures that the logical type name is also unique across ``@DomainObject``s and ``@DomainService``s.
++
+Note: this rule ignores any abstract classes because strictly the framework only requires that instantiatable classes have unique logical type names.
+
 ** JAXB view models are annotated with `@DomainObject(nature=VIEW_MODEL)`
 +
 This ensures that the framework is able to correctly detect the view models in the metamodel:
@@ -192,6 +198,12 @@ Required to allow JAXB view models to transparently reference entities:
 Enforces a very common convention for JPA entities:
 
 *** `every_jpa_Entity_must_have_an_id_field()`
+
+** ensure JDO entity's logicalTypeName matches its discriminator (if any)
++
+Both the logical type name and the `@Discriminator` for subclasses are a unique identifier of a type; this rule says they should be the same value.
+
+*** `every_logicalTypeName_and_jdo_discriminator_must_be_same()`
 
 
 * Recommended
