@@ -79,8 +79,6 @@ public final class MethodLiteralConstants {
         private final Can<String> methodNames;
     }
 
-    public static final String TITLE = "title";
-
     // -- MEMBER SUPPORT
 
     public static final String DEFAULT_PREFIX = "default";

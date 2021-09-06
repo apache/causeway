@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.title.methods;
 
 import java.lang.reflect.Method;
@@ -58,7 +57,7 @@ implements HasImperativeAspect {
     private TitleFacetInferredFromToStringMethod(
             final ImperativeAspect imperativeAspect,
             final FacetHolder holder) {
-        super(holder);
+        super(holder, Precedence.INFERRED);
         this.imperativeAspect = imperativeAspect;
     }
 
