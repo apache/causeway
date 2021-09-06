@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package demoapp.webapp.wicket.common.ui.custom;
 
 import org.apache.wicket.Component;

@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.security.authentication.standard;
 
 import static org.hamcrest.CoreMatchers.equalTo;

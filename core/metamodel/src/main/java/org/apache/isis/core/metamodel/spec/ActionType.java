@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.spec;
 
 import org.apache.isis.commons.collections.ImmutableEnumSet;

@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.collections.collection.defaultview;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.members.cssclass;
 
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;

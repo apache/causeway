@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.applib.services.message;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;

@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.bookmarkpolicy;
 
 import static org.hamcrest.CoreMatchers.is;

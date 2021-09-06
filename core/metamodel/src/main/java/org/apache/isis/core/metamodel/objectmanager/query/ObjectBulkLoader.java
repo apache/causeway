@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.objectmanager.query;
 
 import org.apache.isis.applib.query.Query;

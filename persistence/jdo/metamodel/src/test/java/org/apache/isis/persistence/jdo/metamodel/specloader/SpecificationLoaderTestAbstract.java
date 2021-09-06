@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.persistence.jdo.metamodel.specloader;
 
 import org.junit.jupiter.api.AfterEach;

@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.viewer.wicket.ui.components.scalars.bookmark;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
