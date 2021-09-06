@@ -44,6 +44,8 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.RestEasyConfiguration;
 import org.apache.isis.viewer.restfulobjects.rendering.IsisModuleRestfulObjectsRendering;
 
+import lombok.val;
+
 
 /**
  * @since 1.x {@index}
@@ -75,7 +77,7 @@ public class SwaggerServiceMenu {
         this.basePath = this.restEasyConfiguration.getJaxrs().getDefaultPath() + "/";
     }
 
-    public static abstract class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<SwaggerServiceMenu> { }
+    public static abstract class ActionDomainEvent<T> extends IsisModuleApplib.ActionDomainEvent<T> { }
 
     @Action(
             semantics = SemanticsOf.SAFE,
@@ -86,15 +88,13 @@ public class SwaggerServiceMenu {
             cssClassFa = "fa-external-link-alt",
             sequence="500.600.1")
     public class openSwaggerUi {
-        public class ActionEvent extends ActionDomainEvent { }
+        public class ActionEvent extends ActionDomainEvent<openSwaggerUi> { }
 
-        public LocalResourcePath act() {
-        return new LocalResourcePath("/swagger-ui/index.thtml");
-    }
-    @MemberSupport
-        public String disableAct() {
-            return disableReasonWhenRequiresROViewer();
+        @MemberSupport public LocalResourcePath act() {
+            return new LocalResourcePath("/swagger-ui/index.thtml");
         }
+
+        @MemberSupport public String disableAct() { return disableReasonWhenRequiresROViewer(); }
     }
 
 
@@ -110,15 +110,14 @@ public class SwaggerServiceMenu {
             sequence="500.600.2")
     public class openRestApi {
 
-        public class ActionEvent extends ActionDomainEvent { }
+        public class ActionEvent extends ActionDomainEvent<openRestApi> { }
 
-        LocalResourcePath act() {
+        @MemberSupport LocalResourcePath act() {
             return new LocalResourcePath(basePath);
         }
-    @MemberSupport
-        @MemberSupport String disableAct() {
-            return disableReasonWhenRequiresROViewer();
-        }
+
+        @MemberSupport String disableAct() { return disableReasonWhenRequiresROViewer(); }
+
     }
 
 
@@ -134,9 +133,9 @@ public class SwaggerServiceMenu {
 
     public class downloadSwaggerSchemaDefinition {
 
-        public class ActionEvent extends ActionDomainEvent { }
+        public class ActionEvent extends ActionDomainEvent<downloadSwaggerSchemaDefinition> { }
 
-        public Clob act(
+        @MemberSupport public Clob act(
                 @ParameterLayout(named = "Filename")
                 final String fileNamePrefix,
                 final Visibility visibility,
@@ -148,18 +147,13 @@ public class SwaggerServiceMenu {
         }
 
         @MemberSupport public String default0Act() { return "swagger"; }
-        @MemberSupport public Visibility default1Act() {
-            return Visibility.PRIVATE;
-        }
-        @MemberSupport public Format default2Act() {
-            return Format.YAML;
-        }
+        @MemberSupport public Visibility default1Act() { return Visibility.PRIVATE; }
+        @MemberSupport public Format default2Act() { return Format.YAML; }
     }
 
 
     // -- HELPER
-    @Programmatic
-    private String disableReasonWhenRequiresROViewer() {
+    @Programmatic String disableReasonWhenRequiresROViewer() {
         final Optional<?> moduleIfAny = serviceRegistry
                 .lookupBeanById("isis.viewer.ro.WebModuleJaxrsRestEasy4");
         return moduleIfAny.isPresent()
@@ -180,6 +174,5 @@ public class SwaggerServiceMenu {
                 fileNamePrefix + "-" + visibility.name().toLowerCase(),
                 formatLower);
     }
-
 
 }
