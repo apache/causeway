@@ -16,17 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.title.methods;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
 import java.util.function.BiConsumer;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationContext;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.HasImperativeAspect;
+import org.apache.isis.core.metamodel.facets.ImperativeAspect;
+import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -39,35 +42,39 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class TitleFacetViaTitleMethod
 extends TitleFacetAbstract
-implements ImperativeFacet {
+implements HasImperativeAspect {
 
-    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
+    @Getter(onMethod_ = {@Override}) private final @NonNull ImperativeAspect imperativeAspect;
     private final TranslationContext translationContext;
 
-    public TitleFacetViaTitleMethod(
-            final Method method,
+    public static Optional<TitleFacet> create(
+            final @Nullable Method methodIfAny,
+            final FacetHolder holder) {
+
+        return Optional.ofNullable(methodIfAny)
+        .map(method->
+            new TitleFacetViaTitleMethod(
+                    ImperativeAspect.singleMethod(method, Intent.UI_HINT),
+                    TranslationContext.forMethod(method),
+                    holder));
+    }
+
+    private TitleFacetViaTitleMethod(
+            final ImperativeAspect imperativeAspect,
     		final TranslationContext translationContext,
     		final FacetHolder holder) {
         super(holder);
-        this.methods = ImperativeFacet.singleMethod(method);
+        this.imperativeAspect = imperativeAspect;
         this.translationContext = translationContext;
     }
 
     @Override
-    public Intent getIntent(final Method method) {
-        return Intent.UI_HINT;
-    }
-
-    @Override
     public String title(final ManagedObject owningAdapter) {
-
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(owningAdapter)) {
             return null;
         }
-
-        val method = methods.getFirstOrFail();
         try {
-            final Object returnValue = ManagedObjects.InvokeUtil.invoke(method, owningAdapter);
+            val returnValue = imperativeAspect.invokeSingleMethod(owningAdapter);
             if(returnValue instanceof String) {
                 return (String) returnValue;
             }
@@ -77,11 +84,9 @@ implements ImperativeFacet {
             }
             return null;
         } catch (final RuntimeException ex) {
-
             val isUnitTesting = getMetaModelContext().getSystemEnvironment().isUnitTesting();
-
             if(!isUnitTesting) {
-                log.warn("Title failure", ex);
+                log.warn("Failed Title {}", owningAdapter.getSpecification(), ex);
             }
             return "Failed Title";
         }
@@ -90,7 +95,7 @@ implements ImperativeFacet {
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        ImperativeFacet.visitAttributes(this, visitor);
+        imperativeAspect.visitAttributes(visitor);
     }
 
 }

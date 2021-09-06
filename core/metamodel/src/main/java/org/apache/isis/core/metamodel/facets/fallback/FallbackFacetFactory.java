@@ -73,8 +73,7 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
         val facetHolder = processClassContext.getFacetHolder();
 
         addFacet(new TitleFacetNone(facetHolder));
-        addFacet(
-                new PagedFacetFromConfiguration(
+        addFacet(new PagedFacetFromConfiguration(
                         getConfiguration().getApplib().getAnnotation().getDomainObjectLayout().getPaged(),
                         facetHolder));
     }

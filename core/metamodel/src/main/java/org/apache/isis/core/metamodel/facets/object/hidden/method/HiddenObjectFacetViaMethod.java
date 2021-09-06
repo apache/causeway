@@ -16,38 +16,43 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.hidden.method;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import org.apache.isis.commons.collections.Can;
+import org.springframework.lang.Nullable;
+
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.HasImperativeAspect;
+import org.apache.isis.core.metamodel.facets.ImperativeAspect;
+import org.apache.isis.core.metamodel.facets.object.hidden.HiddenObjectFacet;
 import org.apache.isis.core.metamodel.facets.object.hidden.HiddenObjectFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 public class HiddenObjectFacetViaMethod
 extends HiddenObjectFacetAbstract
-implements ImperativeFacet {
+implements HasImperativeAspect {
 
-    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
+    @Getter(onMethod_ = {@Override}) private final @NonNull ImperativeAspect imperativeAspect;
 
-    public HiddenObjectFacetViaMethod(final Method method, final FacetHolder holder) {
-        super(holder);
-        this.methods = ImperativeFacet.singleMethod(method);;
+    public static Optional<HiddenObjectFacet> create(
+            final @Nullable Method methodIfAny,
+            final FacetHolder holder) {
+
+        return Optional.ofNullable(methodIfAny)
+        .map(method->ImperativeAspect.singleMethod(method, Intent.CHECK_IF_HIDDEN))
+        .map(imperativeAspect->new HiddenObjectFacetViaMethod(imperativeAspect, holder));
     }
 
-    @Override
-    public Intent getIntent(final Method method) {
-        return Intent.CHECK_IF_HIDDEN;
+    private HiddenObjectFacetViaMethod(final ImperativeAspect imperativeAspect, final FacetHolder holder) {
+        super(holder);
+        this.imperativeAspect = imperativeAspect;
     }
 
     @Override
@@ -61,22 +66,18 @@ implements ImperativeFacet {
         if (target == null) {
             return null;
         }
-        val method = methods.getFirstOrFail();
-        final Boolean isHidden = (Boolean) ManagedObjects.InvokeUtil.invoke(method, target);
+        final boolean isHidden = (boolean) imperativeAspect.invokeSingleMethod(target);
         return isHidden ? "Hidden" : null;
     }
 
     @Override
     public HiddenObjectFacetViaMethod clone(final FacetHolder holder) {
-        val method = methods.getFirstOrFail();
-        return new HiddenObjectFacetViaMethod(method, holder);
+        return new HiddenObjectFacetViaMethod(imperativeAspect, holder);
     }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        val method = methods.getFirstOrFail();
         super.visitAttributes(visitor);
-        ImperativeFacet.visitAttributes(this, visitor);
-        visitor.accept("method", method);
+        imperativeAspect.visitAttributes(visitor);
     }
 }

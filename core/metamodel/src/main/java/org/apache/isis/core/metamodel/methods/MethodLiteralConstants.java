@@ -61,13 +61,25 @@ public final class MethodLiteralConstants {
 
     // -- OBJECT SUPPORT
 
-    public static final String DISABLED = "disabled"; // for batch disabling all members
-    public static final String HIDDEN = "hidden"; // for batch hiding all members
+    @Getter
+    public enum ObjectSupportMethod {
+        /** for batch disabling all members */
+        DISABLED("disabled"),
+
+        /** for batch hiding all members */
+        HIDDEN("hidden"),
+
+        TITLE("title"),
+        CSS_CLASS("cssClass"),
+        ICON_NAME("iconName"),
+        LAYOUT("layout");
+        ObjectSupportMethod(final String ...methodNames) {
+            this.methodNames = Can.of(methodNames);
+        }
+        private final Can<String> methodNames;
+    }
 
     public static final String TITLE = "title";
-    public static final String CSS_CLASS = "cssClass";
-    public static final String ICON_NAME = "iconName";
-    public static final String LAYOUT = "layout";
 
     // -- MEMBER SUPPORT
 

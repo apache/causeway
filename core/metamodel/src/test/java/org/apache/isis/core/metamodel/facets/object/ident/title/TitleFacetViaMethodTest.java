@@ -69,7 +69,10 @@ public class TitleFacetViaMethodTest {
         mockFacetHolder = mockery.mock(FacetHolder.class);
         mockOwningAdapter = mockery.mock(ManagedObject.class);
         final Method iconNameMethod = DomainObjectWithProblemInItsTitleMethod.class.getMethod("title");
-        facet = new TitleFacetViaTitleMethod(iconNameMethod, null, mockFacetHolder);
+        facet = (TitleFacetViaTitleMethod) TitleFacetViaTitleMethod
+                .create(iconNameMethod, mockFacetHolder)
+                .orElse(null);
+
 
         mockery.checking(new Expectations() {
             {

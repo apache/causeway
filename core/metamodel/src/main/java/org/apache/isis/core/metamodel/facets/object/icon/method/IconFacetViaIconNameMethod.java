@@ -20,11 +20,15 @@
 package org.apache.isis.core.metamodel.facets.object.icon.method;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import org.apache.isis.commons.collections.Can;
+import org.springframework.lang.Nullable;
+
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.HasImperativeAspect;
+import org.apache.isis.core.metamodel.facets.ImperativeAspect;
+import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -35,13 +39,26 @@ import lombok.val;
 
 public class IconFacetViaIconNameMethod
 extends IconFacetAbstract
-implements ImperativeFacet {
+implements HasImperativeAspect {
 
-    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
+    @Getter(onMethod_ = {@Override}) private final @NonNull ImperativeAspect imperativeAspect;
 
-    public IconFacetViaIconNameMethod(final Method method, final FacetHolder holder) {
+    public static Optional<IconFacet> create(
+            final @Nullable Method methodIfAny,
+            final FacetHolder holder) {
+
+        return Optional.ofNullable(methodIfAny)
+        .map(method->
+            new IconFacetViaIconNameMethod(
+                    ImperativeAspect.singleMethod(method, Intent.UI_HINT),
+                    holder));
+    }
+
+    private IconFacetViaIconNameMethod(
+            final ImperativeAspect imperativeAspect,
+            final FacetHolder holder) {
         super(holder);
-        this.methods = ImperativeFacet.singleMethod(method);
+        this.imperativeAspect = imperativeAspect;
     }
 
     @Override
@@ -50,30 +67,22 @@ implements ImperativeFacet {
             return null;
         }
         try {
-            val method = methods.getFirstOrFail();
-            return (String) ManagedObjects.InvokeUtil.invoke(method, domainObject);
+            return (String) imperativeAspect.invokeSingleMethod(domainObject);
         } catch (final RuntimeException ex) {
             return null;
         }
     }
 
     @Override
-    public Intent getIntent(final Method method) {
-        return Intent.UI_HINT;
-    }
-
-    @Override
     protected String toStringValues() {
-        val method = methods.getFirstOrFail();
+        val method = imperativeAspect.getMethods().getFirstOrFail();
         return "method=" + method;
     }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        val method = methods.getFirstOrFail();
         super.visitAttributes(visitor);
-        ImperativeFacet.visitAttributes(this, visitor);
-        visitor.accept("method", method);
+        imperativeAspect.visitAttributes(visitor);
     }
 
 }

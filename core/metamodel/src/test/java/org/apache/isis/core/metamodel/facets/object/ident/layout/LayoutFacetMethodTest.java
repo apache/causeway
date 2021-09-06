@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.ident.layout;
 
 import java.lang.reflect.Method;
@@ -28,13 +27,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacetViaLayoutMethod;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacetViaLayoutMethod;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class LayoutFacetMethodTest {
 
@@ -60,7 +59,9 @@ public class LayoutFacetMethodTest {
         mockFacetHolder = mockery.mock(FacetHolder.class);
         mockOwningAdapter = mockery.mock(ManagedObject.class);
         final Method iconNameMethod = DomainObjectWithProblemInLayoutMethod.class.getMethod("layout");
-        facet = new LayoutFacetViaLayoutMethod(iconNameMethod, mockFacetHolder);
+        facet = (LayoutFacetViaLayoutMethod) LayoutFacetViaLayoutMethod
+                    .create(iconNameMethod, mockFacetHolder)
+                    .orElse(null);
 
         mockery.checking(new Expectations() {
             {

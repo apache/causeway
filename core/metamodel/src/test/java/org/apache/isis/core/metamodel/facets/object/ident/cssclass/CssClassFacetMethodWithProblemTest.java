@@ -28,13 +28,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFacetViaCssClassMethod;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFacetViaCssClassMethod;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class CssClassFacetMethodWithProblemTest {
 
@@ -60,7 +60,9 @@ public class CssClassFacetMethodWithProblemTest {
         mockFacetHolder = mockery.mock(FacetHolder.class);
         mockOwningAdapter = mockery.mock(ManagedObject.class);
         final Method iconNameMethod = DomainObjectWithProblemInCssClassMethod.class.getMethod("cssClass");
-        facet = new CssClassFacetViaCssClassMethod(iconNameMethod, mockFacetHolder);
+        facet = (CssClassFacetViaCssClassMethod) CssClassFacetViaCssClassMethod
+                .create(iconNameMethod, mockFacetHolder)
+                .orElse(null);
 
         mockery.checking(new Expectations() {
             {

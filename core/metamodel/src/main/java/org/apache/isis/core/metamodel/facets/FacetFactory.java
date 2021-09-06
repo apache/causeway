@@ -26,6 +26,8 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
@@ -176,7 +178,7 @@ public interface FacetFactory {
         }
 
         @Override
-        public void removeMethod(final Method method) {
+        public void removeMethod(final @Nullable Method method) {
             methodRemover.removeMethod(method);
         }
 

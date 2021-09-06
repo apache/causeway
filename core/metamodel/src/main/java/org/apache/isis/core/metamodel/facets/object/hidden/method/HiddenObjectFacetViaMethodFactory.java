@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.object.hidden.method;
 
 import javax.inject.Inject;
 
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -30,7 +29,7 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.object.hidden.HiddenObjectFacet;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
+import org.apache.isis.core.metamodel.methods.MethodLiteralConstants.ObjectSupportMethod;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -51,11 +50,12 @@ import lombok.val;
 public class HiddenObjectFacetViaMethodFactory
 extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String METHOD_NAME = MethodLiteralConstants.HIDDEN;
+    private static final ObjectSupportMethod SUPPORT_METHOD = ObjectSupportMethod.HIDDEN;
 
     @Inject
     public HiddenObjectFacetViaMethodFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.EVERYTHING_BUT_PARAMETERS, OrphanValidation.VALIDATE, Can.ofSingleton(METHOD_NAME));
+        super(mmc, FeatureType.EVERYTHING_BUT_PARAMETERS, OrphanValidation.VALIDATE,
+                SUPPORT_METHOD.getMethodNames());
     }
 
     @Override
@@ -63,15 +63,15 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         val cls = processClassContext.getCls();
         val facetHolder = processClassContext.getFacetHolder();
 
-        val method = MethodFinderUtils.findMethod_returningBoolean(
-                MethodFinderOptions
-                .objectSupport(processClassContext.getIntrospectionPolicy()),
-                cls, METHOD_NAME, NO_ARG);
-        if (method == null) {
-            return;
-        }
-        addFacet(new HiddenObjectFacetViaMethod(method, facetHolder));
-        processClassContext.removeMethod(method);
+        SUPPORT_METHOD.getMethodNames()
+        .forEach(methodName->{
+            val method = MethodFinderUtils.findMethod_returningBoolean(
+                    MethodFinderOptions
+                    .objectSupport(processClassContext.getIntrospectionPolicy()),
+                    cls, methodName, NO_ARG);
+            addFacetIfPresent(HiddenObjectFacetViaMethod.create(method, facetHolder));
+            processClassContext.removeMethod(method);
+        });
     }
 
     @Override

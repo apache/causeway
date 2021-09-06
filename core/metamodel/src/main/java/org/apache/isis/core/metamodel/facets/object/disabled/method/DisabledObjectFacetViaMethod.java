@@ -20,16 +20,19 @@
 package org.apache.isis.core.metamodel.facets.object.disabled.method;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
 import java.util.function.BiConsumer;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationContext;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.HasImperativeAspect;
+import org.apache.isis.core.metamodel.facets.ImperativeAspect;
+import org.apache.isis.core.metamodel.facets.object.disabled.DisabledObjectFacet;
 import org.apache.isis.core.metamodel.facets.object.disabled.DisabledObjectFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -37,29 +40,36 @@ import lombok.val;
 
 public class DisabledObjectFacetViaMethod
 extends DisabledObjectFacetAbstract
-implements ImperativeFacet {
+implements HasImperativeAspect {
 
-    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
+    @Getter(onMethod_ = {@Override}) private final @NonNull ImperativeAspect imperativeAspect;
+
     private final TranslationContext translationContext;
 
+    public static Optional<DisabledObjectFacet> create(
+            final @Nullable Method methodIfAny,
+            final FacetHolder holder) {
+
+        return Optional.ofNullable(methodIfAny)
+        .map(method->
+            new DisabledObjectFacetViaMethod(
+                    ImperativeAspect.singleMethod(method, Intent.CHECK_IF_DISABLED),
+                    TranslationContext.forMethod(method),
+                    holder));
+    }
+
     public DisabledObjectFacetViaMethod(
-            final Method method,
+            final ImperativeAspect imperativeAspect,
             final TranslationContext translationContext,
             final FacetHolder holder) {
         super(holder);
-        this.methods = ImperativeFacet.singleMethod(method);
+        this.imperativeAspect = imperativeAspect;
         this.translationContext = translationContext;
     }
 
     @Override
-    public Intent getIntent(final Method method) {
-        return Intent.CHECK_IF_DISABLED;
-    }
-
-    @Override
     public String disabledReason(final ManagedObject owningAdapter) {
-        val method = methods.getFirstOrFail();
-        final Object returnValue = ManagedObjects.InvokeUtil.invoke(method, owningAdapter);
+        val returnValue = imperativeAspect.invokeSingleMethod(owningAdapter);
         if(returnValue instanceof String) {
             return (String) returnValue;
         }
@@ -72,22 +82,19 @@ implements ImperativeFacet {
 
     @Override
     protected String toStringValues() {
-        val method = methods.getFirstOrFail();
+        val method = imperativeAspect.getMethods().getFirstOrFail();
         return "method=" + method;
     }
 
     @Override
     public DisabledObjectFacetViaMethod clone(final FacetHolder holder) {
-        val method = methods.getFirstOrFail();
-        return new DisabledObjectFacetViaMethod(method, translationContext, holder);
+        return new DisabledObjectFacetViaMethod(imperativeAspect, translationContext, holder);
     }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        val method = methods.getFirstOrFail();
         super.visitAttributes(visitor);
-        ImperativeFacet.visitAttributes(this, visitor);
-        visitor.accept("method", method);
+        imperativeAspect.visitAttributes(visitor);
     }
 
 }

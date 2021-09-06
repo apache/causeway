@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
@@ -91,12 +90,13 @@ public class TitleFacetViaMethodsFactoryTest extends AbstractFacetFactoryTest {
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(toStringMethod));
     }
 
-    public void testTitleFacetMethodUsingToStringIsClassifiedAsANoop() throws NoSuchMethodException, SecurityException {
+    public void testTitleFacetOnJavaObjectToStringIsIgnored() throws NoSuchMethodException, SecurityException {
 
-        final Method sampleMethod = Object.class.getMethod("toString", _Constants.emptyClasses);
-        assertEquals(
-                Precedence.INFERRED,
-                new TitleFacetInferredFromToStringMethod(sampleMethod, facetedMethod).getPrecedence());
+        final Method sampleMethod = Object.class
+                .getMethod("toString", _Constants.emptyClasses);
+        assertFalse(TitleFacetInferredFromToStringMethod
+                    .create(sampleMethod, facetedMethod)
+                    .isPresent());
     }
 
     public void testNoExplicitTitleOrToStringMethod() {

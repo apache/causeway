@@ -19,26 +19,16 @@
 
 package org.apache.isis.core.metamodel.facets.object.title.methods;
 
-import java.lang.reflect.Method;
-
 import javax.inject.Inject;
 
-import org.springframework.lang.Nullable;
-
-import org.apache.isis.applib.services.i18n.TranslationContext;
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.fallback.FallbackFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
+import org.apache.isis.core.metamodel.methods.MethodLiteralConstants.ObjectSupportMethod;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
-import static org.apache.isis.core.metamodel.methods.MethodLiteralConstants.TITLE;
 import static org.apache.isis.core.metamodel.methods.MethodLiteralConstants.TO_STRING;
 
 import lombok.val;
@@ -50,13 +40,12 @@ import lombok.val;
 public class TitleFacetViaMethodsFactory
 extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final Can<String> METHOD_NAMES = Can.ofCollection(_Lists.of(
-            TO_STRING,
-            TITLE));
+    private static final ObjectSupportMethod SUPPORT_METHOD = ObjectSupportMethod.TITLE;
 
     @Inject
     public TitleFacetViaMethodsFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, METHOD_NAMES);
+        super(mmc, FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE,
+                SUPPORT_METHOD.getMethodNames());
     }
 
     /**
@@ -68,57 +57,34 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         val cls = processClassContext.getCls();
         val facetHolder = processClassContext.getFacetHolder();
 
-        val titleMethod = MethodFinderUtils.findMethod_returningText(
-                MethodFinderOptions
-                .objectSupport(processClassContext.getIntrospectionPolicy()),
-                cls,
-                TITLE,
-                NO_ARG);
-        if (titleMethod != null) {
+        // priming 'toString()' into Precedence.INFERRED rank
+        inferTitleFromToString(processClassContext);
+
+        SUPPORT_METHOD.getMethodNames()
+        .forEach(methodName->{
+
+            val titleMethod = MethodFinderUtils.findMethod_returningText(
+                    MethodFinderOptions
+                    .objectSupport(processClassContext.getIntrospectionPolicy()),
+                    cls,
+                    methodName,
+                    NO_ARG);
+            addFacetIfPresent(TitleFacetViaTitleMethod.create(titleMethod, facetHolder));
             processClassContext.removeMethod(titleMethod);
-            // sadness: same as in TranslationFactory
-            val translationContext = TranslationContext.forMethod(titleMethod);
-
-            FacetUtil.addFacet(
-                    new TitleFacetViaTitleMethod(
-                            titleMethod, translationContext, facetHolder));
-
-            removeToString(processClassContext);
-            return;
-        }
-
-        // may have a facet by virtue of @Title, say.
-        val existingTitleFacet = facetHolder.lookupNonFallbackFacet(TitleFacet.class);
-        if(existingTitleFacet.isPresent()) {
-            removeToString(processClassContext);
-            return;
-        }
-
-        try {
-            val toStringMethod = removeToString(processClassContext);
-            if (toStringMethod != null) {
-                if(!ClassExtensions.isJavaClass(toStringMethod.getDeclaringClass())) {
-                    FacetUtil.addFacet(new TitleFacetInferredFromToStringMethod(toStringMethod, facetHolder));
-                }
-            }
-        } catch (final Exception e) {
-            // ignore
-        }
-
+        });
     }
 
     // -- HELPER
 
-    private @Nullable Method removeToString(final ProcessClassContext processClassContext) {
+    private void inferTitleFromToString(final ProcessClassContext processClassContext) {
         val cls = processClassContext.getCls();
+        val facetHolder = processClassContext.getFacetHolder();
         val toStringMethod = MethodFinderUtils.findMethod(
                 MethodFinderOptions.publicOnly(),
-                cls, TO_STRING, String.class, null);
-        if (toStringMethod != null) {
-            processClassContext.removeMethod(toStringMethod);
-        }
-        return toStringMethod;
+                cls, TO_STRING, String.class, NO_ARG);
+        processClassContext.removeMethod(toStringMethod);
+        addFacetIfPresent(TitleFacetInferredFromToStringMethod
+                .create(toStringMethod, facetHolder));
     }
-
 
 }

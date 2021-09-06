@@ -20,10 +20,16 @@
 package org.apache.isis.core.metamodel.facets.object.title.methods;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
+import java.util.function.BiConsumer;
 
-import org.apache.isis.commons.collections.Can;
+import org.springframework.lang.Nullable;
+
+import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.HasImperativeAspect;
+import org.apache.isis.core.metamodel.facets.ImperativeAspect;
+import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
@@ -33,18 +39,27 @@ import lombok.val;
 
 public class TitleFacetInferredFromToStringMethod
 extends TitleFacetAbstract
-implements ImperativeFacet {
+implements HasImperativeAspect {
 
-    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
+    @Getter(onMethod_ = {@Override}) private final @NonNull ImperativeAspect imperativeAspect;
 
-    public TitleFacetInferredFromToStringMethod(final Method method, final FacetHolder holder) {
-        super(holder, Precedence.INFERRED);
-        this.methods = ImperativeFacet.singleMethod(method);
+    public static Optional<TitleFacet> create(
+            final @Nullable Method methodIfAny,
+            final FacetHolder holder) {
+
+        return Optional.ofNullable(methodIfAny)
+        .filter(method->!ClassExtensions.isJavaClass(method.getDeclaringClass()))
+        .map(method->
+            new TitleFacetInferredFromToStringMethod(
+                    ImperativeAspect.singleMethod(method, Intent.UI_HINT),
+                    holder));
     }
 
-    @Override
-    public Intent getIntent(final Method method) {
-        return Intent.UI_HINT;
+    private TitleFacetInferredFromToStringMethod(
+            final ImperativeAspect imperativeAspect,
+            final FacetHolder holder) {
+        super(holder);
+        this.imperativeAspect = imperativeAspect;
     }
 
     @Override
@@ -53,6 +68,12 @@ implements ImperativeFacet {
         return pojo!=null
                 ? pojo.toString()
                 : "(not present)";
+    }
+
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        imperativeAspect.visitAttributes(visitor);
     }
 
 }

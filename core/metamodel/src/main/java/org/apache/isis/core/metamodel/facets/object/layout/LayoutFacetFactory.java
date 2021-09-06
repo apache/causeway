@@ -16,15 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.layout;
 
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
+import org.apache.isis.core.metamodel.methods.MethodLiteralConstants.ObjectSupportMethod;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
 import lombok.val;
@@ -32,10 +30,11 @@ import lombok.val;
 public class LayoutFacetFactory
 extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String METHOD_NAME = MethodLiteralConstants.LAYOUT;
+    private static final ObjectSupportMethod SUPPORT_METHOD = ObjectSupportMethod.LAYOUT;
 
     public LayoutFacetFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(METHOD_NAME));
+        super(mmc, FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE,
+                SUPPORT_METHOD.getMethodNames());
     }
 
     @Override
@@ -43,15 +42,15 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         val cls = processClassContext.getCls();
         val facetHolder = processClassContext.getFacetHolder();
 
-        val method = MethodFinderUtils.findMethod(
-                MethodFinderOptions
-                .objectSupport(processClassContext.getIntrospectionPolicy()),
-                cls, METHOD_NAME, String.class, NO_ARG);
-        if (method == null) {
-            addFacet(new LayoutFacetFallback(facetHolder));
-            return;
-        }
-        processClassContext.removeMethod(method);
-        addFacet(new LayoutFacetViaLayoutMethod(method, facetHolder));
+        SUPPORT_METHOD.getMethodNames()
+        .forEach(methodName->{
+            val method = MethodFinderUtils.findMethod(
+                    MethodFinderOptions
+                    .objectSupport(processClassContext.getIntrospectionPolicy()),
+                    cls, methodName, String.class, NO_ARG);
+            addFacet(LayoutFacetViaLayoutMethod.create(method, facetHolder)
+                    .orElseGet(()->new LayoutFacetFallback(facetHolder)));
+            processClassContext.removeMethod(method);
+        });
     }
 }
