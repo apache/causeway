@@ -18,37 +18,12 @@
  */
 package org.apache.isis.core.metamodel.facets.object.ident.cssclass;
 
-import java.lang.reflect.Method;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFacetViaCssClassMethod;
-import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFacetMethodFactory;
+import org.apache.isis.core.metamodel.facets.object.support.ObjectSupportFacetFactoryTestAbstract;
+import org.apache.isis.core.metamodel.methods.MethodLiteralConstants.ObjectSupportMethod;
 
 public class CssClassFacetMethodFactoryTest
-extends AbstractFacetFactoryTest {
-
-    private CssClassFacetMethodFactory facetFactory;
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        facetFactory = new CssClassFacetMethodFactory(metaModelContext);
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        facetFactory = null;
-        super.tearDown();
-    }
+extends ObjectSupportFacetFactoryTestAbstract {
 
     public void testIconNameMethodPickedUpOnClassAndMethodRemoved() {
         class Customer {
@@ -57,16 +32,7 @@ extends AbstractFacetFactoryTest {
                 return null;
             }
         }
-        final Method cssClassNameMethod = findMethod(Customer.class, "cssClass");
-
-        facetFactory.process(ProcessClassContext
-                .forTesting(Customer.class, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(CssClassFacet.class);
-        assertThat(facet, is(notNullValue()));
-        assertThat(facet, is(instanceOf(CssClassFacetViaCssClassMethod.class)));
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(cssClassNameMethod));
+        assertPicksUp(1, facetFactory, Customer.class, ObjectSupportMethod.CSS_CLASS, CssClassFacet.class);
     }
 
 }

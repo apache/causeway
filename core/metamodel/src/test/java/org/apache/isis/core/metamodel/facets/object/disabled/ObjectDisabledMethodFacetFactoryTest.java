@@ -18,30 +18,11 @@
  */
 package org.apache.isis.core.metamodel.facets.object.disabled;
 
-import java.lang.reflect.Method;
+import org.apache.isis.core.metamodel.facets.object.support.ObjectSupportFacetFactoryTestAbstract;
+import org.apache.isis.core.metamodel.methods.MethodLiteralConstants.ObjectSupportMethod;
 
-import org.apache.isis.commons.internal._Constants;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.isis.core.metamodel.facets.object.disabled.method.DisabledObjectFacetViaMethod;
-import org.apache.isis.core.metamodel.facets.object.disabled.method.DisabledObjectFacetViaMethodFactory;
-
-public class ObjectDisabledMethodFacetFactoryTest extends AbstractFacetFactoryTest {
-
-    private DisabledObjectFacetViaMethodFactory facetFactory;
-
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-        facetFactory = new DisabledObjectFacetViaMethodFactory(metaModelContext);
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        facetFactory = null;
-        super.tearDown();
-    }
+public class ObjectDisabledMethodFacetFactoryTest
+extends ObjectSupportFacetFactoryTestAbstract {
 
     public void testDisabledMethodPickedUpAndMethodRemoved() {
         class Customer {
@@ -50,18 +31,7 @@ public class ObjectDisabledMethodFacetFactoryTest extends AbstractFacetFactoryTe
                 return null;
             }
         }
-        final Method disabledMethod = findMethod(Customer.class, "disabled", _Constants.emptyClasses);
-        assertNotNull(disabledMethod);
-
-        final ProcessClassContext processClassContext = ProcessClassContext
-                .forTesting(Customer.class, methodRemover, facetHolder);
-        facetFactory.process(processClassContext);
-
-        final Facet facet = facetHolder.getFacet(DisabledObjectFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof DisabledObjectFacetViaMethod);
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(disabledMethod));
+        assertPicksUp(1, facetFactory, Customer.class, ObjectSupportMethod.DISABLED, DisabledObjectFacet.class);
     }
 
 }

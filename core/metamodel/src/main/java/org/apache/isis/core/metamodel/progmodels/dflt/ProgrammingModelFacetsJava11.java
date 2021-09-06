@@ -45,27 +45,22 @@ import org.apache.isis.core.metamodel.facets.object.ViewModelSemanticCheckingFac
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetFallbackFactory;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.choices.enums.EnumFacetUsingValueFacetUsingSemanticsProviderFactory;
-import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFacetMethodFactory;
 import org.apache.isis.core.metamodel.facets.object.defaults.annotcfg.DefaultedFacetAnnotationElseConfigurationFactory;
-import org.apache.isis.core.metamodel.facets.object.disabled.method.DisabledObjectFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.DomainObjectLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.domainservice.annotation.DomainServiceFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.hidden.HiddenTypeFacetDerivedFromAuthorizationFactory;
-import org.apache.isis.core.metamodel.facets.object.hidden.method.HiddenObjectFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.object.icon.method.IconFacetMethodFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.annotation.RemoveAnnotatedMethodsFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.javalang.IteratorFilteringFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.javalang.RemoveMethodsFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.classname.LogicalTypeFacetDerivedFromClassNameFactory;
 import org.apache.isis.core.metamodel.facets.object.navparent.annotation.NavigableParentAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImplFactory;
 import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.support.ObjectSupportFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaMethodsFactory;
 import org.apache.isis.core.metamodel.facets.object.validating.validateobject.method.ValidateObjectFacetMethodFactory;
 import org.apache.isis.core.metamodel.facets.object.value.annotcfg.ValueFacetAnnotationOrConfigurationFactory;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethodFactory;
@@ -244,12 +239,8 @@ extends ProgrammingModelAbstract {
 
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory(mmc));
 
-
         // must come after CssClassFacetOnMemberFactory
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new CssClassFacetOnActionFromConfiguredRegexFactory(mmc));
-
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new HiddenObjectFacetViaMethodFactory(mmc));
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new DisabledObjectFacetViaMethodFactory(mmc));
 
         val postConstructMethodsCache = new MethodByClassMap();
 
@@ -277,13 +268,11 @@ extends ProgrammingModelAbstract {
         addFactory(FacetProcessingOrder.F1_LAYOUT, new GridFacetFactory(mmc));
 
         // must come before DomainObjectLayoutFacetFactory
-        // (so subscribers on titleUi event etc can override)
+        // (so subscribers on titleUi event etc can override) ... no longer true since we have event rank that overrules anyway
         addFactory(FacetProcessingOrder.F1_LAYOUT, new TitleAnnotationFacetFactory(mmc));
-        addFactory(FacetProcessingOrder.F1_LAYOUT, new TitleFacetViaMethodsFactory(mmc));
-        addFactory(FacetProcessingOrder.F1_LAYOUT, new IconFacetMethodFactory(mmc));
+
+        addFactory(FacetProcessingOrder.F1_LAYOUT, new ObjectSupportFacetFactory(mmc));
         addFactory(FacetProcessingOrder.F1_LAYOUT, new NavigableParentAnnotationFacetFactory(mmc));
-        addFactory(FacetProcessingOrder.F1_LAYOUT, new CssClassFacetMethodFactory(mmc));
-        addFactory(FacetProcessingOrder.F1_LAYOUT, new LayoutFacetFactory(mmc));
 
         addFactory(FacetProcessingOrder.F1_LAYOUT, new DomainServiceLayoutFacetFactory(mmc));
         addFactory(FacetProcessingOrder.F1_LAYOUT, new DomainObjectLayoutFacetFactory(mmc));

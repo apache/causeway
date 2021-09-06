@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.fallback.FallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
-import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaMethodsFactory;
+import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaTitleMethod;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
@@ -61,7 +61,7 @@ implements MetaModelRefiner {
      * <p>
      * If there are only inherited methods annotated with <tt>@Title</tt>
      * then this is <i>not</i> a violation;
-     * but (from the implementation of {@link TitleFacetViaMethodsFactory}
+     * but (from the {@link TitleFacetViaTitleMethod}
      * the imperative <tt>title()</tt> method will take
      * precedence.
      */

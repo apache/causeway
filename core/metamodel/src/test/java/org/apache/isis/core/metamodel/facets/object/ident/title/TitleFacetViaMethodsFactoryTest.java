@@ -22,30 +22,14 @@ import java.lang.reflect.Method;
 
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.isis.core.metamodel.facets.object.support.ObjectSupportFacetFactoryTestAbstract;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetInferredFromToStringMethod;
-import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaMethodsFactory;
-import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaTitleMethod;
+import org.apache.isis.core.metamodel.methods.MethodLiteralConstants.ObjectSupportMethod;
 
-public class TitleFacetViaMethodsFactoryTest extends AbstractFacetFactoryTest {
-
-    private TitleFacetViaMethodsFactory facetFactory;
-
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-
-        facetFactory = new TitleFacetViaMethodsFactory(metaModelContext);
-    }
-
-
-    @Override
-    protected void tearDown() throws Exception {
-        facetFactory = null;
-        super.tearDown();
-    }
+public class TitleFacetViaMethodsFactoryTest
+extends ObjectSupportFacetFactoryTestAbstract {
 
     public void testTitleMethodPickedUpOnClassAndMethodRemoved() {
         class Customer {
@@ -54,18 +38,7 @@ public class TitleFacetViaMethodsFactoryTest extends AbstractFacetFactoryTest {
                 return "Some title";
             }
         }
-        final Method titleMethod = findMethod(Customer.class, "title");
-
-        facetFactory.process(ProcessClassContext
-                .forTesting(Customer.class, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(TitleFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof TitleFacetViaTitleMethod);
-        final TitleFacetViaTitleMethod titleFacetViaTitleMethod = (TitleFacetViaTitleMethod) facet;
-        assertEquals(titleMethod, titleFacetViaTitleMethod.getMethods().getFirstOrFail());
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(titleMethod));
+        assertPicksUp(1, facetFactory, Customer.class, ObjectSupportMethod.TITLE, TitleFacet.class);
     }
 
     public void testToStringMethodPickedUpOnClassAndMethodRemoved() {

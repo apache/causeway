@@ -108,7 +108,7 @@ public final class MethodFinder {
 
     public static Stream<MethodAndPpmConstructor> findMethodWithPPMArg_returningAnyOf(
             final MethodFinderOptions options,
-            final Class<?>[] returnTypes,
+            final Can<Class<?>> returnTypes,
             final Class<?> type,
             final Can<String> names,
             final Class<?>[] paramTypes,

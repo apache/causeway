@@ -19,8 +19,10 @@
 package org.apache.isis.core.metamodel.methods;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Array;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.function.IntFunction;
 
 import org.springframework.lang.Nullable;
@@ -28,6 +30,7 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.ObjectLifecycle;
 import org.apache.isis.applib.annotation.ObjectSupport;
+import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 
@@ -59,23 +62,48 @@ public final class MethodLiteralConstants {
         private final Can<String> methodNames;
     }
 
+    // -- TYPE CATEGORIES
+
+    @Getter
+    public enum ReturnTypeCategory {
+        VOID(void.class),
+        BOOLEAN(boolean.class),
+        STRING(String.class),
+        TRANSLATABLE(String.class, TranslatableString.class);
+        ReturnTypeCategory(final Class<?> ...returnTypes) {
+            this.returnTypes = Can.of(returnTypes);
+        }
+        private final Can<Class<?>> returnTypes;
+
+        public static Can<Class<?>> nonScalar(final Class<?> elementReturnType) {
+            return Can.<Class<?>>of(
+                Can.class,
+                Collection.class,
+                Array.newInstance(elementReturnType, 0).getClass());
+        }
+    }
+
     // -- OBJECT SUPPORT
 
     @Getter
     public enum ObjectSupportMethod {
         /** for batch disabling all members */
-        DISABLED("disabled"),
+        DISABLED(ReturnTypeCategory.TRANSLATABLE, "disabled"),
 
         /** for batch hiding all members */
-        HIDDEN("hidden"),
+        HIDDEN(ReturnTypeCategory.BOOLEAN, "hidden"),
 
-        TITLE("title"),
-        CSS_CLASS("cssClass"),
-        ICON_NAME("iconName"),
-        LAYOUT("layout");
-        ObjectSupportMethod(final String ...methodNames) {
+        TITLE(ReturnTypeCategory.TRANSLATABLE, "title"),
+        CSS_CLASS(ReturnTypeCategory.STRING, "cssClass"),
+        ICON_NAME(ReturnTypeCategory.STRING, "iconName"),
+        LAYOUT(ReturnTypeCategory.STRING, "layout");
+        ObjectSupportMethod(
+                final ReturnTypeCategory returnTypeCategory,
+                final String ...methodNames) {
+            this.returnTypeCategory = returnTypeCategory;
             this.methodNames = Can.of(methodNames);
         }
+        private final ReturnTypeCategory returnTypeCategory;
         private final Can<String> methodNames;
     }
 

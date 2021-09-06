@@ -19,20 +19,18 @@
 package org.apache.isis.core.metamodel.methods;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.reflection._ClassCache;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
+import org.apache.isis.core.metamodel.methods.MethodLiteralConstants.ReturnTypeCategory;
 
 import static org.apache.isis.commons.internal.reflection._Reflect.Filter.paramSignatureMatch;
 
@@ -115,7 +113,7 @@ public final class MethodFinderUtils {
 
     public static Method findMethod_returningAnyOf(
             final MethodFinderOptions options,
-            final Class<?>[] returnTypes,
+            final Can<Class<?>> returnTypes,
             final Class<?> type,
             final String name,
             final Class<?>[] paramTypes) {
@@ -224,29 +222,22 @@ public final class MethodFinderUtils {
 
     // -- SHORTCUTS
 
-    private static final Class<?>[] BOOLEAN_TYPES = new Class<?>[]{
-        boolean.class};
-
-
     public static Method findMethod_returningBoolean(
             final MethodFinderOptions options,
             final Class<?> type,
             final String name,
             final Class<?>[] paramTypes) {
-        return findMethod_returningAnyOf(options, BOOLEAN_TYPES, type, name, paramTypes);
+        return findMethod_returningAnyOf(
+                options, ReturnTypeCategory.BOOLEAN.getReturnTypes(), type, name, paramTypes);
     }
-
-    private static final Class<?>[] TEXT_TYPES = new Class<?>[]{
-        String.class,
-        TranslatableString.class};
-
 
     public static Method findMethod_returningText(
             final MethodFinderOptions options,
             final Class<?> type,
             final String name,
             final Class<?>[] paramTypes) {
-        return findMethod_returningAnyOf(options, TEXT_TYPES, type, name, paramTypes);
+        return findMethod_returningAnyOf(
+                options, ReturnTypeCategory.TRANSLATABLE.getReturnTypes(), type, name, paramTypes);
     }
 
     public static Method findMethod_returningNonScalar(
@@ -256,12 +247,8 @@ public final class MethodFinderUtils {
             final Class<?> elementReturnType,
             final Class<?>[] paramTypes) {
 
-        val nonScalarTypes = new Class<?>[]{
-            Can.class,
-            Collection.class,
-            Array.newInstance(elementReturnType, 0).getClass()};
-
-        return findMethod_returningAnyOf(options, nonScalarTypes, type, name, paramTypes);
+        return findMethod_returningAnyOf(
+                options, ReturnTypeCategory.nonScalar(elementReturnType), type, name, paramTypes);
     }
 
     // -- PPM SUPPORT
@@ -306,7 +293,7 @@ public final class MethodFinderUtils {
 
     public static MethodAndPpmConstructor findMethodWithPPMArg_returningAnyOf(
             final MethodFinderOptions options,
-            final Class<?>[] returnTypes,
+            final Can<Class<?>> returnTypes,
             final Class<?> type,
             final String name,
             final Class<?>[] paramTypes,
@@ -328,7 +315,8 @@ public final class MethodFinderUtils {
             final Class<?>[] paramTypes,
             final Can<Class<?>> additionalParamTypes) {
 
-        return findMethodWithPPMArg_returningAnyOf(options, BOOLEAN_TYPES, type, name, paramTypes, additionalParamTypes);
+        return findMethodWithPPMArg_returningAnyOf(
+                options, ReturnTypeCategory.BOOLEAN.getReturnTypes(), type, name, paramTypes, additionalParamTypes);
     }
 
     public static MethodAndPpmConstructor findMethodWithPPMArg_returningText(
@@ -338,7 +326,8 @@ public final class MethodFinderUtils {
             final Class<?>[] paramTypes,
             final Can<Class<?>> additionalParamTypes) {
 
-        return findMethodWithPPMArg_returningAnyOf(options, TEXT_TYPES, type, name, paramTypes, additionalParamTypes);
+        return findMethodWithPPMArg_returningAnyOf(
+                options, ReturnTypeCategory.TRANSLATABLE.getReturnTypes(), type, name, paramTypes, additionalParamTypes);
     }
 
     public static MethodAndPpmConstructor findMethodWithPPMArg_returningNonScalar(
@@ -349,11 +338,8 @@ public final class MethodFinderUtils {
             final Class<?>[] paramTypes,
             final Can<Class<?>> additionalParamTypes) {
 
-        val nonScalarTypes = new Class<?>[]{
-            Collection.class,
-            Array.newInstance(elementReturnType, 0).getClass()};
-
-        return findMethodWithPPMArg_returningAnyOf(options, nonScalarTypes, type, name, paramTypes, additionalParamTypes);
+        return findMethodWithPPMArg_returningAnyOf(
+                options, ReturnTypeCategory.nonScalar(elementReturnType), type, name, paramTypes, additionalParamTypes);
     }
 
     // -- HELPER
