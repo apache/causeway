@@ -82,15 +82,6 @@ implements Facet, HasMetaModelContext {
                 : String.format("%s[type=%s; %s]", className, ClassUtils.getShortName(facetType()), attributesAsString());
     }
 
-    private String attributesAsString() {
-        val keyValuePairs = _Lists.<_Strings.KeyValuePair>newArrayList();
-        visitAttributes((k, v)->keyValuePairs.add(_Strings.pair(k, ""+v)));
-        return keyValuePairs.stream()
-                .filter(kv->!kv.getKey().equals("facet")) // skip superfluous attribute
-                .map(_Strings.KeyValuePair::toString)
-                .collect(Collectors.joining("; "));
-    }
-
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         visitor.accept("facet", ClassUtils.getShortName(getClass()));
@@ -146,5 +137,19 @@ implements Facet, HasMetaModelContext {
         }
     }
 
+    // -- HELPER
+
+    protected final Stream<_Strings.KeyValuePair> streamAttributes() {
+        final var keyValuePairs = _Lists.<_Strings.KeyValuePair>newArrayList();
+        visitAttributes((k, v)->keyValuePairs.add(_Strings.pair(k, ""+v)));
+        return keyValuePairs.stream();
+    }
+
+    private String attributesAsString() {
+        return streamAttributes()
+                .filter(kv->!kv.getKey().equals("facet")) // skip superfluous attribute
+                .map(_Strings.KeyValuePair::toString)
+                .collect(Collectors.joining("; "));
+    }
 
 }
