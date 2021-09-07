@@ -22,14 +22,12 @@ import java.util.EnumSet;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.ParameterSupport;
 import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest.ReturnType;
 import org.apache.isis.core.metamodel.facets.ParameterSupport.SearchAlgorithm;
-import org.apache.isis.core.metamodel.facets.param.choices.ActionChoicesFacet;
 import org.apache.isis.core.metamodel.methods.MemberSupportFacetFactoryAbstract;
 
 import lombok.val;
@@ -75,12 +73,6 @@ extends MemberSupportFacetFactoryAbstract {
             val returnType = searchResult.getReturnType();
 
             processMethodContext.removeMethod(choicesMethod);
-
-            if (facetedMethod.containsNonFallbackFacet(ActionChoicesFacet.class)) {
-                val cls = processMethodContext.getCls();
-                throw new MetaModelException(cls + " uses both old and new choices syntax - "
-                        + "must use one or other");
-            }
 
             // add facets directly to parameters, not to actions
             val paramAsHolder = parameters.get(paramIndex);

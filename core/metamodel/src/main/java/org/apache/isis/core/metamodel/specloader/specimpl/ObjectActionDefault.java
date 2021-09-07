@@ -50,7 +50,6 @@ import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInv
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
-import org.apache.isis.core.metamodel.facets.param.choices.ActionChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.interactions.ActionUsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ActionValidityContext;
@@ -478,46 +477,30 @@ implements ObjectAction {
         final int parameterCount = getParameterCount();
         CanVector<ManagedObject> paramChoicesVector;
 
-        final ActionChoicesFacet facet = getFacet(ActionChoicesFacet.class);
         val parameters = getParameters();
 
-        if (!facet.getPrecedence().isFallback()) {
-            // using the old choicesXxx() approach
-            paramChoicesVector = facet.getChoices(target,
-                    interactionInitiatedBy);
-
-            // if no options, or not the right number of pojos, then default
-            if (paramChoicesVector == null) {
-                paramChoicesVector = new CanVector<>(parameterCount);
-            } else if (paramChoicesVector.size() != parameterCount) {
-                throw new DomainModelException(
-                        String.format("Choices array of incompatible size; expected %d elements, but was %d for %s",
-                                parameterCount, paramChoicesVector.size(), facet));
-            }
-        } else {
             // use the new choicesNXxx approach for each param in turn
             // (the reflector will have made sure both aren't installed).
 
-            val emptyPendingArgs = Can.<ManagedObject>empty();
-            paramChoicesVector = new CanVector<>(parameterCount);
-            for (int i = 0; i < parameterCount; i++) {
-                val param = parameters.getElseFail(i);
-                val paramSpec = param.getSpecification();
-                val paramFacet = param.getFacet(ActionParameterChoicesFacet.class);
+        val emptyPendingArgs = Can.<ManagedObject>empty();
+        paramChoicesVector = new CanVector<>(parameterCount);
+        for (int i = 0; i < parameterCount; i++) {
+            val param = parameters.getElseFail(i);
+            val paramSpec = param.getSpecification();
+            val paramFacet = param.getFacet(ActionParameterChoicesFacet.class);
 
-                if (paramFacet != null && !paramFacet.getPrecedence().isFallback()) {
+            if (paramFacet != null && !paramFacet.getPrecedence().isFallback()) {
 
-                    val visibleChoices = paramFacet.getChoices(
-                            paramSpec,
-                            interactionHead(target),
-                            emptyPendingArgs,
-                            interactionInitiatedBy);
-                    ObjectActionParameterAbstract.checkChoicesOrAutoCompleteType(
-                            getSpecificationLoader(), visibleChoices, paramSpec);
-                    paramChoicesVector.set(i, visibleChoices);
-                } else {
-                    paramChoicesVector.set(i, Can.empty());
-                }
+                val visibleChoices = paramFacet.getChoices(
+                        paramSpec,
+                        interactionHead(target),
+                        emptyPendingArgs,
+                        interactionInitiatedBy);
+                ObjectActionParameterAbstract.checkChoicesOrAutoCompleteType(
+                        getSpecificationLoader(), visibleChoices, paramSpec);
+                paramChoicesVector.set(i, visibleChoices);
+            } else {
+                paramChoicesVector.set(i, Can.empty());
             }
         }
         return paramChoicesVector;

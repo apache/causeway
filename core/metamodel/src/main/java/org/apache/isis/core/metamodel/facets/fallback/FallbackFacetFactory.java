@@ -94,7 +94,6 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
         }
         if (featureType.isAction()) {
             addFacet(new ActionDefaultsFacetNone(facetedMethod));
-            addFacet(new ActionChoicesFacetNone(facetedMethod));
         }
         if (featureType.isCollection()) {
             addFacet(

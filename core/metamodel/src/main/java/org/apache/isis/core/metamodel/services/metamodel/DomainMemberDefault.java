@@ -40,7 +40,6 @@ import org.apache.isis.core.metamodel.facets.actions.validate.ActionValidationFa
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
-import org.apache.isis.core.metamodel.facets.param.choices.ActionChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.properties.autocomplete.PropertyAutoCompleteFacet;
@@ -73,19 +72,19 @@ public class DomainMemberDefault implements DomainMember {
         throw _Exceptions.unexpectedCodeReach();
     }
 
-    DomainMemberDefault(ObjectSpecification spec, OneToOneAssociation property) {
+    DomainMemberDefault(final ObjectSpecification spec, final OneToOneAssociation property) {
         this.spec = spec;
         this.member = property;
         this.memberType = MemberType.PROPERTY;
     }
 
-    DomainMemberDefault(ObjectSpecification spec, OneToManyAssociation collection) {
+    DomainMemberDefault(final ObjectSpecification spec, final OneToManyAssociation collection) {
         this.spec = spec;
         this.member = collection;
         this.memberType = MemberType.COLLECTION;
     }
 
-    DomainMemberDefault(ObjectSpecification spec, ObjectAction action) {
+    DomainMemberDefault(final ObjectSpecification spec, final ObjectAction action) {
         this.spec = spec;
         this.member = this.action = action;
         this.memberType = MemberType.ACTION;
@@ -183,6 +182,7 @@ public class DomainMemberDefault implements DomainMember {
             return interpretRowAndFacet(PropertyChoicesFacet.class);
         case COLLECTION:
             return "";
+        case ACTION:
         default:
             val parameters = this.action.getParameters();
             final SortedSet<String> interpretations = _Sets.newTreeSet();
@@ -190,9 +190,9 @@ public class DomainMemberDefault implements DomainMember {
                 final ActionParameterChoicesFacet facet = param.getFacet(ActionParameterChoicesFacet.class);
                 addIfNotEmpty(interpretFacet(facet), interpretations);
             }
-            return !interpretations.isEmpty() ?
-                    interpretations.stream().collect(Collectors.joining(";")) :
-                        interpretRowAndFacet(ActionChoicesFacet.class);
+            return interpretations.isEmpty()
+                    ? ""
+                    : interpretations.stream().collect(Collectors.joining(";"));
         }
     }
 
@@ -228,7 +228,7 @@ public class DomainMemberDefault implements DomainMember {
             }
             return !interpretations.isEmpty()
                     ? String.join(";", interpretations)
-                            : interpretRowAndFacet(ActionDefaultsFacet.class);
+                    : interpretRowAndFacet(ActionDefaultsFacet.class);
         }
     }
 
@@ -246,13 +246,13 @@ public class DomainMemberDefault implements DomainMember {
     // -- COMPARATOR
 
     @Override
-    public int compareTo(DomainMember o) {
+    public int compareTo(final DomainMember o) {
         return comparator.compare(this, o);
     }
 
     // -- HELPER
 
-    private String interpretRowAndFacet(Class<? extends Facet> facetClass) {
+    private String interpretRowAndFacet(final Class<? extends Facet> facetClass) {
         final Facet facet = member.getFacet(facetClass);
         return interpretFacet(facet);
     }
