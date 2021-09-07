@@ -35,6 +35,7 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.message.MessageService;
 
 import lombok.RequiredArgsConstructor;
@@ -74,8 +75,8 @@ public class ImpersonateMenu {
 
     final UserService userService;
     final MessageService messageService;
+    final FactoryService factoryService;
     final List<ImpersonateMenuAdvisor> impersonateMenuAdvisors;
-
 
 
     @Action(
@@ -103,7 +104,9 @@ public class ImpersonateMenu {
             messageService.informUser("Now impersonating " + userName);
         }
         @MemberSupport public boolean hideAct() {
-            return ! userService.supportsImpersonation() || !hideAct();
+            // when supported, either 'impersonate' or 'impersonateWithRoles' should show up but not both
+            return ! userService.supportsImpersonation()
+                    || ! factoryService.mixin(impersonateWithRoles.class, ImpersonateMenu.this).hideAct();
         }
         @MemberSupport public String disableAct() {
             return userService.isImpersonating() ? "currently impersonating" : null;
