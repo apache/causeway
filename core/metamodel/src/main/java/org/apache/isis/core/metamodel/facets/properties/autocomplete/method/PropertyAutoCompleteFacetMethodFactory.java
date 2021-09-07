@@ -21,13 +21,13 @@ package org.apache.isis.core.metamodel.facets.properties.autocomplete.method;
 import javax.inject.Inject;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
 import lombok.val;
@@ -35,7 +35,7 @@ import lombok.val;
 public class PropertyAutoCompleteFacetMethodFactory
 extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String PREFIX = MethodLiteralConstants.AUTO_COMPLETE_PREFIX;
+    private static final String PREFIX = ProgrammingModelConstants.AUTO_COMPLETE_PREFIX;
 
     @Inject
     public PropertyAutoCompleteFacetMethodFactory(final MetaModelContext mmc) {

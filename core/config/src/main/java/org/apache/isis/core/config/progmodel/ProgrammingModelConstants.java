@@ -16,34 +16,98 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.methods;
+package org.apache.isis.core.config.progmodel;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.function.IntFunction;
+import java.util.function.Predicate;
+
+import javax.enterprise.inject.Vetoed;
 
 import org.springframework.lang.Nullable;
+import org.springframework.util.ClassUtils;
 
+import org.apache.isis.applib.annotation.Domain;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.ObjectLifecycle;
 import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.commons.StringExtensions;
+import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
-public final class MethodLiteralConstants {
+public final class ProgrammingModelConstants {
+
+    // -- TYPE VETO MARKERS (EXLUDE FROM DOMAIN)
+
+    @Getter
+    @RequiredArgsConstructor
+    public enum TypeVetoMarker {
+        DOMAIN_EXLCUDE(Domain.Exclude.class),
+        VETO(Vetoed.class);
+        private final Class<? extends Annotation> annotationType;
+    }
 
     // -- ACCESSORS
 
-    public static final String GET_PREFIX = "get";
-    public static final String IS_PREFIX = "is";
-    public static final String SET_PREFIX = "set";
+    @Getter
+    @RequiredArgsConstructor
+    public enum AccessorPrefix {
+        GET("get"),
+        IS("is"),
+        SET("set");
+        private final String prefix;
+
+        public String prefix(final @Nullable String input) {
+            return input!=null
+                    ? prefix + input
+                    : prefix;
+        }
+
+        public boolean isPrefixOf(final @Nullable String input) {
+            return input!=null
+                    ? input.startsWith(prefix)
+                    : false;
+        }
+
+        public static boolean isCandidateGetterName(final @Nullable String name) {
+            return GET.isPrefixOf(name)
+                    || IS.isPrefixOf(name);
+        }
+
+        public static boolean isBooleanGetter(final Method method) {
+            return IS.isPrefixOf(method.getName())
+                    && method.getParameterCount() == 0
+                    && !Modifier.isStatic(method.getModifiers())
+                    && (method.getReturnType() == boolean.class
+                        || method.getReturnType() == Boolean.class);
+        }
+
+        public static boolean isNonBooleanGetter(final Method method, final Predicate<Class<?>> typeFilter) {
+            return GET.isPrefixOf(method.getName())
+                    && method.getParameterCount() == 0
+                    && !Modifier.isStatic(method.getModifiers())
+                    && typeFilter.test(method.getReturnType());
+        }
+
+        public static boolean isNonBooleanGetter(final Method method, final Class<?> expectedType) {
+            return isNonBooleanGetter(method, type->
+                expectedType.isAssignableFrom(ClassUtils.resolvePrimitiveIfNecessary(type)));
+        }
+
+        public static boolean isGetter(final Method method) {
+            return isBooleanGetter(method)
+                    || isNonBooleanGetter(method, type->type != void.class);
+        }
+    }
 
     // -- LIFECYCLE CALLBACKS
 
@@ -126,7 +190,8 @@ public final class MethodLiteralConstants {
 
     // -- CONFLICTING MARKER ANNOTATIONS
 
-    @RequiredArgsConstructor @Getter
+    @Getter
+    @RequiredArgsConstructor
     public static enum ConflictingAnnotations {
         OBJECT_SUPPORT(Can.of(ObjectLifecycle.class, MemberSupport.class)),
         OBJECT_LIFECYCLE(Can.of(ObjectSupport.class, MemberSupport.class)),
@@ -161,20 +226,20 @@ public final class MethodLiteralConstants {
 
     public static final Can<SupportingMethodNameProviderForAction> NAMING_ACTIONS = Can.of(
             (final Method actionMethod, final String prefix, final boolean isMixin)->
-                prefix + StringExtensions.asCapitalizedName(actionMethod.getName()),
+                prefix + _Strings.capitalize(actionMethod.getName()),
             (final Method actionMethod, final String prefix, final boolean isMixin)->
                 isMixin
-                    // prefix only notation is restricted to mixins
+                    // prefix-only notation is restricted to mixins
                     ? prefix
                     : null
             );
     public static final Can<SupportingMethodNameProviderForParameter> NAMING_PARAMETERS = Can.of(
             (final Method actionMethod, final String prefix, final boolean isMixin, final int paramNum)->
-                prefix + paramNum + StringExtensions.asCapitalizedName(actionMethod.getName()),
+                prefix + paramNum + _Strings.capitalize(actionMethod.getName()),
             (final Method actionMethod, final String prefix, final boolean isMixin, final int paramNum)->
                 isMixin
-                    // no action name reference notation is restricted to mixins
-                    ? prefix + StringExtensions.asCapitalizedName(actionMethod.getParameters()[paramNum].getName())
+                    // no-action-name-reference notation is restricted to mixins
+                    ? prefix + _Strings.capitalize(actionMethod.getParameters()[paramNum].getName())
                     : null
             );
     public static final Can<SupportingMethodNameProviderForPropertyAndCollection> NAMING_PROPERTIES_AND_COLLECTIONS = Can.of(
@@ -182,7 +247,7 @@ public final class MethodLiteralConstants {
                 prefix + getCapitalizedMemberName(member),
             (final Member member, final String prefix, final boolean isMixin)->
                 isMixin
-                    // prefix only notation is restricted to mixins
+                    // prefix-only notation is restricted to mixins
                     ? prefix
                     : null
             );
@@ -191,20 +256,19 @@ public final class MethodLiteralConstants {
 
     private static String getCapitalizedMemberName(final Member member) {
         if(member instanceof Method) {
-            final Method method = (Method)member;
-            if(method.getParameterCount()>0) {
+            val method = (Method)member;
+            val methodName = method.getName();
+            if(method.getParameterCount()>0
+                    || method.getReturnType().equals(void.class)
+                    || !AccessorPrefix.isCandidateGetterName(methodName)) {
                 // definitely an action not a getter
-                return StringExtensions.asCapitalizedName(method.getName());
+                return _Strings.capitalize(methodName);
             }
-            // either a no-arg action or a getter
-            final String capitalizedName =
-                    StringExtensions.asJavaBaseNameStripAccessorPrefixIfRequired(member.getName());
-            return  capitalizedName;
+            // must be a getter
+            return _Strings.capitalize(_Strings.asPrefixDropped(methodName));
         }
         // must be a field then
-        final String capitalizedName =
-                StringExtensions.asCapitalizedName(member.getName());
-        return capitalizedName;
+        return _Strings.capitalize(member.getName());
     }
 
 

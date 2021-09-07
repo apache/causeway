@@ -32,11 +32,11 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.reflection._Annotations;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 
 import lombok.Getter;
@@ -322,7 +322,7 @@ public interface FacetFactory {
                 final String prefix) {
             val actionMethod = getMethod();
             val isMixin = isMixinMain();
-            return MethodLiteralConstants.NAMING_ACTIONS
+            return ProgrammingModelConstants.NAMING_ACTIONS
                     .map(naming->naming.getActionSupportingMethodName(actionMethod, prefix, isMixin));
         }
 
@@ -330,7 +330,7 @@ public interface FacetFactory {
                 final String prefix) {
             val actionMethod = getMethod();
             val isMixin = isMixinMain();
-            return MethodLiteralConstants.NAMING_PARAMETERS
+            return ProgrammingModelConstants.NAMING_PARAMETERS
                     .map(naming->naming.providerForParam(actionMethod, prefix, isMixin));
         }
 
@@ -338,7 +338,7 @@ public interface FacetFactory {
                 final String prefix) {
             val getterMethod = getMethod();
             val isMixin = isMixinMain();
-            return MethodLiteralConstants.NAMING_PROPERTIES_AND_COLLECTIONS
+            return ProgrammingModelConstants.NAMING_PROPERTIES_AND_COLLECTIONS
                     .map(naming->naming.getMemberSupportingMethodName(getterMethod, prefix, isMixin));
         }
 

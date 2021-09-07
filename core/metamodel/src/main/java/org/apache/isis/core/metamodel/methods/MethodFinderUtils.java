@@ -28,9 +28,9 @@ import java.util.stream.Stream;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.reflection._ClassCache;
 import org.apache.isis.commons.internal.reflection._Reflect;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ReturnTypeCategory;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants.ReturnTypeCategory;
 
 import static org.apache.isis.commons.internal.reflection._Reflect.Filter.paramSignatureMatch;
 

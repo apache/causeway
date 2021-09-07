@@ -18,9 +18,9 @@
  */
 package org.apache.isis.core.metamodel.facets.object.ident.icon;
 
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.support.ObjectSupportFacetFactoryTestAbstract;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants.ObjectSupportMethod;
 
 public class IconFacetMethodFactoryTest
 extends ObjectSupportFacetFactoryTestAbstract {

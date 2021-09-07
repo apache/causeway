@@ -26,6 +26,7 @@ import java.util.stream.Stream;
 import javax.inject.Inject;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -44,12 +45,11 @@ import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetInfe
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaTitleMethod;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants.ObjectSupportMethod;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
-import static org.apache.isis.core.metamodel.methods.MethodLiteralConstants.TO_STRING;
+import static org.apache.isis.core.config.progmodel.ProgrammingModelConstants.TO_STRING;
 
 import lombok.val;
 

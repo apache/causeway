@@ -24,11 +24,11 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
 import lombok.val;
@@ -36,7 +36,7 @@ import lombok.val;
 public class DisableForContextFacetViaMethodFactory
 extends MethodPrefixBasedFacetFactoryAbstract  {
 
-    private static final String PREFIX = MethodLiteralConstants.DISABLE_PREFIX;
+    private static final String PREFIX = ProgrammingModelConstants.DISABLE_PREFIX;
 
     @Inject
     public DisableForContextFacetViaMethodFactory(final MetaModelContext mmc) {

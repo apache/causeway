@@ -29,6 +29,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.commons.internal.reflection._Reflect;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 
 import lombok.NonNull;
 import lombok.Value;
@@ -61,7 +62,7 @@ public class MethodFinderOptions {
         return havingAnnotationIfEnforcedByPolicyOrAccessibility(
                 memberIntrospectionPolicy,
                 Domain.Include.class,
-                MethodLiteralConstants.ConflictingAnnotations.OBJECT_SUPPORT.getProhibits());
+                ProgrammingModelConstants.ConflictingAnnotations.OBJECT_SUPPORT.getProhibits());
     }
 
     public static MethodFinderOptions livecycleCallback(
@@ -69,7 +70,7 @@ public class MethodFinderOptions {
         return havingAnnotationIfEnforcedByPolicyOrAccessibility(
                 memberIntrospectionPolicy,
                 Domain.Include.class,
-                MethodLiteralConstants.ConflictingAnnotations.OBJECT_LIFECYCLE.getProhibits());
+                ProgrammingModelConstants.ConflictingAnnotations.OBJECT_LIFECYCLE.getProhibits());
     }
 
     public static MethodFinderOptions memberSupport(
@@ -77,7 +78,7 @@ public class MethodFinderOptions {
         return havingAnnotationIfEnforcedByPolicyOrAccessibility(
                 memberIntrospectionPolicy,
                 Domain.Include.class,
-                MethodLiteralConstants.ConflictingAnnotations.MEMBER_SUPPORT.getProhibits());
+                ProgrammingModelConstants.ConflictingAnnotations.MEMBER_SUPPORT.getProhibits());
     }
 
     private final @NonNull EncapsulationPolicy encapsulationPolicy;

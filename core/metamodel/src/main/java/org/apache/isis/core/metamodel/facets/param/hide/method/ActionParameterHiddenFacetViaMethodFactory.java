@@ -24,13 +24,13 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.ParameterSupport;
 import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest.ReturnType;
 import org.apache.isis.core.metamodel.facets.ParameterSupport.SearchAlgorithm;
 import org.apache.isis.core.metamodel.facets.param.hide.ActionParameterHiddenFacet;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
 import lombok.val;
@@ -41,7 +41,7 @@ import lombok.val;
 public class ActionParameterHiddenFacetViaMethodFactory
 extends MethodPrefixBasedFacetFactoryAbstract  {
 
-    private static final String PREFIX = MethodLiteralConstants.HIDE_PREFIX;
+    private static final String PREFIX = ProgrammingModelConstants.HIDE_PREFIX;
 
     @Inject
     public ActionParameterHiddenFacetViaMethodFactory(final MetaModelContext mmc) {

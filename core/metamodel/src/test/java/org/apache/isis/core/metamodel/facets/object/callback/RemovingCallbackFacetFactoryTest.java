@@ -18,8 +18,8 @@
  */
 package org.apache.isis.core.metamodel.facets.object.callback;
 
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.CallbackMethod;
 import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacet;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants.CallbackMethod;
 
 public class RemovingCallbackFacetFactoryTest
 extends CallbackFacetFactoryTestAbstract {

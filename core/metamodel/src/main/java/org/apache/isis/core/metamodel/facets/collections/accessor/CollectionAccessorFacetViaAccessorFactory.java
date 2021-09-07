@@ -25,13 +25,13 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 
 import lombok.val;
 
@@ -74,7 +74,7 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
 
     @Override
     public boolean isPropertyOrCollectionGetterCandidate(final Method method) {
-        return method.getName().startsWith(MethodLiteralConstants.GET_PREFIX);
+        return ProgrammingModelConstants.AccessorPrefix.GET.isPrefixOf(method.getName());
     }
 
     @Override
@@ -101,7 +101,7 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
             final List<Method> methodListToAppendTo) {
 
         methodRemover.removeMethods(
-                MethodUtil.Predicates.getter(Collection.class),
+                MethodUtil.Predicates.nonBooleanGetter(Collection.class),
                 methodListToAppendTo::add
                 );
     }

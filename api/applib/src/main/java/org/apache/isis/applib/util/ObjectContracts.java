@@ -29,10 +29,8 @@ import lombok.extern.log4j.Log4j2;
 
 /**
  * Provides fluent composition for Objects' equals, hashCode and toString.
- * @deprecated heavily relies on reflection, there are probably better alternatives, eg. lombok
  * @since 1.x revised for 2.0 {@index}
  */
-@Deprecated(forRemoval = true, since = "2.0.0-M7")
 @Log4j2
 public final class ObjectContracts {
 

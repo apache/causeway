@@ -21,12 +21,12 @@ package org.apache.isis.core.metamodel.facets.object.ident.title;
 import java.lang.reflect.Method;
 
 import org.apache.isis.commons.internal._Constants;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.support.ObjectSupportFacetFactoryTestAbstract;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetInferredFromToStringMethod;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants.ObjectSupportMethod;
 
 public class TitleFacetViaMethodsFactoryTest
 extends ObjectSupportFacetFactoryTestAbstract {

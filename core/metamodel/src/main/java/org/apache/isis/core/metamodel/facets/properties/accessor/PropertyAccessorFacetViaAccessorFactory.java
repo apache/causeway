@@ -24,7 +24,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.commons.CanBeVoid;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -32,10 +32,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-
-import lombok.val;
 
 public class PropertyAccessorFacetViaAccessorFactory
 extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
@@ -70,16 +67,7 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
 
     @Override
     public boolean isPropertyOrCollectionGetterCandidate(final Method method) {
-        final String methodName = method.getName();
-        if (methodName.startsWith(MethodLiteralConstants.GET_PREFIX)
-                && method.getReturnType() != void.class) {
-            return true;
-        }
-        if (methodName.startsWith(MethodLiteralConstants.IS_PREFIX)
-                && method.getReturnType() == boolean.class) {
-            return true;
-        }
-        return false;
+        return ProgrammingModelConstants.AccessorPrefix.isGetter(method);
     }
 
     /**
@@ -101,13 +89,8 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
 
     @Override
     public void findAndRemovePropertyAccessors(final MethodRemover methodRemover, final List<Method> methodListToAppendTo) {
-        appendMatchingMethods(methodRemover, MethodLiteralConstants.IS_PREFIX, boolean.class, methodListToAppendTo);
-        appendMatchingMethods(methodRemover, MethodLiteralConstants.GET_PREFIX, Object.class, methodListToAppendTo);
-    }
-
-    private static void appendMatchingMethods(final MethodRemover methodRemover, final String prefix, final Class<?> returnType, final List<Method> methodListToAppendTo) {
-        val filter = MethodUtil.Predicates.prefixed(prefix, returnType, CanBeVoid.FALSE, 0);
-        methodRemover.removeMethods(filter, methodListToAppendTo::add);
+        methodRemover.removeMethods(MethodUtil.Predicates.booleanGetter(), methodListToAppendTo::add);
+        methodRemover.removeMethods(MethodUtil.Predicates.nonBooleanGetter(Object.class), methodListToAppendTo::add);
     }
 
     @Override

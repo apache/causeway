@@ -18,8 +18,8 @@
  */
 package org.apache.isis.core.metamodel.facets.object.callback;
 
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.CallbackMethod;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedCallbackFacet;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants.CallbackMethod;
 
 public class LoadedCallbackFacetFactoryTest
 extends CallbackFacetFactoryTestAbstract {

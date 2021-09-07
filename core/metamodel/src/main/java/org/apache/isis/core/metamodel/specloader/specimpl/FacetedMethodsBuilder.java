@@ -54,7 +54,6 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.core.metamodel.specloader.typeextract.TypeExtractor;
@@ -239,10 +238,8 @@ implements HasMetaModelContext {
         val propertyAccessors = _Lists.<Method>newArrayList();
         getFacetProcessor().findAndRemovePropertyAccessors(methodRemover, propertyAccessors);
 
-        findAndRemovePrefixedNonVoidMethods(
-                MethodLiteralConstants.GET_PREFIX, Object.class, 0, propertyAccessors::add);
-        findAndRemovePrefixedNonVoidMethods(
-                MethodLiteralConstants.IS_PREFIX, Boolean.class, 0, propertyAccessors::add);
+        methodRemover.removeMethods(MethodUtil.Predicates.nonBooleanGetter(Object.class), propertyAccessors::add);
+        methodRemover.removeMethods(MethodUtil.Predicates.booleanGetter(), propertyAccessors::add);
 
         createPropertyFacetedMethodsFromAccessors(propertyAccessors, onNewField);
     }

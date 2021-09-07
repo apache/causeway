@@ -66,6 +66,7 @@ public final class ClassUtil {
                     double.class, 0.0,
                     char.class, (char)0
                     );
+    //XXX supposedly use Spring's ClassUtils instead
     static final Map<Class<?>, Class<?>> wrapperClasses =
             MapUtil.asMap(
                     // TODO: there is a better way of doing this in 1.6 using TypeMirror

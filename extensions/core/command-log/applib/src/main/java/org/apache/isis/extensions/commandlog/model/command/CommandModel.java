@@ -25,6 +25,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.CommandOutcomeHandler;
 import org.apache.isis.applib.services.commanddto.HasCommandDto;
 import org.apache.isis.applib.util.ObjectContracts;
+import org.apache.isis.applib.util.ToString;
 import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogApplib;
 
 public interface CommandModel
@@ -66,16 +67,17 @@ extends
 
     void setReplayState(ReplayState excluded);
 
+    static final ToString<CommandModel> stringifier = ObjectContracts
+        .toString("interactionId", CommandModel::getInteractionId)
+        .thenToString("username", CommandModel::getUsername)
+        .thenToString("timestamp", CommandModel::getTimestamp)
+        .thenToString("target", CommandModel::getTarget)
+        .thenToString("logicalMemberIdentifier", CommandModel::getLogicalMemberIdentifier)
+        .thenToStringOmitIfAbsent("startedAt", CommandModel::getStartedAt)
+        .thenToStringOmitIfAbsent("completedAt", CommandModel::getCompletedAt);
+
     default String toFriendlyString() {
-        return ObjectContracts
-                .toString("interactionId", CommandModel::getInteractionId)
-                .thenToString("username", CommandModel::getUsername)
-                .thenToString("timestamp", CommandModel::getTimestamp)
-                .thenToString("target", CommandModel::getTarget)
-                .thenToString("logicalMemberIdentifier", CommandModel::getLogicalMemberIdentifier)
-                .thenToStringOmitIfAbsent("startedAt", CommandModel::getStartedAt)
-                .thenToStringOmitIfAbsent("completedAt", CommandModel::getCompletedAt)
-                .toString(this);
+        return stringifier.toString(this);
     }
 
     @Override

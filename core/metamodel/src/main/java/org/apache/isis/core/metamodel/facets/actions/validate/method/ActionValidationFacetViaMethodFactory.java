@@ -25,13 +25,13 @@ import javax.inject.Inject;
 import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.ActionSupport;
 import org.apache.isis.core.metamodel.facets.ActionSupport.SearchAlgorithm;
 import org.apache.isis.core.metamodel.facets.actions.validate.ActionValidationFacet;
 import org.apache.isis.core.metamodel.facets.param.validate.method.ActionParameterValidationFacetViaMethod;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
 import lombok.val;
@@ -42,7 +42,7 @@ import lombok.val;
 public class ActionValidationFacetViaMethodFactory
 extends MethodPrefixBasedFacetFactoryAbstract  {
 
-    private static final String PREFIX = MethodLiteralConstants.VALIDATE_PREFIX;
+    private static final String PREFIX = ProgrammingModelConstants.VALIDATE_PREFIX;
 
     @Inject
     public ActionValidationFacetViaMethodFactory(final MetaModelContext mmc) {

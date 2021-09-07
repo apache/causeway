@@ -26,7 +26,7 @@ import java.util.function.Predicate;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Collections;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;
@@ -192,10 +192,13 @@ public class MethodUtil {
 
         }
 
-        public static Predicate<Method> getter(final Class<?> returnType) {
-            return prefixed(MethodLiteralConstants.GET_PREFIX, returnType, CanBeVoid.FALSE, 0);
+        public static Predicate<Method> booleanGetter() {
+            return ProgrammingModelConstants.AccessorPrefix::isBooleanGetter;
         }
 
+        public static Predicate<Method> nonBooleanGetter(final Class<?> returnType) {
+            return method->ProgrammingModelConstants.AccessorPrefix.isNonBooleanGetter(method, returnType);
+        }
 
     }
 

@@ -18,8 +18,8 @@
  */
 package org.apache.isis.core.metamodel.facets.object.disabled;
 
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
 import org.apache.isis.core.metamodel.facets.object.support.ObjectSupportFacetFactoryTestAbstract;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants.ObjectSupportMethod;
 
 public class ObjectDisabledMethodFacetFactoryTest
 extends ObjectSupportFacetFactoryTestAbstract {

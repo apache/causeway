@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 import javax.inject.Inject;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -33,7 +34,6 @@ import org.apache.isis.core.metamodel.facets.properties.update.init.PropertyInit
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacetViaSetterMethod;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
 public class PropertySetterFacetFactory
@@ -73,7 +73,9 @@ extends MethodPrefixBasedFacetFactoryAbstract {
                 .findMethod(
                         MethodFinderOptions
                         .accessor(processMethodContext.getIntrospectionPolicy()),
-                        cls, MethodLiteralConstants.SET_PREFIX + capitalizedName, void.class, paramTypes);
+                        cls,
+                        ProgrammingModelConstants.AccessorPrefix.SET.prefix(capitalizedName),
+                        void.class, paramTypes);
         processMethodContext.removeMethod(setterMethod);
 
         final FacetHolder property = processMethodContext.getFacetHolder();

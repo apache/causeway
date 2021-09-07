@@ -23,7 +23,6 @@ import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.Locale;
 
-import javax.enterprise.inject.Vetoed;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -33,10 +32,10 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.TypeVetoMarker;
 
 import static org.apache.isis.commons.internal.reflection._Annotations.findNearestAnnotation;
 
@@ -84,9 +83,10 @@ implements IsisBeanTypeClassifier {
 
         // handle vetoing ...
 
-        if(findNearestAnnotation(type, Vetoed.class).isPresent()
-                || findNearestAnnotation(type, Programmatic.class).isPresent()) {
-            return BeanClassification.selfManaged(BeanSort.VETOED); // reject
+        for(TypeVetoMarker vetoMarker : TypeVetoMarker.values()) {
+            if(findNearestAnnotation(type, vetoMarker.getAnnotationType()).isPresent()) {
+                return BeanClassification.selfManaged(BeanSort.VETOED); // reject
+            }
         }
 
         val profiles = Can.ofArray(findNearestAnnotation(type, Profile.class)

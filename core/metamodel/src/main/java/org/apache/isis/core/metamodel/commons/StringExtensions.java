@@ -29,6 +29,8 @@ import org.apache.isis.applib.util.Enums;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.resources._Resources;
 
+import lombok.val;
+
 public final class StringExtensions {
 
     private StringExtensions() {}
@@ -42,7 +44,7 @@ public final class StringExtensions {
      * between the words, where each word starts with a capital letter. E.g.,
      * "NextAvailableDate" is returned as "Next Available Date".
      */
-    public static String asNaturalName2(String name) {
+    public static String asNaturalName2(final String name) {
         return _Strings.asNaturalName2.apply(name);
     }
 
@@ -118,7 +120,7 @@ public final class StringExtensions {
         return b.toString();
     }
 
-    public static String asLowerDashed(String extendee) {
+    public static String asLowerDashed(final String extendee) {
         return _Strings.asLowerDashed.apply(extendee);
     }
 
@@ -251,11 +253,11 @@ public final class StringExtensions {
                         : extendee;
     }
 
-    public static String enumTitle(String enumName) {
+    public static String enumTitle(final String enumName) {
         return Enums.getFriendlyNameOf(enumName);
     }
 
-    public static String enumDeTitle(String enumFriendlyName) {
+    public static String enumDeTitle(final String enumFriendlyName) {
         return Enums.getEnumNameFromFriendly(enumFriendlyName);
     }
 
@@ -295,7 +297,7 @@ public final class StringExtensions {
 
     /**
      * Returns the name of a Java entity without any prefix. A prefix is defined
-     * as the first set of lowercase letters and the name is characters from,
+     * as the first set of lower-case letters and the name is characters from,
      * and including, the first upper case letter. If no upper case letter is
      * found then an empty string is returned.
      *
@@ -304,58 +306,16 @@ public final class StringExtensions {
      * results:
      *
      * <pre>
-     *                     getCarRegistration        -&gt; CarRegistration
-     *                     CityMayor -&gt; CityMayor
-     *                     isReady -&gt; Ready
+     * getCarRegistration -&gt; CarRegistration
+     * CityMayor          -&gt; CityMayor
+     * isReady            -&gt; Ready
      * </pre>
      *
      */
     public static String asJavaBaseName(final String javaName) {
-        int pos = 0;
-
-        // find first upper case character
-        final int len = javaName.length();
-
-        while ((pos < len) && (javaName.charAt(pos) != '_') && Character.isLowerCase(javaName.charAt(pos))) {
-            pos++;
-        }
-
-        if (pos >= len) {
-            return "";
-        }
-
-        if (javaName.charAt(pos) == '_') {
-            pos++;
-        }
-
-        if (pos >= len) {
-            return "";
-        }
-
-        final String baseName = javaName.substring(pos);
-        final char firstChar = baseName.charAt(0);
-
-        if (Character.isLowerCase(firstChar)) {
-            return Character.toUpperCase(firstChar) + baseName.substring(1);
-        } else {
-            return baseName;
-        }
+        val baseName = _Strings.asPrefixDropped(javaName);
+        return _Strings.capitalize(baseName);
     }
-
-    public static String asJavaBaseNameStripAccessorPrefixIfRequired(final String javaNameExtendee) {
-        if (javaNameExtendee.startsWith("is") || javaNameExtendee.startsWith("get")) {
-            return asJavaBaseName(javaNameExtendee);
-        } else {
-            return StringExtensions.asCapitalizedName(javaNameExtendee);
-        }
-    }
-
-    public static String asCapitalizedName(final String extendee) {
-
-        return Character.toUpperCase(extendee.charAt(0)) +
-                extendee.substring(1);
-    }
-
 
     public static String asPluralName(final String extendee) {
         String pluralName;

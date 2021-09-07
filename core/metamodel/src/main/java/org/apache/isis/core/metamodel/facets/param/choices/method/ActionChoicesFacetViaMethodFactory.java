@@ -24,12 +24,12 @@ import java.util.Collection;
 import javax.inject.Inject;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
 import lombok.val;
@@ -37,7 +37,7 @@ import lombok.val;
 public class ActionChoicesFacetViaMethodFactory
 extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String PREFIX = MethodLiteralConstants.CHOICES_PREFIX;
+    private static final String PREFIX = ProgrammingModelConstants.CHOICES_PREFIX;
 
     @Inject
     public ActionChoicesFacetViaMethodFactory(final MetaModelContext mmc) {

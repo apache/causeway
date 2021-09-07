@@ -2,12 +2,12 @@ package org.apache.isis.core.metamodel.facets.object.callback;
 
 import org.junit.jupiter.api.Assertions;
 
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacetFactory;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 
 import lombok.val;
 
@@ -33,7 +33,7 @@ extends AbstractFacetFactoryTest {
             final int expectedCallbackCount,
             final FacetFactory facetFactory,
             final Class<?> type,
-            final MethodLiteralConstants.CallbackMethod callbackMethod,
+            final ProgrammingModelConstants.CallbackMethod callbackMethod,
             final Class<? extends ImperativeFacet> facetType) {
 
         // when
