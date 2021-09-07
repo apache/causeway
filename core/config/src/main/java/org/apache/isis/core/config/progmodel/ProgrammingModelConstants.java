@@ -205,7 +205,7 @@ public final class ProgrammingModelConstants {
     @FunctionalInterface
     public static interface SupportingMethodNameProviderForPropertyAndCollection {
         /** automatically deals with properties getters and actions */
-        @Nullable String getMemberSupportingMethodName(Member member, String prefix, boolean isMixinMain);
+        @Nullable String getMemberSupportingMethodName(Member member, String prefix, boolean isMixin);
     }
 
     // -- SUPPORTING METHOD NAMING CONVENTION
@@ -214,24 +214,24 @@ public final class ProgrammingModelConstants {
         /** eg. hideAct() */
         PREFIXED_ACTION_NAME {
             @Override
-            String nameFor(final Method actionMethod, final String prefix, final boolean isMixinMain) {
+            String nameFor(final Method actionMethod, final String prefix, final boolean isMixin) {
                 return prefix + _Strings.capitalize(actionMethod.getName());
             }
         },
         /** eg. hide() */
         PREFIX_ONLY {
             @Override
-            String nameFor(final Method actionMethod, final String prefix, final boolean isMixinMain) {
-                return isMixinMain
+            String nameFor(final Method actionMethod, final String prefix, final boolean isMixin) {
+                return isMixin
                         // prefix-only notation is restricted to mixins
                         ? prefix
                         : null;
             }
         };
-        abstract String nameFor(Method actionMethod, String prefix, boolean isMixinMain);
-        public static Can<String> namesFor(final Method actionMethod, final String prefix, final boolean isMixinMain) {
+        abstract String nameFor(Method actionMethod, String prefix, boolean isMixin);
+        public static Can<String> namesFor(final Method actionMethod, final String prefix, final boolean isMixin) {
             return Stream.of(ActionSupportNaming.values())
-                    .map(naming->naming.nameFor(actionMethod, prefix, isMixinMain))
+                    .map(naming->naming.nameFor(actionMethod, prefix, isMixin))
                     .collect(Can.toCan());
         }
     }
@@ -240,51 +240,51 @@ public final class ProgrammingModelConstants {
         /** eg. hide2Act(..) */
         PREFIX_PARAM_INDEX_ACTION_NAME {
             @Override
-            String nameFor(final Method actionMethod, final String prefix, final boolean isMixinMain, final int paramNum) {
+            String nameFor(final Method actionMethod, final String prefix, final boolean isMixin, final int paramNum) {
                 return prefix + paramNum + _Strings.capitalize(actionMethod.getName());
             }
         },
         /** eg. hideEmail() .. where email is the referenced parameter's name */
         PREFIXED_PARAM_NAME {
             @Override
-            String nameFor(final Method actionMethod, final String prefix, final boolean isMixinMain, final int paramNum) {
-                return isMixinMain
+            String nameFor(final Method actionMethod, final String prefix, final boolean isMixin, final int paramNum) {
+                return isMixin
                         // no-action-name-reference notation is restricted to mixins
                         ? prefix + _Strings.capitalize(actionMethod.getParameters()[paramNum].getName())
                         : null;
             }
         };
-        abstract String nameFor(Method actionMethod, String prefix, boolean isMixinMain, int paramNum);
-        public static Can<IntFunction<String>> namesFor(final Method actionMethod, final String prefix, final boolean isMixinMain) {
+        abstract String nameFor(Method actionMethod, String prefix, boolean isMixin, int paramNum);
+        public static Can<IntFunction<String>> namesFor(final Method actionMethod, final String prefix, final boolean isMixin) {
             return Stream.of(ParameterSupportNaming.values())
-                    .<IntFunction<String>>map(naming->(paramNum->naming.nameFor(actionMethod, prefix, isMixinMain, paramNum)))
+                    .<IntFunction<String>>map(naming->(paramNum->naming.nameFor(actionMethod, prefix, isMixin, paramNum)))
                     .collect(Can.toCan());
         }
     }
 
-    /** deals with <i>Getters</i> and <i>Actions</i> */
+    /** deals with <i>fields</i>, <i>getters</i> and <i>actions</i> */
     public static enum MemberSupportNaming {
         /** eg. hideProp() */
         PREFIXED_MEMBER_NAME {
             @Override
-            String nameFor(final Member member, final String prefix, final boolean isMixinMain) {
+            String nameFor(final Member member, final String prefix, final boolean isMixin) {
                 return prefix + getCapitalizedMemberName(member);
             }
         },
         /** eg. hide() */
         PREFIX_ONLY {
             @Override
-            String nameFor(final Member member, final String prefix, final boolean isMixinMain) {
-                return isMixinMain
+            String nameFor(final Member member, final String prefix, final boolean isMixin) {
+                return isMixin
                         // prefix-only notation is restricted to mixins
                         ? prefix
                         : null;
             }
         };
-        abstract String nameFor(Member member, String prefix, boolean isMixinMain);
-        public static Can<String> namesFor(final Member member, final String prefix, final boolean isMixinMain) {
+        abstract String nameFor(Member member, String prefix, boolean isMixin);
+        public static Can<String> namesFor(final Member member, final String prefix, final boolean isMixin) {
             return Stream.of(MemberSupportNaming.values())
-                    .map(naming->naming.nameFor(member, prefix, isMixinMain))
+                    .map(naming->naming.nameFor(member, prefix, isMixin))
                     .collect(Can.toCan());
         }
     }
