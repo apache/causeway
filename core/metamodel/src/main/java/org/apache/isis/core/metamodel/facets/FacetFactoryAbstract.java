@@ -85,7 +85,6 @@ implements FacetFactory, HasMetaModelContext {
 
     // -- METHOD UTILITITES
 
-    protected static final Class<?> ANY_RETURN = null;
     protected static final Class<?>[] NO_ARG = new Class<?>[0];
     protected static final Class<?>[] STRING_ARG = new Class<?>[] {String.class};
 

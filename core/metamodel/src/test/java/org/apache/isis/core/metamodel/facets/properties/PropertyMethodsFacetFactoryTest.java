@@ -208,7 +208,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
             }
 
             @SuppressWarnings("unused")
-            public Object[] choicesFirstName() {
+            public String[] choicesFirstName() {
                 return null;
             }
         }
@@ -238,7 +238,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
             }
 
             @SuppressWarnings("unused")
-            public Object[] autoCompleteFirstName(final String searchArg) {
+            public String[] autoCompleteFirstName(final String searchArg) {
                 return null;
             }
         }

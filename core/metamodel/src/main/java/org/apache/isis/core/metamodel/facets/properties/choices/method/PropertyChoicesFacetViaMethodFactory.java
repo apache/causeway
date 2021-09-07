@@ -43,20 +43,19 @@ extends MemberSupportFacetFactoryAbstract {
             final ProcessMethodContext processMethodContext,
             final Can<String> methodNameCandidates) {
 
+        val getterOrMixinMain = processMethodContext.getMethod();
+        val returnType = getterOrMixinMain.getReturnType();
+
         MethodFinder
-        .findMethod(
+        .findMethod_returningNonScalar(
             MethodFinderOptions
             .memberSupport(processMethodContext.getIntrospectionPolicy()),
             processMethodContext.getCls(),
             methodNameCandidates,
-            ANY_RETURN,
+            returnType,
             NO_ARG)
         .peek(processMethodContext::removeMethod)
         .forEach(choicesMethod->{
-
-            val getterOrMixinMain = processMethodContext.getMethod();
-            val returnType = getterOrMixinMain.getReturnType();
-
             addFacet(
                     new PropertyChoicesFacetViaMethod(
                             choicesMethod, returnType, processMethodContext.getFacetHolder()));

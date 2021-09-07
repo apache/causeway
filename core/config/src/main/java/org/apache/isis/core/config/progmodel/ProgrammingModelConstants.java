@@ -142,6 +142,9 @@ public final class ProgrammingModelConstants {
         private final Can<Class<?>> returnTypes;
 
         public static Can<Class<?>> nonScalar(final @NonNull Class<?> elementReturnType) {
+            if(VOID.returnTypes.contains(elementReturnType)) {
+                return Can.empty();
+            }
             return Can.<Class<?>>of(
                 Can.class,
                 Collection.class,
