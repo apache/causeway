@@ -321,25 +321,22 @@ public interface FacetFactory {
         private Can<String> namingConventionForActionSupport(
                 final String prefix) {
             val actionMethod = getMethod();
-            val isMixin = isMixinMain();
-            return ProgrammingModelConstants.NAMING_ACTIONS
-                    .map(naming->naming.getActionSupportingMethodName(actionMethod, prefix, isMixin));
+            return ProgrammingModelConstants.ActionSupportNaming
+                    .namesFor(actionMethod, prefix, isMixinMain());
         }
 
         private Can<java.util.function.IntFunction<String>> namingConventionForParameterSupport(
                 final String prefix) {
             val actionMethod = getMethod();
-            val isMixin = isMixinMain();
-            return ProgrammingModelConstants.NAMING_PARAMETERS
-                    .map(naming->naming.providerForParam(actionMethod, prefix, isMixin));
+            return ProgrammingModelConstants.ParameterSupportNaming
+                    .namesFor(actionMethod, prefix, isMixinMain());
         }
 
         private Can<String> namingConventionForPropertyAndCollectionSupport(
                 final String prefix) {
             val getterMethod = getMethod();
-            val isMixin = isMixinMain();
-            return ProgrammingModelConstants.NAMING_PROPERTIES_AND_COLLECTIONS
-                    .map(naming->naming.getMemberSupportingMethodName(getterMethod, prefix, isMixin));
+            return ProgrammingModelConstants.MemberSupportNaming
+                    .namesFor(getterMethod, prefix, isMixinMain());
         }
 
         // -- JUNIT SUPPORT
