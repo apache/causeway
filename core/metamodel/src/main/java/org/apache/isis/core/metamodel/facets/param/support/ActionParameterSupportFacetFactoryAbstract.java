@@ -30,24 +30,24 @@ import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMet
 import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest.ParamSupportingMethodSearchRequestBuilder;
 import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchResult;
 import org.apache.isis.core.metamodel.facets.ParameterSupport.SearchAlgorithm;
-import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.members.support.MemberAndPropertySupportFacetFactoryAbstract;
 
 import lombok.NonNull;
 import lombok.val;
 
-public abstract class ActionParameterSupportFacetAbstract
-extends MemberSupportFacetFactoryAbstract {
+public abstract class ActionParameterSupportFacetFactoryAbstract
+extends MemberAndPropertySupportFacetFactoryAbstract {
 
     private final UnaryOperator<ParamSupportingMethodSearchRequest.ParamSupportingMethodSearchRequestBuilder>
         searchRefiner;
 
-    protected ActionParameterSupportFacetAbstract(
+    protected ActionParameterSupportFacetFactoryAbstract(
             final @NonNull MetaModelContext mmc,
             final @NonNull MemberSupportPrefix memberSupportPrefix) {
         this(mmc, memberSupportPrefix, UnaryOperator.identity());
     }
 
-    protected ActionParameterSupportFacetAbstract(
+    protected ActionParameterSupportFacetFactoryAbstract(
             final @NonNull MetaModelContext mmc,
             final @NonNull MemberSupportPrefix memberSupportPrefix,
             final @NonNull UnaryOperator<ParamSupportingMethodSearchRequestBuilder> searchRefiner) {
@@ -68,11 +68,13 @@ extends MemberSupportFacetFactoryAbstract {
         val methodNameCandidates = memberSupportPrefix.getMethodNamePrefixes()
                 .flatMap(processMethodContext::parameterSupportCandidates);
 
-        val searchRequest = searchRefiner.apply(ParameterSupport.ParamSupportingMethodSearchRequest.builder()
-                .processMethodContext(processMethodContext)
-                .paramIndexToMethodNameProviders(methodNameCandidates))
-                .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.SWEEP))
-                .returnType(memberSupportPrefix.getParameterSearchReturnType())
+        val searchRequest = searchRefiner
+                .apply(
+                        ParameterSupport.ParamSupportingMethodSearchRequest.builder()
+                        .processMethodContext(processMethodContext)
+                        .paramIndexToMethodNameProviders(methodNameCandidates)
+                        .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.SWEEP))
+                        .returnType(memberSupportPrefix.getParameterSearchReturnType()))
                 .build();
 
         ParameterSupport.findParamSupportingMethods(searchRequest, searchResult -> {

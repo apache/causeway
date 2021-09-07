@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchResult;
 import org.apache.isis.core.metamodel.facets.ParameterSupport.SearchAlgorithm;
-import org.apache.isis.core.metamodel.facets.param.support.ActionParameterSupportFacetAbstract;
+import org.apache.isis.core.metamodel.facets.param.support.ActionParameterSupportFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.param.validate.ActionParameterValidationFacet;
 
 import lombok.val;
@@ -35,7 +35,7 @@ import lombok.val;
 /**
  * Sets up {@link ActionParameterValidationFacet}. */
 public class ActionParameterValidationFacetViaMethodFactory
-extends ActionParameterSupportFacetAbstract  {
+extends ActionParameterSupportFacetFactoryAbstract  {
 
     @Inject
     public ActionParameterValidationFacetViaMethodFactory(final MetaModelContext mmc) {

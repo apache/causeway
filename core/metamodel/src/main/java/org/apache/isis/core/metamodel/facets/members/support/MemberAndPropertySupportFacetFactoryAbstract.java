@@ -16,40 +16,33 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.param.hide.method;
+package org.apache.isis.core.metamodel.facets.members.support;
 
-import javax.inject.Inject;
-
+import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
-import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchResult;
-import org.apache.isis.core.metamodel.facets.param.hide.ActionParameterHiddenFacet;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.param.support.ActionParameterSupportFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
-import lombok.val;
+import lombok.NonNull;
 
 /**
- * Sets up {@link ActionParameterHiddenFacet}.
+ * Specializations {@link ActionParameterSupportFacetFactoryAbstract} and
+ * {@link MemberSupportFacetFactoryAbstract}
  */
-public class ActionParameterHiddenFacetViaMethodFactory
-extends ActionParameterSupportFacetFactoryAbstract {
+public abstract class MemberAndPropertySupportFacetFactoryAbstract
+extends MethodPrefixBasedFacetFactoryAbstract {
 
-    @Inject
-    public ActionParameterHiddenFacetViaMethodFactory(final MetaModelContext mmc) {
-        super(mmc, MemberSupportPrefix.HIDE);
+    protected final MemberSupportPrefix memberSupportPrefix;
+
+    protected MemberAndPropertySupportFacetFactoryAbstract(
+            final @NonNull MetaModelContext mmc,
+            final @NonNull ImmutableEnumSet<FeatureType> featureTypes,
+            final @NonNull MemberSupportPrefix memberSupportPrefix) {
+        super(mmc, featureTypes, OrphanValidation.VALIDATE,
+                memberSupportPrefix.getMethodNamePrefixes());
+        this.memberSupportPrefix = memberSupportPrefix;
     }
-
-    @Override
-    protected void onSearchResult(
-            final FacetedMethodParameter paramAsHolder,
-            final ParamSupportingMethodSearchResult searchResult) {
-        val hideMethod = searchResult.getSupportingMethod();
-        val ppmFactory = searchResult.getPpmFactory();
-        addFacet(
-                new ActionParameterHiddenFacetViaMethod(
-                        hideMethod, ppmFactory, paramAsHolder));
-    }
-
 
 }

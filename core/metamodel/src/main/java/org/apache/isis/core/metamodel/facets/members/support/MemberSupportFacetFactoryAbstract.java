@@ -18,26 +18,72 @@
  */
 package org.apache.isis.core.metamodel.facets.members.support;
 
+import java.util.function.UnaryOperator;
+
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest;
+import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest.ParamSupportingMethodSearchRequestBuilder;
 
 import lombok.NonNull;
 
 public abstract class MemberSupportFacetFactoryAbstract
-extends MethodPrefixBasedFacetFactoryAbstract {
+extends MemberAndPropertySupportFacetFactoryAbstract {
 
-    protected final MemberSupportPrefix memberSupportPrefix;
+    private final UnaryOperator<ParamSupportingMethodSearchRequest.ParamSupportingMethodSearchRequestBuilder>
+        searchRefiner;
 
     protected MemberSupportFacetFactoryAbstract(
             final @NonNull MetaModelContext mmc,
             final @NonNull ImmutableEnumSet<FeatureType> featureTypes,
             final @NonNull MemberSupportPrefix memberSupportPrefix) {
-        super(mmc, featureTypes, OrphanValidation.VALIDATE,
-                memberSupportPrefix.getMethodNamePrefixes());
-        this.memberSupportPrefix = memberSupportPrefix;
+        this(mmc, featureTypes, memberSupportPrefix, UnaryOperator.identity());
     }
+
+    protected MemberSupportFacetFactoryAbstract(
+            final @NonNull MetaModelContext mmc,
+            final @NonNull ImmutableEnumSet<FeatureType> featureTypes,
+            final @NonNull MemberSupportPrefix memberSupportPrefix,
+            final @NonNull UnaryOperator<ParamSupportingMethodSearchRequestBuilder> searchRefiner) {
+        super(mmc, featureTypes, memberSupportPrefix);
+        this.searchRefiner = searchRefiner;
+    }
+
+//TODO WIP
+//    @Override
+//    public final void process(final ProcessMethodContext processMethodContext) {
+//
+//        val facetedMethod = processMethodContext.getFacetHolder();
+//        val parameters = facetedMethod.getParameters();
+//
+//        if (parameters.isEmpty()) {
+//            return;
+//        }
+//
+//        val methodNameCandidates = memberSupportPrefix.getMethodNamePrefixes()
+//                .flatMap(processMethodContext::parameterSupportCandidates);
+//
+//        val searchRequest = searchRefiner.apply(ParameterSupport.ParamSupportingMethodSearchRequest.builder()
+//                .processMethodContext(processMethodContext)
+//                .paramIndexToMethodNameProviders(methodNameCandidates))
+//                .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.SWEEP))
+//                .returnType(memberSupportPrefix.getParameterSearchReturnType())
+//                .build();
+//
+//        ParameterSupport.findParamSupportingMethods(searchRequest, searchResult -> {
+//            processMethodContext.removeMethod(searchResult.getSupportingMethod());
+//            val paramIndex = searchResult.getParamIndex();
+//            // add facets directly to parameters, not to actions
+//            val paramAsHolder = parameters.get(paramIndex);
+//            onSearchResult(paramAsHolder, searchResult);
+//        });
+//
+//    }
+//
+//    protected abstract void onSearchResult(
+//            FacetedMethodParameter paramAsHolder,
+//            ParamSupportingMethodSearchResult searchResult);
 
 }

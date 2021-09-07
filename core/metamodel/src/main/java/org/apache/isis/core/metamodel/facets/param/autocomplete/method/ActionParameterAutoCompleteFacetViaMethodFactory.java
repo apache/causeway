@@ -24,12 +24,12 @@ import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSup
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchResult;
-import org.apache.isis.core.metamodel.facets.param.support.ActionParameterSupportFacetAbstract;
+import org.apache.isis.core.metamodel.facets.param.support.ActionParameterSupportFacetFactoryAbstract;
 
 import lombok.val;
 
 public class ActionParameterAutoCompleteFacetViaMethodFactory
-extends ActionParameterSupportFacetAbstract {
+extends ActionParameterSupportFacetFactoryAbstract {
 
     @Inject
     public ActionParameterAutoCompleteFacetViaMethodFactory(final MetaModelContext mmc) {

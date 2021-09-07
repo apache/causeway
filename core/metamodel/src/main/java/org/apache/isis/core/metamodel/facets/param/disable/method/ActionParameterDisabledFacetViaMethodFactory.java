@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchResult;
 import org.apache.isis.core.metamodel.facets.param.disable.ActionParameterDisabledFacet;
-import org.apache.isis.core.metamodel.facets.param.support.ActionParameterSupportFacetAbstract;
+import org.apache.isis.core.metamodel.facets.param.support.ActionParameterSupportFacetFactoryAbstract;
 
 import lombok.val;
 
@@ -33,7 +33,7 @@ import lombok.val;
  * Sets up {@link ActionParameterDisabledFacet}.
  */
 public class ActionParameterDisabledFacetViaMethodFactory
-extends ActionParameterSupportFacetAbstract  {
+extends ActionParameterSupportFacetFactoryAbstract  {
 
     @Inject
     public ActionParameterDisabledFacetViaMethodFactory(final MetaModelContext mmc) {
