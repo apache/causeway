@@ -172,7 +172,7 @@ public final class ProgrammingModelConstants {
         private final Can<String> methodNames;
     }
 
-    // -- MEMBER SUPPORT
+    // -- MEMBER SUPPORT PREFIXES
 
     public static final String DEFAULT_PREFIX = "default";
     public static final String CHOICES_PREFIX = "choices";
@@ -200,27 +200,19 @@ public final class ProgrammingModelConstants {
         final Can<Class<? extends Annotation>> prohibits;
     }
 
-    // -- METHOD NAMING CONVENTIONS
-
-    @FunctionalInterface
-    public static interface SupportingMethodNameProviderForPropertyAndCollection {
-        /** automatically deals with properties getters and actions */
-        @Nullable String getMemberSupportingMethodName(Member member, String prefix, boolean isMixin);
-    }
-
     // -- SUPPORTING METHOD NAMING CONVENTION
 
     public static enum ActionSupportNaming {
         /** eg. hideAct() */
         PREFIXED_ACTION_NAME {
-            @Override
+            @Override @Nullable
             String nameFor(final Method actionMethod, final String prefix, final boolean isMixin) {
                 return prefix + _Strings.capitalize(actionMethod.getName());
             }
         },
         /** eg. hide() */
         PREFIX_ONLY {
-            @Override
+            @Override @Nullable
             String nameFor(final Method actionMethod, final String prefix, final boolean isMixin) {
                 return isMixin
                         // prefix-only notation is restricted to mixins
@@ -228,7 +220,7 @@ public final class ProgrammingModelConstants {
                         : null;
             }
         };
-        abstract String nameFor(Method actionMethod, String prefix, boolean isMixin);
+        abstract @Nullable String nameFor(Method actionMethod, String prefix, boolean isMixin);
         public static Can<String> namesFor(final Method actionMethod, final String prefix, final boolean isMixin) {
             return Stream.of(ActionSupportNaming.values())
                     .map(naming->naming.nameFor(actionMethod, prefix, isMixin))
@@ -239,14 +231,14 @@ public final class ProgrammingModelConstants {
     public static enum ParameterSupportNaming {
         /** eg. hide2Act(..) */
         PREFIX_PARAM_INDEX_ACTION_NAME {
-            @Override
+            @Override @Nullable
             String nameFor(final Method actionMethod, final String prefix, final boolean isMixin, final int paramNum) {
                 return prefix + paramNum + _Strings.capitalize(actionMethod.getName());
             }
         },
         /** eg. hideEmail() .. where email is the referenced parameter's name */
         PREFIXED_PARAM_NAME {
-            @Override
+            @Override @Nullable
             String nameFor(final Method actionMethod, final String prefix, final boolean isMixin, final int paramNum) {
                 return isMixin
                         // no-action-name-reference notation is restricted to mixins
@@ -254,7 +246,7 @@ public final class ProgrammingModelConstants {
                         : null;
             }
         };
-        abstract String nameFor(Method actionMethod, String prefix, boolean isMixin, int paramNum);
+        abstract @Nullable String nameFor(Method actionMethod, String prefix, boolean isMixin, int paramNum);
         public static Can<IntFunction<String>> namesFor(final Method actionMethod, final String prefix, final boolean isMixin) {
             return Stream.of(ParameterSupportNaming.values())
                     .<IntFunction<String>>map(naming->(paramNum->naming.nameFor(actionMethod, prefix, isMixin, paramNum)))
@@ -266,14 +258,14 @@ public final class ProgrammingModelConstants {
     public static enum MemberSupportNaming {
         /** eg. hideProp() */
         PREFIXED_MEMBER_NAME {
-            @Override
+            @Override @Nullable
             String nameFor(final Member member, final String prefix, final boolean isMixin) {
                 return prefix + getCapitalizedMemberName(member);
             }
         },
         /** eg. hide() */
         PREFIX_ONLY {
-            @Override
+            @Override @Nullable
             String nameFor(final Member member, final String prefix, final boolean isMixin) {
                 return isMixin
                         // prefix-only notation is restricted to mixins
@@ -281,7 +273,7 @@ public final class ProgrammingModelConstants {
                         : null;
             }
         };
-        abstract String nameFor(Member member, String prefix, boolean isMixin);
+        abstract @Nullable String nameFor(Member member, String prefix, boolean isMixin);
         public static Can<String> namesFor(final Member member, final String prefix, final boolean isMixin) {
             return Stream.of(MemberSupportNaming.values())
                     .map(naming->naming.nameFor(member, prefix, isMixin))
