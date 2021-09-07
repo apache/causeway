@@ -20,39 +20,32 @@ package org.apache.isis.core.metamodel.facets.members.named.method;
 
 import javax.inject.Inject;
 
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.methods.MemberSupportFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
-import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
 import lombok.val;
 
 public class NamedFacetForMemberViaMethodFactory
-extends MethodPrefixBasedFacetFactoryAbstract {
-
-    private static final String PREFIX = ProgrammingModelConstants.NAMED_PREFIX;
+extends MemberSupportFacetFactoryAbstract {
 
     @Inject
     public NamedFacetForMemberViaMethodFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.MEMBERS, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
+        super(mmc, FeatureType.MEMBERS, MemberSupportPrefix.NAMED);
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        addNamedFacetIfNamedMethodIsFound(processMethodContext);
-    }
-
-    private void addNamedFacetIfNamedMethodIsFound(
-            final ProcessMethodContext processMethodContext) {
 
         val cls = processMethodContext.getCls();
         //val actionOrGetter = processMethodContext.getMethod();
 
-        val methodNameCandidates = processMethodContext.memberSupportCandidates(PREFIX);
+        val methodNameCandidates = memberSupportPrefix.getMethodNamePrefixes()
+                .flatMap(processMethodContext::memberSupportCandidates);
 
         val namedMethod = MethodFinder.findMethod_returningText(
                 MethodFinderOptions

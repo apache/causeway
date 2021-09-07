@@ -21,38 +21,31 @@ package org.apache.isis.core.metamodel.facets.properties.validating.method;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.services.i18n.TranslationContext;
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.methods.MemberSupportFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
-import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
 import lombok.val;
 
 public class PropertyValidateFacetViaMethodFactory
-extends MethodPrefixBasedFacetFactoryAbstract  {
-
-    private static final String PREFIX = ProgrammingModelConstants.VALIDATE_PREFIX;
+extends MemberSupportFacetFactoryAbstract  {
 
     @Inject
     public PropertyValidateFacetViaMethodFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.PROPERTIES_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
+        super(mmc, FeatureType.PROPERTIES_ONLY, MemberSupportPrefix.VALIDATE);
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        attachValidateFacetIfValidateMethodIsFound(processMethodContext);
-    }
-
-    private void attachValidateFacetIfValidateMethodIsFound(final ProcessMethodContext processMethodContext) {
-
         val cls = processMethodContext.getCls();
         val getterMethod = processMethodContext.getMethod();
 
-        val methodNameCandidates = processMethodContext.memberSupportCandidates(PREFIX);
+        val methodNameCandidates = memberSupportPrefix.getMethodNamePrefixes()
+                .flatMap(processMethodContext::memberSupportCandidates);
         val returnType = getterMethod.getReturnType();
 
         val validateMethod = MethodFinder.findMethod_returningText(

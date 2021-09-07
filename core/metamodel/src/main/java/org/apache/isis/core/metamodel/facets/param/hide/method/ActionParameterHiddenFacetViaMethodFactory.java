@@ -23,15 +23,14 @@ import java.util.EnumSet;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.ParameterSupport;
 import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest.ReturnType;
 import org.apache.isis.core.metamodel.facets.ParameterSupport.SearchAlgorithm;
 import org.apache.isis.core.metamodel.facets.param.hide.ActionParameterHiddenFacet;
-import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.methods.MemberSupportFacetFactoryAbstract;
 
 import lombok.val;
 
@@ -39,13 +38,11 @@ import lombok.val;
  * Sets up {@link ActionParameterHiddenFacet}.
  */
 public class ActionParameterHiddenFacetViaMethodFactory
-extends MethodPrefixBasedFacetFactoryAbstract  {
-
-    private static final String PREFIX = ProgrammingModelConstants.HIDE_PREFIX;
+extends MemberSupportFacetFactoryAbstract {
 
     @Inject
     public ActionParameterHiddenFacetViaMethodFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
+        super(mmc, FeatureType.ACTIONS_ONLY, MemberSupportPrefix.HIDE);
     }
 
     @Override
@@ -60,7 +57,8 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
 
         // attach ActionParameterHiddenFacet if hideNumMethod is found ...
 
-        val methodNameCandidates = processMethodContext.parameterSupportCandidates(PREFIX);
+        val methodNameCandidates = memberSupportPrefix.getMethodNamePrefixes()
+                .flatMap(processMethodContext::parameterSupportCandidates);
 
         val searchRequest = ParameterSupport.ParamSupportingMethodSearchRequest.builder()
                 .processMethodContext(processMethodContext)

@@ -23,32 +23,25 @@ import java.lang.reflect.Method;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.services.i18n.TranslationContext;
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.methods.MemberSupportFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
-import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
 import lombok.val;
 
 public class DisableForContextFacetViaMethodFactory
-extends MethodPrefixBasedFacetFactoryAbstract  {
-
-    private static final String PREFIX = ProgrammingModelConstants.DISABLE_PREFIX;
+extends MemberSupportFacetFactoryAbstract  {
 
     @Inject
     public DisableForContextFacetViaMethodFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.MEMBERS, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
+        super(mmc, FeatureType.MEMBERS, MemberSupportPrefix.DISABLE);
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        attachDisabledFacetIfDisabledMethodIsFound(processMethodContext);
-    }
-
-    private void attachDisabledFacetIfDisabledMethodIsFound(final ProcessMethodContext processMethodContext) {
 
         val actionOrGetter = processMethodContext.getMethod();
 
@@ -56,7 +49,8 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
 
         Method disableMethod = null;
 
-        val methodNameCandidates = processMethodContext.memberSupportCandidates(PREFIX);
+        val methodNameCandidates = memberSupportPrefix.getMethodNamePrefixes()
+                .flatMap(processMethodContext::memberSupportCandidates);
 
         boolean noParamsOnly = getConfiguration().getCore().getMetaModel().getValidator().isNoParamsOnly();
         boolean searchExactMatch = !noParamsOnly;

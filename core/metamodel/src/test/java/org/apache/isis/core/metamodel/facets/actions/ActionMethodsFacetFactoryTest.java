@@ -27,26 +27,19 @@ import java.util.Set;
 
 import org.jmock.Expectations;
 
-import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
-import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethod;
-import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.actions.validate.ActionValidationFacet;
 import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.param.choices.ActionChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
-import org.apache.isis.core.metamodel.facets.param.choices.method.ActionChoicesFacetViaMethod;
-import org.apache.isis.core.metamodel.facets.param.choices.method.ActionChoicesFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
@@ -168,119 +161,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(validateMethod));
     }
-
-    public void testInstallsParameterDefaultsMethodNoArgsFacetAndRemovesMethod() {
-        val facetFactory = new ActionDefaultsFacetViaMethodFactory(metaModelContext);
-
-        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
-        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
-
-        class Customer {
-            @SuppressWarnings("unused")
-            public void someAction(final int x, final Long y) {
-            }
-
-            @SuppressWarnings("unused")
-            public Object[] defaultSomeAction() {
-                return null;
-            }
-        }
-        final Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class, Long.class });
-        final Method defaultMethod = findMethod(Customer.class, "defaultSomeAction", new Class[] {});
-
-        facetFactory.process(ProcessMethodContext
-                .forTesting(Customer.class, FeatureType.ACTION, actionMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(ActionDefaultsFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof ActionDefaultsFacetViaMethod);
-        final ActionDefaultsFacetViaMethod actionDefaultFacetViaMethod = (ActionDefaultsFacetViaMethod) facet;
-        assertEquals(defaultMethod, actionDefaultFacetViaMethod.getMethods().getFirstOrFail());
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(defaultMethod));
-    }
-
-    public void testInstallsParameterDefaultsMethodSomeArgsIsIgnored() {
-        val facetFactory = new ActionDefaultsFacetViaMethodFactory(metaModelContext);
-
-        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
-        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
-
-        class Customer {
-            @SuppressWarnings("unused")
-            public void someAction(final int x, final Long y) {
-            }
-
-            @SuppressWarnings("unused")
-            public Object[] defaultSomeAction(final int x, final Long y) {
-                return null;
-            }
-        }
-        final Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class, Long.class });
-
-        facetFactory.process(ProcessMethodContext
-                .forTesting(Customer.class, FeatureType.ACTION, actionMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(ActionDefaultsFacet.class);
-        assertNull(facet);
-    }
-
-    public void testInstallsParameterChoicesMethodNoArgsFacetAndRemovesMethod() {
-        val facetFactory = new ActionChoicesFacetViaMethodFactory(metaModelContext);
-
-        class Customer {
-            @SuppressWarnings("unused")
-            public void someAction(final int x, final Long y) {
-            }
-
-            @SuppressWarnings("unused")
-            public Object[] choicesSomeAction() {
-                return null;
-            }
-        }
-        final Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class, Long.class });
-        final Method choicesMethod = findMethod(Customer.class, "choicesSomeAction", new Class[] {});
-        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
-        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
-
-        facetFactory.process(ProcessMethodContext
-                .forTesting(Customer.class, FeatureType.ACTION, actionMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(ActionChoicesFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof ActionChoicesFacetViaMethod);
-        final ActionChoicesFacetViaMethod actionChoicesFacetViaMethod = (ActionChoicesFacetViaMethod) facet;
-        assertEquals(choicesMethod, actionChoicesFacetViaMethod.getMethods().getFirstOrFail());
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(choicesMethod));
-    }
-
-    public void testInstallsParameterChoicesMethodSomeArgsIsIgnored() {
-        val facetFactory = new ActionChoicesFacetViaMethodFactory(metaModelContext);
-
-        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
-        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
-
-        class Customer {
-            @SuppressWarnings("unused")
-            public void someAction(final int x, final Long y) {
-            }
-
-            @SuppressWarnings("unused")
-            public Object[] choicesSomeAction(final int x, final Long y) {
-                return null;
-            }
-        }
-        final Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class, Long.class });
-
-        facetFactory.process(ProcessMethodContext
-                .forTesting(Customer.class, FeatureType.ACTION, actionMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(ActionChoicesFacet.class);
-        assertNull(facet);
-    }
-
-
 
     public void testInstallsParameterDefaultsMethodAndRemovesMethod() {
         val facetFactory = new ActionParameterDefaultsFacetViaMethodFactory(metaModelContext);
@@ -431,100 +311,5 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(autoComplete0Method));
     }
 
-    public void testBothChoicesMethodCausesException() {
-
-        val facetFactory = new ActionChoicesFacetViaMethodFactory(metaModelContext);
-
-        //        mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
-        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
-
-        final ActionParameterChoicesFacetViaMethodFactory facetFactoryForParams =
-                new ActionParameterChoicesFacetViaMethodFactory(metaModelContext);
-
-        //        mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
-
-        class Customer {
-            @SuppressWarnings("unused")
-            public void someAction(final int x, final long y) {
-            }
-
-            @SuppressWarnings("unused")
-            public int[] choices0SomeAction() {
-                return new int[0];
-            }
-
-            @SuppressWarnings("unused")
-            public long[] choices1SomeAction() {
-                return new long[0];
-            }
-
-            @SuppressWarnings("unused")
-            public Object[][] choicesSomeAction() {
-                return null;
-            }
-        }
-
-        final Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class, long.class });
-        final FacetedMethod facetHolderWithParms = FacetedMethod
-                .createForAction(metaModelContext, Customer.class, actionMethod);
-
-        final ProcessMethodContext processMethodContext = ProcessMethodContext
-                .forTesting(Customer.class, FeatureType.ACTION, actionMethod, methodRemover, facetHolderWithParms);
-        facetFactory.process(processMethodContext);
-        try {
-            facetFactoryForParams.process(processMethodContext);
-            fail("exception expected");
-        } catch (final MetaModelException expected) {
-            // ignore
-        }
-    }
-
-    public void testBothDefaultMethodCausesException() {
-        val facetFactory = new ActionDefaultsFacetViaMethodFactory(metaModelContext);
-
-        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
-        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
-
-        final ActionParameterDefaultsFacetViaMethodFactory facetFactoryForParams =
-                new ActionParameterDefaultsFacetViaMethodFactory(metaModelContext);
-
-        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
-        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
-
-        class Customer {
-            @SuppressWarnings("unused")
-            public void someAction(final int x, final long y) {
-            }
-
-            @SuppressWarnings("unused")
-            public int default0SomeAction() {
-                return 0;
-            }
-
-            @SuppressWarnings("unused")
-            public long default1SomeAction() {
-                return 0;
-            }
-
-            @SuppressWarnings("unused")
-            public Object[] defaultSomeAction() {
-                return null;
-            }
-        }
-
-        final Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class, long.class });
-        final FacetedMethod facetHolderWithParms = FacetedMethod
-                .createForAction(metaModelContext, Customer.class, actionMethod);
-
-        final ProcessMethodContext processMethodContext = ProcessMethodContext
-                .forTesting(Customer.class, FeatureType.ACTION, actionMethod, methodRemover, facetHolderWithParms);
-        facetFactory.process(processMethodContext);
-        try {
-            facetFactoryForParams.process(processMethodContext);
-            fail("exception expected");
-        } catch (final MetaModelException expected) {
-
-        }
-    }
 
 }

@@ -174,16 +174,24 @@ public final class ProgrammingModelConstants {
 
     // -- MEMBER SUPPORT PREFIXES
 
-    public static final String DEFAULT_PREFIX = "default";
-    public static final String CHOICES_PREFIX = "choices";
-    public static final String AUTO_COMPLETE_PREFIX = "autoComplete";
+    @Getter
+    public static enum MemberSupportPrefix {
+        DEFAULT("default"),
+        CHOICES("choices"),
+        AUTO_COMPLETE("autoComplete"),
+        HIDE("hide"),
+        DISABLE("disable"),
+        VALIDATE("validate"),
+        NAMED("named"), // imperative naming
+        DESCRIBED("described"); // imperative naming
+        MemberSupportPrefix(
+                final String ...methodNamePrefixes) {
+            this.methodNamePrefixes = Can.of(methodNamePrefixes);
+        }
+        private final Can<String> methodNamePrefixes;
+    }
 
-    public static final String HIDE_PREFIX = "hide";
-    public static final String DISABLE_PREFIX = "disable";
     public static final String VALIDATE_PREFIX = "validate";
-
-    public static final String NAMED_PREFIX = "named"; // dynamic naming
-    public static final String DESCRIBED_PREFIX = "described"; // dynamic description
 
     // -- OTHER LITERALS
 

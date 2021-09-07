@@ -410,6 +410,20 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
         return _CanFactory.ofNonNullElements(nonNullMappedElements);
     }
 
+    default <R> Can<R> flatMap(final @NonNull Function<? super T, ? extends Can<? extends R>> mapper) {
+
+        if(isEmpty()) {
+            return empty();
+        }
+
+        return
+                stream()
+                .map(mapper)
+                .filter(_NullSafe::isPresent)
+                .flatMap(Can::stream)
+                .collect(Can.toCan());
+    }
+
     // -- CONCATENATION
 
     /**

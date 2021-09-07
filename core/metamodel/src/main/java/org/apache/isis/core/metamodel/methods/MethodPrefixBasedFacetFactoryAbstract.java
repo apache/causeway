@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.methods;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
-import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -114,9 +114,9 @@ implements MethodPrefixBasedFacetFactory {
                             val explanation =
                                     objectAction.getParameterCount() > 0
                                             && noParamsOnly
-                                            && (ProgrammingModelConstants.HIDE_PREFIX.equals(prefix)
-                                                    || ProgrammingModelConstants.DISABLE_PREFIX.equals(prefix))
-                                            ? " (such methods must have no parameters, '"
+                                            && (MemberSupportPrefix.HIDE.getMethodNamePrefixes().contains(prefix)
+                                                    || MemberSupportPrefix.DISABLE.getMethodNamePrefixes().contains(prefix))
+                                            ? " (such methods must not have parameters, '"
                                                 + "isis.core.meta-model.validator.no-params-only"
                                                 + "' config property)"
                                             : "";

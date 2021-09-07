@@ -43,7 +43,6 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.commons.internal.reflection._ClassCache;
 import org.apache.isis.commons.internal.reflection._Reflect;
-import org.apache.isis.core.metamodel.commons.CanBeVoid;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
@@ -508,34 +507,6 @@ implements HasMetaModelContext {
     // ////////////////////////////////////////////////////////////////////////////
     // Helpers for finding and removing methods.
     // ////////////////////////////////////////////////////////////////////////////
-
-    /**
-     *
-     * @param prefix
-     * @param returnType
-     * @param paramCount
-     * @param onRemoved - collecting parameter
-     */
-    private void findAndRemovePrefixedNonVoidMethods(
-            final String prefix,
-            final Class<?> returnType,
-            final int paramCount,
-            final Consumer<Method> onRemoved) {
-
-        findAndRemovePrefixedMethods(prefix, returnType, CanBeVoid.FALSE, paramCount, onRemoved);
-    }
-
-    private void findAndRemovePrefixedMethods(
-            final String prefix,
-            final Class<?> returnType,
-            final CanBeVoid canBeVoid,
-            final int paramCount,
-            final Consumer<Method> onMatch) {
-
-        val filter = MethodUtil.Predicates.prefixed(prefix, returnType, canBeVoid, paramCount);
-        methodRemover.removeMethods(filter, onMatch);
-
-    }
 
     /**
      * In case this inspected type is a mixin, returns whether given method can be identified

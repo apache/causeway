@@ -23,8 +23,7 @@ import java.util.EnumSet;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -32,20 +31,19 @@ import org.apache.isis.core.metamodel.facets.ParameterSupport;
 import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest.ReturnType;
 import org.apache.isis.core.metamodel.facets.ParameterSupport.SearchAlgorithm;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
-import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.methods.MemberSupportFacetFactoryAbstract;
 
 import lombok.val;
 
 /**
  * Sets up all the {@link Facet}s for an action in a single shot.
  */
-public class ActionParameterDefaultsFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
-
-    private static final String PREFIX = ProgrammingModelConstants.DEFAULT_PREFIX;
+public class ActionParameterDefaultsFacetViaMethodFactory
+extends MemberSupportFacetFactoryAbstract {
 
     @Inject
     public ActionParameterDefaultsFacetViaMethodFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
+        super(mmc, FeatureType.ACTIONS_ONLY, MemberSupportPrefix.DEFAULT);
     }
 
     // ///////////////////////////////////////////////////////
@@ -65,7 +63,8 @@ public class ActionParameterDefaultsFacetViaMethodFactory extends MethodPrefixBa
         // attach DefaultFacetForParameters if defaultNumMethod is found ...
 
         val actionMethod = processMethodContext.getMethod();
-        val methodNameCandidates = processMethodContext.parameterSupportCandidates(PREFIX);
+        val methodNameCandidates = memberSupportPrefix.getMethodNamePrefixes()
+                .flatMap(processMethodContext::parameterSupportCandidates);
 
         val searchRequest = ParameterSupport.ParamSupportingMethodSearchRequest.builder()
                 .processMethodContext(processMethodContext)

@@ -24,15 +24,14 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.isis.applib.services.i18n.TranslationContext;
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.ActionSupport;
 import org.apache.isis.core.metamodel.facets.ActionSupport.SearchAlgorithm;
 import org.apache.isis.core.metamodel.facets.actions.validate.ActionValidationFacet;
 import org.apache.isis.core.metamodel.facets.param.validate.method.ActionParameterValidationFacetViaMethod;
-import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.methods.MemberSupportFacetFactoryAbstract;
 
 import lombok.val;
 
@@ -40,13 +39,11 @@ import lombok.val;
  * Sets up {@link ActionValidationFacet} and {@link ActionParameterValidationFacetViaMethod}.
  */
 public class ActionValidationFacetViaMethodFactory
-extends MethodPrefixBasedFacetFactoryAbstract  {
-
-    private static final String PREFIX = ProgrammingModelConstants.VALIDATE_PREFIX;
+extends MemberSupportFacetFactoryAbstract  {
 
     @Inject
     public ActionValidationFacetViaMethodFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
+        super(mmc, FeatureType.ACTIONS_ONLY, MemberSupportPrefix.VALIDATE);
     }
 
     @Override
@@ -58,7 +55,8 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
 
         val facetHolder = processMethodContext.getFacetHolder();
 
-        val methodNameCandidates = processMethodContext.memberSupportCandidates(PREFIX);
+        val methodNameCandidates = memberSupportPrefix.getMethodNamePrefixes()
+                .flatMap(processMethodContext::memberSupportCandidates);
 
         val searchRequest = ActionSupport.ActionSupportingMethodSearchRequest.builder()
                 .processMethodContext(processMethodContext)

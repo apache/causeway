@@ -20,25 +20,22 @@ package org.apache.isis.core.metamodel.facets.members.described.method;
 
 import javax.inject.Inject;
 
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.methods.MemberSupportFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
-import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
 import lombok.val;
 
 public class DescribedAsFacetForMemberViaMethodFactory
-extends MethodPrefixBasedFacetFactoryAbstract {
-
-    private static final String PREFIX = ProgrammingModelConstants.DESCRIBED_PREFIX;
+extends MemberSupportFacetFactoryAbstract {
 
     @Inject
     public DescribedAsFacetForMemberViaMethodFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.MEMBERS, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
+        super(mmc, FeatureType.MEMBERS, MemberSupportPrefix.DESCRIBED);
     }
 
     @Override
@@ -52,7 +49,8 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         val cls = processMethodContext.getCls();
         //val actionOrGetter = processMethodContext.getMethod();
 
-        val methodNameCandidates = processMethodContext.memberSupportCandidates(PREFIX);
+        val methodNameCandidates = memberSupportPrefix.getMethodNamePrefixes()
+                .flatMap(processMethodContext::memberSupportCandidates);
 
         val describedMethod = MethodFinder.findMethod_returningText(
                 MethodFinderOptions
