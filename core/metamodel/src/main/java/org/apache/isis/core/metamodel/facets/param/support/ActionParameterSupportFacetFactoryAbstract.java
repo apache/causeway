@@ -74,7 +74,7 @@ extends MemberAndPropertySupportFacetFactoryAbstract {
                         .processMethodContext(processMethodContext)
                         .paramIndexToMethodNameProviders(methodNameCandidates)
                         .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.SWEEP))
-                        .returnType(memberSupportPrefix.getParameterSearchReturnType()))
+                        .returnType(memberSupportPrefix.getSupportMethodReturnType()))
                 .build();
 
         ParameterSupport.findParamSupportingMethods(searchRequest, searchResult -> {

@@ -70,8 +70,6 @@ implements MethodPrefixBasedFacetFactory {
             return;
         }
 
-        val noParamsOnly = getConfiguration().getCore().getMetaModel().getValidator().isNoParamsOnly();
-
         programmingModel
         .addValidator(new MetaModelVisitingValidatorAbstract(programmingModel.getMetaModelContext()) {
 
@@ -113,7 +111,6 @@ implements MethodPrefixBasedFacetFactory {
 
                             val explanation =
                                     objectAction.getParameterCount() > 0
-                                            && noParamsOnly
                                             && (MemberSupportPrefix.HIDE.getMethodNamePrefixes().contains(prefix)
                                                     || MemberSupportPrefix.DISABLE.getMethodNamePrefixes().contains(prefix))
                                             ? " (such methods must not have parameters, '"
@@ -144,10 +141,14 @@ implements MethodPrefixBasedFacetFactory {
 
     protected boolean isPropertyOrMixinMain(final ProcessMethodContext processMethodContext) {
         return processMethodContext.isMixinMain()
-                || (
-                        processMethodContext.getFeatureType()!=null // null check, yet to support some JUnit tests
-                        && processMethodContext.getFeatureType().isProperty()
-                   );
+                || (processMethodContext.getFeatureType()!=null // null check, yet to support some JUnit tests
+                        && processMethodContext.getFeatureType().isProperty());
+    }
+
+    protected boolean isCollectionOrMixinMain(final ProcessMethodContext processMethodContext) {
+        return processMethodContext.isMixinMain()
+                || (processMethodContext.getFeatureType()!=null // null check, yet to support some JUnit tests
+                        && processMethodContext.getFeatureType().isCollection());
     }
 
     // -- HELPER

@@ -20,13 +20,10 @@ package org.apache.isis.core.metamodel.facets.properties.choices.method;
 
 import javax.inject.Inject;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.ActionSupport.ActionSupportingMethodSearchResult;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
@@ -38,46 +35,32 @@ extends MemberSupportFacetFactoryAbstract {
 
     @Inject
     public PropertyChoicesFacetViaMethodFactory(final MetaModelContext mmc) {
-        // to also support properties from mixins, need to not only include properties but also actions
-        super(mmc, FeatureType.PROPERTIES_AND_ACTIONS, MemberSupportPrefix.CHOICES);
+        super(mmc, FeatureType.PROPERTIES_ONLY, MemberSupportPrefix.CHOICES);
     }
 
     @Override
-    public void process(final ProcessMethodContext processMethodContext) {
+    protected void search(
+            final ProcessMethodContext processMethodContext,
+            final Can<String> methodNameCandidates) {
 
-        // optimization step, not strictly required
-        if(!super.isPropertyOrMixinMain(processMethodContext)) {
-            return;
-        }
+        MethodFinder
+        .findMethod(
+            MethodFinderOptions
+            .memberSupport(processMethodContext.getIntrospectionPolicy()),
+            processMethodContext.getCls(),
+            methodNameCandidates,
+            ANY_RETURN,
+            NO_ARG)
+        .peek(processMethodContext::removeMethod)
+        .forEach(choicesMethod->{
 
-        val getterOrMixinMain = processMethodContext.getMethod();
-        val methodNameCandidates = memberSupportPrefix.getMethodNamePrefixes()
-                .flatMap(processMethodContext::memberSupportCandidates);
+            val getterOrMixinMain = processMethodContext.getMethod();
+            val returnType = getterOrMixinMain.getReturnType();
 
-        val cls = processMethodContext.getCls();
-        val returnType = getterOrMixinMain.getReturnType();
-        val choicesMethod = MethodFinder
-                .findMethod(
-                        MethodFinderOptions
-                        .memberSupport(processMethodContext.getIntrospectionPolicy()),
-                    cls,
-                    methodNameCandidates,
-                    NO_RETURN,
-                    NO_ARG)
-                .findFirst()
-                .orElse(null);
-        if (choicesMethod == null) {
-            return;
-        }
-        processMethodContext.removeMethod(choicesMethod);
-
-        final FacetHolder property = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new PropertyChoicesFacetViaMethod(choicesMethod, returnType, property));
-    }
-
-    @Override
-    protected void onSearchResult(final FacetedMethod facetHolder, final ActionSupportingMethodSearchResult searchResult) {
-        // TODO Auto-generated method stub
+            addFacet(
+                    new PropertyChoicesFacetViaMethod(
+                            choicesMethod, returnType, processMethodContext.getFacetHolder()));
+        });
 
     }
 

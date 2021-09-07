@@ -22,12 +22,13 @@ import java.util.EnumSet;
 
 import javax.inject.Inject;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ReturnType;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.ActionSupport.ActionSupportingMethodSearchResult;
+import org.apache.isis.core.metamodel.facets.ActionSupport;
 import org.apache.isis.core.metamodel.facets.ActionSupport.SearchAlgorithm;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.param.validate.method.ActionParameterValidationFacetViaMethod;
 
@@ -41,20 +42,30 @@ extends MemberSupportFacetFactoryAbstract {
 
     @Inject
     public ActionValidationFacetViaMethodFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.ACTIONS_ONLY, MemberSupportPrefix.VALIDATE, searchOptions->
-                searchOptions
-                .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.ALL_PARAM_TYPES)));
+        super(mmc, FeatureType.ACTIONS_ONLY, MemberSupportPrefix.VALIDATE);
     }
 
     @Override
-    protected void onSearchResult(
-            final FacetedMethod facetHolder,
-            final ActionSupportingMethodSearchResult searchResult) {
-        val validateMethod = searchResult.getSupportingMethod();
-        val ppmFactory = searchResult.getPpmFactory();
-        addFacet(
-                new ActionValidationFacetViaMethod(
-                        validateMethod, ppmFactory, facetHolder));
+    protected void search(
+            final ProcessMethodContext processMethodContext,
+            final Can<String> methodNameCandidates) {
+
+        val searchRequest = ActionSupport.ActionSupportingMethodSearchRequest.builder()
+                .processMethodContext(processMethodContext)
+                .returnType(ReturnType.TEXT)
+                .methodNames(methodNameCandidates)
+                .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.ALL_PARAM_TYPES))
+                .build();
+
+        ActionSupport.findActionSupportingMethods(searchRequest, searchResult -> {
+            val validateMethod = searchResult.getSupportingMethod();
+            processMethodContext.removeMethod(validateMethod);
+            val ppmFactory = searchResult.getPpmFactory();
+            addFacet(
+                    new ActionValidationFacetViaMethod(
+                            validateMethod, ppmFactory, processMethodContext.getFacetHolder()));
+        });
+
     }
 
 }

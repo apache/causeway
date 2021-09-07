@@ -20,12 +20,10 @@ package org.apache.isis.core.metamodel.facets.properties.validating.method;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.services.i18n.TranslationContext;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.ActionSupport.ActionSupportingMethodSearchResult;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
@@ -41,41 +39,27 @@ extends MemberSupportFacetFactoryAbstract  {
     }
 
     @Override
-    public void process(final ProcessMethodContext processMethodContext) {
+    protected void search(
+            final ProcessMethodContext processMethodContext,
+            final Can<String> methodNameCandidates) {
 
-        val cls = processMethodContext.getCls();
         val getterMethod = processMethodContext.getMethod();
-
-        val methodNameCandidates = memberSupportPrefix.getMethodNamePrefixes()
-                .flatMap(processMethodContext::memberSupportCandidates);
         val returnType = getterMethod.getReturnType();
 
-        val validateMethod = MethodFinder.findMethod_returningText(
-                MethodFinderOptions
-                .memberSupport(processMethodContext.getIntrospectionPolicy()),
-                cls,
-                methodNameCandidates,
-                new Class[] { returnType })
-                .findFirst()
-                .orElse(null);
-        if (validateMethod == null) {
-            return;
-        }
-        processMethodContext.removeMethod(validateMethod);
-
-        val facetHolder = processMethodContext.getFacetHolder();
-        // sadness: same as in TranslationFactory
-        val translationContext = TranslationContext.forTranslationContextHolder(facetHolder.getFeatureIdentifier());
-        addFacet(
-                new PropertyValidateFacetViaMethod(
-                        validateMethod, translationContext, facetHolder));
-    }
-
-    @Override
-    protected void onSearchResult(final FacetedMethod facetHolder, final ActionSupportingMethodSearchResult searchResult) {
-        // TODO Auto-generated method stub
+        MethodFinder
+        .findMethod_returningText(
+            MethodFinderOptions
+            .memberSupport(processMethodContext.getIntrospectionPolicy()),
+            processMethodContext.getCls(),
+            methodNameCandidates,
+            new Class[] { returnType })
+        .peek(processMethodContext::removeMethod)
+        .forEach(validateMethod->{
+            addFacet(
+                    new PropertyValidateFacetViaMethod(
+                            validateMethod, processMethodContext.getFacetHolder()));
+        });
 
     }
-
 
 }

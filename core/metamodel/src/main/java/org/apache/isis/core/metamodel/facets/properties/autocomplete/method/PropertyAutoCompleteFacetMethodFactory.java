@@ -20,13 +20,10 @@ package org.apache.isis.core.metamodel.facets.properties.autocomplete.method;
 
 import javax.inject.Inject;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.ActionSupport.ActionSupportingMethodSearchResult;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
@@ -38,48 +35,33 @@ extends MemberSupportFacetFactoryAbstract {
 
     @Inject
     public PropertyAutoCompleteFacetMethodFactory(final MetaModelContext mmc) {
-        // to also support properties from mixins, need to not only include properties but also actions
-        super(mmc, FeatureType.PROPERTIES_AND_ACTIONS, MemberSupportPrefix.AUTO_COMPLETE);
+        super(mmc, FeatureType.PROPERTIES_ONLY, MemberSupportPrefix.AUTO_COMPLETE);
     }
 
     @Override
-    public void process(final ProcessMethodContext processMethodContext) {
+    protected void search(
+            final ProcessMethodContext processMethodContext,
+            final Can<String> methodNameCandidates) {
 
-        // optimization step, not strictly required
-        if(!super.isPropertyOrMixinMain(processMethodContext)) {
-            return;
-        }
+        MethodFinder
+        .findMethod(
+            MethodFinderOptions
+            .memberSupport(processMethodContext.getIntrospectionPolicy()),
+            processMethodContext.getCls(),
+            methodNameCandidates,
+            ANY_RETURN,
+            STRING_ARG)
+        .peek(processMethodContext::removeMethod)
+        .forEach(autoCompleteMethod->{
 
-        val getterOrMixinMain = processMethodContext.getMethod();
-        val methodNameCandidates = memberSupportPrefix.getMethodNamePrefixes()
-                .flatMap(processMethodContext::memberSupportCandidates);
+            val getterOrMixinMain = processMethodContext.getMethod();
+            val returnType = getterOrMixinMain.getReturnType();
 
-        val cls = processMethodContext.getCls();
-        val returnType = getterOrMixinMain.getReturnType();
-        val autoCompleteMethod = MethodFinder
-                .findMethod(
-                        MethodFinderOptions
-                        .memberSupport(processMethodContext.getIntrospectionPolicy()),
-                        cls,
-                        methodNameCandidates,
-                        NO_RETURN,
-                        STRING_ARG)
-                .findFirst()
-                .orElse(null);
-        if (autoCompleteMethod == null) {
-            return;
-        }
-        processMethodContext.removeMethod(autoCompleteMethod);
-
-        final FacetHolder property = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new PropertyAutoCompleteFacetMethod(autoCompleteMethod, returnType, property));
-    }
-
-    @Override
-    protected void onSearchResult(final FacetedMethod facetHolder, final ActionSupportingMethodSearchResult searchResult) {
-        // TODO Auto-generated method stub
+            addFacet(
+                    new PropertyAutoCompleteFacetMethod(
+                            autoCompleteMethod, returnType, processMethodContext.getFacetHolder()));
+        });
 
     }
-
 
 }

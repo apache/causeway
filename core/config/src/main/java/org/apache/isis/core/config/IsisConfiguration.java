@@ -68,8 +68,6 @@ import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.applib.services.userui.UserMenu;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.config.IsisConfiguration.Core;
-import org.apache.isis.core.config.IsisConfiguration.Viewer;
 import org.apache.isis.core.config.metamodel.facets.DefaultViewConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.ActionPublishingPolicy;
@@ -1413,8 +1411,10 @@ public class IsisConfiguration {
                  *     relate to the N-th parameter, and allow up to N-1 parameters to be passed in (allowing the Nth
                  *     parameter to be dynamically hidden or disabled).
                  * </p>
+                 * @deprecated this option is ignored by the framework, behavior is now fixated to noParamsOnly = true
                  */
-                private boolean noParamsOnly = false;
+                @Deprecated(forRemoval = true, since = "2.0.0-M7")
+                private boolean noParamsOnly = true;
 
                 /**
                  * Whether to validate that any actions that accept action parameters have either a corresponding

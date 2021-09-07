@@ -197,7 +197,7 @@ extends AbstractFacetFactoryTest {
             }
 
 
-            public String disableSomeAction(final int x, final long y) {
+            public String disableSomeAction() {
                 return null;
             }
         }
@@ -205,7 +205,7 @@ extends AbstractFacetFactoryTest {
         final Method actionMethod = findMethod(CustomerEx.class, "someAction", new Class[] { int.class, long.class });
         final Method choices0Method = findMethod(CustomerEx.class, "choices0SomeAction", new Class[] {});
         final Method choices1Method = findMethod(CustomerEx.class, "choices1SomeAction", new Class[] {});
-        final Method disableMethod = findMethod(CustomerEx.class, "disableSomeAction", new Class[] { int.class, long.class });
+        final Method disableMethod = findMethod(CustomerEx.class, "disableSomeAction", new Class[] {});
 
         final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(metaModelContext, CustomerEx.class, actionMethod);
 

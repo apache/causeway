@@ -42,6 +42,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -140,7 +141,7 @@ public final class ProgrammingModelConstants {
         }
         private final Can<Class<?>> returnTypes;
 
-        public static Can<Class<?>> nonScalar(final Class<?> elementReturnType) {
+        public static Can<Class<?>> nonScalar(final @NonNull Class<?> elementReturnType) {
             return Can.<Class<?>>of(
                 Can.class,
                 Collection.class,
@@ -196,10 +197,10 @@ public final class ProgrammingModelConstants {
         MemberSupportPrefix(
                 final ReturnType parameterSearchReturnType,
                 final String ...methodNamePrefixes) {
-            this.parameterSearchReturnType = parameterSearchReturnType;
+            this.supportMethodReturnType = parameterSearchReturnType;
             this.methodNamePrefixes = Can.of(methodNamePrefixes);
         }
-        private final ReturnType parameterSearchReturnType;
+        private final ReturnType supportMethodReturnType;
         private final Can<String> methodNamePrefixes;
     }
 

@@ -18,16 +18,11 @@
  */
 package org.apache.isis.core.metamodel.facets.members.support;
 
-import java.util.function.UnaryOperator;
-
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.ActionSupport;
-import org.apache.isis.core.metamodel.facets.ActionSupport.ActionSupportingMethodSearchRequest.ActionSupportingMethodSearchRequestBuilder;
-import org.apache.isis.core.metamodel.facets.ActionSupport.ActionSupportingMethodSearchResult;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
 
 import lombok.NonNull;
 import lombok.val;
@@ -35,48 +30,47 @@ import lombok.val;
 public abstract class MemberSupportFacetFactoryAbstract
 extends MemberAndPropertySupportFacetFactoryAbstract {
 
-    private final UnaryOperator<ActionSupportingMethodSearchRequestBuilder>
-        searchRefiner;
+    private final boolean mixinSupportExplicitlyAdded;
 
     protected MemberSupportFacetFactoryAbstract(
             final @NonNull MetaModelContext mmc,
             final @NonNull ImmutableEnumSet<FeatureType> featureTypes,
             final @NonNull MemberSupportPrefix memberSupportPrefix) {
-        this(mmc, featureTypes, memberSupportPrefix, UnaryOperator.identity());
+        super(mmc, addMixinSupport(featureTypes), memberSupportPrefix);
+        this.mixinSupportExplicitlyAdded = !featureTypes.contains(FeatureType.ACTION);
     }
 
-    protected MemberSupportFacetFactoryAbstract(
-            final @NonNull MetaModelContext mmc,
-            final @NonNull ImmutableEnumSet<FeatureType> featureTypes,
-            final @NonNull MemberSupportPrefix memberSupportPrefix,
-            final @NonNull UnaryOperator<ActionSupportingMethodSearchRequestBuilder> searchRefiner) {
-        super(mmc, featureTypes, memberSupportPrefix);
-        this.searchRefiner = searchRefiner;
+    private static ImmutableEnumSet<FeatureType> addMixinSupport(
+            final ImmutableEnumSet<FeatureType> featureTypes) {
+        return featureTypes.add(FeatureType.ACTION);
     }
 
     @Override
-    public void process(final ProcessMethodContext processMethodContext) {
+    public final void process(final ProcessMethodContext processMethodContext) {
+
+        // optimization step, not strictly required
+        if(mixinSupportExplicitlyAdded
+                && !processMethodContext.isMixinMain()) {
+            // stop processing if it is not an allowed property or collection
+            val isProp = getFeatureTypes().contains(FeatureType.PROPERTY)
+                    && processMethodContext.getFeatureType().isProperty();
+            val isColl = getFeatureTypes().contains(FeatureType.COLLECTION)
+                    && processMethodContext.getFeatureType().isCollection();
+            if(!(isProp
+                    || isColl)) {
+                return; // skip
+            }
+        }
 
         val methodNameCandidates = memberSupportPrefix.getMethodNamePrefixes()
                 .flatMap(processMethodContext::memberSupportCandidates);
 
-        val searchRequest = searchRefiner
-                .apply(
-                        ActionSupport.ActionSupportingMethodSearchRequest.builder()
-                        .processMethodContext(processMethodContext)
-                        .methodNames(methodNameCandidates)
-                        .returnType(memberSupportPrefix.getParameterSearchReturnType()))
-                .build();
-
-        ActionSupport.findActionSupportingMethods(searchRequest, searchResult -> {
-            processMethodContext.removeMethod(searchResult.getSupportingMethod());
-            onSearchResult(processMethodContext.getFacetHolder(), searchResult);
-        });
+        search(processMethodContext, methodNameCandidates);
 
     }
 
-    protected abstract void onSearchResult(
-            FacetedMethod facetHolder,
-            ActionSupportingMethodSearchResult searchResult);
+    protected abstract void search(
+            ProcessMethodContext processMethodContext,
+            Can<String> methodNameCandidates);
 
 }

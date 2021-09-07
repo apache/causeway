@@ -22,6 +22,8 @@ import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.stream.Stream;
 
+import lombok.val;
+
 /**
  * Immutable variant of {@link EnumSet}
  *
@@ -90,5 +92,15 @@ implements Iterable<E>, java.io.Serializable {
     public boolean isEmpty() {
         return delegate.isEmpty();
     }
+
+    public ImmutableEnumSet<E> add(final E entry) {
+        if(contains(entry)) {
+            return this;
+        }
+        val newEnumSet = delegate.clone();
+        newEnumSet.add(entry);
+        return from(newEnumSet);
+    }
+
 
 }

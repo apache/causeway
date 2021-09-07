@@ -18,21 +18,15 @@
  */
 package org.apache.isis.core.metamodel.facets.members.disabled.method;
 
-import java.lang.reflect.Method;
-
 import javax.inject.Inject;
 
-import org.apache.isis.applib.services.i18n.TranslationContext;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.ActionSupport.ActionSupportingMethodSearchResult;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
-
-import lombok.val;
 
 public class DisableForContextFacetViaMethodFactory
 extends MemberSupportFacetFactoryAbstract  {
@@ -42,61 +36,24 @@ extends MemberSupportFacetFactoryAbstract  {
         super(mmc, FeatureType.MEMBERS, MemberSupportPrefix.DISABLE);
     }
 
-    @Override
-    public void process(final ProcessMethodContext processMethodContext) {
+     @Override
+    protected void search(
+            final ProcessMethodContext processMethodContext,
+            final Can<String> methodNameCandidates) {
 
-        val actionOrGetter = processMethodContext.getMethod();
-
-        val cls = processMethodContext.getCls();
-
-        Method disableMethod = null;
-
-        val methodNameCandidates = memberSupportPrefix.getMethodNamePrefixes()
-                .flatMap(processMethodContext::memberSupportCandidates);
-
-        boolean noParamsOnly = getConfiguration().getCore().getMetaModel().getValidator().isNoParamsOnly();
-        boolean searchExactMatch = !noParamsOnly;
-        if(searchExactMatch) {
-            // search for exact match
-            disableMethod = MethodFinder.findMethod_returningText(
-                    MethodFinderOptions
-                    .memberSupport(processMethodContext.getIntrospectionPolicy()),
-                    cls,
-                    methodNameCandidates,
-                    actionOrGetter.getParameterTypes())
-                    .findFirst()
-                    .orElse(null);
-        }
-        if (disableMethod == null) {
-            // search for no-arg version
-            disableMethod = MethodFinder.findMethod_returningText(
-                    MethodFinderOptions
-                    .memberSupport(processMethodContext.getIntrospectionPolicy()),
-                    cls,
-                    methodNameCandidates,
-                    NO_ARG)
-                    .findFirst()
-                    .orElse(null);
-        }
-        if (disableMethod == null) {
-            return;
-        }
-
-        processMethodContext.removeMethod(disableMethod);
-
-        val facetHolder = processMethodContext.getFacetHolder();
-        val translationService = getTranslationService();
-        // sadness: same logic as in I18nFacetFactory
-        val translationContext = TranslationContext
-                .forTranslationContextHolder(facetHolder.getFeatureIdentifier());
-        addFacet(
-                new DisableForContextFacetViaMethod(
-                        disableMethod, translationService, translationContext, facetHolder));
-    }
-
-    @Override
-    protected void onSearchResult(final FacetedMethod facetHolder, final ActionSupportingMethodSearchResult searchResult) {
-        // TODO Auto-generated method stub
+         MethodFinder
+         .findMethod_returningText(
+             MethodFinderOptions
+             .memberSupport(processMethodContext.getIntrospectionPolicy()),
+             processMethodContext.getCls(),
+             methodNameCandidates,
+             NO_ARG)
+         .peek(processMethodContext::removeMethod)
+         .forEach(disableMethod->{
+             addFacet(
+                     new DisableForContextFacetViaMethod(
+                             disableMethod, processMethodContext.getFacetHolder()));
+         });
 
     }
 

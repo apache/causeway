@@ -20,16 +20,13 @@ package org.apache.isis.core.metamodel.facets.members.described.method;
 
 import javax.inject.Inject;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.ActionSupport.ActionSupportingMethodSearchResult;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
-
-import lombok.val;
 
 public class DescribedAsFacetForMemberViaMethodFactory
 extends MemberSupportFacetFactoryAbstract {
@@ -40,37 +37,23 @@ extends MemberSupportFacetFactoryAbstract {
     }
 
     @Override
-    public void process(final ProcessMethodContext processMethodContext) {
+    protected void search(
+            final ProcessMethodContext processMethodContext,
+            final Can<String> methodNameCandidates) {
 
-        val cls = processMethodContext.getCls();
-        //val actionOrGetter = processMethodContext.getMethod();
-
-        val methodNameCandidates = memberSupportPrefix.getMethodNamePrefixes()
-                .flatMap(processMethodContext::memberSupportCandidates);
-
-        val describedMethod = MethodFinder.findMethod_returningText(
-                MethodFinderOptions
-                .memberSupport(processMethodContext.getIntrospectionPolicy()),
-                cls,
-                methodNameCandidates,
-                NO_ARG)
-                .findFirst()
-                .orElse(null);
-        if (describedMethod == null) {
-            return;
-        }
-        processMethodContext.removeMethod(describedMethod);
-
-        addFacet(
-                new DescribedAsFacetForMemberViaMethod(
-                        describedMethod,
-                        processMethodContext.getFacetHolder()));
-    }
-
-    @Override
-    protected void onSearchResult(final FacetedMethod facetHolder, final ActionSupportingMethodSearchResult searchResult) {
-        // TODO Auto-generated method stub
-
+        MethodFinder
+        .findMethod_returningText(
+            MethodFinderOptions
+            .memberSupport(processMethodContext.getIntrospectionPolicy()),
+            processMethodContext.getCls(),
+            methodNameCandidates,
+            NO_ARG)
+        .peek(processMethodContext::removeMethod)
+        .forEach(describedMethod->{
+            addFacet(
+                    new DescribedAsFacetForMemberViaMethod(
+                            describedMethod, processMethodContext.getFacetHolder()));
+        });
     }
 
 }

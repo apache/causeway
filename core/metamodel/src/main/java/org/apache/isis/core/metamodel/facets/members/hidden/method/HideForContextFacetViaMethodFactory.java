@@ -18,22 +18,15 @@
  */
 package org.apache.isis.core.metamodel.facets.members.hidden.method;
 
-import java.lang.reflect.Method;
-
 import javax.inject.Inject;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.ActionSupport.ActionSupportingMethodSearchResult;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
-
-import lombok.val;
 
 public class HideForContextFacetViaMethodFactory
 extends MemberSupportFacetFactoryAbstract {
@@ -44,53 +37,24 @@ extends MemberSupportFacetFactoryAbstract {
     }
 
     @Override
-    public void process(final ProcessMethodContext processMethodContext) {
+    protected void search(
+            final ProcessMethodContext processMethodContext,
+            final Can<String> methodNameCandidates) {
 
-        final Method actionOrGetter = processMethodContext.getMethod();
-
-        val methodNameCandidates = memberSupportPrefix.getMethodNamePrefixes()
-                .flatMap(processMethodContext::memberSupportCandidates);
-
-        val cls = processMethodContext.getCls();
-        Method hideMethod = MethodFinder.findMethod(
-                MethodFinderOptions
-                .memberSupport(processMethodContext.getIntrospectionPolicy()),
-                cls,
-                methodNameCandidates,
-                boolean.class,
-                NO_ARG)
-                .findFirst()
-                .orElse(null);
-        if (hideMethod == null) {
-
-            boolean noParamsOnly = getConfiguration().getCore().getMetaModel().getValidator().isNoParamsOnly();
-            boolean searchExactMatch = !noParamsOnly;
-            if(searchExactMatch) {
-                hideMethod = MethodFinder.findMethod(
-                        MethodFinderOptions
-                        .memberSupport(processMethodContext.getIntrospectionPolicy()),
-                        cls,
-                        methodNameCandidates,
-                        boolean.class,
-                        actionOrGetter.getParameterTypes())
-                        .findFirst()
-                        .orElse(null);
-            }
-        }
-
-        if (hideMethod == null) {
-            return;
-        }
-
-        processMethodContext.removeMethod(hideMethod);
-
-        final FacetHolder facetedMethod = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new HideForContextFacetViaMethod(hideMethod, facetedMethod));
-    }
-
-    @Override
-    protected void onSearchResult(final FacetedMethod facetHolder, final ActionSupportingMethodSearchResult searchResult) {
-        // TODO Auto-generated method stub
+        MethodFinder
+        .findMethod(
+            MethodFinderOptions
+            .memberSupport(processMethodContext.getIntrospectionPolicy()),
+            processMethodContext.getCls(),
+            methodNameCandidates,
+            boolean.class,
+            NO_ARG)
+        .peek(processMethodContext::removeMethod)
+        .forEach(hideMethod->{
+            addFacet(
+                    new HideForContextFacetViaMethod(
+                            hideMethod, processMethodContext.getFacetHolder()));
+        });
 
     }
 
