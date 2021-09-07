@@ -22,14 +22,12 @@ import java.util.EnumSet;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
-import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.ParameterSupport;
+import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
+import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchResult;
 import org.apache.isis.core.metamodel.facets.ParameterSupport.SearchAlgorithm;
-import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.param.support.ActionParameterSupportFacetAbstract;
 import org.apache.isis.core.metamodel.facets.param.validate.ActionParameterValidationFacet;
 
 import lombok.val;
@@ -37,60 +35,24 @@ import lombok.val;
 /**
  * Sets up {@link ActionParameterValidationFacet}. */
 public class ActionParameterValidationFacetViaMethodFactory
-extends MemberSupportFacetFactoryAbstract  {
+extends ActionParameterSupportFacetAbstract  {
 
     @Inject
     public ActionParameterValidationFacetViaMethodFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.ACTIONS_ONLY, MemberSupportPrefix.VALIDATE);
+        super(mmc, MemberSupportPrefix.VALIDATE, searchOptions->
+            searchOptions
+            .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.SINGLEARG_BEING_PARAMTYPE)));
     }
 
     @Override
-    public void process(final ProcessMethodContext processMethodContext) {
-
-        val facetedMethod = processMethodContext.getFacetHolder();
-        val parameters = facetedMethod.getParameters();
-
-        if (parameters.isEmpty()) {
-            return;
-        }
-
-        // attach ActionParameterValidationFacet if validateNumMethod is found ...
-        // in any case single-arg, either same as param-type or PPM style
-
-        val methodNameCandidates = memberSupportPrefix.getMethodNamePrefixes()
-                .flatMap(processMethodContext::parameterSupportCandidates);
-
-        val searchRequest = ParameterSupport.ParamSupportingMethodSearchRequest.builder()
-                .processMethodContext(processMethodContext)
-                .returnType(org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ReturnType.TEXT)
-                .paramIndexToMethodNameProviders(methodNameCandidates)
-                .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.SINGLEARG_BEING_PARAMTYPE))
-                .build();
-
-        ParameterSupport.findParamSupportingMethods(searchRequest, searchResult -> {
-
-            val validateMethod = searchResult.getSupportingMethod();
-            val paramNum = searchResult.getParamIndex();
-
-            processMethodContext.removeMethod(validateMethod);
-
-            if (facetedMethod.containsNonFallbackFacet(ActionParameterValidationFacet.class)) {
-                val cls = processMethodContext.getCls();
-                throw new MetaModelException(cls + " uses both old and new 'validate' syntax - "
-                        + "must use one or other");
-            }
-
-            // add facets directly to parameters, not to actions
-            val paramAsHolder = parameters.get(paramNum);
-            val translationContext = TranslationContext.forTranslationContextHolder(paramAsHolder.getFeatureIdentifier());
-            val ppmFactory = searchResult.getPpmFactory();
-            val translationService = getMetaModelContext().getTranslationService();
-
-            addFacet(
-                    new ActionParameterValidationFacetViaMethod(
-                            validateMethod, translationService, translationContext, ppmFactory, paramAsHolder));
-
-        });
+    protected void onSearchResult(
+            final FacetedMethodParameter paramAsHolder,
+            final ParamSupportingMethodSearchResult searchResult) {
+        val validateMethod = searchResult.getSupportingMethod();
+        val ppmFactory = searchResult.getPpmFactory();
+        addFacet(
+                new ActionParameterValidationFacetViaMethod(
+                        validateMethod, ppmFactory, paramAsHolder));
     }
 
 
