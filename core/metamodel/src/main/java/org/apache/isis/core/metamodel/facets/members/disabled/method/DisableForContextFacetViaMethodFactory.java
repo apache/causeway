@@ -26,6 +26,8 @@ import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.ActionSupport.ActionSupportingMethodSearchResult;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
@@ -90,6 +92,12 @@ extends MemberSupportFacetFactoryAbstract  {
         addFacet(
                 new DisableForContextFacetViaMethod(
                         disableMethod, translationService, translationContext, facetHolder));
+    }
+
+    @Override
+    protected void onSearchResult(final FacetedMethod facetHolder, final ActionSupportingMethodSearchResult searchResult) {
+        // TODO Auto-generated method stub
+
     }
 
 }

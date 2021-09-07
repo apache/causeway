@@ -24,15 +24,18 @@ import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest;
-import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest.ParamSupportingMethodSearchRequestBuilder;
+import org.apache.isis.core.metamodel.facets.ActionSupport;
+import org.apache.isis.core.metamodel.facets.ActionSupport.ActionSupportingMethodSearchRequest.ActionSupportingMethodSearchRequestBuilder;
+import org.apache.isis.core.metamodel.facets.ActionSupport.ActionSupportingMethodSearchResult;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 
 import lombok.NonNull;
+import lombok.val;
 
 public abstract class MemberSupportFacetFactoryAbstract
 extends MemberAndPropertySupportFacetFactoryAbstract {
 
-    private final UnaryOperator<ParamSupportingMethodSearchRequest.ParamSupportingMethodSearchRequestBuilder>
+    private final UnaryOperator<ActionSupportingMethodSearchRequestBuilder>
         searchRefiner;
 
     protected MemberSupportFacetFactoryAbstract(
@@ -46,44 +49,34 @@ extends MemberAndPropertySupportFacetFactoryAbstract {
             final @NonNull MetaModelContext mmc,
             final @NonNull ImmutableEnumSet<FeatureType> featureTypes,
             final @NonNull MemberSupportPrefix memberSupportPrefix,
-            final @NonNull UnaryOperator<ParamSupportingMethodSearchRequestBuilder> searchRefiner) {
+            final @NonNull UnaryOperator<ActionSupportingMethodSearchRequestBuilder> searchRefiner) {
         super(mmc, featureTypes, memberSupportPrefix);
         this.searchRefiner = searchRefiner;
     }
 
-//TODO WIP
-//    @Override
-//    public final void process(final ProcessMethodContext processMethodContext) {
-//
-//        val facetedMethod = processMethodContext.getFacetHolder();
-//        val parameters = facetedMethod.getParameters();
-//
-//        if (parameters.isEmpty()) {
-//            return;
-//        }
-//
-//        val methodNameCandidates = memberSupportPrefix.getMethodNamePrefixes()
-//                .flatMap(processMethodContext::parameterSupportCandidates);
-//
-//        val searchRequest = searchRefiner.apply(ParameterSupport.ParamSupportingMethodSearchRequest.builder()
-//                .processMethodContext(processMethodContext)
-//                .paramIndexToMethodNameProviders(methodNameCandidates))
-//                .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.SWEEP))
-//                .returnType(memberSupportPrefix.getParameterSearchReturnType())
-//                .build();
-//
-//        ParameterSupport.findParamSupportingMethods(searchRequest, searchResult -> {
-//            processMethodContext.removeMethod(searchResult.getSupportingMethod());
-//            val paramIndex = searchResult.getParamIndex();
-//            // add facets directly to parameters, not to actions
-//            val paramAsHolder = parameters.get(paramIndex);
-//            onSearchResult(paramAsHolder, searchResult);
-//        });
-//
-//    }
-//
-//    protected abstract void onSearchResult(
-//            FacetedMethodParameter paramAsHolder,
-//            ParamSupportingMethodSearchResult searchResult);
+    @Override
+    public void process(final ProcessMethodContext processMethodContext) {
+
+        val methodNameCandidates = memberSupportPrefix.getMethodNamePrefixes()
+                .flatMap(processMethodContext::memberSupportCandidates);
+
+        val searchRequest = searchRefiner
+                .apply(
+                        ActionSupport.ActionSupportingMethodSearchRequest.builder()
+                        .processMethodContext(processMethodContext)
+                        .methodNames(methodNameCandidates)
+                        .returnType(memberSupportPrefix.getParameterSearchReturnType()))
+                .build();
+
+        ActionSupport.findActionSupportingMethods(searchRequest, searchResult -> {
+            processMethodContext.removeMethod(searchResult.getSupportingMethod());
+            onSearchResult(processMethodContext.getFacetHolder(), searchResult);
+        });
+
+    }
+
+    protected abstract void onSearchResult(
+            FacetedMethod facetHolder,
+            ActionSupportingMethodSearchResult searchResult);
 
 }

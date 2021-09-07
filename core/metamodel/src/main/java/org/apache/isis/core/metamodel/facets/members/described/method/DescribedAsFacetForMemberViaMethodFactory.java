@@ -23,6 +23,8 @@ import javax.inject.Inject;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.ActionSupport.ActionSupportingMethodSearchResult;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
@@ -63,6 +65,12 @@ extends MemberSupportFacetFactoryAbstract {
                 new DescribedAsFacetForMemberViaMethod(
                         describedMethod,
                         processMethodContext.getFacetHolder()));
+    }
+
+    @Override
+    protected void onSearchResult(final FacetedMethod facetHolder, final ActionSupportingMethodSearchResult searchResult) {
+        // TODO Auto-generated method stub
+
     }
 
 }

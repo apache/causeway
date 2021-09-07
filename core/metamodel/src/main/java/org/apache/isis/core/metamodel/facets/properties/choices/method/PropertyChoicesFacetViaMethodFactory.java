@@ -25,6 +25,8 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.ActionSupport.ActionSupportingMethodSearchResult;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
@@ -71,6 +73,12 @@ extends MemberSupportFacetFactoryAbstract {
 
         final FacetHolder property = processMethodContext.getFacetHolder();
         FacetUtil.addFacet(new PropertyChoicesFacetViaMethod(choicesMethod, returnType, property));
+    }
+
+    @Override
+    protected void onSearchResult(final FacetedMethod facetHolder, final ActionSupportingMethodSearchResult searchResult) {
+        // TODO Auto-generated method stub
+
     }
 
 }

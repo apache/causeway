@@ -22,69 +22,39 @@ import java.util.EnumSet;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
-import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.ActionSupport;
+import org.apache.isis.core.metamodel.facets.ActionSupport.ActionSupportingMethodSearchResult;
 import org.apache.isis.core.metamodel.facets.ActionSupport.SearchAlgorithm;
-import org.apache.isis.core.metamodel.facets.actions.validate.ActionValidationFacet;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.param.validate.method.ActionParameterValidationFacetViaMethod;
 
 import lombok.val;
 
 /**
- * Sets up {@link ActionValidationFacet} and {@link ActionParameterValidationFacetViaMethod}.
+ * Sets up {@link ActionParameterValidationFacetViaMethod}.
  */
 public class ActionValidationFacetViaMethodFactory
 extends MemberSupportFacetFactoryAbstract {
 
     @Inject
     public ActionValidationFacetViaMethodFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.ACTIONS_ONLY, MemberSupportPrefix.VALIDATE);
+        super(mmc, FeatureType.ACTIONS_ONLY, MemberSupportPrefix.VALIDATE, searchOptions->
+                searchOptions
+                .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.ALL_PARAM_TYPES)));
     }
 
     @Override
-    public void process(final ProcessMethodContext processMethodContext) {
-        handleValidateAllArgsMethod(processMethodContext);
+    protected void onSearchResult(
+            final FacetedMethod facetHolder,
+            final ActionSupportingMethodSearchResult searchResult) {
+        val validateMethod = searchResult.getSupportingMethod();
+        val ppmFactory = searchResult.getPpmFactory();
+        addFacet(
+                new ActionValidationFacetViaMethod(
+                        validateMethod, ppmFactory, facetHolder));
     }
-
-    private void handleValidateAllArgsMethod(final ProcessMethodContext processMethodContext) {
-
-        val facetHolder = processMethodContext.getFacetHolder();
-
-        val methodNameCandidates = memberSupportPrefix.getMethodNamePrefixes()
-                .flatMap(processMethodContext::memberSupportCandidates);
-
-        val searchRequest = ActionSupport.ActionSupportingMethodSearchRequest.builder()
-                .processMethodContext(processMethodContext)
-                .returnType(ActionSupport.ActionSupportingMethodSearchRequest.ReturnType.TEXT)
-                .methodNames(methodNameCandidates)
-                .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.ALL_PARAM_TYPES))
-                .build();
-
-        ActionSupport.findActionSupportingMethods(searchRequest, searchResult -> {
-            val validateMethod = searchResult.getSupportingMethod();
-
-            processMethodContext.removeMethod(validateMethod);
-
-            if (facetHolder.containsNonFallbackFacet(ActionValidationFacetViaMethod.class)) {
-                throw new MetaModelException( processMethodContext.getCls() + " uses both old and new 'validate' syntax - "
-                        + "must use one or other");
-            }
-
-            val ppmFactory = searchResult.getPpmFactory();
-            val translationService = getTranslationService();
-            val translationContext = TranslationContext.forTranslationContextHolder(facetHolder.getFeatureIdentifier());
-            addFacet(
-                    new ActionValidationFacetViaMethod(
-                            validateMethod, translationService, translationContext, ppmFactory, facetHolder));
-        });
-
-    }
-
-
 
 }
