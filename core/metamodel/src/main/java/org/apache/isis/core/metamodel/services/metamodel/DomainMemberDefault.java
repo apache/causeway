@@ -35,7 +35,6 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.actions.validate.ActionValidationFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
@@ -228,7 +227,7 @@ public class DomainMemberDefault implements DomainMember {
             }
             return !interpretations.isEmpty()
                     ? String.join(";", interpretations)
-                    : interpretRowAndFacet(ActionDefaultsFacet.class);
+                    : "";
         }
     }
 

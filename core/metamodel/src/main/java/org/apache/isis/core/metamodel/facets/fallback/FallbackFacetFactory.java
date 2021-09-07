@@ -93,7 +93,7 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
             addFacet(newPropParamLayoutFacetIfAny(facetedMethod, "propertyLayout", getConfiguration().getApplib().getAnnotation().getPropertyLayout()));
         }
         if (featureType.isAction()) {
-            addFacet(new ActionDefaultsFacetNone(facetedMethod));
+            // none
         }
         if (featureType.isCollection()) {
             addFacet(

@@ -29,7 +29,6 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.exceptions.RecoverableException;
-import org.apache.isis.applib.exceptions.unrecoverable.DomainModelException;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.CanVector;
@@ -47,7 +46,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
-import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
@@ -424,47 +422,11 @@ implements ObjectAction {
 
     @Override
     public Can<ManagedObject> getDefaults(final ManagedObject target) {
-
-        val actionDefaultsFacet = getFacet(ActionDefaultsFacet.class);
-        if (!actionDefaultsFacet.getPrecedence().isFallback()) {
-
-            // use the old defaultXxx approach
-
-            final int parameterCount = getParameterCount();
-            val parameters = getParameters();
-            final Object[] parameterDefaultPojos;
-
-            parameterDefaultPojos = actionDefaultsFacet.getDefaults(target);
-            if (parameterDefaultPojos.length != parameterCount) {
-                throw new DomainModelException("Defaults array of incompatible size; expected " + parameterCount + " elements, but was " + parameterDefaultPojos.length + " for " + actionDefaultsFacet);
-            }
-            for (int i = 0; i < parameterCount; i++) {
-                if (parameterDefaultPojos[i] != null) {
-                    final ObjectSpecification componentSpec = getSpecificationLoader().loadSpecification(parameterDefaultPojos[i].getClass());
-                    final ObjectSpecification parameterSpec = parameters.getElseFail(i).getSpecification();
-                    // TODO: should implement this instead as a MetaModelValidator
-                    if (!componentSpec.isOfType(parameterSpec)) {
-                        throw new DomainModelException("Defaults type incompatible with parameter " + (i + 1) + " type; expected " + parameterSpec.getFullIdentifier() + ", but was " + componentSpec.getFullIdentifier());
-                    }
-                }
-            }
-
-            final ManagedObject[] parameterDefaultAdapters = new ManagedObject[parameterCount];
-            for (int i = 0; i < parameterCount; i++) {
-                val paramSpec = parameters.getElseFail(i).getSpecification();
-                parameterDefaultAdapters[i] = ManagedObject.of(paramSpec, parameterDefaultPojos[i]);
-            }
-
-            return Can.ofArray(parameterDefaultAdapters);
-
-        }
-
-        // else use the new defaultNXxx approach for each param in turn
+        // use the new defaultNXxx approach for each param in turn
         // (the reflector will have made sure both aren't installed).
         return interactionHead(target)
                 .defaults()
                 .getParamValues();
-
     }
 
     // -- choices
