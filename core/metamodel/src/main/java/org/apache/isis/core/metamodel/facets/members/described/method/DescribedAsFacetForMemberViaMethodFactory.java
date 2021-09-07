@@ -24,7 +24,7 @@ import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSup
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.methods.MemberSupportFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 
@@ -40,11 +40,6 @@ extends MemberSupportFacetFactoryAbstract {
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        addDescribedFacetIfDescribedMethodIsFound(processMethodContext);
-    }
-
-    private void addDescribedFacetIfDescribedMethodIsFound(
-            final ProcessMethodContext processMethodContext) {
 
         val cls = processMethodContext.getCls();
         //val actionOrGetter = processMethodContext.getMethod();

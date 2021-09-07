@@ -35,7 +35,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 
 /**
- * Replaces {@link PropertyDefaultFacetDerivedFromTypeFactory}
+ * Installs {@link PropertyDefaultFacetDerivedFromTypeFactory} as a fallback.
  */
 public class DeriveDefaultFromTypePostProcessor
 extends ObjectSpecificationPostProcessorAbstract {

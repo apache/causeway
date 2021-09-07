@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.facets.ParameterSupport;
 import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest.ReturnType;
 import org.apache.isis.core.metamodel.facets.ParameterSupport.SearchAlgorithm;
 import org.apache.isis.core.metamodel.facets.param.disable.ActionParameterDisabledFacet;
-import org.apache.isis.core.metamodel.methods.MemberSupportFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 
 import lombok.val;
 

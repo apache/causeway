@@ -191,8 +191,6 @@ public final class ProgrammingModelConstants {
         private final Can<String> methodNamePrefixes;
     }
 
-    public static final String VALIDATE_PREFIX = "validate";
-
     // -- OTHER LITERALS
 
     public static final String TO_STRING = "toString";
