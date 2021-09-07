@@ -28,10 +28,9 @@ import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSup
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.ParameterSupport;
-import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest.ReturnType;
 import org.apache.isis.core.metamodel.facets.ParameterSupport.SearchAlgorithm;
-import org.apache.isis.core.metamodel.facets.param.validate.ActionParameterValidationFacet;
 import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.param.validate.ActionParameterValidationFacet;
 
 import lombok.val;
 
@@ -63,7 +62,7 @@ extends MemberSupportFacetFactoryAbstract  {
 
         val searchRequest = ParameterSupport.ParamSupportingMethodSearchRequest.builder()
                 .processMethodContext(processMethodContext)
-                .returnType(ReturnType.TEXT)
+                .returnType(org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ReturnType.TEXT)
                 .paramIndexToMethodNameProviders(methodNameCandidates)
                 .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.SINGLEARG_BEING_PARAMTYPE))
                 .build();

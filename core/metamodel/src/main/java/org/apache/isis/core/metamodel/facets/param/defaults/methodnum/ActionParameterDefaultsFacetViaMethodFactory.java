@@ -18,18 +18,14 @@
  */
 package org.apache.isis.core.metamodel.facets.param.defaults.methodnum;
 
-import java.util.EnumSet;
-
 import javax.inject.Inject;
 
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.ParameterSupport;
-import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest.ReturnType;
-import org.apache.isis.core.metamodel.facets.ParameterSupport.SearchAlgorithm;
-import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
+import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchResult;
+import org.apache.isis.core.metamodel.facets.param.support.ActionParameterSupportFacetAbstract;
 
 import lombok.val;
 
@@ -37,55 +33,23 @@ import lombok.val;
  * Sets up all the {@link Facet}s for an action in a single shot.
  */
 public class ActionParameterDefaultsFacetViaMethodFactory
-extends MemberSupportFacetFactoryAbstract {
+extends ActionParameterSupportFacetAbstract {
 
     @Inject
     public ActionParameterDefaultsFacetViaMethodFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.ACTIONS_ONLY, MemberSupportPrefix.DEFAULT);
+        super(mmc, MemberSupportPrefix.DEFAULT);
     }
-
-    // ///////////////////////////////////////////////////////
-    // Actions
-    // ///////////////////////////////////////////////////////
 
     @Override
-    public void process(final ProcessMethodContext processMethodContext) {
-
-        val facetedMethod = processMethodContext.getFacetHolder();
-        val parameters = facetedMethod.getParameters();
-
-        if (parameters.isEmpty()) {
-            return;
-        }
-
-        // attach DefaultFacetForParameters if defaultNumMethod is found ...
-
-        val methodNameCandidates = memberSupportPrefix.getMethodNamePrefixes()
-                .flatMap(processMethodContext::parameterSupportCandidates);
-
-        val searchRequest = ParameterSupport.ParamSupportingMethodSearchRequest.builder()
-                .processMethodContext(processMethodContext)
-                .returnType(ReturnType.SAME_AS_PARAMETER_TYPE)
-                .paramIndexToMethodNameProviders(methodNameCandidates)
-                .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.SWEEP))
-                .build();
-
-        ParameterSupport.findParamSupportingMethods(searchRequest, searchResult -> {
-
-            val defaultMethod = searchResult.getSupportingMethod();
-            val paramIndex = searchResult.getParamIndex();
-
-            processMethodContext.removeMethod(defaultMethod);
-
-            // add facets directly to parameters, not to actions
-            val paramAsHolder = parameters.get(paramIndex);
-            //val translationContext = paramAsHolder.getIdentifier().toFullIdentityString();
-            val ppmFactory = searchResult.getPpmFactory();
-
-            addFacet(new ActionParameterDefaultsFacetViaMethod(
-                    defaultMethod, paramIndex, ppmFactory, paramAsHolder));
-        });
+    protected void onSearchResult(
+            final FacetedMethodParameter paramAsHolder,
+            final ParamSupportingMethodSearchResult searchResult) {
+        val defaultMethod = searchResult.getSupportingMethod();
+        val paramIndex = searchResult.getParamIndex();
+        val ppmFactory = searchResult.getPpmFactory();
+        addFacet(
+                new ActionParameterDefaultsFacetViaMethod(
+                        defaultMethod, paramIndex, ppmFactory, paramAsHolder));
     }
-
 
 }

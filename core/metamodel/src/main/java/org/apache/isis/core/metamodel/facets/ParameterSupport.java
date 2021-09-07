@@ -30,6 +30,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Arrays;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ReturnType;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils.MethodAndPpmConstructor;
@@ -50,13 +51,6 @@ public final class ParameterSupport {
 
     @Value @Builder
     public static class ParamSupportingMethodSearchRequest {
-
-        public static enum ReturnType {
-            NON_SCALAR,
-            TEXT,
-            BOOLEAN,
-            SAME_AS_PARAMETER_TYPE,
-        }
 
         @NonNull FacetFactory.ProcessMethodContext processMethodContext;
         @NonNull Can<IntFunction<String>> paramIndexToMethodNameProviders;

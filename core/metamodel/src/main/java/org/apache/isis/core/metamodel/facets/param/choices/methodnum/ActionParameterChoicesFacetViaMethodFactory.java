@@ -18,72 +18,35 @@
  */
 package org.apache.isis.core.metamodel.facets.param.choices.methodnum;
 
-import java.util.EnumSet;
-
 import javax.inject.Inject;
 
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.ParameterSupport;
-import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest.ReturnType;
-import org.apache.isis.core.metamodel.facets.ParameterSupport.SearchAlgorithm;
-import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
+import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchResult;
+import org.apache.isis.core.metamodel.facets.param.support.ActionParameterSupportFacetAbstract;
 
 import lombok.val;
 
 public class ActionParameterChoicesFacetViaMethodFactory
-extends MemberSupportFacetFactoryAbstract {
+extends ActionParameterSupportFacetAbstract {
 
     @Inject
     public ActionParameterChoicesFacetViaMethodFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.ACTIONS_ONLY, MemberSupportPrefix.CHOICES);
+        super(mmc, MemberSupportPrefix.CHOICES);
     }
-
-    // ///////////////////////////////////////////////////////
-    // Actions
-    // ///////////////////////////////////////////////////////
 
     @Override
-    public void process(final ProcessMethodContext processMethodContext) {
-
-        val facetedMethod = processMethodContext.getFacetHolder();
-        val parameters = facetedMethod.getParameters();
-
-        if (parameters.isEmpty()) {
-            return;
-        }
-
-        // attach ActionChoicesFacet if choicesNumMethod is found ...
-
-        val methodNameCandidates = memberSupportPrefix.getMethodNamePrefixes()
-                .flatMap(processMethodContext::parameterSupportCandidates);
-
-        val searchRequest = ParameterSupport.ParamSupportingMethodSearchRequest.builder()
-                .processMethodContext(processMethodContext)
-                .returnType(ReturnType.NON_SCALAR)
-                .paramIndexToMethodNameProviders(methodNameCandidates)
-                .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.SWEEP))
-                .build();
-
-        ParameterSupport.findParamSupportingMethods(searchRequest, searchResult -> {
-
-            val choicesMethod = searchResult.getSupportingMethod();
-            val paramIndex = searchResult.getParamIndex();
-            val returnType = searchResult.getReturnType();
-
-            processMethodContext.removeMethod(choicesMethod);
-
-            // add facets directly to parameters, not to actions
-            val paramAsHolder = parameters.get(paramIndex);
-            val ppmFactory = searchResult.getPpmFactory();
-            addFacet(
-                    new ActionParameterChoicesFacetViaMethod(
-                            choicesMethod, returnType, ppmFactory, paramAsHolder));
-        });
-
+    protected void onSearchResult(
+            final FacetedMethodParameter paramAsHolder,
+            final ParamSupportingMethodSearchResult searchResult) {
+        val choicesMethod = searchResult.getSupportingMethod();
+        val returnType = searchResult.getReturnType();
+        val ppmFactory = searchResult.getPpmFactory();
+        addFacet(
+                new ActionParameterChoicesFacetViaMethod(
+                        choicesMethod, returnType, ppmFactory, paramAsHolder));
     }
-
 
 
 }

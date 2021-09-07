@@ -148,6 +148,15 @@ public final class ProgrammingModelConstants {
         }
     }
 
+    // -- PARAMETER SUPPORT
+
+    public static enum ReturnType {
+        NON_SCALAR,
+        TEXT,
+        BOOLEAN,
+        SAME_AS_PARAMETER_TYPE,
+    }
+
     // -- OBJECT SUPPORT
 
     @Getter
@@ -176,18 +185,21 @@ public final class ProgrammingModelConstants {
 
     @Getter
     public static enum MemberSupportPrefix {
-        DEFAULT("default"),
-        CHOICES("choices"),
-        AUTO_COMPLETE("autoComplete"),
-        HIDE("hide"),
-        DISABLE("disable"),
-        VALIDATE("validate"),
-        NAMED("named"), // imperative naming
-        DESCRIBED("described"); // imperative naming
+        DEFAULT(ReturnType.SAME_AS_PARAMETER_TYPE, "default"),
+        CHOICES(ReturnType.NON_SCALAR, "choices"),
+        AUTO_COMPLETE(ReturnType.NON_SCALAR, "autoComplete"),
+        HIDE(ReturnType.BOOLEAN, "hide"),
+        DISABLE(ReturnType.TEXT, "disable"),
+        VALIDATE(ReturnType.TEXT, "validate"),
+        NAMED(ReturnType.TEXT, "named"), // imperative naming
+        DESCRIBED(ReturnType.TEXT, "described"); // imperative naming
         MemberSupportPrefix(
+                final ReturnType parameterSearchReturnType,
                 final String ...methodNamePrefixes) {
+            this.parameterSearchReturnType = parameterSearchReturnType;
             this.methodNamePrefixes = Can.of(methodNamePrefixes);
         }
+        private final ReturnType parameterSearchReturnType;
         private final Can<String> methodNamePrefixes;
     }
 

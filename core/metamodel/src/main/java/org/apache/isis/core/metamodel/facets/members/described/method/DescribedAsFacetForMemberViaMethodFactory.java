@@ -22,7 +22,6 @@ import javax.inject.Inject;
 
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
@@ -60,7 +59,7 @@ extends MemberSupportFacetFactoryAbstract {
         }
         processMethodContext.removeMethod(describedMethod);
 
-        FacetUtil.addFacet(
+        addFacet(
                 new DescribedAsFacetForMemberViaMethod(
                         describedMethod,
                         processMethodContext.getFacetHolder()));
