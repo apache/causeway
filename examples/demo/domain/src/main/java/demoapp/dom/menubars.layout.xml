@@ -231,6 +231,7 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
                 <mb3:named>Apache Isis Extensions</mb3:named>
                 <mb3:serviceAction objectType="demo.IsisExtTypesMenu" id="asciiDocs"/>
                 <mb3:serviceAction objectType="demo.IsisExtTypesMenu" id="markdowns"/>
+                <mb3:serviceAction objectType="demo.IsisExtTypesMenu" id="calendarEvents"/>
                 <mb3:serviceAction objectType="demo.AsyncActionMenu" id="asyncActions">
                     <cpt:named>SSE</cpt:named>
                     <cpt:describedAs>Background (Async) Actions</cpt:describedAs>

@@ -16,24 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.fullcalendar.ui.component;
+package demoapp.dom.types.isisext.cal.holder;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
 
-import org.apache.isis.extensions.fullcalendar.applib.IsisModuleExtFullCalendarApplib;
-import org.apache.isis.extensions.fullcalendar.ui.component.calendarable.CalendarableCollectionAsFullCalendarFactory;
-import org.apache.isis.extensions.fullcalendar.ui.component.calendareventable.CalendarEventableCollectionAsFullCalendarFactory;
+//tag::class[]
+public interface IsisCalendarEventHolder {
 
-/**
- * @since 2.0 {@index}
- */
-@Configuration
-@Import({
-        IsisModuleExtFullCalendarApplib.class,
+    CalendarEvent getReadOnlyProperty();
+    void setReadOnlyProperty(CalendarEvent c);
 
-        CalendarEventableCollectionAsFullCalendarFactory.class,
-        CalendarableCollectionAsFullCalendarFactory.class
-})
-public class IsisModuleExtFullCalendarUi {
+    CalendarEvent getReadWriteProperty();
+    void setReadWriteProperty(CalendarEvent c);
+
+    CalendarEvent getReadOnlyOptionalProperty();
+    void setReadOnlyOptionalProperty(CalendarEvent c);
+
+    CalendarEvent getReadWriteOptionalProperty();
+    void setReadWriteOptionalProperty(CalendarEvent c);
+
 }
+//end::class[]

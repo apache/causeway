@@ -16,24 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.fullcalendar.ui.component;
+package demoapp.dom.types.isisext.cal.persistence;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import javax.inject.Inject;
 
-import org.apache.isis.extensions.fullcalendar.applib.IsisModuleExtFullCalendarApplib;
-import org.apache.isis.extensions.fullcalendar.ui.component.calendarable.CalendarableCollectionAsFullCalendarFactory;
-import org.apache.isis.extensions.fullcalendar.ui.component.calendareventable.CalendarEventableCollectionAsFullCalendarFactory;
+import org.springframework.stereotype.Service;
 
-/**
- * @since 2.0 {@index}
- */
-@Configuration
-@Import({
-        IsisModuleExtFullCalendarApplib.class,
+import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
 
-        CalendarEventableCollectionAsFullCalendarFactory.class,
-        CalendarableCollectionAsFullCalendarFactory.class
-})
-public class IsisModuleExtFullCalendarUi {
+import demoapp.dom._infra.seed.SeedServiceAbstract;
+import demoapp.dom._infra.values.ValueHolderRepository;
+
+@Service
+public class IsisCalendarEventSeeding
+extends SeedServiceAbstract {
+
+    @Inject
+    public IsisCalendarEventSeeding(final ValueHolderRepository<CalendarEvent, ? extends IsisCalendarEventEntity> entities) {
+        super(entities);
+    }
+
 }

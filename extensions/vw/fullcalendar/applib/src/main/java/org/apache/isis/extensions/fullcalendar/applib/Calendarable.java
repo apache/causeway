@@ -27,10 +27,10 @@ import java.util.Set;
 public interface Calendarable {
 
     /**
-     * The names of unique &quot;calendar&quot;s provided by this object.
+     * The names of unique 'calendar's provided by this object.
      *
      * <p>
-     * The &quot;calendar&quot; is a string identifier that indicates the nature of this event.
+     * The 'calendar' is a string identifier that indicates the nature of this event.
      *
      * <p>
      * For example, an event of a lease's <code>FixedBreakOption</code> has three dates: the <i>break date</i>,

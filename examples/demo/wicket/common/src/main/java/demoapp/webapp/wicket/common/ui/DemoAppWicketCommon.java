@@ -16,31 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom;
+package demoapp.webapp.wicket.common.ui;
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 
-import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
+import org.apache.isis.extensions.fullcalendar.ui.component.IsisModuleExtFullCalendarUi;
 
+import demoapp.webapp.wicket.common.ui.custom.WhereInTheWorldPanelFactory;
+
+/**
+ * Featured Wicket specific extensions.
+ */
 @Configuration
 @Import({
-    IsisModuleCoreRuntimeServices.class,
-    IsisModuleTestingFixturesApplib.class,
+    WhereInTheWorldPanelFactory.class,
+    IsisModuleExtFullCalendarUi.class,
 })
-@PropertySources({
-    @PropertySource(IsisPresets.NoTranslations),
-    @PropertySource(IsisPresets.SilenceWicket),
-})
-@ComponentScan(
-        basePackageClasses= {
-                DemoModuleCommon.class
-        })
-public class DemoModuleCommon {
+public class DemoAppWicketCommon {
 
 }

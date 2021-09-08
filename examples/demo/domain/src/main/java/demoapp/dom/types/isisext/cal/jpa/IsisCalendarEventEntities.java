@@ -16,24 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.fullcalendar.ui.component;
+package demoapp.dom.types.isisext.cal.jpa;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
 
-import org.apache.isis.extensions.fullcalendar.applib.IsisModuleExtFullCalendarApplib;
-import org.apache.isis.extensions.fullcalendar.ui.component.calendarable.CalendarableCollectionAsFullCalendarFactory;
-import org.apache.isis.extensions.fullcalendar.ui.component.calendareventable.CalendarEventableCollectionAsFullCalendarFactory;
+import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
 
-/**
- * @since 2.0 {@index}
- */
-@Configuration
-@Import({
-        IsisModuleExtFullCalendarApplib.class,
+import demoapp.dom._infra.values.ValueHolderRepository;
 
-        CalendarEventableCollectionAsFullCalendarFactory.class,
-        CalendarableCollectionAsFullCalendarFactory.class
-})
-public class IsisModuleExtFullCalendarUi {
+@Profile("demo-jpa")
+@Service
+public class IsisCalendarEventEntities
+extends ValueHolderRepository<CalendarEvent, IsisCalendarEventJpa> {
+
+    protected IsisCalendarEventEntities() {
+        super(IsisCalendarEventJpa.class);
+    }
+
+    @Override
+    protected IsisCalendarEventJpa newDetachedEntity(final CalendarEvent value) {
+        return new IsisCalendarEventJpa(value);
+    }
+
 }

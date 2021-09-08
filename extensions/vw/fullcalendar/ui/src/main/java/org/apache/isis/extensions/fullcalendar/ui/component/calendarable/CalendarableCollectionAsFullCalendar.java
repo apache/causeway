@@ -30,7 +30,8 @@ import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 
 import net.ftlines.wicket.fullcalendar.EventProvider;
 
-public class CalendarableCollectionAsFullCalendar extends CalendaredCollectionAbstract {
+public class CalendarableCollectionAsFullCalendar
+extends CalendaredCollectionAbstract {
 
     private static final long serialVersionUID = 1L;
 

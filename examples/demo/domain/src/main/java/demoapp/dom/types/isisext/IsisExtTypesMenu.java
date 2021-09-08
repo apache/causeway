@@ -27,9 +27,8 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import lombok.extern.log4j.Log4j2;
-
 import demoapp.dom.types.isisext.asciidocs.IsisAsciiDocs;
+import demoapp.dom.types.isisext.cal.IsisCalendarEvents;
 import demoapp.dom.types.isisext.markdowns.IsisMarkdowns;
 
 @DomainService(
@@ -50,6 +49,12 @@ public class IsisExtTypesMenu {
     @ActionLayout(cssClassFa="fa-pen-fancy")
     public IsisMarkdowns markdowns(){
         return new IsisMarkdowns();
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="far fa-calendar-alt")
+    public IsisCalendarEvents calendarEvents(){
+        return new IsisCalendarEvents();
     }
 
 }
