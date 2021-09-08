@@ -21,27 +21,55 @@ package org.apache.isis.core.metamodel.methods;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.Domain;
 import org.apache.isis.applib.annotation.Introspection.EncapsulationPolicy;
 import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.commons.internal.reflection._Annotations;
+import org.apache.isis.commons.internal.reflection._ClassCache;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ConflictingAnnotations;
+import org.apache.isis.core.metamodel.commons.MethodUtil;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NonNull;
-import lombok.Value;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@Value(staticConstructor = "of")
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class MethodFinderOptions {
 
-    public static MethodFinderOptions notNecessarilyPublic() {
+    public static MethodFinderOptions of(
+            @NonNull final Can<String> methodNameCandidatesPossiblyDuplicated,
+            @NonNull final EncapsulationPolicy encapsulationPolicy,
+            @NonNull final Predicate<Method> mustSatisfy) {
+
+        final Predicate<Method> isNotStatic = MethodUtil::isNotStatic;
+        val methodNameCandidates = methodNameCandidatesPossiblyDuplicated.distinct();
+
+        return new MethodFinderOptions(
+                encapsulationPolicy,
+                methodNameCandidates.equals(ANY_NAME)
+                        ? isNotStatic.and(mustSatisfy)
+                        : isNotStatic
+                            .and(method->methodNameCandidates.contains(method.getName()))
+                            .and(mustSatisfy),
+                methodNameCandidates.distinct());
+    }
+
+    public static final Can<String> ANY_NAME = Can.of("");
+    public static final Class<?>[] NO_ARG = new Class<?>[0];
+
+    public static MethodFinderOptions notNecessarilyPublic(
+            final Can<String> methodNameCandidates) {
         return of(
-                Can.empty(), //FIXME
+                methodNameCandidates,
                 EncapsulationPolicy.ENCAPSULATED_MEMBERS_SUPPORTED,
                 _Predicates.alwaysTrue()
                 );
@@ -94,9 +122,33 @@ public class MethodFinderOptions {
                 ProgrammingModelConstants.ConflictingAnnotations.MEMBER_SUPPORT);
     }
 
+    @Getter private final @NonNull EncapsulationPolicy encapsulationPolicy;
+    @Getter private final @NonNull Predicate<Method> mustSatisfy;
     private final @NonNull Can<String> methodNameCandidates;
-    private final @NonNull EncapsulationPolicy encapsulationPolicy;
-    private final @NonNull Predicate<Method> mustSatisfy;
+
+    public Stream<Method> streamMethods(
+            final Class<?> type,
+            final Class<?>[] paramTypes) {
+
+        val classCache = _ClassCache.getInstance();
+        val isEncapsulationSupported = getEncapsulationPolicy().isEncapsulatedMembersSupported();
+
+        if(methodNameCandidates.equals(ANY_NAME)) {
+            //stream all
+            return (isEncapsulationSupported
+                    ? classCache.streamPublicOrDeclaredMethods(type)
+                    : classCache.streamPublicMethods(type))
+                        .filter(mustSatisfy);
+        }
+
+        return methodNameCandidates.stream()
+        .map(name->isEncapsulationSupported
+                ? classCache.lookupPublicOrDeclaredMethod(type, name, paramTypes)
+                : classCache.lookupPublicMethod(type, name, paramTypes))
+        .filter(_NullSafe::isPresent)
+        .filter(mustSatisfy);
+
+    }
 
     // -- HELPER
 
@@ -163,6 +215,8 @@ public class MethodFinderOptions {
         }
         return isMarkerAnnotationPresent;
     }
+
+
 
 
 }

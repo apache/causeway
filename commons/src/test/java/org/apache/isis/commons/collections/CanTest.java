@@ -195,23 +195,23 @@ class CanTest {
 
         assertEquals(
                 Can.empty(),
-                Can.empty().unique());
+                Can.empty().distinct());
 
         assertEquals(
                 Can.of("a"),
-                Can.of("a").unique());
+                Can.of("a").distinct());
 
         assertEquals(
                 Can.of("a"),
-                Can.of("a", "a", "a").unique());
+                Can.of("a", "a", "a").distinct());
 
         assertEquals(
                 Can.of("a", "b", "c"),
-                Can.of("a", "b", "c").unique());
+                Can.of("a", "b", "c").distinct());
 
         assertEquals(
                 Can.of("a", "b"),
-                Can.of("a", "b", "a").unique());
+                Can.of("a", "b", "a").distinct());
     }
 
     @Test
@@ -222,23 +222,23 @@ class CanTest {
 
         assertEquals(
                 Can.empty(),
-                Can.<String>empty().unique(firstCharEquility));
+                Can.<String>empty().distinct(firstCharEquility));
 
         assertEquals(
                 Can.of("a"),
-                Can.of("a").unique(firstCharEquility));
+                Can.of("a").distinct(firstCharEquility));
 
         assertEquals(
                 Can.of("aDog"),
-                Can.of("aDog", "aCat", "aMonkey").unique(firstCharEquility));
+                Can.of("aDog", "aCat", "aMonkey").distinct(firstCharEquility));
 
         assertEquals(
                 Can.of("aDog", "bCat", "cMonkey"),
-                Can.of("aDog", "bCat", "cMonkey").unique(firstCharEquility));
+                Can.of("aDog", "bCat", "cMonkey").distinct(firstCharEquility));
 
         assertEquals(
                 Can.of("aDog", "bCat"),
-                Can.of("aDog", "bCat", "aMonkey").unique(firstCharEquility));
+                Can.of("aDog", "bCat", "aMonkey").distinct(firstCharEquility));
 
     }
 

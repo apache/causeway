@@ -75,7 +75,7 @@ implements MetaModelRefiner {
                 .getFacetRanking(TitleFacet.class)
                 .map(facetRanking->facetRanking.getTopRank(TitleFacet.class))
                 .orElse(Can.empty())
-                .unique(TitleFacet::semanticEquals);
+                .distinct(TitleFacet::semanticEquals);
 
             // top-rank if present must not be ambiguous
             if(titleFacetTopRank.isCardinalityMultiple()) {

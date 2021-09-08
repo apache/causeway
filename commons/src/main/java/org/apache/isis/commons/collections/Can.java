@@ -361,14 +361,14 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * {@link Object#equals(Object)} object equality.
      * @return non-null
      */
-    public Can<T> unique();
+    public Can<T> distinct();
 
     /**
      * Returns a {@code Can} with all the elements from this {@code Can}, but
      * duplicated elements removed, based on given {@code equality} relation.
      * @return non-null
      */
-    public Can<T> unique(@NonNull BiPredicate<T, T> equality);
+    public Can<T> distinct(@NonNull BiPredicate<T, T> equality);
 
     /**
      * Returns a {@code Can} with all the elements from this {@code Can}, but

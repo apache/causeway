@@ -102,12 +102,12 @@ final class Can_Empty<T> implements Can<T> {
     }
 
     @Override
-    public Can<T> unique() {
+    public Can<T> distinct() {
         return this;
     }
 
     @Override
-    public Can<T> unique(final @NonNull BiPredicate<T, T> equality) {
+    public Can<T> distinct(final @NonNull BiPredicate<T, T> equality) {
         return this;
     }
 

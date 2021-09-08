@@ -30,8 +30,8 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
+import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 
 import lombok.val;
@@ -52,7 +52,7 @@ public class MethodFinderUtilsTest {
         val cache = new MethodByClassMap();
         final Method method = MethodFinderUtils
                 .findAnnotatedMethod(
-                        MethodFinderOptions.notNecessarilyPublic(),
+                        MethodFinderOptions.notNecessarilyPublic(MethodFinderOptions.ANY_NAME),
                         new WithPostConstruct(), PostConstruct.class, cache );
 
         assertThat(method, is(not(nullValue())));
@@ -68,7 +68,7 @@ public class MethodFinderUtilsTest {
         val cache = new MethodByClassMap();
         final Method method = MethodFinderUtils
                 .findAnnotatedMethod(
-                        MethodFinderOptions.notNecessarilyPublic(),
+                        MethodFinderOptions.notNecessarilyPublic(MethodFinderOptions.ANY_NAME),
                         new NoPostConstruct(), PostConstruct.class, cache);
 
         assertThat(method, is(nullValue()));

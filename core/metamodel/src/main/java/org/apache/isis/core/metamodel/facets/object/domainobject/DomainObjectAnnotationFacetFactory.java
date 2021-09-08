@@ -646,7 +646,7 @@ implements
     public Method postConstructMethodFor(final Object pojo) {
         return MethodFinderUtils.findAnnotatedMethod(
                 // @PostConstruct is allowed to appear on non-public methods
-                MethodFinderOptions.notNecessarilyPublic(),
+                MethodFinderOptions.notNecessarilyPublic(MethodFinderOptions.ANY_NAME),
                 pojo, PostConstruct.class, postConstructMethodsCache);
     }
 

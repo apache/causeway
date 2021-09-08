@@ -115,14 +115,14 @@ final class Can_Multiple<T> implements Can<T> {
     }
 
     @Override
-    public Can<T> unique() {
+    public Can<T> distinct() {
         val set = new LinkedHashSet<T>(); // preserve order
         set.addAll(elements);
         return Can.ofCollection(set);
     }
 
     @Override
-    public Can<T> unique(final @NonNull BiPredicate<T, T> equality) {
+    public Can<T> distinct(final @NonNull BiPredicate<T, T> equality) {
         final int initialSize = Math.min(1024, elements.size());
         val uniqueElements = _Lists.<T>newArrayList(initialSize);
         elements
