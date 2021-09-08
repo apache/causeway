@@ -26,12 +26,13 @@ import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.util.Enums;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.commons.MethodExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
+import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
-import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 
 import lombok.val;
 
@@ -58,9 +59,6 @@ implements EnumFacet {
         return max;
     }
 
-
-    private static final String TITLE = "title";
-
     private final Method titleMethod;
 
 //    /**
@@ -81,11 +79,16 @@ implements EnumFacet {
                 EqualByContent.HONOURED,
                 defaultFor(adaptedClass));
 
-        titleMethod = MethodFinderUtils.findMethod_returningText(
-                MethodFinderOptions.objectSupport(introspectionPolicy),
-                getAdaptedClass(),
-                TITLE,
-                null);
+        titleMethod = MethodFinder
+            .findMethod_returningText(
+                    MethodFinderOptions
+                        .objectSupport(
+                                ProgrammingModelConstants.ObjectSupportMethod.TITLE.getMethodNames(),
+                                introspectionPolicy),
+                    getAdaptedClass(),
+                    null)
+            .findFirst()
+            .orElse(null);
 
     }
 

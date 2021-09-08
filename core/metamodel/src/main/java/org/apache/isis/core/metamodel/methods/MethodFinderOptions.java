@@ -30,6 +30,7 @@ import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ConflictingAnnotations;
 
 import lombok.NonNull;
 import lombok.Value;
@@ -40,60 +41,92 @@ public class MethodFinderOptions {
 
     public static MethodFinderOptions notNecessarilyPublic() {
         return of(
+                Can.empty(), //FIXME
                 EncapsulationPolicy.ENCAPSULATED_MEMBERS_SUPPORTED,
                 _Predicates.alwaysTrue()
                 );
     }
 
-    public static MethodFinderOptions publicOnly() {
+    public static MethodFinderOptions publicOnly(
+            final Can<String> methodNameCandidates) {
         return of(
+                methodNameCandidates,
                 EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED,
                 _Predicates.alwaysTrue()
                 );
     }
 
     public static MethodFinderOptions accessor(
+            final Can<String> methodNameCandidates,
             final IntrospectionPolicy memberIntrospectionPolicy) {
-        return havingAnyOrNoAnnotation(memberIntrospectionPolicy);
+        return havingAnyOrNoAnnotation(
+                methodNameCandidates,
+                memberIntrospectionPolicy);
     }
 
     public static MethodFinderOptions objectSupport(
+            final Can<String> methodNameCandidates,
             final IntrospectionPolicy memberIntrospectionPolicy) {
-        return havingAnnotationIfEnforcedByPolicyOrAccessibility(
+        return supportMethod(
+                methodNameCandidates,
                 memberIntrospectionPolicy,
                 Domain.Include.class,
-                ProgrammingModelConstants.ConflictingAnnotations.OBJECT_SUPPORT.getProhibits());
+                ProgrammingModelConstants.ConflictingAnnotations.OBJECT_SUPPORT);
     }
 
     public static MethodFinderOptions livecycleCallback(
+            final Can<String> methodNameCandidates,
             final IntrospectionPolicy memberIntrospectionPolicy) {
-        return havingAnnotationIfEnforcedByPolicyOrAccessibility(
+        return supportMethod(
+                methodNameCandidates,
                 memberIntrospectionPolicy,
                 Domain.Include.class,
-                ProgrammingModelConstants.ConflictingAnnotations.OBJECT_LIFECYCLE.getProhibits());
+                ProgrammingModelConstants.ConflictingAnnotations.OBJECT_LIFECYCLE);
     }
 
     public static MethodFinderOptions memberSupport(
+            final Can<String> methodNameCandidates,
             final IntrospectionPolicy memberIntrospectionPolicy) {
-        return havingAnnotationIfEnforcedByPolicyOrAccessibility(
+        return supportMethod(
+                methodNameCandidates,
                 memberIntrospectionPolicy,
                 Domain.Include.class,
-                ProgrammingModelConstants.ConflictingAnnotations.MEMBER_SUPPORT.getProhibits());
+                ProgrammingModelConstants.ConflictingAnnotations.MEMBER_SUPPORT);
     }
 
+    private final @NonNull Can<String> methodNameCandidates;
     private final @NonNull EncapsulationPolicy encapsulationPolicy;
     private final @NonNull Predicate<Method> mustSatisfy;
 
     // -- HELPER
 
     private static MethodFinderOptions havingAnyOrNoAnnotation(
+            final Can<String> methodNameCandidates,
             final IntrospectionPolicy memberIntrospectionPolicy) {
         return of(
+                methodNameCandidates,
                 memberIntrospectionPolicy.getEncapsulationPolicy(),
                 _Predicates.alwaysTrue());
     }
 
-    private static MethodFinderOptions havingAnnotationIfEnforcedByPolicyOrAccessibility(
+    private static MethodFinderOptions supportMethod(
+            final Can<String> methodNameCandidates,
+            final IntrospectionPolicy memberIntrospectionPolicy,
+            final Class<? extends Annotation> annotationType,
+            final ConflictingAnnotations conflictingAnnotations) {
+
+        return of(
+                methodNameCandidates,
+                // support methods are always allowed private
+                EncapsulationPolicy.ENCAPSULATED_MEMBERS_SUPPORTED,
+                havingAnnotationIfEnforcedByPolicyOrAccessibility(
+                        memberIntrospectionPolicy,
+                        annotationType,
+                        conflictingAnnotations.getProhibits()));
+
+    }
+
+    private static Predicate<Method> havingAnnotationIfEnforcedByPolicyOrAccessibility(
             final IntrospectionPolicy memberIntrospectionPolicy,
             final Class<? extends Annotation> annotationType,
             final Can<Class<? extends Annotation>> conflictingAnnotations) {
@@ -102,13 +135,11 @@ public class MethodFinderOptions {
         //  when REQUIRED -> annot. on support also required
         //  when OPTIONAL -> annot. on support only required when support method is private
 
-        return of(
-                EncapsulationPolicy.ENCAPSULATED_MEMBERS_SUPPORTED, // support methods are always allowed private
-                memberIntrospectionPolicy.getMemberAnnotationPolicy().isMemberAnnotationsRequired()
+        return memberIntrospectionPolicy.getMemberAnnotationPolicy().isMemberAnnotationsRequired()
                     ? method->havingAnnotation(method, annotationType, conflictingAnnotations)
                     : method-> !_Reflect.isAccessible(method)
                             ? havingAnnotation(method, annotationType, conflictingAnnotations)
-                            : true);
+                            : true;
 
     }
 

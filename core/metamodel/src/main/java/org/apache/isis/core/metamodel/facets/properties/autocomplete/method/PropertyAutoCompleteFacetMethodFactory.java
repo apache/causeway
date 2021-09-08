@@ -49,9 +49,8 @@ extends MemberSupportFacetFactoryAbstract {
         MethodFinder
         .findMethod_returningNonScalar(
             MethodFinderOptions
-            .memberSupport(processMethodContext.getIntrospectionPolicy()),
+            .memberSupport(methodNameCandidates, processMethodContext.getIntrospectionPolicy()),
             processMethodContext.getCls(),
-            methodNameCandidates,
             returnType,
             STRING_ARG)
         .peek(processMethodContext::removeMethod)

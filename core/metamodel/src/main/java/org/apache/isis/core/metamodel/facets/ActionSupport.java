@@ -119,8 +119,8 @@ public final class ActionSupport {
             MethodFinder
                 .findMethodWithPPMArg_returningBoolean(
                         MethodFinderOptions
-                        .memberSupport(processMethodContext.getIntrospectionPolicy()),
-                        type, methodNames, paramTypes, additionalParamTypes)
+                        .memberSupport(methodNames, processMethodContext.getIntrospectionPolicy()),
+                        type, paramTypes, additionalParamTypes)
                 .map(ActionSupport::toSearchResult)
                 .forEach(onMethodFound);
             break;
@@ -128,8 +128,8 @@ public final class ActionSupport {
             MethodFinder
                 .findMethodWithPPMArg_returningText(
                         MethodFinderOptions
-                        .memberSupport(processMethodContext.getIntrospectionPolicy()),
-                        type, methodNames, paramTypes, additionalParamTypes)
+                        .memberSupport(methodNames, processMethodContext.getIntrospectionPolicy()),
+                        type, paramTypes, additionalParamTypes)
                 .map(ActionSupport::toSearchResult)
                 .forEach(onMethodFound);
             break;
@@ -170,8 +170,8 @@ public final class ActionSupport {
                 MethodFinder
                     .findMethod_returningBoolean(
                             MethodFinderOptions
-                            .memberSupport(processMethodContext.getIntrospectionPolicy()),
-                            type, methodNames, paramTypesToLookFor)
+                            .memberSupport(methodNames, processMethodContext.getIntrospectionPolicy()),
+                            type, paramTypesToLookFor)
                     .map(ActionSupport::toSearchResult)
                     .forEach(onMethodFound);
                 break;
@@ -179,8 +179,8 @@ public final class ActionSupport {
                 MethodFinder
                     .findMethod_returningText(
                             MethodFinderOptions
-                            .memberSupport(processMethodContext.getIntrospectionPolicy()),
-                            type, methodNames, paramTypesToLookFor)
+                            .memberSupport(methodNames, processMethodContext.getIntrospectionPolicy()),
+                            type, paramTypesToLookFor)
                     .map(ActionSupport::toSearchResult)
                     .forEach(onMethodFound);
                 break;

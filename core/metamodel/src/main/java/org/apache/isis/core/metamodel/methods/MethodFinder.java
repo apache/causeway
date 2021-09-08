@@ -23,6 +23,7 @@ import java.util.stream.Stream;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ReturnTypeCategory;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils.MethodAndPpmConstructor;
 
 /**
@@ -35,11 +36,10 @@ public final class MethodFinder {
     public static Stream<Method> findMethod(
             final MethodFinderOptions options,
             final Class<?> type,
-            final Can<String> names,
             final Class<?> expectedReturnType,
             final Class<?>[] paramTypes) {
 
-        return names.stream()
+        return options.getMethodNameCandidates().stream()
         .distinct()
         .map(name->MethodFinderUtils
                 .findMethod(options, type, name, expectedReturnType, paramTypes))
@@ -48,13 +48,25 @@ public final class MethodFinder {
 
     // -- SEARCH FOR MULTIPLE NAME CANDIDATES
 
+    public static Stream<Method> findMethod_returningCategory(
+            final MethodFinderOptions options,
+            final ReturnTypeCategory returnTypeCategory,
+            final Class<?> type,
+            final Class<?>[] paramTypes) {
+
+        return options.getMethodNameCandidates().stream()
+        .distinct()
+        .map(name->MethodFinderUtils
+                .findMethod_returningCategory(options, returnTypeCategory, type, name, paramTypes))
+        .filter(_NullSafe::isPresent);
+    }
+
     public static Stream<Method> findMethod_returningBoolean(
             final MethodFinderOptions options,
             final Class<?> type,
-            final Can<String> names,
             final Class<?>[] paramTypes) {
 
-        return names.stream()
+        return options.getMethodNameCandidates().stream()
         .distinct()
         .map(name->MethodFinderUtils
                 .findMethod_returningBoolean(options, type, name, paramTypes))
@@ -64,10 +76,9 @@ public final class MethodFinder {
     public static Stream<Method> findMethod_returningText(
             final MethodFinderOptions options,
             final Class<?> type,
-            final Can<String> names,
             final Class<?>[] paramTypes) {
 
-        return names.stream()
+        return options.getMethodNameCandidates().stream()
         .distinct()
         .map(name->MethodFinderUtils
                 .findMethod_returningText(options, type, name, paramTypes))
@@ -77,29 +88,26 @@ public final class MethodFinder {
     public static Stream<Method> findMethod_returningNonScalar(
             final MethodFinderOptions options,
             final Class<?> type,
-            final Can<String> names,
             final Class<?> elementReturnType,
             final Class<?>[] paramTypes) {
 
-        return names.stream()
+        return options.getMethodNameCandidates().stream()
         .distinct()
         .map(name->MethodFinderUtils
                 .findMethod_returningNonScalar(options, type, name, elementReturnType, paramTypes))
         .filter(_NullSafe::isPresent);
     }
 
-
     // -- SEARCH FOR MULTIPLE NAME CANDIDATES (PPM)
 
     public static Stream<MethodAndPpmConstructor> findMethodWithPPMArg(
             final MethodFinderOptions options,
             final Class<?> type,
-            final Can<String> names,
             final Class<?> returnType,
             final Class<?>[] paramTypes,
             final Can<Class<?>> additionalParamTypes) {
 
-        return names.stream()
+        return options.getMethodNameCandidates().stream()
         .distinct()
         .map(name->MethodFinderUtils
                 .findMethodWithPPMArg(options, type, name, returnType, paramTypes, additionalParamTypes))
@@ -110,11 +118,10 @@ public final class MethodFinder {
             final MethodFinderOptions options,
             final Can<Class<?>> returnTypes,
             final Class<?> type,
-            final Can<String> names,
             final Class<?>[] paramTypes,
             final Can<Class<?>> additionalParamTypes) {
 
-        return names.stream()
+        return options.getMethodNameCandidates().stream()
         .distinct()
         .map(name->MethodFinderUtils
                 .findMethodWithPPMArg_returningAnyOf(options, returnTypes, type, name, paramTypes, additionalParamTypes))
@@ -124,11 +131,10 @@ public final class MethodFinder {
     public static Stream<MethodAndPpmConstructor> findMethodWithPPMArg_returningBoolean(
             final MethodFinderOptions options,
             final Class<?> type,
-            final Can<String> names,
             final Class<?>[] paramTypes,
             final Can<Class<?>> additionalParamTypes) {
 
-        return names.stream()
+        return options.getMethodNameCandidates().stream()
         .distinct()
         .map(name->MethodFinderUtils
                 .findMethodWithPPMArg_returningBoolean(options, type, name, paramTypes, additionalParamTypes))
@@ -138,11 +144,10 @@ public final class MethodFinder {
     public static Stream<MethodAndPpmConstructor> findMethodWithPPMArg_returningText(
             final MethodFinderOptions options,
             final Class<?> type,
-            final Can<String> names,
             final Class<?>[] paramTypes,
             final Can<Class<?>> additionalParamTypes) {
 
-        return names.stream()
+        return options.getMethodNameCandidates().stream()
         .distinct()
         .map(name->MethodFinderUtils
                 .findMethodWithPPMArg_returningText(options, type, name, paramTypes, additionalParamTypes))
@@ -152,12 +157,11 @@ public final class MethodFinder {
     public static Stream<MethodAndPpmConstructor> findMethodWithPPMArg_returningNonScalar(
             final MethodFinderOptions options,
             final Class<?> type,
-            final Can<String> names,
             final Class<?> elementReturnType,
             final Class<?>[] paramTypes,
             final Can<Class<?>> additionalParamTypes) {
 
-        return names.stream()
+        return options.getMethodNameCandidates().stream()
         .distinct()
         .map(name->MethodFinderUtils
                 .findMethodWithPPMArg_returningNonScalar(options, type, name, elementReturnType, paramTypes, additionalParamTypes))

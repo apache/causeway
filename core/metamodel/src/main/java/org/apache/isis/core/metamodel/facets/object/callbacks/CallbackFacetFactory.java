@@ -29,8 +29,8 @@ import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.CallbackM
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
-import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
 import lombok.val;
@@ -65,17 +65,20 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         val cls = processClassContext.getCls();
         val facetHolder = processClassContext.getFacetHolder();
 
-        val callbackMethods = callbackMethodEnum
-                .getMethodNames()
-                .map(callbackMethodName->MethodFinderUtils.findMethod(
-                        MethodFinderOptions
-                        .livecycleCallback(processClassContext.getIntrospectionPolicy()),
-                        cls, callbackMethodName, void.class, NO_ARG));
+        val callbackMethods = MethodFinder
+        .findMethod(
+                MethodFinderOptions
+                .livecycleCallback(
+                        callbackMethodEnum.getMethodNames(),
+                        processClassContext.getIntrospectionPolicy()),
+                cls, void.class, NO_ARG)
+        .peek(processClassContext::removeMethod)
+        .collect(Can.toCan());
 
         if(callbackMethods.isNotEmpty()) {
-            callbackMethods.forEach(processClassContext::removeMethod);
             addFacet(callbackFacetConstructor.apply(callbackMethods, facetHolder));
         }
+
     }
 
 

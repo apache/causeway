@@ -24,18 +24,25 @@ import javax.inject.Inject;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ReturnTypeCategory;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod;
 import org.apache.isis.core.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacetViaSetterMethod;
+import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
-import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
+import lombok.val;
+
+/**
+ * Sets up the {@link PropertySetterFacetViaSetterMethod} to invoke the
+ * property's setter if available, but if none then marks the property as
+ * {@link SnapshotExcludeFacetInferred not-persistable}.
+ */
 public class PropertySetterFacetFactory
 extends MethodPrefixBasedFacetFactoryAbstract {
 
@@ -49,39 +56,33 @@ extends MethodPrefixBasedFacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        final Method setterMethod = attachPropertyModifyFacetIfSetterIsFound(processMethodContext);
-
-        attachPropertyClearFacetUsingSetterIfRequired(processMethodContext, setterMethod);
-    }
-
-    /**
-     * Sets up the {@link PropertySetterFacetViaSetterMethod} to invoke the
-     * property's setter if available, but if none then marks the property as
-     * {@link NotPersistableFacet not-persistable} and {@link DisabledFacet
-     * disabled} otherwise.
-     */
-    private Method attachPropertyModifyFacetIfSetterIsFound(
-            final ProcessMethodContext processMethodContext) {
-
         final Method getterMethod = processMethodContext.getMethod();
         final String capitalizedName = StringExtensions.asJavaBaseName(getterMethod.getName());
+        val methodNameCandidates = Can.ofSingleton(
+                ProgrammingModelConstants.AccessorPrefix.SET.prefix(capitalizedName));
 
-        final Class<?> cls = processMethodContext.getCls();
-        final Class<?> returnType = getterMethod.getReturnType();
-        final Class<?>[] paramTypes = new Class[] { returnType };
-        final Method setterMethod = MethodFinderUtils
-                .findMethod(
-                        MethodFinderOptions
-                        .accessor(processMethodContext.getIntrospectionPolicy()),
-                        cls,
-                        ProgrammingModelConstants.AccessorPrefix.SET.prefix(capitalizedName),
-                        void.class, paramTypes);
-        processMethodContext.removeMethod(setterMethod);
+        final Class<?>[] paramTypes = new Class[] { getterMethod.getReturnType() };
+
+        val setterMethods = MethodFinder
+        .findMethod_returningCategory(
+                MethodFinderOptions
+                .accessor(methodNameCandidates, processMethodContext.getIntrospectionPolicy()),
+                ReturnTypeCategory.VOID,
+                processMethodContext.getCls(),
+                paramTypes)
+        .peek(processMethodContext::removeMethod)
+        .collect(Can.toCan());
 
         final FacetHolder property = processMethodContext.getFacetHolder();
-        if (setterMethod != null) {
-            addFacet(new PropertySetterFacetViaSetterMethod(setterMethod, property));
-            addFacet(new PropertyInitializationFacetViaSetterMethod(setterMethod, property));
+        if (setterMethods.isNotEmpty()) {
+
+            setterMethods
+            .forEach(setterMethod->{
+                addFacet(new PropertySetterFacetViaSetterMethod(setterMethod, property));
+                addFacet(new PropertyInitializationFacetViaSetterMethod(setterMethod, property));
+                addFacet(new PropertyClearFacetViaSetterMethod(setterMethod, property));
+            });
+
         } else {
             addFacet(new SnapshotExcludeFacetInferred(property));
 
@@ -92,17 +93,6 @@ extends MethodPrefixBasedFacetFactoryAbstract {
 
         }
 
-        return setterMethod;
-    }
-
-    private void attachPropertyClearFacetUsingSetterIfRequired(
-            final ProcessMethodContext processMethodContext, final Method setMethod) {
-
-        if (setMethod == null) {
-            return;
-        }
-        final FacetHolder property = processMethodContext.getFacetHolder();
-        addFacet(new PropertyClearFacetViaSetterMethod(setMethod, property));
     }
 
 }

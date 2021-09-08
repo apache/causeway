@@ -20,6 +20,7 @@ package org.apache.isis.viewer.restfulobjects.viewer.mappers;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
@@ -34,8 +35,8 @@ final class FailureUtil {
     public static HttpStatusCode getFailureStatusCodeIfAny(final Throwable ex) {
 
         val errorCodeGetter = MethodFinderUtils.findNoArgMethod(
-                MethodFinderOptions.publicOnly(),
-                ex.getClass(), "getErrorCode", int.class)
+                MethodFinderOptions.publicOnly(Can.ofSingleton("getErrorCode")),
+                ex.getClass(), int.class)
                 .orElse(null);
         if(errorCodeGetter!=null) {
             try {

@@ -174,7 +174,11 @@ public final class ProgrammingModelConstants {
         TITLE(ReturnTypeCategory.TRANSLATABLE, "title"),
         CSS_CLASS(ReturnTypeCategory.STRING, "cssClass"),
         ICON_NAME(ReturnTypeCategory.STRING, "iconName"),
-        LAYOUT(ReturnTypeCategory.STRING, "layout");
+        LAYOUT(ReturnTypeCategory.STRING, "layout"),
+
+        /** as a fallback in the absence of other title providers */
+        TO_STRING(ReturnTypeCategory.STRING, "toString"),
+        ;
         ObjectSupportMethod(
                 final ReturnTypeCategory returnTypeCategory,
                 final String ...methodNames) {
@@ -206,10 +210,6 @@ public final class ProgrammingModelConstants {
         private final ReturnType supportMethodReturnType;
         private final Can<String> methodNamePrefixes;
     }
-
-    // -- OTHER LITERALS
-
-    public static final String TO_STRING = "toString";
 
     // -- CONFLICTING MARKER ANNOTATIONS
 

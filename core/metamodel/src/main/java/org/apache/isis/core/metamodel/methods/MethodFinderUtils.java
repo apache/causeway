@@ -129,8 +129,8 @@ public final class MethodFinderUtils {
 
     public static Optional<Method> findNoArgMethod(
             final MethodFinderOptions options,
-            final Class<?> type, final String name, final Class<?> returnType) {
-        return streamMethods(options, type, Can.ofSingleton(name), returnType)
+            final Class<?> type, final Class<?> returnType) {
+        return streamMethods(options, type, options.getMethodNameCandidates(), returnType)
                 .filter(MethodUtil.Predicates.paramCount(0))
                 .findFirst();
     }
@@ -221,6 +221,16 @@ public final class MethodFinderUtils {
     }
 
     // -- SHORTCUTS
+
+    public static Method findMethod_returningCategory(
+            final MethodFinderOptions options,
+            final ReturnTypeCategory returnTypeCategory,
+            final Class<?> type,
+            final String name,
+            final Class<?>[] paramTypes) {
+        return findMethod_returningAnyOf(
+                options, returnTypeCategory.getReturnTypes(), type, name, paramTypes);
+    }
 
     public static Method findMethod_returningBoolean(
             final MethodFinderOptions options,

@@ -43,13 +43,11 @@ import org.apache.isis.core.metamodel.facets.object.icon.method.IconFacetViaIcon
 import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacetViaLayoutMethod;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetInferredFromToStringMethod;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaTitleMethod;
+import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
-import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-
-import static org.apache.isis.core.config.progmodel.ProgrammingModelConstants.TO_STRING;
 
 import lombok.val;
 
@@ -93,29 +91,6 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         processObjectSupport(processClassContext, ObjectSupportMethod.CSS_CLASS, CssClassFacetViaCssClassMethod::create);
     }
 
-    private void processObjectSupport(
-            final ProcessClassContext processClassContext,
-            final ObjectSupportMethod objectSupportMethodEnum,
-            final BiFunction<Method, FacetHolder, Optional<? extends Facet>> ojectSupportFacetConstructor) {
-        val cls = processClassContext.getCls();
-        val facetHolder = processClassContext.getFacetHolder();
-        val requiredReturnTypes = objectSupportMethodEnum.getReturnTypeCategory().getReturnTypes();
-
-        val objectSupportMethods = objectSupportMethodEnum
-                .getMethodNames()
-                .map(callbackMethodName->MethodFinderUtils.findMethod_returningAnyOf(
-                        MethodFinderOptions
-                        .objectSupport(processClassContext.getIntrospectionPolicy()),
-                        requiredReturnTypes,
-                        cls, callbackMethodName, NO_ARG));
-
-        objectSupportMethods
-        .forEach(method->{
-            addFacetIfPresent(ojectSupportFacetConstructor.apply(method, facetHolder));
-            processClassContext.removeMethod(method);
-        });
-    }
-
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
         final FacetedMethod member = processMethodContext.getFacetHolder();
@@ -134,14 +109,42 @@ extends MethodPrefixBasedFacetFactoryAbstract {
     // -- HELPER
 
     private void inferTitleFromToString(final ProcessClassContext processClassContext) {
-        val cls = processClassContext.getCls();
-        val facetHolder = processClassContext.getFacetHolder();
-        val toStringMethod = MethodFinderUtils.findMethod(
-                MethodFinderOptions.publicOnly(),
-                cls, TO_STRING, String.class, NO_ARG);
-        processClassContext.removeMethod(toStringMethod);
-        addFacetIfPresent(TitleFacetInferredFromToStringMethod
-                .create(toStringMethod, facetHolder));
+
+        val toString = ObjectSupportMethod.TO_STRING;
+
+        MethodFinder
+        .findMethod_returningCategory(
+                MethodFinderOptions.publicOnly(toString.getMethodNames()),
+                toString.getReturnTypeCategory(),
+                processClassContext.getCls(),
+                NO_ARG)
+        .peek(processClassContext::removeMethod)
+        .forEach(method->{
+            addFacetIfPresent(TitleFacetInferredFromToStringMethod
+                    .create(method, processClassContext.getFacetHolder()));
+        });
+
+    }
+
+    private void processObjectSupport(
+            final ProcessClassContext processClassContext,
+            final ObjectSupportMethod objectSupportMethodEnum,
+            final BiFunction<Method, FacetHolder, Optional<? extends Facet>> ojectSupportFacetConstructor) {
+
+        MethodFinder
+        .findMethod_returningCategory(
+                MethodFinderOptions
+                .objectSupport(
+                        objectSupportMethodEnum.getMethodNames(),
+                        processClassContext.getIntrospectionPolicy()),
+                objectSupportMethodEnum.getReturnTypeCategory(),
+                processClassContext.getCls(),
+                NO_ARG)
+        .peek(processClassContext::removeMethod)
+        .forEach(method->{
+            addFacetIfPresent(ojectSupportFacetConstructor
+                    .apply(method, processClassContext.getFacetHolder()));
+        });
     }
 
 
