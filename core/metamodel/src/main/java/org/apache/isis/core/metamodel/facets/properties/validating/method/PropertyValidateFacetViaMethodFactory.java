@@ -21,11 +21,9 @@ package org.apache.isis.core.metamodel.facets.properties.validating.method;
 import javax.inject.Inject;
 
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
-import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ReturnTypeCategory;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 
 import lombok.val;
@@ -46,11 +44,8 @@ extends MemberSupportFacetFactoryAbstract  {
         val getterMethod = processMethodContext.getMethod();
         val argType = getterMethod.getReturnType();
 
-        MethodFinder
-        .findMethod_returningAnyOf(
-                methodFinderOptions,
-                ReturnTypeCategory.TRANSLATABLE.getReturnTypes(),
-                new Class[] { argType })
+        methodFinderOptions
+        .streamMethodsMatchingSignature(new Class[] { argType })
         .peek(processMethodContext::removeMethod)
         .forEach(validateMethod->{
             addFacet(

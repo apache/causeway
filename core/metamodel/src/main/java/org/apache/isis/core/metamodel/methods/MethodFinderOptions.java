@@ -194,6 +194,15 @@ public class MethodFinderOptions {
                 methodNameCandidates);
     }
 
+    public MethodFinderOptions withReturnTypeAnyOf(final @NonNull Can<Class<?>> anyOfReturnTypes) {
+        return new MethodFinderOptions(
+                correspondingClass,
+                encapsulationPolicy,
+                mustSatisfy.and(MethodFinder.hasReturnTypeAnyOf(anyOfReturnTypes)),
+                methodNameCandidates);
+    }
+
+
     // -- HELPER
 
     private static MethodFinderOptions havingAnyOrNoAnnotation(
@@ -263,6 +272,8 @@ public class MethodFinderOptions {
         }
         return isMarkerAnnotationPresent;
     }
+
+
 
 
 

@@ -31,7 +31,6 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ReturnTypePattern;
-import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodFinderPAT;
 import org.apache.isis.core.metamodel.methods.MethodFinderPAT.MethodAndPatConstructor;
@@ -163,17 +162,14 @@ public final class ParameterSupport {
         val paramTypes = searchRequest.getParamTypes();
         val methodNames = searchRequest.getSupporingMethodNameCandidates(paramIndex);
         val paramType = paramTypes[paramIndex];
-        val singleArg = new Class<?>[]{paramType};
+        val signature = new Class<?>[]{paramType};
 
-        MethodFinder
-        .findMethod_returningAnyOf(
-                MethodFinderOptions
-                .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy()),
-                searchRequest.getReturnTypePattern().matchingTypes(paramType),
-                singleArg)
+        MethodFinderOptions
+        .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy())
+        .withReturnTypeAnyOf(searchRequest.getReturnTypePattern().matchingTypes(paramType))
+        .streamMethodsMatchingSignature(signature)
         .map(supportingMethod->toSearchResult(paramIndex, paramType, supportingMethod))
         .forEach(onMethodFound);
-
     }
 
     /*
@@ -195,17 +191,15 @@ public final class ParameterSupport {
         int paramsConsideredCount = paramIndex + additionalParamCount;
         while(paramsConsideredCount>=0) {
 
-            val paramTypesToLookFor = concat(paramTypes, paramsConsideredCount, additionalParamType);
+            val signature = concat(paramTypes, paramsConsideredCount, additionalParamType);
 
-            final Method supportingMethod;
-            supportingMethod = MethodFinder
-                    .findMethod_returningAnyOf(
-                            MethodFinderOptions
-                            .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy()),
-                            searchRequest.getReturnTypePattern().matchingTypes(paramType),
-                            paramTypesToLookFor)
-                    .findFirst()
-                    .orElse(null);
+            val supportingMethod =
+            MethodFinderOptions
+            .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy())
+            .withReturnTypeAnyOf(searchRequest.getReturnTypePattern().matchingTypes(paramType))
+            .streamMethodsMatchingSignature(signature)
+            .findFirst()
+            .orElse(null);
 
             if(supportingMethod != null) {
                 onMethodFound.accept(toSearchResult(paramIndex, paramType, supportingMethod));

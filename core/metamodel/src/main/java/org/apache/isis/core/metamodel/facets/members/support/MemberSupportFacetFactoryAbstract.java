@@ -62,6 +62,9 @@ extends MemberAndPropertySupportFacetFactoryAbstract {
             }
         }
 
+        val getterMethod = processMethodContext.getMethod();
+        val elementType = getterMethod.getReturnType(); // in case of an action, is never used
+
         val methodNameCandidates = memberSupportPrefix.getMethodNamePrefixes()
                 .flatMap(processMethodContext::memberSupportCandidates);
 
@@ -69,7 +72,10 @@ extends MemberAndPropertySupportFacetFactoryAbstract {
                 MethodFinderOptions
                 .memberSupport(processMethodContext.getCls(),
                         methodNameCandidates,
-                        processMethodContext.getIntrospectionPolicy()));
+                        processMethodContext.getIntrospectionPolicy())
+                .withReturnTypeAnyOf(memberSupportPrefix
+                        .getSupportMethodReturnType().matchingTypes(elementType))
+                );
     }
 
     protected abstract void search(

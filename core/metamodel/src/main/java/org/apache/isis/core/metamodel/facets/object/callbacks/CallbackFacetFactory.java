@@ -29,7 +29,6 @@ import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.CallbackM
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
@@ -65,14 +64,15 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         val cls = processClassContext.getCls();
         val facetHolder = processClassContext.getFacetHolder();
 
-        val callbackMethods = MethodFinder
-        .findMethod(
-                MethodFinderOptions
-                .livecycleCallback(
-                        cls,
-                        callbackMethodEnum.getMethodNames(),
-                        processClassContext.getIntrospectionPolicy()),
-                void.class, NO_ARG)
+        val callbackMethods =
+
+        MethodFinderOptions
+        .livecycleCallback(
+                cls,
+                callbackMethodEnum.getMethodNames(),
+                processClassContext.getIntrospectionPolicy())
+        .withRequiredReturnType(void.class)
+        .streamMethodsMatchingSignature(NO_ARG)
         .peek(processClassContext::removeMethod)
         .collect(Can.toCan());
 

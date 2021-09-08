@@ -30,7 +30,6 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ReturnTypePattern;
-import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodFinderPAT;
 import org.apache.isis.core.metamodel.methods.MethodFinderPAT.MethodAndPatConstructor;
@@ -51,6 +50,8 @@ public final class ActionSupport {
         @NonNull FacetFactory.ProcessMethodContext processMethodContext;
         @Getter @NonNull MethodFinderOptions finderOptions;
         @NonNull EnumSet<SearchAlgorithm> searchAlgorithms;
+
+        @Deprecated
         @NonNull ReturnTypePattern returnTypePattern;
 
         Class<?> additionalParamType;
@@ -141,14 +142,12 @@ public final class ActionSupport {
         final int paramsConsideredCount = paramTypes.length + additionalParamCount;
         if(paramsConsideredCount>=0) {
 
-            val paramTypesToLookFor = concat(paramTypes, paramsConsideredCount, additionalParamType);
+            val signature = concat(paramTypes, paramsConsideredCount, additionalParamType);
             val anyOfReturnTypes = searchRequest.getReturnTypePattern().matchingTypes(void.class); // ignores actual type
 
-            MethodFinder
-            .findMethod_returningAnyOf(
-                    finderOptions,
-                    anyOfReturnTypes,
-                    paramTypesToLookFor)
+            finderOptions
+            .withReturnTypeAnyOf(anyOfReturnTypes)
+            .streamMethodsMatchingSignature(signature)
             .map(ActionSupport::toSearchResult)
             .forEach(onMethodFound);
 

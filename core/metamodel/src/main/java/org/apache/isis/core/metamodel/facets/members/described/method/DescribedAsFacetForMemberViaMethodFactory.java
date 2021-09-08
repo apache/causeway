@@ -21,11 +21,9 @@ package org.apache.isis.core.metamodel.facets.members.described.method;
 import javax.inject.Inject;
 
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
-import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ReturnTypeCategory;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 
 public class DescribedAsFacetForMemberViaMethodFactory
@@ -41,11 +39,8 @@ extends MemberSupportFacetFactoryAbstract {
             final ProcessMethodContext processMethodContext,
             final MethodFinderOptions methodFinderOptions) {
 
-        MethodFinder
-        .findMethod_returningAnyOf(
-                methodFinderOptions,
-                ReturnTypeCategory.TRANSLATABLE.getReturnTypes(),
-                NO_ARG)
+        methodFinderOptions
+        .streamMethodsMatchingSignature(NO_ARG)
         .peek(processMethodContext::removeMethod)
         .forEach(describedMethod->{
             addFacet(

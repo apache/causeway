@@ -23,7 +23,7 @@ import java.lang.reflect.Method;
 import javax.inject.Inject;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.AccessorPrefix;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ReturnTypeCategory;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -32,7 +32,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod;
 import org.apache.isis.core.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacetViaSetterMethod;
-import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
@@ -46,11 +45,9 @@ import lombok.val;
 public class PropertySetterFacetFactory
 extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final Can<String> PREFIXES = Can.empty();
-
     @Inject
     public PropertySetterFacetFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.PROPERTIES_ONLY, OrphanValidation.VALIDATE, PREFIXES);
+        super(mmc, FeatureType.PROPERTIES_ONLY, OrphanValidation.VALIDATE, Can.empty());
     }
 
     @Override
@@ -59,16 +56,15 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         final Method getterMethod = processMethodContext.getMethod();
         final String capitalizedName = StringExtensions.asJavaBaseName(getterMethod.getName());
         val methodNameCandidates = Can.ofSingleton(
-                ProgrammingModelConstants.AccessorPrefix.SET.prefix(capitalizedName));
+                AccessorPrefix.SET.prefix(capitalizedName));
 
-        final Class<?>[] paramTypes = new Class[] { getterMethod.getReturnType() };
+        final Class<?>[] signature = new Class[] { getterMethod.getReturnType() };
 
-        val setterMethods = MethodFinder
-        .findMethod_returningAnyOf(
-                MethodFinderOptions
-                .accessor(processMethodContext.getCls(), methodNameCandidates, processMethodContext.getIntrospectionPolicy()),
-                ReturnTypeCategory.VOID.getReturnTypes(),
-                paramTypes)
+        val setterMethods =
+        MethodFinderOptions
+        .accessor(processMethodContext.getCls(), methodNameCandidates, processMethodContext.getIntrospectionPolicy())
+        .withReturnTypeAnyOf(ReturnTypeCategory.VOID.getReturnTypes())
+        .streamMethodsMatchingSignature(signature)
         .peek(processMethodContext::removeMethod)
         .collect(Can.toCan());
 

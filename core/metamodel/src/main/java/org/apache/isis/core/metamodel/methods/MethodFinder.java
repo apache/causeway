@@ -41,22 +41,21 @@ public final class MethodFinder {
 
     public static Stream<Method> findMethod(
             final MethodFinderOptions options,
-            final Class<?> expectedReturnType,
             final Class<?>[] signature) {
-        return options.streamMethodsMatchingSignature(signature)
-                .filter(hasReturnType(expectedReturnType));
+        return options.streamMethodsMatchingSignature(signature);
     }
 
     // -- SEARCH FOR MULTIPLE NAME CANDIDATES
 
-
+    @Deprecated
     public static Stream<Method> findMethod_returningAnyOf(
             final MethodFinderOptions options,
             final Can<Class<?>> anyOfReturnTypes,
             final Class<?>[] signature) {
 
-        return options.streamMethodsMatchingSignature(signature)
-                .filter(hasReturnTypeAnyOf(anyOfReturnTypes));
+        return options
+                .withReturnTypeAnyOf(anyOfReturnTypes)
+                .streamMethodsMatchingSignature(signature);
     }
 
 }

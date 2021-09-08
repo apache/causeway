@@ -43,7 +43,6 @@ import org.apache.isis.core.metamodel.facets.object.icon.method.IconFacetViaIcon
 import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacetViaLayoutMethod;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetInferredFromToStringMethod;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaTitleMethod;
-import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -112,13 +111,12 @@ extends MethodPrefixBasedFacetFactoryAbstract {
 
         val toString = ObjectSupportMethod.TO_STRING;
 
-        MethodFinder
-        .findMethod_returningAnyOf(
-                MethodFinderOptions.publicOnly(
-                        processClassContext.getCls(),
-                        toString.getMethodNames()),
-                toString.getReturnTypeCategory().getReturnTypes(),
-                NO_ARG)
+        MethodFinderOptions
+        .publicOnly(
+                processClassContext.getCls(),
+                toString.getMethodNames())
+        .withReturnTypeAnyOf(toString.getReturnTypeCategory().getReturnTypes())
+        .streamMethodsMatchingSignature(NO_ARG)
         .peek(processClassContext::removeMethod)
         .forEach(method->{
             addFacetIfPresent(TitleFacetInferredFromToStringMethod
@@ -132,15 +130,14 @@ extends MethodPrefixBasedFacetFactoryAbstract {
             final ObjectSupportMethod objectSupportMethodEnum,
             final BiFunction<Method, FacetHolder, Optional<? extends Facet>> ojectSupportFacetConstructor) {
 
-        MethodFinder
-        .findMethod_returningAnyOf(
-                MethodFinderOptions
-                .objectSupport(
-                        processClassContext.getCls(),
-                        objectSupportMethodEnum.getMethodNames(),
-                        processClassContext.getIntrospectionPolicy()),
-                objectSupportMethodEnum.getReturnTypeCategory().getReturnTypes(),
-                NO_ARG)
+
+        MethodFinderOptions
+        .objectSupport(
+                processClassContext.getCls(),
+                objectSupportMethodEnum.getMethodNames(),
+                processClassContext.getIntrospectionPolicy())
+        .withReturnTypeAnyOf(objectSupportMethodEnum.getReturnTypeCategory().getReturnTypes())
+        .streamMethodsMatchingSignature(NO_ARG)
         .peek(processClassContext::removeMethod)
         .forEach(method->{
             addFacetIfPresent(ojectSupportFacetConstructor

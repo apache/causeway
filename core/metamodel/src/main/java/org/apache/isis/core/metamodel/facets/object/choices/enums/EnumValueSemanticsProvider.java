@@ -31,7 +31,6 @@ import org.apache.isis.core.metamodel.commons.MethodExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 
 import lombok.val;
@@ -81,15 +80,15 @@ implements EnumFacet {
 
         val supportMethodEnum = ObjectSupportMethod.TITLE;
 
-        titleMethod = MethodFinder
-        .findMethod_returningAnyOf(
-                MethodFinderOptions
-                .objectSupport(
-                        getAdaptedClass(),
-                        supportMethodEnum.getMethodNames(),
-                        introspectionPolicy),
-                supportMethodEnum.getReturnTypeCategory().getReturnTypes(),
-                null)
+        titleMethod =
+
+        MethodFinderOptions
+        .objectSupport(
+                getAdaptedClass(),
+                supportMethodEnum.getMethodNames(),
+                introspectionPolicy)
+        .withReturnTypeAnyOf(supportMethodEnum.getReturnTypeCategory().getReturnTypes())
+        .streamMethodsMatchingSignature(MethodFinderOptions.NO_ARG)
         .findFirst()
         .orElse(null);
 
