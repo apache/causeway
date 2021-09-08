@@ -178,11 +178,11 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
 
     private Object defaultFor(final ObjectActionParameter param) {
 
-        val emptyPpm = param.getAction()
+        val emptyParamTuple = param.getAction()
                 .interactionHead(objectAdapter)
                 .emptyModel();
 
-        val defaultAdapter = param.getDefault(emptyPpm);
+        val defaultAdapter = param.getDefault(emptyParamTuple);
         if (ManagedObjects.isNullOrUnspecifiedOrEmpty(defaultAdapter)) {
             return null;
         }

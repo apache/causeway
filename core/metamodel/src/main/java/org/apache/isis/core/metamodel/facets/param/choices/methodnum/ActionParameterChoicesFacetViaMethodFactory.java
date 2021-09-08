@@ -42,10 +42,10 @@ extends ActionParameterSupportFacetFactoryAbstract {
             final ParamSupportingMethodSearchResult searchResult) {
         val choicesMethod = searchResult.getSupportingMethod();
         val returnType = searchResult.getReturnType();
-        val ppmFactory = searchResult.getPpmFactory();
+        val patConstructor = searchResult.getPatConstructor();
         addFacet(
                 new ActionParameterChoicesFacetViaMethod(
-                        choicesMethod, returnType, ppmFactory, paramAsHolder));
+                        choicesMethod, returnType, patConstructor, paramAsHolder));
     }
 
 

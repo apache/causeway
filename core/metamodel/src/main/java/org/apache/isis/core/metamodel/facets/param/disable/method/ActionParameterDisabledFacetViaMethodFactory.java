@@ -45,10 +45,10 @@ extends ActionParameterSupportFacetFactoryAbstract  {
             final FacetedMethodParameter paramAsHolder,
             final ParamSupportingMethodSearchResult searchResult) {
         val disableMethod = searchResult.getSupportingMethod();
-        val ppmFactory = searchResult.getPpmFactory();
+        val patConstructor = searchResult.getPatConstructor();
         addFacet(
                 new ActionParameterDisabledFacetViaMethod(
-                        disableMethod, ppmFactory, paramAsHolder));
+                        disableMethod, patConstructor, paramAsHolder));
     }
 
 }

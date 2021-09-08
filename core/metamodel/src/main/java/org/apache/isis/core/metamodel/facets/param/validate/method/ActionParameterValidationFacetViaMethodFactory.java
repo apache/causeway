@@ -41,7 +41,7 @@ extends ActionParameterSupportFacetFactoryAbstract  {
     public ActionParameterValidationFacetViaMethodFactory(final MetaModelContext mmc) {
         super(mmc, MemberSupportPrefix.VALIDATE, searchOptions->
             searchOptions
-            .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.SINGLEARG_BEING_PARAMTYPE)));
+            .searchAlgorithms(EnumSet.of(SearchAlgorithm.PAT, SearchAlgorithm.SINGLEARG_BEING_PARAMTYPE)));
     }
 
     @Override
@@ -49,10 +49,10 @@ extends ActionParameterSupportFacetFactoryAbstract  {
             final FacetedMethodParameter paramAsHolder,
             final ParamSupportingMethodSearchResult searchResult) {
         val validateMethod = searchResult.getSupportingMethod();
-        val ppmFactory = searchResult.getPpmFactory();
+        val patConstructor = searchResult.getPatConstructor();
         addFacet(
                 new ActionParameterValidationFacetViaMethod(
-                        validateMethod, ppmFactory, paramAsHolder));
+                        validateMethod, patConstructor, paramAsHolder));
     }
 
 

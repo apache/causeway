@@ -758,7 +758,7 @@ public final class ManagedObjects {
     @UtilityClass
     public static final class InvokeUtil {
 
-        public static Object invokeWithPPM(
+        public static Object invokeWithPAT(
                 final Constructor<?> ppmConstructor,
                 final Method method,
                 final ManagedObject adapter,
@@ -770,12 +770,12 @@ public final class ManagedObjects {
             return MethodExtensions.invoke(method, UnwrapUtil.single(adapter), paramPojos);
         }
 
-        public static Object invokeWithPPM(
+        public static Object invokeWithPAT(
                 final Constructor<?> ppmConstructor,
                 final Method method,
                 final ManagedObject adapter,
                 final Can<ManagedObject> argumentAdapters) {
-            return invokeWithPPM(ppmConstructor, method, adapter, argumentAdapters, Collections.emptyList());
+            return invokeWithPAT(ppmConstructor, method, adapter, argumentAdapters, Collections.emptyList());
         }
 
         public static void invokeAll(final Iterable<Method> methods, final ManagedObject adapter) {

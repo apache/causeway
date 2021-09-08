@@ -32,8 +32,8 @@ import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ReturnType;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
-import org.apache.isis.core.metamodel.methods.MethodFinderPPM;
-import org.apache.isis.core.metamodel.methods.MethodFinderPPM.MethodAndPpmConstructor;
+import org.apache.isis.core.metamodel.methods.MethodFinderPAT;
+import org.apache.isis.core.metamodel.methods.MethodFinderPAT.MethodAndPatConstructor;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -73,7 +73,7 @@ public final class ActionSupport {
     @RequiredArgsConstructor
     public static enum SearchAlgorithm
     implements SearchFunction {
-        PPM(ActionSupport::findActionSupportingMethodWithPPMArg),
+        PAT(ActionSupport::findActionSupportingMethodWithPATArg),
         ALL_PARAM_TYPES(ActionSupport::findActionSupportingMethodWithAllParamTypes),
         ;
         private final SearchFunction searchFunction;
@@ -89,7 +89,7 @@ public final class ActionSupport {
     public static class ActionSupportingMethodSearchResult {
         Method supportingMethod;
         Class<?> returnType;
-        Optional<Constructor<?>> ppmFactory;
+        Optional<Constructor<?>> patConstructor;
     }
 
     public static void findActionSupportingMethods(
@@ -104,7 +104,7 @@ public final class ActionSupport {
 
     // -- SEARCH ALGORITHMS
 
-    private final static void findActionSupportingMethodWithPPMArg(
+    private final static void findActionSupportingMethodWithPATArg(
             final ActionSupportingMethodSearchRequest searchRequest,
             final Consumer<ActionSupportingMethodSearchResult> onMethodFound) {
 
@@ -117,8 +117,8 @@ public final class ActionSupport {
 
         switch(searchRequest.getReturnType()) {
         case BOOLEAN:
-            MethodFinderPPM
-                .findMethodWithPPMArg_returningBoolean(
+            MethodFinderPAT
+                .findMethodWithPATArg_returningBoolean(
                         MethodFinderOptions
                         .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy()),
                         paramTypes, additionalParamTypes)
@@ -126,8 +126,8 @@ public final class ActionSupport {
                 .forEach(onMethodFound);
             break;
         case TEXT:
-            MethodFinderPPM
-                .findMethodWithPPMArg_returningText(
+            MethodFinderPAT
+                .findMethodWithPATArg_returningText(
                         MethodFinderOptions
                         .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy()),
                         paramTypes, additionalParamTypes)
@@ -141,12 +141,12 @@ public final class ActionSupport {
     }
 
     private static ActionSupportingMethodSearchResult toSearchResult(
-            final MethodAndPpmConstructor supportingMethodAndPpmConstructor) {
+            final MethodAndPatConstructor supportingMethodAndPatConstructor) {
         return ActionSupportingMethodSearchResult
                 .of(
-                        supportingMethodAndPpmConstructor.getSupportingMethod(),
-                        supportingMethodAndPpmConstructor.getSupportingMethod().getReturnType(),
-                        Optional.of(supportingMethodAndPpmConstructor.getPpmFactory()));
+                        supportingMethodAndPatConstructor.getSupportingMethod(),
+                        supportingMethodAndPatConstructor.getSupportingMethod().getReturnType(),
+                        Optional.of(supportingMethodAndPatConstructor.getPatConstructor()));
     }
 
     private final static void findActionSupportingMethodWithAllParamTypes(

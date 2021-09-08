@@ -42,18 +42,18 @@ implements ImperativeFacet {
 
     @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
     private final TranslationContext translationContext;
-    private final Optional<Constructor<?>> ppmFactory;
+    private final Optional<Constructor<?>> patConstructor;
 
     public ActionValidationFacetViaMethod(
             final Method method,
-            final Optional<Constructor<?>> ppmFactory,
+            final Optional<Constructor<?>> patConstructor,
             final FacetHolder holder) {
 
         super(holder);
         this.methods = ImperativeFacet.singleMethod(method);
         this.translationContext =
                 TranslationContext.forTranslationContextHolder(holder.getFeatureIdentifier());
-        this.ppmFactory = ppmFactory;
+        this.patConstructor = patConstructor;
     }
 
     @Override
@@ -65,8 +65,8 @@ implements ImperativeFacet {
     public String invalidReason(final ManagedObject owningAdapter, final Can<ManagedObject> proposedArgumentAdapters) {
 
         val method = methods.getFirstOrFail();
-        final Object returnValue = ppmFactory.isPresent()
-                ? ManagedObjects.InvokeUtil.invokeWithPPM(ppmFactory.get(), method, owningAdapter, proposedArgumentAdapters)
+        final Object returnValue = patConstructor.isPresent()
+                ? ManagedObjects.InvokeUtil.invokeWithPAT(patConstructor.get(), method, owningAdapter, proposedArgumentAdapters)
                 : ManagedObjects.InvokeUtil.invoke(method, owningAdapter, proposedArgumentAdapters);
 
         if(returnValue instanceof String) {

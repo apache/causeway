@@ -26,7 +26,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ReturnTypeCategory;
 
 /**
- * An extension to {@link MethodFinderPPM} in support of multiple simultaneous naming conventions.
+ * An extension to {@link MethodFinderPAT} in support of multiple simultaneous naming conventions.
  * @apiNote each method name candidate is processed in sequence as given by {@code Can<String> names}
  */
 //@Log4j2

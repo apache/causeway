@@ -54,16 +54,16 @@ extends MemberSupportFacetFactoryAbstract {
                 .processMethodContext(processMethodContext)
                 .returnType(ReturnType.TEXT)
                 .methodNames(methodNameCandidates)
-                .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.ALL_PARAM_TYPES))
+                .searchAlgorithms(EnumSet.of(SearchAlgorithm.PAT, SearchAlgorithm.ALL_PARAM_TYPES))
                 .build();
 
         ActionSupport.findActionSupportingMethods(searchRequest, searchResult -> {
             val validateMethod = searchResult.getSupportingMethod();
             processMethodContext.removeMethod(validateMethod);
-            val ppmFactory = searchResult.getPpmFactory();
+            val patConstructor = searchResult.getPatConstructor();
             addFacet(
                     new ActionValidationFacetViaMethod(
-                            validateMethod, ppmFactory, processMethodContext.getFacetHolder()));
+                            validateMethod, patConstructor, processMethodContext.getFacetHolder()));
         });
 
     }

@@ -46,10 +46,10 @@ extends ActionParameterSupportFacetFactoryAbstract {
             final ParamSupportingMethodSearchResult searchResult) {
         val defaultMethod = searchResult.getSupportingMethod();
         val paramIndex = searchResult.getParamIndex();
-        val ppmFactory = searchResult.getPpmFactory();
+        val patConstructor = searchResult.getPatConstructor();
         addFacet(
                 new ActionParameterDefaultsFacetViaMethod(
-                        defaultMethod, paramIndex, ppmFactory, paramAsHolder));
+                        defaultMethod, paramIndex, patConstructor, paramAsHolder));
     }
 
 }

@@ -33,8 +33,8 @@ import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ReturnType;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
-import org.apache.isis.core.metamodel.methods.MethodFinderPPM;
-import org.apache.isis.core.metamodel.methods.MethodFinderPPM.MethodAndPpmConstructor;
+import org.apache.isis.core.metamodel.methods.MethodFinderPAT;
+import org.apache.isis.core.metamodel.methods.MethodFinderPAT.MethodAndPatConstructor;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -75,7 +75,7 @@ public final class ParameterSupport {
         Class<?> paramType;
         Method supportingMethod;
         Class<?> returnType;
-        Optional<Constructor<?>> ppmFactory;
+        Optional<Constructor<?>> patConstructor;
     }
 
     @FunctionalInterface
@@ -89,7 +89,7 @@ public final class ParameterSupport {
     @RequiredArgsConstructor
     public static enum SearchAlgorithm
     implements SearchFunction {
-        PPM(ParameterSupport::findParamSupportingMethodWithPPMArg),
+        PAT(ParameterSupport::findParamSupportingMethodWithPATArg),
         SWEEP(ParameterSupport::findParamSupportingMethod),
         SINGLEARG_BEING_PARAMTYPE(ParameterSupport::singleArgBeingParamType)
         ;
@@ -119,7 +119,7 @@ public final class ParameterSupport {
 
     }
 
-    private static void findParamSupportingMethodWithPPMArg(
+    private static void findParamSupportingMethodWithPATArg(
             final ParamSupportingMethodSearchRequest searchRequest,
             final int paramIndex,
             final Consumer<ParamSupportingMethodSearchResult> onMethodFound) {
@@ -134,39 +134,39 @@ public final class ParameterSupport {
 
         switch(searchRequest.getReturnType()) {
         case BOOLEAN:
-            MethodFinderPPM
-                .findMethodWithPPMArg_returningBoolean(
+            MethodFinderPAT
+                .findMethodWithPATArg_returningBoolean(
                         MethodFinderOptions
                         .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy()),
                         paramTypes, additionalParamTypes)
-                .map(methodAndPpmConstructor->toSearchResult(paramIndex, paramType, methodAndPpmConstructor))
+                .map(methodAndPatConstructor->toSearchResult(paramIndex, paramType, methodAndPatConstructor))
                 .forEach(onMethodFound);
             break;
         case TEXT:
-            MethodFinderPPM
-                .findMethodWithPPMArg_returningText(
+            MethodFinderPAT
+                .findMethodWithPATArg_returningText(
                         MethodFinderOptions
                         .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy()),
                         paramTypes, additionalParamTypes)
-                .map(methodAndPpmConstructor->toSearchResult(paramIndex, paramType, methodAndPpmConstructor))
+                .map(methodAndPatConstructor->toSearchResult(paramIndex, paramType, methodAndPatConstructor))
                 .forEach(onMethodFound);
             break;
         case NON_SCALAR:
-            MethodFinderPPM
-                .findMethodWithPPMArg_returningNonScalar(
+            MethodFinderPAT
+                .findMethodWithPATArg_returningNonScalar(
                         MethodFinderOptions
                         .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy()),
                         paramType, paramTypes, additionalParamTypes)
-                .map(methodAndPpmConstructor->toSearchResult(paramIndex, paramType, methodAndPpmConstructor))
+                .map(methodAndPatConstructor->toSearchResult(paramIndex, paramType, methodAndPatConstructor))
                 .forEach(onMethodFound);
             break;
         case SAME_AS_PARAMETER_TYPE:
-            MethodFinderPPM
-                .findMethodWithPPMArg(
+            MethodFinderPAT
+                .findMethodWithPATArg(
                         MethodFinderOptions
                         .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy()),
                         paramType, paramTypes, additionalParamTypes)
-                .map(methodAndPpmConstructor->toSearchResult(paramIndex, paramType, methodAndPpmConstructor))
+                .map(methodAndPatConstructor->toSearchResult(paramIndex, paramType, methodAndPatConstructor))
                 .forEach(onMethodFound);
             break;
         default:
@@ -178,12 +178,12 @@ public final class ParameterSupport {
     private static ParamSupportingMethodSearchResult toSearchResult(
             final int paramIndex,
             final Class<?> paramType,
-            final MethodAndPpmConstructor supportingMethodAndPpmConstructor) {
+            final MethodAndPatConstructor supportingMethodAndPatConstructor) {
         return ParamSupportingMethodSearchResult
                 .of(paramIndex, paramType,
-                        supportingMethodAndPpmConstructor.getSupportingMethod(),
-                        supportingMethodAndPpmConstructor.getSupportingMethod().getReturnType(),
-                        Optional.of(supportingMethodAndPpmConstructor.getPpmFactory()));
+                        supportingMethodAndPatConstructor.getSupportingMethod(),
+                        supportingMethodAndPatConstructor.getSupportingMethod().getReturnType(),
+                        Optional.of(supportingMethodAndPatConstructor.getPatConstructor()));
     }
 
     private static void singleArgBeingParamType(

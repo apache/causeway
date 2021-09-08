@@ -44,10 +44,10 @@ extends ActionParameterSupportFacetFactoryAbstract {
             final ParamSupportingMethodSearchResult searchResult) {
         val autoCompleteMethod = searchResult.getSupportingMethod();
         val paramType = searchResult.getParamType();
-        val ppmFactory = searchResult.getPpmFactory();
+        val patConstructor = searchResult.getPatConstructor();
         addFacet(
                 new ActionParameterAutoCompleteFacetViaMethod(
-                        autoCompleteMethod, paramType, ppmFactory, paramAsHolder));
+                        autoCompleteMethod, paramType, patConstructor, paramAsHolder));
     }
 
 }

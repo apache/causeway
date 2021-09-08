@@ -33,22 +33,25 @@ import static org.apache.isis.commons.internal.reflection._Reflect.Filter.paramS
 import lombok.NonNull;
 import lombok.Value;
 
-public final class MethodFinderPPM {
+/**
+ * In support of <i>Parameters as a Tuple</i> (PAT).
+ */
+public final class MethodFinderPAT {
 
-    private MethodFinderPPM() {
+    private MethodFinderPAT() {
     }
 
-    // -- PPM SUPPORT
+    // -- PAT SUPPORT
 
     @Value(staticConstructor = "of")
-    public static class MethodAndPpmConstructor {
+    public static class MethodAndPatConstructor {
         @NonNull Method supportingMethod;
-        @NonNull Constructor<?> ppmFactory;
+        @NonNull Constructor<?> patConstructor;
     }
 
-    // -- SEARCH FOR MULTIPLE NAME CANDIDATES (PPM)
+    // -- SEARCH FOR MULTIPLE NAME CANDIDATES (PAT)
 
-    public static Stream<MethodAndPpmConstructor> findMethodWithPPMArg(
+    public static Stream<MethodAndPatConstructor> findMethodWithPATArg(
             final MethodFinderOptions options,
             final Class<?> returnType,
             final Class<?>[] paramTypes,
@@ -59,64 +62,64 @@ public final class MethodFinderPPM {
                 || returnType.isAssignableFrom(method.getReturnType()))
             .filter(MethodUtil.Predicates.paramCount(additionalParamTypes.size()+1))
             .filter(MethodUtil.Predicates.matchParamTypes(1, additionalParamTypes))
-            .map(method->MethodAndPpmCandidate.of(method, method.getParameterTypes()[0]))
+            .map(method->MethodAndPatCandidate.of(method, method.getParameterTypes()[0]))
             .map(ppmCandidate->ppmCandidate.lookupConstructor(paramTypes))
             .flatMap(Optional::stream);
     }
 
-    public static Stream<MethodAndPpmConstructor> findMethodWithPPMArg_returningBoolean(
+    public static Stream<MethodAndPatConstructor> findMethodWithPATArg_returningBoolean(
             final MethodFinderOptions options,
             final Class<?>[] paramTypes,
             final Can<Class<?>> additionalParamTypes) {
 
-        return MethodFinderPPM
-        .findMethodWithPPMArg_returningAnyOf(
+        return MethodFinderPAT
+        .findMethodWithPATArg_returningAnyOf(
                 options, ReturnTypeCategory.BOOLEAN.getReturnTypes(), paramTypes, additionalParamTypes);
     }
 
-    public static Stream<MethodAndPpmConstructor> findMethodWithPPMArg_returningText(
+    public static Stream<MethodAndPatConstructor> findMethodWithPATArg_returningText(
             final MethodFinderOptions options,
             final Class<?>[] paramTypes,
             final Can<Class<?>> additionalParamTypes) {
 
-        return MethodFinderPPM
-        .findMethodWithPPMArg_returningAnyOf(
+        return MethodFinderPAT
+        .findMethodWithPATArg_returningAnyOf(
                 options, ReturnTypeCategory.TRANSLATABLE.getReturnTypes(), paramTypes, additionalParamTypes);
     }
 
-    public static Stream<MethodAndPpmConstructor> findMethodWithPPMArg_returningNonScalar(
+    public static Stream<MethodAndPatConstructor> findMethodWithPATArg_returningNonScalar(
             final MethodFinderOptions options,
             final Class<?> elementReturnType,
             final Class<?>[] paramTypes,
             final Can<Class<?>> additionalParamTypes) {
 
-        return MethodFinderPPM
-        .findMethodWithPPMArg_returningAnyOf(
+        return MethodFinderPAT
+        .findMethodWithPATArg_returningAnyOf(
                 options, ReturnTypeCategory.nonScalar(elementReturnType), paramTypes, additionalParamTypes);
     }
 
     // -- HELPER
 
     @Value(staticConstructor = "of")
-    private static class MethodAndPpmCandidate {
+    private static class MethodAndPatCandidate {
         @NonNull Method supportingMethod;
-        @NonNull Class<?> ppmCandidate;
-        Optional<MethodAndPpmConstructor> lookupConstructor(final Class<?>[] paramTypes) {
-            return _Reflect.getPublicConstructors(getPpmCandidate()).stream()
+        @NonNull Class<?> patCandidate;
+        Optional<MethodAndPatConstructor> lookupConstructor(final Class<?>[] paramTypes) {
+            return _Reflect.getPublicConstructors(getPatCandidate()).stream()
             .filter(paramSignatureMatch(paramTypes))
-            .map(constructor->MethodAndPpmConstructor.of(supportingMethod, constructor))
+            .map(constructor->MethodAndPatConstructor.of(supportingMethod, constructor))
             .findFirst();
         }
     }
 
-    static Stream<MethodAndPpmConstructor> findMethodWithPPMArg_returningAnyOf(
+    static Stream<MethodAndPatConstructor> findMethodWithPATArg_returningAnyOf(
             final MethodFinderOptions options,
             final Can<Class<?>> returnTypes,
             final Class<?>[] paramTypes,
             final Can<Class<?>> additionalParamTypes) {
 
         return returnTypes.stream()
-        .flatMap(returnType->findMethodWithPPMArg(options, returnType, paramTypes, additionalParamTypes));
+        .flatMap(returnType->findMethodWithPATArg(options, returnType, paramTypes, additionalParamTypes));
     }
 
 }

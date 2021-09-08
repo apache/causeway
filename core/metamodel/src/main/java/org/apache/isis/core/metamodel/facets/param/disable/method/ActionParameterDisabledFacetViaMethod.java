@@ -42,18 +42,18 @@ implements ImperativeFacet {
 
     @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
     private final TranslationContext translationContext;
-    private final Optional<Constructor<?>> ppmFactory;
+    private final Optional<Constructor<?>> patConstructor;
 
     public ActionParameterDisabledFacetViaMethod(
             final Method method,
-            final Optional<Constructor<?>> ppmFactory,
+            final Optional<Constructor<?>> patConstructor,
             final FacetHolder holder) {
 
         super(holder);
         this.methods = ImperativeFacet.singleMethod(method);
         this.translationContext =
                 TranslationContext.forTranslationContextHolder(holder.getFeatureIdentifier());
-        this.ppmFactory = ppmFactory;
+        this.patConstructor = patConstructor;
     }
 
     @Override
@@ -67,8 +67,8 @@ implements ImperativeFacet {
             final Can<ManagedObject> pendingArgs) {
 
         val method = methods.getFirstOrFail();
-        final Object returnValue = ppmFactory.isPresent()
-                ? ManagedObjects.InvokeUtil.invokeWithPPM(ppmFactory.get(), method, owningAdapter, pendingArgs)
+        final Object returnValue = patConstructor.isPresent()
+                ? ManagedObjects.InvokeUtil.invokeWithPAT(patConstructor.get(), method, owningAdapter, pendingArgs)
                 : ManagedObjects.InvokeUtil.invokeAutofit(method, owningAdapter, pendingArgs);
 
         if(returnValue instanceof String) {
