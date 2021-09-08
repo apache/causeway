@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.properties.choices.method;
 import javax.inject.Inject;
 
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ReturnTypeCategory;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
@@ -43,18 +44,18 @@ extends MemberSupportFacetFactoryAbstract {
             final MethodFinderOptions methodFinderOptions) {
 
         val getterOrMixinMain = processMethodContext.getMethod();
-        val returnType = getterOrMixinMain.getReturnType();
+        val getterType = getterOrMixinMain.getReturnType();
 
         MethodFinder
-        .findMethod_returningNonScalar(
+        .findMethod_returningAnyOf(
                 methodFinderOptions,
-            returnType,
-            NO_ARG)
+                ReturnTypeCategory.nonScalar(getterType),
+                NO_ARG)
         .peek(processMethodContext::removeMethod)
         .forEach(choicesMethod->{
             addFacet(
                     new PropertyChoicesFacetViaMethod(
-                            choicesMethod, returnType, processMethodContext.getFacetHolder()));
+                            choicesMethod, getterType, processMethodContext.getFacetHolder()));
         });
 
     }

@@ -24,6 +24,7 @@ import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
+import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -141,24 +142,29 @@ public final class ProgrammingModelConstants {
         }
         private final Can<Class<?>> returnTypes;
 
-        public static Can<Class<?>> nonScalar(final @NonNull Class<?> elementReturnType) {
-            if(VOID.returnTypes.contains(elementReturnType)) {
+        public static Can<Class<?>> nonScalar(final @NonNull Class<?> elementType) {
+            if(VOID.returnTypes.contains(elementType)) {
                 return Can.empty();
             }
             return Can.<Class<?>>of(
                 Can.class,
                 Collection.class,
-                Array.newInstance(elementReturnType, 0).getClass());
+                Array.newInstance(elementType, 0).getClass());
         }
     }
 
     // -- PARAMETER SUPPORT
 
-    public static enum ReturnType {
-        NON_SCALAR,
-        TEXT,
-        BOOLEAN,
-        SAME_AS_PARAMETER_TYPE,
+    @RequiredArgsConstructor
+    public static enum ReturnTypePattern {
+        SCALAR(Can::ofSingleton),
+        NON_SCALAR(ReturnTypeCategory::nonScalar),
+        TEXT(__->ReturnTypeCategory.TRANSLATABLE.getReturnTypes()),
+        BOOLEAN(__->ReturnTypeCategory.BOOLEAN.getReturnTypes());
+        final Function<Class<?>, Can<Class<?>>> matchingTypesForElementType;
+        public Can<Class<?>> matchingTypes(final @NonNull Class<?> elementType) {
+            return matchingTypesForElementType.apply(elementType);
+        }
     }
 
     // -- OBJECT SUPPORT
@@ -193,21 +199,21 @@ public final class ProgrammingModelConstants {
 
     @Getter
     public static enum MemberSupportPrefix {
-        DEFAULT(ReturnType.SAME_AS_PARAMETER_TYPE, "default"),
-        CHOICES(ReturnType.NON_SCALAR, "choices"),
-        AUTO_COMPLETE(ReturnType.NON_SCALAR, "autoComplete"),
-        HIDE(ReturnType.BOOLEAN, "hide"),
-        DISABLE(ReturnType.TEXT, "disable"),
-        VALIDATE(ReturnType.TEXT, "validate"),
-        NAMED(ReturnType.TEXT, "named"), // imperative naming
-        DESCRIBED(ReturnType.TEXT, "described"); // imperative naming
+        DEFAULT(ReturnTypePattern.SCALAR, "default"),
+        CHOICES(ReturnTypePattern.NON_SCALAR, "choices"),
+        AUTO_COMPLETE(ReturnTypePattern.NON_SCALAR, "autoComplete"),
+        HIDE(ReturnTypePattern.BOOLEAN, "hide"),
+        DISABLE(ReturnTypePattern.TEXT, "disable"),
+        VALIDATE(ReturnTypePattern.TEXT, "validate"),
+        NAMED(ReturnTypePattern.TEXT, "named"), // imperative naming
+        DESCRIBED(ReturnTypePattern.TEXT, "described"); // imperative naming
         MemberSupportPrefix(
-                final ReturnType parameterSearchReturnType,
+                final ReturnTypePattern parameterSearchReturnType,
                 final String ...methodNamePrefixes) {
             this.supportMethodReturnType = parameterSearchReturnType;
             this.methodNamePrefixes = Can.of(methodNamePrefixes);
         }
-        private final ReturnType supportMethodReturnType;
+        private final ReturnTypePattern supportMethodReturnType;
         private final Can<String> methodNamePrefixes;
     }
 

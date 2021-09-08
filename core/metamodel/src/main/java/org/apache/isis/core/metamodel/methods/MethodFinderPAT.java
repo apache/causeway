@@ -25,7 +25,6 @@ import java.util.stream.Stream;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.reflection._Reflect;
-import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ReturnTypeCategory;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
 
 import static org.apache.isis.commons.internal.reflection._Reflect.Filter.paramSignatureMatch;
@@ -66,37 +65,14 @@ public final class MethodFinderPAT {
             .flatMap(Optional::stream);
     }
 
-    @Deprecated
-    public Stream<MethodAndPatConstructor> findMethodWithPATArg_returningBoolean(
+    public Stream<MethodAndPatConstructor> findMethodWithPATArg_returningAnyOf(
             final MethodFinderOptions options,
+            final Can<Class<?>> returnTypes,
             final Class<?>[] signature,
             final Can<Class<?>> additionalParamTypes) {
 
-        return MethodFinderPAT
-        .findMethodWithPATArg_returningAnyOf(
-                options, ReturnTypeCategory.BOOLEAN.getReturnTypes(), signature, additionalParamTypes);
-    }
-
-    @Deprecated
-    public Stream<MethodAndPatConstructor> findMethodWithPATArg_returningText(
-            final MethodFinderOptions options,
-            final Class<?>[] signature,
-            final Can<Class<?>> additionalParamTypes) {
-
-        return MethodFinderPAT
-        .findMethodWithPATArg_returningAnyOf(
-                options, ReturnTypeCategory.TRANSLATABLE.getReturnTypes(), signature, additionalParamTypes);
-    }
-
-    public Stream<MethodAndPatConstructor> findMethodWithPATArg_returningNonScalar(
-            final MethodFinderOptions options,
-            final Class<?> elementReturnType,
-            final Class<?>[] signature,
-            final Can<Class<?>> additionalParamTypes) {
-
-        return MethodFinderPAT
-        .findMethodWithPATArg_returningAnyOf(
-                options, ReturnTypeCategory.nonScalar(elementReturnType), signature, additionalParamTypes);
+        return returnTypes.stream()
+        .flatMap(returnType->findMethodWithPATArg(options, returnType, signature, additionalParamTypes));
     }
 
     // -- HELPER
@@ -112,14 +88,5 @@ public final class MethodFinderPAT {
                 .findFirst();
     }
 
-    private Stream<MethodAndPatConstructor> findMethodWithPATArg_returningAnyOf(
-            final MethodFinderOptions options,
-            final Can<Class<?>> returnTypes,
-            final Class<?>[] signature,
-            final Can<Class<?>> additionalParamTypes) {
-
-        return returnTypes.stream()
-        .flatMap(returnType->findMethodWithPATArg(options, returnType, signature, additionalParamTypes));
-    }
 
 }

@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.properties.autocomplete.method;
 import javax.inject.Inject;
 
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ReturnTypeCategory;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
@@ -43,18 +44,18 @@ extends MemberSupportFacetFactoryAbstract {
             final MethodFinderOptions methodFinderOptions) {
 
         val getterOrMixinMain = processMethodContext.getMethod();
-        val returnType = getterOrMixinMain.getReturnType();
+        val getterType = getterOrMixinMain.getReturnType();
 
         MethodFinder
-        .findMethod_returningNonScalar(
+        .findMethod_returningAnyOf(
                 methodFinderOptions,
-            returnType,
-            STRING_ARG)
+                ReturnTypeCategory.nonScalar(getterType),
+                STRING_ARG)
         .peek(processMethodContext::removeMethod)
         .forEach(autoCompleteMethod->{
             addFacet(
                     new PropertyAutoCompleteFacetMethod(
-                            autoCompleteMethod, returnType, processMethodContext.getFacetHolder()));
+                            autoCompleteMethod, getterType, processMethodContext.getFacetHolder()));
         });
 
     }

@@ -29,8 +29,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Arrays;
-import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ReturnType;
-import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ReturnTypeCategory;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ReturnTypePattern;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodFinderPAT;
@@ -52,7 +51,7 @@ public final class ActionSupport {
         @NonNull FacetFactory.ProcessMethodContext processMethodContext;
         @Getter @NonNull MethodFinderOptions finderOptions;
         @NonNull EnumSet<SearchAlgorithm> searchAlgorithms;
-        @NonNull ReturnType returnType;
+        @NonNull ReturnTypePattern returnTypePattern;
 
         Class<?> additionalParamType;
 
@@ -109,28 +108,15 @@ public final class ActionSupport {
         val paramTypes = searchRequest.getParamTypes();
         val finderOptions = searchRequest.getFinderOptions();
         val additionalParamTypes = Can.ofNullable(searchRequest.getAdditionalParamType());
+        val anyOfReturnTypes = searchRequest.getReturnTypePattern().matchingTypes(void.class); // ignores actual type
 
-        switch(searchRequest.getReturnType()) {
-        case BOOLEAN:
-            MethodFinderPAT
-                .findMethodWithPATArg_returningBoolean(
-                        finderOptions,
-                        paramTypes, additionalParamTypes)
-                .map(ActionSupport::toSearchResult)
-                .forEach(onMethodFound);
-            break;
-        case TEXT:
-            MethodFinderPAT
-                .findMethodWithPATArg_returningText(
-                        finderOptions,
-                        paramTypes, additionalParamTypes)
-                .map(ActionSupport::toSearchResult)
-                .forEach(onMethodFound);
-            break;
-        default:
-
-        }
-
+        MethodFinderPAT
+        .findMethodWithPATArg_returningAnyOf(
+                finderOptions,
+                anyOfReturnTypes,
+                paramTypes, additionalParamTypes)
+        .map(ActionSupport::toSearchResult)
+        .forEach(onMethodFound);
     }
 
     private static ActionSupportingMethodSearchResult toSearchResult(
@@ -156,28 +142,15 @@ public final class ActionSupport {
         if(paramsConsideredCount>=0) {
 
             val paramTypesToLookFor = concat(paramTypes, paramsConsideredCount, additionalParamType);
+            val anyOfReturnTypes = searchRequest.getReturnTypePattern().matchingTypes(void.class); // ignores actual type
 
-            switch(searchRequest.getReturnType()) {
-            case BOOLEAN:
-                MethodFinder
-                    .findMethod_returningCategory(
-                            finderOptions,
-                            ReturnTypeCategory.BOOLEAN,
-                            paramTypesToLookFor)
-                    .map(ActionSupport::toSearchResult)
-                    .forEach(onMethodFound);
-                break;
-            case TEXT:
-                MethodFinder
-                    .findMethod_returningCategory(
-                            finderOptions,
-                            ReturnTypeCategory.TRANSLATABLE,
-                            paramTypesToLookFor)
-                    .map(ActionSupport::toSearchResult)
-                    .forEach(onMethodFound);
-                break;
-            default:
-            }
+            MethodFinder
+            .findMethod_returningAnyOf(
+                    finderOptions,
+                    anyOfReturnTypes,
+                    paramTypesToLookFor)
+            .map(ActionSupport::toSearchResult)
+            .forEach(onMethodFound);
 
         }
     }

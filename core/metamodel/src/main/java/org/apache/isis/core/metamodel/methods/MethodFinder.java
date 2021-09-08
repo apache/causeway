@@ -50,6 +50,17 @@ public final class MethodFinder {
 
     // -- SEARCH FOR MULTIPLE NAME CANDIDATES
 
+
+    public static Stream<Method> findMethod_returningAnyOf(
+            final MethodFinderOptions options,
+            final Can<Class<?>> anyOfReturnTypes,
+            final Class<?>[] signature) {
+
+        return options.streamMethodsMatchingSignature(signature)
+                .filter(hasReturnTypeAnyOf(anyOfReturnTypes));
+    }
+
+    @Deprecated
     public static Stream<Method> findMethod_returningCategory(
             final MethodFinderOptions options,
             final ReturnTypeCategory returnTypeCategory,
@@ -57,15 +68,6 @@ public final class MethodFinder {
 
         return options.streamMethodsMatchingSignature(signature)
                 .filter(hasReturnTypeAnyOf(returnTypeCategory.getReturnTypes()));
-    }
-
-    public static Stream<Method> findMethod_returningNonScalar(
-            final MethodFinderOptions options,
-            final Class<?> elementReturnType,
-            final Class<?>[] signature) {
-
-        return options.streamMethodsMatchingSignature(signature)
-                .filter(hasReturnTypeAnyOf(ReturnTypeCategory.nonScalar(elementReturnType)));
     }
 
 }
