@@ -45,12 +45,12 @@ public interface HasPostConstructMethodCache {
     }
 
     private static Method findAnnotatedMethod(
-            final MethodFinder options,
+            final MethodFinder finder,
             final Class<? extends Annotation> annotationClass,
             final MethodByClassMap methods) {
 
-        val type = options.getCorrespondingClass();
-        return methods.computeIfAbsent(type, __->options.streamMethodsIgnoringSignature()
+        val type = finder.getCorrespondingClass();
+        return methods.computeIfAbsent(type, __->finder.streamMethodsIgnoringSignature()
                         .filter(method->method.getAnnotation(annotationClass)!=null)
                         .findFirst()).orElse(null);
     }

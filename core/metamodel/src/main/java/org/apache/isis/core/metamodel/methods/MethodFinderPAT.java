@@ -23,11 +23,12 @@ import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.reflection._Reflect;
-import org.apache.isis.core.metamodel.commons.MethodUtil;
+import org.springframework.util.ClassUtils;
 
-import static org.apache.isis.commons.internal.reflection._Reflect.Filter.paramSignatureMatch;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.reflection._ClassCache;
+import org.apache.isis.core.metamodel.commons.ClassExtensions;
+import org.apache.isis.core.metamodel.commons.MethodUtil;
 
 import lombok.NonNull;
 import lombok.Value;
@@ -51,28 +52,37 @@ public final class MethodFinderPAT {
     // -- SEARCH FOR MULTIPLE NAME CANDIDATES (PAT)
 
     public Stream<MethodAndPatConstructor> findMethodWithPATArg(
-            final MethodFinder options,
+            final MethodFinder finder,
             final Class<?>[] signature,
             final Can<Class<?>> additionalParamTypes) {
 
-        return options.streamMethodsIgnoringSignature()
+        return finder.streamMethodsIgnoringSignature()
             .filter(MethodUtil.Predicates.paramCount(1 + additionalParamTypes.size()))
             .filter(MethodUtil.Predicates.matchParamTypes(1, additionalParamTypes))
-            .map(method->lookupPatConstructor(method, signature))
+            .map(method->lookupPatConstructor(finder, method, signature))
             .flatMap(Optional::stream);
     }
 
     // -- HELPER
 
     private Optional<MethodAndPatConstructor> lookupPatConstructor(
+            final MethodFinder finder,
             final Method supportingMethod,
             final Class<?>[] signature) {
 
         val patCandidate = supportingMethod.getParameterTypes()[0];
-        return _Reflect.getPublicConstructors(patCandidate).stream()
-                .filter(paramSignatureMatch(signature))
-                .map(constructor->MethodAndPatConstructor.of(supportingMethod, constructor))
-                .findFirst();
+
+        // just an optimization, not strictly required
+        if(ClassUtils.isPrimitiveOrWrapper(patCandidate)
+                || ClassExtensions.isJavaClass(patCandidate)) {
+            return Optional.empty();
+        }
+
+        val classCache = _ClassCache.getInstance();
+
+        return classCache
+                .lookupPublicConstructor(patCandidate, signature)
+                .map(constructor->MethodAndPatConstructor.of(supportingMethod, constructor));
     }
 
 

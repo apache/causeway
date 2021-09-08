@@ -88,8 +88,11 @@ public final class ParameterSupport {
     @RequiredArgsConstructor
     public static enum SearchAlgorithm
     implements SearchFunction {
+        /** In support of <i>Parameters as a Tuple</i> (PAT).*/
         PAT(ParameterSupport::findParamSupportingMethodWithPATArg),
+        /** Starting with all-args working its way down to no-arg.*/
         SWEEP(ParameterSupport::findParamSupportingMethod),
+        /** Argument matches return type.*/
         SINGLEARG_BEING_PARAMTYPE(ParameterSupport::singleArgBeingParamType)
         ;
         private final SearchFunction searchFunction;
@@ -236,11 +239,11 @@ public final class ParameterSupport {
 
         val paramTypesConsidered = paramsConsidered<paramTypes.length
                 ? Arrays.copyOf(paramTypes, paramsConsidered)
-                        : paramTypes;
+                : paramTypes;
 
         val withAdditional = additionalParamType!=null
                 ? _Arrays.combine(paramTypesConsidered, additionalParamType)
-                        : paramTypesConsidered;
+                : paramTypesConsidered;
 
         return withAdditional;
     }
