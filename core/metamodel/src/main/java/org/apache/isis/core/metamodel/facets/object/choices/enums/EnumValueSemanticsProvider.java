@@ -83,9 +83,9 @@ implements EnumFacet {
             .findMethod_returningText(
                     MethodFinderOptions
                         .objectSupport(
+                                getAdaptedClass(),
                                 ProgrammingModelConstants.ObjectSupportMethod.TITLE.getMethodNames(),
                                 introspectionPolicy),
-                    getAdaptedClass(),
                     null)
             .findFirst()
             .orElse(null);

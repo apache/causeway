@@ -20,8 +20,11 @@ package org.apache.isis.core.metamodel.methods;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.Domain;
 import org.apache.isis.applib.annotation.Introspection.EncapsulationPolicy;
@@ -46,29 +49,34 @@ import lombok.val;
 public class MethodFinderOptions {
 
     public static MethodFinderOptions of(
-            @NonNull final Can<String> methodNameCandidatesPossiblyDuplicated,
-            @NonNull final EncapsulationPolicy encapsulationPolicy,
-            @NonNull final Predicate<Method> mustSatisfy) {
+            final @NonNull Class<?> correspondingClass,
+            final @NonNull Can<String> methodNameCandidatesPossiblyDuplicated,
+            final @NonNull EncapsulationPolicy encapsulationPolicy,
+            final @NonNull Predicate<Method> mustSatisfy) {
 
         final Predicate<Method> isNotStatic = MethodUtil::isNotStatic;
         val methodNameCandidates = methodNameCandidatesPossiblyDuplicated.distinct();
 
         return new MethodFinderOptions(
+                correspondingClass,
                 encapsulationPolicy,
                 methodNameCandidates.equals(ANY_NAME)
                         ? isNotStatic.and(mustSatisfy)
                         : isNotStatic
                             .and(method->methodNameCandidates.contains(method.getName()))
                             .and(mustSatisfy),
-                methodNameCandidates.distinct());
+                methodNameCandidates);
     }
 
-    public static final Can<String> ANY_NAME = Can.of("");
+    public static final Can<String> ANY_NAME = Can.of(""); // arbitrary marker
     public static final Class<?>[] NO_ARG = new Class<?>[0];
+    //private static final Class<?>[] ANY_ARG = new Class<?>[] {void.class}; // arbitrary marker
 
     public static MethodFinderOptions notNecessarilyPublic(
+            final Class<?> correspondingClass,
             final Can<String> methodNameCandidates) {
         return of(
+                correspondingClass,
                 methodNameCandidates,
                 EncapsulationPolicy.ENCAPSULATED_MEMBERS_SUPPORTED,
                 _Predicates.alwaysTrue()
@@ -76,8 +84,10 @@ public class MethodFinderOptions {
     }
 
     public static MethodFinderOptions publicOnly(
+            final Class<?> correspondingClass,
             final Can<String> methodNameCandidates) {
         return of(
+                correspondingClass,
                 methodNameCandidates,
                 EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED,
                 _Predicates.alwaysTrue()
@@ -85,17 +95,21 @@ public class MethodFinderOptions {
     }
 
     public static MethodFinderOptions accessor(
+            final Class<?> correspondingClass,
             final Can<String> methodNameCandidates,
             final IntrospectionPolicy memberIntrospectionPolicy) {
         return havingAnyOrNoAnnotation(
+                correspondingClass,
                 methodNameCandidates,
                 memberIntrospectionPolicy);
     }
 
     public static MethodFinderOptions objectSupport(
+            final Class<?> correspondingClass,
             final Can<String> methodNameCandidates,
             final IntrospectionPolicy memberIntrospectionPolicy) {
         return supportMethod(
+                correspondingClass,
                 methodNameCandidates,
                 memberIntrospectionPolicy,
                 Domain.Include.class,
@@ -103,9 +117,11 @@ public class MethodFinderOptions {
     }
 
     public static MethodFinderOptions livecycleCallback(
+            final Class<?> correspondingClass,
             final Can<String> methodNameCandidates,
             final IntrospectionPolicy memberIntrospectionPolicy) {
         return supportMethod(
+                correspondingClass,
                 methodNameCandidates,
                 memberIntrospectionPolicy,
                 Domain.Include.class,
@@ -113,23 +129,30 @@ public class MethodFinderOptions {
     }
 
     public static MethodFinderOptions memberSupport(
+            final Class<?> correspondingClass,
             final Can<String> methodNameCandidates,
             final IntrospectionPolicy memberIntrospectionPolicy) {
         return supportMethod(
+                correspondingClass,
                 methodNameCandidates,
                 memberIntrospectionPolicy,
                 Domain.Include.class,
                 ProgrammingModelConstants.ConflictingAnnotations.MEMBER_SUPPORT);
     }
 
+    @Getter private final @NonNull Class<?> correspondingClass;
     @Getter private final @NonNull EncapsulationPolicy encapsulationPolicy;
     @Getter private final @NonNull Predicate<Method> mustSatisfy;
     private final @NonNull Can<String> methodNameCandidates;
 
-    public Stream<Method> streamMethods(
-            final Class<?> type,
-            final Class<?>[] paramTypes) {
+    public Stream<Method> streamMethodsMatchingSignature(
+            final @Nullable Class<?>[] paramTypes) {
 
+        if(paramTypes==null) {
+            return streamMethodsIgnoringSignature();
+        }
+
+        val type = getCorrespondingClass();
         val classCache = _ClassCache.getInstance();
         val isEncapsulationSupported = getEncapsulationPolicy().isEncapsulatedMembersSupported();
 
@@ -138,6 +161,7 @@ public class MethodFinderOptions {
             return (isEncapsulationSupported
                     ? classCache.streamPublicOrDeclaredMethods(type)
                     : classCache.streamPublicMethods(type))
+                        .filter(method->Arrays.equals(paramTypes, method.getParameterTypes()))
                         .filter(mustSatisfy);
         }
 
@@ -150,24 +174,48 @@ public class MethodFinderOptions {
 
     }
 
+    public Stream<Method> streamMethodsIgnoringSignature() {
+        val type = getCorrespondingClass();
+        val classCache = _ClassCache.getInstance();
+        val isEncapsulationSupported = getEncapsulationPolicy().isEncapsulatedMembersSupported();
+        return (isEncapsulationSupported
+                ? classCache.streamPublicOrDeclaredMethods(type)
+                : classCache.streamPublicMethods(type))
+                    .filter(mustSatisfy);
+    }
+
+    // -- WITHERS
+
+    public MethodFinderOptions withRequiredReturnType(final @NonNull Class<?> requiredReturnType) {
+        return new MethodFinderOptions(
+                correspondingClass,
+                encapsulationPolicy,
+                mustSatisfy.and(MethodFinder.hasReturnType(requiredReturnType)),
+                methodNameCandidates);
+    }
+
     // -- HELPER
 
     private static MethodFinderOptions havingAnyOrNoAnnotation(
+            final Class<?> correspondingClass,
             final Can<String> methodNameCandidates,
             final IntrospectionPolicy memberIntrospectionPolicy) {
         return of(
+                correspondingClass,
                 methodNameCandidates,
                 memberIntrospectionPolicy.getEncapsulationPolicy(),
                 _Predicates.alwaysTrue());
     }
 
     private static MethodFinderOptions supportMethod(
+            final Class<?> correspondingClass,
             final Can<String> methodNameCandidates,
             final IntrospectionPolicy memberIntrospectionPolicy,
             final Class<? extends Annotation> annotationType,
             final ConflictingAnnotations conflictingAnnotations) {
 
         return of(
+                correspondingClass,
                 methodNameCandidates,
                 // support methods are always allowed private
                 EncapsulationPolicy.ENCAPSULATED_MEMBERS_SUPPORTED,

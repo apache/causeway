@@ -23,6 +23,7 @@ import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -31,8 +32,6 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
-import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
-import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 
 import lombok.val;
 
@@ -46,14 +45,25 @@ public class MethodFinderUtilsTest {
         private void thisDoesHaveAnnotation(){}
     }
 
+    private HasPostConstructMethodCache hasPostConstructMethodCache;
+
+    @Before
+    public void setup() {
+        val methodByClassMap = new MethodByClassMap();
+        this.hasPostConstructMethodCache = new HasPostConstructMethodCache() {
+            @Override
+            public MethodByClassMap getPostConstructMethodsCache() {
+                return methodByClassMap;
+            }
+        };
+    }
+
+
     @Test
     public void whenExists() throws Exception {
 
-        val cache = new MethodByClassMap();
-        final Method method = MethodFinderUtils
-                .findAnnotatedMethod(
-                        MethodFinderOptions.notNecessarilyPublic(MethodFinderOptions.ANY_NAME),
-                        new WithPostConstruct(), PostConstruct.class, cache );
+        val cache = hasPostConstructMethodCache.getPostConstructMethodsCache();
+        val method = hasPostConstructMethodCache.postConstructMethodFor(new WithPostConstruct());
 
         assertThat(method, is(not(nullValue())));
         final Optional<Method> actual = cache.get(WithPostConstruct.class);
@@ -65,11 +75,8 @@ public class MethodFinderUtilsTest {
     @Test
     public void whenDoesNotExist() throws Exception {
 
-        val cache = new MethodByClassMap();
-        final Method method = MethodFinderUtils
-                .findAnnotatedMethod(
-                        MethodFinderOptions.notNecessarilyPublic(MethodFinderOptions.ANY_NAME),
-                        new NoPostConstruct(), PostConstruct.class, cache);
+        val cache = hasPostConstructMethodCache.getPostConstructMethodsCache();
+        val method = hasPostConstructMethodCache.postConstructMethodFor(new NoPostConstruct());
 
         assertThat(method, is(nullValue()));
         final Optional<Method> actual = cache.get(NoPostConstruct.class);

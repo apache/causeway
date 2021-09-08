@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.Identifier;
@@ -56,7 +55,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
-import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
+import org.apache.isis.core.metamodel.facets.HasPostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedLifecycleEventFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedLifecycleEventFacetForDomainObjectAnnotation;
@@ -78,8 +77,6 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.recreatable.Rec
 import org.apache.isis.core.metamodel.facets.object.mixin.MetaModelValidatorForMixinTypes;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
-import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
-import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelVisitingValidatorAbstract;
@@ -88,6 +85,7 @@ import org.apache.isis.core.metamodel.util.EventUtil;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -97,7 +95,7 @@ public class DomainObjectAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements
     MetaModelRefiner,
-    PostConstructMethodCache,
+    HasPostConstructMethodCache,
     ObjectTypeFacetFactory {
 
     private final MetaModelValidatorForMixinTypes mixinTypeValidator =
@@ -640,15 +638,7 @@ implements
 
     // //////////////////////////////////////
 
+    @Getter(onMethod_ = {@Override})
     private final @NonNull MethodByClassMap postConstructMethodsCache;
-
-    @Override
-    public Method postConstructMethodFor(final Object pojo) {
-        return MethodFinderUtils.findAnnotatedMethod(
-                // @PostConstruct is allowed to appear on non-public methods
-                MethodFinderOptions.notNecessarilyPublic(MethodFinderOptions.ANY_NAME),
-                pojo, PostConstruct.class, postConstructMethodsCache);
-    }
-
 
 }

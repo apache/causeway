@@ -114,9 +114,10 @@ extends MethodPrefixBasedFacetFactoryAbstract {
 
         MethodFinder
         .findMethod_returningCategory(
-                MethodFinderOptions.publicOnly(toString.getMethodNames()),
+                MethodFinderOptions.publicOnly(
+                        processClassContext.getCls(),
+                        toString.getMethodNames()),
                 toString.getReturnTypeCategory(),
-                processClassContext.getCls(),
                 NO_ARG)
         .peek(processClassContext::removeMethod)
         .forEach(method->{
@@ -135,10 +136,10 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         .findMethod_returningCategory(
                 MethodFinderOptions
                 .objectSupport(
+                        processClassContext.getCls(),
                         objectSupportMethodEnum.getMethodNames(),
                         processClassContext.getIntrospectionPolicy()),
                 objectSupportMethodEnum.getReturnTypeCategory(),
-                processClassContext.getCls(),
                 NO_ARG)
         .peek(processClassContext::removeMethod)
         .forEach(method->{

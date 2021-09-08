@@ -44,11 +44,9 @@ public final class MethodFinder {
 
     public static Stream<Method> findMethod(
             final MethodFinderOptions options,
-            final Class<?> type,
             final Class<?> expectedReturnType,
             final Class<?>[] paramTypes) {
-
-        return options.streamMethods(type, paramTypes)
+        return options.streamMethodsMatchingSignature(paramTypes)
                 .filter(hasReturnType(expectedReturnType));
     }
 
@@ -57,36 +55,32 @@ public final class MethodFinder {
     public static Stream<Method> findMethod_returningCategory(
             final MethodFinderOptions options,
             final ReturnTypeCategory returnTypeCategory,
-            final Class<?> type,
             final Class<?>[] paramTypes) {
 
-        return options.streamMethods(type, paramTypes)
+        return options.streamMethodsMatchingSignature(paramTypes)
                 .filter(hasReturnTypeAnyOf(returnTypeCategory.getReturnTypes()));
     }
 
     public static Stream<Method> findMethod_returningBoolean(
             final MethodFinderOptions options,
-            final Class<?> type,
             final Class<?>[] paramTypes) {
 
-        return findMethod_returningCategory(options, ReturnTypeCategory.BOOLEAN, type, paramTypes);
+        return findMethod_returningCategory(options, ReturnTypeCategory.BOOLEAN, paramTypes);
     }
 
     public static Stream<Method> findMethod_returningText(
             final MethodFinderOptions options,
-            final Class<?> type,
             final Class<?>[] paramTypes) {
 
-        return findMethod_returningCategory(options, ReturnTypeCategory.TRANSLATABLE, type, paramTypes);
+        return findMethod_returningCategory(options, ReturnTypeCategory.TRANSLATABLE, paramTypes);
     }
 
     public static Stream<Method> findMethod_returningNonScalar(
             final MethodFinderOptions options,
-            final Class<?> type,
             final Class<?> elementReturnType,
             final Class<?>[] paramTypes) {
 
-        return options.streamMethods(type, paramTypes)
+        return options.streamMethodsMatchingSignature(paramTypes)
                 .filter(hasReturnTypeAnyOf(ReturnTypeCategory.nonScalar(elementReturnType)));
     }
 
@@ -95,60 +89,55 @@ public final class MethodFinder {
     @Deprecated // redundant
     public static Stream<MethodAndPpmConstructor> findMethodWithPPMArg(
             final MethodFinderOptions options,
-            final Class<?> type,
             final Class<?> returnType,
             final Class<?>[] paramTypes,
             final Can<Class<?>> additionalParamTypes) {
 
         return MethodFinderUtils
-                .findMethodWithPPMArg(options, type, returnType, paramTypes, additionalParamTypes);
+                .findMethodWithPPMArg(options, returnType, paramTypes, additionalParamTypes);
     }
 
     @Deprecated // redundant
     public static Stream<MethodAndPpmConstructor> findMethodWithPPMArg_returningAnyOf(
             final MethodFinderOptions options,
             final Can<Class<?>> returnTypes,
-            final Class<?> type,
             final Class<?>[] paramTypes,
             final Can<Class<?>> additionalParamTypes) {
 
         return MethodFinderUtils
                 .findMethodWithPPMArg_returningAnyOf(
-                        options, returnTypes, type, paramTypes, additionalParamTypes);
+                        options, returnTypes, paramTypes, additionalParamTypes);
     }
 
     public static Stream<MethodAndPpmConstructor> findMethodWithPPMArg_returningBoolean(
             final MethodFinderOptions options,
-            final Class<?> type,
             final Class<?>[] paramTypes,
             final Can<Class<?>> additionalParamTypes) {
 
         return MethodFinderUtils
         .findMethodWithPPMArg_returningAnyOf(
-                options, ReturnTypeCategory.BOOLEAN.getReturnTypes(), type, paramTypes, additionalParamTypes);
+                options, ReturnTypeCategory.BOOLEAN.getReturnTypes(), paramTypes, additionalParamTypes);
     }
 
     public static Stream<MethodAndPpmConstructor> findMethodWithPPMArg_returningText(
             final MethodFinderOptions options,
-            final Class<?> type,
             final Class<?>[] paramTypes,
             final Can<Class<?>> additionalParamTypes) {
 
         return MethodFinderUtils
         .findMethodWithPPMArg_returningAnyOf(
-                options, ReturnTypeCategory.TRANSLATABLE.getReturnTypes(), type, paramTypes, additionalParamTypes);
+                options, ReturnTypeCategory.TRANSLATABLE.getReturnTypes(), paramTypes, additionalParamTypes);
     }
 
     public static Stream<MethodAndPpmConstructor> findMethodWithPPMArg_returningNonScalar(
             final MethodFinderOptions options,
-            final Class<?> type,
             final Class<?> elementReturnType,
             final Class<?>[] paramTypes,
             final Can<Class<?>> additionalParamTypes) {
 
         return MethodFinderUtils
         .findMethodWithPPMArg_returningAnyOf(
-                options, ReturnTypeCategory.nonScalar(elementReturnType), type, paramTypes, additionalParamTypes);
+                options, ReturnTypeCategory.nonScalar(elementReturnType), paramTypes, additionalParamTypes);
     }
 
 }

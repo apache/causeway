@@ -24,7 +24,7 @@ import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
+import org.apache.isis.core.metamodel.facets.HasPostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
@@ -37,7 +37,7 @@ extends RecreatableObjectFacetAbstract {
     public RecreatableObjectFacetDeclarativeInitializingAbstract(
             final FacetHolder holder,
             final RecreationMechanism recreationMechanism,
-            final PostConstructMethodCache postConstructMethodCache,
+            final HasPostConstructMethodCache postConstructMethodCache,
             final Facet.Precedence precedence) {
 
         super(holder, recreationMechanism, postConstructMethodCache, precedence);

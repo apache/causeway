@@ -20,14 +20,14 @@ package org.apache.isis.core.metamodel.facets.object.recreatable;
 
 import org.apache.isis.applib.RecreatableDomainObject;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
+import org.apache.isis.core.metamodel.facets.HasPostConstructMethodCache;
 
 public class RecreatableObjectFacetForRecreatableDomainObjectInterface
 extends RecreatableObjectFacetAbstract {
 
     public RecreatableObjectFacetForRecreatableDomainObjectInterface(
             final FacetHolder holder,
-            final PostConstructMethodCache postConstructMethodCache) {
+            final HasPostConstructMethodCache postConstructMethodCache) {
         super(holder, RecreationMechanism.INITIALIZES, postConstructMethodCache);
     }
 

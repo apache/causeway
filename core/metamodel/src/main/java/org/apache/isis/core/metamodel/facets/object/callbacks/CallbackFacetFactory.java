@@ -69,9 +69,10 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         .findMethod(
                 MethodFinderOptions
                 .livecycleCallback(
+                        cls,
                         callbackMethodEnum.getMethodNames(),
                         processClassContext.getIntrospectionPolicy()),
-                cls, void.class, NO_ARG)
+                void.class, NO_ARG)
         .peek(processClassContext::removeMethod)
         .collect(Can.toCan());
 

@@ -34,8 +34,8 @@ final class FailureUtil {
 
     public static HttpStatusCode getFailureStatusCodeIfAny(final Throwable ex) {
 
-        val errorCodeGetter = MethodFinderOptions.publicOnly(Can.ofSingleton("getErrorCode"))
-        .streamMethods(ex.getClass(), MethodFinderOptions.NO_ARG)
+        val errorCodeGetter = MethodFinderOptions.publicOnly(ex.getClass(), Can.ofSingleton("getErrorCode"))
+        .streamMethodsMatchingSignature(MethodFinderOptions.NO_ARG)
         .filter(MethodFinder.hasReturnType(int.class))
         .findFirst()
         .orElse(null);

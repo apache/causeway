@@ -44,8 +44,9 @@ extends MemberSupportFacetFactoryAbstract  {
          MethodFinder
          .findMethod_returningText(
              MethodFinderOptions
-             .memberSupport(methodNameCandidates, processMethodContext.getIntrospectionPolicy()),
-             processMethodContext.getCls(),
+             .memberSupport(processMethodContext.getCls(),
+                     methodNameCandidates,
+                     processMethodContext.getIntrospectionPolicy()),
              NO_ARG)
          .peek(processMethodContext::removeMethod)
          .forEach(disableMethod->{

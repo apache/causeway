@@ -24,7 +24,7 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
+import org.apache.isis.core.metamodel.facets.HasPostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacetDeclarativeInitializingAbstract;
 
 public class RecreatableObjectFacetForDomainObjectAnnotation
@@ -33,7 +33,7 @@ extends RecreatableObjectFacetDeclarativeInitializingAbstract {
     public static Optional<RecreatableObjectFacetForDomainObjectAnnotation> create(
             final Optional<DomainObject> domainObjectIfAny,
             final FacetHolder holder,
-            final PostConstructMethodCache postConstructMethodCache,
+            final HasPostConstructMethodCache postConstructMethodCache,
             final Facet.Precedence precedence) {
 
         return domainObjectIfAny
@@ -58,7 +58,7 @@ extends RecreatableObjectFacetDeclarativeInitializingAbstract {
 
     private RecreatableObjectFacetForDomainObjectAnnotation(
             final FacetHolder holder,
-            final PostConstructMethodCache postConstructMethodCache,
+            final HasPostConstructMethodCache postConstructMethodCache,
             final Facet.Precedence precedence) {
 
         super(holder, RecreationMechanism.INITIALIZES, postConstructMethodCache, precedence);

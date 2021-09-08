@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.commons.MethodExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
+import org.apache.isis.core.metamodel.facets.HasPostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 
 import lombok.val;
@@ -36,7 +36,7 @@ public abstract class RecreatableObjectFacetAbstract
 extends FacetAbstract
 implements ViewModelFacet {
 
-    private final PostConstructMethodCache postConstructMethodCache;
+    private final HasPostConstructMethodCache postConstructMethodCache;
     private final ViewModelFacet.RecreationMechanism recreationMechanism;
 
     private static final Class<? extends Facet> type() {
@@ -46,7 +46,7 @@ implements ViewModelFacet {
     protected RecreatableObjectFacetAbstract(
             final FacetHolder holder,
             final RecreationMechanism recreationMechanism,
-            final PostConstructMethodCache postConstructMethodCache) {
+            final HasPostConstructMethodCache postConstructMethodCache) {
         super(type(), holder);
         this.postConstructMethodCache = postConstructMethodCache;
         this.recreationMechanism = recreationMechanism;
@@ -55,7 +55,7 @@ implements ViewModelFacet {
     protected RecreatableObjectFacetAbstract(
             final FacetHolder holder,
             final RecreationMechanism recreationMechanism,
-            final PostConstructMethodCache postConstructMethodCache,
+            final HasPostConstructMethodCache postConstructMethodCache,
             final Facet.Precedence precedence) {
         super(type(), holder, precedence);
         this.postConstructMethodCache = postConstructMethodCache;

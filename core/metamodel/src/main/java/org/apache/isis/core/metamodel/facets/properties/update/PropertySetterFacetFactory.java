@@ -66,9 +66,8 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         val setterMethods = MethodFinder
         .findMethod_returningCategory(
                 MethodFinderOptions
-                .accessor(methodNameCandidates, processMethodContext.getIntrospectionPolicy()),
+                .accessor(processMethodContext.getCls(), methodNameCandidates, processMethodContext.getIntrospectionPolicy()),
                 ReturnTypeCategory.VOID,
-                processMethodContext.getCls(),
                 paramTypes)
         .peek(processMethodContext::removeMethod)
         .collect(Can.toCan());
