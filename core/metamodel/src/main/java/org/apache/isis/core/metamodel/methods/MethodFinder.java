@@ -24,10 +24,9 @@ import java.util.stream.Stream;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ReturnTypeCategory;
-import org.apache.isis.core.metamodel.methods.MethodFinderUtils.MethodAndPpmConstructor;
 
 /**
- * An extension to {@link MethodFinderUtils} in support of multiple simultaneous naming conventions.
+ * An extension to {@link MethodFinderPPM} in support of multiple simultaneous naming conventions.
  * @apiNote each method name candidate is processed in sequence as given by {@code Can<String> names}
  */
 //@Log4j2
@@ -82,62 +81,6 @@ public final class MethodFinder {
 
         return options.streamMethodsMatchingSignature(paramTypes)
                 .filter(hasReturnTypeAnyOf(ReturnTypeCategory.nonScalar(elementReturnType)));
-    }
-
-    // -- SEARCH FOR MULTIPLE NAME CANDIDATES (PPM)
-
-    @Deprecated // redundant
-    public static Stream<MethodAndPpmConstructor> findMethodWithPPMArg(
-            final MethodFinderOptions options,
-            final Class<?> returnType,
-            final Class<?>[] paramTypes,
-            final Can<Class<?>> additionalParamTypes) {
-
-        return MethodFinderUtils
-                .findMethodWithPPMArg(options, returnType, paramTypes, additionalParamTypes);
-    }
-
-    @Deprecated // redundant
-    public static Stream<MethodAndPpmConstructor> findMethodWithPPMArg_returningAnyOf(
-            final MethodFinderOptions options,
-            final Can<Class<?>> returnTypes,
-            final Class<?>[] paramTypes,
-            final Can<Class<?>> additionalParamTypes) {
-
-        return MethodFinderUtils
-                .findMethodWithPPMArg_returningAnyOf(
-                        options, returnTypes, paramTypes, additionalParamTypes);
-    }
-
-    public static Stream<MethodAndPpmConstructor> findMethodWithPPMArg_returningBoolean(
-            final MethodFinderOptions options,
-            final Class<?>[] paramTypes,
-            final Can<Class<?>> additionalParamTypes) {
-
-        return MethodFinderUtils
-        .findMethodWithPPMArg_returningAnyOf(
-                options, ReturnTypeCategory.BOOLEAN.getReturnTypes(), paramTypes, additionalParamTypes);
-    }
-
-    public static Stream<MethodAndPpmConstructor> findMethodWithPPMArg_returningText(
-            final MethodFinderOptions options,
-            final Class<?>[] paramTypes,
-            final Can<Class<?>> additionalParamTypes) {
-
-        return MethodFinderUtils
-        .findMethodWithPPMArg_returningAnyOf(
-                options, ReturnTypeCategory.TRANSLATABLE.getReturnTypes(), paramTypes, additionalParamTypes);
-    }
-
-    public static Stream<MethodAndPpmConstructor> findMethodWithPPMArg_returningNonScalar(
-            final MethodFinderOptions options,
-            final Class<?> elementReturnType,
-            final Class<?>[] paramTypes,
-            final Can<Class<?>> additionalParamTypes) {
-
-        return MethodFinderUtils
-        .findMethodWithPPMArg_returningAnyOf(
-                options, ReturnTypeCategory.nonScalar(elementReturnType), paramTypes, additionalParamTypes);
     }
 
 }

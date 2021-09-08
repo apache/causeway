@@ -33,7 +33,8 @@ import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ReturnType;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
-import org.apache.isis.core.metamodel.methods.MethodFinderUtils.MethodAndPpmConstructor;
+import org.apache.isis.core.metamodel.methods.MethodFinderPPM;
+import org.apache.isis.core.metamodel.methods.MethodFinderPPM.MethodAndPpmConstructor;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -133,7 +134,7 @@ public final class ParameterSupport {
 
         switch(searchRequest.getReturnType()) {
         case BOOLEAN:
-            MethodFinder
+            MethodFinderPPM
                 .findMethodWithPPMArg_returningBoolean(
                         MethodFinderOptions
                         .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy()),
@@ -142,7 +143,7 @@ public final class ParameterSupport {
                 .forEach(onMethodFound);
             break;
         case TEXT:
-            MethodFinder
+            MethodFinderPPM
                 .findMethodWithPPMArg_returningText(
                         MethodFinderOptions
                         .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy()),
@@ -151,7 +152,7 @@ public final class ParameterSupport {
                 .forEach(onMethodFound);
             break;
         case NON_SCALAR:
-            MethodFinder
+            MethodFinderPPM
                 .findMethodWithPPMArg_returningNonScalar(
                         MethodFinderOptions
                         .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy()),
@@ -160,7 +161,7 @@ public final class ParameterSupport {
                 .forEach(onMethodFound);
             break;
         case SAME_AS_PARAMETER_TYPE:
-            MethodFinder
+            MethodFinderPPM
                 .findMethodWithPPMArg(
                         MethodFinderOptions
                         .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy()),
