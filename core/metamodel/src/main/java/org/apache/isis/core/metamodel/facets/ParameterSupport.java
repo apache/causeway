@@ -31,6 +31,7 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ReturnType;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ReturnTypeCategory;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.core.metamodel.methods.MethodFinderPAT;
@@ -201,18 +202,20 @@ public final class ParameterSupport {
         switch(searchRequest.getReturnType()) {
         case BOOLEAN:
             MethodFinder
-                .findMethod_returningBoolean(
+                .findMethod_returningCategory(
                         MethodFinderOptions
                         .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy()),
+                        ReturnTypeCategory.BOOLEAN,
                         singleArg)
                 .map(supportingMethod->toSearchResult(paramIndex, paramType, supportingMethod))
                 .forEach(onMethodFound);
             break;
         case TEXT:
             MethodFinder
-                .findMethod_returningText(
+                .findMethod_returningCategory(
                         MethodFinderOptions
                         .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy()),
+                        ReturnTypeCategory.TRANSLATABLE,
                         singleArg)
                 .map(supportingMethod->toSearchResult(paramIndex, paramType, supportingMethod))
                 .forEach(onMethodFound);
@@ -266,18 +269,20 @@ public final class ParameterSupport {
             switch(searchRequest.getReturnType()) {
             case BOOLEAN:
                 supportingMethod = MethodFinder
-                    .findMethod_returningBoolean(
+                    .findMethod_returningCategory(
                             MethodFinderOptions
                             .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy()),
+                            ReturnTypeCategory.BOOLEAN,
                             paramTypesToLookFor)
                     .findFirst()
                     .orElse(null);
                 break;
             case TEXT:
                 supportingMethod = MethodFinder
-                    .findMethod_returningText(
+                    .findMethod_returningCategory(
                             MethodFinderOptions
                             .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy()),
+                            ReturnTypeCategory.TRANSLATABLE,
                             paramTypesToLookFor)
                     .findFirst()
                     .orElse(null);

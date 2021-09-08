@@ -26,8 +26,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ReturnTypeCategory;
 
 /**
- * An extension to {@link MethodFinderPAT} in support of multiple simultaneous naming conventions.
- * @apiNote each method name candidate is processed in sequence as given by {@code Can<String> names}
+ * Support of multiple concurrent naming conventions.
  */
 //@Log4j2
 public final class MethodFinder {
@@ -44,8 +43,8 @@ public final class MethodFinder {
     public static Stream<Method> findMethod(
             final MethodFinderOptions options,
             final Class<?> expectedReturnType,
-            final Class<?>[] paramTypes) {
-        return options.streamMethodsMatchingSignature(paramTypes)
+            final Class<?>[] signature) {
+        return options.streamMethodsMatchingSignature(signature)
                 .filter(hasReturnType(expectedReturnType));
     }
 
@@ -54,32 +53,18 @@ public final class MethodFinder {
     public static Stream<Method> findMethod_returningCategory(
             final MethodFinderOptions options,
             final ReturnTypeCategory returnTypeCategory,
-            final Class<?>[] paramTypes) {
+            final Class<?>[] signature) {
 
-        return options.streamMethodsMatchingSignature(paramTypes)
+        return options.streamMethodsMatchingSignature(signature)
                 .filter(hasReturnTypeAnyOf(returnTypeCategory.getReturnTypes()));
-    }
-
-    public static Stream<Method> findMethod_returningBoolean(
-            final MethodFinderOptions options,
-            final Class<?>[] paramTypes) {
-
-        return findMethod_returningCategory(options, ReturnTypeCategory.BOOLEAN, paramTypes);
-    }
-
-    public static Stream<Method> findMethod_returningText(
-            final MethodFinderOptions options,
-            final Class<?>[] paramTypes) {
-
-        return findMethod_returningCategory(options, ReturnTypeCategory.TRANSLATABLE, paramTypes);
     }
 
     public static Stream<Method> findMethod_returningNonScalar(
             final MethodFinderOptions options,
             final Class<?> elementReturnType,
-            final Class<?>[] paramTypes) {
+            final Class<?>[] signature) {
 
-        return options.streamMethodsMatchingSignature(paramTypes)
+        return options.streamMethodsMatchingSignature(signature)
                 .filter(hasReturnTypeAnyOf(ReturnTypeCategory.nonScalar(elementReturnType)));
     }
 

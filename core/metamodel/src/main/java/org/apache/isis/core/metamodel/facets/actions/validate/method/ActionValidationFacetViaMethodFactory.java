@@ -22,7 +22,6 @@ import java.util.EnumSet;
 
 import javax.inject.Inject;
 
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ReturnType;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -31,6 +30,7 @@ import org.apache.isis.core.metamodel.facets.ActionSupport;
 import org.apache.isis.core.metamodel.facets.ActionSupport.SearchAlgorithm;
 import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.param.validate.method.ActionParameterValidationFacetViaMethod;
+import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 
 import lombok.val;
 
@@ -48,12 +48,12 @@ extends MemberSupportFacetFactoryAbstract {
     @Override
     protected void search(
             final ProcessMethodContext processMethodContext,
-            final Can<String> methodNameCandidates) {
+            final MethodFinderOptions methodFinderOptions) {
 
         val searchRequest = ActionSupport.ActionSupportingMethodSearchRequest.builder()
                 .processMethodContext(processMethodContext)
                 .returnType(ReturnType.TEXT)
-                .methodNames(methodNameCandidates)
+                .finderOptions(methodFinderOptions)
                 .searchAlgorithms(EnumSet.of(SearchAlgorithm.PAT, SearchAlgorithm.ALL_PARAM_TYPES))
                 .build();
 

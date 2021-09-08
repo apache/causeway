@@ -18,11 +18,11 @@
  */
 package org.apache.isis.core.metamodel.facets.members.support;
 
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 
 import lombok.NonNull;
 import lombok.val;
@@ -65,12 +65,15 @@ extends MemberAndPropertySupportFacetFactoryAbstract {
         val methodNameCandidates = memberSupportPrefix.getMethodNamePrefixes()
                 .flatMap(processMethodContext::memberSupportCandidates);
 
-        search(processMethodContext, methodNameCandidates);
-
+        search(processMethodContext,
+                MethodFinderOptions
+                .memberSupport(processMethodContext.getCls(),
+                        methodNameCandidates,
+                        processMethodContext.getIntrospectionPolicy()));
     }
 
     protected abstract void search(
             ProcessMethodContext processMethodContext,
-            Can<String> methodNameCandidates);
+            MethodFinderOptions methodFinderOptions);
 
 }

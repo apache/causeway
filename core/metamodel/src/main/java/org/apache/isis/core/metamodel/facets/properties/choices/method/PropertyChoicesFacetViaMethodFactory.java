@@ -20,7 +20,6 @@ package org.apache.isis.core.metamodel.facets.properties.choices.method;
 
 import javax.inject.Inject;
 
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -41,17 +40,14 @@ extends MemberSupportFacetFactoryAbstract {
     @Override
     protected void search(
             final ProcessMethodContext processMethodContext,
-            final Can<String> methodNameCandidates) {
+            final MethodFinderOptions methodFinderOptions) {
 
         val getterOrMixinMain = processMethodContext.getMethod();
         val returnType = getterOrMixinMain.getReturnType();
 
         MethodFinder
         .findMethod_returningNonScalar(
-            MethodFinderOptions
-            .memberSupport(processMethodContext.getCls(),
-                    methodNameCandidates,
-                    processMethodContext.getIntrospectionPolicy()),
+                methodFinderOptions,
             returnType,
             NO_ARG)
         .peek(processMethodContext::removeMethod)

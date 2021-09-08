@@ -20,8 +20,8 @@ package org.apache.isis.core.metamodel.facets.members.named.method;
 
 import javax.inject.Inject;
 
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ReturnTypeCategory;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
@@ -39,15 +39,13 @@ extends MemberSupportFacetFactoryAbstract {
     @Override
     protected void search(
             final ProcessMethodContext processMethodContext,
-            final Can<String> methodNameCandidates) {
+            final MethodFinderOptions methodFinderOptions) {
 
         MethodFinder
-        .findMethod_returningText(
-            MethodFinderOptions
-            .memberSupport(processMethodContext.getCls(),
-                    methodNameCandidates,
-                    processMethodContext.getIntrospectionPolicy()),
-            NO_ARG)
+        .findMethod_returningCategory(
+                methodFinderOptions,
+                ReturnTypeCategory.TRANSLATABLE,
+                NO_ARG)
         .peek(processMethodContext::removeMethod)
         .forEach(namedMethod->{
             addFacet(

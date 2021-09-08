@@ -20,8 +20,8 @@ package org.apache.isis.core.metamodel.facets.properties.validating.method;
 
 import javax.inject.Inject;
 
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ReturnTypeCategory;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
@@ -41,18 +41,16 @@ extends MemberSupportFacetFactoryAbstract  {
     @Override
     protected void search(
             final ProcessMethodContext processMethodContext,
-            final Can<String> methodNameCandidates) {
+            final MethodFinderOptions methodFinderOptions) {
 
         val getterMethod = processMethodContext.getMethod();
-        val returnType = getterMethod.getReturnType();
+        val argType = getterMethod.getReturnType();
 
         MethodFinder
-        .findMethod_returningText(
-            MethodFinderOptions
-            .memberSupport(processMethodContext.getCls(),
-                    methodNameCandidates,
-                    processMethodContext.getIntrospectionPolicy()),
-            new Class[] { returnType })
+        .findMethod_returningCategory(
+                methodFinderOptions,
+                ReturnTypeCategory.TRANSLATABLE,
+                new Class[] { argType })
         .peek(processMethodContext::removeMethod)
         .forEach(validateMethod->{
             addFacet(

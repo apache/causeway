@@ -32,14 +32,14 @@ import static org.apache.isis.commons.internal.reflection._Reflect.Filter.paramS
 
 import lombok.NonNull;
 import lombok.Value;
+import lombok.val;
+import lombok.experimental.UtilityClass;
 
 /**
  * In support of <i>Parameters as a Tuple</i> (PAT).
  */
+@UtilityClass
 public final class MethodFinderPAT {
-
-    private MethodFinderPAT() {
-    }
 
     // -- PAT SUPPORT
 
@@ -51,75 +51,75 @@ public final class MethodFinderPAT {
 
     // -- SEARCH FOR MULTIPLE NAME CANDIDATES (PAT)
 
-    public static Stream<MethodAndPatConstructor> findMethodWithPATArg(
+    public Stream<MethodAndPatConstructor> findMethodWithPATArg(
             final MethodFinderOptions options,
             final Class<?> returnType,
-            final Class<?>[] paramTypes,
+            final Class<?>[] signature,
             final Can<Class<?>> additionalParamTypes) {
 
         return options.streamMethodsIgnoringSignature()
             .filter(method -> returnType == null
                 || returnType.isAssignableFrom(method.getReturnType()))
-            .filter(MethodUtil.Predicates.paramCount(additionalParamTypes.size()+1))
+            .filter(MethodUtil.Predicates.paramCount(1 + additionalParamTypes.size()))
             .filter(MethodUtil.Predicates.matchParamTypes(1, additionalParamTypes))
-            .map(method->MethodAndPatCandidate.of(method, method.getParameterTypes()[0]))
-            .map(ppmCandidate->ppmCandidate.lookupConstructor(paramTypes))
+            .map(method->lookupPatConstructor(method, signature))
             .flatMap(Optional::stream);
     }
 
-    public static Stream<MethodAndPatConstructor> findMethodWithPATArg_returningBoolean(
+    @Deprecated
+    public Stream<MethodAndPatConstructor> findMethodWithPATArg_returningBoolean(
             final MethodFinderOptions options,
-            final Class<?>[] paramTypes,
+            final Class<?>[] signature,
             final Can<Class<?>> additionalParamTypes) {
 
         return MethodFinderPAT
         .findMethodWithPATArg_returningAnyOf(
-                options, ReturnTypeCategory.BOOLEAN.getReturnTypes(), paramTypes, additionalParamTypes);
+                options, ReturnTypeCategory.BOOLEAN.getReturnTypes(), signature, additionalParamTypes);
     }
 
-    public static Stream<MethodAndPatConstructor> findMethodWithPATArg_returningText(
+    @Deprecated
+    public Stream<MethodAndPatConstructor> findMethodWithPATArg_returningText(
             final MethodFinderOptions options,
-            final Class<?>[] paramTypes,
+            final Class<?>[] signature,
             final Can<Class<?>> additionalParamTypes) {
 
         return MethodFinderPAT
         .findMethodWithPATArg_returningAnyOf(
-                options, ReturnTypeCategory.TRANSLATABLE.getReturnTypes(), paramTypes, additionalParamTypes);
+                options, ReturnTypeCategory.TRANSLATABLE.getReturnTypes(), signature, additionalParamTypes);
     }
 
-    public static Stream<MethodAndPatConstructor> findMethodWithPATArg_returningNonScalar(
+    public Stream<MethodAndPatConstructor> findMethodWithPATArg_returningNonScalar(
             final MethodFinderOptions options,
             final Class<?> elementReturnType,
-            final Class<?>[] paramTypes,
+            final Class<?>[] signature,
             final Can<Class<?>> additionalParamTypes) {
 
         return MethodFinderPAT
         .findMethodWithPATArg_returningAnyOf(
-                options, ReturnTypeCategory.nonScalar(elementReturnType), paramTypes, additionalParamTypes);
+                options, ReturnTypeCategory.nonScalar(elementReturnType), signature, additionalParamTypes);
     }
 
     // -- HELPER
 
-    @Value(staticConstructor = "of")
-    private static class MethodAndPatCandidate {
-        @NonNull Method supportingMethod;
-        @NonNull Class<?> patCandidate;
-        Optional<MethodAndPatConstructor> lookupConstructor(final Class<?>[] paramTypes) {
-            return _Reflect.getPublicConstructors(getPatCandidate()).stream()
-            .filter(paramSignatureMatch(paramTypes))
-            .map(constructor->MethodAndPatConstructor.of(supportingMethod, constructor))
-            .findFirst();
-        }
+    private Optional<MethodAndPatConstructor> lookupPatConstructor(
+            final Method supportingMethod,
+            final Class<?>[] signature) {
+
+        val patCandidate = supportingMethod.getParameterTypes()[0];
+        return _Reflect.getPublicConstructors(patCandidate).stream()
+                .filter(paramSignatureMatch(signature))
+                .map(constructor->MethodAndPatConstructor.of(supportingMethod, constructor))
+                .findFirst();
     }
 
-    static Stream<MethodAndPatConstructor> findMethodWithPATArg_returningAnyOf(
+    private Stream<MethodAndPatConstructor> findMethodWithPATArg_returningAnyOf(
             final MethodFinderOptions options,
             final Can<Class<?>> returnTypes,
-            final Class<?>[] paramTypes,
+            final Class<?>[] signature,
             final Can<Class<?>> additionalParamTypes) {
 
         return returnTypes.stream()
-        .flatMap(returnType->findMethodWithPATArg(options, returnType, paramTypes, additionalParamTypes));
+        .flatMap(returnType->findMethodWithPATArg(options, returnType, signature, additionalParamTypes));
     }
 
 }

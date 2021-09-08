@@ -26,7 +26,7 @@ import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.util.Enums;
-import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
 import org.apache.isis.core.metamodel.commons.MethodExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -79,16 +79,19 @@ implements EnumFacet {
                 EqualByContent.HONOURED,
                 defaultFor(adaptedClass));
 
+        val supportMethodEnum = ObjectSupportMethod.TITLE;
+
         titleMethod = MethodFinder
-            .findMethod_returningText(
-                    MethodFinderOptions
-                        .objectSupport(
-                                getAdaptedClass(),
-                                ProgrammingModelConstants.ObjectSupportMethod.TITLE.getMethodNames(),
-                                introspectionPolicy),
-                    null)
-            .findFirst()
-            .orElse(null);
+        .findMethod_returningCategory(
+                MethodFinderOptions
+                .objectSupport(
+                        getAdaptedClass(),
+                        supportMethodEnum.getMethodNames(),
+                        introspectionPolicy),
+                supportMethodEnum.getReturnTypeCategory(),
+                null)
+        .findFirst()
+        .orElse(null);
 
     }
 
