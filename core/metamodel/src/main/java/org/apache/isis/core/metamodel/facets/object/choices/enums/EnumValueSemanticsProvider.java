@@ -82,13 +82,13 @@ implements EnumFacet {
         val supportMethodEnum = ObjectSupportMethod.TITLE;
 
         titleMethod = MethodFinder
-        .findMethod_returningCategory(
+        .findMethod_returningAnyOf(
                 MethodFinderOptions
                 .objectSupport(
                         getAdaptedClass(),
                         supportMethodEnum.getMethodNames(),
                         introspectionPolicy),
-                supportMethodEnum.getReturnTypeCategory(),
+                supportMethodEnum.getReturnTypeCategory().getReturnTypes(),
                 null)
         .findFirst()
         .orElse(null);

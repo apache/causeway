@@ -47,9 +47,9 @@ extends MemberSupportFacetFactoryAbstract  {
         val argType = getterMethod.getReturnType();
 
         MethodFinder
-        .findMethod_returningCategory(
+        .findMethod_returningAnyOf(
                 methodFinderOptions,
-                ReturnTypeCategory.TRANSLATABLE,
+                ReturnTypeCategory.TRANSLATABLE.getReturnTypes(),
                 new Class[] { argType })
         .peek(processMethodContext::removeMethod)
         .forEach(validateMethod->{

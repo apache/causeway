@@ -64,10 +64,10 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         final Class<?>[] paramTypes = new Class[] { getterMethod.getReturnType() };
 
         val setterMethods = MethodFinder
-        .findMethod_returningCategory(
+        .findMethod_returningAnyOf(
                 MethodFinderOptions
                 .accessor(processMethodContext.getCls(), methodNameCandidates, processMethodContext.getIntrospectionPolicy()),
-                ReturnTypeCategory.VOID,
+                ReturnTypeCategory.VOID.getReturnTypes(),
                 paramTypes)
         .peek(processMethodContext::removeMethod)
         .collect(Can.toCan());

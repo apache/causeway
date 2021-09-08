@@ -113,11 +113,11 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         val toString = ObjectSupportMethod.TO_STRING;
 
         MethodFinder
-        .findMethod_returningCategory(
+        .findMethod_returningAnyOf(
                 MethodFinderOptions.publicOnly(
                         processClassContext.getCls(),
                         toString.getMethodNames()),
-                toString.getReturnTypeCategory(),
+                toString.getReturnTypeCategory().getReturnTypes(),
                 NO_ARG)
         .peek(processClassContext::removeMethod)
         .forEach(method->{
@@ -133,13 +133,13 @@ extends MethodPrefixBasedFacetFactoryAbstract {
             final BiFunction<Method, FacetHolder, Optional<? extends Facet>> ojectSupportFacetConstructor) {
 
         MethodFinder
-        .findMethod_returningCategory(
+        .findMethod_returningAnyOf(
                 MethodFinderOptions
                 .objectSupport(
                         processClassContext.getCls(),
                         objectSupportMethodEnum.getMethodNames(),
                         processClassContext.getIntrospectionPolicy()),
-                objectSupportMethodEnum.getReturnTypeCategory(),
+                objectSupportMethodEnum.getReturnTypeCategory().getReturnTypes(),
                 NO_ARG)
         .peek(processClassContext::removeMethod)
         .forEach(method->{

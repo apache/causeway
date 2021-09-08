@@ -42,9 +42,9 @@ extends MemberSupportFacetFactoryAbstract {
             final MethodFinderOptions methodFinderOptions) {
 
         MethodFinder
-        .findMethod_returningCategory(
+        .findMethod_returningAnyOf(
                 methodFinderOptions,
-                ReturnTypeCategory.TRANSLATABLE,
+                ReturnTypeCategory.TRANSLATABLE.getReturnTypes(),
                 NO_ARG)
         .peek(processMethodContext::removeMethod)
         .forEach(describedMethod->{

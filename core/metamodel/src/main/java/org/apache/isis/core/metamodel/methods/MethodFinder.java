@@ -23,7 +23,6 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ReturnTypeCategory;
 
 /**
  * Support of multiple concurrent naming conventions.
@@ -58,16 +57,6 @@ public final class MethodFinder {
 
         return options.streamMethodsMatchingSignature(signature)
                 .filter(hasReturnTypeAnyOf(anyOfReturnTypes));
-    }
-
-    @Deprecated
-    public static Stream<Method> findMethod_returningCategory(
-            final MethodFinderOptions options,
-            final ReturnTypeCategory returnTypeCategory,
-            final Class<?>[] signature) {
-
-        return options.streamMethodsMatchingSignature(signature)
-                .filter(hasReturnTypeAnyOf(returnTypeCategory.getReturnTypes()));
     }
 
 }
