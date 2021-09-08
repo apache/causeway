@@ -55,6 +55,11 @@ class PumlCode() {
         return this
     }
 
+    fun mindmap(): PumlCode {
+        code += "@startmindmap$NL" + code + "@endmindmap$NL"
+        return this
+    }
+
     private fun center(s: String): String {
         return ".." + s + ".."
     }

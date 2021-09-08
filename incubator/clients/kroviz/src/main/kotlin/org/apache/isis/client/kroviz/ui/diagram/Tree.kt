@@ -18,8 +18,31 @@
  */
 package org.apache.isis.client.kroviz.ui.diagram
 
-class Node(val key: String, val parent: Node?) {
+class Tree(val root: Node) {
 
-    val children = mutableListOf<Node>()
+    fun addChildToParent(childUrl: String, parentUrl: String) {
+        var p = find(parentUrl, root)
+        if (p == null) {
+            p = root
+        }
+        val c = Node(childUrl, p)
+        p.children.add(c)
+    }
+
+    fun find(url: String, node: Node): Node? {
+        if (node.key == url) {
+            return node
+        } else {
+            var answer: Node? = null
+            node.children.forEach {
+                if (it.key == url) {
+                    answer = it
+                } else {
+                    answer = find(url, it)
+                }
+            }
+            return answer
+        }
+    }
 
 }

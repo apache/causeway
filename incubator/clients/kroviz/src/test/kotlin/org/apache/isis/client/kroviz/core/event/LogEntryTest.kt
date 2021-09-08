@@ -30,7 +30,7 @@ class LogEntryTest {
         val url = "https://kroki.io"
 
         // when
-        val le = LogEntry(url)
+        val le = LogEntry(ResourceSpecification(url))
 
         // then
         assertFalse(le.title.startsWith("/"))
@@ -39,7 +39,7 @@ class LogEntryTest {
     @Test
     fun testCalculate() {
         // given
-        val le = LogEntry("http://test/url")
+        val le = LogEntry(ResourceSpecification("http://test/url"))
 
         // when
         le.setSuccess()

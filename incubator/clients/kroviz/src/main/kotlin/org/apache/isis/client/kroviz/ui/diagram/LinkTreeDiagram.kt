@@ -18,10 +18,10 @@
  */
 package org.apache.isis.client.kroviz.ui.diagram
 
+import org.apache.isis.client.kroviz.core.aggregator.AggregatorWithLayout
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.event.LogEntry
-import org.apache.isis.client.kroviz.core.event.LogEntryDecorator
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.to.HasLinks
 import org.apache.isis.client.kroviz.ui.core.UiManager
@@ -29,102 +29,71 @@ import org.apache.isis.client.kroviz.utils.StringUtils
 
 object LinkTreeDiagram {
 
-    private const val NL = "\n"
-    private const val prolog = "@startmindmap$NL"
-    private const val epilog = "@endmindmap$NL"
     private val protocolHostPort = UiManager.getUrl()
 
     fun build(aggregator: BaseAggregator): String {
-        var code = prolog
-        val entryList: List<LogEntry> = EventStore.findAllBy(aggregator)
-        val root = findRoot(entryList)
-        if (root == null) {
-            code += "* / $NL"
-            code += createNodes(entryList, 2)
-        } else {
-            code += root.asPumlNode(1)
-            val led = LogEntryDecorator(root)
-            val childList = led.findChildrenOfLogEntry()
-            console.log(aggregator)
-            console.log(entryList)
-            code += createChildNodes(childList, 2)
+        console.log("[LTD.build]")
+        val pc = PumlCode()
+        if (aggregator is AggregatorWithLayout) {
+            val tree = aggregator.tree!!
+            val root = tree.root
+            console.log(root)
+            pc.code += toPumlCode(root, 1)
         }
-        code += epilog
-        return code
+        pc.mindmap()
+        console.log(pc.code)
+        return pc.code
     }
 
-    private fun createChildNodes(childList: List<LogEntry>, level: Int): String {
-        var code = ""
-        childList.forEach {
-            code += createNode(it, level)
-            val led = LogEntryDecorator(it)
-            val kidSet = led.findChildrenOfLogEntry()
-            code += createChildNodes(kidSet, level + 1)
-        }
-        return code
-    }
-
-    private fun createNode(le: LogEntry, level: Int): String {
-        var code = ""
-        if (isInEventStore(le.url)) {
-            code += le.asPumlNode(level)
-        }
-        return code
-    }
-
-    private fun createNodes(entryList: List<LogEntry>, level: Int): String {
-        var code = ""
-        entryList.forEach {
-            code += createNode(it, level)
-        }
-        return code
-    }
-
-    private fun findRoot(entryList: List<LogEntry>): LogEntry? {
-        entryList.forEach {
-            val led = LogEntryDecorator(it)
-            val parent = led.findParent()
-            if (parent != null && !entryList.contains(parent)) {
-                return parent
-            }
-        }
-        return null
-    }
-
-    private fun isInEventStore(url: String): Boolean {
+    private fun toPumlCode(node: Node, level: Int): String {
+        val url = node.key
         val rs = ResourceSpecification(url)
         val le = EventStore.findBy(rs)
-        return (le != null)
-    }
-
-    fun LogEntry.asPumlNode(level: Int): String {
-        val led = LogEntryDecorator(this)
-        val url = this.url
-        val title = StringUtils.shortTitle(url, protocolHostPort)
-        val type = led.selfType()
-        val depth = "*".repeat(level)
         val pc = PumlCode()
-        pc.add(depth).add(":")
-        pc.addStereotype(type)
-        pc.addLink(url, title)
-        pc.addHorizontalLine()
-        pc.add(traceInfo(this))
-        pc.addLine(";")
+        if (le != null) {
+            val title = StringUtils.shortTitle(url, protocolHostPort)
+            val type = le.selfType()
+            val depth = "*".repeat(level)
+            pc.add(depth).add(":")
+            pc.addStereotype(type)
+            pc.addLink(url, title)
+            pc.addHorizontalLine()
+            pc.add(traceInfo(le))
+            pc.addLine(";")
+            node.children.forEach {
+                val childCode = toPumlCode(it, level + 1)
+                pc.add(childCode)
+            }
+        }
         return pc.code
     }
 
     private fun traceInfo(logEntry: LogEntry): String {
-        val obj = logEntry.obj!!
-        val className = obj::class.simpleName!!
-        val pc = PumlCode().addClass(className)
-        if (obj is HasLinks) {
-            obj.links.forEach {
-                val url = it.href
-                val title = StringUtils.shortTitle(url, protocolHostPort)
-                pc.addLink(url, title)
+        val pc = PumlCode()
+        val obj = logEntry.obj
+        if (obj != null) {
+            val className = obj::class.simpleName!!
+            pc.addClass(className)
+            if (obj is HasLinks) {
+                obj.links.forEach {
+                    val url = it.href
+                    val title = StringUtils.shortTitle(url, protocolHostPort)
+                    pc.addLink(url, title)
+                }
             }
         }
         return pc.code
+    }
+
+    private fun LogEntry.selfType(): String {
+        val selfLink = this.selfLink()
+        return if (selfLink != null) {
+            selfLink.representation().type
+        } else {
+            console.log("[LE.selfType]")
+            console.log(this)
+            ""
+        }
     }
 
 }

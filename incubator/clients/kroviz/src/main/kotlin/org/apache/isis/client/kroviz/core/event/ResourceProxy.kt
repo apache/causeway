@@ -27,6 +27,7 @@ import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.ui.diagram.Node
+import org.apache.isis.client.kroviz.ui.diagram.Tree
 
 /**
  * Facade for RoXmlHttpRequest. If a resource is being fetched, it:
@@ -51,18 +52,6 @@ class ResourceProxy {
         }
     }
 
-    private fun processCached(rs: ResourceSpecification, aggregator: BaseAggregator?) {
-        val le = EventStore.findBy(rs)!!
-        le.retrieveResponse()
-        if (aggregator == null) {
-            ResponseHandler.handle(le)
-        } else {
-            aggregator.update(le, le.subType)
-        }
-        le.setCached()
-        EventStore.updateStatus(le)
-    }
-
     fun fetch(link: Link,
               aggregator: BaseAggregator? = null,
               subType: String = Constants.subTypeJson,
@@ -75,24 +64,35 @@ class ResourceProxy {
         }
         when {
             isCached -> processCached(rs, aggregator)
-            !isCached && isRest -> {
-                if (aggregator is AggregatorWithLayout) {
-                    val child = Node(link.href)
-//FIXME                    aggregator.root.add(child)
-                }
-                RoXmlHttpRequest(aggregator).process(link, subType)
-            }
+            !isCached && isRest -> process(aggregator, link, subType, referrer)
             !isCached && !isRest -> RoXmlHttpRequest(aggregator).processNonREST(link, subType)
         }
     }
 
-    private fun isNotRenderedYet(aggregator: BaseAggregator?): Boolean {
-        if (aggregator != null && aggregator is AggregatorWithLayout) {
-            return !aggregator.dpm.isRendered
-        } else {
-            return false
+    private fun process(aggregator: BaseAggregator?, link: Link, subType: String, referrer: String) {
+        if (aggregator is AggregatorWithLayout) {
+            if (aggregator.tree == null) {
+                val root = Node(referrer, null)
+                aggregator.tree = Tree(root)
+            }
+            aggregator.tree!!.addChildToParent(link.href, referrer)
+
         }
+        RoXmlHttpRequest(aggregator).process(link, subType)
     }
+
+    private fun processCached(rs: ResourceSpecification, aggregator: BaseAggregator?) {
+        val le = EventStore.findBy(rs)!!
+        le.retrieveResponse()
+        if (aggregator == null) {
+            ResponseHandler.handle(le)
+        } else {
+            aggregator.update(le, le.subType)
+        }
+        le.setCached()
+        EventStore.updateStatus(le)
+    }
+
 
     fun invokeKroki(pumlCode: String, aggregator: SvgDispatcher) {
         RoXmlHttpRequest(aggregator).invokeKroki(pumlCode)

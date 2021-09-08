@@ -6,11 +6,13 @@ import org.apache.isis.client.kroviz.layout.Layout
 import org.apache.isis.client.kroviz.to.Represention
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.core.Constants
+import org.apache.isis.client.kroviz.ui.diagram.Tree
 
 abstract class AggregatorWithLayout : BaseAggregator() {
     // parentUrl is to be set in update
     // and to be used in subsequent invocations
     var parentUrl: String? = null
+    var tree: Tree? = null
 
     override fun update(logEntry: LogEntry, subType: String) {
         parentUrl = logEntry.url

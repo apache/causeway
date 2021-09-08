@@ -20,7 +20,6 @@ package org.apache.isis.client.kroviz.ui.dialog
 
 import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.event.LogEntry
-import org.apache.isis.client.kroviz.core.event.LogEntryDecorator
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.to.bs3.Grid
@@ -41,7 +40,7 @@ class EventLogDetail(val logEntryFromTabulator: LogEntry) : Command() {
         // For a yet unknown reason, aggregators are not transmitted via tabulator.
         // As a WORKAROUND, we fetch the full blown LogEntry from the EventStore again.
         val rs = ResourceSpecification(logEntryFromTabulator.title)
-        logEntry = EventStore.findBy(rs)?: logEntryFromTabulator  // in case of xml, we use the entry passed in
+        logEntry = EventStore.findBy(rs) ?: logEntryFromTabulator  // in case of xml, we use the entry passed in
     }
 
     // callback parameter
@@ -55,15 +54,10 @@ class EventLogDetail(val logEntryFromTabulator: LogEntry) : Command() {
             XmlHelper.format(logEntry.response)
         }
 
-        val led = LogEntryDecorator(logEntry)
-        val children = led.findChildren()
-        var kids = ""
-        children.forEach { kids += it.url + "\n" }
         val formItems = mutableListOf<FormItem>()
         formItems.add(FormItem("Url", ValueType.TEXT, logEntry.title))
         formItems.add(FormItem("Response", ValueType.TEXT_AREA, responseStr, 10))
         formItems.add(FormItem("Aggregators", ValueType.TEXT, content = logEntry.aggregators))
-        formItems.add(FormItem("Children", ValueType.TEXT_AREA, kids, size = 5))
         formItems.add(FormItem("Link Tree Diagram", ValueType.BUTTON, null, callBack = this, callBackAction = LNK))
         formItems.add(FormItem("Console", ValueType.BUTTON, null, callBack = this, callBackAction = LOG))
 
