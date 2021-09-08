@@ -24,7 +24,7 @@ import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSup
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
+import org.apache.isis.core.metamodel.methods.MethodFinder;
 
 import lombok.val;
 
@@ -39,12 +39,12 @@ extends MemberSupportFacetFactoryAbstract {
     @Override
     protected void search(
             final ProcessMethodContext processMethodContext,
-            final MethodFinderOptions methodFinderOptions) {
+            final MethodFinder methodFinder) {
 
         val getterOrMixinMain = processMethodContext.getMethod();
         val getterType = getterOrMixinMain.getReturnType();
 
-        methodFinderOptions
+        methodFinder
         .streamMethodsMatchingSignature(STRING_ARG)
         .peek(processMethodContext::removeMethod)
         .forEach(autoCompleteMethod->{

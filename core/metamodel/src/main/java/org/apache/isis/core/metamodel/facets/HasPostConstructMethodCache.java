@@ -24,7 +24,7 @@ import java.lang.reflect.Method;
 import javax.annotation.PostConstruct;
 
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
-import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
+import org.apache.isis.core.metamodel.methods.MethodFinder;
 
 import lombok.val;
 
@@ -38,14 +38,14 @@ public interface HasPostConstructMethodCache {
     default Method postConstructMethodFor(final Object pojo) {
         return findAnnotatedMethod(
                 // @PostConstruct is allowed to appear on non-public methods
-                MethodFinderOptions.notNecessarilyPublic(pojo.getClass(), MethodFinderOptions.ANY_NAME)
+                MethodFinder.notNecessarilyPublic(pojo.getClass(), MethodFinder.ANY_NAME)
                 .withRequiredReturnType(void.class),
                 PostConstruct.class,
                 getPostConstructMethodsCache());
     }
 
     private static Method findAnnotatedMethod(
-            final MethodFinderOptions options,
+            final MethodFinder options,
             final Class<? extends Annotation> annotationClass,
             final MethodByClassMap methods) {
 

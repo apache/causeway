@@ -23,14 +23,13 @@ import java.util.EnumSet;
 import javax.inject.Inject;
 
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
-import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ReturnTypePattern;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.ActionSupport;
 import org.apache.isis.core.metamodel.facets.ActionSupport.SearchAlgorithm;
 import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.param.validate.method.ActionParameterValidationFacetViaMethod;
-import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
+import org.apache.isis.core.metamodel.methods.MethodFinder;
 
 import lombok.val;
 
@@ -48,12 +47,11 @@ extends MemberSupportFacetFactoryAbstract {
     @Override
     protected void search(
             final ProcessMethodContext processMethodContext,
-            final MethodFinderOptions methodFinderOptions) {
+            final MethodFinder methodFinder) {
 
         val searchRequest = ActionSupport.ActionSupportingMethodSearchRequest.builder()
                 .processMethodContext(processMethodContext)
-                .returnTypePattern(ReturnTypePattern.TEXT)
-                .finderOptions(methodFinderOptions)
+                .methodFinder(methodFinder)
                 .searchAlgorithms(EnumSet.of(SearchAlgorithm.PAT, SearchAlgorithm.ALL_PARAM_TYPES))
                 .build();
 

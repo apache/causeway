@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod;
 import org.apache.isis.core.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacetViaSetterMethod;
-import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
+import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
 import lombok.val;
@@ -61,7 +61,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         final Class<?>[] signature = new Class[] { getterMethod.getReturnType() };
 
         val setterMethods =
-        MethodFinderOptions
+        MethodFinder
         .accessor(processMethodContext.getCls(), methodNameCandidates, processMethodContext.getIntrospectionPolicy())
         .withReturnTypeAnyOf(ReturnTypeCategory.VOID.getReturnTypes())
         .streamMethodsMatchingSignature(signature)

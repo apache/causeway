@@ -31,7 +31,7 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ReturnTypePattern;
-import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
+import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderPAT;
 import org.apache.isis.core.metamodel.methods.MethodFinderPAT.MethodAndPatConstructor;
 
@@ -132,10 +132,10 @@ public final class ParameterSupport {
         val additionalParamTypes = Can.ofNullable(searchRequest.getAdditionalParamType());
 
         MethodFinderPAT
-        .findMethodWithPATArg_returningAnyOf(
-                MethodFinderOptions
-                .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy()),
-                searchRequest.getReturnTypePattern().matchingTypes(paramType),
+        .findMethodWithPATArg(
+                MethodFinder
+                .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy())
+                .withReturnTypeAnyOf(searchRequest.getReturnTypePattern().matchingTypes(paramType)),
                 paramTypes, additionalParamTypes)
         .map(methodAndPatConstructor->toSearchResult(paramIndex, paramType, methodAndPatConstructor))
         .forEach(onMethodFound);
@@ -164,7 +164,7 @@ public final class ParameterSupport {
         val paramType = paramTypes[paramIndex];
         val signature = new Class<?>[]{paramType};
 
-        MethodFinderOptions
+        MethodFinder
         .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy())
         .withReturnTypeAnyOf(searchRequest.getReturnTypePattern().matchingTypes(paramType))
         .streamMethodsMatchingSignature(signature)
@@ -194,7 +194,7 @@ public final class ParameterSupport {
             val signature = concat(paramTypes, paramsConsideredCount, additionalParamType);
 
             val supportingMethod =
-            MethodFinderOptions
+            MethodFinder
             .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy())
             .withReturnTypeAnyOf(searchRequest.getReturnTypePattern().matchingTypes(paramType))
             .streamMethodsMatchingSignature(signature)

@@ -22,7 +22,7 @@ import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
+import org.apache.isis.core.metamodel.methods.MethodFinder;
 
 import lombok.NonNull;
 import lombok.val;
@@ -69,7 +69,7 @@ extends MemberAndPropertySupportFacetFactoryAbstract {
                 .flatMap(processMethodContext::memberSupportCandidates);
 
         search(processMethodContext,
-                MethodFinderOptions
+                MethodFinder
                 .memberSupport(processMethodContext.getCls(),
                         methodNameCandidates,
                         processMethodContext.getIntrospectionPolicy())
@@ -80,6 +80,6 @@ extends MemberAndPropertySupportFacetFactoryAbstract {
 
     protected abstract void search(
             ProcessMethodContext processMethodContext,
-            MethodFinderOptions methodFinderOptions);
+            MethodFinder methodFinder);
 
 }

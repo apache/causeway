@@ -51,28 +51,15 @@ public final class MethodFinderPAT {
     // -- SEARCH FOR MULTIPLE NAME CANDIDATES (PAT)
 
     public Stream<MethodAndPatConstructor> findMethodWithPATArg(
-            final MethodFinderOptions options,
-            final Class<?> returnType,
+            final MethodFinder options,
             final Class<?>[] signature,
             final Can<Class<?>> additionalParamTypes) {
 
         return options.streamMethodsIgnoringSignature()
-            .filter(method -> returnType == null
-                || returnType.isAssignableFrom(method.getReturnType()))
             .filter(MethodUtil.Predicates.paramCount(1 + additionalParamTypes.size()))
             .filter(MethodUtil.Predicates.matchParamTypes(1, additionalParamTypes))
             .map(method->lookupPatConstructor(method, signature))
             .flatMap(Optional::stream);
-    }
-
-    public Stream<MethodAndPatConstructor> findMethodWithPATArg_returningAnyOf(
-            final MethodFinderOptions options,
-            final Can<Class<?>> returnTypes,
-            final Class<?>[] signature,
-            final Can<Class<?>> additionalParamTypes) {
-
-        return returnTypes.stream()
-        .flatMap(returnType->findMethodWithPATArg(options, returnType, signature, additionalParamTypes));
     }
 
     // -- HELPER

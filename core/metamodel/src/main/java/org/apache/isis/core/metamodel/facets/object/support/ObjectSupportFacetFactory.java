@@ -43,7 +43,7 @@ import org.apache.isis.core.metamodel.facets.object.icon.method.IconFacetViaIcon
 import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacetViaLayoutMethod;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetInferredFromToStringMethod;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaTitleMethod;
-import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
+import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -111,7 +111,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
 
         val toString = ObjectSupportMethod.TO_STRING;
 
-        MethodFinderOptions
+        MethodFinder
         .publicOnly(
                 processClassContext.getCls(),
                 toString.getMethodNames())
@@ -131,7 +131,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
             final BiFunction<Method, FacetHolder, Optional<? extends Facet>> ojectSupportFacetConstructor) {
 
 
-        MethodFinderOptions
+        MethodFinder
         .objectSupport(
                 processClassContext.getCls(),
                 objectSupportMethodEnum.getMethodNames(),

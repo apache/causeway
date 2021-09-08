@@ -564,6 +564,15 @@ public final class _Reflect {
     @UtilityClass
     public static class Filter {
 
+        public static Predicate<Method> hasReturnType(final Class<?> expectedReturnType) {
+            return method->expectedReturnType.isAssignableFrom(method.getReturnType());
+        }
+
+        public static Predicate<Method> hasReturnTypeAnyOf(final Can<Class<?>> allowedReturnTypes) {
+            return method->allowedReturnTypes.stream()
+                    .anyMatch(allowedReturnType->allowedReturnType.isAssignableFrom(method.getReturnType()));
+        }
+
         public static Predicate<Executable> isPublic() {
             return ex->Modifier.isPublic(ex.getModifiers());
         }
@@ -576,6 +585,7 @@ public final class _Reflect {
             return ex->ex.getParameterTypes()[paramIndex].isAssignableFrom(paramType);
         }
 
+        //TODO simple array compare should do
         public static Predicate<Executable> paramSignatureMatch(final Class<?>[] matchingParamTypes) {
             return ex->{
                 // check params (if required)

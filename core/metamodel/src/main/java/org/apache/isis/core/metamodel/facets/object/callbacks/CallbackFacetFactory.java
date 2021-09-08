@@ -29,7 +29,7 @@ import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.CallbackM
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
+import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
 import lombok.val;
@@ -66,7 +66,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
 
         val callbackMethods =
 
-        MethodFinderOptions
+        MethodFinder
         .livecycleCallback(
                 cls,
                 callbackMethodEnum.getMethodNames(),

@@ -24,7 +24,7 @@ import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSup
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
+import org.apache.isis.core.metamodel.methods.MethodFinder;
 
 public class DescribedAsFacetForMemberViaMethodFactory
 extends MemberSupportFacetFactoryAbstract {
@@ -37,9 +37,9 @@ extends MemberSupportFacetFactoryAbstract {
     @Override
     protected void search(
             final ProcessMethodContext processMethodContext,
-            final MethodFinderOptions methodFinderOptions) {
+            final MethodFinder methodFinder) {
 
-        methodFinderOptions
+        methodFinder
         .streamMethodsMatchingSignature(NO_ARG)
         .peek(processMethodContext::removeMethod)
         .forEach(describedMethod->{

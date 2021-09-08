@@ -29,8 +29,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Arrays;
-import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ReturnTypePattern;
-import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
+import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderPAT;
 import org.apache.isis.core.metamodel.methods.MethodFinderPAT.MethodAndPatConstructor;
 
@@ -48,11 +47,8 @@ public final class ActionSupport {
     public static class ActionSupportingMethodSearchRequest {
 
         @NonNull FacetFactory.ProcessMethodContext processMethodContext;
-        @Getter @NonNull MethodFinderOptions finderOptions;
+        @Getter @NonNull MethodFinder methodFinder;
         @NonNull EnumSet<SearchAlgorithm> searchAlgorithms;
-
-        @Deprecated
-        @NonNull ReturnTypePattern returnTypePattern;
 
         Class<?> additionalParamType;
 
@@ -107,14 +103,12 @@ public final class ActionSupport {
             final Consumer<ActionSupportingMethodSearchResult> onMethodFound) {
 
         val paramTypes = searchRequest.getParamTypes();
-        val finderOptions = searchRequest.getFinderOptions();
+        val finderOptions = searchRequest.getMethodFinder();
         val additionalParamTypes = Can.ofNullable(searchRequest.getAdditionalParamType());
-        val anyOfReturnTypes = searchRequest.getReturnTypePattern().matchingTypes(void.class); // ignores actual type
 
         MethodFinderPAT
-        .findMethodWithPATArg_returningAnyOf(
+        .findMethodWithPATArg(
                 finderOptions,
-                anyOfReturnTypes,
                 paramTypes, additionalParamTypes)
         .map(ActionSupport::toSearchResult)
         .forEach(onMethodFound);
@@ -134,7 +128,7 @@ public final class ActionSupport {
             final Consumer<ActionSupportingMethodSearchResult> onMethodFound) {
 
         val paramTypes = searchRequest.getParamTypes();
-        val finderOptions = searchRequest.getFinderOptions();
+        val finderOptions = searchRequest.getMethodFinder();
 
         val additionalParamType = searchRequest.getAdditionalParamType();
         val additionalParamCount = additionalParamType!=null ? 1 : 0;
@@ -143,10 +137,8 @@ public final class ActionSupport {
         if(paramsConsideredCount>=0) {
 
             val signature = concat(paramTypes, paramsConsideredCount, additionalParamType);
-            val anyOfReturnTypes = searchRequest.getReturnTypePattern().matchingTypes(void.class); // ignores actual type
 
             finderOptions
-            .withReturnTypeAnyOf(anyOfReturnTypes)
             .streamMethodsMatchingSignature(signature)
             .map(ActionSupport::toSearchResult)
             .forEach(onMethodFound);

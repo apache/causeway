@@ -18,15 +18,15 @@
  */
 package org.apache.isis.viewer.restfulobjects.viewer.mappers;
 
-import java.lang.reflect.InvocationTargetException;
+import java.util.Optional;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
-import org.apache.isis.core.metamodel.methods.MethodFinderOptions;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -34,22 +34,18 @@ final class FailureUtil {
 
     public static HttpStatusCode getFailureStatusCodeIfAny(final Throwable ex) {
 
-        val errorCodeGetter = MethodFinderOptions.publicOnly(ex.getClass(), Can.ofSingleton("getErrorCode"))
-        .streamMethodsMatchingSignature(MethodFinderOptions.NO_ARG)
-        .filter(MethodFinder.hasReturnType(int.class))
-        .findFirst()
-        .orElse(null);
-
-        if(errorCodeGetter!=null) {
-            try {
-                val errorCode = (int)errorCodeGetter.invoke(ex);
-                return RestfulResponse.HttpStatusCode.statusFor(errorCode);
-            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-                // ignore
-            }
-        }
-
-        return null;
+        return MethodFinder
+            .publicOnly(ex.getClass(), Can.ofSingleton("getErrorCode"))
+            .withRequiredReturnType(int.class)
+            .streamMethodsMatchingSignature(MethodFinder.NO_ARG)
+            .findFirst()
+            .map(errorCodeGetter->_Reflect.invokeMethodOn(errorCodeGetter, ex))
+            .map(Result::getValue)
+            .map(Optional::stream)
+            .map(Integer.class::isInstance)
+            .map(Integer.class::cast)
+            .map(RestfulResponse.HttpStatusCode::statusFor)
+            .orElse(null);
 
     }
 
