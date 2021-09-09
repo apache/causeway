@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.jaxb;
+package org.apache.isis.valuetypes.jodatime.applib.jaxb;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -28,15 +28,15 @@ import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
+import org.apache.isis.applib.jaxb.JodaTimeXMLGregorianCalendarMarshalling;
+
 import lombok.experimental.UtilityClass;
 
 /**
  * @since 2.0 {@index}
- * @deprecated use org.apache.isis.valuetypes.jodatime.applib.jaxb.JodatimeJaxbAdapters instead
  */
 @UtilityClass
-@Deprecated(forRemoval = true, since = "2.0.0-M7")
-public final class JodaTimeJaxbAdapters {
+public final class JodatimeJaxbAdapters {
 
     public static class LocalDateToStringAdapter extends XmlAdapter<String, LocalDate> {
 
@@ -172,3 +172,4 @@ public final class JodaTimeJaxbAdapters {
 
 
 }
+
