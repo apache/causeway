@@ -24,6 +24,7 @@ import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.to.HasLinks
+import org.apache.isis.client.kroviz.to.Property
 import org.apache.isis.client.kroviz.to.Relation
 import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.utils.StringUtils
@@ -33,16 +34,13 @@ object LinkTreeDiagram {
     private val protocolHostPort = UiManager.getUrl()
 
     fun build(aggregator: BaseAggregator): String {
-        console.log("[LTD.build]")
         val pc = PumlCode()
         if (aggregator is AggregatorWithLayout) {
             val tree = aggregator.tree!!
             val root = tree.root
-            console.log(root)
             pc.code += toPumlCode(root, 1)
         }
         pc.mindmap()
-        console.log(pc.code)
         return pc.code
     }
 
@@ -53,23 +51,26 @@ object LinkTreeDiagram {
         val pc = PumlCode()
         if (le != null) {
             val title = StringUtils.shortTitle(url, protocolHostPort)
-            val type = le.selfType()
             val depth = "*".repeat(level)
             pc.add(depth).add(":")
-            pc.addStereotype(type)
+            pc.addStereotype(le.type)
             pc.addLink(url, title)
             pc.addHorizontalLine()
-            pc.add(traceInfo(le))
+            pc.add(linkInfo(le))
             pc.addLine(";")
             node.children.forEach {
                 val childCode = toPumlCode(it, level + 1)
                 pc.add(childCode)
             }
+            if (le.type == "property-description") {
+                val pdCode = propertyDescriptionInfo(le, level + 1)
+                pc.add(pdCode)
+            }
         }
         return pc.code
     }
 
-    private fun traceInfo(logEntry: LogEntry): String {
+    private fun linkInfo(logEntry: LogEntry): String {
         val pc = PumlCode()
         val obj = logEntry.obj
         if (obj != null) {
@@ -88,15 +89,18 @@ object LinkTreeDiagram {
         return pc.code
     }
 
-    private fun LogEntry.selfType(): String {
-        val selfLink = this.selfLink()
-        return if (selfLink != null) {
-            selfLink.representation().type
-        } else {
-            console.log("[LE.selfType]")
-            console.log(this)
-            ""
+    private fun propertyDescriptionInfo(logEntry: LogEntry, level: Int) : String {
+        val pc = PumlCode()
+        val obj = logEntry.obj
+        if (obj != null) {
+            val depth = "*".repeat(level)
+            pc.add(depth).add(":")
+            val ets = (obj as Property).extensions!!
+            pc.addLine("friendlyName: " + ets.friendlyName)
+            pc.addLine("descriptions: " + ets.description)
+            pc.addLine(";")
         }
+        return pc.code
     }
 
 }

@@ -56,8 +56,9 @@ data class LogEntry(
         val method: String? = "",
         val request: String = "",
         @Contextual val createdAt: Date = Date()) {
-    val url:String = rs.url
-    val referrer = rs.referrerUrl
+    val url: String = rs.url
+
+    //    val referrer = rs.referrerUrl
     val subType = rs.subType
     var state = EventState.INITIAL
     var title: String = ""
@@ -175,8 +176,12 @@ data class LogEntry(
             val self = (obj as HasLinks).getLinks().firstOrNull() { it.relation() == Relation.SELF }
             if (self != null) {
                 val t = self.type.removePrefix("application/json;profile=\"urn:org.restfulobjects:repr-types/")
-                this.type = t.removeSuffix("\"")
+                type = t.removeSuffix("\"")
             }
+        }
+        if (type == "") {
+            console.log("[LE.initType]")
+            console.log(this)
         }
     }
 
