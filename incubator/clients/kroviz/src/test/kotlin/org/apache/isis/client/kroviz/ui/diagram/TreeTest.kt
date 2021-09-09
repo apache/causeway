@@ -42,15 +42,15 @@ class TreeTest {
         tree.addChildToParent(url_1_2, url_1)
 
         //then
-        val r = tree.find(url_0, root)!!
+        val r = tree.find(root, url_0, )!!
         assertEquals(1, r.children.size)
         assertNull(r.parent)
 
-        val c = tree.find(url_1, root)!!
+        val c = tree.find(root, url_1, )!!
         assertNotNull(c.parent)
         assertEquals(2, c.children.size)
-        assertEquals(url_1_1, c.children.first().key)
-        assertEquals(url_1_2, c.children.last().key)
+        assertEquals(url_1_1, c.children.first().name)
+        assertEquals(url_1_2, c.children.last().name)
     }
 
 }

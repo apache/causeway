@@ -24,6 +24,7 @@ import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.to.HasLinks
+import org.apache.isis.client.kroviz.to.Relation
 import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.utils.StringUtils
 
@@ -46,7 +47,7 @@ object LinkTreeDiagram {
     }
 
     private fun toPumlCode(node: Node, level: Int): String {
-        val url = node.key
+        val url = node.name
         val rs = ResourceSpecification(url)
         val le = EventStore.findBy(rs)
         val pc = PumlCode()
@@ -76,9 +77,11 @@ object LinkTreeDiagram {
             pc.addClass(className)
             if (obj is HasLinks) {
                 obj.links.forEach {
-                    val url = it.href
-                    val title = StringUtils.shortTitle(url, protocolHostPort)
-                    pc.addLink(url, title)
+                    if (it.relation() != Relation.SELF) {
+                        val url = it.href
+                        val title = StringUtils.shortTitle(url, protocolHostPort)
+                        pc.addLink(url, title)
+                    }
                 }
             }
         }
