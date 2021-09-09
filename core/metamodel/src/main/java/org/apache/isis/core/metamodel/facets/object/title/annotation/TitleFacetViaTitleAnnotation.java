@@ -36,6 +36,8 @@ import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.commons.internal.reflection._Reflect.InterfacePolicy;
 import org.apache.isis.commons.internal.reflection._Reflect.TypeHierarchyPolicy;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.Validation;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.Evaluators;
 import org.apache.isis.core.metamodel.facets.Evaluators.MethodEvaluator;
@@ -43,6 +45,7 @@ import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -67,6 +70,7 @@ implements ImperativeFacet {
                     annotatedElement->isTitleComponent(annotatedElement, titleRef::set),
                     TypeHierarchyPolicy.EXCLUDE,
                     InterfacePolicy.INCLUDE)
+                .filter(evaluator->!isATitleProvidingObjectSupportMethod(evaluator, holder))
                 .map(evaluator->TitleComponent.of(evaluator, titleRef.getValueElseFail()))
                 .sorted()
                 .collect(Can.toCan());
@@ -188,6 +192,18 @@ implements ImperativeFacet {
                 .synthesizeInherited(annotatedElement, Title.class)
                 .map(title->{onTitleFound.accept(title); return true;})
                 .orElse(false);
+    }
+
+    private static boolean isATitleProvidingObjectSupportMethod(
+            final Evaluators.Evaluator evaluator,
+            final FacetHolder facetHolder) {
+        if(ObjectSupportMethod.TITLE.getMethodNames().contains(evaluator.name())) {
+            ValidationFailure.raise(facetHolder,
+                    Validation.CONFLICTING_TITLE_STRATEGIES
+                    .getMessage(facetHolder.getFeatureIdentifier()));
+            return true;
+        }
+        return false;
     }
 
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)

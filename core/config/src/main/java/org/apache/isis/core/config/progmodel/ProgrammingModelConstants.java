@@ -34,6 +34,7 @@ import javax.enterprise.inject.Vetoed;
 import org.springframework.lang.Nullable;
 import org.springframework.util.ClassUtils;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Domain;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.ObjectLifecycle;
@@ -309,6 +310,18 @@ public final class ProgrammingModelConstants {
         }
     }
 
+    //FIXME[ISIS-2774] consolidate all MM validation raisers here, if we can find a common method signature for that
+    @RequiredArgsConstructor
+    public static enum Validation {
+        CONFLICTING_TITLE_STRATEGIES(
+                "${type} has title() method with @Title annotation, which is not allowed; "
+                + "consider either removing the @Title annotation or renaming the method");
+        private final String template;
+        public String getMessage(final Identifier identifier) {
+            return processMessageTemplate(template, identifier);
+        }
+    }
+
     // -- HELPER
 
     private static String getCapitalizedMemberName(final Member member) {
@@ -326,6 +339,12 @@ public final class ProgrammingModelConstants {
         }
         // must be a field then
         return _Strings.capitalize(member.getName());
+    }
+
+    private static String processMessageTemplate(
+            final String template,
+            final Identifier identifier) {
+        return template.replace("${type}", identifier.getLogicalType().getClassName());
     }
 
 
