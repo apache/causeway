@@ -20,18 +20,24 @@ package demoapp.dom.types.isisext.cal.samples;
 
 import java.util.stream.Stream;
 
+import javax.inject.Inject;
+
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
 
 import demoapp.dom.types.Samples;
+import demoapp.dom.types.javatime.javatimezoneddatetime.samples.JavaTimeZonedDateTimeSamples;
 
 @Service
 public class IsisCalendarEventSamples implements Samples<CalendarEvent> {
 
+    @Inject JavaTimeZonedDateTimeSamples zonedDateTimeSamples;
+
     @Override
     public Stream<CalendarEvent> stream() {
-        return Stream.of();
+        return zonedDateTimeSamples.stream()
+                .map(dateTime->CalendarEvent.of(dateTime, "A Calendar", "New Event"));
     }
 
 }

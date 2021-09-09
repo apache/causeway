@@ -18,6 +18,8 @@
  */
 package org.apache.isis.extensions.fullcalendar.applib.value;
 
+import java.time.Instant;
+
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
@@ -26,11 +28,13 @@ import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 /**
  * For internal use; allows Isis to parse etc.
  */
-public class CalendarEventSemanticsProvider implements ValueSemanticsProvider<CalendarEvent> {
+public class CalendarEventSemanticsProvider
+implements ValueSemanticsProvider<CalendarEvent> {
 
     @Override
 	public DefaultsProvider<CalendarEvent> getDefaultsProvider() {
-		return null;
+		return ()->new CalendarEvent(
+		        Instant.now().toEpochMilli(), "Default Calendar", "New Event", "empty");
 	}
 
 	@Override

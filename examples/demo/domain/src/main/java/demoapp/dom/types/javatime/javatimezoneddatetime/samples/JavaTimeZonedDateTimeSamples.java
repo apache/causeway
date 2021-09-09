@@ -18,7 +18,7 @@
  */
 package demoapp.dom.types.javatime.javatimezoneddatetime.samples;
 
-import java.time.ZoneOffset;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.stream.Stream;
 
@@ -31,8 +31,18 @@ public class JavaTimeZonedDateTimeSamples implements Samples<ZonedDateTime> {
 
     @Override
     public Stream<ZonedDateTime> stream() {
+        return ZoneId.getAvailableZoneIds()
+                .stream()
+                .limit(2)
+                .map(ZoneId::of)
+                .flatMap(this::streamWithZone);
+    }
+
+    // -- HELPER
+
+    private Stream<ZonedDateTime> streamWithZone(final ZoneId zoneId) {
         return Stream.of(1, 2, 3)
-                .map(x -> java.time.ZonedDateTime.of(2020,x,x,x,x,x,x, ZoneOffset.UTC));
+                .map(x -> java.time.ZonedDateTime.of(2020,x,x,x,x,x,x, zoneId));
     }
 
 }

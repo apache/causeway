@@ -56,6 +56,23 @@ implements
     private final @NonNull String title;
     private final @Nullable String notes;
 
+    // -- FACTORIES
+
+    public static CalendarEvent of(
+            final @NonNull ZonedDateTime dateTime,
+            final @NonNull String calendarName,
+            final @NonNull String title) {
+        return of(dateTime, calendarName, title, null);
+    }
+
+    public static CalendarEvent of(
+            final @NonNull ZonedDateTime dateTime,
+            final @NonNull String calendarName,
+            final @NonNull String title,
+            final @Nullable String notes) {
+        return new CalendarEvent(dateTime.toInstant().toEpochMilli(), calendarName, title, notes);
+    }
+
     // -- ADDITIONAL WITHERS
 
     public CalendarEvent withDateTime(final @NonNull ZonedDateTime dateTime) {
