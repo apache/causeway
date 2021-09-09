@@ -32,10 +32,10 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.annotation.Title;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolderRepository;
@@ -51,8 +51,7 @@ import demoapp.dom.services.extensions.secman.apptenancy.persistence.TenantedEnt
 )
 public class AppTenancyVm implements HasAsciiDocDescription {
 
-    @Title
-    public String title() {
+    @ObjectSupport public String title() {
         return "Tenancy demo";
     }
 

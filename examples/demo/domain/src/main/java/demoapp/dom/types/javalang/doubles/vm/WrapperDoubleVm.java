@@ -32,10 +32,11 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javalang.doubles.holder.WrapperDoubleHolder2;
 import lombok.Getter;
 import lombok.Setter;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.types.javalang.doubles.holder.WrapperDoubleHolder2;
 
 //tag::class[]
 @XmlRootElement(name = "root")

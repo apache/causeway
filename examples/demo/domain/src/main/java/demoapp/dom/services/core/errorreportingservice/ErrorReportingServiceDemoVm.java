@@ -28,7 +28,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.annotation.ObjectSupport;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
@@ -38,8 +38,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.ErrorReportingServiceDemoVm", editing=Editing.ENABLED)
 public class ErrorReportingServiceDemoVm implements HasAsciiDocDescription {
 
-    @Title
-    public String title() {
+    @ObjectSupport public String title() {
         return "Error Reporting Service demo";
     }
 

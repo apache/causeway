@@ -21,9 +21,9 @@ package demoapp.dom.domain._commands;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.tablecol.TableColumnOrderForCollectionTypeAbstract;
 import org.apache.isis.extensions.commandlog.model.command.CommandModel;
 

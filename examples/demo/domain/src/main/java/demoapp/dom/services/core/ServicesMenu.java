@@ -28,6 +28,9 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.factory.FactoryService;
 
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+
 import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.services.core.errorreportingservice.ErrorReportingServiceDemoVm;
 import demoapp.dom.services.core.eventbusservice.EventBusServiceDemoVm;
@@ -35,8 +38,6 @@ import demoapp.dom.services.core.messageservice.MessageServiceDemoVm;
 import demoapp.dom.services.core.wrapperFactory.WrapperFactoryEntity;
 import demoapp.dom.services.core.xmlSnapshotService.XmlSnapshotParentVm;
 import demoapp.dom.services.core.xmlSnapshotService.peer.XmlSnapshotPeerVm;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @DomainService(
         nature=NatureOfService.VIEW,

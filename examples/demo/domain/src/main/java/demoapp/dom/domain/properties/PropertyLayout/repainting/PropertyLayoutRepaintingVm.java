@@ -27,11 +27,11 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Repainting;
-import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.annotations.PdfJsViewer;
 
@@ -50,8 +50,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 )
 public class PropertyLayoutRepaintingVm implements HasAsciiDocDescription {
 
-    @Title
-    public String title() {
+    @ObjectSupport public String title() {
         return "PropertyLayout#repainting";
     }
 

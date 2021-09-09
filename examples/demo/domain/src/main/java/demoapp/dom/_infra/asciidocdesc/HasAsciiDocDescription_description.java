@@ -27,8 +27,9 @@ import org.apache.isis.applib.annotation.Snapshot;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
-import demoapp.dom._infra.resources.AsciiDocReaderService;
 import lombok.RequiredArgsConstructor;
+
+import demoapp.dom._infra.resources.AsciiDocReaderService;
 
 @Property(snapshot = Snapshot.EXCLUDED)
 @RequiredArgsConstructor

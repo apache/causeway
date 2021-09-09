@@ -26,8 +26,6 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import lombok.extern.log4j.Log4j2;
-
 import demoapp.dom.types.javalang.booleans.WrapperBooleans;
 import demoapp.dom.types.javalang.bytes.WrapperBytes;
 import demoapp.dom.types.javalang.characters.WrapperCharacters;

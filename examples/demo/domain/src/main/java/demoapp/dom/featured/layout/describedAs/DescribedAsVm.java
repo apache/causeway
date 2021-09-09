@@ -35,6 +35,7 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -42,7 +43,6 @@ import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.value.Markup;
 
 import lombok.Getter;
@@ -57,8 +57,7 @@ import demoapp.dom.domain.actions.progmodel.assoc.DemoItem;
 @DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.Tooltip")
 public class DescribedAsVm implements HasAsciiDocDescription {
 
-    @Title
-    public String title() {
+    @ObjectSupport public String title() {
         return "Tooltip Demo";
     }
 

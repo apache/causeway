@@ -33,8 +33,8 @@ import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.annotation.Title;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -55,8 +55,7 @@ public class ActionTypeOfVm implements HasAsciiDocDescription {
 
 //end::class-collections-children[]
 
-    @Title
-    public String title() {
+    @ObjectSupport public String title() {
         return "Action#typeOf";
     }
 

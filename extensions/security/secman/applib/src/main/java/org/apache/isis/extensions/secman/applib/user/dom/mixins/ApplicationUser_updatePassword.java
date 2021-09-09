@@ -30,10 +30,10 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
-import org.apache.isis.extensions.secman.applib.user.spi.PasswordEncryptionService;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_updatePassword.DomainEvent;
+import org.apache.isis.extensions.secman.applib.user.spi.PasswordEncryptionService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

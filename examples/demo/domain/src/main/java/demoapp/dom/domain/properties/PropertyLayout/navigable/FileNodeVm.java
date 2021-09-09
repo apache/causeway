@@ -30,7 +30,6 @@ import org.apache.isis.applib.annotation.Navigable;
 import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.graph.tree.TreeNode;
 
@@ -58,8 +57,7 @@ public class FileNodeVm implements HasAsciiDocDescription {
     }
 
 //tag::title[]
-    @Title
-    public String title() {
+    @ObjectSupport public String title() {
         if(this.path == null) {
             return "(root)";
         }

@@ -35,6 +35,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Title;
@@ -56,8 +57,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 )
 public class StatefulVmUsingJaxb implements HasAsciiDocDescription {
 
-    @Title
-    public String title() {
+    @ObjectSupport public String title() {
         return String.format("%s; %s children", getMessage(), getChildren().size());
     }
 

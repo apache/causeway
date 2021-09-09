@@ -28,10 +28,10 @@ import org.springframework.context.annotation.Profile;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Publishing;
-import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
 import lombok.Getter;
@@ -67,8 +67,7 @@ public class PropertyCommandPublishingJpa
         this.propertyMetaAnnotatedOverridden = initialValue;
     }
 
-    @Title
-    public String title() {
+    @ObjectSupport public String title() {
         return "Property#commandPublishing (JPA)";
     }
 

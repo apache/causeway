@@ -135,8 +135,7 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
 
     //region > title, iconName
 
-    @Title
-    public String title() {
+    @ObjectSupport public String title() {
         final TitleBuffer buf = new TitleBuffer();
         buf.append(getDescription());
         if (isComplete()) {

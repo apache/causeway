@@ -47,7 +47,7 @@ import demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.J
 public class JaxbRefJdo
         extends JaxbRefEntity {
 
-    public JaxbRefJdo(String name) {
+    public JaxbRefJdo(final String name) {
         this.name = name;
     }
 

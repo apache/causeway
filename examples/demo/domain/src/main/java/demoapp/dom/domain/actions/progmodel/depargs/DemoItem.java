@@ -23,9 +23,9 @@ import javax.inject.Named;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Title;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -40,8 +40,7 @@ import lombok.Setter;
 @EqualsAndHashCode // required for the Dependent Arguments demo to work properly
 public class DemoItem {
 
-    @Title
-    public String title() {
+    @ObjectSupport public String title() {
         return String.format("DemoItem '%s' (%s)", getName(), getParity());
     }
 

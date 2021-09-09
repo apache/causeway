@@ -21,8 +21,9 @@ package demoapp.dom._infra.resources;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
 import org.springframework.stereotype.Service;
+
+import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
 
 import lombok.val;
 

@@ -34,9 +34,10 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.value.Password;
 
-import demoapp.dom.types.isis.passwords.persistence.IsisPasswordEntity;
 import lombok.Getter;
 import lombok.Setter;
+
+import demoapp.dom.types.isis.passwords.persistence.IsisPasswordEntity;
 
 @Profile("demo-jdo")
 //tag::class[]

@@ -22,7 +22,7 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Value;
 
 import lombok.AccessLevel;
@@ -50,8 +50,7 @@ public class ComplexNumberJpa
 // end::class[]
 
 // tag::title[]
-    @Title
-    public String title() {
+    @ObjectSupport public String title() {
         return im >= 0
                 ? "" + re + " + " +  im + "i"
                 : "" + re + " - " + (-im) + "i";

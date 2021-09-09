@@ -18,12 +18,15 @@
  */
 package demoapp.dom.types.javalang.strings.samples;
 
-import demoapp.dom.types.Samples;
-import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.springframework.stereotype.Service;
+import java.util.stream.Stream;
 
 import javax.annotation.Priority;
-import java.util.stream.Stream;
+
+import org.springframework.stereotype.Service;
+
+import org.apache.isis.applib.annotation.PriorityPrecedence;
+
+import demoapp.dom.types.Samples;
 
 @Service
 @Priority(PriorityPrecedence.EARLY)

@@ -34,8 +34,7 @@ import lombok.Setter;
 
 abstract class ProperMemberInheritanceAbstract {
 
-    @Title
-    public String title() {
+    @ObjectSupport public String title() {
         return "inherited title";
     }
 

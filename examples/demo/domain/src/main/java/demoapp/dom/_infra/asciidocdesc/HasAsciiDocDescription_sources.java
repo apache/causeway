@@ -27,9 +27,10 @@ import org.apache.isis.applib.annotation.Snapshot;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
-import demoapp.dom._infra.resources.MarkupVariableResolverService;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+
+import demoapp.dom._infra.resources.MarkupVariableResolverService;
 
 @Property(snapshot = Snapshot.EXCLUDED)
 @RequiredArgsConstructor

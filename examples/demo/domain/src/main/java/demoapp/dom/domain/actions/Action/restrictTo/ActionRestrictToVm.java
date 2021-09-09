@@ -29,11 +29,11 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.annotation.Title;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -62,8 +62,7 @@ public class ActionRestrictToVm implements HasAsciiDocDescription {
         this.propertyForMetaAnnotationsOverridden = value;
     }
 
-    @Title
-    public String title() {
+    @ObjectSupport public String title() {
         return "Action#restrictTo";
     }
 

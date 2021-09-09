@@ -30,7 +30,6 @@ import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.Navigable;
 import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.schema.metamodel.v2.DomainClassDto;
@@ -65,8 +64,8 @@ public abstract class MMNode {
 
     protected String title;
 
-    @Title
-    public final String title() {
+    //FIXME[ISIS-2774] should be picked up also when declared abstract, yet we work around that
+    @ObjectSupport public final String title() {
         return title==null
                 ? title = createTitle()
                 : title;

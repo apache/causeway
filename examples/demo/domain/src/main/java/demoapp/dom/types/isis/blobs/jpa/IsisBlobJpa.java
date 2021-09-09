@@ -28,6 +28,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.context.annotation.Profile;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Optionality;
@@ -37,10 +39,10 @@ import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 import org.apache.isis.persistence.jpa.applib.types.BlobJpaEmbeddable;
-import org.springframework.context.annotation.Profile;
+
+import lombok.NoArgsConstructor;
 
 import demoapp.dom.types.isis.blobs.persistence.IsisBlobEntity;
-import lombok.NoArgsConstructor;
 
 @Profile("demo-jpa")
 //tag::class[]

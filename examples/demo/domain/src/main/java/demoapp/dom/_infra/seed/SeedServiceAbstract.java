@@ -22,10 +22,10 @@ import java.util.function.Supplier;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.core.metamodel.events.MetamodelEvent;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;

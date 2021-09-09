@@ -39,7 +39,6 @@ import java.lang.annotation.Target;
         ElementType.METHOD,
         ElementType.FIELD
 })
-@ObjectSupport // meta annotation, in support of meta-model validation
 public @interface Title {
 
     /**

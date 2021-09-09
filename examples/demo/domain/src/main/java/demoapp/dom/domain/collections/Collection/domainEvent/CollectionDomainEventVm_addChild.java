@@ -22,10 +22,11 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.domain.collections.Collection.domainEvent.child.CollectionDomainEventChildVm;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.domain.collections.Collection.domainEvent.child.CollectionDomainEventChildVm;
 
 //tag::class[]
 @Action(

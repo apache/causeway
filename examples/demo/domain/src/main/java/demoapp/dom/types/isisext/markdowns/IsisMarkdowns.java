@@ -34,9 +34,9 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
@@ -52,8 +52,7 @@ import demoapp.dom.types.isisext.markdowns.vm.IsisMarkdownVm;
 //@Log4j2
 public class IsisMarkdowns implements HasAsciiDocDescription {
 
-    @Title
-    public String title() {
+    @ObjectSupport public String title() {
         return "Markdown data type";
     }
 
