@@ -20,6 +20,7 @@ package org.apache.isis.extensions.fullcalendar.applib.value;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
@@ -55,13 +56,28 @@ implements
     private final @NonNull String title;
     private final @Nullable String notes;
 
-    public ZonedDateTime asDateTime(final ZoneId zoneId) {
+    // -- ADDITIONAL WITHERS
+
+    public CalendarEvent withDateTime(final @NonNull ZonedDateTime dateTime) {
+        return new CalendarEvent(dateTime.toInstant().toEpochMilli(), calendarName, title, notes);
+    }
+
+    public CalendarEvent withDateTime(final @NonNull LocalDateTime localDateTime, final @NonNull ZoneId zoneId) {
+        return withDateTime(ZonedDateTime.of(localDateTime, zoneId));
+    }
+
+    // -- CONVERTERS
+
+    public ZonedDateTime asDateTime(final @NonNull ZoneId zoneId) {
         return ZonedDateTime.ofInstant(Instant.ofEpochMilli(epochMillis), zoneId);
     }
 
-    public ZonedDateTime asDateTime() {
-        return asDateTime(ZoneId.systemDefault());
-    }
+    //XXX potential misuse
+//    public ZonedDateTime asDateTime() {
+//        return asDateTime(ZoneId.systemDefault());
+//    }
+
+    // -- OBJECT CONTRACT
 
     @Override
     public int compareTo(final CalendarEvent other) {

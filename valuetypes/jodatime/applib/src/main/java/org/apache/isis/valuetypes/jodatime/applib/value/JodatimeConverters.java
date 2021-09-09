@@ -33,7 +33,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public final class JodatimeConverters {
 
-    // LOCAL TIME
+    // -- INSTANT
 
     public Instant toJoda(final java.time.Instant input) {
         return new Instant(input.toEpochMilli());
@@ -43,7 +43,7 @@ public final class JodatimeConverters {
         return java.time.Instant.ofEpochMilli(input.getMillis());
     }
 
-    // LOCAL TIME
+    // -- LOCAL TIME
 
     public LocalTime toJoda(final java.time.LocalTime input) {
         return new LocalTime(
@@ -57,7 +57,7 @@ public final class JodatimeConverters {
                 millisToNanos(input.getMillisOfSecond()));
     }
 
-    // LOCAL DATE
+    // -- LOCAL DATE
 
     public LocalDate toJoda(final java.time.LocalDate input) {
         return new LocalDate(
@@ -69,7 +69,7 @@ public final class JodatimeConverters {
                 input.getYear(), input.getMonthOfYear(), input.getDayOfMonth());
     }
 
-    // LOCAL DATE TIME
+    // -- LOCAL DATE TIME
 
     public LocalDateTime toJoda(final java.time.LocalDateTime input) {
         return new LocalDateTime(
@@ -85,7 +85,7 @@ public final class JodatimeConverters {
                 millisToNanos(input.getMillisOfSecond()));
     }
 
-    // DATE TIME WITH TIME ZONE DATA
+    // -- DATE TIME WITH TIME ZONE DATA
 
     public DateTime toJoda(final java.time.ZonedDateTime input) {
         return new DateTime(
@@ -103,7 +103,7 @@ public final class JodatimeConverters {
                 fromJoda(input.getZone()));
     }
 
-    // TIME ZONE
+    // -- TIME ZONE
 
     public DateTimeZone toJoda(final java.time.ZoneId input) {
         return DateTimeZone.forID(input.getId());
