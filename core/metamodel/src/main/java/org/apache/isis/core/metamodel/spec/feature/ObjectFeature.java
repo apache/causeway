@@ -22,11 +22,15 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.commons.internal.base._Either;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Specification;
+
+import lombok.val;
 
 /**
  * A specification representing a non-{@link FeatureType#OBJECT object}, that
@@ -72,6 +76,24 @@ public interface ObjectFeature extends Specification {
     Optional<String> getStaticFriendlyName();
 
     /**
+     * TODO
+     */
+    default String getCanonicalFriendlyName() {
+        //FIXME this is too low level, we have abstracted that
+        return _Strings.asNaturalName2.apply(getId());
+    }
+
+    /**
+     * TODO
+     */
+    default _Either<String, String> getStaticOrCanonicalFriendlyName() {
+        val staticFriendlyName = getStaticFriendlyName();
+        return staticFriendlyName.isPresent()
+                ? _Either.left(staticFriendlyName.get())
+                : _Either.right(getCanonicalFriendlyName());
+    }
+
+    /**
      * Returns a (translated) description of how the member is used - this complements the
      * help text.
      *
@@ -88,6 +110,23 @@ public interface ObjectFeature extends Specification {
      * and not imperatively.
      */
     Optional<String> getStaticDescription();
+
+    /**
+     * TODO
+     */
+    default String getCanonicalDescription() {
+        return "";
+    }
+
+    /**
+     * TODO
+     */
+    default _Either<String, String> getStaticOrCanonicalDescription() {
+        val staticDescription = getStaticDescription();
+        return staticDescription.isPresent()
+                ? _Either.left(staticDescription.get())
+                : _Either.right(getCanonicalDescription());
+    }
 
     /**
      * The specification of the underlying type.

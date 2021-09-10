@@ -94,7 +94,8 @@ public class IsisEntityListener {
             .filter(DirectToFieldChangeRecord.class::isInstance)
             .map(DirectToFieldChangeRecord.class::cast)
             .map(changeRecord -> {
-                val propertyName = changeRecord.getAttribute();
+                //XXX lombok val issue with nested lambda
+                final String propertyName = changeRecord.getAttribute();
                 return entity
                         .getSpecification()
                         .getProperty(propertyName)

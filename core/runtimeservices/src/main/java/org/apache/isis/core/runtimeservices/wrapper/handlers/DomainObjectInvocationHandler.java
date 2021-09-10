@@ -338,12 +338,12 @@ extends DelegatingInvocationHandlerDefault<T> {
 
         return runExecutionTask(()->{
 
-            val interactionInitiatedBy = getInteractionInitiatedBy();
-            val currentReferencedAdapter = property.get(targetAdapter, interactionInitiatedBy);
+            final var interactionInitiatedBy = getInteractionInitiatedBy();
+            final var currentReferencedAdapter = property.get(targetAdapter, interactionInitiatedBy);
 
-            val currentReferencedObj = UnwrapUtil.single(currentReferencedAdapter);
+            final var currentReferencedObj = UnwrapUtil.single(currentReferencedAdapter);
 
-            val propertyAccessEvent = new PropertyAccessEvent(
+            final var propertyAccessEvent = new PropertyAccessEvent(
                     getDelegate(), property.getFeatureIdentifier(), currentReferencedObj);
             notifyListeners(propertyAccessEvent);
             return currentReferencedObj;
@@ -410,12 +410,12 @@ extends DelegatingInvocationHandlerDefault<T> {
             val collectionAccessEvent = new CollectionAccessEvent(getDelegate(), collection.getFeatureIdentifier());
 
             if (currentReferencedObj instanceof Collection) {
-                val collectionViewObject = lookupWrappingObject(
+                final var collectionViewObject = lookupWrappingObject(
                         (Collection<?>) currentReferencedObj, collection);
                 notifyListeners(collectionAccessEvent);
                 return collectionViewObject;
             } else if (currentReferencedObj instanceof Map) {
-                val mapViewObject = lookupWrappingObject((Map<?, ?>) currentReferencedObj,
+                final var mapViewObject = lookupWrappingObject((Map<?, ?>) currentReferencedObj,
                         collection);
                 notifyListeners(collectionAccessEvent);
                 return mapViewObject;
@@ -469,9 +469,9 @@ extends DelegatingInvocationHandlerDefault<T> {
         });
 
         return runExecutionTask(()->{
-            val interactionInitiatedBy = getInteractionInitiatedBy();
+            final var interactionInitiatedBy = getInteractionInitiatedBy();
 
-            val returnedAdapter = objectAction.execute(
+            final var returnedAdapter = objectAction.execute(
                     head, argAdapters,
                     interactionInitiatedBy);
             return UnwrapUtil.single(returnedAdapter);

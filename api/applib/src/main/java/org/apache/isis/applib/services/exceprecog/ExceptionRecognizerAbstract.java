@@ -32,7 +32,6 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -76,25 +75,25 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
     protected boolean logRecognizedExceptions;
 
     public ExceptionRecognizerAbstract(
-            final Category category, 
-            final Predicate<Throwable> predicate, 
+            final Category category,
+            final Predicate<Throwable> predicate,
             final Function<Throwable, String> rootCauseMessageFormatter) {
         Objects.requireNonNull(predicate);
         this.category = category;
         this.predicate = predicate;
-        this.rootCauseMessageFormatter = rootCauseMessageFormatter != null 
-                ? rootCauseMessageFormatter 
+        this.rootCauseMessageFormatter = rootCauseMessageFormatter != null
+                ? rootCauseMessageFormatter
                 : Throwable::getMessage;
     }
 
     public ExceptionRecognizerAbstract(
-            final Predicate<Throwable> predicate, 
+            final Predicate<Throwable> predicate,
             final Function<Throwable, String> rootCauseMessageFormatter) {
         this(Category.OTHER, predicate, rootCauseMessageFormatter);
     }
 
     public ExceptionRecognizerAbstract(
-            final Category category, 
+            final Category category,
             final Predicate<Throwable> predicate) {
         this(category, predicate, null);
     }
@@ -106,7 +105,7 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
 
 
 
-    private Optional<String> recognizeRootCause(Throwable ex) {
+    private Optional<String> recognizeRootCause(final Throwable ex) {
 
         return _Exceptions.streamCausalChain(ex)
         .filter(predicate)
@@ -115,10 +114,10 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
                 log.info("Recognized exception, stacktrace : ", throwable);
             }
             if(ex instanceof TranslatableException) {
-                val translatableException = (TranslatableException) ex;
-                val translatableMessage = translatableException.getTranslatableMessage();
-                val translationContext = translatableException.getTranslationContext();
-                if(translatableMessage != null 
+                final var translatableException = (TranslatableException) ex;
+                final var translatableMessage = translatableException.getTranslatableMessage();
+                final var translationContext = translatableException.getTranslationContext();
+                if(translatableMessage != null
                         && translationContext != null) {
                     return translatableMessage.translate(translationService, translationContext);
                 }
@@ -132,7 +131,7 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
     }
 
     @Override
-    public Optional<Recognition> recognize(Throwable ex) {
+    public Optional<Recognition> recognize(final Throwable ex) {
         if(disabled) {
             return Optional.empty();
         }

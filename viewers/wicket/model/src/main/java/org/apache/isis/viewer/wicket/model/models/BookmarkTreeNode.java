@@ -22,9 +22,8 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.base._NullSafe;
@@ -53,7 +52,7 @@ public class BookmarkTreeNode implements Serializable {
     private PageParameters pageParameters;
 
     public static BookmarkTreeNode newRoot(
-            BookmarkableModel bookmarkableModel) {
+            final BookmarkableModel bookmarkableModel) {
         return new BookmarkTreeNode(bookmarkableModel, 0);
     }
 
@@ -80,14 +79,14 @@ public class BookmarkTreeNode implements Serializable {
     public String getTitle() {
         return title;
     }
-    private void setTitle(String title) {
+    private void setTitle(final String title) {
         this.title = title;
     }
 
     public List<BookmarkTreeNode> getChildren() {
         return children;
     }
-    public BookmarkTreeNode addChild(BookmarkableModel childModel) {
+    public BookmarkTreeNode addChild(final BookmarkableModel childModel) {
         final BookmarkTreeNode childNode = new BookmarkTreeNode(childModel, depth+1);
         children.add(childNode);
         return childNode;
@@ -107,7 +106,7 @@ public class BookmarkTreeNode implements Serializable {
      *
      * @return - whether the provided candidate is found or was added to this node's tree.
      */
-    public boolean matches(BookmarkableModel candidateBookmarkableModel) {
+    public boolean matches(final BookmarkableModel candidateBookmarkableModel) {
         if(candidateBookmarkableModel instanceof EntityModel) {
             return matchAndUpdateTitleFor((EntityModel) candidateBookmarkableModel);
         }
@@ -133,7 +132,7 @@ public class BookmarkTreeNode implements Serializable {
             this.setTitle(candidateEntityModel.getTitle());
         }
 
-        // and also match recursively down to all children and grandchildren.
+        // and also match recursively down to all children and grand-children.
         if(candidateEntityModel.hasAsChildPolicy()) {
             for(BookmarkTreeNode childNode: this.getChildren()) {
                 inGraph = childNode.matches(candidateEntityModel) || inGraph; // evaluate each
@@ -176,7 +175,7 @@ public class BookmarkTreeNode implements Serializable {
         return true;
     }
 
-    private boolean addToGraphIfParented(BookmarkableModel candidateBookmarkableModel) {
+    private boolean addToGraphIfParented(final BookmarkableModel candidateBookmarkableModel) {
 
         val whetherAdded = _Refs.booleanRef(false);
 
@@ -189,7 +188,7 @@ public class BookmarkTreeNode implements Serializable {
             .streamAssociations(MixedIn.EXCLUDED)
             .filter(ObjectAssociation.Predicates.REFERENCE_PROPERTIES) // properties only
             .map(objectAssoc->{
-                val parentAdapter =
+                final var parentAdapter =
                         objectAssoc.get(candidateAdapter, InteractionInitiatedBy.USER);
                 return parentAdapter;
             })
@@ -213,7 +212,7 @@ public class BookmarkTreeNode implements Serializable {
         return whetherAdded.isTrue();
     }
 
-    public void appendGraphTo(List<BookmarkTreeNode> list) {
+    public void appendGraphTo(final List<BookmarkTreeNode> list) {
         list.add(this);
         for (BookmarkTreeNode childNode : children) {
             childNode.appendGraphTo(list);
@@ -242,7 +241,7 @@ public class BookmarkTreeNode implements Serializable {
         }
     }
 
-    public static String oidStrFrom(BookmarkableModel candidateBookmarkableModel) {
+    public static String oidStrFrom(final BookmarkableModel candidateBookmarkableModel) {
         final Bookmark bookmark = bookmarkFrom(candidateBookmarkableModel.getPageParametersWithoutUiHints());
         return bookmark != null
                 ? bookmark.stringify()

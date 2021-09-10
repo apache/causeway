@@ -48,14 +48,15 @@ public class TableColumnVisibilityServiceForSecman implements TableColumnVisibil
     final SpecificationLoader specificationLoader;
 
     @Override
-    public boolean hides(Class<?> elementType, String memberId) {
+    public boolean hides(final Class<?> elementType, final String memberId) {
         val me = factoryService.mixin(MeService.me.class, meService).act();
         val permissionSet = me.getPermissionSet();
 
         final boolean granted = specificationLoader.specForType(elementType)
             .map(ObjectSpecification::getLogicalTypeName)
             .map(logicalTypeName->{
-                val featureId = ApplicationFeatureId.newMember(logicalTypeName, memberId);
+                //XXX lombok val issue with lambda
+                final var featureId = ApplicationFeatureId.newMember(logicalTypeName, memberId);
                 return permissionSet.evaluate(featureId, ApplicationPermissionMode.VIEWING).isGranted();
             })
             .orElse(false); // do not grant if elementType has no logicalTypeName

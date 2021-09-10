@@ -19,15 +19,12 @@
 package org.apache.isis.viewer.restfulobjects.rendering.domaintypes;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
-
-import lombok.val;
 
 public abstract class AbstractTypeFeatureReprRenderer<T extends ObjectFeature>
 extends ReprRendererAbstract<ParentSpecAndFeature<T>> {
@@ -101,38 +98,21 @@ extends ReprRendererAbstract<ParentSpecAndFeature<T>> {
     protected abstract void putExtensionsSpecificToFeature();
 
     protected void putExtensionsName() {
-
-        val staticFriendlyName = getObjectFeature().getStaticFriendlyName();
-        if(staticFriendlyName.isPresent()) {
-            getExtensions()
-                .mapPut("staticFriendlyName", staticFriendlyName.get());
-        } else {
-            getExtensions()
-                .mapPut("canonicalFriendlyName",
-                        objectFeature instanceof ObjectAssociation
-                            ? ((ObjectAssociation)objectFeature)
-                                    .getCanonicalFriendlyName()
-                            : objectFeature.getId()
-                        );
-        }
-
+        getObjectFeature().getStaticOrCanonicalFriendlyName()
+        .accept(
+                staticForm->
+                    getExtensions().mapPut("staticFriendlyName", staticForm),
+                canonicalForm->
+                    getExtensions().mapPut("canonicalFriendlyName", canonicalForm));
     }
 
     protected void putExtensionsDescriptionIfAvailable() {
-
-        val staticDescription = getObjectFeature().getStaticDescription();
-        if(staticDescription.isPresent()) {
-            getExtensions()
-                .mapPut("staticDescription", staticDescription.get());
-        } else {
-            getExtensions()
-                .mapPut("canonicalDescription",
-                        objectFeature instanceof ObjectAssociation
-                            ? ((ObjectAssociation)objectFeature)
-                                    .getCanonicalDescription()
-                            : ""
-                        );
-        }
+        getObjectFeature().getStaticOrCanonicalDescription()
+        .accept(
+                staticForm->
+                    getExtensions().mapPut("staticDescription", staticForm),
+                canonicalForm->
+                    getExtensions().mapPut("canonicalDescription", canonicalForm));
     }
 
 }
