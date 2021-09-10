@@ -92,7 +92,7 @@ implements MetaModelRefiner {
             method = ((Evaluators.MethodEvaluator) parentEvaluator).getMethod();
         } else if(parentEvaluator instanceof Evaluators.FieldEvaluator) {
             // we have a 'parent' annotated field (useful if one uses lombok's @Getter on a field)
-            method = ((Evaluators.FieldEvaluator) parentEvaluator).lookupGetter().orElse(null);
+            method = ((Evaluators.FieldEvaluator) parentEvaluator).getCorrespondingGetter().orElse(null);
             if(method==null)
                 return; // code should not be reached, since case should be handled by meta-data validation
 
@@ -164,7 +164,7 @@ implements MetaModelRefiner {
                 final Evaluators.FieldEvaluator fieldEvaluator =
                         (Evaluators.FieldEvaluator) parentEvaluator;
 
-                if(!fieldEvaluator.lookupGetter().isPresent()) {
+                if(!fieldEvaluator.getCorrespondingGetter().isPresent()) {
 
                     ValidationFailure.raiseFormatted(
                             spec,

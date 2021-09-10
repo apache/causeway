@@ -22,6 +22,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
@@ -100,6 +101,11 @@ final class Can_Singleton<T> implements Can<T> {
     @Override
     public Iterator<T> iterator() {
         return Collections.singletonList(element).iterator();
+    }
+
+    @Override
+    public Can<T> sorted(final @NonNull Comparator<? super T> c) {
+        return this;
     }
 
     @Override

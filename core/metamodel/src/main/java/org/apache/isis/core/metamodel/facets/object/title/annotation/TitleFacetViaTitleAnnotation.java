@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.facets.object.title.annotation;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
+import java.util.ArrayDeque;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
@@ -28,7 +29,6 @@ import java.util.function.Predicate;
 
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.compare._Comparators;
@@ -63,17 +63,18 @@ implements ImperativeFacet {
             final @NonNull Class<?> cls,
             final @NonNull FacetHolder holder){
 
-        val titleRef = _Refs.<Title>objectRef(null);
+        val titles = new ArrayDeque<Title>();
 
         val titleComponents = Evaluators
                 .streamEvaluators(cls,
-                    annotatedElement->isTitleComponent(annotatedElement, titleRef::set),
+                    annotatedElement->isTitleComponent(annotatedElement, titles::addLast),
                     TypeHierarchyPolicy.EXCLUDE,
                     InterfacePolicy.INCLUDE)
-                .filter(evaluator->!isATitleProvidingObjectSupportMethod(evaluator, holder))
-                .map(evaluator->TitleComponent.of(evaluator, titleRef.getValueElseFail()))
-                .sorted()
-                .collect(Can.toCan());
+                .filter(evaluator->!isATitleProvidingObjectSupportMethod(
+                        evaluator, holder, titles::removeLast))
+                .map(evaluator->TitleComponent.of(evaluator, titles.removeFirst()))
+              .collect(Can.toCan())
+              .sorted(TitleComponent::compareTo);
 
         if (titleComponents.isEmpty()) {
             return Optional.empty();
@@ -196,11 +197,13 @@ implements ImperativeFacet {
 
     private static boolean isATitleProvidingObjectSupportMethod(
             final Evaluators.Evaluator evaluator,
-            final FacetHolder facetHolder) {
+            final FacetHolder facetHolder,
+            final Runnable onTrue) {
         if(ObjectSupportMethod.TITLE.getMethodNames().contains(evaluator.name())) {
             ValidationFailure.raise(facetHolder,
                     Validation.CONFLICTING_TITLE_STRATEGIES
                     .getMessage(facetHolder.getFeatureIdentifier()));
+            onTrue.run();
             return true;
         }
         return false;
@@ -214,7 +217,7 @@ implements ImperativeFacet {
                 final Evaluators.Evaluator titleEvaluator,
                 final Title annotation) {
 
-            final String deweyOrdinal = annotation != null ? annotation.sequence() : "1";
+            final String deweyOrdinal = annotation != null ? annotation.sequence() : "1.0";
             final String prepend = annotation != null ? annotation.prepend() : " ";
             final String append = annotation != null ? annotation.append() : "";
             final int abbreviateTo = annotation != null ? annotation.abbreviatedTo() : Integer.MAX_VALUE;

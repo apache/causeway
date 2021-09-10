@@ -22,16 +22,12 @@ import java.lang.annotation.Annotation;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;
 import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
 import org.springframework.core.annotation.MergedAnnotation;
 import org.springframework.core.annotation.MergedAnnotations;
 import org.springframework.core.annotation.MergedAnnotations.SearchStrategy;
-import org.springframework.util.ReflectionUtils;
-
-import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -57,8 +53,8 @@ public final class _Annotations {
      * @return non-null
      */
     public static <A extends Annotation> boolean isPresent(
-            AnnotatedElement annotatedElement,
-            Class<A> annotationType) {
+            final AnnotatedElement annotatedElement,
+            final Class<A> annotationType) {
 
         return collect(annotatedElement).isPresent(annotationType);
     }
@@ -72,8 +68,8 @@ public final class _Annotations {
      * @return non-null
      */
     public static <A extends Annotation> Optional<A> findNearestAnnotation(
-            AnnotatedElement annotatedElement,
-            Class<A> annotationType) {
+            final AnnotatedElement annotatedElement,
+            final Class<A> annotationType) {
         //XXX if synthesize has good runtime performance, then we simply us it here
         return synthesize(annotatedElement, annotationType);
     }
@@ -94,15 +90,15 @@ public final class _Annotations {
      * @return non-null
      */
     public static <A extends Annotation> Optional<A> synthesizeInherited(
-            AnnotatedElement annotatedElement,
-            Class<A> annotationType) {
+            final AnnotatedElement annotatedElement,
+            final Class<A> annotationType) {
 
         return calc_synthesizeInherited(annotatedElement, annotationType);
     }
 
     private static <A extends Annotation> Optional<A> calc_synthesizeInherited(
-            AnnotatedElement annotatedElement,
-            Class<A> annotationType) {
+            final AnnotatedElement annotatedElement,
+            final Class<A> annotationType) {
 
         val collected = _Annotations
                 .collect(annotatedElement);
@@ -113,7 +109,11 @@ public final class _Annotations {
             if(annotatedElement instanceof Method &&
                     searchAnnotationOnField(annotationType) ) {
 
-                val fieldForGetter = fieldForGetter((Method) annotatedElement);
+                val method = (Method) annotatedElement;
+
+                val fieldForGetter = _ClassCache.getInstance()
+                        .fieldForGetter(method.getDeclaringClass(), (Method) annotatedElement)
+                        .orElse(null);
                 if(fieldForGetter!=null) {
                     return synthesizeInherited(fieldForGetter, annotationType);
                 }
@@ -140,8 +140,8 @@ public final class _Annotations {
      * @return non-null
      */
     public static <A extends Annotation> Optional<A> synthesize(
-            AnnotatedElement annotatedElement,
-            Class<A> annotationType) {
+            final AnnotatedElement annotatedElement,
+            final Class<A> annotationType) {
 
         val synthesized = _Annotations
                 .collect(annotatedElement)
@@ -157,44 +157,13 @@ public final class _Annotations {
     /**
      * @apiNote don't expose Spring's MergedAnnotations
      */
-    static MergedAnnotations collect(AnnotatedElement annotatedElement) {
+    static MergedAnnotations collect(final AnnotatedElement annotatedElement) {
         val collected = MergedAnnotations.from(annotatedElement, SearchStrategy.INHERITED_ANNOTATIONS);
         return collected;
     }
 
-    private static Field fieldForGetter(Method getter) {
-        if(ReflectionUtils.isObjectMethod(getter)) {
-            return null;
-        }
-        val fieldNameCandidate = fieldNameForGetter(getter);
-        if(fieldNameCandidate==null) {
-            return null;
-        }
-        val declaringClass = getter.getDeclaringClass();
-        return ReflectionUtils.findField(declaringClass, fieldNameCandidate);
-    }
 
-    private static String fieldNameForGetter(Method getter) {
-        if(getter.getParameterCount()>0) {
-            return null;
-        }
-        if(getter.getReturnType()==void.class) {
-            return null;
-        }
-        val methodName = getter.getName();
-        String fieldName = null;
-        if(methodName.startsWith("is") &&  methodName.length() > 2) {
-            fieldName = methodName.substring(2);
-        } else if(methodName.startsWith("get") &&  methodName.length() > 3) {
-            fieldName = methodName.substring(3);
-        } else {
-            return null;
-        }
-        return _Strings.decapitalize(fieldName);
-    }
-
-
-    private static boolean searchAnnotationOnField(Class<? extends Annotation> annotationType) {
+    private static boolean searchAnnotationOnField(final Class<? extends Annotation> annotationType) {
         val target = annotationType.getAnnotation(Target.class);
         if(target==null) {
             return false;

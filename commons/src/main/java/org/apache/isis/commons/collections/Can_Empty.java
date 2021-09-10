@@ -21,6 +21,7 @@ package org.apache.isis.commons.collections;
 import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -99,6 +100,11 @@ final class Can_Empty<T> implements Can<T> {
     @Override
     public Iterator<T> iterator() {
         return Collections.<T>emptyList().iterator();
+    }
+
+    @Override
+    public Can<T> sorted(final @NonNull Comparator<? super T> c) {
+        return this;
     }
 
     @Override

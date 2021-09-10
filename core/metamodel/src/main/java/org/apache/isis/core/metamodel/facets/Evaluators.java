@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.facets;
 
-import java.beans.IntrospectionException;
 import java.lang.annotation.Annotation;
 import java.lang.invoke.MethodHandle;
 import java.lang.reflect.AnnotatedElement;
@@ -29,6 +28,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.reflection._ClassCache;
@@ -43,9 +43,8 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
-@Log4j2
+//@Log4j2
 public final class Evaluators  {
 
     /**
@@ -73,12 +72,21 @@ public final class Evaluators  {
 
         val classCache = _ClassCache.getInstance();
 
+        // if it so happens (eg. lombok) that both the field and its getter are annotated,
+        // don't duplicate, let the method win
+
+        val methodEvaluators = streamMethodEvaluators(cls, memberFilter, classCache)
+                .collect(Can.toCan());
+        val fieldEvaluators = streamFieldEvaluators(cls, memberFilter, classCache)
+                .filter(fieldEvaluator->fieldEvaluator.isSameAsAnyOf(methodEvaluators))
+                .collect(Can.toCan());
+
         return Stream.concat(
-                streamMethodEvaluators(cls, memberFilter, classCache),
-                streamFieldEvaluators(cls, memberFilter, classCache));
+                methodEvaluators.stream(),
+                fieldEvaluators.stream());
     }
 
-    private static Stream<Evaluator> streamMethodEvaluators(
+    private static Stream<MethodEvaluator> streamMethodEvaluators(
             final Class<?> cls,
             final Predicate<AnnotatedElement> memberFilter,
             final _ClassCache classCache) {
@@ -88,21 +96,23 @@ public final class Evaluators  {
         .filter(MethodUtil::isNotStatic)
         .filter(MethodUtil::isNoArg)
         .filter(MethodUtil::isNotVoid)
-        .map(method->memberFilter.test(method) ? new MethodEvaluator(cls, method) : null)
-        .filter(_NullSafe::isPresent)
-        .map(Evaluator.class::cast);
+        .map(method->memberFilter.test(method)
+                ? new MethodEvaluator(cls, method)
+                : null)
+        .filter(_NullSafe::isPresent);
     }
 
-    private static <T extends Annotation> Stream<Evaluator> streamFieldEvaluators(
+    private static <T extends Annotation> Stream<FieldEvaluator> streamFieldEvaluators(
             final Class<?> cls,
             final Predicate<AnnotatedElement> memberFilter,
             final _ClassCache classCache) {
 
         return classCache
         .streamDeclaredFields(cls)
-        .map(field->memberFilter.test(field) ? new FieldEvaluator(cls, field) : null)
-        .filter(_NullSafe::isPresent)
-        .map(Evaluator.class::cast);
+        .map(field->memberFilter.test(field)
+                ? new FieldEvaluator(cls, field, classCache.getterForField(cls, field))
+                : null)
+        .filter(_NullSafe::isPresent);
     }
 
     // -- EVALUATOR
@@ -162,6 +172,7 @@ public final class Evaluators  {
 
         @Getter private final Class<?> correspondingClass;
         @Getter private final Field field;
+        @Getter private final Optional<Method> correspondingGetter;
 
         @Override
         public String name() {
@@ -170,21 +181,20 @@ public final class Evaluators  {
 
         @Override
         protected MethodHandle createMethodHandle() throws IllegalAccessException {
-            val getter = lookupGetter().orElse(null);
+            val getter = correspondingGetter.orElse(null);
             return getter!=null
                     ? _Reflect.handleOf(getter)
                     : _Reflect.handleOfGetterOn(field);
         }
 
-        public Optional<Method> lookupGetter() {
-            try {
-                return Optional.ofNullable(
-                        _Reflect.getGetter(correspondingClass, field.getName())    );
-            } catch (IntrospectionException e) {
-                log.warn("failed reflective introspection on {} field {}",
-                        correspondingClass, field.getName(), e);
-            }
-            return Optional.empty();
+        private boolean isSameAs(final MethodEvaluator methodEvaluator) {
+            return correspondingGetter
+            .map(getter->_Reflect.methodsSame(getter, methodEvaluator.getMethod()))
+            .orElse(false);
+        }
+
+        private boolean isSameAsAnyOf(final Can<MethodEvaluator> methodEvaluators) {
+            return methodEvaluators.stream().anyMatch(this::isSameAs);
         }
 
     }

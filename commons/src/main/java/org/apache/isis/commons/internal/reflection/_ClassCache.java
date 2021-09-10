@@ -27,7 +27,11 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.springframework.util.ReflectionUtils;
+
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal._Constants;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.context._Context;
 
@@ -124,6 +128,21 @@ public final class _ClassCache implements AutoCloseable {
             .computeIfAbsent(attributeName, key->classModel.declaredMethods.filter(filter))
             .stream();
         }
+    }
+
+    // -- FIELD vs GETTER
+
+    public Optional<Method> getterForField(final Class<?> type, final Field field) {
+        val capitalizedFieldName = _Strings.capitalize(field.getName());
+        return Stream.of("get", "is")
+        .map(prefix->prefix + capitalizedFieldName)
+        .map(methodName->lookupPublicOrDeclaredMethod(type, methodName, _Constants.emptyClasses))
+        .filter(_Reflect.Filter.isGetter())
+        .findFirst();
+    }
+
+    public Optional<Field> fieldForGetter(final Class<?> type, final Method getterCandidate) {
+        return Optional.ofNullable(findFieldForGetter(getterCandidate));
     }
 
     // -- IMPLEMENATION DETAILS
@@ -242,5 +261,37 @@ public final class _ClassCache implements AutoCloseable {
         return null;
     }
 
+    // -- HELPER - FIELD FOR GETTER
+
+    private static Field findFieldForGetter(final Method getterCandidate) {
+        if(ReflectionUtils.isObjectMethod(getterCandidate)) {
+            return null;
+        }
+        val fieldNameCandidate = fieldNameForGetter(getterCandidate);
+        if(fieldNameCandidate==null) {
+            return null;
+        }
+        val declaringClass = getterCandidate.getDeclaringClass();
+        return ReflectionUtils.findField(declaringClass, fieldNameCandidate);
+    }
+
+    private static String fieldNameForGetter(final Method getter) {
+        if(getter.getParameterCount()>0) {
+            return null;
+        }
+        if(getter.getReturnType()==void.class) {
+            return null;
+        }
+        val methodName = getter.getName();
+        String fieldName = null;
+        if(methodName.startsWith("is") &&  methodName.length() > 2) {
+            fieldName = methodName.substring(2);
+        } else if(methodName.startsWith("get") &&  methodName.length() > 3) {
+            fieldName = methodName.substring(3);
+        } else {
+            return null;
+        }
+        return _Strings.decapitalize(fieldName);
+    }
 
 }

@@ -564,6 +564,15 @@ public final class _Reflect {
     @UtilityClass
     public static class Filter {
 
+        public static Predicate<Method> isGetter() {
+            return method->method!=null
+                    && method.getParameterCount()==0
+                    && method.getReturnType()!=void.class
+                    && (method.getName().startsWith("get")
+                        || (method.getName().startsWith("is")
+                                && method.getReturnType()==boolean.class));
+        }
+
         public static Predicate<Method> hasReturnType(final Class<?> expectedReturnType) {
             return method->expectedReturnType.isAssignableFrom(method.getReturnType());
         }

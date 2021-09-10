@@ -98,6 +98,9 @@ extends ReprRendererAbstract<ParentSpecAndFeature<T>> {
     protected abstract void putExtensionsSpecificToFeature();
 
     protected void putExtensionsName() {
+
+        getObjectFeature().getFriendlyName(null);
+
         getExtensions()
         .mapPut("friendlyName",
                 getObjectFeature().getStaticFriendlyName()

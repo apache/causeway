@@ -22,6 +22,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -112,6 +113,13 @@ final class Can_Multiple<T> implements Can<T> {
             return Optional.empty();
         }
         return Optional.of(elements.get(elementIndex));
+    }
+
+    @Override
+    public Can<T> sorted(final @NonNull Comparator<? super T> c) {
+        val newElements = _Lists.<T>newArrayList(elements);
+        newElements.sort(c);
+        return Can_Multiple.of(newElements);
     }
 
     @Override

@@ -21,6 +21,7 @@ package org.apache.isis.commons.collections;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
@@ -354,6 +355,14 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
     }
 
     // -- OPERATORS
+
+    /**
+     * Returns a {@code Can} with all the elements from this {@code Can}, but
+     * sorted based on
+     * {@link Comparable#compareTo(Object)} order.
+     * @return non-null
+     */
+    public Can<T> sorted(Comparator<? super T> comparator);
 
     /**
      * Returns a {@code Can} with all the elements from this {@code Can}, but
@@ -722,6 +731,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @return a non-null array, containing the elements of this Can
      */
     T[] toArray(Class<T> elementType);
+
 
 
 
