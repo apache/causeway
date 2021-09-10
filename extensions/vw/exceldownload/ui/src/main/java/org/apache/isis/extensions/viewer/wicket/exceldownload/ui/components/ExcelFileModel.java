@@ -29,6 +29,7 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -111,7 +112,8 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
                 int i=0;
                 for (ObjectAssociation property : columnProperties) {
                     final Cell cell = row.createCell((short) i++);
-                    cell.setCellValue(property.getFriendlyName(model::getParentObject));
+                    cell.setCellValue(property.getStaticOrCanonicalFriendlyName()
+                            .fold(UnaryOperator.identity(), UnaryOperator.identity()));
                 }
 
                 final CellStyle dateCellStyle = createDateFormatCellStyle(wb);
