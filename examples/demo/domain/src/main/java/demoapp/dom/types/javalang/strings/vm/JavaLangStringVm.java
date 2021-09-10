@@ -18,14 +18,18 @@
  */
 package demoapp.dom.types.javalang.strings.vm;
 
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
@@ -51,7 +55,7 @@ public class JavaLangStringVm
         implements HasAsciiDocDescription, JavaLangStringHolder2 {
 
 //end::class[]
-    public JavaLangStringVm(String initialValue) {
+    public JavaLangStringVm(final String initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
@@ -78,6 +82,20 @@ public class JavaLangStringVm
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
     @Getter @Setter
     private String readWriteOptionalProperty;
+
+    @Property
+    @Getter @Setter
+    private String imperativeProp;
+    @MemberSupport public String namedImperativeProp() {
+        return "prop" + readOnlyProperty;
+    }
+
+    @Collection
+    public List<JavaLangStringVm> getMulitple() {
+        return List.of(
+                new JavaLangStringVm("hi"),
+                new JavaLangStringVm("ho"));
+    }
 
 }
 //end::class[]
