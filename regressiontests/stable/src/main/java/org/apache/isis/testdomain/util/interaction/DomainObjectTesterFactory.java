@@ -59,8 +59,9 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 import org.apache.isis.testdomain.util.CollectionAssertions;
 import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
 
@@ -244,10 +245,10 @@ public class DomainObjectTesterFactory {
         }
 
         @Override
-        public Optional<ObjectMemberAbstract> getMetaModel() {
+        public Optional<OneToOneAssociation> getMetaModel() {
             return managedPropertyIfAny
             .map(ManagedProperty::getMetaModel)
-            .map(ObjectMemberAbstract.class::cast);
+            .map(OneToOneAssociation.class::cast);
         }
 
         @Override
@@ -310,10 +311,10 @@ public class DomainObjectTesterFactory {
         }
 
         @Override
-        public Optional<ObjectMemberAbstract> getMetaModel() {
+        public Optional<OneToManyAssociation> getMetaModel() {
             return managedCollectionIfAny
             .map(ManagedCollection::getMetaModel)
-            .map(ObjectMemberAbstract.class::cast);
+            .map(OneToManyAssociation.class::cast);
         }
 
         @Override
