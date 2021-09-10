@@ -35,7 +35,7 @@ class PumlCode() {
     }
 
     fun addStereotype(s: String): PumlCode {
-        var result = "<<" + s + ">>"
+        var result = "<<$s>>"
         result = italic(result)
         result = center(result)
         code += result + NL
@@ -43,39 +43,39 @@ class PumlCode() {
     }
 
     fun addLink(url: String, title: String): PumlCode {
-        var result = "[[" + url + " "+ title + "]]"
+        var result = "[[$url $title]]"
         result = bold(result)
         code += result + NL
         return this
     }
 
     fun addClass(s: String): PumlCode {
-        val result = underline("(C) "+ s)
+        val result = underline("(C) $s")
         code += result + NL
         return this
     }
 
     fun toMindmap(): PumlCode {
-        code += "@startmindmap$NL" + code + "@endmindmap$NL"
+        code += "@startmindmap$NL$code@endmindmap$NL"
         return this
     }
 
     fun toMindmapNode(level:Int): PumlCode {
         val depth = "*".repeat(level)
-        code = depth + ":" + code + ";" + NL
+        code = "$depth:$code;$NL"
         return this
     }
 
     private fun center(s: String): String {
-        return ".." + s + ".."
+        return "..$s.."
     }
 
     private fun italic(s: String): String {
-        return "//" + s + "//"
+        return "//$s//"
     }
 
     private fun bold(s: String): String {
-        return "**" + s + "**"
+        return "**$s**"
     }
 
     private fun underline(s: String): String {
@@ -83,7 +83,7 @@ class PumlCode() {
     }
 
     fun addHorizontalLine(): PumlCode {
-        code += "----" + NL
+        code += "----$NL"
         return this
     }
 
