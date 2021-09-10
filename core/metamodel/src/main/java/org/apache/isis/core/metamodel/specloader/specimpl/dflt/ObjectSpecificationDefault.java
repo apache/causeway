@@ -24,9 +24,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.Can;
@@ -49,11 +51,13 @@ import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.core.metamodel.specloader.postprocessor.PostProcessor;
 import org.apache.isis.core.metamodel.specloader.specimpl.FacetedMethodsBuilder;
@@ -362,6 +366,17 @@ implements FacetHolder {
     private Optional<ObjectSpecification> lookupElementSpecification() {
         return Optional.ofNullable(getFacet(TypeOfFacet.class))
                 .map(typeOfFacet -> ElementSpecificationProvider.of(typeOfFacet).getElementType());
+    }
+
+    // -- TABLE COLUMN RENDERING
+
+    @Override
+    public final Stream<OneToOneAssociation> streamPropertiesForColumnRendering(
+            final Identifier memberIdentifier,
+            final Optional<ManagedObject> parentObject) {
+
+        return new _PropertiesAsColumns(getMetaModelContext())
+            .streamPropertiesForColumnRendering(this, memberIdentifier, parentObject);
     }
 
 
