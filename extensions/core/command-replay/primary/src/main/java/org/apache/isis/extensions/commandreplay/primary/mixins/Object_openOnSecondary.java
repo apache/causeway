@@ -25,6 +25,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -61,7 +62,10 @@ public class Object_openOnSecondary {
 
     final Object object;
 
-    public URL act() {
+    @Inject PrimaryConfig primaryConfig;
+    @Inject BookmarkService bookmarkService;
+
+    @MemberSupport public URL act() {
         val baseUrlPrefix = lookupBaseUrlPrefix();
         val urlSuffix = bookmarkService.bookmarkForElseFail(object).toString();
 
@@ -71,7 +75,8 @@ public class Object_openOnSecondary {
             throw new RecoverableException(e);
         }
     }
-    public boolean hideAct() {
+
+    @MemberSupport public boolean hideAct() {
         return !primaryConfig.isConfigured();
     }
 
@@ -79,7 +84,5 @@ public class Object_openOnSecondary {
         return primaryConfig.getSecondaryBaseUrlWicket() + "entity/";
     }
 
-    @Inject PrimaryConfig primaryConfig;
-    @Inject BookmarkService bookmarkService;
 
 }

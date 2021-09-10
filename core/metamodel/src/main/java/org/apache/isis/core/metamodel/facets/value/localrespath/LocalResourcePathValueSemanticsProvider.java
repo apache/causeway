@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.value.localrespath;
 
 import java.nio.file.InvalidPathException;
@@ -74,7 +73,9 @@ extends ValueSemanticsProviderAndFacetAbstract<LocalResourcePath> implements Loc
 
     @Override
     public String titleString(final Object object) {
-        return object instanceof LocalResourcePath ? ((LocalResourcePath)object).getPath(): "";
+        return object instanceof LocalResourcePath
+                ? ((LocalResourcePath)object).getValue()
+                : "";
     }
 
     @Override
@@ -87,8 +88,10 @@ extends ValueSemanticsProviderAndFacetAbstract<LocalResourcePath> implements Loc
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected String doEncode(final LocalResourcePath url) {
-        return url != null ? url.getPath() : "NULL";
+    protected String doEncode(final LocalResourcePath localResourcePath) {
+        return localResourcePath != null
+                ? localResourcePath.getValue()
+                : "NULL";
     }
 
     @Override

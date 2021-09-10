@@ -18,11 +18,13 @@
  */
 package demoapp.dom.domain.objects.DomainObject.entityChangePublishing;
 
-import org.springframework.lang.Nullable;
 import javax.inject.Inject;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
@@ -39,15 +41,15 @@ import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotO
 public class DomainObjectEntityChangePublishingVm_delete {
 
     private final DomainObjectEntityChangePublishingVm domainObjectAuditingVm;
-    public DomainObjectEntityChangePublishingVm_delete(DomainObjectEntityChangePublishingVm domainObjectAuditingVm) {
+    public DomainObjectEntityChangePublishingVm_delete(final DomainObjectEntityChangePublishingVm domainObjectAuditingVm) {
         this.domainObjectAuditingVm = domainObjectAuditingVm;
     }
 
-    public DomainObjectEntityChangePublishingVm act(
-            @Nullable DomainObjectEntityChangePublishingEnabledEntity enabledEntity
-            , @Nullable DomainObjectEntityChangePublishingDisabledEntity disabledEntity
-            , @Nullable DomainObjectEntityChangePublishingEnabledMetaAnnotatedEntity metaAnnotatedEntity
-            , @Nullable DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenEntity metaAnnotOverriddenEntity
+    @MemberSupport public DomainObjectEntityChangePublishingVm act(
+            @Nullable final DomainObjectEntityChangePublishingEnabledEntity enabledEntity
+            , @Nullable final DomainObjectEntityChangePublishingDisabledEntity disabledEntity
+            , @Nullable final DomainObjectEntityChangePublishingEnabledMetaAnnotatedEntity metaAnnotatedEntity
+            , @Nullable final DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenEntity metaAnnotOverriddenEntity
             ) {
         if(enabledEntity != null) {
             publishingEnabledEntities.remove(enabledEntity);
@@ -63,19 +65,19 @@ public class DomainObjectEntityChangePublishingVm_delete {
         }
         return domainObjectAuditingVm;
     }
-    public DomainObjectEntityChangePublishingEnabledEntity default0Act() {
+    @MemberSupport public DomainObjectEntityChangePublishingEnabledEntity default0Act() {
         return publishingEnabledEntities.first().orElse(null);
     }
-    public DomainObjectEntityChangePublishingDisabledEntity default1Act() {
+    @MemberSupport public DomainObjectEntityChangePublishingDisabledEntity default1Act() {
         return publishingDisabledEntities.first().orElse(null);
     }
-    public DomainObjectEntityChangePublishingEnabledMetaAnnotatedEntity default2Act() {
+    @MemberSupport public DomainObjectEntityChangePublishingEnabledMetaAnnotatedEntity default2Act() {
         return publishingEnabledMetaAnnotatedEntities.first().orElse(null);
     }
-    public DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenEntity default3Act() {
+    @MemberSupport public DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenEntity default3Act() {
         return publishingEnabledMetaAnnotOverriddenEntities.first().orElse(null);
     }
-    public String disableAct() {
+    @MemberSupport public String disableAct() {
         if(!publishingEnabledEntities.first().isPresent()) { return "No EnabledJdo to delete"; }
         if(!publishingDisabledEntities.first().isPresent()) { return "No DisabledJdo to delete"; }
         if(!publishingEnabledMetaAnnotatedEntities.first().isPresent()) { return "No MetaAnnotated to delete"; }

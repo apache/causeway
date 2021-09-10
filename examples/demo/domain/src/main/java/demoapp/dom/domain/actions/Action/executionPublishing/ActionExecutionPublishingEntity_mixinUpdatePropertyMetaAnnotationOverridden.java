@@ -20,6 +20,7 @@ package demoapp.dom.domain.actions.Action.executionPublishing;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
@@ -45,16 +46,16 @@ public class ActionExecutionPublishingEntity_mixinUpdatePropertyMetaAnnotationOv
 
     private final ActionExecutionPublishingEntity actionPublishingEntity;
 
-    public ActionExecutionPublishingEntity_mixinUpdatePropertyMetaAnnotationOverridden(ActionExecutionPublishingJdo actionPublishingJdo) {
+    public ActionExecutionPublishingEntity_mixinUpdatePropertyMetaAnnotationOverridden(final ActionExecutionPublishingJdo actionPublishingJdo) {
         this.actionPublishingEntity = actionPublishingJdo;
     }
 
 //tag::class[]
-    public ActionExecutionPublishingEntity act(final String value) {
+    @MemberSupport public ActionExecutionPublishingEntity act(final String value) {
         actionPublishingEntity.setPropertyMetaAnnotatedOverridden(value);
         return actionPublishingEntity;
     }
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return actionPublishingEntity.getPropertyMetaAnnotatedOverridden();
     }
 }

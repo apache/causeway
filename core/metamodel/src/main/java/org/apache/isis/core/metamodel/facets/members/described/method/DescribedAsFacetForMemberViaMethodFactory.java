@@ -16,59 +16,37 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.members.described.method;
 
 import javax.inject.Inject;
 
-import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
-import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
-
-import lombok.val;
 
 public class DescribedAsFacetForMemberViaMethodFactory
-extends MethodPrefixBasedFacetFactoryAbstract {
-
-    private static final String PREFIX = MethodLiteralConstants.DESCRIBED_PREFIX;
+extends MemberSupportFacetFactoryAbstract {
 
     @Inject
     public DescribedAsFacetForMemberViaMethodFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.MEMBERS, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
+        super(mmc, FeatureType.MEMBERS, MemberSupportPrefix.DESCRIBED);
     }
 
     @Override
-    public void process(final ProcessMethodContext processMethodContext) {
-        addDescribedFacetIfDescribedMethodIsFound(processMethodContext);
-    }
+    protected void search(
+            final ProcessMethodContext processMethodContext,
+            final MethodFinder methodFinder) {
 
-    private void addDescribedFacetIfDescribedMethodIsFound(
-            final ProcessMethodContext processMethodContext) {
-
-        val cls = processMethodContext.getCls();
-        //val actionOrGetter = processMethodContext.getMethod();
-
-        val namingConvention = processMethodContext.memberSupportCandidates(PREFIX);
-
-        val describedMethod = MethodFinder.findMethod_returningText(
-                cls,
-                namingConvention,
-                NO_ARG)
-                .findFirst()
-                .orElse(null);
-        if (describedMethod == null) {
-            return;
-        }
-        processMethodContext.removeMethod(describedMethod);
-
-        FacetUtil.addFacet(
-                new DescribedAsFacetForMemberViaMethod(
-                        describedMethod,
-                        processMethodContext.getFacetHolder()));
+        methodFinder
+        .streamMethodsMatchingSignature(NO_ARG)
+        .peek(processMethodContext::removeMethod)
+        .forEach(describedMethod->{
+            addFacet(
+                    new DescribedAsFacetForMemberViaMethod(
+                            describedMethod, processMethodContext.getFacetHolder()));
+        });
     }
 
 }

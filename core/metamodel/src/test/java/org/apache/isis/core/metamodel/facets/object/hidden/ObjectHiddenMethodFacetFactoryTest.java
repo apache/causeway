@@ -16,33 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.hidden;
 
-import java.lang.reflect.Method;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
+import org.apache.isis.core.metamodel.facets.object.support.ObjectSupportFacetFactoryTestAbstract;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.isis.core.metamodel.facets.object.hidden.method.HiddenObjectFacetViaMethod;
-import org.apache.isis.core.metamodel.facets.object.hidden.method.HiddenObjectFacetViaMethodFactory;
-
-public class ObjectHiddenMethodFacetFactoryTest extends AbstractFacetFactoryTest {
-
-    private HiddenObjectFacetViaMethodFactory facetFactory;
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        facetFactory = new HiddenObjectFacetViaMethodFactory(metaModelContext);
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        facetFactory = null;
-        super.tearDown();
-    }
+public class ObjectHiddenMethodFacetFactoryTest
+extends ObjectSupportFacetFactoryTestAbstract {
 
     public void testDisabledMethodPickedUpAndMethodRemovedBooleanType() {
         class Customer {
@@ -51,35 +31,7 @@ public class ObjectHiddenMethodFacetFactoryTest extends AbstractFacetFactoryTest
                 return true;
             }
         }
-        final Method hiddenMethod = findMethod(Customer.class, "hidden");
-
-        final ProcessClassContext processClassContext = new ProcessClassContext(Customer.class, methodRemover, facetHolder);
-        facetFactory.process(processClassContext);
-
-        final Facet facet = facetHolder.getFacet(HiddenObjectFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof HiddenObjectFacetViaMethod);
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(hiddenMethod));
-    }
-
-    public void testHiddenMethodPickedUpAndMethodRemovedBooleanClass() {
-        class Customer {
-            @SuppressWarnings("unused")
-            public Boolean hidden() {
-                return true;
-            }
-        }
-        final Method hiddenMethod = findMethod(Customer.class, "hidden");
-
-        final ProcessClassContext processClassContext = new ProcessClassContext(Customer.class, methodRemover, facetHolder);
-        facetFactory.process(processClassContext);
-
-        final Facet facet = facetHolder.getFacet(HiddenObjectFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof HiddenObjectFacetViaMethod);
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(hiddenMethod));
+        assertPicksUp(1, facetFactory, Customer.class, ObjectSupportMethod.HIDDEN, HiddenObjectFacet.class);
     }
 
 }

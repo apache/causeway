@@ -89,7 +89,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
      * object, with the {@link #getObject() value of this model} to be default
      * value (if any) of that action parameter.
      */
-    protected ScalarModel(EntityModel parentEntityModel, ActionParameterMemento apm) {
+    protected ScalarModel(final EntityModel parentEntityModel, final ActionParameterMemento apm) {
 
         super(parentEntityModel.getCommonContext());
 
@@ -106,10 +106,10 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
      * property.
      */
     protected ScalarModel(
-            EntityModel parentEntityModel,
-            PropertyMemento pm,
-            ObjectUiModel.Mode mode,
-            ObjectUiModel.RenderingHint renderingHint) {
+            final EntityModel parentEntityModel,
+            final PropertyMemento pm,
+            final ObjectUiModel.Mode mode,
+            final ObjectUiModel.RenderingHint renderingHint) {
 
         super(parentEntityModel.getCommonContext());
         this.kind = Kind.PROPERTY;
@@ -190,7 +190,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         // parse text to get adapter
         ParseableFacet parseableFacet = getTypeOfSpecification().getFacet(ParseableFacet.class);
         if (parseableFacet == null) {
-            throw new RuntimeException("unable to parse string for " + getTypeOfSpecification().getFullIdentifier());
+            throw new RuntimeException("unable to find a parser for " + getTypeOfSpecification().getFullIdentifier());
         }
         ManagedObject adapter = parseableFacet.parseTextEntry(getObject(), enteredText,
                 InteractionInitiatedBy.USER);
@@ -269,7 +269,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         return inlinePromptContext;
     }
 
-    public void setInlinePromptContext(InlinePromptContext inlinePromptContext) {
+    public void setInlinePromptContext(final InlinePromptContext inlinePromptContext) {
         if (this.inlinePromptContext != null) {
             // otherwise the components created for an property edit inline prompt will overwrite the original
             // components on the underlying page (which we go back to if the prompt is cancelled).

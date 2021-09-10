@@ -20,6 +20,7 @@ package demoapp.dom.types.javalang.doubles.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
@@ -39,11 +40,12 @@ public class WrapperDoubleHolder_updateReadOnlyProperty {
 
     private final WrapperDoubleHolder holder;
 
-    public WrapperDoubleHolder act(Double newValue) {
+    @MemberSupport public WrapperDoubleHolder act(final Double newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
-    public Double default0Act() {
+
+    @MemberSupport public Double default0Act() {
         return holder.getReadOnlyProperty();
     }
 

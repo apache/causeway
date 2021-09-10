@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.commons;
 
 import java.lang.reflect.Member;
@@ -26,7 +25,8 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
+import org.apache.isis.commons.internal.collections._Collections;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;
@@ -47,10 +47,30 @@ public class MethodUtil {
         return Modifier.isStatic(modifiers);
     }
 
-    public static boolean isPublic(Member method) {
+    public static boolean isPublic(final Member method) {
         final int modifiers = method.getModifiers();
         return Modifier.isPublic(modifiers);
     }
+
+    public static boolean isNoArg(final Method method) {
+        return method.getParameterCount() == 0;
+    }
+
+    public static boolean isVoid(final Method method) {
+        val returnType = method.getReturnType();
+        return returnType.equals(void.class)
+                    || returnType.equals(Void.class);
+    }
+
+    public static boolean isNotVoid(final Method method) {
+        return !isVoid(method);
+    }
+
+    public static boolean isScalar(final Method method) {
+        return isNotVoid(method)
+                    && ! _Collections.isCollectionOrArrayOrCanType(method.getReturnType());
+    }
+
 
     @UtilityClass
     public static class Predicates {
@@ -148,7 +168,7 @@ public class MethodUtil {
          * @return whether the method under test matches the given constraints
          */
         public static Predicate<Method> prefixed(
-                String prefix, Class<?> returnType, CanBeVoid canBeVoid, int paramCount) {
+                final String prefix, final Class<?> returnType, final CanBeVoid canBeVoid, final int paramCount) {
 
             return method -> {
 
@@ -172,10 +192,13 @@ public class MethodUtil {
 
         }
 
-        public static Predicate<Method> getter(Class<?> returnType) {
-            return prefixed(MethodLiteralConstants.GET_PREFIX, returnType, CanBeVoid.FALSE, 0);
+        public static Predicate<Method> booleanGetter() {
+            return ProgrammingModelConstants.AccessorPrefix::isBooleanGetter;
         }
 
+        public static Predicate<Method> nonBooleanGetter(final Class<?> returnType) {
+            return method->ProgrammingModelConstants.AccessorPrefix.isNonBooleanGetter(method, returnType);
+        }
 
     }
 

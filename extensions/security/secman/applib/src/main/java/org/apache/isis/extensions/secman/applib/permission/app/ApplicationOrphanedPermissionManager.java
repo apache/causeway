@@ -24,6 +24,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRepository;
@@ -41,8 +42,7 @@ public class ApplicationOrphanedPermissionManager {
 
     @Inject private ApplicationPermissionRepository applicationPermissionRepository;
 
-
-    public String title() {
+    @ObjectSupport public String title() {
         return "Manage Orphaned Permissions";
     }
 

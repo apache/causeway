@@ -26,8 +26,8 @@ import org.apache.isis.applib.annotation.Title;
 public class AmbiguousTitle {
 
     @Title
-    public void invalidTitleProvider() {
-
+    public String conflictingTitleProvider() {
+        return "";
     }
 
     public String title() {

@@ -22,6 +22,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import demoapp.dom._infra.samples.NameSamples;
@@ -39,17 +40,16 @@ import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotO
 public class DomainObjectEntityChangePublishingVm_create {
 
     private final DomainObjectEntityChangePublishingVm domainObjectAuditingVm;
-    public DomainObjectEntityChangePublishingVm_create(DomainObjectEntityChangePublishingVm domainObjectAuditingVm) {
+    public DomainObjectEntityChangePublishingVm_create(final DomainObjectEntityChangePublishingVm domainObjectAuditingVm) {
         this.domainObjectAuditingVm = domainObjectAuditingVm;
     }
 
-
-    public DomainObjectEntityChangePublishingVm act(
-            String newValue
-            , boolean publishingEnabled
-            , boolean publishingDisabled
-            , boolean publishingEnabledMetaAnnotated
-            , boolean publishingEnabledMetaAnnotOverridden
+    @MemberSupport public DomainObjectEntityChangePublishingVm act(
+            final String newValue
+            , final boolean publishingEnabled
+            , final boolean publishingDisabled
+            , final boolean publishingEnabledMetaAnnotated
+            , final boolean publishingEnabledMetaAnnotOverridden
     ) {
         if(publishingEnabled) {
             publishingEnabledEntities.create(newValue);
@@ -65,19 +65,19 @@ public class DomainObjectEntityChangePublishingVm_create {
         }
         return domainObjectAuditingVm;
     }
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return nameSamples.random();
     }
-    public boolean default1Act() {
+    @MemberSupport public boolean default1Act() {
         return true;
     }
-    public boolean default2Act() {
+    @MemberSupport public boolean default2Act() {
         return true;
     }
-    public boolean default3Act() {
+    @MemberSupport public boolean default3Act() {
         return true;
     }
-    public boolean default4Act() {
+    @MemberSupport public boolean default4Act() {
         return true;
     }
 

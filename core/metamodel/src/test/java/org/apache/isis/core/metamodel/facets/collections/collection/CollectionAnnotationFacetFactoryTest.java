@@ -35,6 +35,7 @@ import org.apache.isis.core.metamodel.commons.matchers.IsisMatchers;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
@@ -78,20 +79,20 @@ extends AbstractFacetFactoryJUnit4TestCase {
     }
 
     private static void processModify(
-            CollectionAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
+            final CollectionAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
         val collectionIfAny = processMethodContext.synthesizeOnMethod(Collection.class);
         facetFactory.processModify(processMethodContext, collectionIfAny);
     }
 
     private static void processHidden(
-            CollectionAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
+            final CollectionAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
         val collectionIfAny = processMethodContext.synthesizeOnMethod(Collection.class);
         facetFactory.processHidden(processMethodContext, collectionIfAny);
     }
 
 
     private static void processTypeOf(
-            CollectionAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
+            final CollectionAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
         val collectionIfAny = processMethodContext.synthesizeOnMethod(Collection.class);
         facetFactory.processTypeOf(processMethodContext, collectionIfAny);
     }
@@ -131,8 +132,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
             collectionMethod = findMethod(Customer.class, "getOrders");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls,
-                    null, collectionMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = ProcessMethodContext
+                    .forTesting(cls, null, collectionMethod, mockMethodRemover, facetedMethod);
             processHidden(facetFactory, processMethodContext);
 
             // then
@@ -172,8 +173,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
             collectionMethod = findMethod(Customer.class, "getOrders");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls,
-                    null, collectionMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = ProcessMethodContext
+                    .forTesting(cls, null, collectionMethod, mockMethodRemover, facetedMethod);
             processTypeOf(facetFactory, processMethodContext);
 
             // then
@@ -202,8 +203,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
             collectionMethod = findMethod(Customer.class, "getOrders");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls,
-                    null, collectionMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = ProcessMethodContext
+                    .forTesting(cls, null, collectionMethod, mockMethodRemover, facetedMethod);
             processTypeOf(facetFactory, processMethodContext);
 
             // then
@@ -232,8 +233,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
             collectionMethod = findMethod(Customer.class, "getOrders");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls,
-                    null, collectionMethod, mockMethodRemover, facetedMethod);
+            final FacetFactory.ProcessMethodContext processMethodContext = ProcessMethodContext
+                    .forTesting(cls, null, collectionMethod, mockMethodRemover, facetedMethod);
             processTypeOf(facetFactory, processMethodContext);
 
             // then

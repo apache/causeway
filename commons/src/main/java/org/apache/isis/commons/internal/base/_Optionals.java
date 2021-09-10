@@ -26,25 +26,6 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class _Optionals {
 
-    /**
-     * @deprecated since Java 9 can be replaced with {@code firstOptional.or(() -> secondOptional)};
-     */
-    @Deprecated
-    public static <T> Optional<T> or(
-            final Optional<? extends T> a,
-            final Supplier<Optional<? extends T>> b) {
-        return a.isPresent()
-                ? _Casts.uncheckedCast(a)
-                : b.get().map(_Casts::uncheckedCast);
-    }
-
-    public static <T> Optional<T> or(
-            final Optional<? extends T> a,
-            final Supplier<Optional<? extends T>> b,
-            final Supplier<Optional<? extends T>> c) {
-        return or(or(a, b), c);
-    }
-
     public static <T> Optional<T> orNullable(
             final Optional<? extends T> a,
             final Supplier<? extends T> b) {
@@ -59,5 +40,6 @@ public class _Optionals {
             final Supplier<? extends T> c) {
         return orNullable(orNullable(a, b), c);
     }
+
 
 }

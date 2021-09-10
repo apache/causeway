@@ -20,6 +20,7 @@ package org.apache.isis.extensions.fullcalendar.ui.component.calendareventable;
 
 import org.apache.wicket.Component;
 
+import org.apache.isis.applib.annotation.Domain;
 import org.apache.isis.extensions.fullcalendar.applib.CalendarEventable;
 import org.apache.isis.extensions.fullcalendar.ui.component.CalendaredCollectionFactoryAbstract;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -28,7 +29,10 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 /**
  * {@link ComponentFactory} for {@link CalendarEventableCollectionAsFullCalendar}.
  */
-public class CalendarEventableCollectionAsFullCalendarFactory extends CalendaredCollectionFactoryAbstract {
+@org.springframework.stereotype.Component
+@Domain.Exclude
+public class CalendarEventableCollectionAsFullCalendarFactory
+extends CalendaredCollectionFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
@@ -37,7 +41,7 @@ public class CalendarEventableCollectionAsFullCalendarFactory extends Calendared
     }
 
     @Override
-    protected Component newComponent(String id, EntityCollectionModel collectionModel) {
+    protected Component newComponent(final String id, final EntityCollectionModel collectionModel) {
         return new CalendarEventableCollectionAsFullCalendar(id, collectionModel);
     }
 }

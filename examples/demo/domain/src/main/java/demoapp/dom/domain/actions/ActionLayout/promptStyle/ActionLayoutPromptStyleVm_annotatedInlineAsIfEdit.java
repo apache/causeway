@@ -20,6 +20,7 @@ package demoapp.dom.domain.actions.ActionLayout.promptStyle;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
@@ -41,11 +42,11 @@ public class ActionLayoutPromptStyleVm_annotatedInlineAsIfEdit {
 
     private final ActionLayoutPromptStyleVm stringViewModel;
 
-    public ActionLayoutPromptStyleVm act(String newValue) {
+    @MemberSupport public ActionLayoutPromptStyleVm act(final String newValue) {
         stringViewModel.setReadOnlyProperty2(newValue);
         return stringViewModel;
     }
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return stringViewModel.getReadOnlyProperty2();
     }
 

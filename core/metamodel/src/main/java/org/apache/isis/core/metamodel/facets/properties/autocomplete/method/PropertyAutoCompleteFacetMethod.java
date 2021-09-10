@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.properties.autocomplete.method;
 
 import java.lang.reflect.Method;
@@ -81,12 +80,6 @@ implements ImperativeFacet {
                 .visiblePojosAsArray(collectionAdapter, interactionInitiatedBy);
 
         return visiblePojos;
-    }
-
-    @Override
-    protected String toStringValues() {
-        val method = methods.getFirstOrFail();
-        return "method=" + method + ",class=" + choicesClass;
     }
 
     @Override

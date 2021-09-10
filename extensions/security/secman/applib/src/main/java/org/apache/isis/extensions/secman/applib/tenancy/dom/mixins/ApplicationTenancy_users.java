@@ -22,6 +22,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy;
 import org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy.CollectionDomainEvent;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
@@ -45,7 +46,7 @@ public class ApplicationTenancy_users {
     public static class DomainEvent
             extends CollectionDomainEvent<ApplicationUser> {}
 
-    public java.util.Collection<ApplicationUser> coll() {
+    @MemberSupport public java.util.Collection<ApplicationUser> coll() {
         return applicationUserRepository.findByAtPath(target.getPath());
     }
 

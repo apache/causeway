@@ -16,15 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.propparam.decimal;
 
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 
+import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.param.bigdecimal.javaxvaldigits.BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.param.bigdecimal.javaxvaldigits.BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.bigdecimal.javaxvaldigits.BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation;
@@ -46,7 +47,8 @@ extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Order.class, "getCost");
 
-        facetFactory.process(new FacetFactory.ProcessMethodContext(Order.class, null, method, methodRemover, facetedMethod));
+        facetFactory.process(ProcessMethodContext
+                .forTesting(Order.class, null, method, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(BigDecimalValueFacet.class);
         assertNotNull(facet);
@@ -69,7 +71,10 @@ extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Order.class, "updateCost", new Class[] { BigDecimal.class });
 
-        facetFactory.processParams(new FacetFactory.ProcessParameterContext(Customer.class, method, 0, null, facetedMethodParameter));
+
+
+        facetFactory.processParams(new FacetFactory
+                .ProcessParameterContext(Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, method, 0, null, facetedMethodParameter));
 
         final Facet facet = facetedMethodParameter.getFacet(BigDecimalValueFacet.class);
         assertNotNull(facet);

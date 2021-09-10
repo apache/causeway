@@ -56,6 +56,7 @@ import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.i18n.Mode;
@@ -74,7 +75,7 @@ import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.EntityCha
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.PropertyPublishingPolicy;
 import org.apache.isis.core.config.metamodel.services.ApplicationFeaturesInitConfiguration;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
-import org.apache.isis.core.config.viewer.wicket.DialogMode;
+import org.apache.isis.core.config.viewer.web.DialogMode;
 
 import lombok.Data;
 import lombok.Getter;
@@ -712,13 +713,6 @@ public class IsisConfiguration {
                  */
                 private ActionPublishingPolicy executionPublishing = ActionPublishingPolicy.NONE;
 
-                /**
-                 * Whether or not a public method needs to be annotated with
-                 * @{@link org.apache.isis.applib.annotation.Action} in order to be picked up as an action in the
-                 * metamodel.
-                 */
-                private boolean explicit = false;
-
                 private final DomainEvent domainEvent = new DomainEvent();
                 @Data
                 public static class DomainEvent {
@@ -1305,6 +1299,19 @@ public class IsisConfiguration {
             private final Introspector introspector = new Introspector();
             @Data
             public static class Introspector {
+
+                /**
+                 * Policy as to how introspection should process
+                 * class members and supporting methods.
+                 * <p>
+                 * Default is to only introspect public class members, while annotating these is optional.
+                 */
+                private IntrospectionPolicy policy;
+                public IntrospectionPolicy getPolicy() {
+                    return Optional.ofNullable(policy)
+                            .orElse(IntrospectionPolicy.ANNOTATION_OPTIONAL);
+                }
+
                 /**
                  * Whether to perform introspection in parallel. Meant to speed up bootstrapping.
                  * <p>
@@ -1404,8 +1411,10 @@ public class IsisConfiguration {
                  *     relate to the N-th parameter, and allow up to N-1 parameters to be passed in (allowing the Nth
                  *     parameter to be dynamically hidden or disabled).
                  * </p>
+                 * @deprecated this option is ignored by the framework, behavior is now fixated to noParamsOnly = true
                  */
-                private boolean noParamsOnly = false;
+                @Deprecated(forRemoval = true, since = "2.0.0-M7")
+                private boolean noParamsOnly = true;
 
                 /**
                  * Whether to validate that any actions that accept action parameters have either a corresponding
@@ -2135,13 +2144,6 @@ public class IsisConfiguration {
              * </p>
              */
             private boolean suppressPasswordReset = false;
-
-            /**
-             * @deprecated - seemingly unused
-             */
-            @Deprecated
-            @NotNull @NotEmpty
-            private String timestampPattern = "yyyy-MM-dd HH:mm:ss.SSS";
 
             /**
              * Whether to show an indicator for a form submit button that it has been clicked.

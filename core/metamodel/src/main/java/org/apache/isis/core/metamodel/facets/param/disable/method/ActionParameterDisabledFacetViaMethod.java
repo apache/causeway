@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.param.disable.method;
 
 import java.lang.reflect.Constructor;
@@ -26,7 +25,6 @@ import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationContext;
-import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -43,22 +41,19 @@ extends ActionParameterDisabledFacetAbstract
 implements ImperativeFacet {
 
     @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
-    private final TranslationService translationService;
     private final TranslationContext translationContext;
-    private final Optional<Constructor<?>> ppmFactory;
+    private final Optional<Constructor<?>> patConstructor;
 
     public ActionParameterDisabledFacetViaMethod(
             final Method method,
-            final TranslationService translationService,
-            final TranslationContext translationContext,
-            final Optional<Constructor<?>> ppmFactory,
+            final Optional<Constructor<?>> patConstructor,
             final FacetHolder holder) {
 
         super(holder);
         this.methods = ImperativeFacet.singleMethod(method);
-        this.translationService = translationService;
-        this.translationContext = translationContext;
-        this.ppmFactory = ppmFactory;
+        this.translationContext =
+                TranslationContext.forTranslationContextHolder(holder.getFeatureIdentifier());
+        this.patConstructor = patConstructor;
     }
 
     @Override
@@ -72,8 +67,8 @@ implements ImperativeFacet {
             final Can<ManagedObject> pendingArgs) {
 
         val method = methods.getFirstOrFail();
-        final Object returnValue = ppmFactory.isPresent()
-                ? ManagedObjects.InvokeUtil.invokeWithPPM(ppmFactory.get(), method, owningAdapter, pendingArgs)
+        final Object returnValue = patConstructor.isPresent()
+                ? ManagedObjects.InvokeUtil.invokeWithPAT(patConstructor.get(), method, owningAdapter, pendingArgs)
                 : ManagedObjects.InvokeUtil.invokeAutofit(method, owningAdapter, pendingArgs);
 
         if(returnValue instanceof String) {
@@ -81,15 +76,9 @@ implements ImperativeFacet {
         }
         if(returnValue instanceof TranslatableString) {
             final TranslatableString ts = (TranslatableString) returnValue;
-            return ts.translate(translationService, translationContext);
+            return ts.translate(getTranslationService(), translationContext);
         }
         return null;
-    }
-
-    @Override
-    protected String toStringValues() {
-        val method = methods.getFirstOrFail();
-        return "method=" + method;
     }
 
     @Override

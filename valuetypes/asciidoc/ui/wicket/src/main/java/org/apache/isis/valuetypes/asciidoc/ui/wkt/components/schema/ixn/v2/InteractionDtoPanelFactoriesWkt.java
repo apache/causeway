@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.valuetypes.asciidoc.ui.wkt.components.schema.ixn.v2;
 
 import org.springframework.stereotype.Component;

@@ -52,14 +52,14 @@ public class DependentArgsActionDemo_useAutoComplete {
         DemoItem item1;
     }
 
-    public DependentArgsActionDemo act(
+    @MemberSupport public DependentArgsActionDemo act(
 
             // PARAM 0
-            @Parameter(optionality = Optionality.MANDATORY)
+            @Parameter(optionality = Optionality.MANDATORY) final
             Parity parity,
 
             // PARAM 1
-            @Parameter(optionality = Optionality.MANDATORY)
+            @Parameter(optionality = Optionality.MANDATORY) final
             DemoItem item
 
             ) {
@@ -70,17 +70,15 @@ public class DependentArgsActionDemo_useAutoComplete {
 
     // -- PARAM 0 (Parity)
 
-    @MemberSupport
-    public Parity default0Act() {
+    @MemberSupport public Parity default0Act() {
         return holder.getDialogParityDefault();
     }
 
     // -- PARAM 1 (DemoItem)
 
-    @MemberSupport
-    public Collection<DemoItem> autoComplete1Act(
-            Parameters params,
-            @MinLength(3) String search) {
+    @MemberSupport public Collection<DemoItem> autoComplete1Act(
+            final Parameters params,
+            @MinLength(3) final String search) {
 
         val parity = params.parity(); // <-- the refining parameter from the dialog above
 

@@ -32,7 +32,9 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.LocalResourcePath;
@@ -50,16 +52,17 @@ import demoapp.dom.types.isis.localresourcepaths.vm.IsisLocalResourcePathVm;
 //@Log4j2
 public class IsisLocalResourcePaths implements HasAsciiDocDescription {
 
-    public String title() {
+    @ObjectSupport public String title() {
         return "LocalResourcePath data type";
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public IsisLocalResourcePathVm openViewModel(LocalResourcePath initialValue) {
+    public IsisLocalResourcePathVm openViewModel(final LocalResourcePath initialValue) {
         return new IsisLocalResourcePathVm(initialValue);
     }
-    public LocalResourcePath default0OpenViewModel() {
+
+    @MemberSupport public LocalResourcePath default0OpenViewModel() {
         return samples.single();
     }
 

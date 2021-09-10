@@ -16,8 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.parseable;
+
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
@@ -72,8 +73,9 @@ implements ParseableFacet {
     }
 
     @Override
-    protected String toStringValues() {
-        return parserClass.getName();
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("parser", parserClass.getName());
     }
 
     @Override

@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.param.layout.annotation;
 
 import java.lang.reflect.Method;
@@ -26,6 +25,7 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
+import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -47,7 +47,10 @@ public class LabelAtFacetForParameterLayoutAnnotationFactoryTest extends Abstrac
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { String.class });
 
-        facetFactory.processParams(new FacetFactory.ProcessParameterContext(Customer.class, method, 0, null, facetedMethodParameter));
+        facetFactory.processParams(new FacetFactory.ProcessParameterContext(
+                Customer.class,
+                IntrospectionPolicy.ANNOTATION_OPTIONAL,
+                method, 0, null, facetedMethodParameter));
 
         final Facet facet = facetedMethodParameter.getFacet(LabelAtFacet.class);
         assertThat(facet, is(notNullValue()));

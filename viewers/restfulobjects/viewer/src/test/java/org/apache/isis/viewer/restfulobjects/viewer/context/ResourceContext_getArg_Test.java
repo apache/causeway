@@ -28,9 +28,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.commons.internal.codec._UrlDecoderUtil;
@@ -46,6 +43,9 @@ import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulRequest.RequestParameter;
 import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 import org.apache.isis.viewer.restfulobjects.viewer.resources.ResourceDescriptor;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ResourceContext_getArg_Test {
 
@@ -102,7 +102,7 @@ public class ResourceContext_getArg_Test {
     public void whenArgExists() throws Exception {
         final String queryString = UrlEncodingUtils.urlEncode(JsonRepresentation.newMap("x-ro-page", "123").asJsonNode());
 
-        resourceContext = new ResourceContext(ResourceDescriptor.empty(), null, null, null, null,
+        resourceContext = new ResourceContext(ResourceDescriptor.empty(), null, null, null, null, null,
                 _UrlDecoderUtil.urlDecodeNullSafe(queryString),
                 mockHttpServletRequest, null, null,
                 metaModelContext, null, null) {
@@ -119,7 +119,7 @@ public class ResourceContext_getArg_Test {
     public void whenArgDoesNotExist() throws Exception {
         final String queryString = UrlEncodingUtils.urlEncode(JsonRepresentation.newMap("xxx", "123").asJsonNode());
 
-        resourceContext = new ResourceContext(ResourceDescriptor.empty(), null, null, null, null,
+        resourceContext = new ResourceContext(ResourceDescriptor.empty(), null, null, null, null, null,
                 _UrlDecoderUtil.urlDecodeNullSafe(queryString),
                 mockHttpServletRequest, null, null,
                 metaModelContext, null, null) {

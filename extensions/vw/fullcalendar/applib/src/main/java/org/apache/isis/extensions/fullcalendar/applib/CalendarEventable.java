@@ -33,8 +33,9 @@ public interface CalendarEventable {
      * The name of the calendar to which this event belongs.
      *
      * <p>
-     *     For example, an <code>Employee</code> might provide have a <code>employedOn</code>, so the calendar name
-     *     would be &quot;employedOn&quot;
+     *     For example, an <code>Employee</code> might provide have a <code>employedOn</code>,
+     *     so the calendar name
+     *     would be 'employedOn'
      * </p>
      *
      * <p>

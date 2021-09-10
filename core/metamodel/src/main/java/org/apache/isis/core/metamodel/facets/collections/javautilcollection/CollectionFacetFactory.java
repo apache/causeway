@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.collections.javautilcollection;
 
 import javax.inject.Inject;
@@ -29,8 +28,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetDefaultToObject;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 
 public class CollectionFacetFactory
@@ -61,8 +58,8 @@ extends FacetFactoryAbstract {
             final Class<?> collectionElementType = collectionElementType(cls);
             typeOfFacet =
                     collectionElementType != Object.class
-                    ? new TypeOfFacetInferredFromGenerics(collectionElementType, facetHolder)
-                            : new TypeOfFacetDefaultToObject(facetHolder);
+                        ? TypeOfFacet.inferredFromGenerics(collectionElementType, facetHolder)
+                        : new TypeOfFacetDefaultToObject(facetHolder);
                     facetHolder.addFacet(typeOfFacet);
         }
 
@@ -79,7 +76,7 @@ extends FacetFactoryAbstract {
         facetHolder.addFacet(collectionFacet);
 
         final TypeOfFacet typeOfFacet =
-                new TypeOfFacetInferredFromArray(cls.getComponentType(), facetHolder);
+                TypeOfFacet.inferredFromArray(cls.getComponentType(), facetHolder);
         facetHolder.addFacet(typeOfFacet);
     }
 

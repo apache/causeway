@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.domainobject;
 
 import org.apache.isis.applib.annotation.Bounding;
@@ -53,7 +52,8 @@ extends AbstractFacetFactoryTest {
         class Customer {
         }
 
-        val context = new ProcessClassContext(Customer.class, methodRemover, facetedMethod);
+        val context = ProcessClassContext
+                .forTesting(Customer.class, methodRemover, facetedMethod);
         facetFactory.processBounded(context.synthesizeOnType(DomainObject.class), context);
 
         final Facet facet = facetedMethod.getFacet(ChoicesFacet.class);

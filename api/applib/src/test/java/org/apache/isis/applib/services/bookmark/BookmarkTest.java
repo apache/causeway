@@ -30,35 +30,35 @@ class BookmarkTest {
 
     @Test
     void shouldParse_whenExactly2Token() {
-        
+
         val bookmark = Bookmark.parse("a:b").get();
-        
-        assertEquals("a", bookmark.getObjectType());
+
+        assertEquals("a", bookmark.getLogicalTypeName());
         assertEquals("b", bookmark.getIdentifier());
-        
+
     }
-    
+
     @Test
     void shouldNotParse_whenNotAtLeast2Token() {
-        
+
         assertEquals(Optional.empty(), Bookmark.parse(null));
         assertEquals(Optional.empty(), Bookmark.parse(""));
         assertEquals(Optional.empty(), Bookmark.parse("a"));
         assertEquals(Optional.empty(), Bookmark.parse("a:"));
         assertEquals(Optional.empty(), Bookmark.parse(":"));
         assertEquals(Optional.empty(), Bookmark.parse(":b"));
-        
+
     }
-    
-    
+
+
     @Test
     void shouldParse_whenMoreThan2Token() {
-        
+
         val bookmark = Bookmark.parse("a:b:c").get();
-        
-        assertEquals("a", bookmark.getObjectType());
+
+        assertEquals("a", bookmark.getLogicalTypeName());
         assertEquals("b:c", bookmark.getIdentifier());
-        
+
     }
 
 }

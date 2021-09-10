@@ -16,10 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.ignore.javalang;
 
-import java.lang.reflect.Method;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -64,13 +62,12 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
     public RemoveMethodsFacetFactory(final MetaModelContext mmc) {
         super(mmc, FeatureType.OBJECTS_ONLY);
 
-        final Class<?> typeToIgnore = Object.class;
-
-        final Method[] methods = typeToIgnore.getMethods();
-        for (final Method method : methods) {
+        getClassCache()
+        .streamPublicMethods(Object.class)
+        .forEach(method->{
             javaLangObjectMethodsToIgnore
             .add(new RemoveMethodsFacetFactory.MethodAndParameterTypes(method.getName(), method.getParameterTypes()));
-        }
+        });
 
     }
 
@@ -83,12 +80,13 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
         val isConcreteMixin = facetHolder instanceof ObjectSpecification
                 ? ((ObjectSpecification)facetHolder).getBeanSort().isMixin()
                 : false;
-        final Method[] methods = cls.getMethods();
 
-        val config = processClassContext.getFacetHolder().getMetaModelContext().getConfiguration();
-        val isExplicitAction = config.getApplib().getAnnotation().getAction().isExplicit();
+        val isActionAnnotationRequired = processClassContext.getIntrospectionPolicy()
+                .getMemberAnnotationPolicy().isMemberAnnotationsRequired();
 
-        for (Method method : methods) {
+        getClassCache()
+        .streamPublicMethods(cls)
+        .forEach(method->{
             // remove synthetic methods (except when is a mixin)
             // (it seems that javac marks methods synthetic in the context of non-static inner classes)
             if (!isConcreteMixin
@@ -103,7 +101,7 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
 
             // remove property setter, if has not explicitly an @Action annotation
             // this code block is not required, if @Action annotations are explicit per config
-            if(!isExplicitAction
+            if(!isActionAnnotationRequired
                     && method.getParameterCount() == 1
                     && method.getName().startsWith("set")
                     && method.getName().length() > 3) {
@@ -112,8 +110,7 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
                     processClassContext.removeMethod(method);
                 }
             }
-
-        }
+        });
 
         removeSuperclassMethods(processClassContext.getCls(), processClassContext);
 
@@ -136,10 +133,9 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
             return;
         }
 
-        final Method[] methods = type.getMethods();
-        for (final Method method : methods) {
-            processClassContext.removeMethod(method);
-        }
+        getClassCache()
+        .streamPublicMethods(type)
+        .forEach(processClassContext::removeMethod);
 
     }
 

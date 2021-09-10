@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.recreatable;
 
 import org.apache.isis.applib.ViewModel;
@@ -58,7 +57,8 @@ extends AbstractFacetFactoryTest {
 
         }
 
-        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
+        facetFactory.process(ProcessClassContext
+                .forTesting(Customer.class, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ViewModelFacet.class);
         assertNotNull(facet);

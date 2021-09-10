@@ -16,14 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.actcoll.typeof;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public class TypeOfFacetInferredFromArray extends TypeOfFacetAbstract {
 
-    public TypeOfFacetInferredFromArray(final Class<?> type, final FacetHolder holder) {
+    TypeOfFacetInferredFromArray(final Class<?> type, final FacetHolder holder) {
         super(type, holder);
     }
 

@@ -48,15 +48,15 @@ public class DependentArgsActionDemo_useHide {
         String message;
     }
 
-    public DependentArgsActionDemo act(
+    @MemberSupport public DependentArgsActionDemo act(
 
             // PARAM 0
-            @ParameterLayout(named = "Hide Message Field")
+            @ParameterLayout(named = "Hide Message Field") final
             boolean hideMessageField,
 
             // PARAM 1
             @Parameter(optionality = Optionality.MANDATORY)
-            @ParameterLayout(named = "Message")
+            @ParameterLayout(named = "Message") final
             String message
 
             ) {
@@ -67,20 +67,18 @@ public class DependentArgsActionDemo_useHide {
 
     // -- PARAM 0 (boolean hideMessageField)
 
-    @MemberSupport
-    public boolean default0Act() {
+    @MemberSupport public boolean default0Act() {
         return holder.isDialogCheckboxDefault();
     }
 
     // -- PARAM 1 (String message)
 
-    @MemberSupport
-    public boolean hide1Act(boolean hideMessageField) {
+    @MemberSupport public boolean hide1Act(final boolean hideMessageField) {
         return hideMessageField;
     }
 
 
-    public boolean hide1Act(Parameters params) {
+    public boolean hide1Act(final Parameters params) {
         return params.hideMessageField();
     }
 

@@ -18,8 +18,9 @@
  */
 package org.apache.isis.extensions.secman.applib.user.dom.mixins;
 
-import org.springframework.lang.Nullable;
 import javax.inject.Inject;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -55,8 +56,7 @@ public class ApplicationUser_duplicate {
 
     private final ApplicationUser target;
 
-    @MemberSupport
-    public ApplicationUser act(
+    @MemberSupport public ApplicationUser act(
             final String username,
             @Nullable
             final String emailAddress) {
@@ -74,5 +74,4 @@ public class ApplicationUser_duplicate {
                 });
 
     }
-
 }

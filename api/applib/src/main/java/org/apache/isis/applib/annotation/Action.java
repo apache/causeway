@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.applib.annotation;
 
 import java.lang.annotation.ElementType;
@@ -55,31 +54,8 @@ import org.apache.isis.applib.value.Clob;
 )
 @Retention(RetentionPolicy.RUNTIME)
 @DomainObject(nature=Nature.MIXIN, mixinMethod = "act") // meta annotation, only applies at class level
+@Domain.Include // meta annotation, in support of meta-model validation
 public @interface Action {
-
-    /**
-     * Associates this action with a property or collection, specifying its id.
-     *
-     * <p>
-     *     To specify the layout order use {@link ActionLayout#sequence()}.
-     * </p>
-     *
-     * <p>
-     *     For example <code>@Action(associateWith="items") @ActionLayout(sequence="2.1")</code>
-     * </p>
-     *
-     * <p>
-     *     If an action is associated with a collection, then any matching parameters will have
-     *     their choices automatically inferred from the collection (if not otherwise specified)
-     *     and any collection parameter defaults can be specified using checkboxes
-     *     (in the Wicket UI, at least).
-     * </p>
-     *
-     * @see ActionLayout#sequence()
-     * @deprecated use {{@link #choicesFrom()} instead
-     */
-    String associateWith()
-            default "";
 
     /**
      * References a collection of a certain element type, for an action with a collection parameter of that

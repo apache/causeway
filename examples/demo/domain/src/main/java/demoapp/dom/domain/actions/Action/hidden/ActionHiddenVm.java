@@ -27,16 +27,19 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @XmlRootElement(name = "root")
 @XmlType
@@ -51,12 +54,12 @@ public class ActionHiddenVm implements HasAsciiDocDescription {
     // ...
 //end::class[]
 
-    public ActionHiddenVm(String value) {
+    public ActionHiddenVm(final String value) {
         this.text = value;
         this.otherText = value;
     }
 
-    public String title() {
+    @ObjectSupport public String title() {
         return "Action#hidden";
     }
 
@@ -87,7 +90,7 @@ public class ActionHiddenVm implements HasAsciiDocDescription {
         setText(text);
         return this;
     }
-    public String default0UpdateTextNoAnnotation() {
+    @MemberSupport public String default0UpdateTextNoAnnotation() {
         return getText();
     }
 //end::action-no-annotation[]
@@ -107,7 +110,7 @@ public class ActionHiddenVm implements HasAsciiDocDescription {
         setText(text);
         return this;
     }
-    public String default0UpdateTextAndHiddenNowhere() {
+    @MemberSupport public String default0UpdateTextAndHiddenNowhere() {
         return getText();
     }
 //end::action-hidden-nowhere[]
@@ -127,7 +130,7 @@ public class ActionHiddenVm implements HasAsciiDocDescription {
         setText(text);
         return this;
     }
-    public String default0UpdateTextButHiddenOnForms() {
+    @MemberSupport public String default0UpdateTextButHiddenOnForms() {
         return getText();
     }
 //end::action-but-hidden-on-forms[]
@@ -148,7 +151,7 @@ public class ActionHiddenVm implements HasAsciiDocDescription {
         setText(text);
         return this;
     }
-    public String default0UpdateTextButHiddenEverywhere() {
+    @MemberSupport public String default0UpdateTextButHiddenEverywhere() {
         return getText();
     }
 //end::action-but-hidden-everywhere[]

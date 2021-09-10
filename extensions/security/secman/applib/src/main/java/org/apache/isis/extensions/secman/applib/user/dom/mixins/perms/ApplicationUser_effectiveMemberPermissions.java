@@ -52,8 +52,7 @@ public class ApplicationUser_effectiveMemberPermissions {
 
     private final ApplicationUser user;
 
-    @MemberSupport
-    public List<UserPermissionViewModel> coll() {
+    @MemberSupport public List<UserPermissionViewModel> coll() {
         return applicationFeatureRepository
                 .allMembers()
                 .stream()

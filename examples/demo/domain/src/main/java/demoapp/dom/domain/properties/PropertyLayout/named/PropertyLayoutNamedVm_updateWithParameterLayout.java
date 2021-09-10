@@ -20,6 +20,7 @@ package demoapp.dom.domain.properties.PropertyLayout.named;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -39,7 +40,7 @@ public class PropertyLayoutNamedVm_updateWithParameterLayout {
     private final PropertyLayoutNamedVm propertyLayoutNamedVm;
 
 //tag::annotation[]
-    public PropertyLayoutNamedVm act(
+    @MemberSupport public PropertyLayoutNamedVm act(
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(
                 named = "Named using @ParameterLayout"          // <.>
@@ -51,7 +52,7 @@ public class PropertyLayoutNamedVm_updateWithParameterLayout {
         return propertyLayoutNamedVm;
     }
 //end::annotation[]
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return propertyLayoutNamedVm.getPropertyUsingAnnotation();
     }
 

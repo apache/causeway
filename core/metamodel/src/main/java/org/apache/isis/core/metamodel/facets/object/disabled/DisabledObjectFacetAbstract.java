@@ -16,10 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.disabled;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -41,10 +39,11 @@ implements DisabledObjectFacet {
     @Override
     public String disables(final UsabilityContext ic) {
         final ManagedObject toDisable = ic.getTarget();
-        final Identifier identifier = ic.getIdentifier();
-        return toDisable != null ? disabledReason(toDisable, identifier) : null;
+        return toDisable != null
+                ? disabledReason(toDisable)
+                : null;
     }
 
-    protected abstract String disabledReason(ManagedObject toDisable, Identifier identifier);
+    protected abstract String disabledReason(ManagedObject toDisable);
 
 }

@@ -19,8 +19,8 @@
 package org.apache.isis.applib.services.iactnlayer;
 
 import java.io.Serializable;
+import java.time.ZoneId;
 import java.util.Locale;
-import java.util.TimeZone;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
@@ -62,7 +62,7 @@ public class InteractionContext implements Serializable {
                 .user(user)
                 .clock(VirtualClock.system())
                 .locale(Locale.getDefault())
-                .timeZone(TimeZone.getDefault())
+                .timeZone(ZoneId.systemDefault())
                 .build();
     }
 
@@ -91,7 +91,7 @@ public class InteractionContext implements Serializable {
     final @NonNull Locale locale = Locale.getDefault();
 
     @With @Getter @Builder.Default
-    final @NonNull TimeZone timeZone = TimeZone.getDefault();
+    final @NonNull ZoneId timeZone = ZoneId.systemDefault();
 
 
     /**
@@ -124,14 +124,14 @@ public class InteractionContext implements Serializable {
     /**
      * Convenience method for use with {@link org.apache.isis.applib.services.sudo.SudoService}, returning a
      * {@link UnaryOperator} that will act upon the provided {@link InteractionContext} to return the same but with
-     * the specified {@link TimeZone}.
+     * the specified {@link ZoneId}.
      */
-    public static UnaryOperator<InteractionContext> switchTimeZone(final @NonNull TimeZone timeZone) {
+    public static UnaryOperator<InteractionContext> switchTimeZone(final @NonNull ZoneId timeZone) {
         return interactionContext -> interactionContext.withTimeZone(timeZone);
     }
 
     /**
-     * Convenience method to combine {@link UnaryOperator}s, for example as per {@link #switchUser(UserMemento)} and {@link #switchTimeZone(TimeZone)}.
+     * Convenience method to combine {@link UnaryOperator}s, for example as per {@link #switchUser(UserMemento)} and {@link #switchTimeZone(ZoneId)}.
      *
      * <p>
      * NOTE: this implementation can result in heap pollution; better to use the {@link #combine(Stream) overload}.
@@ -145,7 +145,7 @@ public class InteractionContext implements Serializable {
     }
 
     /**
-     * Convenience method to combine {@link UnaryOperator}s, for example as per {@link #switchUser(UserMemento)} and {@link #switchTimeZone(TimeZone)}.
+     * Convenience method to combine {@link UnaryOperator}s, for example as per {@link #switchUser(UserMemento)} and {@link #switchTimeZone(ZoneId)}.
      *
      * credit: https://stackoverflow.com/a/51065029/56880
      */

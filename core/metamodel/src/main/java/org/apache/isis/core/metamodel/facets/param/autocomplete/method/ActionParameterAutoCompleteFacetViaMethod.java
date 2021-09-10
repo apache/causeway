@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.param.autocomplete.method;
 
 import java.lang.reflect.Constructor;
@@ -45,19 +44,19 @@ implements ImperativeFacet {
     @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
     private final Class<?> choicesType;
     private final int minLength;
-    private final Optional<Constructor<?>> ppmFactory;
+    private final Optional<Constructor<?>> patConstructor;
 
     public ActionParameterAutoCompleteFacetViaMethod(
             final Method method,
             final Class<?> choicesType,
-            final Optional<Constructor<?>> ppmFactory,
+            final Optional<Constructor<?>> patConstructor,
             final FacetHolder holder) {
 
         super(holder);
         this.methods = ImperativeFacet.singleMethod(method);
         this.choicesType = choicesType;
         this.minLength = MinLengthUtil.determineMinLength(method);
-        this.ppmFactory = ppmFactory;
+        this.patConstructor = patConstructor;
     }
 
     @Override
@@ -78,9 +77,9 @@ implements ImperativeFacet {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         val method = methods.getFirstOrFail();
-        final Object collectionOrArray = ppmFactory.isPresent()
-                ? ManagedObjects.InvokeUtil.invokeWithPPM(
-                        ppmFactory.get(), method, owningAdapter, pendingArgs, Collections.singletonList(searchArg))
+        final Object collectionOrArray = patConstructor.isPresent()
+                ? ManagedObjects.InvokeUtil.invokeWithPAT(
+                        patConstructor.get(), method, owningAdapter, pendingArgs, Collections.singletonList(searchArg))
                 : ManagedObjects.InvokeUtil.invokeAutofit(
                         method, owningAdapter, pendingArgs, Collections.singletonList(searchArg));
 
@@ -93,13 +92,6 @@ implements ImperativeFacet {
 
         return visibleChoices;
     }
-
-    @Override
-    protected String toStringValues() {
-        val method = methods.getFirstOrFail();
-        return "method=" + method + ",type=" + choicesType;
-    }
-
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {

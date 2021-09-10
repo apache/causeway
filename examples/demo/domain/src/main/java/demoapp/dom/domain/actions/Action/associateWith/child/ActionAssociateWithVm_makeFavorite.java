@@ -24,8 +24,9 @@ import java.util.Objects;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 
-import demoapp.dom.domain.actions.Action.associateWith.ActionAssociateWithVm;
 import lombok.RequiredArgsConstructor;
+
+import demoapp.dom.domain.actions.Action.associateWith.ActionAssociateWithVm;
 
 
 //tag::class[]

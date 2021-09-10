@@ -46,7 +46,6 @@ import org.apache.isis.commons.internal.base._Objects;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.commons.MethodExtensions;
@@ -56,7 +55,6 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.facets.object.entity.PersistenceStandard;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
@@ -65,7 +63,6 @@ import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
 import lombok.NonNull;
-import lombok.SneakyThrows;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
@@ -218,29 +215,6 @@ public final class ManagedObjects {
 
     };
 
-    // -- COPY UTILITIES
-
-    @Nullable
-    public static ManagedObject copyIfClonable(final @Nullable ManagedObject adapter) {
-
-        if(adapter==null) {
-            return null;
-        }
-
-        val viewModelFacet = adapter.getSpecification().getFacet(ViewModelFacet.class);
-        if(viewModelFacet != null) {
-            val viewModelPojo = adapter.getPojo();
-            if(viewModelFacet.isCloneable(viewModelPojo)) {
-                return ManagedObject.of(
-                        adapter.getSpecification(),
-                        viewModelFacet.clone(viewModelPojo));
-            }
-        }
-
-        return adapter;
-
-    }
-
     // -- DEFAULTS UTILITIES
 
     public static ManagedObject emptyToDefault(final boolean mandatory, final @NonNull ManagedObject input) {
@@ -332,9 +306,9 @@ public final class ManagedObjects {
      * used eg. to adapt the result of supporting methods, that return choice pojos
      */
     public static Can<ManagedObject> adaptMultipleOfTypeThenAttachThenFilterByVisibility(
-            @NonNull  final ObjectSpecification elementSpec,
+            final @NonNull  ObjectSpecification elementSpec,
             final @Nullable Object collectionOrArray,
-            @NonNull  final InteractionInitiatedBy interactionInitiatedBy) {
+            final @NonNull  InteractionInitiatedBy interactionInitiatedBy) {
 
         return _NullSafe.streamAutodetect(collectionOrArray)
         .map(pojo->ManagedObject.of(elementSpec, pojo)) // pojo is nullable here
@@ -343,22 +317,7 @@ public final class ManagedObjects {
         .collect(Can.toCan());
     }
 
-    /**
-     * TODO just for debugging, remove!
-     * print stacktrace to console, if {@code pojo} is an attached entity
-     * @deprecated
-     */
-    @Deprecated
-    @SneakyThrows
-    public static void warnIfAttachedEntity(final ManagedObject adapter, final String logMessage) {
-        if(isNullOrUnspecifiedOrEmpty(adapter)) {
-            return;
-        }
-        if(EntityUtil.isAttached(adapter)) {
-            _Probe.errOut("%s [%s]", logMessage, adapter.getSpecification().getFullIdentifier());
-            _Exceptions.dumpStackTrace();
-        }
-    }
+
 
     /**
      * eg. in order to prevent wrapping an object that is already wrapped
@@ -458,7 +417,8 @@ public final class ManagedObjects {
                 val collectionFacet = managedObject.getSpecification().getFacet(CollectionFacet.class);
                 return collectionTitleString(managedObject, collectionFacet);
             } else {
-                return objectTitleString(managedObject, isContextAdapter);
+                return objectTitleString(managedObject, isContextAdapter)
+                        .trim();
             }
         }
 
@@ -798,7 +758,7 @@ public final class ManagedObjects {
     @UtilityClass
     public static final class InvokeUtil {
 
-        public static Object invokeWithPPM(
+        public static Object invokeWithPAT(
                 final Constructor<?> ppmConstructor,
                 final Method method,
                 final ManagedObject adapter,
@@ -810,12 +770,12 @@ public final class ManagedObjects {
             return MethodExtensions.invoke(method, UnwrapUtil.single(adapter), paramPojos);
         }
 
-        public static Object invokeWithPPM(
+        public static Object invokeWithPAT(
                 final Constructor<?> ppmConstructor,
                 final Method method,
                 final ManagedObject adapter,
                 final Can<ManagedObject> argumentAdapters) {
-            return invokeWithPPM(ppmConstructor, method, adapter, argumentAdapters, Collections.emptyList());
+            return invokeWithPAT(ppmConstructor, method, adapter, argumentAdapters, Collections.emptyList());
         }
 
         public static void invokeAll(final Iterable<Method> methods, final ManagedObject adapter) {

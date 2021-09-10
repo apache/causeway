@@ -21,6 +21,7 @@ package demoapp.dom.domain.objects.other.mixins;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Where;
 
@@ -39,7 +40,7 @@ import lombok.Setter;
 @AllArgsConstructor(staticName = "of")
 public class FibonacciNumberVm {
 
-    public String title() {
+    @ObjectSupport public String title() {
         return String.format("%d ! = %d", getNumber(), getFibonacci());
     }
 

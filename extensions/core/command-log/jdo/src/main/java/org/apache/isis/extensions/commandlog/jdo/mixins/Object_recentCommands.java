@@ -65,8 +65,7 @@ public class Object_recentCommands {
 
     private final Object domainObject; // mixee
 
-    @MemberSupport
-    public List<CommandJdo> act() {
+    @MemberSupport public List<CommandJdo> act() {
         return bookmarkService.bookmarkFor(domainObject)
         .map(commandServiceRepository::findRecentByTarget)
         .orElse(Collections.emptyList());
@@ -76,8 +75,7 @@ public class Object_recentCommands {
      * Hide if the mixee is itself {@link HasInteractionId}
      * (commands don't have commands).
      */
-    @MemberSupport
-    public boolean hideAct() {
+    @MemberSupport public boolean hideAct() {
         return (domainObject instanceof HasInteractionId);
     }
 

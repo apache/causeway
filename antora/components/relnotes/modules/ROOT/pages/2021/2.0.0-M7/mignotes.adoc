@@ -1,0 +1,71 @@
+= Migrating from M6 to M7
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+(This page will be added to as development progresses).
+
+== Programming Model
+
+[cols="2a,3a", options="header"]
+
+|===
+
+| previously
+| new
+
+| We provided introspection control via global config option 
+`isis.core.meta-model.annotation.action.explicit=true/false`.
+| Use `@DomainObject(introspection=...)` instead ... 
+as it allows to set the policy on a per class basis, and also introduces support 
+for non-public class member introspection. 
+
+| Imperative _Object_ method `boolean disabled(Type type)` took a single argument.
+| The `Type` argument was removed, use `boolean disabled()` instead.
+
+|===
+
+== Configuration
+
+Following configuration options changed:
+[source,java]
+----
+// removed:
+isis.core.meta-model.annotation.action.explicit=true/false
+
+// semantic equivalent replacement for i.c.m.a.action.explicit=false 
+isis.core.meta-model.introspector.policy=ANNOTATION_OPTIONAL
+
+// semantic equivalent replacement for i.c.m.a.action.explicit=true 
+isis.core.meta-model.introspector.policy=ANNOTATION_REQUIRED
+
+----
+
+== Maven Artifacts
+
+`-dn5` suffix was removed from artifacts, because we migrated DataNucleus 5.x to 6.x
+
+[source,xml]
+----
+<!--
+<dependency>
+	<groupId>org.apache.isis.valuetypes</groupId>
+	<artifactId>isis-valuetypes-asciidoc-persistence-jdo-dn5</artifactId>
+</dependency>
+-->
+<dependency>
+	<groupId>org.apache.isis.valuetypes</groupId>
+	<artifactId>isis-valuetypes-asciidoc-persistence-jdo</artifactId>
+</dependency>
+
+<!--
+<dependency>
+	<groupId>org.apache.isis.valuetypes</groupId>
+	<artifactId>isis-valuetypes-markdown-persistence-jdo-dn5</artifactId>
+</dependency>
+-->
+<dependency>
+	<groupId>org.apache.isis.valuetypes</groupId>
+	<artifactId>isis-valuetypes-markdown-persistence-jdo</artifactId>
+</dependency>
+----

@@ -29,6 +29,7 @@ import org.springframework.context.annotation.Profile;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
@@ -36,9 +37,10 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
 
-import demoapp.dom.types.isisext.markdowns.persistence.IsisMarkdownEntity;
 import lombok.Getter;
 import lombok.Setter;
+
+import demoapp.dom.types.isisext.markdowns.persistence.IsisMarkdownEntity;
 
 @Profile("demo-jdo")
 //tag::class[]
@@ -51,13 +53,13 @@ public class IsisMarkdownJdo                                          // <.>
         extends IsisMarkdownEntity {
 
 //end::class[]
-    public IsisMarkdownJdo(Markdown initialValue) {
+    public IsisMarkdownJdo(final Markdown initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
 
 //tag::class[]
-    public String title() {
+    @ObjectSupport public String title() {
         return "Markdown JDO entity: " +
             bookmarkService.bookmarkForElseFail(this).getIdentifier();
 }

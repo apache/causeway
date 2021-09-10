@@ -25,12 +25,14 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.LocalResourcePath;
 
-import demoapp.dom.types.Samples;
 import lombok.RequiredArgsConstructor;
+
+import demoapp.dom.types.Samples;
 
 //tag::class[]
 @Action(
@@ -46,14 +48,16 @@ public class IsisLocalResourcePathHolder_updateReadOnlyPropertyWithChoices {
 
     private final IsisLocalResourcePathHolder holder;
 
-    public IsisLocalResourcePathHolder act(LocalResourcePath newValue) {
+    @MemberSupport public IsisLocalResourcePathHolder act(final LocalResourcePath newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
-    public LocalResourcePath default0Act() {
+
+    @MemberSupport public LocalResourcePath default0Act() {
         return holder.getReadOnlyProperty();
     }
-    public List<LocalResourcePath> choices0Act() {
+
+    @MemberSupport public List<LocalResourcePath> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }

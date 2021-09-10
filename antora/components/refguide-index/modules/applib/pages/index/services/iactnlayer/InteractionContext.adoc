@@ -14,9 +14,9 @@ class InteractionContext {
   UnaryOperator<InteractionContext> switchClock(final VirtualClock clock)     // <.>
   UnaryOperator<InteractionContext> switchLocale(final Locale locale)     // <.>
   UnaryOperator<InteractionContext> switchTimeZone(final TimeZone timeZone)     // <.>
-  UnaryOperator<T> combine(UnaryOperator<T>... mappers)     // <.>
-  UnaryOperator<T> combine(Stream<UnaryOperator<T>> mappers)     // <.>
-  void replaceUser(UserMemento user)     // <.>
+  UnaryOperator<T> combine(final UnaryOperator<T>... mappers)     // <.>
+  UnaryOperator<T> combine(final Stream<UnaryOperator<T>> mappers)     // <.>
+  void replaceUser(final UserMemento user)     // <.>
 }
 ----
 

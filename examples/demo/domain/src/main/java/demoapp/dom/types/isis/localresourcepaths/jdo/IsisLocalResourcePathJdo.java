@@ -35,9 +35,10 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.value.LocalResourcePath;
 
-import demoapp.dom.types.isis.localresourcepaths.persistence.IsisLocalResourcePathEntity;
 import lombok.Getter;
 import lombok.Setter;
+
+import demoapp.dom.types.isis.localresourcepaths.persistence.IsisLocalResourcePathEntity;
 
 @Profile("demo-jdo")
 //tag::class[]

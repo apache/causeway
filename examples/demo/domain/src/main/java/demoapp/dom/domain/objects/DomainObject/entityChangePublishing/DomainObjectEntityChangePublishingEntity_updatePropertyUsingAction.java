@@ -20,6 +20,7 @@ package demoapp.dom.domain.objects.DomainObject.entityChangePublishing;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
@@ -35,16 +36,16 @@ public class DomainObjectEntityChangePublishingEntity_updatePropertyUsingAction
 //end::class[]
     private final DomainObjectEntityChangePublishingEntity domainObjectAuditingEntity;
 
-    public DomainObjectEntityChangePublishingEntity_updatePropertyUsingAction(DomainObjectEntityChangePublishingEntity domainObjectAuditingEntity) {
+    public DomainObjectEntityChangePublishingEntity_updatePropertyUsingAction(final DomainObjectEntityChangePublishingEntity domainObjectAuditingEntity) {
         this.domainObjectAuditingEntity = domainObjectAuditingEntity;
     }
 
 //tag::class[]
-    public DomainObjectEntityChangePublishingEntity_updatePropertyUsingAction updateProperty(final String value) {
+    @MemberSupport public DomainObjectEntityChangePublishingEntity_updatePropertyUsingAction act(final String value) {
         domainObjectAuditingEntity.setPropertyUpdatedByAction(value);
         return this;
     }
-    public String default0UpdateProperty() {
+    @MemberSupport public String default0Act() {
         return domainObjectAuditingEntity.getPropertyUpdatedByAction();
     }
 

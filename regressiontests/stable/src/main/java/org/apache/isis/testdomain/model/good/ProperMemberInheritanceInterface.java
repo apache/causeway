@@ -24,15 +24,18 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
 public interface ProperMemberInheritanceInterface {
 
+    @ObjectSupport
     default String title() {
         return "inherited title";
     }
 
+    @ObjectSupport
     default String iconName() {
         return "inherited icon";
     }
@@ -63,7 +66,7 @@ public interface ProperMemberInheritanceInterface {
 
     @Action
     @ActionLayout(named = "foo", describedAs = "bar")
-    default void sampleActionOverrideWithParam(String x) {
+    default void sampleActionOverrideWithParam(final String x) {
     }
 
     @Property

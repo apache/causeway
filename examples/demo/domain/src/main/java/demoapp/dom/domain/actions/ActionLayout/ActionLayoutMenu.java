@@ -21,15 +21,14 @@ package demoapp.dom.domain.actions.ActionLayout;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import lombok.extern.log4j.Log4j2;
-
 @DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.ActionLayoutMenu")
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
-@Log4j2
+//@Log4j2
 public class ActionLayoutMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
@@ -37,7 +36,7 @@ public class ActionLayoutMenu {
     )
     public void bookmarking(){
     }
-    public String disableBookmarking(){
+    @MemberSupport public String disableBookmarking(){
         return "Add link to action prompt as a bookmark" +
                 " (not supported by Wicket viewer)";
     }
@@ -48,7 +47,7 @@ public class ActionLayoutMenu {
     @ActionLayout(cssClassFa="fa-pen-nib", describedAs = "CSS class to wrap the UI component representing this action")
     public void cssClass(){
     }
-    public String disableCssClass(){
+    @MemberSupport public String disableCssClass(){
         return "CSS class to wrap the UI component representing this action" +
                 " (not yet implemented in demo)";
     }
@@ -59,7 +58,7 @@ public class ActionLayoutMenu {
     @ActionLayout(cssClassFa="fa-font-awesome-flag", describedAs = "Font awesome icon to represent action")
     public void cssClassFa(){
     }
-    public String disableCssClassFa(){
+    @MemberSupport public String disableCssClassFa(){
         return "Font awesome icon to represent action" +
                 " (not yet implemented in demo)";
     }
@@ -71,7 +70,7 @@ public class ActionLayoutMenu {
     @ActionLayout(cssClassFa="fa-comment", describedAs = "Description of the action, shown as a tooltip")
     public void describedAs(){
     }
-    public String disableDescribedAs(){
+    @MemberSupport public String disableDescribedAs(){
         return "Description of the action, shown as a tooltip" +
                 " (not yet implemented in demo)";
     }
@@ -82,7 +81,7 @@ public class ActionLayoutMenu {
     @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of the action in different contexts")
     public void hidden(){
     }
-    public String disableHidden(){
+    @MemberSupport public String disableHidden(){
         return "Visibility of the action in different contexts" +
                 " (not yet implemented in demo)";
     }
@@ -93,7 +92,7 @@ public class ActionLayoutMenu {
     @ActionLayout(cssClassFa="fa-signature", describedAs = "Custom text for the action's label")
     public void named(){
     }
-    public String disableNamed(){
+    @MemberSupport public String disableNamed(){
         return "Custom text for the action's label" +
                 " (not yet implemented in demo)";
     }
@@ -120,7 +119,7 @@ public class ActionLayoutMenu {
     @ActionLayout(cssClassFa="fa-random", describedAs = "Whether to redraw page if action returns same object")
     public void redirectPolicy(){
     }
-    public String disableRedirectPolicy(){
+    @MemberSupport public String disableRedirectPolicy(){
         return "Whether to redraw page if action returns same object" +
                 " (not yet implemented in demo)";
     }

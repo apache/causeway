@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.param.parameter;
 
 import java.lang.reflect.Method;
@@ -25,6 +24,7 @@ import javax.validation.constraints.Pattern;
 
 import org.junit.Before;
 
+import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
@@ -51,7 +51,9 @@ public class RegExAnnotationOnParameterFacetFactoryTest extends AbstractFacetFac
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { String.class });
 
-        facetFactory.processParams(new ProcessParameterContext(Customer.class, method, 0, null, facetedMethodParameter));
+        facetFactory.processParams(
+                new ProcessParameterContext(
+                        Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, method, 0, null, facetedMethodParameter));
 
         final Facet facet = facetedMethodParameter.getFacet(RegExFacet.class);
         assertNotNull(facet);
@@ -70,7 +72,9 @@ public class RegExAnnotationOnParameterFacetFactoryTest extends AbstractFacetFac
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { int.class });
 
-        facetFactory.processParams(new ProcessParameterContext(Customer.class, method, 0, null, facetedMethodParameter));
+        facetFactory.processParams(
+                new ProcessParameterContext(
+                        Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, method, 0, null, facetedMethodParameter));
 
         assertNull(facetedMethod.getFacet(RegExFacet.class));
     }

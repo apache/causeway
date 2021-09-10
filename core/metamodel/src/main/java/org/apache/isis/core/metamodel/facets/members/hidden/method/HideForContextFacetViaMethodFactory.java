@@ -16,76 +16,38 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.members.hidden.method;
-
-import java.lang.reflect.Method;
 
 import javax.inject.Inject;
 
-import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
-import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
-
-import lombok.val;
 
 public class HideForContextFacetViaMethodFactory
-extends MethodPrefixBasedFacetFactoryAbstract {
-
-    private static final String PREFIX = MethodLiteralConstants.HIDE_PREFIX;
+extends MemberSupportFacetFactoryAbstract {
 
     @Inject
     public HideForContextFacetViaMethodFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.MEMBERS, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
+        super(mmc, FeatureType.MEMBERS, MemberSupportPrefix.HIDE);
     }
 
     @Override
-    public void process(final ProcessMethodContext processMethodContext) {
-        attachHideFacetIfHideMethodIsFound(processMethodContext);
-    }
+    protected void search(
+            final ProcessMethodContext processMethodContext,
+            final MethodFinder methodFinder) {
 
-    private void attachHideFacetIfHideMethodIsFound(final ProcessMethodContext processMethodContext) {
+        methodFinder
+        .streamMethodsMatchingSignature(NO_ARG)
+        .peek(processMethodContext::removeMethod)
+        .forEach(hideMethod->{
+            addFacet(
+                    new HideForContextFacetViaMethod(
+                            hideMethod, processMethodContext.getFacetHolder()));
+        });
 
-        final Method actionOrGetter = processMethodContext.getMethod();
-
-        val namingConvention = processMethodContext.memberSupportCandidates(PREFIX);
-
-        val cls = processMethodContext.getCls();
-        Method hideMethod = MethodFinder.findMethod(
-                cls,
-                namingConvention,
-                boolean.class,
-                NO_ARG)
-                .findFirst()
-                .orElse(null);
-        if (hideMethod == null) {
-
-            boolean noParamsOnly = getConfiguration().getCore().getMetaModel().getValidator().isNoParamsOnly();
-            boolean searchExactMatch = !noParamsOnly;
-            if(searchExactMatch) {
-                hideMethod = MethodFinder.findMethod(
-                        cls,
-                        namingConvention,
-                        boolean.class,
-                        actionOrGetter.getParameterTypes())
-                        .findFirst()
-                        .orElse(null);
-            }
-        }
-
-        if (hideMethod == null) {
-            return;
-        }
-
-        processMethodContext.removeMethod(hideMethod);
-
-        final FacetHolder facetedMethod = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new HideForContextFacetViaMethod(hideMethod, facetedMethod));
     }
 
 }

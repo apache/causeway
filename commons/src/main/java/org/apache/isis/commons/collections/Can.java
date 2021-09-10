@@ -21,6 +21,7 @@ package org.apache.isis.commons.collections;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
@@ -30,6 +31,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -38,8 +40,9 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
 import javax.enterprise.inject.Instance;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -226,28 +229,11 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
             return empty();
         }
 
-        // this is just an optimization, to pre-allocate a reasonable list size,
-        // specifically targeted at small list sizes
-        val maxSize = Math.min(array.length, 1024);
-
         val nonNullElements = Stream.of(array)
                 .filter(_NullSafe::isPresent)
-                .collect(Collectors.toCollection(()->new ArrayList<>(maxSize)));
+                .collect(_CanFactory.toListWithSizeUpperBound(array.length));
 
-        nonNullElements.trimToSize(); // in case we have a 'sparse' collection as input to this method
-
-        val size = nonNullElements.size();
-
-        if(size==0) {
-            return empty();
-        }
-
-        if(size==1) {
-            return ofSingleton(((List<T>)nonNullElements).get(0));
-        }
-
-        return Can_Multiple.of(nonNullElements);
-
+        return _CanFactory.ofNonNullElements(nonNullElements);
     }
 
     /**
@@ -260,31 +246,17 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      */
     public static <T> Can<T> ofCollection(final @Nullable Collection<T> collection) {
 
-        if(_NullSafe.size(collection)==0) {
+        val inputSize = _NullSafe.size(collection);
+
+        if(inputSize==0) {
             return empty();
         }
-
-        // this is just an optimization, to pre-allocate a reasonable list size,
-        // specifically targeted at small list sizes
-        val maxSize = Math.min(collection.size(), 1024);
 
         val nonNullElements = collection.stream()
                 .filter(_NullSafe::isPresent)
-                .collect(Collectors.toCollection(()->new ArrayList<>(maxSize)));
+                .collect(_CanFactory.toListWithSizeUpperBound(inputSize));
 
-        nonNullElements.trimToSize(); // in case we have a 'sparse' collection as input to this method
-
-        val size = nonNullElements.size();
-
-        if(size==0) {
-            return empty();
-        }
-
-        if(size==1) {
-            return ofSingleton(((List<T>)nonNullElements).get(0));
-        }
-
-        return Can_Multiple.of(nonNullElements);
+        return _CanFactory.ofNonNullElements(nonNullElements);
     }
 
     /**
@@ -301,10 +273,14 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
             return empty();
         }
 
-        val elements = new ArrayList<T>();
-        iterable.forEach(elements::add);
+        val nonNullElements = new ArrayList<T>();
+        iterable.forEach(element->{
+            if(element!=null) {
+                nonNullElements.add(element);
+            }
+        });
 
-        return ofCollection(elements);
+        return _CanFactory.ofNonNullElements(nonNullElements);
     }
 
     /**
@@ -323,11 +299,14 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
             return empty();
         }
 
-        val elements = new ArrayList<T>();
+        val nonNullElements = new ArrayList<T>();
         while(enumeration.hasMoreElements()) {
-            elements.add(enumeration.nextElement());
+            val element = enumeration.nextElement();
+            if(element!=null) {
+                nonNullElements.add(element);
+            }
         }
-        return ofCollection(elements);
+        return _CanFactory.ofNonNullElements(nonNullElements);
     }
 
     /**
@@ -350,17 +329,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
                 .filter(_NullSafe::isPresent)
                 .collect(Collectors.toCollection(()->new ArrayList<>()));
 
-        val size = nonNullElements.size();
-
-        if(size==0) {
-            return empty();
-        }
-
-        if(size==1) {
-            return ofSingleton(((List<T>)nonNullElements).get(0));
-        }
-
-        return Can_Multiple.of(nonNullElements);
+        return _CanFactory.ofNonNullElements(nonNullElements);
     }
 
     /**
@@ -389,11 +358,26 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
 
     /**
      * Returns a {@code Can} with all the elements from this {@code Can}, but
+     * sorted based on
+     * {@link Comparable#compareTo(Object)} order.
+     * @return non-null
+     */
+    public Can<T> sorted(Comparator<? super T> comparator);
+
+    /**
+     * Returns a {@code Can} with all the elements from this {@code Can}, but
      * duplicated elements removed, based on
      * {@link Object#equals(Object)} object equality.
      * @return non-null
      */
-    public Can<T> unique();
+    public Can<T> distinct();
+
+    /**
+     * Returns a {@code Can} with all the elements from this {@code Can}, but
+     * duplicated elements removed, based on given {@code equality} relation.
+     * @return non-null
+     */
+    public Can<T> distinct(@NonNull BiPredicate<T, T> equality);
 
     /**
      * Returns a {@code Can} with all the elements from this {@code Can}, but
@@ -426,13 +410,27 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
             return empty();
         }
 
-        val mappedElements =
+        val nonNullMappedElements =
                 stream()
                 .map(mapper)
                 .filter(_NullSafe::isPresent)
-                .collect(Collectors.toCollection(ArrayList::new));
+                .collect(_CanFactory.toListWithSizeUpperBound(size()));
 
-        return ofCollection(mappedElements);
+        return _CanFactory.ofNonNullElements(nonNullMappedElements);
+    }
+
+    default <R> Can<R> flatMap(final @NonNull Function<? super T, ? extends Can<? extends R>> mapper) {
+
+        if(isEmpty()) {
+            return empty();
+        }
+
+        return
+                stream()
+                .map(mapper)
+                .filter(_NullSafe::isPresent)
+                .flatMap(Can::stream)
+                .collect(Can.toCan());
     }
 
     // -- CONCATENATION
@@ -733,6 +731,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @return a non-null array, containing the elements of this Can
      */
     T[] toArray(Class<T> elementType);
+
 
 
 

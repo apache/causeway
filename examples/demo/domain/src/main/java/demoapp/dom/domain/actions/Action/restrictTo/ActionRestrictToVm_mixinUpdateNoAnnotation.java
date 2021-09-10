@@ -20,6 +20,7 @@ package demoapp.dom.domain.actions.Action.restrictTo;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
@@ -40,11 +41,11 @@ public class ActionRestrictToVm_mixinUpdateNoAnnotation {
 
     private final ActionRestrictToVm actionRestrictToVm;
 
-    public ActionRestrictToVm act(final String text) {
+    @MemberSupport public ActionRestrictToVm act(final String text) {
         actionRestrictToVm.setPropertyNoAnnotation(text);
         return actionRestrictToVm;
     }
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return actionRestrictToVm.getPropertyNoAnnotation();
     }
 }

@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.value;
 
 import org.apache.isis.applib.adapters.DefaultsProvider;
@@ -119,6 +118,7 @@ implements ValueFacet {
             // install the EncodeableFacet if we've been given an EncoderDecoder
             final EncoderDecoder<?> encoderDecoder = semanticsProvider.getEncoderDecoder();
             if (encoderDecoder != null) {
+                getServiceInjector().injectServicesInto(encoderDecoder);
                 this.addContributedFacet(new EncodableFacetUsingEncoderDecoder(encoderDecoder, holder));
             }
 

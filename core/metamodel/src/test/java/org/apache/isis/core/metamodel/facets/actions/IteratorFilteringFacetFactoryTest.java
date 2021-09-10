@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.actions;
 
 import java.lang.reflect.Method;
@@ -49,7 +48,8 @@ public class IteratorFilteringFacetFactoryTest extends AbstractFacetFactoryTest 
             public void someAction() {
             }
         }
-        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
+        facetFactory.process(ProcessClassContext
+                .forTesting(Customer.class, methodRemover, facetedMethod));
 
         assertEquals(1, methodRemover.getRemoveMethodArgsCalls().size());
     }

@@ -46,21 +46,18 @@ public class ApplicationUser_updateEmailAddress {
 
     private final ApplicationUser target;
 
-    @MemberSupport
-    public ApplicationUser act(
+    @MemberSupport public ApplicationUser act(
             @ApplicationUser.EmailAddress
             final String emailAddress) {
         target.setEmailAddress(emailAddress);
         return target;
     }
 
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return target.getEmailAddress();
     }
 
-    @MemberSupport
-    public String disableAct() {
+    @MemberSupport public String disableAct() {
         return target.isForSelfOrRunAsAdministrator()? null: "Can only update your own user record.";
     }
 

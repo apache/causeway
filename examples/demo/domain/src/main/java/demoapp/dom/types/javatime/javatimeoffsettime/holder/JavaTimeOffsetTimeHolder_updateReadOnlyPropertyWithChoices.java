@@ -26,11 +26,13 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import demoapp.dom.types.Samples;
 import lombok.RequiredArgsConstructor;
+
+import demoapp.dom.types.Samples;
 
 //tag::class[]
 @Action(
@@ -46,14 +48,16 @@ public class JavaTimeOffsetTimeHolder_updateReadOnlyPropertyWithChoices {
 
     private final JavaTimeOffsetTimeHolder holder;
 
-    public JavaTimeOffsetTimeHolder act(java.time.OffsetTime newValue) {
+    @MemberSupport public JavaTimeOffsetTimeHolder act(final java.time.OffsetTime newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
-    public java.time.OffsetTime default0Act() {
+
+    @MemberSupport public java.time.OffsetTime default0Act() {
         return holder.getReadOnlyProperty();
     }
-    public List<java.time.OffsetTime> choices0Act() {
+
+    @MemberSupport public List<java.time.OffsetTime> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }

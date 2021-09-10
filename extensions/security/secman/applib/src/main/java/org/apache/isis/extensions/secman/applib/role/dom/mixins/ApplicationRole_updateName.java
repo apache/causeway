@@ -20,6 +20,7 @@ package org.apache.isis.extensions.secman.applib.role.dom.mixins;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
@@ -45,7 +46,7 @@ public class ApplicationRole_updateName {
 
     private final ApplicationRole target;
 
-    public ApplicationRole act(
+    @MemberSupport public ApplicationRole act(
             @ApplicationRole.Name
             final String name) {
 
@@ -53,8 +54,6 @@ public class ApplicationRole_updateName {
         return target;
     }
 
-    public String default0Act() {
-        return target.getName();
-    }
+    @MemberSupport public String default0Act() { return target.getName(); }
 
 }

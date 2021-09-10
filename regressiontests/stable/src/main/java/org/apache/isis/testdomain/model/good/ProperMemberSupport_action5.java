@@ -30,19 +30,17 @@ public class ProperMemberSupport_action5 {
 
     private final ProperMemberSupport mixee;
 
-    public ProperMemberSupport act() {
+    @MemberSupport public ProperMemberSupport act() {
         return mixee;
     }
 
     // -- IMPERATIVE NAMING AND DESCRIBING
 
-    @MemberSupport
-    public String namedAct() {
+    @MemberSupport public String namedAct() {
         return "named-imperative[action5]";
     }
 
-    @MemberSupport
-    public String describedAct() {
+    @MemberSupport public String describedAct() {
         return "described-imperative[action5]";
     }
 

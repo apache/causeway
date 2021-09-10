@@ -20,6 +20,7 @@ package demoapp.dom.domain.actions.ActionLayout.position;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
@@ -39,11 +40,11 @@ public class ActionLayoutPositionVm_annotatedBelow {
 
     private final ActionLayoutPositionVm stringViewModel;
 
-    public ActionLayoutPositionVm act(String newValue) {
+    @MemberSupport public ActionLayoutPositionVm act(final String newValue) {
         stringViewModel.setReadOnlyProperty1(newValue);
         return stringViewModel;
     }
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return stringViewModel.getReadOnlyProperty1();
     }
 

@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.viewer.wicket.viewer.wicketapp;
 
 import org.apache.wicket.IPageFactory;

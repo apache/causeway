@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -30,7 +31,6 @@ import org.apache.isis.applib.services.factory.FactoryService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom.domain.collections.Collection.domainEvent.CollectionDomainEventVm;
 import demoapp.dom.domain.collections.Collection.domainEvent.CollectionDomainEventVm_addChild;
@@ -40,8 +40,8 @@ import demoapp.dom.domain.collections.Collection.domainEvent.CollectionDomainEve
         logicalTypeName = "demo.CollectionMenu"
 )
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
-@Log4j2
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
+//@Log4j2
 public class CollectionMenu {
 
     final FactoryService factoryService;
@@ -64,7 +64,7 @@ public class CollectionMenu {
     @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of collections")
     public void hidden(){
     }
-    public String disableHidden(){
+    @MemberSupport public String disableHidden(){
         return "Visibility of collections" +
                  " (not yet implemented in demo)";
     }
@@ -75,14 +75,12 @@ public class CollectionMenu {
     @ActionLayout(cssClassFa="fa-shapes", describedAs = "Element type of collections")
     public void typeOf(){
     }
-    public String disableTypeOf(){
+    @MemberSupport public String disableTypeOf(){
         return "Element type of collections" +
                  " (not yet implemented in demo)";
     }
 
-
-
-    private CollectionDomainEventVm_addChild addChild(CollectionDomainEventVm collectionDomainEventVm) {
+    private CollectionDomainEventVm_addChild addChild(final CollectionDomainEventVm collectionDomainEventVm) {
         return factoryService.mixin(CollectionDomainEventVm_addChild.class, collectionDomainEventVm);
     }
 

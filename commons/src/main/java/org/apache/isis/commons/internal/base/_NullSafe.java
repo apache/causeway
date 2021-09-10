@@ -159,7 +159,7 @@ public final class _NullSafe {
     private static <T> Spliterator<T> toSpliterator(final Enumeration<T> e){
         return new Spliterators.AbstractSpliterator<T>(Long.MAX_VALUE, Spliterator.ORDERED) {
             @Override
-            public boolean tryAdvance(Consumer<? super T> action) {
+            public boolean tryAdvance(final Consumer<? super T> action) {
                 if(e.hasMoreElements()) {
                     action.accept(e.nextElement());
                     return true;
@@ -167,7 +167,7 @@ public final class _NullSafe {
                 return false;
             }
             @Override
-            public void forEachRemaining(Consumer<? super T> action) {
+            public void forEachRemaining(final Consumer<? super T> action) {
                 while(e.hasMoreElements()) {
                     action.accept(e.nextElement());
                 }
@@ -329,6 +329,5 @@ public final class _NullSafe {
                 ? Collections.emptySet()
                 : map.entrySet();
     }
-
 
 }

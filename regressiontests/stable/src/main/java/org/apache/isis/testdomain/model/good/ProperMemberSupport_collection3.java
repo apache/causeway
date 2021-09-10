@@ -34,20 +34,17 @@ public class ProperMemberSupport_collection3 {
 
     private final ProperMemberSupport holder;
 
-    @MemberSupport
-    public List<String> coll() {
+    @MemberSupport public List<String> coll() {
         return Collections.singletonList(holder.toString());
     }
 
     // -- IMPERATIVE NAMING AND DESCRIBING
 
-    @MemberSupport
-    public String namedColl() {
+    @MemberSupport public String namedColl() {
         return "named-imperative[collection3]";
     }
 
-    @MemberSupport
-    public String describedColl() {
+    @MemberSupport public String describedColl() {
         return "described-imperative[collection3]";
     }
 

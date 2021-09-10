@@ -18,6 +18,7 @@
  */
 package org.apache.isis.testdomain.domainmodel;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
@@ -29,17 +30,28 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.apache.isis.applib.annotation.Introspection.EncapsulationPolicy;
+import org.apache.isis.applib.annotation.Introspection.MemberAnnotationPolicy;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.metamodel.Config;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.title.TitleService;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
+import org.apache.isis.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
@@ -58,19 +70,17 @@ import org.apache.isis.testdomain.model.good.ElementTypeConcrete;
 import org.apache.isis.testdomain.model.good.ElementTypeInterface;
 import org.apache.isis.testdomain.model.good.ProperChoicesWhenChoicesFrom;
 import org.apache.isis.testdomain.model.good.ProperElementTypeVm;
+import org.apache.isis.testdomain.model.good.ProperFullyImpl;
 import org.apache.isis.testdomain.model.good.ProperInterface2;
 import org.apache.isis.testdomain.model.good.ProperMemberInheritanceInterface;
 import org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingAbstract;
 import org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingInterface;
 import org.apache.isis.testdomain.model.good.ProperMemberSupport;
 import org.apache.isis.testdomain.model.good.ProperServiceWithMixin;
+import org.apache.isis.testdomain.model.good.ViewModelWithAnnotationOptionalUsingPrivateSupport;
+import org.apache.isis.testdomain.model.good.ViewModelWithEncapsulatedMembers;
+import org.apache.isis.testdomain.util.interaction.DomainObjectTesterFactory;
 import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.val;
 
@@ -97,9 +107,10 @@ class DomainModelTest_usingGoodDomain {
     @Inject private MetaModelService metaModelService;
     @Inject private JaxbService jaxbService;
     @Inject private ServiceRegistry serviceRegistry;
-//    @Inject private FactoryService factoryService;
     @Inject private SpecificationLoader specificationLoader;
     @Inject private TitleService titleService;
+    @Inject private IsisConfiguration isisConfig;
+    @Inject private DomainObjectTesterFactory testerFactory;
 
     void debug() {
         val config = new Config()
@@ -133,11 +144,9 @@ class DomainModelTest_usingGoodDomain {
     @Test
     void reservedPrefixShouldBeAllowed_onExplicitAction() {
 
-        val holderSpec = specificationLoader.specForTypeElseFail(ProperMemberSupport.class);
-
-        val prefixed_action = holderSpec.getActionElseFail("hideMe");
-        assertNotNull(prefixed_action);
-        assertEquals("hideMe", prefixed_action.getId());
+        val tester = testerFactory.actionTester(ProperMemberSupport.class, "hideMe");
+        tester.assertExists(true);
+        tester.assertMemberId("hideMe");
     }
 
     @Test
@@ -194,9 +203,18 @@ class DomainModelTest_usingGoodDomain {
 
     }
 
+    @Test
+    void fullyAbstractObject_whenImplemented_shouldBeSupported() {
+        val tester = testerFactory.objectTester(ProperFullyImpl.class);
+        tester.assertTitle("title");
+        tester.assertIcon("icon");
+        tester.assertCssClass("css");
+        tester.assertLayout("layout");
+    }
+
     @ParameterizedTest
     @MethodSource("provideProperMemberInheritanceTypes")
-    void titleAndIconName_shouldBeInheritable(final Class<?> type) {
+    void titleAndIconName_shouldBeInheritable(final Class<?> type) throws Exception {
 
         val spec = specificationLoader.specForTypeElseFail(type);
 
@@ -206,9 +224,16 @@ class DomainModelTest_usingGoodDomain {
         val iconFacet = spec.getFacet(IconFacet.class);
         assertNotNull(iconFacet);
 
-        val properMemberInheritance = new ProperMemberInheritance_usingAbstract();
-        assertEquals(properMemberInheritance.title(), titleService.titleOf(properMemberInheritance));
-        assertEquals(properMemberInheritance.iconName(), titleService.iconNameOf(properMemberInheritance));
+        if(!spec.isAbstract()) {
+            val instance = type.getDeclaredConstructor().newInstance();
+            assertEquals("inherited title", titleService.titleOf(instance));
+            assertEquals("inherited icon", titleService.iconNameOf(instance));
+
+            val domainObject = ManagedObject.of(spec, instance);
+            assertEquals("inherited title", titleFacet.title(domainObject));
+            assertEquals("inherited icon", iconFacet.iconName(domainObject));
+        }
+
     }
 
     @ParameterizedTest
@@ -423,6 +448,112 @@ class DomainModelTest_usingGoodDomain {
                 .count());
 
     }
+
+
+
+    @Test
+    void viewmodelWithEncapsulatedMembers() {
+
+        // OBJECT
+
+        val objectSpec = specificationLoader.specForTypeElseFail(ViewModelWithEncapsulatedMembers.class);
+
+        val introspectionPolicyFacet = objectSpec.getFacet(IntrospectionPolicyFacet.class);
+        assertNotNull(introspectionPolicyFacet);
+
+        val introspectionPolicy = introspectionPolicyFacet.getIntrospectionPolicy(isisConfig);
+        assertEquals(
+                EncapsulationPolicy.ENCAPSULATED_MEMBERS_SUPPORTED,
+                introspectionPolicy.getEncapsulationPolicy());
+        assertEquals(
+                MemberAnnotationPolicy.MEMBER_ANNOTATIONS_REQUIRED,
+                introspectionPolicy.getMemberAnnotationPolicy());
+
+        // PRIVATE ACTION
+
+        val act = testerFactory
+                .actionTester(ViewModelWithEncapsulatedMembers.class, "myAction");
+        act.assertExists(true);
+        act.assertIsExplicitlyAnnotated(true);
+        act.assertVisibilityIsNotVetoed();
+        act.assertUsabilityIsVetoedWith("action disabled for testing purposes");
+        act.assertInvocationResult("Hallo World!", List.of());
+
+        // -- PROPERTY WITH PRIVATE GETTER AND SETTER
+
+        val prop = testerFactory
+                .propertyTester(ViewModelWithEncapsulatedMembers.class, "propWithPrivateAccessors");
+        prop.assertExists(true);
+        prop.assertIsExplicitlyAnnotated(true);
+        prop.assertVisibilityIsNotVetoed();
+        prop.assertUsabilityIsVetoedWith("property disabled for testing purposes");
+        prop.assertValue("Foo");
+        prop.assertValueUpdate("Bar");
+
+        // -- COLLECTION WITH PRIVATE GETTER AND SETTER
+
+        val coll = testerFactory
+                .collectionTester(ViewModelWithEncapsulatedMembers.class, "collWithPrivateAccessors");
+        coll.assertExists(true);
+        coll.assertIsExplicitlyAnnotated(true);
+        coll.assertVisibilityIsNotVetoed();
+        coll.assertUsabilityIsVetoedWith("collection disabled for testing purposes");
+        coll.assertCollectionElements(List.of("Foo"));
+    }
+
+    @Test
+    void viewmodelWithAnnotationOptional_usingPrivateSupport() {
+
+        // OBJECT
+
+        val objectSpec = specificationLoader.specForTypeElseFail(ViewModelWithAnnotationOptionalUsingPrivateSupport.class);
+
+        val introspectionPolicyFacet = objectSpec.getFacet(IntrospectionPolicyFacet.class);
+        assertNotNull(introspectionPolicyFacet);
+
+        val introspectionPolicy = introspectionPolicyFacet.getIntrospectionPolicy(isisConfig);
+        assertEquals(
+                EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED,
+                introspectionPolicy.getEncapsulationPolicy());
+        assertEquals(
+                MemberAnnotationPolicy.MEMBER_ANNOTATIONS_OPTIONAL,
+                introspectionPolicy.getMemberAnnotationPolicy());
+
+        // PRIVATE ACTION
+
+        val act = testerFactory
+                .actionTester(ViewModelWithAnnotationOptionalUsingPrivateSupport.class, "myAction");
+        act.assertExists(true);
+        act.assertIsExplicitlyAnnotated(true);
+        act.assertVisibilityIsNotVetoed();
+        act.assertUsabilityIsVetoedWithAll(
+                Can.of("object disabled for testing purposes", "action disabled for testing purposes"));
+        act.assertInvocationResult("Hallo World!", List.of());
+
+        // -- PROPERTY WITH PRIVATE GETTER AND SETTER
+
+        val prop = testerFactory
+                .propertyTester(ViewModelWithAnnotationOptionalUsingPrivateSupport.class, "propWithPrivateAccessors");
+        prop.assertExists(true);
+        prop.assertIsExplicitlyAnnotated(true);
+        prop.assertVisibilityIsNotVetoed();
+        prop.assertUsabilityIsVetoedWithAll(
+                Can.of("object disabled for testing purposes", "property disabled for testing purposes"));
+        prop.assertValue("Foo");
+        prop.assertValueUpdate("Bar");
+
+        // -- COLLECTION WITH PRIVATE GETTER AND SETTER
+
+        val coll = testerFactory
+                .collectionTester(ViewModelWithAnnotationOptionalUsingPrivateSupport.class, "collWithPrivateAccessors");
+        coll.assertExists(true);
+        coll.assertIsExplicitlyAnnotated(true);
+        coll.assertVisibilityIsNotVetoed();
+        coll.assertUsabilityIsVetoedWithAll(
+                Can.of("object disabled for testing purposes", "collection disabled for testing purposes"));
+        coll.assertCollectionElements(List.of("Foo"));
+    }
+
 
     // -- HELPER
 

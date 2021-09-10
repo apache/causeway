@@ -24,6 +24,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
@@ -32,12 +33,24 @@ import lombok.Setter;
 
 abstract class ProperMemberInheritanceAbstract {
 
+    @ObjectSupport
     public String title() {
         return "inherited title";
     }
 
+    @ObjectSupport
     public String iconName() {
         return "inherited icon";
+    }
+
+    @ObjectSupport
+    public String cssClass(){
+        return "another-class";
+    }
+
+    @ObjectSupport
+    public String layout(){
+        return "layout";
     }
 
     @Action
@@ -62,10 +75,12 @@ abstract class ProperMemberInheritanceAbstract {
     public void sampleActionOverride() {
     }
 
-    @Action
-    @ActionLayout(named = "foo", describedAs = "bar")
-    public void sampleActionOverride(String x) {
-    }
+    //FIXME[ISIS-2774] method overloading is not allowed - MM validation must fail, but currently does not?
+    // move this to the 'bad' domain and check for validation failures
+//    @Action
+//    @ActionLayout(named = "foo", describedAs = "bar")
+//    public void sampleActionOverride(String x) {
+//    }
 
     @Property
     @PropertyLayout(named = "foo", describedAs = "bar")

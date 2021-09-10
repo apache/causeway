@@ -27,16 +27,18 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.value.Markup;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.isis.markups.holder.IsisMarkupHolder2;
 import lombok.Getter;
 import lombok.Setter;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.types.isis.markups.holder.IsisMarkupHolder2;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -51,13 +53,13 @@ public class IsisMarkupVm
         implements HasAsciiDocDescription, IsisMarkupHolder2 {
 
 //end::class[]
-    public IsisMarkupVm(Markup initialValue) {
+    public IsisMarkupVm(final Markup initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
 
 //tag::class[]
-    public String title() {
+    @ObjectSupport public String title() {
         return "Markup view model";
     }
 

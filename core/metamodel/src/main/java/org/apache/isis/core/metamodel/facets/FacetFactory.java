@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets;
 
 import java.lang.annotation.Annotation;
@@ -26,15 +25,18 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+import org.springframework.lang.Nullable;
+
+import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.reflection._Annotations;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 
 import lombok.Getter;
@@ -81,10 +83,15 @@ public interface FacetFactory {
          * </p>
          */
         @Getter private final Class<?> cls;
+        @Getter private final IntrospectionPolicy introspectionPolicy;
 
-        AbstractProcessWithClsContext(final Class<?> cls, final T facetHolder) {
+        AbstractProcessWithClsContext(
+                final Class<?> cls,
+                final IntrospectionPolicy introspectionPolicy,
+                final T facetHolder) {
             super(facetHolder);
             this.cls = cls;
+            this.introspectionPolicy = introspectionPolicy;
         }
 
         /**
@@ -106,11 +113,12 @@ public interface FacetFactory {
 
         AbstractProcessWithMethodContext(
                 final Class<?> cls,
+                final IntrospectionPolicy introspectionPolicy,
                 final Method method,
                 final MethodRemover methodRemover,
                 final T facetHolder) {
 
-            super(cls, facetHolder);
+            super(cls, introspectionPolicy, facetHolder);
             this.method = method;
             this.methodRemover = methodRemover;
         }
@@ -159,16 +167,17 @@ public interface FacetFactory {
 
         private final MethodRemover methodRemover;
 
-        /**
-         * For testing only.
-         */
-        public ProcessClassContext(final Class<?> cls, final MethodRemover methodRemover, final FacetHolder facetHolder) {
-            super(cls, facetHolder);
+        public ProcessClassContext(
+                final Class<?> cls,
+                final IntrospectionPolicy introspectionPolicy,
+                final MethodRemover methodRemover,
+                final FacetHolder facetHolder) {
+            super(cls, introspectionPolicy, facetHolder);
             this.methodRemover = methodRemover;
         }
 
         @Override
-        public void removeMethod(final Method method) {
+        public void removeMethod(final @Nullable Method method) {
             methodRemover.removeMethod(method);
         }
 
@@ -180,6 +189,19 @@ public interface FacetFactory {
         @Override
         public Can<Method> snapshot() {
             return methodRemover.snapshot();
+        }
+
+        // -- JUNIT SUPPORT
+
+        /**
+         * For testing only.
+         */
+        public static ProcessClassContext forTesting(
+                final Class<?> cls,
+                final MethodRemover methodRemover,
+                final FacetHolder facetHolder) {
+            return new ProcessClassContext(
+                    cls, IntrospectionPolicy.ANNOTATION_OPTIONAL, methodRemover, facetHolder);
         }
 
     }
@@ -207,7 +229,6 @@ public interface FacetFactory {
         @Getter private final boolean mixinMain;
 
         /**
-         *
          * @param cls
          * @param featureType
          * @param method
@@ -219,27 +240,17 @@ public interface FacetFactory {
          */
         public ProcessMethodContext(
                 final Class<?> cls,
+                final IntrospectionPolicy introspectionPolicy,
                 final FeatureType featureType,
                 final Method method,
                 final MethodRemover methodRemover,
                 final FacetedMethod facetedMethod,
                 final boolean isMixinMain) {
 
-            super(cls, method, methodRemover, facetedMethod);
+            super(cls, introspectionPolicy, method, methodRemover, facetedMethod);
             this.featureType = featureType;
             this.mixinMain = isMixinMain;
         }
-
-        /** JUnit support, historically not using 'isMixinMain' */
-        public ProcessMethodContext(
-                final Class<?> cls,
-                final FeatureType featureType,
-                final Method method,
-                final MethodRemover methodRemover,
-                final FacetedMethod facetedMethod) {
-            this(cls, featureType, method, methodRemover, facetedMethod, false);
-        }
-
 
         /**
          * Annotation lookup on this context's method. Also honors annotations on fields, if this method is a getter.
@@ -310,27 +321,40 @@ public interface FacetFactory {
         private Can<String> namingConventionForActionSupport(
                 final String prefix) {
             val actionMethod = getMethod();
-            val isMixin = isMixinMain();
-            return MethodLiteralConstants.NAMING_ACTIONS
-                    .map(naming->naming.getActionSupportingMethodName(actionMethod, prefix, isMixin));
+            return ProgrammingModelConstants.ActionSupportNaming
+                    .namesFor(actionMethod, prefix, isMixinMain());
         }
 
         private Can<java.util.function.IntFunction<String>> namingConventionForParameterSupport(
                 final String prefix) {
             val actionMethod = getMethod();
-            val isMixin = isMixinMain();
-            return MethodLiteralConstants.NAMING_PARAMETERS
-                    .map(naming->naming.providerForParam(actionMethod, prefix, isMixin));
+            return ProgrammingModelConstants.ParameterSupportNaming
+                    .namesFor(actionMethod, prefix, isMixinMain());
         }
 
         private Can<String> namingConventionForPropertyAndCollectionSupport(
                 final String prefix) {
             val getterMethod = getMethod();
-            val isMixin = isMixinMain();
-            return MethodLiteralConstants.NAMING_PROPERTIES_AND_COLLECTIONS
-                    .map(naming->naming.getMemberSupportingMethodName(getterMethod, prefix, isMixin));
+            return ProgrammingModelConstants.MemberSupportNaming
+                    .namesFor(getterMethod, prefix, isMixinMain());
         }
 
+        // -- JUNIT SUPPORT
+
+        /**
+         * JUnit support, historically using classic IntrospectionPolicy ANNOTATION_OPTIONAL
+         *  and not using 'isMixinMain'
+         */
+        public static ProcessMethodContext forTesting(
+                final Class<?> cls,
+                final FeatureType featureType,
+                final Method method,
+                final MethodRemover methodRemover,
+                final FacetedMethod facetedMethod) {
+            return new ProcessMethodContext(
+                    cls, IntrospectionPolicy.ANNOTATION_OPTIONAL, featureType, method,
+                    methodRemover, facetedMethod, false);
+        }
 
     }
 
@@ -351,12 +375,13 @@ public interface FacetFactory {
 
         public ProcessParameterContext(
                 final Class<?> cls,
+                final IntrospectionPolicy introspectionPolicy,
                 final Method method,
                 final int paramNum,
                 final MethodRemover methodRemover,
                 final FacetedMethodParameter facetedMethodParameter) {
 
-            super(cls, method, methodRemover, facetedMethodParameter);
+            super(cls, introspectionPolicy, method, methodRemover, facetedMethodParameter);
             if(paramNum>=method.getParameterCount()) {
                 throw _Exceptions.unrecoverable("invalid ProcessParameterContext");
             }

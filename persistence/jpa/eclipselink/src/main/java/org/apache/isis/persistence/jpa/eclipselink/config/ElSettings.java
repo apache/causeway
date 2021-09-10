@@ -28,14 +28,14 @@ import javax.inject.Named;
 import javax.inject.Provider;
 
 import org.eclipse.persistence.config.PersistenceUnitProperties;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.persistence.jpa.eclipselink.inject.BeanManagerForEntityListeners;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -72,6 +72,7 @@ public class ElSettings {
 
         // setup defaults
         jpaProps.put(PersistenceUnitProperties.WEAVING, "false");
+        //jpaProps.put(PersistenceUnitProperties.LOGGING_LEVEL, SessionLog.FINER_LABEL); //debug logging
         jpaProps.put(PersistenceUnitProperties.DDL_GENERATION, PersistenceUnitProperties.CREATE_OR_EXTEND);
         jpaProps.put(PersistenceUnitProperties.CDI_BEANMANAGER, new BeanManagerForEntityListeners(serviceInjectorProvider));
 

@@ -20,6 +20,7 @@ package demoapp.dom.domain.properties.Property.maxLength;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -38,7 +39,7 @@ public class PropertyMaxLengthVm_updateWithMetaAnnotation {
     private final PropertyMaxLengthVm propertyMaxLengthVm;
 
 //tag::meta-annotation[]
-    public PropertyMaxLengthVm act(
+    @MemberSupport public PropertyMaxLengthVm act(
             @MaxLength10MetaAnnotation                            // <.>
             @Parameter()
             @ParameterLayout(
@@ -49,7 +50,7 @@ public class PropertyMaxLengthVm_updateWithMetaAnnotation {
         return propertyMaxLengthVm;
     }
 //end::meta-annotation[]
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return propertyMaxLengthVm.getPropertyUsingMetaAnnotation();
     }
 

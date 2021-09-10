@@ -32,7 +32,7 @@ import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 
 @SpringBootTest(
-        classes = { 
+        classes = {
                 Configuration_headless.class
         }
 )
@@ -47,7 +47,9 @@ class IsisConfigBeanTest_usingHeadless {
     @Test
     void configurationBean_shouldBePickedUpBySpring() {
         assertNotNull(isisConfiguration);
-        assertTrue(isisConfiguration.getApplib().getAnnotation().getAction().isExplicit());
+        assertTrue(isisConfiguration
+                .getCore().getMetaModel().getIntrospector().getPolicy()
+                .getMemberAnnotationPolicy().isMemberAnnotationsRequired());
     }
 
 }

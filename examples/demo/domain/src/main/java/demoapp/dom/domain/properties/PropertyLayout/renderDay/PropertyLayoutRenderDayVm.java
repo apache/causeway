@@ -30,16 +30,18 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.RenderDay;
 import org.apache.isis.applib.jaxb.JodaTimeJaxbAdapters;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -53,12 +55,12 @@ import lombok.Setter;
 @NoArgsConstructor
 public class PropertyLayoutRenderDayVm implements HasAsciiDocDescription {
 
-    public PropertyLayoutRenderDayVm(LocalDate localDate) {
+    public PropertyLayoutRenderDayVm(final LocalDate localDate) {
         startDate = localDate;
         endDate = startDate.plusDays(7);
     }
 
-    public String title() {
+    @ObjectSupport public String title() {
         return "PropertyLayout#renderDay";
     }
 

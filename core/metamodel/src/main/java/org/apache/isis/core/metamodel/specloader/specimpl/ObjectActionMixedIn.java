@@ -19,11 +19,13 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.Domain;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.CanVector;
 import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
@@ -171,7 +173,17 @@ implements MixedInMember {
     @Override
     public ObjectSpecification getMixinType() {
         return getSpecificationLoader().loadSpecification(mixinType);
+    }
 
+    @Getter(lazy=true, onMethod_ = {@Override})
+    private final boolean explicitlyAnnotated = calculateIsExplicitlyAnnotated();
+
+    // -- HELPER
+
+    private boolean calculateIsExplicitlyAnnotated() {
+        val javaMethod = getFacetedMethod().getMethod();
+        return super.isExplicitlyAnnotated() // legacy programming style
+                || _Annotations.synthesizeInherited(javaMethod, Domain.Include.class).isPresent();
     }
 
 }

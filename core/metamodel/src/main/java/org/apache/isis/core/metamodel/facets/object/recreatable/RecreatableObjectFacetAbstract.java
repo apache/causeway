@@ -16,22 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.recreatable;
 
 import java.lang.reflect.Method;
 import java.util.function.BiConsumer;
 
-import org.apache.isis.applib.ViewModel;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.commons.MethodExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
+import org.apache.isis.core.metamodel.facets.HasPostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 
 import lombok.val;
 
@@ -39,7 +36,7 @@ public abstract class RecreatableObjectFacetAbstract
 extends FacetAbstract
 implements ViewModelFacet {
 
-    private final PostConstructMethodCache postConstructMethodCache;
+    private final HasPostConstructMethodCache postConstructMethodCache;
     private final ViewModelFacet.RecreationMechanism recreationMechanism;
 
     private static final Class<? extends Facet> type() {
@@ -49,7 +46,7 @@ implements ViewModelFacet {
     protected RecreatableObjectFacetAbstract(
             final FacetHolder holder,
             final RecreationMechanism recreationMechanism,
-            final PostConstructMethodCache postConstructMethodCache) {
+            final HasPostConstructMethodCache postConstructMethodCache) {
         super(type(), holder);
         this.postConstructMethodCache = postConstructMethodCache;
         this.recreationMechanism = recreationMechanism;
@@ -58,36 +55,11 @@ implements ViewModelFacet {
     protected RecreatableObjectFacetAbstract(
             final FacetHolder holder,
             final RecreationMechanism recreationMechanism,
-            final PostConstructMethodCache postConstructMethodCache,
+            final HasPostConstructMethodCache postConstructMethodCache,
             final Facet.Precedence precedence) {
         super(type(), holder, precedence);
         this.postConstructMethodCache = postConstructMethodCache;
         this.recreationMechanism = recreationMechanism;
-    }
-
-
-    @Override
-    public boolean isCloneable(Object pojo) {
-        return pojo != null && pojo instanceof ViewModel.Cloneable;
-    }
-
-    @Override
-    public boolean isImplicitlyImmutable() {
-        final FacetHolder facetHolder = getFacetHolder();
-        if (facetHolder instanceof ObjectSpecificationDefault) {
-            final ObjectSpecificationDefault objectSpec = (ObjectSpecificationDefault) facetHolder;
-            final Class<?> correspondingClass = objectSpec.getCorrespondingClass();
-            if (ViewModel.Cloneable.class.isAssignableFrom(correspondingClass)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    @Override
-    public Object clone(Object pojo) {
-        ViewModel.Cloneable viewModelCloneable = (ViewModel.Cloneable) pojo;
-        return viewModelCloneable.clone();
     }
 
     @Override

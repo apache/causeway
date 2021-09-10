@@ -19,8 +19,6 @@
 package org.apache.isis.viewer.wicket.ui.actionresponse;
 
 import java.net.URL;
-import java.util.Collection;
-import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.request.IRequestHandler;
@@ -29,7 +27,8 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.applib.value.OpenUrlStrategy;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -44,34 +43,33 @@ import org.apache.isis.viewer.wicket.ui.pages.value.ValuePage;
 import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
 
 import lombok.SneakyThrows;
-import lombok.val;
 
 public enum ActionResultResponseType {
     OBJECT {
         @Override
-        public ActionResultResponse interpretResult(ActionModel actionModel, AjaxRequestTarget target, ManagedObject resultAdapter) {
-            val commonContext = actionModel.getCommonContext();
-            val actualAdapter = determineActualAdapter(commonContext, resultAdapter); // intercepts collections
+        public ActionResultResponse interpretResult(final ActionModel actionModel, final AjaxRequestTarget target, final ManagedObject resultAdapter) {
+            final var commonContext = actionModel.getCommonContext();
+            final var actualAdapter = determineScalarAdapter(commonContext, resultAdapter); // intercepts collections
             return toEntityPage(actionModel, actualAdapter);
         }
 
         @Override
-        public ActionResultResponse interpretResult(ActionModel actionModel, ManagedObject targetAdapter) {
+        public ActionResultResponse interpretResult(final ActionModel actionModel, final ManagedObject targetAdapter) {
             final ActionResultResponse actionResultResponse = toEntityPage(actionModel, targetAdapter);
             return actionResultResponse;
         }
     },
     COLLECTION {
         @Override
-        public ActionResultResponse interpretResult(ActionModel actionModel, AjaxRequestTarget target, ManagedObject resultAdapter) {
-            val collectionModel = EntityCollectionModel.createStandalone(resultAdapter, actionModel);
+        public ActionResultResponse interpretResult(final ActionModel actionModel, final AjaxRequestTarget target, final ManagedObject resultAdapter) {
+            final var collectionModel = EntityCollectionModel.createStandalone(resultAdapter, actionModel);
             return ActionResultResponse.toPage(new StandaloneCollectionPage(collectionModel));
         }
     },
     VALUE {
         @Override
-        public ActionResultResponse interpretResult(ActionModel model, AjaxRequestTarget target, ManagedObject resultAdapter) {
-            val commonContext = model.getCommonContext();
+        public ActionResultResponse interpretResult(final ActionModel model, final AjaxRequestTarget target, final ManagedObject resultAdapter) {
+            final var commonContext = model.getCommonContext();
             ValueModel valueModel = new ValueModel(commonContext, resultAdapter);
             valueModel.setActionHint(model);
             final ValuePage valuePage = new ValuePage(valueModel);
@@ -80,7 +78,7 @@ public enum ActionResultResponseType {
     },
     VALUE_CLOB {
         @Override
-        public ActionResultResponse interpretResult(ActionModel model, AjaxRequestTarget target, ManagedObject resultAdapter) {
+        public ActionResultResponse interpretResult(final ActionModel model, final AjaxRequestTarget target, final ManagedObject resultAdapter) {
             final Object value = resultAdapter.getPojo();
             IRequestHandler handler = model.downloadHandler(value);
             return ActionResultResponse.withHandler(handler);
@@ -88,7 +86,7 @@ public enum ActionResultResponseType {
     },
     VALUE_BLOB {
         @Override
-        public ActionResultResponse interpretResult(ActionModel model, AjaxRequestTarget target, ManagedObject resultAdapter) {
+        public ActionResultResponse interpretResult(final ActionModel model, final AjaxRequestTarget target, final ManagedObject resultAdapter) {
             final Object value = resultAdapter.getPojo();
             IRequestHandler handler = model.downloadHandler(value);
             return ActionResultResponse.withHandler(handler);
@@ -96,24 +94,26 @@ public enum ActionResultResponseType {
     },
     VALUE_LOCALRESPATH_AJAX {
         @Override @SneakyThrows
-        public ActionResultResponse interpretResult(ActionModel model, AjaxRequestTarget target, ManagedObject resultAdapter) {
+        public ActionResultResponse interpretResult(final ActionModel model, final AjaxRequestTarget target, final ManagedObject resultAdapter) {
             final LocalResourcePath localResPath = (LocalResourcePath)resultAdapter.getPojo();
+            final var webAppContextPath = model.getCommonContext().getWebAppContextPath();
             return ActionResultResponse
-                    .openUrlInBrowser(target, localResPath.getPath(), localResPath.getOpenUrlStrategy());
+                    .openUrlInBrowser(target, localResPath.getEffectivePath(webAppContextPath::prependContextPath), localResPath.getOpenUrlStrategy());
         }
     },
     VALUE_LOCALRESPATH_NOAJAX {
         @Override
-        public ActionResultResponse interpretResult(ActionModel model, AjaxRequestTarget target, ManagedObject resultAdapter) {
+        public ActionResultResponse interpretResult(final ActionModel model, final AjaxRequestTarget target, final ManagedObject resultAdapter) {
             // open URL server-side redirect
             final LocalResourcePath localResPath = (LocalResourcePath)resultAdapter.getPojo();
-            IRequestHandler handler = ActionModel.redirectHandler(localResPath, localResPath.getOpenUrlStrategy());
+            final var webAppContextPath = model.getCommonContext().getWebAppContextPath();
+            IRequestHandler handler = ActionModel.redirectHandler(localResPath, localResPath.getOpenUrlStrategy(), webAppContextPath);
             return ActionResultResponse.withHandler(handler);
         }
     },
     VALUE_URL_AJAX {
         @Override
-        public ActionResultResponse interpretResult(ActionModel model, AjaxRequestTarget target, ManagedObject resultAdapter) {
+        public ActionResultResponse interpretResult(final ActionModel model, final AjaxRequestTarget target, final ManagedObject resultAdapter) {
             final URL url = (URL)resultAdapter.getPojo();
             return ActionResultResponse
                     .openUrlInBrowser(target, url.toString(), OpenUrlStrategy.NEW_WINDOW); // default behavior
@@ -121,17 +121,18 @@ public enum ActionResultResponseType {
     },
     VALUE_URL_NOAJAX {
         @Override
-        public ActionResultResponse interpretResult(ActionModel model, AjaxRequestTarget target, ManagedObject resultAdapter) {
+        public ActionResultResponse interpretResult(final ActionModel model, final AjaxRequestTarget target, final ManagedObject resultAdapter) {
             // open URL server-side redirect
             final Object value = resultAdapter.getPojo();
-            IRequestHandler handler = ActionModel.redirectHandler(value, OpenUrlStrategy.NEW_WINDOW); // default behavior
+            final var webAppContextPath = model.getCommonContext().getWebAppContextPath();
+            IRequestHandler handler = ActionModel.redirectHandler(value, OpenUrlStrategy.NEW_WINDOW, webAppContextPath); // default behavior
             return ActionResultResponse.withHandler(handler);
         }
     },
     VOID {
         @Override
-        public ActionResultResponse interpretResult(ActionModel model, AjaxRequestTarget target, ManagedObject resultAdapter) {
-            val commonContext = model.getCommonContext();
+        public ActionResultResponse interpretResult(final ActionModel model, final AjaxRequestTarget target, final ManagedObject resultAdapter) {
+            final var commonContext = model.getCommonContext();
             final VoidModel voidModel = new VoidModel(commonContext);
             voidModel.setActionHint(model);
             return ActionResultResponse.toPage(new VoidReturnPage(voidModel));
@@ -143,25 +144,25 @@ public enum ActionResultResponseType {
     /**
      * Only overridden for {@link ActionResultResponseType#OBJECT object}
      */
-    public ActionResultResponse interpretResult(ActionModel model, ManagedObject targetAdapter) {
+    public ActionResultResponse interpretResult(final ActionModel model, final ManagedObject targetAdapter) {
         throw new UnsupportedOperationException("Cannot render concurrency exception for any result type other than OBJECT");
     }
 
-    private static ManagedObject determineActualAdapter(
-            IsisAppCommonContext commonContext,
-            ManagedObject resultAdapter) {
+    private static ManagedObject determineScalarAdapter(
+            final IsisAppCommonContext commonContext,
+            final ManagedObject resultAdapter) {
 
         if (resultAdapter.getSpecification().isNotCollection()) {
             return resultAdapter;
         } else {
             // will only be a single element
-            final List<Object> pojoList = asList(resultAdapter);
-            final Object pojo = pojoList.get(0);
+            final Object pojo = _NullSafe
+                    .streamAutodetect(resultAdapter.getPojo())
+                    .findFirst()
+                    .orElseThrow(_Exceptions::noSuchElement);
 
-            //XXX lombok issue, cannot use val here
-            final ManagedObject actualAdapter = commonContext.getPojoToAdapter().apply(pojo);
-
-            return actualAdapter;
+            final var scalarAdapter = commonContext.getPojoToAdapter().apply(pojo);
+            return scalarAdapter;
         }
     }
 
@@ -190,7 +191,7 @@ public enum ActionResultResponseType {
 
     private static ActionResultResponseType determineFor(
             final ManagedObject resultAdapter,
-            AjaxRequestTarget targetIfAny) {
+            final AjaxRequestTarget targetIfAny) {
 
         if(resultAdapter == null) {
             return ActionResultResponseType.VOID;
@@ -223,8 +224,9 @@ public enum ActionResultResponseType {
                 return ActionResultResponseType.OBJECT;
             }
         } else {
-            final List<Object> pojoList = asList(resultAdapter);
-            switch (pojoList.size()) {
+
+            final int cardinality = (int)_NullSafe.streamAutodetect(resultAdapter.getPojo()).count();
+            switch (cardinality) {
             case 1:
                 return ActionResultResponseType.OBJECT;
             default:
@@ -232,14 +234,5 @@ public enum ActionResultResponseType {
             }
         }
     }
-
-    @SuppressWarnings("unchecked")
-    private static List<Object> asList(final ManagedObject resultAdapter) {
-        final Collection<Object> coll = (Collection<Object>) resultAdapter.getPojo();
-        return coll instanceof List
-                ? (List<Object>)coll
-                        : _Lists.<Object>newArrayList(coll);
-    }
-
 
 }

@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.actions.action;
 
 import java.lang.reflect.Method;
@@ -35,7 +34,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
-public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
+public class ActionAnnotationFacetFactoryTest
+extends AbstractFacetFactoryJUnit4TestCase {
 
     ActionAnnotationFacetFactory facetFactory;
     Method actionMethod;
@@ -100,7 +100,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
     }
 
-    void allowingPublishingConfigurationToReturn(PublishingPolicies.ActionPublishingPolicy value) {
+    void allowingPublishingConfigurationToReturn(final PublishingPolicies.ActionPublishingPolicy value) {
         val config = metaModelContext.getConfiguration();
         config.getApplib().getAnnotation().getAction().setExecutionPublishing(value);
     }

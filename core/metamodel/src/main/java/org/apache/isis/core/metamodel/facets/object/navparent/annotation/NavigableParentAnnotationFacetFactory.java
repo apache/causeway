@@ -16,26 +16,31 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.navparent.annotation;
 
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
-import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.reflection._Annotations;
+import org.apache.isis.commons.internal.reflection._Reflect.InterfacePolicy;
+import org.apache.isis.commons.internal.reflection._Reflect.TypeHierarchyPolicy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.Evaluators;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.object.navparent.method.NavigableParentFacetMethod;
+import org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFacet;
+import org.apache.isis.core.metamodel.facets.object.navparent.method.NavigableParentFacetViaGetterMethod;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -66,28 +71,28 @@ implements MetaModelRefiner {
         // That's the one we use to
         // resolve the current domain-object's navigable parent.
 
-        final List<Annotations.Evaluator<PropertyLayout>> evaluators =
-                Annotations.firstEvaluatorsInHierarchyHaving(cls, PropertyLayout.class,
-                        NavigableParentAnnotationFacetFactory::isNavigableParentFlagSet);
+        final Optional<Evaluators.Evaluator> evaluators =
+                Evaluators.streamEvaluators(cls,
+                        NavigableParentAnnotationFacetFactory::isNavigableParentFlagSet,
+                        TypeHierarchyPolicy.INCLUDE,
+                        InterfacePolicy.EXCLUDE)
+                .findFirst();
 
-        if (_NullSafe.isEmpty(evaluators)) {
+        if (evaluators.isEmpty()) {
             return; // no parent resolvable
-        } else if (evaluators.size()>1) {
-            // code should not be reached, since case should be handled by meta-data validation
-            throw new RuntimeException("unable to determine navigable parent due to ambiguity");
         }
 
-        final Annotations.Evaluator<PropertyLayout> parentEvaluator = evaluators.get(0);
+        final Evaluators.Evaluator parentEvaluator = evaluators.get();
 
         final Method method;
 
         // find method that provides the parent ...
-        if(parentEvaluator instanceof Annotations.MethodEvaluator) {
-            // we have a @Parent annotated method
-            method = ((Annotations.MethodEvaluator<PropertyLayout>) parentEvaluator).getMethod();
-        } else if(parentEvaluator instanceof Annotations.FieldEvaluator) {
-            // we have a @Parent annotated field (useful if one uses lombok's @Getter on a field)
-            method = ((Annotations.FieldEvaluator<PropertyLayout>) parentEvaluator).getGetter(cls).orElse(null);
+        if(parentEvaluator instanceof Evaluators.MethodEvaluator) {
+            // we have a 'parent' annotated method
+            method = ((Evaluators.MethodEvaluator) parentEvaluator).getMethod();
+        } else if(parentEvaluator instanceof Evaluators.FieldEvaluator) {
+            // we have a 'parent' annotated field (useful if one uses lombok's @Getter on a field)
+            method = ((Evaluators.FieldEvaluator) parentEvaluator).getCorrespondingGetter().orElse(null);
             if(method==null)
                 return; // code should not be reached, since case should be handled by meta-data validation
 
@@ -96,20 +101,22 @@ implements MetaModelRefiner {
         }
 
         try {
-            addFacet(new NavigableParentFacetMethod(method, facetHolder));
+            addFacet(new NavigableParentFacetViaGetterMethod(method, facetHolder));
         } catch (IllegalAccessException e) {
             log.warn("failed to create NavigableParentFacetMethod method:{} holder:{}",
                     method, facetHolder, e);
         }
     }
 
-    private static boolean isNavigableParentFlagSet(final Annotations.Evaluator<PropertyLayout> evaluator){
-        return evaluator.getAnnotation().navigable().isParent();
+    private static boolean isNavigableParentFlagSet(final AnnotatedElement annotatedElement){
+        return _Annotations
+                .synthesizeInherited(annotatedElement, PropertyLayout.class)
+                .map(propertyLayout->propertyLayout.navigable().isParent())
+                .orElse(false);
     }
 
-
     /**
-     * For detailed behavioral specification see
+     * For detailed behavior see
      * <a href="https://issues.apache.org/jira/browse/ISIS-1816">ISIS-1816</a>.
      */
     @Override
@@ -117,35 +124,47 @@ implements MetaModelRefiner {
 
         programmingModel.addVisitingValidatorSkipManagedBeans(spec->{
 
-            final Class<?> cls = spec.getCorrespondingClass();
+            val cls = spec.getCorrespondingClass();
 
-            final List<Annotations.Evaluator<PropertyLayout>> evaluators =
-                    Annotations.firstEvaluatorsInHierarchyHaving(cls, PropertyLayout.class,
-                            NavigableParentAnnotationFacetFactory::isNavigableParentFlagSet);
+            if(!spec.lookupFacet(NavigableParentFacet.class).isPresent()) {
+                return; // skip check
+            }
 
-            if (_NullSafe.isEmpty(evaluators)) {
+            val evaluators =
+                    Evaluators.streamEvaluators(cls,
+                            NavigableParentAnnotationFacetFactory::isNavigableParentFlagSet,
+                            TypeHierarchyPolicy.EXCLUDE,
+                            InterfacePolicy.INCLUDE)
+                    .collect(Can.toCan());
+
+            if (evaluators.isEmpty()) {
                 return; // no conflict, continue validation processing
-            } else if (evaluators.size()>1) {
+            } else if (evaluators.isCardinalityMultiple()) {
+
+                val conflictingEvaluatorNames = evaluators.map(Evaluators.Evaluator::name).toList();
 
                 ValidationFailure.raiseFormatted(
                         spec,
                         "%s: conflict for determining a strategy for retrieval of (navigable) parent for class, "
-                                + "contains multiple annotations '@%s' having navigable=PARENT, while at most one is allowed.",
+                                + "contains multiple annotations '@%s' having navigable=PARENT, "
+                                + "while at most one is allowed.\n\tConflicting members: %s",
                                 spec.getFeatureIdentifier().getClassName(),
-                                PropertyLayout.class.getName());
+                                PropertyLayout.class.getName(),
+                                conflictingEvaluatorNames.toString()
+                                );
 
                 return; // continue validation processing
             }
 
-            final Annotations.Evaluator<PropertyLayout> parentEvaluator = evaluators.get(0);
+            final Evaluators.Evaluator parentEvaluator = evaluators.getSingletonOrFail();
 
-            if(parentEvaluator instanceof Annotations.FieldEvaluator) {
+            if(parentEvaluator instanceof Evaluators.FieldEvaluator) {
                 // we have a @Parent annotated field (useful if one uses lombok's @Getter on a field)
 
-                final Annotations.FieldEvaluator<PropertyLayout> fieldEvaluator =
-                        (Annotations.FieldEvaluator<PropertyLayout>) parentEvaluator;
+                final Evaluators.FieldEvaluator fieldEvaluator =
+                        (Evaluators.FieldEvaluator) parentEvaluator;
 
-                if(!fieldEvaluator.getGetter(cls).isPresent()) {
+                if(!fieldEvaluator.getCorrespondingGetter().isPresent()) {
 
                     ValidationFailure.raiseFormatted(
                             spec,

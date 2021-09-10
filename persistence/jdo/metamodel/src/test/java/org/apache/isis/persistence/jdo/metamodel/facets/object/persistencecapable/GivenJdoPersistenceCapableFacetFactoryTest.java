@@ -23,7 +23,7 @@ import javax.jdo.annotations.PersistenceCapable;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
 import org.apache.isis.persistence.jdo.metamodel.testing.AbstractFacetFactoryTest;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
@@ -63,7 +63,7 @@ extends AbstractFacetFactoryTest {
         }
 
         facetFactory.process(new ObjectTypeFacetFactory.ProcessObjectTypeContext(Customer.class, facetHolder));
-        facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
+        facetFactory.process(ProcessClassContext.forTesting(Customer.class, methodRemover, facetHolder));
 
         final Facet facet = facetHolder.getFacet(JdoPersistenceCapableFacet.class);
         assertNotNull(facet);
@@ -76,7 +76,7 @@ extends AbstractFacetFactoryTest {
         }
 
         facetFactory.process(new ObjectTypeFacetFactory.ProcessObjectTypeContext(Customer.class, facetHolder));
-        facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
+        facetFactory.process(ProcessClassContext.forTesting(Customer.class, methodRemover, facetHolder));
 
         final Facet facet = facetHolder.getFacet(JdoPersistenceCapableFacet.class);
         assertNull(facet);
@@ -88,7 +88,8 @@ extends AbstractFacetFactoryTest {
         }
 
         facetFactory.process(new ObjectTypeFacetFactory.ProcessObjectTypeContext(Customer.class, facetHolder));
-        facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
+        facetFactory.process(ProcessClassContext
+                .forTesting(Customer.class, methodRemover, facetHolder));
 
         final JdoPersistenceCapableFacet entityFacet = facetHolder
                 .getFacet(JdoPersistenceCapableFacet.class);
@@ -101,7 +102,8 @@ extends AbstractFacetFactoryTest {
         }
 
         facetFactory.process(new ObjectTypeFacetFactory.ProcessObjectTypeContext(Customer.class, facetHolder));
-        facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
+        facetFactory.process(ProcessClassContext
+                .forTesting(Customer.class, methodRemover, facetHolder));
 
         final JdoPersistenceCapableFacet entityFacet = facetHolder
                 .getFacet(JdoPersistenceCapableFacet.class);
@@ -114,7 +116,8 @@ extends AbstractFacetFactoryTest {
         }
 
         facetFactory.process(new ObjectTypeFacetFactory.ProcessObjectTypeContext(Customer.class, facetHolder));
-        facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
+        facetFactory.process(ProcessClassContext
+                .forTesting(Customer.class, methodRemover, facetHolder));
 
         final JdoPersistenceCapableFacet entityFacet = facetHolder
                 .getFacet(JdoPersistenceCapableFacet.class);
@@ -127,7 +130,8 @@ extends AbstractFacetFactoryTest {
         }
 
         facetFactory.process(new ObjectTypeFacetFactory.ProcessObjectTypeContext(Customer.class, facetHolder));
-        facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
+        facetFactory.process(ProcessClassContext
+                .forTesting(Customer.class, methodRemover, facetHolder));
 
         final JdoPersistenceCapableFacet entityFacet = facetHolder
                 .getFacet(JdoPersistenceCapableFacet.class);
@@ -140,7 +144,8 @@ extends AbstractFacetFactoryTest {
         }
 
         facetFactory.process(new ObjectTypeFacetFactory.ProcessObjectTypeContext(Customer.class, facetHolder));
-        facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
+        facetFactory.process(ProcessClassContext
+                .forTesting(Customer.class, methodRemover, facetHolder));
 
         assertNoMethodsRemoved();
     }

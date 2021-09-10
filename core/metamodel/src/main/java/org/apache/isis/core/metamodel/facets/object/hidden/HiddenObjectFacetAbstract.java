@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.hidden;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -25,7 +24,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public abstract class HiddenObjectFacetAbstract extends FacetAbstract implements HiddenObjectFacet {
+public abstract class HiddenObjectFacetAbstract
+extends FacetAbstract
+implements HiddenObjectFacet {
 
     private static final Class<? extends Facet> type() {
         return HiddenObjectFacet.class;

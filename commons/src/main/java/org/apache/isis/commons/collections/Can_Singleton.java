@@ -22,6 +22,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
@@ -29,6 +30,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -102,7 +104,17 @@ final class Can_Singleton<T> implements Can<T> {
     }
 
     @Override
-    public Can<T> unique() {
+    public Can<T> sorted(final @NonNull Comparator<? super T> c) {
+        return this;
+    }
+
+    @Override
+    public Can<T> distinct() {
+        return this;
+    }
+
+    @Override
+    public Can<T> distinct(final @NonNull BiPredicate<T, T> equality) {
         return this;
     }
 
@@ -160,7 +172,7 @@ final class Can_Singleton<T> implements Can<T> {
         val newElements = new ArrayList<T>(other.size()+1);
         newElements.add(element);
         other.forEach(newElements::add);
-        return Can_Multiple.of(newElements);
+        return _CanFactory.ofNonNullElements(newElements);
     }
 
     @Override
@@ -228,7 +240,7 @@ final class Can_Singleton<T> implements Can<T> {
         for(int i=0; i<pickCount; i++) {
             newElements.add(element);
         }
-        return Can.ofCollection(newElements);
+        return _CanFactory.ofNonNullElements(newElements);
     }
 
     @Override

@@ -28,6 +28,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.context.annotation.Profile;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Optionality;
@@ -35,12 +37,12 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.value.Clob;
-import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
+import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 import org.apache.isis.persistence.jpa.applib.types.ClobJpaEmbeddable;
-import org.springframework.context.annotation.Profile;
+
+import lombok.NoArgsConstructor;
 
 import demoapp.dom.types.isis.clobs.persistence.IsisClobEntity;
-import lombok.NoArgsConstructor;
 
 @Profile("demo-jpa")
 //tag::class[]
@@ -49,7 +51,7 @@ import lombok.NoArgsConstructor;
       schema = "demo",
       name = "IsisClobJpa"
 )
-@EntityListeners(JpaEntityInjectionPointResolver.class)
+@EntityListeners(IsisEntityListener.class)
 @DomainObject(
       logicalTypeName = "demo.IsisClobEntity"
 )
@@ -58,7 +60,7 @@ public class IsisClobJpa
         extends IsisClobEntity {
 
 //end::class[]
-    public IsisClobJpa(Clob initialValue) {
+    public IsisClobJpa(final Clob initialValue) {
         setReadOnlyProperty(initialValue);
         setReadWriteProperty(initialValue);
     }
@@ -77,12 +79,14 @@ public class IsisClobJpa
     @Embedded
     private ClobJpaEmbeddable readOnlyProperty;
 
+    @Override
     @Title(prepend = "Clob JPA entity: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     public Clob getReadOnlyProperty() {
         return ClobJpaEmbeddable.toClob(readOnlyProperty);
     }
 
+    @Override
     public void setReadOnlyProperty(final Clob readOnlyProperty) {
         this.readOnlyProperty = ClobJpaEmbeddable.fromClob(readOnlyProperty);
     }
@@ -96,12 +100,14 @@ public class IsisClobJpa
     @Embedded
     private ClobJpaEmbeddable readWriteProperty;
 
+    @Override
     @Property(editing = Editing.ENABLED)                            // <.>
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     public Clob getReadWriteProperty() {
         return ClobJpaEmbeddable.toClob(readWriteProperty);
     }
 
+    @Override
     public void setReadWriteProperty(final Clob readWriteProperty) {
         this.readWriteProperty = ClobJpaEmbeddable.fromClob(readWriteProperty);
     }
@@ -115,12 +121,14 @@ public class IsisClobJpa
     @Embedded
     private ClobJpaEmbeddable readOnlyOptionalProperty;
 
+    @Override
     @Property(optionality = Optionality.OPTIONAL)                   // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
     public Clob getReadOnlyOptionalProperty() {
         return ClobJpaEmbeddable.toClob(readOnlyOptionalProperty);
     }
 
+    @Override
     public void setReadOnlyOptionalProperty(final Clob readOnlyOptionalProperty) {
         this.readOnlyOptionalProperty = ClobJpaEmbeddable.fromClob(readOnlyOptionalProperty);
     }
@@ -133,12 +141,14 @@ public class IsisClobJpa
     @Embedded
     private ClobJpaEmbeddable readWriteOptionalProperty;
 
+    @Override
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
     public Clob getReadWriteOptionalProperty() {
         return ClobJpaEmbeddable.toClob(readWriteOptionalProperty);
     }
 
+    @Override
     public void setReadWriteOptionalProperty(final Clob readWriteOptionalProperty) {
         this.readWriteOptionalProperty = ClobJpaEmbeddable.fromClob(readWriteOptionalProperty);
     }

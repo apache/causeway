@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facetapi;
 
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
@@ -66,7 +65,8 @@ public class FacetAbstractTest extends TestCase {
     }
 
     public void testToString() {
-        assertEquals("FacetAbstractTest$ConcreteFacet[type=FacetAbstractTest$FooFacet]", fooFacet.toString());
+        assertEquals("FacetAbstractTest.ConcreteFacet[type=FacetAbstractTest.FooFacet; precedence=DEFAULT]",
+                fooFacet.toString());
     }
 
 }

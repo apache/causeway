@@ -20,6 +20,7 @@ package demoapp.dom.types.jodatime.jodadatetime.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -41,14 +42,15 @@ public class JodaDateTimeHolder_updateReadOnlyOptionalProperty {
 
     private final JodaDateTimeHolder holder;
 
-    public JodaDateTimeHolder act(
+    @MemberSupport public JodaDateTimeHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
-            org.joda.time.DateTime newValue
+            final org.joda.time.DateTime newValue
     ) {
         holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
-    public org.joda.time.DateTime default0Act() {
+
+    @MemberSupport public org.joda.time.DateTime default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

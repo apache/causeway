@@ -21,8 +21,6 @@ package org.apache.isis.extensions.secman.applib.role.seed;
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.confview.ConfigurationMenu;
-import org.apache.isis.applib.services.confview.ConfigurationProperty;
-import org.apache.isis.applib.services.confview.ConfigurationViewmodel;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRule;

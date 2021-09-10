@@ -36,7 +36,9 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
@@ -53,16 +55,16 @@ import demoapp.dom.types.jodatime.jodalocaltime.vm.JodaLocalTimeVm;
 //@Log4j2
 public class JodaLocalTimes implements HasAsciiDocDescription {
 
-    public String title() {
+    @ObjectSupport public String title() {
         return "org.joda.time.LocalTime data type";
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public JodaLocalTimeVm openViewModel(org.joda.time.LocalTime initialValue) {
+    public JodaLocalTimeVm openViewModel(final org.joda.time.LocalTime initialValue) {
         return new JodaLocalTimeVm(initialValue);
     }
-    public org.joda.time.LocalTime default0OpenViewModel() {
+    @MemberSupport public org.joda.time.LocalTime default0OpenViewModel() {
         return samples.single();
     }
 

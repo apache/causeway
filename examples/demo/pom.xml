@@ -166,7 +166,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-asciidoc-persistence-jdo-dn5</artifactId>
+			<artifactId>isis-valuetypes-asciidoc-persistence-jdo</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.valuetypes</groupId>
@@ -178,7 +178,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-markdown-persistence-jdo-dn5</artifactId>
+			<artifactId>isis-valuetypes-markdown-persistence-jdo</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.valuetypes</groupId>

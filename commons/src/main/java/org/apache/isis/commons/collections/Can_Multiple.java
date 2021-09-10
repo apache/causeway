@@ -22,6 +22,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -29,6 +30,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -39,6 +41,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Objects;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
@@ -113,10 +116,30 @@ final class Can_Multiple<T> implements Can<T> {
     }
 
     @Override
-    public Can<T> unique() {
+    public Can<T> sorted(final @NonNull Comparator<? super T> c) {
+        val newElements = _Lists.<T>newArrayList(elements);
+        newElements.sort(c);
+        return Can_Multiple.of(newElements);
+    }
+
+    @Override
+    public Can<T> distinct() {
         val set = new LinkedHashSet<T>(); // preserve order
         set.addAll(elements);
         return Can.ofCollection(set);
+    }
+
+    @Override
+    public Can<T> distinct(final @NonNull BiPredicate<T, T> equality) {
+        final int initialSize = Math.min(1024, elements.size());
+        val uniqueElements = _Lists.<T>newArrayList(initialSize);
+        elements
+        .forEach(element->{
+            if(!uniqueElements.stream().anyMatch(x->equality.test(x, element))) {
+                uniqueElements.add(element);
+            }
+        });
+        return _CanFactory.ofNonNullElements(uniqueElements);
     }
 
     @Override

@@ -96,8 +96,7 @@ public class JdoProduct implements Comparable<JdoProduct> {
         this.setPrice(2.*getPrice());
     }
 
-    @MemberSupport
-    public String disableDoubleThePrice() {
+    @MemberSupport public String disableDoubleThePrice() {
         return "always disabled for testing purposes";
     }
 

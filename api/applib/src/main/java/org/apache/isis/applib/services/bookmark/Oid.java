@@ -39,15 +39,6 @@ public interface Oid extends Serializable {
     String getIdentifier();
 
     /**
-     * Alias for {@link #getLogicalTypeName()}.
-     * @deprecated use {@link #getLogicalTypeName()}
-     */
-    @Deprecated
-    default String getObjectType() {
-        return getLogicalTypeName();
-    }
-
-    /**
      * The canonical form of the {@link Bookmark}, that is
      * {@link #getLogicalTypeName() logical-type-name}{@value #SEPARATOR}{@link #getIdentifier() identifier}.
      */

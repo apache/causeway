@@ -34,10 +34,11 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.jaxb.JavaTimeJaxbAdapters;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javatime.javatimeoffsettime.holder.JavaTimeOffsetTimeHolder3;
 import lombok.Getter;
 import lombok.Setter;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.types.javatime.javatimeoffsettime.holder.JavaTimeOffsetTimeHolder3;
 
 //tag::class[]
 @XmlRootElement(name = "root")

@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolderRepository;
@@ -38,7 +39,7 @@ public class EmbeddedTypeVm implements HasAsciiDocDescription {
 // end::class[]
     @Inject private ValueHolderRepository<ComplexNumber, ? extends NumberConstantEntity> numberConstantRepo;
 
-    public String title() {
+    @ObjectSupport public String title() {
         return "Embedded Types";
     }
 

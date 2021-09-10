@@ -35,8 +35,7 @@ public class ProperActionWithNameStartingWithSetOrGet {
     }
 
     // should be properly picked up as supporting method
-    @MemberSupport
-    public int default0SetToValue() {
+    @MemberSupport public int default0SetToValue() {
         return 0;
     }
 
@@ -49,8 +48,7 @@ public class ProperActionWithNameStartingWithSetOrGet {
     }
 
     // should be properly picked up as supporting method
-    @MemberSupport
-    public int default0GetFromValue() {
+    @MemberSupport public int default0GetFromValue() {
         return 0;
     }
 

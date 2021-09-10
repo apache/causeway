@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.actions.action;
 
 import java.lang.reflect.Method;
@@ -76,7 +75,8 @@ extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        processInvocation(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
+        processInvocation(facetFactory, ProcessMethodContext
+                .forTesting(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
         assertNotNull(facet);
@@ -97,7 +97,8 @@ extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        processInvocation(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
+        processInvocation(facetFactory, ProcessMethodContext
+                .forTesting(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
         final ActionInvocationFacetForDomainEventAbstract actionInvocationFacetViaMethod = (ActionInvocationFacetForDomainEventAbstract) facet;
@@ -115,7 +116,8 @@ extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        processInvocation(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
+        processInvocation(facetFactory, ProcessMethodContext
+                .forTesting(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
         final ActionInvocationFacetForDomainEventAbstract actionInvocationFacetViaMethod = (ActionInvocationFacetForDomainEventAbstract) facet;
@@ -133,7 +135,8 @@ extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        processInvocation(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
+        processInvocation(facetFactory, ProcessMethodContext
+                .forTesting(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
         final ActionInvocationFacetForDomainEventAbstract actionInvocationFacetViaMethod = (ActionInvocationFacetForDomainEventAbstract) facet;
@@ -157,7 +160,8 @@ extends AbstractFacetFactoryTest {
         final FacetedMethod facetHolderWithParms = FacetedMethod
                 .createForAction(metaModelContext, CustomerEx.class, actionMethod);
 
-        processInvocation(facetFactory, new ProcessMethodContext(CustomerEx.class, null, actionMethod, methodRemover, facetHolderWithParms));
+        processInvocation(facetFactory, ProcessMethodContext
+                .forTesting(CustomerEx.class, null, actionMethod, methodRemover, facetHolderWithParms));
 
         final Facet facet0 = facetHolderWithParms.getFacet(ActionInvocationFacet.class);
         assertNotNull(facet0);
@@ -193,7 +197,7 @@ extends AbstractFacetFactoryTest {
             }
 
 
-            public String disableSomeAction(final int x, final long y) {
+            public String disableSomeAction() {
                 return null;
             }
         }
@@ -201,11 +205,12 @@ extends AbstractFacetFactoryTest {
         final Method actionMethod = findMethod(CustomerEx.class, "someAction", new Class[] { int.class, long.class });
         final Method choices0Method = findMethod(CustomerEx.class, "choices0SomeAction", new Class[] {});
         final Method choices1Method = findMethod(CustomerEx.class, "choices1SomeAction", new Class[] {});
-        final Method disableMethod = findMethod(CustomerEx.class, "disableSomeAction", new Class[] { int.class, long.class });
+        final Method disableMethod = findMethod(CustomerEx.class, "disableSomeAction", new Class[] {});
 
         final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(metaModelContext, CustomerEx.class, actionMethod);
 
-        final ProcessMethodContext processMethodContext = new ProcessMethodContext(CustomerEx.class, FeatureType.ACTION, actionMethod, methodRemover, facetHolderWithParms);
+        final ProcessMethodContext processMethodContext = ProcessMethodContext
+                .forTesting(CustomerEx.class, FeatureType.ACTION, actionMethod, methodRemover, facetHolderWithParms);
         processInvocation(facetFactory, processMethodContext);
 
         facetFactoryForChoices.process(processMethodContext);

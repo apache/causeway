@@ -30,7 +30,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.annotation.Priority;
@@ -38,6 +37,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
@@ -65,7 +65,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelService;
-import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
+import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava11;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutor.Substitution;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
@@ -94,7 +94,7 @@ import lombok.extern.log4j.Log4j2;
  * <ul>
  * <li>The most important plug-in point is {@link ProgrammingModel} that
  * specifies the set of {@link Facet} that make up programming model. If not
- * specified then defaults to {@link ProgrammingModelFacetsJava8} (which should
+ * specified then defaults to {@link ProgrammingModelFacetsJava11} (which should
  * be used as a starting point for your own customizations).
  * <li>The only mandatory plug-in point is {@link ClassSubstitutor}, which
  * allows the class to be loaded to be substituted if required. This is used in

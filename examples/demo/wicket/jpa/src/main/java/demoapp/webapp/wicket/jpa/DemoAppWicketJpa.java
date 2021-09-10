@@ -18,6 +18,11 @@
  */
 package demoapp.webapp.wicket.jpa;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.Import;
+
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.ui.IsisModuleExtPdfjsUi;
 import org.apache.isis.valuetypes.asciidoc.metamodel.IsisModuleValAsciidocMetaModel;
@@ -27,13 +32,9 @@ import org.apache.isis.valuetypes.markdown.persistence.jpa.IsisModuleValMarkdown
 import org.apache.isis.valuetypes.markdown.ui.wkt.IsisModuleValMarkdownUiWkt;
 import org.apache.isis.valuetypes.sse.ui.wkt.IsisModuleValSseUiWkt;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-import org.springframework.context.annotation.Import;
 
 import demoapp.web.DemoAppManifestJpa;
-import demoapp.webapp.wicket.common.ui.custom.WhereInTheWorldPanelFactory;
+import demoapp.webapp.wicket.common.ui.DemoAppWicketCommon;
 
 /**
  * Bootstrap the application.
@@ -54,7 +55,7 @@ import demoapp.webapp.wicket.common.ui.custom.WhereInTheWorldPanelFactory;
     IsisModuleExtPdfjsUi.class,
 
     // Custom Demo UI (Wicket Viewer)
-    WhereInTheWorldPanelFactory.class,
+    DemoAppWicketCommon.class,
 
     // Persistence/Converters (JPA)
     IsisModuleValAsciidocPersistenceJpa.class,
@@ -71,7 +72,7 @@ public class DemoAppWicketJpa extends SpringBootServletInitializer {
      * @implNote this is to support the <em>Spring Boot Maven Plugin</em>, which auto-detects an
      * entry point by searching for classes having a {@code main(...)}
      */
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
     	IsisPresets.prototyping();
         //IsisPresets.logging(WebRequestCycleForIsis.class, "debug");
 

@@ -20,6 +20,7 @@ package demoapp.dom.types.isis.passwords.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -42,14 +43,15 @@ public class IsisPasswordHolder_updateReadOnlyOptionalProperty {
 
     private final IsisPasswordHolder holder;
 
-    public IsisPasswordHolder act(
+    @MemberSupport public IsisPasswordHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
-            Password newValue
+            final Password newValue
     ) {
         holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
-    public Password default0Act() {
+
+    @MemberSupport public Password default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

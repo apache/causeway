@@ -16,38 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.ident.title;
 
 import java.lang.reflect.Method;
 
 import org.apache.isis.commons.internal._Constants;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.Facet.Precedence;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.isis.core.metamodel.facets.object.support.ObjectSupportFacetFactoryTestAbstract;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetInferredFromToStringMethod;
-import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaMethodsFactory;
-import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaTitleMethod;
 
-public class TitleFacetViaMethodsFactoryTest extends AbstractFacetFactoryTest {
-
-    private TitleFacetViaMethodsFactory facetFactory;
-
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-
-        facetFactory = new TitleFacetViaMethodsFactory(metaModelContext);
-    }
-
-
-    @Override
-    protected void tearDown() throws Exception {
-        facetFactory = null;
-        super.tearDown();
-    }
+public class TitleFacetViaMethodsFactoryTest
+extends ObjectSupportFacetFactoryTestAbstract {
 
     public void testTitleMethodPickedUpOnClassAndMethodRemoved() {
         class Customer {
@@ -56,17 +38,7 @@ public class TitleFacetViaMethodsFactoryTest extends AbstractFacetFactoryTest {
                 return "Some title";
             }
         }
-        final Method titleMethod = findMethod(Customer.class, "title");
-
-        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(TitleFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof TitleFacetViaTitleMethod);
-        final TitleFacetViaTitleMethod titleFacetViaTitleMethod = (TitleFacetViaTitleMethod) facet;
-        assertEquals(titleMethod, titleFacetViaTitleMethod.getMethods().getFirstOrFail());
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(titleMethod));
+        assertPicksUp(1, facetFactory, Customer.class, ObjectSupportMethod.TITLE, TitleFacet.class);
     }
 
     public void testToStringMethodPickedUpOnClassAndMethodRemoved() {
@@ -78,7 +50,8 @@ public class TitleFacetViaMethodsFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method toStringMethod = findMethod(Customer.class, "toString");
 
-        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
+        facetFactory.process(ProcessClassContext
+                .forTesting(Customer.class, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(TitleFacet.class);
         assertNotNull(facet);
@@ -89,19 +62,21 @@ public class TitleFacetViaMethodsFactoryTest extends AbstractFacetFactoryTest {
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(toStringMethod));
     }
 
-    public void testTitleFacetMethodUsingToStringIsClassifiedAsANoop() throws NoSuchMethodException, SecurityException {
+    public void testTitleFacetOnJavaObjectToStringIsIgnored() throws NoSuchMethodException, SecurityException {
 
-        final Method sampleMethod = Object.class.getMethod("toString", _Constants.emptyClasses);
-        assertEquals(
-                Precedence.INFERRED,
-                new TitleFacetInferredFromToStringMethod(sampleMethod, facetedMethod).getPrecedence());
+        final Method sampleMethod = Object.class
+                .getMethod("toString", _Constants.emptyClasses);
+        assertFalse(TitleFacetInferredFromToStringMethod
+                    .create(sampleMethod, facetedMethod)
+                    .isPresent());
     }
 
     public void testNoExplicitTitleOrToStringMethod() {
         class Customer {
         }
 
-        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
+        facetFactory.process(ProcessClassContext
+                .forTesting(Customer.class, methodRemover, facetedMethod));
 
         assertNull(facetedMethod.getFacet(TitleFacet.class));
         assertFalse(methodRemover.getRemovedMethodMethodCalls().isEmpty());

@@ -64,8 +64,7 @@ public class ApplicationRole_removePermissions {
 
     private final ApplicationRole target;
 
-    @MemberSupport
-    public ApplicationRole act(Collection<ApplicationPermission> permissions) {
+    @MemberSupport public ApplicationRole act(Collection<ApplicationPermission> permissions) {
 
         _NullSafe.stream(permissions)
         .filter(this::canRemove)

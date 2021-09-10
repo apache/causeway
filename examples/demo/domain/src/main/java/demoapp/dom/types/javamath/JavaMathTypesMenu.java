@@ -27,8 +27,6 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import lombok.extern.log4j.Log4j2;
-
 import demoapp.dom.types.javamath.bigdecimals.JavaMathBigDecimals;
 import demoapp.dom.types.javamath.bigintegers.JavaMathBigIntegers;
 

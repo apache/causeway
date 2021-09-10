@@ -20,6 +20,7 @@ package demoapp.dom.types.javalang.floats.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
@@ -39,11 +40,12 @@ public class WrapperFloatHolder_updateReadOnlyProperty {
 
     private final WrapperFloatHolder holder;
 
-    public WrapperFloatHolder act(Float newValue) {
+    @MemberSupport public WrapperFloatHolder act(final Float newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
-    public Float default0Act() {
+
+    @MemberSupport public Float default0Act() {
         return holder.getReadOnlyProperty();
     }
 

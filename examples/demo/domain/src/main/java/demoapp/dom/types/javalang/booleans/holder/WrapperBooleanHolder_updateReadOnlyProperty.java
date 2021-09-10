@@ -20,6 +20,7 @@ package demoapp.dom.types.javalang.booleans.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
@@ -39,11 +40,12 @@ public class WrapperBooleanHolder_updateReadOnlyProperty {
 
     private final WrapperBooleanHolder holder;
 
-    public WrapperBooleanHolder act(Boolean newValue) {
+    @MemberSupport public WrapperBooleanHolder act(final Boolean newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
-    public Boolean default0Act() {
+
+    @MemberSupport public Boolean default0Act() {
         return holder.getReadOnlyProperty();
     }
 

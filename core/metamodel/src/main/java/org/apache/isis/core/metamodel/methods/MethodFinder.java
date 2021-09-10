@@ -18,141 +18,258 @@
  */
 package org.apache.isis.core.metamodel.methods;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.springframework.lang.Nullable;
+
+import org.apache.isis.applib.annotation.Domain;
+import org.apache.isis.applib.annotation.Introspection.EncapsulationPolicy;
+import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.core.metamodel.methods.MethodFinderUtils.MethodAndPpmConstructor;
+import org.apache.isis.commons.internal.functions._Predicates;
+import org.apache.isis.commons.internal.reflection._Annotations;
+import org.apache.isis.commons.internal.reflection._ClassCache;
+import org.apache.isis.commons.internal.reflection._Reflect;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ConflictingAnnotations;
+import org.apache.isis.core.metamodel.commons.MethodUtil;
 
-/**
- * An extension to {@link MethodFinderUtils} in support of multiple simultaneous naming conventions.
- * @apiNote each method name candidate is processed in sequence as given by {@code Can<String> names}
- */
-//@Log4j2
-public final class MethodFinder {
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
-    public static Stream<Method> findMethod(
-            final Class<?> type,
-            final Can<String> names,
-            final Class<?> expectedReturnType,
-            final Class<?>[] paramTypes) {
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+public class MethodFinder {
 
-        return names.stream()
-        .distinct()
-        .map(name->MethodFinderUtils
-                .findMethod(type, name, expectedReturnType, paramTypes))
-        .filter(_NullSafe::isPresent);
+    public static MethodFinder of(
+            final @NonNull Class<?> correspondingClass,
+            final @NonNull Can<String> methodNameCandidatesPossiblyDuplicated,
+            final @NonNull EncapsulationPolicy encapsulationPolicy,
+            final @NonNull Predicate<Method> mustSatisfy) {
+
+        final Predicate<Method> isNotStatic = MethodUtil::isNotStatic;
+        val methodNameCandidates = methodNameCandidatesPossiblyDuplicated.distinct();
+
+        return new MethodFinder(
+                correspondingClass,
+                encapsulationPolicy,
+                methodNameCandidates.equals(ANY_NAME)
+                        ? isNotStatic.and(mustSatisfy)
+                        : isNotStatic
+                            .and(method->methodNameCandidates.contains(method.getName()))
+                            .and(mustSatisfy),
+                methodNameCandidates);
     }
 
-    // -- SEARCH FOR MULTIPLE NAME CANDIDATES
+    public static final Can<String> ANY_NAME = Can.of(""); // arbitrary marker
+    public static final Class<?>[] NO_ARG = new Class<?>[0];
 
-    public static Stream<Method> findMethod_returningBoolean(
-            final Class<?> type,
-            final Can<String> names,
-            final Class<?>[] paramTypes) {
-
-        return names.stream()
-        .distinct()
-        .map(name->MethodFinderUtils
-                .findMethod_returningBoolean(type, name, paramTypes))
-        .filter(_NullSafe::isPresent);
+    public static MethodFinder notNecessarilyPublic(
+            final Class<?> correspondingClass,
+            final Can<String> methodNameCandidates) {
+        return of(
+                correspondingClass,
+                methodNameCandidates,
+                EncapsulationPolicy.ENCAPSULATED_MEMBERS_SUPPORTED,
+                _Predicates.alwaysTrue()
+                );
     }
 
-    public static Stream<Method> findMethod_returningText(
-            final Class<?> type,
-            final Can<String> names,
-            final Class<?>[] paramTypes) {
-
-        return names.stream()
-        .distinct()
-        .map(name->MethodFinderUtils
-                .findMethod_returningText(type, name, paramTypes))
-        .filter(_NullSafe::isPresent);
+    public static MethodFinder publicOnly(
+            final Class<?> correspondingClass,
+            final Can<String> methodNameCandidates) {
+        return of(
+                correspondingClass,
+                methodNameCandidates,
+                EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED,
+                _Predicates.alwaysTrue()
+                );
     }
 
-    public static Stream<Method> findMethod_returningNonScalar(
-            final Class<?> type,
-            final Can<String> names,
-            final Class<?> elementReturnType,
-            final Class<?>[] paramTypes) {
+    public static MethodFinder accessor(
+            final Class<?> correspondingClass,
+            final Can<String> methodNameCandidates,
+            final IntrospectionPolicy memberIntrospectionPolicy) {
+        return havingAnyOrNoAnnotation(
+                correspondingClass,
+                methodNameCandidates,
+                memberIntrospectionPolicy);
+    }
 
-        return names.stream()
-        .distinct()
-        .map(name->MethodFinderUtils
-                .findMethod_returningNonScalar(type, name, elementReturnType, paramTypes))
-        .filter(_NullSafe::isPresent);
+    public static MethodFinder objectSupport(
+            final Class<?> correspondingClass,
+            final Can<String> methodNameCandidates,
+            final IntrospectionPolicy memberIntrospectionPolicy) {
+        return supportMethod(
+                correspondingClass,
+                methodNameCandidates,
+                memberIntrospectionPolicy,
+                Domain.Include.class,
+                ProgrammingModelConstants.ConflictingAnnotations.OBJECT_SUPPORT);
+    }
+
+    public static MethodFinder livecycleCallback(
+            final Class<?> correspondingClass,
+            final Can<String> methodNameCandidates,
+            final IntrospectionPolicy memberIntrospectionPolicy) {
+        return supportMethod(
+                correspondingClass,
+                methodNameCandidates,
+                memberIntrospectionPolicy,
+                Domain.Include.class,
+                ProgrammingModelConstants.ConflictingAnnotations.OBJECT_LIFECYCLE);
+    }
+
+    public static MethodFinder memberSupport(
+            final Class<?> correspondingClass,
+            final Can<String> methodNameCandidates,
+            final IntrospectionPolicy memberIntrospectionPolicy) {
+        return supportMethod(
+                correspondingClass,
+                methodNameCandidates,
+                memberIntrospectionPolicy,
+                Domain.Include.class,
+                ProgrammingModelConstants.ConflictingAnnotations.MEMBER_SUPPORT);
+    }
+
+    @Getter private final @NonNull Class<?> correspondingClass;
+    @Getter private final @NonNull EncapsulationPolicy encapsulationPolicy;
+    @Getter private final @NonNull Predicate<Method> mustSatisfy;
+    private final @NonNull Can<String> methodNameCandidates;
+
+    public Stream<Method> streamMethodsMatchingSignature(
+            final @Nullable Class<?>[] paramTypes) {
+
+        if(paramTypes==null) {
+            return streamMethodsIgnoringSignature();
+        }
+
+        val type = getCorrespondingClass();
+        val classCache = _ClassCache.getInstance();
+        val isEncapsulationSupported = getEncapsulationPolicy().isEncapsulatedMembersSupported();
+
+        if(methodNameCandidates.equals(ANY_NAME)) {
+            //stream all
+            return (isEncapsulationSupported
+                    ? classCache.streamPublicOrDeclaredMethods(type)
+                    : classCache.streamPublicMethods(type))
+                        .filter(method->Arrays.equals(paramTypes, method.getParameterTypes()))
+                        .filter(mustSatisfy);
+        }
+
+        return methodNameCandidates.stream()
+        .map(name->isEncapsulationSupported
+                ? classCache.lookupPublicOrDeclaredMethod(type, name, paramTypes)
+                : classCache.lookupPublicMethod(type, name, paramTypes))
+        .filter(_NullSafe::isPresent)
+        .filter(mustSatisfy);
+
+    }
+
+    public Stream<Method> streamMethodsIgnoringSignature() {
+        val type = getCorrespondingClass();
+        val classCache = _ClassCache.getInstance();
+        val isEncapsulationSupported = getEncapsulationPolicy().isEncapsulatedMembersSupported();
+        return (isEncapsulationSupported
+                ? classCache.streamPublicOrDeclaredMethods(type)
+                : classCache.streamPublicMethods(type))
+                    .filter(mustSatisfy);
+    }
+
+    // -- WITHERS
+
+    public MethodFinder withRequiredReturnType(final @NonNull Class<?> requiredReturnType) {
+        return new MethodFinder(
+                correspondingClass,
+                encapsulationPolicy,
+                mustSatisfy.and(_Reflect.Filter.hasReturnType(requiredReturnType)),
+                methodNameCandidates);
+    }
+
+    public MethodFinder withReturnTypeAnyOf(final @NonNull Can<Class<?>> anyOfReturnTypes) {
+        return new MethodFinder(
+                correspondingClass,
+                encapsulationPolicy,
+                mustSatisfy.and(_Reflect.Filter.hasReturnTypeAnyOf(anyOfReturnTypes)),
+                methodNameCandidates);
     }
 
 
-    // -- SEARCH FOR MULTIPLE NAME CANDIDATES (PPM)
+    // -- HELPER
 
-    public static Stream<MethodAndPpmConstructor> findMethodWithPPMArg(
-            final Class<?> type,
-            final Can<String> names,
-            final Class<?> returnType,
-            final Class<?>[] paramTypes,
-            final Can<Class<?>> additionalParamTypes) {
-
-        return names.stream()
-        .distinct()
-        .map(name->MethodFinderUtils
-                .findMethodWithPPMArg(type, name, returnType, paramTypes, additionalParamTypes))
-        .filter(_NullSafe::isPresent);
+    private static MethodFinder havingAnyOrNoAnnotation(
+            final Class<?> correspondingClass,
+            final Can<String> methodNameCandidates,
+            final IntrospectionPolicy memberIntrospectionPolicy) {
+        return of(
+                correspondingClass,
+                methodNameCandidates,
+                memberIntrospectionPolicy.getEncapsulationPolicy(),
+                _Predicates.alwaysTrue());
     }
 
-    public static Stream<MethodAndPpmConstructor> findMethodWithPPMArg_returningAnyOf(
-            final Class<?>[] returnTypes,
-            final Class<?> type,
-            final Can<String> names,
-            final Class<?>[] paramTypes,
-            final Can<Class<?>> additionalParamTypes) {
+    private static MethodFinder supportMethod(
+            final Class<?> correspondingClass,
+            final Can<String> methodNameCandidates,
+            final IntrospectionPolicy memberIntrospectionPolicy,
+            final Class<? extends Annotation> annotationType,
+            final ConflictingAnnotations conflictingAnnotations) {
 
-        return names.stream()
-        .distinct()
-        .map(name->MethodFinderUtils
-                .findMethodWithPPMArg_returningAnyOf(returnTypes, type, name, paramTypes, additionalParamTypes))
-        .filter(_NullSafe::isPresent);
+        return of(
+                correspondingClass,
+                methodNameCandidates,
+                // support methods are always allowed private
+                EncapsulationPolicy.ENCAPSULATED_MEMBERS_SUPPORTED,
+                havingAnnotationIfEnforcedByPolicyOrAccessibility(
+                        memberIntrospectionPolicy,
+                        annotationType,
+                        conflictingAnnotations.getProhibits()));
+
     }
 
-    public static Stream<MethodAndPpmConstructor> findMethodWithPPMArg_returningBoolean(
-            final Class<?> type,
-            final Can<String> names,
-            final Class<?>[] paramTypes,
-            final Can<Class<?>> additionalParamTypes) {
+    private static Predicate<Method> havingAnnotationIfEnforcedByPolicyOrAccessibility(
+            final IntrospectionPolicy memberIntrospectionPolicy,
+            final Class<? extends Annotation> annotationType,
+            final Can<Class<? extends Annotation>> conflictingAnnotations) {
 
-        return names.stream()
-        .distinct()
-        .map(name->MethodFinderUtils
-                .findMethodWithPPMArg_returningBoolean(type, name, paramTypes, additionalParamTypes))
-        .filter(_NullSafe::isPresent);
+        //MemberAnnotationPolicy
+        //  when REQUIRED -> annot. on support also required
+        //  when OPTIONAL -> annot. on support only required when support method is private
+
+        return memberIntrospectionPolicy.getMemberAnnotationPolicy().isMemberAnnotationsRequired()
+                    ? method->havingAnnotation(method, annotationType, conflictingAnnotations)
+                    : method-> !_Reflect.isAccessible(method)
+                            ? havingAnnotation(method, annotationType, conflictingAnnotations)
+                            : true;
+
     }
 
-    public static Stream<MethodAndPpmConstructor> findMethodWithPPMArg_returningText(
-            final Class<?> type,
-            final Can<String> names,
-            final Class<?>[] paramTypes,
-            final Can<Class<?>> additionalParamTypes) {
+    //FIXME[ISIS-2774] if annotation appears on an abstract method that was inherited with given method,
+    // its not detected here
+    private static boolean havingAnnotation(
+            final Method method,
+            final Class<? extends Annotation> annotationType,
+            final Can<Class<? extends Annotation>> conflictingAnnotations) {
 
-        return names.stream()
-        .distinct()
-        .map(name->MethodFinderUtils
-                .findMethodWithPPMArg_returningText(type, name, paramTypes, additionalParamTypes))
-        .filter(_NullSafe::isPresent);
-    }
+        val isMarkerAnnotationPresent = _Annotations.synthesizeInherited(method, annotationType).isPresent();
+        if(isMarkerAnnotationPresent) {
 
-    public static Stream<MethodAndPpmConstructor> findMethodWithPPMArg_returningNonScalar(
-            final Class<?> type,
-            final Can<String> names,
-            final Class<?> elementReturnType,
-            final Class<?>[] paramTypes,
-            final Can<Class<?>> additionalParamTypes) {
+            val isConflictingAnnotationPresent = conflictingAnnotations
+            .stream()
+            .anyMatch(conflictingAnnotationType->
+                    _Annotations.synthesizeInherited(method, conflictingAnnotationType).isPresent());
 
-        return names.stream()
-        .distinct()
-        .map(name->MethodFinderUtils
-                .findMethodWithPPMArg_returningNonScalar(type, name, elementReturnType, paramTypes, additionalParamTypes))
-        .filter(_NullSafe::isPresent);
+            // do not pickup this method if conflicting - so meta-model validation will fail later on
+            return !isConflictingAnnotationPresent;
+        }
+        return isMarkerAnnotationPresent;
     }
 
 

@@ -23,21 +23,19 @@ import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.Locale;
 
-import org.springframework.lang.Nullable;
-import javax.enterprise.inject.Vetoed;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import org.springframework.context.annotation.Profile;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.config.util.LogicalTypeNameUtil;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.TypeVetoMarker;
 
 import static org.apache.isis.commons.internal.reflection._Annotations.findNearestAnnotation;
 
@@ -85,9 +83,10 @@ implements IsisBeanTypeClassifier {
 
         // handle vetoing ...
 
-        if(findNearestAnnotation(type, Vetoed.class).isPresent()
-                || findNearestAnnotation(type, Programmatic.class).isPresent()) {
-            return BeanClassification.selfManaged(BeanSort.VETOED); // reject
+        for(TypeVetoMarker vetoMarker : TypeVetoMarker.values()) {
+            if(findNearestAnnotation(type, vetoMarker.getAnnotationType()).isPresent()) {
+                return BeanClassification.selfManaged(BeanSort.VETOED); // reject
+            }
         }
 
         val profiles = Can.ofArray(findNearestAnnotation(type, Profile.class)
@@ -117,7 +116,7 @@ implements IsisBeanTypeClassifier {
         if(aDomainService.isPresent()) {
             return BeanClassification
                     .delegated(BeanSort.MANAGED_BEAN_CONTRIBUTING,
-                            LogicalTypeNameUtil.logicalTypeName(aDomainService.get()));
+                            aDomainService.get().logicalTypeName());
         }
 
         // allow ServiceLoader plugins to have a say, eg. when classifying entity types
@@ -139,7 +138,7 @@ implements IsisBeanTypeClassifier {
 
             val aDomainObject = findNearestAnnotation(type, DomainObject.class).orElse(null);
             if(aDomainObject!=null) {
-                logicalTypeName = LogicalTypeNameUtil.logicalTypeName(aDomainObject);
+                logicalTypeName = aDomainObject.logicalTypeName();
             }
 
             // don't trample over the @DomainObject(logicalTypeName=..) if present
@@ -170,7 +169,7 @@ implements IsisBeanTypeClassifier {
             case BEAN:
                 return BeanClassification.delegated(
                         BeanSort.MANAGED_BEAN_CONTRIBUTING,
-                        LogicalTypeNameUtil.logicalTypeName(aDomainObject));
+                        aDomainObject.logicalTypeName());
             case MIXIN:
                 return BeanClassification.selfManaged(BeanSort.MIXIN);
             case ENTITY:

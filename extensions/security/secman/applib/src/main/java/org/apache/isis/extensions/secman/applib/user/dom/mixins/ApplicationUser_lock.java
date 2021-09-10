@@ -53,14 +53,12 @@ public class ApplicationUser_lock {
 
     private final ApplicationUser target;
 
-    @MemberSupport
-    public ApplicationUser act() {
+    @MemberSupport public ApplicationUser act() {
         target.setStatus(ApplicationUserStatus.LOCKED);
         return target;
     }
 
-    @MemberSupport
-    public String disableAct() {
+    @MemberSupport public String disableAct() {
         if(applicationUserRepository.isAdminUser(target)) {
             return String.format("Cannot lock the '%s' user.", configBean.getAdminUserName());
         }

@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.applib.annotation;
 
 import java.lang.annotation.ElementType;
@@ -45,6 +44,7 @@ import java.util.Comparator;
 })
 @Retention(RetentionPolicy.RUNTIME)
 @DomainObject(nature=Nature.MIXIN, mixinMethod = "coll") // meta annotation, only applies at class level
+@Domain.Include // meta annotation, in support of meta-model validation
 public @interface CollectionLayout {
 
     /**
@@ -111,19 +111,9 @@ public @interface CollectionLayout {
      * @see PropertyLayout#named()
      * @see DomainObjectLayout#named()
      * @see DomainServiceLayout#named()
-     * @see CollectionLayout#namedEscaped()
      */
     String named()
             default "";
-
-    /**
-     * A flag indicating whether the value of {@linkplain #named()} should be HTML escaped or not.
-     *
-     * @see CollectionLayout#named()
-     */
-    @Deprecated
-    boolean namedEscaped()
-            default true;
 
     /**
      * The page size for instances of this class when rendered within

@@ -29,7 +29,9 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -39,10 +41,11 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
 import static org.apache.isis.applib.services.wrapper.control.SyncControl.control;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @XmlRootElement(name = "root")
 @XmlType
@@ -75,7 +78,7 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
         this.propertyForMetaAnnotationsOverridden = value;
     }
 
-    public String title() {
+    @ObjectSupport public String title() {
         return "Action#semantics";
     }
 
@@ -148,7 +151,7 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
         setPropertyNoAnnotation(getPropertyNoAnnotation() + amount);
         return this;
     }
-    public int default0IncrementByAmountNoAnnotation() {
+    @MemberSupport public int default0IncrementByAmountNoAnnotation() {
         return 1;
     }
 //end::action-no-annotation[]
@@ -222,7 +225,7 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
         setPropertyForIdempotent(value);
         return this;
     }
-    public int default0SetToValuePropertyForIdempotent() {
+    @MemberSupport public int default0SetToValuePropertyForIdempotent() {
         return getPropertyForIdempotent();
     }
 //end::action-semantics-idempotent[]
@@ -241,7 +244,7 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
         setPropertyForIdempotentAreYouSure(value);
         return this;
     }
-    public int default0SetToValuePropertyForIdempotentAreYouSure() {
+    @MemberSupport public int default0SetToValuePropertyForIdempotentAreYouSure() {
         return getPropertyForIdempotentAreYouSure();
     }
 //end::action-semantics-idempotent-are-you-sure[]
@@ -261,7 +264,7 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
         setPropertyForNonIdempotent(getPropertyForNonIdempotent() + amount);
         return this;
     }
-    public int default0IncrementByAmountPropertyForNonIdempotent() {
+    @MemberSupport public int default0IncrementByAmountPropertyForNonIdempotent() {
         return 1;
     }
 //end::action-semantics-non-idempotent[]
@@ -297,7 +300,7 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
         setPropertyForNonIdempotentAreYouSure(getPropertyForNonIdempotentAreYouSure() + amount);
         return this;
     }
-    public int default0IncrementByAmountPropertyForNonIdempotentAreYouSure() {
+    @MemberSupport public int default0IncrementByAmountPropertyForNonIdempotentAreYouSure() {
         return 1;
     }
 //end::action-semantics-non-idempotent-are-you-sure[]
@@ -318,7 +321,7 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
         setPropertyForMetaAnnotations(value);
         return this;
     }
-    public int default0SetToValueMetaAnnotated() {
+    @MemberSupport public int default0SetToValueMetaAnnotated() {
         return getPropertyForMetaAnnotations();
     }
 //end::action-meta-annotated[]
@@ -340,7 +343,7 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
         setPropertyForMetaAnnotationsOverridden(val);
         return this;
     }
-    public int default0SetToValueMetaAnnotatedOverridden() {
+    @MemberSupport public int default0SetToValueMetaAnnotatedOverridden() {
         return getPropertyForMetaAnnotationsOverridden();
     }
 //end::action-meta-annotated-overridden[]

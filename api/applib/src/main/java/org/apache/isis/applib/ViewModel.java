@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.applib;
 
 import org.apache.isis.applib.annotation.Programmatic;
@@ -44,20 +43,12 @@ public interface ViewModel {
      * through {@link #viewModelInit(String)}.
      */
     @Programmatic
-    public String viewModelMemento();
+    String viewModelMemento();
 
     /**
      * Used to re-initialize a view model with a memento obtained from {@link #viewModelMemento()}.
      */
     @Programmatic
-    public void viewModelInit(String memento);
+    void viewModelInit(String memento);
 
-    /**
-     * Cloneable view models can in effect appear to be editable; the viewer can build a new view model from a
-     * view model whose state has been edited.
-     */
-    public interface Cloneable extends java.lang.Cloneable {
-        @Programmatic
-        public Object clone();
-    }
 }

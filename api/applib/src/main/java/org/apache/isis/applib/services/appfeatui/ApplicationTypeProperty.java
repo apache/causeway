@@ -26,6 +26,7 @@ import java.lang.annotation.Target;
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
@@ -131,8 +132,7 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
                 ? maxLen.getAsInt()
                 : null; // unexpected code path, as this case should be hidden
     }
-
-    public boolean hideMaxLength() {
+    @MemberSupport public boolean hideMaxLength() {
         if(!getFeature().getPropertyMaxLength().isPresent()) {
             return true;
         }
@@ -164,8 +164,7 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
                 ? maxLen.getAsInt()
                 : null; // unexpected code path, as this case should be hidden
     }
-
-    public boolean hideTypicalLength() {
+    @MemberSupport public boolean hideTypicalLength() {
         if(!getFeature().getPropertyTypicalLength().isPresent()) {
             return true;
         }

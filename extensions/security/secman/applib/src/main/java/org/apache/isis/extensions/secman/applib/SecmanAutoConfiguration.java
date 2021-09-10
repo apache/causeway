@@ -18,12 +18,12 @@
  */
 package org.apache.isis.extensions.secman.applib;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.extensions.secman.applib.permission.spi.PermissionsEvaluationService;
 import org.apache.isis.extensions.secman.applib.permission.spi.PermissionsEvaluationServiceAllowBeatsVeto;

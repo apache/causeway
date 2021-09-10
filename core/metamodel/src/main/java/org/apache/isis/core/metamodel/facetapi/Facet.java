@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facetapi;
 
 import java.util.Optional;
@@ -184,8 +183,5 @@ extends
      * @since 2.0
      */
     void forEachContributedFacet(Consumer<Facet> onContributedFacet);
-
-
-
 
 }

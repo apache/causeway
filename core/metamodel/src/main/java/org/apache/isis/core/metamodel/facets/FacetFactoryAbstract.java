@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets;
 
 import java.util.Optional;
@@ -24,12 +23,14 @@ import java.util.Optional;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.collections.ImmutableEnumSet;
+import org.apache.isis.commons.internal.reflection._ClassCache;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -40,11 +41,14 @@ implements FacetFactory, HasMetaModelContext {
 
     @Getter(onMethod_ = {@Override}) private final ImmutableEnumSet<FeatureType> featureTypes;
 
+    @Getter(AccessLevel.PROTECTED) private final _ClassCache classCache;
+
     public FacetFactoryAbstract(
             final MetaModelContext metaModelContext,
             final ImmutableEnumSet<FeatureType> featureTypes) {
         this.metaModelContext = metaModelContext;
         this.featureTypes = featureTypes;
+        this.classCache = _ClassCache.getInstance();
     }
 
     @Override
@@ -81,7 +85,6 @@ implements FacetFactory, HasMetaModelContext {
 
     // -- METHOD UTILITITES
 
-    protected static final Class<?> NO_RETURN = null;
     protected static final Class<?>[] NO_ARG = new Class<?>[0];
     protected static final Class<?>[] STRING_ARG = new Class<?>[] {String.class};
 

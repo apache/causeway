@@ -35,9 +35,10 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.value.Blob;
 
-import demoapp.dom.types.isis.blobs.persistence.IsisBlobEntity;
 import lombok.Getter;
 import lombok.Setter;
+
+import demoapp.dom.types.isis.blobs.persistence.IsisBlobEntity;
 
 @Profile("demo-jdo")
 //tag::class[]

@@ -20,6 +20,7 @@ package demoapp.dom.types.isisext.markdowns.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
@@ -40,11 +41,12 @@ public class IsisMarkdownHolder_updateReadOnlyProperty {
 
     private final IsisMarkdownHolder holder;
 
-    public IsisMarkdownHolder act(Markdown newValue) {
+    @MemberSupport public IsisMarkdownHolder act(final Markdown newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
-    public Markdown default0Act() {
+
+    @MemberSupport public Markdown default0Act() {
         return holder.getReadOnlyProperty();
     }
 

@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Constructor;
@@ -24,6 +23,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
@@ -76,11 +77,11 @@ public class DomainEventHelper {
             final FacetHolder facetHolder,
             final InteractionHead head,
             final Can<ManagedObject> argumentAdapters,
-            final ManagedObject resultAdapter) {
+            final @Nullable Object resultPojo) {
 
         return postEventForAction(phase, uncheckedCast(eventType), /*existingEvent*/null,
                 objectAction, facetHolder,
-                head, argumentAdapters, resultAdapter);
+                head, argumentAdapters, resultPojo);
     }
 
     // variant using existing event and not eventType (is derived from event)
@@ -91,11 +92,11 @@ public class DomainEventHelper {
             final FacetHolder facetHolder,
             final InteractionHead head,
             final Can<ManagedObject> argumentAdapters,
-            final ManagedObject resultAdapter) {
+            final @Nullable Object resultPojo) {
 
         return postEventForAction(phase,
                 uncheckedCast(existingEvent.getClass()), existingEvent, objectAction, facetHolder,
-                head, argumentAdapters, resultAdapter);
+                head, argumentAdapters, resultPojo);
     }
 
     private <S> ActionDomainEvent<S> postEventForAction(
@@ -106,7 +107,7 @@ public class DomainEventHelper {
             final FacetHolder facetHolder,
             final InteractionHead head,
             final Can<ManagedObject> argumentAdapters,
-            final ManagedObject resultAdapter) {
+            final @Nullable Object resultPojo) {
 
         _Assert.assertTypeIsInstanceOf(eventType, ActionDomainEvent.class);
 
@@ -152,7 +153,7 @@ public class DomainEventHelper {
             event.setEventPhase(phase);
 
             if(phase.isExecuted()) {
-                event.setReturnValue(UnwrapUtil.single(resultAdapter));
+                event.setReturnValue(resultPojo);
             }
 
             metamodelEventService.fireActionDomainEvent(event);

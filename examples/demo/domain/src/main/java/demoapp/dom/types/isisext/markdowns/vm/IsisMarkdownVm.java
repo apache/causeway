@@ -27,16 +27,18 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.isisext.markdowns.holder.IsisMarkdownHolder2;
 import lombok.Getter;
 import lombok.Setter;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.types.isisext.markdowns.holder.IsisMarkdownHolder2;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -51,13 +53,13 @@ public class IsisMarkdownVm
         implements HasAsciiDocDescription, IsisMarkdownHolder2 {
 
 //end::class[]
-    public IsisMarkdownVm(Markdown initialValue) {
+    public IsisMarkdownVm(final Markdown initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
 
 //tag::class[]
-    public String title() {
+    @ObjectSupport public String title() {
         return "Markdown view model";
     }
 

@@ -16,17 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.postprocessors.propparam;
 
 import javax.inject.Inject;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet;
-import org.apache.isis.core.metamodel.facets.param.defaults.fromtype.ActionParameterDefaultFacetDerivedFromTypeFactory;
-import org.apache.isis.core.metamodel.facets.param.defaults.fromtype.ActionParameterDefaultFacetInferredFromTypeFacets;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.metamodel.facets.properties.defaults.fromtype.PropertyDefaultFacetDerivedFromDefaultedFacet;
 import org.apache.isis.core.metamodel.facets.properties.defaults.fromtype.PropertyDefaultFacetDerivedFromTypeFactory;
@@ -37,12 +33,9 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
-import lombok.val;
-
 
 /**
- * Replaces {@link ActionParameterDefaultFacetDerivedFromTypeFactory}
- * and  {@link PropertyDefaultFacetDerivedFromTypeFactory}
+ * Installs {@link PropertyDefaultFacetDerivedFromTypeFactory} as a fallback.
  */
 public class DeriveDefaultFromTypePostProcessor
 extends ObjectSpecificationPostProcessorAbstract {
@@ -61,28 +54,6 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction, final ObjectActionParameter parameter) {
-
-        if (parameter.containsNonFallbackFacet(ActionDefaultsFacet.class)) {
-            return;
-        }
-
-        // this loop within the outer loop (for every param) is really weird,
-        // but arises from porting the old facet factory
-        val parameterSpecs = objectAction.getParameterTypes();
-        final DefaultedFacet[] parameterTypeDefaultedFacets = new DefaultedFacet[parameterSpecs.size()];
-        boolean hasAtLeastOneDefault = false;
-        for (int i = 0; i < parameterSpecs.size(); i++) {
-            final ObjectSpecification parameterSpec = parameterSpecs.getElseFail(i);
-            parameterTypeDefaultedFacets[i] = parameterSpec.getFacet(DefaultedFacet.class);
-            hasAtLeastOneDefault = hasAtLeastOneDefault | (parameterTypeDefaultedFacets[i] != null);
-        }
-        if (hasAtLeastOneDefault) {
-            FacetUtil.addFacet(new ActionParameterDefaultFacetInferredFromTypeFacets(parameterTypeDefaultedFacets, peerFor(parameter)));
-        }
-    }
-
-    @Override
     protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToOneAssociation property) {
         if(property.containsNonFallbackFacet(PropertyDefaultFacet.class)) {
             return;
@@ -95,6 +66,11 @@ extends ObjectSpecificationPostProcessorAbstract {
 
     @Override
     protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
+    }
+
+    @Override
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction,
+            final ObjectActionParameter param) {
     }
 
 }

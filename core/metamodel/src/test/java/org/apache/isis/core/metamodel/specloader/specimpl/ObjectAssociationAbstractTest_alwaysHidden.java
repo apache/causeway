@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.jmock.Expectations;
@@ -151,6 +150,11 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
             public int getAutoCompleteMinLength() {
                 return 0;
             }
+            @Override
+            public boolean isExplicitlyAnnotated() {
+                return false;
+            }
+
         };
     }
 

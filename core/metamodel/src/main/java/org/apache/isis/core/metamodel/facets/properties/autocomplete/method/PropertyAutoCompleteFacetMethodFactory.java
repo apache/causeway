@@ -16,68 +16,43 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.properties.autocomplete.method;
 
 import javax.inject.Inject;
 
-import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
-import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
 import lombok.val;
 
 public class PropertyAutoCompleteFacetMethodFactory
-extends MethodPrefixBasedFacetFactoryAbstract {
-
-    private static final String PREFIX = MethodLiteralConstants.AUTO_COMPLETE_PREFIX;
+extends MemberSupportFacetFactoryAbstract {
 
     @Inject
     public PropertyAutoCompleteFacetMethodFactory(final MetaModelContext mmc) {
-        // to also support properties from mixins, need to not only include properties but also actions
-        super(mmc, FeatureType.PROPERTIES_AND_ACTIONS, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
+        super(mmc, FeatureType.PROPERTIES_ONLY, MemberSupportPrefix.AUTO_COMPLETE);
     }
 
     @Override
-    public void process(final ProcessMethodContext processMethodContext) {
-
-        attachPropertyAutoCompleteFacetIfChoicesMethodIsFound(processMethodContext);
-    }
-
-    private void attachPropertyAutoCompleteFacetIfChoicesMethodIsFound(
-            final ProcessMethodContext processMethodContext) {
-
-        // optimization step, not strictly required
-        if(!super.isPropertyOrMixinMain(processMethodContext)) {
-            return;
-        }
+    protected void search(
+            final ProcessMethodContext processMethodContext,
+            final MethodFinder methodFinder) {
 
         val getterOrMixinMain = processMethodContext.getMethod();
-        val namingConvention = processMethodContext.memberSupportCandidates(PREFIX);
+        val getterType = getterOrMixinMain.getReturnType();
 
-        val cls = processMethodContext.getCls();
-        val returnType = getterOrMixinMain.getReturnType();
-        val autoCompleteMethod = MethodFinder
-                .findMethod(
-                        cls,
-                        namingConvention,
-                        NO_RETURN,
-                        STRING_ARG)
-                .findFirst()
-                .orElse(null);
-        if (autoCompleteMethod == null) {
-            return;
-        }
-        processMethodContext.removeMethod(autoCompleteMethod);
+        methodFinder
+        .streamMethodsMatchingSignature(STRING_ARG)
+        .peek(processMethodContext::removeMethod)
+        .forEach(autoCompleteMethod->{
+            addFacet(
+                    new PropertyAutoCompleteFacetMethod(
+                            autoCompleteMethod, getterType, processMethodContext.getFacetHolder()));
+        });
 
-        final FacetHolder property = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new PropertyAutoCompleteFacetMethod(autoCompleteMethod, returnType, property));
     }
-
 
 }

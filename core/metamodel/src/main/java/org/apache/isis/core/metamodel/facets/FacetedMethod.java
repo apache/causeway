@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Method;
@@ -104,7 +103,7 @@ extends TypedHolderAbstract {
 
             val facetedMethodParamToUse =
                     TypeOfFacet
-                    .inferFromParameterType(facetedMethodParam, param)
+                    .inferFromParameterType(param, facetedMethodParam)
                     .map(typeOfFacet->{
                         // (corresponds to similar code for OneToManyAssociation in FacetMethodsBuilder).
                         FacetUtil.addFacet(typeOfFacet);

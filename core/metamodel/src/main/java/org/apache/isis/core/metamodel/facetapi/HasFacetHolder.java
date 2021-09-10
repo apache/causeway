@@ -35,12 +35,12 @@ public interface HasFacetHolder extends FacetHolder {
     }
 
     @Override
-    default <T extends Facet> T getFacet(Class<T> cls) {
+    default <T extends Facet> T getFacet(final Class<T> cls) {
         return getFacetHolder().getFacet(cls);
     }
 
     @Override
-    default boolean containsFacet(Class<? extends Facet> facetType) {
+    default boolean containsFacet(final Class<? extends Facet> facetType) {
         return getFacetHolder().containsFacet(facetType);
     }
 
@@ -50,12 +50,17 @@ public interface HasFacetHolder extends FacetHolder {
     }
 
     @Override
-    default void addFacet(Facet facet) {
+    default void addFacet(final Facet facet) {
         getFacetHolder().addFacet(facet);
     }
 
     @Override
-    default Optional<FacetRanking> getFacetRanking(Class<? extends Facet> facetType) {
+    default Stream<FacetRanking> streamFacetRankings() {
+        return getFacetHolder().streamFacetRankings();
+    }
+
+    @Override
+    default Optional<FacetRanking> getFacetRanking(final Class<? extends Facet> facetType) {
         return getFacetHolder().getFacetRanking(facetType);
     }
 

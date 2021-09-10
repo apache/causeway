@@ -16,19 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facetapi;
 
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
@@ -111,6 +108,11 @@ implements FacetHolder {
     // -- VALIDATION SUPPORT
 
     @Override
+    public Stream<FacetRanking> streamFacetRankings() {
+        return rankingByType.values().stream();
+    }
+
+    @Override
     public Optional<FacetRanking> getFacetRanking(final Class<? extends Facet> facetType) {
         return Optional.ofNullable(rankingByType.get(facetType));
     }
@@ -178,9 +180,6 @@ implements FacetHolder {
         return false; // no changes
     }
 
-    @Deprecated // introduced so can resolve initial conflicts
-    private static Set<String> uniquePrecedenceWarnings = _Sets.newConcurrentHashSet();
-
     // on equal precedence returns b
     private Facet preferredOf(final @NonNull Facet a, final @NonNull Facet b) {
 
@@ -209,9 +208,7 @@ implements FacetHolder {
                             friendlyName(b.getClass()),
                             a.getPrecedence().name());
 
-            if(uniquePrecedenceWarnings.add(msg)) {
-                log.warn(msg);
-            }
+            log.warn(msg);
 
             return b;
         }

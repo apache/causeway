@@ -55,7 +55,7 @@ public class PropertyNode extends MMNode {
     }
 
     @Override
-    public String iconName() {
+    protected String iconSuffix() {
         return "";
     }
 

@@ -144,14 +144,17 @@ The example demo app has also been fleshed out considerably as both a regression
 * link:https://issues.apache.org/jira/browse/ISIS-2315[ISIS-2315] - Bad PageParameter: oidString=images (as seen with SimpleApp)
 * link:https://issues.apache.org/jira/browse/ISIS-2314[ISIS-2314] - ComponentHintKey fails to restore field 'hintStore' on de-serialization
 * link:https://issues.apache.org/jira/browse/ISIS-2313[ISIS-2313] - Do not depend on 2 versions of javax.jdo simultaneously
+* link:https://issues.apache.org/jira/browse/ISIS-2313[ISIS-2313] - Do not depend on 2 versions of javax.jdo simultaneously
 * link:https://issues.apache.org/jira/browse/ISIS-2311[ISIS-2311] - Bulk Toggle (Multiselect): UI can get out of sync with underlying model
 * link:https://issues.apache.org/jira/browse/ISIS-2309[ISIS-2309] - @EmbeddedOnly types are broken
 * link:https://issues.apache.org/jira/browse/ISIS-2304[ISIS-2304] - Vaadin Viewer: fix menubar rendering
-* link:https://issues.apache.org/jira/browse/ISIS-1919[ISIS-1919] - Collective UI Improvements
+* link:https://issues.apache.org/jira/browse/ISIS-2287[ISIS-2287] - Regression: parameters get reset if a predecessor is modified, even if there are no dependent defaults
 ** link:https://issues.apache.org/jira/browse/ISIS-2098[ISIS-2098] - Buttons (action-links) with confirmation don't show their associated tooltip
+* link:https://issues.apache.org/jira/browse/ISIS-1919[ISIS-1919] - Collective UI Improvements
 ** link:https://issues.apache.org/jira/browse/ISIS-1990[ISIS-1990] - Buttons (action-links) don't honor disabled state if providing a confirmation dialog
 ** link:https://issues.apache.org/jira/browse/ISIS-1989[ISIS-1989] - Disabled buttons (action-links) won't show the styled tooltip
 ** link:https://issues.apache.org/jira/browse/ISIS-1921[ISIS-1921] - Confirmation-Popups sometimes render outside window bounds
+* link:https://issues.apache.org/jira/browse/ISIS-1599[ISIS-1599] - "Set" interface does not work as an action parameter's collection type
 
 
 == Task
@@ -170,7 +173,9 @@ The example demo app has also been fleshed out considerably as both a regression
 * link:https://issues.apache.org/jira/browse/ISIS-2357[ISIS-2357] - Upgrade FontAwesome 4 -> 5
 
 
-== Won't Fix
+== Won't Fix / Not a Problem / Duplicates
+
+No code changes were made to close these tickets:
 
 * link:https://issues.apache.org/jira/browse/ISIS-2402[ISIS-2402] - [WON'T FIX] Demo Launch takes >25s until Spring Boot Banner even appears (investigate)
 * link:https://issues.apache.org/jira/browse/ISIS-2436[ISIS-2436] - [NOT AN ISSUE] Secman: Update name(s) for ApplicationUser causes error
@@ -178,12 +183,8 @@ The example demo app has also been fleshed out considerably as both a regression
 * link:https://issues.apache.org/jira/browse/ISIS-2318[ISIS-2318] - [CANNOT REPRODUCE] Regression on Mixins: @Action at method level no longer honor association
 * link:https://issues.apache.org/jira/browse/ISIS-2135[ISIS-2135] - [WON'T FIX] Testing: Mockito to replace JMock
 * link:https://issues.apache.org/jira/browse/ISIS-1924[ISIS-1924] - [WON'T FIX] Indicator for Long Running Actions
-* link:https://issues.apache.org/jira/browse/ISIS-996[ISIS-996] - [WON'T FIX] Define component factories as Spring @Components
-
-== Duplicates
-
-These were _not_ implemented in this release ... this is just backlog grooming.
-
+* link:https://issues.apache.org/jira/browse/ISIS-1593[ISIS-1593] - [DUPLICATE] Tooltip for disabled menu items does not render properly
 * link:https://issues.apache.org/jira/browse/ISIS-1219[ISIS-1219] - [DUPLICATE?] Extend events to allow subscribers to provide defaults, choices, autoComplete on action parameters.
+* link:https://issues.apache.org/jira/browse/ISIS-996[ISIS-996] - [WON'T FIX] Define component factories as Spring @Components
 * link:https://issues.apache.org/jira/browse/ISIS-510[ISIS-510] - [DUPLICATE] Help page overlay (a la ? in gmail)
 

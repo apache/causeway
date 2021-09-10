@@ -22,6 +22,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.mixins.security.HasUsername;
 import org.apache.isis.applib.services.i18n.TranslatableString;
@@ -48,22 +49,16 @@ public class HasUsername_open {
 
     public static class ActionDomainEvent extends IsisModuleExtSecmanApplib.ActionDomainEvent<HasUsername_open> {}
 
-    public ApplicationUser act() {
+    @MemberSupport public ApplicationUser act() {
         if (target == null || target.getUsername() == null) {
             return null;
         }
         return applicationUserRepository.findByUsername(target.getUsername()).orElse(null);
     }
 
-    public boolean hideAct() {
-        return target instanceof ApplicationUser;
-    }
-
-    public TranslatableString disableAct() {
-        if (target == null || target.getUsername() == null) {
-            return TranslatableString.tr("No username");
-        }
-        return null;
+    @MemberSupport public boolean hideAct() { return target instanceof ApplicationUser; }
+    @MemberSupport public TranslatableString disableAct() {
+        return target == null || target.getUsername() == null ? TranslatableString.tr("No username") : null;
     }
 
 

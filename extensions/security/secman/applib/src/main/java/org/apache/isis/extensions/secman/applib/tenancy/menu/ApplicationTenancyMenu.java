@@ -26,8 +26,10 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -51,70 +53,76 @@ public class ApplicationTenancyMenu {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationTenancyMenu";
 
-    // -- domain event classes
-    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApplib.PropertyDomainEvent<ApplicationTenancyMenu, T> {}
-    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApplib.CollectionDomainEvent<ApplicationTenancyMenu, T> {}
-    public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationTenancyMenu> {}
+    public static abstract class ActionDomainEvent<T> extends IsisModuleExtSecmanApplib.ActionDomainEvent<T> {}
 
     @Inject private ApplicationTenancyRepository applicationTenancyRepository;
 
-    // -- iconName
+
+    @ObjectSupport
     public String iconName() {
         return "applicationTenancy";
     }
 
 
-    // -- findTenancies
-    public static class FindTenanciesDomainEvent extends ActionDomainEvent {}
 
     @Action(
-            domainEvent = FindTenanciesDomainEvent.class,
+            domainEvent = findTenancies.ActionEvent.class,
             semantics = SemanticsOf.SAFE
             )
     @ActionLayout(sequence = "100.30.1")
-    public Collection<? extends ApplicationTenancy> findTenancies(
-            @Parameter(optionality = Optionality.OPTIONAL)
-            @ParameterLayout(named = "Partial Name Or Path", describedAs = "String to search for, wildcard (*) can be used")
-            @MinLength(1) // for auto-complete
-            final String partialNameOrPath) {
-        return applicationTenancyRepository.findByNameOrPathMatchingCached(partialNameOrPath);
+    public class findTenancies{
+
+        public class ActionEvent extends ActionDomainEvent<findTenancies> {}
+
+        @MemberSupport public Collection<? extends ApplicationTenancy> act(
+                @Parameter(optionality = Optionality.OPTIONAL)
+                @ParameterLayout(named = "Partial Name Or Path", describedAs = "String to search for, wildcard (*) can be used")
+                @MinLength(1) // for auto-complete
+                final String partialNameOrPath) {
+            return applicationTenancyRepository.findByNameOrPathMatchingCached(partialNameOrPath);
+        }
     }
 
 
-    // -- newTenancy
-    public static class NewTenancyDomainEvent extends ActionDomainEvent {}
 
     @Action(
-            domainEvent = NewTenancyDomainEvent.class,
+            domainEvent = newTenancy.ActionEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
             )
     @ActionLayout(sequence = "100.30.3")
-    public ApplicationTenancy newTenancy(
-            @Parameter(maxLength = ApplicationTenancy.Name.MAX_LENGTH)
-            @ParameterLayout(named = "Name", typicalLength = ApplicationTenancy.Name.TYPICAL_LENGTH)
-            final String name,
-            @Parameter(maxLength = ApplicationTenancy.Path.MAX_LENGTH)
-            @ParameterLayout(named = "Path")
-            final String path,
-            @Parameter(optionality = Optionality.OPTIONAL)
-            @ParameterLayout(named = "Parent")
-            final ApplicationTenancy parent) {
-        return applicationTenancyRepository.newTenancy(name, path, parent);
+    public class newTenancy{
+
+        public class ActionEvent extends ActionDomainEvent<newTenancy> {}
+
+        @MemberSupport public ApplicationTenancy act(
+                @Parameter(maxLength = ApplicationTenancy.Name.MAX_LENGTH)
+                @ParameterLayout(named = "Name", typicalLength = ApplicationTenancy.Name.TYPICAL_LENGTH)
+                final String name,
+                @Parameter(maxLength = ApplicationTenancy.Path.MAX_LENGTH)
+                @ParameterLayout(named = "Path")
+                final String path,
+                @Parameter(optionality = Optionality.OPTIONAL)
+                @ParameterLayout(named = "Parent")
+                final ApplicationTenancy parent) {
+            return applicationTenancyRepository.newTenancy(name, path, parent);
+        }
+
     }
 
 
-    // -- allTenancies
-    public static class AllTenanciesDomainEvent extends ActionDomainEvent {}
-
     @Action(
-            domainEvent = AllTenanciesDomainEvent.class,
+            domainEvent = allTenancies.ActionEvent.class,
             semantics = SemanticsOf.SAFE,
             restrictTo = RestrictTo.PROTOTYPING
             )
     @ActionLayout(sequence = "100.30.4")
-    public Collection<? extends ApplicationTenancy> allTenancies() {
-        return applicationTenancyRepository.allTenancies();
-    }
+    public class allTenancies{
 
+        public class ActionEvent extends ActionDomainEvent<allTenancies> {}
+
+        @MemberSupport public Collection<? extends ApplicationTenancy> act() {
+            return applicationTenancyRepository.allTenancies();
+        }
+    }
 
 }

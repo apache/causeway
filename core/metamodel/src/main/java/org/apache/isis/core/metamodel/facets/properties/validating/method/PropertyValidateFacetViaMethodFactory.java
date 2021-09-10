@@ -16,63 +16,43 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.properties.validating.method;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.services.i18n.TranslationContext;
-import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
-import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
 import lombok.val;
 
 public class PropertyValidateFacetViaMethodFactory
-extends MethodPrefixBasedFacetFactoryAbstract  {
-
-    private static final String PREFIX = MethodLiteralConstants.VALIDATE_PREFIX;
+extends MemberSupportFacetFactoryAbstract  {
 
     @Inject
     public PropertyValidateFacetViaMethodFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.PROPERTIES_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
+        super(mmc, FeatureType.PROPERTIES_ONLY, MemberSupportPrefix.VALIDATE);
     }
 
     @Override
-    public void process(final ProcessMethodContext processMethodContext) {
+    protected void search(
+            final ProcessMethodContext processMethodContext,
+            final MethodFinder methodFinder) {
 
-        attachValidateFacetIfValidateMethodIsFound(processMethodContext);
-    }
-
-    private void attachValidateFacetIfValidateMethodIsFound(final ProcessMethodContext processMethodContext) {
-
-        val cls = processMethodContext.getCls();
         val getterMethod = processMethodContext.getMethod();
+        val argType = getterMethod.getReturnType();
 
-        val namingConvention = processMethodContext.memberSupportCandidates(PREFIX);
-        val returnType = getterMethod.getReturnType();
+        methodFinder
+        .streamMethodsMatchingSignature(new Class[] { argType })
+        .peek(processMethodContext::removeMethod)
+        .forEach(validateMethod->{
+            addFacet(
+                    new PropertyValidateFacetViaMethod(
+                            validateMethod, processMethodContext.getFacetHolder()));
+        });
 
-        val validateMethod = MethodFinder.findMethod_returningText(
-                cls,
-                namingConvention,
-                new Class[] { returnType })
-                .findFirst()
-                .orElse(null);
-        if (validateMethod == null) {
-            return;
-        }
-        processMethodContext.removeMethod(validateMethod);
-
-        val facetHolder = processMethodContext.getFacetHolder();
-        // sadness: same as in TranslationFactory
-        val translationContext = TranslationContext.forTranslationContextHolder(facetHolder.getFeatureIdentifier());
-        addFacet(
-                new PropertyValidateFacetViaMethod(
-                        validateMethod, translationContext, facetHolder));
     }
-
 
 }

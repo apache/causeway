@@ -16,8 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.objectvalue.typicallen;
+
+import java.util.function.BiConsumer;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -31,13 +32,13 @@ implements TypicalLengthFacet {
         return TypicalLengthFacet.class;
     }
 
-    public TypicalLengthFacetAbstract(
+    protected TypicalLengthFacetAbstract(
             final int typicalLength,
             final FacetHolder holder) {
         super(type(), holder, typicalLength);
     }
 
-    public TypicalLengthFacetAbstract(
+    protected TypicalLengthFacetAbstract(
             final int typicalLength,
             final FacetHolder holder,
             final Facet.Precedence precedence) {
@@ -47,16 +48,17 @@ implements TypicalLengthFacet {
     // -- REPORTING
 
     @Override
-    protected String toStringValues() {
-        final int typicalLength = value();
-        return typicalLength == 0
-                ? "default"
-                : String.valueOf(typicalLength);
+    protected String getAttributeNameForValue() {
+        return "typicalLength";
     }
 
     @Override
-    protected String getAttributeNameForValue() {
-        return "typicalLength";
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        final int typicalLength = value();
+        visitor.accept("typicalLength", typicalLength == 0
+                ? "default"
+                : String.valueOf(typicalLength));
     }
 
 

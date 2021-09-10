@@ -16,12 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -38,6 +40,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
+import lombok.Getter;
 import lombok.val;
 
 public class OneToManyAssociationDefault
@@ -166,7 +169,8 @@ implements OneToManyAssociation {
         return 0; // n/a
     }
 
-
+    @Getter(lazy=true, onMethod_ = {@Override})
+    private final boolean explicitlyAnnotated = calculateIsExplicitlyAnnotated();
 
     // -- toString
 
@@ -177,6 +181,14 @@ implements OneToManyAssociation {
         str.append(",");
         str.append("type", getSpecification() == null ? "unknown" : getSpecification().getShortIdentifier());
         return str.toString();
+    }
+
+    // -- HELPER
+
+    private boolean calculateIsExplicitlyAnnotated() {
+        val javaMethod = getFacetedMethod().getMethod();
+        return _Annotations.synthesizeInherited(javaMethod, Collection.class).isPresent()
+                || _Annotations.synthesizeInherited(javaMethod, CollectionLayout.class).isPresent();
     }
 
 

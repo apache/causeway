@@ -16,10 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.spec;
 
-import java.io.Externalizable;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
@@ -421,9 +419,6 @@ extends
         return getBeanSort().isMixin();
     }
 
-    boolean isViewModelCloneable(ManagedObject targetAdapter);
-    boolean isWizard();
-
     //TODO this predicate can now be answered by getBeanSort().isAbstract(), we can retire any old logic
     boolean isAbstract();
 
@@ -466,8 +461,8 @@ extends
 
         final Object newInstance;
         try {
-            newInstance = cls.newInstance();
-        } catch (final IllegalAccessException | InstantiationException e) {
+            newInstance = cls.getDeclaredConstructor().newInstance();
+        } catch (final Throwable e) {
             throw new UnrecoverableException("Failed to create instance of type " + getFullIdentifier(), e);
         }
 
@@ -559,17 +554,14 @@ extends
     }
 
     /**
-     * @return whether corresponding class implements {@link java.io.Serializable} or
-     * {@link java.io.Externalizable}.
+     * @return whether corresponding class implements {@link java.io.Serializable}.
      * @apiNote: per se does not tell what recreation strategy to use, the corresponding class
      * might be an entity or a view-model or a value with eg. encodable semantics, which have
      * different object recreation mechanics
      * @since 2.0.0
      */
     default boolean isSerializable() {
-        return
-                Serializable.class.isAssignableFrom(getCorrespondingClass())
-                || Externalizable.class.isAssignableFrom(getCorrespondingClass());
+        return Serializable.class.isAssignableFrom(getCorrespondingClass());
     }
 
     default String fqcn() {

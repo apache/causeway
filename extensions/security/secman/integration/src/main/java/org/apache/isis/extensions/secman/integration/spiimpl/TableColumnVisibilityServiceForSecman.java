@@ -21,11 +21,12 @@ package org.apache.isis.extensions.secman.integration.spiimpl;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.tablecol.TableColumnVisibilityService;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -43,11 +44,12 @@ import lombok.val;
 public class TableColumnVisibilityServiceForSecman implements TableColumnVisibilityService {
 
     final MeService meService;
+    final FactoryService factoryService;
     final SpecificationLoader specificationLoader;
 
     @Override
     public boolean hides(Class<?> elementType, String memberId) {
-        val me = meService.me();
+        val me = factoryService.mixin(MeService.me.class, meService).act();
         val permissionSet = me.getPermissionSet();
 
         final boolean granted = specificationLoader.specForType(elementType)

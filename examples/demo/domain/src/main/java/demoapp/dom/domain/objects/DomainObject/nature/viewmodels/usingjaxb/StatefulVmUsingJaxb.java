@@ -33,16 +33,19 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Title;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
 @XmlRootElement(name = "root")                              // <.>
@@ -54,7 +57,7 @@ import lombok.val;
 )
 public class StatefulVmUsingJaxb implements HasAsciiDocDescription {
 
-    public String title() {
+    @ObjectSupport public String title() {
         return String.format("%s; %s children", getMessage(), getChildren().size());
     }
 
@@ -100,8 +103,8 @@ public class StatefulVmUsingJaxb implements HasAsciiDocDescription {
         children.remove(child);
         return this;
     }
-    public List<Child> choices0RemoveChild() { return getChildren(); }
-    public String disableRemoveChild() {
+    @MemberSupport public List<Child> choices0RemoveChild() { return getChildren(); }
+    @MemberSupport public String disableRemoveChild() {
         return choices0RemoveChild().isEmpty()? "No children to remove" : null;
     }
 //end::addChild[]

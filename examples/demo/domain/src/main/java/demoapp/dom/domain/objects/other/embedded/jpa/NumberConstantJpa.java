@@ -28,14 +28,16 @@ import org.springframework.context.annotation.Profile;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
+import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
-import demoapp.dom.domain.objects.other.embedded.ComplexNumber;
-import demoapp.dom.domain.objects.other.embedded.persistence.NumberConstantEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import demoapp.dom.domain.objects.other.embedded.ComplexNumber;
+import demoapp.dom.domain.objects.other.embedded.persistence.NumberConstantEntity;
 
 @Profile("demo-jpa")
 //tag::class[]
@@ -44,7 +46,7 @@ import lombok.Setter;
       schema = "demo",
       name = "NumberConstantJpa"
 )
-@EntityListeners(JpaEntityInjectionPointResolver.class)
+@EntityListeners(IsisEntityListener.class)
 @DomainObject(logicalTypeName = "demo.NumberConstantEntity")
 @NoArgsConstructor
 public class NumberConstantJpa
@@ -53,7 +55,7 @@ public class NumberConstantJpa
     // ...
 
 //end::class[]
-    public String title() {
+    @ObjectSupport public String title() {
         return getName();
     }
 

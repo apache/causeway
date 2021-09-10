@@ -20,6 +20,7 @@ package demoapp.dom.domain.actions.Action.associateWith;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 
 import lombok.RequiredArgsConstructor;
 
@@ -37,11 +38,11 @@ public class ActionAssociateWithVm_updateOtherProperty {
 
     private final ActionAssociateWithVm actionAssociateWithVm;
 
-    public ActionAssociateWithVm act(String newValue) {
+    @MemberSupport public ActionAssociateWithVm act(final String newValue) {
         actionAssociateWithVm.setOtherProperty(newValue);
         return actionAssociateWithVm;
     }
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return actionAssociateWithVm.getOtherProperty();
     }
 }

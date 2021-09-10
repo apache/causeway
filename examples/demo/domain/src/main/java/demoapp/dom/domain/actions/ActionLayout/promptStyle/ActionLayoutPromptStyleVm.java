@@ -27,14 +27,15 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Title;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.Setter;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -46,11 +47,10 @@ import lombok.Setter;
 )
 public class ActionLayoutPromptStyleVm implements HasAsciiDocDescription {
 
-    public String title() {
+    @ObjectSupport public String title() {
         return "ActionLayout#promptStyle";
     }
 
-    @Title
     @Property(editing = Editing.DISABLED)
     @PropertyLayout(fieldSetId = "general", sequence = "1")
     @XmlElement(required = true)

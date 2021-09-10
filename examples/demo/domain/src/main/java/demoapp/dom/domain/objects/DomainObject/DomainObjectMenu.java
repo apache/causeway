@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -46,7 +47,7 @@ public class DomainObjectMenu {
     @ActionLayout(cssClassFa="fa-question-circle", describedAs = "Search object in prompt")
     public void autoComplete(){
     }
-    public String disableAutoComplete(){
+    @MemberSupport public String disableAutoComplete(){
         return "Search object in prompt" +
                  " (not yet implemented in demo)";
     }
@@ -57,7 +58,7 @@ public class DomainObjectMenu {
     @ActionLayout(cssClassFa="fa-list-ul", describedAs = "Choose 'reference data' object (one of a bounded set) in prompt")
     public void bounded(){
     }
-    public String disableBounded(){
+    @MemberSupport public String disableBounded(){
         return "Choose 'reference data' object (one of a bounded set) in prompt" +
                  " (not yet implemented in demo)";
     }
@@ -68,7 +69,7 @@ public class DomainObjectMenu {
     @ActionLayout(cssClassFa="fa-pencil-alt", describedAs = "Default editability of properties")
     public void editing() {
     }
-    public String disableEditing(){
+    @MemberSupport public String disableEditing(){
         return "Default editability of properties" +
                  " (not yet implemented in demo)";
     }
@@ -87,7 +88,7 @@ public class DomainObjectMenu {
     @ActionLayout(cssClassFa="fa-tools", describedAs = "For mixins, override the default method name")
     public void mixinMethod() {
     }
-    public String disableMixinMethod(){
+    @MemberSupport public String disableMixinMethod(){
         return "For mixins, override the default method name" +
                  " (not yet implemented in demo)";
     }
@@ -101,7 +102,7 @@ public class DomainObjectMenu {
         viewModel.setMessage(message);
         return viewModel;
     }
-    public String default0NatureStateful() {
+    @MemberSupport public String default0NatureStateful() {
         return "Some initial state";
     }
 
@@ -114,7 +115,7 @@ public class DomainObjectMenu {
         viewModel.setMessage(message);
         return viewModel;
     }
-    public String default0NatureStatefulRefsEntity() {
+    @MemberSupport public String default0NatureStatefulRefsEntity() {
         return "Some initial state";
     }
 
@@ -124,7 +125,7 @@ public class DomainObjectMenu {
     @ActionLayout(cssClassFa="fa-circle", describedAs = "Explicitly specify the logical type name")
     public void logicalTypeName() {
     }
-    public String disableLogicalTypeName(){
+    @MemberSupport public String disableLogicalTypeName(){
         return "Explicitly specify the object type alias" +
                  " (not yet implemented in demo)";
     }
@@ -135,7 +136,7 @@ public class DomainObjectMenu {
     @ActionLayout(cssClassFa="fa-asterisk", describedAs = "Default class of the domain event emitted when interacting with the domain object's actions, properties or collections")
     public void xxxDomainEvent() {
     }
-    public String disableXxxDomainEvent(){
+    @MemberSupport public String disableXxxDomainEvent(){
         return "Default class of the domain event emitted when interacting with the domain object's actions, properties or collections" +
                  " (not yet implemented in demo)";
     }
@@ -146,7 +147,7 @@ public class DomainObjectMenu {
     @ActionLayout(cssClassFa="fa-redo", describedAs = "Class of the lifecycle event emitted when the domain entity transitions through its persistence lifecycle")
     public void xxxLifecycleEvent() {
     }
-    public String disableXxxLifecycleEvent(){
+    @MemberSupport public String disableXxxLifecycleEvent(){
         return "Class of the lifecycle event emitted when the domain entity transitions through its persistence lifecycle" +
                  " (not yet implemented in demo)";
     }

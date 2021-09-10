@@ -16,8 +16,8 @@ For every Maven module that includes JPA entities, add the following dependency:
 ----
 <dependencies>
     <dependency>
-        <groupId>org.apache.isis.mavendeps</groupId>
-        <artifactId>isis-mavendeps-jpa</artifactId>
+        <groupId>org.apache.isis.persistence</groupId>
+        <artifactId>isis-persistence-jpa-eclipselink</artifactId>
         <type>pom</type>
     </dependency>
 </dependencies>

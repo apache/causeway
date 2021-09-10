@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.internaltestsupport.config;
 
 import java.awt.Color;
@@ -34,7 +33,7 @@ public interface IsisConfigurationLegacy {
     // -- VERSION
 
     public default String getVersion() {
-        return "2.0.0-M5";
+        return "2.0.0-M6";
     }
 
     // --

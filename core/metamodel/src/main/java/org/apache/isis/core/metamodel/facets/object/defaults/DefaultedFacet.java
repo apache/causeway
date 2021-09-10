@@ -16,11 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.defaults;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
@@ -33,7 +31,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
  *
  * <p>
  * The rest of the framework does not used this directly, but instead we infer
- * {@link PropertyDefaultFacet} and {@link ActionDefaultsFacet} from the
+ * {@link PropertyDefaultFacet} from the
  * method's return type / parameter types, and copy over.
  */
 public interface DefaultedFacet extends Facet {

@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.Objects;
@@ -25,10 +24,11 @@ import java.util.UUID;
 import java.util.function.Predicate;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.exceptions.RecoverableException;
-import org.apache.isis.applib.exceptions.unrecoverable.DomainModelException;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.CanVector;
@@ -36,6 +36,7 @@ import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
@@ -45,10 +46,8 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
-import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
-import org.apache.isis.core.metamodel.facets.param.choices.ActionChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.interactions.ActionUsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ActionValidityContext;
@@ -65,6 +64,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 
@@ -422,47 +422,11 @@ implements ObjectAction {
 
     @Override
     public Can<ManagedObject> getDefaults(final ManagedObject target) {
-
-        val actionDefaultsFacet = getFacet(ActionDefaultsFacet.class);
-        if (!actionDefaultsFacet.getPrecedence().isFallback()) {
-
-            // use the old defaultXxx approach
-
-            final int parameterCount = getParameterCount();
-            val parameters = getParameters();
-            final Object[] parameterDefaultPojos;
-
-            parameterDefaultPojos = actionDefaultsFacet.getDefaults(target);
-            if (parameterDefaultPojos.length != parameterCount) {
-                throw new DomainModelException("Defaults array of incompatible size; expected " + parameterCount + " elements, but was " + parameterDefaultPojos.length + " for " + actionDefaultsFacet);
-            }
-            for (int i = 0; i < parameterCount; i++) {
-                if (parameterDefaultPojos[i] != null) {
-                    final ObjectSpecification componentSpec = getSpecificationLoader().loadSpecification(parameterDefaultPojos[i].getClass());
-                    final ObjectSpecification parameterSpec = parameters.getElseFail(i).getSpecification();
-                    // TODO: should implement this instead as a MetaModelValidator
-                    if (!componentSpec.isOfType(parameterSpec)) {
-                        throw new DomainModelException("Defaults type incompatible with parameter " + (i + 1) + " type; expected " + parameterSpec.getFullIdentifier() + ", but was " + componentSpec.getFullIdentifier());
-                    }
-                }
-            }
-
-            final ManagedObject[] parameterDefaultAdapters = new ManagedObject[parameterCount];
-            for (int i = 0; i < parameterCount; i++) {
-                val paramSpec = parameters.getElseFail(i).getSpecification();
-                parameterDefaultAdapters[i] = ManagedObject.of(paramSpec, parameterDefaultPojos[i]);
-            }
-
-            return Can.ofArray(parameterDefaultAdapters);
-
-        }
-
-        // else use the new defaultNXxx approach for each param in turn
+        // use the new defaultNXxx approach for each param in turn
         // (the reflector will have made sure both aren't installed).
         return interactionHead(target)
                 .defaults()
                 .getParamValues();
-
     }
 
     // -- choices
@@ -475,46 +439,30 @@ implements ObjectAction {
         final int parameterCount = getParameterCount();
         CanVector<ManagedObject> paramChoicesVector;
 
-        final ActionChoicesFacet facet = getFacet(ActionChoicesFacet.class);
         val parameters = getParameters();
 
-        if (!facet.getPrecedence().isFallback()) {
-            // using the old choicesXxx() approach
-            paramChoicesVector = facet.getChoices(target,
-                    interactionInitiatedBy);
-
-            // if no options, or not the right number of pojos, then default
-            if (paramChoicesVector == null) {
-                paramChoicesVector = new CanVector<>(parameterCount);
-            } else if (paramChoicesVector.size() != parameterCount) {
-                throw new DomainModelException(
-                        String.format("Choices array of incompatible size; expected %d elements, but was %d for %s",
-                                parameterCount, paramChoicesVector.size(), facet));
-            }
-        } else {
             // use the new choicesNXxx approach for each param in turn
             // (the reflector will have made sure both aren't installed).
 
-            val emptyPendingArgs = Can.<ManagedObject>empty();
-            paramChoicesVector = new CanVector<>(parameterCount);
-            for (int i = 0; i < parameterCount; i++) {
-                val param = parameters.getElseFail(i);
-                val paramSpec = param.getSpecification();
-                val paramFacet = param.getFacet(ActionParameterChoicesFacet.class);
+        val emptyPendingArgs = Can.<ManagedObject>empty();
+        paramChoicesVector = new CanVector<>(parameterCount);
+        for (int i = 0; i < parameterCount; i++) {
+            val param = parameters.getElseFail(i);
+            val paramSpec = param.getSpecification();
+            val paramFacet = param.getFacet(ActionParameterChoicesFacet.class);
 
-                if (paramFacet != null && !paramFacet.getPrecedence().isFallback()) {
+            if (paramFacet != null && !paramFacet.getPrecedence().isFallback()) {
 
-                    val visibleChoices = paramFacet.getChoices(
-                            paramSpec,
-                            interactionHead(target),
-                            emptyPendingArgs,
-                            interactionInitiatedBy);
-                    ObjectActionParameterAbstract.checkChoicesOrAutoCompleteType(
-                            getSpecificationLoader(), visibleChoices, paramSpec);
-                    paramChoicesVector.set(i, visibleChoices);
-                } else {
-                    paramChoicesVector.set(i, Can.empty());
-                }
+                val visibleChoices = paramFacet.getChoices(
+                        paramSpec,
+                        interactionHead(target),
+                        emptyPendingArgs,
+                        interactionInitiatedBy);
+                ObjectActionParameterAbstract.checkChoicesOrAutoCompleteType(
+                        getSpecificationLoader(), visibleChoices, paramSpec);
+                paramChoicesVector.set(i, visibleChoices);
+            } else {
+                paramChoicesVector.set(i, Can.empty());
             }
         }
         return paramChoicesVector;
@@ -524,6 +472,9 @@ implements ObjectAction {
     public boolean isPrototype() {
         return getType().isPrototype();
     }
+
+    @Getter(lazy=true, onMethod_ = {@Override})
+    private final boolean explicitlyAnnotated = calculateIsExplicitlyAnnotated();
 
     /**
      * Internal API, called by the various implementations of
@@ -577,6 +528,12 @@ implements ObjectAction {
 
         return getCommandDtoFactory()
                 .asCommandDto(interactionId, Can.ofSingleton(head), this, argumentAdapters);
+    }
+
+    private boolean calculateIsExplicitlyAnnotated() {
+        val javaMethod = getFacetedMethod().getMethod();
+        return _Annotations.synthesizeInherited(javaMethod, Action.class).isPresent()
+                || _Annotations.synthesizeInherited(javaMethod, ActionLayout.class).isPresent();
     }
 
 }

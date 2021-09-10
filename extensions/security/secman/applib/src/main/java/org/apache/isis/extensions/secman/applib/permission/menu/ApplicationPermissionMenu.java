@@ -26,7 +26,9 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -49,44 +51,47 @@ public class ApplicationPermissionMenu {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationPermissionMenu";
 
-    // -- domain event classes
-    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApplib.PropertyDomainEvent<ApplicationPermissionMenu, T> {}
-    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApplib.CollectionDomainEvent<ApplicationPermissionMenu, T> {}
-    public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationPermissionMenu> {}
+    public static abstract class ActionDomainEvent<T> extends IsisModuleExtSecmanApplib.ActionDomainEvent<T> {}
 
     @Inject private ApplicationPermissionRepository applicationPermissionRepository;
     @Inject private FactoryService factoryService;
 
-    // -- iconName
-    public String iconName() {
+
+    @ObjectSupport public String iconName() {
         return "applicationPermission";
     }
 
 
-    // -- findOrphanedPermissions (action)
-    public static class FindOrphanedPermissionsDomainEvent extends ActionDomainEvent {}
-
     @Action(
-            domainEvent=FindOrphanedPermissionsDomainEvent.class,
+            domainEvent= findOrphanedPermissions.ActionEvent.class,
             semantics = SemanticsOf.SAFE
             )
     @ActionLayout(sequence = "100.50.1")
-    public ApplicationOrphanedPermissionManager findOrphanedPermissions() {
-        return factoryService.viewModel(new ApplicationOrphanedPermissionManager());
+    public class findOrphanedPermissions{
+
+        public class ActionEvent extends ActionDomainEvent<findOrphanedPermissions> {}
+
+        @MemberSupport public ApplicationOrphanedPermissionManager act() {
+            return factoryService.viewModel(new ApplicationOrphanedPermissionManager());
+        }
     }
 
 
-    // -- allPermissions (action)
-    public static class AllPermissionsDomainEvent extends ActionDomainEvent {}
 
     @Action(
-            domainEvent=AllPermissionsDomainEvent.class,
+            domainEvent= allPermissions.ActionEvent.class,
             semantics = SemanticsOf.SAFE,
             restrictTo = RestrictTo.PROTOTYPING
             )
     @ActionLayout(sequence = "100.50.2")
-    public Collection<? extends ApplicationPermission> allPermissions() {
-        return applicationPermissionRepository.allPermissions();
+    public class allPermissions {
+
+        public class ActionEvent extends ActionDomainEvent<allPermissions> {}
+
+        @MemberSupport public Collection<? extends ApplicationPermission> act() {
+            return applicationPermissionRepository.allPermissions();
+        }
+
     }
 
 

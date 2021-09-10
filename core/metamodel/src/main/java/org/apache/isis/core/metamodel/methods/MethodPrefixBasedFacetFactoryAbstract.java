@@ -20,12 +20,15 @@ package org.apache.isis.core.metamodel.methods;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelVisitingValidatorAbstract;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
@@ -63,18 +66,17 @@ implements MethodPrefixBasedFacetFactory {
     @Override
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
 
-        if(orphanValidation == OrphanValidation.DONT_VALIDATE
-                || getConfiguration().getApplib().getAnnotation().getAction().isExplicit()) {
+        if(orphanValidation == OrphanValidation.DONT_VALIDATE) {
             return;
         }
 
-        val noParamsOnly = getConfiguration().getCore().getMetaModel().getValidator().isNoParamsOnly();
-
-        programmingModel.addValidator(new MetaModelVisitingValidatorAbstract(programmingModel.getMetaModelContext()) {
+        programmingModel
+        .addValidator(new MetaModelVisitingValidatorAbstract(programmingModel.getMetaModelContext()) {
 
             @Override
             public String toString() {
-                return "MetaModelValidatorVisiting.Visitor : MethodPrefixBasedFacetFactoryAbstract : " + prefixes.toList().toString();
+                return "MetaModelValidatorVisiting.Visitor : MethodPrefixBasedFacetFactoryAbstract : " +
+                        prefixes.toList().toString();
             }
 
             @Override
@@ -84,11 +86,22 @@ implements MethodPrefixBasedFacetFactory {
                     return;
                 }
 
+                if(spec instanceof ObjectSpecificationAbstract
+                        && ((ObjectSpecificationAbstract)spec).getIntrospectionPolicy()
+                            .getMemberAnnotationPolicy().isMemberAnnotationsRequired()) {
+                    return; // skip orphaned method validation if annotations are required
+                }
+
+
                 // as an optimization only checking declared members (skipping inherited ones)
 
                 // ensure accepted actions do not have any of the reserved prefixes
                 spec.streamDeclaredActions(MixedIn.EXCLUDED)
                 .forEach(objectAction -> {
+
+                    if(((ObjectMemberAbstract)objectAction).isExplicitlyAnnotated()) {
+                        return; // thats always allowed, check next
+                    }
 
                     val actionId = objectAction.getId();
 
@@ -98,12 +111,11 @@ implements MethodPrefixBasedFacetFactory {
 
                             val explanation =
                                     objectAction.getParameterCount() > 0
-                                            && noParamsOnly
-                                            && (MethodLiteralConstants.HIDE_PREFIX.equals(prefix)
-                                            || MethodLiteralConstants.DISABLE_PREFIX.equals(prefix))
-                                            ? " (such methods must have no parameters, '"
-                                            + "isis.core.meta-model.validator.no-params-only"
-                                            + "' config property)"
+                                            && (MemberSupportPrefix.HIDE.getMethodNamePrefixes().contains(prefix)
+                                                    || MemberSupportPrefix.DISABLE.getMethodNamePrefixes().contains(prefix))
+                                            ? " (such methods must not have parameters, '"
+                                                + "isis.core.meta-model.validator.no-params-only"
+                                                + "' config property)"
                                             : "";
 
                             val messageFormat = "%s#%s: has prefix %s, is probably intended as a supporting method "
@@ -129,10 +141,14 @@ implements MethodPrefixBasedFacetFactory {
 
     protected boolean isPropertyOrMixinMain(final ProcessMethodContext processMethodContext) {
         return processMethodContext.isMixinMain()
-                || (
-                        processMethodContext.getFeatureType()!=null // null check, yet to support some JUnit tests
-                        && processMethodContext.getFeatureType().isProperty()
-                   );
+                || (processMethodContext.getFeatureType()!=null // null check, yet to support some JUnit tests
+                        && processMethodContext.getFeatureType().isProperty());
+    }
+
+    protected boolean isCollectionOrMixinMain(final ProcessMethodContext processMethodContext) {
+        return processMethodContext.isMixinMain()
+                || (processMethodContext.getFeatureType()!=null // null check, yet to support some JUnit tests
+                        && processMethodContext.getFeatureType().isCollection());
     }
 
     // -- HELPER

@@ -16,12 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.applib.spec;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
 import java.lang.reflect.Method;
+
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.commons.internal.reflection._ClassCache;
+
+import lombok.val;
 
 /**
  * Adapter to make it easy to write {@link Specification}s.
@@ -52,12 +54,21 @@ public abstract class AbstractSpecification<T> implements Specification {
     }
 
     private static Class<?> findExpectedType(final Class<?> fromClass) {
+
+        val classCache = _ClassCache.getInstance();
+
         for (Class<?> c = fromClass; c != Object.class; c = c.getSuperclass()) {
-            for (final Method method : c.getDeclaredMethods()) {
-                if (isSatisfiesSafelyMethod(method)) {
-                    return method.getParameterTypes()[0];
-                }
+
+            val methodFound = classCache
+            .streamDeclaredMethods(c)
+            .filter(AbstractSpecification::isSatisfiesSafelyMethod)
+            .findFirst()
+            .orElse(null);
+
+            if(methodFound!=null) {
+                return methodFound.getParameterTypes()[0];
             }
+
         }
 
         throw new Error("Cannot determine correct type for satisfiesSafely() method.");

@@ -46,8 +46,7 @@ public class ApplicationUser_updateName {
 
     private final ApplicationUser target;
 
-    @MemberSupport
-    public ApplicationUser act(
+    @MemberSupport public ApplicationUser act(
             @ApplicationUser.FamilyName
             final String familyName,
             @ApplicationUser.GivenName
@@ -61,28 +60,14 @@ public class ApplicationUser_updateName {
         return target;
     }
 
-    @MemberSupport
-    public String default0Act() {
-        return target.getFamilyName();
-    }
-
-    @MemberSupport
-    public String default1Act() {
-        return target.getGivenName();
-    }
-
-    @MemberSupport
-    public String default2Act() {
-        return target.getKnownAs();
-    }
-
-    @MemberSupport
-    public String disableAct() {
+    @MemberSupport public String default0Act() { return target.getFamilyName(); }
+    @MemberSupport public String default1Act() { return target.getGivenName(); }
+    @MemberSupport public String default2Act() { return target.getKnownAs(); }
+    @MemberSupport public String disableAct() {
         return target.isForSelfOrRunAsAdministrator()? null: "Can only update your own user record.";
     }
 
-    @MemberSupport
-    public String validateAct(final String familyName, final String givenName, final String knownAs) {
+    @MemberSupport public String validateAct(final String familyName, final String givenName, final String knownAs) {
         if(familyName != null && givenName == null) {
             return "Must provide given name if family name has been provided.";
         }

@@ -30,21 +30,24 @@ import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.springframework.context.annotation.Profile;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
+import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
-import org.springframework.context.annotation.Profile;
 
-import demoapp.dom.types.isisext.asciidocs.persistence.IsisAsciiDocEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import demoapp.dom.types.isisext.asciidocs.persistence.IsisAsciiDocEntity;
 
 @Profile("demo-jpa")
 //tag::class[]
@@ -53,7 +56,7 @@ import lombok.Setter;
       schema = "demo",
       name = "IsisAsciiDocJpa"
 )
-@EntityListeners(JpaEntityInjectionPointResolver.class)
+@EntityListeners(IsisEntityListener.class)
 @DomainObject(
       logicalTypeName = "demo.IsisAsciiDocEntity"
 )
@@ -62,7 +65,7 @@ public class IsisAsciiDocJpa
         extends IsisAsciiDocEntity {
 
 //end::class[]
-    public IsisAsciiDocJpa(AsciiDoc initialValue) {
+    public IsisAsciiDocJpa(final AsciiDoc initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
@@ -72,7 +75,7 @@ public class IsisAsciiDocJpa
     @GeneratedValue
     private Long id;
 
-    public String title() {
+    @ObjectSupport public String title() {
         return "AsciiDoc JPA entity: " +
             bookmarkService.bookmarkForElseFail(this).getIdentifier();
     }

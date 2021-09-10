@@ -29,7 +29,9 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Publishing;
@@ -56,14 +58,14 @@ public class ActionCommandPublishingJdo
     // ...
 //end::class[]
 
-    public ActionCommandPublishingJdo(String initialValue) {
+    public ActionCommandPublishingJdo(final String initialValue) {
         this.property = initialValue;
         this.propertyCommandDisabled = initialValue;
         this.propertyMetaAnnotated = initialValue;
         this.propertyMetaAnnotatedOverridden = initialValue;
     }
 
-    public String title() {
+    @ObjectSupport public String title() {
         return "Action#commandPublishing (JDO)";
     }
 
@@ -106,7 +108,7 @@ public class ActionCommandPublishingJdo
         setProperty(value);
         return this;
     }
-    public String default0UpdatePropertyUsingAnnotation() {
+    @MemberSupport public String default0UpdatePropertyUsingAnnotation() {
         return getProperty();
 //tag::annotation[]
     }
@@ -129,7 +131,7 @@ public class ActionCommandPublishingJdo
         setPropertyCommandDisabled(value);
         return this;
     }
-    public String default0UpdatePropertyCommandDisabledUsingAnnotation() {
+    @MemberSupport public String default0UpdatePropertyCommandDisabledUsingAnnotation() {
         return getPropertyCommandDisabled();
 //tag::annotation-2[]
     }
@@ -152,7 +154,7 @@ public class ActionCommandPublishingJdo
         setPropertyMetaAnnotated(value);
         return this;
     }
-    public String default0UpdatePropertyUsingMetaAnnotation() {
+    @MemberSupport public String default0UpdatePropertyUsingMetaAnnotation() {
         return getPropertyMetaAnnotated();
 //tag::meta-annotation[]
     }
@@ -177,7 +179,7 @@ public class ActionCommandPublishingJdo
         setPropertyMetaAnnotatedOverridden(value);
         return this;
     }
-    public String default0UpdatePropertyUsingMetaAnnotationButOverridden() {
+    @MemberSupport public String default0UpdatePropertyUsingMetaAnnotationButOverridden() {
         return getPropertyMetaAnnotatedOverridden();
 //tag::meta-annotation-overridden[]
     }

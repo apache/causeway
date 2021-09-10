@@ -16,15 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -53,6 +55,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
+import lombok.Getter;
 import lombok.val;
 
 public class OneToOneAssociationDefault
@@ -312,6 +315,9 @@ implements OneToOneAssociation {
                 .asCommandDto(interactionId, Can.ofSingleton(head), this, valueAdapterOrNull));
     }
 
+    @Getter(lazy=true, onMethod_ = {@Override})
+    private final boolean explicitlyAnnotated = calculateIsExplicitlyAnnotated();
+
     // -- OBJECT CONTRACT
 
     @Override
@@ -322,6 +328,14 @@ implements OneToOneAssociation {
         str.append("persisted", !isNotPersisted());
         str.append("type", getSpecification().getShortIdentifier());
         return str.toString();
+    }
+
+    // -- HELPER
+
+    private boolean calculateIsExplicitlyAnnotated() {
+        val javaMethod = getFacetedMethod().getMethod();
+        return _Annotations.synthesizeInherited(javaMethod, Property.class).isPresent()
+                || _Annotations.synthesizeInherited(javaMethod, PropertyLayout.class).isPresent();
     }
 
 

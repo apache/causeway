@@ -16,12 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.services;
 
 import javax.inject.Inject;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
@@ -30,13 +28,13 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ActiveProfiles;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.config.IsisModuleCoreConfig;
 import org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.isis.core.metamodel.services.registry.ServiceRegistryDefault;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ActiveProfiles("test")
 @SpringBootTest(classes = {
@@ -46,9 +44,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
         ServiceInjectorLegacyTest.Producers.class,
         ServiceInjectorDefaultTest_validateServices_happy.DomainServiceWithSomeId.class,
         ServiceInjectorDefaultTest_validateServices_happy.DomainServiceWithDifferentId.class,
-        
+
         IsisBeanFactoryPostProcessorForSpring.class
-        
+
 },
 properties = {
         "isis.services.injector.setPrefix=true"
@@ -72,14 +70,10 @@ class ServiceInjectorDefaultTest_validateServices_happy {
 
     @Inject private ServiceRegistry serviceRegistry;
 
-    @BeforeEach
-    void setup() {
-    }
-
     @Test
-    public void validate_DomainServicesWithoutDuplicateIds() {
+    void validate_DomainServicesWithoutDuplicateIds() {
 
-        // ensure we actually test a ServiceRegistryDefault 
+        // ensure we actually test a ServiceRegistryDefault
         assertEquals(ServiceRegistryDefault.class, serviceRegistry.getClass());
 
         // nothing else to check

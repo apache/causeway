@@ -26,11 +26,13 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import demoapp.dom.types.Samples;
 import lombok.RequiredArgsConstructor;
+
+import demoapp.dom.types.Samples;
 
 //tag::class[]
 @Action(
@@ -46,14 +48,16 @@ public class JavaSqlDateHolder_updateReadOnlyPropertyWithChoices {
 
     private final JavaSqlDateHolder holder;
 
-    public JavaSqlDateHolder act(java.sql.Date newValue) {
+    @MemberSupport public JavaSqlDateHolder act(final java.sql.Date newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
-    public java.sql.Date default0Act() {
+
+    @MemberSupport public java.sql.Date default0Act() {
         return holder.getReadOnlyProperty();
     }
-    public List<java.sql.Date> choices0Act() {
+
+    @MemberSupport public List<java.sql.Date> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }

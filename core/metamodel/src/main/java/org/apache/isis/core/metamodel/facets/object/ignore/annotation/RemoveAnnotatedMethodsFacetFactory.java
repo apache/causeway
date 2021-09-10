@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.ignore.annotation;
 
 import java.lang.annotation.Annotation;
@@ -77,15 +76,17 @@ extends FacetFactoryAbstract {
             return;
         }
 
-        final Method[] methods = cls.getMethods();
-        for (final Method method : methods) {
+        getClassCache()
+        .streamPublicMethods(cls)
+        .forEach(method->{
             removeAnnotatedMethods(methodRemover, method, PreDestroy.class);
             removeAnnotatedMethods(methodRemover, method, PostConstruct.class);
             removeAnnotatedMethods(methodRemover, method, Programmatic.class);
             eventHandlerClasses.forEach(eventHandlerClass->{
                 removeAnnotatedMethods(methodRemover, method, eventHandlerClass);
             });
-        }
+        });
+
     }
 
     private static <T extends Annotation> void removeAnnotatedMethods(

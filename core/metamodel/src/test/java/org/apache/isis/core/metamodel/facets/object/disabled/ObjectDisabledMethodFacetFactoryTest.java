@@ -16,56 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.disabled;
 
-import java.lang.reflect.Method;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
+import org.apache.isis.core.metamodel.facets.object.support.ObjectSupportFacetFactoryTestAbstract;
 
-import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.Identifier.Type;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.isis.core.metamodel.facets.object.disabled.method.DisabledObjectFacetViaMethod;
-import org.apache.isis.core.metamodel.facets.object.disabled.method.DisabledObjectFacetViaMethodFactory;
-
-public class ObjectDisabledMethodFacetFactoryTest extends AbstractFacetFactoryTest {
-
-    private DisabledObjectFacetViaMethodFactory facetFactory;
-
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-        facetFactory = new DisabledObjectFacetViaMethodFactory(metaModelContext);
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        facetFactory = null;
-        super.tearDown();
-    }
+public class ObjectDisabledMethodFacetFactoryTest
+extends ObjectSupportFacetFactoryTestAbstract {
 
     public void testDisabledMethodPickedUpAndMethodRemoved() {
-        final Class<?>[] params = new Class<?>[1];
-        params[0] = Identifier.Type.class;
-
         class Customer {
             @SuppressWarnings("unused")
-            public String disabled(final Type type) {
+            public String disabled() {
                 return null;
             }
         }
-        final Method disabledMethod = findMethod(Customer.class, "disabled", params);
-        assertNotNull(disabledMethod);
-
-        final ProcessClassContext processClassContext = new ProcessClassContext(Customer.class, methodRemover, facetHolder);
-        facetFactory.process(processClassContext);
-
-        final Facet facet = facetHolder.getFacet(DisabledObjectFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof DisabledObjectFacetViaMethod);
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(disabledMethod));
+        assertPicksUp(1, facetFactory, Customer.class, ObjectSupportMethod.DISABLED, DisabledObjectFacet.class);
     }
 
 }

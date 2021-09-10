@@ -33,8 +33,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Domain;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
@@ -60,7 +62,6 @@ import org.apache.isis.testing.fixtures.applib.personas.BuilderScriptAbstract;
 import org.apache.isis.testing.fixtures.applib.personas.PersonaWithBuilderScript;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.val;
 
@@ -333,18 +334,15 @@ public class FixtureScripts {
             eventBusService.post(new FixturesInstalledEvent(this));
         }
     }
-
-    public boolean hideRunFixtureScript() {
+    @MemberSupport public boolean hideRunFixtureScript() {
         return specification == null;
     }
-
-    public String disableRunFixtureScript() {
+    @MemberSupport public String disableRunFixtureScript() {
         return getFixtureScriptByFriendlyName().isEmpty()
                 ? String.format("No fixture scripts found under package '%s'", specification.getPackagePrefix())
                 : null;
     }
-
-    public String default0RunFixtureScript() {
+    @MemberSupport public String default0RunFixtureScript() {
         val defaultFixtureScript = defaultFromFixtureScriptsSpecification();
         if(defaultFixtureScript != null) {
             return defaultFixtureScript;
@@ -354,19 +352,16 @@ public class FixtureScripts {
                 ? choices.iterator().next()
                 : null;
     }
-
-    private String defaultFromFixtureScriptsSpecification() {
+    @Domain.Exclude private String defaultFromFixtureScriptsSpecification() {
         Class<? extends FixtureScript> defaultScript = specification.getRunScriptDefaultScriptClass();
         return defaultScript != null
                 ? findFixtureScriptNameFor(defaultScript)
                 : null;
     }
-
-    public Set<String> choices0RunFixtureScript() {
+    @MemberSupport public Set<String> choices0RunFixtureScript() {
         return fixtureScriptByFriendlyName.keySet();
     }
-
-    public String validateRunFixtureScript(final String fixtureScriptName, final String parameters) {
+    @MemberSupport public String validateRunFixtureScript(final String fixtureScriptName, final String parameters) {
         return fixtureScriptByFriendlyName.get(fixtureScriptName).validateRun(parameters);
     }
 
@@ -409,8 +404,7 @@ public class FixtureScripts {
         }
         return results.get(0).getObject();
     }
-
-    public boolean hideRecreateObjectsAndReturnFirst() {
+    @MemberSupport public boolean hideRecreateObjectsAndReturnFirst() {
         return specification == null || specification.getRecreateScriptClass() == null;
     }
 
@@ -435,7 +429,7 @@ public class FixtureScripts {
 
     @SafeVarargs
     @Programmatic
-    public final void runPersonas(PersonaWithBuilderScript<? extends BuilderScriptAbstract<?>> ... personaScripts) {
+    public final void runPersonas(final PersonaWithBuilderScript<? extends BuilderScriptAbstract<?>> ... personaScripts) {
         for (val personaWithBuilderScript : personaScripts) {
 
             val script = _Casts.<PersonaWithBuilderScript<BuilderScriptAbstract<Object>>>
@@ -561,7 +555,7 @@ public class FixtureScripts {
 
     // -- HELPERS - LOCAL
 
-    private static FixtureScript toSingleScript(FixtureScript[] fixtureScriptList) {
+    private static FixtureScript toSingleScript(final FixtureScript[] fixtureScriptList) {
 
         if (fixtureScriptList.length == 1) {
             return fixtureScriptList[0];
@@ -569,7 +563,7 @@ public class FixtureScripts {
 
         return new FixtureScript() {
             @Override
-            protected void execute(ExecutionContext executionContext) {
+            protected void execute(final ExecutionContext executionContext) {
                 for (FixtureScript fixtureScript : fixtureScriptList) {
                     executionContext.executeChild(this, fixtureScript);
                 }
@@ -577,37 +571,6 @@ public class FixtureScripts {
         };
 
     }
-
-
-    // -- DEPRECATIONS
-
-    /**
-     * @deprecated renamed to {@link #runPersona(PersonaWithBuilderScript)}
-     */
-    @Programmatic @Deprecated
-    public <T> T fixtureScript(final PersonaWithBuilderScript<BuilderScriptAbstract<T>> persona) {
-        return runPersona(persona);
-    }
-
-    /**
-     * @deprecated renamed to {@link #run(FixtureScript...)}
-     */
-    @Deprecated
-    @Programmatic
-    public void runFixtureScript(final FixtureScript... fixtureScriptList) {
-        run(fixtureScriptList);
-    }
-
-    /**
-     * @deprecated renamed to {@link #runBuilder(BuilderScriptAbstract)}
-     */
-    @Deprecated
-    @Programmatic
-    public <T> T runBuilderScript(final BuilderScriptAbstract<T> builderScript) {
-        return runBuilder(builderScript);
-    }
-
-
 
 
 }

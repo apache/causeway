@@ -31,20 +31,17 @@ public class ProperMemberSupport_property3 {
 
     private final ProperMemberSupport holder;
 
-    @MemberSupport
-    public String prop() {
+    @MemberSupport public String prop() {
         return holder.toString();
     }
 
     // -- IMPERATIVE NAMING AND DESCRIBING
 
-    @MemberSupport
-    public String namedProp() {
+    @MemberSupport public String namedProp() {
         return "named-imperative[property3]";
     }
 
-    @MemberSupport
-    public String describedProp() {
+    @MemberSupport public String describedProp() {
         return "described-imperative[property3]";
     }
 

@@ -21,6 +21,7 @@ package demoapp.dom.domain.properties.PropertyLayout.labelPosition;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.LabelPosition;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -40,7 +41,7 @@ public class PropertyLayoutLabelPositionVm_updateWithMetaAnnotationOverridden {
     private final PropertyLayoutLabelPositionVm propertyLayoutLabelPositionVm;
 
 //tag::meta-annotation-overridden[]
-    public PropertyLayoutLabelPositionVm act(
+    @MemberSupport public PropertyLayoutLabelPositionVm act(
             @LabelPositionTopMetaAnnotation                             // <.>
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(
@@ -53,7 +54,7 @@ public class PropertyLayoutLabelPositionVm_updateWithMetaAnnotationOverridden {
         return propertyLayoutLabelPositionVm;
     }
 //end::meta-annotation-overridden[]
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return propertyLayoutLabelPositionVm.getPropertyUsingMetaAnnotationButOverridden();
     }
 

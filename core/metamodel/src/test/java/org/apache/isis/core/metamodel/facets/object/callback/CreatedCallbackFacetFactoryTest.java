@@ -16,53 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.callback;
 
-import java.lang.reflect.Method;
-
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.CallbackMethod;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacetViaMethod;
 
 public class CreatedCallbackFacetFactoryTest
-extends AbstractFacetFactoryTest {
-
-    private CreatedCallbackFacetFactory facetFactory;
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        facetFactory = new CreatedCallbackFacetFactory(metaModelContext);
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        facetFactory = null;
-        super.tearDown();
-    }
+extends CallbackFacetFactoryTestAbstract {
 
     public void testCreatedLifecycleMethodPickedUpOn() {
         class Customer {
             @SuppressWarnings("unused")
             public void created() {
-            };
+            }
         }
-        final Method method = findMethod(Customer.class, "created");
-
-        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(CreatedCallbackFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof CreatedCallbackFacetViaMethod);
-        final CreatedCallbackFacetViaMethod createdCallbackFacetViaMethod = (CreatedCallbackFacetViaMethod) facet;
-        assertEquals(method, createdCallbackFacetViaMethod.getMethods().getFirstOrFail());
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
+        assertPicksUp(1, facetFactory, Customer.class, CallbackMethod.CREATED, CreatedCallbackFacet.class);
     }
 
 }

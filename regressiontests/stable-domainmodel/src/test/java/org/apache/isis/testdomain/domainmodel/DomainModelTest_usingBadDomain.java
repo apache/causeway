@@ -50,18 +50,20 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.bad.AmbiguousMixinAnnotations;
 import org.apache.isis.testdomain.model.bad.AmbiguousTitle;
 import org.apache.isis.testdomain.model.bad.Configuration_usingInvalidDomain;
-import org.apache.isis.testdomain.model.bad.InvalidContradictingTypeSemantics;
 import org.apache.isis.testdomain.model.bad.InvalidActionOverloading;
+import org.apache.isis.testdomain.model.bad.InvalidContradictingTypeSemantics;
 import org.apache.isis.testdomain.model.bad.InvalidLogicalTypeNameClash;
 import org.apache.isis.testdomain.model.bad.InvalidOrphanedActionSupport;
 import org.apache.isis.testdomain.model.bad.InvalidOrphanedCollectionSupport;
 import org.apache.isis.testdomain.model.bad.InvalidOrphanedPropertySupport;
 import org.apache.isis.testdomain.model.bad.InvalidPropertyAnnotationOnAction;
+import org.apache.isis.testdomain.util.interaction.DomainObjectTesterFactory;
 import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
 
 import lombok.val;
@@ -85,6 +87,7 @@ class DomainModelTest_usingBadDomain {
     @Inject private IsisConfiguration configuration;
     @Inject private IsisSystemEnvironment isisSystemEnvironment;
     @Inject private SpecificationLoader specificationLoader;
+    @Inject private DomainObjectTesterFactory testerFactory;
 
     private DomainModelValidator validator;
 
@@ -102,62 +105,56 @@ class DomainModelTest_usingBadDomain {
 
     @Test
     void ambiguousTitle_shouldFail() {
-        assertTrue(validator.anyMatchesContaining(
+        validator.assertAnyFailuresContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(AmbiguousTitle.class)),
-                "conflict for determining a strategy for retrieval of title"));
+                "conflict for determining a strategy for retrieval of title");
     }
 
     @Test
     void orphanedActionSupport_shouldFail() {
-        assertTrue(validator.anyMatchesContaining(
+        validator.assertAnyFailuresContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedActionSupport.class)),
-                "InvalidOrphanedActionSupport#hideOrphaned: has annotation @MemberSupport, "
-                + "is assumed to support"));
+                "InvalidOrphanedActionSupport#hideOrphaned(): has annotation @Domain.Include, "
+                + "is assumed to support");
 
-        assertTrue(validator.anyMatchesContaining(
-                Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedActionSupport.class)),
-                "InvalidOrphanedActionSupport#hideMe: "
-                + "is assumed to support a property, collection or action. "
-                + "Unmet constraint(s): unsupported method signature or orphaned "
-                + "(not associated with a member)"));
+        val tester = testerFactory.objectTester(InvalidOrphanedActionSupport.class);
+
+        tester.assertValidationFailureOnMember(
+                ProgrammingModelConstants.Validation.ORPHANED_METHOD, "hideMe()");
     }
 
 
     @Test
     void orphanedPropertySupport_shouldFail() {
-        assertTrue(validator.anyMatchesContaining(
+        validator.assertAnyFailuresContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedPropertySupport.class)),
-                "InvalidOrphanedPropertySupport#hideMyProperty: has annotation @MemberSupport, "
-                + "is assumed to support"));
+                "InvalidOrphanedPropertySupport#hideMyProperty(): has annotation @Domain.Include, "
+                + "is assumed to support");
 
-        assertTrue(validator.anyMatchesContaining(
-                Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedPropertySupport.class)),
-                "InvalidOrphanedPropertySupport#hideMe: "
-                + "is assumed to support a property, collection or action. "
-                + "Unmet constraint(s): unsupported method signature or orphaned "
-                + "(not associated with a member)"));
+        val tester = testerFactory.objectTester(InvalidOrphanedPropertySupport.class);
+
+        tester.assertValidationFailureOnMember(
+                ProgrammingModelConstants.Validation.ORPHANED_METHOD, "hideMe()");
     }
 
     @Test
     void orphanedCollectionSupport_shouldFail() {
-        assertTrue(validator.anyMatchesContaining(
+        validator.assertAnyFailuresContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedCollectionSupport.class)),
-                "InvalidOrphanedCollectionSupport#hideMyCollection: has annotation @MemberSupport, "
-                + "is assumed to support"));
+                "InvalidOrphanedCollectionSupport#hideMyCollection(): has annotation @Domain.Include, "
+                + "is assumed to support");
 
-        assertTrue(validator.anyMatchesContaining(
-                Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedCollectionSupport.class)),
-                "InvalidOrphanedCollectionSupport#hideMe: "
-                + "is assumed to support a property, collection or action. "
-                + "Unmet constraint(s): unsupported method signature or orphaned "
-                + "(not associated with a member)"));
+        val tester = testerFactory.objectTester(InvalidOrphanedCollectionSupport.class);
+
+        tester.assertValidationFailureOnMember(
+                ProgrammingModelConstants.Validation.ORPHANED_METHOD, "hideMe()");
     }
 
     @Test
     void actionOverloading_shouldFail() {
-        assertTrue(validator.anyMatchesContaining(
+        validator.assertAnyFailuresContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidActionOverloading.class)),
-                "Action method overloading is not allowed"));
+                "Action method overloading is not allowed");
     }
 
     @Test
@@ -168,24 +165,26 @@ class DomainModelTest_usingBadDomain {
                 InvalidLogicalTypeNameClash.VariantC.class));
     }
 
-    private void assertLogicalTypeNameClashesAmong(Can<Class<?>> types) {
+    private void assertLogicalTypeNameClashesAmong(final Can<Class<?>> types) {
 
         val typeLiteralList = types.stream()
                 .map(t->t.getName())
                 .collect(Collectors.joining(", "));
 
-        assertTrue(types.stream()
-                .anyMatch(t->
-                    validator.anyMatchesContaining(
-                            Identifier.classIdentifier(LogicalType.fqcn(t)),
-                            "Logical type name 'isis.testdomain.InvalidLogicalTypeNameClash' "
-                                    + "mapped to multiple non-abstract classes:\n"
-                                    + typeLiteralList)));
+        val classIdentifiers = types.stream()
+                .map(t->Identifier.classIdentifier(LogicalType.fqcn(t)))
+                .collect(Can.toCan());
+
+        validator.assertAnyOfContainingAnyFailures(
+                classIdentifiers,
+                "Logical type name 'isis.testdomain.InvalidLogicalTypeNameClash' "
+                        + "mapped to multiple non-abstract classes:\n"
+                        + typeLiteralList);
     }
 
     @Test
     void contradictingTypeSemantics_shouldFailValidation() {
-        validator.anyMatchesContaining(
+        validator.assertAnyFailuresContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidContradictingTypeSemantics.class)),
                 "Cannot use @DomainObject and @Value on the same type: "
                 + InvalidContradictingTypeSemantics.class.getName());
@@ -199,9 +198,9 @@ class DomainModelTest_usingBadDomain {
             final String mixinMethodName) {
 
         final String annotationLiteral = "@" + annotationType.getSimpleName();
-        assertTrue(validator.anyMatchesContaining(
+        validator.assertAnyFailuresContaining(
                 Identifier.propertyOrCollectionIdentifier(LogicalType.fqcn(mixinClass), mixinMethodName),
-                String.format("Annotation %s on both method and type level is not allowed", annotationLiteral)));
+                String.format("Annotation %s on both method and type level is not allowed", annotationLiteral));
     }
 
     private static Stream<Arguments> provideAmbiguousMixins() {
@@ -219,9 +218,9 @@ class DomainModelTest_usingBadDomain {
 
     @Test @Disabled("this case has no vaildation refiner yet")
     void invalidPropertyAnnotationOnAction_shouldFail() {
-        assertTrue(validator.anyMatchesContaining(
+        validator.assertAnyFailuresContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidPropertyAnnotationOnAction.class)),
-                "TODO"));
+                "TODO");
     }
 
 //    @Test

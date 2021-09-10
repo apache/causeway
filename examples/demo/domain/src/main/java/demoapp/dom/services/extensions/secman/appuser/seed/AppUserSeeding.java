@@ -18,17 +18,19 @@
  */
 package demoapp.dom.services.extensions.secman.appuser.seed;
 
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.extensions.secman.applib.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
 import org.apache.isis.extensions.secman.applib.user.dom.AccountType;
 import org.apache.isis.extensions.secman.applib.user.fixtures.AbstractUserAndRolesFixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
-import org.springframework.stereotype.Service;
 
-import demoapp.dom._infra.seed.SeedServiceAbstract;
 import static org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionMode.CHANGING;
 import static org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRule.ALLOW;
+
+import demoapp.dom._infra.seed.SeedServiceAbstract;
 
 @Service
 public class AppUserSeeding

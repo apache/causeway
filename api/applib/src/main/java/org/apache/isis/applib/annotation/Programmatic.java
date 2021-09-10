@@ -38,6 +38,8 @@ import java.lang.annotation.Target;
  * It can also be added to a type, meaning that the type is ignored from the metamodel.
  * This is intended as a &quot;get out of jail&quot; for any classes from unit tests, say,
  * that end up on the classpath of integration tests but should otherwise be ignored.
+ * @apiNote synonym for {@link Domain.Exclude}
+ * @see Domain.Exclude
  * @since 1.x {@index}
  */
 @Inherited
@@ -47,5 +49,6 @@ import java.lang.annotation.Target;
         ElementType.FIELD
 })
 @Retention(RetentionPolicy.RUNTIME)
+@Domain.Exclude // meta annotation
 public @interface Programmatic {
 }

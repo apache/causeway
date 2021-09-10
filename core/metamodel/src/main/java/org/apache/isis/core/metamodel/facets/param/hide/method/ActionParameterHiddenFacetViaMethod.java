@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.param.hide.method;
 
 import java.lang.reflect.Constructor;
@@ -41,16 +40,16 @@ extends ActionParameterHiddenFacetAbstract
 implements ImperativeFacet {
 
     @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
-    private final @NonNull Optional<Constructor<?>> ppmFactory;
+    private final @NonNull Optional<Constructor<?>> patConstructor;
 
     public ActionParameterHiddenFacetViaMethod(
             final Method method,
-            final Optional<Constructor<?>> ppmFactory,
+            final Optional<Constructor<?>> patConstructor,
             final FacetHolder holder) {
 
         super(holder);
         this.methods = ImperativeFacet.singleMethod(method);
-        this.ppmFactory = ppmFactory;
+        this.patConstructor = patConstructor;
     }
 
     @Override
@@ -64,8 +63,8 @@ implements ImperativeFacet {
             final Can<ManagedObject> argumentAdapters) {
 
         val method = methods.getFirstOrFail();
-        final Object returnValue = ppmFactory.isPresent()
-                ? ManagedObjects.InvokeUtil.invokeWithPPM(ppmFactory.get(), method, owningAdapter, argumentAdapters)
+        final Object returnValue = patConstructor.isPresent()
+                ? ManagedObjects.InvokeUtil.invokeWithPAT(patConstructor.get(), method, owningAdapter, argumentAdapters)
                 : ManagedObjects.InvokeUtil.invokeAutofit(method, owningAdapter, argumentAdapters);
 
         if(returnValue instanceof Boolean) {
@@ -76,12 +75,6 @@ implements ImperativeFacet {
     }
 
     @Override
-    protected String toStringValues() {
-        val method = methods.getFirstOrFail();
-        return "method=" + method;
-    }
-
-    @Override
     public boolean semanticEquals(final @NonNull Facet otherFacet) {
 
         if(! (otherFacet instanceof ActionParameterHiddenFacetViaMethod)) {
@@ -89,7 +82,7 @@ implements ImperativeFacet {
         }
 
         val other = (ActionParameterHiddenFacetViaMethod)otherFacet;
-        return this.ppmFactory.equals(other.ppmFactory)
+        return this.patConstructor.equals(other.patConstructor)
                 && this.getMethods().equals(other.getMethods());
     }
 

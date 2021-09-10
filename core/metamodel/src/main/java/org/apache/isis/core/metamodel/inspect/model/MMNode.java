@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.Navigable;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.base._Strings;
@@ -62,16 +63,23 @@ public abstract class MMNode {
     protected abstract Stream<MMNode> streamChildNodes();
 
     protected String title;
-    public final String title() {
+
+    //FIXME[ISIS-2774] should be picked up also when declared abstract, yet we work around that
+    @ObjectSupport public final String title() {
         return title==null
                 ? title = createTitle()
                 : title;
     }
-    public abstract String createTitle();
+    protected abstract String createTitle();
 
-    public abstract String iconName();
+    protected abstract String iconSuffix();
 
-    protected String typeToString(Object type) {
+    @ObjectSupport
+    public final String iconName() {
+        return iconSuffix();
+    }
+
+    protected String typeToString(final Object type) {
         if(type instanceof DomainClassDto) {
             return typeToString((DomainClassDto) type);
         }
@@ -80,13 +88,13 @@ public abstract class MMNode {
                 : "void";
     }
 
-    protected String typeToString(DomainClassDto type) {
+    protected String typeToString(final DomainClassDto type) {
         return type!=null
                 ? abbreviate(type.getId())
                 : "void";
     }
 
-    protected String abbreviate(String input) {
+    protected String abbreviate(final String input) {
         return (""+input)
                 .replace("org.apache.isis.core.metamodel.facets.", "».c.m.f.")
                 .replace("org.apache.isis.core.metamodel.", "».c.m.")
@@ -96,7 +104,7 @@ public abstract class MMNode {
                 .replace("java.lang.", "");
     }
 
-    protected String simpleName(String name) {
+    protected String simpleName(final String name) {
         return _Strings.splitThenStream(""+name, ".")
         .reduce((first, second) -> second) // get the last
         .orElse("null");

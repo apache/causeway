@@ -21,25 +21,24 @@ package demoapp.dom.domain.collections.CollectionLayout;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
-
-import lombok.extern.log4j.Log4j2;
 
 @DomainService(
         nature=NatureOfService.VIEW,
         logicalTypeName = "demo.CollectionLayoutMenu"
 )
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
-@Log4j2
+//@Log4j2
 public class CollectionLayoutMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-pen-nib", describedAs = "CSS class to wrap the UI component representing this collection")
     public void cssClass(){
     }
-    public String disableCssClass(){
+    @MemberSupport public String disableCssClass(){
         return "CSS class to wrap the UI component representing this collection" +
                 " (not yet implemented in demo)";
     }
@@ -50,7 +49,7 @@ public class CollectionLayoutMenu {
     @ActionLayout(cssClassFa="fa-atom", describedAs = "View collection as a table, or collapsed, or some other representation if available")
     public void defaultView(){
     }
-    public String disableDefaultView(){
+    @MemberSupport public String disableDefaultView(){
         return "View collection as a table, or collapsed, or some other representation if available" +
                 " (not yet implemented in demo)";
     }
@@ -61,7 +60,7 @@ public class CollectionLayoutMenu {
     @ActionLayout(cssClassFa="fa-comment", describedAs = "Description of the collection, shown as a tooltip")
     public void describedAs(){
     }
-    public String disableDescribedAs(){
+    @MemberSupport public String disableDescribedAs(){
         return "Description of the collection, shown as a tooltip" +
                 " (not yet implemented in demo)";
     }
@@ -72,7 +71,7 @@ public class CollectionLayoutMenu {
     @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of the collection in different contexts")
     public void hidden(){
     }
-    public String disableHidden(){
+    @MemberSupport public String disableHidden(){
         return "Visibility of the collection in different contexts" +
                 " (not yet implemented in demo)";
     }
@@ -83,7 +82,7 @@ public class CollectionLayoutMenu {
     @ActionLayout(cssClassFa="fa-signature", describedAs = "Custom text for the collection's label")
     public void named(){
     }
-    public String disableNamed(){
+    @MemberSupport public String disableNamed(){
         return "Custom text for the collection's label" +
                 " (not yet implemented in demo)";
     }
@@ -93,7 +92,7 @@ public class CollectionLayoutMenu {
     @ActionLayout(cssClassFa="fa-fast-forward", describedAs = "Number of domain objects per page in this collection")
     public void paged(){
     }
-    public String disablePaged(){
+    @MemberSupport public String disablePaged(){
         return "Number of domain objects per page in this collection" +
                 " (not yet implemented in demo)";
     }
@@ -104,11 +103,9 @@ public class CollectionLayoutMenu {
     @ActionLayout(cssClassFa="fa-sort", describedAs = "Sort domain objects in this collection, overriding their default comparator")
     public void sortedBy(){
     }
-    public String disableSortedBy(){
+    @MemberSupport public String disableSortedBy(){
         return "Sort domain objects in this collection, overriding their default comparator" +
                 " (not yet implemented in demo)";
     }
-
-
 
 }

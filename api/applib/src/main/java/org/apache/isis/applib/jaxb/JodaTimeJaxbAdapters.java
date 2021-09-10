@@ -32,8 +32,10 @@ import lombok.experimental.UtilityClass;
 
 /**
  * @since 2.0 {@index}
+ * @deprecated use org.apache.isis.valuetypes.jodatime.applib.jaxb.JodatimeJaxbAdapters instead
  */
 @UtilityClass
+@Deprecated(forRemoval = true, since = "2.0.0-M7")
 public final class JodaTimeJaxbAdapters {
 
     public static class LocalDateToStringAdapter extends XmlAdapter<String, LocalDate> {
@@ -164,7 +166,7 @@ public final class JodaTimeJaxbAdapters {
     }
 
 
-    private static boolean isNullOrEmpty(String x) {
+    private static boolean isNullOrEmpty(final String x) {
         return x == null || x.isEmpty();
     }
 

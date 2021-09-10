@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent;
 
 import org.apache.wicket.markup.html.form.Form;

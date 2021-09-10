@@ -16,7 +16,6 @@
  * specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
 import org.assertj.core.api.Assertions;
@@ -39,7 +38,7 @@ import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
-import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
@@ -102,7 +101,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
                 final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
+                facetFactory.process(ProcessClassContext
+                        .forTesting(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(BookmarkPolicyFacet.class);
                 assertNotNull(facet);
@@ -121,7 +121,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
                 final Class<?> cls = CustomerWithDefaults.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
+                facetFactory.process(ProcessClassContext
+                        .forTesting(cls, mockMethodRemover, facetHolder));
 
                 final BookmarkPolicyFacet facet = facetHolder.getFacet(BookmarkPolicyFacet.class);
                 Assert.assertThat(facet.value(), is(BookmarkPolicy.NOT_SPECIFIED));
@@ -155,7 +156,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
                 final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
+                facetFactory.process(ProcessClassContext
+                        .forTesting(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(CssClassFacet.class);
                 assertNotNull(facet);
@@ -172,7 +174,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
                 final Class<?> cls = CustomerWithDefaults.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
+                facetFactory.process(ProcessClassContext
+                        .forTesting(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(CssClassFacet.class);
                 assertNull(facet);
@@ -200,7 +203,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
                 final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
+                facetFactory.process(ProcessClassContext
+                        .forTesting(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(CssClassFaFacet.class);
                 assertNotNull(facet);
@@ -218,7 +222,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
                 final Class<?> cls = CustomerWithDefaults.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
+                facetFactory.process(ProcessClassContext
+                        .forTesting(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(CssClassFaFacet.class);
                 assertNull(facet);
@@ -246,7 +251,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
                 final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
+                facetFactory.process(ProcessClassContext
+                        .forTesting(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(ObjectDescribedFacet.class);
                 assertNotNull(facet);
@@ -263,7 +269,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
                 final Class<?> cls = CustomerWithDefaults.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
+                facetFactory.process(ProcessClassContext
+                        .forTesting(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(ObjectDescribedFacet.class);
                 assertNull(facet);
@@ -291,7 +298,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
                 final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
+                facetFactory.process(ProcessClassContext
+                        .forTesting(cls, mockMethodRemover, facetHolder));
 
                 val namedFacet = facetHolder.getFacet(ObjectNamedFacet.class);
                 assertNotNull(namedFacet);
@@ -307,7 +315,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
                 final Class<?> cls = CustomerWithDefaults.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
+                facetFactory.process(ProcessClassContext
+                        .forTesting(cls, mockMethodRemover, facetHolder));
 
                 val facet = facetHolder.getFacet(ObjectNamedFacet.class);
                 assertNull(facet);
@@ -335,7 +344,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
                 final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
+                facetFactory.process(ProcessClassContext
+                        .forTesting(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(PagedFacet.class);
                 assertNotNull(facet);
@@ -352,7 +362,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
                 final Class<?> cls = CustomerWithDefaults.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls,mockMethodRemover, facetHolder));
+                facetFactory.process(ProcessClassContext
+                        .forTesting(cls,mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(PagedFacet.class);
                 assertNull(facet);
@@ -379,7 +390,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
                 final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
+                facetFactory.process(ProcessClassContext
+                        .forTesting(cls, mockMethodRemover, facetHolder));
 
                 val namedFacet = facetHolder.getFacet(ObjectNamedFacet.class);
                 assertNotNull(namedFacet);
@@ -394,7 +406,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
                 final Class<?> cls = CustomerWithDefaults.class;
 
-                facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
+                facetFactory.process(ProcessClassContext
+                        .forTesting(cls, mockMethodRemover, facetHolder));
 
                 val namedFacet = facetHolder.getFacet(ObjectNamedFacet.class);
                 assertNull(namedFacet);

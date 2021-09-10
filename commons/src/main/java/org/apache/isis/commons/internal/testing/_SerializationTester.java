@@ -18,14 +18,11 @@
  */
 package org.apache.isis.commons.internal.testing;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.resources._Serializables;
 
 import lombok.SneakyThrows;
 import lombok.val;
@@ -38,28 +35,10 @@ import lombok.val;
 public class _SerializationTester {
 
     @SneakyThrows
-    public static byte[] marshall(final Serializable object) {
-        val bos = new ByteArrayOutputStream(16*4096); // 16k initial buffer size
-        try(val oos = new ObjectOutputStream(bos)) {
-            oos.writeObject(object);
-            oos.flush();
-        }
-        return bos.toByteArray();
-
-    }
-
-    @SneakyThrows
-    public static <T> T unmarshall(final byte[] input) {
-        val bis = new ByteArrayInputStream(input);
-        try(val ois = new ObjectInputStream(bis)){
-            return _Casts.uncheckedCast(ois.readObject());
-        }
-    }
-
-    @SneakyThrows
     public static <T extends Serializable> T roundtrip(final T object) {
-        val bytes = marshall(object);
-        return unmarshall(bytes);
+        val bytes = _Serializables.write(object);
+        return _Casts.uncheckedCast(
+                _Serializables.read(object.getClass(), bytes));
     }
 
     @SneakyThrows

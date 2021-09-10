@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.valuetypes.markdown.ui.wkt.components;
 
 import org.apache.isis.applib.annotation.Programmatic;

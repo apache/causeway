@@ -129,14 +129,6 @@ public enum SemanticsOf {
         return isSafeAndRequestCacheable() || this == SAFE;
     }
 
-    /**
-     * @deprecated - use {@link #isSafeInNature()} instead (avoid any ambiguity).
-     */
-    @Deprecated
-    public boolean isSafe() {
-        return isSafeInNature();
-    }
-
     public boolean isSafeAndRequestCacheable() {
         return this == SAFE_AND_REQUEST_CACHEABLE;
     }

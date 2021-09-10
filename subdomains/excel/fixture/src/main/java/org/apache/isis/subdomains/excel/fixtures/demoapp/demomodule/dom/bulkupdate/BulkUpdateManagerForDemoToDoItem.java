@@ -21,13 +21,14 @@ package org.apache.isis.subdomains.excel.fixtures.demoapp.demomodule.dom.bulkupd
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.lang.Nullable;
 import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -36,6 +37,7 @@ import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -106,7 +108,7 @@ public class BulkUpdateManagerForDemoToDoItem {
         setFileName(fileName);
         return this;
     }
-    public String default0ChangeFileName() {
+    @MemberSupport public String default0ChangeFileName() {
         return getFileName();
     }
 
@@ -123,20 +125,20 @@ public class BulkUpdateManagerForDemoToDoItem {
         setComplete(completed);
         return this;
     }
-    public Category default0Select() {
+    @MemberSupport public Category default0Select() {
         return getCategory();
     }
-    public Subcategory default1Select() {
+    @MemberSupport public Subcategory default1Select() {
         return getSubcategory();
     }
-    public boolean default2Select() {
+    @MemberSupport public boolean default2Select() {
         return isComplete();
     }
-    public List<Subcategory> choices1Select(
+    @MemberSupport public List<Subcategory> choices1Select(
             final Category category) {
         return Subcategory.listFor(category);
     }
-    public String validateSelect(
+    @MemberSupport public String validateSelect(
             final Category category,
             final Subcategory subcategory,
             final boolean completed) {
@@ -161,8 +163,7 @@ public class BulkUpdateManagerForDemoToDoItem {
         final List<ExcelDemoToDoItem> items = getToDoItems();
         return toExcel(fileName, items);
     }
-
-    public String disableExport() {
+    @MemberSupport public String disableExport() {
         return getFileName() == null? "file name is required": null;
     }
 

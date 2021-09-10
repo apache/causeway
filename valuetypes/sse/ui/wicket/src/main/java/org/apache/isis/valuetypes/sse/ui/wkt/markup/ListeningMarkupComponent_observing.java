@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.valuetypes.sse.ui.wkt.markup;
 
 import java.io.IOException;
@@ -24,7 +23,7 @@ import java.util.UUID;
 
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.commons.internal.resources._Resources;
-import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
+import org.apache.isis.core.config.viewer.web.WebAppContextPath;
 
 import static org.apache.isis.commons.internal.base._Strings.isNullOrEmpty;
 
@@ -58,7 +57,7 @@ final class ListeningMarkupComponent_observing  {
         }
 
         final String targetId = UUID.randomUUID().toString();
-        final String observingPath = webAppContextPath.prependContextPath(observing.getPath());
+        final String observingPath = observing.getEffectivePath(webAppContextPath::prependContextPath);
 
         final StringBuilder sb = new StringBuilder();
         sb

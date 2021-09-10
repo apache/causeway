@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.applib.annotation;
 
 import java.lang.annotation.ElementType;
@@ -66,17 +65,6 @@ public @interface DomainService {
      */
     NatureOfService nature()
             default NatureOfService.VIEW;
-
-    /**
-     * Synonym for {@link #logicalTypeName()}.
-     *
-     * @deprecated use {@link #logicalTypeName()} instead
-     *
-     * @see #logicalTypeName()
-     */
-    @AliasFor(annotation = Named.class, attribute = "value")
-    String objectType()
-            default "";
 
     /**
      * The logical name of this object's type, that uniquely and fully qualifies it.

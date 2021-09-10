@@ -22,6 +22,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
@@ -51,7 +52,7 @@ public class ApplicationPermission_delete {
 
     private final ApplicationPermission target;
 
-    public ApplicationRole act() {
+    @MemberSupport public ApplicationRole act() {
         val owningRole = target.getRole();
         repository.remove(target);
         return owningRole;

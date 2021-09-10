@@ -32,7 +32,9 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Password;
@@ -50,16 +52,17 @@ import demoapp.dom.types.isis.passwords.vm.IsisPasswordVm;
 //@Log4j2
 public class IsisPasswords implements HasAsciiDocDescription {
 
-    public String title() {
+    @ObjectSupport public String title() {
         return "Password data type";
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public IsisPasswordVm openViewModel(Password initialValue) {
+    public IsisPasswordVm openViewModel(final Password initialValue) {
         return new IsisPasswordVm(initialValue);
     }
-    public Password default0OpenViewModel() {
+
+    @MemberSupport public Password default0OpenViewModel() {
         return samples.single();
     }
 

@@ -20,6 +20,7 @@ package demoapp.dom.domain.actions.Action.semantics;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
@@ -39,14 +40,11 @@ public class ActionSemanticsVm_mixinIncrementNonIdempotentAreYouSure {
 
     private final ActionSemanticsVm actionSemanticsVm;
 
-    public ActionSemanticsVm act() {
+    @MemberSupport public ActionSemanticsVm act() {
         actionSemanticsVm.setPropertyForNonIdempotentAreYouSure(
                 actionSemanticsVm.getPropertyForNonIdempotentAreYouSure() + 1
         );
         return actionSemanticsVm;
-    }
-    public int default0Act() {
-        return 1;
     }
 }
 //end::class[]

@@ -57,14 +57,12 @@ public class ApplicationRole_addUser {
 
     private final ApplicationRole target;
 
-    @MemberSupport
-    public ApplicationRole act(final ApplicationUser applicationUser) {
+    @MemberSupport public ApplicationRole act(final ApplicationUser applicationUser) {
         applicationRoleRepository.addRoleToUser(target, applicationUser);
         return target;
     }
 
-    @MemberSupport
-    public List<? extends ApplicationUser> autoComplete0Act(final String search) {
+    @MemberSupport public List<? extends ApplicationUser> autoComplete0Act(final String search) {
         final Collection<? extends ApplicationUser> matchingSearch = applicationUserRepository.find(search);
         final List<? extends ApplicationUser> list = _Lists.newArrayList(matchingSearch);
         list.removeAll(applicationUserRepository.findByRole(target));

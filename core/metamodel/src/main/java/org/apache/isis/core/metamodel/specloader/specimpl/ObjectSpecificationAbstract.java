@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.lang.reflect.Method;
@@ -30,6 +29,7 @@ import java.util.stream.Stream;
 import javax.enterprise.inject.Vetoed;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.Can;
@@ -254,6 +254,8 @@ implements ObjectSpecification {
         return fullName;
     }
 
+    public abstract IntrospectionPolicy getIntrospectionPolicy();
+
     @Override
     public void introspectUpTo(final IntrospectionState upTo) {
 
@@ -411,7 +413,10 @@ implements ObjectSpecification {
                 return titleString;
             }
         }
-        return (this.isManagedBean() ? "" : "Untitled ") + getSingularName();
+        val prefix = this.isManagedBean()
+                ? ""
+                : "Untitled ";
+        return prefix + getSingularName();
     }
 
     @Override

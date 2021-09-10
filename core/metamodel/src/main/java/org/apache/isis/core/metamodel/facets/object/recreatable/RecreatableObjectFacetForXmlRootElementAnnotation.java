@@ -16,13 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.recreatable;
 
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
+import org.apache.isis.core.metamodel.facets.HasPostConstructMethodCache;
 
 public class RecreatableObjectFacetForXmlRootElementAnnotation
 extends RecreatableObjectFacetAbstract {
@@ -30,7 +29,7 @@ extends RecreatableObjectFacetAbstract {
 
     public RecreatableObjectFacetForXmlRootElementAnnotation(
             final FacetHolder holder,
-            final PostConstructMethodCache postConstructMethodCache) {
+            final HasPostConstructMethodCache postConstructMethodCache) {
 
         super(holder, RecreationMechanism.INSTANTIATES, postConstructMethodCache, Precedence.HIGH);
     }
@@ -53,23 +52,7 @@ extends RecreatableObjectFacetAbstract {
         return encoded;
     }
 
-    @Override
-    public boolean isCloneable(Object pojo) {
-        return true;
-    }
-
-    @Override
-    public boolean isImplicitlyImmutable() {
-        return false;
-    }
-
-    @Override
-    public Object clone(Object pojo) {
-        final String xml = getJaxbService().toXml(pojo);
-        final Object cloned = getJaxbService().fromXml(pojo.getClass(), xml);
-        return cloned;
-    }
-
+    // -- DEPENDENCIES
 
     private JaxbService getJaxbService() {
         return getServiceRegistry().lookupServiceElseFail(JaxbService.class);

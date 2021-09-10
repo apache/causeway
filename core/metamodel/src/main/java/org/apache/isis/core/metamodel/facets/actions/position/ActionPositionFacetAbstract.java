@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.actions.position;
 
 import java.util.function.BiConsumer;
@@ -43,11 +42,6 @@ implements ActionPositionFacet {
     @Override
     public ActionLayout.Position position() {
         return position;
-    }
-
-    @Override
-    protected String toStringValues() {
-        return "position=" + position;
     }
 
     @Override

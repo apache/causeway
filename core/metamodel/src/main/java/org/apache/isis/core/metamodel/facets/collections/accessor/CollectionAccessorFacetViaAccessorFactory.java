@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.collections.accessor;
 
 import java.lang.reflect.Method;
@@ -26,13 +25,13 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 
 import lombok.val;
 
@@ -74,17 +73,17 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
     // ///////////////////////////////////////////////////////////////
 
     @Override
-    public boolean isPropertyOrCollectionAccessorCandidate(final Method method) {
-        return method.getName().startsWith(MethodLiteralConstants.GET_PREFIX);
+    public boolean isPropertyOrCollectionGetterCandidate(final Method method) {
+        return ProgrammingModelConstants.AccessorPrefix.GET.isPrefixOf(method.getName());
     }
 
     @Override
     public boolean isCollectionAccessor(final Method method) {
-        if (!isPropertyOrCollectionAccessorCandidate(method)) {
+        if (!isPropertyOrCollectionGetterCandidate(method)) {
             return false;
         }
         final Class<?> methodReturnType = method.getReturnType();
-        return isCollectionOrArray(methodReturnType);
+        return isNonScalar(methodReturnType);
     }
 
     /**
@@ -102,7 +101,7 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
             final List<Method> methodListToAppendTo) {
 
         methodRemover.removeMethods(
-                MethodUtil.Predicates.getter(Collection.class),
+                MethodUtil.Predicates.nonBooleanGetter(Collection.class),
                 methodListToAppendTo::add
                 );
     }

@@ -32,7 +32,9 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
@@ -48,16 +50,16 @@ import demoapp.dom.types.javautil.javautildate.vm.JavaUtilDateVm;
 //@Log4j2
 public class JavaUtilDates implements HasAsciiDocDescription {
 
-    public String title() {
+    @ObjectSupport public String title() {
         return "java.util.Date data type";
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public JavaUtilDateVm openViewModel(java.util.Date initialValue) {
+    public JavaUtilDateVm openViewModel(final java.util.Date initialValue) {
         return new JavaUtilDateVm(initialValue);
     }
-    public java.util.Date default0OpenViewModel() {
+    @MemberSupport public java.util.Date default0OpenViewModel() {
         return new java.util.Date(120,1,1); // 1900 is the epoch
     }
 

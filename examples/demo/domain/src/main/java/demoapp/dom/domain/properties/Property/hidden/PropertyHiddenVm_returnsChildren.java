@@ -21,6 +21,7 @@ package demoapp.dom.domain.properties.Property.hidden;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
@@ -36,12 +37,9 @@ public class PropertyHiddenVm_returnsChildren {
     private final PropertyHiddenVm propertyHiddenVm;
 
 //tag::meta-annotation[]
-    public List<PropertyHiddenChildVm> act() {
+    @MemberSupport public List<PropertyHiddenChildVm> act() {
         return propertyHiddenVm.getChildren();
     }
 //end::meta-annotation[]
-    public String default0Act() {
-        return propertyHiddenVm.getPropertyUsingMetaAnnotation();
-    }
 
 }

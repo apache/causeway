@@ -22,11 +22,13 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import demoapp.dom.domain.actions.Action.domainEvent.ActionDomainEventVm;
 import lombok.RequiredArgsConstructor;
+
+import demoapp.dom.domain.actions.Action.domainEvent.ActionDomainEventVm;
 
 
 //tag::class[]
@@ -42,11 +44,11 @@ public class ActionDomainEventVm_controlUpdateTextInvocation {
 
     private final ActionDomainEventVm actionDomainEventVm;
 
-    public ActionDomainEventVm act(final ActionDomainEventControlStrategy controlStrategy) {
+    @MemberSupport public ActionDomainEventVm act(final ActionDomainEventControlStrategy controlStrategy) {
         eventActionDomainEventControlService.controlStrategy = controlStrategy;
         return actionDomainEventVm;
     }
-    public ActionDomainEventControlStrategy default0Act() {
+    @MemberSupport public ActionDomainEventControlStrategy default0Act() {
         return eventActionDomainEventControlService.controlStrategy;
     }
 

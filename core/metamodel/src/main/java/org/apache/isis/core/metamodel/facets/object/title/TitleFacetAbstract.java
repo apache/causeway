@@ -16,12 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.title;
+
+import java.util.Objects;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+
+import lombok.NonNull;
+import lombok.val;
 
 public abstract class TitleFacetAbstract
 extends FacetAbstract
@@ -37,6 +42,32 @@ implements TitleFacet {
 
     public TitleFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
         super(type(), holder, precedence);
+    }
+
+    @Override
+    public boolean semanticEquals(final @NonNull Facet other) {
+
+        // equality by facet-type and java-methods
+
+        if(!this.facetType().equals(other.facetType())) {
+            return false;
+        }
+
+        val otherFacet = (TitleFacet)other;
+
+        if(Objects.equals(this, otherFacet)) {
+            return true;
+        }
+
+        if(this instanceof ImperativeFacet
+                && otherFacet instanceof ImperativeFacet) {
+
+            return ((ImperativeFacet)this)
+                    .getMethods()
+                    .equals(((ImperativeFacet)otherFacet).getMethods());
+        }
+
+        return false;
     }
 
 }

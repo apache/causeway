@@ -20,6 +20,7 @@ package demoapp.dom.domain.properties.Property.fileAccept;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -39,7 +40,7 @@ public class PropertyFileAcceptVm_updateWithMetaAnnotationOverridden {
     private final PropertyFileAcceptVm propertyFileAcceptVm;
 
 //tag::meta-annotation-overridden[]
-    public PropertyFileAcceptVm act(
+    @MemberSupport public PropertyFileAcceptVm act(
             @FileAcceptPdfMetaAnnotation                    // <.>
             @Parameter(
                 fileAccept = ".docx"                        // <.>
@@ -54,7 +55,7 @@ public class PropertyFileAcceptVm_updateWithMetaAnnotationOverridden {
         return propertyFileAcceptVm;
     }
 //end::meta-annotation-overridden[]
-    public Blob default0Act() {
+    @MemberSupport public Blob default0Act() {
         return propertyFileAcceptVm.getDocxPropertyUsingMetaAnnotationButOverridden();
     }
 

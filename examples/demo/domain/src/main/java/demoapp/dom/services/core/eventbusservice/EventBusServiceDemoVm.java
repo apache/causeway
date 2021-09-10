@@ -28,6 +28,7 @@ import org.apache.isis.applib.annotation.ActionLayout.Position;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
@@ -38,7 +39,7 @@ public class EventBusServiceDemoVm implements HasAsciiDocDescription {
     @Inject private EventLogEntryJdoRepository repository;
     @Inject private EventBusService eventBusService;
 
-    public String title() {
+    @ObjectSupport public String title() {
         return "Event Demo";
     }
 

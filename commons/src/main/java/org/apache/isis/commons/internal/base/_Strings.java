@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.commons.internal.base;
 
 import java.io.InputStream;
@@ -36,6 +35,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
+import java.util.stream.Collector;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -83,7 +83,8 @@ public final class _Strings {
 
     // -- PAIR OF STRINGS
 
-    public static interface KeyValuePair extends Map.Entry<String, String> { }
+    public static interface KeyValuePair extends Map.Entry<String, String> {
+    }
 
     public static KeyValuePair pair(final String key, final String value){
         return _Strings_KeyValuePair.of(key, value);
@@ -685,6 +686,29 @@ public final class _Strings {
         return suffix(fileName, prefix(fileExtension, "."));
     }
 
+    /**
+     * A prefix is defined
+     * as the first set of lower-case letters and the name is characters from,
+     * and including, the first upper case letter. If no upper case letter is
+     * found then an empty string is returned.
+     * <p>
+     * Calling this method with the following Java names will produce these
+     * results:
+     * <pre>
+     * getCarRegistration  -&gt; CarRegistration
+     * CityMayor           -&gt; CityMayor
+     * isReady             -&gt; Ready
+     * </pre>
+     */
+    public static final String asPrefixDropped(final @Nullable String name) {
+        return isNotEmpty(name)
+                ? _Strings
+                    .streamCharacters(name)
+                    .dropWhile(c->c != '_' && Character.isLowerCase(c))
+                    .collect(_Strings.joiningCharacters())
+                : name;
+    }
+
     // -- SHORTCUTS
 
     /**
@@ -717,5 +741,20 @@ public final class _Strings {
         return _Strings.convert(str, _Bytes.asUrlBase64, StandardCharsets.UTF_8);
     }
 
+    // -- CHARACTER PROCESSING
+
+    public static Stream<Character> streamCharacters(final @Nullable String str) {
+        return isNotEmpty(str)
+                ? str.codePoints().mapToObj(c -> (char) c)
+                : Stream.empty();
+    }
+
+    public static Collector<Character, StringBuilder, String> joiningCharacters() {
+        return Collector.of(
+                StringBuilder::new,
+                StringBuilder::append,
+                StringBuilder::append,
+                StringBuilder::toString);
+    }
 
 }

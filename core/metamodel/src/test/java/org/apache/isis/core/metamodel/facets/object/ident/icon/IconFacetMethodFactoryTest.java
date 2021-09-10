@@ -16,39 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.ident.icon;
 
-import java.lang.reflect.Method;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
-import org.apache.isis.core.metamodel.facets.object.icon.method.IconFacetMethod;
-import org.apache.isis.core.metamodel.facets.object.icon.method.IconFacetMethodFactory;
+import org.apache.isis.core.metamodel.facets.object.support.ObjectSupportFacetFactoryTestAbstract;
 
-public class IconFacetMethodFactoryTest extends AbstractFacetFactoryTest {
-
-    private IconFacetMethodFactory facetFactory;
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        facetFactory = new IconFacetMethodFactory(metaModelContext);
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        facetFactory = null;
-        super.tearDown();
-    }
+public class IconFacetMethodFactoryTest
+extends ObjectSupportFacetFactoryTestAbstract {
 
     public void testIconNameMethodPickedUpOnClassAndMethodRemoved() {
         class Customer {
@@ -57,15 +32,7 @@ public class IconFacetMethodFactoryTest extends AbstractFacetFactoryTest {
                 return null;
             }
         }
-        final Method iconNameMethod = findMethod(Customer.class, "iconName");
-
-        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(IconFacet.class);
-        assertThat(facet, is(notNullValue()));
-        assertThat(facet, is(instanceOf(IconFacetMethod.class)));
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(iconNameMethod));
+        assertPicksUp(1, facetFactory, Customer.class, ObjectSupportMethod.ICON_NAME, IconFacet.class);
     }
 
 }

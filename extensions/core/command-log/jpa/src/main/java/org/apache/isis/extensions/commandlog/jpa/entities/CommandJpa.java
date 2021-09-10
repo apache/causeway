@@ -36,6 +36,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
@@ -321,14 +322,14 @@ implements
     public static class TitleProvider {
 
         @EventListener(TitleUiEvent.class)
-        public void on(TitleUiEvent ev) {
+        public void on(final TitleUiEvent ev) {
             if(!Objects.equals(ev.getTitle(), "Command Jdo") || ev.getTranslatableTitle() != null) {
                 return;
             }
             ev.setTitle(title((CommandJpa)ev.getSource()));
         }
 
-        private static String title(CommandJpa source) {
+        private static String title(final CommandJpa source) {
             // nb: not thread-safe
             // formats defined in https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html
             val format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -400,7 +401,7 @@ implements
     @PropertyLayout(hidden = Where.ALL_TABLES, multiLine = 5)
     @Getter @Setter
     private String replayStateFailureReason;
-    public boolean hideReplayStateFailureReason() {
+    @MemberSupport public boolean hideReplayStateFailureReason() {
         return getReplayState() == null || !getReplayState().isFailed();
     }
 
@@ -535,7 +536,7 @@ implements
     @PropertyLayout(hidden = Where.ALL_TABLES, multiLine = 5, named = "Exception (if any)")
     @Getter
     private String exception;
-    public void setException(String exception) {
+    public void setException(final String exception) {
         this.exception = exception;
     }
     public void setException(final Throwable exception) {
@@ -563,7 +564,7 @@ implements
 
 
     @Override
-    public void saveAnalysis(String analysis) {
+    public void saveAnalysis(final String analysis) {
         if (analysis == null) {
             setReplayState(ReplayState.OK);
         } else {
@@ -612,16 +613,16 @@ implements
         public TableColumnOrderDefault() { super(CommandJpa.class); }
 
         @Override
-        protected List<String> orderParented(Object parent, String collectionId, List<String> propertyIds) {
+        protected List<String> orderParented(final Object parent, final String collectionId, final List<String> propertyIds) {
             return ordered(propertyIds);
         }
 
         @Override
-        protected List<String> orderStandalone(List<String> propertyIds) {
+        protected List<String> orderStandalone(final List<String> propertyIds) {
             return ordered(propertyIds);
         }
 
-        private List<String> ordered(List<String> propertyIds) {
+        private List<String> ordered(final List<String> propertyIds) {
             return Arrays.asList(
                 "timestamp", "target", "targetMember", "username", "complete", "resultSummary", "interactionIdStr"
             );

@@ -18,16 +18,30 @@
  */
 package org.apache.isis.core.metamodel.facets;
 
+import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
+/**
+ * Processes logicalTypeName and determines the effective IntrospectionPolicy.
+ */
 public interface ObjectTypeFacetFactory extends FacetFactory {
-
-    // -- process logicalTypeName
 
     public static class ProcessObjectTypeContext
     extends AbstractProcessWithClsContext<FacetHolder> {
-        public ProcessObjectTypeContext(final Class<?> cls, final FacetHolder facetHolder) {
-            super(cls, facetHolder);
+        public ProcessObjectTypeContext(
+                final Class<?> cls,
+                final FacetHolder facetHolder) {
+            super(cls,
+                    IntrospectionPolicy.ANNOTATION_OPTIONAL, // not used - but to satisfy constraints
+                    facetHolder);
+        }
+        @Override
+        public IntrospectionPolicy getIntrospectionPolicy() {
+            throw _Exceptions.unsupportedOperation(
+                    "ProcessObjectTypeContext does not support getIntrospectionPolicy() "
+                    + "as the IntrospectionPolicy is not yet available this early "
+                    + "in the meta-model processing stage.");
         }
     }
 

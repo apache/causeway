@@ -19,6 +19,7 @@
 package org.apache.isis.valuetypes.sse.ui.wkt.webmodule;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ForkJoinPool;
 
@@ -35,8 +36,6 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.valuetypes.sse.applib.service.SseChannel;
 import org.apache.isis.valuetypes.sse.applib.service.SseService;
-
-import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -59,11 +58,11 @@ public class ServerSentEventsServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        requires(sseService, "sseService");
+        Objects.requireNonNull(sseService, "sseService");
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
 
         val eventStreamType = parseEventStreamType(request);
         val eventStream = eventStreamType.flatMap(sseService::lookupByType)
@@ -100,7 +99,7 @@ public class ServerSentEventsServlet extends HttpServlet {
 
     // -- HELPER
 
-    private Optional<AsyncContext> asyncContext(HttpServletRequest request) {
+    private Optional<AsyncContext> asyncContext(final HttpServletRequest request) {
         try {
             return Optional.of(request.startAsync());
         } catch (IllegalStateException e) {
@@ -109,7 +108,7 @@ public class ServerSentEventsServlet extends HttpServlet {
         }
     }
 
-    private boolean flushBuffer(HttpServletResponse response) {
+    private boolean flushBuffer(final HttpServletResponse response) {
         try {
             response.flushBuffer();
             return true;
@@ -169,7 +168,7 @@ public class ServerSentEventsServlet extends HttpServlet {
 
     }
 
-    private Optional<Class<?>> parseEventStreamType(HttpServletRequest request) {
+    private Optional<Class<?>> parseEventStreamType(final HttpServletRequest request) {
         val eventStreamId = request.getParameter("eventStream");
         if(_Strings.isNullOrEmpty(eventStreamId)) {
             return Optional.empty();

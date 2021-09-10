@@ -20,6 +20,7 @@ package demoapp.dom.types.javautil.uuids.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -41,14 +42,15 @@ public class JavaUtilUuidHolder_updateReadOnlyOptionalProperty {
 
     private final JavaUtilUuidHolder holder;
 
-    public JavaUtilUuidHolder act(
+    @MemberSupport public JavaUtilUuidHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
-            java.util.UUID newValue
+            final java.util.UUID newValue
     ) {
         holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
-    public java.util.UUID default0Act() {
+
+    @MemberSupport public java.util.UUID default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

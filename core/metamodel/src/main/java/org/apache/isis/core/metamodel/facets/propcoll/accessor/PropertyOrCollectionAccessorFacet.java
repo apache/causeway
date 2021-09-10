@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.propcoll.accessor;
 
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;

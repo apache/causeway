@@ -16,85 +16,43 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.param.validate.method;
 
 import java.util.EnumSet;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
-import org.apache.isis.applib.services.i18n.TranslationContext;
-import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.ParameterSupport;
-import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest.ReturnType;
+import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
+import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchResult;
 import org.apache.isis.core.metamodel.facets.ParameterSupport.SearchAlgorithm;
+import org.apache.isis.core.metamodel.facets.param.support.ActionParameterSupportFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.param.validate.ActionParameterValidationFacet;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
-import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
 import lombok.val;
 
 /**
  * Sets up {@link ActionParameterValidationFacet}. */
-public class ActionParameterValidationFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract  {
-
-    private static final String PREFIX = MethodLiteralConstants.VALIDATE_PREFIX;
+public class ActionParameterValidationFacetViaMethodFactory
+extends ActionParameterSupportFacetFactoryAbstract  {
 
     @Inject
     public ActionParameterValidationFacetViaMethodFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
+        super(mmc, MemberSupportPrefix.VALIDATE, searchOptions->
+            searchOptions
+            .searchAlgorithms(EnumSet.of(SearchAlgorithm.PAT, SearchAlgorithm.SINGLEARG_BEING_PARAMTYPE)));
     }
 
-
     @Override
-    public void process(final ProcessMethodContext processMethodContext) {
-
-        val facetedMethod = processMethodContext.getFacetHolder();
-        val parameters = facetedMethod.getParameters();
-
-        if (parameters.isEmpty()) {
-            return;
-        }
-
-        // attach ActionParameterValidationFacet if validateNumMethod is found ...
-        // in any case single-arg, either same as param-type or PPM style
-
-        val namingConvention = processMethodContext.parameterSupportCandidates(PREFIX);
-
-        val searchRequest = ParameterSupport.ParamSupportingMethodSearchRequest.builder()
-                .processMethodContext(processMethodContext)
-                .returnType(ReturnType.TEXT)
-                .paramIndexToMethodNameProviders(namingConvention)
-                .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.SINGLEARG_BEING_PARAMTYPE))
-                .build();
-
-        ParameterSupport.findParamSupportingMethods(searchRequest, searchResult -> {
-
-            val validateMethod = searchResult.getSupportingMethod();
-            val paramNum = searchResult.getParamIndex();
-
-            processMethodContext.removeMethod(validateMethod);
-
-            if (facetedMethod.containsNonFallbackFacet(ActionParameterValidationFacet.class)) {
-                val cls = processMethodContext.getCls();
-                throw new MetaModelException(cls + " uses both old and new 'validate' syntax - "
-                        + "must use one or other");
-            }
-
-            // add facets directly to parameters, not to actions
-            val paramAsHolder = parameters.get(paramNum);
-            val translationContext = TranslationContext.forTranslationContextHolder(paramAsHolder.getFeatureIdentifier());
-            val ppmFactory = searchResult.getPpmFactory();
-            val translationService = getMetaModelContext().getTranslationService();
-
-            addFacet(
-                    new ActionParameterValidationFacetViaMethod(
-                            validateMethod, translationService, translationContext, ppmFactory, paramAsHolder));
-
-        });
+    protected void onSearchResult(
+            final FacetedMethodParameter paramAsHolder,
+            final ParamSupportingMethodSearchResult searchResult) {
+        val validateMethod = searchResult.getSupportingMethod();
+        val patConstructor = searchResult.getPatConstructor();
+        addFacet(
+                new ActionParameterValidationFacetViaMethod(
+                        validateMethod, patConstructor, paramAsHolder));
     }
 
 

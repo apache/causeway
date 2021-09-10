@@ -25,6 +25,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.xml.XmlService;
 import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService;
@@ -57,7 +58,7 @@ public class XmlSnapshotParentVm_takeXmlSnapshot {
         PEER_AND_ITS_CHILDREN("peer/children");
 
         final List<String> paths;
-        PathsToInclude(String... paths) {
+        PathsToInclude(final String... paths) {
             this.paths = Collections.unmodifiableList(Arrays.asList(paths));
         }
     }
@@ -71,7 +72,7 @@ public class XmlSnapshotParentVm_takeXmlSnapshot {
 //end::SnapshotType[]
 
 //tag::class[]
-    public Clob act(
+    @MemberSupport public Clob act(
             final PathsToInclude pathsToInclude,
             final SnapshotType snapshotType) {
         val builder = xmlSnapshotService.builderFor(xmlSnapshotParentVm);
@@ -85,11 +86,10 @@ public class XmlSnapshotParentVm_takeXmlSnapshot {
         return asClob(fileName, xmlService.asString(doc));
     }
 //end::class[]
-
-    public PathsToInclude default0Act() {
+    @MemberSupport public PathsToInclude default0Act() {
         return PathsToInclude.NONE;
     }
-    public SnapshotType default1Act() {
+    @MemberSupport public SnapshotType default1Act() {
         return SnapshotType.XML;
     }
 

@@ -26,6 +26,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -53,8 +54,7 @@ public class WhereInTheWorldMenu {
     )
     public WhereInTheWorldVm whereInTheWorld(
             final String address,
-            @Zoom final int zoom
-    ){
+            @Zoom final int zoom) {
         val vm = new WhereInTheWorldVm();
 
         val latLng = geoapifyClient.geocode(address);
@@ -66,14 +66,15 @@ public class WhereInTheWorldMenu {
         return vm;
     }
 //end::action[]
-
-    public List<String> choices0WhereInTheWorld() {
+    @MemberSupport public List<String> choices0WhereInTheWorld() {
         return Arrays.asList("Malvern, UK", "Vienna, Austria", "Leeuwarden, Netherlands", "Dublin, Ireland");
     }
-    public String default0WhereInTheWorld() {
+
+    @MemberSupport public String default0WhereInTheWorld() {
         return "Malvern, UK";
     }
-    public int default1WhereInTheWorld() {
+
+    @MemberSupport public int default1WhereInTheWorld() {
         return 14;
     }
 

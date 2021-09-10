@@ -108,7 +108,7 @@ public enum RepresentationType {
             RestfulMediaType.APPLICATION_JSON_OBJECT_LAYOUT_BS3,
             RestfulMediaType.APPLICATION_XML_OBJECT_LAYOUT_BS3,
             null),
-    OBJECT_ICON(
+    IMAGE(
             "image/*",
             "image/*",
             null),
@@ -176,16 +176,10 @@ public enum RepresentationType {
         return name;
     }
 
-    /**
-     * @deprecated - use {@link #getJsonMediaType()} instead.
-     */
-    @Deprecated
-    public final MediaType getMediaType() {
-        return getJsonMediaType();
-    }
     public final MediaType getJsonMediaType() {
         return jsonMediaType;
     }
+
     public MediaType getXmlMediaType() {
         return xmlMediaType;
     }
@@ -195,7 +189,7 @@ public enum RepresentationType {
     }
 
     /**
-     * Clones the (immutable) {@link #getMediaType() media type}, adding in one additional
+     * Clones the (immutable) {@link #getJsonMediaType() media type}, adding in one additional
      * parameter value.
      */
     public MediaType getMediaType(final String parameter, final String paramValue) {

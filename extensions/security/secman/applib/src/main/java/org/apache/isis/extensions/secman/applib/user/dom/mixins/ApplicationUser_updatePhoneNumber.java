@@ -46,22 +46,16 @@ public class ApplicationUser_updatePhoneNumber {
 
     private final ApplicationUser target;
 
-    @MemberSupport
-    public ApplicationUser act(
+    @MemberSupport public ApplicationUser act(
             @ApplicationUser.PhoneNumber
             final String phoneNumber) {
         target.setPhoneNumber(phoneNumber);
         return target;
     }
 
-    @MemberSupport
-    public String disableAct() {
+    @MemberSupport public String disableAct() {
         return target.isForSelfOrRunAsAdministrator()? null: "Can only update your own user record.";
     }
-
-    @MemberSupport
-    public String default0Act() {
-        return target.getPhoneNumber();
-    }
+    @MemberSupport public String default0Act() { return target.getPhoneNumber(); }
 
 }

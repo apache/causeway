@@ -31,7 +31,7 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
+import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -46,7 +46,7 @@ import demoapp.dom.types.primitive.longs.persistence.PrimitiveLongEntity;
       schema = "demo",
       name = "PrimitiveLongJpa"
 )
-@EntityListeners(JpaEntityInjectionPointResolver.class)
+@EntityListeners(IsisEntityListener.class)
 @DomainObject(
       logicalTypeName = "demo.PrimitiveLongEntity"
 )
@@ -55,7 +55,7 @@ public class PrimitiveLongJpa
         extends PrimitiveLongEntity {
 
 //end::class[]
-    public PrimitiveLongJpa(long initialValue) {
+    public PrimitiveLongJpa(final long initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

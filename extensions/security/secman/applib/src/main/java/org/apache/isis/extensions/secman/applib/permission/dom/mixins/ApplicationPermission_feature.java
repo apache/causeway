@@ -20,15 +20,15 @@ package org.apache.isis.extensions.secman.applib.permission.dom.mixins;
 
 import javax.inject.Inject;
 
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
-import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.applib.services.appfeatui.ApplicationFeatureViewModel;
+import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission;
 
 import lombok.RequiredArgsConstructor;
@@ -48,7 +48,10 @@ public class ApplicationPermission_feature {
 
     final ApplicationPermission target;
 
-    public ApplicationFeatureViewModel prop(final ApplicationPermission permission) {
+    @Inject FactoryService factory;
+    @Inject ApplicationFeatureRepository featureRepository;
+
+    @MemberSupport public ApplicationFeatureViewModel prop(final ApplicationPermission permission) {
         if(permission.getFeatureSort() == null) {
             return null;
         }
@@ -60,8 +63,5 @@ public class ApplicationPermission_feature {
         return ApplicationFeatureId.newFeature(permission.getFeatureSort(), permission.getFeatureFqn());
     }
 
-    @Inject RepositoryService repository;
-    @Inject FactoryService factory;
-    @Inject ApplicationFeatureRepository featureRepository;
 
 }

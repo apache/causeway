@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.applib.annotation;
 
 import java.lang.annotation.ElementType;
@@ -40,6 +39,7 @@ import java.lang.annotation.Target;
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @DomainObject(nature=Nature.MIXIN, mixinMethod = "prop") // meta annotation, only applies at class level
+@Domain.Include // meta annotation, in support of meta-model validation
 public @interface PropertyLayout {
 
     /**
@@ -106,7 +106,7 @@ public @interface PropertyLayout {
      * specified.
      * </p>
      *
-     * @see Action#associateWith()
+     * @see Action#choicesFrom()
      * @see ActionLayout#fieldSetId()
      * @see ActionLayout#fieldSetName()
      * @see PropertyLayout#fieldSetName()
@@ -125,7 +125,7 @@ public @interface PropertyLayout {
      * For a more in depth description see {@link PropertyLayout#fieldSetId()}.
      * </p>
      *
-     * @see Action#associateWith()
+     * @see Action#choicesFrom()
      * @see ActionLayout#fieldSetId()
      * @see ActionLayout#fieldSetName()
      * @see PropertyLayout#fieldSetId()

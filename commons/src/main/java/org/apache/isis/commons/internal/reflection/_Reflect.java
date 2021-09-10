@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.commons.internal.reflection;
 
 import java.beans.BeanInfo;
@@ -34,17 +33,15 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
-import java.util.Spliterator;
-import java.util.Spliterators;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.lang.Nullable;
+import org.springframework.util.ClassUtils;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.Result;
@@ -75,16 +72,82 @@ public final class _Reflect {
 
     // -- PREDICATES
 
-    public static boolean same(final Method method, final Method superMethod) {
-        if(!method.getName().equals(superMethod.getName())) {
+    /**
+     * Other than checking for Method equality, this function is weaker and only
+     * checks for method name, method signature equality
+     * and whether a overrides b or vice versa.
+     * <p>
+     * Example of co-variant overriding:
+     * <pre>
+     * class Parent {
+     *     Object getSomething(){ return 10; }
+     * }
+     *
+     * class Child extends Parent {
+     *     &#64;Override Integer getSomething() { return 10; }
+     * }
+     * </pre>
+     * @param a
+     * @param b
+     * @see Method#equals(Object)
+     */
+    public static boolean methodsSame(final Method a, final Method b) {
+        if(!a.getName().equals(b.getName())) {
             return false;
         }
-        if(method.getParameterCount()!=superMethod.getParameterCount()) {
+        if(a.getParameterCount()!=b.getParameterCount()) {
             return false;
         }
-        return _Arrays.testAllMatch(method.getParameters(), superMethod.getParameters(),
-                (p1, p2)->p1.getType().equals(p2.getType()));
+        if(!_Arrays.testAllMatch(a.getParameters(), b.getParameters(),
+                (p1, p2)->p1.getType().equals(p2.getType()))) {
+            return false;
+        }
+        return a.getReturnType().isAssignableFrom(b.getReturnType())
+                || b.getReturnType().isAssignableFrom(a.getReturnType());
     }
+
+    // -- COMPARATORS
+
+    /**
+     * In compliance with the sameness relation {@link #methodsSame(Method, Method)}
+     * provides a comparator (with an arbitrarily chosen ordering relation).
+     * @apiNote don't depend on the chosen ordering
+     * @param a
+     * @param b
+     * @see #methodsSame(Method, Method)
+     */
+    public static int methodWeakCompare(final Method a, final Method b) {
+
+        int c = a.getName().compareTo(b.getName());
+        if(c!=0) {
+            return c;
+        }
+        c = Integer.compare(a.getParameterCount(), b.getParameterCount());
+        if(c!=0) {
+            return c;
+        }
+        val paramsA = a.getParameters();
+        val paramsB = b.getParameters();
+        for(int i=0; i<a.getParameterCount(); ++i) {
+            c = typesCompare(paramsA[i].getType(), paramsB[i].getType());
+            if(c!=0) {
+                return c;
+            }
+        }
+        c = typesCompare(a.getReturnType(), b.getReturnType());
+        if(c!=0) {
+            return a.getReturnType().isAssignableFrom(b.getReturnType())
+                    || b.getReturnType().isAssignableFrom(a.getReturnType())
+                    ? 0 // same
+                    : c;
+        }
+        return 0; // equal
+    }
+
+    public static int typesCompare(final Class<?> a, final Class<?> b) {
+        return a.getName().compareTo(b.getName());
+    }
+
 
     /**
      * Returns whether a {@link Member} is accessible.
@@ -176,6 +239,7 @@ public final class _Reflect {
             return Stream.empty();
         }
         if(ignoreAccess) {
+            //FIXME does not include public inherited - thats either intended or not by the caller!
             return _NullSafe.stream(type.getDeclaredMethods());
         }
         return _NullSafe.stream(type.getMethods());
@@ -199,52 +263,38 @@ public final class _Reflect {
 
     // -- SUPER CLASSES
 
+    public enum TypeHierarchyPolicy {
+        EXCLUDE,
+        INCLUDE;
+        public boolean isIncludeTypeHierarchy() {
+            return this == TypeHierarchyPolicy.INCLUDE;
+        }
+    }
+
     public enum InterfacePolicy {
-        INCLUDE,
-        EXCLUDE
+        EXCLUDE,
+        INCLUDE;
+        public boolean isIncludeInterfaces() {
+            return this == InterfacePolicy.INCLUDE;
+        }
     }
 
     /**
      * Stream all types of given {@code type}, up the super class hierarchy starting with self
      * @param type (nullable)
-     * @param interfacePolicy - whether to include all interfaces implemented by given {@code type}.
+     * @param interfacePolicy - whether to include all interfaces implemented by given {@code type} at the end
      * @return non-null
      */
     public static Stream<Class<?>> streamTypeHierarchy(
             final @Nullable Class<?> type,
-            final InterfacePolicy interfacePolicy) {
+            final @NonNull InterfacePolicy interfacePolicy) {
 
-        val includeInterfaces = interfacePolicy == InterfacePolicy.INCLUDE;
+        return interfacePolicy.isIncludeInterfaces()
+                ? Stream.concat(
+                        Stream.<Class<?>>iterate(type, Objects::nonNull, Class::getSuperclass),
+                        ClassUtils.getAllInterfacesForClassAsSet(type).stream())
+                : Stream.iterate(type, Objects::nonNull, Class::getSuperclass);
 
-        // https://stackoverflow.com/questions/40240450/java8-streaming-a-class-hierarchy?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
-        // Java 9+ will allow ...
-        // return Stream.iterate(type, Objects::nonNull, Class::getSuperclass);
-
-        return StreamSupport.stream(
-                new Spliterators.AbstractSpliterator<Class<?>>(Long.MAX_VALUE,
-                        Spliterator.ORDERED|Spliterator.IMMUTABLE|Spliterator.NONNULL) {
-                    Class<?> current = type;
-                    @Override
-                    public boolean tryAdvance(final Consumer<? super Class<?>> action) {
-                        if(current == null) return false;
-                        action.accept(current);
-                        if(includeInterfaces) {
-                            for(Class<?> subIface : current.getInterfaces()) {
-                                recur(subIface, action);
-                            }
-                        }
-                        current = current.getSuperclass();
-                        return true;
-                    }
-
-                    private void recur(final Class<?> iface, final Consumer<? super Class<?>> action) {
-                        action.accept(iface);
-                        for(Class<?> subIface : iface.getInterfaces()) {
-                            recur(subIface, action);
-                        }
-                    }
-
-                }, false);
     }
 
     // -- ANNOTATIONS
@@ -514,6 +564,24 @@ public final class _Reflect {
     @UtilityClass
     public static class Filter {
 
+        public static Predicate<Method> isGetter() {
+            return method->method!=null
+                    && method.getParameterCount()==0
+                    && method.getReturnType()!=void.class
+                    && (method.getName().startsWith("get")
+                        || (method.getName().startsWith("is")
+                                && method.getReturnType()==boolean.class));
+        }
+
+        public static Predicate<Method> hasReturnType(final Class<?> expectedReturnType) {
+            return method->expectedReturnType.isAssignableFrom(method.getReturnType());
+        }
+
+        public static Predicate<Method> hasReturnTypeAnyOf(final Can<Class<?>> allowedReturnTypes) {
+            return method->allowedReturnTypes.stream()
+                    .anyMatch(allowedReturnType->allowedReturnType.isAssignableFrom(method.getReturnType()));
+        }
+
         public static Predicate<Executable> isPublic() {
             return ex->Modifier.isPublic(ex.getModifiers());
         }
@@ -526,6 +594,7 @@ public final class _Reflect {
             return ex->ex.getParameterTypes()[paramIndex].isAssignableFrom(paramType);
         }
 
+        //TODO simple array compare should do
         public static Predicate<Executable> paramSignatureMatch(final Class<?>[] matchingParamTypes) {
             return ex->{
                 // check params (if required)
@@ -576,6 +645,17 @@ public final class _Reflect {
             (!ref.getName().equals(other.getName()))
             ? false
             : Arrays.equals(refSignature, other.getParameterTypes());
+    }
+
+    public static String methodToShortString(final @NonNull Method method) {
+
+        return method.getName() + "(" +
+
+            Stream.of(method.getParameterTypes())
+            .map(parameterType->parameterType.getTypeName())
+            .collect(Collectors.joining(", "))
+
+        + ")";
     }
 
 

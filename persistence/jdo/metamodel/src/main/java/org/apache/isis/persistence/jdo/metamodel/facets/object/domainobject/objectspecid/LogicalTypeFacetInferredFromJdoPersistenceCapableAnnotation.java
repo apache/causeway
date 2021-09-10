@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.persistence.jdo.metamodel.facets.object.domainobject.objectspecid;
 
 import java.util.Locale;

@@ -46,14 +46,12 @@ public class ApplicationUser_unlock {
 
     private final ApplicationUser target;
 
-    @MemberSupport
-    public ApplicationUser act() {
+    @MemberSupport public ApplicationUser act() {
         target.setStatus(ApplicationUserStatus.UNLOCKED);
         return target;
     }
 
-    @MemberSupport
-    public String disableAct() {
+    @MemberSupport public String disableAct() {
         return target.getStatus() == ApplicationUserStatus.UNLOCKED ? "Status is already set to UNLOCKED": null;
     }
 

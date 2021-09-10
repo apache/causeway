@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.jmock.Expectations;
@@ -24,6 +23,9 @@ import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.inject.ServiceInjector;
@@ -44,9 +46,6 @@ import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 public class ObjectAssociationAbstractTest {
 
@@ -117,14 +116,14 @@ public class ObjectAssociationAbstractTest {
             @Override
             public UsabilityContext createUsableInteractionContext(
                     final ManagedObject target, final InteractionInitiatedBy interactionInitiatedBy,
-                    Where where) {
+                    final Where where) {
                 return null;
             }
 
             @Override
             public VisibilityContext createVisibleInteractionContext(
                     final ManagedObject targetObjectAdapter, final InteractionInitiatedBy interactionInitiatedBy,
-                    Where where) {
+                    final Where where) {
                 return null;
             }
 
@@ -140,14 +139,19 @@ public class ObjectAssociationAbstractTest {
 
             @Override
             public Can<ManagedObject> getAutoComplete(
-                    ManagedObject object,
-                    String searchArg,
+                    final ManagedObject object,
+                    final String searchArg,
                     final InteractionInitiatedBy interactionInitiatedBy) {
                 return null;
             }
             @Override
             public int getAutoCompleteMinLength() {
                 return 0;
+            }
+
+            @Override
+            public boolean isExplicitlyAnnotated() {
+                return false;
             }
 
         };
@@ -182,7 +186,7 @@ public class ObjectAssociationAbstractTest {
         assertTrue(objectAssociation.hasChoices());
     }
 
-    private <T extends Facet> T mockFacetIgnoring(final Class<T> typeToMock, Precedence precedence) {
+    private <T extends Facet> T mockFacetIgnoring(final Class<T> typeToMock, final Precedence precedence) {
         final T facet = context.mock(typeToMock);
         context.checking(new Expectations() {
             {

@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.testspec;
 
 import java.lang.reflect.Method;
@@ -317,16 +316,6 @@ implements ObjectSpecification {
     // /////////////////////////////////////////////////////////
     // view models and wizards
     // /////////////////////////////////////////////////////////
-
-    @Override
-    public boolean isViewModelCloneable(final ManagedObject targetAdapter) {
-        return false;
-    }
-
-    @Override
-    public boolean isWizard() {
-        return false;
-    }
 
     @Override
     public String toString() {

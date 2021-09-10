@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.ident.title;
 
 import java.lang.reflect.Method;
@@ -69,7 +68,10 @@ public class TitleFacetViaMethodTest {
         mockFacetHolder = mockery.mock(FacetHolder.class);
         mockOwningAdapter = mockery.mock(ManagedObject.class);
         final Method iconNameMethod = DomainObjectWithProblemInItsTitleMethod.class.getMethod("title");
-        facet = new TitleFacetViaTitleMethod(iconNameMethod, null, mockFacetHolder);
+        facet = (TitleFacetViaTitleMethod) TitleFacetViaTitleMethod
+                .create(iconNameMethod, mockFacetHolder)
+                .orElse(null);
+
 
         mockery.checking(new Expectations() {
             {

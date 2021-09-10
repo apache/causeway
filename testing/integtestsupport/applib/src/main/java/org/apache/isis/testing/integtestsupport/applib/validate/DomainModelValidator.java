@@ -23,16 +23,19 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.Assertions;
+import org.opentest4j.AssertionFailedError;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.exceptions.unrecoverable.DomainModelException;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
@@ -53,7 +56,7 @@ public class DomainModelValidator {
     private final ValidationFailures validationFailures;
 
     @Inject
-    public DomainModelValidator(ServiceRegistry registry) {
+    public DomainModelValidator(final ServiceRegistry registry) {
         this(   registry.lookupServiceElseFail(SpecificationLoader.class),
                 registry.lookupServiceElseFail(IsisConfiguration.class),
                 registry.lookupServiceElseFail(IsisSystemEnvironment.class));
@@ -78,7 +81,7 @@ public class DomainModelValidator {
     }
 
 
-    private static boolean isRecreateRequired(IsisConfiguration configuration, IsisSystemEnvironment isisSystemEnvironment) {
+    private static boolean isRecreateRequired(final IsisConfiguration configuration, final IsisSystemEnvironment isisSystemEnvironment) {
         final IntrospectionMode mode = configuration.getCore().getMetaModel().getIntrospector().getMode();
         switch (mode) {
             case FULL:
@@ -120,7 +123,7 @@ public class DomainModelValidator {
         return validationFailures.getFailures(); // already wrapped unmodifiable
     }
 
-    public Stream<ValidationFailure> streamFailures(@Nullable Predicate<Identifier> filter) {
+    public Stream<ValidationFailure> streamFailures(@Nullable final Predicate<Identifier> filter) {
         if(validationFailures==null) {
             return Stream.empty();
         }
@@ -137,31 +140,71 @@ public class DomainModelValidator {
     }
 
 
-    // -- SHORTCUTS
+    // -- JUNIT SUPPORT
 
     /**
-     * primarily used for testing
+     * JUnit support
      */
-    public boolean anyMatchesContaining(
+    public void assertAnyFailuresContaining(
             final @NonNull Identifier identifier,
             final @NonNull String messageSnippet) {
-        return streamFailuresMatchingOriginatingIdentifier(identifier)
+
+        boolean matchFound = streamFailuresMatchingOriginatingIdentifier(identifier)
                 .anyMatch(failure->
                     failure.getMessage().contains(messageSnippet));
+
+        if(!matchFound) {
+            val msg = String.format("validation snipped '%s' not found within messages:\n%s",
+                    messageSnippet,
+                    streamFailuresMatchingOriginatingIdentifier(identifier)
+                    .map(ValidationFailure::getMessage)
+                    .collect(Collectors.joining("\n")));
+            throw new AssertionFailedError(msg);
+        }
+
+    }
+
+    /**
+     * JUnit support
+     */
+    public void assertAnyOfContainingAnyFailures(
+            final Can<Identifier> classIdentifiers,
+            final String messageSnippet) {
+
+        boolean matchFound = classIdentifiers
+                .stream()
+                .anyMatch(identifier->
+                        streamFailuresMatchingOriginatingIdentifier(identifier)
+                                .anyMatch(failure->
+                                failure.getMessage().contains(messageSnippet)));
+
+        if(!matchFound) {
+            val msg = String.format("validation snipped '%s' not found within messages:\n%s",
+                    messageSnippet,
+                    classIdentifiers.stream()
+                    .flatMap(identifier->streamFailuresMatchingOriginatingIdentifier(identifier))
+                    .map(ValidationFailure::getMessage)
+                    .collect(Collectors.joining("\n")));
+            throw new AssertionFailedError(msg);
+        }
+
+
     }
 
     // -- HELPER
 
-    private void throwFailureException(String errorMessage, Collection<String> logMessages) {
+    private void throwFailureException(final String errorMessage, final Collection<String> logMessages) {
         logErrors(logMessages);
         throw new DomainModelException(errorMessage);
     }
 
-    private void logErrors(Collection<String> logMessages) {
+    private void logErrors(final Collection<String> logMessages) {
         log.error("### Domain Model Deficiencies");
         for (String logMessage : logMessages) {
             log.error(logMessage);
         }
     }
+
+
 
 }

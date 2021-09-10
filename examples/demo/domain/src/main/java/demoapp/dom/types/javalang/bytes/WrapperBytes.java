@@ -32,7 +32,9 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
@@ -48,16 +50,17 @@ import demoapp.dom.types.javalang.bytes.vm.WrapperByteVm;
 //@Log4j2
 public class WrapperBytes implements HasAsciiDocDescription {
 
-    public String title() {
+    @ObjectSupport public String title() {
         return "Byte (wrapper) data type";
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public WrapperByteVm openViewModel(Byte initialValue) {
+    public WrapperByteVm openViewModel(final Byte initialValue) {
         return new WrapperByteVm(initialValue);
     }
-    public Byte default0OpenViewModel() {
+
+    @MemberSupport public Byte default0OpenViewModel() {
         return (byte)123;
     }
 

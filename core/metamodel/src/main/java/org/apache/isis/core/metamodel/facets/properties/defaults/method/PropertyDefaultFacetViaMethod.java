@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.properties.defaults.method;
 
 import java.lang.reflect.Method;
@@ -69,12 +68,6 @@ implements ImperativeFacet {
         } else {
             throw new UnknownTypeException("not an object, is this a collection?");
         }
-    }
-
-    @Override
-    protected String toStringValues() {
-        val method = methods.getFirstOrFail();
-        return "method=" + method;
     }
 
     @Override

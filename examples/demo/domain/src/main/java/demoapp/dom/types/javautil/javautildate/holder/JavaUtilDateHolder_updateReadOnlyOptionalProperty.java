@@ -20,6 +20,7 @@ package demoapp.dom.types.javautil.javautildate.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -41,14 +42,15 @@ public class JavaUtilDateHolder_updateReadOnlyOptionalProperty {
 
     private final JavaUtilDateHolder holder;
 
-    public JavaUtilDateHolder act(
+    @MemberSupport public JavaUtilDateHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
-            java.util.Date newValue
+            final java.util.Date newValue
     ) {
         holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
-    public java.util.Date default0Act() {
+
+    @MemberSupport public java.util.Date default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

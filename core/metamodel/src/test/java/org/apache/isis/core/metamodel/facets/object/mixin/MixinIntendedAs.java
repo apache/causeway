@@ -21,13 +21,15 @@ package org.apache.isis.core.metamodel.facets.object.mixin;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
-import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 
@@ -64,11 +66,8 @@ abstract class MixinIntendedAs {
                 metaModelContext,
                 Identifier.classIdentifier(LogicalType.fqcn(type)));
 
-        val processClassContext =
-                new FacetFactory.ProcessClassContext(
-                        type,
-                        MethodRemover.NOOP,
-                        facetHolder);
+        val processClassContext = ProcessClassContext
+                .forTesting(type, MethodRemover.NOOP, facetHolder);
 
         programmingModel.streamFactories()
 //        .filter(facetFactory->!facetFactory.getClass().getSimpleName().startsWith("Grid"))
@@ -91,8 +90,9 @@ abstract class MixinIntendedAs {
                 parameterType);
 
         val processParameterContext =
-                new FacetFactory.ProcessParameterContext(
+                new ProcessParameterContext(
                         owningType,
+                        IntrospectionPolicy.ANNOTATION_OPTIONAL,
                         actionMethod,
                         paramIndex,
                         MethodRemover.NOOP,

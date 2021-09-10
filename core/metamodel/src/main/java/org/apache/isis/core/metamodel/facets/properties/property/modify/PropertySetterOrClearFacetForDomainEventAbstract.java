@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.properties.property.modify;
 
 import java.util.Objects;
@@ -31,7 +30,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearingAccessor;
@@ -181,7 +179,7 @@ implements
         private final EditingVariant style;
 
         @Override
-        public Object execute(PropertyEdit currentExecution) {
+        public Object execute(final PropertyEdit currentExecution) {
 
             // TODO: REVIEW - is this safe to do?
             ManagedObject newValueAdapterMutatable = newValueAdapter;
@@ -232,10 +230,7 @@ implements
                             oldValuePojo, actualNewValue);
                 }
 
-                val targetManagedObjectPossiblyCloned =
-                        PropertySetterOrClearFacetForDomainEventAbstract.this.cloneIfViewModelCloneable(head.getTarget());
-
-                return targetManagedObjectPossiblyCloned.getPojo();
+                return head.getTarget().getPojo();
 
                 //
                 // REVIEW: the corresponding action has a whole bunch of error handling here.
@@ -271,18 +266,6 @@ implements
                 getFacetHolder(),
                 editingVariant
                 );
-    }
-
-    private ManagedObject cloneIfViewModelCloneable(final ManagedObject adapter) {
-
-        if (!adapter.getSpecification().isViewModelCloneable(adapter)) {
-            return adapter;
-        }
-
-        final ViewModelFacet viewModelFacet = adapter.getSpecification().getFacet(ViewModelFacet.class);
-        final Object clone = viewModelFacet.clone(adapter.getPojo());
-
-        return getObjectManager().adapt(clone);
     }
 
     public <S, T> Class<? extends PropertyDomainEvent<S, T>> getEventType() {

@@ -31,6 +31,11 @@ The release process should be performed on Java 11.
 This updated dependency changed as of 2.0.0-M6.
 ====
 
+[IMPORTANT]
+====
+The deploy process requires `gpg` v2.1 or later.
+====
+
 === Obtain Consensus
 
 Before releasing the framework, ensure there is consensus on the xref:docs:support:mailing-list.adoc[dev mailing list] that this is the right time for a release.
@@ -136,6 +141,18 @@ licenses to remove from supplemental-models.xml (are spurious):
 If any missing entries are listed or are spurious, then update `supplemental-models.xml` and try again.
 
 
+=== Reconcile isis-parent pom
+
+The `isis-parent/pom.xml` is a customisation of the `org.apache:apache` pom, with each section of customisation clearly identified.
+
+Check to see if there has been a new version of `org.apache:apache`; if so, merge in the changes.
+
+=== Update the project build timestamp
+
+For link:https://maven.apache.org/guides/mini/guide-reproducible-builds.html[reproducibility], the `project.build.outputTimestamp` property must be updated to a hard-coded value.
+
+Locate this property in `isis-parent/pom.xml` and update to the current date/time.
+
 === Update and preview website
 
 The next step is to generate the website, ensuring that the config, examples, projdoc (system overview and global index) are all updated.
@@ -237,7 +254,8 @@ git push origin $ISISBRANCH -u
 
 Search through the `.java` files for `{page-isisprev}`, and change to `{page-isisrel}`.
 
-At the time of writing there are just a couple of files that have the release hard-coded.
+At the time of writing there was just one `.java` file that had the release hard-coded (`IsisConfigurationLegacy`).
+
 
 === Switch to the `isis-parent` directory
 
@@ -273,7 +291,7 @@ mvn install -o -DskipTests -Dreleased
 ====
 The `released` system property is set to only sanity check the modules actually to be released (ignores the incubator modules).
 
-Partly that's because there's no need to check the incubator modules, it's also because the incubator modules might require new than Java 11 (Java 11 is used for everything else)
+Partly that's because there's no need to check the incubator modules, it's also because the incubator modules might require more recent versions of Java than that formally supported by the framework (Java 11 currently).
 ====
 
 * next we also update the starters (as used by applications built using the framework):
@@ -323,13 +341,23 @@ Still in the `isis-parent` directory, we deploy (upload the artifacts) using:
 ----
 mvn deploy \
     -Dapache-release \
-    -Dgit
+    -Dgit \
+    -Dmaven.javadoc.skip=true    #<.>
 ----
+<.> generation of Javadoc is broken as of 2.0.0-M6; see note below.
 
 When prompted, enter your GPG passphrase.
 (Or, it might be sufficient to add just `-Dgpg.passphrase="..."`)
 
-IMPORTANT: This requires `gpg` v2.1 or later.
+[WARNING]
+.javadoc generation
+====
+As of 2.0.0-M6 javadoc generation is broken, due to link:https://issues.apache.org/jira/browse/MJAVADOC-586[MJAVADOC-586].
+
+Fixing the issue requires performing the build using a more recent version of the JDK than JDK11.
+However, this in turn requires module paths to be properly fixed; see link:https://issues.apache.org/jira/browse/ISIS-2841[ISIS-2841] for some ideas.
+====
+
 
 
 === Tag the Release
@@ -636,8 +664,16 @@ popd
 ----
 cd ../isis-release
 
-sh preview.sh
+sh preview.sh -A
 ----
++
+[WARNING]
+====
+This procedure doesn't yet work; Antora does not yet support worktrees.
+
+So instead it's currently necessary to perform the preview in the main `../isis` directory (switch branches first, of course).
+====
+
 
 * Copy the generated Antora site to `isis-site` repo's `contents` directory:
 +

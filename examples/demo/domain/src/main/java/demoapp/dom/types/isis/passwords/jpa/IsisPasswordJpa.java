@@ -34,12 +34,13 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.value.Password;
-import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
+import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
-import demoapp.dom.types.isis.passwords.persistence.IsisPasswordEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import demoapp.dom.types.isis.passwords.persistence.IsisPasswordEntity;
 
 @Profile("demo-jpa")
 //tag::class[]
@@ -48,7 +49,7 @@ import lombok.Setter;
       schema = "demo",
       name = "IsisPasswordJpa"
 )
-@EntityListeners(JpaEntityInjectionPointResolver.class)
+@EntityListeners(IsisEntityListener.class)
 @DomainObject(
       logicalTypeName = "demo.IsisPasswordEntity"
 )
@@ -57,7 +58,7 @@ public class IsisPasswordJpa
         extends IsisPasswordEntity {
 
 //end::class[]
-    public IsisPasswordJpa(Password initialValue) {
+    public IsisPasswordJpa(final Password initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

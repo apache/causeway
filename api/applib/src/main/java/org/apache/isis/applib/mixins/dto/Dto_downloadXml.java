@@ -62,8 +62,7 @@ public class Dto_downloadXml {
     public static class ActionDomainEvent
     extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Dto_downloadXml> {}
 
-    @MemberSupport
-    public Object act(
+    @MemberSupport public Object act(
 
             // PARAM 0
             @ParameterLayout(
@@ -75,8 +74,7 @@ public class Dto_downloadXml {
         return Clob.of(fileName, CommonMimeType.XML, xmlString);
     }
 
-    @MemberSupport
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return holder.getClass().getName();
     }
 

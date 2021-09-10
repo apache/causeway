@@ -35,8 +35,11 @@ import javax.ws.rs.ext.Providers;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
+import org.apache.isis.commons.internal.base._Refs;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.codec._UrlDecoderUtil;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.config.viewer.web.WebAppContextPath;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -65,6 +68,8 @@ public abstract class ResourceAbstract {
     @Context HttpServletResponse httpServletResponse;
     @Context SecurityContext securityContext;
     @Context Providers providers;
+
+    @Inject WebAppContextPath webAppContextPath;
 
     @Inject
     protected ResourceAbstract(
@@ -108,11 +113,31 @@ public abstract class ResourceAbstract {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED);
         }
 
-        final String baseUri = isisConfiguration.getViewer().getRestfulobjects().getBaseUri()
-                                    .orElse(uriInfo.getBaseUri().toString());
+        // eg. http://localhost:8080/ctx/restful/
+        final String restfulAbsoluteBase = isisConfiguration.getViewer().getRestfulobjects().getBaseUri()
+                                    .orElseGet(()->uriInfo.getBaseUri().toString());
+
+        // eg. /ctx/restful/
+        val restfulRelativeBase = uriInfo.getBaseUri().getRawPath();
+
+        // eg. http://localhost:8080/
+        val serverAbsoluteBase =
+                _Strings
+                .suffix(_Refs
+                        .stringRef(restfulAbsoluteBase)
+                        .cutAtLastIndexOfAndDrop(restfulRelativeBase),
+                "/");
+
+        // eg. http://localhost:8080/ctx/
+        val applicationAbsoluteBase = _Strings
+                .suffix(webAppContextPath.appendContextPath(serverAbsoluteBase), "/");
 
         return resourceContext(
-                resourceDescriptor, baseUri, urlUnencodedQueryString, httpServletRequest.getParameterMap());
+                resourceDescriptor,
+                applicationAbsoluteBase,
+                restfulAbsoluteBase,
+                urlUnencodedQueryString,
+                httpServletRequest.getParameterMap());
     }
 
     public ResourceContext resourceContextForTesting(
@@ -120,7 +145,7 @@ public abstract class ResourceAbstract {
             final Map<String, String[]> requestParams) {
 
         return resourceContext(
-                resourceDescriptor, "/restful", /*urlUnencodedQueryString*/ null, requestParams);
+                resourceDescriptor, "", "/restful", /*urlUnencodedQueryString*/ null, requestParams);
     }
 
     // -- ISIS INTEGRATION
@@ -162,13 +187,16 @@ public abstract class ResourceAbstract {
 
     private ResourceContext resourceContext(
             final ResourceDescriptor resourceDescriptor,
-            final String baseUri,
+            final String applicationAbsoluteBase,
+            final String restfulAbsoluteBase,
             final String urlUnencodedQueryString,
             final Map<String, String[]> requestParams) {
 
         return new ResourceContext(
                 resourceDescriptor,
-                httpHeaders, providers, baseUri, request,
+                httpHeaders, providers, request,
+                applicationAbsoluteBase,
+                restfulAbsoluteBase,
                 urlUnencodedQueryString,
                 httpServletRequest, httpServletResponse,
                 securityContext,

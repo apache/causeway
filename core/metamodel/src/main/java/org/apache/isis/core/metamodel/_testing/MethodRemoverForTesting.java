@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel._testing;
 
 import java.lang.reflect.Method;
@@ -24,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.commons.CanBeVoid;
@@ -57,7 +58,8 @@ public class MethodRemoverForTesting implements MethodRemover {
     private final List<Method> removedMethodMethodCalls = new ArrayList<Method>();
 
     @Override
-    public void removeMethod(final Method method) {
+    public void removeMethod(final @Nullable Method method) {
+        if(method==null) return;
         removedMethodMethodCalls.add(method);
     }
 
@@ -73,7 +75,7 @@ public class MethodRemoverForTesting implements MethodRemover {
     }
 
     @Override
-    public void removeMethods(Predicate<Method> filter, Consumer<Method> onRemoval) {
+    public void removeMethods(final Predicate<Method> filter, final Consumer<Method> onRemoval) {
         removeMethodArgsCalls.add(new RemoveMethodArgs("", void.class, new Class[0]));
     }
 

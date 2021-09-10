@@ -18,11 +18,17 @@
  */
 package org.apache.isis.valuetypes.asciidoc.applib.value;
 
+import java.util.Optional;
+
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.AttributesBuilder;
+import org.asciidoctor.Attributes;
 import org.asciidoctor.Options;
-import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.SafeMode;
+import org.springframework.lang.Nullable;
+
+import org.apache.isis.commons.internal.base._Strings;
+
+import lombok.Getter;
 
 final class Converter {
 
@@ -50,28 +56,36 @@ final class Converter {
      * </pre>
      *
      * @param adoc - formatted input to be converted to HTML
+     * @param options - if {@code null} uses built-in default options
      */
-    public static String adocToHtml(String adoc) {
-        if(asciidoctor==null) {
-            asciidoctor = Asciidoctor.Factory.create();
-            options = defaultOptions();
-        }
-        return asciidoctor.convert(adoc, options);
+    public static String adocToHtml(final @Nullable String adoc, final @Nullable Options options) {
+        return _Strings.isEmpty(adoc)
+                ? ""
+                : getAsciidoctor().convert(adoc,
+                    Optional
+                    .ofNullable(options)
+                    .orElseGet(Converter::getDefaultOptions));
+    }
+
+    /**
+     * Shortcut to {@link #adocToHtml(String, Options)} using default options.
+     */
+    public static String adocToHtml(final String adoc) {
+        return adocToHtml(adoc, null);
     }
 
     // -- HELPER
 
-    private static Asciidoctor asciidoctor;
-    private static Options options;
+    @Getter(lazy = true)
+    private final static Asciidoctor asciidoctor = Asciidoctor.Factory.create();
 
-    private static Options defaultOptions() {
-        return OptionsBuilder.options()
-                .safe(SafeMode.UNSAFE)
-                .toFile(false)
-                .attributes(AttributesBuilder.attributes()
-                        .sourceHighlighter("prism")
-                        .get())
-                .get();
-    }
+    @Getter(lazy = true)
+    private final static Options defaultOptions = Options.builder()
+            .safe(SafeMode.UNSAFE)
+            .toFile(false)
+            .attributes(Attributes.builder()
+                    .sourceHighlighter("prism")
+                    .build())
+            .build();
 
 }

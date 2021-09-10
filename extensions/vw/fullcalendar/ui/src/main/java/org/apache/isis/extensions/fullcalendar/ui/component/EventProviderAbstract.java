@@ -18,6 +18,7 @@
  */
 package org.apache.isis.extensions.fullcalendar.ui.component;
 
+import java.time.ZoneId;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
 
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -35,6 +37,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.extensions.fullcalendar.applib.spi.CalendarableDereferencingService;
 import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
+import org.apache.isis.valuetypes.jodatime.applib.value.JodatimeConverters;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 
 import lombok.val;
@@ -90,10 +93,15 @@ public abstract class EventProviderAbstract implements EventProvider {
                 return null;
             }
 
-            final Event event = new Event();
+            val timeZone = commonContext.getInteractionProvider()
+                    .currentInteractionContext()
+                    .map(InteractionContext::getTimeZone)
+                    .orElse(ZoneId.systemDefault());
 
-            final DateTime start = calendarEvent.getDateTime();
-            final DateTime end = start;
+            val start = JodatimeConverters.toJoda(calendarEvent.asDateTime(timeZone));
+            val end = start;
+
+            final Event event = new Event();
             event.setStart(start);
             event.setEnd(end);
             event.setAllDay(true);
@@ -143,7 +151,7 @@ public abstract class EventProviderAbstract implements EventProvider {
     }
 
     @Override
-    public Event getEventForId(String id) throws EventNotFoundException {
+    public Event getEventForId(final String id) throws EventNotFoundException {
         return eventById.get(id);
     }
 

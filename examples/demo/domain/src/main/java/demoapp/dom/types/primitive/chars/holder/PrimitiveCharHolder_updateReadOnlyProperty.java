@@ -20,6 +20,7 @@ package demoapp.dom.types.primitive.chars.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
@@ -39,11 +40,12 @@ public class PrimitiveCharHolder_updateReadOnlyProperty {
 
     private final PrimitiveCharHolder holder;
 
-    public PrimitiveCharHolder act(char newValue) {
+    @MemberSupport public PrimitiveCharHolder act(final char newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
-    public char default0Act() {
+
+    @MemberSupport public char default0Act() {
         return holder.getReadOnlyProperty();
     }
 

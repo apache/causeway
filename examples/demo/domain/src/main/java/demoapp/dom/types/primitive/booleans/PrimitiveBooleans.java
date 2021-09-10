@@ -32,7 +32,9 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
@@ -52,17 +54,17 @@ import demoapp.dom.types.primitive.booleans.vm.PrimitiveBooleanVm;
 //@Log4j2
 public class PrimitiveBooleans implements HasAsciiDocDescription {
 
-    public String title() {
+    @ObjectSupport public String title() {
         return "boolean (primitive) data type";
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public PrimitiveBooleanVm openViewModel(boolean initialValue) {
+    public PrimitiveBooleanVm openViewModel(final boolean initialValue) {
         return new PrimitiveBooleanVm(initialValue);
     }
     // TODO: there is a bug in the UI, requiring the user to explicitly set/unset the value (even though looks like is set)
-    public boolean default0OpenViewModel() {
+    @MemberSupport public boolean default0OpenViewModel() {
         return true;
     }
 

@@ -42,18 +42,18 @@ public class DependentArgsActionDemo_useIndependent {
 
     private final DependentArgsActionDemo holder;
 
-    public DependentArgsActionDemo act(
+    @MemberSupport public DependentArgsActionDemo act(
 
             // PARAM 0
-            @Parameter(optionality = Optionality.MANDATORY)
+            @Parameter(optionality = Optionality.MANDATORY) final
             Parity parity,
 
             // PARAM 1
-            @Parameter(optionality = Optionality.MANDATORY)
+            @Parameter(optionality = Optionality.MANDATORY) final
             DemoItem item1,
 
             // PARAM 2
-            @Parameter(optionality = Optionality.MANDATORY)
+            @Parameter(optionality = Optionality.MANDATORY) final
             DemoItem item2
 
             ) {
@@ -66,22 +66,19 @@ public class DependentArgsActionDemo_useIndependent {
 
     // -- PARAM 0 (Parity)
 
-    @MemberSupport
-    public Parity default0Act() {
+    @MemberSupport public Parity default0Act() {
         return holder.getDialogParityDefault();
     }
 
     // -- PARAM 1 (DemoItem item1)
 
-    @MemberSupport
-    public Collection<DemoItem> choices1Act() {
+    @MemberSupport public Collection<DemoItem> choices1Act() {
         return holder.getItems();
     }
 
     // -- PARAM 2 (DemoItem item2)
 
-    @MemberSupport
-    public Collection<DemoItem> choices2Act() {
+    @MemberSupport public Collection<DemoItem> choices2Act() {
         return holder.getItems();
     }
 

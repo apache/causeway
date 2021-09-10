@@ -198,8 +198,9 @@ public final class _Refs {
     public static final class StringReference {
         private @NonNull String value;
 
-        public String update(final @NonNull UnaryOperator<String> operator) {
-            return value = Objects.requireNonNull(operator.apply(value));
+        public StringReference update(final @NonNull UnaryOperator<String> operator) {
+            value = Objects.requireNonNull(operator.apply(value));
+            return this;
         }
 
         public boolean isSet(final String other) {

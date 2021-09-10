@@ -26,11 +26,13 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import demoapp.dom.types.Samples;
 import lombok.RequiredArgsConstructor;
+
+import demoapp.dom.types.Samples;
 
 //tag::class[]
 @Action(
@@ -46,14 +48,16 @@ public class JavaMathBigDecimalHolder_updateReadOnlyPropertyWithChoices {
 
     private final JavaMathBigDecimalHolder holder;
 
-    public JavaMathBigDecimalHolder act(java.math.BigDecimal newValue) {
+    @MemberSupport public JavaMathBigDecimalHolder act(final java.math.BigDecimal newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
-    public java.math.BigDecimal default0Act() {
+
+    @MemberSupport public java.math.BigDecimal default0Act() {
         return holder.getReadOnlyProperty();
     }
-    public List<java.math.BigDecimal> choices0Act() {
+
+    @MemberSupport public List<java.math.BigDecimal> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }

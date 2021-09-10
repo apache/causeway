@@ -77,12 +77,18 @@ public final class LinkBuilder {
 
     public JsonRepresentation build() {
         representation.mapPut("rel", rel);
-        representation.mapPut("href", resourceContext.urlFor(href));
+        representation.mapPut("href", resourceContext.restfulUrlFor(href));
         representation.mapPut("method", method);
         representation.mapPut("type", mediaType.toString());
         representation.mapPut("title", title);
         representation.mapPut("arguments", arguments);
         representation.mapPut("value", value);
+        return representation;
+    }
+
+    public JsonRepresentation buildAsApplicationResource() {
+        build();
+        representation.mapPut("href", resourceContext.applicationUrlFor(href));
         return representation;
     }
 

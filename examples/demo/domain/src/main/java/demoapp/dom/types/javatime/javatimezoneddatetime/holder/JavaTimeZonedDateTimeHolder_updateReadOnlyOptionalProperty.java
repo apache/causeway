@@ -20,6 +20,7 @@ package demoapp.dom.types.javatime.javatimezoneddatetime.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -41,14 +42,15 @@ public class JavaTimeZonedDateTimeHolder_updateReadOnlyOptionalProperty {
 
     private final JavaTimeZonedDateTimeHolder holder;
 
-    public JavaTimeZonedDateTimeHolder act(
+    @MemberSupport public JavaTimeZonedDateTimeHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
-            java.time.ZonedDateTime newValue
+            final java.time.ZonedDateTime newValue
     ) {
         holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
-    public java.time.ZonedDateTime default0Act() {
+
+    @MemberSupport public java.time.ZonedDateTime default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

@@ -26,8 +26,7 @@ import org.apache.isis.applib.annotation.Nature;
 public class InvalidOrphanedCollectionSupport {
 
     // should fail
-    @MemberSupport
-    public boolean hideMyCollection() {
+    @MemberSupport public boolean hideMyCollection() {
         return false;
     }
 

@@ -22,6 +22,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.control.AsyncControl;
@@ -49,13 +50,13 @@ public class WrapperFactoryEntity_mixinUpdatePropertyAsync {
     private final WrapperFactoryEntity wrapperFactoryEntity;
 
 //tag::class[]
-    public WrapperFactoryEntity act(final String value) {
+    @MemberSupport public WrapperFactoryEntity act(final String value) {
         val control = AsyncControl.returningVoid().withSkipRules();
         val wrapped = this.wrapperFactory.asyncWrap(this.wrapperFactoryEntity, control);
         wrapped.setPropertyAsync(value);
         return this.wrapperFactoryEntity;
     }
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return wrapperFactoryEntity.getPropertyAsync();
     }
 }

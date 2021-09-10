@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.domainobject;
 
 import java.util.UUID;
@@ -51,7 +50,7 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.editing.Immutab
 import org.apache.isis.core.metamodel.facets.object.domainobject.entitychangepublishing.EntityChangePublishingFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.entitychangepublishing.EntityChangePublishingFacetForDomainObjectAnnotationAsConfigured;
 import org.apache.isis.core.metamodel.facets.object.domainobject.entitychangepublishing.EntityChangePublishingFacetFromConfiguration;
-import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.LogicalTypeFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.logicaltype.LogicalTypeFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.recreatable.RecreatableObjectFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;
@@ -128,7 +127,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
             allowingEntityChangePublishingToReturn(PublishingPolicies.EntityChangePublishingPolicy.ALL);
 
-            val context = new ProcessClassContext(HasInteractionId.class, mockMethodRemover, facetHolder);
+            val context = ProcessClassContext
+                    .forTesting(HasInteractionId.class, mockMethodRemover, facetHolder);
             facetFactory.processEntityChangePublishing(context.synthesizeOnType(DomainObject.class), context);
 
             final Facet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
@@ -143,7 +143,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
             public void configured_value_set_to_all() {
                 allowingEntityChangePublishingToReturn(PublishingPolicies.EntityChangePublishingPolicy.ALL);
 
-                val context = new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder);
+                val context = ProcessClassContext
+                        .forTesting(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder);
                 facetFactory.processEntityChangePublishing(context.synthesizeOnType(DomainObject.class), context);
 
                 final Facet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
@@ -157,7 +158,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
             public void configured_value_set_to_none() {
                 allowingEntityChangePublishingToReturn(PublishingPolicies.EntityChangePublishingPolicy.NONE);
 
-                facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
+                facetFactory.process(ProcessClassContext
+                        .forTesting(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
 
                 final EntityChangePublishingFacet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
                 Assert.assertNull(facet);
@@ -173,7 +175,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
             public void configured_value_set_to_all() {
                 allowingEntityChangePublishingToReturn(PublishingPolicies.EntityChangePublishingPolicy.ALL);
 
-                facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndAuditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
+                facetFactory.process(ProcessClassContext
+                        .forTesting(CustomerWithDomainObjectAndAuditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
                 Assert.assertNotNull(facet);
@@ -186,7 +189,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
             public void configured_value_set_to_none() {
                 allowingEntityChangePublishingToReturn(PublishingPolicies.EntityChangePublishingPolicy.NONE);
 
-                facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndAuditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
+                facetFactory.process(ProcessClassContext
+                        .forTesting(CustomerWithDomainObjectAndAuditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
 
                 final EntityChangePublishingFacet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
                 Assert.assertNull(facet);
@@ -202,7 +206,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
             public void irrespective_of_configured_value() {
                 allowingEntityChangePublishingToReturn(null);
 
-                facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndAuditingSetToEnabled.class, mockMethodRemover, facetHolder));
+                facetFactory.process(ProcessClassContext
+                        .forTesting(CustomerWithDomainObjectAndAuditingSetToEnabled.class, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
                 Assert.assertNotNull(facet);
@@ -219,7 +224,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
             public void irrespective_of_configured_value() {
                 allowingEntityChangePublishingToReturn(PublishingPolicies.EntityChangePublishingPolicy.ALL);
 
-                facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndAuditingSetToDisabled.class, mockMethodRemover, facetHolder));
+                facetFactory.process(ProcessClassContext
+                        .forTesting(CustomerWithDomainObjectAndAuditingSetToDisabled.class, mockMethodRemover, facetHolder));
 
                 assertFalse(EntityChangePublishingFacet.isPublishingEnabled(facetHolder));
 
@@ -275,7 +281,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
         @Test
         public void whenDomainObjectAndAutoCompleteRepositoryAndAction() {
 
-            facetFactory.process(new ProcessClassContext(
+            facetFactory.process(ProcessClassContext
+                    .forTesting(
                     CustomerWithDomainObjectAndAutoCompleteRepositoryAndAction.class, mockMethodRemover, facetHolder));
 
             final Facet facet = facetHolder.getFacet(AutoCompleteFacet.class);
@@ -294,7 +301,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
         @Test
         public void whenDomainObjectAndAutoCompleteRepository() {
 
-            facetFactory.process(new ProcessClassContext(
+            facetFactory.process(ProcessClassContext
+                    .forTesting(
                     CustomerWithDomainObjectAndAutoCompleteRepository.class, mockMethodRemover, facetHolder));
 
             final Facet facet = facetHolder.getFacet(AutoCompleteFacet.class);
@@ -313,7 +321,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
         @Test
         public void whenDomainObjectAnnotationButNoAutoComplete() {
 
-            facetFactory.process(new ProcessClassContext(
+            facetFactory.process(ProcessClassContext
+                    .forTesting(
                     CustomerWithDomainObjectButNoAutoCompleteRepository.class, mockMethodRemover, facetHolder));
 
             final Facet facet = facetHolder.getFacet(AutoCompleteFacet.class);
@@ -325,7 +334,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
         @Test
         public void whenNoDomainObjectAnnotation() {
 
-            facetFactory.process(new ProcessClassContext(
+            facetFactory.process(ProcessClassContext
+                    .forTesting(
                     DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
 
             final Facet facet = facetHolder.getFacet(AutoCompleteFacet.class);
@@ -360,7 +370,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
         @Test
         public void whenDomainObjectAndBoundedSetToTrue() {
 
-            facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndBoundedSetToTrue.class, mockMethodRemover, facetHolder));
+            facetFactory.process(ProcessClassContext
+                    .forTesting(CustomerWithDomainObjectAndBoundedSetToTrue.class, mockMethodRemover, facetHolder));
 
             final Facet facet = facetHolder.getFacet(ChoicesFacet.class);
             Assert.assertNotNull(facet);
@@ -373,7 +384,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
         @Test
         public void whenDomainObjectAndAutoCompleteRepository() {
 
-            facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndBoundedSetToFalse.class, mockMethodRemover, facetHolder));
+            facetFactory.process(ProcessClassContext
+                    .forTesting(CustomerWithDomainObjectAndBoundedSetToFalse.class, mockMethodRemover, facetHolder));
 
             final Facet facet = facetHolder.getFacet(ChoicesFacet.class);
             Assert.assertNull(facet);
@@ -384,7 +396,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
         @Test
         public void whenNoDomainObjectAnnotation() {
 
-            facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
+            facetFactory.process(ProcessClassContext
+                    .forTesting(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
 
             final Facet facet = facetHolder.getFacet(ChoicesFacet.class);
             Assert.assertNull(facet);
@@ -418,7 +431,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
             public void configured_value_set_to_true() {
                 allowingObjectsEditingToReturn(EditingObjectsConfiguration.TRUE);
 
-                facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
+                facetFactory.process(ProcessClassContext
+                        .forTesting(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
                 Assert.assertNull(facet);
@@ -430,7 +444,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
             public void configured_value_set_to_false() {
                 allowingObjectsEditingToReturn(EditingObjectsConfiguration.FALSE);
 
-                facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
+                facetFactory.process(ProcessClassContext
+                        .forTesting(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
                 Assert.assertNotNull(facet);
@@ -443,7 +458,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
             public void configured_value_set_to_defaults() {
                 //allowingConfigurationToReturn("isis.objects.editing", "foobar");
 
-                facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
+                facetFactory.process(ProcessClassContext
+                        .forTesting(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
                 Assert.assertNotNull(facet); // default is now non-editable
@@ -461,7 +477,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
             public void configured_value_set_to_true() {
                 allowingObjectsEditingToReturn(EditingObjectsConfiguration.TRUE);
 
-                facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndEditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
+                facetFactory.process(ProcessClassContext
+                        .forTesting(CustomerWithDomainObjectAndEditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
                 Assert.assertNull(facet);
@@ -473,7 +490,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
             public void configured_value_set_to_false() {
                 allowingObjectsEditingToReturn(EditingObjectsConfiguration.FALSE);
 
-                facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndEditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
+                facetFactory.process(ProcessClassContext
+                        .forTesting(CustomerWithDomainObjectAndEditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
                 Assert.assertNotNull(facet);
@@ -486,7 +504,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
             public void configured_value_set_to_defaults() {
                 //allowingConfigurationToReturn("isis.objects.editing", "foobar");
 
-                facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndEditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
+                facetFactory.process(ProcessClassContext
+                        .forTesting(CustomerWithDomainObjectAndEditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
                 Assert.assertNotNull(facet); // default is now non-editable
@@ -502,7 +521,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
             public void irrespective_of_configured_value() {
                 allowingObjectsEditingToReturn(EditingObjectsConfiguration.FALSE);
 
-                facetFactory.process(new ProcessClassContext(
+                facetFactory.process(ProcessClassContext
+                        .forTesting(
                         CustomerWithDomainObjectAndEditingSetToEnabled.class, mockMethodRemover, facetHolder));
 
                 final ImmutableFacet facet = facetHolder.getFacet(ImmutableFacet.class);
@@ -519,7 +539,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
             public void irrespective_of_configured_value() {
                 allowingObjectsEditingToReturn(EditingObjectsConfiguration.TRUE);
 
-                facetFactory.process(new ProcessClassContext(
+                facetFactory.process(ProcessClassContext
+                        .forTesting(
                         CustomerWithDomainObjectAndEditingSetToDisabled.class, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
@@ -570,7 +591,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
         @Test
         public void whenDomainObjectAndObjectTypeNotSet() {
 
-            facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectButNoObjectType.class, mockMethodRemover, facetHolder));
+            facetFactory.process(ProcessClassContext
+                    .forTesting(CustomerWithDomainObjectButNoObjectType.class, mockMethodRemover, facetHolder));
 
             final Facet facet = facetHolder.getFacet(LogicalTypeFacet.class);
             Assert.assertNull(facet);
@@ -581,7 +603,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
         @Test
         public void whenNoDomainObjectAnnotation() {
 
-            facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
+            facetFactory.process(ProcessClassContext
+                    .forTesting(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
 
             final Facet facet = facetHolder.getFacet(LogicalTypeFacet.class);
             Assert.assertNull(facet);
@@ -619,7 +642,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
         @Test
         public void whenDomainObjectAndNatureSetToJdoEntity() {
 
-            facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndNatureSetToJdoEntity.class, mockMethodRemover, facetHolder));
+            facetFactory.process(ProcessClassContext
+                    .forTesting(CustomerWithDomainObjectAndNatureSetToJdoEntity.class, mockMethodRemover, facetHolder));
 
             final Facet facet = facetHolder.getFacet(ViewModelFacet.class);
             Assert.assertNull(facet);
@@ -630,7 +654,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
         @Test
         public void whenDomainObjectAndNatureSetToNotSpecified() {
 
-            facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndNatureSetToNotSpecified.class, mockMethodRemover, facetHolder));
+            facetFactory.process(ProcessClassContext
+                    .forTesting(CustomerWithDomainObjectAndNatureSetToNotSpecified.class, mockMethodRemover, facetHolder));
 
             final Facet facet = facetHolder.getFacet(ViewModelFacet.class);
             Assert.assertNull(facet);
@@ -641,7 +666,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
         @Test
         public void whenDomainObjectAndNatureSetToViewModel() {
 
-            facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndNatureSetToViewModel.class, mockMethodRemover, facetHolder));
+            facetFactory.process(ProcessClassContext
+                    .forTesting(CustomerWithDomainObjectAndNatureSetToViewModel.class, mockMethodRemover, facetHolder));
 
             final Facet facet = facetHolder.getFacet(ViewModelFacet.class);
             Assert.assertNotNull(facet);
@@ -654,7 +680,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
         @Test
         public void whenNoDomainObjectAnnotation() {
 
-            facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
+            facetFactory.process(ProcessClassContext
+                    .forTesting(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
 
             final Facet facet = facetHolder.getFacet(ViewModelFacet.class);
             Assert.assertNull(facet);

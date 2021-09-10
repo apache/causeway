@@ -34,6 +34,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
@@ -49,16 +50,16 @@ import demoapp.dom.types.javalang.booleans.vm.WrapperBooleanVm;
 //@Log4j2
 public class WrapperBooleans implements HasAsciiDocDescription {
 
-    public String title() {
+    @ObjectSupport public String title() {
         return "Boolean (wrapper) data type";
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public WrapperBooleanVm openViewModel(Boolean initialValue) {
+    public WrapperBooleanVm openViewModel(final Boolean initialValue) {
         return new WrapperBooleanVm(initialValue);
     }
-    public Boolean default0OpenViewModel() {
+    @MemberSupport public Boolean default0OpenViewModel() {
         return true;
     }
 
@@ -79,12 +80,11 @@ public class WrapperBooleans implements HasAsciiDocDescription {
             , describedAs = "FIXME[ISIS-2387] even though primitive1 gets initialized with true, the model thinks its null"
     )
     public WrapperBooleans booleanParams(
-            boolean primitive0,
-            boolean primitive1) {
+            final boolean primitive0,
+            final boolean primitive1) {
         return this;
     }
-    @MemberSupport
-    public boolean default1BooleanParams() {
+    @MemberSupport public boolean default1BooleanParams() {
         return true;
     }
 
@@ -99,12 +99,11 @@ public class WrapperBooleans implements HasAsciiDocDescription {
                     " initialize with FALSE when null"
     )
     public WrapperBooleans booleanBoxedParams(
-            Boolean boxed0,
-            Boolean boxed1) {
+            final Boolean boxed0,
+            final Boolean boxed1) {
         return this;
     }
-    @MemberSupport
-    public Boolean default1BooleanBoxedParams() {
+    @MemberSupport public Boolean default1BooleanBoxedParams() {
         return true;
     }
 

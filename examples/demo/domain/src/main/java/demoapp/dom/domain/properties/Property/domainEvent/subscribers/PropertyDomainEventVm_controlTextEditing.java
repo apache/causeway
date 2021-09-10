@@ -22,12 +22,14 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Redirect;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import demoapp.dom.domain.properties.Property.domainEvent.PropertyDomainEventVm;
 import lombok.RequiredArgsConstructor;
+
+import demoapp.dom.domain.properties.Property.domainEvent.PropertyDomainEventVm;
 
 //tag::class[]
 @Action(
@@ -44,11 +46,11 @@ public class PropertyDomainEventVm_controlTextEditing {
 
     private final PropertyDomainEventVm propertyDomainEventVm;
 
-    public PropertyDomainEventVm act(final PropertyDomainEventControlStrategy controlStrategy) {
+    @MemberSupport public PropertyDomainEventVm act(final PropertyDomainEventControlStrategy controlStrategy) {
         eventControlService.controlStrategy = controlStrategy;
         return propertyDomainEventVm;
     }
-    public PropertyDomainEventControlStrategy default0Act() {
+    @MemberSupport public PropertyDomainEventControlStrategy default0Act() {
         return eventControlService.controlStrategy;
     }
 

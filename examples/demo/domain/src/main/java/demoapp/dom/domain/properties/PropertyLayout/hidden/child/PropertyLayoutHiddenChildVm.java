@@ -27,16 +27,18 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.domain.properties.PropertyLayout.hidden.PropertyLayoutHiddenVm;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.domain.properties.PropertyLayout.hidden.PropertyLayoutHiddenVm;
 
 //tag::class[]
 @XmlRootElement(name = "child")
@@ -49,7 +51,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class PropertyLayoutHiddenChildVm implements HasAsciiDocDescription {
 
-    public PropertyLayoutHiddenChildVm(String value, PropertyLayoutHiddenVm parent) {
+    public PropertyLayoutHiddenChildVm(final String value, final PropertyLayoutHiddenVm parent) {
         setPropertyHiddenNowhere(value);
         setPropertyHiddenEverywhere(value);
         setPropertyHiddenAnywhere(value);
@@ -64,7 +66,7 @@ public class PropertyLayoutHiddenChildVm implements HasAsciiDocDescription {
         setPropertyHiddenReferencesParent(parent);
     }
 
-    public String title() {
+    @ObjectSupport public String title() {
         return "PropertyLayout#hidden (child object)";
     }
 

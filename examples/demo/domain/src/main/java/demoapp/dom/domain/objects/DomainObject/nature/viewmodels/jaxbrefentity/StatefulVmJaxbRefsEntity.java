@@ -36,7 +36,9 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -63,7 +65,7 @@ public class StatefulVmJaxbRefsEntity implements HasAsciiDocDescription {
     @XmlTransient @Inject
     private ValueHolderRepository<String, ? extends JaxbRefEntity> childEntities;
 
-    public String title() {
+    @ObjectSupport public String title() {
         return String.format("%s; %s children", getMessage(), getChildren().size());
     }
 
@@ -79,16 +81,16 @@ public class StatefulVmJaxbRefsEntity implements HasAsciiDocDescription {
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
     @ActionLayout(associateWith = "favoriteChild", sequence = "1")
-    public StatefulVmJaxbRefsEntity changeFavoriteChild(JaxbRefEntity newFavorite) {
+    public StatefulVmJaxbRefsEntity changeFavoriteChild(final JaxbRefEntity newFavorite) {
         favoriteChild = newFavorite;
         return this;
     }
-    public List<JaxbRefEntity> choices0ChangeFavoriteChild() {
+    @MemberSupport public List<JaxbRefEntity> choices0ChangeFavoriteChild() {
         List<JaxbRefEntity> children = new ArrayList<>(getChildren());
         children.remove(getFavoriteChild());
         return children;
     }
-    public String disableChangeFavoriteChild() {
+    @MemberSupport public String disableChangeFavoriteChild() {
         switch (getChildren().size()) {
             case 0: return "no children";
             case 1: return "only child";
@@ -100,7 +102,7 @@ public class StatefulVmJaxbRefsEntity implements HasAsciiDocDescription {
 
     //XXX[ISIS-2384] potentially fails with NPE
     @Action(choicesFrom = "children")
-    public StatefulVmJaxbRefsEntity suffixSelected(List<JaxbRefEntity> children) {
+    public StatefulVmJaxbRefsEntity suffixSelected(final List<JaxbRefEntity> children) {
         for(JaxbRefEntity child : children) {
             child.setName(child.getName() + ", Jr");
         }
@@ -120,10 +122,10 @@ public class StatefulVmJaxbRefsEntity implements HasAsciiDocDescription {
     }
 
     //XXX[ISIS-2383] in support of an editable property ...
-    public List<JaxbRefEntity> choicesFavoriteChild() {
+    @MemberSupport public List<JaxbRefEntity> choicesFavoriteChild() {
         return choices0ChangeFavoriteChild(); // reuse logic from above
     }
-    public String disableFavoriteChild() {
+    @MemberSupport public String disableFavoriteChild() {
         return disableChangeFavoriteChild(); // reuse logic from above
     }
 
@@ -150,8 +152,8 @@ public class StatefulVmJaxbRefsEntity implements HasAsciiDocDescription {
         children.remove(child);
         return this;
     }
-    public List<JaxbRefEntity> choices0RemoveChild() { return getChildren(); }
-    public String disableRemoveChild() {
+    @MemberSupport public List<JaxbRefEntity> choices0RemoveChild() { return getChildren(); }
+    @MemberSupport public String disableRemoveChild() {
         return choices0RemoveChild().isEmpty()? "No children to remove" : null;
     }
 

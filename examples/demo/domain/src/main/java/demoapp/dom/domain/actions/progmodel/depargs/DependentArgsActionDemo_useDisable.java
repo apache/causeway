@@ -48,15 +48,15 @@ public class DependentArgsActionDemo_useDisable {
         String message;
     }
 
-    public DependentArgsActionDemo act(
+    @MemberSupport public DependentArgsActionDemo act(
 
             // PARAM 0
-            @ParameterLayout(named = "Disable Message Field")
+            @ParameterLayout(named = "Disable Message Field") final
             boolean disableMessageField,
 
             // PARAM 1
             @Parameter(optionality = Optionality.MANDATORY)
-            @ParameterLayout(named = "Message")
+            @ParameterLayout(named = "Message") final
             String message
 
             ) {
@@ -67,15 +67,13 @@ public class DependentArgsActionDemo_useDisable {
 
     // -- PARAM 0 (boolean disableMessageField)
 
-    @MemberSupport
-    public boolean default0Act() {
+    @MemberSupport public boolean default0Act() {
         return holder.isDialogCheckboxDefault();
     }
 
     // -- PARAM 1 (String message)
 
-    @MemberSupport
-    public String disable1Act(boolean disableMessageField) {
+    @MemberSupport public String disable1Act(final boolean disableMessageField) {
         return disableMessageField
                 ? "disabled by dependent argument"
                         : null;

@@ -20,6 +20,7 @@ package demoapp.dom.domain.properties.Property.regexPattern;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -39,7 +40,7 @@ public class PropertyRegexPatternVm_updateWithMetaAnnotation {
     private final PropertyRegexPatternVm propertyRegexPatternVm;
 
 //tag::meta-annotation[]
-    public PropertyRegexPatternVm act(
+    @MemberSupport public PropertyRegexPatternVm act(
             @RegexPatternEmailComMetaAnnotation                            // <.>
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(
@@ -50,7 +51,7 @@ public class PropertyRegexPatternVm_updateWithMetaAnnotation {
         return propertyRegexPatternVm;
     }
 //end::meta-annotation[]
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return propertyRegexPatternVm.getEmailAddressPropertyUsingMetaAnnotation();
     }
 

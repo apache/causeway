@@ -27,16 +27,19 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @XmlRootElement(name = "root")
 @XmlType
@@ -51,11 +54,11 @@ public class ActionDomainEventVm implements HasAsciiDocDescription {
     // ...
 //end::class[]
 
-    public ActionDomainEventVm(String text) {
+    public ActionDomainEventVm(final String text) {
         this.text = text;
     }
 
-    public String title() {
+    @ObjectSupport public String title() {
         return "Action#domainEvent";
     }
 
@@ -83,7 +86,7 @@ public class ActionDomainEventVm implements HasAsciiDocDescription {
         setText(text);
         return this;
     }
-    public String default0UpdateText() {
+    @MemberSupport public String default0UpdateText() {
         return getText();
     }
 }

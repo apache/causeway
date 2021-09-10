@@ -23,8 +23,9 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
-import demoapp.dom.domain.properties.Property.domainEvent.PropertyDomainEventVm;
 import lombok.RequiredArgsConstructor;
+
+import demoapp.dom.domain.properties.Property.domainEvent.PropertyDomainEventVm;
 
 
 //tag::class[]

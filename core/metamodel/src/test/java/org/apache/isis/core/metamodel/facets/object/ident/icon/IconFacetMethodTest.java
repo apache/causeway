@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.ident.icon;
 
 import java.lang.reflect.Method;
@@ -28,19 +27,19 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.icon.method.IconFacetMethod;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.icon.method.IconFacetViaIconNameMethod;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class IconFacetMethodTest {
 
     private final Mockery mockery = new JUnit4Mockery();
 
-    private IconFacetMethod facet;
+    private IconFacetViaIconNameMethod facet;
     private FacetHolder mockFacetHolder;
 
     private ManagedObject mockOwningAdapter;
@@ -60,7 +59,9 @@ public class IconFacetMethodTest {
         mockFacetHolder = mockery.mock(FacetHolder.class);
         mockOwningAdapter = mockery.mock(ManagedObject.class);
         final Method iconNameMethod = DomainObjectWithProblemInIconNameMethod.class.getMethod("iconName");
-        facet = new IconFacetMethod(iconNameMethod, mockFacetHolder);
+        facet = (IconFacetViaIconNameMethod) IconFacetViaIconNameMethod
+                .create(iconNameMethod, mockFacetHolder)
+                .orElse(null);
 
         mockery.checking(new Expectations() {
             {

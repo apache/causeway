@@ -20,6 +20,7 @@ package demoapp.dom.domain.properties.PropertyLayout.multiLine;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -39,7 +40,7 @@ public class PropertyLayoutMultiLineVm_updateWithParameterLayout {
     private final PropertyLayoutMultiLineVm propertyLayoutMultiLineVm;
 
 //tag::annotation[]
-    public PropertyLayoutMultiLineVm act(
+    @MemberSupport public PropertyLayoutMultiLineVm act(
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(
                 multiLine = 5                                 // <.>
@@ -51,7 +52,7 @@ public class PropertyLayoutMultiLineVm_updateWithParameterLayout {
         return propertyLayoutMultiLineVm;
     }
 //end::annotation[]
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return propertyLayoutMultiLineVm.getPropertyUsingAnnotation();
     }
 

@@ -16,82 +16,38 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.members.disabled.method;
-
-import java.lang.reflect.Method;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.services.i18n.TranslationContext;
-import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
-import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
-
-import lombok.val;
 
 public class DisableForContextFacetViaMethodFactory
-extends MethodPrefixBasedFacetFactoryAbstract  {
-
-    private static final String PREFIX = MethodLiteralConstants.DISABLE_PREFIX;
+extends MemberSupportFacetFactoryAbstract  {
 
     @Inject
     public DisableForContextFacetViaMethodFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.MEMBERS, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
+        super(mmc, FeatureType.MEMBERS, MemberSupportPrefix.DISABLE);
     }
 
-    @Override
-    public void process(final ProcessMethodContext processMethodContext) {
-        attachDisabledFacetIfDisabledMethodIsFound(processMethodContext);
-    }
+     @Override
+    protected void search(
+            final ProcessMethodContext processMethodContext,
+            final MethodFinder methodFinder) {
 
-    private void attachDisabledFacetIfDisabledMethodIsFound(final ProcessMethodContext processMethodContext) {
+         methodFinder
+         .streamMethodsMatchingSignature(NO_ARG)
+         .peek(processMethodContext::removeMethod)
+         .forEach(disableMethod->{
+             addFacet(
+                     new DisableForContextFacetViaMethod(
+                             disableMethod, processMethodContext.getFacetHolder()));
+         });
 
-        val actionOrGetter = processMethodContext.getMethod();
-
-        val cls = processMethodContext.getCls();
-
-        Method disableMethod = null;
-
-        val namingConvention = processMethodContext.memberSupportCandidates(PREFIX);
-
-        boolean noParamsOnly = getConfiguration().getCore().getMetaModel().getValidator().isNoParamsOnly();
-        boolean searchExactMatch = !noParamsOnly;
-        if(searchExactMatch) {
-            // search for exact match
-            disableMethod = MethodFinder.findMethod_returningText(
-                    cls,
-                    namingConvention,
-                    actionOrGetter.getParameterTypes())
-                    .findFirst()
-                    .orElse(null);
-        }
-        if (disableMethod == null) {
-            // search for no-arg version
-            disableMethod = MethodFinder.findMethod_returningText(
-                    cls,
-                    namingConvention,
-                    NO_ARG)
-                    .findFirst()
-                    .orElse(null);
-        }
-        if (disableMethod == null) {
-            return;
-        }
-
-        processMethodContext.removeMethod(disableMethod);
-
-        val facetHolder = processMethodContext.getFacetHolder();
-        val translationService = getTranslationService();
-        // sadness: same logic as in I18nFacetFactory
-        val translationContext = TranslationContext
-                .forTranslationContextHolder(facetHolder.getFeatureIdentifier());
-        addFacet(
-                new DisableForContextFacetViaMethod(
-                        disableMethod, translationService, translationContext, facetHolder));
     }
 
 }

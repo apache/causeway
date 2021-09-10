@@ -20,6 +20,7 @@ package demoapp.dom.domain.actions.Action.restrictTo;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
@@ -44,11 +45,11 @@ public class ActionRestrictToVm_mixinUpdateMetaAnnotatedOverridden {
 
     private final ActionRestrictToVm actionRestrictToVm;
 
-    public ActionRestrictToVm act(final String text) {
+    @MemberSupport public ActionRestrictToVm act(final String text) {
         actionRestrictToVm.setPropertyForMetaAnnotationsOverridden(text);
         return actionRestrictToVm;
     }
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return actionRestrictToVm.getPropertyForMetaAnnotationsOverridden();
     }
 }

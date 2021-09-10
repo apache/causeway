@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.viewer.restfulobjects.viewer.webmodule;
 
 import java.io.IOException;
@@ -24,6 +23,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -53,8 +53,6 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidExcep
 import org.apache.isis.core.webapp.modules.templresources.TemplateResourceCachingFilter;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategy;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategyDefault;
-
-import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
 
@@ -342,10 +340,13 @@ public class IsisRestfulObjectsInteractionFilter implements Filter {
     // /////////////////////////////////////////////////////////////////
 
     @Override
-    public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
+    public void doFilter(
+            final ServletRequest request,
+            final ServletResponse response,
+            final FilterChain chain) throws IOException, ServletException {
 
-        requires(interactionService, "isisInteractionFactory");
-        requires(specificationLoader, "specificationLoader");
+        Objects.requireNonNull(interactionService, "isisInteractionFactory");
+        Objects.requireNonNull(specificationLoader, "specificationLoader");
 
         ensureMetamodelIsValid(specificationLoader);
 
@@ -410,7 +411,7 @@ public class IsisRestfulObjectsInteractionFilter implements Filter {
     }
 
 
-    private static void ensureMetamodelIsValid(SpecificationLoader specificationLoader) {
+    private static void ensureMetamodelIsValid(final SpecificationLoader specificationLoader) {
         // using side-effect free access to MM validation result
         val validationResult = specificationLoader.getValidationResult()
         .orElseThrow(()->_Exceptions.illegalState("Application is not fully initilized yet."));

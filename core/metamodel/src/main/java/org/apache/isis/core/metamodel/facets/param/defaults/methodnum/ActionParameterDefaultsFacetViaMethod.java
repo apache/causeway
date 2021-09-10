@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.param.defaults.methodnum;
 
 import java.lang.reflect.Constructor;
@@ -42,7 +41,7 @@ implements ImperativeFacet {
     @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
     @SuppressWarnings("unused")
     private final int paramNum;
-    private final Optional<Constructor<?>> ppmFactory;
+    private final Optional<Constructor<?>> patConstructor;
 
     /**
      *
@@ -53,13 +52,13 @@ implements ImperativeFacet {
     public ActionParameterDefaultsFacetViaMethod(
             final Method method,
             final int paramNum,
-            final Optional<Constructor<?>> ppmFactory,
+            final Optional<Constructor<?>> patConstructor,
             final FacetHolder holder) {
 
         super(holder);
         this.methods = ImperativeFacet.singleMethod(method);
         this.paramNum = paramNum;
-        this.ppmFactory = ppmFactory;
+        this.patConstructor = patConstructor;
     }
 
 
@@ -69,16 +68,16 @@ implements ImperativeFacet {
     }
 
     @Override
-    public Object getDefault(@NonNull ParameterNegotiationModel pendingArgs) {
+    public Object getDefault(@NonNull final ParameterNegotiationModel pendingArgs) {
 
         val method = methods.getFirstOrFail();
 
         // call with args: defaultNAct(X x, Y y, ...)
 
-        val defaultValue = ppmFactory.isPresent()
-            // PPM programming model
+        val defaultValue = patConstructor.isPresent()
+            // PAT programming model
             ? ManagedObjects.InvokeUtil
-                    .invokeWithPPM(ppmFactory.get(), method,
+                    .invokeWithPAT(patConstructor.get(), method,
                             pendingArgs.getActionTarget(), pendingArgs.getParamValues())
             // else support legacy programming model, call any-arg defaultNAct(...)
             : ManagedObjects.InvokeUtil
@@ -86,12 +85,6 @@ implements ImperativeFacet {
                         pendingArgs.getActionTarget(), pendingArgs.getParamValues());
 
         return defaultValue;
-    }
-
-    @Override
-    protected String toStringValues() {
-        val method = methods.getFirstOrFail();
-        return "method=" + method;
     }
 
     @Override

@@ -20,6 +20,7 @@ package demoapp.dom.types.javasql.javasqldate.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
@@ -39,11 +40,12 @@ public class JavaSqlDateHolder_updateReadOnlyProperty {
 
     private final JavaSqlDateHolder holder;
 
-    public JavaSqlDateHolder act(java.sql.Date newValue) {
+    @MemberSupport public JavaSqlDateHolder act(final java.sql.Date newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
-    public java.sql.Date default0Act() {
+
+    @MemberSupport public java.sql.Date default0Act() {
         return holder.getReadOnlyProperty();
     }
 

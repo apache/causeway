@@ -21,6 +21,7 @@ package demoapp.dom.domain.properties.Property.snapshot;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.xml.XmlService;
 import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService;
@@ -41,7 +42,7 @@ public class PropertySnapshotVm_takeXmlSnapshot {
 
     private final PropertySnapshotVm vm;
 //tag::class[]
-    public Clob act(final String fileName) {
+    @MemberSupport public Clob act(final String fileName) {
         val builder = xmlSnapshotService.builderFor(vm);
         val snapshot = builder.build();
         val doc = snapshot.getXmlDocument();
@@ -49,7 +50,7 @@ public class PropertySnapshotVm_takeXmlSnapshot {
     }
     // ...
 //end::class[]
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return "snapshot.xml";
     }
 

@@ -42,6 +42,8 @@ interface VirtualClock {
   XMLGregorianCalendar nowAsXmlGregorianCalendar()     // <.>
   org.joda.time.DateTime nowAsJodaDateTime(final ZoneId zoneId)     // <.>
   org.joda.time.DateTime nowAsJodaDateTime()     // <.>
+  org.joda.time.LocalDateTime nowAsJodaLocalDateTime(final ZoneId zoneId)     // <.>
+  org.joda.time.LocalDateTime nowAsJodaLocalDateTime()     // <.>
   org.joda.time.LocalDate nowAsJodaLocalDate(final ZoneId zoneId)     // <.>
   org.joda.time.LocalDate nowAsJodaLocalDate()     // <.>
 }
@@ -136,6 +138,16 @@ Returns the time as a Joda _org.joda.time.DateTime_ , using the specified _ZoneI
 +
 --
 Returns the time as a Joda _org.joda.time.DateTime_ , using the _ZoneId#systemDefault() system default_ timezone.
+--
+<.> xref:#nowAsJodaLocalDateTime__ZoneId[nowAsJodaLocalDateTime(ZoneId)]
++
+--
+Returns the time as a Joda _org.joda.time.LocalDateTime_ , using the specified _ZoneId_ timezone.
+--
+<.> xref:#nowAsJodaLocalDateTime__[nowAsJodaLocalDateTime()]
++
+--
+Returns the time as a Joda _org.joda.time.LocalDateTime_ , using the _ZoneId#systemDefault() system default_ timezone.
 --
 <.> xref:#nowAsJodaLocalDate__ZoneId[nowAsJodaLocalDate(ZoneId)]
 +
@@ -239,6 +251,16 @@ Returns the time as a Joda _org.joda.time.DateTime_ , using the specified _ZoneI
 === nowAsJodaDateTime()
 
 Returns the time as a Joda _org.joda.time.DateTime_ , using the _ZoneId#systemDefault() system default_ timezone.
+
+[#nowAsJodaLocalDateTime__ZoneId]
+=== nowAsJodaLocalDateTime(ZoneId)
+
+Returns the time as a Joda _org.joda.time.LocalDateTime_ , using the specified _ZoneId_ timezone.
+
+[#nowAsJodaLocalDateTime__]
+=== nowAsJodaLocalDateTime()
+
+Returns the time as a Joda _org.joda.time.LocalDateTime_ , using the _ZoneId#systemDefault() system default_ timezone.
 
 [#nowAsJodaLocalDate__ZoneId]
 === nowAsJodaLocalDate(ZoneId)

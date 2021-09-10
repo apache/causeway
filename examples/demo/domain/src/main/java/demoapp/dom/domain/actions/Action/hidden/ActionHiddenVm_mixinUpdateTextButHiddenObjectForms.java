@@ -20,6 +20,7 @@ package demoapp.dom.domain.actions.Action.hidden;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 
@@ -42,11 +43,11 @@ public class ActionHiddenVm_mixinUpdateTextButHiddenObjectForms {
 
     private final ActionHiddenVm actionHiddenVm;
 
-    public ActionHiddenVm act(final String text) {
+    @MemberSupport public ActionHiddenVm act(final String text) {
         actionHiddenVm.setOtherText(text);
         return actionHiddenVm;
     }
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return actionHiddenVm.getOtherText();
     }
 }

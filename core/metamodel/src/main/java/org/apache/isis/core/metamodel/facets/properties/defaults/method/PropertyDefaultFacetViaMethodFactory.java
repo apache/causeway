@@ -16,65 +16,38 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.properties.defaults.method;
 
 import javax.inject.Inject;
 
-import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
-import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
-import lombok.val;
-
-public class PropertyDefaultFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
-
-    private static final String PREFIX = MethodLiteralConstants.DEFAULT_PREFIX;
+public class PropertyDefaultFacetViaMethodFactory
+extends MemberSupportFacetFactoryAbstract {
 
     @Inject
     public PropertyDefaultFacetViaMethodFactory(final MetaModelContext mmc) {
-     // to also support properties from mixins, need to not only include properties but also actions
-        super(mmc, FeatureType.PROPERTIES_AND_ACTIONS, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
+        super(mmc, FeatureType.PROPERTIES_ONLY, MemberSupportPrefix.DEFAULT);
     }
 
     @Override
-    public void process(final ProcessMethodContext processMethodContext) {
+    protected void search(
+            final ProcessMethodContext processMethodContext,
+            final MethodFinder methodFinder) {
 
-        attachPropertyDefaultFacetIfDefaultMethodIsFound(processMethodContext);
-    }
+        methodFinder
+        .streamMethodsMatchingSignature(NO_ARG)
+        .peek(processMethodContext::removeMethod)
+        .forEach(defaultMethod->{
+            addFacet(
+                    new PropertyDefaultFacetViaMethod(
+                            defaultMethod, processMethodContext.getFacetHolder()));
+        });
 
-    private void attachPropertyDefaultFacetIfDefaultMethodIsFound(final ProcessMethodContext processMethodContext) {
-
-        // optimization step, not strictly required
-        if(!super.isPropertyOrMixinMain(processMethodContext)) {
-            return;
-        }
-
-        val getterOrMixinMain = processMethodContext.getMethod();
-        val namingConvention = processMethodContext.memberSupportCandidates(PREFIX);
-
-        val cls = processMethodContext.getCls();
-        val returnType = getterOrMixinMain.getReturnType();
-        val method = MethodFinder
-                .findMethod(
-                    cls,
-                    namingConvention,
-                    returnType,
-                    NO_ARG)
-                .findFirst()
-                .orElse(null);
-        if (method == null) {
-            return;
-        }
-        processMethodContext.removeMethod(method);
-
-        final FacetHolder property = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new PropertyDefaultFacetViaMethod(method, property));
     }
 
 }

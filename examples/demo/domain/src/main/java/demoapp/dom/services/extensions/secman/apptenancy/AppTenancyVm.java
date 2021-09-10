@@ -30,7 +30,9 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -49,7 +51,7 @@ import demoapp.dom.services.extensions.secman.apptenancy.persistence.TenantedEnt
 )
 public class AppTenancyVm implements HasAsciiDocDescription {
 
-    public String title() {
+    @ObjectSupport public String title() {
         return "Tenancy demo";
     }
 
@@ -66,12 +68,12 @@ public class AppTenancyVm implements HasAsciiDocDescription {
             associateWith = "hideRegex",
             promptStyle = PromptStyle.INLINE_AS_IF_EDIT)
     public AppTenancyVm updateHideRegex(
-            @Parameter(optionality = Optionality.OPTIONAL)
+            @Parameter(optionality = Optionality.OPTIONAL) final
             String regex) {
         applicationTenancyEvaluatorForDemo.setHideRegex(regex);
         return this;
     }
-    public String default0UpdateHideRegex() {
+    @MemberSupport public String default0UpdateHideRegex() {
         return getHideRegex();
     }
 //end::hideRegex[]
@@ -85,12 +87,12 @@ public class AppTenancyVm implements HasAsciiDocDescription {
             associateWith = "disableRegex",
             promptStyle = PromptStyle.INLINE_AS_IF_EDIT)
     public AppTenancyVm updateDisableRegex(
-            @Parameter(optionality = Optionality.OPTIONAL)
+            @Parameter(optionality = Optionality.OPTIONAL) final
             String regex) {
         applicationTenancyEvaluatorForDemo.setDisableRegex(regex);
         return this;
     }
-    public String default0UpdateDisableRegex() {
+    @MemberSupport public String default0UpdateDisableRegex() {
         return getDisableRegex();
     }
 //end::disableRegex[]

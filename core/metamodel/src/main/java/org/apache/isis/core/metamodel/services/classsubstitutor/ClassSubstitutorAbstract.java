@@ -16,16 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.services.classsubstitutor;
 
 import java.util.Objects;
 import java.util.Set;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.proxy._ProxyFactoryService;
+import org.apache.isis.commons.internal.reflection._ClassCache;
 import org.apache.isis.core.metamodel.commons.ClassUtil;
 
 import lombok.NonNull;
@@ -33,8 +32,10 @@ import lombok.val;
 
 public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
 
+    private final _ClassCache classCache = _ClassCache.getInstance();
+
     @Override
-    public final Substitution getSubstitution(@NonNull Class<?> cls) {
+    public final Substitution getSubstitution(@NonNull final Class<?> cls) {
         val replacement = getReplacement(cls);
         if(Objects.equals(cls, replacement)) {
             return Substitution.passThrough(); // indifferent
@@ -78,7 +79,7 @@ public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
 
         try {
             // guard against cannot introspect
-            _Blackhole.consume(cls.getMethods());
+            classCache.add(cls);
         } catch (Throwable e) {
             classesToIgnore.add(cls);
             return null;

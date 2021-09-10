@@ -20,6 +20,7 @@ package demoapp.dom.domain.actions.Action.commandPublishing;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
@@ -44,11 +45,12 @@ public class ActionCommandPublishingEntity_mixinUpdatePropertyCommandDisabled {
 
     private final ActionCommandPublishingEntity actionCommandEntity;
 
-    public ActionCommandPublishingEntity act(final String value) {
+    @MemberSupport public ActionCommandPublishingEntity act(final String value) {
         actionCommandEntity.setPropertyCommandDisabled(value);
         return actionCommandEntity;
     }
-    public String default0Act() {
+
+    @MemberSupport public String default0Act() {
         return actionCommandEntity.getPropertyCommandDisabled();
     }
 //tag::class[]

@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.actions.validate.method;
 
 import java.lang.reflect.Method;
@@ -69,12 +68,6 @@ implements ImperativeFacet {
             return ts.translate(translationService, translationContext);
         }
         return null;
-    }
-
-    @Override
-    protected String toStringValues() {
-        val method = methods.getFirstOrFail();
-        return "method=" + method;
     }
 
     @Override

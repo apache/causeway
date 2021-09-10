@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.collections;
 
 import java.lang.reflect.Method;
@@ -30,7 +29,7 @@ import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor;
 import org.apache.isis.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessorFactory;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
@@ -64,7 +63,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         }
         final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
 
-        facetFactory.process(new FacetFactory.ProcessMethodContext(Customer.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(ProcessMethodContext
+                .forTesting(Customer.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
         assertNotNull(facet);
@@ -88,7 +88,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
 
 
-        facetFactory.process(new FacetFactory.ProcessMethodContext(Customer.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(ProcessMethodContext
+                .forTesting(Customer.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
         assertNotNull(facet);
@@ -110,7 +111,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         }
         final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
 
-        facetFactory.process(new FacetFactory.ProcessMethodContext(Customer.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(ProcessMethodContext
+                .forTesting(Customer.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
         assertNotNull(facet);
@@ -132,7 +134,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         }
         final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
 
-        facetFactory.process(new FacetFactory.ProcessMethodContext(Customer.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(ProcessMethodContext
+                .forTesting(Customer.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
         assertNotNull(facet);
@@ -157,7 +160,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         }
         final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
 
-        facetFactory.process(new FacetFactory.ProcessMethodContext(Customer.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(ProcessMethodContext
+                .forTesting(Customer.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
         assertNotNull(facet);
@@ -186,7 +190,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
         final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
 
-        facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerEx.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
+        facetFactory.process(ProcessMethodContext
+                .forTesting(CustomerEx.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
         assertNotNull(facet);

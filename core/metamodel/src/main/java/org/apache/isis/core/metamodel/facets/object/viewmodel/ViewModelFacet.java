@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.viewmodel;
 
 import java.util.function.Function;
@@ -64,9 +63,9 @@ public interface ViewModelFacet extends Facet {
     }
 
     default Object createViewModelPojo(
-            ObjectSpecification spec,
-            String mementoStr,
-            Function<ObjectSpecification, Object> factory) {
+            final ObjectSpecification spec,
+            final String mementoStr,
+            final Function<ObjectSpecification, Object> factory) {
 
         final Object viewModelPojo;
         if(getRecreationMechanism().isInitializes()) {
@@ -90,37 +89,16 @@ public interface ViewModelFacet extends Facet {
     /**
      * Will be called if {@link #getRecreationMechanism()} is {@link RecreationMechanism#INITIALIZES}.
      */
-    void initialize(Object pojo, String memento);
+    void initialize(Object viewModelPojo, String viewModelMemento);
 
     /**
      * Will be called only if {@link #getRecreationMechanism()} is {@link RecreationMechanism#INSTANTIATES}.
      */
-    Object instantiate(final Class<?> viewModelClass, String memento);
+    Object instantiate(final Class<?> viewModelClass, String viewModelMemento);
 
     /**
      * Obtain a memento of the pojo, which can then be used to reinstantiate (either by {@link #instantiate(Class, String)} or {@link #initialize(Object, String)}) subsequently.
      */
-    String memento(Object pojo);
-
-    /**
-     * Whether {@link #clone(Object)} can be called.
-     */
-    boolean isCloneable(Object pojo);
-
-    /**
-     * Whether can infer the view model is immutable or not.
-     *
-     * <p>
-     *     Equivalent to {@link #isCloneable(Object)}, but at the class rather than object level.
-     * </p>
-     */
-    boolean isImplicitlyImmutable();
-
-    /**
-     * View models are implicitly immutable (their state is determined by their {@link #memento(Object)}), so this
-     * method allows the framework to clone an existing view model to mutate it, thereby simulating editable
-     * view models.
-     */
-    Object clone(Object pojo);
+    String memento(Object viewModelPojo);
 
 }

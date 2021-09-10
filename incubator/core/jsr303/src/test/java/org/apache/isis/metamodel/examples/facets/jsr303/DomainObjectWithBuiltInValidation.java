@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.examples.facets.jsr303;
 
 import javax.validation.Pattern;

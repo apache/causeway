@@ -30,10 +30,10 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
-import org.apache.isis.extensions.secman.applib.user.spi.PasswordEncryptionService;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_updatePassword.DomainEvent;
+import org.apache.isis.extensions.secman.applib.user.spi.PasswordEncryptionService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -57,8 +57,7 @@ public class ApplicationUser_updatePassword {
 
     private final ApplicationUser target;
 
-    @MemberSupport
-    public ApplicationUser act(
+    @MemberSupport public ApplicationUser act(
             final Password existingPassword,
             final Password newPassword,
             final Password repeatNewPassword) {
@@ -67,13 +66,8 @@ public class ApplicationUser_updatePassword {
         return target;
     }
 
-    @MemberSupport
-    public boolean hideAct() {
-        return !applicationUserRepository.isPasswordFeatureEnabled(target);
-    }
-
-    @MemberSupport
-    public String disableAct() {
+    @MemberSupport public boolean hideAct() { return !applicationUserRepository.isPasswordFeatureEnabled(target); }
+    @MemberSupport public String disableAct() {
 
         if(!target.isForSelfOrRunAsAdministrator()) {
             return "Can only update password for your own user account.";
@@ -84,8 +78,7 @@ public class ApplicationUser_updatePassword {
         return null;
     }
 
-    @MemberSupport
-    public String validateAct(
+    @MemberSupport public String validateAct(
             final Password existingPassword,
             final Password newPassword,
             final Password repeatNewPassword) {
@@ -110,6 +103,5 @@ public class ApplicationUser_updatePassword {
 
         return null;
     }
-
 
 }

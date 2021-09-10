@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Method;
@@ -54,22 +53,6 @@ public interface ImperativeFacet extends Facet {
 
     /**
      * The {@link Method}s invoked by this {@link Facet}.
-     *
-     * <p>
-     * In the vast majority of cases there is only a single {@link Method} (eg
-     * wrapping a property's getter). However, some {@link Facet}s, such as
-     * those for callbacks, could map to multiple {@link Method}s.
-     * Implementations that will return multiple {@link Method}s should
-     * implement the {@link ImperativeFacetMulti} sub-interface that provides
-     * the ability to {@link ImperativeFacetMulti#addMethod(Method) add}
-     * {@link Method}s as part of the interface API. For example:
-     *
-     * <pre>
-     * if (someFacet instanceof ImperativeFacetMulti) {
-     *     ImperativeFacetMulti ifm = (ImperativeFacetMulti)someFacet;
-     *     ifm.addMethod(...);
-     * }
-     * </pre>
      */
     public Can<Method> getMethods();
 

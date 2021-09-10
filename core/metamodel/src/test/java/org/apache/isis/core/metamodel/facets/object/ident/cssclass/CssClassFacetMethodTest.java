@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.ident.cssclass;
 
 import java.lang.reflect.Method;
@@ -28,20 +27,20 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFacetMethod;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFacetViaCssClassMethod;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class CssClassFacetMethodTest {
 
     public static final String CSS_CLASS = "someCssClass";
     private final Mockery mockery = new JUnit4Mockery();
 
-    private CssClassFacetMethod facet;
+    private CssClassFacetViaCssClassMethod facet;
     private FacetHolder mockFacetHolder;
 
     private ManagedObject mockOwningAdapter;
@@ -61,7 +60,9 @@ public class CssClassFacetMethodTest {
         mockFacetHolder = mockery.mock(FacetHolder.class);
         mockOwningAdapter = mockery.mock(ManagedObject.class);
         final Method iconNameMethod = DomainObjectInCssClassMethod.class.getMethod("cssClass");
-        facet = new CssClassFacetMethod(iconNameMethod, mockFacetHolder);
+        facet = (CssClassFacetViaCssClassMethod) CssClassFacetViaCssClassMethod
+                .create(iconNameMethod, mockFacetHolder)
+                .orElse(null);
 
         mockery.checking(new Expectations() {
             {

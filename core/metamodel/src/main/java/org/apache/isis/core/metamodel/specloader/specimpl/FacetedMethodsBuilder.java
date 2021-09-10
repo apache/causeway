@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.lang.reflect.Method;
@@ -34,28 +33,25 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.reflection._Annotations;
+import org.apache.isis.commons.internal.reflection._ClassCache;
 import org.apache.isis.commons.internal.reflection._Reflect;
-import org.apache.isis.core.metamodel.commons.CanBeVoid;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
-import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.facets.object.facets.FacetsFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
@@ -69,16 +65,13 @@ import lombok.extern.log4j.Log4j2;
 public class FacetedMethodsBuilder
 implements HasMetaModelContext {
 
-    private static final String GET_PREFIX = "get";
-    private static final String IS_PREFIX = "is";
-
     /* thread-safety ... make sure every methodsRemaining access is synchronized! */
     private static final class ConcurrentMethodRemover implements MethodRemover {
 
         private final Set<Method> methodsRemaining;
 
-        private ConcurrentMethodRemover(final Class<?> introspectedClass, final Method[] methods) {
-            this.methodsRemaining = Stream.of(methods)
+        private ConcurrentMethodRemover(final Class<?> introspectedClass, final Stream<Method> methodStream) {
+            this.methodsRemaining = methodStream
                     .filter(_NullSafe::isPresent)
                     .collect(Collectors.toCollection(_Sets::newConcurrentHashSet));
         }
@@ -126,7 +119,7 @@ implements HasMetaModelContext {
 
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
 
-    private final boolean explicitAnnotationsForActions;
+    private final boolean isMemberAnnotationsRequired;
 
     // -- CONSTRUCTOR
 
@@ -144,10 +137,13 @@ implements HasMetaModelContext {
         this.inspectedTypeSpec = inspectedTypeSpec;
         this.introspectedClass = inspectedTypeSpec.getCorrespondingClass();
 
-        this.explicitAnnotationsForActions =
-                getConfiguration().getApplib().getAnnotation().getAction().isExplicit();
+        this.isMemberAnnotationsRequired =
+                introspectionPolicy().getMemberAnnotationPolicy().isMemberAnnotationsRequired();
 
-        val methodsRemaining = introspectedClass.getMethods();
+        val classCache = _ClassCache.getInstance();
+        val methodsRemaining = introspectionPolicy().getEncapsulationPolicy().isEncapsulatedMembersSupported()
+                ? classCache.streamPublicOrDeclaredMethods(introspectedClass)
+                : classCache.streamPublicMethods(introspectedClass);
         this.methodRemover = new ConcurrentMethodRemover(introspectedClass, methodsRemaining);
 
     }
@@ -156,7 +152,6 @@ implements HasMetaModelContext {
     public MetaModelContext getMetaModelContext() {
         return inspectedTypeSpec.getMetaModelContext();
     }
-
 
     // ////////////////////////////////////////////////////////////////////////////
     // Class and stuff immediately derived from class
@@ -178,25 +173,8 @@ implements HasMetaModelContext {
 
         // process facets at object level
         // this will also remove some methods, such as the superclass methods.
-        getFacetProcessor().process(introspectedClass, methodRemover, inspectedTypeSpec);
-
-        // if this class has additional facets (as per @Facets), then process
-        // them.
-        final FacetsFacet facetsFacet = inspectedTypeSpec.getFacet(FacetsFacet.class);
-        if (facetsFacet != null) {
-            final Class<? extends FacetFactory>[] facetFactories = facetsFacet.facetFactories();
-            for (final Class<? extends FacetFactory> facetFactorie : facetFactories) {
-                FacetFactory facetFactory;
-                try {
-                    facetFactory = facetFactorie.newInstance();
-                } catch (final InstantiationException | IllegalAccessException e) {
-                    throw new UnrecoverableException(e);
-                }
-                getFacetProcessor().injectDependenciesInto(facetFactory);
-                facetFactory.process(new ProcessClassContext(introspectedClass, methodRemover, inspectedTypeSpec));
-            }
-        }
-
+        getFacetProcessor()
+        .process(introspectedClass, introspectionPolicy(), methodRemover, inspectedTypeSpec);
     }
 
     // ////////////////////////////////////////////////////////////////////////////
@@ -216,15 +194,15 @@ implements HasMetaModelContext {
 
     private List<FacetedMethod> createAssociationFacetedMethods() {
         if (log.isDebugEnabled()) {
-            log.debug("introspecting {}: properties and collections", getClassName());
+            log.debug("introspecting(policy={}) {}: properties and collections", introspectionPolicy(), getClassName());
         }
 
         val specLoader = getSpecificationLoader();
 
         val associationCandidateMethods = new HashSet<Method>();
 
-
-        getFacetProcessor().findAssociationCandidateAccessors(
+        getFacetProcessor()
+        .findAssociationCandidateGetters(
                     methodRemover.streamRemaining(),
                     associationCandidateMethods::add);
 
@@ -259,8 +237,8 @@ implements HasMetaModelContext {
         val propertyAccessors = _Lists.<Method>newArrayList();
         getFacetProcessor().findAndRemovePropertyAccessors(methodRemover, propertyAccessors);
 
-        findAndRemovePrefixedNonVoidMethods(GET_PREFIX, Object.class, 0, propertyAccessors::add);
-        findAndRemovePrefixedNonVoidMethods(IS_PREFIX, Boolean.class, 0, propertyAccessors::add);
+        methodRemover.removeMethods(MethodUtil.Predicates.nonBooleanGetter(Object.class), propertyAccessors::add);
+        methodRemover.removeMethods(MethodUtil.Predicates.booleanGetter(), propertyAccessors::add);
 
         createPropertyFacetedMethodsFromAccessors(propertyAccessors, onNewField);
     }
@@ -277,8 +255,10 @@ implements HasMetaModelContext {
 
             // create property and add facets
             val facetedMethod = FacetedMethod.createForCollection(mmc, introspectedClass, accessorMethod);
-            getFacetProcessor().process(
+            getFacetProcessor()
+            .process(
                     introspectedClass,
+                    introspectionPolicy(),
                     accessorMethod,
                     methodRemover,
                     facetedMethod,
@@ -320,8 +300,10 @@ implements HasMetaModelContext {
                     .createForProperty(getMetaModelContext(), introspectedClass, accessorMethod);
 
             // process facets for the 1:1 association (eg. contributed properties)
-            getFacetProcessor().process(
+            getFacetProcessor()
+            .process(
                     introspectedClass,
+                    introspectionPolicy(),
                     accessorMethod,
                     methodRemover,
                     facetedMethod,
@@ -350,7 +332,7 @@ implements HasMetaModelContext {
     private List<FacetedMethod> findActionFacetedMethods() {
 
         if (log.isDebugEnabled()) {
-            log.debug("introspecting {}: actions", getClassName());
+            log.debug("introspecting(policy={}) {}: actions", introspectionPolicy(), getClassName());
         }
         val actionFacetedMethods = _Lists.<FacetedMethod>newArrayList();
         collectActionFacetedMethods(actionFacetedMethods::add);
@@ -403,8 +385,10 @@ implements HasMetaModelContext {
                 .createForAction(getMetaModelContext(), introspectedClass, actionMethod);
 
         // process facets on the action & parameters
-        getFacetProcessor().process(
+        getFacetProcessor()
+        .process(
                 introspectedClass,
+                introspectionPolicy(),
                 actionMethod,
                 methodRemover,
                 action,
@@ -413,7 +397,8 @@ implements HasMetaModelContext {
 
         final List<FacetedMethodParameter> actionParams = action.getParameters();
         for (int j = 0; j < actionParams.size(); j++) {
-            getFacetProcessor().processParams(introspectedClass, actionMethod, j, methodRemover, actionParams.get(j));
+            getFacetProcessor()
+            .processParams(introspectedClass, introspectionPolicy(), actionMethod, j, methodRemover, actionParams.get(j));
         }
 
         return action;
@@ -443,7 +428,7 @@ implements HasMetaModelContext {
         // return false if both are true
         // 1. actionMethod has no @Action annotation
         // 2. actionMethod does not identify as a mixin's main method
-        if(isExplicitActionAnnotationConfigured()) {
+        if(isMemberAnnotationsRequired) {
 
             // even though when @Action is mandatory for action methods,
             // mixins now can contribute methods,
@@ -509,7 +494,7 @@ implements HasMetaModelContext {
             return false;
         }
 
-        if(isExplicitActionAnnotationConfigured()) {
+        if(isMemberAnnotationsRequired) {
             // we have no @Action, so dismiss
             return false;
         }
@@ -519,42 +504,9 @@ implements HasMetaModelContext {
         return true;
     }
 
-
-    private boolean isExplicitActionAnnotationConfigured() {
-        return explicitAnnotationsForActions;
-    }
-
     // ////////////////////////////////////////////////////////////////////////////
     // Helpers for finding and removing methods.
     // ////////////////////////////////////////////////////////////////////////////
-
-    /**
-     *
-     * @param prefix
-     * @param returnType
-     * @param paramCount
-     * @param onRemoved - collecting parameter
-     */
-    private void findAndRemovePrefixedNonVoidMethods(
-            final String prefix,
-            final Class<?> returnType,
-            final int paramCount,
-            final Consumer<Method> onRemoved) {
-
-        findAndRemovePrefixedMethods(prefix, returnType, CanBeVoid.FALSE, paramCount, onRemoved);
-    }
-
-    private void findAndRemovePrefixedMethods(
-            final String prefix,
-            final Class<?> returnType,
-            final CanBeVoid canBeVoid,
-            final int paramCount,
-            final Consumer<Method> onMatch) {
-
-        val filter = MethodUtil.Predicates.prefixed(prefix, returnType, canBeVoid, paramCount);
-        methodRemover.removeMethods(filter, onMatch);
-
-    }
 
     /**
      * In case this inspected type is a mixin, returns whether given method can be identified
@@ -579,6 +531,10 @@ implements HasMetaModelContext {
                 .map(FacetedMethod::getMethod)
                 .map(method::equals)
                 .orElse(false);
+    }
+
+    private IntrospectionPolicy introspectionPolicy() {
+        return inspectedTypeSpec.getIntrospectionPolicy();
     }
 
     // ////////////////////////////////////////////////////////////////////////////

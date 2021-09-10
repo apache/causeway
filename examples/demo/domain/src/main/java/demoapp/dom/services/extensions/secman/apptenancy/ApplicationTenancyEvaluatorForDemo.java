@@ -25,9 +25,10 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.extensions.secman.applib.tenancy.spi.ApplicationTenancyEvaluator;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 
-import demoapp.dom.services.extensions.secman.apptenancy.persistence.TenantedEntity;
 import lombok.Getter;
 import lombok.val;
+
+import demoapp.dom.services.extensions.secman.apptenancy.persistence.TenantedEntity;
 
 //tag::class[]
 @Service

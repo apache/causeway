@@ -22,6 +22,7 @@ import java.awt.image.BufferedImage;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -45,14 +46,15 @@ public class JavaAwtBufferedImageHolder_updateReadOnlyOptionalProperty {
 
     private final JavaAwtBufferedImageHolder holder;
 
-    public JavaAwtBufferedImageHolder act(
+    @MemberSupport public JavaAwtBufferedImageHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
-            BufferedImage newValue
+            final BufferedImage newValue
     ) {
         holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
-    public BufferedImage default0Act() {
+
+    @MemberSupport public BufferedImage default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

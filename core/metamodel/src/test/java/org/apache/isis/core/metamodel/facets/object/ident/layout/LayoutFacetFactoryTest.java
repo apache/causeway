@@ -16,39 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.ident.layout;
 
-import java.lang.reflect.Method;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
 import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacet;
-import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacetMethod;
+import org.apache.isis.core.metamodel.facets.object.support.ObjectSupportFacetFactoryTestAbstract;
 
-public class LayoutFacetFactoryTest extends AbstractFacetFactoryTest {
-
-    private LayoutFacetFactory facetFactory;
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        facetFactory = new LayoutFacetFactory(metaModelContext);
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        facetFactory = null;
-        super.tearDown();
-    }
+public class LayoutFacetFactoryTest
+extends ObjectSupportFacetFactoryTestAbstract {
 
     public void testLayoutMethodPickedUpOnClassAndMethodRemoved() {
         class Customer {
@@ -57,15 +32,7 @@ public class LayoutFacetFactoryTest extends AbstractFacetFactoryTest {
                 return null;
             }
         }
-        final Method method = findMethod(Customer.class, "layout");
-
-        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(LayoutFacet.class);
-        assertThat(facet, is(notNullValue()));
-        assertThat(facet, is(instanceOf(LayoutFacetMethod.class)));
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
+        assertPicksUp(1, facetFactory, Customer.class, ObjectSupportMethod.LAYOUT, LayoutFacet.class);
     }
 
 }

@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.commons.internal.factory;
 
 public class _UnavailableClassException extends RuntimeException {

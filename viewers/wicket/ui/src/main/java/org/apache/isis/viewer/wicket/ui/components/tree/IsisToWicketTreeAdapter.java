@@ -57,13 +57,12 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
+import lombok.NonNull;
 import lombok.val;
 
 class IsisToWicketTreeAdapter {
 
-    public static Component adapt(String id, ValueModel valueModel) {
+    public static Component adapt(final String id, final ValueModel valueModel) {
         if(valueModel==null || valueModel.getObject()==null) {
             return emptyTreeComponent(id);
         }
@@ -71,7 +70,7 @@ class IsisToWicketTreeAdapter {
                 toIModelRepresentingCollapseExpandState(valueModel));
     }
 
-    public static Component adapt(String id, ScalarModel scalarModel) {
+    public static Component adapt(final String id, final ScalarModel scalarModel) {
         if(scalarModel==null || scalarModel.getObject()==null) {
             return emptyTreeComponent(id);
         }
@@ -81,7 +80,7 @@ class IsisToWicketTreeAdapter {
 
     // -- FALLBACK
 
-    private static Component emptyTreeComponent(String id) {
+    private static Component emptyTreeComponent(final String id) {
         return new Label(id);
     }
 
@@ -95,9 +94,9 @@ class IsisToWicketTreeAdapter {
         private static final long serialVersionUID = 1L;
 
         public EntityTree(
-                String id,
-                ITreeProvider<TreeModel> provider,
-                TreeExpansionModel collapseExpandState) {
+                final String id,
+                final ITreeProvider<TreeModel> provider,
+                final TreeExpansionModel collapseExpandState) {
             super(id, provider, collapseExpandState);
         }
 
@@ -105,7 +104,7 @@ class IsisToWicketTreeAdapter {
          * To use a custom component for the representation of a node's content we override this method.
          */
         @Override
-        protected Component newContentComponent(String id, IModel<TreeModel> node) {
+        protected Component newContentComponent(final String id, final IModel<TreeModel> node) {
             final TreeModel treeModel = node.getObject();
             final Component entityIconAndTitle = new EntityIconAndTitlePanel(id, treeModel);
             return entityIconAndTitle;
@@ -115,18 +114,18 @@ class IsisToWicketTreeAdapter {
          * To hardcode Node's <pre>AjaxFallbackLink.isEnabledInHierarchy()->true</pre> we override this method.
          */
         @Override
-        public Component newNodeComponent(String id, IModel<TreeModel> model) {
+        public Component newNodeComponent(final String id, final IModel<TreeModel> model) {
 
             final Node<TreeModel> node =  new Node<TreeModel>(id, this, model) {
                 private static final long serialVersionUID = 1L;
 
                 @Override
-                protected Component createContent(String id, IModel<TreeModel> model) {
+                protected Component createContent(final String id, final IModel<TreeModel> model) {
                     return EntityTree.this.newContentComponent(id, model);
                 }
 
                 @Override
-                protected MarkupContainer createJunctionComponent(String id) {
+                protected MarkupContainer createJunctionComponent(final String id) {
 
                     final Node<TreeModel> node = this;
                     final Runnable toggleExpandCollapse = (Runnable & Serializable) this::toggle;
@@ -135,7 +134,7 @@ class IsisToWicketTreeAdapter {
                         private static final long serialVersionUID = 1L;
 
                         @Override
-                        public void onClick(Optional<AjaxRequestTarget> target) {
+                        public void onClick(final Optional<AjaxRequestTarget> target) {
                             toggleExpandCollapse.run();
                         }
 
@@ -165,7 +164,7 @@ class IsisToWicketTreeAdapter {
          * we override this method.
          */
         @Override
-        public State getState(TreeModel t) {
+        public State getState(final TreeModel t) {
             final TreeExpansionModel treeExpansionModel = (TreeExpansionModel) getModel();
             return treeExpansionModel.contains(t.getTreePath()) ? State.EXPANDED : State.COLLAPSED;
         }
@@ -175,7 +174,7 @@ class IsisToWicketTreeAdapter {
          * we override this method.
          */
         @Override
-        public void expand(TreeModel t) {
+        public void expand(final TreeModel t) {
             final TreeExpansionModel treeExpansionModel = (TreeExpansionModel) getModel();
             treeExpansionModel.onExpand(t);
             super.expand(t);
@@ -186,7 +185,7 @@ class IsisToWicketTreeAdapter {
          * we override this method.
          */
         @Override
-        public void collapse(TreeModel t) {
+        public void collapse(final TreeModel t) {
             final TreeExpansionModel treeExpansionModel = (TreeExpansionModel) getModel();
             treeExpansionModel.onCollapse(t);
             super.collapse(t);
@@ -204,12 +203,12 @@ class IsisToWicketTreeAdapter {
 
         private final TreePath treePath;
 
-        public TreeModel(IsisAppCommonContext commonContext, TreePath treePath) {
+        public TreeModel(final IsisAppCommonContext commonContext, final TreePath treePath) {
             super(commonContext, (ManagedObject)null);
             this.treePath = treePath;
         }
 
-        public TreeModel(IsisAppCommonContext commonContext, ManagedObject adapter, TreePath treePath) {
+        public TreeModel(final IsisAppCommonContext commonContext, final ManagedObject adapter, final TreePath treePath) {
             super(commonContext, Objects.requireNonNull(adapter));
             this.treePath = treePath;
         }
@@ -242,14 +241,14 @@ class IsisToWicketTreeAdapter {
 
 
         private TreeModelTreeAdapter(
-                IsisAppCommonContext commonContext,
-                Class<? extends TreeAdapter> treeAdapterClass) {
+                final IsisAppCommonContext commonContext,
+                final Class<? extends TreeAdapter> treeAdapterClass) {
 
             this.treeAdapterClass = treeAdapterClass;
             init(commonContext);
         }
 
-        private void init(IsisAppCommonContext commonContext) {
+        private void init(final IsisAppCommonContext commonContext) {
             this.commonContext = commonContext;
             this.factoryService = commonContext.lookupServiceElseFail(FactoryService.class);
             this.pojoToAdapter = pojo ->
@@ -269,7 +268,7 @@ class IsisToWicketTreeAdapter {
         }
 
         @Override
-        public Optional<TreeModel> parentOf(TreeModel treeModel) {
+        public Optional<TreeModel> parentOf(final TreeModel treeModel) {
             if(treeModel==null) {
                 return Optional.empty();
             }
@@ -278,7 +277,7 @@ class IsisToWicketTreeAdapter {
         }
 
         @Override
-        public int childCountOf(TreeModel treeModel) {
+        public int childCountOf(final TreeModel treeModel) {
             if(treeModel==null) {
                 return 0;
             }
@@ -286,7 +285,7 @@ class IsisToWicketTreeAdapter {
         }
 
         @Override
-        public Stream<TreeModel> childrenOf(TreeModel treeModel) {
+        public Stream<TreeModel> childrenOf(final TreeModel treeModel) {
             if(treeModel==null) {
                 return Stream.empty();
             }
@@ -294,19 +293,18 @@ class IsisToWicketTreeAdapter {
                     .map(newPojoToTreeModelMapper(treeModel));
         }
 
-        private TreeModel wrap(Object pojo, TreePath treePath) {
-            requires(pojo, "pojo");
+        private TreeModel wrap(final @NonNull Object pojo, final TreePath treePath) {
             ensureInit(); // in case we were de-serialzed
             val objectAdapter = pojoToAdapter.apply(pojo);
             return new TreeModel(commonContext, objectAdapter, treePath);
         }
 
-        private Object unwrap(TreeModel model) {
+        private Object unwrap(final TreeModel model) {
             Objects.requireNonNull(model);
             return model.getObject().getPojo();
         }
 
-        private Function<Object, TreeModel> newPojoToTreeModelMapper(TreeModel parent) {
+        private Function<Object, TreeModel> newPojoToTreeModelMapper(final TreeModel parent) {
             return _Functions.indexAwareToFunction((indexWithinSiblings, pojo)->
             wrap(pojo, parent.getTreePath().append(indexWithinSiblings)));
         }
@@ -334,7 +332,7 @@ class IsisToWicketTreeAdapter {
         private final TreeModel primaryValue;
         private final TreeModelTreeAdapter treeAdapter;
 
-        private TreeModelTreeProvider(TreeModel primaryValue, TreeModelTreeAdapter treeAdapter) {
+        private TreeModelTreeProvider(final TreeModel primaryValue, final TreeModelTreeAdapter treeAdapter) {
             this.primaryValue = primaryValue;
             this.treeAdapter = treeAdapter;
         }
@@ -349,12 +347,12 @@ class IsisToWicketTreeAdapter {
         }
 
         @Override
-        public boolean hasChildren(TreeModel node) {
+        public boolean hasChildren(final TreeModel node) {
             return treeAdapter.childCountOf(node)>0;
         }
 
         @Override
-        public Iterator<? extends TreeModel> getChildren(TreeModel node) {
+        public Iterator<? extends TreeModel> getChildren(final TreeModel node) {
             return treeAdapter.childrenOf(node).iterator();
         }
 
@@ -372,7 +370,7 @@ class IsisToWicketTreeAdapter {
      * @return Wicket's ITreeProvider
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    private static ITreeProvider<TreeModel> toITreeProvider(ModelAbstract<ManagedObject> model) {
+    private static ITreeProvider<TreeModel> toITreeProvider(final ModelAbstract<ManagedObject> model) {
 
         val commonContext = model.getCommonContext();
         val treeNode = (TreeNode) model.getObject().getPojo();
@@ -399,7 +397,7 @@ class IsisToWicketTreeAdapter {
 
         private final transient IsisAppCommonContext commonContext;
 
-        public LoadableDetachableTreeModel(TreeModel tModel) {
+        public LoadableDetachableTreeModel(final TreeModel tModel) {
             super(tModel);
             this.treePath = tModel.getTreePath();
             this.bookmark = ManagedObjects.bookmarkElseFail(tModel.getObject());
@@ -434,7 +432,7 @@ class IsisToWicketTreeAdapter {
          * unique within a tree structure.
          */
         @Override
-        public boolean equals(Object obj) {
+        public boolean equals(final Object obj) {
             if (obj instanceof LoadableDetachableTreeModel) {
                 final LoadableDetachableTreeModel other = (LoadableDetachableTreeModel) obj;
                 return treePath.equals(other.treePath) && bookmark.equals(other.bookmark);
@@ -460,7 +458,7 @@ class IsisToWicketTreeAdapter {
      */
     @SuppressWarnings({ "rawtypes" })
     private static TreeExpansionModel toIModelRepresentingCollapseExpandState(
-            ModelAbstract<ManagedObject> model) {
+            final ModelAbstract<ManagedObject> model) {
 
         val treeNode = (TreeNode) model.getObject().getPojo();
         val treeState = treeNode.getTreeState();
@@ -475,8 +473,8 @@ class IsisToWicketTreeAdapter {
         private static final long serialVersionUID = 648152234030889164L;
 
         public static TreeExpansionModel of(
-                IsisAppCommonContext commonContext,
-                Set<TreePath> expandedTreePaths) {
+                final IsisAppCommonContext commonContext,
+                final Set<TreePath> expandedTreePaths) {
 
             return new TreeExpansionModel(commonContext, expandedTreePaths);
         }
@@ -485,7 +483,7 @@ class IsisToWicketTreeAdapter {
          * Happens on user interaction via UI.
          * @param t
          */
-        public void onExpand(TreeModel t) {
+        public void onExpand(final TreeModel t) {
             expandedTreePaths.add(t.getTreePath());
         }
 
@@ -493,11 +491,11 @@ class IsisToWicketTreeAdapter {
          * Happens on user interaction via UI.
          * @param t
          */
-        public void onCollapse(TreeModel t) {
+        public void onCollapse(final TreeModel t) {
             expandedTreePaths.remove(t.getTreePath());
         }
 
-        public boolean contains(TreePath treePath) {
+        public boolean contains(final TreePath treePath) {
             return expandedTreePaths.contains(treePath);
         }
 
@@ -505,8 +503,8 @@ class IsisToWicketTreeAdapter {
         private final Set<TreeModel> expandedNodes;
 
         private TreeExpansionModel(
-                IsisAppCommonContext commonContext,
-                Set<TreePath> expandedTreePaths) {
+                final IsisAppCommonContext commonContext,
+                final Set<TreePath> expandedTreePaths) {
 
             this.expandedTreePaths = expandedTreePaths;
             this.expandedNodes = expandedTreePaths.stream()

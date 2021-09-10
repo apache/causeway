@@ -27,16 +27,19 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @XmlRootElement(name = "root")
 @XmlType
@@ -51,7 +54,7 @@ public class ActionRestrictToVm implements HasAsciiDocDescription {
     // ...
 //end::class[]
 
-    public ActionRestrictToVm(String value) {
+    public ActionRestrictToVm(final String value) {
         this.propertyNoAnnotation = value;
         this.propertyForPrototyping = value;
         this.propertyForNoRestrictions = value;
@@ -59,7 +62,7 @@ public class ActionRestrictToVm implements HasAsciiDocDescription {
         this.propertyForMetaAnnotationsOverridden = value;
     }
 
-    public String title() {
+    @ObjectSupport public String title() {
         return "Action#restrictTo";
     }
 
@@ -108,7 +111,7 @@ public class ActionRestrictToVm implements HasAsciiDocDescription {
         setPropertyNoAnnotation(text);
         return this;
     }
-    public String default0UpdateNoAnnotation() {
+    @MemberSupport public String default0UpdateNoAnnotation() {
         return getPropertyNoAnnotation();
     }
 //end::action-no-annotation[]
@@ -128,7 +131,7 @@ public class ActionRestrictToVm implements HasAsciiDocDescription {
         setPropertyForPrototyping(text);
         return this;
     }
-    public String default0UpdateRestrictToPrototyping() {
+    @MemberSupport public String default0UpdateRestrictToPrototyping() {
         return getPropertyForPrototyping();
     }
 //end::action-restrict-to-prototyping[]
@@ -148,7 +151,7 @@ public class ActionRestrictToVm implements HasAsciiDocDescription {
         setPropertyForNoRestrictions(text);
         return this;
     }
-    public String default0UpdateRestrictToNoRestrictions() {
+    @MemberSupport public String default0UpdateRestrictToNoRestrictions() {
         return getPropertyForNoRestrictions();
     }
 //end::action-restrict-to-no-restrictions[]
@@ -168,7 +171,7 @@ public class ActionRestrictToVm implements HasAsciiDocDescription {
         setPropertyForMetaAnnotations(text);
         return this;
     }
-    public String default0UpdateMetaAnnotated() {
+    @MemberSupport public String default0UpdateMetaAnnotated() {
         return getPropertyForMetaAnnotations();
     }
 //end::action-meta-annotated[]
@@ -190,7 +193,7 @@ public class ActionRestrictToVm implements HasAsciiDocDescription {
         setPropertyForMetaAnnotationsOverridden(text);
         return this;
     }
-    public String default0UpdateMetaAnnotatedOverridden() {
+    @MemberSupport public String default0UpdateMetaAnnotatedOverridden() {
         return getPropertyForMetaAnnotationsOverridden();
     }
 //end::action-meta-annotated-overridden[]

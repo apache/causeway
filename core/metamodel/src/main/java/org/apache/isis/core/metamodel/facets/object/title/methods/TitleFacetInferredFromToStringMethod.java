@@ -16,43 +16,59 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.title.methods;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
+import java.util.function.BiConsumer;
 
-import org.apache.isis.commons.collections.Can;
+import org.springframework.lang.Nullable;
+
+import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.HasImperativeAspect;
+import org.apache.isis.core.metamodel.facets.ImperativeAspect;
+import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 public class TitleFacetInferredFromToStringMethod
 extends TitleFacetAbstract
-implements ImperativeFacet {
+implements HasImperativeAspect {
 
-    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
+    @Getter(onMethod_ = {@Override}) private final @NonNull ImperativeAspect imperativeAspect;
 
-    public TitleFacetInferredFromToStringMethod(final Method method, final FacetHolder holder) {
+    public static Optional<TitleFacet> create(
+            final @Nullable Method methodIfAny,
+            final FacetHolder holder) {
+
+        return Optional.ofNullable(methodIfAny)
+        .filter(method->!ClassExtensions.isJavaClass(method.getDeclaringClass()))
+        .map(method->
+            new TitleFacetInferredFromToStringMethod(
+                    ImperativeAspect.singleMethod(method, Intent.UI_HINT),
+                    holder));
+    }
+
+    private TitleFacetInferredFromToStringMethod(
+            final ImperativeAspect imperativeAspect,
+            final FacetHolder holder) {
         super(holder, Precedence.INFERRED);
-        this.methods = ImperativeFacet.singleMethod(method);
+        this.imperativeAspect = imperativeAspect;
     }
 
     @Override
-    public Intent getIntent(final Method method) {
-        return Intent.UI_HINT;
+    public String title(final ManagedObject domainObject) {
+        return imperativeAspect.eval(domainObject, "(not present)");
     }
 
     @Override
-    public String title(final ManagedObject object) {
-        val pojo = object.getPojo();
-        return pojo!=null
-                ? pojo.toString()
-                : "(not present)";
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        imperativeAspect.visitAttributes(visitor);
     }
 
 }

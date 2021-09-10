@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facetapi;
 
 import java.util.Set;
@@ -25,6 +24,10 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.springframework.util.ClassUtils;
+
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -71,32 +74,17 @@ implements Facet, HasMetaModelContext {
         return facetHolder.getMetaModelContext();
     }
 
-    protected String toStringValues() {
-        return "";
-    }
-
     @Override
     public String toString() {
-        String details = interactionAdvisors(";");
-        if (!details.isEmpty()) {
-            details = "interactionAdvisors=" + details + ",";
-        }
-
-        final String className = getClass().getName();
-        final String stringValues = toStringValues();
-        if (getClass() != facetType()) {
-            final String facetType = facetType().getName();
-            details += "type=" + facetType.substring(facetType.lastIndexOf('.') + 1);
-        }
-        if (!"".equals(stringValues)) {
-            details += ",";
-        }
-        return className.substring(className.lastIndexOf('.') + 1) + "[" + details + stringValues + "]";
+        val className = ClassUtils.getShortName(getClass());
+        return getClass() == facetType()
+                ? String.format("%s[%s]", className, attributesAsString())
+                : String.format("%s[type=%s; %s]", className, ClassUtils.getShortName(facetType()), attributesAsString());
     }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        visitor.accept("facet", this.getClass().getName());
+        visitor.accept("facet", ClassUtils.getShortName(getClass()));
         visitor.accept("precedence", getPrecedence().name());
 
         val interactionAdvisors = interactionAdvisors(", ");
@@ -149,5 +137,19 @@ implements Facet, HasMetaModelContext {
         }
     }
 
+    // -- HELPER
+
+    protected final Stream<_Strings.KeyValuePair> streamAttributes() {
+        final var keyValuePairs = _Lists.<_Strings.KeyValuePair>newArrayList();
+        visitAttributes((k, v)->keyValuePairs.add(_Strings.pair(k, ""+v)));
+        return keyValuePairs.stream();
+    }
+
+    private String attributesAsString() {
+        return streamAttributes()
+                .filter(kv->!kv.getKey().equals("facet")) // skip superfluous attribute
+                .map(_Strings.KeyValuePair::toString)
+                .collect(Collectors.joining("; "));
+    }
 
 }

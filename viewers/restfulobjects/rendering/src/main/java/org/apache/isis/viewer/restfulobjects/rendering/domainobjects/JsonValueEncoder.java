@@ -21,7 +21,6 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 import java.util.Map;
 import java.util.function.Function;
 
-import org.springframework.lang.Nullable;
 import javax.annotation.PostConstruct;
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -31,6 +30,7 @@ import javax.inject.Singleton;
 import com.fasterxml.jackson.databind.node.NullNode;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
@@ -43,8 +43,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-
-import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -77,7 +75,7 @@ public class JsonValueEncoder {
 
     private Map<Class<?>, JsonValueConverter> converterByClass = _Maps.newLinkedHashMap();
 
-    private void registerConverter(JsonValueConverter jvc) {
+    private void registerConverter(final JsonValueConverter jvc) {
         jvc.getClasses().forEach(cls->converterByClass.put(cls, jvc));
     }
 
@@ -132,11 +130,11 @@ public class JsonValueEncoder {
     }
 
     public Object appendValueAndFormat(
-            ManagedObject objectAdapter,
-            ObjectSpecification objectSpecification,
-            JsonRepresentation repr,
-            String format,
-            boolean suppressExtensions) {
+            final ManagedObject objectAdapter,
+            final ObjectSpecification objectSpecification,
+            final JsonRepresentation repr,
+            final String format,
+            final boolean suppressExtensions) {
 
         val cls = objectSpecification.getCorrespondingClass();
         val jsonValueConverter = converterByClass.get(cls);
@@ -162,8 +160,6 @@ public class JsonValueEncoder {
     @Nullable
     public Object asObject(final @NonNull ManagedObject adapter, final String format) {
 
-        requires(adapter, "adapter");
-
         val objectSpec = adapter.getSpecification();
         val cls = objectSpec.getCorrespondingClass();
 
@@ -181,7 +177,7 @@ public class JsonValueEncoder {
     }
 
 
-    static void appendFormats(JsonRepresentation repr, String format, String xIsisFormat, boolean suppressExtensions) {
+    static void appendFormats(final JsonRepresentation repr, final String format, final String xIsisFormat, final boolean suppressExtensions) {
         if(format != null) {
             repr.mapPut("format", format);
         }
@@ -190,7 +186,7 @@ public class JsonValueEncoder {
         }
     }
 
-    static Object unwrapAsObjectElseNullNode(ManagedObject adapter) {
+    static Object unwrapAsObjectElseNullNode(final ManagedObject adapter) {
         return adapter != null? adapter.getPojo(): NullNode.getInstance();
     }
 
@@ -211,7 +207,7 @@ public class JsonValueEncoder {
 
         @Getter private final Can<Class<?>> classes;
 
-        public JsonValueConverter(String format, String xIsisFormat, Class<?>... classes) {
+        public JsonValueConverter(final String format, final String xIsisFormat, final Class<?>... classes) {
             this.format = format;
             this.xIsisFormat = xIsisFormat;
             this.classes = Can.ofArray(classes);
@@ -223,10 +219,10 @@ public class JsonValueEncoder {
         public abstract ManagedObject asAdapter(JsonRepresentation repr, String format);
 
         public Object appendValueAndFormat(
-                ManagedObject objectAdapter,
-                String format,
-                JsonRepresentation repr,
-                boolean suppressExtensions) {
+                final ManagedObject objectAdapter,
+                final String format,
+                final JsonRepresentation repr,
+                final boolean suppressExtensions) {
 
             final Object value = unwrapAsObjectElseNullNode(objectAdapter);
             repr.mapPut("value", value);
@@ -234,7 +230,7 @@ public class JsonValueEncoder {
             return value;
         }
 
-        public Object asObject(ManagedObject objectAdapter, String format) {
+        public Object asObject(final ManagedObject objectAdapter, final String format) {
             return objectAdapter.getPojo();
         }
     }
@@ -243,7 +239,7 @@ public class JsonValueEncoder {
     /**
      * JUnit support
      */
-    public static JsonValueEncoder forTesting(SpecificationLoader specificationLoader) {
+    public static JsonValueEncoder forTesting(final SpecificationLoader specificationLoader) {
         val jsonValueEncoder = new JsonValueEncoder();
         jsonValueEncoder.specificationLoader = specificationLoader;
         jsonValueEncoder.init();

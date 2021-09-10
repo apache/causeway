@@ -32,6 +32,8 @@ import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -114,13 +116,12 @@ public abstract class ApplicationUser
     public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApplib.PropertyDomainEvent<ApplicationUser, T> {}
     public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApplib.CollectionDomainEvent<ApplicationUser, T> {}
 
-    // -- MODEL
 
-    public String title() {
+
+    @ObjectSupport public String title() {
         return getName();
     }
-
-    public String iconName() {
+    @ObjectSupport public String iconName() {
         return getStatus().isUnlocked() ? "unlocked" : "locked";
     }
 
@@ -470,8 +471,7 @@ public abstract class ApplicationUser
     @EncryptedPassword
     public abstract String getEncryptedPassword();
     public abstract void setEncryptedPassword(String encryptedPassword);
-
-    public boolean hideEncryptedPassword() {
+    @MemberSupport public boolean hideEncryptedPassword() {
         return !getApplicationUserRepository().isPasswordFeatureEnabled(this);
     }
 
@@ -497,8 +497,7 @@ public abstract class ApplicationUser
     public boolean isHasPassword() {
         return _Strings.isNotEmpty(getEncryptedPassword());
     }
-
-    public boolean hideHasPassword() {
+    @MemberSupport public boolean hideHasPassword() {
         return !getApplicationUserRepository().isPasswordFeatureEnabled(this);
     }
 

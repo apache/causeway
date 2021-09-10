@@ -16,45 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.commons.internal.base;
 
 import java.util.Optional;
 
 import static org.apache.isis.commons.internal.exceptions._Exceptions.notImplemented;
 
+import lombok.Value;
+
 /**
  *
  * package private mixin for utility class {@link _Strings}
  *
  */
+@Value(staticConstructor = "of")
 final class _Strings_KeyValuePair implements _Strings.KeyValuePair {
-
-    static _Strings.KeyValuePair of(String key, String value) {
-        return new _Strings_KeyValuePair(key, value);
-    }
 
     private final String key;
     private final String value;
 
-    private _Strings_KeyValuePair(String key, String value) {
-        this.key = key;
-        this.value = value;
-    }
 
     @Override
-    public String getKey() {
-        return key;
-    }
-
-    @Override
-    public String getValue() {
-        return value;
-    }
-
-    @Override
-    public String setValue(String value) {
+    public String setValue(final String value) {
         throw notImplemented();
+    }
+
+    @Override
+    public String toString() {
+        return key + "=" + value;
     }
 
     /**
@@ -64,7 +53,7 @@ final class _Strings_KeyValuePair implements _Strings.KeyValuePair {
      * @return a non-empty Optional, if (and only if) the {@code keyValueLiteral}
      * does contain at least one {@code separator}
      */
-    public static Optional<_Strings.KeyValuePair> parse(String keyValueLiteral, char separator) {
+    public static Optional<_Strings.KeyValuePair> parse(final String keyValueLiteral, final char separator) {
 
         if(_Strings.isNullOrEmpty(keyValueLiteral)) {
             return Optional.empty();
@@ -78,7 +67,7 @@ final class _Strings_KeyValuePair implements _Strings.KeyValuePair {
         String aKey = keyValueLiteral.substring(0, equalsIndex);
         String aValue = equalsIndex == keyValueLiteral.length() - 1
                 ? ""
-                        : keyValueLiteral.substring(equalsIndex + 1);
+                : keyValueLiteral.substring(equalsIndex + 1);
 
         return Optional.of(of(aKey, aValue));
     }

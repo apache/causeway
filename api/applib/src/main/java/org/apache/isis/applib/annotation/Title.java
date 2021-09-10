@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.applib.annotation;
 
 import java.lang.annotation.ElementType;
@@ -29,7 +28,7 @@ import java.lang.annotation.Target;
  *
  * <p>
  * If more than one property is used, the order can be specified (using the
- * same Dewey-decimal notation). 
+ * same Dewey-decimal notation).
  * The string to use between the components can also be specified.
  * </p>
  *

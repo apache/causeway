@@ -16,15 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.applib.value;
 
 import java.io.Serializable;
 import java.net.URISyntaxException;
+import java.util.function.UnaryOperator;
 
-import org.springframework.lang.Nullable;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Value;
@@ -79,13 +80,13 @@ public final class LocalResourcePath implements Serializable {
     }
 
     @NonNull
-    public Object getValue() {
+    public String getValue() {
         return path;
     }
 
     @NonNull
-    public String getPath() {
-        return path;
+    public String getEffectivePath(final @NonNull UnaryOperator<String> contextPathPrepender) {
+        return contextPathPrepender.apply(path);
     }
 
     @Override
@@ -94,7 +95,7 @@ public final class LocalResourcePath implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if(obj==null) {
             return false;
         }
@@ -106,16 +107,16 @@ public final class LocalResourcePath implements Serializable {
         return path.hashCode();
     }
 
-    public boolean isEqualTo(LocalResourcePath other) {
+    public boolean isEqualTo(final LocalResourcePath other) {
         if(other==null) {
             return false;
         }
-        return this.getPath().equals(other.getPath());
+        return this.getValue().equals(other.getValue());
     }
 
     // -- HELPER
 
-    private void validate(String path) throws IllegalArgumentException {
+    private void validate(final String path) throws IllegalArgumentException {
         if(path==null) {
             return;
         }
@@ -130,13 +131,13 @@ public final class LocalResourcePath implements Serializable {
 
     public static class JaxbToStringAdapter extends XmlAdapter<String, LocalResourcePath> {
         @Override
-        public LocalResourcePath unmarshal(String path) {
+        public LocalResourcePath unmarshal(final String path) {
             return path != null ? new LocalResourcePath(path) : null;
         }
 
         @Override
-        public String marshal(LocalResourcePath localResourcePath) {
-            return localResourcePath != null ? localResourcePath.getPath() : null;
+        public String marshal(final LocalResourcePath localResourcePath) {
+            return localResourcePath != null ? localResourcePath.getValue() : null;
         }
     }
 }

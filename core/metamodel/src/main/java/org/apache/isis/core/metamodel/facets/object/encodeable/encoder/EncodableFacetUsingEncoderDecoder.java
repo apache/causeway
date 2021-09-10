@@ -16,8 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.encodeable.encoder;
+
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.commons.internal.assertions._Assert;
@@ -41,10 +42,11 @@ implements EncodableFacet {
     public static final String ENCODED_NULL = "NULL";
 
     @Override
-    protected String toStringValues() {
-        getServiceInjector().injectServicesInto(encoderDecoder);
-        return encoderDecoder.toString();
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("codec", encoderDecoder.toString());
     }
+
 
     @Override
     public ManagedObject fromEncodedString(final String encodedData) {
@@ -52,7 +54,6 @@ implements EncodableFacet {
         if (ENCODED_NULL.equals(encodedData)) {
             return null;
         } else {
-            getServiceInjector().injectServicesInto(encoderDecoder);
             final Object decodedObject = encoderDecoder.fromEncodedString(encodedData);
             return getObjectManager().adapt(decodedObject);
         }
@@ -61,7 +62,6 @@ implements EncodableFacet {
 
     @Override
     public String toEncodedString(final ManagedObject adapter) {
-        getServiceInjector().injectServicesInto(encoderDecoder);
         return adapter == null ? ENCODED_NULL: encode(encoderDecoder, adapter.getPojo());
     }
 

@@ -20,6 +20,7 @@ package demoapp.dom.types.isisext.markdowns.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -42,14 +43,15 @@ public class IsisMarkdownHolder_updateReadOnlyOptionalProperty {
 
     private final IsisMarkdownHolder holder;
 
-    public IsisMarkdownHolder act(
+    @MemberSupport public IsisMarkdownHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
-            Markdown newValue
+            final Markdown newValue
     ) {
         holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
-    public Markdown default0Act() {
+
+    @MemberSupport public Markdown default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

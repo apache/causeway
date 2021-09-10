@@ -29,10 +29,11 @@ import org.springframework.context.annotation.Profile;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Publishing;
-import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
+import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -49,7 +50,7 @@ import demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecut
       schema = "demo",
       name = "PropertyExecutionPublishingJpa"
 )
-@EntityListeners(JpaEntityInjectionPointResolver.class)
+@EntityListeners(IsisEntityListener.class)
 @DomainObject(
       logicalTypeName = "demo.PropertyExecutionPublishingEntity"
       , editing = Editing.ENABLED
@@ -60,13 +61,13 @@ public class PropertyExecutionPublishingJpa
     // ...
 //end::class[]
 
-    public PropertyExecutionPublishingJpa(String initialValue) {
+    public PropertyExecutionPublishingJpa(final String initialValue) {
         this.property = initialValue;
         this.propertyMetaAnnotated = initialValue;
         this.propertyMetaAnnotatedOverridden = initialValue;
     }
 
-    public String title() {
+    @ObjectSupport public String title() {
         return "Property#executionPublishing (JDO)";
     }
 

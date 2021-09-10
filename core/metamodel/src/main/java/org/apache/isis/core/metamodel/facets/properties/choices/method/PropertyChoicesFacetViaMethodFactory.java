@@ -16,65 +16,43 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.properties.choices.method;
 
 import javax.inject.Inject;
 
-import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
-import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
 import lombok.val;
 
-public class PropertyChoicesFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
-
-    private static final String PREFIX = MethodLiteralConstants.CHOICES_PREFIX;
+public class PropertyChoicesFacetViaMethodFactory
+extends MemberSupportFacetFactoryAbstract {
 
     @Inject
     public PropertyChoicesFacetViaMethodFactory(final MetaModelContext mmc) {
-     // to also support properties from mixins, need to not only include properties but also actions
-        super(mmc, FeatureType.PROPERTIES_AND_ACTIONS, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
+        super(mmc, FeatureType.PROPERTIES_ONLY, MemberSupportPrefix.CHOICES);
     }
 
     @Override
-    public void process(final ProcessMethodContext processMethodContext) {
-
-        attachPropertyChoicesFacetIfChoicesMethodIsFound(processMethodContext);
-    }
-
-    private void attachPropertyChoicesFacetIfChoicesMethodIsFound(final ProcessMethodContext processMethodContext) {
-
-        // optimization step, not strictly required
-        if(!super.isPropertyOrMixinMain(processMethodContext)) {
-            return;
-        }
+    protected void search(
+            final ProcessMethodContext processMethodContext,
+            final MethodFinder methodFinder) {
 
         val getterOrMixinMain = processMethodContext.getMethod();
-        val namingConvention = processMethodContext.memberSupportCandidates(PREFIX);
+        val getterType = getterOrMixinMain.getReturnType();
 
-        val cls = processMethodContext.getCls();
-        val returnType = getterOrMixinMain.getReturnType();
-        val choicesMethod = MethodFinder
-                .findMethod(
-                    cls,
-                    namingConvention,
-                    NO_RETURN,
-                    NO_ARG)
-                .findFirst()
-                .orElse(null);
-        if (choicesMethod == null) {
-            return;
-        }
-        processMethodContext.removeMethod(choicesMethod);
+        methodFinder
+        .streamMethodsMatchingSignature(NO_ARG)
+        .peek(processMethodContext::removeMethod)
+        .forEach(choicesMethod->{
+            addFacet(
+                    new PropertyChoicesFacetViaMethod(
+                            choicesMethod, getterType, processMethodContext.getFacetHolder()));
+        });
 
-        final FacetHolder property = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new PropertyChoicesFacetViaMethod(choicesMethod, returnType, property));
     }
 
 }

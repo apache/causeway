@@ -32,7 +32,9 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
@@ -48,16 +50,16 @@ import demoapp.dom.types.javatime.javatimelocaldatetime.vm.JavaTimeLocalDateTime
 //@Log4j2
 public class JavaTimeLocalDateTimes implements HasAsciiDocDescription {
 
-    public String title() {
+    @ObjectSupport public String title() {
         return "java.time.LocalDateTime data type";
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public JavaTimeLocalDateTimeVm openViewModel(java.time.LocalDateTime initialValue) {
+    public JavaTimeLocalDateTimeVm openViewModel(final java.time.LocalDateTime initialValue) {
         return new JavaTimeLocalDateTimeVm(initialValue);
     }
-    public java.time.LocalDateTime default0OpenViewModel() {
+    @MemberSupport public java.time.LocalDateTime default0OpenViewModel() {
         return java.time.LocalDateTime.of(120, 1, 1, 1, 1);
     }
 

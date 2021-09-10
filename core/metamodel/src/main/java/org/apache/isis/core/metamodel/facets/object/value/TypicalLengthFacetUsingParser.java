@@ -16,8 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.value;
+
+import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -34,8 +35,9 @@ extends TypicalLengthFacetAbstract {
     }
 
     @Override
-    protected String toStringValues() {
-        return parser.toString();
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("parser", parser.toString());
     }
 
 }

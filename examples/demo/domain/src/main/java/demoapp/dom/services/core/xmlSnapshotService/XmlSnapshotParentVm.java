@@ -32,16 +32,18 @@ import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.services.core.xmlSnapshotService.child.XmlSnapshotChildVm;
-import demoapp.dom.services.core.xmlSnapshotService.peer.XmlSnapshotPeerVm;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.val;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.services.core.xmlSnapshotService.child.XmlSnapshotChildVm;
+import demoapp.dom.services.core.xmlSnapshotService.peer.XmlSnapshotPeerVm;
 
 @XmlRootElement(name = "root")
 @XmlType
@@ -53,11 +55,11 @@ import lombok.val;
 @NoArgsConstructor
 public class XmlSnapshotParentVm implements HasAsciiDocDescription {
 
-    public XmlSnapshotParentVm(String text) {
+    public XmlSnapshotParentVm(final String text) {
         this.text = text;
     }
 
-    public String title() {
+    @ObjectSupport public String title() {
         return "XmlSnapshotService parent VM";
     }
 

@@ -42,28 +42,23 @@ public class ProperMemberSupport_property {
 
     // -- PROPERLY DECLARED SUPPORTING METHODS
 
-    @MemberSupport
-    public Set<String> autoCompleteProp(@MinLength(3) String search) {
+    @MemberSupport public Set<String> autoCompleteProp(@MinLength(3) String search) {
         return null;
     }
 
-    @MemberSupport
-    public Set<String> choicesProp() {
+    @MemberSupport public Set<String> choicesProp() {
         return null;
     }
 
-    @MemberSupport
-    public String defaultProp() {
+    @MemberSupport public String defaultProp() {
         return "";
     }
 
-    @MemberSupport
-    public String disableProp() {
+    @MemberSupport public String disableProp() {
         return null;
     }
 
-    @MemberSupport
-    public boolean hideProp() {
+    @MemberSupport public boolean hideProp() {
         return false;
     }
 

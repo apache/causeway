@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.properties.property;
 
 import java.util.Optional;
@@ -323,9 +322,9 @@ extends FacetFactoryAbstract {
 
         val method = processMethodContext.getMethod();
         val holder = processMethodContext.getFacetHolder();
-        
+
         // check for @Nullable
-        val hasNullable = 
+        val hasNullable =
                 _NullSafe.stream(method.getAnnotations())
                     .map(annot->annot.annotationType().getSimpleName())
                     .anyMatch(name->name.equals("Nullable"));

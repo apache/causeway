@@ -33,7 +33,9 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
@@ -50,16 +52,16 @@ import demoapp.dom.types.javanet.urls.vm.JavaNetUrlVm;
 //@Log4j2
 public class JavaNetUrls implements HasAsciiDocDescription {
 
-    public String title() {
+    @ObjectSupport public String title() {
         return "java.net.URL data type";
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public JavaNetUrlVm openViewModel(java.net.URL initialValue) {
+    public JavaNetUrlVm openViewModel(final java.net.URL initialValue) {
         return new JavaNetUrlVm(initialValue);
     }
-    public java.net.URL default0OpenViewModel() {
+    @MemberSupport public java.net.URL default0OpenViewModel() {
         return samples.single();
     }
 

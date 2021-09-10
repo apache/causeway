@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.choices.enums;
 
 import javax.inject.Inject;
@@ -45,7 +44,10 @@ extends ValueFacetUsingSemanticsProviderFactory<Enum<?>> {
         }
 
         addFacets(_Casts.uncheckedCast(
-                new EnumValueSemanticsProvider<>(facetHolder, _Casts.uncheckedCast(cls))));
+                new EnumValueSemanticsProvider<>(
+                        processClassContext.getIntrospectionPolicy(),
+                        facetHolder,
+                        _Casts.uncheckedCast(cls))));
         addFacet(new ChoicesFacetEnum(facetHolder, cls));
     }
 

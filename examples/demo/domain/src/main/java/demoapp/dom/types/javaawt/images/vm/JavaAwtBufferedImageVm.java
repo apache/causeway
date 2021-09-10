@@ -28,13 +28,15 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.Setter;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -54,13 +56,13 @@ public class JavaAwtBufferedImageVm
 {
 
 //end::class[]
-    public JavaAwtBufferedImageVm(BufferedImage initialValue) {
+    public JavaAwtBufferedImageVm(final BufferedImage initialValue) {
         this.readOnlyProperty = initialValue;
 //        this.readWriteProperty = initialValue;    // editable properties not yet supported
     }
 
     // @Title not yet supported
-    public String title() {
+    @ObjectSupport public String title() {
         return "Image view model";
     }
 

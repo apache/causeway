@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.objectvalue.labelat;
 
 import java.util.function.BiConsumer;
@@ -49,18 +48,13 @@ implements LabelAtFacet {
     }
 
     @Override
-    protected String toStringValues() {
-        return "position=" + value;
-    }
-
-    @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("label", value);
+        visitor.accept("labelPosition", value);
     }
 
     @Override
-    public boolean semanticEquals(@NonNull Facet other) {
+    public boolean semanticEquals(@NonNull final Facet other) {
         return other instanceof LabelAtFacetAbstract
                 && this.label() == ((LabelAtFacetAbstract) other).label();
     }

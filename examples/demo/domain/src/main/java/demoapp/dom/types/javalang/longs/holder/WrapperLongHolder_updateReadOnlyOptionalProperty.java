@@ -20,6 +20,7 @@ package demoapp.dom.types.javalang.longs.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -41,14 +42,15 @@ public class WrapperLongHolder_updateReadOnlyOptionalProperty {
 
     private final WrapperLongHolder holder;
 
-    public WrapperLongHolder act(
+    @MemberSupport public WrapperLongHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
-            Long newValue
+            final Long newValue
     ) {
         holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
-    public Long default0Act() {
+
+    @MemberSupport public Long default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

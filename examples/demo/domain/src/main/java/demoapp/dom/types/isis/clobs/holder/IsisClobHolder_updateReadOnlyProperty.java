@@ -20,6 +20,7 @@ package demoapp.dom.types.isis.clobs.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Clob;
@@ -40,11 +41,12 @@ public class IsisClobHolder_updateReadOnlyProperty {
 
     private final IsisClobHolder holder;
 
-    public IsisClobHolder act(Clob newValue) {
+    @MemberSupport public IsisClobHolder act(final Clob newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
-    public Clob default0Act() {
+
+    @MemberSupport public Clob default0Act() {
         return holder.getReadOnlyProperty();
     }
 

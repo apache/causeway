@@ -34,12 +34,13 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.value.LocalResourcePath;
-import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
+import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
-import demoapp.dom.types.isis.localresourcepaths.persistence.IsisLocalResourcePathEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import demoapp.dom.types.isis.localresourcepaths.persistence.IsisLocalResourcePathEntity;
 
 @Profile("demo-jpa")
 //tag::class[]
@@ -48,7 +49,7 @@ import lombok.Setter;
       schema = "demo",
       name = "IsisLocalResourcePathJpa"
 )
-@EntityListeners(JpaEntityInjectionPointResolver.class)
+@EntityListeners(IsisEntityListener.class)
 @DomainObject(
       logicalTypeName = "demo.IsisLocalResourcePathEntity"
 )
@@ -57,7 +58,7 @@ public class IsisLocalResourcePathJpa
         extends IsisLocalResourcePathEntity {
 
 //end::class[]
-    public IsisLocalResourcePathJpa(LocalResourcePath initialValue) {
+    public IsisLocalResourcePathJpa(final LocalResourcePath initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

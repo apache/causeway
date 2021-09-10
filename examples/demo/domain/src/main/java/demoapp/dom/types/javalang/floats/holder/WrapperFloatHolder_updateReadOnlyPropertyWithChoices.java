@@ -25,11 +25,13 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import demoapp.dom.types.Samples;
 import lombok.RequiredArgsConstructor;
+
+import demoapp.dom.types.Samples;
 
 //tag::class[]
 @Action(
@@ -45,14 +47,16 @@ public class WrapperFloatHolder_updateReadOnlyPropertyWithChoices {
 
     private final WrapperFloatHolder holder;
 
-    public WrapperFloatHolder act(Float newValue) {
+    @MemberSupport public WrapperFloatHolder act(final Float newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
-    public Float default0Act() {
+
+    @MemberSupport public Float default0Act() {
         return holder.getReadOnlyProperty();
     }
-    public List<Float> choices0Act() {
+
+    @MemberSupport public List<Float> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }

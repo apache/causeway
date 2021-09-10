@@ -16,18 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.recreatable;
 
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
+import org.apache.isis.core.metamodel.facets.HasPostConstructMethodCache;
 
 public class RecreatableObjectFacetForRecreatableObjectInterface extends RecreatableObjectFacetAbstract {
 
     public RecreatableObjectFacetForRecreatableObjectInterface(
             final FacetHolder holder,
-            final PostConstructMethodCache postConstructMethodCache) {
+            final HasPostConstructMethodCache postConstructMethodCache) {
         super(holder, RecreationMechanism.INITIALIZES, postConstructMethodCache);
     }
 

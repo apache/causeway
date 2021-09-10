@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.actions.action;
 
 import java.util.Optional;
@@ -26,7 +25,6 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.mixins.system.HasInteractionId;
-import org.apache.isis.commons.internal.base._Optionals;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -247,20 +245,18 @@ extends FacetFactoryAbstract {
         val facetedMethod = processMethodContext.getFacetHolder();
 
         val methodReturnType = method.getReturnType();
-        if (!_Collections.isCollectionOrArrayType(methodReturnType)) {
+        if (!_Collections.isCollectionOrArrayOrCanType(methodReturnType)) {
             return;
         }
 
         // check for @Action(typeOf=...)
-        val typeOfFacet = _Optionals.<TypeOfFacet>or(
-
-                actionIfAny
+        val typeOfFacet = actionIfAny
                 .map(Action::typeOf)
                 .filter(typeOf -> typeOf != null && typeOf != Object.class)
-                .map(typeOf -> new TypeOfFacetForActionAnnotation(typeOf, facetedMethod)),
-
-                // else infer from generic type arg if any
-                ()->TypeOfFacet.inferFromMethodReturnType(facetedMethod, method));
+                .<TypeOfFacet>map(typeOf -> new TypeOfFacetForActionAnnotation(typeOf, facetedMethod))
+                .or(
+                    // else infer from generic type arg if any
+                    ()->TypeOfFacet.inferFromMethodReturnType(method, facetedMethod));
 
         addFacetIfPresent(typeOfFacet);
     }
@@ -274,13 +270,6 @@ extends FacetFactoryAbstract {
             val choicesFrom = action.choicesFrom();
             if(_Strings.isNotEmpty(choicesFrom)) {
                 addFacet(new ChoicesFromFacetForActionAnnotation(choicesFrom, facetedMethod));
-                return;
-            }
-            @SuppressWarnings("deprecation")
-            val associateWith = action.associateWith();
-            if(_Strings.isNotEmpty(associateWith)) {
-                addFacet(new ChoicesFromFacetForActionAnnotation(associateWith, facetedMethod));
-                return;
             }
         });
 

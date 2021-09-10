@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.HomePage;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
@@ -38,7 +39,7 @@ import demoapp.dom._infra.resources.AsciiDocReaderService;
 public class DemoHomePage
         implements HasAsciiDocDescription {                     // <.>
 
-    public String title() {                                     // <.>
+    @ObjectSupport public String title() {                                     // <.>
         return "Hello, " + userService.currentUserNameElseNobody();
     }
 

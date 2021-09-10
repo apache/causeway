@@ -41,7 +41,7 @@ public class AsciiDoc implements HasHtml, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public static AsciiDoc valueOfAdoc(String adoc) {
+    public static AsciiDoc valueOfAdoc(final String adoc) {
         return new AsciiDoc(adoc);
     }
 
@@ -52,12 +52,8 @@ public class AsciiDoc implements HasHtml, Serializable {
         this(null);
     }
 
-    public AsciiDoc(String adoc) {
+    public AsciiDoc(final String adoc) {
         this.adoc = adoc !=null ? adoc : "";
-    }
-
-    public String title() {
-        return getAdoc();
     }
 
     @Override
@@ -87,7 +83,7 @@ public class AsciiDoc implements HasHtml, Serializable {
 
     @Override
     public String toString() {
-        return "AsciiDoc[length="+ adoc.length()+", html="+ adoc +"]";
+        return "AsciiDoc[length="+ adoc.length()+"]";
     }
 
 }

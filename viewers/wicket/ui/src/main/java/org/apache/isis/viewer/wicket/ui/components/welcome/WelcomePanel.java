@@ -16,14 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.viewer.wicket.ui.components.welcome;
-
-import javax.inject.Inject;
 
 import org.apache.wicket.markup.html.basic.Label;
 
-import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.viewer.wicket.model.models.WelcomeModel;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -39,7 +35,7 @@ extends PanelAbstract<String, WelcomeModel> {
 
     private static final String ID_MESSAGE = "message";
 
-    @Inject private transient WebAppContextPath webAppContextPath;
+    //@Inject private transient WebAppContextPath webAppContextPath;
 
     public WelcomePanel(final String id, final WelcomeModel model) {
         super(id, model);

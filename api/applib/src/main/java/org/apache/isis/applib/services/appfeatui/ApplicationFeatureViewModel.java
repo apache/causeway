@@ -31,12 +31,15 @@ import javax.inject.Inject;
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Navigable;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
@@ -129,9 +132,10 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
      * having a title() method (rather than using @Title annotation) is necessary as a workaround to be able to use
      * wrapperFactory#unwrap(...) method, which is otherwise broken in Isis 1.6.0
      */
-    public String title() {
+    @ObjectSupport public String title() {
         return getFullyQualifiedName();
     }
+    @ObjectSupport
     public String iconName() {
         return "applicationFeature";
     }
@@ -245,7 +249,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     public String getTypeSimpleName() {
         return getFeatureId().getTypeSimpleName();
     }
-    public boolean hideTypeSimpleName() {
+    @MemberSupport public boolean hideTypeSimpleName() {
         return getSort().isNamespace();
     }
 
@@ -286,8 +290,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     public String getMemberName() {
         return getFeatureId().getLogicalMemberName();
     }
-
-    public boolean hideMemberName() {
+    @MemberSupport public boolean hideMemberName() {
         return !getSort().isMember();
     }
 

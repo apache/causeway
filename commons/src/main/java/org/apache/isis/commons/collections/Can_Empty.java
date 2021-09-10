@@ -21,12 +21,14 @@ package org.apache.isis.commons.collections;
 import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -101,7 +103,17 @@ final class Can_Empty<T> implements Can<T> {
     }
 
     @Override
-    public Can<T> unique() {
+    public Can<T> sorted(final @NonNull Comparator<? super T> c) {
+        return this;
+    }
+
+    @Override
+    public Can<T> distinct() {
+        return this;
+    }
+
+    @Override
+    public Can<T> distinct(final @NonNull BiPredicate<T, T> equality) {
         return this;
     }
 
@@ -243,7 +255,6 @@ final class Can_Empty<T> implements Can<T> {
         val array = _Casts.<T[]>uncheckedCast(Array.newInstance(elementType, 0));
         return array;
     }
-
 
 
 }

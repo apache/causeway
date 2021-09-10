@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets;
 
 import org.apache.isis.commons.collections.Can;
@@ -38,8 +37,8 @@ implements PropertyOrCollectionIdentifyingFacetFactory {
         super(mmc, featureTypes, OrphanValidation.DONT_VALIDATE, prefixes);
     }
 
-    protected boolean isCollectionOrArray(final Class<?> cls) {
-        return _Collections.isCollectionOrArrayType(cls);
+    protected boolean isNonScalar(final Class<?> cls) {
+        return _Collections.isCollectionOrArrayOrCanType(cls);
     }
 
 }

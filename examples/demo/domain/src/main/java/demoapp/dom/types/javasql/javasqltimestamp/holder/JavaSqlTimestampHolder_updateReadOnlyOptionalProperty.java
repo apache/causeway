@@ -20,6 +20,7 @@ package demoapp.dom.types.javasql.javasqltimestamp.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -42,14 +43,15 @@ public class JavaSqlTimestampHolder_updateReadOnlyOptionalProperty {
 
     private final JavaSqlTimestampHolder holder;
 
-    public JavaSqlTimestampHolder act(
+    @MemberSupport public JavaSqlTimestampHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
-            java.sql.Timestamp newValue
+            final java.sql.Timestamp newValue
     ) {
         holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
-    public java.sql.Timestamp default0Act() {
+
+    @MemberSupport public java.sql.Timestamp default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

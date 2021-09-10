@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.properties.validating.method;
 
 import java.lang.reflect.Method;
@@ -38,11 +37,11 @@ public class PropertyValidateFacetViaMethod extends PropertyValidateFacetAbstrac
 
     public PropertyValidateFacetViaMethod(
             final Method method,
-    		final TranslationContext translationContext,
     		final FacetHolder holder) {
         super(holder);
         this.method = method;
-        this.translationContext = translationContext;
+        this.translationContext =
+                TranslationContext.forTranslationContextHolder(holder.getFeatureIdentifier());
     }
 
     /**
@@ -70,11 +69,6 @@ public class PropertyValidateFacetViaMethod extends PropertyValidateFacetAbstrac
             return ts.translate(getTranslationService(), translationContext);
         }
         return null;
-    }
-
-    @Override
-    protected String toStringValues() {
-        return "method=" + method;
     }
 
     @Override

@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.properties.update.init;
 
 import java.lang.reflect.Method;
@@ -54,12 +53,6 @@ implements ImperativeFacet {
     public void initProperty(final ManagedObject owningAdapter, final ManagedObject initialAdapter) {
         val method = methods.getFirstOrFail();
         ManagedObjects.InvokeUtil.invoke(method, owningAdapter, initialAdapter);
-    }
-
-    @Override
-    protected String toStringValues() {
-        val method = methods.getFirstOrFail();
-        return "method=" + method;
     }
 
     @Override

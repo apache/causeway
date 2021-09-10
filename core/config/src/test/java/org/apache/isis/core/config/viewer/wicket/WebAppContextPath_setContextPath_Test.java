@@ -22,6 +22,8 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import org.apache.isis.core.config.viewer.web.WebAppContextPath;
+
 class WebAppContextPath_setContextPath_Test {
 
     private WebAppContextPath webAppContextPath;

@@ -16,23 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.param.hide.method;
-
-import java.util.EnumSet;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
-import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.ParameterSupport;
-import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest.ReturnType;
-import org.apache.isis.core.metamodel.facets.ParameterSupport.SearchAlgorithm;
+import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
+import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchResult;
 import org.apache.isis.core.metamodel.facets.param.hide.ActionParameterHiddenFacet;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
-import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.param.support.ActionParameterSupportFacetFactoryAbstract;
 
 import lombok.val;
 
@@ -40,57 +33,22 @@ import lombok.val;
  * Sets up {@link ActionParameterHiddenFacet}.
  */
 public class ActionParameterHiddenFacetViaMethodFactory
-extends MethodPrefixBasedFacetFactoryAbstract  {
-
-    private static final String PREFIX = MethodLiteralConstants.HIDE_PREFIX;
+extends ActionParameterSupportFacetFactoryAbstract {
 
     @Inject
     public ActionParameterHiddenFacetViaMethodFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
+        super(mmc, MemberSupportPrefix.HIDE);
     }
 
     @Override
-    public void process(final ProcessMethodContext processMethodContext) {
-
-        val facetedMethod = processMethodContext.getFacetHolder();
-        val parameters = facetedMethod.getParameters();
-
-        if (parameters.isEmpty()) {
-            return;
-        }
-
-        // attach ActionParameterHiddenFacet if hideNumMethod is found ...
-
-        val namingConvention = processMethodContext.parameterSupportCandidates(PREFIX);
-
-        val searchRequest = ParameterSupport.ParamSupportingMethodSearchRequest.builder()
-                .processMethodContext(processMethodContext)
-                .returnType(ReturnType.BOOLEAN)
-                .paramIndexToMethodNameProviders(namingConvention)
-                .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.SWEEP))
-                .build();
-
-        ParameterSupport.findParamSupportingMethods(searchRequest, searchResult -> {
-
-            val hideMethod = searchResult.getSupportingMethod();
-            val paramIndex = searchResult.getParamIndex();
-
-            processMethodContext.removeMethod(hideMethod);
-
-            if (facetedMethod.containsNonFallbackFacet(ActionParameterHiddenFacet.class)) {
-                val cls = processMethodContext.getCls();
-                throw new MetaModelException(cls + " uses both old and new 'hide' syntax - "
-                        + "must use one or other");
-            }
-
-            // add facets directly to parameters, not to actions
-            val paramAsHolder = parameters.get(paramIndex);
-            val ppmFactory = searchResult.getPpmFactory();
-
-            addFacet(
-                    new ActionParameterHiddenFacetViaMethod(hideMethod, ppmFactory, paramAsHolder));
-        });
-
+    protected void onSearchResult(
+            final FacetedMethodParameter paramAsHolder,
+            final ParamSupportingMethodSearchResult searchResult) {
+        val hideMethod = searchResult.getSupportingMethod();
+        val patConstructor = searchResult.getPatConstructor();
+        addFacet(
+                new ActionParameterHiddenFacetViaMethod(
+                        hideMethod, patConstructor, paramAsHolder));
     }
 
 

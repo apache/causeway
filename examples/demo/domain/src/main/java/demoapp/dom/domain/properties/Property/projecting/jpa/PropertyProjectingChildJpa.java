@@ -32,7 +32,7 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
-import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
+import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -47,7 +47,7 @@ import demoapp.dom.domain.properties.Property.projecting.persistence.PropertyPro
     schema = "demo",
     name = "PropertyProjectingChildJpa"
 )
-@EntityListeners(JpaEntityInjectionPointResolver.class)
+@EntityListeners(IsisEntityListener.class)
 @DomainObject(
     logicalTypeName = "demo.PropertyProjectingChildEntity"
     , editing = Editing.DISABLED
@@ -59,7 +59,7 @@ public class PropertyProjectingChildJpa
     // ...
 //end::class[]
 
-    public PropertyProjectingChildJpa(String initialValue) {
+    public PropertyProjectingChildJpa(final String initialValue) {
         this.name = initialValue;
     }
 

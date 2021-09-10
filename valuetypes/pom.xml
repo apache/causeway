@@ -63,6 +63,12 @@
 
 			<dependency>
 				<groupId>org.apache.isis.valuetypes</groupId>
+				<artifactId>isis-valuetypes-jodatime-applib</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.valuetypes</groupId>
 				<artifactId>isis-valuetypes-asciidoc-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
@@ -83,7 +89,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.valuetypes</groupId>
-				<artifactId>isis-valuetypes-asciidoc-persistence-jdo-dn5</artifactId>
+				<artifactId>isis-valuetypes-asciidoc-persistence-jdo</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
@@ -109,7 +115,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.valuetypes</groupId>
-				<artifactId>isis-valuetypes-markdown-persistence-jdo-dn5</artifactId>
+				<artifactId>isis-valuetypes-markdown-persistence-jdo</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
@@ -154,6 +160,7 @@
 	</dependencies>
 
 	<modules>
+		<module>jodatime</module>
 		<module>asciidoc</module>
 		<module>markdown</module>
 		<module>sse</module>
@@ -168,17 +175,9 @@
 				</file>
 			</activation>
 			<properties>
-
-				<!-- keep in sync with versions used in Apache Isis -->
-				<datanucleus-api-jdo.version>5.2.7</datanucleus-api-jdo.version>
-				<datanucleus-core.version>5.2.8</datanucleus-core.version>
-				<datanucleus-jodatime.version>5.2.0-release</datanucleus-jodatime.version>
-				<datanucleus-maven-plugin.version>5.2.1</datanucleus-maven-plugin.version>
-
 				<datanucleus-maven-plugin.log4jConfiguration>${basedir}/logging-dn-enhance.properties</datanucleus-maven-plugin.log4jConfiguration>
 				<datanucleus-maven-plugin.verbose>true</datanucleus-maven-plugin.verbose>
 				<datanucleus-maven-plugin.fork>false</datanucleus-maven-plugin.fork>
-
 			</properties>
 			<build>
 				<plugins>

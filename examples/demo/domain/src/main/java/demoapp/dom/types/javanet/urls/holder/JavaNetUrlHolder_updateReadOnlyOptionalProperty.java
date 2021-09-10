@@ -20,6 +20,7 @@ package demoapp.dom.types.javanet.urls.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -41,14 +42,15 @@ public class JavaNetUrlHolder_updateReadOnlyOptionalProperty {
 
     private final JavaNetUrlHolder holder;
 
-    public JavaNetUrlHolder act(
+    @MemberSupport public JavaNetUrlHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
-            java.net.URL newValue
+            final java.net.URL newValue
     ) {
         holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
-    public java.net.URL default0Act() {
+
+    @MemberSupport public java.net.URL default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

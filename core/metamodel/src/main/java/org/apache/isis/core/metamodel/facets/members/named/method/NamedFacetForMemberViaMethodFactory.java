@@ -16,59 +16,38 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.members.named.method;
 
 import javax.inject.Inject;
 
-import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
-import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
-
-import lombok.val;
 
 public class NamedFacetForMemberViaMethodFactory
-extends MethodPrefixBasedFacetFactoryAbstract {
-
-    private static final String PREFIX = MethodLiteralConstants.NAMED_PREFIX;
+extends MemberSupportFacetFactoryAbstract {
 
     @Inject
     public NamedFacetForMemberViaMethodFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.MEMBERS, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
+        super(mmc, FeatureType.MEMBERS, MemberSupportPrefix.NAMED);
     }
 
     @Override
-    public void process(final ProcessMethodContext processMethodContext) {
-        addNamedFacetIfNamedMethodIsFound(processMethodContext);
+    protected void search(
+            final ProcessMethodContext processMethodContext,
+            final MethodFinder methodFinder) {
+
+        methodFinder
+        .streamMethodsMatchingSignature(NO_ARG)
+        .peek(processMethodContext::removeMethod)
+        .forEach(namedMethod->{
+            addFacet(
+                    new NamedFacetForMemberViaMethod(
+                            namedMethod, processMethodContext.getFacetHolder()));
+        });
     }
 
-    private void addNamedFacetIfNamedMethodIsFound(
-            final ProcessMethodContext processMethodContext) {
-
-        val cls = processMethodContext.getCls();
-        //val actionOrGetter = processMethodContext.getMethod();
-
-        val namingConvention = processMethodContext.memberSupportCandidates(PREFIX);
-
-        val namedMethod = MethodFinder.findMethod_returningText(
-                cls,
-                namingConvention,
-                NO_ARG)
-                .findFirst()
-                .orElse(null);
-        if (namedMethod == null) {
-            return;
-        }
-        processMethodContext.removeMethod(namedMethod);
-
-        FacetUtil.addFacet(
-                new NamedFacetForMemberViaMethod(
-                        namedMethod,
-                        processMethodContext.getFacetHolder()));
-    }
 
 }

@@ -18,8 +18,8 @@
  */
 package org.apache.isis.applib.services.wrapper.control;
 
+import java.time.ZoneId;
 import java.util.Locale;
-import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
@@ -101,7 +101,7 @@ public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
      * </p>
      */
     @Override
-    public AsyncControl with(ExceptionHandler exceptionHandler) {
+    public AsyncControl with(final ExceptionHandler exceptionHandler) {
         return super.with(exceptionHandler);
     }
 
@@ -122,7 +122,7 @@ public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
      *
      * @param executorService
      */
-    public AsyncControl<R> with(ExecutorService executorService) {
+    public AsyncControl<R> with(final ExecutorService executorService) {
         this.executorService = executorService;
         return this;
         // ...
@@ -154,8 +154,8 @@ public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
      * Defaults to the system time zone, if not overridden
      */
     @Getter
-    private TimeZone timeZone;
-    public AsyncControl<R> withTimeZone(final @NonNull TimeZone timeZone) {
+    private ZoneId timeZone;
+    public AsyncControl<R> withTimeZone(final @NonNull ZoneId timeZone) {
         this.timeZone = timeZone;
         return this;
         // ...
@@ -194,7 +194,7 @@ public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
     /**
      * For framework use only.
      */
-    public void setFuture(Future<R> future) {
+    public void setFuture(final Future<R> future) {
         this.future = future;
     }
 

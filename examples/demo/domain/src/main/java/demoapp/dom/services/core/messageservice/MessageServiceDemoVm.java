@@ -25,6 +25,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.ActionLayout.Position;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.services.message.MessageService;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
@@ -34,7 +35,7 @@ public class MessageServiceDemoVm implements HasAsciiDocDescription {
 
     @Inject private MessageService messageService;
 
-    public String title() {
+    @ObjectSupport public String title() {
         return "Message Demo";
     }
 

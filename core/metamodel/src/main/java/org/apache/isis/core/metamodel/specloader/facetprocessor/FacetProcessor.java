@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.specloader.facetprocessor;
 
 import java.lang.reflect.Method;
@@ -27,6 +26,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -137,7 +137,7 @@ implements HasMetaModelContext{
         factoryByFactoryType.clear();
     }
 
-    private void registerFactory(FacetFactory factory) {
+    private void registerFactory(final FacetFactory factory) {
         factoryByFactoryType.put(factory.getClass(), factory);
         factories.add(factory);
         injectDependenciesInto(factory);
@@ -147,7 +147,7 @@ implements HasMetaModelContext{
      * This is <tt>public</tt> so that can be used for <tt>@Facets</tt>
      * processing.
      */
-    public void injectDependenciesInto(FacetFactory factory) {
+    public void injectDependenciesInto(final FacetFactory factory) {
         metaModelContext.getServiceInjector().injectServicesInto(factory);
     }
 
@@ -159,15 +159,16 @@ implements HasMetaModelContext{
      * Delegates to all known
      * {@link PropertyOrCollectionIdentifyingFacetFactory}s.
      */
-    public void findAssociationCandidateAccessors(
-            Stream<Method> methods,
-            Consumer<Method> onCandidate) {
+    public void findAssociationCandidateGetters(
+            final Stream<Method> methodStream,
+            final Consumer<Method> onCandidate) {
 
         val factories = propertyOrCollectionIdentifyingFactories.get();
 
-        methods.forEach(method->{
+        methodStream
+        .forEach(method->{
             for (val facetFactory : factories) {
-                if (facetFactory.isPropertyOrCollectionAccessorCandidate(method)) {
+                if (facetFactory.isPropertyOrCollectionGetterCandidate(method)) {
                     onCandidate.accept(method);
                 }
             }
@@ -183,8 +184,8 @@ implements HasMetaModelContext{
      * Intended to be called after {@link #findAndRemovePropertyAccessors(MethodRemover, java.util.List)} once only reference properties remain.
      */
     public void findAndRemovePropertyAccessors(
-            MethodRemover methodRemover,
-            List<Method> methodListToAppendTo) {
+            final MethodRemover methodRemover,
+            final List<Method> methodListToAppendTo) {
 
         for (val facetFactory : propertyOrCollectionIdentifyingFactories.get()) {
             facetFactory.findAndRemovePropertyAccessors(methodRemover, methodListToAppendTo);
@@ -200,8 +201,8 @@ implements HasMetaModelContext{
      *      List)
      */
     public void findAndRemoveCollectionAccessors(
-            MethodRemover methodRemover,
-            List<Method> methodListToAppendTo) {
+            final MethodRemover methodRemover,
+            final List<Method> methodListToAppendTo) {
 
         for (val facetFactory : propertyOrCollectionIdentifyingFactories.get()) {
             facetFactory.findAndRemoveCollectionAccessors(methodRemover, methodListToAppendTo);
@@ -226,7 +227,7 @@ implements HasMetaModelContext{
      * factory set does the work) is a slight performance optimization for when
      * there are multiple facet factories that search for the same prefix.
      */
-    public boolean recognizes(Method method) {
+    public boolean recognizes(final Method method) {
         val methodName = method.getName();
         for (val prefix : methodPrefixes.get()) {
             if (methodName.startsWith(prefix)) {
@@ -243,7 +244,7 @@ implements HasMetaModelContext{
         return false;
     }
 
-    public void processObjectType(Class<?> cls, FacetHolder facetHolder) {
+    public void processObjectType(final Class<?> cls, final FacetHolder facetHolder) {
         val factoryList = getObjectSpecIfFacetFactoryList();
         for (val facetFactory : factoryList) {
             facetFactory.process(new ProcessObjectTypeContext(cls, facetHolder));
@@ -285,12 +286,14 @@ implements HasMetaModelContext{
      *            - holder to attach facets to.
      */
     public void process(
-            Class<?> cls,
-            MethodRemover methodRemover,
-            FacetHolder facetHolder) {
+            final Class<?> cls,
+            final IntrospectionPolicy introspectionPolicy,
+            final MethodRemover methodRemover,
+            final FacetHolder facetHolder) {
 
         val ctx = new ProcessClassContext(
                 cls,
+                introspectionPolicy,
                 removerElseNoopRemover(methodRemover),
                 facetHolder);
 
@@ -323,16 +326,18 @@ implements HasMetaModelContext{
      *            can be identified as the main method of the processed mixin class. (since 2.0)
      */
     public void process(
-            Class<?> cls,
-            Method method,
-            MethodRemover methodRemover,
-            FacetedMethod facetedMethod,
-            FeatureType featureType,
-            boolean isMixinMain) {
+            final Class<?> cls,
+            final IntrospectionPolicy introspectionPolicy,
+            final Method method,
+            final MethodRemover methodRemover,
+            final FacetedMethod facetedMethod,
+            final FeatureType featureType,
+            final boolean isMixinMain) {
 
         val processMethodContext =
                 new ProcessMethodContext(
                         cls,
+                        introspectionPolicy,
                         featureType,
                         method,
                         removerElseNoopRemover(methodRemover), facetedMethod, isMixinMain);
@@ -343,7 +348,7 @@ implements HasMetaModelContext{
         }
     }
 
-    public void processMemberOrder(ObjectMember facetHolder) {
+    public void processMemberOrder(final ObjectMember facetHolder) {
 
     }
 
@@ -366,27 +371,29 @@ implements HasMetaModelContext{
      * @param facetedMethodParameter
      */
     public void processParams(
-            Class<?> introspectedClass,
-            Method method,
-            int paramNum,
-            MethodRemover methodRemover,
-            FacetedMethodParameter facetedMethodParameter) {
+            final Class<?> introspectedClass,
+            final IntrospectionPolicy introspectionPolicy,
+            final Method method,
+            final int paramNum,
+            final MethodRemover methodRemover,
+            final FacetedMethodParameter facetedMethodParameter) {
 
         for (val featureType : FeatureType.PARAMETERS_ONLY) {
-            processParams(introspectedClass, method, paramNum, methodRemover, facetedMethodParameter, featureType);
+            processParams(introspectedClass, introspectionPolicy, method, paramNum, methodRemover, facetedMethodParameter, featureType);
         }
     }
 
     public void processParams(
-            Class<?> introspectedClass,
-            Method method,
-            int paramNum,
-            MethodRemover methodRemover,
-            FacetedMethodParameter facetedMethodParameter,
-            FeatureType featureType) {
+            final Class<?> introspectedClass,
+            final IntrospectionPolicy introspectionPolicy,
+            final Method method,
+            final int paramNum,
+            final MethodRemover methodRemover,
+            final FacetedMethodParameter facetedMethodParameter,
+            final FeatureType featureType) {
 
         val processParameterContext =
-                new ProcessParameterContext(introspectedClass, method, paramNum, methodRemover, facetedMethodParameter);
+                new ProcessParameterContext(introspectedClass, introspectionPolicy, method, paramNum, methodRemover, facetedMethodParameter);
 
         factoryListByFeatureType.get().getOrElseEmpty(featureType)
         .forEach(facetFactory->facetFactory.processParams(processParameterContext));
@@ -446,8 +453,9 @@ implements HasMetaModelContext{
 
     // -- HELPER
 
-    private static MethodRemover removerElseNoopRemover(MethodRemover methodRemover) {
+    private static MethodRemover removerElseNoopRemover(final MethodRemover methodRemover) {
         return methodRemover != null ? methodRemover : MethodRemover.NOOP;
     }
+
 
 }

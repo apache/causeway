@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.actions.action.invocation;
 
 import java.lang.reflect.InvocationTargetException;
@@ -40,7 +39,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -113,12 +111,6 @@ implements ImperativeFacet {
         visitor.accept("eventType", eventType);
     }
 
-    @Override
-    protected String toStringValues() {
-        val method = methods.getFirstOrFail();
-        return "method=" + method;
-    }
-
     // -- HELPER
 
     private ManagedObject doInvoke(
@@ -164,34 +156,6 @@ implements ImperativeFacet {
         } else {
             return CanonicalParameterUtil.invoke(method, targetPojo, executionParameters);
         }
-    }
-
-    private ManagedObject cloneIfViewModelCloneable(
-            final Object resultPojo,
-            final ManagedObject targetAdapter) {
-
-        // to remove boilerplate from the domain, we automatically clone the returned object if it is a view model.
-
-        if (resultPojo != null) {
-            final ManagedObject resultAdapter = getObjectManager().adapt(resultPojo);
-            return cloneIfViewModelElse(resultAdapter, resultAdapter);
-        } else {
-            // if void or null, attempt to clone the original target, else return null.
-            return cloneIfViewModelElse(targetAdapter, null);
-        }
-    }
-
-    private ManagedObject cloneIfViewModelElse(final ManagedObject adapter, final ManagedObject dfltAdapter) {
-
-        if (!adapter.getSpecification().isViewModelCloneable(adapter)) {
-            return dfltAdapter;
-        }
-
-        final ViewModelFacet viewModelFacet = adapter.getSpecification().getFacet(ViewModelFacet.class);
-        final Object clone = viewModelFacet.clone(adapter.getPojo());
-
-        final ManagedObject clonedAdapter = getObjectManager().adapt(clone);
-        return clonedAdapter;
     }
 
     private QueryResultsCache getQueryResultsCache() {
@@ -242,8 +206,6 @@ implements ImperativeFacet {
 
                 // invoke method
                 val resultPojo = invokeMethodElseFromCache(head, argumentAdapters);
-                ManagedObject resultAdapterPossiblyCloned =
-                        cloneIfViewModelCloneable(resultPojo, head.getTarget());
 
                 // ... post the executed event
 
@@ -251,14 +213,9 @@ implements ImperativeFacet {
                         AbstractDomainEvent.Phase.EXECUTED,
                         actionDomainEvent,
                         owningAction, owningAction, head, argumentAdapters,
-                        resultAdapterPossiblyCloned);
+                        resultPojo);
 
-                final Object returnValue = actionDomainEvent.getReturnValue();
-                if(returnValue != resultPojo) {
-                    resultAdapterPossiblyCloned =
-                            cloneIfViewModelCloneable(returnValue, head.getTarget());
-                }
-                return UnwrapUtil.single(resultAdapterPossiblyCloned);
+                return actionDomainEvent.getReturnValue();
 
 //            } catch (Exception e) {
 //

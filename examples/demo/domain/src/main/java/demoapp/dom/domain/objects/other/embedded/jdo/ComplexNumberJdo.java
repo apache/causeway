@@ -22,11 +22,13 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Value;
 
-import demoapp.dom.domain.objects.other.embedded.ComplexNumber;
 import lombok.AccessLevel;
 import lombok.val;
+
+import demoapp.dom.domain.objects.other.embedded.ComplexNumber;
 
 // tag::class[]
 @javax.jdo.annotations.PersistenceCapable                               // <.>
@@ -47,7 +49,7 @@ public class ComplexNumberJdo
 // end::class[]
 
 // tag::title[]
-    public String title() {
+    @ObjectSupport public String title() {
         return im >= 0
                 ? "" + re + " + " +  im + "i"
                 : "" + re + " - " + (-im) + "i";
@@ -66,13 +68,13 @@ public class ComplexNumberJdo
                 : Optional.empty();
     }
 
-    private static double realFrom(Matcher m) {
+    private static double realFrom(final Matcher m) {
         return Double.parseDouble(m.group("re"));
     }
-    private static double signFrom(Matcher m) {
+    private static double signFrom(final Matcher m) {
         return m.group("sign").equals("-") ? -1.0d : +1.0d;
     }
-    private static double imaginaryFrom(Matcher m) {
+    private static double imaginaryFrom(final Matcher m) {
         return Double.parseDouble(m.group("im"));
     }
 // end::parse[]

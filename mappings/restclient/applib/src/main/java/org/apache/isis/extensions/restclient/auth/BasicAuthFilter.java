@@ -28,7 +28,7 @@ import javax.xml.bind.DatatypeConverter;
 
 import org.apache.isis.commons.internal.base._Strings;
 
-import static org.apache.isis.commons.internal.base._With.requires;
+import lombok.NonNull;
 
 /**
  * @since 2.0 {@index}
@@ -46,13 +46,13 @@ public class BasicAuthFilter implements ClientRequestFilter {
         public static Credentials empty() {
             return new Credentials("anonymous", null);
         }
-        public static Credentials of(String user, String pass) {
+        public static Credentials of(final String user, final String pass) {
             if(_Strings.isNullOrEmpty(user)) {
                 return empty();
             }
             return new Credentials(user, pass);
         }
-        private Credentials(String user, String pass) {
+        private Credentials(final String user, final String pass) {
             this.user = user;
             this.pass = pass;
         }
@@ -62,24 +62,24 @@ public class BasicAuthFilter implements ClientRequestFilter {
         }
     }
 
-    public static BasicAuthFilter of(Credentials credentials) {
+    public static BasicAuthFilter of(final Credentials credentials) {
         BasicAuthFilter filter = new BasicAuthFilter();
         filter.setCredentials(credentials);
         return filter;
     }
 
-    private Credentials credentials = Credentials.empty();
+    private @NonNull Credentials credentials = Credentials.empty();
 
     public Credentials getCredentials() {
         return credentials;
     }
 
-    public void setCredentials(Credentials credentials) {
-        this.credentials = requires(credentials, "credentials");
+    public void setCredentials(final Credentials credentials) {
+        this.credentials = credentials;
     }
 
     @Override
-    public void filter(ClientRequestContext requestContext) throws IOException {
+    public void filter(final ClientRequestContext requestContext) throws IOException {
         requestContext.getHeaders().add("Authorization", getAuthorizationValue());
     }
 

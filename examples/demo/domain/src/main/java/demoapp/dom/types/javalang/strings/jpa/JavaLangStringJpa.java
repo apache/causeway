@@ -33,7 +33,7 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
+import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,7 +48,7 @@ import demoapp.dom.types.javalang.strings.persistence.JavaLangStringEntity;
         schema = "demo",
         name = "JavaLangStringJpa"
 )
-@EntityListeners(JpaEntityInjectionPointResolver.class)
+@EntityListeners(IsisEntityListener.class)
 @DomainObject(
         logicalTypeName = "demo.JavaLangStringEntity"
 )
@@ -57,7 +57,7 @@ public class JavaLangStringJpa
         extends JavaLangStringEntity {
 
 //end::class[]
-    public JavaLangStringJpa(String initialValue) {
+    public JavaLangStringJpa(final String initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

@@ -20,6 +20,7 @@ package demoapp.dom.types.primitive.bytes.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
@@ -39,11 +40,12 @@ public class PrimitiveByteHolder_updateReadOnlyProperty {
 
     private final PrimitiveByteHolder holder;
 
-    public PrimitiveByteHolder act(byte newValue) {
+    @MemberSupport public PrimitiveByteHolder act(final byte newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
-    public byte default0Act() {
+
+    @MemberSupport public byte default0Act() {
         return holder.getReadOnlyProperty();
     }
 

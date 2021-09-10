@@ -20,16 +20,17 @@ package org.apache.isis.commons.collections;
 
 import java.io.IOException;
 import java.util.Set;
+import java.util.function.BiPredicate;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
-import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.commons.internal.testing._SerializationTester;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.testing._SerializationTester;
 
 import lombok.val;
 
@@ -187,9 +188,64 @@ class CanTest {
                 Can.<String>of("a", "b", "c").pickByIndex(0, 1, -2, 0, 5));
     }
 
+    // -- UNIQUE
+
+    @Test
+    void uniqueByEquals() {
+
+        assertEquals(
+                Can.empty(),
+                Can.empty().distinct());
+
+        assertEquals(
+                Can.of("a"),
+                Can.of("a").distinct());
+
+        assertEquals(
+                Can.of("a"),
+                Can.of("a", "a", "a").distinct());
+
+        assertEquals(
+                Can.of("a", "b", "c"),
+                Can.of("a", "b", "c").distinct());
+
+        assertEquals(
+                Can.of("a", "b"),
+                Can.of("a", "b", "a").distinct());
+    }
+
+    @Test
+    void uniqueByEqualityRelation() {
+
+        final BiPredicate<String, String> firstCharEquility =
+                (left, right) -> left.charAt(0) == right.charAt(0);
+
+        assertEquals(
+                Can.empty(),
+                Can.<String>empty().distinct(firstCharEquility));
+
+        assertEquals(
+                Can.of("a"),
+                Can.of("a").distinct(firstCharEquility));
+
+        assertEquals(
+                Can.of("aDog"),
+                Can.of("aDog", "aCat", "aMonkey").distinct(firstCharEquility));
+
+        assertEquals(
+                Can.of("aDog", "bCat", "cMonkey"),
+                Can.of("aDog", "bCat", "cMonkey").distinct(firstCharEquility));
+
+        assertEquals(
+                Can.of("aDog", "bCat"),
+                Can.of("aDog", "bCat", "aMonkey").distinct(firstCharEquility));
+
+    }
+
+
     // -- HEPER
 
-    private static <T> void assertSetEquals(Set<T> a, Set<T> b) {
+    private static <T> void assertSetEquals(final Set<T> a, final Set<T> b) {
         assertTrue(_Sets.minus(a, b).isEmpty());
         assertTrue(_Sets.minus(b, a).isEmpty());
     }

@@ -30,7 +30,8 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
-import org.apache.isis.core.metamodel.methods.MethodFinderUtils.MethodAndPpmConstructor;
+import org.apache.isis.core.metamodel.methods.MethodFinderPAT;
+import org.apache.isis.core.metamodel.methods.MethodFinderPAT.MethodAndPatConstructor;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -45,24 +46,14 @@ public final class ActionSupport {
     @Value @Builder
     public static class ActionSupportingMethodSearchRequest {
 
-        public static enum ReturnType {
-            TEXT,
-            BOOLEAN,
-        }
-
         @NonNull FacetFactory.ProcessMethodContext processMethodContext;
-        @NonNull Can<String> methodNames;
+        @Getter @NonNull MethodFinder methodFinder;
         @NonNull EnumSet<SearchAlgorithm> searchAlgorithms;
-        @NonNull ReturnType returnType;
 
         Class<?> additionalParamType;
 
         @Getter(lazy = true)
         Class<?>[] paramTypes = getProcessMethodContext().getMethod().getParameterTypes();
-
-        Can<String> getSupporingMethodNameCandidates() {
-            return methodNames;
-        }
     }
 
     @FunctionalInterface
@@ -75,14 +66,15 @@ public final class ActionSupport {
     @RequiredArgsConstructor
     public static enum SearchAlgorithm
     implements SearchFunction {
-        PPM(ActionSupport::findActionSupportingMethodWithPPMArg),
+        /** Parameter as a Tuple */
+        PAT(ActionSupport::findActionSupportingMethodWithPATArg),
         ALL_PARAM_TYPES(ActionSupport::findActionSupportingMethodWithAllParamTypes),
         ;
         private final SearchFunction searchFunction;
         @Override
         public void search(
                 final ActionSupportingMethodSearchRequest searchRequest,
-                Consumer<ActionSupportingMethodSearchResult> onMethodFound) {
+                final Consumer<ActionSupportingMethodSearchResult> onMethodFound) {
             searchFunction.search(searchRequest, onMethodFound);
         }
     }
@@ -91,7 +83,7 @@ public final class ActionSupport {
     public static class ActionSupportingMethodSearchResult {
         Method supportingMethod;
         Class<?> returnType;
-        Optional<Constructor<?>> ppmFactory;
+        Optional<Constructor<?>> patConstructor;
     }
 
     public static void findActionSupportingMethods(
@@ -106,53 +98,37 @@ public final class ActionSupport {
 
     // -- SEARCH ALGORITHMS
 
-    private final static void findActionSupportingMethodWithPPMArg(
+    private final static void findActionSupportingMethodWithPATArg(
             final ActionSupportingMethodSearchRequest searchRequest,
             final Consumer<ActionSupportingMethodSearchResult> onMethodFound) {
 
-        val processMethodContext = searchRequest.getProcessMethodContext();
-        val type = processMethodContext.getCls();
         val paramTypes = searchRequest.getParamTypes();
-        val methodNames = searchRequest.getMethodNames();
-
+        val finderOptions = searchRequest.getMethodFinder();
         val additionalParamTypes = Can.ofNullable(searchRequest.getAdditionalParamType());
 
-        switch(searchRequest.getReturnType()) {
-        case BOOLEAN:
-            MethodFinder
-                .findMethodWithPPMArg_returningBoolean(type, methodNames, paramTypes, additionalParamTypes)
-                .map(ActionSupport::toSearchResult)
-                .forEach(onMethodFound);
-            break;
-        case TEXT:
-            MethodFinder
-                .findMethodWithPPMArg_returningText(type, methodNames, paramTypes, additionalParamTypes)
-                .map(ActionSupport::toSearchResult)
-                .forEach(onMethodFound);
-            break;
-        default:
-
-        }
-
+        MethodFinderPAT
+        .findMethodWithPATArg(
+                finderOptions,
+                paramTypes, additionalParamTypes)
+        .map(ActionSupport::toSearchResult)
+        .forEach(onMethodFound);
     }
 
     private static ActionSupportingMethodSearchResult toSearchResult(
-            final MethodAndPpmConstructor supportingMethodAndPpmConstructor) {
+            final MethodAndPatConstructor supportingMethodAndPatConstructor) {
         return ActionSupportingMethodSearchResult
                 .of(
-                        supportingMethodAndPpmConstructor.getSupportingMethod(),
-                        supportingMethodAndPpmConstructor.getSupportingMethod().getReturnType(),
-                        Optional.of(supportingMethodAndPpmConstructor.getPpmFactory()));
+                        supportingMethodAndPatConstructor.getSupportingMethod(),
+                        supportingMethodAndPatConstructor.getSupportingMethod().getReturnType(),
+                        Optional.of(supportingMethodAndPatConstructor.getPatConstructor()));
     }
 
     private final static void findActionSupportingMethodWithAllParamTypes(
             final ActionSupportingMethodSearchRequest searchRequest,
             final Consumer<ActionSupportingMethodSearchResult> onMethodFound) {
 
-        val processMethodContext = searchRequest.getProcessMethodContext();
-        val type = processMethodContext.getCls();
         val paramTypes = searchRequest.getParamTypes();
-        val methodNames = searchRequest.getMethodNames();
+        val finderOptions = searchRequest.getMethodFinder();
 
         val additionalParamType = searchRequest.getAdditionalParamType();
         val additionalParamCount = additionalParamType!=null ? 1 : 0;
@@ -160,23 +136,12 @@ public final class ActionSupport {
         final int paramsConsideredCount = paramTypes.length + additionalParamCount;
         if(paramsConsideredCount>=0) {
 
-            val paramTypesToLookFor = concat(paramTypes, paramsConsideredCount, additionalParamType);
+            val signature = concat(paramTypes, paramsConsideredCount, additionalParamType);
 
-            switch(searchRequest.getReturnType()) {
-            case BOOLEAN:
-                MethodFinder
-                    .findMethod_returningBoolean(type, methodNames, paramTypesToLookFor)
-                    .map(ActionSupport::toSearchResult)
-                    .forEach(onMethodFound);
-                break;
-            case TEXT:
-                MethodFinder
-                    .findMethod_returningText(type, methodNames, paramTypesToLookFor)
-                    .map(ActionSupport::toSearchResult)
-                    .forEach(onMethodFound);
-                break;
-            default:
-            }
+            finderOptions
+            .streamMethodsMatchingSignature(signature)
+            .map(ActionSupport::toSearchResult)
+            .forEach(onMethodFound);
 
         }
     }
@@ -202,11 +167,11 @@ public final class ActionSupport {
 
         val paramTypesConsidered = paramsConsidered<paramTypes.length
                 ? Arrays.copyOf(paramTypes, paramsConsidered)
-                        : paramTypes;
+                : paramTypes;
 
         val withAdditional = additionalParamType!=null
                 ? _Arrays.combine(paramTypesConsidered, additionalParamType)
-                        : paramTypesConsidered;
+                : paramTypesConsidered;
 
         return withAdditional;
     }

@@ -33,6 +33,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.jaxb.PersistentEntitiesAdapter;
@@ -113,7 +114,7 @@ public class DomainObjectList {
 
     // -- title
     private String title;
-    public String title() {
+    @ObjectSupport public String title() {
         return title;
     }
 

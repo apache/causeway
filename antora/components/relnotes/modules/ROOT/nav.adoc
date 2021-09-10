@@ -3,6 +3,7 @@
 
 
 * 2021
+** xref:relnotes:ROOT:2021/2.0.0-M6/relnotes.adoc[2.0.0-M6]
 ** xref:relnotes:ROOT:2021/2.0.0-M5/relnotes.adoc[2.0.0-M5]
 * 2020
 ** xref:relnotes:ROOT:2020/2.0.0-M4/relnotes.adoc[2.0.0-M4]

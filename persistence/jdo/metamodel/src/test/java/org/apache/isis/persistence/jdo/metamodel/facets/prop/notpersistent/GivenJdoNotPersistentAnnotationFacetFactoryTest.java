@@ -24,7 +24,7 @@ import javax.jdo.annotations.NotPersistent;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.persistence.jdo.metamodel.testing.AbstractFacetFactoryTest;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
 
@@ -60,7 +60,8 @@ extends AbstractFacetFactoryTest {
     public void testNotPersistentAnnotationPickedUpOnProperty() throws Exception {
         final Class<?> cls = SimpleObjectWithNotPersistentColumn.class;
         final Method method = cls.getMethod("getSomeColumn");
-        facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, method, methodRemover, facetedMethod));
+        facetFactory.process(ProcessMethodContext
+                .forTesting(cls, null, method, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(JdoNotPersistentFacet.class);
         assertNotNull(facet);
@@ -86,7 +87,8 @@ extends AbstractFacetFactoryTest {
 
         final Class<?> cls = Customer.class;
         final Method method = cls.getMethod("getSomeColumn");
-        facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, method, methodRemover, facetedMethod));
+        facetFactory.process(ProcessMethodContext
+                .forTesting(cls, null, method, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(JdoNotPersistentFacet.class);
         assertNull(facet);
@@ -109,7 +111,8 @@ extends AbstractFacetFactoryTest {
 
         final Class<?> cls = Customer.class;
         final Method method = cls.getMethod("getSomeColumn");
-        facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, method, methodRemover, facetedMethod));
+        facetFactory.process(ProcessMethodContext
+                .forTesting(cls, null, method, methodRemover, facetedMethod));
 
         assertNoMethodsRemoved();
     }

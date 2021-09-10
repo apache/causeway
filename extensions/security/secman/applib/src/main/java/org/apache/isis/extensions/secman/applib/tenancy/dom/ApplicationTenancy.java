@@ -28,6 +28,7 @@ import java.util.Comparator;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Property;
@@ -63,7 +64,7 @@ public abstract class ApplicationTenancy implements Comparable<ApplicationTenanc
 
     // -- MODEL
 
-    public String title() {
+    @ObjectSupport public String title() {
         return getName();
     }
 
@@ -183,7 +184,7 @@ public abstract class ApplicationTenancy implements Comparable<ApplicationTenanc
 
     @Override
     public int compareTo(final org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy other) {
-        return comparator.compare(this, (ApplicationTenancy) other);
+        return comparator.compare(this, other);
     }
 
     @Override

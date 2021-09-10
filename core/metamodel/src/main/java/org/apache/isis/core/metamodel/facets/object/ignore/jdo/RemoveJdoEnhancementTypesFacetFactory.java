@@ -16,10 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.ignore.jdo;
 
-import java.lang.reflect.Method;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -54,11 +52,14 @@ extends FacetFactoryAbstract {
     }
 
     private void addMethodsToBeIgnored(final Class<?> typeToIgnore) {
-        final Method[] methods = typeToIgnore.getMethods();
-        for (final Method method : methods) {
+
+        getClassCache()
+        .streamPublicMethods(typeToIgnore)
+        .forEach(method->{
             jdoEnhancementmethodsToIgnore
             .add(new RemoveMethodsFacetFactory.MethodAndParameterTypes(method.getName(), method.getParameterTypes()));
-        }
+        });
+
     }
 
     @Override

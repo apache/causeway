@@ -54,19 +54,13 @@ public class ApplicationPermission_updateRole {
 
     private final ApplicationPermission target;
 
-    @MemberSupport
-    public ApplicationPermission act(final ApplicationRole applicationRole) {
+    @MemberSupport public ApplicationPermission act(final ApplicationRole applicationRole) {
         target.setRole(applicationRole);
         return target;
     }
 
-    @MemberSupport
-    public ApplicationRole default0Act() {
-        return target.getRole();
-    }
-
-    @MemberSupport
-    public Collection<? extends ApplicationRole> choices0Act() {
+    @MemberSupport public ApplicationRole default0Act() { return target.getRole(); }
+    @MemberSupport public Collection<? extends ApplicationRole> choices0Act() {
         return applicationRoleRepository.allRoles();
     }
 

@@ -20,6 +20,7 @@ package demoapp.dom.types.javalang.shorts.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -41,14 +42,15 @@ public class WrapperShortHolder_updateReadOnlyOptionalProperty {
 
     private final WrapperShortHolder holder;
 
-    public WrapperShortHolder act(
+    @MemberSupport public WrapperShortHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
-            Short newValue
+            final Short newValue
     ) {
         holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
-    public Short default0Act() {
+
+    @MemberSupport public Short default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

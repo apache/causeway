@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.specloader.specimpl.dflt;
 
 import java.lang.reflect.Method;
@@ -28,6 +27,7 @@ import java.util.function.BiConsumer;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
@@ -44,13 +44,11 @@ import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
+import org.apache.isis.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.core.metamodel.facets.object.wizard.WizardFacet;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -65,6 +63,7 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbs
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationDefault;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationDefault;
 
+import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -86,8 +85,11 @@ implements FacetHolder {
     private Map<Method, ObjectMember> membersByMethod = null;
 
     private final FacetedMethodsBuilder facetedMethodsBuilder;
+
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
 
+    @Getter(onMethod_ = {@Override})
+    private final IntrospectionPolicy introspectionPolicy;
 
     /**
      * available only for managed-beans
@@ -106,11 +108,23 @@ implements FacetHolder {
         super(correspondingClass, determineShortName(correspondingClass), beanSort, facetProcessor, postProcessor);
 
         this.nameIfIsManagedBean = nameIfIsManagedBean;
-        this.facetedMethodsBuilder = new FacetedMethodsBuilder(this, facetProcessor, classSubstitutorRegistry);
         this.classSubstitutorRegistry = classSubstitutorRegistry;
 
+        // must install EncapsulationFacet (if any) and MemberAnnotationPolicyFacet (if any)
         facetProcessor.processObjectType(correspondingClass, this);
 
+        // naturally supports attribute inheritance from the type's hierarchy
+        final IntrospectionPolicy introspectionPolicy =
+                this.lookupFacet(IntrospectionPolicyFacet.class)
+                .map(introspectionPolicyFacet->
+                        introspectionPolicyFacet
+                        .getIntrospectionPolicy(mmc.getConfiguration()))
+                .orElseGet(()->mmc.getConfiguration().getCore().getMetaModel().getIntrospector().getPolicy());
+
+        this.introspectionPolicy = introspectionPolicy;
+
+        this.facetedMethodsBuilder =
+                new FacetedMethodsBuilder(this, facetProcessor, classSubstitutorRegistry);
     }
 
     @Override
@@ -189,10 +203,11 @@ implements FacetHolder {
 
     // -- create associations and actions
     private List<ObjectAssociation> createAssociations() {
-        final List<ObjectAssociation> associations = _Lists.newArrayList();
-        final List<FacetedMethod> associationFacetedMethods = facetedMethodsBuilder.getAssociationFacetedMethods();
-        for (FacetedMethod facetedMethod : associationFacetedMethods) {
-            final ObjectAssociation association = createAssociation(facetedMethod);
+        val associations = _Lists.<ObjectAssociation>newArrayList();
+        val associationFacetedMethods =
+                facetedMethodsBuilder.getAssociationFacetedMethods();
+        for (val facetedMethod : associationFacetedMethods) {
+            val association = createAssociation(facetedMethod);
             if(association != null) {
                 associations.add(association);
             }
@@ -212,7 +227,8 @@ implements FacetHolder {
 
     private List<ObjectAction> createActions() {
         val actions = _Lists.<ObjectAction>newArrayList();
-        val actionFacetedMethods = facetedMethodsBuilder.getActionFacetedMethods();
+        val actionFacetedMethods =
+                facetedMethodsBuilder.getActionFacetedMethods();
         for (val facetedMethod : actionFacetedMethods) {
             val action = createAction(facetedMethod);
             if(action != null) {
@@ -232,21 +248,6 @@ implements FacetHolder {
     }
 
     // -- PREDICATES
-
-    @Override
-    public boolean isViewModelCloneable(final ManagedObject targetAdapter) {
-        final ViewModelFacet facet = getFacet(ViewModelFacet.class);
-        if(facet == null) {
-            return false;
-        }
-        final Object pojo = targetAdapter.getPojo();
-        return facet.isCloneable(pojo);
-    }
-
-    @Override
-    public boolean isWizard() {
-        return containsFacet(WizardFacet.class);
-    }
 
     @Override
     public String getManagedBeanName() {
@@ -319,7 +320,7 @@ implements FacetHolder {
      * for any synthetic method also add an entry with its regular method,
      * as found in the method's declaring class type-hierarchy
      */
-    private void postprocessSyntheticMembers(HashMap<Method, ObjectMember> membersByMethod) {
+    private void postprocessSyntheticMembers(final HashMap<Method, ObjectMember> membersByMethod) {
         val syntheticEntries = Can.ofStream(
             membersByMethod
             .entrySet()

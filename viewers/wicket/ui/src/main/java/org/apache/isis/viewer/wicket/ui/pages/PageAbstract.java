@@ -56,7 +56,7 @@ import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.isis.applib.services.metamodel.BeanSort;
-import org.apache.isis.core.config.viewer.wicket.DialogMode;
+import org.apache.isis.core.config.viewer.web.DialogMode;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.model.hints.IsisEventLetterAbstract;

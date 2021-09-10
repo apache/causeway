@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.param.choices.methodnum;
 
 import java.lang.reflect.Constructor;
@@ -44,18 +43,18 @@ implements ImperativeFacet {
 
     @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
     private final Class<?> choicesType;
-    private final Optional<Constructor<?>> ppmFactory;
+    private final Optional<Constructor<?>> patConstructor;
 
     public ActionParameterChoicesFacetViaMethod(
             final Method method,
             final Class<?> choicesType,
-            final Optional<Constructor<?>> ppmFactory,
+            final Optional<Constructor<?>> patConstructor,
             final FacetHolder holder) {
 
         super(holder);
         this.methods = ImperativeFacet.singleMethod(method);
         this.choicesType = choicesType;
-        this.ppmFactory = ppmFactory;
+        this.patConstructor = patConstructor;
     }
 
     @Override
@@ -71,8 +70,8 @@ implements ImperativeFacet {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         val method = methods.getFirstOrFail();
-        final Object collectionOrArray = ppmFactory.isPresent()
-                ? ManagedObjects.InvokeUtil.invokeWithPPM(ppmFactory.get(), method, head.getTarget(), pendingArgs)
+        final Object collectionOrArray = patConstructor.isPresent()
+                ? ManagedObjects.InvokeUtil.invokeWithPAT(patConstructor.get(), method, head.getTarget(), pendingArgs)
                 : ManagedObjects.InvokeUtil.invokeAutofit(method, head.getTarget(), pendingArgs);
         if (collectionOrArray == null) {
             return Can.empty();
@@ -83,12 +82,6 @@ implements ImperativeFacet {
                         requiredSpec, collectionOrArray, interactionInitiatedBy);
 
         return visibleChoices;
-    }
-
-    @Override
-    protected String toStringValues() {
-        val method = methods.getFirstOrFail();
-        return "method=" + method + ",type=" + choicesType;
     }
 
     @Override

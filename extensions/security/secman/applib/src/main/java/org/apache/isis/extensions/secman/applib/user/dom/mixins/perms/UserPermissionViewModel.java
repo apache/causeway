@@ -36,6 +36,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
@@ -108,11 +109,12 @@ public class UserPermissionViewModel implements ViewModel {
 
 
     // -- identification
-    public String title() {
+
+    @ObjectSupport public String title() {
         return getVerb() + " " + getFeatureId().getFullyQualifiedName();
     }
 
-    public String iconName() {
+    @ObjectSupport public String iconName() {
         return "userPermission";
     }
 
@@ -170,7 +172,7 @@ public class UserPermissionViewModel implements ViewModel {
         );
     }
 
-    private static String join(Object ... args) {
+    private static String join(final Object ... args) {
         return _NullSafe.stream(args)
                 .map(arg->""+arg)
                 .collect(Collectors.joining(":"));

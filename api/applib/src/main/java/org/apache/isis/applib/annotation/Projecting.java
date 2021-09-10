@@ -19,7 +19,7 @@
 package org.apache.isis.applib.annotation;
 
 /**
- * 
+ *
  * @since 1.x {@index}
  */
 public enum Projecting {
@@ -30,7 +30,8 @@ public enum Projecting {
     PROJECTED,
 
     /**
-     * The property
+     * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
+     * annotations or superclasses/interfaces).
      */
     NOT_SPECIFIED;
 

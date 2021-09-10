@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.Getter;
@@ -34,73 +33,66 @@ import lombok.val;
  * @since 2.x {@index}
  */
 @Value(staticConstructor = "ofName")
-public final class TranslationContext 
+public final class TranslationContext
 implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Getter private final String name;
-    
+
     //XXX this guard could be removed if non-null is guaranteed
     public static TranslationContext forTranslationContextHolder(
             final @Nullable HasTranslationContext hasTranslationContext) {
-        
+
         return hasTranslationContext!=null
                 ? hasTranslationContext.getTranslationContext()
                 : EMPTY;
     }
-    
+
     //XXX no logical type name supported
     public static TranslationContext forClassName(
             final @Nullable Class<?> contextClass) {
-        
+
         return contextClass!=null
                 ? ofName(contextClass.getName())
                 : EMPTY;
     }
-    
+
     //XXX no logical type name supported
     public static TranslationContext forMethod(
-            final @Nullable Class<?> contextClass, 
+            final @Nullable Class<?> contextClass,
             final @Nullable String contextMethodName) {
-        
+
         val classContext = forClassName(contextClass);
         return _Strings.isNullOrEmpty(contextMethodName)
                 ? classContext
                 : ofName(classContext.getName() + "#" + contextMethodName + "()");
     }
-    
+
     //XXX no logical type name supported
     public static TranslationContext forMethod(
             final @Nullable Method method) {
-        
+
         return method!=null
                 ? ofName(method.getDeclaringClass().getName() + "#" + method.getName() + "()")
                 : EMPTY;
     }
-    
+
     //XXX no logical type name supported
     public static TranslationContext forEnum(
             final @Nullable Enum<?> objectAsEnum) {
-        
+
         return objectAsEnum!=null
                 ? ofName(objectAsEnum.getClass().getName() + "#" + objectAsEnum.name())
                 : EMPTY;
     }
-	
+
 	// -- EMPTY
-	
+
 	private final static TranslationContext EMPTY = TranslationContext.ofName("default");
 
     public static TranslationContext empty() {
         return EMPTY;
     }
 
-    // -- DEPRECATIONS
-    
-    @Deprecated // just a refactoring step
-    public static TranslationContext forTabIdentifier(Identifier identifier) {
-        return ofName(identifier.getTranslationContext() + "~tabName");
-    }
-	
 }

@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.applib.annotation;
 
 import java.lang.annotation.ElementType;
@@ -97,21 +96,9 @@ public @interface ParameterLayout {
      * @see CollectionLayout#named()
      * @see DomainObjectLayout#named()
      * @see DomainServiceLayout#named()
-     * @see ParameterLayout#namedEscaped()
      */
     String named()
             default "";
-
-    /**
-     * A flag indicating whether the value of {@linkplain #named()} should be HTML escaped or not.
-     *
-     * @see PropertyLayout#namedEscaped()
-     * @see CollectionLayout#namedEscaped()
-     * @see ParameterLayout#named()
-     */
-    @Deprecated
-    boolean namedEscaped()
-            default true;
 
     /**
      * For string parameters (and properties), whether to render as a text area

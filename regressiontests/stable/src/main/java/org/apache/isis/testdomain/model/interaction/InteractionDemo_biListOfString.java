@@ -35,34 +35,29 @@ public class InteractionDemo_biListOfString {
     @SuppressWarnings("unused")
     private final InteractionDemo holder;
 
-    @MemberSupport
-    public String act(List<String> a, List<String> b) {
+    @MemberSupport public String act(List<String> a, List<String> b) {
         return Stream.concat(a.stream(), b.stream())
                 .collect(Collectors.joining(","));
     }
 
     // -- PARAM A
 
-    @MemberSupport
-    public List<String> defaultA(ParameterSamples.BiListOfString p) {
+    @MemberSupport public List<String> defaultA(ParameterSamples.BiListOfString p) {
         return _Lists.of("a1", "a2", "a3");
     }
 
-    @MemberSupport
-    public List<String> choicesA(ParameterSamples.BiListOfString p) {
+    @MemberSupport public List<String> choicesA(ParameterSamples.BiListOfString p) {
         return _Lists.of("a1", "a2", "a3", "a4");
     }
 
 
     // -- PARAM B
 
-    @MemberSupport
-    public List<String> defaultB(ParameterSamples.BiListOfString p) {
+    @MemberSupport public List<String> defaultB(ParameterSamples.BiListOfString p) {
         return _Lists.of("b1");
     }
 
-    @MemberSupport
-    public List<String> choicesB(ParameterSamples.BiListOfString p) {
+    @MemberSupport public List<String> choicesB(ParameterSamples.BiListOfString p) {
         return _Lists.of("b1", "b2", "b3", "b4");
     }
 

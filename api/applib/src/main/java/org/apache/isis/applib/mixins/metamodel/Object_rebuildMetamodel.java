@@ -60,8 +60,7 @@ public class Object_rebuildMetamodel {
 
     private final Object holder;
 
-    @MemberSupport
-    public Object act() {
+    @MemberSupport public Object act() {
         metaModelService.rebuild(holder.getClass());
         return holder;
     }

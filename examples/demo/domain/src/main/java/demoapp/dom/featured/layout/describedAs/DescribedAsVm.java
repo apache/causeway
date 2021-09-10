@@ -28,13 +28,14 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.LabelPosition;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -56,7 +57,7 @@ import demoapp.dom.domain.actions.progmodel.assoc.DemoItem;
 @DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.Tooltip")
 public class DescribedAsVm implements HasAsciiDocDescription {
 
-    public String title() {
+    @ObjectSupport public String title() {
         return "Tooltip Demo";
     }
 
@@ -91,13 +92,13 @@ public class DescribedAsVm implements HasAsciiDocDescription {
             @Parameter(optionality=Optionality.MANDATORY)
             @ParameterLayout(
                     named="first",
-                    describedAs="This is a mandatory parameter with a tooltip.")
+                    describedAs="This is a mandatory parameter with a tooltip.") final
             String firstArg,
 
             @Parameter(optionality=Optionality.OPTIONAL)
             @ParameterLayout(
                     named="second",
-                    describedAs="This is an optional parameter with a tooltip.")
+                    describedAs="This is an optional parameter with a tooltip.") final
             String secondArg
 
             ){
@@ -105,8 +106,7 @@ public class DescribedAsVm implements HasAsciiDocDescription {
         return this;
     }
 
-    @MemberSupport
-    public String validateBiArgAction(String firstArg, String secondArg) {
+    @MemberSupport public String validateBiArgAction(final String firstArg, final String secondArg) {
         return "always fail for demonstration";
     }
 
@@ -120,13 +120,13 @@ public class DescribedAsVm implements HasAsciiDocDescription {
             @Parameter(optionality=Optionality.MANDATORY)
             @ParameterLayout(
                     named="first",
-                    describedAs="This is a mandatory parameter with a tooltip.")
+                    describedAs="This is a mandatory parameter with a tooltip.") final
             String firstArg,
 
             @Parameter(optionality=Optionality.OPTIONAL)
             @ParameterLayout(
                     named="second",
-                    describedAs="This is an optional parameter with a tooltip.")
+                    describedAs="This is an optional parameter with a tooltip.") final
             String secondArg
 
             ){
@@ -134,8 +134,7 @@ public class DescribedAsVm implements HasAsciiDocDescription {
         return this;
     }
 
-    @MemberSupport
-    public String validateBiArgActionWithConfirm(String firstArg, String secondArg) {
+    @MemberSupport public String validateBiArgActionWithConfirm(final String firstArg, final String secondArg) {
         return "always fail for demonstration";
     }
 
@@ -150,8 +149,7 @@ public class DescribedAsVm implements HasAsciiDocDescription {
         return this;
     }
 
-    @MemberSupport
-    public String disableDisabledAction() {
+    @MemberSupport public String disableDisabledAction() {
         return "Disabled for demonstration.";
     }
 
@@ -165,8 +163,7 @@ public class DescribedAsVm implements HasAsciiDocDescription {
         return this;
     }
 
-    @MemberSupport
-    public String disableDisabledActionWithConfirmation() {
+    @MemberSupport public String disableDisabledActionWithConfirmation() {
         return "Disabled for demonstration.";
     }
 

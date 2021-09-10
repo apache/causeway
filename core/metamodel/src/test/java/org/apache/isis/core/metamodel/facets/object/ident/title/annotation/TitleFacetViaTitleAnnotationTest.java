@@ -16,10 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.ident.title.annotation;
-
-import java.util.List;
 
 import org.jmock.Expectations;
 import org.jmock.Sequence;
@@ -28,21 +25,18 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.Annotations;
-import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public class TitleFacetViaTitleAnnotationTest {
 
@@ -54,7 +48,7 @@ public class TitleFacetViaTitleAnnotationTest {
     @Mock private ObjectManager mockObjectManager;
 
     protected MetaModelContext metaModelContext;
-    
+
     protected static class DomainObjectWithProblemInItsAnnotatedTitleMethod {
 
         @Title
@@ -93,21 +87,20 @@ public class TitleFacetViaTitleAnnotationTest {
 
     @Test
     public void testTitle() throws Exception {
-        final List<Annotations.Evaluator<Title>> evaluatorList = Annotations
-                .getEvaluators(NormalDomainObject.class, Title.class);
 
-        TitleAnnotationFacetFactory.sort(evaluatorList);
+        final TitleFacetViaTitleAnnotation facet =
+                (TitleFacetViaTitleAnnotation) TitleFacetViaTitleAnnotation
+                .create(NormalDomainObject.class, mockFacetHolder)
+                .orElse(null);
 
-        final List<TitleFacetViaTitleAnnotation.TitleComponent> components = _Lists.map(evaluatorList, TitleFacetViaTitleAnnotation.TitleComponent.FROM_EVALUATORS);
-        final TitleFacetViaTitleAnnotation facet = new TitleFacetViaTitleAnnotation(components, mockFacetHolder);
         final NormalDomainObject normalPojo = new NormalDomainObject();
         final Sequence sequence = context.sequence("in-title-element-order");
         context.checking(new Expectations() {
             {
-                
+
                 allowing(mockFacetHolder).getMetaModelContext();
                 will(returnValue(metaModelContext));
-                
+
                 allowing(mockManagedObject).getPojo();
                 will(returnValue(normalPojo));
 
@@ -129,18 +122,19 @@ public class TitleFacetViaTitleAnnotationTest {
     @Test
     public void titleThrowsException() {
 
-        final List<Annotations.Evaluator<Title>> evaluators = Annotations
-                .getEvaluators(DomainObjectWithProblemInItsAnnotatedTitleMethod.class, Title.class);
+        final TitleFacetViaTitleAnnotation facet =
+                (TitleFacetViaTitleAnnotation) TitleFacetViaTitleAnnotation
+                .create(DomainObjectWithProblemInItsAnnotatedTitleMethod.class, mockFacetHolder)
+                .orElse(null);
 
-        final List<TitleFacetViaTitleAnnotation.TitleComponent> components = _Lists.map(evaluators, TitleFacetViaTitleAnnotation.TitleComponent.FROM_EVALUATORS);
-        final TitleFacetViaTitleAnnotation facet = new TitleFacetViaTitleAnnotation(components, mockFacetHolder);
-        final DomainObjectWithProblemInItsAnnotatedTitleMethod screwedPojo = new DomainObjectWithProblemInItsAnnotatedTitleMethod();
+        final DomainObjectWithProblemInItsAnnotatedTitleMethod screwedPojo =
+                new DomainObjectWithProblemInItsAnnotatedTitleMethod();
         context.checking(new Expectations() {
             {
-                
+
                 allowing(mockFacetHolder).getMetaModelContext();
                 will(returnValue(metaModelContext));
-                
+
                 allowing(mockManagedObject).getPojo();
                 will(returnValue(screwedPojo));
             }

@@ -20,6 +20,7 @@ package demoapp.dom.types.javatime.javatimelocaldatetime.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
@@ -39,11 +40,12 @@ public class JavaTimeLocalDateTimeHolder_updateReadOnlyProperty {
 
     private final JavaTimeLocalDateTimeHolder holder;
 
-    public JavaTimeLocalDateTimeHolder act(java.time.LocalDateTime newValue) {
+    @MemberSupport public JavaTimeLocalDateTimeHolder act(final java.time.LocalDateTime newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
-    public java.time.LocalDateTime default0Act() {
+
+    @MemberSupport public java.time.LocalDateTime default0Act() {
         return holder.getReadOnlyProperty();
     }
 

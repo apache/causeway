@@ -61,58 +61,49 @@ public class ProperMemberSupport {
 
     }
 
-    @MemberSupport
-    public String namedMyAction() {
+    @MemberSupport public String namedMyAction() {
         return "named-imperative[MyAction]";
     }
 
-    @MemberSupport
-    public String describedMyAction() {
+    @MemberSupport public String describedMyAction() {
         return "described-imperative[MyAction]";
     }
 
-    @MemberSupport
-    public String disableMyAction() {
+    @MemberSupport public String disableMyAction() {
         return null;
     }
 
-    @MemberSupport // variant with dependent args
-    public String disable1MyAction(final String p0) {
+    // variant with dependent args
+    @MemberSupport public String disable1MyAction(final String p0) {
         return null;
     }
 
-    @MemberSupport
-    public boolean hideMyAction() {
+    @MemberSupport public boolean hideMyAction() {
         return false;
     }
 
-    @MemberSupport // variant with dependent args
-    public boolean hide1MyAction(final String p0) {
+    // variant with dependent args
+    @MemberSupport public boolean hide1MyAction(final String p0) {
         return false;
     }
 
-    @MemberSupport
-    public String validateMyAction(final String p0, final String p1) {
+    @MemberSupport public String validateMyAction(final String p0, final String p1) {
         return null;
     }
 
-    @MemberSupport
-    public Set<String> autoComplete0MyAction(@MinLength(3) final String search) {
+    @MemberSupport public Set<String> autoComplete0MyAction(@MinLength(3) final String search) {
         return null;
     }
 
-    @MemberSupport
-    public Set<String> autoComplete1MyAction(@MinLength(3) final String search) {
+    @MemberSupport public Set<String> autoComplete1MyAction(@MinLength(3) final String search) {
         return null;
     }
 
-    @MemberSupport
-    public Set<String> choices0MyAction() {
+    @MemberSupport public Set<String> choices0MyAction() {
         return null;
     }
 
-    @MemberSupport
-    public Set<String> choices1MyAction() {
+    @MemberSupport public Set<String> choices1MyAction() {
         return null;
     }
 
@@ -122,23 +113,19 @@ public class ProperMemberSupport {
 //        return null;
 //    }
 
-    @MemberSupport
-    public String default0MyAction() {
+    @MemberSupport public String default0MyAction() {
         return null;
     }
 
-    @MemberSupport
-    public String default1MyAction() {
+    @MemberSupport public String default1MyAction() {
         return null;
     }
 
-    @MemberSupport
-    public String validate0MyAction(final String p0) {
+    @MemberSupport public String validate0MyAction(final String p0) {
         return null;
     }
 
-    @MemberSupport
-    public String validate1MyAction(final String p1) {
+    @MemberSupport public String validate1MyAction(final String p1) {
         return null;
     }
 
@@ -154,43 +141,35 @@ public class ProperMemberSupport {
     @PropertyLayout(named = "foo", describedAs = "bar")
     @Getter @Setter private String myProp;
 
-    @MemberSupport
-    public String namedMyProp() {
+    @MemberSupport public String namedMyProp() {
         return "named-imperative[MyProp]";
     }
 
-    @MemberSupport
-    public String describedMyProp() {
+    @MemberSupport public String describedMyProp() {
         return "described-imperative[MyProp]";
     }
 
-    @MemberSupport
-    public Set<String> autoCompleteMyProp(@MinLength(3) final String search) {
+    @MemberSupport public Set<String> autoCompleteMyProp(@MinLength(3) final String search) {
         return null;
     }
 
-    @MemberSupport
-    public Set<String> choicesMyProp() {
+    @MemberSupport public Set<String> choicesMyProp() {
         return null;
     }
 
-    @MemberSupport
-    public String defaultMyProp() {
+    @MemberSupport public String defaultMyProp() {
         return "";
     }
 
-    @MemberSupport
-    public String disableMyProp() {
+    @MemberSupport public String disableMyProp() {
         return null;
     }
 
-    @MemberSupport
-    public boolean hideMyProp() {
+    @MemberSupport public boolean hideMyProp() {
         return false;
     }
 
-    @MemberSupport
-    public String validateMyProp(final String x) {
+    @MemberSupport public String validateMyProp(final String x) {
         return "think twice";
     }
 
@@ -200,23 +179,19 @@ public class ProperMemberSupport {
     @CollectionLayout(named = "foo", describedAs = "bar")
     @Getter @Setter private List<String> myColl;
 
-    @MemberSupport
-    public String namedMyColl() {
+    @MemberSupport public String namedMyColl() {
         return "named-imperative[MyColl]";
     }
 
-    @MemberSupport
-    public String describedMyColl() {
+    @MemberSupport public String describedMyColl() {
         return "described-imperative[MyColl]";
     }
 
-    @MemberSupport
-    public String disableMyColl() {
+    @MemberSupport public String disableMyColl() {
         return null;
     }
 
-    @MemberSupport
-    public boolean hideMyColl() {
+    @MemberSupport public boolean hideMyColl() {
         return false;
     }
 
@@ -232,58 +207,47 @@ public class ProperMemberSupport {
         return this;
     }
 
-    @MemberSupport
-    public String disableAct() {
+    @MemberSupport public String disableAct() {
         return null;
     }
 
-    @MemberSupport
-    public boolean hideAct() {
+    @MemberSupport public boolean hideAct() {
         return false;
     }
 
-    @MemberSupport
-    public String validateAct(Parameter params) {
+    @MemberSupport public String validateAct(Parameter params) {
         return null;
     }
 
-    @MemberSupport
-    public Set<String> autoComplete0Act(Parameter params, @MinLength(3) String search) {
+    @MemberSupport public Set<String> autoComplete0Act(Parameter params, @MinLength(3) String search) {
         return null;
     }
 
-    @MemberSupport
-    public Set<String> autoComplete1Act(Parameter params, @MinLength(3) String search) {
+    @MemberSupport public Set<String> autoComplete1Act(Parameter params, @MinLength(3) String search) {
         return null;
     }
 
-    @MemberSupport
-    public Set<String> choices0Act(Parameter params) {
+    @MemberSupport public Set<String> choices0Act(Parameter params) {
         return null;
     }
 
-    @MemberSupport
-    public Set<String> choices1Act(Parameter params) {
+    @MemberSupport public Set<String> choices1Act(Parameter params) {
         return null;
     }
 
-    @MemberSupport
-    public List<String> default0Act(Parameter params) {
+    @MemberSupport public List<String> default0Act(Parameter params) {
         return null;
     }
 
-    @MemberSupport
-    public List<String> default1Act(Parameter params) {
+    @MemberSupport public List<String> default1Act(Parameter params) {
         return null;
     }
 
-    @MemberSupport
-    public String validate0Act(Parameter params) {
+    @MemberSupport public String validate0Act(Parameter params) {
         return null;
     }
 
-    @MemberSupport
-    public String validate1Act(Parameter params) {
+    @MemberSupport public String validate1Act(Parameter params) {
         return null;
     }
 */

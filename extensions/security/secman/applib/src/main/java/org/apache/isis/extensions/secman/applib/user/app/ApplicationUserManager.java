@@ -20,6 +20,7 @@ package org.apache.isis.extensions.secman.applib.user.app;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 
 @DomainObject(
@@ -30,7 +31,7 @@ public class ApplicationUserManager {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationUserManager";
 
-    public String title() {
+    @ObjectSupport public String title() {
         return "Application User Manager";
     }
 

@@ -20,6 +20,7 @@ package demoapp.dom.domain.properties.Property.optionality;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -39,7 +40,7 @@ public class PropertyOptionalityVm_updateWithParameterLayout {
     private final PropertyOptionalityVm propertyOptionalityVm;
 
 //tag::annotation[]
-    public PropertyOptionalityVm act(
+    @MemberSupport public PropertyOptionalityVm act(
             @Parameter(
                 optionality = Optionality.OPTIONAL
             )
@@ -52,7 +53,7 @@ public class PropertyOptionalityVm_updateWithParameterLayout {
         return propertyOptionalityVm;
     }
 //end::annotation[]
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return propertyOptionalityVm.getPropertyUsingAnnotation();
     }
 

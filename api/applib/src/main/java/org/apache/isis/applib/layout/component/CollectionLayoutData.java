@@ -69,7 +69,7 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed {
     private String id;
 
     /**
-     * Collection identifier, being the getter method without "get" prefix, first letter lower cased.
+     * Collection identifier, being the getter method without 'get' prefix, first letter lower cased.
      */
     @XmlAttribute(required = true)
     public String getId() {

@@ -16,27 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.choices.enums;
 
 import java.lang.reflect.Method;
 import java.util.function.BiConsumer;
 
-import org.apache.isis.applib.adapters.EncoderDecoder;
-import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.util.Enums;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
 import org.apache.isis.core.metamodel.commons.MethodExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
+import org.apache.isis.core.metamodel.methods.MethodFinder;
 
 import lombok.val;
 
-public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemanticsProviderAndFacetAbstract<T> implements EnumFacet {
+public class EnumValueSemanticsProvider<T extends Enum<T>>
+extends ValueSemanticsProviderAndFacetAbstract<T>
+implements EnumFacet {
 
 
     private static Class<? extends Facet> type() {
@@ -57,19 +58,19 @@ public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemantic
         return max;
     }
 
-
-    private static final String TITLE = "title";
-
     private final Method titleMethod;
 
-    /**
-     * Required because {@link Parser} and {@link EncoderDecoder}.
-     */
-    public EnumValueSemanticsProvider() {
-        this(null, null);
-    }
+//    /**
+//     * Required because {@link Parser} and {@link EncoderDecoder}.
+//     */
+//    public EnumValueSemanticsProvider() {
+//        this(EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED, null, null);
+//    }
 
-    public EnumValueSemanticsProvider(final FacetHolder holder, final Class<T> adaptedClass) {
+    public EnumValueSemanticsProvider(
+            final IntrospectionPolicy introspectionPolicy,
+            final FacetHolder holder,
+            final Class<T> adaptedClass) {
         super(
                 type(), holder,  adaptedClass,
                 maxLengthFor(adaptedClass),
@@ -77,10 +78,19 @@ public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemantic
                 EqualByContent.HONOURED,
                 defaultFor(adaptedClass));
 
-        titleMethod = MethodFinderUtils.findMethod_returningText(
+        val supportMethodEnum = ObjectSupportMethod.TITLE;
+
+        titleMethod =
+
+        MethodFinder
+        .objectSupport(
                 getAdaptedClass(),
-                TITLE,
-                null);
+                supportMethodEnum.getMethodNames(),
+                introspectionPolicy)
+        .withReturnTypeAnyOf(supportMethodEnum.getReturnTypeCategory().getReturnTypes())
+        .streamMethodsMatchingSignature(MethodFinder.NO_ARG)
+        .findFirst()
+        .orElse(null);
 
     }
 

@@ -25,6 +25,7 @@ import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
@@ -50,7 +51,7 @@ public class InteractionDtoVm implements ViewModel {
 
     private final static UrlEncodingService encodingService = new UrlEncodingServiceWithCompression();
 
-    public String title() {
+    @ObjectSupport public String title() {
         // nb: not thread-safe
         // formats defined in https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html
         val format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -75,7 +76,7 @@ public class InteractionDtoVm implements ViewModel {
     }
 
     @Override
-    public void viewModelInit(String memento) {
+    public void viewModelInit(final String memento) {
         interactionDto =  InteractionDtoUtils.fromXml(encodingService.decodeToString(memento));
     }
 

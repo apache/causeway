@@ -16,10 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.viewer.wicket.viewer.wicketapp;
 
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
@@ -94,8 +94,6 @@ import org.apache.isis.viewer.wicket.viewer.integration.ConverterForObjectAdapte
 import org.apache.isis.viewer.wicket.viewer.integration.ConverterForObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.viewer.integration.IsisResourceSettings;
 import org.apache.isis.viewer.wicket.viewer.integration.WebRequestCycleForIsis;
-
-import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.Getter;
 import lombok.val;
@@ -198,9 +196,9 @@ implements
     }
 
     @Override
-    public Application setAjaxRequestTargetProvider(Function<Page, AjaxRequestTarget> ajaxRequestTargetProvider) {
+    public Application setAjaxRequestTargetProvider(final Function<Page, AjaxRequestTarget> ajaxRequestTargetProvider) {
         final Application application = super.setAjaxRequestTargetProvider(
-                (Page context) -> decorate(ajaxRequestTargetProvider.apply(context)) );
+                (final Page context) -> decorate(ajaxRequestTargetProvider.apply(context)) );
         return application;
     }
 
@@ -221,7 +219,7 @@ implements
         // bootstrap dependencies from the metaModelContext
         {
 
-            requires(metaModelContext, "metaModelContext");
+            Objects.requireNonNull(metaModelContext, "metaModelContext");
 
             commonContext = IsisAppCommonContext.of(metaModelContext);
             configuration = commonContext.lookupServiceElseFail(IsisConfiguration.class);
@@ -341,21 +339,21 @@ implements
      * @since 2.0 ... overrides the default, to 'inject' the commonContext into new sessions
      */
     @Override
-    public Session newSession(Request request, Response response) {
+    public Session newSession(final Request request, final Response response) {
         return newSessionMixin.interceptNewSession(super.newSession(request, response));
     }
 
     /**
      * protected visibility to allow ad-hoc overriding of some other authentication strategy.
      */
-    void configureSecurity(IsisConfiguration configuration) {
+    void configureSecurity(final IsisConfiguration configuration) {
         getSecuritySettings().setAuthenticationStrategy(newAuthenticationStrategy(configuration));
     }
 
     /**
      * protected visibility to allow ad-hoc overriding of some other authentication strategy.
      */
-    IAuthenticationStrategy newAuthenticationStrategy(IsisConfiguration configuration) {
+    IAuthenticationStrategy newAuthenticationStrategy(final IsisConfiguration configuration) {
         val rememberMe = configuration.getViewer().getWicket().getRememberMe();
         val cookieKey = rememberMe.getCookieKey();
         val encryptionKey = rememberMe.getEncryptionKey().orElse(defaultEncryptionKey());
@@ -419,7 +417,7 @@ implements
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void renderHead(IHeaderResponse response) {
+            public void renderHead(final IHeaderResponse response) {
                 BootstrapBaseBehavior bootstrapBaseBehavior = new BootstrapBaseBehavior();
                 bootstrapBaseBehavior.renderHead(settings, response);
             }
@@ -471,7 +469,7 @@ implements
     }
 
     protected static final Function<ComponentFactory, Iterable<CssResourceReference>> getCssResourceReferences =
-            (ComponentFactory input) -> {
+            (final ComponentFactory input) -> {
                 final CssResourceReference cssResourceReference = input.getCssResourceReference();
                 return cssResourceReference != null?
                         Collections.singletonList(cssResourceReference):

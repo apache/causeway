@@ -33,7 +33,9 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
@@ -49,16 +51,16 @@ import demoapp.dom.types.javatime.javatimezoneddatetime.vm.JavaTimeZonedDateTime
 //@Log4j2
 public class JavaTimeZonedDateTimes implements HasAsciiDocDescription {
 
-    public String title() {
+    @ObjectSupport public String title() {
         return "java.time.ZonedDateTime data type";
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public JavaTimeZonedDateTimeVm openViewModel(java.time.ZonedDateTime initialValue) {
+    public JavaTimeZonedDateTimeVm openViewModel(final java.time.ZonedDateTime initialValue) {
         return new JavaTimeZonedDateTimeVm(initialValue);
     }
-    public java.time.ZonedDateTime default0OpenViewModel() {
+    @MemberSupport public java.time.ZonedDateTime default0OpenViewModel() {
         return java.time.ZonedDateTime.of(120,1,1, 1, 1, 1, 1, ZoneOffset.UTC);
     }
 

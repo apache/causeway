@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.commons;
 
 import java.lang.reflect.Constructor;
@@ -46,14 +45,12 @@ import lombok.val;
  * <p>
  * For a given array of parameters, we intercept and adapt those,
  * that are not compatible with the expected target parameter type.
- * </p>
  * <p>
- * By now we do this for collection parameter types List, Set, SortedSet, Collection and Arrays.
- * </p>
+ * We do this for collection parameter types List, Set, SortedSet, Collection, Can and Arrays.
  */
 public final class CanonicalParameterUtil {
 
-    public static <T> T construct(Constructor<T> constructor, Object[] executionParameters) {
+    public static <T> T construct(final Constructor<T> constructor, final Object[] executionParameters) {
         val adaptedExecutionParameters = preprocess(constructor, executionParameters);
 
         // supports effective private constructors as well
@@ -62,7 +59,7 @@ public final class CanonicalParameterUtil {
         .presentElseFail();
     }
 
-    public static Object invoke(Method method, Object targetPojo, Object[] executionParameters)
+    public static Object invoke(final Method method, final Object targetPojo, final Object[] executionParameters)
             throws IllegalAccessException, InvocationTargetException {
 
         val adaptedExecutionParameters = preprocess(method, executionParameters);
@@ -74,7 +71,7 @@ public final class CanonicalParameterUtil {
         .orElse(null);
     }
 
-    private static Object[] preprocess(Executable executable, Object[] executionParameters) {
+    private static Object[] preprocess(final Executable executable, final Object[] executionParameters) {
         if (isEmpty(executionParameters)) {
             return executionParameters;
         }
@@ -96,12 +93,18 @@ public final class CanonicalParameterUtil {
      * Replaces obj (if required) to be conform with the parameterType
      * @param obj
      * @param parameterType
-     * @return
      */
-    private static Object adapt(Object obj, Class<?> parameterType) {
+    private static Object adapt(Object obj, final Class<?> parameterType) {
 
         if(obj==null) {
             return null;
+        }
+
+        if(parameterType == Can.class) {
+            if(obj instanceof Can) {
+                return obj;
+            }
+            return Can.ofStream(_NullSafe.streamAutodetect(obj));
         }
 
         if(obj instanceof Can) {
@@ -141,9 +144,9 @@ public final class CanonicalParameterUtil {
     }
 
     private static Throwable toVerboseException(
-            Class<?>[] parameterTypes,
-            Object[] adaptedExecutionParameters,
-            Throwable e) {
+            final Class<?>[] parameterTypes,
+            final Object[] adaptedExecutionParameters,
+            final Throwable e) {
 
         final int expectedParamCount = _NullSafe.size(parameterTypes);
         final int actualParamCount = _NullSafe.size(adaptedExecutionParameters);

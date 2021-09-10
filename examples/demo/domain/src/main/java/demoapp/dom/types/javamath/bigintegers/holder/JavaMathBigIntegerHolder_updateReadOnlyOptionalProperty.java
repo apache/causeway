@@ -20,6 +20,7 @@ package demoapp.dom.types.javamath.bigintegers.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -41,14 +42,15 @@ public class JavaMathBigIntegerHolder_updateReadOnlyOptionalProperty {
 
     private final JavaMathBigIntegerHolder holder;
 
-    public JavaMathBigIntegerHolder act(
+    @MemberSupport public JavaMathBigIntegerHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
-            java.math.BigInteger newValue
+            final java.math.BigInteger newValue
     ) {
         holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
-    public java.math.BigInteger default0Act() {
+
+    @MemberSupport public java.math.BigInteger default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

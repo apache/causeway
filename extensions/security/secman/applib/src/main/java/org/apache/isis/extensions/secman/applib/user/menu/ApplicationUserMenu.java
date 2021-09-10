@@ -26,7 +26,9 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -52,46 +54,54 @@ public class ApplicationUserMenu {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationUserMenu";
 
-    public static abstract class ActionDomainEvent
-        extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationUserMenu> { }
+    public static abstract class ActionDomainEvent<T> extends IsisModuleExtSecmanApplib.ActionDomainEvent<T> { }
 
     private final ApplicationUserRepository applicationUserRepository;
     private final FactoryService factory;
 
 
-    public String iconName() {
+    @ObjectSupport public String iconName() {
         return "applicationUser";
     }
 
 
 
-    public static class FindUsersByNameDomainEvent
-        extends ActionDomainEvent { }
-
     @Action(
-            domainEvent = FindUsersByNameDomainEvent.class,
+            domainEvent = findUsers.ActionEvent.class,
             semantics = SemanticsOf.SAFE
     )
     @ActionLayout(sequence = "100.10.2")
-    public Collection<? extends ApplicationUser> findUsers(
-            final @ParameterLayout(named = "Search") String search) {
-        return applicationUserRepository.find(search);
+    public class findUsers{
+
+        public class ActionEvent
+                extends ActionDomainEvent<findUsers> { }
+
+        @MemberSupport public Collection<? extends ApplicationUser> act(
+                final @ParameterLayout(named = "Search") String search) {
+            return applicationUserRepository.find(search);
+        }
+
     }
 
 
 
-    public static class UserManagerDomainEvent extends ActionDomainEvent { }
 
     @Action(
-            domainEvent = UserManagerDomainEvent.class,
+            domainEvent = userManager.ActionEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
     )
     @ActionLayout(
             sequence = "100.10.3",
             cssClassFa = "user-plus"
     )
-    public ApplicationUserManager userManager() {
-        return factory.viewModel(new ApplicationUserManager());
+    public class userManager{
+
+        public class ActionEvent extends ActionDomainEvent<userManager> { }
+
+        @MemberSupport public ApplicationUserManager act(){
+            return factory.viewModel(new ApplicationUserManager());
+        }
+
     }
 
 }

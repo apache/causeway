@@ -33,6 +33,7 @@ import org.apache.isis.applib.graph.tree.TreePath;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+@SuppressWarnings("unchecked")
 //tag::sessionTree[]
 @Service
 @Named("demo.FileTreeNodeService")
@@ -42,12 +43,15 @@ public class FileTreeNodeService {
     final Provider<HttpSession> httpSessionProvider;
 
     public TreeNode<FileNodeVm> sessionTree() {
-        TreeNode<FileNodeVm> tree = (TreeNode<FileNodeVm>) httpSessionProvider.get().getAttribute(TreeNode.class.getName());
+        val session = httpSessionProvider.get();
+        val cacheKey = TreeNode.class.getName();
+        var tree = (TreeNode<FileNodeVm>) session.getAttribute(cacheKey);
         if(tree == null) {
             tree = newTree();
-            httpSessionProvider.get().setAttribute(TreeNode.class.getName(), tree);
+            session.setAttribute(cacheKey, tree);
         }
         return tree;
+
     }
 //end::sessionTree[]
 

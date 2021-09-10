@@ -26,7 +26,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.persistence.jdo.metamodel.testing.AbstractFacetFactoryTest;
 
@@ -63,7 +63,8 @@ extends AbstractFacetFactoryTest {
     public void testAnnotationPickedUpOnProperty() throws Exception {
         final Class<?> cls = SimpleObjectWithBigDecimalColumnAnnotations.class;
         final Method method = cls.getMethod("getBigDecimalPropertyWithColumnAnnotation");
-        facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, method, methodRemover, facetedMethod));
+        facetFactory.process(ProcessMethodContext
+                .forTesting(cls, null, method, methodRemover, facetedMethod));
 
         final BigDecimalValueFacet facet = facetedMethod.getFacet(BigDecimalValueFacet.class);
         assertNotNull(facet);
@@ -75,7 +76,8 @@ extends AbstractFacetFactoryTest {
     public void testAnnotationDefaultsLengthIfMissing() throws Exception {
         final Class<?> cls = SimpleObjectWithBigDecimalColumnAnnotations.class;
         final Method method = cls.getMethod("getBigDecimalPropertyWithColumnAnnotationMissingLength");
-        facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, method, methodRemover, facetedMethod));
+        facetFactory.process(ProcessMethodContext
+                .forTesting(cls, null, method, methodRemover, facetedMethod));
 
         final BigDecimalValueFacet facet = facetedMethod.getFacet(BigDecimalValueFacet.class);
         assertNotNull(facet);
@@ -86,7 +88,8 @@ extends AbstractFacetFactoryTest {
     public void testAnnotationDefaultsScaleIfMissing() throws Exception {
         final Class<?> cls = SimpleObjectWithBigDecimalColumnAnnotations.class;
         final Method method = cls.getMethod("getBigDecimalPropertyWithColumnAnnotationMissingScale");
-        facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, method, methodRemover, facetedMethod));
+        facetFactory.process(ProcessMethodContext
+                .forTesting(cls, null, method, methodRemover, facetedMethod));
 
         final BigDecimalValueFacet facet = facetedMethod.getFacet(BigDecimalValueFacet.class);
         assertNotNull(facet);
@@ -98,7 +101,8 @@ extends AbstractFacetFactoryTest {
 
         final Class<?> cls = SimpleObjectWithBigDecimalColumnAnnotations.class;
         final Method method = cls.getMethod("getStringPropertyWithColumnAnnotation");
-        facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, method, methodRemover, facetedMethod));
+        facetFactory.process(ProcessMethodContext
+                .forTesting(cls, null, method, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(BigDecimalValueFacet.class);
         assertNull(facet);
@@ -108,7 +112,8 @@ extends AbstractFacetFactoryTest {
 
         final Class<?> cls = SimpleObjectWithBigDecimalColumnAnnotations.class;
         final Method method = cls.getMethod("getBigDecimalPropertyWithoutColumnAnnotation");
-        facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, method, methodRemover, facetedMethod));
+        facetFactory.process(ProcessMethodContext
+                .forTesting(cls, null, method, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(BigDecimalValueFacet.class);
         assertNotNull(facet);

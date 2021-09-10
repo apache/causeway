@@ -16,9 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.callbacks;
 
+import java.lang.reflect.Method;
+
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
@@ -30,8 +32,10 @@ implements CreatedCallbackFacet {
         return CreatedCallbackFacet.class;
     }
 
-    public CreatedCallbackFacetAbstract(final FacetHolder holder) {
-        super(type(), holder);
+    public CreatedCallbackFacetAbstract(
+            final Can<Method> methods,
+            final FacetHolder holder) {
+        super(type(), methods, holder);
     }
 
 }

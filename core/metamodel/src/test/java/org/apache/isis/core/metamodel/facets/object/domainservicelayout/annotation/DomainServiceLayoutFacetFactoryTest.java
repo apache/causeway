@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.domainservicelayout.annotation;
 
 import org.junit.Assert;
@@ -55,7 +54,8 @@ extends AbstractFacetFactoryTest {
         class Customers {
         }
 
-        facetFactory.process(new ProcessClassContext(Customers.class, methodRemover, facetHolder));
+        facetFactory.process(ProcessClassContext
+                .forTesting(Customers.class, methodRemover, facetHolder));
 
         final Facet facet = facetHolder.getFacet(DomainServiceLayoutFacet.class);
         assertNotNull(facet);
@@ -73,7 +73,8 @@ extends AbstractFacetFactoryTest {
         class Customers {
         }
 
-        facetFactory.process(new ProcessClassContext(Customers.class, methodRemover, facetHolder));
+        facetFactory.process(ProcessClassContext
+                .forTesting(Customers.class, methodRemover, facetHolder));
 
         final Facet facet = facetHolder.getFacet(DomainServiceLayoutFacet.class);
         assertNotNull(facet);
@@ -90,7 +91,8 @@ extends AbstractFacetFactoryTest {
         class Customers {
         }
 
-        facetFactory.process(new ProcessClassContext(Customers.class, methodRemover, facetHolder));
+        facetFactory.process(ProcessClassContext
+                .forTesting(Customers.class, methodRemover, facetHolder));
 
         final Facet facet = facetHolder.getFacet(DomainServiceLayoutFacet.class);
         assertNotNull(facet);
@@ -108,7 +110,8 @@ extends AbstractFacetFactoryTest {
         class Customers {
         }
 
-        facetFactory.process(new ProcessClassContext(Customers.class, methodRemover, facetHolder));
+        facetFactory.process(ProcessClassContext
+                .forTesting(Customers.class, methodRemover, facetHolder));
 
         final Facet facet = facetHolder.getFacet(DomainServiceLayoutFacet.class);
         assertNotNull(facet);

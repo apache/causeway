@@ -16,14 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.navparent;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class NavigableParentFacetAbstract extends FacetAbstract implements NavigableParentFacet {
+public abstract class NavigableParentFacetAbstract
+extends FacetAbstract
+implements NavigableParentFacet {
 
     private static final Class<? extends Facet> type() {
         return NavigableParentFacet.class;

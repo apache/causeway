@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.Identifier;
@@ -56,7 +55,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
-import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
+import org.apache.isis.core.metamodel.facets.HasPostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedLifecycleEventFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedLifecycleEventFacetForDomainObjectAnnotation;
@@ -72,12 +71,12 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.Pr
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.EditingEnabledFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.ImmutableFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.entitychangepublishing.EntityChangePublishingFacetForDomainObjectAnnotation;
-import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.LogicalTypeFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.introspection.IntrospectionPolicyFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.logicaltype.LogicalTypeFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.recreatable.RecreatableObjectFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.mixin.MetaModelValidatorForMixinTypes;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
-import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelVisitingValidatorAbstract;
@@ -86,6 +85,7 @@ import org.apache.isis.core.metamodel.util.EventUtil;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -95,7 +95,7 @@ public class DomainObjectAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements
     MetaModelRefiner,
-    PostConstructMethodCache,
+    HasPostConstructMethodCache,
     ObjectTypeFacetFactory {
 
     private final MetaModelValidatorForMixinTypes mixinTypeValidator =
@@ -252,15 +252,21 @@ implements
             final Class<?> repositoryClass,
             final String methodName) {
 
-        final Method[] methods = repositoryClass.getMethods();
-        for (Method method : methods) {
-            if(method.getName().equals(methodName)) {
-                final Class<?>[] parameterTypes = method.getParameterTypes();
-                if(parameterTypes.length == 1 && parameterTypes[0].equals(String.class)) {
-                    return method;
-                }
-            }
+        val repoMethod = getClassCache()
+        .streamPublicMethods(repositoryClass)
+        .filter(method->method.getName().equals(methodName))
+        .filter(method->{
+            final Class<?>[] parameterTypes = method.getParameterTypes();
+            return parameterTypes.length == 1
+                    && parameterTypes[0].equals(String.class);
+        })
+        .findFirst()
+        .orElse(null);
+
+        if(repoMethod!=null) {
+            return repoMethod;
         }
+
         ValidationFailure.raise(
                 facetHolder.getSpecificationLoader(),
                 Identifier.classIdentifier(LogicalType.fqcn(cls)),
@@ -312,6 +318,11 @@ implements
         FacetUtil.addFacetIfPresent(
                 LogicalTypeFacetForDomainObjectAnnotation
                 .create(domainObjectIfAny, cls, facetHolder));
+
+        FacetUtil.addFacetIfPresent(
+                IntrospectionPolicyFacetForDomainObjectAnnotation
+                .create(domainObjectIfAny, cls, facetHolder));
+
     }
 
 
@@ -627,12 +638,7 @@ implements
 
     // //////////////////////////////////////
 
+    @Getter(onMethod_ = {@Override})
     private final @NonNull MethodByClassMap postConstructMethodsCache;
-
-    @Override
-    public Method postConstructMethodFor(final Object pojo) {
-        return MethodFinderUtils.findAnnotatedMethod(pojo, PostConstruct.class, postConstructMethodsCache);
-    }
-
 
 }

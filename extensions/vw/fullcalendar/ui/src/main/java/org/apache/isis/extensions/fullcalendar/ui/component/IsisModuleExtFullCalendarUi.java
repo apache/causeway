@@ -22,13 +22,18 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.extensions.fullcalendar.applib.IsisModuleExtFullCalendarApplib;
+import org.apache.isis.extensions.fullcalendar.ui.component.calendarable.CalendarableCollectionAsFullCalendarFactory;
+import org.apache.isis.extensions.fullcalendar.ui.component.calendareventable.CalendarEventableCollectionAsFullCalendarFactory;
 
 /**
  * @since 2.0 {@index}
  */
 @Configuration
 @Import({
-        IsisModuleExtFullCalendarApplib.class
+        IsisModuleExtFullCalendarApplib.class,
+
+        CalendarEventableCollectionAsFullCalendarFactory.class,
+        CalendarableCollectionAsFullCalendarFactory.class
 })
 public class IsisModuleExtFullCalendarUi {
 }

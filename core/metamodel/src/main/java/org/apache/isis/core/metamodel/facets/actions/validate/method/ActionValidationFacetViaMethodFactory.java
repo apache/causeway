@@ -16,78 +16,54 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.actions.validate.method;
 
 import java.util.EnumSet;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
-import org.apache.isis.applib.services.i18n.TranslationContext;
-import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.ActionSupport;
 import org.apache.isis.core.metamodel.facets.ActionSupport.SearchAlgorithm;
-import org.apache.isis.core.metamodel.facets.actions.validate.ActionValidationFacet;
+import org.apache.isis.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.param.validate.method.ActionParameterValidationFacetViaMethod;
-import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
-import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.methods.MethodFinder;
 
 import lombok.val;
 
 /**
- * Sets up {@link ActionValidationFacet} and {@link ActionParameterValidationFacetViaMethod}.
+ * Sets up {@link ActionParameterValidationFacetViaMethod}.
  */
 public class ActionValidationFacetViaMethodFactory
-extends MethodPrefixBasedFacetFactoryAbstract  {
-
-    private static final String PREFIX = MethodLiteralConstants.VALIDATE_PREFIX;
+extends MemberSupportFacetFactoryAbstract {
 
     @Inject
     public ActionValidationFacetViaMethodFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
+        super(mmc, FeatureType.ACTIONS_ONLY, MemberSupportPrefix.VALIDATE);
     }
 
     @Override
-    public void process(final ProcessMethodContext processMethodContext) {
-        handleValidateAllArgsMethod(processMethodContext);
-    }
-
-    private void handleValidateAllArgsMethod(final ProcessMethodContext processMethodContext) {
-
-        val facetHolder = processMethodContext.getFacetHolder();
-
-        val namingConvention = processMethodContext.memberSupportCandidates(PREFIX);
+    protected void search(
+            final ProcessMethodContext processMethodContext,
+            final MethodFinder methodFinder) {
 
         val searchRequest = ActionSupport.ActionSupportingMethodSearchRequest.builder()
                 .processMethodContext(processMethodContext)
-                .returnType(ActionSupport.ActionSupportingMethodSearchRequest.ReturnType.TEXT)
-                .methodNames(namingConvention)
-                .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.ALL_PARAM_TYPES))
+                .methodFinder(methodFinder)
+                .searchAlgorithms(EnumSet.of(SearchAlgorithm.PAT, SearchAlgorithm.ALL_PARAM_TYPES))
                 .build();
 
         ActionSupport.findActionSupportingMethods(searchRequest, searchResult -> {
             val validateMethod = searchResult.getSupportingMethod();
-
             processMethodContext.removeMethod(validateMethod);
-
-            if (facetHolder.containsNonFallbackFacet(ActionValidationFacetViaMethod.class)) {
-                throw new MetaModelException( processMethodContext.getCls() + " uses both old and new 'validate' syntax - "
-                        + "must use one or other");
-            }
-
-            val ppmFactory = searchResult.getPpmFactory();
-            val translationService = getTranslationService();
-            val translationContext = TranslationContext.forTranslationContextHolder(facetHolder.getFeatureIdentifier());
+            val patConstructor = searchResult.getPatConstructor();
             addFacet(
                     new ActionValidationFacetViaMethod(
-                            validateMethod, translationService, translationContext, ppmFactory, facetHolder));
+                            validateMethod, patConstructor, processMethodContext.getFacetHolder()));
         });
 
     }
-
-
 
 }

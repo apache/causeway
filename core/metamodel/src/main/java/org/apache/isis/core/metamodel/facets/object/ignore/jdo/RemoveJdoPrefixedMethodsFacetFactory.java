@@ -16,11 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.ignore.jdo;
 
-
-import java.lang.reflect.Method;
 
 import javax.inject.Inject;
 
@@ -41,13 +38,12 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessClassContext context) {
-        Class<?> cls = context.getCls();
-        Method[] methods = cls.getMethods();
-        for(Method method: methods) {
-            if(method.getName().startsWith("jdo")) {
-                context.removeMethod(method);
-            }
-        }
+
+        getClassCache()
+        .streamPublicMethods(context.getCls())
+        .filter(method->method.getName().startsWith("jdo"))
+        .forEach(context::removeMethod);
+
     }
 
 }

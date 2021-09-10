@@ -20,11 +20,11 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.junit.jupiter.api.Test;
 
-import org.apache.isis.core.metamodel.commons.StringExtensions;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.apache.isis.commons.internal.base._Strings;
 
 class MixedInMemberNamingStrategyTest {
 
@@ -44,31 +44,31 @@ class MixedInMemberNamingStrategyTest {
 
     @Test
     void exactly_underscore() throws Exception {
-        final String s = StringExtensions.asCapitalizedName(_MixedInMemberNamingStrategy.deriveMemberNameFrom("_"));
+        final String s = _Strings.capitalize(_MixedInMemberNamingStrategy.deriveMemberNameFrom("_"));
         assertThat(s, is("_"));
     }
 
     @Test
     void ends_with_underscore() throws Exception {
-        final String s = StringExtensions.asCapitalizedName(_MixedInMemberNamingStrategy.deriveMemberNameFrom("abc_"));
+        final String s = _Strings.capitalize(_MixedInMemberNamingStrategy.deriveMemberNameFrom("abc_"));
         assertThat(s, is("Abc_"));
     }
 
     @Test
     void has_no_underscore() throws Exception {
-        final String s = StringExtensions.asCapitalizedName(_MixedInMemberNamingStrategy.deriveMemberNameFrom("defghij"));
+        final String s = _Strings.capitalize(_MixedInMemberNamingStrategy.deriveMemberNameFrom("defghij"));
         assertThat(s, is("Defghij"));
     }
 
     @Test
     void contains_one_underscore() throws Exception {
-        final String s = StringExtensions.asCapitalizedName(_MixedInMemberNamingStrategy.deriveMemberNameFrom("abc_def"));
+        final String s = _Strings.capitalize(_MixedInMemberNamingStrategy.deriveMemberNameFrom("abc_def"));
         assertThat(s, is("Def"));
     }
 
     @Test
     void contains_more_than_one_underscore() throws Exception {
-        final String s = StringExtensions.asCapitalizedName(_MixedInMemberNamingStrategy.deriveMemberNameFrom("abc_def_ghi"));
+        final String s = _Strings.capitalize(_MixedInMemberNamingStrategy.deriveMemberNameFrom("abc_def_ghi"));
         assertThat(s, is("Ghi"));
     }
 

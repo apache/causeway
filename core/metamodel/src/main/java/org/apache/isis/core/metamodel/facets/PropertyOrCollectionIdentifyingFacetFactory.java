@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Method;
@@ -54,7 +53,7 @@ public interface PropertyOrCollectionIdentifyingFacetFactory extends FacetFactor
      * alternatively has a prefix of <tt>is</tt> and returns a <tt>boolean</tt>,
      * then it would be a candidate.
      */
-    public boolean isPropertyOrCollectionAccessorCandidate(Method method);
+    public boolean isPropertyOrCollectionGetterCandidate(Method method);
 
     /**
      * Whether (this facet is able to determine that) the supplied

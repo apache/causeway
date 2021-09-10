@@ -19,95 +19,86 @@
 package org.apache.isis.extensions.fullcalendar.applib.value;
 
 import java.io.Serializable;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
-import org.joda.time.DateTime;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.Value;
-import org.apache.isis.applib.util.ObjectContracts;
-import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
+
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.ToString;
+import lombok.With;
 
 /**
  * Value type representing an event on a calendar.
- *
  * @since 2.0 {@index}
+ * @apiNote implements Comparable<CalendarEvent> based on epochMillis
  */
 @Value(semanticsProviderClass=CalendarEventSemanticsProvider.class)
-public class CalendarEvent implements Serializable {
+@Getter @With
+@ToString @EqualsAndHashCode
+@AllArgsConstructor
+public class CalendarEvent
+implements
+    Comparable<CalendarEvent>,
+    Serializable {
 
     private static final long serialVersionUID = 1L;
 
-	static final CalendarEvent DEFAULT_VALUE = null; // no default
+    private final long epochMillis;
+    private final @NonNull String calendarName;
+    private final @NonNull String title;
+    private final @Nullable String notes;
 
-    private final DateTime dateTime;
-    private final String calendarName;
-    private final String title;
-    private final String notes;
+    // -- FACTORIES
 
-	public CalendarEvent(final DateTime dateTime, final String calendarName, final String title) {
-        this(dateTime, calendarName, title, null);
-	}
-
-    public CalendarEvent(final DateTime dateTime, final String calendarName, final String title, final String notes) {
-        this.dateTime = dateTime;
-        this.calendarName = calendarName;
-        this.title = title;
-        this.notes = notes;
+    public static CalendarEvent of(
+            final @NonNull ZonedDateTime dateTime,
+            final @NonNull String calendarName,
+            final @NonNull String title) {
+        return of(dateTime, calendarName, title, null);
     }
 
-    public DateTime getDateTime() {
-        return dateTime;
+    public static CalendarEvent of(
+            final @NonNull ZonedDateTime dateTime,
+            final @NonNull String calendarName,
+            final @NonNull String title,
+            final @Nullable String notes) {
+        return new CalendarEvent(dateTime.toInstant().toEpochMilli(), calendarName, title, notes);
     }
 
-    public String getCalendarName() {
-        return calendarName;
+    // -- ADDITIONAL WITHERS
+
+    public CalendarEvent withDateTime(final @NonNull ZonedDateTime dateTime) {
+        return new CalendarEvent(dateTime.toInstant().toEpochMilli(), calendarName, title, notes);
     }
 
-    public String getTitle() {
-        return title;
+    public CalendarEvent withDateTime(final @NonNull LocalDateTime localDateTime, final @NonNull ZoneId zoneId) {
+        return withDateTime(ZonedDateTime.of(localDateTime, zoneId));
     }
 
-    public String getNotes() {
-        return notes;
+    // -- CONVERTERS
+
+    public ZonedDateTime asDateTime(final @NonNull ZoneId zoneId) {
+        return ZonedDateTime.ofInstant(Instant.ofEpochMilli(epochMillis), zoneId);
     }
 
-	public CalendarEvent withDateTime(final DateTime date) {
-		return new CalendarEvent(date, this.calendarName, this.title, this.notes);
-	}
+    //XXX potential misuse
+//    public ZonedDateTime asDateTime() {
+//        return asDateTime(ZoneId.systemDefault());
+//    }
 
-	public CalendarEvent withCalendarName(final String calendarName) {
-	    return new CalendarEvent(this.dateTime, calendarName, this.title, this.notes);
-	}
-
-	public CalendarEvent withTitle(final String title) {
-	    return new CalendarEvent(this.dateTime, this.calendarName, title, this.notes);
-	}
-
-	public CalendarEvent withNotes(final String notes) {
-	    return new CalendarEvent(this.dateTime, this.calendarName, this.title, notes);
-	}
-
-	private static final ObjectContract<CalendarEvent> objectContract =
-	    ObjectContracts.contract(CalendarEvent.class)
-	    .thenUse("dateTime", CalendarEvent::getDateTime)
-	    .thenUse("calendarName", CalendarEvent::getCalendarName);
-
-
-	@Override
-    public int hashCode() {
-	    return objectContract.hashCode(this);
-    }
+    // -- OBJECT CONTRACT
 
     @Override
-    public boolean equals(Object obj) {
-        return objectContract.equals(this, obj);
+    public int compareTo(final CalendarEvent other) {
+        return Long.compare(this.epochMillis, other.getEpochMillis());
     }
 
-    @Override
-    public String toString() {
-        return objectContract.toString(this);
-    }
-
-    public static int typicalLength() {
-		return 30;
-	}
 }

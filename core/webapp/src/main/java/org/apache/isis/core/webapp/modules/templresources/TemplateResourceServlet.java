@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.webapp.modules.templresources;
 
 import java.io.IOException;
@@ -34,7 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.RestEasyConfiguration;
-import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
+import org.apache.isis.core.config.viewer.web.WebAppContextPath;
 import org.apache.isis.core.metamodel.commons.InputStreamExtensions;
 import org.apache.isis.core.metamodel.commons.ResourceUtil;
 import org.apache.isis.core.metamodel.commons.StringExtensions;

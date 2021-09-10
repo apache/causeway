@@ -50,8 +50,7 @@ public class ApplicationTenancy_addChild {
 
     private final ApplicationTenancy target;
 
-    @MemberSupport
-    public ApplicationTenancy act(final ApplicationTenancy child) {
+    @MemberSupport public ApplicationTenancy act(final ApplicationTenancy child) {
         applicationTenancyRepository.setParentOnTenancy(child, target);
         return target;
     }

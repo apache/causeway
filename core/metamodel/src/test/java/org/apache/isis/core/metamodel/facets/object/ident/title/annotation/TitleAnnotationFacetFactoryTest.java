@@ -21,24 +21,26 @@ package org.apache.isis.core.metamodel.facets.object.ident.title.annotation;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
-import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.Evaluators;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -49,6 +51,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
     private TitleAnnotationFacetFactory facetFactory;
 
     @Mock private ManagedObject mockObjectAdapter;
+    @Mock private ObjectSpecification mockStringSpec;
+    @Mock private ObjectSpecification mockIntegerSpec;
 
     @Before
     public void setUp() throws Exception {
@@ -76,7 +80,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
     @Test
     public void testTitleAnnotatedMethodPickedUpOnClassRemoved() throws Exception {
-        facetFactory.process(new ProcessClassContext(Customer.class, mockMethodRemover, facetedMethod));
+        facetFactory.process(ProcessClassContext
+                .forTesting(Customer.class, mockMethodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(TitleFacet.class);
         Assert.assertNotNull(facet);
@@ -85,7 +90,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
         final List<Method> titleMethods = Arrays.asList(Customer.class.getMethod("someTitle"));
         for (int i = 0; i < titleMethods.size(); i++) {
-            final Annotations.MethodEvaluator<Title> titleEvaluator = (Annotations.MethodEvaluator<Title>) titleFacetViaTitleAnnotation.getComponents().get(i)
+            final Evaluators.MethodEvaluator titleEvaluator =
+                    (Evaluators.MethodEvaluator) titleFacetViaTitleAnnotation.getComponents().getElseFail(i)
                     .getTitleEvaluator();
 
             Assert.assertEquals(titleMethods.get(i),
@@ -112,11 +118,11 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
     }
 
-    @Ignore // to re-instate
     @Test
     public void testTitleAnnotatedMethodsPickedUpOnClass() throws Exception {
 
-        facetFactory.process(new ProcessClassContext(Customer2.class, mockMethodRemover, facetedMethod));
+        facetFactory.process(ProcessClassContext
+                .forTesting(Customer2.class, mockMethodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(TitleFacet.class);
         Assert.assertNotNull(facet);
@@ -127,7 +133,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
         //final List<TitleComponent> components = titleFacetViaTitleAnnotation.getComponents();
         for (int i = 0; i < titleMethods.size(); i++) {
-            final Annotations.MethodEvaluator<Title> titleEvaluator = (Annotations.MethodEvaluator<Title>) titleFacetViaTitleAnnotation.getComponents().get(i)
+            final Evaluators.MethodEvaluator titleEvaluator =
+                    (Evaluators.MethodEvaluator) titleFacetViaTitleAnnotation.getComponents().getElseFail(i)
                     .getTitleEvaluator();
 
             Assert.assertEquals(titleMethods.get(i),
@@ -136,12 +143,23 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
         final Customer2 customer = new Customer2();
 
-        context.checking(new Expectations() {
-            {
-                allowing(mockObjectAdapter).getPojo();
-                will(returnValue(customer));
-            }
-        });
+        context.checking(new Expectations() {{
+
+            allowing(mockObjectAdapter).getPojo();
+            will(returnValue(customer));
+
+            allowing(mockSpecificationLoader).specForType(String.class);
+            will(returnValue(Optional.of(mockStringSpec)));
+
+            allowing(mockStringSpec).getCorrespondingClass();
+            will(returnValue(String.class));
+
+            allowing(mockStringSpec).isParentedOrFreeCollection();
+            will(returnValue(false));
+
+            ignoring(mockStringSpec).assertPojoCompatible(with(any(String.class)));
+
+        }});
         final String title = titleFacetViaTitleAnnotation.title(mockObjectAdapter);
         assertThat(title, is("titleElement1. titleElement3,titleElement2"));
     }
@@ -152,7 +170,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
     @Test
     public void testNoExplicitTitleAnnotations() {
 
-        facetFactory.process(new ProcessClassContext(Customer3.class, mockMethodRemover, facetedMethod));
+        facetFactory.process(ProcessClassContext
+                .forTesting(Customer3.class, mockMethodRemover, facetedMethod));
 
         Assert.assertNull(facetedMethod.getFacet(TitleFacet.class));
     }
@@ -201,11 +220,12 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
     }
 
-    @Ignore // to re-instate
+    @SuppressWarnings("unchecked")
     @Test
     public void titleAnnotatedMethodsSomeOfWhichReturnNulls() throws Exception {
 
-        facetFactory.process(new ProcessClassContext(Customer4.class, mockMethodRemover, facetedMethod));
+        facetFactory.process(ProcessClassContext
+                .forTesting(Customer4.class, mockMethodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(TitleFacet.class);
         final TitleFacetViaTitleAnnotation titleFacetViaTitleAnnotation = (TitleFacetViaTitleAnnotation) facet;
@@ -216,6 +236,33 @@ extends AbstractFacetFactoryJUnit4TestCase {
             {
                 allowing(mockObjectAdapter).getPojo();
                 will(returnValue(customer));
+
+                allowing(mockSpecificationLoader).specForType(String.class);
+                will(returnValue(Optional.of(mockStringSpec)));
+
+                allowing(mockStringSpec).getCorrespondingClass();
+                will(returnValue(String.class));
+
+                allowing(mockStringSpec).isParentedOrFreeCollection();
+                will(returnValue(false));
+
+                ignoring(mockStringSpec).assertPojoCompatible(with(any(String.class)));
+
+                allowing(mockSpecificationLoader).specForType(Integer.class);
+                will(returnValue(Optional.of(mockIntegerSpec)));
+
+                allowing(mockIntegerSpec).getCorrespondingClass();
+                will(returnValue(Integer.class));
+
+                allowing(mockIntegerSpec).isParentedOrFreeCollection();
+                will(returnValue(false));
+
+                allowing(mockIntegerSpec).getTitle(with(any(Predicate.class)), with(any(ManagedObject.class)));
+                will(returnValue("3"));
+
+                ignoring(mockIntegerSpec).assertPojoCompatible(with(any(Integer.class)));
+                ignoring(mockIntegerSpec).assertPojoCompatible(with(any(int.class)));
+
             }
         });
         final String title = titleFacetViaTitleAnnotation.title(mockObjectAdapter);

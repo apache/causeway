@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFacet;
 import org.apache.isis.core.metamodel.facets.object.navparent.annotation.NavigableParentTestSamples.DomainObjectA;
-import org.apache.isis.core.metamodel.facets.object.navparent.method.NavigableParentFacetMethod;
+import org.apache.isis.core.metamodel.facets.object.navparent.method.NavigableParentFacetViaGetterMethod;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class NavigableParentAnnotationFacetFactoryTest
@@ -65,13 +65,14 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
         final Class<?> domainClass = domainObject.getClass();
 
-        facetFactory.process(new ProcessClassContext(domainClass, mockMethodRemover, facetedMethod));
+        facetFactory.process(ProcessClassContext
+                .forTesting(domainClass, mockMethodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(NavigableParentFacet.class);
         Assert.assertNotNull(facet);
-        Assert.assertTrue(facet instanceof NavigableParentFacetMethod);
+        Assert.assertTrue(facet instanceof NavigableParentFacetViaGetterMethod);
 
-        final NavigableParentFacetMethod navigableParentFacetMethod = (NavigableParentFacetMethod) facet;
+        final NavigableParentFacetViaGetterMethod navigableParentFacetMethod = (NavigableParentFacetViaGetterMethod) facet;
         final Method parentMethod = domainClass.getMethod(parentMethodName);
 
         Assert.assertEquals(

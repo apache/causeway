@@ -14,7 +14,6 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License. */
-
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
 import java.lang.reflect.Method;
@@ -76,7 +75,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
             }
         });
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, method, mockMethodRemover,
+        facetFactory.process(ProcessMethodContext.forTesting(Customer.class, null, method, mockMethodRemover,
                 facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionPositionFacet.class);
@@ -112,7 +111,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
             }
         });
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, method, mockMethodRemover,
+        facetFactory.process(ProcessMethodContext.forTesting(Customer.class, null, method, mockMethodRemover,
                 facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionPositionFacet.class);
@@ -146,8 +145,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
                 }
             });
 
-            facetFactory.process(new ProcessMethodContext(Customer.class, null, method, mockMethodRemover,
-                    facetedMethod));
+            facetFactory.process(ProcessMethodContext
+                    .forTesting(Customer.class, null, method, mockMethodRemover, facetedMethod));
 
             Facet facet = facetedMethod.getFacet(CssClassFaFacet.class);
             assertThat(facet, is(notNullValue()));
@@ -181,8 +180,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
                 }
             });
 
-            facetFactory.process(new ProcessMethodContext(Customer.class, null, method, mockMethodRemover,
-                    facetedMethod));
+            facetFactory.process(ProcessMethodContext
+                    .forTesting(Customer.class, null, method, mockMethodRemover, facetedMethod));
 
             Facet facet = facetedMethod.getFacet(CssClassFaFacet.class);
             assertThat(facet, is(notNullValue()));

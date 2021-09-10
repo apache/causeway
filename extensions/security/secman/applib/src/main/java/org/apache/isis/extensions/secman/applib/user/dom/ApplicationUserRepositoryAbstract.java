@@ -23,8 +23,9 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import org.springframework.lang.Nullable;
 import javax.inject.Inject;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.eventbus.EventBusService;
@@ -37,12 +38,12 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.extensions.secman.applib.SecmanConfiguration;
-import org.apache.isis.extensions.secman.applib.user.spi.PasswordEncryptionService;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy;
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_lock;
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_unlock;
 import org.apache.isis.extensions.secman.applib.user.events.UserCreatedEvent;
+import org.apache.isis.extensions.secman.applib.user.spi.PasswordEncryptionService;
 import org.apache.isis.extensions.secman.applib.util.RegexReplacer;
 
 import lombok.NonNull;

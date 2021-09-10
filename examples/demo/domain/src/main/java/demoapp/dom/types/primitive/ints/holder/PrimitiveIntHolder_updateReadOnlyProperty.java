@@ -20,6 +20,7 @@ package demoapp.dom.types.primitive.ints.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
@@ -39,11 +40,12 @@ public class PrimitiveIntHolder_updateReadOnlyProperty {
 
     private final PrimitiveIntHolder holder;
 
-    public PrimitiveIntHolder act(int newValue) {
+    @MemberSupport public PrimitiveIntHolder act(final int newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
-    public int default0Act() {
+
+    @MemberSupport public int default0Act() {
         return holder.getReadOnlyProperty();
     }
 

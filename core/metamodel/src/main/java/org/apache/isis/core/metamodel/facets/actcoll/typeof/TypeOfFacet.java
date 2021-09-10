@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.actcoll.typeof;
 
 import java.lang.reflect.Method;
@@ -44,45 +43,45 @@ public interface TypeOfFacet extends SingleClassValueFacet {
     // -- FACTORIES
 
     static TypeOfFacet inferredFromArray(
-            final FacetHolder holder,
-            final Class<?> elementType) {
+            final Class<?> elementType,
+            final FacetHolder holder) {
         return new TypeOfFacetInferredFromArray(elementType, holder);
     }
 
     static TypeOfFacet inferredFromGenerics(
-            final FacetHolder holder,
-            final Class<?> elementType) {
+            final Class<?> elementType,
+            final FacetHolder holder) {
         return new TypeOfFacetInferredFromGenerics(elementType, holder);
     }
 
     static Optional<TypeOfFacet> inferFromParameterType(
-            final FacetHolder holder,
-            final Parameter param) {
+            final Parameter param,
+            final FacetHolder holder) {
 
         val paramType = param.getType();
 
         if (_Arrays.isArrayType(paramType)) {
             return _Arrays.inferComponentType(paramType)
-                    .map(elementType->inferredFromArray(holder, elementType));
+                    .map(elementType->inferredFromArray(elementType, holder));
         }
 
         return _Collections.inferElementType(param)
-                .map(elementType->inferredFromGenerics(holder, elementType));
+                .map(elementType->inferredFromGenerics(elementType, holder));
     }
 
     static Optional<TypeOfFacet> inferFromMethodReturnType(
-            final FacetHolder holder,
-            final Method method) {
+            final Method method,
+            final FacetHolder holder) {
 
         val returnType = method.getReturnType();
 
         if (_Arrays.isArrayType(returnType)) {
             return _Arrays.inferComponentType(returnType)
-                    .map(elementType->inferredFromArray(holder, elementType));
+                    .map(elementType->inferredFromArray(elementType, holder));
         }
 
         return _Collections.inferElementType(method)
-                .map(elementType->inferredFromGenerics(holder, elementType));
+                .map(elementType->inferredFromGenerics(elementType, holder));
     }
 
 

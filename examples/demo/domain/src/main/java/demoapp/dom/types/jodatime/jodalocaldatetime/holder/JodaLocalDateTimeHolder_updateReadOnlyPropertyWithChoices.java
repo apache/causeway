@@ -27,11 +27,13 @@ import org.joda.time.LocalDateTime;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import demoapp.dom.types.Samples;
 import lombok.RequiredArgsConstructor;
+
+import demoapp.dom.types.Samples;
 
 //tag::class[]
 @Action(
@@ -47,14 +49,16 @@ public class JodaLocalDateTimeHolder_updateReadOnlyPropertyWithChoices {
 
     private final JodaLocalDateTimeHolder holder;
 
-    public JodaLocalDateTimeHolder act(org.joda.time.LocalDateTime newValue) {
+    @MemberSupport public JodaLocalDateTimeHolder act(final org.joda.time.LocalDateTime newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
-    public org.joda.time.LocalDateTime default0Act() {
+
+    @MemberSupport public org.joda.time.LocalDateTime default0Act() {
         return holder.getReadOnlyProperty();
     }
-    public List<org.joda.time.LocalDateTime> choices0Act() {
+
+    @MemberSupport public List<org.joda.time.LocalDateTime> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }

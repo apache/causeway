@@ -52,14 +52,12 @@ public class ApplicationRole_delete {
 
     private final ApplicationRole holder;
 
-    @MemberSupport
-    public Collection<ApplicationRole> act() {
+    @MemberSupport public Collection<ApplicationRole> act() {
         applicationRoleRepository.deleteRole(holder);
         return applicationRoleRepository.allRoles();
     }
 
-    @MemberSupport
-    public String disableAct() {
+    @MemberSupport public String disableAct() {
         return applicationRoleRepository.isAdminRole(holder) ? "Cannot delete the admin role" : null;
     }
 

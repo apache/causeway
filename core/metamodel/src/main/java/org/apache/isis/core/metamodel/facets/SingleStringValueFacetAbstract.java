@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets;
 
 import java.util.Objects;
@@ -49,15 +48,6 @@ implements SingleStringValueFacet {
     @Override
     public String value() {
         return value;
-    }
-
-    @Override
-    protected String toStringValues() {
-        if (value == null) {
-            return "null";
-        } else {
-            return "\"" + value + "\"";
-        }
     }
 
     @Override

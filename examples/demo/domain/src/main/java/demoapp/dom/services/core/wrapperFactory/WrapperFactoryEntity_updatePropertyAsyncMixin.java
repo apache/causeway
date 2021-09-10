@@ -20,6 +20,7 @@ package demoapp.dom.services.core.wrapperFactory;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
@@ -42,11 +43,11 @@ public class WrapperFactoryEntity_updatePropertyAsyncMixin {
     private final WrapperFactoryEntity wrapperFactoryEntity;
 
 //tag::class[]
-    public WrapperFactoryEntity act(final String value) {
+    @MemberSupport public WrapperFactoryEntity act(final String value) {
         wrapperFactoryEntity.setPropertyAsyncMixin(value);
         return wrapperFactoryEntity;
     }
-    public String default0Act() {
+    @MemberSupport public String default0Act() {
         return wrapperFactoryEntity.getPropertyAsyncMixin();
     }
 }

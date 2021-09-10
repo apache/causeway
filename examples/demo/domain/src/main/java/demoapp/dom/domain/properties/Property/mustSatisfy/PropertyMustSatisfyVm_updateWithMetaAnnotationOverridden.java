@@ -20,6 +20,7 @@ package demoapp.dom.domain.properties.Property.mustSatisfy;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -38,7 +39,7 @@ public class PropertyMustSatisfyVm_updateWithMetaAnnotationOverridden {
     private final PropertyMustSatisfyVm propertyMustSatisfyVm;
 
 //tag::meta-annotation-overridden[]
-    public PropertyMustSatisfyVm act(
+    @MemberSupport public PropertyMustSatisfyVm act(
             @MustSatisfyOfWorkingAgeMetaAnnotation                  // <.>
             @Parameter(
                 mustSatisfy = OfRetirementAgeSpecification.class    // <.>
@@ -53,7 +54,7 @@ public class PropertyMustSatisfyVm_updateWithMetaAnnotationOverridden {
         return propertyMustSatisfyVm;
     }
 //end::meta-annotation-overridden[]
-    public Integer default0Act() {
+    @MemberSupport public Integer default0Act() {
         return propertyMustSatisfyVm.getCustomerAgePropertyUsingMetaAnnotationButOverridden();
     }
 

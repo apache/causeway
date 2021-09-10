@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted;
 
 import java.util.function.BiConsumer;
@@ -37,7 +36,7 @@ implements RenderedAdjustedFacet {
 
     private final int adjustBy;
 
-    public RenderedAdjustedFacetAbstract(int adjustBy, final FacetHolder holder) {
+    public RenderedAdjustedFacetAbstract(final int adjustBy, final FacetHolder holder) {
         super(type(), holder);
         this.adjustBy = adjustBy;
     }
@@ -48,17 +47,11 @@ implements RenderedAdjustedFacet {
     }
 
     @Override
-    protected String toStringValues() {
-        final int intValue = value();
-        return intValue == -1
-                ? "default"
-                : String.valueOf(intValue);
-    }
-
-    @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("adjustBy", adjustBy);
+        visitor.accept("adjustBy", adjustBy == -1
+                ? "default"
+                : String.valueOf(adjustBy));
     }
 
     @Override

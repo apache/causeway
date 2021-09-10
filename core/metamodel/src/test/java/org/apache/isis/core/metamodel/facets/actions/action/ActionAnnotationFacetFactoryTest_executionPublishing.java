@@ -22,6 +22,10 @@ import java.lang.reflect.Method;
 
 import org.junit.Test;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.commons.internal.base._Blackhole;
@@ -33,16 +37,12 @@ import org.apache.isis.core.metamodel.facets.members.publish.execution.Execution
 import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingActionFacetFromConfiguration;
 import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-
 import lombok.val;
 
 public class ActionAnnotationFacetFactoryTest_executionPublishing extends ActionAnnotationFacetFactoryTest {
 
     private void processExecutionPublishing(
-            ActionAnnotationFacetFactory facetFactory, ProcessMethodContext processMethodContext) {
+            final ActionAnnotationFacetFactory facetFactory, final ProcessMethodContext processMethodContext) {
         val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
         facetFactory.processExecutionPublishing(processMethodContext, actionIfAny);
     }
@@ -52,7 +52,8 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
 
         final Method actionMethod = findMethod(SomeHasInteractionId.class, "someAction");
 
-        processExecutionPublishing(facetFactory, new ProcessMethodContext(SomeHasInteractionId.class, null, actionMethod, mockMethodRemover, facetedMethod));
+        processExecutionPublishing(facetFactory, ProcessMethodContext
+                .forTesting(SomeHasInteractionId.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
         assertFalse(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));
 
@@ -69,7 +70,8 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
         facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
 
         // when
-        processExecutionPublishing(facetFactory, new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
+        processExecutionPublishing(facetFactory, ProcessMethodContext
+                .forTesting(ActionAnnotationFacetFactoryTest.Customer.class, null,
                 actionMethod, mockMethodRemover, facetedMethod));
 
         // then
@@ -86,7 +88,8 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
         facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.IDEMPOTENT, facetedMethod) {});
 
         // when
-        processExecutionPublishing(facetFactory, new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
+        processExecutionPublishing(facetFactory, ProcessMethodContext
+                .forTesting(ActionAnnotationFacetFactoryTest.Customer.class, null,
                 actionMethod, mockMethodRemover, facetedMethod));
 
         // then
@@ -104,7 +107,8 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
         final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
         // when
-        processExecutionPublishing(facetFactory, new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
+        processExecutionPublishing(facetFactory, ProcessMethodContext
+                .forTesting(ActionAnnotationFacetFactoryTest.Customer.class, null,
                 actionMethod, mockMethodRemover, facetedMethod));
 
     }
@@ -117,7 +121,8 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
         final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
         // when
-        processExecutionPublishing(facetFactory, new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
+        processExecutionPublishing(facetFactory, ProcessMethodContext
+                .forTesting(ActionAnnotationFacetFactoryTest.Customer.class, null,
                 actionMethod, mockMethodRemover, facetedMethod));
 
         // then
@@ -136,7 +141,8 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
         allowingPublishingConfigurationToReturn(PublishingPolicies.ActionPublishingPolicy.ALL);
 
         // when
-        processExecutionPublishing(facetFactory, new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
+        processExecutionPublishing(facetFactory, ProcessMethodContext
+                .forTesting(ActionAnnotationFacetFactoryTest.Customer.class, null,
                 actionMethod, mockMethodRemover, facetedMethod));
 
         // then
@@ -159,7 +165,8 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
 
         facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
 
-        processExecutionPublishing(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
+        processExecutionPublishing(facetFactory, ProcessMethodContext
+                .forTesting(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
         assertFalse(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));
 
@@ -184,7 +191,8 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
         facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.IDEMPOTENT, facetedMethod) {});
 
         // when
-        processExecutionPublishing(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
+        processExecutionPublishing(facetFactory, ProcessMethodContext
+                .forTesting(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
         // then
         final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
@@ -207,7 +215,8 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
         allowingPublishingConfigurationToReturn(PublishingPolicies.ActionPublishingPolicy.IGNORE_QUERY_ONLY);
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        processExecutionPublishing(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
+        processExecutionPublishing(facetFactory, ProcessMethodContext
+                .forTesting(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
     }
 
     @Test
@@ -222,7 +231,8 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
         allowingPublishingConfigurationToReturn(PublishingPolicies.ActionPublishingPolicy.NONE);
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        processExecutionPublishing(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
+        processExecutionPublishing(facetFactory, ProcessMethodContext
+                .forTesting(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
         assertFalse(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));
 
@@ -246,7 +256,8 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
         allowingPublishingConfigurationToReturn(PublishingPolicies.ActionPublishingPolicy.ALL);
 
         // when
-        processExecutionPublishing(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
+        processExecutionPublishing(facetFactory, ProcessMethodContext
+                .forTesting(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
         // then
         final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
@@ -273,7 +284,8 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
         allowingPublishingConfigurationToReturn(PublishingPolicies.ActionPublishingPolicy.NONE);
 
         // when
-        processExecutionPublishing(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
+        processExecutionPublishing(facetFactory, ProcessMethodContext
+                .forTesting(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
         // then
         final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
@@ -298,7 +310,8 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
         allowingPublishingConfigurationToReturn(PublishingPolicies.ActionPublishingPolicy.NONE);
 
         // when
-        processExecutionPublishing(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
+        processExecutionPublishing(facetFactory, ProcessMethodContext
+                .forTesting(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
         // then
         assertFalse(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));

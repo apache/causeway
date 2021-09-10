@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets;
 
 import java.util.function.BiConsumer;
@@ -56,11 +55,6 @@ implements WhereValueFacet {
     @Override
     public Where where() {
         return where;
-    }
-
-    @Override
-    protected String toStringValues() {
-        return super.toStringValues() + "; where =" + where.getFriendlyName();
     }
 
     @Override

@@ -33,10 +33,11 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.value.LocalResourcePath;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.isis.localresourcepaths.holder.IsisLocalResourcePathHolder2;
 import lombok.Getter;
 import lombok.Setter;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.types.isis.localresourcepaths.holder.IsisLocalResourcePathHolder2;
 
 //tag::class[]
 @XmlRootElement(name = "root")

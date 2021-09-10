@@ -20,6 +20,7 @@ package demoapp.dom.types.primitive.shorts.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
@@ -39,11 +40,12 @@ public class PrimitiveShortHolder_updateReadOnlyProperty {
 
     private final PrimitiveShortHolder holder;
 
-    public PrimitiveShortHolder act(short newValue) {
+    @MemberSupport public PrimitiveShortHolder act(final short newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
-    public short default0Act() {
+
+    @MemberSupport public short default0Act() {
         return holder.getReadOnlyProperty();
     }
 

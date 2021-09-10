@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.Objects;
 
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 
 import lombok.experimental.UtilityClass;
@@ -32,7 +33,7 @@ class _MixedInMemberNamingStrategy {
      *              for mixin main methods
      */
     String determineNameFrom(final ObjectActionDefault mixinActionAsRegular) {
-        return StringExtensions.asCapitalizedName(suffix(mixinActionAsRegular));
+        return _Strings.capitalize(suffix(mixinActionAsRegular));
     }
 
     /**

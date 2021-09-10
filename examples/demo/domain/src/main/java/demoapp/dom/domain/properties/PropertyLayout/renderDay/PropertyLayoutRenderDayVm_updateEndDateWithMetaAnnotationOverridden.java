@@ -22,6 +22,7 @@ import java.time.LocalDate;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -42,7 +43,7 @@ public class PropertyLayoutRenderDayVm_updateEndDateWithMetaAnnotationOverridden
     private final PropertyLayoutRenderDayVm propertyLayoutRenderDayVm;
 
 //tag::meta-annotation-overridden[]
-    public PropertyLayoutRenderDayVm act(
+    @MemberSupport public PropertyLayoutRenderDayVm act(
             @RenderDayMetaAnnotationStartDateInclusive          // <.>
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(
@@ -56,7 +57,7 @@ public class PropertyLayoutRenderDayVm_updateEndDateWithMetaAnnotationOverridden
         return propertyLayoutRenderDayVm;
     }
 //end::meta-annotation-overridden[]
-    public LocalDate default0Act() {
+    @MemberSupport public LocalDate default0Act() {
         return propertyLayoutRenderDayVm.getEndDateUsingMetaAnnotationButOverridden();
     }
 
