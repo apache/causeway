@@ -26,6 +26,7 @@ import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.to.HasLinks
 import org.apache.isis.client.kroviz.to.Property
 import org.apache.isis.client.kroviz.to.Relation
+import org.apache.isis.client.kroviz.to.Represention
 import org.apache.isis.client.kroviz.ui.core.UiManager
 import org.apache.isis.client.kroviz.utils.StringUtils
 
@@ -40,7 +41,7 @@ object LinkTreeDiagram {
             val root = tree.root
             pc.code += toPumlCode(root, 1)
         }
-        pc.mindmap()
+        pc.toMindmap()
         return pc.code
     }
 
@@ -51,18 +52,16 @@ object LinkTreeDiagram {
         val pc = PumlCode()
         if (le != null) {
             val title = StringUtils.shortTitle(url, protocolHostPort)
-            val depth = "*".repeat(level)
-            pc.add(depth).add(":")
             pc.addStereotype(le.type)
             pc.addLink(url, title)
             pc.addHorizontalLine()
             pc.add(linkInfo(le))
-            pc.addLine(";")
+            pc.toMindmapNode(level)
             node.children.forEach {
                 val childCode = toPumlCode(it, level + 1)
                 pc.add(childCode)
             }
-            if (le.type == "property-description") {
+            if (le.type == Represention.PROPERTY_DESCRIPTION.type) {
                 val pdCode = propertyDescriptionInfo(le, level + 1)
                 pc.add(pdCode)
             }
@@ -86,19 +85,19 @@ object LinkTreeDiagram {
                 }
             }
         }
+        pc.trim()
         return pc.code
     }
 
-    private fun propertyDescriptionInfo(logEntry: LogEntry, level: Int) : String {
+    private fun propertyDescriptionInfo(logEntry: LogEntry, level: Int): String {
         val pc = PumlCode()
         val obj = logEntry.obj
         if (obj != null) {
-            val depth = "*".repeat(level)
-            pc.add(depth).add(":")
             val ets = (obj as Property).extensions!!
             pc.addLine("friendlyName: " + ets.friendlyName)
-            pc.addLine("descriptions: " + ets.description)
-            pc.addLine(";")
+            pc.addHorizontalLine()
+            pc.add("descriptions: " + ets.description)
+            pc.toMindmapNode(level)
         }
         return pc.code
     }

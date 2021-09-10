@@ -55,8 +55,14 @@ class PumlCode() {
         return this
     }
 
-    fun mindmap(): PumlCode {
+    fun toMindmap(): PumlCode {
         code += "@startmindmap$NL" + code + "@endmindmap$NL"
+        return this
+    }
+
+    fun toMindmapNode(level:Int): PumlCode {
+        val depth = "*".repeat(level)
+        code = depth + ":" + code + ";" + NL
         return this
     }
 
@@ -80,4 +86,12 @@ class PumlCode() {
         code += "----" + NL
         return this
     }
+
+    fun trim(): PumlCode {
+        if (code.endsWith(NL)) {
+            code = code.dropLast(1)
+        }
+        return this
+    }
+
 }

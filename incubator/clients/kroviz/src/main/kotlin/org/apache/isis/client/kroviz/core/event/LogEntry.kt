@@ -180,8 +180,8 @@ data class LogEntry(
             }
         }
         if (type == "") {
-            console.log("[LE.initType]")
-            console.log(this)
+            val stringList = url.split("/")
+            type = stringList.last()
         }
     }
 
