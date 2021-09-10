@@ -18,6 +18,8 @@
  */
 package org.apache.isis.testdomain.domainmodel;
 
+import java.util.Map;
+
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.Test;
@@ -35,10 +37,11 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.badnoactenforce.Configuration_usingInvalidDomain_noActionEnforced;
-import org.apache.isis.testdomain.model.badnoactenforce.InvalidOrphanedActionSupportNoActionEnforced;
+import org.apache.isis.testdomain.model.badnoactenforce.InvalidOrphanedActionSupportNoAnnotationEnforced;
 import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
 
 import lombok.val;
@@ -58,7 +61,7 @@ import lombok.val;
     IsisPresets.SilenceMetaModel,
     IsisPresets.SilenceProgrammingModel
 })
-class DomainModelTest_usingBadDomain_noActionEnforced {
+class DomainModelTest_usingBadDomain_noAnnotationEnforced {
 
     @Inject private IsisConfiguration configuration;
     @Inject private IsisSystemEnvironment isisSystemEnvironment;
@@ -84,8 +87,11 @@ class DomainModelTest_usingBadDomain_noActionEnforced {
 
         assertThrows(DomainModelException.class, validateDomainModel::throwIfInvalid);
         validateDomainModel.assertAnyFailuresContaining(
-                Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedActionSupportNoActionEnforced.class)),
-                "is assumed to support");
+                Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedActionSupportNoAnnotationEnforced.class)),
+                ProgrammingModelConstants.Validation.ORPHANED_METHOD
+                .getMessage(Map.of(
+                        "type", InvalidOrphanedActionSupportNoAnnotationEnforced.class.getName(),
+                        "member", "hideOrphaned()")));
     }
 
 

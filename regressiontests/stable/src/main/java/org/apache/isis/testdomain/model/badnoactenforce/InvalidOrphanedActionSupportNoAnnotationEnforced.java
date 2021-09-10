@@ -22,7 +22,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 
 @DomainObject(nature = Nature.VIEW_MODEL)
-public class InvalidOrphanedActionSupportNoActionEnforced {
+public class InvalidOrphanedActionSupportNoAnnotationEnforced {
 
     // should fail
     public boolean hideOrphaned() {

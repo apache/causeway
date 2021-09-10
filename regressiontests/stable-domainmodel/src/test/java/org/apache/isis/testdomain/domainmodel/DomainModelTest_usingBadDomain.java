@@ -19,6 +19,7 @@
 package org.apache.isis.testdomain.domainmodel;
 
 import java.lang.annotation.Annotation;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -50,6 +51,7 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.bad.AmbiguousMixinAnnotations;
@@ -116,10 +118,10 @@ class DomainModelTest_usingBadDomain {
 
         validator.assertAnyFailuresContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedActionSupport.class)),
-                "InvalidOrphanedActionSupport#hideMe(): "
-                + "is assumed to support a property, collection or action. "
-                + "Unmet constraint(s): unsupported method signature or orphaned "
-                + "(not associated with a member)");
+                ProgrammingModelConstants.Validation.ORPHANED_METHOD
+                .getMessage(Map.of(
+                        "type", InvalidOrphanedActionSupport.class.getName(),
+                        "member", "hideMe()")));
     }
 
 
@@ -132,10 +134,10 @@ class DomainModelTest_usingBadDomain {
 
         validator.assertAnyFailuresContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedPropertySupport.class)),
-                "InvalidOrphanedPropertySupport#hideMe(): "
-                + "is assumed to support a property, collection or action. "
-                + "Unmet constraint(s): unsupported method signature or orphaned "
-                + "(not associated with a member)");
+                ProgrammingModelConstants.Validation.ORPHANED_METHOD
+                .getMessage(Map.of(
+                        "type", InvalidOrphanedPropertySupport.class.getName(),
+                        "member", "hideMe()")));
     }
 
     @Test
@@ -147,10 +149,10 @@ class DomainModelTest_usingBadDomain {
 
         validator.assertAnyFailuresContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedCollectionSupport.class)),
-                "InvalidOrphanedCollectionSupport#hideMe(): "
-                + "is assumed to support a property, collection or action. "
-                + "Unmet constraint(s): unsupported method signature or orphaned "
-                + "(not associated with a member)");
+                ProgrammingModelConstants.Validation.ORPHANED_METHOD
+                .getMessage(Map.of(
+                        "type", InvalidOrphanedCollectionSupport.class.getName(),
+                        "member", "hideMe()")));
     }
 
     @Test

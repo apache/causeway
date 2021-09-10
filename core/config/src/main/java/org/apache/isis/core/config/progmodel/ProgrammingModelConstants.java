@@ -24,6 +24,7 @@ import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.Predicate;
@@ -41,6 +42,7 @@ import org.apache.isis.applib.annotation.ObjectLifecycle;
 import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.Getter;
@@ -322,7 +324,12 @@ public final class ProgrammingModelConstants {
         ;
         private final String template;
         public String getMessage(final Identifier featureIdentifier) {
-            return processMessageTemplate(template, featureIdentifier);
+            return getMessage(Map.of(
+                    "type", featureIdentifier.getLogicalType().getClassName(),
+                    "member", featureIdentifier.getMemberLogicalName()));
+        }
+        public String getMessage(final Map<String, String> templateVars) {
+            return processMessageTemplate(template, templateVars);
         }
     }
 
@@ -347,10 +354,11 @@ public final class ProgrammingModelConstants {
 
     private static String processMessageTemplate(
             final String template,
-            final Identifier identifier) {
-        return template
-                .replace("${type}", identifier.getLogicalType().getClassName())
-                .replace("${member}", identifier.getMemberLogicalName());
+            final Map<String, String> templateVars) {
+
+        val templateRef = _Refs.stringRef(template);
+        templateVars.forEach((k, v)->templateRef.update(str->str.replace("${" + k + "}", v)));
+        return templateRef.getValue();
     }
 
 
