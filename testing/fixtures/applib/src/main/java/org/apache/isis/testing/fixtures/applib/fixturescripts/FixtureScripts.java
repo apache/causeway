@@ -33,6 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Domain;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
@@ -351,7 +352,7 @@ public class FixtureScripts {
                 ? choices.iterator().next()
                 : null;
     }
-    @MemberSupport private String defaultFromFixtureScriptsSpecification() {
+    @Domain.Exclude private String defaultFromFixtureScriptsSpecification() {
         Class<? extends FixtureScript> defaultScript = specification.getRunScriptDefaultScriptClass();
         return defaultScript != null
                 ? findFixtureScriptNameFor(defaultScript)

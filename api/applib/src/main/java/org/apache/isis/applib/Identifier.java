@@ -19,6 +19,7 @@
 package org.apache.isis.applib;
 
 import java.io.Serializable;
+import java.lang.reflect.Method;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -30,6 +31,7 @@ import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.reflection._Reflect;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -75,6 +77,13 @@ implements
             final String propertyOrCollectionName) {
         return new Identifier(typeIdentifier, propertyOrCollectionName, Can.empty(),
                 Type.PROPERTY_OR_COLLECTION);
+    }
+
+    /** for reporting orphaned methods */
+    public static Identifier methodIdentifier(
+            final LogicalType typeIdentifier,
+            final Method method) {
+        return actionIdentifier(typeIdentifier, _Reflect.methodToShortString(method), method.getParameterTypes());
     }
 
     public static Identifier actionIdentifier(

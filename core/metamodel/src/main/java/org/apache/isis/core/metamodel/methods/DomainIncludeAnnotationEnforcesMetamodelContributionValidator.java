@@ -22,6 +22,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Optional;
 import java.util.TreeSet;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -65,32 +66,33 @@ extends MetaModelVisitingValidatorAbstract {
     @Override
     public void validate(final ObjectSpecification spec) {
 
-        if(spec.isManagedBean()
-                || spec.isAbstract()) {
+        if(!(spec instanceof ObjectSpecificationAbstract)
+                || spec.isAbstract()
+                || spec.getBeanSort().isManagedBeanNotContributing()
+                || spec.isValue()) {
             return;
         }
 
         final Class<?> type = spec.getCorrespondingClass();
 
+        // methods picked up by the framework
         // assuming 'weak' equality, treating overwritten and overriding methods as same
-        val recognizedMemberMethods = new TreeSet<Method>(_Reflect::methodWeakCompare);
+        val memberMethods = new TreeSet<Method>(_Reflect::methodWeakCompare);
+        val supportMethods = new TreeSet<Method>(_Reflect::methodWeakCompare);
 
         spec
         .streamAnyActions(MixedIn.EXCLUDED)
         .map(ObjectMemberAbstract.class::cast)
         .map(ObjectMemberAbstract::getFacetedMethod)
         .map(FacetedMethod::getMethod)
-        .forEach(recognizedMemberMethods::add);
+        .forEach(memberMethods::add);
 
         spec
         .streamAssociations(MixedIn.EXCLUDED)
         .map(ObjectMemberAbstract.class::cast)
         .map(ObjectMemberAbstract::getFacetedMethod)
         .map(FacetedMethod::getMethod)
-        .forEach(recognizedMemberMethods::add);
-
-        // support methods known to the meta-model
-        val recognizedSupportMethods = new TreeSet<Method>(_Reflect::methodWeakCompare);
+        .forEach(memberMethods::add);
 
         spec
         .streamFacetHolders()
@@ -101,10 +103,9 @@ extends MetaModelVisitingValidatorAbstract {
         .map(ImperativeFacet.class::cast)
         .map(ImperativeFacet::getMethods)
         .flatMap(Can::stream)
-        .forEach(recognizedSupportMethods::add);
+        .forEach(supportMethods::add);
 
-        // methods intended to be included with the meta-model
-        val notRecognizedMethods = _Sets.<Method>newHashSet();
+        val methodsIntendedToBeIncludedButNotPickedUp = _Sets.<Method>newHashSet();
 
         classCache
         // methods intended to be included with the meta-model but missing
@@ -113,31 +114,34 @@ extends MetaModelVisitingValidatorAbstract {
                 "domain-include",
                 method->_Annotations.synthesizeInherited(method, Domain.Include.class).isPresent())
         // filter away those that are recognized
-        .filter(intendedMethod->!recognizedSupportMethods.contains(intendedMethod))
-        .filter(intendedMethod->!recognizedMemberMethods.contains(intendedMethod))
-        .forEach(notRecognizedMethods::add);
+        .filter(Predicate.not(memberMethods::contains))
+        .filter(Predicate.not(supportMethods::contains))
+        .forEach(methodsIntendedToBeIncludedButNotPickedUp::add);
 
         // find reasons about why these are not recognized
-        notRecognizedMethods.forEach(notRecognizedMethod->{
-            final List<String> unmetContraints =
-                    unmetContraints((ObjectSpecificationAbstract) spec, notRecognizedMethod);
+        methodsIntendedToBeIncludedButNotPickedUp
+        .forEach(notPickedUpMethod->{
+            val unmetContraints =
+                    unmetContraints((ObjectSpecificationAbstract) spec, notPickedUpMethod)
+                    .stream()
+                    .collect(Collectors.joining("; "));
 
             //FIXME[ISIS-2774] - update message to a more generic one
-            String messageFormat = "%s#%s: has annotation @%s, is assumed to support "
-                    + "a property, collection or action. Unmet constraint(s): %s";
-            ValidationFailure.raiseFormatted(
-                    spec,
-                    messageFormat,
+            ValidationFailure.raiseFormatted(spec,
+                    "%s#%s: has annotation @%s, is assumed to support "
+                            + "a property, collection or action. Unmet constraint(s): %s",
                     spec.getFeatureIdentifier().getClassName(),
-                    _Reflect.methodToShortString(notRecognizedMethod),
+                    _Reflect.methodToShortString(notPickedUpMethod),
                     "Domain.Include",
-                    unmetContraints.stream()
-                    .collect(Collectors.joining("; ")));
+                    unmetContraints);
         });
+
+        _OrphanedSupportingMethodValidator.validate((ObjectSpecificationAbstract)spec,
+                supportMethods, memberMethods, methodsIntendedToBeIncludedButNotPickedUp);
 
     }
 
-    // -- VALIDATION LOGIC
+    // -- HELPER - VALIDATION LOGIC
 
     private List<String> unmetContraints(
             final ObjectSpecificationAbstract spec,
@@ -156,5 +160,7 @@ extends MetaModelVisitingValidatorAbstract {
         return unmetContraints;
 
     }
+
+
 
 }

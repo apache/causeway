@@ -127,7 +127,6 @@ import org.apache.isis.core.metamodel.facets.value.url.URLValueFacetUsingSemanti
 import org.apache.isis.core.metamodel.facets.value.uuid.UUIDValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.methods.DomainIncludeAnnotationEnforcesMetamodelContributionValidator;
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
-import org.apache.isis.core.metamodel.methods.OrphanedSupportingMethodValidator;
 import org.apache.isis.core.metamodel.postprocessors.DeriveMixinMembersPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.all.DeriveDescribedAsFromTypePostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.all.i18n.SynthesizeObjectNamingPostProcessor;
@@ -378,7 +377,6 @@ extends ProgrammingModelAbstract {
         val mmc = getMetaModelContext();
 
         addValidator(new DomainIncludeAnnotationEnforcesMetamodelContributionValidator(mmc));
-        addValidator(new OrphanedSupportingMethodValidator(mmc));
         addValidator(new TitlesAndTranslationsValidator(mmc));  // should this instead be a post processor, alongside TranslationPostProcessor ?
         addValidator(new ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator(mmc));
         addValidator(new ActionOverloadingValidator(mmc));

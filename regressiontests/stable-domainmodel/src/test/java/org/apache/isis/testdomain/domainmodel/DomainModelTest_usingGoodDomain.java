@@ -23,6 +23,7 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -71,6 +72,7 @@ import org.apache.isis.testdomain.model.good.ElementTypeConcrete;
 import org.apache.isis.testdomain.model.good.ElementTypeInterface;
 import org.apache.isis.testdomain.model.good.ProperChoicesWhenChoicesFrom;
 import org.apache.isis.testdomain.model.good.ProperElementTypeVm;
+import org.apache.isis.testdomain.model.good.ProperFullyImpl;
 import org.apache.isis.testdomain.model.good.ProperInterface2;
 import org.apache.isis.testdomain.model.good.ProperMemberInheritanceInterface;
 import org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingAbstract;
@@ -131,6 +133,14 @@ class DomainModelTest_usingGoodDomain {
         }
         System.out.println("==============");
     }
+
+    private DomainObjectTesterFactory testerFactory;;
+
+    @BeforeEach
+    void setUp() {
+        testerFactory = new DomainObjectTesterFactory(serviceInjector);
+    }
+
 
     @Test
     void goodDomain_shouldPassValidation() {
@@ -205,9 +215,18 @@ class DomainModelTest_usingGoodDomain {
 
     }
 
+    @Test
+    void fullyAbstractObject_whenImplemented_shouldBeSupported() {
+        val tester = testerFactory.objectTester(ProperFullyImpl.class);
+        tester.assertTitle("title");
+        tester.assertIcon("icon");
+        tester.assertCssClass("css");
+        tester.assertLayout("layout");
+    }
+
     @ParameterizedTest
     @MethodSource("provideProperMemberInheritanceTypes")
-    void titleAndIconName_shouldBeInheritable(final Class<?> type) {
+    void titleAndIconName_shouldBeInheritable(final Class<?> type) throws Exception {
 
         val spec = specificationLoader.specForTypeElseFail(type);
 
@@ -217,9 +236,16 @@ class DomainModelTest_usingGoodDomain {
         val iconFacet = spec.getFacet(IconFacet.class);
         assertNotNull(iconFacet);
 
-        val properMemberInheritance = new ProperMemberInheritance_usingAbstract();
-        assertEquals(properMemberInheritance.title(), titleService.titleOf(properMemberInheritance));
-        assertEquals(properMemberInheritance.iconName(), titleService.iconNameOf(properMemberInheritance));
+        if(!spec.isAbstract()) {
+            val instance = type.getDeclaredConstructor().newInstance();
+            assertEquals("inherited title", titleService.titleOf(instance));
+            assertEquals("inherited icon", titleService.iconNameOf(instance));
+
+            val domainObject = ManagedObject.of(spec, instance);
+            assertEquals("inherited title", titleFacet.title(domainObject));
+            assertEquals("inherited icon", iconFacet.iconName(domainObject));
+        }
+
     }
 
     @ParameterizedTest
@@ -440,8 +466,6 @@ class DomainModelTest_usingGoodDomain {
     @Test
     void viewmodelWithEncapsulatedMembers() {
 
-        val testerFactory = new DomainObjectTesterFactory(serviceInjector);
-
         // OBJECT
 
         val objectSpec = specificationLoader.specForTypeElseFail(ViewModelWithEncapsulatedMembers.class);
@@ -508,8 +532,6 @@ class DomainModelTest_usingGoodDomain {
 
     @Test
     void viewmodelWithAnnotationOptional_usingPrivateSupport() {
-
-        val testerFactory = new DomainObjectTesterFactory(serviceInjector);
 
         // OBJECT
 

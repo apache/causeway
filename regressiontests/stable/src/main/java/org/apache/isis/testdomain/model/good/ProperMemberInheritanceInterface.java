@@ -27,11 +27,10 @@ import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Title;
 
 public interface ProperMemberInheritanceInterface {
 
-    @Title
+    @ObjectSupport
     default String title() {
         return "inherited title";
     }

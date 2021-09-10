@@ -315,10 +315,14 @@ public final class ProgrammingModelConstants {
     public static enum Validation {
         CONFLICTING_TITLE_STRATEGIES(
                 "${type} has title() method with @Title annotation, which is not allowed; "
-                + "consider either removing the @Title annotation or renaming the method");
+                + "consider either removing the @Title annotation or renaming the method"),
+        ORPHANED_METHOD("${type}#${member}: is public, but orphaned (was not picked up by the framework); "
+                + "reporting orphans, because the class is setup for member introspection, "
+                + "without enforcing annotations")
+        ;
         private final String template;
-        public String getMessage(final Identifier identifier) {
-            return processMessageTemplate(template, identifier);
+        public String getMessage(final Identifier featureIdentifier) {
+            return processMessageTemplate(template, featureIdentifier);
         }
     }
 
@@ -344,7 +348,9 @@ public final class ProgrammingModelConstants {
     private static String processMessageTemplate(
             final String template,
             final Identifier identifier) {
-        return template.replace("${type}", identifier.getLogicalType().getClassName());
+        return template
+                .replace("${type}", identifier.getLogicalType().getClassName())
+                .replace("${member}", identifier.getMemberLogicalName());
     }
 
 

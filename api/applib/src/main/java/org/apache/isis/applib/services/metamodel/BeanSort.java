@@ -89,8 +89,13 @@ public enum BeanSort {
         return this == MANAGED_BEAN_CONTRIBUTING;
     }
 
+    public boolean isManagedBeanNotContributing() {
+        return this == MANAGED_BEAN_NOT_CONTRIBUTING;
+    }
+
     public boolean isManagedBean() {
-        return this == MANAGED_BEAN_CONTRIBUTING || this == MANAGED_BEAN_NOT_CONTRIBUTING;
+        return this == MANAGED_BEAN_CONTRIBUTING
+                || this == MANAGED_BEAN_NOT_CONTRIBUTING;
     }
 
     public boolean isMixin() {

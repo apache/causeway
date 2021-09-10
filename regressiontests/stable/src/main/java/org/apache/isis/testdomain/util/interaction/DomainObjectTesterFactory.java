@@ -34,6 +34,10 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
+import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacet;
+import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.CollectionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
@@ -56,6 +60,14 @@ import lombok.val;
 public class DomainObjectTesterFactory {
 
     private final @NonNull ServiceInjector serviceInjector;
+
+    public <T> ObjectTester<T> objectTester(
+            final Class<T> domainObjectType) {
+        val tester = serviceInjector.injectServicesInto(
+                new ObjectTester<T>(domainObjectType));
+        tester.init();
+        return tester;
+    }
 
     public <T> ActionTester<T> actionTester(
             final Class<T> domainObjectType,
@@ -84,6 +96,48 @@ public class DomainObjectTesterFactory {
         return tester;
     }
 
+    // -- OBJECT TESTER
+
+    public static class ObjectTester<T>
+    extends Tester<T> {
+
+        protected ObjectTester(final @NonNull Class<T> domainObjectType) {
+            super(domainObjectType);
+        }
+
+        public void assertTitle(final @Nullable String expectedResult) {
+            assertEquals(expectedResult,
+                    super.objectSpecification.getTitleService().titleOf(vm.getPojo()));
+            assertEquals(expectedResult,
+                    super.objectSpecification.lookupFacet(TitleFacet.class)
+                    .map(titleFacet->titleFacet.title(vm))
+                    .orElse(null));
+        }
+
+        public void assertIcon(final @Nullable String expectedResult) {
+            assertEquals(expectedResult,
+                    super.objectSpecification.getTitleService().iconNameOf(vm.getPojo()));
+            assertEquals(expectedResult,
+                    super.objectSpecification.lookupFacet(IconFacet.class)
+                    .map(iconFacet->iconFacet.iconName(vm))
+                    .orElse(null));
+        }
+
+        public void assertCssClass(final @Nullable String expectedResult) {
+            assertEquals(expectedResult,
+                    super.objectSpecification.lookupFacet(CssClassFacet.class)
+                    .map(cssClassFacet->cssClassFacet.cssClass(vm))
+                    .orElse(null));
+        }
+
+        public void assertLayout(final @Nullable String expectedResult) {
+            assertEquals(expectedResult,
+                    super.objectSpecification.lookupFacet(LayoutFacet.class)
+                    .map(layoutFacet->layoutFacet.layout(vm))
+                    .orElse(null));
+        }
+
+    }
 
     // -- ACTION TESTER
 
@@ -259,32 +313,26 @@ public class DomainObjectTesterFactory {
 
     // -- COMMON ABSTRACT MEMBER TESTER
 
-    private static abstract class MemberTester<T> {
+    private static abstract class MemberTester<T>
+    extends Tester<T>{
 
-        @Inject protected SpecificationLoader specificationLoader;
-        @Inject protected InteractionService interactionService;
-        @Inject protected FactoryService factoryService;
-
-        @Getter private final Class<T> domainObjectType;
         @Getter private final String memberName;
         private final String memberSort;
 
-        @Getter private ObjectSpecification objectSpecification;
         private Optional<? extends ManagedMember> managedMemberIfAny;
 
         protected MemberTester(
                 final @NonNull Class<T> domainObjectType,
                 final @NonNull String memberName,
                 final @NonNull String memberSort) {
-
-            this.domainObjectType = domainObjectType;
+            super(domainObjectType);
             this.memberName = memberName;
             this.memberSort = memberSort;
         }
 
+        @Override
         protected final MemberTester<T> init() {
-            this.objectSpecification = specificationLoader.specForTypeElseFail(domainObjectType);
-            val vm = ManagedObject.of(objectSpecification, factoryService.viewModel(domainObjectType));
+            super.init();
             this.managedMemberIfAny = startInteractionOn(vm);
             return this;
         }
@@ -399,5 +447,28 @@ public class DomainObjectTesterFactory {
 
     }
 
+    private static abstract class Tester<T> {
+
+        @Inject protected SpecificationLoader specificationLoader;
+        @Inject protected InteractionService interactionService;
+        @Inject protected FactoryService factoryService;
+
+        @Getter private final Class<T> domainObjectType;
+
+        @Getter private ObjectSpecification objectSpecification;
+        protected ManagedObject vm;
+
+        protected Tester(
+                final @NonNull Class<T> domainObjectType) {
+            this.domainObjectType = domainObjectType;
+        }
+
+        protected Tester<T> init() {
+            this.objectSpecification = specificationLoader.specForTypeElseFail(domainObjectType);
+            this.vm = ManagedObject.of(objectSpecification, factoryService.viewModel(domainObjectType));
+            return this;
+        }
+
+    }
 
 }

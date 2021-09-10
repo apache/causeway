@@ -28,63 +28,25 @@ import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
-import lombok.Getter;
-import lombok.Setter;
+abstract class ProperFullyAbstract {
 
-abstract class ProperMemberInheritanceAbstract {
-
-    @ObjectSupport
-    public String title() {
-        return "inherited title";
-    }
-
-    @ObjectSupport
-    public String iconName() {
-        return "inherited icon";
-    }
-
-    @ObjectSupport
-    public String cssClass(){
-        return "another-class";
-    }
-
-    @ObjectSupport
-    public String layout(){
-        return "layout";
-    }
+    @ObjectSupport public abstract String title();
+    @ObjectSupport public abstract String iconName();
+    @ObjectSupport public abstract String cssClass();
+    @ObjectSupport public abstract String layout();
 
     @Action
     @ActionLayout(named = "foo", describedAs = "bar")
-    public void sampleAction() {
-    }
+    public abstract void sampleAction();
 
     @Property
     @PropertyLayout(named = "foo", describedAs = "bar")
-    @Getter @Setter
-    private String sampleProperty;
+    public abstract String getSampleProperty();
+    public abstract void setSampleProperty(String sampleProperty);
 
     @Collection
     @CollectionLayout(named = "foo", describedAs = "bar")
-    @Getter @Setter
-    private List<String> sampleCollection;
-
-    // -- OVERRIDING TESTS
-
-    @Action
-    @ActionLayout(named = "foo", describedAs = "bar")
-    public void sampleActionOverride() {
-    }
-
-    //FIXME[ISIS-2774] method overloading is not allowed - MM validation must fail, but currently does not?
-    // move this to the 'bad' domain and check for validation failures
-//    @Action
-//    @ActionLayout(named = "foo", describedAs = "bar")
-//    public void sampleActionOverride(String x) {
-//    }
-
-    @Property
-    @PropertyLayout(named = "foo", describedAs = "bar")
-    @Getter @Setter
-    private String samplePropertyOverride;
+    public abstract List<String> getSampleCollection();
+    public abstract void setSampleCollection(List<String> sampleCollection);
 
 }
