@@ -58,15 +58,18 @@ class EventLogDetail(val logEntryFromTabulator: LogEntry) : Command() {
         formItems.add(FormItem("Url", ValueType.TEXT, logEntry.title))
         formItems.add(FormItem("Response", ValueType.TEXT_AREA, responseStr, 10))
         formItems.add(FormItem("Aggregators", ValueType.TEXT, content = logEntry.aggregators))
-        formItems.add(FormItem("Link Tree Diagram", ValueType.BUTTON, null, callBack = this, callBackAction = LNK))
-        formItems.add(FormItem("Console", ValueType.BUTTON, null, callBack = this, callBackAction = LOG))
+
+        val customButtons = mutableListOf<FormItem>()
+        customButtons.add(FormItem("Link Tree Diagram", ValueType.BUTTON, null, callBack = this, callBackAction = LNK))
+        customButtons.add(FormItem("Console", ValueType.BUTTON, null, callBack = this, callBackAction = LOG))
 
         dialog = RoDialog(
                 caption = "Details :" + logEntry.title,
                 items = formItems,
                 command = this,
-                defaultAction = "Diagram",
-                widthPerc = 60)
+                defaultAction = "Response Diagram",
+                widthPerc = 60,
+                customButtons = customButtons)
         dialog.open()
     }
 
@@ -96,16 +99,20 @@ class EventLogDetail(val logEntryFromTabulator: LogEntry) : Command() {
 
     private fun defaultAction() {
         val str = logEntry.response
+        var label = "Diagram"
         val pumlCode = when {
             str.startsWith("<") -> {
                 val grid = logEntry.obj as Grid
+                label = "Layout Diagram"
                 LayoutDiagram.build(grid)
             }
-            str.startsWith("{") ->
+            str.startsWith("{") -> {
+                label = "JSON / XML Diagram"
                 JsonDiagram.build(str)
+            }
             else -> "{}"
         }
-        DiagramDialog("Layout Diagram", pumlCode).open()
+        DiagramDialog(label, pumlCode).open()
     }
 
 }

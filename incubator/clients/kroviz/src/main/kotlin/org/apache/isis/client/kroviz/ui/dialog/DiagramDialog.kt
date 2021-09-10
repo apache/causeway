@@ -48,7 +48,7 @@ class DiagramDialog(
         dialog = RoDialog(
                 widthPerc = 80,
                 heightPerc = 80,
-                caption = "Diagram",
+                caption = label,
                 items = formItems,
                 command = this,
                 defaultAction = "Pin",

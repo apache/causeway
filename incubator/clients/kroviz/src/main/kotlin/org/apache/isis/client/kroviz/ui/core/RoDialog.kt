@@ -44,7 +44,8 @@ class RoDialog(
         defaultAction: String = "OK",
         widthPerc: Int = 30,
         heightPerc: Int = 100,
-        menu: List<KvisionHtmlLink>? = null) :
+        menu: List<KvisionHtmlLink>? = null,
+        customButtons: List<FormItem> = emptyList() ) :
         Displayable, RoWindow(caption = caption, closeButton = true, menu = menu) {
 
     private val okButton = Button(
@@ -101,6 +102,10 @@ class RoDialog(
                     spacing = 10,
                     classes = setOf("button-bar"))
             buttonBar.add(okButton)
+            customButtons.forEach {
+                val b = createButton(it)
+                buttonBar.add(b)
+            }
             buttonBar.add(cancelButton)
             if (items.isNotEmpty() && hasScalableContent()) {
                 buttonBar.add(scaleUpButton)
@@ -146,6 +151,16 @@ class RoDialog(
      */
     override fun toggleMinimize() {
         //TODO put Dialog to lower right message box
+    }
+
+    private fun createButton(fi: FormItem): Button {
+        val item = Button(text = fi.label, icon = IconManager.find(fi.label))
+        val obj = fi.callBack!! as Command
+        val action = fi.callBackAction
+        item.onClick {
+            obj.execute(action)
+        }
+        return item
     }
 
 }

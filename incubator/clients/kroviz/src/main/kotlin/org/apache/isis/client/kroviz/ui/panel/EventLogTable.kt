@@ -44,6 +44,7 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
                     width = "50",
                     headerMenu = DynamicMenuBuilder().buildTableMenu(this),
                     hozAlign = Align.CENTER,
+                    vertAlign = VAlign.MIDDLE,
                     formatterComponentFunction = { _, _, data -> buildActionButton(data) }
             ),
             ColumnDefinition(
@@ -129,9 +130,10 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
         val b = Button(
                 text = "",
                 icon = "fa fa-info-circle",
-                style = data.state.style)
+                style = data.state.style        )
         b.onClick { EventLogDetail(data).open() }
         b.margin = CssSize(-10, UNIT.px)
+        b.addCssClass("btn-sm")
         return b
     }
 
