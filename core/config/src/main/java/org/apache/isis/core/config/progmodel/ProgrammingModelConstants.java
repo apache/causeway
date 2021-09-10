@@ -310,7 +310,7 @@ public final class ProgrammingModelConstants {
         }
     }
 
-    //FIXME[ISIS-2774] consolidate all MM validation raisers here, if we can find a common method signature for that
+    //maybe consolidate all MM validation raisers here, if we can find a common method signature for that
     @RequiredArgsConstructor
     public static enum Validation {
         CONFLICTING_TITLE_STRATEGIES(

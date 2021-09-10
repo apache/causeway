@@ -156,8 +156,8 @@
 
 		<!-- See https://nodejs.org/en/download/ for latest node and npm (lts)
 			versions -->
-		<node.version>v14.17.5</node.version>
-		<npm.version>6.14.14</npm.version>
+		<node.version>v14.17.6</node.version>
+		<npm.version>6.14.15</npm.version>
 
 		<objenesis.version>3.2</objenesis.version>
 		<ognl.version>3.2.21</ognl.version>
@@ -181,7 +181,7 @@
 
 		<togglz.version>2.9.9</togglz.version>
 
-		<vaadin.version>20.0.7</vaadin.version>
+		<vaadin.version>21.0.0</vaadin.version>
 
 		<wicket.version>8.13.0</wicket.version>
 		<wicket-bootstrap.version>3.0.0-M18</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->

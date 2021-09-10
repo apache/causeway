@@ -92,7 +92,7 @@ extends MetaModelVisitingValidatorAbstract {
             val messageFormat = "%s#%s: is assumed to support "
                     + "a property, collection or action. Unmet constraint(s): %s";
 
-            ValidationFailure.raiseFormatted(
+            ValidationFailure.raise(
                     spec,
                     String.format(
                             messageFormat,
