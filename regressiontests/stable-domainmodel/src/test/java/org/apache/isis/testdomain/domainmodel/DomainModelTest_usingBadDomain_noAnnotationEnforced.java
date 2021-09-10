@@ -18,8 +18,6 @@
  */
 package org.apache.isis.testdomain.domainmodel;
 
-import java.util.Map;
-
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.Test;
@@ -27,22 +25,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.exceptions.unrecoverable.DomainModelException;
-import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.badnoactenforce.Configuration_usingInvalidDomain_noActionEnforced;
 import org.apache.isis.testdomain.model.badnoactenforce.InvalidOrphanedActionSupportNoAnnotationEnforced;
-import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
+import org.apache.isis.testdomain.util.interaction.DomainObjectTesterFactory;
 
 import lombok.val;
 
@@ -65,8 +58,7 @@ class DomainModelTest_usingBadDomain_noAnnotationEnforced {
 
     @Inject private IsisConfiguration configuration;
     @Inject private IsisSystemEnvironment isisSystemEnvironment;
-    @Inject private SpecificationLoader specificationLoader;
-
+    @Inject private DomainObjectTesterFactory testerFactory;
 
     @Test
     void fullIntrospection_shouldBeEnabledByThisTestClass() {
@@ -83,16 +75,10 @@ class DomainModelTest_usingBadDomain_noAnnotationEnforced {
     @Test
     void orphanedActionSupport_shouldFail() {
 
-        val validateDomainModel = new DomainModelValidator(specificationLoader, configuration, isisSystemEnvironment);
+        val tester = testerFactory.objectTester(InvalidOrphanedActionSupportNoAnnotationEnforced.class);
 
-        assertThrows(DomainModelException.class, validateDomainModel::throwIfInvalid);
-        validateDomainModel.assertAnyFailuresContaining(
-                Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedActionSupportNoAnnotationEnforced.class)),
-                ProgrammingModelConstants.Validation.ORPHANED_METHOD
-                .getMessage(Map.of(
-                        "type", InvalidOrphanedActionSupportNoAnnotationEnforced.class.getName(),
-                        "member", "hideOrphaned()")));
+        tester.assertValidationFailureOnMember(
+                ProgrammingModelConstants.Validation.ORPHANED_METHOD, "hideOrphaned()");
     }
-
 
 }

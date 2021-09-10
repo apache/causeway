@@ -23,7 +23,6 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -39,7 +38,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.annotation.Introspection.EncapsulationPolicy;
 import org.apache.isis.applib.annotation.Introspection.MemberAnnotationPolicy;
-import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.metamodel.Config;
@@ -112,7 +110,7 @@ class DomainModelTest_usingGoodDomain {
     @Inject private SpecificationLoader specificationLoader;
     @Inject private TitleService titleService;
     @Inject private IsisConfiguration isisConfig;
-    @Inject private ServiceInjector serviceInjector;
+    @Inject private DomainObjectTesterFactory testerFactory;
 
     void debug() {
         val config = new Config()
@@ -133,14 +131,6 @@ class DomainModelTest_usingGoodDomain {
         }
         System.out.println("==============");
     }
-
-    private DomainObjectTesterFactory testerFactory;;
-
-    @BeforeEach
-    void setUp() {
-        testerFactory = new DomainObjectTesterFactory(serviceInjector);
-    }
-
 
     @Test
     void goodDomain_shouldPassValidation() {

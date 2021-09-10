@@ -19,7 +19,6 @@
 package org.apache.isis.testdomain.domainmodel;
 
 import java.lang.annotation.Annotation;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -64,6 +63,7 @@ import org.apache.isis.testdomain.model.bad.InvalidOrphanedActionSupport;
 import org.apache.isis.testdomain.model.bad.InvalidOrphanedCollectionSupport;
 import org.apache.isis.testdomain.model.bad.InvalidOrphanedPropertySupport;
 import org.apache.isis.testdomain.model.bad.InvalidPropertyAnnotationOnAction;
+import org.apache.isis.testdomain.util.interaction.DomainObjectTesterFactory;
 import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
 
 import lombok.val;
@@ -87,6 +87,7 @@ class DomainModelTest_usingBadDomain {
     @Inject private IsisConfiguration configuration;
     @Inject private IsisSystemEnvironment isisSystemEnvironment;
     @Inject private SpecificationLoader specificationLoader;
+    @Inject private DomainObjectTesterFactory testerFactory;
 
     private DomainModelValidator validator;
 
@@ -116,12 +117,10 @@ class DomainModelTest_usingBadDomain {
                 "InvalidOrphanedActionSupport#hideOrphaned(): has annotation @Domain.Include, "
                 + "is assumed to support");
 
-        validator.assertAnyFailuresContaining(
-                Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedActionSupport.class)),
-                ProgrammingModelConstants.Validation.ORPHANED_METHOD
-                .getMessage(Map.of(
-                        "type", InvalidOrphanedActionSupport.class.getName(),
-                        "member", "hideMe()")));
+        val tester = testerFactory.objectTester(InvalidOrphanedActionSupport.class);
+
+        tester.assertValidationFailureOnMember(
+                ProgrammingModelConstants.Validation.ORPHANED_METHOD, "hideMe()");
     }
 
 
@@ -132,12 +131,10 @@ class DomainModelTest_usingBadDomain {
                 "InvalidOrphanedPropertySupport#hideMyProperty(): has annotation @Domain.Include, "
                 + "is assumed to support");
 
-        validator.assertAnyFailuresContaining(
-                Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedPropertySupport.class)),
-                ProgrammingModelConstants.Validation.ORPHANED_METHOD
-                .getMessage(Map.of(
-                        "type", InvalidOrphanedPropertySupport.class.getName(),
-                        "member", "hideMe()")));
+        val tester = testerFactory.objectTester(InvalidOrphanedPropertySupport.class);
+
+        tester.assertValidationFailureOnMember(
+                ProgrammingModelConstants.Validation.ORPHANED_METHOD, "hideMe()");
     }
 
     @Test
@@ -147,12 +144,10 @@ class DomainModelTest_usingBadDomain {
                 "InvalidOrphanedCollectionSupport#hideMyCollection(): has annotation @Domain.Include, "
                 + "is assumed to support");
 
-        validator.assertAnyFailuresContaining(
-                Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedCollectionSupport.class)),
-                ProgrammingModelConstants.Validation.ORPHANED_METHOD
-                .getMessage(Map.of(
-                        "type", InvalidOrphanedCollectionSupport.class.getName(),
-                        "member", "hideMe()")));
+        val tester = testerFactory.objectTester(InvalidOrphanedCollectionSupport.class);
+
+        tester.assertValidationFailureOnMember(
+                ProgrammingModelConstants.Validation.ORPHANED_METHOD, "hideMe()");
     }
 
     @Test

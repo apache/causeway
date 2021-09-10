@@ -19,21 +19,30 @@
 package org.apache.isis.testdomain.util.interaction;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.inject.Inject;
 
 import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.exceptions.unrecoverable.DomainModelException;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.config.environment.IsisSystemEnvironment;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacet;
@@ -50,13 +59,15 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 import org.apache.isis.testdomain.util.CollectionAssertions;
+import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.Value;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@Value
+@Service
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class DomainObjectTesterFactory {
 
     private final @NonNull ServiceInjector serviceInjector;
@@ -135,6 +146,22 @@ public class DomainObjectTesterFactory {
                     super.objectSpecification.lookupFacet(LayoutFacet.class)
                     .map(layoutFacet->layoutFacet.layout(vm))
                     .orElse(null));
+        }
+
+        public void assertValidationFailureOnMember(
+                final ProgrammingModelConstants.Validation validationEnum,
+                final String memberName) {
+
+            val validateDomainModel =
+                    new DomainModelValidator(specificationLoader, configuration, isisSystemEnvironment);
+
+            assertThrows(DomainModelException.class, validateDomainModel::throwIfInvalid);
+            validateDomainModel.assertAnyFailuresContaining(
+                    Identifier.classIdentifier(LogicalType.fqcn(getDomainObjectType())),
+                    validationEnum
+                    .getMessage(Map.of(
+                            "type", getDomainObjectType().getName(),
+                            "member", memberName)));
         }
 
     }
@@ -449,6 +476,8 @@ public class DomainObjectTesterFactory {
 
     private static abstract class Tester<T> {
 
+        @Inject protected IsisConfiguration configuration;
+        @Inject protected IsisSystemEnvironment isisSystemEnvironment;
         @Inject protected SpecificationLoader specificationLoader;
         @Inject protected InteractionService interactionService;
         @Inject protected FactoryService factoryService;
