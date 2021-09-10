@@ -78,7 +78,7 @@ public final class Evaluators  {
         val methodEvaluators = streamMethodEvaluators(cls, memberFilter, classCache)
                 .collect(Can.toCan());
         val fieldEvaluators = streamFieldEvaluators(cls, memberFilter, classCache)
-                .filter(fieldEvaluator->fieldEvaluator.isSameAsAnyOf(methodEvaluators))
+                .filter(fieldEvaluator->!fieldEvaluator.isSameAsAnyOf(methodEvaluators))
                 .collect(Can.toCan());
 
         return Stream.concat(
