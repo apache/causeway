@@ -40,6 +40,7 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
@@ -56,6 +57,8 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 import org.apache.isis.testdomain.util.CollectionAssertions;
@@ -181,10 +184,10 @@ public class DomainObjectTesterFactory {
         }
 
         @Override
-        public Optional<ObjectMemberAbstract> getMetaModel() {
+        public Optional<ObjectAction> getMetaModel() {
             return managedActionIfAny
             .map(ManagedAction::getMetaModel)
-            .map(ObjectMemberAbstract.class::cast);
+            .map(ObjectAction.class::cast);
         }
 
         @Override
@@ -364,7 +367,7 @@ public class DomainObjectTesterFactory {
             return this;
         }
 
-        protected abstract Optional<ObjectMemberAbstract> getMetaModel();
+        protected abstract Optional<? extends ObjectMember> getMetaModel();
 
         protected abstract Optional<? extends ManagedMember> startInteractionOn(ManagedObject viewModel);
 
@@ -379,6 +382,12 @@ public class DomainObjectTesterFactory {
                     && managedMemberIfAny.isPresent()) {
                 fail(String.format("%s %s does exist", memberSort, memberName));
             }
+        }
+
+        public void assertMemberId(final String expectedMemberId) {
+            assertEquals(expectedMemberId,
+                    getMetaModel()
+                    .orElseThrow(_Exceptions::noSuchElement).getId());
         }
 
         public final void assertVisibilityIsNotVetoed() {

@@ -144,11 +144,9 @@ class DomainModelTest_usingGoodDomain {
     @Test
     void reservedPrefixShouldBeAllowed_onExplicitAction() {
 
-        val holderSpec = specificationLoader.specForTypeElseFail(ProperMemberSupport.class);
-
-        val prefixed_action = holderSpec.getActionElseFail("hideMe");
-        assertNotNull(prefixed_action);
-        assertEquals("hideMe", prefixed_action.getId());
+        val tester = testerFactory.actionTester(ProperMemberSupport.class, "hideMe");
+        tester.assertExists(true);
+        tester.assertMemberId("hideMe");
     }
 
     @Test
@@ -502,23 +500,6 @@ class DomainModelTest_usingGoodDomain {
         coll.assertUsabilityIsVetoedWith("collection disabled for testing purposes");
         coll.assertCollectionElements(List.of("Foo"));
     }
-
-//    @Test
-//    void quicktest() {
-//        val testerFactory = new DomainObjectTesterFactory(serviceInjector);
-//        val prop = testerFactory.propertyTester(DomainObjectList.class, "elementTypeFqcn");
-//        prop.assertExists(true);
-//
-//        val objectSpec = specificationLoader.specForTypeElseFail(DomainObjectList.class);
-//
-//        val titleFacet = objectSpec.getFacetRanking(TitleFacet.class).get().getWinnerNonEvent(TitleFacet.class).get();
-//        assertNotNull(titleFacet);
-//        assertTrue(titleFacet instanceof ImperativeFacet, "no imperative: " + titleFacet.getClass());
-//
-//        ((ImperativeFacet)titleFacet).getMethods()
-//        .forEach(System.err::println);
-//
-//    }
 
     @Test
     void viewmodelWithAnnotationOptional_usingPrivateSupport() {
