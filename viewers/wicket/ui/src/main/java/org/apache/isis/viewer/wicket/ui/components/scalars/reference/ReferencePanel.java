@@ -35,9 +35,9 @@ import org.wicketstuff.select2.Settings;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.memento.ObjectMemento;
+import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.HasRenderingHints;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
@@ -100,7 +100,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     @Override
     protected FormGroup createComponentForRegular() {
 
-        entityLink = new EntityLinkSelect2Panel(ComponentType.ENTITY_LINK.getWicketId(), this);
+        entityLink = new EntityLinkSelect2Panel(ComponentType.ENTITY_LINK.getId(), this);
 
         entityLink.setRequired(getModel().isRequired());
         this.select2 = createSelect2AndSemantics();
@@ -253,7 +253,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
             val componentFactory = getComponentFactoryRegistry()
                     .findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, scalarModel);
             val component = componentFactory
-                    .createComponent(ComponentType.ENTITY_ICON_AND_TITLE.getWicketId(), scalarModel);
+                    .createComponent(ComponentType.ENTITY_ICON_AND_TITLE.getId(), scalarModel);
 
             componentForRegular.addOrReplace(component);
 

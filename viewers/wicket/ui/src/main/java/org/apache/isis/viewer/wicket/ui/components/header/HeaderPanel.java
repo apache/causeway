@@ -26,11 +26,11 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.viewer.common.applib.services.userprof.UserProfileUiModel;
 import org.apache.isis.viewer.common.model.branding.BrandingUiModel;
+import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.common.model.header.HeaderUiModel;
 import org.apache.isis.viewer.common.model.menu.MenuUiModel;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.models.ServiceActionsModel;
-import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.AvatarImage;
 import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandLogo;
 import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandName;

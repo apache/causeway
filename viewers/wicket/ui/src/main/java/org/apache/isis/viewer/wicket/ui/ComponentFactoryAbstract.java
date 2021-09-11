@@ -23,6 +23,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.CssResourceReference;
 
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
 import lombok.Getter;
@@ -42,22 +43,22 @@ public abstract class ComponentFactoryAbstract implements ComponentFactory {
 
     private final Class<?> componentClass;
 
-    public ComponentFactoryAbstract(ComponentType componentType) {
+    public ComponentFactoryAbstract(final ComponentType componentType) {
         this(componentType, null, null);
     }
 
-    public ComponentFactoryAbstract(ComponentType componentType, String name) {
+    public ComponentFactoryAbstract(final ComponentType componentType, final String name) {
         this(componentType, name, null);
     }
 
-    public ComponentFactoryAbstract(ComponentType componentType, Class<?> componentClass) {
+    public ComponentFactoryAbstract(final ComponentType componentType, final Class<?> componentClass) {
         this(componentType, null, componentClass);
     }
 
     public ComponentFactoryAbstract(
-            ComponentType componentType,
-            String name,
-            Class<?> componentClass) {
+            final ComponentType componentType,
+            final String name,
+            final Class<?> componentClass) {
 
         this.componentType = componentType;
         this.name = name != null ? name : getClass().getSimpleName();

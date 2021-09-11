@@ -29,9 +29,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.metamodel.facet.PdfJsViewerFacet;
+import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
-import org.apache.isis.viewer.wicket.ui.ComponentType;
 
 import lombok.val;
 

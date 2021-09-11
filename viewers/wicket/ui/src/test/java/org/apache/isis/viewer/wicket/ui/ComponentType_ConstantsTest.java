@@ -21,6 +21,9 @@ package org.apache.isis.viewer.wicket.ui;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.is;
+
+import org.apache.isis.viewer.common.model.components.ComponentType;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ComponentType_ConstantsTest {

@@ -25,7 +25,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 
 /**
@@ -49,7 +49,7 @@ extends PanelBase<T> {
     }
 
     public PanelAbstract(final ComponentType componentType, final M model) {
-        this(componentType.getWicketId(), model);
+        this(componentType.getId(), model);
     }
 
     public PanelAbstract(final String id, final M model) {
@@ -90,7 +90,7 @@ extends PanelBase<T> {
         Components.permanentlyHide(this, ids);
     }
 
-    protected static void setVisible(@Nullable Component component, boolean visible) {
+    protected static void setVisible(@Nullable final Component component, final boolean visible) {
         if(component == null) {
             return;
         }
