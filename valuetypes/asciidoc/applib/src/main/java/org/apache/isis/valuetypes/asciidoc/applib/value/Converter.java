@@ -61,7 +61,7 @@ final class Converter {
     public static String adocToHtml(final @Nullable String adoc, final @Nullable Options options) {
         return _Strings.isEmpty(adoc)
                 ? ""
-                : getAsciidoctor().convert(adoc,
+                : convert(adoc,
                     Optional
                     .ofNullable(options)
                     .orElseGet(Converter::getDefaultOptions));
@@ -75,6 +75,11 @@ final class Converter {
     }
 
     // -- HELPER
+
+    private static String convert(final String content, final Options options) {
+        return getAsciidoctor()
+            .convert(content, options);
+    }
 
     @Getter(lazy = true)
     private final static Asciidoctor asciidoctor = Asciidoctor.Factory.create();

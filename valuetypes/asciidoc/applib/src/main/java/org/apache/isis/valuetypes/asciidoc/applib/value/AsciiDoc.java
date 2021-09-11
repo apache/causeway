@@ -19,6 +19,7 @@
 package org.apache.isis.valuetypes.asciidoc.applib.value;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
@@ -26,7 +27,10 @@ import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.value.HasHtml;
 import org.apache.isis.valuetypes.asciidoc.applib.jaxb.AsciiDocJaxbAdapter;
 
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.experimental.Accessors;
 
 /**
  * Immutable value type holding pre-rendered HTML.
@@ -36,8 +40,9 @@ import lombok.Getter;
 @org.apache.isis.applib.annotation.Value(
         logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.AsciiDoc",
         semanticsProviderName = "org.apache.isis.valuetypes.asciidoc.metamodel.facets.AsciiDocValueSemanticsProvider")
+@EqualsAndHashCode
 @XmlJavaTypeAdapter(AsciiDocJaxbAdapter.class)  // for JAXB view model support
-public class AsciiDoc implements HasHtml, Serializable {
+public final class AsciiDoc implements HasHtml, Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -45,8 +50,16 @@ public class AsciiDoc implements HasHtml, Serializable {
         return new AsciiDoc(adoc);
     }
 
-    @Getter
-    private final String adoc;
+    public static AsciiDoc valueOfAdocAndHtml(final String adoc, final String html) {
+        return null;
+    }
+
+    @Getter private final String adoc;
+
+    @EqualsAndHashCode.Exclude
+    @Getter(lazy = true, value = AccessLevel.PRIVATE)
+    @Accessors(fluent = true)
+    private final String html = Converter.adocToHtml(getAdoc());
 
     public AsciiDoc() {
         this(null);
@@ -58,32 +71,18 @@ public class AsciiDoc implements HasHtml, Serializable {
 
     @Override
     public String asHtml() {
-        return Converter.adocToHtml(this.adoc);
+        return html();
     }
 
     public boolean isEqualTo(final AsciiDoc other) {
-        return other != null && this.adoc.equals(other.adoc);
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        return isEqualTo((AsciiDoc) obj);
-    }
-
-    @Override
-    public int hashCode() {
-        return adoc.hashCode();
+        return Objects.equals(this, other);
     }
 
     @Override
     public String toString() {
         return "AsciiDoc[length="+ adoc.length()+"]";
     }
+
+
 
 }

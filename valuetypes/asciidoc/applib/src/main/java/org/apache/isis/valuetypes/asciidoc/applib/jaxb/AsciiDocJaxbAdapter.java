@@ -41,20 +41,20 @@ public final class AsciiDocJaxbAdapter extends XmlAdapter<String, AsciiDoc> {
     private final Base64.Decoder decoder = Base64.getDecoder(); // is thread-safe ?
 
     @Override
-    public AsciiDoc unmarshal(String v) throws Exception {
+    public AsciiDoc unmarshal(final String v) throws Exception {
         if(v==null) {
             return null;
         }
         final String adoc = _Strings.ofBytes(decoder.decode(v), StandardCharsets.UTF_8);
-        return new AsciiDoc(adoc);
+        return AsciiDoc.valueOfAdoc(adoc);
     }
 
     @Override
-    public String marshal(AsciiDoc v) throws Exception {
+    public String marshal(final AsciiDoc v) throws Exception {
         if(v==null) {
             return null;
         }
-        final String html = v.getAdoc();
-        return encoder.encodeToString(_Strings.toBytes(html, StandardCharsets.UTF_8));
+        final String adoc = v.getAdoc();
+        return encoder.encodeToString(_Strings.toBytes(adoc, StandardCharsets.UTF_8));
     }
 }
