@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.common.model.components;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 
 /**
@@ -147,6 +149,11 @@ public enum ComponentType {
      */
     FOOTER;
 
+    @Override
+    public String toString() {
+        return getId();
+    }
+
     /**
      * Returns the {@link #name()} formatted as
      * {@link StringExtensions#toCamelCase(String) case}.
@@ -154,15 +161,11 @@ public enum ComponentType {
      * <p>
      * For example, <tt>OBJECT_EDIT</tt> becomes <tt>objectEdit</tt>.
      */
-    @Override
-    public String toString() {
-        return getId();
-    }
-
     public String getId() {
         return StringExtensions.toCamelCase(name());
     }
 
+    @Nullable
     public static ComponentType lookup(final String id) {
         for (final ComponentType componentType : values()) {
             if (componentType.getId().equals(id)) {

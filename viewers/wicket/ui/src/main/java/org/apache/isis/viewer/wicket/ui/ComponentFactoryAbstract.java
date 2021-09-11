@@ -28,34 +28,39 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Adapter implementation for {@link ComponentFactory}.
  */
+@ToString
+@Log4j2
 public abstract class ComponentFactoryAbstract implements ComponentFactory {
 
     private static final long serialVersionUID = 1L;
 
+    @ToString.Exclude
     @Getter @Setter private transient IsisAppCommonContext commonContext;
 
-    private final ComponentType componentType;
-    private final String name;
+    @Getter(onMethod_ = {@Override}) private final ComponentType componentType;
+    @Getter(onMethod_ = {@Override}) private final String name;
 
     private final Class<?> componentClass;
 
-    public ComponentFactoryAbstract(final ComponentType componentType) {
+    protected ComponentFactoryAbstract(final ComponentType componentType) {
         this(componentType, null, null);
     }
 
-    public ComponentFactoryAbstract(final ComponentType componentType, final String name) {
+    protected ComponentFactoryAbstract(final ComponentType componentType, final String name) {
         this(componentType, name, null);
     }
 
-    public ComponentFactoryAbstract(final ComponentType componentType, final Class<?> componentClass) {
+    protected ComponentFactoryAbstract(final ComponentType componentType, final Class<?> componentClass) {
         this(componentType, null, componentClass);
     }
 
-    public ComponentFactoryAbstract(
+    protected ComponentFactoryAbstract(
             final ComponentType componentType,
             final String name,
             final Class<?> componentClass) {
@@ -66,11 +71,7 @@ public abstract class ComponentFactoryAbstract implements ComponentFactory {
             throw new IllegalArgumentException("specified a ComponentFactory as a componentClass... you probably meant the component instead? componentClass = " + componentClass.getName());
         }
         this.componentClass = componentClass;
-    }
-
-    @Override
-    public ComponentType getComponentType() {
-        return componentType;
+        log.debug("new factory {}", this::toString);
     }
 
     /**
@@ -105,6 +106,7 @@ public abstract class ComponentFactoryAbstract implements ComponentFactory {
 
     @Override
     public final Component createComponent(final IModel<?> model) {
+        log.debug("creating component {}", getComponentType()::toString);
         return createComponent(getComponentType().toString(), model);
     }
 
@@ -112,14 +114,8 @@ public abstract class ComponentFactoryAbstract implements ComponentFactory {
     public abstract Component createComponent(String id, IModel<?> model);
 
     @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
     public CssResourceReference getCssResourceReference() {
         return PanelUtil.cssResourceReferenceFor(componentClass);
     }
-
 
 }
