@@ -29,6 +29,7 @@ import org.apache.isis.client.kroviz.ui.core.RoDialog
 import org.apache.isis.client.kroviz.ui.diagram.JsonDiagram
 import org.apache.isis.client.kroviz.ui.diagram.LayoutDiagram
 import org.apache.isis.client.kroviz.ui.diagram.LinkTreeDiagram
+import org.apache.isis.client.kroviz.utils.Flatted
 import org.apache.isis.client.kroviz.utils.StringUtils
 import org.apache.isis.client.kroviz.utils.XmlHelper
 
@@ -46,6 +47,7 @@ class EventLogDetail(val logEntryFromTabulator: LogEntry) : Command() {
     // callback parameter
     private val LOG: String = "log"
     private val LNK: String = "lnk"
+    private val DPM: String = "dpm"
 
     fun open() {
         val responseStr = if (logEntry.subType == Constants.subTypeJson) {
@@ -61,6 +63,7 @@ class EventLogDetail(val logEntryFromTabulator: LogEntry) : Command() {
 
         val customButtons = mutableListOf<FormItem>()
         customButtons.add(FormItem("Link Tree Diagram", ValueType.BUTTON, null, callBack = this, callBackAction = LNK))
+        customButtons.add(FormItem("Display Model Diagram", ValueType.BUTTON, null, callBack = this, callBackAction = DPM))
         customButtons.add(FormItem("Console", ValueType.BUTTON, null, callBack = this, callBackAction = LOG))
 
         dialog = RoDialog(
@@ -82,6 +85,9 @@ class EventLogDetail(val logEntryFromTabulator: LogEntry) : Command() {
             action == LNK -> {
                 linkTreeDiagram()
             }
+            action == DPM -> {
+                displayModelDiagram()
+            }
             else -> {
                 console.log(logEntry)
                 console.log("Action not defined yet: " + action)
@@ -93,6 +99,18 @@ class EventLogDetail(val logEntryFromTabulator: LogEntry) : Command() {
         logEntry.aggregators.forEach {
             val code = LinkTreeDiagram.build(it)
             DiagramDialog("Link Tree Diagram", code).open()
+        }
+        dialog.close()
+    }
+
+    private fun displayModelDiagram() {
+        logEntry.aggregators.forEach {
+            val dpm = it.dpm
+            val json = Flatted.stringify(dpm)
+            console.log("[ELD.displayModelDiagram]")
+            console.log(json)
+            val code = JsonDiagram.build(json)
+            DiagramDialog("Display Model Diagram", code).open()
         }
         dialog.close()
     }

@@ -93,6 +93,7 @@ kotlin {
         implementation("io.kvision:kvision-moment:$kvisionVersion")
         implementation("io.kvision:kvision-maps:$kvisionVersion")
         implementation(npm("xmltojson", "1.3.5", false))
+        implementation(npm("flatted", "3.2.2", false))
     }
     sourceSets["test"].dependencies {
         implementation(kotlin("test-js"))
