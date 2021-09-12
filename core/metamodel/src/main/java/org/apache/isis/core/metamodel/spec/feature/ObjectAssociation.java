@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-import org.springframework.lang.Nullable;
 import javax.enterprise.inject.Vetoed;
 
 import org.apache.isis.applib.annotation.Where;
@@ -68,30 +67,6 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
             InteractionInitiatedBy interactionInitiatedBy);
 
     //Instance get(final Instance owner, final InteractionInitiatedBy interactionInitiatedBy);
-
-    /**
-     * If not statically (non-imperatively) specified otherwise,
-     * the (translated friendly) name inferred from the corresponding domain-object-member (java-source) name.
-     * <p>
-     * Eg used when rendering a domain-object collection as table,
-     * the table's (translated friendly) column names are inferred
-     * from the corresponding domain-object-property canonical-name(s).
-     * @since 2.0
-     */
-    String getCanonicalFriendlyName();
-
-    /**
-     * If statically (non-imperatively) specified,
-     * the (translated friendly) description, otherwise {@code null}.
-     * <p>
-     * Eg used when rendering a domain-object collection as table,
-     * the table's (translated friendly) column descriptions are inferred
-     * from the corresponding domain-object-property column-description(s).
-     * @return null-able; if empty, no description is available,
-     * consequently eg. viewers should not provide any tooltip
-     * @since 2.0
-     */
-    @Nullable String getCanonicalDescription();
 
     /**
      * Return the default for this property.

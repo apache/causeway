@@ -51,7 +51,7 @@ public class JavaLangStringVm
         implements HasAsciiDocDescription, JavaLangStringHolder2 {
 
 //end::class[]
-    public JavaLangStringVm(String initialValue) {
+    public JavaLangStringVm(final String initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

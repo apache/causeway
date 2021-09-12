@@ -23,10 +23,10 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.userreg.UserDetails;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.applib.value.Password;
@@ -38,7 +38,6 @@ import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserReposito
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserStatus;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * An implementation of {@link org.apache.isis.applib.services.userreg.UserRegistrationService}
@@ -94,7 +93,7 @@ public class UserRegistrationServiceForSecman implements UserRegistrationService
     public boolean updatePasswordByEmail(final String emailAddress, final String password) {
         return applicationUserRepository.findByEmailAddress(emailAddress)
                 .map(user -> {
-                    val passwordWasUpdated = applicationUserRepository.updatePassword(user, password);
+                    final var passwordWasUpdated = applicationUserRepository.updatePassword(user, password);
                     return passwordWasUpdated;
                 })
                 .orElse(false);

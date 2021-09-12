@@ -50,7 +50,7 @@ public class IsisModuleValAsciidocMetaModel {
 @Named("isis.val.AsciiDocMetaModelRefiner")
 class AsciiDocMetaModelRefiner implements MetaModelRefiner {
     @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+    public void refineProgrammingModel(final ProgrammingModel programmingModel) {
 // blueprint
 //        programmingModel.addFactory(
 //                ProgrammingModel.FacetProcessingOrder.G1_VALUE_TYPES,

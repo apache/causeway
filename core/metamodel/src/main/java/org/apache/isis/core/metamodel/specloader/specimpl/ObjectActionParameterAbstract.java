@@ -136,16 +136,21 @@ implements
     }
 
     @Override
-    public String getFriendlyName(final Supplier<ManagedObject> domainObjectProvider) {
+    public final String getFriendlyName(final Supplier<ManagedObject> domainObjectProvider) {
         //as we don't support imperative naming for parameters yet ..
         return staticFriendlyName();
     }
 
     @Override
-    public Optional<String> getStaticFriendlyName() {
+    public final Optional<String> getStaticFriendlyName() {
         return Optional.of(staticFriendlyName());
     }
 
+    @Override
+    public final String getCanonicalFriendlyName() {
+        //as we don't support imperative naming for parameters yet ..
+        return staticFriendlyName();
+    }
 
     private String staticFriendlyName() {
         return lookupFacet(ParamNamedFacet.class)
@@ -155,14 +160,20 @@ implements
     }
 
     @Override
-    public String getDescription(final Supplier<ManagedObject> domainObjectProvider) {
+    public final String getDescription(final Supplier<ManagedObject> domainObjectProvider) {
         //as we don't support imperative naming for parameters yet ..
         return staticDescription();
     }
 
     @Override
-    public Optional<String> getStaticDescription() {
+    public final Optional<String> getStaticDescription() {
         return Optional.of(staticDescription());
+    }
+
+    @Override
+    public final String getCanonicalDescription() {
+        //as we don't support imperative naming for parameters yet ..
+        return staticDescription();
     }
 
     private String staticDescription() {

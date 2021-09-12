@@ -21,7 +21,9 @@ package org.apache.isis.core.metamodel.spec.feature;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
 
 public interface ObjectAssociationContainer {
@@ -108,6 +110,13 @@ public interface ObjectAssociationContainer {
                 .map(OneToManyAssociation.class::cast);
     }
 
+    /**
+     * Properties visible as columns honoring order and visibility.
+     */
+    Stream<OneToOneAssociation> streamPropertiesForColumnRendering(
+            Identifier memberIdentifier,
+            Optional<ManagedObject> parentObject);
+
     // -- ASSOCIATION STREAMS (INHERITANCE NOT CONSIDERED)
 
     /**
@@ -118,6 +127,7 @@ public interface ObjectAssociationContainer {
      * unauthorized fields have been removed) use
      * <tt>ObjectAssociationFilters#staticallyVisible(...)</tt>
      */
-    Stream<ObjectAssociation> streamDeclaredAssociations(MixedIn contributed);
+    Stream<ObjectAssociation> streamDeclaredAssociations(final MixedIn contributed);
+
 
 }

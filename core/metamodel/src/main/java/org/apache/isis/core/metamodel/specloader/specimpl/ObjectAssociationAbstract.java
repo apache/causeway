@@ -20,13 +20,9 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
-import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
-import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
@@ -89,30 +85,6 @@ implements ObjectAssociation {
     @Override
     public abstract boolean isEmpty(final ManagedObject adapter, final InteractionInitiatedBy interactionInitiatedBy);
 
-    // -- CANONICAL NAMING
 
-    @Override
-    public final String getCanonicalFriendlyName() {
-        return lookupFacet(MemberNamedFacet.class)
-        .flatMap(MemberNamedFacet::getSharedFacetRanking)
-        .flatMap(facetRanking->facetRanking.getWinnerNonEventLowerOrEqualTo(MemberNamedFacet.class, Precedence.HIGH))
-        .map(MemberNamedFacet::getSpecialization)
-        .flatMap(specialization->specialization.left())
-        .map(HasStaticText::translated)
-        //we have a facet-post-processor to ensure following code path is unreachable,
-        //however, we keep it in support of JUnit testing
-        .orElseGet(()->getFeatureIdentifier().getMemberNaturalName());
-    }
-
-    @Override
-    public final String getCanonicalDescription() {
-        return lookupFacet(MemberDescribedFacet.class)
-        .flatMap(MemberDescribedFacet::getSharedFacetRanking)
-        .flatMap(facetRanking->facetRanking.getWinnerNonEventLowerOrEqualTo(MemberDescribedFacet.class, Precedence.HIGH))
-        .map(MemberDescribedFacet::getSpecialization)
-        .flatMap(specialization->specialization.left())
-        .map(HasStaticText::translated)
-        .orElse(null);
-    }
 
 }

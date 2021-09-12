@@ -16,15 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui;
+package org.apache.isis.viewer.common.model.components;
 
-import org.apache.wicket.Component;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 
 /**
- * Enumerates the different types of {@link Component}s that can be constructed
- * using {@link ComponentFactory}.
+ * Enumerates the different types of UI <i>Components</i> that can be constructed
+ * using component factories.
  *
  * <p>
  * Some are fine-grained (such as {@link ComponentType#SCALAR_NAME_AND_VALUE}, a
@@ -33,7 +33,6 @@ import org.apache.isis.core.metamodel.commons.StringExtensions;
  * entity, with its actions, properties and collections).
  */
 public enum ComponentType {
-
 
     /**
      * About page text.
@@ -135,7 +134,7 @@ public enum ComponentType {
     BOOKMARKED_PAGES,
     /**
      * Place holder for a component used to represent an unknown model;
-     * not used for matching, since the {@link ComponentFactory} implementation
+     * not used for matching,
      * acts as a fallback whenever a more suitable factory cannot be located.
      */
     UNKNOWN,
@@ -150,6 +149,11 @@ public enum ComponentType {
      */
     FOOTER;
 
+    @Override
+    public String toString() {
+        return getId();
+    }
+
     /**
      * Returns the {@link #name()} formatted as
      * {@link StringExtensions#toCamelCase(String) case}.
@@ -157,18 +161,14 @@ public enum ComponentType {
      * <p>
      * For example, <tt>OBJECT_EDIT</tt> becomes <tt>objectEdit</tt>.
      */
-    @Override
-    public String toString() {
-        return getWicketId();
-    }
-
-    public String getWicketId() {
+    public String getId() {
         return StringExtensions.toCamelCase(name());
     }
 
+    @Nullable
     public static ComponentType lookup(final String id) {
         for (final ComponentType componentType : values()) {
-            if (componentType.getWicketId().equals(id)) {
+            if (componentType.getId().equals(id)) {
                 return componentType;
             }
         }

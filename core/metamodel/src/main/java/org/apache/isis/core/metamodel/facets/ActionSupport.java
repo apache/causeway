@@ -25,9 +25,8 @@ import java.util.EnumSet;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderPAT;
@@ -38,9 +37,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
-import lombok.val;
 
-//@Log4j2
 public final class ActionSupport {
 
     @Value @Builder
@@ -50,10 +47,11 @@ public final class ActionSupport {
         @Getter @NonNull MethodFinder methodFinder;
         @NonNull EnumSet<SearchAlgorithm> searchAlgorithms;
 
-        Class<?> additionalParamType;
+        @Builder.Default
+        final @NonNull Can<Class<?>> additionalParamTypes = Can.empty();
 
-        @Getter(lazy = true)
-        Class<?>[] paramTypes = getProcessMethodContext().getMethod().getParameterTypes();
+        @Getter(lazy = true) Class<?>[] paramTypes =
+                getProcessMethodContext().getMethod().getParameterTypes();
     }
 
     @FunctionalInterface
@@ -90,7 +88,7 @@ public final class ActionSupport {
             final ActionSupportingMethodSearchRequest searchRequest,
             final Consumer<ActionSupportingMethodSearchResult> onMethodFound) {
 
-        for (val searchAlgorithm : searchRequest.searchAlgorithms) {
+        for (final var searchAlgorithm : searchRequest.searchAlgorithms) {
             searchAlgorithm.search(searchRequest, onMethodFound);
         }
 
@@ -102,14 +100,11 @@ public final class ActionSupport {
             final ActionSupportingMethodSearchRequest searchRequest,
             final Consumer<ActionSupportingMethodSearchResult> onMethodFound) {
 
-        val paramTypes = searchRequest.getParamTypes();
-        val finderOptions = searchRequest.getMethodFinder();
-        val additionalParamTypes = Can.ofNullable(searchRequest.getAdditionalParamType());
-
         MethodFinderPAT
         .findMethodWithPATArg(
-                finderOptions,
-                paramTypes, additionalParamTypes)
+                searchRequest.getMethodFinder(),
+                searchRequest.getParamTypes(),
+                searchRequest.getAdditionalParamTypes())
         .map(ActionSupport::toSearchResult)
         .forEach(onMethodFound);
     }
@@ -127,22 +122,21 @@ public final class ActionSupport {
             final ActionSupportingMethodSearchRequest searchRequest,
             final Consumer<ActionSupportingMethodSearchResult> onMethodFound) {
 
-        val paramTypes = searchRequest.getParamTypes();
-        val finderOptions = searchRequest.getMethodFinder();
+        final var paramTypes = searchRequest.getParamTypes();
+        final var finderOptions = searchRequest.getMethodFinder();
 
-        val additionalParamType = searchRequest.getAdditionalParamType();
-        val additionalParamCount = additionalParamType!=null ? 1 : 0;
+        final var additionalParamTypes = searchRequest.getAdditionalParamTypes();
+        final var additionalParamCount = additionalParamTypes.size();
 
         final int paramsConsideredCount = paramTypes.length + additionalParamCount;
         if(paramsConsideredCount>=0) {
 
-            val signature = concat(paramTypes, paramsConsideredCount, additionalParamType);
+            final var signature = concat(paramTypes, paramsConsideredCount, additionalParamTypes);
 
             finderOptions
             .streamMethodsMatchingSignature(signature)
             .map(ActionSupport::toSearchResult)
             .forEach(onMethodFound);
-
         }
     }
 
@@ -157,20 +151,20 @@ public final class ActionSupport {
     private static Class<?>[] concat(
             final Class<?>[] paramTypes,
             final int paramsConsidered,
-            final @Nullable Class<?> additionalParamType) {
+            final Can<Class<?>> additionalParamTypes) {
 
         if(paramsConsidered>paramTypes.length) {
-            val msg = String.format("paramsConsidered %d exceeds size of paramTypes %d",
+            final var msg = String.format("paramsConsidered %d exceeds size of paramTypes %d",
                     paramsConsidered, paramTypes.length);
             throw new IllegalArgumentException(msg);
         }
 
-        val paramTypesConsidered = paramsConsidered<paramTypes.length
+        final var paramTypesConsidered = paramsConsidered<paramTypes.length
                 ? Arrays.copyOf(paramTypes, paramsConsidered)
                 : paramTypes;
 
-        val withAdditional = additionalParamType!=null
-                ? _Arrays.combine(paramTypesConsidered, additionalParamType)
+        final var withAdditional = additionalParamTypes.isNotEmpty()
+                ? _Arrays.combine(paramTypesConsidered, additionalParamTypes.toArray(_Constants.emptyClasses))
                 : paramTypesConsidered;
 
         return withAdditional;

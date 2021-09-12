@@ -23,11 +23,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.wicket.Session;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.string.Strings;
+import org.springframework.lang.Nullable;
 import org.wicketstuff.select2.ChoiceProvider;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -57,7 +56,7 @@ extends ChoiceProvider<ObjectMemento> {
     private transient IsisAppCommonContext commonContext;
     private transient WicketViewerSettings wicketViewerSettings;
 
-    public ObjectAdapterMementoProviderAbstract(ScalarModel scalarModel) {
+    public ObjectAdapterMementoProviderAbstract(final ScalarModel scalarModel) {
         this.scalarModel = scalarModel;
     }
 
@@ -128,8 +127,8 @@ extends ChoiceProvider<ObjectMemento> {
      * @return A list of all matching choices
      */
     protected final Can<ObjectMemento> obtainMementos(
-            String term,
-            Can<ObjectMemento> choicesMementos) {
+            final String term,
+            final Can<ObjectMemento> choicesMementos) {
 
         if (Strings.isEmpty(term)) {
             return choicesMementos;
@@ -137,9 +136,9 @@ extends ChoiceProvider<ObjectMemento> {
 
         val commonContext = getCommonContext();
 
-        return choicesMementos.filter((ObjectMemento candidate)->{
-            val objectAdapter = commonContext.reconstructObject(candidate);
-            val title = objectAdapter.titleString();
+        return choicesMementos.filter((final ObjectMemento candidate)->{
+            final var objectAdapter = commonContext.reconstructObject(candidate);
+            final var title = objectAdapter.titleString();
             return title.toLowerCase().contains(term.toLowerCase());
         });
 
@@ -158,7 +157,7 @@ extends ChoiceProvider<ObjectMemento> {
         return true;
     }
 
-    // -- DEPS
+    // -- DEPENDENCIES
 
     protected IsisAppCommonContext getCommonContext() {
         if(commonContext==null) {
@@ -176,7 +175,7 @@ extends ChoiceProvider<ObjectMemento> {
 
     // -- HELPER
 
-    private @Nullable ObjectMemento idToMemento(String id) {
+    private @Nullable ObjectMemento idToMemento(final String id) {
         if(NULL_PLACEHOLDER.equals(id)) {
             return null;
         }

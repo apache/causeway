@@ -26,7 +26,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions.FluentException;
-import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.common.model.components.ComponentType;
 
 public final class Components {
 
@@ -48,8 +48,7 @@ public final class Components {
      */
     public static void permanentlyHide(final MarkupContainer container, final ComponentType... componentIds) {
         for (final ComponentType componentType : componentIds) {
-            final String wicketId = componentType.getWicketId();
-            permanentlyHideSingle(container, wicketId);
+            permanentlyHideSingle(container, componentType.getId());
         }
     }
 
@@ -78,8 +77,7 @@ public final class Components {
      */
     public static void setVisible(final MarkupContainer container, final boolean visibility, final ComponentType... componentTypes) {
         for (final ComponentType componentType : componentTypes) {
-            final String wicketId = componentType.getWicketId();
-            setVisible(container, visibility, wicketId);
+            setVisible(container, visibility, componentType.getId());
         }
     }
 
@@ -96,7 +94,7 @@ public final class Components {
         return component.findParent(Page.class)!=null;
     }
 
-    public static void addToAjaxRequest(AjaxRequestTarget target, Component component) {
+    public static void addToAjaxRequest(final AjaxRequestTarget target, final Component component) {
 
         if (target == null || component == null) {
             return;

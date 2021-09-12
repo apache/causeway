@@ -26,6 +26,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.Can;
@@ -37,6 +38,8 @@ import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.WhereValueFacet;
+import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
@@ -50,6 +53,7 @@ import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 
 import lombok.Synchronized;
@@ -387,5 +391,23 @@ implements ObjectSpecification {
     public Optional<CssClassFaFactory> getCssClassFaFactory() {
         return Optional.empty();
     }
+
+    @Override
+    public Stream<OneToOneAssociation> streamPropertiesForColumnRendering(
+            final Identifier memberIdentifier,
+            final Optional<ManagedObject> parentObject) {
+
+        val whereContext = parentObject.isPresent()
+                ? Where.PARENTED_TABLES
+                : Where.STANDALONE_TABLES;
+
+        return streamProperties(MixedIn.INCLUDED)
+                .filter(property->property.streamFacets()
+                        .filter(facet -> facet instanceof HiddenFacet)
+                        .map(WhereValueFacet.class::cast)
+                        .map(WhereValueFacet::where)
+                        .noneMatch(where -> where.includes(whereContext)));
+    }
+
 
 }

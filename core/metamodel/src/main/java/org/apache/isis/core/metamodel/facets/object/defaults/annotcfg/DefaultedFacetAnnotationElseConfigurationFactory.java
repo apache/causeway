@@ -29,8 +29,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultsProviderUtil;
 
-import lombok.val;
-
 public class DefaultedFacetAnnotationElseConfigurationFactory
 extends FacetFactoryAbstract {
 
@@ -42,10 +40,10 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessClassContext processClassContext) {
 
-        val cls = processClassContext.getCls();
-        val facetHolder = processClassContext.getFacetHolder();
-        val config = super.getConfiguration();
-        val defaultedIfAny = processClassContext.synthesizeOnType(Defaulted.class);
+        final var cls = processClassContext.getCls();
+        final var facetHolder = processClassContext.getFacetHolder();
+        final var config = super.getConfiguration();
+        final var defaultedIfAny = processClassContext.synthesizeOnType(Defaulted.class);
 
         addFacetIfPresent(
 
@@ -56,7 +54,7 @@ extends FacetFactoryAbstract {
 
                 // otherwise, try to create from configuration, if present
                 ()->{
-                    val providerName = DefaultsProviderUtil.defaultsProviderNameFromConfiguration(config, cls);
+                    final var providerName = DefaultsProviderUtil.defaultsProviderNameFromConfiguration(config, cls);
                     return _Strings.isNotEmpty(providerName)
                         ? DefaultedFacetFromConfiguration.create(providerName, facetHolder)
                         : Optional.empty();

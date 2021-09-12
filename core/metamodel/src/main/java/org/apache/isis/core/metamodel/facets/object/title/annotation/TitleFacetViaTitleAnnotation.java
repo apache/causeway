@@ -63,9 +63,9 @@ implements ImperativeFacet {
             final @NonNull Class<?> cls,
             final @NonNull FacetHolder holder){
 
-        val titles = new ArrayDeque<Title>();
+        final var titles = new ArrayDeque<Title>();
 
-        val titleComponents = Evaluators
+        final var titleComponents = Evaluators
                 .streamEvaluators(cls,
                     annotatedElement->isTitleComponent(annotatedElement, titles::addLast),
                     TypeHierarchyPolicy.EXCLUDE,
@@ -74,6 +74,8 @@ implements ImperativeFacet {
                         evaluator, holder, titles::removeLast))
                 .map(evaluator->TitleComponent.of(evaluator, titles.removeFirst()))
               .collect(Can.toCan())
+              // fixes type hierarchy deep search duplicates
+              //.distinct((a, b)->a.getTitleEvaluator().name().equals(b.getTitleEvaluator().name()))
               .sorted(TitleComponent::compareTo);
 
         if (titleComponents.isEmpty()) {
@@ -233,6 +235,7 @@ implements ImperativeFacet {
         @Override
         public String toString() {
             final List<String> parts = _Lists.newArrayList();
+            parts.add("evaluator=" + titleEvaluator.name());
             if(prepend != null && !_Strings.isNullOrEmpty(prepend.trim())) {
                 parts.add("prepend=" + prepend);
             }

@@ -98,20 +98,21 @@ extends ReprRendererAbstract<ParentSpecAndFeature<T>> {
     protected abstract void putExtensionsSpecificToFeature();
 
     protected void putExtensionsName() {
-
-        getObjectFeature().getFriendlyName(null);
-
-        getExtensions()
-        .mapPut("friendlyName",
-                getObjectFeature().getStaticFriendlyName()
-                .orElse("!imperative"));
+        getObjectFeature().getStaticOrCanonicalFriendlyName()
+        .accept(
+                staticForm->
+                    getExtensions().mapPut("staticFriendlyName", staticForm),
+                canonicalForm->
+                    getExtensions().mapPut("canonicalFriendlyName", canonicalForm));
     }
 
     protected void putExtensionsDescriptionIfAvailable() {
-        getExtensions()
-        .mapPut("description",
-                getObjectFeature().getStaticDescription()
-                .orElse("!imperative"));
+        getObjectFeature().getStaticOrCanonicalDescription()
+        .accept(
+                staticForm->
+                    getExtensions().mapPut("staticDescription", staticForm),
+                canonicalForm->
+                    getExtensions().mapPut("canonicalDescription", canonicalForm));
     }
 
 }

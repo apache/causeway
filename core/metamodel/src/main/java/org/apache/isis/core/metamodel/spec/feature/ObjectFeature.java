@@ -22,11 +22,14 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Specification;
+
+import lombok.val;
 
 /**
  * A specification representing a non-{@link FeatureType#OBJECT object}, that
@@ -72,6 +75,31 @@ public interface ObjectFeature extends Specification {
     Optional<String> getStaticFriendlyName();
 
     /**
+     * If not statically (non-imperatively) specified otherwise,
+     * the (translated friendly) name inferred from the corresponding domain-object-member (java-source) name.
+     * <p>
+     * Eg used when rendering a domain-object collection as table,
+     * the table's (translated friendly) column names are inferred
+     * from the corresponding domain-object-property canonical-name(s).
+     * @since 2.0
+     */
+    String getCanonicalFriendlyName();
+
+    /**
+     * Either the friendly name's static or canonical form, based on whether the friendly name is resolved
+     * statically or imperatively.
+     * @see #getStaticFriendlyName()
+     * @see #getCanonicalFriendlyName()
+     * @since 2.0
+     */
+    default _Either<String, String> getStaticOrCanonicalFriendlyName() {
+        val staticFriendlyName = getStaticFriendlyName();
+        return staticFriendlyName.isPresent()
+                ? _Either.left(staticFriendlyName.get())
+                : _Either.right(getCanonicalFriendlyName());
+    }
+
+    /**
      * Returns a (translated) description of how the member is used - this complements the
      * help text.
      *
@@ -88,6 +116,33 @@ public interface ObjectFeature extends Specification {
      * and not imperatively.
      */
     Optional<String> getStaticDescription();
+
+    /**
+     * If statically (non-imperatively) specified,
+     * the (translated friendly) description, otherwise {@code null}.
+     * <p>
+     * Eg used when rendering a domain-object collection as table,
+     * the table's (translated friendly) column descriptions are inferred
+     * from the corresponding domain-object-property column-description(s).
+     * @return null-able; if empty, no description is available,
+     * consequently eg. viewers should not provide any tooltip
+     * @since 2.0
+     */
+    String getCanonicalDescription();
+
+    /**
+     * Either the descriptions's static or canonical form, based on whether the description is resolved
+     * statically or imperatively.
+     * @see #getStaticDescription()
+     * @see #getCanonicalDescription()
+     * @since 2.0
+     */
+    default _Either<String, String> getStaticOrCanonicalDescription() {
+        val staticDescription = getStaticDescription();
+        return staticDescription.isPresent()
+                ? _Either.left(staticDescription.get())
+                : _Either.right(getCanonicalDescription());
+    }
 
     /**
      * The specification of the underlying type.

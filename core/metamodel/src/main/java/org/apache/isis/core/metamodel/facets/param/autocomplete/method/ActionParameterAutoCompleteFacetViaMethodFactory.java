@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.facets.param.autocomplete.method;
 
 import javax.inject.Inject;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
@@ -35,7 +36,7 @@ extends ActionParameterSupportFacetFactoryAbstract {
     public ActionParameterAutoCompleteFacetViaMethodFactory(final MetaModelContext mmc) {
         super(mmc, MemberSupportPrefix.AUTO_COMPLETE, searchOptions->
             searchOptions
-            .additionalParamType(String.class));
+            .additionalParamTypes(Can.of(String.class)));
     }
 
     @Override

@@ -29,6 +29,7 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -39,10 +40,8 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.wicket.model.LoadableDetachableModel;
 
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -85,11 +84,10 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
 
     private Can<OneToOneAssociation> columnProperties() {
         val typeOfSpec = model.getTypeOfSpecification();
-        return typeOfSpec.streamProperties(MixedIn.INCLUDED)
-                .filter(ObjectAssociation.Predicates.staticallyVisible(
-                        model.isParented()
-                        ? Where.PARENTED_TABLES
-                        : Where.STANDALONE_TABLES))
+        final Optional<ManagedObject> parentObject = model.parentedParentObject();
+        val memberIdentifier = model.getIdentifier();
+        return typeOfSpec
+                .streamPropertiesForColumnRendering(memberIdentifier, parentObject)
                 .collect(Can.toCan());
     }
 
@@ -108,10 +106,11 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
                 Row row = rowFactory.newRow();
 
                 // header row
+
                 int i=0;
                 for (ObjectAssociation property : columnProperties) {
                     final Cell cell = row.createCell((short) i++);
-                    cell.setCellValue(property.getFriendlyName(model::getParentObject));
+                    cell.setCellValue(property.getCanonicalFriendlyName());
                 }
 
                 final CellStyle dateCellStyle = createDateFormatCellStyle(wb);

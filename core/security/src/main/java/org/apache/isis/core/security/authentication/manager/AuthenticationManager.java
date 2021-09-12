@@ -85,13 +85,13 @@ public class AuthenticationManager {
 
     @Transactional(readOnly = true) // let Spring handle the transactional context for this method
     // cannot use final here, as Spring provides a transaction aware proxy for this type
-    public /*final*/ InteractionContext authenticate(AuthenticationRequest request) {
+    public /*final*/ InteractionContext authenticate(final AuthenticationRequest request) {
 
         if (request == null) {
             return null;
         }
 
-        val compatibleAuthenticators = authenticators
+        final var compatibleAuthenticators = authenticators
                 .filter(authenticator->authenticator.canAuthenticate(request.getClass()));
 
         if (compatibleAuthenticators.isEmpty()) {
@@ -103,8 +103,8 @@ public class AuthenticationManager {
         // we simply participate with the current transaction
         return interactionService.callAnonymous(()->{
 
-            for (val authenticator : compatibleAuthenticators) {
-                val interactionContext = authenticator.authenticate(request, getUnusedRandomCode());
+            for (final var authenticator : compatibleAuthenticators) {
+                final var interactionContext = authenticator.authenticate(request, getUnusedRandomCode());
                 if (interactionContext != null) {
                     val userMemento = refineUserWithin(interactionContext);
                     userByValidationCode.put(
@@ -126,7 +126,7 @@ public class AuthenticationManager {
      * @return
      */
     @NonNull
-    private UserMemento refineUserWithin(InteractionContext interactionContext) {
+    private UserMemento refineUserWithin(final InteractionContext interactionContext) {
         val userMementoOrig = interactionContext.getUser();
         UserMemento userMemento = userMementoOrig;
         for (UserMementoRefiner refiner : userMementoRefiners) {
@@ -176,7 +176,7 @@ public class AuthenticationManager {
     }
 
 
-    public void closeSession(InteractionContext context) {
+    public void closeSession(final InteractionContext context) {
         for (val authenticator : authenticators) {
             authenticator.logout(context);
         }
@@ -185,7 +185,7 @@ public class AuthenticationManager {
 
     // -- AUTHENTICATORS
 
-    public boolean register(RegistrationDetails registrationDetails) {
+    public boolean register(final RegistrationDetails registrationDetails) {
         for (val registrar : this.registrars) {
             if (registrar.canRegister(registrationDetails.getClass())) {
                 return registrar.register(registrationDetails);
@@ -195,7 +195,7 @@ public class AuthenticationManager {
     }
 
 
-    public boolean supportsRegistration(Class<? extends RegistrationDetails> registrationDetailsClass) {
+    public boolean supportsRegistration(final Class<? extends RegistrationDetails> registrationDetailsClass) {
         for (val registrar : this.registrars) {
             if (registrar.canRegister(registrationDetailsClass)) {
                 return true;
@@ -203,8 +203,6 @@ public class AuthenticationManager {
         }
         return false;
     }
-
-
 
     // -- DEBUGGING
 

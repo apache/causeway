@@ -48,7 +48,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 
 /**
  * Provides a list of links for selecting other views that support
- * {@link org.apache.isis.viewer.wicket.ui.ComponentType#COLLECTION_CONTENTS} with a backing
+ * {@link org.apache.isis.viewer.common.model.components.ComponentType#COLLECTION_CONTENTS} with a backing
  * {@link org.apache.isis.viewer.wicket.model.models.EntityCollectionModel}.
  */
 public class CollectionSelectorPanel

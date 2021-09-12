@@ -21,10 +21,10 @@ package org.apache.isis.viewer.wicket.ui.components.welcome;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
+import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.WelcomeModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
-import org.apache.isis.viewer.wicket.ui.ComponentType;
 
 /**
  * {@link ComponentFactory} for {@link WelcomePanel}.

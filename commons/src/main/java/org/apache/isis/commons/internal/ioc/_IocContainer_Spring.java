@@ -25,12 +25,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
 import javax.inject.Qualifier;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.ResolvableType;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
@@ -69,22 +69,22 @@ final class _IocContainer_Spring implements _IocContainer {
         return Stream.of(context.getBeanDefinitionNames())
                 .map(name->{
 
-                    val type = context.getType(name);
-                    val id = name; // just reuse the bean's name
+                    final var type = context.getType(name);
+                    final var id = name; // just reuse the bean's name
 
                     //val scope = beanFactory.getBeanDefinition(name).getScope();
 
-                    val resolvableType = ResolvableType.forClass(type);
-                    val bean = context.getBeanProvider(resolvableType);
+                    final var resolvableType = ResolvableType.forClass(type);
+                    final var bean = context.getBeanProvider(resolvableType);
 
-                    val beanAdapter = _ManagedBeanAdapter_Spring.of(id, type, bean);
+                    final var beanAdapter = _ManagedBeanAdapter_Spring.of(id, type, bean);
 
                     return beanAdapter;
                 });
     }
 
     @Override
-    public Optional<?> lookupById(String id) {
+    public Optional<?> lookupById(final String id) {
         return springContext.containsBean(id)
                 ? Optional.of(springContext.getBean(id))
                 : Optional.empty();
@@ -107,7 +107,7 @@ final class _IocContainer_Spring implements _IocContainer {
 
         if(_NullSafe.isEmpty(qualifiersRequired)) {
 
-            val allMatchingBeans = springContext.getBeanProvider(requiredType)
+            final var allMatchingBeans = springContext.getBeanProvider(requiredType)
                     .orderedStream()
                     .collect(Can.toCan());
 
@@ -147,7 +147,7 @@ final class _IocContainer_Spring implements _IocContainer {
      * @param annotation
      * @return whether or not the annotation is a valid qualifier for Spring
      */
-    private static boolean isGenericQualifier(Annotation annotation) {
+    private static boolean isGenericQualifier(final Annotation annotation) {
         if(annotation==null) {
             return false;
         }
