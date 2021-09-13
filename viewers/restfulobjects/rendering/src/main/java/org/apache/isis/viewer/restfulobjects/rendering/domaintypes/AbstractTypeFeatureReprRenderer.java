@@ -98,21 +98,33 @@ extends ReprRendererAbstract<ParentSpecAndFeature<T>> {
     protected abstract void putExtensionsSpecificToFeature();
 
     protected void putExtensionsName() {
-        getObjectFeature().getStaticOrCanonicalFriendlyName()
+        getObjectFeature()
+        .getStaticOrCanonicalFriendlyName()
         .accept(
-                staticForm->
-                    getExtensions().mapPut("staticFriendlyName", staticForm),
-                canonicalForm->
-                    getExtensions().mapPut("canonicalFriendlyName", canonicalForm));
+                staticForm->{
+                    getExtensions().mapPut("friendlyName", staticForm);
+                    getExtensions().mapPut("friendlyNameForm", "static");
+                },
+                canonicalForm->{
+                    getExtensions().mapPut("friendlyName", canonicalForm);
+                    getExtensions().mapPut("friendlyNameForm", "canonical");
+                });
     }
 
     protected void putExtensionsDescriptionIfAvailable() {
-        getObjectFeature().getStaticOrCanonicalDescription()
+        getObjectFeature()
+        .getStaticOrCanonicalDescription()
         .accept(
-                staticForm->
-                    getExtensions().mapPut("staticDescription", staticForm),
-                canonicalForm->
-                    getExtensions().mapPut("canonicalDescription", canonicalForm));
+                staticForm->{
+                    if(staticForm.isEmpty()) return;
+                    getExtensions().mapPut("description", staticForm);
+                    getExtensions().mapPut("descriptionForm", "static");
+                },
+                canonicalForm->{
+                    if(canonicalForm.isEmpty()) return;
+                    getExtensions().mapPut("description", canonicalForm);
+                    getExtensions().mapPut("descriptionForm", "canonical");
+                });
     }
 
 }

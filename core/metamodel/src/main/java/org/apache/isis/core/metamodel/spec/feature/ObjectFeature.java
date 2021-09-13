@@ -23,6 +23,7 @@ import java.util.function.Supplier;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.internal.base._Either;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -141,7 +142,7 @@ public interface ObjectFeature extends Specification {
         val staticDescription = getStaticDescription();
         return staticDescription.isPresent()
                 ? _Either.left(staticDescription.get())
-                : _Either.right(getCanonicalDescription());
+                : _Either.right(_Strings.nullToEmpty(getCanonicalDescription()));
     }
 
     /**
